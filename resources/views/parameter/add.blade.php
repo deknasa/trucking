@@ -103,7 +103,7 @@
         data: $('form').serializeArray(),
         success: response => {
           if (response.status) {
-            alert('berhasil simpan')
+            alert(response.message)
             window.location.href = indexUrl
           }
 
