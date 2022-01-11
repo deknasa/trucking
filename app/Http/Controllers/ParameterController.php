@@ -11,14 +11,15 @@ class ParameterController extends Controller
 
     public function index(Request $request)
     {
-        $params = [
-            'offset' => (($request->page - 1) * $request->rows),
-            'limit' => $request->rows,
-            'sortIndex' => $request->sidx,
-            'sortOrder' => $request->sord,
-        ];
-
         if ($request->ajax()) {
+            $params = [
+                'offset' => (($request->page - 1) * $request->rows),
+                'limit' => $request->rows,
+                'sortIndex' => $request->sidx,
+                'sortOrder' => $request->sord,
+                'search' => json_decode($request->filters, 1) ?? [],
+            ];
+
             $response = Http::withHeaders($request->header())
                 ->get('http://localhost/trucking-laravel/public/api/parameter', $params);
 

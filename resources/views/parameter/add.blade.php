@@ -104,7 +104,7 @@
         success: response => {
           if (response.status) {
             alert(response.message)
-            window.location.href = indexUrl
+            window.location.href = `${indexUrl}?page=${response.data.position}`
           }
 
           $.each(response.errors, (index, error) => {

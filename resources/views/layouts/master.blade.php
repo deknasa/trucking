@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
 
   <!-- JqGrid -->
-  <link rel="stylesheet" href="{{ asset('libraries/jqgrid/550/css/trirand/ui.jqgrid-bootstrap4.css') }}" />
+  <link rel="stylesheet" href="{{ asset('libraries/jqgrid/560/css/trirand/ui.jqgrid-bootstrap4.css') }}" />
 
   <style>
     * {
@@ -108,8 +108,8 @@
   <script src="{{ asset('dist/js/adminlte.js') }}"></script>
 
   <!-- JqGrid -->
-  <script src="{{ asset('libraries/jqgrid/550/js/trirand/src/jquery.jqGrid.js') }}"></script>
-  <script src="{{ asset('libraries/jqgrid/550/js/trirand/i18n/grid.locale-en.js') }}"></script>
+  <script src="{{ asset('libraries/jqgrid/560/js/trirand/src/jquery.jqGrid.js') }}"></script>
+  <script src="{{ asset('libraries/jqgrid/560/js/trirand/i18n/grid.locale-en.js') }}"></script>
 
   <!-- Custom global script -->
 
