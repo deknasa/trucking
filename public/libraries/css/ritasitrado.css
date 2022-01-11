@@ -1,0 +1,51 @@
+    .myAltRowClass { background-color: #DCFFFF; background-image: none; }
+    span.myCell
+    {
+    display:block;
+    background-image:none;
+    margin-right:-2px;
+    margin-left:-2px;
+    height:14px;
+    padding:4px;
+    color:white;
+    }
+    .ui-jqgrid tr.myfootrow td {
+    font-weight: bold;
+    overflow: hidden;
+    white-space:nowrap;
+    height: 21px;
+    padding: 0 2px 0 2px;
+    border-top-width: 1px;
+    border-top-color: inherit;
+    border-top-style: solid;
+	}
+	.ui-jqgrid tr.myfootrow1 td {
+    font-weight: bold;
+    overflow: hidden;
+    white-space:nowrap;
+    height: 21px;
+    padding: 0 2px 0 2px;
+    border-top-width: 1px;
+    border-top-color: inherit;
+    border-top-style: solid;
+	}
+	.ui-jqgrid tr.myfootrow2 td {
+    font-weight: bold;
+    overflow: hidden;
+    white-space:nowrap;
+    height: 21px;
+    padding: 0 2px 0 2px;
+    border-top-width: 1px;
+    border-top-color: inherit;
+    border-top-style: solid;
+	}
+	.ui-jqgrid tr.myfootrow3 td {
+    font-weight: bold;
+    overflow: hidden;
+    white-space:nowrap;
+    height: 21px;
+    padding: 0 2px 0 2px;
+    border-top-width: 1px;
+    border-top-color: inherit;
+    border-top-style: solid;
+	}

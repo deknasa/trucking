@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ParameterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Route::get('parameter', [ParameterController::class, 'index'])->name('parameter.index');
+Route::get('parameter/{id}/delete', [ParameterController::class, 'delete']);
+Route::resource('parameter', ParameterController::class);
