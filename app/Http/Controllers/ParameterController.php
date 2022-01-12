@@ -32,7 +32,7 @@ class ParameterController extends Controller
             return response($data);
         }
 
-        $title = 'Parameter';
+        $title = $this->title;
 
         return view('parameter.index', compact('title'));
     }

@@ -41,9 +41,15 @@
             </p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="{{ route('absensi.index') }}" class="nav-link">
+            <i class="fas fa-fingerprint nav-icon"></i>
+            <p>
+              Absensi
+            </p>
+          </a>
+        </li>
       </ul>
     </nav>
-    <!-- /.sidebar-menu -->
   </div>
-  <!-- /.sidebar -->
 </aside>

@@ -59,16 +59,6 @@
       indexRow = "{{ $_GET['indexRow'] }}"
     <?php } ?>
 
-    /* Set sortname */
-    <?php if (isset($_GET['sortname'])) {?>
-      sortname = "{{ $_GET['sortname'] }}"
-    <?php } ?>
-
-    /* Set sortorder */
-    <?php if (isset($_GET['sortorder'])) {?>
-      sortorder = "{{ $_GET['sortorder'] }}"
-    <?php } ?>
-
     $("#jqGrid").jqGrid({
         url: indexUrl,
         mtype: "GET",
@@ -151,9 +141,9 @@
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-              id = ''
-            } else if (indexRow != undefined) {
+                $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                id = ''
+            } else if (indexRow != '' && indexRow != undefined) {
               $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
@@ -212,11 +202,7 @@
         }
       })
 
-      .jqGrid('filterToolbar', {
-        stringResult: true,
-        searchOnEnter: false,
-        defaultSearch: 'cn',
-        groupOp: 'AND',
+      .jqGrid('filterToolbar', {  
         beforeSearch: function() {
           clearGlobalSearch()
         }

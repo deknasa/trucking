@@ -7,8 +7,6 @@
           <div class="card-body">
             @csrf
             <input type="hidden" name="limit" value="{{ $_GET['limit'] ?? 10 }}">
-            <input type="hidden" name="sortname" value="{{ $_GET['sortname'] ?? 'id' }}">
-            <input type="hidden" name="sortorder" value="{{ $_GET['sortorder'] ?? 'asc' }}">
             
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
