@@ -36,7 +36,6 @@
     let pager = '#jqGridPager'
     let popup = "";
     let id = "";
-    let selectID;
     let triggerClick = true;
     let highlightSearch;
     let totalRecord
@@ -44,6 +43,21 @@
     let postData
     let sortname = 'grp'
     let sortorder = 'asc'
+
+    /* Set page */
+    <?php if (isset($_GET['page'])) {?>
+      page = "{{ $_GET['page'] }}"
+    <?php } ?>
+
+    /* Set id */
+    <?php if (isset($_GET['id'])) {?>
+      id = "{{ $_GET['id'] }}"
+    <?php } ?>
+
+    /* Set indexRow */
+    <?php if (isset($_GET['indexRow'])) {?>
+      indexRow = "{{ $_GET['indexRow'] }}"
+    <?php } ?>
 
     $("#jqGrid").jqGrid({
         url: indexUrl,
@@ -103,14 +117,43 @@
         pager: pager,
         viewrecords: true,
         onSelectRow: function(id) {
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          selectID = id
+          id = $(this).jqGrid('getCell', id, 'rn') - 1
+          indexRow = id
+          page = $(this).jqGrid('getGridParam', 'page')
+          let rows = $(this).jqGrid('getGridParam', 'postData').rows
+          if (id >= rows) id = (id - rows * (page - 1))
         },
         ondblClickRow: function(rowid) {
 
         },
         loadComplete: function(data) {
-          $(`[id="` + $('#jqGrid').getDataIDs()[indexRow] + `"]`).click()
+          /* Set global variables */
+          sortname = $(this).jqGrid("getGridParam", "sortname")
+          sortorder = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecord = $(this).getGridParam("records")
+          limit = $(this).jqGrid('getGridParam', 'postData').rows
+          postData = $(this).jqGrid('getGridParam', 'postData')
+
+          $('.clearsearchclass').click(function() {
+            highlightSearch = ''
+          })
+
+          if (triggerClick) {
+            $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+
+            if (id != '') {
+              indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              id = ''
+            }
+
+            if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+            }
+            triggerClick = false
+          } else {
+            $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+          }
         }
       })
 
@@ -128,7 +171,9 @@
         id: 'add',
         buttonicon: 'fas fa-plus',
         onClickButton: function() {
-          window.location.href = `{{ route('parameter.create') }}?sortname=${sortname}&sortorder=${sortorder}`
+          let limit = $(this).jqGrid('getGridParam', 'postData').rows
+
+          window.location.href = `{{ route('parameter.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
 
@@ -138,7 +183,9 @@
         id: 'edit',
         buttonicon: 'fas fa-pen',
         onClickButton: function() {
-          window.location.href = `${indexUrl}/${selectID}/edit`
+          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          
+          window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
 
@@ -148,19 +195,19 @@
         id: 'delete',
         buttonicon: 'fas fa-trash',
         onClickButton: function() {
-          window.location.href = `${indexUrl}/${selectID}/delete`
+          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          
+          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
         }
       })
 
-      .jqGrid('filterToolbar', {
-        stringResult: true,
-        searchOnEnter: false,
-        defaultSearch: 'cn',
-        groupOp: 'AND',
+      .jqGrid('filterToolbar', {  
         beforeSearch: function() {
           clearGlobalSearch()
         }
       })
+
+      .bindKeys()/
 
     /* Append clear filter button */
     loadClearFilter()

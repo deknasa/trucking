@@ -19,5 +19,5 @@ Route::get('/', function () {
 });
 
 // Route::get('parameter', [ParameterController::class, 'index'])->name('parameter.index');
-Route::get('parameter/{id}/delete', [ParameterController::class, 'delete']);
+Route::get('parameter/{id}/delete', [ParameterController::class, 'delete'])->name('parameter.delete');
 Route::resource('parameter', ParameterController::class);

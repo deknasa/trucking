@@ -46,14 +46,6 @@ class ParameterController extends Controller
 
     public function store(Request $request)
     {
-        /* For specific params */
-        // $params = [
-        //     'grp' => $request->grp,
-        //     'subgrp' => $request->subgrp,
-        //     'text' => $request->text,
-        //     'memo' => $request->memo,
-        // ];
-
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -85,16 +77,20 @@ class ParameterController extends Controller
     }
 
     public function delete($id) {
-        $title = $this->title;
-        
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])->get("http://localhost/trucking-laravel/public/api/parameter/$id");
-        
-        $parameter = $response['data'];
-
-        return view('parameter.delete', compact('title', 'parameter'));
+        try {
+            $title = $this->title;
+            
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json'
+            ])->get("http://localhost/trucking-laravel/public/api/parameter/$id");
+            
+            $parameter = $response['data'];
+    
+            return view('parameter.delete', compact('title', 'parameter'));
+        } catch (\Throwable $th) {
+            return redirect()->route('parameter.index');
+        }
     }
 
     public function destroy($id) {
