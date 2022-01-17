@@ -1,28 +1,9 @@
-@extends('layouts.master')
-
-@section('content')
-<div class="content-header">
-  <div class="container-fluid">
-    <div class="row mb-2">
-      <div class="col-sm-6">
-        <h1 class="m-0">{{ $title }}</h1>
-      </div>
-      <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-          <li class="breadcrumb-item active">{{ $title }}</li>
-        </ol>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Grid -->
-<div class="container-fluid">
+<div class="container-fluid my-4">
   <div class="row">
     <div class="col-12">
-      <table id="jqGrid"></table>
-      <div id="jqGridPager"></div>
+      <table id="detail"></table>
+      <div id="detailPager"></div>
     </div>
   </div>
 </div>
@@ -33,7 +14,7 @@
     let indexUrl = "{{ route('parameter.index') }}"
     let indexRow = 0;
     let page = 0;
-    let pager = '#jqGridPager'
+    let pager = '#detailPager'
     let popup = "";
     let id = "";
     let triggerClick = true;
@@ -69,7 +50,7 @@
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
 
-    $("#jqGrid").jqGrid({
+    $("#detail").jqGrid({
         url: indexUrl,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -137,34 +118,6 @@
 
         },
         loadComplete: function(data) {
-          /* Set global variables */
-          sortname = $(this).jqGrid("getGridParam", "sortname")
-          sortorder = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').rows
-          postData = $(this).jqGrid('getGridParam', 'postData')
-
-          $('.clearsearchclass').click(function() {
-            highlightSearch = ''
-          })
-
-          if (triggerClick) {
-            if (id != '') {
-              indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-              id = ''
-            } else if (indexRow != undefined) {
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-            }
-
-            if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-            }
-            
-            triggerClick = false
-          } else {
-            $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
-          }
         }
       })
 
@@ -319,4 +272,3 @@
   }
 </script>
 @endpush()
-@endsection

@@ -9,7 +9,7 @@
       </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
           <li class="breadcrumb-item active">{{ $title }}</li>
         </ol>
       </div>
@@ -27,10 +27,13 @@
   </div>
 </div>
 
+<!-- Detail -->
+@include('absensi._detail')
+
 @push('scripts')
 <script>
   $(document).ready(function() {
-    let indexUrl = "{{ route('parameter.index') }}"
+    let indexUrl = "{{ route('absensi.index') }}"
     let indexRow = 0;
     let page = 0;
     let pager = '#jqGridPager'
@@ -41,7 +44,7 @@
     let totalRecord
     let limit
     let postData
-    let sortname = 'grp'
+    let sortname = 'nobukti'
     let sortorder = 'asc'
 
     /* Set page */
@@ -59,6 +62,16 @@
       indexRow = "{{ $_GET['indexRow'] }}"
     <?php } ?>
 
+    /* Set sortname */
+    <?php if (isset($_GET['sortname'])) {?>
+      sortname = "{{ $_GET['sortname'] }}"
+    <?php } ?>
+
+    /* Set sortorder */
+    <?php if (isset($_GET['sortorder'])) {?>
+      sortorder = "{{ $_GET['sortorder'] }}"
+    <?php } ?>
+
     $("#jqGrid").jqGrid({
         url: indexUrl,
         mtype: "GET",
@@ -72,23 +85,28 @@
             width: '50px'
           },
           {
-            label: 'GROUP',
-            name: 'grp',
+            label: 'NO BUKTI',
+            name: 'nobukti',
             align: 'center'
           },
           {
-            label: 'SUBGROUP',
-            name: 'subgrp',
+            label: 'TANGGAL',
+            name: 'tgl',
             align: 'center'
           },
           {
-            label: 'NAMA PARAMETER',
-            name: 'text',
+            label: 'KETERANGAN',
+            name: 'keterangan',
             align: 'center'
           },
           {
-            label: 'MEMO',
-            name: 'memo',
+            label: 'NO BUKTI KGT',
+            name: 'kasgantung_nobukti',
+            align: 'center'
+          },
+          {
+            label: 'NOMINAL',
+            name: 'nominal',
             align: 'center'
           },
           {
@@ -141,9 +159,9 @@
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-                $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-                id = ''
-            } else if (indexRow != '' && indexRow != undefined) {
+              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              id = ''
+            } else if (indexRow != undefined) {
               $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
@@ -174,7 +192,7 @@
         onClickButton: function() {
           let limit = $(this).jqGrid('getGridParam', 'postData').rows
 
-          window.location.href = `{{ route('parameter.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+          window.location.href = `{{ route('absensi.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
 
@@ -202,7 +220,11 @@
         }
       })
 
-      .jqGrid('filterToolbar', {  
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
         beforeSearch: function() {
           clearGlobalSearch()
         }

@@ -74,6 +74,7 @@
 @push('scripts')
 <script>
   let indexUrl = "{{ route('parameter.index') }}"
+  let fieldLengthUrl = "{{ route('parameter.field_length') }}"
   let action = "{{ $action }}"
   let actionUrl = "{{ route('parameter.store') }}"
   let method = "POST"
@@ -112,6 +113,16 @@
           }
 
           $.each(response.errors, (index, error) => {
+            // showErrorMessages()
+            
+            $(`[name=${index}]`)
+              .addClass('is-invalid')
+              .after(`
+                <div class="invalid-feedback">
+                  ${error}
+                </div>
+              `)
+
             console.log(error);
           })
         },
@@ -119,6 +130,23 @@
           alert(error)
         }
       })
+    })
+
+    /* Get field maxlength */
+    $.ajax({
+      url: fieldLengthUrl,
+      method: 'GET',
+      dataType: 'JSON',
+      success: response => {
+        $.each(response, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+            $(`[name=${index}]`).attr('maxlength', value)
+          }
+        })
+      },
+      error: error => {
+        alert(error)
+      }
     })
   })
 </script>

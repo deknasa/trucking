@@ -18,7 +18,7 @@
 </div>
 
 <!-- Form -->
-@include('parameter._form', [
+@include('absensi._form', [
   'action' => 'delete'
 ])
 

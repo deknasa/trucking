@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Http;
 class ParameterController extends Controller
 {
     public $title = 'Parameter';
+    public $httpHeader = [
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json'
+    ];
 
     public function index(Request $request)
     {
@@ -54,20 +58,22 @@ class ParameterController extends Controller
         return response($response);
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $title = $this->title;
-        
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])->get("http://localhost/trucking-laravel/public/api/parameter/$id");
-        
+
         $parameter = $response['data'];
 
         return view('parameter.edit', compact('title', 'parameter'));
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
@@ -76,29 +82,38 @@ class ParameterController extends Controller
         return response($response);
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         try {
             $title = $this->title;
-            
+
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
             ])->get("http://localhost/trucking-laravel/public/api/parameter/$id");
-            
+
             $parameter = $response['data'];
-    
+
             return view('parameter.delete', compact('title', 'parameter'));
         } catch (\Throwable $th) {
             return redirect()->route('parameter.index');
         }
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])->delete("http://localhost/trucking-laravel/public/api/parameter/$id");
 
         return response($response);
+    }
+
+    public function fieldLength()
+    {
+        $response = Http::withHeaders($this->httpHeader)->get('http://localhost/trucking-laravel/public/api/parameter/field_length');
+
+        return response($response['data']);
     }
 }
