@@ -10,76 +10,55 @@
 
 @push('scripts')
 <script>
-  $(document).ready(function() {
-    let indexUrl = "{{ route('parameter.index') }}"
-    let indexRow = 0;
-    let page = 0;
+  let indexUrl = "{{ route('absensi_detail.index') }}"
+
+  /**
+   * Custom Functions
+   */
+  var delay = (function() {
+    var timer = 0;
+    return function(callback, ms) {
+      clearTimeout(timer);
+      timer = setTimeout(callback, ms);
+    };
+  })()
+
+  function loadDetailGrid() {
     let pager = '#detailPager'
-    let popup = "";
-    let id = "";
-    let triggerClick = true;
-    let highlightSearch;
-    let totalRecord
-    let limit
-    let postData
-    let sortname = 'grp'
-    let sortorder = 'asc'
-
-    /* Set page */
-    <?php if (isset($_GET['page'])) {?>
-      page = "{{ $_GET['page'] }}"
-    <?php } ?>
-
-    /* Set id */
-    <?php if (isset($_GET['id'])) {?>
-      id = "{{ $_GET['id'] }}"
-    <?php } ?>
-
-    /* Set indexRow */
-    <?php if (isset($_GET['indexRow'])) {?>
-      indexRow = "{{ $_GET['indexRow'] }}"
-    <?php } ?>
-
-    /* Set sortname */
-    <?php if (isset($_GET['sortname'])) {?>
-      sortname = "{{ $_GET['sortname'] }}"
-    <?php } ?>
-
-    /* Set sortorder */
-    <?php if (isset($_GET['sortorder'])) {?>
-      sortorder = "{{ $_GET['sortorder'] }}"
-    <?php } ?>
 
     $("#detail").jqGrid({
-        url: indexUrl,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
-            label: 'ID',
-            name: 'id',
+            label: 'TRADO',
+            name: 'trado.keterangan',
             align: 'center',
-            width: '50px'
           },
           {
-            label: 'GROUP',
-            name: 'grp',
+            label: 'SUPIR',
+            name: 'supir.nsupir',
             align: 'center'
           },
           {
-            label: 'SUBGROUP',
-            name: 'subgrp',
+            label: 'STATUS',
+            name: 'absen_trado.nabsen',
             align: 'center'
           },
           {
-            label: 'NAMA PARAMETER',
-            name: 'text',
+            label: 'KETERANGAN',
+            name: 'keterangan',
             align: 'center'
           },
           {
-            label: 'MEMO',
-            name: 'memo',
+            label: 'JAM',
+            name: 'jam',
+            align: 'center'
+          },
+          {
+            label: 'UANG JALAN',
+            name: 'uangjalan',
             align: 'center'
           },
           {
@@ -102,22 +81,10 @@
         rowList: [10, 20, 50],
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortname,
-        sortorder: sortorder,
-        page: page,
         pager: pager,
         viewrecords: true,
-        onSelectRow: function(id) {
-          id = $(this).jqGrid('getCell', id, 'rn') - 1
-          indexRow = id
-          page = $(this).jqGrid('getGridParam', 'page')
-          let rows = $(this).jqGrid('getGridParam', 'postData').rows
-          if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
-        },
-        ondblClickRow: function(rowid) {
-
-        },
         loadComplete: function(data) {
+          console.log(data);
         }
       })
 
@@ -128,72 +95,16 @@
         edit: false,
         del: false,
       })
+  }
 
-      .navButtonAdd(pager, {
-        caption: 'Add',
-        title: 'Add',
-        id: 'add',
-        buttonicon: 'fas fa-plus',
-        onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').rows
-
-          window.location.href = `{{ route('parameter.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Edit',
-        title: 'Edit',
-        id: 'edit',
-        buttonicon: 'fas fa-pen',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          
-          window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Delete',
-        title: 'Delete',
-        id: 'delete',
-        buttonicon: 'fas fa-trash',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          
-          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-        }
-      })
-
-      .jqGrid('filterToolbar', {
-        stringResult: true,
-        searchOnEnter: false,
-        defaultSearch: 'cn',
-        groupOp: 'AND',
-        beforeSearch: function() {
-          clearGlobalSearch()
-        }
-      })
-
-      .bindKeys()/
-
-    /* Append clear filter button */
-    loadClearFilter()
-
-    /* Append global search */
-    loadGlobalSearch()
-  })
-
-  /**
-   * Custom Functions
-   */
-  var delay = (function() {
-    var timer = 0;
-    return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })()
+  function loadDetailData(id) {
+    $('#detail').setGridParam({
+      url: indexUrl,
+      postData: {
+        id: id
+      }
+    }).trigger('reloadGrid')
+  }
 
   function clearColumnSearch() {
     $('input[id*="gs_"]').val("");

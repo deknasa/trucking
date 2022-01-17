@@ -135,14 +135,13 @@
         pager: pager,
         viewrecords: true,
         onSelectRow: function(id) {
+          loadDetailData(id)
+
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
           let rows = $(this).jqGrid('getGridParam', 'postData').rows
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
-        },
-        ondblClickRow: function(rowid) {
-
         },
         loadComplete: function(data) {
           /* Set global variables */
@@ -237,6 +236,9 @@
 
     /* Append global search */
     loadGlobalSearch()
+
+    /* Load detial grid */
+    loadDetailGrid()
   })
 
   /**

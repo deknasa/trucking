@@ -66,7 +66,7 @@
                           <input type="number" name="uangjalan[]">
                         </td>
                         <td>
-                          <select name="absensi_id[]">
+                          <select name="absen_id[]">
                             @foreach($combo['status'] as $status)
                             <option value="{{ $status['id'] }}">{{ $status['nabsen'] }}</option>
                             @endforeach

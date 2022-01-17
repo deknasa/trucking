@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AbsensiSupirDetailController;
 use App\Http\Controllers\AbsensiSupirHeaderController;
 use App\Http\Controllers\ParameterController;
 use Illuminate\Support\Facades\Route;
@@ -29,3 +30,5 @@ Route::resource('parameter', ParameterController::class);
 
 Route::get('absensi/{id}/delete', [AbsensiController::class, 'delete'])->name('absensi.delete');
 Route::resource('absensi', AbsensiSupirHeaderController::class);
+
+Route::resource('absensi_detail', AbsensiSupirDetailController::class);
