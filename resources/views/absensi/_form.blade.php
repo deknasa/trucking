@@ -49,7 +49,7 @@
                       </tr>
                     </thead>
                     <tbody id="table_body">
-                      @foreach($combo['trado'] as $trado)
+                      @foreach($combo['trado'] as $tradoIndex => $trado)
                       <tr>
                         <td>
                           <input type="hidden" name="trado_id[]" value="{{ $trado['id'] }}">
@@ -57,26 +57,26 @@
                         </td>
                         <td>
                           <select name="supir_id[]">
-                            @foreach($combo['supir'] as $supir)
-                            <option value="{{ $supir['id'] }}">{{ $supir['nsupir'] }}</option>
+                            @foreach($combo['supir'] as $supirIndex => $supir)
+                            <option value="{{ $supir['id'] }}" {{ $supir['id'] == @$absensi['absensi_supir_detail'][$tradoIndex]['supir']['id'] ? 'selected' : '' }}>{{ $supir['nsupir'] }}</option>
                             @endforeach
                           </select>
                         </td>
                         <td>
-                          <input type="number" name="uangjalan[]">
+                          <input type="number" name="uangjalan[]" value="{{ $absensi['absensi_supir_detail'][$tradoIndex]['uangjalan'] ?? '' }}">
                         </td>
                         <td>
                           <select name="absen_id[]">
                             @foreach($combo['status'] as $status)
-                            <option value="{{ $status['id'] }}">{{ $status['nabsen'] }}</option>
+                            <option value="{{ $status['id'] }}" {{ $status['id'] == @$absensi['absensi_supir_detail'][$tradoIndex]['absen_trado']['id'] ? 'selected' : '' }}>{{ $status['nabsen'] }}</option>
                             @endforeach
                           </select>
                         </td>
                         <td>
-                          <input type="text" name="jam[]">
+                          <input type="text" name="jam[]" value="{{ $absensi['jam'] ?? '' }}">
                         </td>
                         <td>
-                          <input type="text" name="keterangan_detail[]">
+                          <input type="text" name="keterangan_detail[]" value="{{ $absensi['absensi_supir_detail'][$tradoIndex]['trado']['keterangan'] ?? '' }}">
                         </td>
                       </tr>
                       @endforeach

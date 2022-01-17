@@ -59,6 +59,68 @@ class AbsensiSupirHeaderController extends Controller
 
         return response($response);
     }
+
+    public function edit($id)
+    {
+        $title = $this->title;
+
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        ])->get("http://localhost/trucking-laravel/public/api/absensi/$id");
+
+        $absensi = $response['data'];
+        $combo = [
+            'trado' => $this->getTrado(),
+            'supir' => $this->getSupir(),
+            'status' => $this->getStatus(),
+        ];
+
+        return view('absensi.edit', compact('title', 'absensi', 'combo'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ])->patch("http://localhost/trucking-laravel/public/api/absensi/$id", $request->all());
+
+        return response($response);
+    }
+    
+    public function delete($id)
+    {
+        try {
+            $title = $this->title;
+
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json'
+            ])->get("http://localhost/trucking-laravel/public/api/absensi/$id");
+
+            $absensi = $response['data'];
+            $combo = [
+                'trado' => $this->getTrado(),
+                'supir' => $this->getSupir(),
+                'status' => $this->getStatus(),
+            ];
+    
+            return view('absensi.delete', compact('title', 'combo', 'absensi'));
+        } catch (\Throwable $th) {
+            return redirect()->route('absensi.index');
+        }
+    }
+
+    public function destroy($id)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        ])->delete("http://localhost/trucking-laravel/public/api/absensi/$id");
+
+        return response($response);
+    }
     
     public function getTrado() {
         $response = Http::get('http://localhost/trucking-laravel/public/api/trado');

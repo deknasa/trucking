@@ -76,7 +76,7 @@ class ParameterController extends Controller
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
+            'Content-Type' => 'application/json',
         ])->patch("http://localhost/trucking-laravel/public/api/parameter/$id", $request->all());
 
         return response($response);

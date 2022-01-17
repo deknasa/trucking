@@ -28,7 +28,7 @@ Route::get('parameter/field_length', [ParameterController::class, 'fieldLength']
 Route::get('parameter/{id}/delete', [ParameterController::class, 'delete'])->name('parameter.delete');
 Route::resource('parameter', ParameterController::class);
 
-Route::get('absensi/{id}/delete', [AbsensiController::class, 'delete'])->name('absensi.delete');
+Route::get('absensi/{id}/delete', [AbsensiSupirHeaderController::class, 'delete'])->name('absensi.delete');
 Route::resource('absensi', AbsensiSupirHeaderController::class);
 
 Route::resource('absensi_detail', AbsensiSupirDetailController::class);
