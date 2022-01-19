@@ -15,7 +15,6 @@ class ParameterController extends Controller
 
     public function index(Request $request)
     {
-        dd(config('app.url2'));
         if ($request->ajax()) {
             $params = [
                 'offset' => (($request->page - 1) * $request->rows),
