@@ -1,3 +1,13 @@
+@php
+
+$limit = $_GET['limit'] ?? 10;
+$sortname = $_GET['sortname'] ?? 'id';
+$sortorder = $_GET['sortorder'] ?? 'id';
+$page = $_GET['page'] ?? '';
+$indexRow = $_GET['indexRow'] ?? '';
+
+@endphp
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
@@ -6,10 +16,10 @@
         <form action="" method="post">
           <div class="card-body">
             @csrf
-            <input type="hidden" name="limit" value="{{ $_GET['limit'] ?? 10 }}">
-            <input type="hidden" name="sortname" value="{{ $_GET['sortname'] ?? 'id' }}">
-            <input type="hidden" name="sortorder" value="{{ $_GET['sortorder'] ?? 'asc' }}">
-            
+            <input type="hidden" name="limit" value="{{ $limit }}">
+            <input type="hidden" name="sortname" value="{{ $sortname }}">
+            <input type="hidden" name="sortorder" value="{{ $sortorder }}">
+
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>ID</label>
@@ -20,7 +30,9 @@
             </div>
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
-                <label>GROUP</label>
+                <label>
+                  GROUP <span class="text-danger">*</span>
+                </label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="grp" class="form-control" value="{{ $parameter['grp'] ?? '' }}">
@@ -28,7 +40,9 @@
             </div>
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
-                <label>SUBGROUP</label>
+                <label>
+                  SUBGROUP <span class="text-danger">*</span>
+                </label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="subgrp" class="form-control" value="{{ $parameter['subgrp'] ?? '' }}">
@@ -36,7 +50,8 @@
             </div>
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
-                <label>NAMA PARAMETER</label>
+                <label>
+                  NAMA PARAMETER <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="text" class="form-control" value="{{ $parameter['text'] ?? '' }}">
@@ -44,7 +59,9 @@
             </div>
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
-                <label>MEMO</label>
+                <label>
+                  MEMO <span class="text-danger">*</span>
+                </label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="memo" class="form-control" value="{{ $parameter['memo'] ?? '' }}">
@@ -55,9 +72,9 @@
             <button type="submit" id="btnSimpan" class="btn btn-primary">
               <i class="fa fa-save"></i>
               @if(isset($action) && $action == 'delete')
-                Delete
+              Delete
               @else
-                Simpan
+              Simpan
               @endif
             </button>
             <a href="{{ route('parameter.index') }}" class="btn btn-danger">
@@ -74,6 +91,7 @@
 @push('scripts')
 <script>
   let indexUrl = "{{ route('parameter.index') }}"
+  let fieldLengthUrl = "{{ route('parameter.field_length') }}"
   let action = "{{ $action }}"
   let actionUrl = "{{ route('parameter.store') }}"
   let method = "POST"
@@ -87,7 +105,7 @@
     actionUrl = "{{ route('parameter.destroy', $parameter['id']) }}"
     method = "DELETE"
   <?php endif; ?>
-  
+
   $(document).ready(function() {
     $('form').submit(function(e) {
       e.preventDefault()
@@ -95,30 +113,62 @@
 
     /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
+      $(this).attr('disabled', '')
+
       $.ajax({
         url: actionUrl,
         method: method,
         dataType: 'JSON',
         data: $('form').serializeArray(),
         success: response => {
-          if (response.status) {
-            alert(response.message)
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
 
+          if (response.status) {
             if (action != 'delete') {
-              window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
+              window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $sortname }}&sortorder={{ $sortorder }}&limit={{ $limit }}`
             } else {
-              window.location.href = `${indexUrl}?page={{ $_GET['page'] ?? '' }}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] ?? ''}}&indexRow={{ $_GET['indexRow'] ?? '' }}`
+              window.location.href = `${indexUrl}?page={{ $page }}&sortname={{ $sortname }}&sortorder={{ $sortorder }}&limit={{ $limit }}&indexRow={{ $indexRow }}`
             }
           }
 
-          $.each(response.errors, (index, error) => {
-            console.log(error);
-          })
+          if (response.errors) {
+            $(`[name=${Object.keys(response.errors)[0]}]`).focus()
+            
+            $.each(response.errors, (index, error) => {
+              $(`[name=${index}]`)
+                .addClass('is-invalid')
+                .after(`
+                <div class="invalid-feedback">
+                  ${error}
+                </div>
+              `)
+            })
+          }
         },
         error: error => {
-          alert(error)
-        }
+          alert(`${error.statusText} | ${error.responseText}`)
+        },
+      }).always(() => {
+        $(this).removeAttr('disabled')
       })
+    })
+
+    /* Get field maxlength */
+    $.ajax({
+      url: fieldLengthUrl,
+      method: 'GET',
+      dataType: 'JSON',
+      success: response => {
+        $.each(response, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+            $(`[name=${index}]`).attr('maxlength', value)
+          }
+        })
+      },
+      error: error => {
+        alert(error)
+      }
     })
   })
 </script>

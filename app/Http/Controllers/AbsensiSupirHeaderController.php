@@ -5,17 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class ParameterController extends Controller
+class AbsensiSupirHeaderController extends Controller
 {
-    public $title = 'Parameter';
-    public $httpHeader = [
-        'Accept' => 'application/json',
-        'Content-Type' => 'application/json'
-    ];
+    public $title = 'Absensi';
 
     public function index(Request $request)
     {
-        dd(config('app.url2'));
         if ($request->ajax()) {
             $params = [
                 'offset' => (($request->page - 1) * $request->rows),
@@ -26,9 +21,8 @@ class ParameterController extends Controller
             ];
 
             $response = Http::withHeaders($request->header())
-                ->get('http://localhost/trucking-laravel/public/api/parameter', $params);
+                ->get('http://localhost/trucking-laravel/public/api/absensi', $params);
 
-            // return response($response);
             $data = [
                 'total' => $response['attributes']['totalPages'],
                 'records' => $response['attributes']['totalRows'],
@@ -40,14 +34,20 @@ class ParameterController extends Controller
 
         $title = $this->title;
 
-        return view('parameter.index', compact('title'));
+        return view('absensi.index', compact('title'));
     }
-
+    
     public function create()
     {
         $title = $this->title;
 
-        return view('parameter.add', compact('title'));
+        $combo = [
+            'trado' => $this->getTrado(),
+            'supir' => $this->getSupir(),
+            'status' => $this->getStatus(),
+        ];
+
+        return view('absensi.add', compact('title', 'combo'));
     }
 
     public function store(Request $request)
@@ -55,7 +55,7 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post('http://localhost/trucking-laravel/public/api/parameter', $request->all());
+        ])->post('http://localhost/trucking-laravel/public/api/absensi', $request->all());
 
         return response($response);
     }
@@ -67,11 +67,16 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get("http://localhost/trucking-laravel/public/api/parameter/$id");
+        ])->get("http://localhost/trucking-laravel/public/api/absensi/$id");
 
-        $parameter = $response['data'];
+        $absensi = $response['data'];
+        $combo = [
+            'trado' => $this->getTrado(),
+            'supir' => $this->getSupir(),
+            'status' => $this->getStatus(),
+        ];
 
-        return view('parameter.edit', compact('title', 'parameter'));
+        return view('absensi.edit', compact('title', 'absensi', 'combo'));
     }
 
     public function update(Request $request, $id)
@@ -79,11 +84,11 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch("http://localhost/trucking-laravel/public/api/parameter/$id", $request->all());
+        ])->patch("http://localhost/trucking-laravel/public/api/absensi/$id", $request->all());
 
         return response($response);
     }
-
+    
     public function delete($id)
     {
         try {
@@ -92,13 +97,18 @@ class ParameterController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get("http://localhost/trucking-laravel/public/api/parameter/$id");
+            ])->get("http://localhost/trucking-laravel/public/api/absensi/$id");
 
-            $parameter = $response['data'];
-
-            return view('parameter.delete', compact('title', 'parameter'));
+            $absensi = $response['data'];
+            $combo = [
+                'trado' => $this->getTrado(),
+                'supir' => $this->getSupir(),
+                'status' => $this->getStatus(),
+            ];
+    
+            return view('absensi.delete', compact('title', 'combo', 'absensi'));
         } catch (\Throwable $th) {
-            return redirect()->route('parameter.index');
+            return redirect()->route('absensi.index');
         }
     }
 
@@ -107,15 +117,26 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete("http://localhost/trucking-laravel/public/api/parameter/$id");
+        ])->delete("http://localhost/trucking-laravel/public/api/absensi/$id");
 
         return response($response);
     }
+    
+    public function getTrado() {
+        $response = Http::get('http://localhost/trucking-laravel/public/api/trado');
 
-    public function fieldLength()
-    {
-        $response = Http::withHeaders($this->httpHeader)->get('http://localhost/trucking-laravel/public/api/parameter/field_length');
+        return $response['data'];
+    }
 
-        return response($response['data']);
+    public function getSupir() {
+        $response = Http::get('http://localhost/trucking-laravel/public/api/supir');
+
+        return $response['data'];
+    }
+
+    public function getStatus() {
+        $response = Http::get('http://localhost/trucking-laravel/public/api/absentrado');
+
+        return $response['data'];
     }
 }

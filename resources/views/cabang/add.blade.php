@@ -18,7 +18,7 @@
 </div>
 
 <!-- Form -->
-@include('absensi._form', [
+@include('cabang._form', [
   'action' => 'add'
 ])
 @endsection

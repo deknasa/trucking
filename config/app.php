@@ -53,6 +53,7 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+    'url2' => env('APP_URL', 'http://localhost2'),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -234,4 +235,9 @@ return [
 
     ],
 
+    /**
+     * To define API_URL. So that, it can
+     * be called for every API Request.
+     */
+    'api_url' => 'https://localhost/trucking-laravel/public',
 ];

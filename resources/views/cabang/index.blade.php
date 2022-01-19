@@ -27,13 +27,10 @@
   </div>
 </div>
 
-<!-- Detail -->
-@include('absensi._detail')
-
 @push('scripts')
 <script>
   $(document).ready(function() {
-    let indexUrl = "{{ route('absensi.index') }}"
+    let indexUrl = "{{ route('cabang.index') }}"
     let indexRow = 0;
     let page = 0;
     let pager = '#jqGridPager'
@@ -44,7 +41,7 @@
     let totalRecord
     let limit
     let postData
-    let sortname = 'nobukti'
+    let sortname = 'cabang'
     let sortorder = 'asc'
 
     /* Set page */
@@ -85,30 +82,36 @@
             width: '50px'
           },
           {
-            label: 'NO BUKTI',
-            name: 'nobukti',
-            align: 'center'
+            label: 'CABANG',
+            name: 'cabang',
+            align: 'left'
           },
+          // {
+          //   label: 'STATUS AKTIF',
+          //   name: 'statusaktif',
+          //   align: 'left'
+          // },
           {
-            label: 'TANGGAL',
-            name: 'tgl',
-            align: 'center'
+          label: 'Status',
+          name: 'statusaktif',
+          width: 100,
+          stype: 'select',
+          searchoptions: {
+            value: `<?php
+                    $i = 1;
+                    
+                    foreach ($data['combo'] as $status) :
+                      echo "$status[param]:$status[parameter]";
+                      if ($i !== count($data['combo'])) {
+                        echo ";";
+                      }
+                      $i++;
+                    endforeach
+
+                    ?>
+            `
           },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'center'
-          },
-          {
-            label: 'NO BUKTI KGT',
-            name: 'kasgantung_nobukti',
-            align: 'center'
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'center'
-          },
+        },          
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
@@ -117,6 +120,10 @@
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
+            align: 'center'
+          },          {
+            label: 'CREATEDAT',
+            name: 'created_at',
             align: 'center'
           },
         ],
@@ -135,13 +142,14 @@
         pager: pager,
         viewrecords: true,
         onSelectRow: function(id) {
-          loadDetailData(id)
-
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
           let rows = $(this).jqGrid('getGridParam', 'postData').rows
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
+        },
+        ondblClickRow: function(rowid) {
+
         },
         loadComplete: function(data) {
           /* Set global variables */
@@ -191,7 +199,7 @@
         onClickButton: function() {
           let limit = $(this).jqGrid('getGridParam', 'postData').rows
 
-          window.location.href = `{{ route('absensi.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+          window.location.href = `{{ route('cabang.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
 
@@ -236,9 +244,6 @@
 
     /* Append global search */
     loadGlobalSearch()
-
-    /* Load detial grid */
-    loadDetailGrid()
   })
 
   /**

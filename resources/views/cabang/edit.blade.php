@@ -18,15 +18,15 @@
 </div>
 
 <!-- Form -->
-@include('absensi._form', [
+@include('cabang._form', [
   'action' => 'edit'
 ])
 
 {{--
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('parameter.index') }}"
-  let updateUrl = "{{ route('parameter.update', $parameter['id']) }}"
+  let indexUrl = "{{ route('cabang.index') }}"
+  let updateUrl = "{{ route('cabang.update', $cabang['id']) }}"
   let csrfToken = "{{ csrf_token() }}"
 
   $(document).ready(function() {
