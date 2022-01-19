@@ -3,6 +3,7 @@
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\ParameterController;
 use Illuminate\Support\Facades\Route;
+use URL;
 
 /*
 |--------------------------------------------------------------------------
