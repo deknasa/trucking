@@ -15,6 +15,7 @@ class ParameterController extends Controller
 
     public function index(Request $request)
     {
+        dd(config('app.url2'));
         if ($request->ajax()) {
             $params = [
                 'offset' => (($request->page - 1) * $request->rows),
@@ -27,6 +28,7 @@ class ParameterController extends Controller
             $response = Http::withHeaders($request->header())
                 ->get('http://localhost/trucking-laravel/public/api/parameter', $params);
 
+            // return response($response);
             $data = [
                 'total' => $response['attributes']['totalPages'],
                 'records' => $response['attributes']['totalRows'],
