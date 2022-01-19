@@ -5,6 +5,7 @@ use App\Http\Controllers\AbsensiSupirHeaderController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\ParameterController;
 use Illuminate\Support\Facades\Route;
+use URL;
 
 /*
 |--------------------------------------------------------------------------
