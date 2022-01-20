@@ -41,7 +41,7 @@
     let totalRecord
     let limit
     let postData
-    let sortname = 'cabang'
+    let sortname = 'id'
     let sortorder = 'asc'
 
     /* Set page */
@@ -78,19 +78,20 @@
         colModel: [{
             label: 'ID',
             name: 'id',
-            align: 'center',
-            width: '50px'
+            align: 'right',
+            width: '70px'
           },
           {
-            label: 'CABANG',
-            name: 'cabang',
+            label: 'KODE CABANG',
+            name: 'kodecabang',
             align: 'left'
           },
-          // {
-          //   label: 'STATUS AKTIF',
-          //   name: 'statusaktif',
-          //   align: 'left'
-          // },
+          {
+            label: 'NAMA CABANG',
+            name: 'namacabang',
+            align: 'left'
+          },
+ 
           {
           label: 'Status',
           name: 'statusaktif',
@@ -309,6 +310,7 @@
         for (i = 0; i < l; i++) {
           cm = colModel[i];
           if (cm.search !== false && (cm.stype === undefined || cm.stype === "text" || cm.stype === "select")) {
+
             rules.push({
               field: cm.name,
               op: "cn",

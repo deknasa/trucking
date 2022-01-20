@@ -25,10 +25,14 @@ class CabangController extends Controller
                 'search' => json_decode($request->filters, 1) ?? [],
             ];
 
+    
             // dd($params);
 
-            $response = Http::withHeaders($request->header())
-                ->get('http://localhost/trucking-laravel/public/api/cabang', $params);
+            $response = Http::get('http://localhost/trucking-laravel/public/api/cabang', $params);
+            // $response = Http::withHeaders($request->header())
+            // ->get('http://localhost/trucking-laravel/public/api/cabang', $params);
+
+    
 
             $data = [
                 'total' => $response['attributes']['totalPages'],
@@ -36,14 +40,16 @@ class CabangController extends Controller
                 'rows' => $response['data']
             ];
 
+
             return response($data);
         }
+
 
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama Cabang',
             'combo' => $this->combo('list')
-          ];
+        ];
 
         return view('cabang.index', compact('title', 'data'));
     }
@@ -52,20 +58,19 @@ class CabangController extends Controller
     {
         $title = $this->title;
 
-          $data['combo'] = $this->combo('entry');
-        //   dd($data);
+        $data['combo'] = $this->combo('entry');
 
         return view('cabang.add', compact('title', 'data'));
     }
 
     public function store(Request $request)
     {
-        
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])->post('http://localhost/trucking-laravel/public/api/cabang', $request->all());
-                
+
         return response($response);
     }
 
@@ -78,7 +83,7 @@ class CabangController extends Controller
             'Content-Type' => 'application/json'
         ])->get("http://localhost/trucking-laravel/public/api/cabang/$id");
 
-        $parameter = $response['data'];
+        $cabang = $response['data'];
 
         $data['combo'] = $this->combo('entry');
 
@@ -105,9 +110,11 @@ class CabangController extends Controller
                 'Content-Type' => 'application/json'
             ])->get("http://localhost/trucking-laravel/public/api/cabang/$id");
 
-            $parameter = $response['data'];
+            $cabang = $response['data'];
 
-            return view('cabang.delete', compact('title', 'cabang'));
+            $data['combo'] = $this->combo('entry');
+
+            return view('cabang.delete', compact('title', 'cabang', 'data'));
         } catch (\Throwable $th) {
             return redirect()->route('cabang.index');
         }
@@ -145,4 +152,6 @@ class CabangController extends Controller
 
         return $response['data'];
     }
+
+    
 }
