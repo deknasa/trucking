@@ -16,6 +16,8 @@ class CabangController extends Controller
 
     public function index(Request $request)
     {
+
+
         if ($request->ajax()) {
             $params = [
                 'offset' => (($request->page - 1) * $request->rows),
@@ -25,12 +27,11 @@ class CabangController extends Controller
                 'search' => json_decode($request->filters, 1) ?? [],
             ];
 
-    
             // dd($params);
 
-            $response = Http::get('http://localhost/trucking-laravel/public/api/cabang', $params);
-            // $response = Http::withHeaders($request->header())
-            // ->get('http://localhost/trucking-laravel/public/api/cabang', $params);
+            // $response = Http::get('http://localhost/trucking-laravel/public/api/cabang', $params);
+            $response = Http::withHeaders($request->header())
+            ->get('http://localhost/trucking-laravel/public/api/cabang', $params);
 
     
 
@@ -120,12 +121,12 @@ class CabangController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy($id,Request $request)
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete("http://localhost/trucking-laravel/public/api/cabang/$id");
+        ])->delete("http://localhost/trucking-laravel/public/api/cabang/$id", $request->all());
 
         return response($response);
     }

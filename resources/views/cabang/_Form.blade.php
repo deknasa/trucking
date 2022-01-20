@@ -9,6 +9,7 @@
                         <input type="hidden" name="limit" value="{{ $_GET['limit'] ?? 10 }}">
                         <input type="hidden" name="sortname" value="{{ $_GET['sortname'] ?? 'id' }}">
                         <input type="hidden" name="sortorder" value="{{ $_GET['sortorder'] ?? 'asc' }}">
+                        <input type="hidden" name="indexRow" value="{{ $_GET['indexRow'] ?? 1 }}">
 
 
                         <div class="row form-group">
