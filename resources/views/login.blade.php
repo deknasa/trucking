@@ -25,23 +25,38 @@
     <div class="card">
       <div class="card-body login-card-body">
         <p class="login-box-msg">Login</p>
+        @error('user_not_found')
+        <div class="alert alert-danger">
+          {{ $message }}
+        </div>
+        @enderror
         <form action="{{ route('login.process') }}" method="POST">
           @csrf
           <div class="input-group mb-3">
-            <input type="text" name="userid" value="admin" id="userid" class="form-control" placeholder="User ID" autofocus>
+            <input type="text" name="user" value="admin" id="user" class="form-control @error('user') is-invalid @enderror" placeholder="User ID" autofocus>
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-user"></span>
               </div>
             </div>
+            @error('user')
+            <div class="invalid-feedback">
+              {{ $message }}
+            </div>
+            @enderror
           </div>
           <div class="input-group mb-3">
-            <input type="password" name="password" value="123456" id="password" class="form-control" placeholder="Password">
+            <input type="password" name="password" value="123456" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password">
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-lock"></span>
               </div>
             </div>
+            @error('password')
+            <div class="invalid-feedback">
+              {{ $message }}
+            </div>
+            @enderror
           </div>
           <div id="error">
           </div>

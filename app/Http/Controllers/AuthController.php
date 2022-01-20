@@ -2,20 +2,50 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Redirect;
 
 class AuthController extends Controller
 {
-    public function index() {
+    public $httpHeaders = [
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json'
+    ];
+
+    public function index()
+    {
         $title = 'Login';
-        
+
         return view('login', compact('title'));
     }
 
-    public function process(Request $request) {
-        return response($request);
-        $response = Http::withHeaders($request->header())
-                ->get(config('app.api_url') . 'api/auth/login', $request);
+    public function login(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->post(config('app.api_url') . 'api/auth/login', $request->all());
+
+        if (@$response['status'] && @$response['data'] !== null) {
+            session(['user' => $response['data']]);
+
+            return redirect('dashboard');
+        } else {
+            $errors = [
+                'user_not_found' => 'User not registered'
+            ];
+
+            return redirect()->route('login')->withErrors($errors);
+        }
+
+        return redirect()->route('login')->withErrors($response['errors']);
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+
+        return redirect()->route('login');
     }
 }
