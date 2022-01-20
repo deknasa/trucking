@@ -27,7 +27,6 @@ class ParameterController extends Controller
             $response = Http::withHeaders($request->header())
                 ->get(config('app.api_url') . 'api/parameter', $params);
 
-            // return response($response);
             $data = [
                 'total' => $response['attributes']['totalPages'],
                 'records' => $response['attributes']['totalRows'],
