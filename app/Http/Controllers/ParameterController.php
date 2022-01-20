@@ -65,7 +65,7 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get("http://localhost/trucking-laravel/public/api/parameter/$id");
+        ])->get(config('app.api_url') . "api/parameter/$id");
 
         $parameter = $response['data'];
 

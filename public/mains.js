@@ -18,7 +18,7 @@ $(document).mouseup(function (e) {
 });
 
 function setErrorMessages(errors) {
-    $(`[name=${Object.keys(response.errors)[0]}]`).focus()
+    $(`[name=${Object.keys(errors)[0]}]`).focus()
     
     $.each(errors, (index, error) => {
         $(`[name=${index}]`).addClass("is-invalid").after(`
@@ -28,3 +28,7 @@ function setErrorMessages(errors) {
         `);
     });
 }
+
+(function setInputFocus() {
+    $('form [name]:not(:hidden, [readonly], [disabled], .disabled)').first().focus()
+})()
