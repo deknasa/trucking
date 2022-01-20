@@ -161,6 +161,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        App\Providers\MenuServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -229,7 +230,13 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'MenuHelper' => App\Helpers\Menu::class,
 
     ],
 
+    /**
+     * To define API_URL. So that, it can
+     * be called for every API Request.
+     */
+    'api_url' => 'http://localhost/trucking-laravel/public/',
 ];

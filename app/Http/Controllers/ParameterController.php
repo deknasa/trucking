@@ -25,7 +25,7 @@ class ParameterController extends Controller
             ];
 
             $response = Http::withHeaders($request->header())
-                ->get('http://localhost/trucking-laravel/public/api/parameter', $params);
+                ->get(config('app.api_url') . 'api/parameter', $params);
 
             $data = [
                 'total' => $response['attributes']['totalPages'],
@@ -53,7 +53,7 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post('http://localhost/trucking-laravel/public/api/parameter', $request->all());
+        ])->post(config('app.api_url') . 'api/parameter', $request->all());
 
         return response($response);
     }
@@ -65,7 +65,7 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get("http://localhost/trucking-laravel/public/api/parameter/$id");
+        ])->get(config('app.api_url') . "api/parameter/$id");
 
         $parameter = $response['data'];
 
@@ -77,7 +77,7 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch("http://localhost/trucking-laravel/public/api/parameter/$id", $request->all());
+        ])->patch(config('app.api_url') . "api/parameter/$id", $request->all());
 
         return response($response);
     }
@@ -90,7 +90,7 @@ class ParameterController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get("http://localhost/trucking-laravel/public/api/parameter/$id");
+            ])->get(config('app.api_url') . "api/parameter/$id");
 
             $parameter = $response['data'];
 
@@ -105,14 +105,14 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete("http://localhost/trucking-laravel/public/api/parameter/$id");
+        ])->delete(config('app.api_url') . "api/parameter/$id");
 
         return response($response);
     }
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)->get('http://localhost/trucking-laravel/public/api/parameter/field_length');
+        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'api/parameter/field_length');
 
         return response($response['data']);
     }

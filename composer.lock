@@ -366,6 +366,18 @@
         },
         {
             "name": "dragonmantank/cron-expression",
+<<<<<<< HEAD
+            "version": "v3.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dragonmantank/cron-expression.git",
+                "reference": "9545dea2a1d92b60c8b3d06f02025c83e999bde0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dragonmantank/cron-expression/zipball/9545dea2a1d92b60c8b3d06f02025c83e999bde0",
+                "reference": "9545dea2a1d92b60c8b3d06f02025c83e999bde0",
+=======
             "version": "v3.3.0",
             "source": {
                 "type": "git",
@@ -376,6 +388,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/dragonmantank/cron-expression/zipball/63f2a76a045bac6ec93cc2daf2b534b412aa0313",
                 "reference": "63f2a76a045bac6ec93cc2daf2b534b412aa0313",
+>>>>>>> 0f3820ce08decef553f3e8cc18677edc7c1699ff
                 "shasum": ""
             },
             "require": {
@@ -415,7 +428,11 @@
             ],
             "support": {
                 "issues": "https://github.com/dragonmantank/cron-expression/issues",
+<<<<<<< HEAD
+                "source": "https://github.com/dragonmantank/cron-expression/tree/v3.2.4"
+=======
                 "source": "https://github.com/dragonmantank/cron-expression/tree/v3.3.0"
+>>>>>>> 0f3820ce08decef553f3e8cc18677edc7c1699ff
             },
             "funding": [
                 {
@@ -423,7 +440,11 @@
                     "type": "github"
                 }
             ],
+<<<<<<< HEAD
+            "time": "2022-01-13T04:09:37+00:00"
+=======
             "time": "2022-01-14T16:02:05+00:00"
+>>>>>>> 0f3820ce08decef553f3e8cc18677edc7c1699ff
         },
         {
             "name": "egulias/email-validator",

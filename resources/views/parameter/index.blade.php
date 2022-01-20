@@ -137,6 +137,7 @@
 
         },
         loadComplete: function(data) {
+          // console.log($(this).getGridParam('lastpage'));
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -148,6 +149,10 @@
             highlightSearch = ''
           })
 
+          if (indexRow > $(this).getDataIDs().length - 1) {
+						indexRow = $(this).getDataIDs().length - 1;
+					}
+          
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
@@ -181,6 +186,7 @@
         title: 'Add',
         id: 'add',
         buttonicon: 'fas fa-plus',
+        class: 'btn btn-primary',
         onClickButton: function() {
           let limit = $(this).jqGrid('getGridParam', 'postData').rows
 
@@ -195,8 +201,12 @@
         buttonicon: 'fas fa-pen',
         onClickButton: function() {
           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          
-          window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+
+          if (selectedId == null || selectedId == '' || selectedId == undefined) {
+            alert('please select a row')
+          } else {
+            window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+          }
         }
       })
 
@@ -229,6 +239,16 @@
 
     /* Append global search */
     loadGlobalSearch()
+
+    $('#add .ui-pg-div')
+      .addClass('btn btn-sm btn-primary')
+      .parent().addClass('px-1')
+    $('#edit .ui-pg-div')
+      .addClass('btn btn-sm btn-success')
+      .parent().addClass('px-1')
+    $('#delete .ui-pg-div')
+      .addClass('btn btn-sm btn-danger')
+      .parent().addClass('px-1')
   })
 
   /**
