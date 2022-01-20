@@ -18,13 +18,15 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('login', [AuthController::class, 'index'])->name('login');
-Route::post('login', [AuthController::class, 'login'])->name('login.process');
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth', 'web'])->group(function () {
+Route::middleware('guest')->group(function() {
+    Route::get('login', [AuthController::class, 'index'])->name('login');
+    Route::post('login', [AuthController::class, 'login'])->name('login.process');
+});
+
+Route::middleware('loggedin')->group(function () {
     Route::get('dashboard', function () {
-        dump(Auth::check());
         echo 'dashboard';
     })->name('dashboard.index');
 

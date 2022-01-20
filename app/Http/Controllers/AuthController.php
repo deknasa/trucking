@@ -15,6 +15,11 @@ class AuthController extends Controller
         'Content-Type' => 'application/json'
     ];
 
+    public function __construct()
+    {
+        session_start();
+    }
+    
     public function index()
     {
         $title = 'Login';
@@ -28,9 +33,9 @@ class AuthController extends Controller
             ->post(config('app.api_url') . 'api/auth/login', $request->all());
 
         if (@$response['status'] && @$response['data'] !== null) {
-            session(['user' => $response['data']]);
+            $_SESSION['user'] = $response['data'];
 
-            return redirect('dashboard');
+            return redirect('/');
         } else {
             $errors = [
                 'user_not_found' => 'User not registered'
@@ -44,7 +49,7 @@ class AuthController extends Controller
 
     public function logout()
     {
-        Auth::logout();
+        unset($_SESSION['user']);
 
         return redirect()->route('login');
     }
