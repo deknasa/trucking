@@ -19,6 +19,9 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
+        /*
+        Default
+        =======
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
@@ -26,7 +29,12 @@ class RedirectIfAuthenticated
                 return redirect(RouteServiceProvider::HOME);
             }
         }
+        */
 
+        if (isset($_SESSION['user']) && $_SESSION['user'] !== null) {
+            return redirect(RouteServiceProvider::HOME);
+        }
+        
         return $next($request);
     }
 }

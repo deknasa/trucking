@@ -137,6 +137,7 @@
 
         },
         loadComplete: function(data) {
+          // console.log($(this).getGridParam('lastpage'));
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -148,6 +149,10 @@
             highlightSearch = ''
           })
 
+          if (indexRow > $(this).getDataIDs().length - 1) {
+						indexRow = $(this).getDataIDs().length - 1;
+					}
+          
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
@@ -196,8 +201,12 @@
         buttonicon: 'fas fa-pen',
         onClickButton: function() {
           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          
-          window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+
+          if (selectedId == null || selectedId == '' || selectedId == undefined) {
+            alert('please select a row')
+          } else {
+            window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+          }
         }
       })
 

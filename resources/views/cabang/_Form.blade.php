@@ -9,6 +9,8 @@
                         <input type="hidden" name="limit" value="{{ $_GET['limit'] ?? 10 }}">
                         <input type="hidden" name="sortname" value="{{ $_GET['sortname'] ?? 'id' }}">
                         <input type="hidden" name="sortorder" value="{{ $_GET['sortorder'] ?? 'asc' }}">
+                        <input type="hidden" name="indexRow" value="{{ $_GET['indexRow'] ?? 1 }}">
+
 
                         <div class="row form-group">
                             <label for="staticEmail" class="col-sm-3 col-form-label">ID <span class="text-danger"></span></label>
@@ -17,9 +19,15 @@
                             </div>
                         </div>
                         <div class="row form-group">
+                            <label for="staticEmail" class="col-sm-3 col-form-label">Kode Cabang<span class="text-danger">*</span></label>
+                            <div class="col-sm-3">
+                                <input type="text" name="kodecabang" class="form-control" value="{{ $cabang['kodecabang'] ?? '' }}">
+                            </div>
+                        </div>
+                        <div class="row form-group">
                             <label for="staticEmail" class="col-sm-3 col-form-label">Nama Cabang<span class="text-danger">*</span></label>
                             <div class="col-sm-6">
-                                <input type="text" name="cabang" class="form-control" value="{{ $cabang['cabang'] ?? '' }}">
+                                <input type="text" name="namacabang" class="form-control" value="{{ $cabang['namacabang'] ?? '' }}">
                             </div>
                         </div>
 

@@ -133,17 +133,7 @@ $indexRow = $_GET['indexRow'] ?? '';
           }
 
           if (response.errors) {
-            $(`[name=${Object.keys(response.errors)[0]}]`).focus()
-            
-            $.each(response.errors, (index, error) => {
-              $(`[name=${index}]`)
-                .addClass('is-invalid')
-                .after(`
-                <div class="invalid-feedback">
-                  ${error}
-                </div>
-              `)
-            })
+            setErrorMessages(response.errors)
           }
         },
         error: error => {
