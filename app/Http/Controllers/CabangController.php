@@ -129,6 +129,7 @@ class CabangController extends Controller
         ])->delete("http://localhost/trucking-laravel/public/api/cabang/$id", $request->all());
 
         return response($response);
+        
     }
 
     public function fieldLength()

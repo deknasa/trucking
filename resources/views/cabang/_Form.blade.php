@@ -10,6 +10,7 @@
                         <input type="hidden" name="sortname" value="{{ $_GET['sortname'] ?? 'id' }}">
                         <input type="hidden" name="sortorder" value="{{ $_GET['sortorder'] ?? 'asc' }}">
                         <input type="hidden" name="indexRow" value="{{ $_GET['indexRow'] ?? 1 }}">
+                        <input type="hidden" name="page" value="{{ $_GET['page'] ?? 1 }}">
 
 
                         <div class="row form-group">
@@ -94,11 +95,12 @@
                 dataType: 'JSON',
                 data: $('form').serializeArray(),
                 success: response => {
+                    console.log(response);
                     if (response.status) {
                         alert(response.message)
 
                         if (action != 'delete') {
-                            window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
+                             window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
                         } else {
                             window.location.href = `${indexUrl}?page={{ $_GET['page'] ?? '' }}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] ?? ''}}&indexRow={{ $_GET['indexRow'] ?? '' }}`
                         }
