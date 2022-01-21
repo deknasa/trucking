@@ -33,7 +33,7 @@ Route::middleware('loggedin')->group(function () {
 
     Route::get('/', function () {
         return view('welcome');
-    });
+    })->name('welcome');
 
     Route::get('parameter/field_length', [ParameterController::class, 'fieldLength'])->name('parameter.field_length');
     Route::get('parameter/{id}/delete', [ParameterController::class, 'delete'])->name('parameter.delete');
