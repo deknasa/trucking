@@ -19,6 +19,9 @@ $indexRow = $_GET['indexRow'] ?? '';
             <input type="hidden" name="limit" value="{{ $limit }}">
             <input type="hidden" name="sortname" value="{{ $sortname }}">
             <input type="hidden" name="sortorder" value="{{ $sortorder }}">
+            <input type="hidden" name="indexRow" value="{{ $_GET['indexRow'] ?? 1 }}">
+            <input type="hidden" name="page" value="{{ $_GET['page'] ?? 1 }}">
+
 
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
@@ -125,11 +128,8 @@ $indexRow = $_GET['indexRow'] ?? '';
           $('.invalid-feedback').remove()
 
           if (response.status) {
-            if (action != 'delete') {
-              window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $sortname }}&sortorder={{ $sortorder }}&limit={{ $limit }}`
-            } else {
-              window.location.href = `${indexUrl}?page={{ $page }}&sortname={{ $sortname }}&sortorder={{ $sortorder }}&limit={{ $limit }}&indexRow={{ $indexRow }}`
-            }
+            window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
+
           }
 
           if (response.errors) {

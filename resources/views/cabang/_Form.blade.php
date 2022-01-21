@@ -82,48 +82,38 @@
         method = "DELETE"
     <?php endif; ?>
 
+
+
     $(document).ready(function() {
         $('form').submit(function(e) {
             e.preventDefault()
         })
 
-        /* Handle on click btnSimpan */
         $('#btnSimpan').click(function() {
+            $(this).attr('disabled', '')
+
             $.ajax({
                 url: actionUrl,
                 method: method,
                 dataType: 'JSON',
                 data: $('form').serializeArray(),
                 success: response => {
-                    console.log(response);
-                    if (response.status) {
-                        alert(response.message)
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
 
-                        if (action != 'delete') {
-                             window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
-                        } else {
+                    if (response.status) {
                             window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
-                            // window.location.href = `${indexUrl}?page={{ $_GET['page'] ?? '' }}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] ?? ''}}&indexRow={{ $_GET['indexRow'] ?? '' }}`
-                        }
                     }
 
-                    $.each(response.errors, (index, error) => {
-                        // showErrorMessages()
-
-                        $(`[name=${index}]`)
-                            .addClass('is-invalid')
-                            .after(`
-                <div class="invalid-feedback">
-                  ${error}
-                </div>
-              `)
-
-                        console.log(error);
-                    })
+                    if (response.errors) {
+                        setErrorMessages(response.errors)
+                    }
                 },
                 error: error => {
-                    alert(error)
-                }
+                    alert(`${error.statusText} | ${error.responseText}`)
+                },
+            }).always(() => {
+                $(this).removeAttr('disabled')
             })
         })
 
