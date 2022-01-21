@@ -232,6 +232,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'MenuHelper' => App\Helpers\Menu::class,
+        'Myauth' => App\Libraries\Myauth::class
 
     ],
 

@@ -5,7 +5,7 @@ use App\Http\Controllers\AbsensiSupirHeaderController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\ParameterController;
 use Illuminate\Support\Facades\Route;
-use URL;
+// use URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +20,7 @@ use URL;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Route::get('dashboard', function() {
     echo 'dashboard';
@@ -28,6 +28,7 @@ Route::get('dashboard', function() {
 
 Route::get('parameter/field_length', [ParameterController::class, 'fieldLength'])->name('parameter.field_length');
 Route::get('parameter/{id}/delete', [ParameterController::class, 'delete'])->name('parameter.delete');
+Route::get('parameter/index', [ParameterController::class, 'index'])->name('parameter.index');
 Route::resource('parameter', ParameterController::class);
 
 Route::get('cabang/field_length', [CabangController::class, 'fieldLength'])->name('cabang.field_length');

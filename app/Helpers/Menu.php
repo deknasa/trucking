@@ -16,7 +16,7 @@ class Menu
             $subchild = Menu::print_recursive_list($list['child']);
 
             if ($list['menuexe'] !== "/") {
-                $str .= "<li class='nav-item'><a href='/" . $menuexe . "' id='" . $list['menukode'] . "' class='nav-link' href='" . $menuexe . "'>
+                $str .= "<li class='nav-item'><a href='" . $menuexe . "' id='" . $list['menukode'] . "' class='nav-link' href='" . $menuexe . "'>
             <i class='" . $list['menuicon'] . " nav-icon'></i>
           <p>" . $list['menuno'] . "." . $list['menuname'] . "</p>
           </a> </li>";
