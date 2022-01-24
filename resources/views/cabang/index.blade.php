@@ -222,10 +222,9 @@
         id: 'delete',
         buttonicon: 'fas fa-trash',
         onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
           
-          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-        }
+          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`        }
       })
 
       .jqGrid('filterToolbar', {
