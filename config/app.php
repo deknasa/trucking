@@ -239,5 +239,5 @@ return [
      * To define API_URL. So that, it can
      * be called for every API Request.
      */
-    'api_url' => 'http://localhost/trucking-laravel/public/',
+    'api_url' => 'http://localhost/trucking-laravel/public/api/',
 ];

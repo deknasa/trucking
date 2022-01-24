@@ -10,8 +10,8 @@ class CabangController extends Controller
 {
     public $title = 'Cabang';
     public $httpHeader = [
-        // 'Accept' => 'application/json',
-        // 'Content-Type' => 'application/json'
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json'
     ];
 
     public function index(Request $request)
@@ -27,18 +27,13 @@ class CabangController extends Controller
                 'search' => json_decode($request->filters, 1) ?? [],
             ];
 
-            // dd($params);
-
-            // $response = Http::get('http://localhost/trucking-laravel/public/api/cabang', $params);
             $response = Http::withHeaders($request->header())
-            ->get('http://localhost/trucking-laravel/public/api/cabang', $params);
-
-    
+                ->get(config('app.api_url') . 'api/cabang', $params);
 
             $data = [
-                'total' => $response['attributes']['totalPages'],
-                'records' => $response['attributes']['totalRows'],
-                'rows' => $response['data']
+                'total' => $response['attributes']['totalPages'] ?? [],
+                'records' => $response['attributes']['totalRows'] ?? [],
+                'rows' => $response['data'] ?? []
             ];
 
 

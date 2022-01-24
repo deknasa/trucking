@@ -28,14 +28,12 @@ Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->name('login.process');
 });
 
-Route::middleware('loggedin')->group(function () {
-    // Route::get('dashboard', function () {
-    //     echo 'dashboard';
-    // })->name('dashboard.index');
+Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return view('welcome');
+    })->name('welcome');
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-    // Route::get('/', [UserController::class, 'index']);
 
     Route::get('parameter/field_length', [ParameterController::class, 'fieldLength'])->name('parameter.field_length');
     Route::get('parameter/{id}/delete', [ParameterController::class, 'delete'])->name('parameter.delete');
