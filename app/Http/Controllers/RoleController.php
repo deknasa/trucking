@@ -1,0 +1,134 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+
+class RoleController extends Controller
+{
+    public $title = 'Role';
+    public $httpHeader = [
+        // 'Accept' => 'application/json',
+        // 'Content-Type' => 'application/json'
+    ];
+
+    public function index(Request $request)
+    {
+
+
+        if ($request->ajax()) {
+            $params = [
+                'offset' => (($request->page - 1) * $request->rows),
+                'limit' => $request->rows,
+                'sortIndex' => $request->sidx,
+                'sortOrder' => $request->sord,
+                'search' => json_decode($request->filters, 1) ?? [],
+            ];
+
+            // dd($params);
+
+            // $response = Http::get('http://localhost/trucking-laravel/public/api/role', $params);
+            $response = Http::withHeaders($request->header())
+                ->get(config('app.api_url') . 'api/role', $params);
+
+
+
+            $data = [
+                'total' => $response['attributes']['totalPages'],
+                'records' => $response['attributes']['totalRows'],
+                'rows' => $response['data']
+            ];
+
+
+            return response($data);
+        }
+
+
+        $title = $this->title;
+        $data = [
+            'pagename' => 'Menu Utama Role'
+        ];
+
+        return view('role.index', compact('title', 'data'));
+    }
+
+    public function create()
+    {
+        $title = $this->title;
+
+
+        return view('role.add', compact('title'));
+    }
+
+    public function store(Request $request)
+    {
+
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ])->post(config('app.api_url') . 'api/role', $request->all());
+
+        return response($response);
+    }
+
+    public function edit($id)
+    {
+        $title = $this->title;
+
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        ])->get(config('app.api_url') . "api/role/$id");
+
+        $role = $response['data'];
+
+        return view('role.edit', compact('title', 'role'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ])->patch(config('app.api_url') . "api/role/$id", $request->all());
+
+        return response($response);
+    }
+
+    public function delete($id)
+    {
+        try {
+            $title = $this->title;
+
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json'
+            ])->get(config('app.api_url') . "api/role/$id");
+
+            $role = $response['data'];
+
+
+            return view('role.delete', compact('title', 'role'));
+        } catch (\Throwable $th) {
+            return redirect()->route('role.index');
+        }
+    }
+
+    public function destroy($id, Request $request)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        ])->delete(config('app.api_url') . "api/role/$id", $request->all());
+
+        return response($response);
+    }
+
+    public function fieldLength()
+    {
+        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'api/role/field_length');
+
+        return response($response['data']);
+    }
+}
