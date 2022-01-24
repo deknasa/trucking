@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -38,7 +39,7 @@ class AuthController extends Controller
         ];
         
         if (Auth::attempt($credentials)) {
-            return redirect()->intended('/');
+            return redirect()->intended(RouteServiceProvider::HOME);
         } else {
             return redirect()->back()->withErrors([
                 'user_not_found' => 'User not registered'
