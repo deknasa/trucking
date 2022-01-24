@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Providers\AuthServiceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    protected $user;
+    
     /**
      * Display a listing of the resource.
      *
@@ -13,11 +17,16 @@ class DashboardController extends Controller
      */
     public function __construct()
     {
-        parent::__construct();
+        $this->middleware(function ($request, $next) {
+            parent::__construct();
+            
+            return $next($request);
+        });
     }
-
+    
     public function index()
     {
+        // dd(Auth::user());
         return view('welcome');
     }
 

@@ -2,6 +2,8 @@
 
 namespace App\Libraries;
 
+use App\Models\UserRole;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
@@ -35,100 +37,58 @@ class Myauth
     {
         $class = strtolower($class);
         $method = strtolower($method);
-        
+
         if (!$this->_validatePermission($class, $method)) {
             exit("You don't have access");
         }
     }
 
-    public function hasPermission($class, $method)
+    public function hasPermission($class, $method): bool
     {
         $class = strtolower($class);
         $method = strtolower($method);
 
-        return Myauth::_validatePermission($class, $method);
+        return $this->_validatePermission($class, $method);
     }
 
-    private function _validatePermission($class = null, $method = null)
+    private function _validatePermission($class = null, $method = null): bool
     {
-        $myauth = new Myauth(
-            [
-                'server' => 'web.transporindo.com',
-                'user' => 'sa',
-                'pass' => 'MDF123!@#ldf1411',
-                'db' => 'Trucking',
-                // 'isLogin' => 1,
-                'isLogin' => isset($_SESSION['logged_in']) ? 1 : 0,
-                // 'userPK' => 1,
-                'userPK' => isset($_SESSION['userpk']) ? $_SESSION['userpk'] : 0,
-                // 'baseUrl' => route('welcome')
-            ]
-        );
-
-        if ($myauth->isLogin == 0) {
-            if ($class != $myauth->authController) {
-                dump($class);
-                dd($myauth->authController);
-                if (strtolower($class) != 'extension') {
-                    header("Location: " . $myauth->baseUrl . '/' . $myauth->authController);
-                    exit();
-                }
-            }
-        }
-
-        // check except for class
-        if (in_array($class, $myauth->exceptAuth['class'])) {
+        /* Check if $class is in exception */
+        if (in_array($class, $this->exceptAuth['class'])) {
             return true;
         }
 
-        $user = new \StdClass;
-        // $user = multi_query("select fid,fuser_id,frole_id
-        //     from tuserrole
-        //     where fuser_id={$this->userPK}", "pst", $this->db);
-        $user = DB::table('userrole')->select(['userrole.id', 'userrole.user_id', 'userrole.role_id'])->where('user_id', '=', $myauth->userPK)->get();
+        $userRole = DB::table('userrole')
+            ->where('user_id', $this->userPK)
+            ->get();
 
+        // if (empty($user)) {
+        //     $user[0]->role_id = '';
+        // }
 
-        if (empty($user)) {
-            $user[0]->role_id = '';
-        }
+        // $data_union = DB::table('acos')->select(['acos.id', 'acos.class', 'acos.method'])->join('acl', 'acos.id', '=', 'acl.aco_id')->where('acos.class', 'like', '%' . $class . '%')->where('acl.role_id', '=', $user[0]->role_id);
+        $data_union = DB::table('acos')
+            ->join('acl', 'acos.id', '=', 'acl.aco_id')
+            ->where('acos.class', 'like', '%user%')
+            ->where('acl.role_id', $userRole[0]->id);
 
-        $data_union = DB::table('acos')->select(['acos.id', 'acos.class', 'acos.method'])->join('acl', 'acos.id', '=', 'acl.aco_id')->where('acos.class', 'like', '%' . $class . '%')->where('acl.role_id', '=', $user[0]->role_id);
+            $data = DB::table('acos')
+            ->join('useracl', 'acos.id', '=', 'useracl.aco_id')
+            ->where('acos.class', 'like', '%user%')
+            ->where('useracl.user_id', $userRole[0]->id)
+            ->get();
 
-        $data = DB::table('acos')->join('useracl', 'acos.id', '=', 'useracl.aco_id')->where('acos.class', 'like', '%' . $class . '%')->where('useracl.user_id', '=', $myauth->userPK)->unionAll($data_union)->get(['acos.id', 'acos.class', 'acos.method'])->toArray();
-
-
-        $acos = @$data;
-        $acos = (array) $acos;
-        if (empty($acos)) {
-            return false;
-        }
-
-        if ($myauth->in_array_custom($method, $acos) == false && in_array($method, $myauth->exceptAuth['method']) == false) {
+        if ($this->in_array_custom($method, $data->toArray()) == false && in_array($method, $this->exceptAuth['method']) == false) {
             return false;
         }
 
         return true;
     }
 
-    function in_array_custom($item, $array)
+    public function in_array_custom($item, $array): bool
     {
-        // php > 5.5
-        // $found = array_search($item, array_column($array, 'method'));
-        // php all
-
-
-        // $as = array_map(function ($v) {
-        //     return strtolower($v['method']);
-        // }, $array);
-
-        // dd($as);
-        // dd($array);
-
         $found =  array_search(
             $item,
-            // $array->map(function ($v) {
-            //     return $v['method'];
-            // }),
             array_map(
                 function ($v) {
                     return strtolower($v->method);
@@ -136,6 +96,7 @@ class Myauth
                 $array
             )
         );
+
         return empty($found) && $found !== 0 ? false : true;
     }
 }

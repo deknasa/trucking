@@ -13,6 +13,15 @@ class ParameterController extends Controller
         'Content-Type' => 'application/json'
     ];
 
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            parent::__construct();
+            
+            return $next($request);
+        });
+    }
+    
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -28,9 +37,9 @@ class ParameterController extends Controller
                 ->get(config('app.api_url') . 'parameter', $params);
 
             $data = [
-                'total' => $response['attributes']['totalPages'],
-                'records' => $response['attributes']['totalRows'],
-                'rows' => $response['data']
+                'total' => $response['attributes']['totalPages'] ?? [],
+                'records' => $response['attributes']['totalRows'] ?? [],
+                'rows' => $response['data'] ?? [],
             ];
 
             return response($data);
@@ -65,7 +74,7 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get(config('app.api_url') . "parameter/$id");
+        ])->get(config('app.api_url') . "apiparameter/$id");
 
         $parameter = $response['data'];
 
@@ -77,7 +86,7 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "parameter/$id", $request->all());
+        ])->patch(config('app.api_url') . "apiparameter/$id", $request->all());
 
         return response($response);
     }
@@ -90,7 +99,7 @@ class ParameterController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "parameter/$id");
+            ])->get(config('app.api_url') . "apiparameter/$id");
 
             $parameter = $response['data'];
 
@@ -105,7 +114,7 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete(config('app.api_url') . "parameter/$id");
+        ])->delete(config('app.api_url') . "apiparameter/$id");
 
         return response($response);
     }

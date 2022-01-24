@@ -45,27 +45,27 @@
     let sortorder = 'asc'
 
     /* Set page */
-    <?php if (isset($_GET['page'])) {?>
+    <?php if (isset($_GET['page'])) { ?>
       page = "{{ $_GET['page'] }}"
     <?php } ?>
 
     /* Set id */
-    <?php if (isset($_GET['id'])) {?>
+    <?php if (isset($_GET['id'])) { ?>
       id = "{{ $_GET['id'] }}"
     <?php } ?>
 
     /* Set indexRow */
-    <?php if (isset($_GET['indexRow'])) {?>
+    <?php if (isset($_GET['indexRow'])) { ?>
       indexRow = "{{ $_GET['indexRow'] }}"
     <?php } ?>
 
     /* Set sortname */
-    <?php if (isset($_GET['sortname'])) {?>
+    <?php if (isset($_GET['sortname'])) { ?>
       sortname = "{{ $_GET['sortname'] }}"
     <?php } ?>
 
     /* Set sortorder */
-    <?php if (isset($_GET['sortorder'])) {?>
+    <?php if (isset($_GET['sortorder'])) { ?>
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
 
@@ -150,9 +150,9 @@
           })
 
           if (indexRow > $(this).getDataIDs().length - 1) {
-						indexRow = $(this).getDataIDs().length - 1;
-					}
-          
+            indexRow = $(this).getDataIDs().length - 1;
+          }
+
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
@@ -165,7 +165,7 @@
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
               $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
-            
+
             triggerClick = false
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
@@ -217,7 +217,7 @@
         buttonicon: 'fas fa-trash',
         onClickButton: function() {
           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          
+
           window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
         }
       })
@@ -232,23 +232,39 @@
         }
       })
 
-      .bindKeys()/
+      .bindKeys() /
 
-    /* Append clear filter button */
-    loadClearFilter()
+      /* Append clear filter button */
+      loadClearFilter()
 
     /* Append global search */
     loadGlobalSearch()
 
+
     $('#add .ui-pg-div')
-      .addClass('btn btn-sm btn-primary')
+      .addClass(`btn btn-sm btn-primary`)
       .parent().addClass('px-1')
+
     $('#edit .ui-pg-div')
       .addClass('btn btn-sm btn-success')
       .parent().addClass('px-1')
+
     $('#delete .ui-pg-div')
       .addClass('btn btn-sm btn-danger')
       .parent().addClass('px-1')
+
+
+    if (!`{{ $myAuth->hasPermission('parameter', 'create') }}`) {
+      $('#add').addClass('ui-state-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('parameter', 'edit') }}`) {
+      $('#edit').addClass('ui-state-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('parameter', 'delete') }}`) {
+      $('#delete').addClass('ui-state-disabled')
+    }
   })
 
   /**
