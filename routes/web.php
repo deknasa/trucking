@@ -5,6 +5,7 @@ use App\Http\Controllers\AbsensiSupirHeaderController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\ParameterController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,10 @@ Route::middleware('loggedin')->group(function () {
     Route::get('cabang/field_length', [CabangController::class, 'fieldLength'])->name('cabang.field_length');
     Route::get('cabang/{id}/delete', [CabangController::class, 'delete'])->name('cabang.delete');
     Route::resource('cabang', CabangController::class);
+
+    Route::get('role/field_length', [RoleController::class, 'fieldLength'])->name('role.field_length');
+    Route::get('role/{id}/delete', [RoleController::class, 'delete'])->name('role.delete');
+    Route::resource('role', RoleController::class);
 
 
     Route::get('absensi/{id}/delete', [AbsensiSupirHeaderController::class, 'delete'])->name('absensi.delete');
