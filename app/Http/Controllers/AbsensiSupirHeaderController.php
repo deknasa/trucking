@@ -9,6 +9,11 @@ class AbsensiSupirHeaderController extends Controller
 {
     public $title = 'Absensi';
 
+    public $httpHeaders = [
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json'
+    ];
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -21,7 +26,7 @@ class AbsensiSupirHeaderController extends Controller
             ];
 
             $response = Http::withHeaders($request->header())
-                ->get('http://localhost/trucking-laravel/public/api/absensi', $params);
+                ->get(config('app.api_url') . 'absensi', $params);
 
             $data = [
                 'total' => $response['attributes']['totalPages'],
@@ -36,10 +41,13 @@ class AbsensiSupirHeaderController extends Controller
 
         return view('absensi.index', compact('title'));
     }
-    
+
     public function create()
     {
         $title = $this->title;
+
+        $noBukti = $this->getNoBukti('ABSENSI', 'ABSENSI', 'absensisupirheader');
+        $kasGantungNoBukti = $this->getNoBukti('ABSENSI', 'ABSENSI', 'absensisupirheader');
 
         $combo = [
             'trado' => $this->getTrado(),
@@ -47,7 +55,7 @@ class AbsensiSupirHeaderController extends Controller
             'status' => $this->getStatus(),
         ];
 
-        return view('absensi.add', compact('title', 'combo'));
+        return view('absensi.add', compact('title', 'noBukti', 'combo'));
     }
 
     public function store(Request $request)
@@ -55,7 +63,7 @@ class AbsensiSupirHeaderController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post('http://localhost/trucking-laravel/public/api/absensi', $request->all());
+        ])->post(config('app.api_url') . 'absensi', $request->all());
 
         return response($response);
     }
@@ -67,7 +75,7 @@ class AbsensiSupirHeaderController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get("http://localhost/trucking-laravel/public/api/absensi/$id");
+        ])->get(config('app.api_url') . "absensi/$id");
 
         $absensi = $response['data'];
         $combo = [
@@ -84,11 +92,11 @@ class AbsensiSupirHeaderController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch("http://localhost/trucking-laravel/public/api/absensi/$id", $request->all());
+        ])->patch(config('app.api_url') . "absensi/$id", $request->all());
 
         return response($response);
     }
-    
+
     public function delete($id)
     {
         try {
@@ -97,7 +105,7 @@ class AbsensiSupirHeaderController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get("http://localhost/trucking-laravel/public/api/absensi/$id");
+            ])->get(config('app.api_url') . "absensi/$id");
 
             $absensi = $response['data'];
             $combo = [
@@ -105,7 +113,7 @@ class AbsensiSupirHeaderController extends Controller
                 'supir' => $this->getSupir(),
                 'status' => $this->getStatus(),
             ];
-    
+
             return view('absensi.delete', compact('title', 'combo', 'absensi'));
         } catch (\Throwable $th) {
             return redirect()->route('absensi.index');
@@ -117,26 +125,45 @@ class AbsensiSupirHeaderController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete("http://localhost/trucking-laravel/public/api/absensi/$id");
+        ])->delete(config('app.api_url') . "absensi/$id");
 
         return response($response);
     }
-    
-    public function getTrado() {
-        $response = Http::get('http://localhost/trucking-laravel/public/api/trado');
+
+    public function getTrado()
+    {
+        $response = Http::get(config('app.api_url') . 'trado');
 
         return $response['data'];
     }
 
-    public function getSupir() {
-        $response = Http::get('http://localhost/trucking-laravel/public/api/supir');
+    public function getSupir()
+    {
+        $response = Http::get(config('app.api_url') . 'supir');
 
         return $response['data'];
     }
 
-    public function getStatus() {
-        $response = Http::get('http://localhost/trucking-laravel/public/api/absentrado');
+    public function getStatus()
+    {
+        $response = Http::get(config('app.api_url') . 'absentrado');
 
         return $response['data'];
+    }
+
+    public function getNoBukti($group, $subgroup, $table)
+    {
+        $params = [
+            'group' => $group,
+            'subgroup' => $subgroup,
+            'table' => $table
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->get(config('app.api_url') . "absensi/running_number", $params);
+
+        $noBukti = $response['data'] ?? 'No bukti tidak ditemukan';
+
+        return $noBukti;
     }
 }

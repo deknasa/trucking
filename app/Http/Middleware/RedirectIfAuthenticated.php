@@ -31,7 +31,7 @@ class RedirectIfAuthenticated
         }
         */
 
-        if (isset($_SESSION['user']) && $_SESSION['user'] !== null) {
+        if (Auth::check()) {
             return redirect(RouteServiceProvider::HOME);
         }
         

@@ -10,16 +10,6 @@ use Illuminate\Support\Facades\Redirect;
 
 class AuthController extends Controller
 {
-    public $httpHeaders = [
-        'Accept' => 'application/json',
-        'Content-Type' => 'application/json'
-    ];
-
-    public function __construct()
-    {
-        session_start();
-    }
-    
     public function index()
     {
         $title = 'Login';
@@ -27,29 +17,37 @@ class AuthController extends Controller
         return view('login', compact('title'));
     }
 
+    /**
+     * To proccess login
+     * 
+     * @param \Illuminate\Http\Request $request
+     * 
+     * @return void
+     */
     public function login(Request $request)
     {
-        $response = Http::withHeaders($this->httpHeaders)
-            ->post(config('app.api_url') . 'api/auth/login', $request->all());
-
-        if (@$response['status'] && @$response['data'] !== null) {
-            $_SESSION['user'] = $response['data'];
-
-            return redirect('/');
+        $request->validate([
+            'user' => 'required',
+            'password' => 'required'
+        ]);
+        
+        $credentials = [
+            'user' => $request->user,
+            'password' => $request->password
+        ];
+        
+        if (Auth::attempt($credentials)) {
+            return redirect()->intended('/');
         } else {
-            $errors = [
+            return redirect()->back()->withErrors([
                 'user_not_found' => 'User not registered'
-            ];
-
-            return redirect()->route('login')->withErrors($errors);
+            ]);
         }
-
-        return redirect()->route('login')->withErrors($response['errors']);
     }
 
     public function logout()
     {
-        unset($_SESSION['user']);
+        Auth::logout();
 
         return redirect()->route('login');
     }

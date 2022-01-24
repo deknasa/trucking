@@ -9,13 +9,14 @@
             <input type="hidden" name="limit" value="{{ $_GET['limit'] ?? 10 }}">
             <input type="hidden" name="sortname" value="{{ $_GET['sortname'] ?? 'id' }}">
             <input type="hidden" name="sortorder" value="{{ $_GET['sortorder'] ?? 'asc' }}">
+            <input type="hidden" name="kasgantung_nobukti" value="{{ $absensi['kasgantung_nobukti'] ?? $kasGantungNoBukti }}">
 
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>NO BUKTI</label>
               </div>
               <div class="col-12 col-md-4">
-                <input type="text" name="nobukti" class="form-control" value="{{ $absensi['nobukti'] ?? time() }}" readonly>
+                <input type="text" name="nobukti" class="form-control" value="{{ $absensi['nobukti'] ?? $noBukti }}" readonly>
               </div>
               <div class="col-12 col-md-2 col-form-label">
                 <label>TANGGAL</label>
@@ -58,7 +59,7 @@
                         <td>
                           <select name="supir_id[]">
                             @foreach($combo['supir'] as $supirIndex => $supir)
-                            <option value="{{ $supir['id'] }}" {{ $supir['id'] == @$absensi['absensi_supir_detail'][$tradoIndex]['supir']['id'] ? 'selected' : '' }}>{{ $supir['nsupir'] }}</option>
+                            <option value="{{ $supir['id'] }}" {{ $supir['id'] == @$absensi['absensi_supir_detail'][$tradoIndex]['supir']['id'] ? 'selected' : '' }}>{{ $supir['namasupir'] }}</option>
                             @endforeach
                           </select>
                         </td>
@@ -68,7 +69,7 @@
                         <td>
                           <select name="absen_id[]">
                             @foreach($combo['status'] as $status)
-                            <option value="{{ $status['id'] }}" {{ $status['id'] == @$absensi['absensi_supir_detail'][$tradoIndex]['absen_trado']['id'] ? 'selected' : '' }}>{{ $status['nabsen'] }}</option>
+                            <option value="{{ $status['id'] }}" {{ $status['id'] == @$absensi['absensi_supir_detail'][$tradoIndex]['absen_trado']['id'] ? 'selected' : '' }}>{{ $status['kodeabsen'] }}</option>
                             @endforeach
                           </select>
                         </td>
@@ -130,12 +131,17 @@
 
     /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
+      $(this).attr('disabled', '')
+
       $.ajax({
         url: actionUrl,
         method: method,
         dataType: 'JSON',
         data: $('form').serializeArray(),
         success: response => {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
           if (response.status) {
             alert(response.message)
 
@@ -146,13 +152,15 @@
             }
           }
 
-          $.each(response.errors, (index, error) => {
-            console.log(error);
-          })
+          if (response.errors) {
+            setErrorMessages(response.errors)
+          }
         },
         error: error => {
-          alert(error)
+          alert(`${error.statusText} | ${error.responseText}`)
         }
+      }).always(() => {
+        $(this).removeAttr('disabled')
       })
     })
   })

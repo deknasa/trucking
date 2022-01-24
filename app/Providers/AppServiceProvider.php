@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 // use DB;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,9 +39,9 @@ class AppServiceProvider extends ServiceProvider
         $query = Menu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')->where('menu.menuparent', $induk)->orderby(DB::raw('right(menukode,1)'), 'ASC')->get(['menu.id', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
         foreach ($query as $row) {
             // $check = $this->myauth->hasPermission($row->class, $row->method);
-            $check = \App\Libraries\Myauth::hasPermission($row->class, $row->method);
+            // $check = \App\Libraries\Myauth::hasPermission($row->class, $row->method);
 
-            if ($check == true || $row->class == "") {
+            // if ($check == true || $row->class == "") {
 
                 $data[] = array(
                     'menuid'    => $row->id,
@@ -53,7 +54,7 @@ class AppServiceProvider extends ServiceProvider
                     // recursive
                     'child'    => $this->get_data($row->id)
                 );
-            }
+            // }
         }
         return $data;
     }

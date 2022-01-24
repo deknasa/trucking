@@ -35,6 +35,7 @@ class Myauth
     {
         $class = strtolower($class);
         $method = strtolower($method);
+        
         if (!$this->_validatePermission($class, $method)) {
             exit("You don't have access");
         }
@@ -44,6 +45,7 @@ class Myauth
     {
         $class = strtolower($class);
         $method = strtolower($method);
+
         return Myauth::_validatePermission($class, $method);
     }
 
