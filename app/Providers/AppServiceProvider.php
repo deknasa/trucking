@@ -27,34 +27,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // dd(route(''));
         // ini_set('max_execution_time', 0);
-        $categories = $this->get_data();
-        View::share('sqlmenu', $categories);
-    }
-
-    public function get_data($induk = 0)
-    {
-        $data = array();
-        $query = Menu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')->where('menu.menuparent', $induk)->orderby(DB::raw('right(menukode,1)'), 'ASC')->get(['menu.id', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
-        foreach ($query as $row) {
-            // $check = $this->myauth->hasPermission($row->class, $row->method);
-            $check = \App\Libraries\Myauth::hasPermission($row->class, $row->method);
-
-            if ($check == true || $row->class == "") {
-
-                $data[] = array(
-                    'menuid'    => $row->id,
-                    'menuname'    => $row->menuname,
-                    'menuicon'    => $row->menuicon,
-                    'link' => $row->link,
-                    'menuno' => substr($row->menukode, -1),
-                    'menukode' => $row->menukode,
-                    'menuexe'    => $row->class . "/" . $row->method,
-                    // recursive
-                    'child'    => $this->get_data($row->id)
-                );
-            }
-        }
-        return $data;
+        // $categories = $this->get_data();
+        // View::share('sqlmenu', $categories);
     }
 }

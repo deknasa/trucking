@@ -17,11 +17,13 @@ class AuthController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
         session_start();
     }
-    
+
     public function index()
     {
+        // dd(route('parameter.index'));
         $title = 'Login';
 
         return view('login', compact('title'));
@@ -33,9 +35,12 @@ class AuthController extends Controller
             ->post(config('app.api_url') . 'api/auth/login', $request->all());
 
         if (@$response['status'] && @$response['data'] !== null) {
-            $_SESSION['user'] = $response['data'];
+            $_SESSION['userpk'] = $response['data']['id'];
+            $_SESSION['userid'] = $response['data']['user'];
+            $_SESSION['username'] = $response['data']['name'];
+            $_SESSION['logged_in'] = 1;
 
-            return redirect('/');
+            return redirect()->route('dashboard');
         } else {
             $errors = [
                 'user_not_found' => 'User not registered'

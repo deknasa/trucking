@@ -55,17 +55,20 @@ class Myauth
                 'user' => 'sa',
                 'pass' => 'MDF123!@#ldf1411',
                 'db' => 'Trucking',
-                'isLogin' => 1,
-                // 'isLogin' => isset($_SESSION[SESSION_NAME . 'logged_in']) ? 1 : 0,
-                'userPK' => 1,
-                // 'userPK' => isset($_SESSION[SESSION_NAME . 'userpk']) ? $_SESSION[SESSION_NAME . 'userpk'] : 0,
+                // 'isLogin' => 1,
+                'isLogin' => isset($_SESSION['logged_in']) ? 1 : 0,
+                // 'userPK' => 1,
+                'userPK' => isset($_SESSION['userpk']) ? $_SESSION['userpk'] : 0,
                 // 'baseUrl' => route('welcome')
             ]
         );
+
         if ($myauth->isLogin == 0) {
-            if ($class != $this->authController) {
+            if ($class != $myauth->authController) {
+                dump($class);
+                dd($myauth->authController);
                 if (strtolower($class) != 'extension') {
-                    header("Location: " . $this->baseUrl . '/' . $this->authController);
+                    header("Location: " . $myauth->baseUrl . '/' . $myauth->authController);
                     exit();
                 }
             }

@@ -77,7 +77,7 @@
 
           <?php } else { ?>
             <li class="nav-item">
-              <a href="<?= $data['menuname'] == 'Home' ? route('welcome') : $menuexe ?>" class="nav-link" id="<?= $data['menukode'] ?>">
+              <a href="<?= $data['menuname'] == 'Home' ? route('dashboard') : route('logout') ?>" class="nav-link" id="<?= $data['menukode'] ?>">
                 <i class="nav-icon <?= $data['menuname'] == 'Home' ? 'fas fa-home' : 'fas fa-sign-out-alt' ?>"></i>
                 <p>
                   <?php echo $data['menuno'] ?>. <?php echo $data['menuname'] ?>

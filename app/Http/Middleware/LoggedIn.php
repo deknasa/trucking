@@ -20,7 +20,7 @@ class LoggedIn
 
         // dd(isset($_SESSION['user']));
 
-        if (isset($_SESSION['user']) && $_SESSION['user'] !== null) {
+        if (isset($_SESSION['userpk']) && $_SESSION['userpk'] !== null) {
             return $next($request);
         }
         

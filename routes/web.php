@@ -8,6 +8,7 @@ use App\Http\Controllers\ParameterController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,21 +24,23 @@ use Illuminate\Support\Facades\Route;
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('guest')->group(function () {
-    Route::get('login', [AuthController::class, 'index'])->name('login');
+    Route::get('/', [AuthController::class, 'index'])->name('default');
+    Route::get('login/index', [AuthController::class, 'index'])->name('login');
     Route::post('login', [AuthController::class, 'login'])->name('login.process');
 });
 
 Route::middleware('loggedin')->group(function () {
-    Route::get('dashboard', function () {
-        echo 'dashboard';
-    })->name('dashboard.index');
+    // Route::get('dashboard', function () {
+    //     echo 'dashboard';
+    // })->name('dashboard.index');
 
-    Route::get('/', function () {
-        return view('welcome');
-    });
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Route::get('/', [UserController::class, 'index']);
 
     Route::get('parameter/field_length', [ParameterController::class, 'fieldLength'])->name('parameter.field_length');
     Route::get('parameter/{id}/delete', [ParameterController::class, 'delete'])->name('parameter.delete');
+    Route::get('parameter/index', [ParameterController::class, 'index']);
     Route::resource('parameter', ParameterController::class);
 
     Route::get('cabang/field_length', [CabangController::class, 'fieldLength'])->name('cabang.field_length');
