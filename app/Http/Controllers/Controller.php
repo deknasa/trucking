@@ -71,9 +71,9 @@ class Controller extends BaseController
             ->get(['menu.id', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
 
         foreach ($menu as $row) {
-            $hasPermission = $this->myAuth->hasPermission('user', 'index');
+            // $hasPermission = $this->myAuth->hasPermission('user', 'index');
 
-            if ($hasPermission) {
+            // if ($hasPermission) {
                 $data[] = array(
                     'menuid' => $row->id,
                     'menuname' => $row->menuname,
@@ -84,7 +84,7 @@ class Controller extends BaseController
                     'menuexe' => $row->class . "/" . $row->method,
                     'child' => $this->getMenu($row->id)
                 );
-            }
+            // }
         }
 
         return $data;
