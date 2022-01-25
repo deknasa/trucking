@@ -70,7 +70,6 @@ class Controller extends BaseController
             ->orderby(DB::raw('right(menukode,1)'), 'ASC')
             ->get(['menu.id', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
 
-        // dd($this->myAuth->hasPermission($menu[0]->class, $menu[0]->method));
 
         foreach ($menu as $row) {
             $hasPermission = $this->myAuth->hasPermission($row->class, $row->method);
