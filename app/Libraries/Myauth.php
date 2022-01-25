@@ -6,6 +6,7 @@ use App\Models\UserRole;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use stdClass;
 
 class Myauth
 {
@@ -43,7 +44,7 @@ class Myauth
         }
     }
 
-    public function hasPermission($class, $method): bool
+    public function hasPermission($class, $method)
     {
         $class = strtolower($class);
         $method = strtolower($method);
@@ -51,8 +52,12 @@ class Myauth
         return $this->_validatePermission($class, $method);
     }
 
-    private function _validatePermission($class = null, $method = null): bool
+    private function _validatePermission($class = null, $method = null)
     {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
         /* Check if $class is in exception */
         if (in_array($class, $this->exceptAuth['class'])) {
             return true;
@@ -68,14 +73,17 @@ class Myauth
 
         // $data_union = DB::table('acos')->select(['acos.id', 'acos.class', 'acos.method'])->join('acl', 'acos.id', '=', 'acl.aco_id')->where('acos.class', 'like', '%' . $class . '%')->where('acl.role_id', '=', $user[0]->role_id);
         $data_union = DB::table('acos')
+            ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('acl', 'acos.id', '=', 'acl.aco_id')
-            ->where('acos.class', 'like', '%user%')
+            ->where('acos.class', 'like', "%$class%")
             ->where('acl.role_id', $userRole[0]->id);
 
-            $data = DB::table('acos')
+        $data = DB::table('acos')
+            ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('useracl', 'acos.id', '=', 'useracl.aco_id')
-            ->where('acos.class', 'like', '%user%')
+            ->where('acos.class', 'like', "%$class%")
             ->where('useracl.user_id', $userRole[0]->id)
+            ->unionAll($data_union)
             ->get();
 
         if ($this->in_array_custom($method, $data->toArray()) == false && in_array($method, $this->exceptAuth['method']) == false) {

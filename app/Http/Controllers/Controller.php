@@ -70,11 +70,13 @@ class Controller extends BaseController
             ->orderby(DB::raw('right(menukode,1)'), 'ASC')
             ->get(['menu.id', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
 
-        foreach ($menu as $row) {
-            $hasPermission = $this->myAuth->hasPermission('user', 'index');
+        // dd($this->myAuth->hasPermission($menu[0]->class, $menu[0]->method));
 
-            if ($hasPermission) {
-                $data[] = array(
+        foreach ($menu as $row) {
+            $hasPermission = $this->myAuth->hasPermission($row->class, $row->method);
+            
+            if ($hasPermission || $row->class == null) {
+                $data[] = [
                     'menuid' => $row->id,
                     'menuname' => $row->menuname,
                     'menuicon' => $row->menuicon,
@@ -83,14 +85,14 @@ class Controller extends BaseController
                     'menukode' => $row->menukode,
                     'menuexe' => $row->class . "/" . $row->method,
                     'child' => $this->getMenu($row->id)
-                );
+                ];
             }
         }
 
         return $data;
     }
 
-    public function hasPermission($class, $method): bool
+    public function hasPermission($class, $method)
     {
         return $this->myAuth->hasPermission($class, $method);
     }
