@@ -109,6 +109,10 @@ $indexRow = $_GET['indexRow'] ?? '';
     method = "DELETE"
   <?php endif; ?>
 
+  if (action !== 'add') {
+    $('[name]').addClass('disabled')
+  }
+
   $(document).ready(function() {
     $('form').submit(function(e) {
       e.preventDefault()

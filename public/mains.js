@@ -1,3 +1,14 @@
+$(document).ready(function () {
+    /* Remove autocomplete */
+    $("input").attr("autocomplete", "off");
+    $("input, textarea").attr("spellcheck", "false")
+    
+    /* Init disable plugin */
+    $(".disabled").each(function () {
+        $(this).disable();
+    });
+});
+
 $(window).on("resize", function (event) {
     if ($(window).width() > 990) {
         $("body").addClass("sidebar-close sidebar-collapse");
@@ -18,9 +29,31 @@ $(document).mouseup(function (e) {
     }
 });
 
+/* Disable plugin */
+$.fn.disable = function () {
+    this.bind("cut copy paste change", function () {
+        return false;
+    });
+
+    this.on("keydown", (e) => {
+        if (!e.altKey && !e.ctrlKey) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    if (this.is("select")) {
+        let selected = this.find("option:selected");
+
+        this.change(() => {
+            this.val(selected.val());
+        });
+    }
+};
+
 function setErrorMessages(errors) {
-    $(`[name=${Object.keys(errors)[0]}]`).focus()
-    
+    $(`[name=${Object.keys(errors)[0]}]`).focus();
+
     $.each(errors, (index, error) => {
         $(`[name=${index}]`).addClass("is-invalid").after(`
           <div class="invalid-feedback">
@@ -31,5 +64,7 @@ function setErrorMessages(errors) {
 }
 
 (function setInputFocus() {
-    $('form [name]:not(:hidden, [readonly], [disabled], .disabled)').first().focus()
-})()
+    $("form [name]:not(:hidden, [readonly], [disabled], .disabled)")
+        .first()
+        .focus();
+})();

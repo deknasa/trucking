@@ -74,7 +74,7 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get(config('app.api_url') . "apiparameter/$id");
+        ])->get(config('app.api_url') . "parameter/$id");
 
         $parameter = $response['data'];
 
@@ -86,7 +86,7 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "apiparameter/$id", $request->all());
+        ])->patch(config('app.api_url') . "parameter/$id", $request->all());
 
         return response($response);
     }
@@ -99,7 +99,7 @@ class ParameterController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "apiparameter/$id");
+            ])->get(config('app.api_url') . "parameter/$id");
 
             $parameter = $response['data'];
 
@@ -114,7 +114,7 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete(config('app.api_url') . "apiparameter/$id");
+        ])->delete(config('app.api_url') . "parameter/$id");
 
         return response($response);
     }
