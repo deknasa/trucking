@@ -127,7 +127,7 @@ class RoleController extends Controller
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'api/role/field_length');
+        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'role/field_length');
 
         return response($response['data']);
     }

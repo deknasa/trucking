@@ -65,7 +65,7 @@ class CabangController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post('http://localhost/trucking-laravel/public/api/cabang', $request->all());
+        ])->post(config('app.api_url') . 'api/cabang', $request->all());
 
         return response($response);
     }
@@ -77,7 +77,7 @@ class CabangController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get("http://localhost/trucking-laravel/public/api/cabang/$id");
+        ])->get(config('app.api_url') . "api/menu/$id");
 
         $cabang = $response['data'];
 
@@ -91,7 +91,7 @@ class CabangController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch("http://localhost/trucking-laravel/public/api/cabang/$id", $request->all());
+        ])->patch(config('app.api_url') . "api/menu/$id", $request->all());
 
         return response($response);
     }
@@ -104,7 +104,7 @@ class CabangController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get("http://localhost/trucking-laravel/public/api/cabang/$id");
+            ])->get(config('app.api_url') . "api/menu/$id");
 
             $cabang = $response['data'];
 
@@ -121,7 +121,7 @@ class CabangController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete("http://localhost/trucking-laravel/public/api/cabang/$id", $request->all());
+        ])->delete(config('app.api_url') . "api/menu/$id", $request->all());
 
         return response($response);
         
@@ -129,7 +129,7 @@ class CabangController extends Controller
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)->get('http://localhost/trucking-laravel/public/api/cabang/field_length');
+        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'cabang/field_length');
 
         return response($response['data']);
     }
@@ -145,7 +145,7 @@ class CabangController extends Controller
         ];
 
         $response = Http::withHeaders($this->httpHeader)
-            ->get('http://localhost/trucking-laravel/public/api/cabang/combostatus', $status);
+            ->get(config('app.api_url') . 'cabang/combostatus', $status);
 
         return $response['data'];
     }

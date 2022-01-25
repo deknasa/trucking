@@ -7,6 +7,7 @@ use App\Http\Controllers\CabangController;
 use App\Http\Controllers\ParameterController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
@@ -49,6 +50,10 @@ Route::middleware('auth')->group(function () {
     Route::get('user/field_length', [UserController::class, 'fieldLength'])->name('user.field_length');
     Route::get('user/{id}/delete', [UserController::class, 'delete'])->name('user.delete');
     Route::resource('user', UserController::class);
+
+    Route::get('menu/field_length', [MenuController::class, 'fieldLength'])->name('menu.field_length');
+    Route::get('menu/{id}/delete', [MenuController::class, 'delete'])->name('menu.delete');
+    Route::resource('menu', MenuController::class);    
 
     Route::get('absensi/{id}/delete', [AbsensiSupirHeaderController::class, 'delete'])->name('absensi.delete');
     Route::resource('absensi', AbsensiSupirHeaderController::class);

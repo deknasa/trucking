@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-
-class UserController extends Controller
+class MenuController extends Controller
 {
-    public $title = 'User';
+    public $title = 'Menu';
     public $httpHeader = [
         'Accept' => 'application/json',
         'Content-Type' => 'application/json'
@@ -16,9 +15,9 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        
+
+
         if ($request->ajax()) {
-        
             $params = [
                 'offset' => (($request->page - 1) * $request->rows),
                 'limit' => $request->rows,
@@ -28,7 +27,7 @@ class UserController extends Controller
             ];
 
             $response = Http::withHeaders($request->header())
-                ->get(config('app.api_url') . 'api/user', $params);
+                ->get(config('app.api_url') . 'api/menu', $params);
 
             $data = [
                 'total' => $response['attributes']['totalPages'] ?? [],
@@ -43,12 +42,11 @@ class UserController extends Controller
 
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama User',
-            'combo' => $this->combo('list'),
-            'combocabang' => $this->combocabang('list')
+            'pagename' => 'Menu Utama Menu',
+            'combo' => $this->combo('list')
         ];
 
-        return view('user.index', compact('title', 'data'));
+        return view('menu.index', compact('title', 'data'));
     }
 
     public function create()
@@ -56,9 +54,8 @@ class UserController extends Controller
         $title = $this->title;
 
         $data['combo'] = $this->combo('entry');
-        $data['combocabang'] = $this->combocabang('entry');
 
-        return view('user.add', compact('title', 'data'));
+        return view('menu.add', compact('title', 'data'));
     }
 
     public function store(Request $request)
@@ -67,7 +64,7 @@ class UserController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'api/user', $request->all());
+        ])->post(config('app.api_url') . 'api/menu', $request->all());
 
         return response($response);
     }
@@ -81,12 +78,11 @@ class UserController extends Controller
             'Content-Type' => 'application/json'
         ])->get(config('app.api_url') . "api/menu/$id");
 
-        $user = $response['data'];
+        $menu = $response['data'];
 
         $data['combo'] = $this->combo('entry');
-        $data['combocabang'] = $this->combocabang('entry');
 
-        return view('user.edit', compact('title', 'user', 'data'));
+        return view('menu.edit', compact('title', 'menu', 'data'));
     }
 
     public function update(Request $request, $id)
@@ -109,14 +105,13 @@ class UserController extends Controller
                 'Content-Type' => 'application/json'
             ])->get(config('app.api_url') . "api/menu/$id");
 
-            $user = $response['data'];
+            $menu = $response['data'];
 
             $data['combo'] = $this->combo('entry');
-            $data['combocabang'] = $this->combocabang('entry');
 
-            return view('user.delete', compact('title', 'user', 'data'));
+            return view('menu.delete', compact('title', 'menu', 'data'));
         } catch (\Throwable $th) {
-            return redirect()->route('user.index');
+            return redirect()->route('menu.index');
         }
     }
 
@@ -133,7 +128,7 @@ class UserController extends Controller
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'user/field_length');
+        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'menu/field_length');
 
         return response($response['data']);
     }
@@ -141,31 +136,14 @@ class UserController extends Controller
 
     public function combo($aksi)
     {
-
-        $status = [
-            'status' => $aksi,
-            'grp' => 'STATUS AKTIF',
-            'subgrp' => 'STATUS AKTIF',
-        ];
-
-        $response = Http::withHeaders($this->httpHeader)
-            ->get(config('app.api_url') . 'user/combostatus', $status);
-
-        return $response['data'];
-    }
-
-    public function combocabang($aksi)
-    {
-
         $status = [
             'status' => $aksi,
         ];
 
         $response = Http::withHeaders($this->httpHeader)
-            ->get('http://localhost/trucking-laravel/public/api/user/combocabang', $status);
+            ->get(config('app.api_url') . 'menu/combomenuparent', $status);
 
         return $response['data'];
     }
 
-    
 }
