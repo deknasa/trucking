@@ -53,8 +53,12 @@ class MenuController extends Controller
     {
         $title = $this->title;
 
-        $data['combo'] = $this->combo('entry');
-
+    
+             $data = [
+            'nama' => '',
+            'combo' => $this->combo('entry')
+        ];
+ 
         return view('menu.add', compact('title', 'data'));
     }
 
@@ -67,6 +71,7 @@ class MenuController extends Controller
         ])->post(config('app.api_url') . 'api/menu', $request->all());
 
         return response($response);
+        
     }
 
     public function edit($id)
