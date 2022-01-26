@@ -14,8 +14,8 @@
 
 
                         <div class="row form-group">
-                            <label for="staticEmail" class="col-sm-3 col-form-label">ID <span class="text-danger"></span></label>
-                            <div class="col-sm-2">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">ID <span class="text-danger"></span></label>
+                            <div class="col-sm-4">
                                 <input type="text" name="id" class="form-control" value="{{ $menu['id'] ?? '' }}" readonly>
                             </div>
                         </div>
@@ -35,12 +35,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="staticEmail" class="col-sm-3 col-form-label">Menu Parent<span class="text-danger">*</span></label>
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Menu Parent<span class="text-danger">*</span></label>
                             <div class="col-sm-4">
                                 <select class="form-control select2bs4  <?= @$disable2 ?>" style="width: 100%;" name="menuparent" id="menuparent">
                                     <?php foreach ($data['combo'] as $status) : ?>;
-                                    <option value="<?= $status['id'] ?>" <?= $status['id'] == @$menu['menuparent'] ? 'selected' : '' ?>><?= $status['menuname'] ?></option>
-                                <?php endforeach; ?>
+                                        <option value="<?= $status['id'] ?>" <?= $status['id'] == @$menu['menuparent'] ? 'selected' : '' ?>><?= strtoupper($status['menuparent']) ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
@@ -54,12 +54,18 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="staticEmail" class="col-sm-2 col-form-label">Class <span class="text-danger">*</span></label>
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Link <span class="text-danger">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" name="aco_id" class="form-control" id="aco_id" placeholder="Class" value="{{ $menu['aco_id'] ?? '' }}">
+                                <input type="text" name="menuexe" class="form-control" id="menuexe" placeholder="Link" value="{{ $menu['menuexe'] ?? '' }}">
                             </div>
                         </div>
 
+                        <div class="form-group row">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Class <span class="text-danger">*</span></label>
+                            <div class="col-sm-4">
+                                   <input type="text" name="aco_id" class="form-control" id="aco_id" placeholder="Class" value="{{ $data['nama'] ?? '' }}" <?= $menu['aco_id'] ? 'readonly' : '' ?>>
+                            </div>
+                        </div>
 
 
                     </div>

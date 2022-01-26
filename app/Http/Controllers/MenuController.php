@@ -79,9 +79,12 @@ class MenuController extends Controller
         ])->get(config('app.api_url') . "api/menu/$id");
 
         $menu = $response['data'];
+        $data = [
+            'nama' => $this->getdata($menu['aco_id'])['nama'],
+            'combo' => $this->combo('entry')
+        ];
 
-        $data['combo'] = $this->combo('entry');
-
+        //  dd($data);
         return view('menu.edit', compact('title', 'menu', 'data'));
     }
 
@@ -128,7 +131,7 @@ class MenuController extends Controller
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'menu/field_length');
+        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'api/menu/field_length');
 
         return response($response['data']);
     }
@@ -139,10 +142,20 @@ class MenuController extends Controller
         $status = [
             'status' => $aksi,
         ];
-
         $response = Http::withHeaders($this->httpHeader)
-            ->get(config('app.api_url') . 'menu/combomenuparent', $status);
+            ->get(config('app.api_url') . 'api/menu/combomenuparent', $status);
 
+        return $response['data'];
+    }
+
+    
+    public function getdata($aco_id)
+    {
+        $status = [
+            'aco_id' => $aco_id,
+        ];
+                $response = Http::withHeaders($this->httpHeader)
+            ->get(config('app.api_url') . 'api/menu/getdatanamaacos', $status);
         return $response['data'];
     }
 

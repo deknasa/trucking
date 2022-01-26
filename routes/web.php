@@ -52,6 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('user', UserController::class);
 
     Route::get('menu/field_length', [MenuController::class, 'fieldLength'])->name('menu.field_length');
+    Route::get('menu/getdata', [MenuController::class, 'getdata'])->name('menu.getdata');
     Route::get('menu/{id}/delete', [MenuController::class, 'delete'])->name('menu.delete');
     Route::resource('menu', MenuController::class);    
 
