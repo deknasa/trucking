@@ -2,7 +2,7 @@ $(document).ready(function () {
     /* Remove autocomplete */
     $("input").attr("autocomplete", "off");
     $("input, textarea").attr("spellcheck", "false")
-    
+
     /* Init disable plugin */
     $(".disabled").each(function () {
         $(this).disable();
@@ -61,6 +61,14 @@ function setErrorMessages(errors) {
           </div>
         `);
     });
+}
+
+function removeTags(str) {
+    if ((str === null) || (str === ''))
+        return false;
+    else
+        str = str.toString();
+    return str.replace(/(<([^>]+)>)/ig, '');
 }
 
 (function setInputFocus() {

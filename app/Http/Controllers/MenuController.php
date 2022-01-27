@@ -27,7 +27,7 @@ class MenuController extends Controller
             ];
 
             $response = Http::withHeaders($request->header())
-                ->get(config('app.api_url') . 'api/menu', $params);
+                ->get(config('app.api_url') . 'menu', $params);
 
             $data = [
                 'total' => $response['attributes']['totalPages'] ?? [],
@@ -56,7 +56,8 @@ class MenuController extends Controller
     
              $data = [
             'nama' => '',
-            'combo' => $this->combo('entry')
+            'combo' => $this->combo('entry'),
+            'edit' => '0'
         ];
  
         return view('menu.add', compact('title', 'data'));
@@ -68,7 +69,7 @@ class MenuController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'api/menu', $request->all());
+        ])->post(config('app.api_url') . 'menu', $request->all());
 
         return response($response);
         
@@ -81,12 +82,13 @@ class MenuController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get(config('app.api_url') . "api/menu/$id");
+        ])->get(config('app.api_url') . "menu/$id");
 
         $menu = $response['data'];
         $data = [
             'nama' => $this->getdata($menu['aco_id'])['nama'],
-            'combo' => $this->combo('entry')
+            'combo' => $this->combo('entry'),
+            'edit' => '1'
         ];
 
         //  dd($data);
@@ -98,7 +100,7 @@ class MenuController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "api/menu/$id", $request->all());
+        ])->patch(config('app.api_url') . "menu/$id", $request->all());
 
         return response($response);
     }
@@ -111,11 +113,15 @@ class MenuController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "api/menu/$id");
+            ])->get(config('app.api_url') . "menu/$id");
 
             $menu = $response['data'];
 
-            $data['combo'] = $this->combo('entry');
+            $data = [
+                'nama' => '',
+                'combo' => $this->combo('entry'),
+                'edit' => '0'
+            ];
 
             return view('menu.delete', compact('title', 'menu', 'data'));
         } catch (\Throwable $th) {
@@ -128,7 +134,7 @@ class MenuController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete(config('app.api_url') . "api/menu/$id", $request->all());
+        ])->delete(config('app.api_url') . "menu/$id", $request->all());
 
         return response($response);
         
@@ -136,7 +142,7 @@ class MenuController extends Controller
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'api/menu/field_length');
+        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'menu/field_length');
 
         return response($response['data']);
     }
@@ -148,7 +154,7 @@ class MenuController extends Controller
             'status' => $aksi,
         ];
         $response = Http::withHeaders($this->httpHeader)
-            ->get(config('app.api_url') . 'api/menu/combomenuparent', $status);
+            ->get(config('app.api_url') . 'menu/combomenuparent', $status);
 
         return $response['data'];
     }
@@ -160,7 +166,7 @@ class MenuController extends Controller
             'aco_id' => $aco_id,
         ];
                 $response = Http::withHeaders($this->httpHeader)
-            ->get(config('app.api_url') . 'api/menu/getdatanamaacos', $status);
+            ->get(config('app.api_url') . 'menu/getdatanamaacos', $status);
         return $response['data'];
     }
 

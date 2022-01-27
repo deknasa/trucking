@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-
-class CabangController extends Controller
+class UserRoleController extends Controller
 {
-    public $title = 'Cabang';
+    public $title = 'User Role';
     public $httpHeader = [
         'Accept' => 'application/json',
         'Content-Type' => 'application/json'
@@ -16,8 +15,6 @@ class CabangController extends Controller
 
     public function index(Request $request)
     {
-
-
         if ($request->ajax()) {
             $params = [
                 'offset' => (($request->page - 1) * $request->rows),
@@ -25,10 +22,11 @@ class CabangController extends Controller
                 'sortIndex' => $request->sidx,
                 'sortOrder' => $request->sord,
                 'search' => json_decode($request->filters, 1) ?? [],
+
             ];
 
             $response = Http::withHeaders($request->header())
-                ->get(config('app.api_url') . 'cabang', $params);
+                ->get(config('app.api_url') . 'userrole', $params);
 
             $data = [
                 'total' => $response['attributes']['totalPages'] ?? [],
@@ -43,20 +41,54 @@ class CabangController extends Controller
 
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Cabang',
-            'combo' => $this->combo('list')
+            'pagename' => 'Menu Utama User Role',
         ];
 
-        return view('cabang.index', compact('title', 'data'));
+        return view('userrole.index', compact('title', 'data'));
+       
+
     }
 
-    public function create()
+    public function detail(Request $request)
+    {
+
+        // dd($request->user_id);
+        if ($request->ajax()) {
+            $params = [
+                'offset' => (($request->page - 1) * $request->rows),
+                'limit' => $request->rows,
+                'sortIndex' => $request->sidx,
+                'sortOrder' => $request->sord,
+                'search' => json_decode($request->filters, 1) ?? [],
+                'user_id' => $request->user_id,
+
+            ];
+
+            $response = Http::withHeaders($request->header())
+                ->get(config('app.api_url') . 'userrole/detail', $params);
+
+            $data = [
+                'total' => $response['attributes']['totalPages'] ?? [],
+                'records' => $response['attributes']['totalRows'] ?? [],
+                'rows' => $response['data'] ?? []
+            ];
+
+
+            return response($data);
+        }
+
+    
+    }
+
+    public function create(Request $request)
     {
         $title = $this->title;
-
-        $data['combo'] = $this->combo('entry');
-
-        return view('cabang.add', compact('title', 'data'));
+        $list = [
+            'detail' => $this->detaillist($request->user_id  ?? '0'),
+        ];
+        $user_id='0';
+        // dd($list);
+        return view('userrole.add', compact('title','list','user_id'));
     }
 
     public function store(Request $request)
@@ -65,7 +97,7 @@ class CabangController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'cabang', $request->all());
+        ])->post(config('app.api_url') . 'userrole', $request->all());
 
         return response($response);
     }
@@ -77,13 +109,11 @@ class CabangController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get(config('app.api_url') . "cabang/$id");
+        ])->get(config('app.api_url') . "userrole/$id");
 
-        $cabang = $response['data'];
+        $userrole = $response['data'];
 
-        $data['combo'] = $this->combo('entry');
-
-        return view('cabang.edit', compact('title', 'cabang', 'data'));
+        return view('userrole.edit', compact('title', 'userrole'));
     }
 
     public function update(Request $request, $id)
@@ -91,7 +121,7 @@ class CabangController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "cabang/$id", $request->all());
+        ])->patch(config('app.api_url') . "userrole/$id", $request->all());
 
         return response($response);
     }
@@ -104,15 +134,14 @@ class CabangController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "cabang/$id");
+            ])->get(config('app.api_url') . "userrole/$id");
 
-            $cabang = $response['data'];
+            $userrole = $response['data'];
 
-            $data['combo'] = $this->combo('entry');
 
-            return view('cabang.delete', compact('title', 'cabang', 'data'));
+            return view('userrole.delete', compact('title', 'userrole'));
         } catch (\Throwable $th) {
-            return redirect()->route('cabang.index');
+            return redirect()->route('userrole.index');
         }
     }
 
@@ -121,7 +150,7 @@ class CabangController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete(config('app.api_url') . "cabang/$id", $request->all());
+        ])->delete(config('app.api_url') . "userrole/$id", $request->all());
 
         return response($response);
         
@@ -129,26 +158,25 @@ class CabangController extends Controller
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'cabang/field_length');
+        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'userrole/field_length');
 
         return response($response['data']);
     }
 
-
-    public function combo($aksi)
+    public function detaillist($user_id)
     {
-
         $status = [
-            'status' => $aksi,
-            'grp' => 'STATUS AKTIF',
-            'subgrp' => 'STATUS AKTIF',
+            'user_id' => $user_id,
         ];
-
-        $response = Http::withHeaders($this->httpHeader)
-            ->get(config('app.api_url') . 'cabang/combostatus', $status);
+        $response = Http::get(config('app.api_url') . 'userrole/detaillist', $status);
 
         return $response['data'];
-    }
+        
 
     
+    }
+
+
+
+
 }

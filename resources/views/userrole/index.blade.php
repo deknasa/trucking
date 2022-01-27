@@ -28,12 +28,12 @@
 </div>
 
 <!-- Detail -->
-@include('absensi._detail')
+<!-- @include('userrole._detail') -->
 
 @push('scripts')
 <script>
   $(document).ready(function() {
-    let indexUrl = "{{ route('absensi.index') }}"
+    let indexUrl = "{{ route('userrole.index') }}"
     let indexRow = 0;
     let page = 0;
     let pager = '#jqGridPager'
@@ -44,33 +44,35 @@
     let totalRecord
     let limit
     let postData
-    let sortname = 'nobukti'
+    let sortname = 'user_id'
     let sortorder = 'asc'
 
     /* Set page */
-    <?php if (isset($_GET['page'])) {?>
+    <?php if (isset($_GET['page'])) { ?>
       page = "{{ $_GET['page'] }}"
     <?php } ?>
 
     /* Set id */
-    <?php if (isset($_GET['id'])) {?>
+    <?php if (isset($_GET['id'])) { ?>
       id = "{{ $_GET['id'] }}"
     <?php } ?>
 
     /* Set indexRow */
-    <?php if (isset($_GET['indexRow'])) {?>
+    <?php if (isset($_GET['indexRow'])) { ?>
       indexRow = "{{ $_GET['indexRow'] }}"
     <?php } ?>
 
     /* Set sortname */
-    <?php if (isset($_GET['sortname'])) {?>
+    <?php if (isset($_GET['sortname'])) { ?>
       sortname = "{{ $_GET['sortname'] }}"
     <?php } ?>
 
     /* Set sortorder */
-    <?php if (isset($_GET['sortorder'])) {?>
+    <?php if (isset($_GET['sortorder'])) { ?>
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
+
+
 
     $("#jqGrid").jqGrid({
         url: indexUrl,
@@ -79,45 +81,24 @@
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
-            label: 'ID',
-            name: 'id',
-            align: 'center',
-            width: '50px'
+            label: 'USER',
+            name: 'user_id',
+            align: 'left'
           },
           {
-            label: 'NO BUKTI',
-            name: 'nobukti',
-            align: 'center'
-          },
-          {
-            label: 'TANGGAL',
-            name: 'tgl',
-            align: 'center'
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'center'
-          },
-          {
-            label: 'NO BUKTI KGT',
-            name: 'kasgantung_nobukti',
-            align: 'center'
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'center'
+            label: 'NAMA USER',
+            name: 'name',
+            align: 'left'
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
-            align: 'center'
+            align: 'left'
           },
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'center'
+            align: 'right'
           },
         ],
         autowidth: true,
@@ -151,6 +132,7 @@
           limit = $(this).jqGrid('getGridParam', 'postData').rows
           postData = $(this).jqGrid('getGridParam', 'postData')
 
+
           $('.clearsearchclass').click(function() {
             highlightSearch = ''
           })
@@ -167,7 +149,7 @@
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
               $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
-            
+
             triggerClick = false
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
@@ -191,7 +173,7 @@
         onClickButton: function() {
           let limit = $(this).jqGrid('getGridParam', 'postData').rows
 
-          window.location.href = `{{ route('absensi.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+          window.location.href = `{{ route('userrole.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
 
@@ -202,7 +184,7 @@
         buttonicon: 'fas fa-pen',
         onClickButton: function() {
           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          
+
           window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
@@ -214,7 +196,7 @@
         buttonicon: 'fas fa-trash',
         onClickButton: function() {
           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          
+
           window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
         }
       })
@@ -229,10 +211,10 @@
         }
       })
 
-      .bindKeys()/
+      .bindKeys() /
 
-    /* Append clear filter button */
-    loadClearFilter()
+      /* Append clear filter button */
+      loadClearFilter()
 
     /* Append global search */
     loadGlobalSearch()

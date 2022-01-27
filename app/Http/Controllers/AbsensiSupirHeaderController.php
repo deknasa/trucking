@@ -55,7 +55,7 @@ class AbsensiSupirHeaderController extends Controller
             'status' => $this->getStatus(),
         ];
 
-        return view('absensi.add', compact('title', 'noBukti', 'combo'));
+        return view('absensi.add', compact('title', 'noBukti', 'combo','kasGantungNoBukti'));
     }
 
     public function store(Request $request)

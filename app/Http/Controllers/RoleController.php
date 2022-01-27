@@ -28,9 +28,9 @@ class RoleController extends Controller
 
             // dd($params);
 
-            // $response = Http::get('http://localhost/trucking-laravel/public/api/role', $params);
+            // $response = Http::get('http://localhost/trucking-laravel/public/role', $params);
             $response = Http::withHeaders($request->header())
-                ->get(config('app.api_url') . 'api/role', $params);
+                ->get(config('app.api_url') . 'role', $params);
 
 
 
@@ -67,7 +67,7 @@ class RoleController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'api/role', $request->all());
+        ])->post(config('app.api_url') . 'role', $request->all());
 
         return response($response);
     }
@@ -79,7 +79,7 @@ class RoleController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get(config('app.api_url') . "api/role/$id");
+        ])->get(config('app.api_url') . "role/$id");
 
         $role = $response['data'];
 
@@ -91,7 +91,7 @@ class RoleController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "api/role/$id", $request->all());
+        ])->patch(config('app.api_url') . "role/$id", $request->all());
 
         return response($response);
     }
@@ -104,7 +104,7 @@ class RoleController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "api/role/$id");
+            ])->get(config('app.api_url') . "role/$id");
 
             $role = $response['data'];
 
@@ -120,7 +120,7 @@ class RoleController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete(config('app.api_url') . "api/role/$id", $request->all());
+        ])->delete(config('app.api_url') . "role/$id", $request->all());
 
         return response($response);
     }

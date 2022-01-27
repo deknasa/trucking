@@ -29,6 +29,12 @@
 
 @push('scripts')
 <script>
+    function dbclick(rowid) {
+        var rowData = jQuery('#jqGrid').getRowData(rowid);
+        localStorage.setItem('getUser_id', JSON.stringify(rowData));
+        window.close();
+    }
+
     $(document).ready(function() {
         let indexUrl = "{{ route('user.index') }}"
         let indexRow = 0;
@@ -43,6 +49,8 @@
         let postData
         let sortname = 'id'
         let sortorder = 'asc'
+        popup = "<?= @$_GET['popup'] ?>" == "" ? "" : "ada";
+        id = "<?= @$_GET['name'] ?>" == "" ? "undefined" : "<?= @$_GET['name'] ?>";
 
         /* Set page */
         <?php if (isset($_GET['page'])) { ?>
@@ -180,7 +188,11 @@
                     if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
                 },
                 ondblClickRow: function(rowid) {
-
+                    if (popup == "ada") {
+                        var rowData = jQuery(this).getRowData(rowid);
+                        localStorage.setItem('getUser_id', JSON.stringify(rowData));
+                        window.close();
+                    }
                 },
                 loadComplete: function(data) {
                     /* Set global variables */

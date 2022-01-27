@@ -28,7 +28,7 @@ class UserController extends Controller
             ];
 
             $response = Http::withHeaders($request->header())
-                ->get(config('app.api_url') . 'api/user', $params);
+                ->get(config('app.api_url') . 'user', $params);
 
             $data = [
                 'total' => $response['attributes']['totalPages'] ?? [],
@@ -67,7 +67,7 @@ class UserController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'api/user', $request->all());
+        ])->post(config('app.api_url') . 'user', $request->all());
 
         return response($response);
     }
@@ -79,7 +79,7 @@ class UserController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get(config('app.api_url') . "api/menu/$id");
+        ])->get(config('app.api_url') . "user/$id");
 
         $user = $response['data'];
 
@@ -94,7 +94,7 @@ class UserController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "api/menu/$id", $request->all());
+        ])->patch(config('app.api_url') . "user/$id", $request->all());
 
         return response($response);
     }
@@ -107,7 +107,7 @@ class UserController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "api/menu/$id");
+            ])->get(config('app.api_url') . "user/$id");
 
             $user = $response['data'];
 
@@ -125,7 +125,7 @@ class UserController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete(config('app.api_url') . "api/menu/$id", $request->all());
+        ])->delete(config('app.api_url') . "user/$id", $request->all());
 
         return response($response);
         
@@ -162,7 +162,7 @@ class UserController extends Controller
         ];
 
         $response = Http::withHeaders($this->httpHeader)
-            ->get('http://localhost/trucking-laravel/public/api/user/combocabang', $status);
+            ->get(config('app.api_url') . 'user/combocabang', $status);
 
         return $response['data'];
     }

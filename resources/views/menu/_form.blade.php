@@ -63,7 +63,7 @@
                         <div class="form-group row">
                             <label for="staticEmail" class="col-sm-2 col-form-label">Class <span class="text-danger">*</span></label>
                             <div class="col-sm-4">
-                                   <input type="text" name="aco_id" class="form-control" id="aco_id" placeholder="Class" value="{{ $data['nama'] ?? '' }}" <?= $menu['aco_id'] ? 'readonly' : '' ?>>
+                                   <input type="text" name="aco_id" class="form-control" id="aco_id" placeholder="Class" value="{{ $data['nama'] ?? '' }}" <?= ($data['edit']=='1') ? 'readonly' : '' ?>>
                             </div>
                         </div>
 
