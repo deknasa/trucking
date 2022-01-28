@@ -140,16 +140,16 @@
                     {
                         label: 'MODIFIEDBY',
                         name: 'modifiedby',
-                        align: 'center'
+                        align: 'left'
                     },
                     {
                         label: 'UPDATEDAT',
                         name: 'updated_at',
-                        align: 'center'
+                        align: 'right'
                     }, {
                         label: 'CREATEDAT',
                         name: 'created_at',
-                        align: 'center'
+                        align: 'right'
                     },
                 ],
                 autowidth: true,

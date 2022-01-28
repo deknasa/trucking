@@ -78,38 +78,38 @@
         colModel: [{
             label: 'ID',
             name: 'id',
-            align: 'center',
+            align: 'right',
             width: '50px'
           },
           {
             label: 'GROUP',
             name: 'grp',
-            align: 'center'
+            align: 'left'
           },
           {
             label: 'SUBGROUP',
             name: 'subgrp',
-            align: 'center'
+            align: 'left'
           },
           {
             label: 'NAMA PARAMETER',
             name: 'text',
-            align: 'center'
+            align: 'left'
           },
           {
             label: 'MEMO',
             name: 'memo',
-            align: 'center'
+            align: 'left'
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
-            align: 'center'
+            align: 'left'
           },
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'center'
+            align: 'right'
           },
         ],
         autowidth: true,

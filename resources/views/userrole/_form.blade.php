@@ -1,3 +1,5 @@
+<?php $role_id = 1; ?>
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
@@ -34,43 +36,64 @@
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-md-12">
-                <div class="table-responsive">
-                  <table class="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th">Role</th>
-                      </tr>
-                    </thead>
-                    <tbody id="table_body">
-                      @if ($list['detail'])
-                      @foreach($list['detail'] as $detailIndex => $detail)
-                      <tr>
-                        <td>
-                          <input type="hidden" name="role_id[]" value="{{ $detail['role_id'] }}">
-                          {{ $detail['role_id'] }}
-                        </td>
-                      </tr>
-                      @endforeach
-                      @else
-                      <td >
-                      <div class="col-12 col-md-6">
-                          <div class="input-group">
-                            <input type="text" name="role_id[]" readonly id="role_id" class="form-control flevel" tabindex="-1">
-                            <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" onclick="lookupUser('user_id')" tabindex="-1">...</button>
-                            </span>
-                          </div>
-                        </div>
-                      </td>
-                      @endif
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+            <div style="height: 300px; overflow-x: auto;">
+              <table class="table table-bordered">
+                <thead class="thead-light">
+                  <tr id="header_cart">
+                    <th width="25%">ID</th>
+                    <th>Role</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body" style="overflow-y: auto;">
+                  @if ($list['detail'])
+                  @foreach($list['detail'] as $detailIndex => $detail)
+                  <tr id="<?= $idx ?>">
+                    <td>
+                      <input type="hidden" name="role_id[]" id="role_id<?= $idx ?>"  readonly id="role_id" class="form-control flevel" tabindex="-1" value="{{ $detail['role_id'] ?? ''}}">
+                      {{ $detail['role_id'] }}
+                    </td>
+                    <td>
+                      <input type="hidden" name="rolename[]"  id="role_name<?= $idx ?>"  value="{{ $detail['rolename'] }} " name="rolename[]" readonly id="rolename" class="form-control rolename">
+                      {{ $detail['rolename'] }}
+                    </td>
+
+                  </tr>
+                  @endforeach
+                  @else
+                  <td>
+                    <div>
+                      <div class=" input-group">
+                        <input type="text" name="role_id[]" readonly id="role_id" class="form-control flevel" tabindex="-1">
+                        <span class="input-group-btn">
+                          <button class="btn btn-default" type="button" onclick="lookupRole('role_id',0)" tabindex="-1">...</button>
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <div class="input-group">
+                        <input type="text" name="rolename[]" readonly id="rolename" class="form-control rolename">
+                      </div>
+                    </div>
+                  </td>
+
+                  @endif
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td>Jumlah Baris : <span id="baris"><?= $list['detail'] ? count($list['detail']) : 1 ?></span></td>
+                    <td colspan="1"></td>
+                    <td>
+                      <a id="plus" href="javascript:;" onclick="add_row(<?= $role_id ?>)"><span class="fas fa-plus"></span></a>
+                    </td>
+
+                  </tr>
+                </tfoot>
+              </table>
             </div>
           </div>
+
           <div class="card-footer">
             <button type="submit" id="btnSimpan" class="btn btn-primary">
               <i class="fa fa-save"></i>
@@ -146,35 +169,93 @@
     }, 500);
   }
 
-  function lookupRole(role_id) {
+  function add_row(id) {
+    var baris = parseInt($('#baris').text()) + 1;
+    $('#baris').text(baris);
 
-var role = $('#role_id').val();
-console.log(role);
-if (typeof role === 'undefined') role = '';
+    id += 1;
+    $('#plus').attr('onclick', 'add_row(' + id + ')');
 
 
+    $('#table_body').append(`
+    		<tr id=` + id + `>
 
-var url = "<?= URL::to('/') ?>/role?popup=1&currentpage=" + currentpage + "&id=" + role;
-// console.log(url);
-var winpeserta = window.open(
-  url,
-  "getRole_id");
-var timer = setInterval(function() {
-  if (winpeserta.closed) {
-    clearInterval(timer);
-    var getRole_id = localStorage.getItem('getRole_id');
-    console.log(getRole_id);
-    if (getRole_id) {
-      getRole_id = JSON.parse(getRole_id);
-      localStorage.removeItem('getRole_id');
-      var kode = removeTags(getRole_id.id);
-      var role = removeTags(getRole_id.name);
-      $("#role_id").val(kode);
-      $('#name').val(role);
-    }
+        <td>
+          <div>
+            <div class="input-group">
+              <input type="text" name="role_id[]" id="role_id`+id+`" readonly class="form-control flevel" tabindex="-1">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" onclick="lookupRole('role_id',id)" tabindex="-1">...</button>
+              </span>
+            </div>
+          </div>
+        </td>     
+        <td>
+          <div>
+            <div class="input-group">
+              <input type="text" name="rolename[]" id="role_name`+id+`" readonly class="form-control rolename">
+            </div>
+          </div>
+
+        </td> 
+
+              
+
+        <td class="action" style="width:80px;">
+        <span class="delete_btn">
+        <a href="javascript:;" onclick="del_row(` + id + `)" class="tblItem_del"><span class="ui-icon ui-icon-trash"></span></a>
+        </span>
+        </td>
+
+        </tr>
+    `);
+
+
+    // $('#select' + id).select2();
+    $('.select2bs4').select2({
+      theme: 'bootstrap4',
+    })
+
+    field_data();
   }
-}, 500);
-}
+
+  function del_row(id) {
+    $('#' + id).remove();
+    var baris = parseInt($('#baris').text()) - 1;
+    $('#baris').text(baris);
+  }
+
+  function lookupRole(role_id,id) {
+
+    var role = $('#role_id').val();
+    // console.log(role);
+    if (typeof role === 'undefined') role = '';
+
+
+
+    var url = "<?= URL::to('/') ?>/role?popup=1&currentpage=" + currentpage + "&id=" + role;
+    // console.log(url);
+    var winpeserta = window.open(
+      url,
+      "getRole_id");
+    var timer = setInterval(function() {
+      if (winpeserta.closed) {
+        clearInterval(timer);
+        var getRole_id = localStorage.getItem('getRole_id');
+        // console.log(getRole_id);
+        if (getRole_id) {
+          getRole_id = JSON.parse(getRole_id);
+          localStorage.removeItem('getRole_id');
+          var kode = removeTags(getRole_id.id);
+          var role = removeTags(getRole_id.rolename);
+          // console.log($('#role_id'+id));
+          console.log(id);
+          $('#role_id'+id).val(kode);
+          $('#rolename'+id).val(role);
+        }
+      }
+    }, 500);
+  }
 
 
   $(document).ready(function() {
