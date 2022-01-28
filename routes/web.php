@@ -68,6 +68,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('absensi_detail', AbsensiSupirDetailController::class);
 
     Route::get('userrole/{id}/delete', [UserRoleController::class, 'delete'])->name('userrole.delete');
+    Route::get('userrole/field_length', [UserRoleController::class, 'fieldLength'])->name('userrole.field_length');
     Route::get('userrole/detail', [UserRoleController::class, 'detail'])->name('userrole.detail');
     Route::resource('userrole', UserRoleController::class);
 

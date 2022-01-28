@@ -1,4 +1,4 @@
-<?php $role_id = 1; ?>
+<?php $id = 1; ?>
 
 <div class="container-fluid">
   <div class="row">
@@ -47,14 +47,16 @@
                 <tbody id="table_body" style="overflow-y: auto;">
                   @if ($list['detail'])
                   @foreach($list['detail'] as $detailIndex => $detail)
-                  <tr id="<?= $idx ?>">
+                  <tr id="<?= $detailIndex ?>">
                     <td>
-                      <input type="hidden" name="role_id[]" id="role_id<?= $idx ?>"  readonly id="role_id" class="form-control flevel" tabindex="-1" value="{{ $detail['role_id'] ?? ''}}">
-                      {{ $detail['role_id'] }}
+                      <input type="hidden" name="role_id[]" id="role_id<?= $idx ?>" readonly id="role_id" class="form-control flevel" tabindex="-1" value="{{ $detail['role_id'] ?? ''}}">
+                      <span class="input-group-btn">
+                        <button class="btn btn-default cari" type="button" id="btnBuka<?= $detailIndex ?>" onclick="lookup('role_id',<?= $detailIndex ?>)">...</button>
+                      </span>
+                  
                     </td>
                     <td>
-                      <input type="hidden" name="rolename[]"  id="role_name<?= $idx ?>"  value="{{ $detail['rolename'] }} " name="rolename[]" readonly id="rolename" class="form-control rolename">
-                      {{ $detail['rolename'] }}
+                      <input type="hidden" name="rolename[]" id="rolename<?= $detailIndex ?>" value="{{ $detail['rolename'] }} " name="rolename[]" readonly id="rolename" class="form-control rolename">
                     </td>
 
                   </tr>
@@ -65,7 +67,7 @@
                       <div class=" input-group">
                         <input type="text" name="role_id[]" readonly id="role_id" class="form-control flevel" tabindex="-1">
                         <span class="input-group-btn">
-                          <button class="btn btn-default" type="button" onclick="lookupRole('role_id',0)" tabindex="-1">...</button>
+                          <button class="btn btn-default cari" type="button" onclick="lookupRole('role_id','default')" tabindex="-1">...</button>
                         </span>
                       </div>
                     </div>
@@ -85,7 +87,7 @@
                     <td>Jumlah Baris : <span id="baris"><?= $list['detail'] ? count($list['detail']) : 1 ?></span></td>
                     <td colspan="1"></td>
                     <td>
-                      <a id="plus" href="javascript:;" onclick="add_row(<?= $role_id ?>)"><span class="fas fa-plus"></span></a>
+                      <a id="plus" href="javascript:;" onclick="add_row(<?= $id ?>)"><span class="fas fa-plus"></span></a>
                     </td>
 
                   </tr>
@@ -121,6 +123,7 @@
   let actionUrl = "{{ route('userrole.store') }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
+  let fieldLengthUrl = "{{ route('userrole.field_length') }}"
 
   var currentpage = 0;
   var id;
@@ -169,6 +172,24 @@
     }, 500);
   }
 
+  function field_data() {
+    $.ajax({
+      url: fieldLengthUrl,
+      method: 'GET',
+      dataType: 'JSON',
+      success: response => {
+        $.each(response, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+            $(`[name=${index}]`).attr('maxlength', value)
+          }
+        })
+      },
+      error: error => {
+        alert(error)
+      }
+    });
+  }
+
   function add_row(id) {
     var baris = parseInt($('#baris').text()) + 1;
     $('#baris').text(baris);
@@ -183,9 +204,9 @@
         <td>
           <div>
             <div class="input-group">
-              <input type="text" name="role_id[]" id="role_id`+id+`" readonly class="form-control flevel" tabindex="-1">
+              <input type="text" name="role_id[]" id="role_id`+id+`"  readonly class="form-control flevel" tabindex="-1">
               <span class="input-group-btn">
-                <button class="btn btn-default" type="button" onclick="lookupRole('role_id',id)" tabindex="-1">...</button>
+                <button class="btn btn-default" type="button" id="btnBuka`+id+`"  onclick="lookupRole('role_id',`+id+`)" tabindex="-1">...</button>
               </span>
             </div>
           </div>
@@ -193,7 +214,7 @@
         <td>
           <div>
             <div class="input-group">
-              <input type="text" name="rolename[]" id="role_name`+id+`" readonly class="form-control rolename">
+              <input type="text" name="rolename[]"  id="rolename`+id+`" readonly class="form-control rolename" tabindex="-1" autocomplete="off">
             </div>
           </div>
 
@@ -203,7 +224,7 @@
 
         <td class="action" style="width:80px;">
         <span class="delete_btn">
-        <a href="javascript:;" onclick="del_row(` + id + `)" class="tblItem_del"><span class="ui-icon ui-icon-trash"></span></a>
+        <a href="javascript:;" onclick="del_row(`+id+`)" class="tblItem_del"><span class="ui-icon ui-icon-trash"></span></a>
         </span>
         </td>
 
@@ -212,9 +233,6 @@
 
 
     // $('#select' + id).select2();
-    $('.select2bs4').select2({
-      theme: 'bootstrap4',
-    })
 
     field_data();
   }
@@ -225,11 +243,16 @@
     $('#baris').text(baris);
   }
 
-  function lookupRole(role_id,id) {
+  function lookupRole(role_id, id) {
 
     var role = $('#role_id').val();
     // console.log(role);
+    if (id =='default') {
+          id='';
+        }
+
     if (typeof role === 'undefined') role = '';
+
 
 
 
@@ -249,13 +272,15 @@
           var kode = removeTags(getRole_id.id);
           var role = removeTags(getRole_id.rolename);
           // console.log($('#role_id'+id));
-          console.log(id);
-          $('#role_id'+id).val(kode);
-          $('#rolename'+id).val(role);
+
+          $('#'+role_id + id).val(kode);
+          $('#rolename' + id).val(role);
         }
       }
     }, 500);
   }
+
+
 
 
   $(document).ready(function() {
