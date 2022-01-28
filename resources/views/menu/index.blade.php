@@ -29,14 +29,8 @@
 
 @push('scripts')
 <script>
-    function dbclick(rowid) {
-        var rowData = jQuery('#jqGrid').getRowData(rowid);
-        localStorage.setItem('getUser_id', JSON.stringify(rowData));
-        window.close();
-    }
-
     $(document).ready(function() {
-        let indexUrl = "{{ route('user.index') }}"
+        let indexUrl = "{{ route('menu.index') }}"
         let indexRow = 0;
         let page = 0;
         let pager = '#jqGridPager'
@@ -49,8 +43,6 @@
         let postData
         let sortname = 'id'
         let sortorder = 'asc'
-        popup = "<?= @$_GET['popup'] ?>" == "" ? "" : "ada";
-        id = "<?= @$_GET['name'] ?>" == "" ? "undefined" : "<?= @$_GET['name'] ?>";
 
         /* Set page */
         <?php if (isset($_GET['page'])) { ?>
@@ -90,49 +82,19 @@
                         width: '70px'
                     },
                     {
-                        label: 'USER',
-                        name: 'user',
+                        label: 'NAMA MENU',
+                        name: 'menuname',
                         align: 'left'
                     },
                     {
-                        label: 'NAMA USER',
-                        name: 'name',
+                        label: 'SEQ MENU',
+                        name: 'menuseq',
                         align: 'left'
                     },
-                    {
-                        label: 'DASHBOARD',
-                        name: 'dashboard',
-                        align: 'left'
-                    },
-                    {
-                        label: 'ID KARYAWAN',
-                        name: 'karyawan_id',
-                        align: 'right'
-                    },
-                    {
-                        label: 'Cabang',
-                        name: 'cabang_id',
-                        width: 100,
-                        stype: 'select',
-                        searchoptions: {
-                            value: `<?php
-                                    $i = 1;
 
-                                    foreach ($data['combocabang'] as $status) :
-                                        echo "$status[param]:$status[namacabang]";
-                                        if ($i !== count($data['combocabang'])) {
-                                            echo ";";
-                                        }
-                                        $i++;
-                                    endforeach
-
-                                    ?>
-            `
-                        },
-                    },
                     {
-                        label: 'Status',
-                        name: 'statusaktif',
+                        label: 'MENU PARENT',
+                        name: 'menuparent',
                         width: 100,
                         stype: 'select',
                         searchoptions: {
@@ -140,7 +102,7 @@
                                     $i = 1;
 
                                     foreach ($data['combo'] as $status) :
-                                        echo "$status[param]:$status[parameter]";
+                                        echo "$status[param]:$status[menuparent]";
                                         if ($i !== count($data['combo'])) {
                                             echo ";";
                                         }
@@ -150,6 +112,30 @@
                                     ?>
             `
                         },
+                    },
+                    {
+                        label: 'MENU ICON',
+                        name: 'menuicon',
+                        align: 'left'
+                    },
+                    {
+                        label: 'HEADER MENU',
+                        name: 'aco_id',
+                        align: 'left'
+                    },
+                    {
+                        label: 'LINK',
+                        name: 'link',
+                        align: 'left'
+                    },
+                    {
+                        label: 'MENU EXE',
+                        name: 'menuexe',
+                        align: 'left'
+                    }, {
+                        label: 'KODE MENU',
+                        name: 'menukode',
+                        align: 'left'
                     },
                     {
                         label: 'MODIFIEDBY',
@@ -188,11 +174,7 @@
                     if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
                 },
                 ondblClickRow: function(rowid) {
-                    if (popup == "ada") {
-                        var rowData = jQuery(this).getRowData(rowid);
-                        localStorage.setItem('getUser_id', JSON.stringify(rowData));
-                        window.close();
-                    }
+
                 },
                 loadComplete: function(data) {
                     /* Set global variables */
@@ -242,7 +224,7 @@
                 onClickButton: function() {
                     let limit = $(this).jqGrid('getGridParam', 'postData').rows
 
-                    window.location.href = `{{ route('user.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+                    window.location.href = `{{ route('menu.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
                 }
             })
 

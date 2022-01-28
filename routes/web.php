@@ -7,6 +7,9 @@ use App\Http\Controllers\CabangController;
 use App\Http\Controllers\ParameterController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\UserRoleController;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
@@ -53,9 +56,20 @@ Route::middleware('auth')->group(function () {
     Route::get('user/index', [UserController::class, 'index']);
     Route::resource('user', UserController::class);
 
+    Route::get('menu/field_length', [MenuController::class, 'fieldLength'])->name('menu.field_length');
+    Route::get('menu/getdata', [MenuController::class, 'getdata'])->name('menu.getdata');
+    Route::get('menu/{id}/delete', [MenuController::class, 'delete'])->name('menu.delete');
+    Route::resource('menu', MenuController::class);    
+
     Route::get('absensi/{id}/delete', [AbsensiSupirHeaderController::class, 'delete'])->name('absensi.delete');
     Route::get('absensi/index', [AbsensiController::class, 'index']);
     Route::resource('absensi', AbsensiSupirHeaderController::class);
 
     Route::resource('absensi_detail', AbsensiSupirDetailController::class);
+
+    Route::get('userrole/{id}/delete', [UserRoleController::class, 'delete'])->name('userrole.delete');
+    Route::get('userrole/detail', [UserRoleController::class, 'detail'])->name('userrole.detail');
+    Route::resource('userrole', UserRoleController::class);
+
+
 });

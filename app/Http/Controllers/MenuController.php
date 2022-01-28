@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-
-class CabangController extends Controller
+class MenuController extends Controller
 {
-    public $title = 'Cabang';
+    public $title = 'Menu';
     public $httpHeader = [
         'Accept' => 'application/json',
         'Content-Type' => 'application/json'
@@ -28,7 +27,7 @@ class CabangController extends Controller
             ];
 
             $response = Http::withHeaders($request->header())
-                ->get(config('app.api_url') . 'cabang', $params);
+                ->get(config('app.api_url') . 'menu', $params);
 
             $data = [
                 'total' => $response['attributes']['totalPages'] ?? [],
@@ -43,20 +42,25 @@ class CabangController extends Controller
 
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Cabang',
+            'pagename' => 'Menu Utama Menu',
             'combo' => $this->combo('list')
         ];
 
-        return view('cabang.index', compact('title', 'data'));
+        return view('menu.index', compact('title', 'data'));
     }
 
     public function create()
     {
         $title = $this->title;
 
-        $data['combo'] = $this->combo('entry');
-
-        return view('cabang.add', compact('title', 'data'));
+    
+             $data = [
+            'nama' => '',
+            'combo' => $this->combo('entry'),
+            'edit' => '0'
+        ];
+ 
+        return view('menu.add', compact('title', 'data'));
     }
 
     public function store(Request $request)
@@ -65,9 +69,10 @@ class CabangController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'cabang', $request->all());
+        ])->post(config('app.api_url') . 'menu', $request->all());
 
         return response($response);
+        
     }
 
     public function edit($id)
@@ -77,13 +82,17 @@ class CabangController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get(config('app.api_url') . "cabang/$id");
+        ])->get(config('app.api_url') . "menu/$id");
 
-        $cabang = $response['data'];
+        $menu = $response['data'];
+        $data = [
+            'nama' => $this->getdata($menu['aco_id'])['nama'],
+            'combo' => $this->combo('entry'),
+            'edit' => '1'
+        ];
 
-        $data['combo'] = $this->combo('entry');
-
-        return view('cabang.edit', compact('title', 'cabang', 'data'));
+        //  dd($data);
+        return view('menu.edit', compact('title', 'menu', 'data'));
     }
 
     public function update(Request $request, $id)
@@ -91,7 +100,7 @@ class CabangController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "cabang/$id", $request->all());
+        ])->patch(config('app.api_url') . "menu/$id", $request->all());
 
         return response($response);
     }
@@ -104,15 +113,19 @@ class CabangController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "cabang/$id");
+            ])->get(config('app.api_url') . "menu/$id");
 
-            $cabang = $response['data'];
+            $menu = $response['data'];
 
-            $data['combo'] = $this->combo('entry');
+            $data = [
+                'nama' => '',
+                'combo' => $this->combo('entry'),
+                'edit' => '0'
+            ];
 
-            return view('cabang.delete', compact('title', 'cabang', 'data'));
+            return view('menu.delete', compact('title', 'menu', 'data'));
         } catch (\Throwable $th) {
-            return redirect()->route('cabang.index');
+            return redirect()->route('menu.index');
         }
     }
 
@@ -121,7 +134,7 @@ class CabangController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete(config('app.api_url') . "cabang/$id", $request->all());
+        ])->delete(config('app.api_url') . "menu/$id", $request->all());
 
         return response($response);
         
@@ -129,7 +142,7 @@ class CabangController extends Controller
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'cabang/field_length');
+        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'menu/field_length');
 
         return response($response['data']);
     }
@@ -137,18 +150,24 @@ class CabangController extends Controller
 
     public function combo($aksi)
     {
-
         $status = [
             'status' => $aksi,
-            'grp' => 'STATUS AKTIF',
-            'subgrp' => 'STATUS AKTIF',
         ];
-
         $response = Http::withHeaders($this->httpHeader)
-            ->get(config('app.api_url') . 'cabang/combostatus', $status);
+            ->get(config('app.api_url') . 'menu/combomenuparent', $status);
 
         return $response['data'];
     }
 
     
+    public function getdata($aco_id)
+    {
+        $status = [
+            'aco_id' => $aco_id,
+        ];
+                $response = Http::withHeaders($this->httpHeader)
+            ->get(config('app.api_url') . 'menu/getdatanamaacos', $status);
+        return $response['data'];
+    }
+
 }
