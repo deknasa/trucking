@@ -34,7 +34,7 @@ class Myauth
         $this->authController = isset($params['authController']) ? $params['authController'] : 'login';
     }
 
-    public function auth($class = null, $method = null)
+    public function auth($class = null, $method = null): void
     {
         $class = strtolower($class);
         $method = strtolower($method);

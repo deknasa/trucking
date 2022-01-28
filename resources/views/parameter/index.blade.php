@@ -254,16 +254,16 @@
       .parent().addClass('px-1')
 
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'create') }}`) {
-      $('#add').addClass('ui-state-disabled')
+    if (!`{{ $myAuth->hasPermission('user', 'create') }}`) {
+      $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'edit') }}`) {
-      $('#edit').addClass('ui-state-disabled')
+    if (!`{{ $myAuth->hasPermission('user', 'edit') }}`) {
+      $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'delete') }}`) {
-      $('#delete').addClass('ui-state-disabled')
+    if (!`{{ $myAuth->hasPermission('user', 'delete') }}`) {
+      $('#delete').addClass('ui-disabled')
     }
   })
 

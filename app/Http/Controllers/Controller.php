@@ -23,15 +23,37 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public $myAuthConfig;
+
     public $myAuth;
+    public $class;
+    public $method;
 
     public function __construct()
     {
+        $this->setClass();
+        $this->setMethod();
+
         $this->setMyAuthConfig();
 
         $this->initMyauth();
 
+        $this->myAuth->auth($this->class, $this->method);
+        
         $this->loadMenu();
+    }
+
+    public function setClass(): void
+    {
+        $uri = Route::current()->uri();
+
+        $class = explode('/', $uri)[0];
+        
+        $this->class = $class;
+    }
+
+    public function setMethod(): void
+    {
+        $this->method = Route::current()->getActionMethod();
     }
 
     public function setMyAuthConfig(): void
