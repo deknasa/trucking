@@ -94,6 +94,7 @@ class UserRoleController extends Controller
 
     public function store(Request $request)
     {
+
         $request['modifiedby']=Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
@@ -113,8 +114,13 @@ class UserRoleController extends Controller
         ])->get(config('app.api_url') . "userrole/$id");
 
         $userrole = $response['data'];
+        $list = [
+            'detail' => $this->detaillist($id  ?? '0'),
+        ];
 
-        return view('userrole.edit', compact('title', 'userrole'));
+        $user_id=$id;
+
+        return view('userrole.edit', compact('title', 'userrole','list','user_id'));
     }
 
     public function update(Request $request, $id)
@@ -138,10 +144,14 @@ class UserRoleController extends Controller
                 'Content-Type' => 'application/json'
             ])->get(config('app.api_url') . "userrole/$id");
 
+            
             $userrole = $response['data'];
+            $list = [
+                'detail' => $this->detaillist($id  ?? '0'),
+            ];
+            $user_id=$id;
 
-
-            return view('userrole.delete', compact('title', 'userrole'));
+            return view('userrole.delete', compact('title', 'userrole','list','user_id'));
         } catch (\Throwable $th) {
             return redirect()->route('userrole.index');
         }
@@ -154,6 +164,8 @@ class UserRoleController extends Controller
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])->delete(config('app.api_url') . "userrole/$id", $request->all());
+
+        
 
         return response($response);
         

@@ -92,7 +92,7 @@
                     {
                         label: 'USER',
                         name: 'user',
-                        align: 'left'
+                        align: 'left', searchoptions:{sopt:['cn'],defaultValue:"<?= @$_GET['user'] ?>"}
                     },
                     {
                         label: 'NAMA USER',
@@ -194,7 +194,17 @@
                         window.close();
                     }
                 },
+                beforeProcessing: function() {
+                    $(this).jqGrid('setGridParam', {
+                        search: true,
+                        postData: {
+                            _search: true,
+                            filters: {"groupOp":"AND","rules":[{"field":"user","op":"cn","data":"admina"}]}
+                        }
+                    })
+                },
                 loadComplete: function(data) {
+                    console.log($(this).getGridParam('postData'));
                     /* Set global variables */
                     sortname = $(this).jqGrid("getGridParam", "sortname")
                     sortorder = $(this).jqGrid("getGridParam", "sortorder")

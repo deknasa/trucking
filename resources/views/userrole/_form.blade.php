@@ -14,17 +14,18 @@
 
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
-                <label>USER ID</label>
+                <label>USER</label>
               </div>
               <div class="col-12 col-md-2">
-                <div class="input-group">
-                  <input type="text" name="user_id" id="user_id" class="form-control" value="{{ $userrole['user_id'] ?? '' }}" readonly>
-                  <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" onclick="lookupUser('user_id')" tabindex="-1">...</button>
-                  </span>
+                <div class="input-group mb-3">
+                  <input type="text" name="user_id" id="user_id" class="form-control" value="{{ $userrole['user_id'] ?? '' }}" placeholder="User" >
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" onclick="lookupUser('user_id')" tabindex="-1">...</button>
+                  </div>
                 </div>
               </div>
             </div>
+
 
 
             <div class="row form-group">
@@ -49,16 +50,25 @@
                   @foreach($list['detail'] as $detailIndex => $detail)
                   <tr id="<?= $detailIndex ?>">
                     <td>
-                      <input type="hidden" name="role_id[]" id="role_id<?= $idx ?>" readonly id="role_id" class="form-control flevel" tabindex="-1" value="{{ $detail['role_id'] ?? ''}}">
-                      <span class="input-group-btn">
-                        <button class="btn btn-default cari" type="button" id="btnBuka<?= $detailIndex ?>" onclick="lookup('role_id',<?= $detailIndex ?>)">...</button>
-                      </span>
-                  
+                      <div class=" input-group">
+                        <input type="text" name="role_id[]" id="role_id<?= $detailIndex  ?>" readonly id="role_id" class="form-control flevel" tabindex="-1" value="{{ $detail['role_id'] ?? ''}}">
+                        <span class="input-group-btn">
+                          <button class="btn btn-default cari" type="button" id="btnBuka<?= $detailIndex ?>" onclick="lookup('role_id',<?= $detailIndex ?>)">...</button>
+                        </span>
+                      </div>
                     </td>
                     <td>
-                      <input type="hidden" name="rolename[]" id="rolename<?= $detailIndex ?>" value="{{ $detail['rolename'] }} " name="rolename[]" readonly id="rolename" class="form-control rolename">
+                      <input type="text" name="rolename[]" id="rolename<?= $detailIndex ?>" value="{{ $detail['rolename'] }} " name="rolename[]" readonly id="rolename" class="form-control rolename">
                     </td>
+                    @if ($detailIndex<>0)
 
+                      <td class="action" style="width:80px;">
+                        <span class="delete_btn">
+                          <a href="javascript:;" onclick="del_row(<?= $id ?>)"> <span class="fas fa-trash"></span></a>
+                        </span>
+
+                      </td>
+                      @endif
                   </tr>
                   @endforeach
                   @else
@@ -204,9 +214,9 @@
         <td>
           <div>
             <div class="input-group">
-              <input type="text" name="role_id[]" id="role_id`+id+`"  readonly class="form-control flevel" tabindex="-1">
+              <input type="text" name="role_id[]" id="role_id` + id + `"  readonly class="form-control flevel" tabindex="-1">
               <span class="input-group-btn">
-                <button class="btn btn-default" type="button" id="btnBuka`+id+`"  onclick="lookupRole('role_id',`+id+`)" tabindex="-1">...</button>
+                <button class="btn btn-default" type="button" id="btnBuka` + id + `"  onclick="lookupRole('role_id',` + id + `)" tabindex="-1">...</button>
               </span>
             </div>
           </div>
@@ -214,7 +224,7 @@
         <td>
           <div>
             <div class="input-group">
-              <input type="text" name="rolename[]"  id="rolename`+id+`" readonly class="form-control rolename" tabindex="-1" autocomplete="off">
+              <input type="text" name="rolename[]"  id="rolename` + id + `" readonly class="form-control rolename" tabindex="-1" autocomplete="off">
             </div>
           </div>
 
@@ -224,7 +234,7 @@
 
         <td class="action" style="width:80px;">
         <span class="delete_btn">
-        <a href="javascript:;" onclick="del_row(`+id+`)" class="tblItem_del"><span class="ui-icon ui-icon-trash"></span></a>
+        <a href="javascript:;" onclick="del_row(` + id + `)" class="tblItem_del"><span class="fas fa-trash"></span></a>
         </span>
         </td>
 
@@ -247,9 +257,9 @@
 
     var role = $('#role_id').val();
     // console.log(role);
-    if (id =='default') {
-          id='';
-        }
+    if (id == 'default') {
+      id = '';
+    }
 
     if (typeof role === 'undefined') role = '';
 
@@ -273,7 +283,7 @@
           var role = removeTags(getRole_id.rolename);
           // console.log($('#role_id'+id));
 
-          $('#'+role_id + id).val(kode);
+          $('#' + role_id + id).val(kode);
           $('#rolename' + id).val(role);
         }
       }
