@@ -92,7 +92,11 @@
                     {
                         label: 'USER',
                         name: 'user',
-                        align: 'left', searchoptions:{sopt:['cn'],defaultValue:"<?= @$_GET['user'] ?>"}
+                        align: 'left',
+                        searchoptions: {
+                            sopt: ['cn'],
+                            defaultValue: "<?= @$_GET['user'] ?>"
+                        }
                     },
                     {
                         label: 'NAMA USER',
@@ -194,15 +198,21 @@
                         window.close();
                     }
                 },
-                beforeProcessing: function() {
-                    $(this).jqGrid('setGridParam', {
-                        search: true,
-                        postData: {
-                            _search: true,
-                            filters: {"groupOp":"AND","rules":[{"field":"user","op":"cn","data":"admina"}]}
-                        }
-                    })
+                beforeRequest: function() {
+                    var $requestGrid = $(this);
+                    if ($requestGrid.data('areFiltersDefaulted') !== true) {
+                        $requestGrid.data('areFiltersDefaulted', true);
+                        setTimeout(function() {
+                            $requestGrid[0].triggerToolbar();
+                        }, 50);
+                        return false;
+                    }
+                    // Subsequent runs are always allowed
+                    return true;
                 },
+
+
+
                 loadComplete: function(data) {
                     console.log($(this).getGridParam('postData'));
                     /* Set global variables */
