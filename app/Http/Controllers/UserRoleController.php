@@ -90,7 +90,7 @@ class UserRoleController extends Controller
         $data['combo'] = $this->combo('entry');
 
         $user_id='0';
-        //   dd($list);
+        //   dd($data);
         return view('userrole.add', compact('title','list','user_id', 'data'));
     }
 
