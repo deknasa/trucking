@@ -98,11 +98,15 @@ class UserRoleController extends Controller
     {
 
         $request['modifiedby']=Auth::user()->name;
+        // dd($request->all());
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])->post(config('app.api_url') . 'userrole', $request->all());
 
+        
+        
         return response($response);
     }
 

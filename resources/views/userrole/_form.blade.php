@@ -25,8 +25,8 @@
                       <button class="btn btn-outline-secondary" type="button" onclick="lookupUser('user')" tabindex="-1">...</button>
                     </div>
                     <div class="input-group-prepend">
-
-                      <span class="input-group-text" name="user_id" id="user_id"> {{ $userrole['user_id'] ?? '' }} </span>
+                      <input type="hidden" value="" name="user_id" id="user_id" />
+                      <!-- <span class="input-group-text" class="form-control" name="user_id" id="user_id"> {{ $userrole['user_id'] ?? '' }} </span> -->
                     </div>
                   </div>
                 </div>
@@ -50,9 +50,14 @@
 
                         <div class="input-group input-group-sm mb-1">
                           <div class="input-group-prepend">
-                            <span class="input-group-text" name="role_id[]" id="role_id<?= $detailIndex  ?>"> {{ $detail['role_id'] ?? ''}} </span>
+
+                            <!-- <span class="input-group-text" name="role_id[]" id="role_id<?= $detailIndex  ?>"> {{ $detail['role_id'] ?? ''}} </span> -->
+                            <!-- <input type="hidden" value="" name="role_id[]"" id=" role_id<?= $detailIndex  ?>" /> -->
+                            <input type="hidden" name="role_id[]" id="role_id<?= $detailIndex  ?>" readonly class="form-control role_id" tabindex="-1" value="{{ $detail['role_id'] ?? ''}}">
+
                           </div>
-                          <input type="text" name="rolename[]" id="rolename<?= $detailIndex  ?>" readonly id="rolename" class="form-control flevel" tabindex="-1" value="{{ $detail['rolename'] ?? ''}}">
+
+                          <input type="text" name="rolename[]" id="rolename<?= $detailIndex  ?>" readonly class="form-control rolename" tabindex="-1" value="{{ $detail['rolename'] ?? ''}}">
                         </div>
                       </td>
 
@@ -151,7 +156,7 @@
           var kode = removeTags(getUser_id.id);
           var user = removeTags(getUser_id.user);
           $("#user").val(user);
-          $('#user_id').html(kode);
+          $('#user_id').val(kode);
           // setDetail(kode);
         }
       }
