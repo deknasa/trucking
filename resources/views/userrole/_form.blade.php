@@ -226,7 +226,6 @@
         <span class="delete_btn">
         <a href="javascript:;" onclick="del_row(`+id+`)" class="tblItem_del"><span class="fas fa-plus"></span></a>
         </span>
-        </td>
 
         </tr>
     `);
