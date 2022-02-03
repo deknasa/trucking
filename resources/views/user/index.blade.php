@@ -92,7 +92,11 @@
                     {
                         label: 'USER',
                         name: 'user',
-                        align: 'left'
+                        align: 'left',
+                        searchoptions: {
+                            sopt: ['cn'],
+                            defaultValue: "<?= @$_GET['user'] ?>"
+                        }
                     },
                     {
                         label: 'NAMA USER',
@@ -194,7 +198,23 @@
                         window.close();
                     }
                 },
+                beforeRequest: function() {
+                    var $requestGrid = $(this);
+                    if ($requestGrid.data('areFiltersDefaulted') !== true) {
+                        $requestGrid.data('areFiltersDefaulted', true);
+                        setTimeout(function() {
+                            $requestGrid[0].triggerToolbar();
+                        }, 50);
+                        return false;
+                    }
+                    // Subsequent runs are always allowed
+                    return true;
+                },
+
+
+
                 loadComplete: function(data) {
+                    console.log($(this).getGridParam('postData'));
                     /* Set global variables */
                     sortname = $(this).jqGrid("getGridParam", "sortname")
                     sortorder = $(this).jqGrid("getGridParam", "sortorder")

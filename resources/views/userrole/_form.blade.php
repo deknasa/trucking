@@ -7,92 +7,76 @@
         <div class="card-header">Form {{ $title }}</div>
         <form action="" method="post">
           <div class="card-body">
-            @csrf
-            <input type="hidden" name="limit" value="{{ $_GET['limit'] ?? 10 }}">
-            <input type="hidden" name="sortname" value="{{ $_GET['sortname'] ?? 'id' }}">
-            <input type="hidden" name="sortorder" value="{{ $_GET['sortorder'] ?? 'asc' }}">
+            <div style="margin-left:15px;margin-right:15px;">
+              @csrf
+              <input type="hidden" name="limit" value="{{ $_GET['limit'] ?? 10 }}">
+              <input type="hidden" name="sortname" value="{{ $_GET['sortname'] ?? 'id' }}">
+              <input type="hidden" name="sortorder" value="{{ $_GET['sortorder'] ?? 'asc' }}">
 
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>USER ID</label>
-              </div>
-              <div class="col-12 col-md-2">
-                <div class="input-group">
-                  <input type="text" name="user_id" id="user_id" class="form-control" value="{{ $userrole['user_id'] ?? '' }}" readonly>
-                  <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" onclick="lookupUser('user_id')" tabindex="-1">...</button>
-                  </span>
+              <div class="row form-group">
+                <div class="col-12 col-md-1 col-form-label">
+                  <label>USER</label>
                 </div>
-              </div>
-            </div>
+                <div class="col-12 col-md-5">
+                  <div class="input-group mb-3">
 
-
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>NAMA USER</label>
-              </div>
-              <div class="col-12 col-md-5">
-                <input type="text" name="name" id="name" class="form-control" value="{{ $userrole['name'] ?? '' }}" readonly>
-              </div>
-            </div>
-
-            <div style="height: 300px; overflow-x: auto;">
-              <table class="table table-bordered">
-                <thead class="thead-light">
-                  <tr id="header_cart">
-                    <th width="25%">ID</th>
-                    <th>Role</th>
-                  </tr>
-                </thead>
-                <tbody id="table_body" style="overflow-y: auto;">
-                  @if ($list['detail'])
-                  @foreach($list['detail'] as $detailIndex => $detail)
-                  <tr id="<?= $detailIndex ?>">
-                    <td>
-                      <input type="hidden" name="role_id[]" id="role_id<?= $idx ?>" readonly id="role_id" class="form-control flevel" tabindex="-1" value="{{ $detail['role_id'] ?? ''}}">
-                      <span class="input-group-btn">
-                        <button class="btn btn-default cari" type="button" id="btnBuka<?= $detailIndex ?>" onclick="lookup('role_id',<?= $detailIndex ?>)">...</button>
-                      </span>
-                  
-                    </td>
-                    <td>
-                      <input type="hidden" name="rolename[]" id="rolename<?= $detailIndex ?>" value="{{ $detail['rolename'] }} " name="rolename[]" readonly id="rolename" class="form-control rolename">
-                    </td>
-
-                  </tr>
-                  @endforeach
-                  @else
-                  <td>
-                    <div>
-                      <div class=" input-group">
-                        <input type="text" name="role_id[]" readonly id="role_id" class="form-control flevel" tabindex="-1">
-                        <span class="input-group-btn">
-                          <button class="btn btn-default cari" type="button" onclick="lookupRole('role_id','default')" tabindex="-1">...</button>
-                        </span>
-                      </div>
+                    <input type="text" name="user" id="user" class="form-control" value="{{ $userrole['user'] ?? '' }}" placeholder="User">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary" type="button" onclick="lookupUser('user')" tabindex="-1">...</button>
                     </div>
-                  </td>
-                  <td>
-                    <div>
-                      <div class="input-group">
-                        <input type="text" name="rolename[]" readonly id="rolename" class="form-control rolename">
-                      </div>
+                    <div class="input-group-prepend">
+                      <input type="hidden" value="" name="user_id" id="user_id" />
+                      <!-- <span class="input-group-text" class="form-control" name="user_id" id="user_id"> {{ $userrole['user_id'] ?? '' }} </span> -->
                     </div>
-                  </td>
+                  </div>
+                </div>
 
-                  @endif
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td>Jumlah Baris : <span id="baris"><?= $list['detail'] ? count($list['detail']) : 1 ?></span></td>
-                    <td colspan="1"></td>
-                    <td>
-                      <a id="plus" href="javascript:;" onclick="add_row(<?= $id ?>)"><span class="fas fa-plus"></span></a>
-                    </td>
+              </div>
 
-                  </tr>
-                </tfoot>
-              </table>
+
+              <div style="height: 300px; overflow-x: auto;">
+                <table class="table table-sm table-bordered table-hover">
+                  <thead class="thead-light">
+                    <tr id="header_cart">
+                      <th width="75%">Role</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="table_body" style="overflow-y: auto;">
+                    @if ($list['detail'])
+                    @foreach($list['detail'] as $detailIndex => $detail)
+                    <tr id="<?= $detailIndex ?>">
+                      <td>
+
+                        <div class="input-group input-group-sm mb-1">
+                          <div class="input-group-prepend">
+
+                            <!-- <span class="input-group-text" name="role_id[]" id="role_id<?= $detailIndex  ?>"> {{ $detail['role_id'] ?? ''}} </span> -->
+                            <!-- <input type="hidden" value="" name="role_id[]"" id=" role_id<?= $detailIndex  ?>" /> -->
+                            <input type="hidden" name="role_id[]" id="role_id<?= $detailIndex  ?>" readonly class="form-control role_id" tabindex="-1" value="{{ $detail['role_id'] ?? ''}}">
+
+                          </div>
+
+                          <input type="text" name="rolename[]" id="rolename<?= $detailIndex  ?>" readonly class="form-control rolename" tabindex="-1" value="{{ $detail['rolename'] ?? ''}}">
+                        </div>
+                      </td>
+
+                      <td>
+                        <div class="input-group input-group-sm mb-1">
+                          <select class="form-control select2" name="status[]" id="status">
+                            <?php foreach ($data['combo'] as $key => $item) { ?>
+                              <option value="<?= $item['id'] ?>" <?= $item['id'] == @$detail['status'] ? 'selected' : '' ?>><?= $item['keterangan'] ?></option>
+                            <?php } ?>
+                        </div>
+                      </td>
+
+                    </tr>
+                    @endforeach
+                    @endif
+                  </tbody>
+
+                </table>
+              </div>
             </div>
           </div>
 
@@ -142,15 +126,21 @@
     method = "DELETE"
   <?php endif; ?>
 
-  function lookupUser(user_id) {
 
-    var user = $('#user_id').val();
+
+  function lookupUser(user) {
+
+    var user = $('#user').val();
     console.log(user);
     if (typeof user === 'undefined') user = '';
 
 
+    if (user) {
+      var url = "<?= URL::to('/') ?>/user?popup=1&currentpage=" + currentpage + "&user=" + user;
+    } else {
+      var url = "<?= URL::to('/') ?>/user?popup=1&currentpage=" + currentpage;
+    }
 
-    var url = "<?= URL::to('/') ?>/user?popup=1&currentpage=" + currentpage + "&id=" + user;
     // console.log(url);
     var winpeserta = window.open(
       url,
@@ -164,12 +154,14 @@
           getUser_id = JSON.parse(getUser_id);
           localStorage.removeItem('getUser_id');
           var kode = removeTags(getUser_id.id);
-          var user = removeTags(getUser_id.name);
-          $("#user_id").val(kode);
-          $('#name').val(user);
+          var user = removeTags(getUser_id.user);
+          $("#user").val(user);
+          $('#user_id').val(kode);
+          // setDetail(kode);
         }
       }
     }, 500);
+
   }
 
   function field_data() {
@@ -204,9 +196,9 @@
         <td>
           <div>
             <div class="input-group">
-              <input type="text" name="role_id[]" id="role_id`+id+`"  readonly class="form-control flevel" tabindex="-1">
+              <input type="text" name="role_id[]" id="role_id` + id + `"  readonly class="form-control flevel" tabindex="-1">
               <span class="input-group-btn">
-                <button class="btn btn-default" type="button" id="btnBuka`+id+`"  onclick="lookupRole('role_id',`+id+`)" tabindex="-1">...</button>
+                <button class="btn btn-default" type="button" id="btnBuka` + id + `"  onclick="lookupRole('role_id',` + id + `)" tabindex="-1">...</button>
               </span>
             </div>
           </div>
@@ -214,7 +206,7 @@
         <td>
           <div>
             <div class="input-group">
-              <input type="text" name="rolename[]"  id="rolename`+id+`" readonly class="form-control rolename" tabindex="-1" autocomplete="off">
+              <input type="text" name="rolename[]"  id="rolename` + id + `" readonly class="form-control rolename" tabindex="-1" autocomplete="off">
             </div>
           </div>
 
@@ -224,7 +216,7 @@
 
         <td class="action" style="width:80px;">
         <span class="delete_btn">
-        <a href="javascript:;" onclick="del_row(`+id+`)" class="tblItem_del"><span class="fas fa-plus"></span></a>
+        <a href="javascript:;" onclick="del_row(` + id + `)" class="tblItem_del"><span class="fas fa-trash"></span></a>
         </span>
 
         </tr>
@@ -246,9 +238,9 @@
 
     var role = $('#role_id').val();
     // console.log(role);
-    if (id =='default') {
-          id='';
-        }
+    if (id == 'default') {
+      id = '';
+    }
 
     if (typeof role === 'undefined') role = '';
 
@@ -272,7 +264,7 @@
           var role = removeTags(getRole_id.rolename);
           // console.log($('#role_id'+id));
 
-          $('#'+role_id + id).val(kode);
+          $('#' + role_id + id).val(kode);
           $('#rolename' + id).val(role);
         }
       }

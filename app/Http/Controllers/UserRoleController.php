@@ -87,19 +87,26 @@ class UserRoleController extends Controller
         $list = [
             'detail' => $this->detaillist($request->user_id  ?? '0'),
         ];
+        $data['combo'] = $this->combo('entry');
+
         $user_id='0';
-        // dd($list);
-        return view('userrole.add', compact('title','list','user_id'));
+        //   dd($data);
+        return view('userrole.add', compact('title','list','user_id', 'data'));
     }
 
     public function store(Request $request)
     {
+
         $request['modifiedby']=Auth::user()->name;
+        // dd($request->all());
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])->post(config('app.api_url') . 'userrole', $request->all());
 
+        
+        
         return response($response);
     }
 
@@ -113,8 +120,14 @@ class UserRoleController extends Controller
         ])->get(config('app.api_url') . "userrole/$id");
 
         $userrole = $response['data'];
+        $list = [
+            'detail' => $this->detaillist($id  ?? '0'),
+        ];
+        $data['combo'] = $this->combo('entry');
 
-        return view('userrole.edit', compact('title', 'userrole'));
+        $user_id=$id;
+
+        return view('userrole.edit', compact('title', 'userrole','list','user_id','data'));
     }
 
     public function update(Request $request, $id)
@@ -138,10 +151,16 @@ class UserRoleController extends Controller
                 'Content-Type' => 'application/json'
             ])->get(config('app.api_url') . "userrole/$id");
 
+            
             $userrole = $response['data'];
+            $list = [
+                'detail' => $this->detaillist($id  ?? '0'),
+            ];
+            $data['combo'] = $this->combo('entry');
 
+            $user_id=$id;
 
-            return view('userrole.delete', compact('title', 'userrole'));
+            return view('userrole.delete', compact('title', 'userrole','list','user_id','data'));
         } catch (\Throwable $th) {
             return redirect()->route('userrole.index');
         }
@@ -154,6 +173,8 @@ class UserRoleController extends Controller
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])->delete(config('app.api_url') . "userrole/$id", $request->all());
+
+        
 
         return response($response);
         
@@ -172,12 +193,27 @@ class UserRoleController extends Controller
             'user_id' => $user_id,
         ];
         $response = Http::get(config('app.api_url') . 'userrole/detaillist', $status);
-
         return $response['data'];
         
 
     
     }
+    
+    public function combo($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeader)
+            ->get(config('app.api_url') . 'userrole/combostatus', $status);
+
+        return $response['data'];
+    }
+
 
 
 

@@ -33,12 +33,13 @@
         datatype: "json",
         colModel: [{
             label: 'USER',
-            name: 'user_id',
+            name: 'user',
             align: 'left',
+            hidden: true
           },
           {
             label: 'ROLE',
-            name: 'role_id',
+            name: 'rolename',
             align: 'left'
           },
           {
