@@ -80,7 +80,7 @@
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: indexUrl+'?user_id=1',
+      url: indexUrl+'?user_id='+id,
       postData: {
         id: id
       }

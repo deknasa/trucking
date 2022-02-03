@@ -122,6 +122,7 @@
         pager: pager,
         viewrecords: true,
         onSelectRow: function(id) {
+          console.log(id)
           loadDetailData(id)
 
           id = $(this).jqGrid('getCell', id, 'rn') - 1
@@ -130,7 +131,14 @@
           let rows = $(this).jqGrid('getGridParam', 'postData').rows
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
+        gridComplete: function() {
+          id = $(this).jqGrid('getCell', id, 'rn')
+          console.log(id)
+          loadDetailData(id)
+
+        },
         loadComplete: function(data) {
+
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -189,7 +197,9 @@
         id: 'edit',
         buttonicon: 'fas fa-pen',
         onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          selectedId = $(this).jqGrid('getCell', row_id, 'user_id');
+          // alert(selectid);
 
           window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
@@ -201,7 +211,9 @@
         id: 'delete',
         buttonicon: 'fas fa-trash',
         onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          selectedId = $(this).jqGrid('getCell', row_id, 'user_id');
 
           window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
         }

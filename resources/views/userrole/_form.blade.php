@@ -25,7 +25,7 @@
                       <button class="btn btn-outline-secondary" type="button" onclick="lookupUser('user')" tabindex="-1">...</button>
                     </div>
                     <div class="input-group-prepend">
-                      <input type="hidden" value="" name="user_id" id="user_id" />
+                      <input type="hidden" value="{{ $userrole['user_id'] ?? '' }}" name="user_id" id="user_id" />
                       <!-- <span class="input-group-text" class="form-control" name="user_id" id="user_id"> {{ $userrole['user_id'] ?? '' }} </span> -->
                     </div>
                   </div>

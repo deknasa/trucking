@@ -112,6 +112,7 @@ class UserRoleController extends Controller
 
     public function edit($id)
     {
+        dd(config('app.api_url') . "userrole/$id");
         $title = $this->title;
 
         $response = Http::withHeaders([
@@ -126,7 +127,6 @@ class UserRoleController extends Controller
         $data['combo'] = $this->combo('entry');
 
         $user_id=$id;
-
         return view('userrole.edit', compact('title', 'userrole','list','user_id','data'));
     }
 
@@ -159,7 +159,9 @@ class UserRoleController extends Controller
             $data['combo'] = $this->combo('entry');
 
             $user_id=$id;
-
+            
+        
+           
             return view('userrole.delete', compact('title', 'userrole','list','user_id','data'));
         } catch (\Throwable $th) {
             return redirect()->route('userrole.index');
