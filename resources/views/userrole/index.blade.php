@@ -30,6 +30,7 @@
 <!-- Detail -->
 <!-- @include('userrole._detail') -->
 
+
 @push('scripts')
 <script>
   $(document).ready(function() {
@@ -81,11 +82,16 @@
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
-            label: 'USER',
+            label: 'USER ID',
             name: 'user_id',
-            align: 'left'
+            align: 'left',
+            hidden: true
           },
           {
+            label: 'USER',
+            name: 'user',
+            align: 'left'
+          }, {
             label: 'NAMA USER',
             name: 'name',
             align: 'left'
