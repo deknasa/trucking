@@ -45,7 +45,7 @@
     let totalRecord
     let limit
     let postData
-    let sortname = 'user_id'
+    let sortname = 'user'
     let sortorder = 'asc'
 
     /* Set page */
@@ -88,6 +88,12 @@
             hidden: true
           },
           {
+            label: 'ID',
+            name: 'id',
+            align: 'left',
+            hidden: true
+          },
+          {
             label: 'USER',
             name: 'user',
             align: 'left'
@@ -122,20 +128,17 @@
         pager: pager,
         viewrecords: true,
         onSelectRow: function(id) {
-          console.log(id)
-          loadDetailData(id)
+          row_id = $(this).jqGrid('getGridParam', 'selrow')
+          selectedId = $(this).jqGrid('getCell', row_id, 'user_id');
+          console.log(selectedId)
+
+          loadDetailData(selectedId)
 
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
           let rows = $(this).jqGrid('getGridParam', 'postData').rows
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
-        },
-        gridComplete: function() {
-          id = $(this).jqGrid('getCell', id, 'rn')
-          console.log(id)
-          loadDetailData(id)
-
         },
         loadComplete: function(data) {
 
@@ -151,23 +154,27 @@
             highlightSearch = ''
           })
 
-          if (triggerClick) {
-            if (id != '') {
-              indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-              id = ''
-            } else if (indexRow != undefined) {
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+          setTimeout(function() {
+            if (triggerClick) {
+
+              if (id != '') {
+                indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+                $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                id = ''
+              } else if (indexRow != undefined) {
+                $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              }
+
+              if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+                $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              }
+
+              triggerClick = false
+            } else {
+              $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
             }
 
-            if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-            }
-
-            triggerClick = false
-          } else {
-            $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
-          }
+          }, 100)
         }
       })
 
@@ -198,9 +205,9 @@
         buttonicon: 'fas fa-pen',
         onClickButton: function() {
           row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          selectedId = $(this).jqGrid('getCell', row_id, 'user_id');
+          selectedId = $(this).jqGrid('getCell', row_id, 'id');
           // alert(selectid);
-
+          console.log(selectedId)
           window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
@@ -213,7 +220,7 @@
         onClickButton: function() {
           // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
           row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          selectedId = $(this).jqGrid('getCell', row_id, 'user_id');
+          selectedId = $(this).jqGrid('getCell', row_id, 'id');
 
           window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
         }

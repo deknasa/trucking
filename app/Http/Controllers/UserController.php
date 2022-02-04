@@ -15,11 +15,15 @@ class UserController extends Controller
         'Content-Type' => 'application/json'
     ];
 
+    /**
+     * Fungsi index
+     * @ClassName index
+     */
     public function index(Request $request)
     {
-        
+
         if ($request->ajax()) {
-        
+
             $params = [
                 'offset' => (($request->page - 1) * $request->rows),
                 'limit' => $request->rows,
@@ -52,6 +56,11 @@ class UserController extends Controller
         return view('user.index', compact('title', 'data'));
     }
 
+    /**
+     * Fungsi create
+     * @ClassName create
+     */
+
     public function create()
     {
         $title = $this->title;
@@ -64,7 +73,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $request['modifiedby']=Auth::user()->name;
+        $request['modifiedby'] = Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -73,6 +82,10 @@ class UserController extends Controller
         return response($response);
     }
 
+     /**
+     * Fungsi edit
+     * @ClassName edit
+     */
     public function edit($id)
     {
         $title = $this->title;
@@ -92,7 +105,7 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request['modifiedby']=Auth::user()->name;
+        $request['modifiedby'] = Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -101,6 +114,10 @@ class UserController extends Controller
         return response($response);
     }
 
+     /**
+     * Fungsi delete
+     * @ClassName delete
+     */
     public function delete($id)
     {
         try {
@@ -122,16 +139,15 @@ class UserController extends Controller
         }
     }
 
-    public function destroy($id,Request $request)
+    public function destroy($id, Request $request)
     {
-        $request['modifiedby']=Auth::user()->name;
+        $request['modifiedby'] = Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])->delete(config('app.api_url') . "user/$id", $request->all());
 
         return response($response);
-        
     }
 
     public function fieldLength()
@@ -157,6 +173,20 @@ class UserController extends Controller
         return $response['data'];
     }
 
+    public function getuserid(Request $request)
+    {
+
+        $status = [
+            'user' => $request['user'],
+        ];
+
+        $response = Http::withHeaders($this->httpHeader)
+            ->get(config('app.api_url') . 'user/getuserid', $status);
+
+        // dd($response['data']);
+        return $response['data'];
+    }
+
     public function combocabang($aksi)
     {
 
@@ -169,6 +199,4 @@ class UserController extends Controller
 
         return $response['data'];
     }
-
-    
 }
