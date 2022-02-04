@@ -81,43 +81,43 @@
         colModel: [{
             label: 'ID',
             name: 'id',
-            align: 'center',
+            align: 'right',
             width: '50px'
           },
           {
             label: 'NO BUKTI',
             name: 'nobukti',
-            align: 'center'
+            align: 'left'
           },
           {
             label: 'TANGGAL',
             name: 'tgl',
-            align: 'center'
+            align: 'left'
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-            align: 'center'
+            align: 'left'
           },
           {
             label: 'NO BUKTI KGT',
             name: 'kasgantung_nobukti',
-            align: 'center'
+            align: 'left'
           },
           {
             label: 'NOMINAL',
             name: 'nominal',
-            align: 'center'
+            align: 'right'
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
-            align: 'center'
+            align: 'left'
           },
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'center'
+            align: 'left'
           },
         ],
         autowidth: true,

@@ -45,27 +45,27 @@
     let sortorder = 'asc'
 
     /* Set page */
-    <?php if (isset($_GET['page'])) {?>
+    <?php if (isset($_GET['page'])) { ?>
       page = "{{ $_GET['page'] }}"
     <?php } ?>
 
     /* Set id */
-    <?php if (isset($_GET['id'])) {?>
+    <?php if (isset($_GET['id'])) { ?>
       id = "{{ $_GET['id'] }}"
     <?php } ?>
 
     /* Set indexRow */
-    <?php if (isset($_GET['indexRow'])) {?>
+    <?php if (isset($_GET['indexRow'])) { ?>
       indexRow = "{{ $_GET['indexRow'] }}"
     <?php } ?>
 
     /* Set sortname */
-    <?php if (isset($_GET['sortname'])) {?>
+    <?php if (isset($_GET['sortname'])) { ?>
       sortname = "{{ $_GET['sortname'] }}"
     <?php } ?>
 
     /* Set sortorder */
-    <?php if (isset($_GET['sortorder'])) {?>
+    <?php if (isset($_GET['sortorder'])) { ?>
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
 
@@ -91,41 +91,41 @@
             name: 'namacabang',
             align: 'left'
           },
- 
-          {
-          label: 'Status',
-          name: 'statusaktif',
-          width: 100,
-          stype: 'select',
-          searchoptions: {
-            value: `<?php
-                    $i = 1;
-                    
-                    foreach ($data['combo'] as $status) :
-                      echo "$status[param]:$status[parameter]";
-                      if ($i !== count($data['combo'])) {
-                        echo ";";
-                      }
-                      $i++;
-                    endforeach
 
-                    ?>
+          {
+            label: 'Status',
+            name: 'statusaktif',
+            width: 100,
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combo'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combo'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
             `
+            },
           },
-        },          
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
-            align: 'center'
+            align: 'left'
           },
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'center'
-          },          {
+            align: 'right'
+          }, {
             label: 'CREATEDAT',
             name: 'created_at',
-            align: 'center'
+            align: 'right'
           },
         ],
         autowidth: true,
@@ -176,7 +176,7 @@
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
               $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
-            
+
             triggerClick = false
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
@@ -211,7 +211,7 @@
         buttonicon: 'fas fa-pen',
         onClickButton: function() {
           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          
+
           window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
@@ -222,9 +222,10 @@
         id: 'delete',
         buttonicon: 'fas fa-trash',
         onClickButton: function() {
-           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          
-          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`        }
+          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+        }
       })
 
       .jqGrid('filterToolbar', {
@@ -237,10 +238,10 @@
         }
       })
 
-      .bindKeys()/
+      .bindKeys() /
 
-    /* Append clear filter button */
-    loadClearFilter()
+      /* Append clear filter button */
+      loadClearFilter()
 
     /* Append global search */
     loadGlobalSearch()

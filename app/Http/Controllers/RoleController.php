@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
@@ -16,7 +17,7 @@ class RoleController extends Controller
     public function index(Request $request)
     {
 
-
+     
         if ($request->ajax()) {
             $params = [
                 'offset' => (($request->page - 1) * $request->rows),
@@ -63,7 +64,7 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
-
+        $request['modifiedby']=Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -82,12 +83,12 @@ class RoleController extends Controller
         ])->get(config('app.api_url') . "role/$id");
 
         $role = $response['data'];
-
         return view('role.edit', compact('title', 'role'));
     }
 
     public function update(Request $request, $id)
     {
+        $request['modifiedby']=Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -117,6 +118,7 @@ class RoleController extends Controller
 
     public function destroy($id, Request $request)
     {
+        $request['modifiedby']=Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'

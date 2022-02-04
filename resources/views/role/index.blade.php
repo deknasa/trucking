@@ -43,6 +43,8 @@
     let postData
     let sortname = 'id'
     let sortorder = 'asc'
+    popup = "<?= @$_GET['popup'] ?>" == "" ? "" : "ada";
+        id = "<?= @$_GET['name'] ?>" == "" ? "undefined" : "<?= @$_GET['name'] ?>";
 
     /* Set page */
     <?php if (isset($_GET['page'])) {?>
@@ -90,16 +92,16 @@
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
-            align: 'center'
+            align: 'left'
           },
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'center'
+            align: 'right'
           },          {
             label: 'CREATEDAT',
             name: 'created_at',
-            align: 'center'
+            align: 'right'
           },
         ],
         autowidth: true,
@@ -124,7 +126,11 @@
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         ondblClickRow: function(rowid) {
-
+          if (popup == "ada") {
+                        var rowData = jQuery(this).getRowData(rowid);
+                        localStorage.setItem('getRole_id', JSON.stringify(rowData));
+                        window.close();
+                    }
         },
         loadComplete: function(data) {
           /* Set global variables */

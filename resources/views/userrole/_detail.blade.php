@@ -33,12 +33,13 @@
         datatype: "json",
         colModel: [{
             label: 'USER',
-            name: 'user_id',
+            name: 'user',
             align: 'left',
+            hidden: true
           },
           {
             label: 'ROLE',
-            name: 'role_id',
+            name: 'rolename',
             align: 'left'
           },
           {
@@ -79,7 +80,7 @@
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: indexUrl+'?user_id=1',
+      url: indexUrl+'?user_id='+id,
       postData: {
         id: id
       }

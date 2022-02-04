@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
 
 class ParameterController extends Controller
 {
@@ -59,6 +60,7 @@ class ParameterController extends Controller
 
     public function store(Request $request)
     {
+        $request['modifiedby']=Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -83,6 +85,7 @@ class ParameterController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request['modifiedby']=Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -111,6 +114,7 @@ class ParameterController extends Controller
 
     public function destroy($id)
     {
+        $request['modifiedby']=Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
