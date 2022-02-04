@@ -60,10 +60,21 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <!-- <div class="form-group row">
                             <label for="staticEmail" class="col-sm-2 col-form-label">Class <span class="text-danger">*</span></label>
                             <div class="col-sm-4">
                                    <input type="text" name="aco_id" class="form-control" id="aco_id" placeholder="Class" value="{{ $data['nama'] ?? '' }}" <?= ($data['edit']=='1') ? 'readonly' : '' ?>>
+                            </div>
+                        </div> -->
+
+                        <div class="form-group row">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Controller<span class="text-danger">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control select2bs4  <?= @$disable2 ?>" style="width: 100%;" name="controller" id="controller" <?= ($data['edit']=='1') ? 'readonly' : '' ?>>
+                                    <?php foreach ($data['class'] as $class) : ?>;
+                                        <option value="<?= $class['class'] ?>" <?= $class['class'] == @$data['nama'] ? 'selected' : '' ?>><?= strtoupper($class['class']) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
                         </div>
 

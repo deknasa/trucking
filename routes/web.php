@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::get('menu/getdata', [MenuController::class, 'getdata'])->name('menu.getdata');
     Route::get('menu/{id}/delete', [MenuController::class, 'delete'])->name('menu.delete');
     Route::get('menu/listFolderFiles', [MenuController::class, 'listFolderFiles'])->name('menu.listFolderFiles');
+    Route::get('menu/listclassall', [MenuController::class, 'listclassall'])->name('menu.listclassall');
     Route::resource('menu', MenuController::class);    
 
     Route::get('absensi/{id}/delete', [AbsensiSupirHeaderController::class, 'delete'])->name('absensi.delete');

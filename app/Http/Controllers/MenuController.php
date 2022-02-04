@@ -19,6 +19,12 @@ class MenuController extends Controller
     public function index(Request $request)
     {
 
+
+            // 'class' => $this->listFolderFiles('CabangController')
+        //     $dataclass=json_encode($this->listclassall());
+            
+        // dd($dataclass);
+
         if ($request->ajax()) {
             $params = [
                 'offset' => (($request->page - 1) * $request->rows),
@@ -55,20 +61,24 @@ class MenuController extends Controller
     {
         $title = $this->title;
 
-
         $data = [
             'nama' => '',
             'combo' => $this->combo('entry'),
+            'class' => $this->listclassall(),
             'edit' => '0'
         ];
 
+        // dd($data['class']);
         return view('menu.add', compact('title', 'data'));
     }
 
     public function store(Request $request)
     {
+        
         $request['modifiedby'] = Auth::user()->name;
+        $request['class'] = $this->listFolderFiles($request['controller']);
 
+        // dd($request->all());
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -90,6 +100,8 @@ class MenuController extends Controller
         $data = [
             'nama' => $this->getdata($menu['aco_id'])['nama'],
             'combo' => $this->combo('entry'),
+            'class' => $this->listclassall(),
+
             'edit' => '1'
         ];
 
@@ -99,7 +111,7 @@ class MenuController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request['modifiedby'] = Auth::user()->name;
+        $request['modifiedby'] = $this->listclassall();
 
         $response = Http::withHeaders([
             'Accept' => 'application/json',
@@ -124,6 +136,8 @@ class MenuController extends Controller
             $data = [
                 'nama' => '',
                 'combo' => $this->combo('entry'),
+                'class' => $this->listclassall(),
+
                 'edit' => '0'
             ];
 
@@ -174,38 +188,92 @@ class MenuController extends Controller
             ->get(config('app.api_url') . 'menu/getdatanamaacos', $status);
         return $response['data'];
     }
-    public function listFolderFiles($dir = null)
+
+    public function listFolderFiles($controller)
     {
-        if ($dir === null) {
-            $dir = config('app.apppath') . 'controllers/';
-        }
+        // if ($dir === null) {
+        $dir = config('app.apppath') . 'controllers/';
+        // }
         $ffs = scandir($dir);
         unset($ffs[0], $ffs[1]);
         // prevent empty ordered elements
         if (count($ffs) < 1)
             return;
         $i = 0;
+        // $data[] = '';
+        // $ff=$controller;
         foreach ($ffs as $ff) {
             if (is_dir($dir . '/' . $ff))
                 $this->listFolderFiles($dir . '/' . $ff);
             elseif (is_file($dir . '/' . $ff) && strpos($ff, '.php') !== false) {
-                 $classes = $this->get_php_classes(file_get_contents($dir . '/' . $ff));
+                // if ($ff == $controller) {
+                $classes = $this->get_php_classes(file_get_contents($dir . '/' . $ff));
                 foreach ($classes as $class) {
-                    if (!class_exists($class)) {
-                        include_once($dir . $ff);
-                    }
-                    $methods = $this->get_class_methods($class, true);
+                    if ($class == $controller) {
 
-                    foreach ($methods as $method) {
-                        if (isset($method['docComment']['ClassName'])) {
-                            echo $method['name'];
-                            // $this->Macos->save(['class'=>$class, 'method'=>$method['name'], 'displayname'=>$method['docComment']['AclName'],'modifiedby'=>$_SESSION[SESSION_NAME.'username']]);
+
+                        if (!class_exists($class)) {
+                            include_once($dir . $ff);
+                        }
+                        $methods = $this->get_class_methods($class, true);
+
+                        foreach ($methods as $method) {
+                            if (isset($method['docComment']['ClassName'])) {
+                                $data[] = [
+                                    'class' => $class,
+                                    'method' => $method['name'],
+                                    'name' => $method['name'] . ' ' . $class
+                                ];
+                                // $this->Macos->save(['class'=>$class, 'method'=>$method['name'], 'displayname'=>$method['docComment']['AclName'],'modifiedby'=>$_SESSION[SESSION_NAME.'username']]);
+                            }
                         }
                     }
+                    // }
                 }
             }
         }
+        return $data ?? '';
     }
+
+    public function listclassall()
+    {
+        // if ($dir === null) {
+        $dir = config('app.apppath') . 'controllers/';
+        // }
+        $ffs = scandir($dir);
+        unset($ffs[0], $ffs[1]);
+        // prevent empty ordered elements
+        if (count($ffs) < 1)
+            return;
+        $i = 0;
+        // $data[] = '';
+        // $ff=$controller;
+        $data[] = [
+            'class' => 'NON CONTROLLER',
+        ];
+        foreach ($ffs as $ff) {
+            if (is_dir($dir . '/' . $ff))
+                $this->listFolderFiles($dir . '/' . $ff);
+            elseif (is_file($dir . '/' . $ff) && strpos($ff, '.php') !== false) {
+                // if ($ff == $controller) {
+                $classes = $this->get_php_classes(file_get_contents($dir . '/' . $ff));
+                foreach ($classes as $class) {
+
+                    if (!class_exists($class)) {
+                        include_once($dir . $ff);
+                    }
+                    // $methods = $this->get_class_methods($class, true);
+
+                    $data[] = [
+                        'class' => $class,
+                    ];
+  
+                }
+            }
+        }
+        return $data ?? '';
+    }
+
     public function get_php_classes($php_code, $methods = false)
     {
         $classes = array();
@@ -224,7 +292,7 @@ class MenuController extends Controller
     public function get_class_methods($class, $comment = false)
     {
         // dd($class);
-         $class = 'App\Http\Controllers'.'\\'.$class;
+        $class = 'App\Http\Controllers' . '\\' . $class;
         $r = new ReflectionClass($class);
         $methods = array();
 
@@ -236,13 +304,11 @@ class MenuController extends Controller
                 }
 
                 $methods[] = $arr;
-             
             }
         }
 
         // dd($methods);
         return $methods;
-
     }
     public function get_method_comment($obj, $method)
     {
@@ -260,5 +326,4 @@ class MenuController extends Controller
 
         return $comments;
     }
-
 }
