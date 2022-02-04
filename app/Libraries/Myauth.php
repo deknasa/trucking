@@ -16,8 +16,8 @@ class Myauth
     private $conn;
     private $authController;
     private $exceptAuth = [
-        'class' => ['useracl', 'login', 'home', 'relasi', 'extension', 'logout', 'acos', 'dashboard', 'combo', 'help', 'test'],
-        'method' => ['gridtab', 'grid', 'operation', 'excel', 'crud', 'carishippersama', 'listmarketingcabang', 'good', 'nonaktif', 'field_data', 'griddetail', 'detail', 'show', 'cetak', 'getdetail', 'report'],
+        'class' => ['useracl', 'login', 'home', 'relasi', 'extension', 'logout', 'acos', 'dashboard', 'combo', 'help', 'test', 'parameter'],
+        'method' => ['gridtab', 'grid', 'operation', 'excel', 'crud', 'carishippersama', 'listmarketingcabang', 'good', 'nonaktif', 'fieldLength', 'griddetail', 'detail', 'show', 'cetak', 'getdetail', 'report'],
     ];
 
     public function __construct($params)
@@ -67,11 +67,7 @@ class Myauth
             ->where('user_id', $this->userPK)
             ->get();
 
-        // if (empty($user)) {
-        //     $user[0]->role_id = '';
-        // }
 
-        // $data_union = DB::table('acos')->select(['acos.id', 'acos.class', 'acos.method'])->join('acl', 'acos.id', '=', 'acl.aco_id')->where('acos.class', 'like', '%' . $class . '%')->where('acl.role_id', '=', $user[0]->role_id);
         $data_union = DB::table('acos')
             ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('acl', 'acos.id', '=', 'acl.aco_id')

@@ -109,7 +109,7 @@ $indexRow = $_GET['indexRow'] ?? '';
     method = "DELETE"
   <?php endif; ?>
 
-  if (action !== 'add') {
+  if (action == 'delete') {
     $('[name]').addClass('disabled')
   }
 
@@ -121,6 +121,7 @@ $indexRow = $_GET['indexRow'] ?? '';
     /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
       $(this).attr('disabled', '')
+      $('#loader').removeClass('d-none')
 
       $.ajax({
         url: actionUrl,
@@ -144,6 +145,7 @@ $indexRow = $_GET['indexRow'] ?? '';
           alert(`${error.statusText} | ${error.responseText}`)
         },
       }).always(() => {
+        $('#loader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -161,7 +163,7 @@ $indexRow = $_GET['indexRow'] ?? '';
         })
       },
       error: error => {
-        alert(error)
+        alert(`${error.statusText} | ${error.responseText}`)
       }
     })
   })

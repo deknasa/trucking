@@ -1,12 +1,15 @@
 $(document).ready(function () {
     /* Remove autocomplete */
     $("input").attr("autocomplete", "off");
-    $("input, textarea").attr("spellcheck", "false")
+    $("input, textarea").attr("spellcheck", "false");
 
     /* Init disable plugin */
     $(".disabled").each(function () {
         $(this).disable();
     });
+
+    $("input").attr("autocomplete", "off");
+    $("input, textarea").attr("spellcheck", "false")
 });
 
 $(window).on("resize", function (event) {
@@ -64,15 +67,149 @@ function setErrorMessages(errors) {
 }
 
 function removeTags(str) {
-    if ((str === null) || (str === ''))
-        return false;
-    else
-        str = str.toString();
-    return str.replace(/(<([^>]+)>)/ig, '');
+    if (str === null || str === "") return false;
+    else str = str.toString();
+    return str.replace(/(<([^>]+)>)/gi, "");
 }
 
+/**
+ * Focus to the first input
+ */
 (function setInputFocus() {
     $("form [name]:not(:hidden, [readonly], [disabled], .disabled)")
         .first()
         .focus();
 })();
+
+/**
+ * Set Home, End, PgUp, PgDn
+ * to move grid page
+ */
+function setCustomBindKeys(grid) {
+	$(document).on('keydown', function(e) {
+		if (
+			e.keyCode == 33 ||
+			e.keyCode == 34 ||
+			e.keyCode == 35 ||
+			e.keyCode == 36
+		) {
+			e.preventDefault()
+			triggerClick = true
+			
+			var currentPage = $(grid).getGridParam('page')
+			var lastPage = $(grid).getGridParam('lastpage')
+			var row = $(grid).jqGrid('getGridParam', 'postData').rows
+
+			if (33 === e.keyCode) {
+				if (currentPage > 1) {
+					$(grid).jqGrid('setGridParam', {
+						"page": currentPage - 1
+					}).trigger('reloadGrid')
+				}
+				$(grid).triggerHandler("jqGridKeyUp"),
+					e.preventDefault()
+			}
+			if (34 === e.keyCode) {
+				if (currentPage !== lastPage) {
+					$(grid).jqGrid('setGridParam', {
+						"page": currentPage + 1
+					}).trigger('reloadGrid')
+				}
+				$(grid).triggerHandler("jqGridKeyUp"),
+					e.preventDefault()
+			}
+			if (35 === e.keyCode) {
+				if (currentPage !== lastPage) {
+					$(grid).jqGrid('setGridParam', {
+						"page": lastPage
+					}).trigger('reloadGrid')
+					if (e.ctrlKey) {
+						if ($(grid).jqGrid('getGridParam', 'selrow') !== $('#customer').find(">tbody>tr.jqgrow").filter(":last").attr('id')) {
+							$(grid).jqGrid('setSelection', $(grid).find(">tbody>tr.jqgrow").filter(":last").attr('id')).trigger('reloadGrid')
+						}
+					}
+				}
+				if (e.ctrlKey) {
+					if ($(grid).jqGrid('getGridParam', 'selrow') !== $('#customer').find(">tbody>tr.jqgrow").filter(":last").attr('id')) {
+						$(grid).jqGrid('setSelection', $(grid).find(">tbody>tr.jqgrow").filter(":last").attr('id')).trigger('reloadGrid')
+					}
+				}
+				$(grid).triggerHandler("jqGridKeyUp"),
+					e.preventDefault()
+			}
+			if (36 === e.keyCode) {
+				if (currentPage > 1) {
+					if (e.ctrlKey) {
+						if ($(grid).jqGrid('getGridParam', 'selrow') !== $('#customer').find(">tbody>tr.jqgrow").filter(":first").attr('id')) {
+							$(grid).jqGrid('setSelection', $(grid).find(">tbody>tr.jqgrow").filter(":first").attr('id'))
+						}
+					}
+					$(grid).jqGrid('setGridParam', {
+						"page": 1
+					}).trigger('reloadGrid')
+				}
+				$(grid).triggerHandler("jqGridKeyUp"),
+					e.preventDefault()
+			}
+		}
+	})
+}
+
+/**
+ * Move to closest input when using press enter
+ */
+(function formBindKeys() {
+    let inputs = $('[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit')
+    let element
+    let position
+
+    inputs.each(function(i, el) {
+      $(el).attr('data-input-index', i)
+    })
+
+    $($(inputs[0])).focus()
+
+    inputs.focus(function() {
+      $(this).data('input-index')
+    })
+
+    inputs.keydown(function(e) {
+      let operator
+      switch (e.keyCode) {
+        case 38:
+          element = $(inputs[$(this).data('input-index') - 1])
+
+          break;
+        case 13:
+			if (e.shiftKey) {
+				element = $(inputs[$(this).data('input-index') - 1])
+			} else {
+				element = $(inputs[$(this).data('input-index') + 1])
+
+				if (e.keyCode == 13 && $(this).is('button')) {
+					$(this).click()
+				}
+			}
+  
+			break;
+        case 40:
+          element = $(inputs[$(this).data('input-index') + 1])
+
+          break;
+        default:
+          return;
+      }
+
+	  
+	  if (element.is(':not(select, button)') && element.attr('type') !== 'email') {
+		position = element.val().length
+		element[0].setSelectionRange(position, position)
+	  }
+	  element.hasClass('hasDatePicker') ?
+		$('.ui-datepicker').show() :
+		$('.ui-datepicker').hide()
+	  element.focus()
+	  
+      e.preventDefault();
+    })
+  })()

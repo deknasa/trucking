@@ -29,21 +29,21 @@
 
 @push('scripts')
 <script>
-  $(document).ready(function() {
-    let indexUrl = "{{ route('parameter.index') }}"
-    let indexRow = 0;
-    let page = 0;
-    let pager = '#jqGridPager'
-    let popup = "";
-    let id = "";
-    let triggerClick = true;
-    let highlightSearch;
-    let totalRecord
-    let limit
-    let postData
-    let sortname = 'grp'
-    let sortorder = 'asc'
+  let indexUrl = "{{ route('parameter.index') }}"
+  let indexRow = 0;
+  let page = 0;
+  let pager = '#jqGridPager'
+  let popup = "";
+  let id = "";
+  let triggerClick = true;
+  let highlightSearch;
+  let totalRecord
+  let limit
+  let postData
+  let sortname = 'grp'
+  let sortorder = 'asc'
 
+  $(document).ready(function() {
     /* Set page */
     <?php if (isset($_GET['page'])) { ?>
       page = "{{ $_GET['page'] }}"
@@ -78,38 +78,31 @@
         colModel: [{
             label: 'ID',
             name: 'id',
-            align: 'center',
             width: '50px'
           },
           {
             label: 'GROUP',
             name: 'grp',
-            align: 'center'
           },
           {
             label: 'SUBGROUP',
             name: 'subgrp',
-            align: 'center'
           },
           {
             label: 'NAMA PARAMETER',
             name: 'text',
-            align: 'center'
           },
           {
             label: 'MEMO',
             name: 'memo',
-            align: 'center'
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
-            align: 'center'
           },
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'center'
           },
         ],
         autowidth: true,
@@ -137,7 +130,12 @@
 
         },
         loadComplete: function(data) {
-          // console.log($(this).getGridParam('lastpage'));
+          $('input').attr('autocomplete', 'off')
+          $('input, textarea').attr('spellcheck', 'false')
+
+          $(document).unbind('keydown')
+          setCustomBindKeys(this)
+
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -232,10 +230,10 @@
         }
       })
 
-      .bindKeys() /
+      .bindKeys()
 
-      /* Append clear filter button */
-      loadClearFilter()
+    /* Append clear filter button */
+    loadClearFilter()
 
     /* Append global search */
     loadGlobalSearch()
@@ -254,15 +252,15 @@
       .parent().addClass('px-1')
 
 
-    if (!`{{ $myAuth->hasPermission('user', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('parameter', 'create') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('user', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('parameter', 'edit') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('user', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('parameter', 'delete') }}`) {
       $('#delete').addClass('ui-disabled')
     }
   })
