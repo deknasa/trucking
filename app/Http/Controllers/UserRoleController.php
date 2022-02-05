@@ -14,6 +14,11 @@ class UserRoleController extends Controller
         'Content-Type' => 'application/json'
     ];
 
+
+   /**
+     * Fungsi index
+     * @ClassName index
+     */    
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -81,6 +86,10 @@ class UserRoleController extends Controller
     
     }
 
+   /**
+     * Fungsi create
+     * @ClassName create
+     */    
     public function create(Request $request)
     {
         $title = $this->title;
@@ -110,6 +119,10 @@ class UserRoleController extends Controller
         return response($response);
     }
 
+   /**
+     * Fungsi edit
+     * @ClassName edit
+     */    
     public function edit($id)
     {
         $title = $this->title;
@@ -140,6 +153,10 @@ class UserRoleController extends Controller
         return response($response);
     }
 
+   /**
+     * Fungsi delete
+     * @ClassName delete
+     */       
     public function delete($id)
     {
         try {
