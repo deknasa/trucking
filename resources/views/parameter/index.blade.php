@@ -32,7 +32,7 @@
         <div class="modal-body">
           <input type="hidden" name="sidx">
           <input type="hidden" name="sord">
-          
+
           <div class="form-group row">
             <div class="col-sm-2 col-form-label">
               <label for="">Dari</label>
@@ -72,7 +72,8 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('parameter.get') }}"
+  let indexUrl = "{{ route('parameter.index') }}"
+  let getUrl = "{{ route('parameter.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -114,7 +115,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: indexUrl,
+        url: getUrl,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -265,6 +266,16 @@
       })
 
       .navButtonAdd(pager, {
+        caption: 'Excel',
+        title: 'Excel',
+        id: 'excel',
+        buttonicon: 'fas fa-file-excel',
+        onClickButton: function() {
+          $('#reportModal').modal('show')
+        }
+      })
+
+      .navButtonAdd(pager, {
         caption: 'Report',
         title: 'Report',
         id: 'report',
@@ -294,19 +305,23 @@
 
 
     $('#add .ui-pg-div')
-      .addClass(`btn btn-sm btn-primary`)
+      .addClass(`btn-sm btn-primary`)
       .parent().addClass('px-1')
 
     $('#edit .ui-pg-div')
-      .addClass('btn btn-sm btn-success')
+      .addClass('btn-sm btn-success')
       .parent().addClass('px-1')
 
     $('#delete .ui-pg-div')
-      .addClass('btn btn-sm btn-danger')
+      .addClass('btn-sm btn-danger')
       .parent().addClass('px-1')
 
     $('#report .ui-pg-div')
-      .addClass('btn btn-sm btn-info')
+      .addClass('btn-sm btn-info')
+      .parent().addClass('px-1')
+
+    $('#excel .ui-pg-div')
+      .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
 
@@ -366,7 +381,7 @@
         }
         params += key + "=" + encodeURIComponent(postData[key]);
       }
-      
+
       window.open(`${reportUrl}?${$('#formReport').serialize()}&${params}`)
     })
   })
