@@ -34,42 +34,34 @@
         colModel: [{
             label: 'TRADO',
             name: 'trado.keterangan',
-            align: 'center',
           },
           {
             label: 'SUPIR',
             name: 'supir.nsupir',
-            align: 'center'
           },
           {
             label: 'STATUS',
             name: 'absen_trado.nabsen',
-            align: 'center'
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-            align: 'center'
           },
           {
             label: 'JAM',
             name: 'jam',
-            align: 'center'
           },
           {
             label: 'UANG JALAN',
             name: 'uangjalan',
-            align: 'center'
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
-            align: 'center'
           },
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'center'
           },
         ],
         autowidth: true,

@@ -40,7 +40,7 @@ class ParameterController extends Controller
         return view('parameter.index', compact('title'));
     }
 
-    public function get(Request $request = null)
+    public function get(Request $request)
     {
         if ($request == null) {
             $request = new Request();
@@ -48,7 +48,7 @@ class ParameterController extends Controller
 
         $params = [
             'offset' => $request->offset ?? (($request->page - 1) * $request->rows),
-            'limit' => $request->rows ?? 0,
+            'limit' => $request->rows ?? 10,
             'sortIndex' => $request->sidx,
             'sortOrder' => $request->sord,
             'search' => json_decode($request->filters, 1) ?? [],

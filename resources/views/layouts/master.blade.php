@@ -30,10 +30,10 @@
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
 
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
+  <!-- Daterangepicker -->
+  <link href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
 
-  <!-- summernote -->
+  <!-- Summernote -->
   <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
 
   <!-- JqGrid -->
@@ -91,7 +91,7 @@
   <!-- jQuery Knob Chart -->
   <script src="{{ asset('plugins/jquery-knob/jquery.knob.min.js') }}"></script>
 
-  <!-- daterangepicker -->
+  <!-- Daterangepicker -->
   <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
   <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
 
@@ -116,7 +116,10 @@
 
   <!-- Select2 -->
   <script src="{{ asset('plugins/select2/4.0.13/js/select2-customized.js') }}"></script>
-  
+
+  <!-- Inputmask -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+
   <!-- Custom global script -->
   <script src="{{ asset('mains.js') }}"></script>
 

@@ -1,83 +1,83 @@
 $(document).ready(function () {
-    startTime();
-    setFormBindKeys();
+	startTime();
+	setFormBindKeys();
 
-    /* Remove autocomplete */
-    $("input").attr("autocomplete", "off");
-    $("input, textarea").attr("spellcheck", "false");
+	/* Remove autocomplete */
+	$("input").attr("autocomplete", "off");
+	$("input, textarea").attr("spellcheck", "false");
 
-    /* Init disable plugin */
-    $(".disabled").each(function () {
-        $(this).disable();
-    });
+	/* Init disable plugin */
+	$(".disabled").each(function () {
+		$(this).disable();
+	});
 
-    $("input").attr("autocomplete", "off");
-    $("input, textarea").attr("spellcheck", "false");
+	$("input").attr("autocomplete", "off");
+	$("input, textarea").attr("spellcheck", "false");
 
-    new AutoNumeric.multiple(".autonumeric", {
-        digitGroupSeparator: ".",
-        decimalCharacter: ",",
-    });
+	new AutoNumeric.multiple(".autonumeric", {
+		digitGroupSeparator: ".",
+		decimalCharacter: ",",
+	});
 });
 
 $(window).on("resize", function (event) {
-    if ($(window).width() > 990) {
-        $("body").addClass("sidebar-close sidebar-collapse");
-    }
+	if ($(window).width() > 990) {
+		$("body").addClass("sidebar-close sidebar-collapse");
+	}
 });
 
 $(".sidebars").click(function (e) {
-    $("body").addClass("sidebar-open");
-    e.preventDefault();
+	$("body").addClass("sidebar-open");
+	e.preventDefault();
 });
 
 $(document).mouseup(function (e) {
-    var container = $(".main-sidebar");
-    if (!container.is(e.target) && container.has(e.target).length === 0) {
-        if ($("body").hasClass("sidebar-open")) {
-            $("body").removeClass("sidebar-open");
-        }
-    }
+	var container = $(".main-sidebar");
+	if (!container.is(e.target) && container.has(e.target).length === 0) {
+		if ($("body").hasClass("sidebar-open")) {
+			$("body").removeClass("sidebar-open");
+		}
+	}
 });
 
 /* Disable plugin */
 $.fn.disable = function () {
-    this.bind("cut copy paste change", function () {
-        return false;
-    });
+	this.bind("cut copy paste change", function () {
+		return false;
+	});
 
-    this.on("keydown", (e) => {
-        if (!e.altKey && !e.ctrlKey) {
-            e.preventDefault();
-            return false;
-        }
-    });
+	this.on("keydown", (e) => {
+		if (!e.altKey && !e.ctrlKey) {
+			e.preventDefault();
+			return false;
+		}
+	});
 
-    if (this.is("select")) {
-        let selected = this.find("option:selected");
+	if (this.is("select")) {
+		let selected = this.find("option:selected");
 
-        this.change(() => {
-            this.val(selected.val());
-        });
-    }
+		this.change(() => {
+			this.val(selected.val());
+		});
+	}
 };
 
 function setErrorMessages(errors) {
-    $(`[name=${Object.keys(errors)[0]}]`).focus();
+	$(`[name=${Object.keys(errors)[0]}]`).focus();
 
-    $.each(errors, (index, error) => {
-        $(`[name=${index}]`).addClass("is-invalid").after(`
-          <div class="invalid-feedback">
-            ${error}
-          </div>
-        `);
-    });
+	$.each(errors, (index, error) => {
+		$(`[name=${index}]`).addClass("is-invalid").after(`
+<div class="invalid-feedback">
+${error}
+</div>
+`);
+	});
 }
 
 function removeTags(str) {
-    if (str === null || str === "") return false;
-    else str = str.toString();
-    return str.replace(/(<([^>]+)>)/gi, "");
+	if (str === null || str === "") return false;
+	else str = str.toString();
+	return str.replace(/(<([^>]+)>)/gi, "");
 }
 
 /**
@@ -85,226 +85,239 @@ function removeTags(str) {
  * to move grid page
  */
 function setCustomBindKeys(grid) {
-    $(document).on("keydown", function (e) {
-        if (
-            e.keyCode == 33 ||
-            e.keyCode == 34 ||
-            e.keyCode == 35 ||
-            e.keyCode == 36
-        ) {
-            e.preventDefault();
-            triggerClick = true;
+	$(document).on("keydown", function (e) {
+		if (
+			e.keyCode == 33 ||
+			e.keyCode == 34 ||
+			e.keyCode == 35 ||
+			e.keyCode == 36
+		) {
+			e.preventDefault();
+			triggerClick = true;
 
-            var currentPage = $(grid).getGridParam("page");
-            var lastPage = $(grid).getGridParam("lastpage");
-            var row = $(grid).jqGrid("getGridParam", "postData").rows;
+			var currentPage = $(grid).getGridParam("page");
+			var lastPage = $(grid).getGridParam("lastpage");
+			var row = $(grid).jqGrid("getGridParam", "postData").rows;
 
-            if (33 === e.keyCode) {
-                if (currentPage > 1) {
-                    $(grid)
-                        .jqGrid("setGridParam", {
-                            page: parseInt(currentPage) - 1,
-                        })
-                        .trigger("reloadGrid");
-                }
-                $(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
-            }
-            if (34 === e.keyCode) {
-                if (currentPage !== lastPage) {
-                    $(grid)
-                        .jqGrid("setGridParam", {
-                            page: parseInt(currentPage) + 1,
-                        })
-                        .trigger("reloadGrid");
-                }
-                $(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
-            }
-            if (35 === e.keyCode) {
-                if (currentPage !== lastPage) {
-                    $(grid)
-                        .jqGrid("setGridParam", {
-                            page: lastPage,
-                        })
-                        .trigger("reloadGrid");
-                    if (e.ctrlKey) {
-                        if (
-                            $(grid).jqGrid("getGridParam", "selrow") !==
-                            $("#customer")
-                                .find(">tbody>tr.jqgrow")
-                                .filter(":last")
-                                .attr("id")
-                        ) {
-                            $(grid)
-                                .jqGrid(
-                                    "setSelection",
-                                    $(grid)
-                                        .find(">tbody>tr.jqgrow")
-                                        .filter(":last")
-                                        .attr("id")
-                                )
-                                .trigger("reloadGrid");
-                        }
-                    }
-                }
-                if (e.ctrlKey) {
-                    if (
-                        $(grid).jqGrid("getGridParam", "selrow") !==
-                        $("#customer")
-                            .find(">tbody>tr.jqgrow")
-                            .filter(":last")
-                            .attr("id")
-                    ) {
-                        $(grid)
-                            .jqGrid(
-                                "setSelection",
-                                $(grid)
-                                    .find(">tbody>tr.jqgrow")
-                                    .filter(":last")
-                                    .attr("id")
-                            )
-                            .trigger("reloadGrid");
-                    }
-                }
-                $(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
-            }
-            if (36 === e.keyCode) {
-                if (currentPage > 1) {
-                    if (e.ctrlKey) {
-                        if (
-                            $(grid).jqGrid("getGridParam", "selrow") !==
-                            $("#customer")
-                                .find(">tbody>tr.jqgrow")
-                                .filter(":first")
-                                .attr("id")
-                        ) {
-                            $(grid).jqGrid(
-                                "setSelection",
-                                $(grid)
-                                    .find(">tbody>tr.jqgrow")
-                                    .filter(":first")
-                                    .attr("id")
-                            );
-                        }
-                    }
-                    $(grid)
-                        .jqGrid("setGridParam", {
-                            page: 1,
-                        })
-                        .trigger("reloadGrid");
-                }
-                $(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
-            }
-        }
-    });
+			if (33 === e.keyCode) {
+				if (currentPage > 1) {
+					$(grid)
+						.jqGrid("setGridParam", {
+							page: parseInt(currentPage) - 1,
+						})
+						.trigger("reloadGrid");
+				}
+				$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+			}
+			if (34 === e.keyCode) {
+				if (currentPage !== lastPage) {
+					$(grid)
+						.jqGrid("setGridParam", {
+							page: parseInt(currentPage) + 1,
+						})
+						.trigger("reloadGrid");
+				}
+				$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+			}
+			if (35 === e.keyCode) {
+				if (currentPage !== lastPage) {
+					$(grid)
+						.jqGrid("setGridParam", {
+							page: lastPage,
+						})
+						.trigger("reloadGrid");
+					if (e.ctrlKey) {
+						if (
+							$(grid).jqGrid("getGridParam", "selrow") !==
+							$("#customer").find(">tbody>tr.jqgrow").filter(":last").attr("id")
+						) {
+							$(grid)
+								.jqGrid(
+									"setSelection",
+									$(grid).find(">tbody>tr.jqgrow").filter(":last").attr("id")
+								)
+								.trigger("reloadGrid");
+						}
+					}
+				}
+				if (e.ctrlKey) {
+					if (
+						$(grid).jqGrid("getGridParam", "selrow") !==
+						$("#customer").find(">tbody>tr.jqgrow").filter(":last").attr("id")
+					) {
+						$(grid)
+							.jqGrid(
+								"setSelection",
+								$(grid).find(">tbody>tr.jqgrow").filter(":last").attr("id")
+							)
+							.trigger("reloadGrid");
+					}
+				}
+				$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+			}
+			if (36 === e.keyCode) {
+				if (currentPage > 1) {
+					if (e.ctrlKey) {
+						if (
+							$(grid).jqGrid("getGridParam", "selrow") !==
+							$("#customer")
+								.find(">tbody>tr.jqgrow")
+								.filter(":first")
+								.attr("id")
+						) {
+							$(grid).jqGrid(
+								"setSelection",
+								$(grid).find(">tbody>tr.jqgrow").filter(":first").attr("id")
+							);
+						}
+					}
+					$(grid)
+						.jqGrid("setGridParam", {
+							page: 1,
+						})
+						.trigger("reloadGrid");
+				}
+				$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+			}
+		}
+	});
 }
 
 /**
  * Move to closest input when using press enter
  */
 function setFormBindKeys() {
-    let inputs = $(
-        "[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit"
-    );
-    let element;
-    let position;
+	let inputs = $(
+		"[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit"
+	);
+	let element;
+	let position;
 
-    inputs.each(function (i, el) {
-        $(el).attr("data-input-index", i);
-    });
+	inputs.each(function (i, el) {
+		$(el).attr("data-input-index", i);
+	});
 
-    $($(inputs[0])).focus();
+	$($(inputs[0])).focus();
 
-    inputs.focus(function () {
-        $(this).data("input-index");
-    });
+	inputs.focus(function () {
+		$(this).data("input-index");
+	});
 
-    inputs.keydown(function (e) {
-        let operator;
-        switch (e.keyCode) {
-            case 38:
-                element = $(inputs[$(this).data("input-index") - 1]);
+	inputs.keydown(function (e) {
+		let operator;
+		switch (e.keyCode) {
+			case 38:
+				element = $(inputs[$(this).data("input-index") - 1]);
 
-                break;
-            case 13:
-                if (e.shiftKey) {
-                    element = $(inputs[$(this).data("input-index") - 1]);
-                } else {
-                    element = $(inputs[$(this).data("input-index") + 1]);
+				break;
+			case 13:
+				if (e.shiftKey) {
+					element = $(inputs[$(this).data("input-index") - 1]);
+				} else {
+					element = $(inputs[$(this).data("input-index") + 1]);
 
-                    if (e.keyCode == 13 && $(this).is("button")) {
-                        $(this).click();
-                    }
-                }
+					if (e.keyCode == 13 && $(this).is("button")) {
+						$(this).click();
+					}
+				}
 
-                break;
-            case 40:
-                element = $(inputs[$(this).data("input-index") + 1]);
+				break;
+			case 40:
+				element = $(inputs[$(this).data("input-index") + 1]);
 
-                break;
-            default:
-                return;
-        }
+				break;
+			default:
+				return;
+		}
 
-        if (
-            element.is(":not(select, button)") &&
-            element.attr("type") !== "email"
-        ) {
-            position = element.val().length;
-            element[0].setSelectionRange(position, position);
-        }
-        element.hasClass("hasDatePicker")
-            ? $(".ui-datepicker").show()
-            : $(".ui-datepicker").hide();
-        element.focus();
+		if (
+			element.is(":not(select, button)") &&
+			element.attr("type") !== "email"
+		) {
+			position = element.val().length;
+			element[0].setSelectionRange(position, position);
+		}
+		element.hasClass("hasDatePicker")
+			? $(".ui-datepicker").show()
+			: $(".ui-datepicker").hide();
+		element.focus();
 
-        e.preventDefault();
-    });
+		e.preventDefault();
+	});
 }
 
 function initResize(grid) {
-    /* Check if scrollbar appears */
-    $(window).height() < $(document).height()
-        ? grid.setGridWidth($(window).width() - 15)
-        : "";
+	/* Check if scrollbar appears */
+	$(window).height() < $(document).height()
+		? grid.setGridWidth($(window).width() - 15)
+		: "";
 
-    /* Resize grid while resizing window */
-    $(window).resize(function () {
-        grid.setGridWidth($(window).width() - 15);
-    });
+	/* Resize grid while resizing window */
+	$(window).resize(function () {
+		grid.setGridWidth($(window).width() - 15);
+	});
 }
 
 function tampilkanjam() {
-    var waktu = new Date();
-    var jam = waktu.getHours();
-    var menit = waktu.getMinutes();
-    var detik = waktu.getSeconds();
-    var teksjam = new String();
-    if (menit <= 9) menit = "0" + menit;
-    if (detik <= 9) detik = "0" + detik;
-    teksjam = jam + ":" + menit + ":" + detik;
-    tempatjam.innerHTML = teksjam;
-    setTimeout(tampilkanjam, 1000);
+	var waktu = new Date();
+	var jam = waktu.getHours();
+	var menit = waktu.getMinutes();
+	var detik = waktu.getSeconds();
+	var teksjam = new String();
+	if (menit <= 9) menit = "0" + menit;
+	if (detik <= 9) detik = "0" + detik;
+	teksjam = jam + ":" + menit + ":" + detik;
+	tempatjam.innerHTML = teksjam;
+	setTimeout(tampilkanjam, 1000);
 }
 
 function tampilkantanggal() {
-    var d = new Date();
+	var d = new Date();
 
-    var month = d.getMonth() + 1;
-    var day = d.getDate();
+	var month = d.getMonth() + 1;
+	var day = d.getDate();
 
-    var output =
-        d.getFullYear() +
-        "/" +
-        (("" + month).length < 2 ? "0" : "") +
-        month +
-        "/" +
-        (("" + day).length < 2 ? "0" : "") +
-        day;
+	var output =
+		d.getFullYear() +
+		"/" +
+		(("" + month).length < 2 ? "0" : "") +
+		month +
+		"/" +
+		(("" + day).length < 2 ? "0" : "") +
+		day;
 
-    tempattanggal.innerHTML = output;
+	tempattanggal.innerHTML = output;
 }
 
 function startTime() {
-    tampilkanjam();
-    tampilkantanggal();
+	tampilkanjam();
+	tampilkantanggal();
 }
+
+$(".datepicker")
+	.datepicker({
+		dateFormat: "dd-mm-yy",
+		assumeNearbyYear: true,
+	})
+	.inputmask({
+		inputFormat: "dd-mm-yyyy",
+		alias: "datetime",
+	})
+	.focusout(function (e) {
+		let val = $(this).val();
+		if (val.match("[a-zA-Z]") == null) {
+			if (val.length == 8) {
+				$(this)
+					.inputmask({
+						inputFormat: "dd-mm-yyyy",
+					})
+					.val([val.slice(0, 6), "20", val.slice(6)].join(""));
+			}
+		} else {
+			$(this).focus();
+		}
+	});
+
+$(document).find('select').select2({
+	theme: 'bootstrap4'
+})

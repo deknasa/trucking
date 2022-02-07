@@ -20,30 +20,35 @@ class AbsensiSupirHeaderController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $params = [
-                'offset' => (($request->page - 1) * $request->rows),
-                'limit' => $request->rows,
-                'sortIndex' => $request->sidx,
-                'sortOrder' => $request->sord,
-                'search' => json_decode($request->filters, 1) ?? [],
-            ];
-
-            $response = Http::withHeaders($request->header())
-                ->get(config('app.api_url') . 'absensi', $params);
-
-            $data = [
-                'total' => $response['attributes']['totalPages'],
-                'records' => $response['attributes']['totalRows'],
-                'rows' => $response['data']
-            ];
-
-            return response($data);
-        }
-
         $title = $this->title;
 
         return view('absensi.index', compact('title'));
+    }
+    
+    public function get(Request $request = null)
+    {
+        if ($request == null) {
+            $request = new Request();
+        }
+
+        $params = [
+            'offset' => (($request->page - 1) * $request->rows),
+            'limit' => $request->rows,
+            'sortIndex' => $request->sidx,
+            'sortOrder' => $request->sord,
+            'search' => json_decode($request->filters, 1) ?? [],
+        ];
+
+        $response = Http::withHeaders($request->header())
+            ->get(config('app.api_url') . 'absensi', $params);
+
+        $data = [
+            'total' => $response['attributes']['totalPages'],
+            'records' => $response['attributes']['totalRows'],
+            'rows' => $response['data']
+        ];
+
+        return response($data);
     }
 
     /**

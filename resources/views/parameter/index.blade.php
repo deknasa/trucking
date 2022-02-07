@@ -306,7 +306,6 @@
     /* Append global search */
     loadGlobalSearch()
 
-
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)
       .parent().addClass('px-1')
@@ -327,7 +326,6 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-
     if (!`{{ $myAuth->hasPermission('parameter', 'create') }}`) {
       $('#add').addClass('ui-disabled')
     }
@@ -340,6 +338,10 @@
       $('#delete').addClass('ui-disabled')
     }
 
+    if (!`{{ $myAuth->hasPermission('parameter', 'export') }}`) {
+      $('#delete').addClass('ui-disabled')
+    }
+    
     if (!`{{ $myAuth->hasPermission('parameter', 'report') }}`) {
       $('#delete').addClass('ui-disabled')
     }
