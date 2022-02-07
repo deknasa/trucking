@@ -39,6 +39,10 @@
   <!-- JqGrid -->
   <link rel="stylesheet" href="{{ asset('libraries/jqgrid/560/css/trirand/ui.jqgrid-bootstrap4.css') }}" />
 
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{ asset('plugins/select2/4.0.13/css/select2.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('plugins/select2/themes/select2-bootstrap4.min.css') }}">
+  
   <!-- Custom styles -->
   <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 </head>
@@ -111,7 +115,10 @@
   <script src="{{ asset('libraries/jqgrid/560/js/trirand/i18n/grid.locale-en.js') }}"></script>
 
   <!-- Autonumeric -->
-  <script src="{{ asset('libraries/autonumeric/4.5.4/autonumeric.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
+
+  <!-- Select2 -->
+  <script src="{{ asset('plugins/select2/4.0.13/js/select2-customized.js') }}"></script>
   
   <!-- Custom global script -->
   <script src="{{ asset('mains.js') }}"></script>

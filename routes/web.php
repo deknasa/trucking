@@ -39,6 +39,8 @@ Route::middleware('auth')->group(function () {
     Route::get('parameter/field_length', [ParameterController::class, 'fieldLength'])->name('parameter.field_length');
     Route::get('parameter/{id}/delete', [ParameterController::class, 'delete'])->name('parameter.delete');
     Route::get('parameter/index', [ParameterController::class, 'index']);
+    Route::get('parameter/report', [ParameterController::class, 'report'])->name('parameter.report');
+    Route::get('parameter/get', [ParameterController::class, 'get'])->name('parameter.get');
     Route::resource('parameter', ParameterController::class);
     
     Route::get('cabang/field_length', [CabangController::class, 'fieldLength'])->name('cabang.field_length');
@@ -71,6 +73,4 @@ Route::middleware('auth')->group(function () {
     Route::get('userrole/field_length', [UserRoleController::class, 'fieldLength'])->name('userrole.field_length');
     Route::get('userrole/detail', [UserRoleController::class, 'detail'])->name('userrole.detail');
     Route::resource('userrole', UserRoleController::class);
-
-
 });

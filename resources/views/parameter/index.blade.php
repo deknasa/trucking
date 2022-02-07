@@ -17,6 +17,49 @@
   </div>
 </div>
 
+<!-- Modal for report -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reportModalLabel">Pilih baris</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="formReport" action="{{ route('parameter.report') }}" target="_blank">
+        @csrf
+        <div class="modal-body">
+          <input type="hidden" name="sidx">
+          <input type="hidden" name="sord">
+          
+          <div class="form-group row">
+            <div class="col-sm-2 col-form-label">
+              <label for="">Dari</label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" name="dari" class="form-control autonumeric-report" autofocus>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-2 col-form-label">
+              <label for="">Sampai</label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" name="sampai" class="form-control autonumeric-report">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Report</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
@@ -29,7 +72,7 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('parameter.index') }}"
+  let indexUrl = "{{ route('parameter.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -42,6 +85,7 @@
   let postData
   let sortname = 'grp'
   let sortorder = 'asc'
+  let autoNumericElements = []
 
   $(document).ready(function() {
     /* Set page */
@@ -130,18 +174,18 @@
 
         },
         loadComplete: function(data) {
-          $('input').attr('autocomplete', 'off')
-          $('input, textarea').attr('spellcheck', 'false')
-
-          $(document).unbind('keydown')
-          setCustomBindKeys(this)
-
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').rows
           postData = $(this).jqGrid('getGridParam', 'postData')
+
+          $(document).unbind('keydown')
+          setCustomBindKeys(this)
+
+          $('input').attr('autocomplete', 'off')
+          $('input, textarea').attr('spellcheck', 'false')
 
           $('.clearsearchclass').click(function() {
             highlightSearch = ''
@@ -220,6 +264,16 @@
         }
       })
 
+      .navButtonAdd(pager, {
+        caption: 'Report',
+        title: 'Report',
+        id: 'report',
+        buttonicon: 'fas fa-print',
+        onClickButton: function() {
+          $('#reportModal').modal('show')
+        }
+      })
+
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
@@ -251,6 +305,10 @@
       .addClass('btn btn-sm btn-danger')
       .parent().addClass('px-1')
 
+    $('#report .ui-pg-div')
+      .addClass('btn btn-sm btn-info')
+      .parent().addClass('px-1')
+
 
     if (!`{{ $myAuth->hasPermission('parameter', 'create') }}`) {
       $('#add').addClass('ui-disabled')
@@ -263,6 +321,54 @@
     if (!`{{ $myAuth->hasPermission('parameter', 'delete') }}`) {
       $('#delete').addClass('ui-disabled')
     }
+
+    if (!`{{ $myAuth->hasPermission('parameter', 'report') }}`) {
+      $('#delete').addClass('ui-disabled')
+    }
+
+    $('#reportModal').on('shown.bs.modal', function() {
+      if (autoNumericElements.length > 0) {
+        $.each(autoNumericElements, (index, autoNumericElement) => {
+          autoNumericElement.remove()
+        })
+      }
+
+      $('#formReport [name]:not(:hidden)').first().focus()
+
+      $('#formReport [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
+      $('#formReport [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
+      $('#formReport [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+      $('#formReport [name=sampai]').val(totalRecord)
+
+      autoNumericElements = new AutoNumeric.multiple('#formReport .autonumeric-report', {
+        digitGroupSeparator: '.',
+        decimalCharacter: ',',
+        allowDecimalPadding: false,
+        minimumValue: 1,
+        maximumValue: totalRecord
+      })
+    })
+
+    $('#formReport').submit(event => {
+      event.preventDefault()
+
+      let params
+      let reportUrl = `{{ route('parameter.report') }}`
+
+      /* Clean validation messages */
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
+
+      /* Set params value */
+      for (var key in postData) {
+        if (params != "") {
+          params += "&";
+        }
+        params += key + "=" + encodeURIComponent(postData[key]);
+      }
+      
+      window.open(`${reportUrl}?${$('#formReport').serialize()}&${params}`)
+    })
   })
 
   /**
