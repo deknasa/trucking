@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use ReflectionClass;
 
 class MenuController extends Controller
 {
@@ -14,9 +16,18 @@ class MenuController extends Controller
         'Content-Type' => 'application/json'
     ];
 
+    /**
+     * Fungsi index
+     * @ClassName index
+     */ 
     public function index(Request $request)
     {
 
+
+            // 'class' => $this->listFolderFiles('CabangController')
+        //     $dataclass=json_encode($this->listclassall());
+            
+        // dd($dataclass);
 
         if ($request->ajax()) {
             $params = [
@@ -50,33 +61,44 @@ class MenuController extends Controller
         return view('menu.index', compact('title', 'data'));
     }
 
+    /**
+     * Fungsi create
+     * @ClassName create
+     */ 
     public function create()
     {
         $title = $this->title;
 
-    
-             $data = [
+        $data = [
             'nama' => '',
             'combo' => $this->combo('entry'),
+            'class' => $this->listclassall(),
             'edit' => '0'
         ];
- 
+
+        // dd($data['class']);
         return view('menu.add', compact('title', 'data'));
     }
 
     public function store(Request $request)
     {
-        $request['modifiedby']=Auth::user()->name;
+        
+        $request['modifiedby'] = Auth::user()->name;
+        $request['class'] = $this->listFolderFiles($request['controller']);
 
+        // dd($request->all());
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])->post(config('app.api_url') . 'menu', $request->all());
 
         return response($response);
-        
     }
 
+    /**
+     * Fungsi edit
+     * @ClassName edit
+     */     
     public function edit($id)
     {
         $title = $this->title;
@@ -90,6 +112,8 @@ class MenuController extends Controller
         $data = [
             'nama' => $this->getdata($menu['aco_id'])['nama'],
             'combo' => $this->combo('entry'),
+            'class' => $this->listclassall(),
+
             'edit' => '1'
         ];
 
@@ -99,7 +123,7 @@ class MenuController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request['modifiedby']=Auth::user()->name;
+        $request['modifiedby'] = $this->listclassall();
 
         $response = Http::withHeaders([
             'Accept' => 'application/json',
@@ -109,6 +133,10 @@ class MenuController extends Controller
         return response($response);
     }
 
+    /**
+     * Fungsi delete
+     * @ClassName delete
+     */     
     public function delete($id)
     {
         try {
@@ -124,6 +152,8 @@ class MenuController extends Controller
             $data = [
                 'nama' => '',
                 'combo' => $this->combo('entry'),
+                'class' => $this->listclassall(),
+
                 'edit' => '0'
             ];
 
@@ -133,9 +163,9 @@ class MenuController extends Controller
         }
     }
 
-    public function destroy($id,Request $request)
+    public function destroy($id, Request $request)
     {
-        $request['modifiedby']=Auth::user()->name;
+        $request['modifiedby'] = Auth::user()->name;
 
         $response = Http::withHeaders([
             'Accept' => 'application/json',
@@ -143,7 +173,6 @@ class MenuController extends Controller
         ])->delete(config('app.api_url') . "menu/$id", $request->all());
 
         return response($response);
-        
     }
 
     public function fieldLength()
@@ -165,15 +194,152 @@ class MenuController extends Controller
         return $response['data'];
     }
 
-    
+
     public function getdata($aco_id)
     {
         $status = [
             'aco_id' => $aco_id,
         ];
-                $response = Http::withHeaders($this->httpHeader)
+        $response = Http::withHeaders($this->httpHeader)
             ->get(config('app.api_url') . 'menu/getdatanamaacos', $status);
         return $response['data'];
     }
 
+    public function listFolderFiles($controller)
+    {
+        // if ($dir === null) {
+        $dir = config('app.apppath') . 'controllers/';
+        // }
+        $ffs = scandir($dir);
+        unset($ffs[0], $ffs[1]);
+        // prevent empty ordered elements
+        if (count($ffs) < 1)
+            return;
+        $i = 0;
+        // $data[] = '';
+        // $ff=$controller;
+        foreach ($ffs as $ff) {
+            if (is_dir($dir . '/' . $ff))
+                $this->listFolderFiles($dir . '/' . $ff);
+            elseif (is_file($dir . '/' . $ff) && strpos($ff, '.php') !== false) {
+                // if ($ff == $controller) {
+                $classes = $this->get_php_classes(file_get_contents($dir . '/' . $ff));
+                foreach ($classes as $class) {
+                    if ($class == $controller) {
+
+
+                        if (!class_exists($class)) {
+                            include_once($dir . $ff);
+                        }
+                        $methods = $this->get_class_methods($class, true);
+
+                        foreach ($methods as $method) {
+                            if (isset($method['docComment']['ClassName'])) {
+                                $data[] = [
+                                    'class' => $class,
+                                    'method' => $method['name'],
+                                    'name' => $method['name'] . ' ' . $class
+                                ];
+                                // $this->Macos->save(['class'=>$class, 'method'=>$method['name'], 'displayname'=>$method['docComment']['AclName'],'modifiedby'=>$_SESSION[SESSION_NAME.'username']]);
+                            }
+                        }
+                    }
+                    // }
+                }
+            }
+        }
+        return $data ?? '';
+    }
+
+    public function listclassall()
+    {
+        // if ($dir === null) {
+        $dir = config('app.apppath') . 'controllers/';
+        // }
+        $ffs = scandir($dir);
+        unset($ffs[0], $ffs[1]);
+        // prevent empty ordered elements
+        if (count($ffs) < 1)
+            return;
+        $i = 0;
+        // $data[] = '';
+        // $ff=$controller;
+        $data[] = [
+            'class' => 'NON CONTROLLER',
+        ];
+        foreach ($ffs as $ff) {
+            if (is_dir($dir . '/' . $ff))
+                $this->listFolderFiles($dir . '/' . $ff);
+            elseif (is_file($dir . '/' . $ff) && strpos($ff, '.php') !== false) {
+                // if ($ff == $controller) {
+                $classes = $this->get_php_classes(file_get_contents($dir . '/' . $ff));
+                foreach ($classes as $class) {
+
+                    if (!class_exists($class)) {
+                        include_once($dir . $ff);
+                    }
+                    // $methods = $this->get_class_methods($class, true);
+
+                    $data[] = [
+                        'class' => $class,
+                    ];
+  
+                }
+            }
+        }
+        return $data ?? '';
+    }
+
+    public function get_php_classes($php_code, $methods = false)
+    {
+        $classes = array();
+        $tokens = token_get_all($php_code);
+
+        $count = count($tokens);
+        for ($i = 2; $i < $count; $i++) {
+            if ($tokens[$i - 2][0] == T_CLASS && $tokens[$i - 1][0] == T_WHITESPACE && $tokens[$i][0] == T_STRING) {
+                $classes[] = $tokens[$i][1]; // assigning class name to classes array variable
+
+            }
+        }
+        return $classes;
+    }
+
+    public function get_class_methods($class, $comment = false)
+    {
+        // dd($class);
+        $class = 'App\Http\Controllers' . '\\' . $class;
+        $r = new ReflectionClass($class);
+        $methods = array();
+
+        foreach ($r->getMethods() as $m) {
+            if ($m->class == $class) {
+                $arr = ['name' => $m->name];
+                if ($comment === true) {
+                    $arr['docComment'] = $this->get_method_comment($r, $m->name);
+                }
+
+                $methods[] = $arr;
+            }
+        }
+
+        // dd($methods);
+        return $methods;
+    }
+    public function get_method_comment($obj, $method)
+    {
+        $comment = $obj->getMethod($method)->getDocComment();
+        //define the regular expression pattern to use for string matching
+        $pattern = "#(@[a-zA-Z]+\s*[a-zA-Z0-9, ()_].*)#";
+
+        //perform the regular expression on the string provided
+        preg_match_all($pattern, $comment, $matches, PREG_PATTERN_ORDER);
+        $comments = [];
+        foreach ($matches[0] as $match) {
+            $comment = preg_split('/[\s]/', $match, 2);
+            $comments[trim($comment[0], '@')] = $comment[1];
+        }
+
+        return $comments;
+    }
 }

@@ -8,7 +8,11 @@ use Illuminate\Support\Facades\Http;
 class AbsensiSupirDetailController extends Controller
 {
     public $title = 'Absensi';
-
+    
+   /**
+     * Fungsi index
+     * @ClassName index
+     */
     public function index(Request $request)
     {
         if ($request->ajax()) {

@@ -14,6 +14,10 @@ class CabangController extends Controller
         'Content-Type' => 'application/json'
     ];
 
+    /**
+     * Fungsi index
+     * @ClassName index
+     */    
     public function index(Request $request)
     {
 
@@ -50,6 +54,10 @@ class CabangController extends Controller
         return view('cabang.index', compact('title', 'data'));
     }
 
+    /**
+     * Fungsi create
+     * @ClassName create
+     */       
     public function create()
     {
         $title = $this->title;
@@ -70,6 +78,10 @@ class CabangController extends Controller
         return response($response);
     }
 
+    /**
+     * Fungsi edit
+     * @ClassName edit
+     */       
     public function edit($id)
     {
         $title = $this->title;
@@ -97,6 +109,11 @@ class CabangController extends Controller
         return response($response);
     }
 
+
+    /**
+     * Fungsi delete
+     * @ClassName delete
+     */         
     public function delete($id)
     {
         try {

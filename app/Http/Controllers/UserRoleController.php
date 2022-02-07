@@ -14,6 +14,11 @@ class UserRoleController extends Controller
         'Content-Type' => 'application/json'
     ];
 
+
+   /**
+     * Fungsi index
+     * @ClassName index
+     */    
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -81,6 +86,10 @@ class UserRoleController extends Controller
     
     }
 
+   /**
+     * Fungsi create
+     * @ClassName create
+     */    
     public function create(Request $request)
     {
         $title = $this->title;
@@ -110,9 +119,12 @@ class UserRoleController extends Controller
         return response($response);
     }
 
+   /**
+     * Fungsi edit
+     * @ClassName edit
+     */    
     public function edit($id)
     {
-        dd(config('app.api_url') . "userrole/$id");
         $title = $this->title;
 
         $response = Http::withHeaders([
@@ -122,11 +134,11 @@ class UserRoleController extends Controller
 
         $userrole = $response['data'];
         $list = [
-            'detail' => $this->detaillist($id  ?? '0'),
+            'detail' => $this->detaillist($userrole['user_id']  ?? '0'),
         ];
         $data['combo'] = $this->combo('entry');
 
-        $user_id=$id;
+        $user_id=$userrole['user_id'];
         return view('userrole.edit', compact('title', 'userrole','list','user_id','data'));
     }
 
@@ -141,6 +153,10 @@ class UserRoleController extends Controller
         return response($response);
     }
 
+   /**
+     * Fungsi delete
+     * @ClassName delete
+     */       
     public function delete($id)
     {
         try {
@@ -154,11 +170,11 @@ class UserRoleController extends Controller
             
             $userrole = $response['data'];
             $list = [
-                'detail' => $this->detaillist($id  ?? '0'),
+                'detail' => $this->detaillist($userrole['user_id']  ?? '0'),
             ];
             $data['combo'] = $this->combo('entry');
 
-            $user_id=$id;
+            $user_id=$userrole['user_id'];
             
         
            

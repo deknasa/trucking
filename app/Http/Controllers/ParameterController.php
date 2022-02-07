@@ -25,7 +25,11 @@ class ParameterController extends Controller
             return $next($request);
         });
     }
-    
+
+    /**
+     * Fungsi index
+     * @ClassName index
+     */     
     public function index(Request $request)
     {
         $title = $this->title;
@@ -56,6 +60,10 @@ class ParameterController extends Controller
         return $data;
     }
 
+    /**
+     * Fungsi create
+     * @ClassName create
+     */     
     public function create(): View
     {
         $title = $this->title;
@@ -75,6 +83,10 @@ class ParameterController extends Controller
         return response($response);
     }
 
+    /**
+     * Fungsi edit
+     * @ClassName edit
+     */     
     public function edit($id): View
     {
         $title = $this->title;
@@ -100,6 +112,10 @@ class ParameterController extends Controller
         return response($response);
     }
 
+    /**
+     * Fungsi delete
+     * @ClassName delete
+     */     
     public function delete($id)
     {
         try {

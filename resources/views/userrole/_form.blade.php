@@ -12,27 +12,32 @@
               <input type="hidden" name="limit" value="{{ $_GET['limit'] ?? 10 }}">
               <input type="hidden" name="sortname" value="{{ $_GET['sortname'] ?? 'id' }}">
               <input type="hidden" name="sortorder" value="{{ $_GET['sortorder'] ?? 'asc' }}">
+              <input type="hidden" name="indexRow" value="{{ $_GET['indexRow'] ?? 1 }}">
+              <input type="hidden" name="page" value="{{ $_GET['page'] ?? 1 }}">
 
-              <div class="row form-group">
+
+              <div class="row form-group py-0 my-0">
                 <div class="col-12 col-md-1 col-form-label">
                   <label>USER</label>
                 </div>
                 <div class="col-12 col-md-5">
-                  <div class="input-group mb-3">
+                  <div class="input-group mb-0 pb-0">
 
                     <input type="text" name="user" id="user" class="form-control" value="{{ $userrole['user'] ?? '' }}" placeholder="User">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary" type="button" onclick="lookupUser('user')" tabindex="-1">...</button>
                     </div>
-                    <div class="input-group-prepend">
-                      <input type="hidden" value="{{ $userrole['user_id'] ?? '' }}" name="user_id" id="user_id" />
-                      <!-- <span class="input-group-text" class="form-control" name="user_id" id="user_id"> {{ $userrole['user_id'] ?? '' }} </span> -->
-                    </div>
+
                   </div>
                 </div>
-
               </div>
 
+              <div class="row form-group">
+                <div class="col-12 col-md-1"></div>
+                <div class="col-12 col-md-5">
+                  <input type="hidden" value="{{ $userrole['user_id'] ?? '' }}" name="user_id" id="user_id" />
+                </div>
+              </div>
 
               <div style="height: 300px; overflow-x: auto;">
                 <table class="table table-sm table-bordered table-hover">
@@ -48,7 +53,7 @@
                     <tr id="<?= $detailIndex ?>">
                       <td>
 
-                        <div class="input-group input-group-sm mb-1">
+                        <div class="input-group input-group mb-1">
                           <div class="input-group-prepend">
 
                             <!-- <span class="input-group-text" name="role_id[]" id="role_id<?= $detailIndex  ?>"> {{ $detail['role_id'] ?? ''}} </span> -->
@@ -62,7 +67,7 @@
                       </td>
 
                       <td>
-                        <div class="input-group input-group-sm mb-1">
+                        <div class="input-group input-group mb-1">
                           <select class="form-control select2" name="status[]" id="status">
                             <?php foreach ($data['combo'] as $key => $item) { ?>
                               <option value="<?= $item['id'] ?>" <?= $item['id'] == @$detail['status'] ? 'selected' : '' ?>><?= $item['keterangan'] ?></option>
@@ -126,6 +131,10 @@
     method = "DELETE"
   <?php endif; ?>
 
+  if (action == 'delete') {
+    $('[name]').addClass('disabled')
+  }
+
 
 
   function lookupUser(user) {
@@ -180,6 +189,35 @@
         alert(error)
       }
     });
+  }
+
+  $('#user').on('input', function(e) {
+    getiduser(e)
+  })
+
+  function getiduser(e) {
+    var keyCode = e.keyCode || e.which;
+
+
+    // var user_id = $('#'+user).val();
+
+    if (user_id != '') {
+      $('#user_id').val('');
+      $.ajax({
+        url: "<?= URL::to('/') . '/user/getuserid?user=' ?>" + $('#user').val(),
+        method: 'GET',
+        dataType: 'JSON',
+        // async: false,
+      }).done(function(data) {
+        if (data != null) {
+          $('#user_id').val(data.id);
+        } else {
+          $('#user_id').val('');
+        }
+
+      });
+    }
+
   }
 
   function add_row(id) {
@@ -262,7 +300,7 @@
           localStorage.removeItem('getRole_id');
           var kode = removeTags(getRole_id.id);
           var role = removeTags(getRole_id.rolename);
-          // console.log($('#role_id'+id));
+          // console.log($('#role_id'id));
 
           $('#' + role_id + id).val(kode);
           $('#rolename' + id).val(role);
@@ -293,7 +331,7 @@
           $('.invalid-feedback').remove()
 
           if (response.status) {
-            alert(response.message)
+            // alert(response.message)
 
             if (action != 'delete') {
               window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`

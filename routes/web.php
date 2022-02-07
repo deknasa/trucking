@@ -55,12 +55,15 @@ Route::middleware('auth')->group(function () {
 
     Route::get('user/field_length', [UserController::class, 'fieldLength'])->name('user.field_length');
     Route::get('user/{id}/delete', [UserController::class, 'delete'])->name('user.delete');
+    Route::get('user/getuserid', [UserController::class, 'getuserid']);
     Route::get('user/index', [UserController::class, 'index']);
     Route::resource('user', UserController::class);
 
     Route::get('menu/field_length', [MenuController::class, 'fieldLength'])->name('menu.field_length');
     Route::get('menu/getdata', [MenuController::class, 'getdata'])->name('menu.getdata');
     Route::get('menu/{id}/delete', [MenuController::class, 'delete'])->name('menu.delete');
+    Route::get('menu/listFolderFiles', [MenuController::class, 'listFolderFiles'])->name('menu.listFolderFiles');
+    Route::get('menu/listclassall', [MenuController::class, 'listclassall'])->name('menu.listclassall');
     Route::resource('menu', MenuController::class);    
 
     Route::get('absensi/{id}/delete', [AbsensiSupirHeaderController::class, 'delete'])->name('absensi.delete');

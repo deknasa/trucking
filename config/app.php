@@ -240,4 +240,5 @@ return [
      * be called for every API Request.
      */
     'api_url' => 'http://localhost/trucking-laravel/public/api/',
+    'apppath' => 'c:/xampp/htdocs/truck/app/http/',
 ];
