@@ -53,18 +53,15 @@
   </div>
 
   <div class="wrapper">
-
     @include('layouts._navbar')
 
     @include('layouts._sidebar')
 
-    <!-- <div class="content-wrapper"> -->
-    @yield('content')
-    <!-- </div> -->
+    <div class="content-wrapper">
+      @yield('content')
+    </div>
 
     @include('layouts._footer')
-
-    <aside class="control-sidebar control-sidebar-dark"></aside>
   </div>
 
   <!-- jQuery -->

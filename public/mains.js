@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    startTime();
     setFormBindKeys();
 
     /* Remove autocomplete */
@@ -270,4 +271,40 @@ function initResize(grid) {
     $(window).resize(function () {
         grid.setGridWidth($(window).width() - 15);
     });
+}
+
+function tampilkanjam() {
+    var waktu = new Date();
+    var jam = waktu.getHours();
+    var menit = waktu.getMinutes();
+    var detik = waktu.getSeconds();
+    var teksjam = new String();
+    if (menit <= 9) menit = "0" + menit;
+    if (detik <= 9) detik = "0" + detik;
+    teksjam = jam + ":" + menit + ":" + detik;
+    tempatjam.innerHTML = teksjam;
+    setTimeout(tampilkanjam, 1000);
+}
+
+function tampilkantanggal() {
+    var d = new Date();
+
+    var month = d.getMonth() + 1;
+    var day = d.getDate();
+
+    var output =
+        d.getFullYear() +
+        "/" +
+        (("" + month).length < 2 ? "0" : "") +
+        month +
+        "/" +
+        (("" + day).length < 2 ? "0" : "") +
+        day;
+
+    tempattanggal.innerHTML = output;
+}
+
+function startTime() {
+    tampilkanjam();
+    tampilkantanggal();
 }

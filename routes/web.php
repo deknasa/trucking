@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::get('parameter/{id}/delete', [ParameterController::class, 'delete'])->name('parameter.delete');
     Route::get('parameter/index', [ParameterController::class, 'index']);
     Route::get('parameter/report', [ParameterController::class, 'report'])->name('parameter.report');
+    Route::get('parameter/export', [ParameterController::class, 'export'])->name('parameter.export');
     Route::get('parameter/get', [ParameterController::class, 'get'])->name('parameter.get');
     Route::resource('parameter', ParameterController::class);
     

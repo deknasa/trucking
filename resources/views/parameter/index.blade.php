@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="content-header py-2">
+<div class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
@@ -267,12 +267,14 @@
       })
 
       .navButtonAdd(pager, {
-        caption: 'Excel',
-        title: 'Excel',
-        id: 'excel',
-        buttonicon: 'fas fa-file-excel',
+        caption: 'Export',
+        title: 'Export',
+        id: 'export',
+        buttonicon: 'fas fa-file-export',
         onClickButton: function() {
-          $('#reportModal').modal('show')
+          let exportUrl = `{{ route('parameter.export') }}`
+          
+          window.location.href = exportUrl
         }
       })
 
@@ -321,7 +323,7 @@
       .addClass('btn-sm btn-info')
       .parent().addClass('px-1')
 
-    $('#excel .ui-pg-div')
+    $('#export .ui-pg-div')
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
@@ -371,7 +373,7 @@
       let params
       let reportUrl = `{{ route('parameter.report') }}`
 
-      /* Clean validation messages */
+      /* Clear validation messages */
       $('.is-invalid').removeClass('is-invalid')
       $('.invalid-feedback').remove()
 
