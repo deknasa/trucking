@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="content-header">
+<div class="content-header py-2">
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
@@ -183,7 +183,8 @@
           postData = $(this).jqGrid('getGridParam', 'postData')
 
           $(document).unbind('keydown')
-          setCustomBindKeys(this)
+          setCustomBindKeys($(this))
+          initResize($(this))
 
           $('input').attr('autocomplete', 'off')
           $('input, textarea').attr('spellcheck', 'false')

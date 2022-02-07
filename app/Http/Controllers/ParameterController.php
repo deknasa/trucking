@@ -156,7 +156,7 @@ class ParameterController extends Controller
     public function report(Request $request): View
     {
         $request->offset = $request->dari - 1;
-        $request->rows = $request->sampai;
+        $request->rows = $request->sampai + 1;
 
         $parameters = $this->get($request)['rows'];
 

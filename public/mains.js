@@ -13,10 +13,10 @@ $(document).ready(function () {
     $("input").attr("autocomplete", "off");
     $("input, textarea").attr("spellcheck", "false");
 
-    new AutoNumeric.multiple('.autonumeric', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
-    })
+    new AutoNumeric.multiple(".autonumeric", {
+        digitGroupSeparator: ".",
+        decimalCharacter: ",",
+    });
 });
 
 $(window).on("resize", function (event) {
@@ -102,7 +102,7 @@ function setCustomBindKeys(grid) {
                 if (currentPage > 1) {
                     $(grid)
                         .jqGrid("setGridParam", {
-                            page: currentPage - 1,
+                            page: parseInt(currentPage) - 1,
                         })
                         .trigger("reloadGrid");
                 }
@@ -112,7 +112,7 @@ function setCustomBindKeys(grid) {
                 if (currentPage !== lastPage) {
                     $(grid)
                         .jqGrid("setGridParam", {
-                            page: currentPage + 1,
+                            page: parseInt(currentPage) + 1,
                         })
                         .trigger("reloadGrid");
                 }
@@ -257,5 +257,17 @@ function setFormBindKeys() {
         element.focus();
 
         e.preventDefault();
+    });
+}
+
+function initResize(grid) {
+    /* Check if scrollbar appears */
+    $(window).height() < $(document).height()
+        ? grid.setGridWidth($(window).width() - 15)
+        : "";
+
+    /* Resize grid while resizing window */
+    $(window).resize(function () {
+        grid.setGridWidth($(window).width() - 15);
     });
 }
