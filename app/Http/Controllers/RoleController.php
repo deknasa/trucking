@@ -149,4 +149,17 @@ class RoleController extends Controller
 
         return response($response['data']);
     }
+
+    public function getroleid(Request $request)
+    {
+
+        $status = [
+            'rolename' => $request['rolename'],
+        ];
+        $response = Http::withHeaders($this->httpHeader)
+            ->get(config('app.api_url') . 'role/getroleid', $status);
+
+        // dd($response['data']);
+        return $response['data'];
+    }
 }

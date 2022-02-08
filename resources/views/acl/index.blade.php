@@ -27,10 +27,14 @@
   </div>
 </div>
 
+<!-- Detail -->
+<!-- @include('acl._detail') -->
+
+
 @push('scripts')
 <script>
   $(document).ready(function() {
-    let indexUrl = "{{ route('role.index') }}"
+    let indexUrl = "{{ route('acl.index') }}"
     let indexRow = 0;
     let page = 0;
     let pager = '#jqGridPager'
@@ -41,10 +45,8 @@
     let totalRecord
     let limit
     let postData
-    let sortname = 'id'
+    let sortname = 'rolename'
     let sortorder = 'asc'
-    popup = "<?= @$_GET['popup'] ?>" == "" ? "" : "ada";
-    id = "<?= @$_GET['name'] ?>" == "" ? "undefined" : "<?= @$_GET['name'] ?>";
 
     /* Set page */
     <?php if (isset($_GET['page'])) { ?>
@@ -71,6 +73,8 @@
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
 
+
+
     $("#jqGrid").jqGrid({
         url: indexUrl,
         mtype: "GET",
@@ -78,21 +82,22 @@
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
-            label: 'ID',
-            name: 'id',
-            align: 'right',
-            width: '70px'
+            label: 'ROLE ID',
+            name: 'role_id',
+            align: 'left',
+            hidden: true
           },
           {
-            label: 'ROLE',
-            name: 'rolename',
+            label: 'ID',
+            name: 'id',
             align: 'left',
-            searchoptions: {
-              sopt: ['cn'],
-              defaultValue: "<?= @$_GET['rolename'] ?>"
-            }
+            hidden: true
           },
-
+          {
+            label: 'NAMA ROLE',
+            name: 'rolename',
+            align: 'left'
+          }, 
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
@@ -101,10 +106,6 @@
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'right'
-          }, {
-            label: 'CREATEDAT',
-            name: 'created_at',
             align: 'right'
           },
         ],
@@ -123,32 +124,21 @@
         pager: pager,
         viewrecords: true,
         onSelectRow: function(id) {
+          row_id = $(this).jqGrid('getGridParam', 'selrow')
+          selectedId = $(this).jqGrid('getCell', row_id, 'role_id');
+          console.log(selectedId)
+          console.log('test')
+
+          loadDetailData(selectedId)
+
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
           let rows = $(this).jqGrid('getGridParam', 'postData').rows
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
-        ondblClickRow: function(rowid) {
-          if (popup == "ada") {
-            var rowData = jQuery(this).getRowData(rowid);
-            localStorage.setItem('getRole_id', JSON.stringify(rowData));
-            window.close();
-          }
-        },
-        beforeRequest: function() {
-                    var $requestGrid = $(this);
-                    if ($requestGrid.data('areFiltersDefaulted') !== true) {
-                        $requestGrid.data('areFiltersDefaulted', true);
-                        setTimeout(function() {
-                            $requestGrid[0].triggerToolbar();
-                        }, 50);
-                        return false;
-                    }
-                    // Subsequent runs are always allowed
-                    return true;
-                },
         loadComplete: function(data) {
+
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -156,27 +146,32 @@
           limit = $(this).jqGrid('getGridParam', 'postData').rows
           postData = $(this).jqGrid('getGridParam', 'postData')
 
+
           $('.clearsearchclass').click(function() {
             highlightSearch = ''
           })
 
-          if (triggerClick) {
-            if (id != '') {
-              indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-              id = ''
-            } else if (indexRow != undefined) {
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+          setTimeout(function() {
+            if (triggerClick) {
+
+              if (id != '') {
+                indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+                $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                id = ''
+              } else if (indexRow != undefined) {
+                $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              }
+
+              if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+                $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              }
+
+              triggerClick = false
+            } else {
+              $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
             }
 
-            if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-            }
-
-            triggerClick = false
-          } else {
-            $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
-          }
+          }, 100)
         }
       })
 
@@ -196,7 +191,7 @@
         onClickButton: function() {
           let limit = $(this).jqGrid('getGridParam', 'postData').rows
 
-          window.location.href = `{{ route('role.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+          window.location.href = `{{ route('acl.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
 
@@ -206,8 +201,10 @@
         id: 'edit',
         buttonicon: 'fas fa-pen',
         onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
+          row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          selectedId = $(this).jqGrid('getCell', row_id, 'id');
+          // alert(selectid);
+          console.log(selectedId)
           window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
@@ -218,7 +215,9 @@
         id: 'delete',
         buttonicon: 'fas fa-trash',
         onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          selectedId = $(this).jqGrid('getCell', row_id, 'id');
 
           window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
         }
@@ -241,6 +240,9 @@
 
     /* Append global search */
     loadGlobalSearch()
+
+    /* Load detial grid */
+    loadDetailGrid()
   })
 
   /**
@@ -306,7 +308,6 @@
         for (i = 0; i < l; i++) {
           cm = colModel[i];
           if (cm.search !== false && (cm.stype === undefined || cm.stype === "text" || cm.stype === "select")) {
-
             rules.push({
               field: cm.name,
               op: "cn",
