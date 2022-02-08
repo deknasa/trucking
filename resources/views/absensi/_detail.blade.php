@@ -67,7 +67,7 @@
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 10,
+        rowNum: 0,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
@@ -76,7 +76,7 @@
         pager: pager,
         viewrecords: true,
         loadComplete: function(data) {
-          console.log(data);
+          
         }
       })
 

@@ -40,21 +40,17 @@ class ParameterController extends Controller
         return view('parameter.index', compact('title'));
     }
 
-    public function get(Request $request)
+    public function get($params = null): array
     {
-        if ($request == null) {
-            $request = new Request();
-        }
-
         $params = [
-            'offset' => $request->offset ?? (($request->page - 1) * $request->rows),
-            'limit' => $request->rows ?? 10,
-            'sortIndex' => $request->sidx,
-            'sortOrder' => $request->sord,
-            'search' => json_decode($request->filters, 1) ?? [],
+            'offset' => $params->offset ?? request()->offset ?? ((request()->page - 1) * request()->rows),
+            'limit' => $params->rows ?? request()->rows ?? 0,
+            'sortIndex' => $params->sidx ?? request()->sidx,
+            'sortOrder' => $params->sord ?? request()->sord,
+            'search' => json_decode($params->filters ?? request()->filters, 1) ?? [],
         ];
 
-        $response = Http::withHeaders($request->header())
+        $response = Http::withHeaders(request()->header())
             ->get(config('app.api_url') . 'parameter', $params);
 
         $data = [
@@ -111,6 +107,7 @@ class ParameterController extends Controller
     public function update(Request $request, $id): Response
     {
         $request['modifiedby'] = Auth::user()->name;
+        
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -163,7 +160,7 @@ class ParameterController extends Controller
     public function report(Request $request): View
     {
         $request->offset = $request->dari - 1;
-        $request->rows = $request->sampai + 1;
+        $request->rows = $request->sampai;
 
         $parameters = $this->get($request)['rows'];
 
