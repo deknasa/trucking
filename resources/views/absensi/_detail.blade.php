@@ -34,48 +34,40 @@
         colModel: [{
             label: 'TRADO',
             name: 'trado.keterangan',
-            align: 'center',
           },
           {
             label: 'SUPIR',
             name: 'supir.nsupir',
-            align: 'center'
           },
           {
             label: 'STATUS',
             name: 'absen_trado.nabsen',
-            align: 'center'
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-            align: 'center'
           },
           {
             label: 'JAM',
             name: 'jam',
-            align: 'center'
           },
           {
             label: 'UANG JALAN',
             name: 'uangjalan',
-            align: 'center'
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
-            align: 'center'
           },
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'center'
           },
         ],
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 10,
+        rowNum: 0,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
@@ -84,7 +76,7 @@
         pager: pager,
         viewrecords: true,
         loadComplete: function(data) {
-          console.log(data);
+          
         }
       })
 

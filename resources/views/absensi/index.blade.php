@@ -17,6 +17,49 @@
   </div>
 </div>
 
+<!-- Modal for report -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reportModalLabel">Pilih baris</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="formReport" action="{{ route('absensi.report') }}" target="_blank">
+        @csrf
+        <div class="modal-body">
+          <input type="hidden" name="sidx">
+          <input type="hidden" name="sord">
+
+          <div class="form-group row">
+            <div class="col-sm-2 col-form-label">
+              <label for="">Dari</label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" name="dari" class="form-control autonumeric-report" autofocus>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-2 col-form-label">
+              <label for="">Sampai</label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" name="sampai" class="form-control autonumeric-report">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Report</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
@@ -34,6 +77,7 @@
 <script>
   $(document).ready(function() {
     let indexUrl = "{{ route('absensi.index') }}"
+    let getUrl = "{{ route('absensi.get') }}"
     let indexRow = 0;
     let page = 0;
     let pager = '#jqGridPager'
@@ -46,34 +90,35 @@
     let postData
     let sortname = 'nobukti'
     let sortorder = 'asc'
+    let autoNumericElements = []
 
     /* Set page */
-    <?php if (isset($_GET['page'])) {?>
+    <?php if (isset($_GET['page'])) { ?>
       page = "{{ $_GET['page'] }}"
     <?php } ?>
 
     /* Set id */
-    <?php if (isset($_GET['id'])) {?>
+    <?php if (isset($_GET['id'])) { ?>
       id = "{{ $_GET['id'] }}"
     <?php } ?>
 
     /* Set indexRow */
-    <?php if (isset($_GET['indexRow'])) {?>
+    <?php if (isset($_GET['indexRow'])) { ?>
       indexRow = "{{ $_GET['indexRow'] }}"
     <?php } ?>
 
     /* Set sortname */
-    <?php if (isset($_GET['sortname'])) {?>
+    <?php if (isset($_GET['sortname'])) { ?>
       sortname = "{{ $_GET['sortname'] }}"
     <?php } ?>
 
     /* Set sortorder */
-    <?php if (isset($_GET['sortorder'])) {?>
+    <?php if (isset($_GET['sortorder'])) { ?>
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: indexUrl,
+        url: getUrl,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -134,6 +179,9 @@
         page: page,
         pager: pager,
         viewrecords: true,
+        ajaxRowOptions: {
+          async: false,
+        },
         onSelectRow: function(id) {
           loadDetailData(id)
 
@@ -144,6 +192,8 @@
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         loadComplete: function(data) {
+          initResize($(this))
+
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -167,7 +217,7 @@
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
               $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
-            
+
             triggerClick = false
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
@@ -202,7 +252,7 @@
         buttonicon: 'fas fa-pen',
         onClickButton: function() {
           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          
+
           window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
@@ -214,8 +264,30 @@
         buttonicon: 'fas fa-trash',
         onClickButton: function() {
           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          
+
           window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+        }
+      })
+
+      .navButtonAdd(pager, {
+        caption: 'Export',
+        title: 'Export',
+        id: 'export',
+        buttonicon: 'fas fa-file-export',
+        onClickButton: function() {
+          let exportUrl = `{{ route('absensi.export') }}`
+
+          window.location.href = exportUrl
+        }
+      })
+
+      .navButtonAdd(pager, {
+        caption: 'Report',
+        title: 'Report',
+        id: 'report',
+        buttonicon: 'fas fa-print',
+        onClickButton: function() {
+          $('#reportModal').modal('show')
         }
       })
 
@@ -229,16 +301,80 @@
         }
       })
 
-      .bindKeys()/
+      .bindKeys() /
 
-    /* Append clear filter button */
-    loadClearFilter()
+      /* Append clear filter button */
+      loadClearFilter()
 
     /* Append global search */
     loadGlobalSearch()
 
     /* Load detial grid */
     loadDetailGrid()
+
+    $('#add .ui-pg-div')
+      .addClass(`btn-sm btn-primary`)
+      .parent().addClass('px-1')
+
+    $('#edit .ui-pg-div')
+      .addClass('btn-sm btn-success')
+      .parent().addClass('px-1')
+
+    $('#delete .ui-pg-div')
+      .addClass('btn-sm btn-danger')
+      .parent().addClass('px-1')
+
+    $('#report .ui-pg-div')
+      .addClass('btn-sm btn-info')
+      .parent().addClass('px-1')
+
+    $('#export .ui-pg-div')
+      .addClass('btn-sm btn-warning')
+      .parent().addClass('px-1')
+
+    $('#reportModal').on('shown.bs.modal', function() {
+      if (autoNumericElements.length > 0) {
+        $.each(autoNumericElements, (index, autoNumericElement) => {
+          autoNumericElement.remove()
+        })
+      }
+
+      $('#formReport [name]:not(:hidden)').first().focus()
+
+      $('#formReport [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
+      $('#formReport [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
+      $('#formReport [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+      $('#formReport [name=sampai]').val(totalRecord)
+
+      autoNumericElements = new AutoNumeric.multiple('#formReport .autonumeric-report', {
+        digitGroupSeparator: '.',
+        decimalCharacter: ',',
+        allowDecimalPadding: false,
+        minimumValue: 1,
+        maximumValue: totalRecord
+      })
+    })
+
+    $('#formReport').submit(event => {
+      event.preventDefault()
+
+      let params
+      let reportUrl = `{{ route('absensi.report') }}`
+
+      /* Clear validation messages */
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
+
+      /* Set params value */
+      for (var key in postData) {
+        if (params != "") {
+          params += "&";
+        }
+        params += key + "=" + encodeURIComponent(postData[key]);
+      }
+
+      window.open(`${reportUrl}?${$('#formReport').serialize()}&${params}`)
+    })
   })
 
   /**

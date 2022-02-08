@@ -70,7 +70,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('menu', MenuController::class);    
 
     Route::get('absensi/{id}/delete', [AbsensiSupirHeaderController::class, 'delete'])->name('absensi.delete');
-    Route::get('absensi/index', [AbsensiController::class, 'index']);
+    Route::get('absensi/index', [AbsensiSupirHeaderController::class, 'index']);
+    Route::get('absensi/get', [AbsensiSupirHeaderController::class, 'get'])->name('absensi.get');
+    Route::get('absensi/export', [AbsensiSupirHeaderController::class, 'export'])->name('absensi.export');
+    Route::get('absensi/report', [AbsensiSupirHeaderController::class, 'report'])->name('absensi.report');
     Route::resource('absensi', AbsensiSupirHeaderController::class);
 
     Route::resource('absensi_detail', AbsensiSupirDetailController::class);

@@ -22,7 +22,7 @@
                 <label>TANGGAL</label>
               </div>
               <div class="col-12 col-md-4">
-                <input type="date" name="tgl" class="form-control" value="{{ $absensi['tgl'] ?? '' }}">
+                <input type="text" name="tgl" class="form-control datepicker" value="{{ $absensi['tgl'] ?? '' }}">
               </div>
             </div>
 
@@ -49,35 +49,35 @@
                         <th>Keterangan</th>
                       </tr>
                     </thead>
-                    <tbody id="table_body">
+                    <tbody id="table_body" class="form-group">
                       @foreach($combo['trado'] as $tradoIndex => $trado)
                       <tr>
                         <td>
                           <input type="hidden" name="trado_id[]" value="{{ $trado['id'] }}">
                           {{ $trado['keterangan'] }}
                         </td>
-                        <td>
-                          <select name="supir_id[]">
+                        <td width="20%">
+                          <select name="supir_id[]" class="form-control">
                             @foreach($combo['supir'] as $supirIndex => $supir)
                             <option value="{{ $supir['id'] }}" {{ $supir['id'] == @$absensi['absensi_supir_detail'][$tradoIndex]['supir']['id'] ? 'selected' : '' }}>{{ $supir['namasupir'] }}</option>
                             @endforeach
                           </select>
                         </td>
                         <td>
-                          <input type="number" name="uangjalan[]" value="{{ $absensi['absensi_supir_detail'][$tradoIndex]['uangjalan'] ?? '' }}">
+                          <input type="text" name="uangjalan[]" class="form-control autonumeric" value="{{ $absensi['absensi_supir_detail'][$tradoIndex]['uangjalan'] ?? '' }}">
                         </td>
-                        <td>
-                          <select name="absen_id[]">
+                        <td width="20%">
+                          <select name="absen_id[]" class="form-control">
                             @foreach($combo['status'] as $status)
                             <option value="{{ $status['id'] }}" {{ $status['id'] == @$absensi['absensi_supir_detail'][$tradoIndex]['absen_trado']['id'] ? 'selected' : '' }}>{{ $status['kodeabsen'] }}</option>
                             @endforeach
                           </select>
                         </td>
                         <td>
-                          <input type="text" name="jam[]" value="{{ $absensi['jam'] ?? '' }}">
+                          <input type="text" name="jam[]" class="form-control" value="{{ $absensi['jam'] ?? '' }}">
                         </td>
                         <td>
-                          <input type="text" name="keterangan_detail[]" value="{{ $absensi['absensi_supir_detail'][$tradoIndex]['trado']['keterangan'] ?? '' }}">
+                          <input type="text" name="keterangan_detail[]" class="form-control" value="{{ $absensi['absensi_supir_detail'][$tradoIndex]['trado']['keterangan'] ?? '' }}">
                         </td>
                       </tr>
                       @endforeach
