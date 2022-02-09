@@ -9,6 +9,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserRoleController;
+use App\Http\Controllers\AclController;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +52,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('role/field_length', [RoleController::class, 'fieldLength'])->name('role.field_length');
     Route::get('role/{id}/delete', [RoleController::class, 'delete'])->name('role.delete');
+    Route::get('role/getroleid', [RoleController::class, 'getroleid']);
     Route::get('role/index', [RoleController::class, 'index']);
     Route::resource('role', RoleController::class);
 
@@ -80,4 +82,9 @@ Route::middleware('auth')->group(function () {
     Route::get('userrole/field_length', [UserRoleController::class, 'fieldLength'])->name('userrole.field_length');
     Route::get('userrole/detail', [UserRoleController::class, 'detail'])->name('userrole.detail');
     Route::resource('userrole', UserRoleController::class);
+
+    Route::get('acl/{id}/delete', [AclController::class, 'delete'])->name('acl.delete');
+    Route::get('acl/field_length', [AclController::class, 'fieldLength'])->name('acl.field_length');
+    Route::get('acl/detail', [AclController::class, 'detail'])->name('acl.detail');
+    Route::resource('acl', AclController::class);    
 });
