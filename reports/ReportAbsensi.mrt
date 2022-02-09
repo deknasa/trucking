@@ -1,10 +1,10 @@
 {
-  "ReportGuid": "481a02729ff322130f4e873ad2a702ac",
+  "ReportGuid": "a27c0a726a58f518881699684ca9d8da",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "ReportAbsensi.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1644289564000+0700)/",
+  "ReportChanged": "/Date(1644306356000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -451,7 +451,7 @@
               "Ident": "StiText",
               "Name": "Text9",
               "Guid": "1d2fbec0302a90c53ddfc81f9404bc59",
-              "ClientRectangle": "12.8,0,6.2,2.4",
+              "ClientRectangle": "12.8,0,6.2,0.6",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -459,6 +459,7 @@
               "Text": {
                 "Value": "{absensi.keterangan}"
               },
+              "VertAlignment": "Center",
               "Font": ";10;;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
@@ -750,16 +751,16 @@
             },
             "5": {
               "Ident": "StiText",
-              "Name": "Text24",
-              "Guid": "d908459b2d5c35ed5f824a92db5fef02",
-              "ClientRectangle": "13.6,0,2,0.6",
+              "Name": "Text27",
+              "Guid": "f6b00877b7aacec8292746232dfb1cf6",
+              "ClientRectangle": "15.6,0,3.4,0.6",
               "ComponentPlacement": "h.ap.HeaderBand2",
               "ComponentStyle": "Table Header",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Jam"
+                "Value": "Uang Jalan"
               },
               "VertAlignment": "Center",
               "Font": ";12;Bold;",
@@ -776,16 +777,16 @@
             },
             "6": {
               "Ident": "StiText",
-              "Name": "Text27",
-              "Guid": "f6b00877b7aacec8292746232dfb1cf6",
-              "ClientRectangle": "15.6,0,3.4,0.6",
+              "Name": "Text25",
+              "Guid": "2bd04566ce7303d3476af308c97bbe35",
+              "ClientRectangle": "13.6,0,2,0.6",
               "ComponentPlacement": "h.ap.HeaderBand2",
               "ComponentStyle": "Table Header",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Uang Jalan"
+                "Value": "Jam"
               },
               "VertAlignment": "Center",
               "Font": ";12;Bold;",
