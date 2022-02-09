@@ -152,7 +152,12 @@
           {
             label: 'NOMINAL',
             name: 'nominal',
-            align: 'right'
+            align: 'right',
+            formatter: 'currency',
+            formatoptions: {
+                decimalSeparator: ',',
+                thousandsSeparator: '.'
+            }
           },
           {
             label: 'MODIFIEDBY',

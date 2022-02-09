@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use stdClass;
 
 class AbsensiSupirHeaderController extends Controller
 {
@@ -29,15 +30,15 @@ class AbsensiSupirHeaderController extends Controller
         return view('absensi.index', compact('title'));
     }
 
-    public function get($params = null)
+    public function get($params = [])
     {
         $params = [
-            'offset' => $params->offset ?? request()->offset ?? ((request()->page - 1) * request()->rows),
-            'limit' => $params->rows ?? request()->rows ?? 0,
-            'sortIndex' => $params->sidx ?? request()->sidx,
-            'sortOrder' => $params->sord ?? request()->sord,
-            'search' => json_decode($params->filters ?? request()->filters, 1) ?? [],
-            'withRelations' => $params->withRelations ?? request()->withRelations ?? false,
+            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
+            'limit' => $params['rows'] ?? request()->rows ?? 0,
+            'sortIndex' => $params['sidx'] ?? request()->sidx,
+            'sortOrder' => $params['sord'] ?? request()->sord,
+            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
+            'withRelations' => $params['withRelations'] ?? request()->withRelations ?? false,
         ];
 
         $response = Http::withHeaders(request()->header())
@@ -75,6 +76,18 @@ class AbsensiSupirHeaderController extends Controller
 
     public function store(Request $request)
     {
+        /* Unformat uangjalan */
+        $request->uangjalan = array_map(function ($uangjalan) {
+            $uangjalan = str_replace('.', '', $uangjalan);
+            $uangjalan = str_replace(',', '.', $uangjalan);
+
+            return $uangjalan;
+        }, $request->uangjalan);
+
+        $request->merge([
+            'uangjalan' => $request->uangjalan
+        ]);
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -108,6 +121,18 @@ class AbsensiSupirHeaderController extends Controller
 
     public function update(Request $request, $id)
     {
+        /* Unformat uangjalan */
+        $request->uangjalan = array_map(function ($uangjalan) {
+            $uangjalan = str_replace('.', '', $uangjalan);
+            $uangjalan = str_replace(',', '.', $uangjalan);
+
+            return $uangjalan;
+        }, $request->uangjalan);
+
+        $request->merge([
+            'uangjalan' => $request->uangjalan
+        ]);
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -194,8 +219,9 @@ class AbsensiSupirHeaderController extends Controller
     {
         $request->offset = $request->dari - 1;
         $request->rows = $request->sampai;
+        $request->withRelations = true;
 
-        $absensis = $this->get($request);
+        $absensis = $this->get($request)['rows'];
 
         foreach ($absensis as &$absensi) {
             foreach ($absensi['absensi_supir_detail'] as &$absensi_supir_detail) {
@@ -210,47 +236,128 @@ class AbsensiSupirHeaderController extends Controller
 
     public function export(): void
     {
-        $absensis = $this->get();
+        $params = [
+            'withRelations' => true,
+        ];
+
+        $absensis = $this->get($params)['rows'];
+        
+        foreach ($absensis as &$absensi) {
+            foreach ($absensi['absensi_supir_detail'] as &$absensi_supir_detail) {
+                $absensi_supir_detail['trado'] = $absensi_supir_detail['trado']['nama'] ?? '';
+                $absensi_supir_detail['supir'] = $absensi_supir_detail['supir']['namasupir'] ?? '';
+                $absensi_supir_detail['status'] = $absensi_supir_detail['absen_trado']['keterangan'] ?? '';
+            }
+        }
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', 'Laporan Absensi');
         $sheet->getStyle("A1")->getFont()->setSize(20);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:E1');
+        $sheet->mergeCells('A1:G1');
 
-        $sheet->setCellValue('A2', 'No');
-        $sheet->setCellValue('B2', 'ID');
-        $sheet->setCellValue('C2', 'Group');
-        $sheet->setCellValue('D2', 'Sub Group');
-        $sheet->setCellValue('E2', 'Nama Absensi');
-        $sheet->setCellValue('F2', 'Memo');
-        $sheet->setCellValue('G2', 'ModifiedBy');
-        $sheet->setCellValue('H2', 'ModifiedOn');
+        $header_start_row = 2;
+        $detail_table_header_row = 7;
+        $detail_start_row = $detail_table_header_row + 1;
 
+        $alphabets = range('A', 'Z');
+        
+        $header_columns = [
+            [
+                'label' => 'No Bukti',
+                'index' => 'nobukti',
+            ],
+            [
+                'label' => 'Tanggal',
+                'index' => 'tgl',
+            ],
+            [
+                'label' => 'No Bukti KGT',
+                'index' => 'kasgantung_nobukti',
+            ],
+            [
+                'label' => 'Nominal',
+                'index' => 'nominal',
+            ],
+            [
+                'label' => 'Keterangan',
+                'index' => 'keterangan',
+            ]
+        ];
+
+        $detail_columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'Trado',
+                'index' => 'trado',
+            ],
+            [
+                'label' => 'Supir',
+                'index' => 'supir',
+            ],
+            [
+                'label' => 'Status',
+                'index' => 'status',
+            ],
+            [
+                'label' => 'Keterangan',
+                'index' => 'keterangan',
+            ],
+            [
+                'label' => 'Jam',
+                'index' => 'jam',
+            ],
+            [
+                'label' => 'Uang Jalan',
+                'index' => 'uangjalan',
+            ]
+        ];
+        
+        for ($i=0; $i < count($absensis); $i++) { 
+            foreach ($header_columns as $header_column) {
+                $sheet->setCellValue('A' . $header_start_row, $header_column['label']);
+                $sheet->setCellValue('B' . $header_start_row, ':');
+                $sheet->setCellValue('C' . $header_start_row++, $absensis[$i][$header_column['index']]);
+            }
+
+            $header_start_row += count($absensis[$i]['absensi_supir_detail']) + 2;
+
+            foreach ($detail_columns as $detail_columns_index => $detail_column) {
+                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
+            }
+
+            $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF02c4f5');
+
+            foreach ($absensis[$i]['absensi_supir_detail'] as $absensi_supir_details_index => $absensi_supir_detail) {
+                foreach ($detail_columns as $detail_columns_index => $detail_column) {
+                    $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $absensi_supir_detail[$detail_column['index']] : $absensi_supir_details_index + 1);
+                }
+                $sheet->setCellValue("A$detail_start_row", $absensi_supir_details_index + 1);
+                $sheet->setCellValue("B$detail_start_row", $absensi_supir_detail['trado']);
+                $sheet->setCellValue("C$detail_start_row", $absensi_supir_detail['supir']);
+                $sheet->setCellValue("D$detail_start_row", $absensi_supir_detail['status']);
+                $sheet->setCellValue("E$detail_start_row", $absensi_supir_detail['keterangan']);
+                $sheet->setCellValue("F$detail_start_row", $absensi_supir_detail['jam']);
+                $sheet->setCellValue("G$detail_start_row", $absensi_supir_detail['uangjalan']);
+
+                $detail_start_row++;
+            }
+
+            $detail_table_header_row += (5 + count($absensis[$i]['absensi_supir_detail']) + 2);
+            $detail_start_row = $detail_table_header_row + 1;
+        }
+
+        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
         $sheet->getColumnDimension('H')->setAutoSize(true);
-
-        $no = 1;
-        $x = 3;
-        foreach ($absensis['rows'] as $row) {
-            $sheet->setCellValue('A' . $x, $no++);
-            $sheet->setCellValue('B' . $x, $row['id']);
-            $sheet->setCellValue('C' . $x, $row['nobukti']);
-            $sheet->setCellValue('D' . $x, $row['tgl']);
-            $sheet->setCellValue('E' . $x, $row['keterangan']);
-            $sheet->setCellValue('F' . $x, $row['kasgantung_nobukti']);
-            $sheet->setCellValue('G' . $x, $row['modifiedby']);
-            $sheet->setCellValue('H' . $x,  date("d-m-Y H:i:s", strtotime($row['updated_at'])));
-            $lastCell = 'H' . $x;
-            $x++;
-        }
-
-        $sheet->setCellValue('E' . $x, "=ROWS(E3:" . $lastCell . ")");
 
         $styleArray = array(
             'borders' => array(
@@ -259,10 +366,7 @@ class AbsensiSupirHeaderController extends Controller
                 ),
             ),
         );
-
-        $sheet->getStyle('A2:H2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF02c4f5');
-        $sheet->getStyle('A2:' . $lastCell)->applyFromArray($styleArray);
-
+        
         $writer = new Xlsx($spreadsheet);
         $filename = 'laporanAbsensi' . date('dmYHis');
 

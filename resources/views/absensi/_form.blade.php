@@ -74,7 +74,7 @@
                           </select>
                         </td>
                         <td>
-                          <input type="text" name="jam[]" class="form-control" value="{{ $absensi['jam'] ?? '' }}">
+                          <input type="time" name="jam[]" class="form-control" value="{{ $absensi['jam'] ?? '' }}">
                         </td>
                         <td>
                           <input type="text" name="keterangan_detail[]" class="form-control" value="{{ $absensi['absensi_supir_detail'][$tradoIndex]['trado']['keterangan'] ?? '' }}">
@@ -123,6 +123,10 @@
     actionUrl = "{{ route('absensi.destroy', $absensi['id']) }}"
     method = "DELETE"
   <?php endif; ?>
+
+  if (action == 'delete') {
+    $('[name]').addClass('disabled')
+  }
 
   $(document).ready(function() {
     $('form').submit(function(e) {

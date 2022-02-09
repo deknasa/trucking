@@ -37,11 +37,11 @@
           },
           {
             label: 'SUPIR',
-            name: 'supir.nsupir',
+            name: 'supir.namasupir',
           },
           {
             label: 'STATUS',
-            name: 'absen_trado.nabsen',
+            name: 'absen_trado.kodeabsen',
           },
           {
             label: 'KETERANGAN',
@@ -54,6 +54,12 @@
           {
             label: 'UANG JALAN',
             name: 'uangjalan',
+            align: 'right',
+            formatter: 'currency',
+            formatoptions: {
+                decimalSeparator: ',',
+                thousandsSeparator: '.'
+            }
           },
           {
             label: 'MODIFIEDBY',

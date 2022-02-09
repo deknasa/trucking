@@ -40,14 +40,14 @@ class ParameterController extends Controller
         return view('parameter.index', compact('title'));
     }
 
-    public function get($params = null): array
+    public function get($params = []): array
     {
         $params = [
-            'offset' => $params->offset ?? request()->offset ?? ((request()->page - 1) * request()->rows),
-            'limit' => $params->rows ?? request()->rows ?? 0,
-            'sortIndex' => $params->sidx ?? request()->sidx,
-            'sortOrder' => $params->sord ?? request()->sord,
-            'search' => json_decode($params->filters ?? request()->filters, 1) ?? [],
+            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
+            'limit' => $params['rows'] ?? request()->rows ?? 0,
+            'sortIndex' => $params['sidx'] ?? request()->sidx,
+            'sortOrder' => $params['sord'] ?? request()->sord,
+            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
         ];
 
         $response = Http::withHeaders(request()->header())
