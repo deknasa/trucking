@@ -18,15 +18,15 @@
 </div>
 
 <!-- Form -->
-@include('acl._form', [
+@include('useracl._form', [
   'action' => 'delete'
 ])
 
 {{--
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('acl.index') }}"
-  let deleteUrl = "{{ route('acl.update', $acl['id']) }}"
+  let indexUrl = "{{ route('useracl.index') }}"
+  let deleteUrl = "{{ route('useracl.update', $useracl['id']) }}"
   let csrfToken = "{{ csrf_token() }}"
 
   $(document).ready(function() {

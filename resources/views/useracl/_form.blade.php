@@ -18,15 +18,15 @@
 
               <div class="row form-group py-0 my-0">
                 <div class="col-12 col-md-1 col-form-label">
-                  <label>ROLE</label>
+                  <label>USER</label>
                 </div>
                 <div class="col-12 col-md-5">
                   <div class="input-group mb-0 pb-0">
 
-                    <input type="text" name="rolename" id="rolename" class="form-control" value="{{ $acl['rolename'] ?? '' }}" placeholder="Role Name">
+                    <input type="text" name="user" id="user" class="form-control" value="{{ $useracl['user'] ?? '' }}" placeholder="User">
                     <div class="input-group-append">
-                      <!-- <button class="btn btn-outline-secondary" type="button" tabindex="-1" data-toggle="modal" data-target="#myModal" data-whatever="{{ $acl['rolename'] ?? 'tes' }}">...</button> -->
-                      <button class="btn btn-outline-secondary" type="button" onclick="lookupRole('rolename')" tabindex="-1">...</button>
+                      <!-- <button class="btn btn-outline-secondary" type="button" tabindex="-1" data-toggle="modal" data-target="#myModal" data-whatever="{{ $useracl['user'] ?? 'tes' }}">...</button> -->
+                      <button class="btn btn-outline-secondary" type="button" onclick="lookupUser('user')" tabindex="-1">...</button>
 
                     </div>
 
@@ -37,7 +37,7 @@
               <div class="row form-group">
                 <div class="col-12 col-md-1"></div>
                 <div class="col-12 col-md-5">
-                  <input type="hidden" value="{{ $acl['role_id'] ?? '' }}" name="role_id" id="role_id" />
+                  <input type="hidden" value="{{ $useracl['user_id'] ?? '' }}" name="user_id" id="user_id" />
                 </div>
               </div>
 
@@ -102,7 +102,7 @@
               Simpan
               @endif
             </button>
-            <a href="{{ route('acl.index') }}" class="btn btn-danger">
+            <a href="{{ route('useracl.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
               BATAL
             </a>
@@ -116,48 +116,48 @@
 <!-- The Modal -->
 <div class="modal" id="myModal">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-dialog modal-lg">
+    <div class=" modal-dialog modal-lg">
 
-      <div class="modal-content">
+    <div class="modal-content">
 
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Role</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Form User</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
 
-        <!-- Modal body -->
-        <form id="pilih">
+      <!-- Modal body -->
+      <form id="pilih">
 
-          <div class="modal-body">
-            <table class="table table-striped">
+        <div class="modal-body">
+          <table class="table table-striped">
 
-              <div class="container-fluid">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-10">
+                  <table id="jqGrid"></table>
+                  <div id="jqGridPager"></div>
+                </div>
+
+
                 <div class="row">
-                  <div class="col-10">
-                    <table id="jqGrid"></table>
-                    <div id="jqGridPager"></div>
-                  </div>
-
-
-                  <div class="row">
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                      <button type="submit" class="btn btn-primary">Pilih</button>
-                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Pilih</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                   </div>
                 </div>
               </div>
-            </table>
-          </div>
-        </form>
+            </div>
+          </table>
+        </div>
+      </form>
 
 
 
-      </div>
     </div>
   </div>
+</div>
 </div>
 </div>
 
@@ -165,12 +165,12 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('acl.index') }}"
+  let indexUrl = "{{ route('useracl.index') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('acl.store') }}"
+  let actionUrl = "{{ route('useracl.store') }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
-  let fieldLengthUrl = "{{ route('acl.field_length') }}"
+  let fieldLengthUrl = "{{ route('useracl.field_length') }}"
 
 
   <?php
@@ -178,15 +178,15 @@
   use Illuminate\Support\Facades\URL;
 
   if ($action == 'edit') : ?>
-    actionUrl = "{{ route('acl.update', $acl['id']) }}"
+    actionUrl = "{{ route('useracl.update', $useracl['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('acl.destroy', $acl['id']) }}"
+    actionUrl = "{{ route('useracl.destroy', $useracl['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
   /*Modal JQgrid action */
-  let indexUrlrole = "{{ route('role.index') }}"
+  let indexUrluser = "{{ route('user.index') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -231,21 +231,21 @@
 
   /* Set action url */
   $(document).on('shown.bs.modal', '#myModal', function() {
-    var rolename = $('#rolename').val();
+    var user = $('#user').val();
     var modal = $(this);
-    console.log(rolename);
-    console.log($('#gs_rolename').val(rolename));
-    if (typeof rolename === 'undefined') rolename = '';
+    console.log(user);
+    console.log($('#gs_user').val(user));
+    if (typeof user === 'undefined') user = '';
     var grid = $("#jqGrid");
     var postdata = grid.jqGrid('getGridParam', 'postData');
     jQuery.extend(postdata, {
-      _search:true,
+      _search: true,
       filters: JSON.stringify({
         "groupOp": "AND",
         "rules": [{
-          "field": "rolename",
+          "field": "user",
           "op": "cn",
-          "data": rolename
+          "data": user
         }]
       }),
       stringResult: true,
@@ -264,7 +264,7 @@
 
 
   $("#jqGrid").jqGrid({
-      url: indexUrlrole,
+      url: indexUrluser,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -276,12 +276,12 @@
           width: '70px'
         },
         {
-          label: 'ROLE',
-          name: 'rolename',
+          label: 'USER',
+          name: 'user',
           align: 'left',
           searchoptions: {
             sopt: ['cn'],
-            defaultValue: $("#rolename").val()
+            defaultValue: $("#user").val()
           }
         },
 
@@ -325,12 +325,14 @@
 
         var selRowId = $(this).jqGrid("getGridParam", "selrow");
         var rowData = $(this).jqGrid("getRowData", selRowId)
-        localStorage.setItem('getRole_id', JSON.stringify(rowData));
+        // var rowData = jQuery(this).getRowData(indexRow + 1);
+   
+        localStorage.setItem('getUser_id', JSON.stringify(rowData));
       },
       ondblClickRow: function(rowid) {
         if (popup == "ada") {
           var rowData = jQuery(this).getRowData(rowid);
-          localStorage.setItem('getRole_id', JSON.stringify(rowData));
+          localStorage.setItem('getUser_id', JSON.stringify(rowData));
           window.close();
         }
       },
@@ -396,7 +398,7 @@
       onClickButton: function() {
         let limit = $(this).jqGrid('getGridParam', 'postData').rows
 
-        window.location.href = `{{ route('role.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+        window.location.href = `{{ route('user.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
       }
     })
 
@@ -442,6 +444,35 @@
 
   /* Append global search */
   loadGlobalSearch()
+
+  $('#add .ui-pg-div')
+    .addClass(`btn-sm btn-primary`)
+    .parent().addClass('px-1')
+
+  $('#edit .ui-pg-div')
+    .addClass('btn-sm btn-success')
+    .parent().addClass('px-1')
+
+  $('#delete .ui-pg-div')
+    .addClass('btn-sm btn-danger')
+    .parent().addClass('px-1')
+
+
+
+  if (!`{{ $myAuth->hasPermission('user', 'create') }}`) {
+    $('#add').addClass('ui-disabled')
+  }
+
+  if (!`{{ $myAuth->hasPermission('user', 'edit') }}`) {
+    $('#edit').addClass('ui-disabled')
+  }
+
+  if (!`{{ $myAuth->hasPermission('user', 'delete') }}`) {
+    $('#delete').addClass('ui-disabled')
+  }
+
+
+
 
   var delay = (function() {
     var timer = 0;
@@ -537,35 +568,35 @@
 
 
 
-  function lookupRole(rolename) {
+  function lookupUser(user) {
 
-    var rolename = $('#rolename').val();
-    console.log(rolename);
-    if (typeof rolename === 'undefined') rolename = '';
+    var user = $('#user').val();
+    console.log(user);
+    if (typeof user === 'undefined') user = '';
 
 
-    if (rolename) {
-      var url = "<?= URL::to('/') ?>/role?popup=1&currentpage=" + currentpage + "&rolename=" + rolename;
+    if (user) {
+      var url = "<?= URL::to('/') ?>/user?popup=1&currentpage=" + currentpage + "&user=" + user;
     } else {
-      var url = "<?= URL::to('/') ?>/role?popup=1&currentpage=" + currentpage;
+      var url = "<?= URL::to('/') ?>/user?popup=1&currentpage=" + currentpage;
     }
 
     // console.log(url);
     var winpeserta = window.open(
       url,
-      "getRole_id");
+      "getUser_id");
     var timer = setInterval(function() {
       if (winpeserta.closed) {
         clearInterval(timer);
-        var getRole_id = localStorage.getItem('getRole_id');
-        console.log(getRole_id);
-        if (getRole_id) {
-          getRole_id = JSON.parse(getRole_id);
-          localStorage.removeItem('getRole_id');
-          var kode = removeTags(getRole_id.id);
-          var rolename = removeTags(getRole_id.rolename);
-          $("#rolename").val(rolename);
-          $('#role_id').val(kode);
+        var getUser_id = localStorage.getItem('getUser_id');
+        console.log(getUser_id);
+        if (getUser_id) {
+          getUser_id = JSON.parse(getUser_id);
+          localStorage.removeItem('getUser_id');
+          var kode = removeTags(getUser_id.id);
+          var user = removeTags(getUser_id.user);
+          $("#user").val(user);
+          $('#user_id').val(kode);
           // setDetail(kode);
         }
       }
@@ -595,24 +626,24 @@
     getidrolename(e)
   })
 
-  function getidrolename(e) {
+  function getiduser(e) {
     var keyCode = e.keyCode || e.which;
 
 
     // var role_id = $('#'+user).val();
 
-    if (role_id != '') {
-      $('#role_id').val('');
+    if (user_id != '') {
+      $('#user_id').val('');
       $.ajax({
-        url: "<?= URL::to('/') . '/role/getroleid?rolename=' ?>" + $('#rolename').val(),
+        url: "<?= URL::to('/') . '/user/getuserid?user=' ?>" + $('#user').val(),
         method: 'GET',
         dataType: 'JSON',
         // async: false,
       }).done(function(data) {
         if (data != null) {
-          $('#role_id').val(data.id);
+          $('#user_id').val(data.id);
         } else {
-          $('#role_id').val('');
+          $('#user_id').val('');
         }
 
       });
@@ -672,15 +703,15 @@
       // $('#btnpilih').click(function() {
       //   $(this).attr('disabled', '')
 
-      var getRole_id = localStorage.getItem('getRole_id');
-      console.log(getRole_id);
-      if (getRole_id) {
-        getRole_id = JSON.parse(getRole_id);
-        localStorage.removeItem('getRole_id');
-        var kode = removeTags(getRole_id.id);
-        var rolename = removeTags(getRole_id.rolename);
-        $("#rolename").val(rolename);
-        $('#role_id').val(kode);
+      var getUser_id = localStorage.getItem('getUser_id');
+      console.log(getUser_id);
+      if (getUser_id) {
+        getUser_id = JSON.parse(getUser_id);
+        localStorage.removeItem('getUser_id');
+        var kode = removeTags(getUser_id.id);
+        var user = removeTags(getUser_id.user);
+        $("#user").val(user);
+        $('#user_id').val(kode);
       }
     })
 

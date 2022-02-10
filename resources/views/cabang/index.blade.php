@@ -245,6 +245,32 @@
 
     /* Append global search */
     loadGlobalSearch()
+
+     
+    $('#add .ui-pg-div')
+      .addClass(`btn-sm btn-primary`)
+      .parent().addClass('px-1')
+
+    $('#edit .ui-pg-div')
+      .addClass('btn-sm btn-success')
+      .parent().addClass('px-1')
+
+    $('#delete .ui-pg-div')
+      .addClass('btn-sm btn-danger')
+      .parent().addClass('px-1')
+
+
+    if (!`{{ $myAuth->hasPermission('cabang', 'create') }}`) {
+      $('#add').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('cabang', 'edit') }}`) {
+      $('#edit').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('cabang', 'delete') }}`) {
+      $('#delete').addClass('ui-disabled')
+    }
   })
 
   /**

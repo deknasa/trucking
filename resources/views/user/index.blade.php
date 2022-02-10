@@ -5,7 +5,11 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">{{ $title }}</h1>
+                @if (@$_GET['popup']=="")
+                <h1 class="m-0">{{ $title }} </h1>
+                @else
+                <h1 class="text-danger" class="m-0">Look Up {{ $title }} </h1>
+                @endif
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -222,6 +226,11 @@
                     limit = $(this).jqGrid('getGridParam', 'postData').rows
                     postData = $(this).jqGrid('getGridParam', 'postData')
 
+                    if (popup == "ada") {
+                        $('#pilih').show();
+                    } else {
+                        $('#pilih').hide();
+                    }
                     $('.clearsearchclass').click(function() {
                         highlightSearch = ''
                     })
@@ -259,12 +268,14 @@
                 title: 'Add',
                 id: 'add',
                 buttonicon: 'fas fa-plus',
+                class: 'btn btn-primary',
                 onClickButton: function() {
                     let limit = $(this).jqGrid('getGridParam', 'postData').rows
 
                     window.location.href = `{{ route('user.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
                 }
             })
+
 
             .navButtonAdd(pager, {
                 caption: 'Edit',
@@ -290,6 +301,22 @@
                 }
             })
 
+            .navButtonAdd(pager, {
+                caption: 'Pilih',
+                title: 'Pilih',
+                id: 'pilih',
+                buttonicon: 'fas fa-check',
+                class: 'btn btn-primary',
+                onClickButton: function() {
+                    var selRowId = $(this).jqGrid("getGridParam", "selrow");
+                    var rowData = $(this).jqGrid("getRowData", selRowId)
+                    // var rowData = jQuery(this).getRowData(rowid);
+                    localStorage.setItem('getUser_id', JSON.stringify(rowData));
+                    window.close();
+                }
+            })
+
+
             .jqGrid('filterToolbar', {
                 stringResult: true,
                 searchOnEnter: false,
@@ -307,6 +334,27 @@
 
         /* Append global search */
         loadGlobalSearch()
+
+
+
+        $('#add .ui-pg-div')
+            .addClass(`btn-sm btn-primary`)
+            .parent().addClass('px-1')
+
+        $('#edit .ui-pg-div')
+            .addClass('btn-sm btn-success')
+            .parent().addClass('px-1')
+
+        $('#delete .ui-pg-div')
+            .addClass('btn-sm btn-danger')
+            .parent().addClass('px-1')
+
+        $('#pilih .ui-pg-div')
+            .addClass(`btn-sm btn-primary`)
+            .parent().addClass('px-1')
+
+
+
     })
 
     /**

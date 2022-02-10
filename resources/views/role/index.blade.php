@@ -5,7 +5,11 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0">{{ $title }}</h1>
+        @if (@$_GET['popup']=="")
+        <h1 class="m-0">{{ $title }} </h1>
+        @else
+        <h1 class="text-danger" class="m-0">Look Up {{ $title }} </h1>
+        @endif
       </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
@@ -137,17 +141,17 @@
           }
         },
         beforeRequest: function() {
-                    var $requestGrid = $(this);
-                    if ($requestGrid.data('areFiltersDefaulted') !== true) {
-                        $requestGrid.data('areFiltersDefaulted', true);
-                        setTimeout(function() {
-                            $requestGrid[0].triggerToolbar();
-                        }, 50);
-                        return false;
-                    }
-                    // Subsequent runs are always allowed
-                    return true;
-                },
+          var $requestGrid = $(this);
+          if ($requestGrid.data('areFiltersDefaulted') !== true) {
+            $requestGrid.data('areFiltersDefaulted', true);
+            setTimeout(function() {
+              $requestGrid[0].triggerToolbar();
+            }, 50);
+            return false;
+          }
+          // Subsequent runs are always allowed
+          return true;
+        },
         loadComplete: function(data) {
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -193,6 +197,7 @@
         title: 'Add',
         id: 'add',
         buttonicon: 'fas fa-plus',
+        class: 'btn btn-primary',
         onClickButton: function() {
           let limit = $(this).jqGrid('getGridParam', 'postData').rows
 
@@ -241,6 +246,22 @@
 
     /* Append global search */
     loadGlobalSearch()
+
+    
+    $('#add .ui-pg-div')
+      .addClass(`btn-sm btn-primary`)
+      .parent().addClass('px-1')
+
+    $('#edit .ui-pg-div')
+      .addClass('btn-sm btn-success')
+      .parent().addClass('px-1')
+
+    $('#delete .ui-pg-div')
+      .addClass('btn-sm btn-danger')
+      .parent().addClass('px-1')
+
+
+
   })
 
   /**

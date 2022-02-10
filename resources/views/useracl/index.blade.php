@@ -34,7 +34,9 @@
 @push('scripts')
 <script>
   $(document).ready(function() {
-    let indexUrl = "{{ route('acl.index') }}"
+    let indexUrl = "{{ route('useracl.index') }}"
+    let getUrl = "{{ route('useracl.get') }}"
+
     let indexRow = 0;
     let page = 0;
     let pager = '#jqGridPager'
@@ -45,7 +47,7 @@
     let totalRecord
     let limit
     let postData
-    let sortname = 'rolename'
+    let sortname = 'user'
     let sortorder = 'asc'
 
     /* Set page */
@@ -76,14 +78,14 @@
 
 
     $("#jqGrid").jqGrid({
-        url: indexUrl,
+        url: getUrl,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
-            label: 'ROLE ID',
-            name: 'role_id',
+            label: 'USER ID',
+            name: 'user_id',
             align: 'left',
             hidden: true
           },
@@ -94,10 +96,10 @@
             hidden: true
           },
           {
-            label: 'NAMA ROLE',
-            name: 'rolename',
+            label: 'USER',
+            name: 'user',
             align: 'left'
-          }, 
+          },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
@@ -125,7 +127,7 @@
         viewrecords: true,
         onSelectRow: function(id) {
           row_id = $(this).jqGrid('getGridParam', 'selrow')
-          selectedId = $(this).jqGrid('getCell', row_id, 'role_id');
+          selectedId = $(this).jqGrid('getCell', row_id, 'user_id');
           console.log(selectedId)
           console.log('test')
 
@@ -188,10 +190,11 @@
         title: 'Add',
         id: 'add',
         buttonicon: 'fas fa-plus',
+        class: 'btn btn-primary',
         onClickButton: function() {
           let limit = $(this).jqGrid('getGridParam', 'postData').rows
 
-          window.location.href = `{{ route('acl.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+          window.location.href = `{{ route('useracl.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
 
@@ -223,6 +226,28 @@
         }
       })
 
+      .navButtonAdd(pager, {
+        caption: 'Export',
+        title: 'Export',
+        id: 'export',
+        buttonicon: 'fas fa-file-export',
+        onClickButton: function() {
+          let exportUrl = `{{ route('useracl.export') }}`
+
+          window.location.href = exportUrl
+        }
+      })
+
+      .navButtonAdd(pager, {
+        caption: 'Report',
+        title: 'Report',
+        id: 'report',
+        buttonicon: 'fas fa-print',
+        onClickButton: function() {
+          $('#reportModal').modal('show')
+        }
+      })
+
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
@@ -241,10 +266,6 @@
     /* Append global search */
     loadGlobalSearch()
 
-    /* Load detial grid */
-    loadDetailGrid()
-
-     
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)
       .parent().addClass('px-1')
@@ -257,18 +278,18 @@
       .addClass('btn-sm btn-danger')
       .parent().addClass('px-1')
 
+    $('#report .ui-pg-div')
+      .addClass('btn-sm btn-info')
+      .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('acl', 'create') }}`) {
-      $('#add').addClass('ui-disabled')
-    }
+    $('#export .ui-pg-div')
+      .addClass('btn-sm btn-warning')
+      .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('acl', 'edit') }}`) {
-      $('#edit').addClass('ui-disabled')
-    }
 
-    if (!`{{ $myAuth->hasPermission('acl', 'delete') }}`) {
-      $('#delete').addClass('ui-disabled')
-    }
+
+    /* Load detial grid */
+    loadDetailGrid()
   })
 
   /**

@@ -5,7 +5,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0">Delete {{ $title }}</h1>
+        <h1 class="m-0">Edit {{ $title }}</h1>
       </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
@@ -18,15 +18,15 @@
 </div>
 
 <!-- Form -->
-@include('acl._form', [
-  'action' => 'delete'
+@include('useracl._form', [
+  'action' => 'edit'
 ])
 
 {{--
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('acl.index') }}"
-  let deleteUrl = "{{ route('acl.update', $acl['id']) }}"
+  let indexUrl = "{{ route('useracl.index') }}"
+  let updateUrl = "{{ route('useracl.update', $useracl['id']) }}"
   let csrfToken = "{{ csrf_token() }}"
 
   $(document).ready(function() {
@@ -37,15 +37,10 @@
     /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
       $.ajax({
-        url: deleteUrl,
-        method: 'DELETE',
+        url: updateUrl,
+        method: 'PATCH',
         dataType: 'JSON',
-        headers: {
-            'X-CSRF-TOKEN': csrfToken
-        },
-        data: {
-            'id': $('form [name=id]').val()
-        },
+        data: $('form').serializeArray(),
         success: response => {
           if (response.status) {
             alert(response.message)

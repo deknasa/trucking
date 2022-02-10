@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\AclController;
+use App\Http\Controllers\UserAclController;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -87,4 +88,14 @@ Route::middleware('auth')->group(function () {
     Route::get('acl/field_length', [AclController::class, 'fieldLength'])->name('acl.field_length');
     Route::get('acl/detail', [AclController::class, 'detail'])->name('acl.detail');
     Route::resource('acl', AclController::class);    
+
+    Route::get('useracl/{id}/delete', [UserAclController::class, 'delete'])->name('useracl.delete');
+    Route::get('useracl/field_length', [UserAclController::class, 'fieldLength'])->name('useracl.field_length');
+    Route::get('useracl/detail', [UserAclController::class, 'detail'])->name('useracl.detail');
+    Route::get('useracl/report', [UserAclController::class, 'report'])->name('useracl.report');
+    Route::get('useracl/export', [UserAclController::class, 'export'])->name('useracl.export');
+    Route::get('useracl/get', [UserAclController::class, 'get'])->name('useracl.get');
+
+    Route::resource('useracl', UserAclController::class);    
+
 });
