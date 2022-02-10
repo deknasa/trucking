@@ -99,7 +99,7 @@
     $('#detail').setGridParam({
       url: indexUrl,
       postData: {
-        id: id
+        absensi_id: id
       }
     }).trigger('reloadGrid')
   }
