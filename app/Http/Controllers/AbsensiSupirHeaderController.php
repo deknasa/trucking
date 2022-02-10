@@ -217,21 +217,30 @@ class AbsensiSupirHeaderController extends Controller
 
     public function report(Request $request): View
     {
-        $request->offset = $request->dari - 1;
-        $request->rows = $request->sampai;
-        $request->withRelations = true;
+        $params['offset'] = $request->dari - 1;
+        $params['rows'] = $request->sampai;
+        $params['withRelations'] = true;
 
-        $absensis = $this->get($request)['rows'];
+        $absensis = $this->get($params)['rows'];
 
-        foreach ($absensis as &$absensi) {
-            foreach ($absensi['absensi_supir_detail'] as &$absensi_supir_detail) {
-                $absensi_supir_detail['trado'] = $absensi_supir_detail['trado']['nama'] ?? '';
-                $absensi_supir_detail['supir'] = $absensi_supir_detail['supir']['namasupir'] ?? '';
-                $absensi_supir_detail['status'] = $absensi_supir_detail['absen_trado']['keterangan'] ?? '';
-            }
+        $detailParams = [
+            'withHeader' => true
+        ];
+
+        foreach ($absensis as $index => $absensi) {
+            $detailParams['whereIn'][$index] = $absensi['id'];
         }
 
-        return view('reports.absensi', compact('absensis'));
+        $absensi_details = Http::withHeaders(request()->header())
+            ->get('http://localhost/trucking-laravel/public/api/absensi_detail', $detailParams)['data'];
+
+        foreach ($absensi_details as &$absensi_detail) {
+            $absensi_detail['trado'] = $absensi_detail['trado']['keterangan'] ?? '';
+            $absensi_detail['supir'] = $absensi_detail['supir']['namasupir'] ?? '';
+            $absensi_detail['status'] = $absensi_detail['absen_trado']['keterangan'] ?? '';
+        }
+
+        return view('reports.absensi', compact('absensi_details'));
     }
 
     public function export(): void
@@ -241,7 +250,7 @@ class AbsensiSupirHeaderController extends Controller
         ];
 
         $absensis = $this->get($params)['rows'];
-        
+
         foreach ($absensis as &$absensi) {
             foreach ($absensi['absensi_supir_detail'] as &$absensi_supir_detail) {
                 $absensi_supir_detail['trado'] = $absensi_supir_detail['trado']['nama'] ?? '';
@@ -262,7 +271,7 @@ class AbsensiSupirHeaderController extends Controller
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
-        
+
         $header_columns = [
             [
                 'label' => 'No Bukti',
@@ -315,8 +324,8 @@ class AbsensiSupirHeaderController extends Controller
                 'index' => 'uangjalan',
             ]
         ];
-        
-        for ($i=0; $i < count($absensis); $i++) { 
+
+        for ($i = 0; $i < count($absensis); $i++) {
             foreach ($header_columns as $header_column) {
                 $sheet->setCellValue('A' . $header_start_row, $header_column['label']);
                 $sheet->setCellValue('B' . $header_start_row, ':');
@@ -366,7 +375,7 @@ class AbsensiSupirHeaderController extends Controller
                 ),
             ),
         );
-        
+
         $writer = new Xlsx($spreadsheet);
         $filename = 'laporanAbsensi' . date('dmYHis');
 
