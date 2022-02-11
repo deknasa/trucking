@@ -20,7 +20,7 @@ class Myauth
                     'relasi', 'extension', 'logout', 
                     'acos', 'dashboard', 'combo', 'help', 
                     'test', 'parameter', 'user', 'role',
-                    'menu', 'userrole'
+                    'menu', 'userrole', 'error', 'acl'
                 ],
         'method' => ['gridtab', 'grid', 'operation', 'excel', 'crud', 'carishippersama', 'listmarketingcabang', 'good', 'nonaktif', 'fieldLength', 'griddetail', 'detail', 'show', 'cetak', 'getdetail', 'report'],
     ];

@@ -11,6 +11,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\AclController;
 use App\Http\Controllers\UserAclController;
+use App\Http\Controllers\ErrorController;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +47,12 @@ Route::middleware('auth')->group(function () {
     Route::get('parameter/get', [ParameterController::class, 'get'])->name('parameter.get');
     Route::resource('parameter', ParameterController::class);
     
+    Route::get('error/field_length', [ErrorController::class, 'fieldLength'])->name('error.field_length');
+    Route::get('error/{id}/delete', [ErrorController::class, 'delete'])->name('error.delete');
+    Route::get('error/index', [ErrorController::class, 'index']);
+    Route::get('error/get', [ErrorController::class, 'get'])->name('error.get');
+    Route::resource('error', ErrorController::class);
+
     Route::get('cabang/field_length', [CabangController::class, 'fieldLength'])->name('cabang.field_length');
     Route::get('cabang/{id}/delete', [CabangController::class, 'delete'])->name('cabang.delete');
     Route::get('cabang/index', [CabangController::class, 'index']);
