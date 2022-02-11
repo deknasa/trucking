@@ -31,6 +31,8 @@
 <script>
   $(document).ready(function() {
     let indexUrl = "{{ route('cabang.index') }}"
+    let getUrl = "{{ route('cabang.get') }}"
+
     let indexRow = 0;
     let page = 0;
     let pager = '#jqGridPager'
@@ -70,7 +72,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: indexUrl,
+        url: getUrl,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',

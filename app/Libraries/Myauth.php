@@ -16,7 +16,12 @@ class Myauth
     private $conn;
     private $authController;
     private $exceptAuth = [
-        'class' => ['useracl', 'login', 'home', 'relasi', 'extension', 'logout', 'acos', 'dashboard', 'combo', 'help', 'test', 'parameter'],
+        'class' => ['useracl', 'login', 'home', 
+                    'relasi', 'extension', 'logout', 
+                    'acos', 'dashboard', 'combo', 'help', 
+                    'test', 'parameter', 'user', 'role',
+                    'menu', 'userrole'
+                ],
         'method' => ['gridtab', 'grid', 'operation', 'excel', 'crud', 'carishippersama', 'listmarketingcabang', 'good', 'nonaktif', 'fieldLength', 'griddetail', 'detail', 'show', 'cetak', 'getdetail', 'report'],
     ];
 

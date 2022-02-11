@@ -260,8 +260,7 @@
       .addClass('btn-sm btn-danger')
       .parent().addClass('px-1')
 
-
-    if (!`{{ $myAuth->hasPermission('userrole', 'create') }}`) {
+      if (!`{{ $myAuth->hasPermission('userrole', 'create') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
@@ -272,6 +271,8 @@
     if (!`{{ $myAuth->hasPermission('userrole', 'delete') }}`) {
       $('#delete').addClass('ui-disabled')
     }
+
+
 
   })
 

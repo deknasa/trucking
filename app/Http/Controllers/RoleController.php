@@ -17,38 +17,9 @@ class RoleController extends Controller
     /**
      * Fungsi index
      * @ClassName index
-     */        
+     */
     public function index(Request $request)
     {
-
-     
-        if ($request->ajax()) {
-            $params = [
-                'offset' => (($request->page - 1) * $request->rows),
-                'limit' => $request->rows,
-                'sortIndex' => $request->sidx,
-                'sortOrder' => $request->sord,
-                'search' => json_decode($request->filters, 1) ?? [],
-            ];
-
-            // dd($params);
-
-            // $response = Http::get('http://localhost/trucking-laravel/public/role', $params);
-            $response = Http::withHeaders($request->header())
-                ->get(config('app.api_url') . 'role', $params);
-
-
-
-            $data = [
-                'total' => $response['attributes']['totalPages'],
-                'records' => $response['attributes']['totalRows'],
-                'rows' => $response['data']
-            ];
-
-
-            return response($data);
-        }
-
 
         $title = $this->title;
         $data = [
@@ -58,10 +29,40 @@ class RoleController extends Controller
         return view('role.index', compact('title', 'data'));
     }
 
+    public function get($params = []): array
+    {
+        $params = [
+            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
+            'limit' => $params['rows'] ?? request()->rows ?? 0,
+            'sortIndex' => $params['sidx'] ?? request()->sidx,
+            'sortOrder' => $params['sord'] ?? request()->sord,
+            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
+        ];
+
+        // dd($params);
+
+        // $response = Http::get('http://localhost/trucking-laravel/public/role', $params);
+        $response = Http::withHeaders(request()->header())
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'role', $params);
+
+
+
+        $data = [
+            'total' => $response['attributes']['totalPages'],
+            'records' => $response['attributes']['totalRows'],
+            'rows' => $response['data']
+        ];
+
+
+        return $data;
+    }
+
+
     /**
      * Fungsi create
      * @ClassName create
-     */        
+     */
     public function create()
     {
         $title = $this->title;
@@ -72,11 +73,13 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
-        $request['modifiedby']=Auth::user()->name;
+        $request['modifiedby'] = Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'role', $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->post(config('app.api_url') . 'role', $request->all());
 
         return response($response);
     }
@@ -84,7 +87,7 @@ class RoleController extends Controller
     /**
      * Fungsi edit
      * @ClassName edit
-     */        
+     */
     public function edit($id)
     {
         $title = $this->title;
@@ -92,7 +95,9 @@ class RoleController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get(config('app.api_url') . "role/$id");
+        ])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "role/$id");
 
         $role = $response['data'];
         return view('role.edit', compact('title', 'role'));
@@ -100,11 +105,13 @@ class RoleController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request['modifiedby']=Auth::user()->name;
+        $request['modifiedby'] = Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "role/$id", $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->patch(config('app.api_url') . "role/$id", $request->all());
 
         return response($response);
     }
@@ -112,7 +119,7 @@ class RoleController extends Controller
     /**
      * Fungsi delete
      * @ClassName delete
-     */        
+     */
     public function delete($id)
     {
         try {
@@ -121,7 +128,9 @@ class RoleController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "role/$id");
+            ])
+                ->withToken(session('access_token'))
+                ->get(config('app.api_url') . "role/$id");
 
             $role = $response['data'];
 
@@ -134,18 +143,22 @@ class RoleController extends Controller
 
     public function destroy($id, Request $request)
     {
-        $request['modifiedby']=Auth::user()->name;
+        $request['modifiedby'] = Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete(config('app.api_url') . "role/$id", $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->delete(config('app.api_url') . "role/$id", $request->all());
 
         return response($response);
     }
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'role/field_length');
+        $response = Http::withHeaders($this->httpHeader)
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'role/field_length');
 
         return response($response['data']);
     }
@@ -157,6 +170,7 @@ class RoleController extends Controller
             'rolename' => $request['rolename'],
         ];
         $response = Http::withHeaders($this->httpHeader)
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'role/getroleid', $status);
 
         // dd($response['data']);

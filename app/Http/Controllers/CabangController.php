@@ -17,33 +17,9 @@ class CabangController extends Controller
     /**
      * Fungsi index
      * @ClassName index
-     */    
+     */
     public function index(Request $request)
     {
-
-
-        if ($request->ajax()) {
-            $params = [
-                'offset' => (($request->page - 1) * $request->rows),
-                'limit' => $request->rows,
-                'sortIndex' => $request->sidx,
-                'sortOrder' => $request->sord,
-                'search' => json_decode($request->filters, 1) ?? [],
-            ];
-
-            $response = Http::withHeaders($request->header())
-                ->get(config('app.api_url') . 'cabang', $params);
-
-            $data = [
-                'total' => $response['attributes']['totalPages'] ?? [],
-                'records' => $response['attributes']['totalRows'] ?? [],
-                'rows' => $response['data'] ?? []
-            ];
-
-
-            return response($data);
-        }
-
 
         $title = $this->title;
         $data = [
@@ -54,10 +30,34 @@ class CabangController extends Controller
         return view('cabang.index', compact('title', 'data'));
     }
 
+    public function get($params = []): array
+    {
+        $params = [
+            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
+            'limit' => $params['rows'] ?? request()->rows ?? 0,
+            'sortIndex' => $params['sidx'] ?? request()->sidx,
+            'sortOrder' => $params['sord'] ?? request()->sord,
+            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
+        ];
+
+        $response = Http::withHeaders(request()->header())
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'cabang', $params);
+
+        $data = [
+            'total' => $response['attributes']['totalPages'] ?? [],
+            'records' => $response['attributes']['totalRows'] ?? [],
+            'rows' => $response['data'] ?? []
+        ];
+
+
+        return $data;
+    }
+
     /**
      * Fungsi create
      * @ClassName create
-     */       
+     */
     public function create()
     {
         $title = $this->title;
@@ -69,11 +69,13 @@ class CabangController extends Controller
 
     public function store(Request $request)
     {
-        $request['modifiedby']=Auth::user()->name;
+        $request['modifiedby'] = Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'cabang', $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->post(config('app.api_url') . 'cabang', $request->all());
 
         return response($response);
     }
@@ -81,14 +83,16 @@ class CabangController extends Controller
     /**
      * Fungsi edit
      * @ClassName edit
-     */       
+     */
     public function edit($id)
     {
         $title = $this->title;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get(config('app.api_url') . "cabang/$id");
+        ])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "cabang/$id");
 
         $cabang = $response['data'];
 
@@ -99,12 +103,14 @@ class CabangController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request['modifiedby']=Auth::user()->name;
+        $request['modifiedby'] = Auth::user()->name;
 
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "cabang/$id", $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->patch(config('app.api_url') . "cabang/$id", $request->all());
 
         return response($response);
     }
@@ -113,7 +119,7 @@ class CabangController extends Controller
     /**
      * Fungsi delete
      * @ClassName delete
-     */         
+     */
     public function delete($id)
     {
         try {
@@ -122,7 +128,9 @@ class CabangController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "cabang/$id");
+            ])
+                ->withToken(session('access_token'))
+                ->get(config('app.api_url') . "cabang/$id");
 
             $cabang = $response['data'];
 
@@ -134,22 +142,25 @@ class CabangController extends Controller
         }
     }
 
-    public function destroy($id,Request $request)
+    public function destroy($id, Request $request)
     {
-        $request['modifiedby']=Auth::user()->name;
+        $request['modifiedby'] = Auth::user()->name;
 
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete(config('app.api_url') . "cabang/$id", $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->delete(config('app.api_url') . "cabang/$id", $request->all());
 
         return response($response);
-        
     }
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'cabang/field_length');
+        $response = Http::withHeaders($this->httpHeader)
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'cabang/field_length');
 
         return response($response['data']);
     }
@@ -165,10 +176,9 @@ class CabangController extends Controller
         ];
 
         $response = Http::withHeaders($this->httpHeader)
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'cabang/combostatus', $status);
 
         return $response['data'];
     }
-
-    
 }

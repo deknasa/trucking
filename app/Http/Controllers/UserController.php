@@ -22,28 +22,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
 
-        if ($request->ajax()) {
 
-            $params = [
-                'offset' => (($request->page - 1) * $request->rows),
-                'limit' => $request->rows,
-                'sortIndex' => $request->sidx,
-                'sortOrder' => $request->sord,
-                'search' => json_decode($request->filters, 1) ?? [],
-            ];
-
-            $response = Http::withHeaders($request->header())
-                ->get(config('app.api_url') . 'user', $params);
-
-            $data = [
-                'total' => $response['attributes']['totalPages'] ?? [],
-                'records' => $response['attributes']['totalRows'] ?? [],
-                'rows' => $response['data'] ?? []
-            ];
-
-
-            return response($data);
-        }
 
 
         $title = $this->title;
@@ -54,6 +33,30 @@ class UserController extends Controller
         ];
 
         return view('user.index', compact('title', 'data'));
+    }
+
+    public function get($params = []): array
+    {
+        $params = [
+            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
+            'limit' => $params['rows'] ?? request()->rows ?? 0,
+            'sortIndex' => $params['sidx'] ?? request()->sidx,
+            'sortOrder' => $params['sord'] ?? request()->sord,
+            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
+        ];
+
+        $response = Http::withHeaders(request()->header())
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user', $params);
+
+        $data = [
+            'total' => $response['attributes']['totalPages'] ?? [],
+            'records' => $response['attributes']['totalRows'] ?? [],
+            'rows' => $response['data'] ?? []
+        ];
+
+
+        return $data;
     }
 
     /**
@@ -77,12 +80,14 @@ class UserController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'user', $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->post(config('app.api_url') . 'user', $request->all());
 
         return response($response);
     }
 
-     /**
+    /**
      * Fungsi edit
      * @ClassName edit
      */
@@ -93,7 +98,9 @@ class UserController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get(config('app.api_url') . "user/$id");
+        ])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "user/$id");
 
         $user = $response['data'];
 
@@ -109,12 +116,14 @@ class UserController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "user/$id", $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->patch(config('app.api_url') . "user/$id", $request->all());
 
         return response($response);
     }
 
-     /**
+    /**
      * Fungsi delete
      * @ClassName delete
      */
@@ -126,7 +135,9 @@ class UserController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "user/$id");
+            ])
+                ->withToken(session('access_token'))
+                ->get(config('app.api_url') . "user/$id");
 
             $user = $response['data'];
 
@@ -145,14 +156,18 @@ class UserController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete(config('app.api_url') . "user/$id", $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->delete(config('app.api_url') . "user/$id", $request->all());
 
         return response($response);
     }
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'user/field_length');
+        $response = Http::withHeaders($this->httpHeader)
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/field_length');
 
         return response($response['data']);
     }
@@ -168,6 +183,7 @@ class UserController extends Controller
         ];
 
         $response = Http::withHeaders($this->httpHeader)
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/combostatus', $status);
 
         return $response['data'];
@@ -181,6 +197,7 @@ class UserController extends Controller
         ];
 
         $response = Http::withHeaders($this->httpHeader)
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/getuserid', $status);
 
         // dd($response['data']);
@@ -195,6 +212,7 @@ class UserController extends Controller
         ];
 
         $response = Http::withHeaders($this->httpHeader)
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/combocabang', $status);
 
         return $response['data'];

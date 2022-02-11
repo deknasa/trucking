@@ -97,7 +97,7 @@
             label: 'NAMA ROLE',
             name: 'rolename',
             align: 'left'
-          }, 
+          },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
@@ -244,7 +244,7 @@
     /* Load detial grid */
     loadDetailGrid()
 
-     
+
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)
       .parent().addClass('px-1')
@@ -269,6 +269,9 @@
     if (!`{{ $myAuth->hasPermission('acl', 'delete') }}`) {
       $('#delete').addClass('ui-disabled')
     }
+
+
+
   })
 
   /**

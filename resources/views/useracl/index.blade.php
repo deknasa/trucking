@@ -286,6 +286,18 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
+      if (!`{{ $myAuth->hasPermission('useracl', 'create') }}`) {
+      $('#add').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('useracl', 'edit') }}`) {
+      $('#edit').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('useracl', 'delete') }}`) {
+      $('#delete').addClass('ui-disabled')
+    }
+
 
 
     /* Load detial grid */
