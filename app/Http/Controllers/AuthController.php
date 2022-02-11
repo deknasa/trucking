@@ -32,13 +32,20 @@ class AuthController extends Controller
             'user' => 'required',
             'password' => 'required'
         ]);
-        
+
         $credentials = [
             'user' => $request->user,
             'password' => $request->password
         ];
-        
+
+
         if (Auth::attempt($credentials)) {
+            $token = Http::withHeaders([
+                'Accept' => 'application/json'
+            ])->post(config('app.api_url') . 'token', $credentials);
+
+            session(['access_token' => $token['access_token']]);
+
             return redirect()->intended(RouteServiceProvider::HOME);
         } else {
             return redirect()->back()->withErrors([

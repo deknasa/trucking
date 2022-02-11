@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use stdClass;
 
 class ParameterController extends Controller
 {
     public $title = 'Parameter';
-    public $httpHeader = [
+    public $access_token = 'tes';
+    public $httpHeaders = [
         'Accept' => 'application/json',
-        'Content-Type' => 'application/json'
+        'Content-Type' => 'application/json',
     ];
 
     public function __construct()
@@ -51,13 +51,15 @@ class ParameterController extends Controller
         ];
 
         $response = Http::withHeaders(request()->header())
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'parameter', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
             'records' => $response['attributes']['totalRows'] ?? [],
             'rows' => $response['data'] ?? [],
-            'params' => $params
+            'params' => $params ?? [],
+            'message' => $response['message'] ?? ''
         ];
 
         return $data;
@@ -81,7 +83,9 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'parameter', $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->post(config('app.api_url') . 'parameter', $request->all());
 
         return response($response);
     }
@@ -97,7 +101,9 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get(config('app.api_url') . "parameter/$id");
+        ])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "parameter/$id");
 
         $parameter = $response['data'];
 
@@ -107,11 +113,13 @@ class ParameterController extends Controller
     public function update(Request $request, $id): Response
     {
         $request['modifiedby'] = Auth::user()->name;
-        
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "parameter/$id", $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->patch(config('app.api_url') . "parameter/$id", $request->all());
 
         return response($response);
     }
@@ -128,7 +136,9 @@ class ParameterController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "parameter/$id");
+            ])
+                ->withToken(session('access_token'))
+                ->get(config('app.api_url') . "parameter/$id");
 
             $parameter = $response['data'];
 
@@ -145,7 +155,9 @@ class ParameterController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete(config('app.api_url') . "parameter/$id", $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->delete(config('app.api_url') . "parameter/$id", $request->all());
 
         return response($response);
     }
