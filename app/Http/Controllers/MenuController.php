@@ -19,37 +19,9 @@ class MenuController extends Controller
     /**
      * Fungsi index
      * @ClassName index
-     */ 
+     */
     public function index(Request $request)
     {
-
-
-            // 'class' => $this->listFolderFiles('CabangController')
-        //     $dataclass=json_encode($this->listclassall());
-            
-        // dd($dataclass);
-
-        if ($request->ajax()) {
-            $params = [
-                'offset' => (($request->page - 1) * $request->rows),
-                'limit' => $request->rows,
-                'sortIndex' => $request->sidx,
-                'sortOrder' => $request->sord,
-                'search' => json_decode($request->filters, 1) ?? [],
-            ];
-
-            $response = Http::withHeaders($request->header())
-                ->get(config('app.api_url') . 'menu', $params);
-
-            $data = [
-                'total' => $response['attributes']['totalPages'] ?? [],
-                'records' => $response['attributes']['totalRows'] ?? [],
-                'rows' => $response['data'] ?? []
-            ];
-
-
-            return response($data);
-        }
 
 
         $title = $this->title;
@@ -61,10 +33,42 @@ class MenuController extends Controller
         return view('menu.index', compact('title', 'data'));
     }
 
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            parent::__construct();
+
+            return $next($request);
+        });
+    }
+    public function get($params = []): array
+    {
+        $params = [
+            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
+            'limit' => $params['rows'] ?? request()->rows ?? 0,
+            'sortIndex' => $params['sidx'] ?? request()->sidx,
+            'sortOrder' => $params['sord'] ?? request()->sord,
+            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
+        ];
+
+        $response = Http::withHeaders(request()->header())
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'menu', $params);
+
+        $data = [
+            'total' => $response['attributes']['totalPages'] ?? [],
+            'records' => $response['attributes']['totalRows'] ?? [],
+            'rows' => $response['data'] ?? []
+        ];
+
+
+        return $data;
+    }
+
     /**
      * Fungsi create
      * @ClassName create
-     */ 
+     */
     public function create()
     {
         $title = $this->title;
@@ -82,7 +86,7 @@ class MenuController extends Controller
 
     public function store(Request $request)
     {
-        
+
         $request['modifiedby'] = Auth::user()->name;
         $request['class'] = $this->listFolderFiles($request['controller']);
 
@@ -90,7 +94,9 @@ class MenuController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'menu', $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->post(config('app.api_url') . 'menu', $request->all());
 
         return response($response);
     }
@@ -98,7 +104,7 @@ class MenuController extends Controller
     /**
      * Fungsi edit
      * @ClassName edit
-     */     
+     */
     public function edit($id)
     {
         $title = $this->title;
@@ -106,7 +112,9 @@ class MenuController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get(config('app.api_url') . "menu/$id");
+        ])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "menu/$id");
 
         $menu = $response['data'];
         $data = [
@@ -128,7 +136,9 @@ class MenuController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "menu/$id", $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->withToken(session('access_token'))->patch(config('app.api_url') . "menu/$id", $request->all());
 
         return response($response);
     }
@@ -136,7 +146,7 @@ class MenuController extends Controller
     /**
      * Fungsi delete
      * @ClassName delete
-     */     
+     */
     public function delete($id)
     {
         try {
@@ -145,7 +155,9 @@ class MenuController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "menu/$id");
+            ])
+                ->withToken(session('access_token'))
+                ->get(config('app.api_url') . "menu/$id");
 
             $menu = $response['data'];
 
@@ -170,14 +182,18 @@ class MenuController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete(config('app.api_url') . "menu/$id", $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->delete(config('app.api_url') . "menu/$id", $request->all());
 
         return response($response);
     }
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'menu/field_length');
+        $response = Http::withHeaders($this->httpHeader)
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'menu/field_length');
 
         return response($response['data']);
     }
@@ -189,6 +205,7 @@ class MenuController extends Controller
             'status' => $aksi,
         ];
         $response = Http::withHeaders($this->httpHeader)
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'menu/combomenuparent', $status);
 
         return $response['data'];
@@ -201,6 +218,7 @@ class MenuController extends Controller
             'aco_id' => $aco_id,
         ];
         $response = Http::withHeaders($this->httpHeader)
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'menu/getdatanamaacos', $status);
         return $response['data'];
     }
@@ -283,7 +301,6 @@ class MenuController extends Controller
                     $data[] = [
                         'class' => $class,
                     ];
-  
                 }
             }
         }

@@ -6,10 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 
-
-class UserController extends Controller
+class ErrorController extends Controller
 {
-    public $title = 'User';
+    public $title = 'Error';
     public $httpHeader = [
         'Accept' => 'application/json',
         'Content-Type' => 'application/json'
@@ -22,17 +21,12 @@ class UserController extends Controller
     public function index(Request $request)
     {
 
-
-
-
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama User',
-            'combo' => $this->combo('list'),
-            'combocabang' => $this->combocabang('list')
+            'pagename' => 'Menu Utama Error'
         ];
 
-        return view('user.index', compact('title', 'data'));
+        return view('error.index', compact('title', 'data'));
     }
 
     public function get($params = []): array
@@ -47,7 +41,7 @@ class UserController extends Controller
 
         $response = Http::withHeaders(request()->header())
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'user', $params);
+            ->get(config('app.api_url') . 'error', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -63,26 +57,25 @@ class UserController extends Controller
      * Fungsi create
      * @ClassName create
      */
-
     public function create()
     {
         $title = $this->title;
 
-        $data['combo'] = $this->combo('entry');
-        $data['combocabang'] = $this->combocabang('entry');
 
-        return view('user.add', compact('title', 'data'));
+        return view('error.add', compact('title'));
     }
 
     public function store(Request $request)
     {
+
         $request['modifiedby'] = Auth::user()->name;
+        
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])
             ->withToken(session('access_token'))
-            ->post(config('app.api_url') . 'user', $request->all());
+            ->post(config('app.api_url') . 'error', $request->all());
 
         return response($response);
     }
@@ -94,34 +87,33 @@ class UserController extends Controller
     public function edit($id)
     {
         $title = $this->title;
-
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "user/$id");
+            ->get(config('app.api_url') . "error/$id");
 
-        $user = $response['data'];
+        $error = $response['data'];
 
-        $data['combo'] = $this->combo('entry');
-        $data['combocabang'] = $this->combocabang('entry');
 
-        return view('user.edit', compact('title', 'user', 'data'));
+        return view('error.edit', compact('title', 'error'));
     }
 
     public function update(Request $request, $id)
     {
         $request['modifiedby'] = Auth::user()->name;
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])
             ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "user/$id", $request->all());
+            ->patch(config('app.api_url') . "error/$id", $request->all());
 
         return response($response);
     }
+
 
     /**
      * Fungsi delete
@@ -137,28 +129,27 @@ class UserController extends Controller
                 'Content-Type' => 'application/json'
             ])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "user/$id");
+                ->get(config('app.api_url') . "error/$id");
 
-            $user = $response['data'];
+            $error = $response['data'];
 
-            $data['combo'] = $this->combo('entry');
-            $data['combocabang'] = $this->combocabang('entry');
 
-            return view('user.delete', compact('title', 'user', 'data'));
+            return view('error.delete', compact('title', 'error'));
         } catch (\Throwable $th) {
-            return redirect()->route('user.index');
+            return redirect()->route('error.index');
         }
     }
 
     public function destroy($id, Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])
             ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "user/$id", $request->all());
+            ->delete(config('app.api_url') . "error/$id", $request->all());
 
         return response($response);
     }
@@ -167,54 +158,10 @@ class UserController extends Controller
     {
         $response = Http::withHeaders($this->httpHeader)
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'user/field_length');
+            ->get(config('app.api_url') . 'error/field_length');
 
         return response($response['data']);
     }
 
 
-    public function combo($aksi)
-    {
-
-        $status = [
-            'status' => $aksi,
-            'grp' => 'STATUS AKTIF',
-            'subgrp' => 'STATUS AKTIF',
-        ];
-
-        $response = Http::withHeaders($this->httpHeader)
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'user/combostatus', $status);
-
-        return $response['data'];
-    }
-
-    public function getuserid(Request $request)
-    {
-
-        $status = [
-            'user' => $request['user'],
-        ];
-
-        $response = Http::withHeaders($this->httpHeader)
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'user/getuserid', $status);
-
-        // dd($response['data']);
-        return $response['data'];
-    }
-
-    public function combocabang($aksi)
-    {
-
-        $status = [
-            'status' => $aksi,
-        ];
-
-        $response = Http::withHeaders($this->httpHeader)
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'user/combocabang', $status);
-
-        return $response['data'];
-    }
 }

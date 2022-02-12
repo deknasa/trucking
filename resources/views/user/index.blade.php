@@ -41,6 +41,7 @@
 
     $(document).ready(function() {
         let indexUrl = "{{ route('user.index') }}"
+        let getUrl = "{{ route('user.get') }}"
         let indexRow = 0;
         let page = 0;
         let pager = '#jqGridPager'
@@ -82,7 +83,7 @@
         <?php } ?>
 
         $("#jqGrid").jqGrid({
-                url: indexUrl,
+                url: getUrl,
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
@@ -354,6 +355,17 @@
             .parent().addClass('px-1')
 
 
+        if (!`{{ $myAuth->hasPermission('user', 'create') }}`) {
+            $('#add').addClass('ui-disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('user', 'edit') }}`) {
+            $('#edit').addClass('ui-disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('user', 'delete') }}`) {
+            $('#delete').addClass('ui-disabled')
+        }
 
     })
 

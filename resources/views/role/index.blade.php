@@ -35,6 +35,7 @@
 <script>
   $(document).ready(function() {
     let indexUrl = "{{ route('role.index') }}"
+    let getUrl = "{{ route('role.get') }}"
     let indexRow = 0;
     let page = 0;
     let pager = '#jqGridPager'
@@ -76,7 +77,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: indexUrl,
+        url: getUrl,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -260,6 +261,17 @@
       .addClass('btn-sm btn-danger')
       .parent().addClass('px-1')
 
+      if (!`{{ $myAuth->hasPermission('role', 'create') }}`) {
+      $('#add').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('role', 'edit') }}`) {
+      $('#edit').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('role', 'delete') }}`) {
+      $('#delete').addClass('ui-disabled')
+    }      
 
 
   })

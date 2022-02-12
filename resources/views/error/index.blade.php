@@ -27,14 +27,12 @@
   </div>
 </div>
 
-<!-- Detail -->
-<!-- @include('acl._detail') -->
-
-
 @push('scripts')
 <script>
   $(document).ready(function() {
-    let indexUrl = "{{ route('acl.index') }}"
+    let indexUrl = "{{ route('error.index') }}"
+    let getUrl = "{{ route('error.get') }}"
+
     let indexRow = 0;
     let page = 0;
     let pager = '#jqGridPager'
@@ -45,7 +43,7 @@
     let totalRecord
     let limit
     let postData
-    let sortname = 'rolename'
+    let sortname = 'id'
     let sortorder = 'asc'
 
     /* Set page */
@@ -73,29 +71,21 @@
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
 
-
-
     $("#jqGrid").jqGrid({
-        url: indexUrl,
+        url: getUrl,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
-            label: 'ROLE ID',
-            name: 'role_id',
-            align: 'left',
-            hidden: true
-          },
-          {
             label: 'ID',
             name: 'id',
-            align: 'left',
-            hidden: true
+            align: 'right',
+            width: '70px'
           },
           {
-            label: 'NAMA ROLE',
-            name: 'rolename',
+            label: 'KETERANGAN',
+            name: 'keterangan',
             align: 'left'
           },
           {
@@ -106,6 +96,10 @@
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
+            align: 'right'
+          }, {
+            label: 'CREATEDAT',
+            name: 'created_at',
             align: 'right'
           },
         ],
@@ -124,21 +118,16 @@
         pager: pager,
         viewrecords: true,
         onSelectRow: function(id) {
-          row_id = $(this).jqGrid('getGridParam', 'selrow')
-          selectedId = $(this).jqGrid('getCell', row_id, 'role_id');
-          console.log(selectedId)
-          console.log('test')
-
-          loadDetailData(selectedId)
-
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
           let rows = $(this).jqGrid('getGridParam', 'postData').rows
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
-        loadComplete: function(data) {
+        ondblClickRow: function(rowid) {
 
+        },
+        loadComplete: function(data) {
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -146,32 +135,27 @@
           limit = $(this).jqGrid('getGridParam', 'postData').rows
           postData = $(this).jqGrid('getGridParam', 'postData')
 
-
           $('.clearsearchclass').click(function() {
             highlightSearch = ''
           })
 
-          setTimeout(function() {
-            if (triggerClick) {
-
-              if (id != '') {
-                indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-                $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-                id = ''
-              } else if (indexRow != undefined) {
-                $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-              }
-
-              if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-                $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-              }
-
-              triggerClick = false
-            } else {
-              $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+          if (triggerClick) {
+            if (id != '') {
+              indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              id = ''
+            } else if (indexRow != undefined) {
+              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
-          }, 100)
+            if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+            }
+
+            triggerClick = false
+          } else {
+            $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+          }
         }
       })
 
@@ -191,7 +175,7 @@
         onClickButton: function() {
           let limit = $(this).jqGrid('getGridParam', 'postData').rows
 
-          window.location.href = `{{ route('acl.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+          window.location.href = `{{ route('error.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
 
@@ -201,10 +185,8 @@
         id: 'edit',
         buttonicon: 'fas fa-pen',
         onClickButton: function() {
-          row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          selectedId = $(this).jqGrid('getCell', row_id, 'id');
-          // alert(selectid);
-          console.log(selectedId)
+          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
           window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
@@ -215,9 +197,7 @@
         id: 'delete',
         buttonicon: 'fas fa-trash',
         onClickButton: function() {
-          // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          selectedId = $(this).jqGrid('getCell', row_id, 'id');
+          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
           window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
         }
@@ -241,10 +221,7 @@
     /* Append global search */
     loadGlobalSearch()
 
-    /* Load detial grid */
-    loadDetailGrid()
-
-
+     
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)
       .parent().addClass('px-1')
@@ -258,20 +235,17 @@
       .parent().addClass('px-1')
 
 
-    if (!`{{ $myAuth->hasPermission('acl', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('error', 'create') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('acl', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('error', 'edit') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('acl', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('error', 'delete') }}`) {
       $('#delete').addClass('ui-disabled')
     }
-
-
-
   })
 
   /**
@@ -337,6 +311,7 @@
         for (i = 0; i < l; i++) {
           cm = colModel[i];
           if (cm.search !== false && (cm.stype === undefined || cm.stype === "text" || cm.stype === "select")) {
+
             rules.push({
               field: cm.name,
               op: "cn",
