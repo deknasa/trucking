@@ -173,17 +173,20 @@ class ParameterController extends Controller
 
     public function report(Request $request): View
     {
-        $request->offset = $request->dari - 1;
-        $request->rows = $request->sampai;
+        $params['offset'] = $request->dari - 1;
+        $params['rows'] = $request->sampai - $request->dari + 1;
 
-        $parameters = $this->get($request)['rows'];
+        $parameters = $this->get($params)['rows'];
 
         return view('reports.parameter', compact('parameters'));
     }
 
-    public function export(): void
+    public function export(Request $request): void
     {
-        $parameters = $this->get();
+        $params['offset'] = $request->dari - 1;
+        $params['rows'] = $request->sampai - $request->dari + 1;
+
+        $parameters = $this->get($params);
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();

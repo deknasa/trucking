@@ -199,12 +199,17 @@
         loadComplete: function(data) {
           initResize($(this))
 
+          if (data.message !== "" && data.message !== undefined && data.message !== null) {
+            alert(data.message)
+          }
+
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').rows
           postData = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             highlightSearch = ''
@@ -306,7 +311,7 @@
         }
       })
 
-      .bindKeys() /
+      .bindKeys()
 
       /* Append clear filter button */
       loadClearFilter()

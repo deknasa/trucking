@@ -238,8 +238,10 @@ class AbsensiSupirHeaderController extends Controller
             $absensi_detail['trado'] = $absensi_detail['trado']['keterangan'] ?? '';
             $absensi_detail['supir'] = $absensi_detail['supir']['namasupir'] ?? '';
             $absensi_detail['status'] = $absensi_detail['absen_trado']['keterangan'] ?? '';
+            $absensi_detail['keterangan_detail'] = $absensi_detail['keterangan'] ?? '';
         }
 
+        dd($absensi_details);
         return view('reports.absensi', compact('absensi_details'));
     }
 

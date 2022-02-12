@@ -18,16 +18,16 @@
 </div>
 
 <!-- Modal for report -->
-<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+<div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="reportModalLabel">Pilih baris</h5>
+        <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="formReport" action="{{ route('parameter.report') }}" target="_blank">
+      <form id="formRange" target="_blank">
         @csrf
         <div class="modal-body">
           <input type="hidden" name="sidx">
@@ -175,12 +175,17 @@
 
         },
         loadComplete: function(data) {
+          if (data.message !== "" && data.message !== undefined && data.message !== null) {
+            alert(data.message)
+          }
+          
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').rows
           postData = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = true
 
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -272,9 +277,9 @@
         id: 'export',
         buttonicon: 'fas fa-file-export',
         onClickButton: function() {
-          let exportUrl = `{{ route('parameter.export') }}`
-          
-          window.location.href = exportUrl
+          $('#rangeModal').data('action', 'export')
+          $('#rangeModal').find('button:submit').html(`Export`)
+          $('#rangeModal').modal('show')
         }
       })
 
@@ -284,7 +289,9 @@
         id: 'report',
         buttonicon: 'fas fa-print',
         onClickButton: function() {
-          $('#reportModal').modal('show')
+          $('#rangeModal').data('action', 'report')
+          $('#rangeModal').find('button:submit').html(`Report`)
+          $('#rangeModal').modal('show')
         }
       })
 
@@ -297,8 +304,6 @@
           clearGlobalSearch()
         }
       })
-
-      .bindKeys()
 
     /* Append clear filter button */
     loadClearFilter()
@@ -346,21 +351,21 @@
       $('#delete').addClass('ui-disabled')
     }
 
-    $('#reportModal').on('shown.bs.modal', function() {
+    $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {
           autoNumericElement.remove()
         })
       }
 
-      $('#formReport [name]:not(:hidden)').first().focus()
+      $('#formRange [name]:not(:hidden)').first().focus()
 
-      $('#formReport [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
-      $('#formReport [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-      $('#formReport [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-      $('#formReport [name=sampai]').val(totalRecord)
+      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
+      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
+      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+      $('#formRange [name=sampai]').val(totalRecord)
 
-      autoNumericElements = new AutoNumeric.multiple('#formReport .autonumeric-report', {
+      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
         digitGroupSeparator: '.',
         decimalCharacter: ',',
         allowDecimalPadding: false,
@@ -369,11 +374,17 @@
       })
     })
 
-    $('#formReport').submit(event => {
+    $('#formRange').submit(event => {
       event.preventDefault()
 
       let params
-      let reportUrl = `{{ route('parameter.report') }}`
+      let actionUrl = ``
+      
+      if ($('#rangeModal').data('action') == 'export') {
+        actionUrl = `{{ route('parameter.export') }}`
+      } else if ($('#rangeModal').data('action') == 'report') {
+        actionUrl = `{{ route('parameter.report') }}`
+      }
 
       /* Clear validation messages */
       $('.is-invalid').removeClass('is-invalid')
@@ -387,7 +398,7 @@
         params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-      window.open(`${reportUrl}?${$('#formReport').serialize()}&${params}`)
+      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
 

@@ -90,42 +90,74 @@ function setCustomBindKeys(grid) {
 			e.keyCode == 33 ||
 			e.keyCode == 34 ||
 			e.keyCode == 35 ||
-			e.keyCode == 36
+			e.keyCode == 36 ||
+			e.keyCode == 38 ||
+			e.keyCode == 40
 		) {
 			e.preventDefault();
-			triggerClick = true;
 
+			var gridIds = $("#jqGrid").getDataIDs();
+			var selectedRow = $("#jqGrid").getGridParam("selrow");
 			var currentPage = $(grid).getGridParam("page");
 			var lastPage = $(grid).getGridParam("lastpage");
+			var currentIndex = 0;
 			var row = $(grid).jqGrid("getGridParam", "postData").rows;
 
-			if (33 === e.keyCode) {
-				if (currentPage > 1) {
-					$(grid)
-						.jqGrid("setGridParam", {
-							page: parseInt(currentPage) - 1,
-						})
-						.trigger("reloadGrid");
-				}
-				$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+			for (var i = 0; i < gridIds.length; i++) {
+				if (gridIds[i] == selectedRow) currentIndex = i;
 			}
-			if (34 === e.keyCode) {
-				if (currentPage !== lastPage) {
-					$(grid)
-						.jqGrid("setGridParam", {
-							page: parseInt(currentPage) + 1,
-						})
-						.trigger("reloadGrid");
+
+			if (triggerClick == false) {
+				if (33 === e.keyCode) {
+					if (currentPage > 1) {
+						$(grid)
+							.jqGrid("setGridParam", {
+								page: parseInt(currentPage) - 1,
+							})
+							.trigger("reloadGrid");
+
+							triggerClick = true;
+					}
+					$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
 				}
-				$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
-			}
-			if (35 === e.keyCode) {
-				if (currentPage !== lastPage) {
-					$(grid)
-						.jqGrid("setGridParam", {
-							page: lastPage,
-						})
-						.trigger("reloadGrid");
+				if (34 === e.keyCode) {
+					if (currentPage !== lastPage) {
+						$(grid)
+							.jqGrid("setGridParam", {
+								page: parseInt(currentPage) + 1,
+							})
+							.trigger("reloadGrid");
+
+							triggerClick = true;
+					}
+					$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+				}
+				if (35 === e.keyCode) {
+					if (currentPage !== lastPage) {
+						$(grid)
+							.jqGrid("setGridParam", {
+								page: lastPage,
+							})
+							.trigger("reloadGrid");
+						if (e.ctrlKey) {
+							if (
+								$(grid).jqGrid("getGridParam", "selrow") !==
+								$("#customer")
+									.find(">tbody>tr.jqgrow")
+									.filter(":last")
+									.attr("id")
+							) {
+								$(grid)
+									.jqGrid(
+										"setSelection",
+										$(grid).find(">tbody>tr.jqgrow").filter(":last").attr("id")
+									)
+									.trigger("reloadGrid");
+							}
+						}
+
+						triggerClick = true;
+					}
 					if (e.ctrlKey) {
 						if (
 							$(grid).jqGrid("getGridParam", "selrow") !==
@@ -139,45 +171,48 @@ function setCustomBindKeys(grid) {
 								.trigger("reloadGrid");
 						}
 					}
+					$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
 				}
-				if (e.ctrlKey) {
-					if (
-						$(grid).jqGrid("getGridParam", "selrow") !==
-						$("#customer").find(">tbody>tr.jqgrow").filter(":last").attr("id")
-					) {
-						$(grid)
-							.jqGrid(
-								"setSelection",
-								$(grid).find(">tbody>tr.jqgrow").filter(":last").attr("id")
-							)
-							.trigger("reloadGrid");
-					}
-				}
-				$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
-			}
-			if (36 === e.keyCode) {
-				if (currentPage > 1) {
-					if (e.ctrlKey) {
-						if (
-							$(grid).jqGrid("getGridParam", "selrow") !==
-							$("#customer")
-								.find(">tbody>tr.jqgrow")
-								.filter(":first")
-								.attr("id")
-						) {
-							$(grid).jqGrid(
-								"setSelection",
-								$(grid).find(">tbody>tr.jqgrow").filter(":first").attr("id")
-							);
+				if (36 === e.keyCode) {
+					if (currentPage > 1) {
+						if (e.ctrlKey) {
+							if (
+								$(grid).jqGrid("getGridParam", "selrow") !==
+								$("#customer")
+									.find(">tbody>tr.jqgrow")
+									.filter(":first")
+									.attr("id")
+							) {
+								$(grid).jqGrid(
+									"setSelection",
+									$(grid).find(">tbody>tr.jqgrow").filter(":first").attr("id")
+								);
+							}
 						}
+						$(grid)
+							.jqGrid("setGridParam", {
+								page: 1,
+							})
+							.trigger("reloadGrid");
+
+							triggerClick = true;
 					}
-					$(grid)
-						.jqGrid("setGridParam", {
-							page: 1,
-						})
-						.trigger("reloadGrid");
+					$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
 				}
-				$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+				if (38 === e.keyCode) {
+					if (currentIndex - 1 >= 0) {
+						$(grid)
+							.resetSelection()
+							.setSelection(gridIds[currentIndex - 1]);
+					}
+				}
+				if (40 === e.keyCode) {
+					if (currentIndex + 1 < gridIds.length) {
+						$(grid)
+							.resetSelection()
+							.setSelection(gridIds[currentIndex + 1]);
+					}
+				}
 			}
 		}
 	});
@@ -213,6 +248,8 @@ function setFormBindKeys() {
 			case 13:
 				if (e.shiftKey) {
 					element = $(inputs[$(this).data("input-index") - 1]);
+				} else if (e.ctrlKey) {
+					$(this).closest("form").find("button:submit").click();
 				} else {
 					element = $(inputs[$(this).data("input-index") + 1]);
 
@@ -230,17 +267,20 @@ function setFormBindKeys() {
 				return;
 		}
 
-		if (
-			element.is(":not(select, button)") &&
-			element.attr("type") !== "email"
-		) {
-			position = element.val().length;
-			element[0].setSelectionRange(position, position);
+		if (element !== undefined) {
+			if (
+				element.is(":not(select, button)") &&
+				element.attr("type") !== "email"
+			) {
+				position = element.val().length;
+				element[0].setSelectionRange(position, position);
+			}
+
+			element.hasClass("hasDatePicker")
+				? $(".ui-datepicker").show()
+				: $(".ui-datepicker").hide();
+			element.focus();
 		}
-		element.hasClass("hasDatePicker")
-			? $(".ui-datepicker").show()
-			: $(".ui-datepicker").hide();
-		element.focus();
 
 		e.preventDefault();
 	});
@@ -318,6 +358,6 @@ $(".datepicker")
 		}
 	});
 
-$(document).find('select').select2({
-	theme: 'bootstrap4'
-})
+$(document).find("select").select2({
+	theme: "bootstrap4",
+});
