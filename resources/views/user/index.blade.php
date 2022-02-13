@@ -121,7 +121,7 @@
                     {
                         label: 'Cabang',
                         name: 'cabang_id',
-                        width: 100,
+                        width: 150,
                         stype: 'select',
                         searchoptions: {
                             value: `<?php
@@ -136,13 +136,21 @@
                                     endforeach
 
                                     ?>
-            `
+            `,
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+
                         },
+
                     },
                     {
                         label: 'Status',
                         name: 'statusaktif',
-                        width: 100,
+                        width: 150,
                         stype: 'select',
                         searchoptions: {
                             value: `<?php
@@ -157,7 +165,13 @@
                                     endforeach
 
                                     ?>
-            `
+            `,
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
                         },
                     },
                     {

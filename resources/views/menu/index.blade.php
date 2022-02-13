@@ -111,7 +111,13 @@
                                     endforeach
 
                                     ?>
-            `
+            `,
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
                         },
                     },
                     {
