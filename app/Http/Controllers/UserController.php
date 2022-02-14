@@ -113,7 +113,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders([
+            $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])

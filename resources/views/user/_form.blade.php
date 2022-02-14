@@ -31,13 +31,15 @@
                                 <input type="text" name="name" class="form-control" value="{{ $user['name'] ?? '' }}">
                             </div>
                         </div>
-
+                        @if($action == 'add')
                         <div class="row form-group">
                             <label for="staticEmail" class="col-sm-3 col-form-label">Password<span class="text-danger">*</span></label>
                             <div class="col-sm-6">
                                 <input type="password" name="password" class="form-control" value="{{ $user['password'] ?? '' }}">
                             </div>
                         </div>
+                        @endif
+
 
                         <div class="form-group row">
                             <label for="staticEmail" class="col-sm-3 col-form-label">Cabang<span class="text-danger">*</span></label>
@@ -117,6 +119,11 @@
         method = "DELETE"
     <?php endif; ?>
 
+    if (action == 'delete') {
+        $('[name]').addClass('disabled')
+        $('#statusaktif').prop("disabled", true)
+        $('#cabang_id').prop("disabled", true)
+    }
 
 
     $(document).ready(function() {
