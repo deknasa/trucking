@@ -234,9 +234,7 @@ class AbsensiSupirHeaderController extends Controller
         }
 
         $absensi_details = Http::withHeaders(request()->header())
-            ->get('http://localhost/trucking-laravel/public/api/absensi_detail', $detailParams);
-        
-        dd($absensi_details['message']);
+            ->get('http://localhost/trucking-laravel/public/api/absensi_detail', $detailParams)['data'];
 
         foreach ($absensi_details as $absensi_detailsIndex => &$absensi_detail) {
             $absensi_detail['nominal_header'] = number_format((float) $absensi_detail['nominal_header'], '2', ',', '.');
