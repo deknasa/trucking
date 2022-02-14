@@ -10,7 +10,7 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('absensi_detail.index') }}"
+  let detailIndexUrl = "{{ route('absensi_detail.index') }}"
 
   /**
    * Custom Functions
@@ -33,7 +33,7 @@
         datatype: "json",
         colModel: [{
             label: 'TRADO',
-            name: 'trado.keterangan',
+            name: 'trado.nama',
           },
           {
             label: 'SUPIR',
@@ -97,7 +97,7 @@
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: indexUrl,
+      url: detailIndexUrl,
       postData: {
         absensi_id: id
       }

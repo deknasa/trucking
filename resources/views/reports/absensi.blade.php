@@ -29,14 +29,13 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ url('/../reports/ReportAbsensi.mrt') }}`)
+      report.loadFile(`{{ asset('public/reports/ReportAbsensi.mrt') }}`)
 
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
-        'absensi_detail': <?= json_encode($absensi_details); ?>
+        'absensi': <?= json_encode($absensi_details); ?>
       })
-
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()

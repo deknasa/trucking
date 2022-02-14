@@ -18,16 +18,16 @@
 </div>
 
 <!-- Modal for report -->
-<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+<div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="reportModalLabel">Pilih baris</h5>
+        <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="formReport" action="{{ route('absensi.report') }}" target="_blank">
+      <form id="formRange" target="_blank">
         @csrf
         <div class="modal-body">
           <input type="hidden" name="sidx">
@@ -75,23 +75,23 @@
 
 @push('scripts')
 <script>
-  $(document).ready(function() {
-    let indexUrl = "{{ route('absensi.index') }}"
-    let getUrl = "{{ route('absensi.get') }}"
-    let indexRow = 0;
-    let page = 0;
-    let pager = '#jqGridPager'
-    let popup = "";
-    let id = "";
-    let triggerClick = true;
-    let highlightSearch;
-    let totalRecord
-    let limit
-    let postData
-    let sortname = 'nobukti'
-    let sortorder = 'asc'
-    let autoNumericElements = []
+  let indexUrl = "{{ route('absensi.index') }}"
+  let getUrl = "{{ route('absensi.get') }}"
+  let indexRow = 0;
+  let page = 0;
+  let pager = '#jqGridPager'
+  let popup = "";
+  let id = "";
+  let triggerClick = true;
+  let highlightSearch;
+  let totalRecord
+  let limit
+  let postData
+  let sortname = 'nobukti'
+  let sortorder = 'asc'
+  let autoNumericElements = []
 
+  $(document).ready(function() {
     /* Set page */
     <?php if (isset($_GET['page'])) { ?>
       page = "{{ $_GET['page'] }}"
@@ -155,8 +155,8 @@
             align: 'right',
             formatter: 'currency',
             formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
+              decimalSeparator: ',',
+              thousandsSeparator: '.'
             }
           },
           {
@@ -197,6 +197,8 @@
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         loadComplete: function(data) {
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
           initResize($(this))
 
           if (data.message !== "" && data.message !== undefined && data.message !== null) {
@@ -285,9 +287,9 @@
         id: 'export',
         buttonicon: 'fas fa-file-export',
         onClickButton: function() {
-          let exportUrl = `{{ route('absensi.export') }}`
-
-          window.location.href = exportUrl
+          $('#rangeModal').data('action', 'export')
+          $('#rangeModal').find('button:submit').html(`Export`)
+          $('#rangeModal').modal('show')
         }
       })
 
@@ -297,7 +299,9 @@
         id: 'report',
         buttonicon: 'fas fa-print',
         onClickButton: function() {
-          $('#reportModal').modal('show')
+          $('#rangeModal').data('action', 'report')
+          $('#rangeModal').find('button:submit').html(`Report`)
+          $('#rangeModal').modal('show')
         }
       })
 
@@ -311,10 +315,8 @@
         }
       })
 
-      .bindKeys()
-
-      /* Append clear filter button */
-      loadClearFilter()
+    /* Append clear filter button */
+    loadClearFilter()
 
     /* Append global search */
     loadGlobalSearch()
@@ -342,21 +344,21 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    $('#reportModal').on('shown.bs.modal', function() {
+      $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {
           autoNumericElement.remove()
         })
       }
 
-      $('#formReport [name]:not(:hidden)').first().focus()
+      $('#formRange [name]:not(:hidden)').first().focus()
 
-      $('#formReport [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
-      $('#formReport [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-      $('#formReport [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-      $('#formReport [name=sampai]').val(totalRecord)
+      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
+      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
+      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+      $('#formRange [name=sampai]').val(totalRecord)
 
-      autoNumericElements = new AutoNumeric.multiple('#formReport .autonumeric-report', {
+      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
         digitGroupSeparator: '.',
         decimalCharacter: ',',
         allowDecimalPadding: false,
@@ -365,11 +367,17 @@
       })
     })
 
-    $('#formReport').submit(event => {
+    $('#formRange').submit(event => {
       event.preventDefault()
 
       let params
-      let reportUrl = `{{ route('absensi.report') }}`
+      let actionUrl = ``
+
+      if ($('#rangeModal').data('action') == 'export') {
+        actionUrl = `{{ route('absensi.export') }}`
+      } else if ($('#rangeModal').data('action') == 'report') {
+        actionUrl = `{{ route('absensi.report') }}`
+      }
 
       /* Clear validation messages */
       $('.is-invalid').removeClass('is-invalid')
@@ -383,96 +391,9 @@
         params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-      window.open(`${reportUrl}?${$('#formReport').serialize()}&${params}`)
+      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
-
-  /**
-   * Custom Functions
-   */
-  var delay = (function() {
-    var timer = 0;
-    return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })()
-
-  function clearColumnSearch() {
-    $('input[id*="gs_"]').val("");
-    $("#resetFilterOptions span#resetFilterOptions").removeClass('aktif');
-    $('select[id*="gs_"]').val("");
-    $("#resetdatafilter").removeClass("active");
-  }
-
-  function clearGlobalSearch() {
-    $("#searchText").val("")
-  }
-
-  function loadClearFilter() {
-    /* Append Button */
-    $('#gsh_' + $.jgrid.jqID($('#jqGrid')[0].id) + '_rn').html(
-      $("<div id='resetfilter' class='reset'><span id='resetdatafilter' class='btn btn-default'> X </span></div>")
-    )
-
-    /* Handle button on click */
-    $("#resetdatafilter").click(function() {
-      highlightSearch = '';
-
-      clearGlobalSearch()
-      clearColumnSearch()
-
-      $("#jqGrid").jqGrid('setGridParam', {
-        search: false,
-        postData: {
-          "filters": ""
-        }
-      }).trigger("reloadGrid");
-    })
-  }
-
-  function loadGlobalSearch() {
-    /* Append global search textfield */
-    $('#t_' + $.jgrid.jqID($('#jqGrid')[0].id)).html($('<form class="form-inline"><div class="form-group" id="titlesearch"><label for="searchText" style="font-weight: normal !important;">Search : </label><input type="text" class="form-control" id="searchText" placeholder="Search" autocomplete="off"></div></form>'));
-
-    /* Handle textfield on input */
-    $(document).on("input", "#searchText", function() {
-      delay(function() {
-        clearColumnSearch()
-
-        var postData = $('#jqGrid').jqGrid("getGridParam", "postData"),
-          colModel = $('#jqGrid').jqGrid("getGridParam", "colModel"),
-          rules = [],
-          searchText = $("#searchText").val(),
-          l = colModel.length,
-          i,
-          cm;
-        for (i = 0; i < l; i++) {
-          cm = colModel[i];
-          if (cm.search !== false && (cm.stype === undefined || cm.stype === "text" || cm.stype === "select")) {
-            rules.push({
-              field: cm.name,
-              op: "cn",
-              data: searchText.toUpperCase()
-            });
-          }
-        }
-        postData.filters = JSON.stringify({
-          groupOp: "OR",
-          rules: rules
-        });
-
-        $('#jqGrid').jqGrid("setGridParam", {
-          search: true
-        });
-        $('#jqGrid').trigger("reloadGrid", [{
-          page: 1,
-          current: true
-        }]);
-        return false;
-      }, 500);
-    });
-  }
 </script>
 @endpush()
 @endsection
