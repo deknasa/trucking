@@ -82,6 +82,9 @@
         method = "DELETE"
     <?php endif; ?>
 
+    if (action == 'delete') {
+        $('[name]').addClass('disabled')
+    }
 
 
     $(document).ready(function() {

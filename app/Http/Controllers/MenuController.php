@@ -118,7 +118,6 @@ class MenuController extends Controller
 
         $menu = $response['data'];
         $data = [
-            'nama' => $this->getdata($menu['aco_id'])['nama'],
             'combo' => $this->combo('entry'),
             'class' => $this->listclassall(),
 

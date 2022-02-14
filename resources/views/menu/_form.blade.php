@@ -34,6 +34,7 @@
                             </div>
                         </div>
 
+                        @if($action == 'add')                        
                         <div class="form-group row">
                             <label for="staticEmail" class="col-sm-2 col-form-label">Menu Parent<span class="text-danger">*</span></label>
                             <div class="col-sm-4">
@@ -44,7 +45,7 @@
                                 </select>
                             </div>
                         </div>
-
+                        @endif
 
                         <div class="form-group row">
                             <label for="staticEmail" class="col-sm-2 col-form-label">Icon <span class="text-danger">*</span></label>
@@ -53,13 +54,14 @@
                             </div>
                         </div>
 
+                        @if($action == 'add')     
                         <div class="form-group row">
                             <label for="staticEmail" class="col-sm-2 col-form-label">Link <span class="text-danger">*</span></label>
                             <div class="col-sm-4">
                                 <input type="text" name="menuexe" class="form-control" id="menuexe" placeholder="Link" value="{{ $menu['menuexe'] ?? '' }}">
                             </div>
                         </div>
-
+                        @endif
                         <!-- <div class="form-group row">
                             <label for="staticEmail" class="col-sm-2 col-form-label">Class <span class="text-danger">*</span></label>
                             <div class="col-sm-4">
@@ -67,6 +69,7 @@
                             </div>
                         </div> -->
 
+                        @if($action == 'add')     
                         <div class="form-group row">
                             <label for="staticEmail" class="col-sm-2 col-form-label">Controller<span class="text-danger">*</span></label>
                             <div class="col-sm-4">
@@ -77,7 +80,7 @@
                                 </select>
                             </div>
                         </div>
-
+                        @endif
 
                     </div>
                     <div class="card-footer">
@@ -119,6 +122,9 @@
     <?php endif; ?>
 
 
+    if (action == 'delete') {
+        $('[name]').addClass('disabled')
+    }
 
     $(document).ready(function() {
         $('form').submit(function(e) {

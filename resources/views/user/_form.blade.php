@@ -43,12 +43,13 @@
 
                         <div class="form-group row">
                             <label for="staticEmail" class="col-sm-3 col-form-label">Cabang<span class="text-danger">*</span></label>
-                            <div class="col-sm-4">
-                                <select class="form-control select2bs4  <?= @$disable2 ?>" style="width: 100%;" name="cabang_id" id="cabang_id">
-                                    <?php foreach ($data['combocabang'] as $status) : ?>;
-                                    <option value="<?= $status['id'] ?>" <?= $status['id'] == @$user['cabang_id'] ? 'selected' : '' ?>><?= $status['namacabang'] ?></option>
-                                <?php endforeach; ?>
+                            <div class="col-sm-6">
+                                <select id="selectcabang_id" name="cabang_id">
+                                    <option value="{{ $user['cabang_id'] ?? '' }}"  ></option>
                                 </select>
+
+
+
                             </div>
                         </div>
 
@@ -121,8 +122,6 @@
 
     if (action == 'delete') {
         $('[name]').addClass('disabled')
-        $('#statusaktif').prop("disabled", true)
-        $('#cabang_id').prop("disabled", true)
     }
 
 
@@ -158,6 +157,58 @@
                 $(this).removeAttr('disabled')
             })
         })
+
+
+        $('#selectcabang_id').select2({
+            data: JSON.parse(`<?php echo json_encode($data['combocabang']); ?>`),
+            width: '100%',
+            templateResult: formatSelect,
+            templateSelection: formatSelect,
+            escapeMarkup: function(m) {
+                return m;
+            },
+            matcher: matcher
+        })
+
+        var firstEmptySelect = true;
+
+        function formatSelect(result) {
+            if (!result.id) {
+                if (firstEmptySelect) {
+                    console.log('showing row');
+                    firstEmptySelect = false;
+
+                    return '<div class="row">' +
+                        '<div class="col-sm-3"><b>ID</b></div>' +
+                        '<div class="col-sm-4"><b>Nama Cabang</b></div>' +
+                        '</div>';
+                } else {
+                    console.log('skipping row');
+                    return false;
+                }
+                console.log('result');
+                console.log(result);
+            }
+            return '<div class="row">' +
+                '<div class="col-sm-3">' + result.id + '</div>' +
+                '<div class="col-sm-4">' + result.namacabang + '</div>' +
+                '</div>';
+        }
+
+        function matcher(query, option) {
+            firstEmptySelect = true;
+            if (!query.term) {
+                return option;
+            }
+            var has = true;
+            var words = query.term.toUpperCase().split(" ");
+            for (var i = 0; i < words.length; i++) {
+                var word = words[i];
+                has = has && (option.text.toUpperCase().indexOf(word) >= 0);
+            }
+            if (has) return option;
+            return false;
+        }
 
         /* Get field maxlength */
         $.ajax({
