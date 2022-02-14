@@ -87,7 +87,7 @@ class AbsensiSupirHeaderController extends Controller
         $request->merge([
             'uangjalan' => $request->uangjalan
         ]);
-
+        
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -215,49 +215,53 @@ class AbsensiSupirHeaderController extends Controller
         return $noBukti;
     }
 
-    public function report(Request $request): View
+    public function report(Request $request)
     {
-        $params['offset'] = $request->dari - 1;
-        $params['rows'] = $request->sampai;
-        $params['withRelations'] = true;
+        $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
+            'forReport' => true,
+        ];
 
         $absensis = $this->get($params)['rows'];
 
         $detailParams = [
-            'withHeader' => true
+            'forReport' => true
         ];
 
-        foreach ($absensis as $index => $absensi) {
-            $detailParams['whereIn'][$index] = $absensi['id'];
+        foreach($absensis as $absensisIndex => $absensi) {
+            $detailParams["whereIn[$absensisIndex]"] = $absensi['id'];
         }
 
         $absensi_details = Http::withHeaders(request()->header())
             ->get('http://localhost/trucking-laravel/public/api/absensi_detail', $detailParams)['data'];
-
-        foreach ($absensi_details as &$absensi_detail) {
-            $absensi_detail['trado'] = $absensi_detail['trado']['keterangan'] ?? '';
-            $absensi_detail['supir'] = $absensi_detail['supir']['namasupir'] ?? '';
-            $absensi_detail['status'] = $absensi_detail['absen_trado']['keterangan'] ?? '';
-            $absensi_detail['keterangan_detail'] = $absensi_detail['keterangan'] ?? '';
+        
+        foreach ($absensi_details as $absensi_detailsIndex => &$absensi_detail) {
+            $absensi_detail['nominal_header'] = number_format((float) $absensi_detail['nominal_header'], '2', ',', '.');
+            $absensi_detail['uangjalan'] = number_format((float) $absensi_detail['uangjalan'], '2', ',', '.');
         }
 
-        dd($absensi_details);
         return view('reports.absensi', compact('absensi_details'));
     }
 
-    public function export(): void
+    public function export(Request $request): void
     {
         $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
             'withRelations' => true,
         ];
 
         $absensis = $this->get($params)['rows'];
 
         foreach ($absensis as &$absensi) {
+            $absensi['nominal '] = number_format((float) $absensi['nominal'], '2', ',', '.');
+            
             foreach ($absensi['absensi_supir_detail'] as &$absensi_supir_detail) {
                 $absensi_supir_detail['trado'] = $absensi_supir_detail['trado']['nama'] ?? '';
                 $absensi_supir_detail['supir'] = $absensi_supir_detail['supir']['namasupir'] ?? '';
                 $absensi_supir_detail['status'] = $absensi_supir_detail['absen_trado']['keterangan'] ?? '';
+                $absensi_supir_detail['uangjalan'] = number_format((float) $absensi_supir_detail['uangjalan'], '2', ',', '.');
             }
         }
 
@@ -324,6 +328,7 @@ class AbsensiSupirHeaderController extends Controller
             [
                 'label' => 'Uang Jalan',
                 'index' => 'uangjalan',
+                'format' => 'currency'
             ]
         ];
 

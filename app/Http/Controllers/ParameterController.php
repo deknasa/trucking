@@ -183,9 +183,11 @@ class ParameterController extends Controller
 
     public function export(Request $request): void
     {
-        $params['offset'] = $request->dari - 1;
-        $params['rows'] = $request->sampai - $request->dari + 1;
-
+        $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
+        ];
+        
         $parameters = $this->get($params);
 
         $spreadsheet = new Spreadsheet();

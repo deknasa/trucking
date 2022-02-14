@@ -34,9 +34,8 @@
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
-        'absensi_detail': <?= json_encode($absensi_details); ?>
+        'absensi': <?= json_encode($absensi_details); ?>
       })
-
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
