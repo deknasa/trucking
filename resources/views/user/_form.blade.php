@@ -12,67 +12,61 @@
                         <input type="hidden" name="indexRow" value="{{ $_GET['indexRow'] ?? 1 }}">
                         <input type="hidden" name="page" value="{{ $_GET['page'] ?? 1 }}">
 
-
                         <div class="row form-group">
-                            <label for="staticEmail" class="col-sm-3 col-form-label">ID <span class="text-danger"></span></label>
-                            <div class="col-sm-2">
+                            <label for="staticEmail" class="col-12 col-sm-3 col-form-label">ID <span class="text-danger"></span></label>
+                            <div class="col-12 col-sm-9">
                                 <input type="text" name="id" class="form-control" value="{{ $user['id'] ?? '' }}" readonly>
                             </div>
                         </div>
                         <div class="row form-group">
-                            <label for="staticEmail" class="col-sm-3 col-form-label">User<span class="text-danger">*</span></label>
-                            <div class="col-sm-3">
+                            <label for="staticEmail" class="col-12 col-sm-3 col-form-label">User<span class="text-danger">*</span></label>
+                            <div class="col-12 col-sm-9">
                                 <input type="text" name="user" class="form-control" value="{{ $user['user'] ?? '' }}">
                             </div>
                         </div>
                         <div class="row form-group">
-                            <label for="staticEmail" class="col-sm-3 col-form-label">Nama User<span class="text-danger">*</span></label>
-                            <div class="col-sm-6">
+                            <label for="staticEmail" class="col-12 col-sm-3 col-form-label">Nama User<span class="text-danger">*</span></label>
+                            <div class="col-12 col-sm-9">
                                 <input type="text" name="name" class="form-control" value="{{ $user['name'] ?? '' }}">
                             </div>
                         </div>
                         @if($action == 'add')
                         <div class="row form-group">
-                            <label for="staticEmail" class="col-sm-3 col-form-label">Password<span class="text-danger">*</span></label>
-                            <div class="col-sm-6">
+                            <label for="staticEmail" class="col-12 col-sm-3 col-form-label">Password<span class="text-danger">*</span></label>
+                            <div class="col-12 col-sm-9">
                                 <input type="password" name="password" class="form-control" value="{{ $user['password'] ?? '' }}">
                             </div>
                         </div>
                         @endif
 
-
                         <div class="form-group row">
-                            <label for="staticEmail" class="col-sm-3 col-form-label">Cabang<span class="text-danger">*</span></label>
-                            <div class="col-sm-6">
+                            <label for="staticEmail" class="col-12 col-sm-3 col-form-label">Cabang<span class="text-danger">*</span></label>
+                            <div class="col-12 col-sm-9">
                                 <select id="selectcabang_id" name="cabang_id">
-                                    <option value="{{ $user['cabang_id'] ?? '' }}"  ></option>
+                                    <optgroup label="">
+                                        <option value="{{ $user['cabang_id'] ?? '' }}"></option>
+                                    </optgroup>
                                 </select>
-
-
-
                             </div>
                         </div>
 
-
-
-
                         <div class="row form-group">
-                            <label for="staticEmail" class="col-sm-3 col-form-label">Karyawan ID<span class="text-danger">*</span></label>
-                            <div class="col-sm-6">
+                            <label for="staticEmail" class="col-12 col-sm-3 col-form-label">Karyawan ID<span class="text-danger">*</span></label>
+                            <div class="col-12 col-sm-9">
                                 <input type="text" name="karyawan_id" class="form-control" value="{{ $user['karyawan_id'] ?? 0 }}">
                             </div>
                         </div>
 
                         <div class="row form-group">
-                            <label for="staticEmail" class="col-sm-3 col-form-label">Dashboard<span class="text-danger">*</span></label>
-                            <div class="col-sm-6">
+                            <label for="staticEmail" class="col-12 col-sm-3 col-form-label">Dashboard<span class="text-danger">*</span></label>
+                            <div class="col-12 col-sm-9">
                                 <input type="text" name="dashboard" class="form-control" value="{{ $user['dashboard'] ?? '' }}">
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="staticEmail" class="col-sm-3 col-form-label">Status Aktif<span class="text-danger">*</span></label>
-                            <div class="col-sm-4">
+                            <label for="staticEmail" class="col-12 col-sm-3 col-form-label">Status Aktif<span class="text-danger">*</span></label>
+                            <div class="col-12 col-sm-9">
                                 <select class="form-control select2bs4  <?= @$disable2 ?>" style="width: 100%;" name="statusaktif" id="statusaktif">
                                     <?php foreach ($data['combo'] as $status) : ?>;
                                     <option value="<?= $status['id'] ?>" <?= $status['id'] == @$user['statusaktif'] ? 'selected' : '' ?>><?= $status['keterangan'] ?></option>
@@ -124,7 +118,6 @@
         $('[name]').addClass('disabled')
     }
 
-
     $(document).ready(function() {
         $('form').submit(function(e) {
             e.preventDefault()
@@ -158,24 +151,22 @@
             })
         })
 
-
         $('#selectcabang_id').select2({
             data: JSON.parse(`<?php echo json_encode($data['combocabang']); ?>`),
             width: '100%',
             templateResult: formatSelect,
             templateSelection: formatSelect,
+            matcher: matcher,
             escapeMarkup: function(m) {
                 return m;
             },
-            matcher: matcher
         })
 
-        var firstEmptySelect = true;
+        var firstEmptySelect = false;
 
         function formatSelect(result) {
             if (!result.id) {
                 if (firstEmptySelect) {
-                    console.log('showing row');
                     firstEmptySelect = false;
 
                     return '<div class="row">' +
@@ -183,11 +174,8 @@
                         '<div class="col-sm-4"><b>Nama Cabang</b></div>' +
                         '</div>';
                 } else {
-                    console.log('skipping row');
                     return false;
                 }
-                console.log('result');
-                console.log(result);
             }
             return '<div class="row">' +
                 '<div class="col-sm-3">' + result.id + '</div>' +
