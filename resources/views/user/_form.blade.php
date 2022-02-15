@@ -41,11 +41,18 @@
 
                         <div class="form-group row">
                             <label for="staticEmail" class="col-12 col-sm-3 col-form-label">Cabang<span class="text-danger">*</span></label>
-                            <div class="col-12 col-sm-9">
+                            <!-- <div class="col-12 col-sm-9">
                                 <select id="selectcabang_id" name="cabang_id">
                                     <optgroup label="">
                                         <option value="{{ $user['cabang_id'] ?? '' }}"></option>
                                     </optgroup>
+                                </select>
+                            </div> -->
+                            <div class="col-12 col-sm-9">
+                                <select class="form-control select2bs4  <?= @$disable2 ?>" style="width: 100%;" name="cabang_id" id="cabang_id">
+                                    <?php foreach ($data['combocabang'] as $status) : ?>;
+                                    <option value="<?= $status['id'] ?>" <?= $status['id'] == @$user['cabang_id'] ? 'selected' : '' ?>><?= $status['namacabang'] ?></option>
+                                <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
