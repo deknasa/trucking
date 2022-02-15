@@ -457,6 +457,11 @@ $(".datepicker")
 		}
 	});
 
-$(document).find("select").select2({
-	theme: "bootstrap4",
-});
+$(document)
+	.find("select")
+	.select2({
+		theme: "bootstrap4",
+	})
+	.on("select2:open", function (e) {
+		document.querySelector(".select2-search__field").focus();
+	});
