@@ -29,7 +29,7 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ asset('/reports/ReportAbsensi.mrt') }}`)
+      report.loadFile(`{{ asset('public/reports/ReportAbsensi.mrt') }}`)
 
       report.dictionary.dataSources.clear()
 
