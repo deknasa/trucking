@@ -19,6 +19,14 @@
                                 <input type="text" name="id" class="form-control" value="{{ $error['id'] ?? '' }}" readonly>
                             </div>
                         </div>
+
+                        <div class="row form-group">
+                            <label for="staticEmail" class="col-sm-3 col-form-label">Kode Error<span class="text-danger">*</span></label>
+                            <div class="col-sm-6">
+                                <input type="text" name="kodeerror" class="form-control" value="{{ $error['kodeerror'] ?? '' }}">
+                            </div>
+                        </div>
+
                         <div class="row form-group">
                             <label for="staticEmail" class="col-sm-3 col-form-label">Keterangan<span class="text-danger">*</span></label>
                             <div class="col-sm-6">
@@ -85,7 +93,7 @@
                     $('.invalid-feedback').remove()
 
                     if (response.status) {
-                            window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
+                        window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
                     }
 
                     if (response.errors) {

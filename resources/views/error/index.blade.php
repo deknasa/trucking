@@ -89,6 +89,11 @@
             align: 'left'
           },
           {
+            label: 'KODE ERROR',
+            name: 'kodeerror',
+            align: 'left'
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
