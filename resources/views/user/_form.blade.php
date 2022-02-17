@@ -41,20 +41,20 @@
 
                         <div class="form-group row">
                             <label for="staticEmail" class="col-12 col-sm-3 col-form-label">Cabang<span class="text-danger">*</span></label>
-                            <!-- <div class="col-12 col-sm-9">
+                            <div class="col-12 col-sm-9">
                                 <select id="selectcabang_id" name="cabang_id">
                                     <optgroup label="">
                                         <option value="{{ $user['cabang_id'] ?? '' }}"></option>
                                     </optgroup>
                                 </select>
-                            </div> -->
-                            <div class="col-12 col-sm-9">
+                            </div>
+                            <!-- <div class="col-12 col-sm-9">
                                 <select class="form-control select2bs4  <?= @$disable2 ?>" style="width: 100%;" name="cabang_id" id="cabang_id">
                                     <?php foreach ($data['combocabang'] as $status) : ?>;
                                     <option value="<?= $status['id'] ?>" <?= $status['id'] == @$user['cabang_id'] ? 'selected' : '' ?>><?= $status['namacabang'] ?></option>
                                 <?php endforeach; ?>
                                 </select>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="row form-group">
@@ -160,9 +160,10 @@
 
         $('#selectcabang_id').select2({
             data: JSON.parse(`<?php echo json_encode($data['combocabang']); ?>`),
+            theme: 'bootstrap4',
             width: '100%',
-            templateResult: formatSelect,
-            templateSelection: formatSelect,
+            templateResult: formatResult,
+            templateSelection: formatSelection,
             matcher: matcher,
             escapeMarkup: function(m) {
                 return m;
@@ -171,14 +172,20 @@
 
         var firstEmptySelect = false;
 
-        function formatSelect(result) {
+        function formatSelection(selection) {
+            return '<div class="row">' +
+                '<div class="col-12">' + selection.namacabang + '</div>' +
+                '</div>';
+        }
+
+        function formatResult(result) {
             if (!result.id) {
                 if (firstEmptySelect) {
                     firstEmptySelect = false;
 
                     return '<div class="row">' +
                         '<div class="col-sm-3"><b>ID</b></div>' +
-                        '<div class="col-sm-4"><b>Nama Cabang</b></div>' +
+                        '<div class="col-sm-9"><b>Nama Cabang</b></div>' +
                         '</div>';
                 } else {
                     return false;
@@ -186,23 +193,32 @@
             }
             return '<div class="row">' +
                 '<div class="col-sm-3">' + result.id + '</div>' +
-                '<div class="col-sm-4">' + result.namacabang + '</div>' +
+                '<div class="col-sm-9">' + result.namacabang + '</div>' +
                 '</div>';
         }
 
         function matcher(query, option) {
             firstEmptySelect = true;
+
             if (!query.term) {
                 return option;
             }
+
             var has = true;
             var words = query.term.toUpperCase().split(" ");
+
             for (var i = 0; i < words.length; i++) {
                 var word = words[i];
-                has = has && (option.text.toUpperCase().indexOf(word) >= 0);
+                if (option.namacabang !== undefined) {
+                    has = has && (option.namacabang.toUpperCase().indexOf(word) >= 0);
+                }
             }
-            if (has) return option;
-            return false;
+
+            if (has) {
+                return option
+            }
+            
+            return null;
         }
 
         /* Get field maxlength */
