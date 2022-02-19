@@ -142,7 +142,14 @@ $indexRow = $_GET['indexRow'] ?? '';
           }
         },
         error: error => {
-          alert(`${error.statusText} | ${error.responseText}`)
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(error.responseJSON.errors);
+          } else {
+            showDialog(error.statusText)
+          }
         },
       }).always(() => {
         $('#loader').addClass('d-none')

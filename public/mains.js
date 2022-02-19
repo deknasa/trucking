@@ -457,6 +457,7 @@ $(".datepicker")
 		}
 	});
 
+/* Select2: Autofocus search input on open */
 $(document)
 	.find("select")
 	.select2({
@@ -465,3 +466,10 @@ $(document)
 	.on("select2:open", function (e) {
 		document.querySelector(".select2-search__field").focus();
 	});
+
+function showDialog(message = '') {
+	$('#dialog-message p').html(message)
+	$('#dialog-message').dialog({
+		modal: true
+	})
+}

@@ -180,13 +180,13 @@
         ondblClickRow: function(rowid) {
 
         },
-        loadComplete: function(data) {
+        loadComplete: function(data, b, c, d) {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
 
           if (data.message !== "" && data.message !== undefined && data.message !== null) {
-            alert(data.message)
+            showDialog(data.message)
           }
 
           /* Set global variables */
@@ -222,7 +222,7 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
-        }
+        },
       })
 
       .jqGrid("navGrid", pager, {

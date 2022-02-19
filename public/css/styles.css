@@ -140,3 +140,7 @@
 .autonumeric {
     text-align: right !important;
 }
+
+.ui-dialog {
+    z-index: 9999 !important;
+}

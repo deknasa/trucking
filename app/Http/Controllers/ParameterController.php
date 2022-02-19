@@ -78,16 +78,20 @@ class ParameterController extends Controller
 
     public function store(Request $request): Response
     {
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
-            ->withToken(session('access_token'))
-            ->post(config('app.api_url') . 'parameter', $request->all());
-
-        return response($response);
+        try {
+            $request['modifiedby'] = Auth::user()->name;
+    
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ])
+                ->withToken(session('access_token'))
+                ->post(config('app.api_url') . 'parameter', $request->all());
+    
+            return response($response, $response->status());
+        } catch (\Throwable $th) {
+            throw $th->getMessage();
+        }
     }
 
     /**

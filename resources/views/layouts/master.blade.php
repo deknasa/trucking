@@ -8,7 +8,7 @@
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  
+
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
 
@@ -37,6 +37,11 @@
     <h1 id="txt1">Mohon Tunggu</h1>
   </div>
 
+  <div id="dialog-message" title="Pesan" class="text-center text-danger" style="display: none;">
+    <span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
+    <p></p>
+  </div>
+
   <div class="wrapper">
     @include('layouts._navbar')
 
@@ -48,15 +53,15 @@
 
     @include('layouts._footer')
   </div>
-
+  
   <!-- jQuery -->
   <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 
-  <!-- jQuery UI -->
-  <script src="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.js') }}"></script>
-
   <!-- Bootstrap 4 -->
   <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+  <!-- jQuery UI -->
+  <script src="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.js') }}"></script>
 
   <!-- ChartJS -->
   <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
