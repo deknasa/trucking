@@ -6,7 +6,7 @@
   </ul>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
-      <span id="tempattanggal"></span> / <span id="tempatjam"></span>
+      <span id="tempattanggal"></span>/ <span id="tempatjam"></span>
     </li>
   </ul>
 </nav>
