@@ -70,6 +70,10 @@
     margin-right: auto;
 }
 
+#jqGridPager_right {
+    width: 15% !important;
+}
+
 /* Make jqgrid pager responsive */
 @media only screen and (max-width: 1000px) {
     .ui-pager-control {

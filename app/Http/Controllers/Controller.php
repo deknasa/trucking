@@ -39,6 +39,7 @@ class Controller extends BaseController
 
         $this->myAuth->auth($this->class, $this->method);
         
+        
         $this->loadMenu();
     }
 
@@ -73,6 +74,7 @@ class Controller extends BaseController
     public function loadMenu(): void
     {
         $menu = $this->getMenu();
+
         View::share('sqlmenu', $menu);
     }
 
@@ -91,7 +93,6 @@ class Controller extends BaseController
             ->where('menu.menuparent', $induk)
             ->orderby(DB::raw('right(menukode,1)'), 'ASC')
             ->get(['menu.id', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
-
 
         foreach ($menu as $row) {
             $hasPermission = $this->myAuth->hasPermission($row->class, $row->method);

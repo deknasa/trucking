@@ -1,12 +1,12 @@
-@php
+<?php
 
 $limit = $_GET['limit'] ?? 10;
 $sortname = $_GET['sortname'] ?? 'id';
-$sortorder = $_GET['sortorder'] ?? 'id';
+$sortorder = $_GET['sortorder'] ?? 'asc';
 $page = $_GET['page'] ?? '';
 $indexRow = $_GET['indexRow'] ?? '';
 
-@endphp
+?>
 
 <div class="container-fluid">
   <div class="row">
@@ -133,7 +133,7 @@ $indexRow = $_GET['indexRow'] ?? '';
           $('.invalid-feedback').remove()
 
           if (response.status) {
-            window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
+            window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $sortname }}&sortorder={{ $sortorder }}&limit={{ $limit }}`
 
           }
 

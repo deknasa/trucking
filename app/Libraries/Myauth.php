@@ -16,13 +16,46 @@ class Myauth
     private $conn;
     private $authController;
     private $exceptAuth = [
-        'class' => ['useracl', 'login', 'home', 
-                    'relasi', 'extension', 'logout', 
-                    'acos', 'dashboard', 'combo', 'help', 
-                    'test', 'parameter', 'user', 'role',
-                    'menu', 'userrole', 'error', 'acl'
-                ],
-        'method' => ['gridtab', 'grid', 'operation', 'excel', 'crud', 'carishippersama', 'listmarketingcabang', 'good', 'nonaktif', 'fieldLength', 'griddetail', 'detail', 'show', 'cetak', 'getdetail', 'report'],
+        'class' => [
+            '',
+            'useracl',
+            'login',
+            'home',
+            'relasi',
+            'extension',
+            'logout',
+            'acos',
+            'dashboard',
+            'combo',
+            'help',
+            'test',
+            'parameter',
+            'user',
+            'role',
+            'menu',
+            'userrole',
+            'error',
+            'acl',
+            'cabang'
+        ],
+        'method' => [
+            'gridtab',
+            'grid',
+            'operation',
+            'excel',
+            'crud',
+            'carishippersama',
+            'listmarketingcabang',
+            'good',
+            'nonaktif',
+            'fieldLength',
+            'griddetail',
+            'detail',
+            'show',
+            'cetak',
+            'getdetail',
+            'report'
+        ],
     ];
 
     public function __construct($params)
@@ -71,7 +104,6 @@ class Myauth
         $userRole = DB::table('userrole')
             ->where('user_id', $this->userPK)
             ->get();
-
 
         $data_union = DB::table('acos')
             ->select(['acos.id', 'acos.class', 'acos.method'])

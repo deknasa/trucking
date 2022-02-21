@@ -457,11 +457,15 @@ $(".datepicker")
 		}
 	});
 
-$(document).find("select").select2({
-	theme: "bootstrap4",
-});
-
 $(document).on("input", ".numbernoseparate", function() {
     this.value = this.value.replace(/\D/g, '');
 });
 
+$(document)
+	.find("select")
+	.select2({
+		theme: "bootstrap4",
+	})
+	.on("select2:open", function (e) {
+		document.querySelector(".select2-search__field").focus();
+	});

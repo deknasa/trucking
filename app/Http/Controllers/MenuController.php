@@ -97,7 +97,10 @@ class MenuController extends Controller
         ])
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'menu', $request->all());
-
+            if ($response->status() == 422) {
+                // return response($response['messages']['class'][0], 500);
+                return response($response['messages'], 500);
+            }
         return response($response);
     }
 
@@ -118,7 +121,6 @@ class MenuController extends Controller
 
         $menu = $response['data'];
         $data = [
-            'nama' => $this->getdata($menu['aco_id'])['nama'],
             'combo' => $this->combo('entry'),
             'class' => $this->listclassall(),
 
