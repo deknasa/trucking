@@ -16,6 +16,7 @@ use App\Http\Controllers\ErrorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TradoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -112,5 +113,9 @@ Route::middleware('auth')->group(function () {
     Route::get('useracl/get', [UserAclController::class, 'get'])->name('useracl.get');
 
     Route::resource('useracl', UserAclController::class);    
+
+    Route::get('trado/field_length', [TradoController::class, 'fieldLength'])->name('trado.field_length');
+    Route::get('trado/{id}/delete', [TradoController::class, 'delete'])->name('trado.delete');
+    Route::resource('trado', TradoController::class);
 
 });

@@ -457,6 +457,10 @@ $(".datepicker")
 		}
 	});
 
+$(document).on("input", ".numbernoseparate", function () {
+	this.value = this.value.replace(/\D/g, "");
+});
+
 /* Select2: Autofocus search input on open */
 $(document)
 	.find("select")
@@ -467,9 +471,9 @@ $(document)
 		document.querySelector(".select2-search__field").focus();
 	});
 
-function showDialog(message = '') {
-	$('#dialog-message p').html(message)
-	$('#dialog-message').dialog({
-		modal: true
-	})
+function showDialog(message = "") {
+	$("#dialog-message p").html(message);
+	$("#dialog-message").dialog({
+		modal: true,
+	});
 }

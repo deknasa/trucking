@@ -8,6 +8,7 @@ function formatUang(nilai){
     }
     return nilai;
 }
+
 function nl2br(str) {
   var break_tag = '<br>';
   return (str + '').replace(/([^>rn]?)(rn|nr|r|n)/g, '' + break_tag + '');
