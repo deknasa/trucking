@@ -12,19 +12,20 @@
                         <input type="hidden" name="indexRow" value="{{ $_GET['indexRow'] ?? 1 }}">
                         <input type="hidden" name="page" value="{{ $_GET['page'] ?? 1 }}">
 
-
                         <div class="row form-group">
                             <label for="staticEmail" class="col-sm-3 col-form-label">ID <span class="text-danger"></span></label>
                             <div class="col-sm-2">
                                 <input type="text" name="id" class="form-control" value="{{ $cabang['id'] ?? '' }}" readonly>
                             </div>
                         </div>
+
                         <div class="row form-group">
                             <label for="staticEmail" class="col-sm-3 col-form-label">Kode Cabang<span class="text-danger">*</span></label>
                             <div class="col-sm-3">
                                 <input type="text" name="kodecabang" class="form-control" value="{{ $cabang['kodecabang'] ?? '' }}">
                             </div>
                         </div>
+                        
                         <div class="row form-group">
                             <label for="staticEmail" class="col-sm-3 col-form-label">Nama Cabang<span class="text-danger">*</span></label>
                             <div class="col-sm-6">

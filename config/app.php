@@ -239,6 +239,7 @@ return [
      * To define API_URL. So that, it can
      * be called for every API Request.
      */
-    'api_url' => 'http://localhost/trucking-laravel/public/api/',
+    
+    'api_url' => 'http://localhost:8080/trucking-laravel/public/',
     'apppath' => 'c:/xampp/htdocs/truck/app/http/',
 ];

@@ -43,7 +43,7 @@ class AuthController extends Controller
             $token = Http::withHeaders([
                 'Accept' => 'application/json'
             ])->post(config('app.api_url') . 'token', $credentials);
-
+            
             session(['access_token' => $token['access_token']]);
 
             return redirect()->intended(RouteServiceProvider::HOME);
@@ -60,4 +60,5 @@ class AuthController extends Controller
 
         return redirect()->route('login');
     }
+
 }
