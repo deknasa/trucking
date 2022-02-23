@@ -134,6 +134,8 @@ class Controller extends BaseController
             }
 
             $this->breadcrumb = join(' / ', array_reverse($breadcrumbs));
+        } else {
+            $this->breadcrumb = 'Dashboard';
         }
     }
 }
