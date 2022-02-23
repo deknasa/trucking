@@ -89,7 +89,10 @@
       margin-right: auto;
     }
 
-    .dz-image img { width: 100% !important;height: 100% !important; }
+    .dz-image img {
+      width: 100% !important;
+      height: 100% !important;
+    }
 
     /* #split-bar {
       height: 100%;
@@ -182,8 +185,6 @@
   <!-- Custom styles -->
   <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 
-  <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
   <link rel="stylesheet" href="{{ asset('plugins/dropzone/dropzone.css') }}">
 
   <style>
@@ -211,12 +212,25 @@
     @include('layouts._sidebar')
 
     <div class="content-wrapper">
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-12">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item active">
+                  {!! \App\Helpers\Menu::setBreadcrumb() !!} / {{ (new \App\Http\Controllers\Controller)->method }}
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
       @yield('content')
     </div>
 
     @include('layouts._footer')
   </div>
-  
+
   <!-- jQuery -->
   <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 
@@ -284,9 +298,7 @@
           $(this).focus()
         }
       })
-      .focus(function() {
-      })
-
+      .focus(function() {})
   </script>
 </body>
 

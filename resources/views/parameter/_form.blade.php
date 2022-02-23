@@ -170,7 +170,7 @@ $indexRow = $_GET['indexRow'] ?? '';
         })
       },
       error: error => {
-        alert(`${error.statusText} | ${error.responseText}`)
+        showDialog(error.statusText)
       }
     })
   })

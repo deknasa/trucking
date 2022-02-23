@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Illuminate\Support\Facades\URL;
+use App\Http\Controllers\Controller;
 
 class Menu
 {
@@ -41,5 +42,12 @@ class Menu
       }
     }
     return $str;
+  }
+
+  public function setBreadcrumb()
+  {
+    $controller = new Controller;
+
+    return $controller->breadcrumb;
   }
 }

@@ -5,14 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Menu extends Model
+class Aco extends Model
 {
     use HasFactory;
-
-    protected $table = 'menu';
-
-    public function aco()
+    
+    public function menu()
     {
-        return Aco::where('id', $this->aco_id)->first();
+        return $this->belongsTo(Menu::class);
     }
 }

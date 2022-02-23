@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menu;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -36,11 +37,12 @@ class ParameterController extends Controller
     public function index(Request $request)
     {
         $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
 
-        return view('parameter.index', compact('title'));
+        return view('parameter.index', compact('title', 'breadcrumb'));
     }
 
-    public function get($params = []): array
+    public function get($params = [])
     {
         $params = [
             'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
@@ -62,6 +64,10 @@ class ParameterController extends Controller
             'message' => $response['message'] ?? ''
         ];
 
+        if (request()->ajax()) {
+            return response($data, $response->status());
+        }
+        
         return $data;
     }
 
@@ -72,8 +78,9 @@ class ParameterController extends Controller
     public function create(): View
     {
         $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
 
-        return view('parameter.add', compact('title'));
+        return view('parameter.add', compact('title', 'breadcrumb'));
     }
 
     public function store(Request $request): Response

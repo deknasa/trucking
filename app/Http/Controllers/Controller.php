@@ -27,19 +27,20 @@ class Controller extends BaseController
     public $myAuth;
     public $class;
     public $method;
+    public $breadcrumb;
 
     public function __construct()
     {
         $this->setClass();
         $this->setMethod();
+        $this->setBreadcrumb($this->class);
 
         $this->setMyAuthConfig();
 
         $this->initMyauth();
 
         $this->myAuth->auth($this->class, $this->method);
-        
-        
+
         $this->loadMenu();
     }
 
@@ -48,7 +49,7 @@ class Controller extends BaseController
         $uri = Route::current()->uri();
 
         $class = explode('/', $uri)[0];
-        
+
         $this->class = $class;
     }
 
@@ -96,7 +97,7 @@ class Controller extends BaseController
 
         foreach ($menu as $row) {
             $hasPermission = $this->myAuth->hasPermission($row->class, $row->method);
-            
+
             if ($hasPermission || $row->class == null) {
                 $data[] = [
                     'menuid' => $row->id,
@@ -117,5 +118,22 @@ class Controller extends BaseController
     public function hasPermission($class, $method)
     {
         return $this->myAuth->hasPermission($class, $method);
+    }
+
+    public function setBreadcrumb($class): void
+    {
+        $breadcrumbs = [];
+
+        $menu = ModelsMenu::where('menuname', $this->class)->first();
+
+        if (isset($menu)) {
+            $breadcrumbs[] = isset($menu->aco_id) && $menu->aco_id == 0 ? $menu->menuname : '<a href="' . URL::to('/') . '/' . $menu->aco()->class . '/' . $menu->aco()->method . '">' . $menu->menuname . '</a>';
+
+            while (null !== $menu = ModelsMenu::find($menu->menuparent)) {
+                $breadcrumbs[] = isset($menu->aco_id) && $menu->aco_id == 0 ? $menu->menuname : '<a href="' . URL::to('/') . '/' . $menu->aco()->class . '/' . $menu->aco()->method . '">' . $menu->menuname . '</a>';
+            }
+
+            $this->breadcrumb = join(' / ', array_reverse($breadcrumbs));
+        }
     }
 }
