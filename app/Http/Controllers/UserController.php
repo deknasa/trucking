@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +22,6 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-
 
 
 
@@ -113,7 +113,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $request['modifiedby'] = Auth::user()->name;
-            $response = Http::withHeaders([
+        $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])

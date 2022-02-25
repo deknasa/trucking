@@ -42,17 +42,21 @@
         </div>
       </div>
     </div>
-    <!-- \App\Helpers\Menu::print_recursive_list($data['child']); -->
     <!-- Sidebar Menu -->
 
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
         <?php
 
+        use App\Http\Controllers\Controller;
+        use App\Models\Menu;
 
         $sub = "";
         $plain = "";
         $n = 0;
+        // $current_menu = Menu::where('menuname', (new Controller)->class)->first();
+        // $get_parent = Menu::where('id', $current_menu->menuparent)->first();
+        // $get_all = Menu::where('id', $get_parent->menuparent)->first();
         foreach ($sqlmenu as $data) {
           $n++;
           $x = \App\Helpers\Menu::print_recursive_list($data['child']);
@@ -61,8 +65,10 @@
           // $menuexe = $data['link']!=''?$data['link']:$menuexe;
           if ($x !== "") {
         ?>
-
-            <li class="nav-item">
+            <!--  $get_parent->menuparent == $data['menuid'] ? 'menu-is-opening menu-open' : ''  -->
+            <!-- dump($get_parent->menuparent == $data['menuid']); -->
+             <!-- $get_parent->menuparent == $data['menuid'] ? 'menu-is-opening active' : '' -->
+            <li class="nav-item menu-open ">
               <a href="javascript:void(0)" class="nav-link" id="<?= $data['menukode'] ?>">
                 <i class="nav-icon <?php echo $data['menuicon'] ?>"></i>
                 <p>
@@ -71,7 +77,7 @@
                 </p>
               </a>
               <ul class="nav nav-treeview">
-                <?php echo \App\Helpers\Menu::print_recursive_list($data['child']); ?>
+                <?php echo \App\Helpers\Menu::print_recursive_list($data['child'], $data['menuname']); ?>
               </ul>
             </li>
 

@@ -89,7 +89,10 @@
       margin-right: auto;
     }
 
-    .dz-image img { width: 100% !important;height: 100% !important; }
+    .dz-image img {
+      width: 100% !important;
+      height: 100% !important;
+    }
 
     /* #split-bar {
       height: 100%;
@@ -195,7 +198,7 @@
 
 </head>
 
-<body class="sidebar-mini layout-fixed sidebar-closed sidebar-collapse">
+<body class="sidebar-mini layout-fixed sidebar-collapse">
   <div class="loader d-none" id="loader">
     <h1 id="txt1">Mohon Tunggu</h1>
   </div>
@@ -204,6 +207,8 @@
     <span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
     <p></p>
   </div>
+
+  @dd((new \App\Http\Controllers\Controller)->class);
 
   <div class="wrapper">
     @include('layouts._navbar')
@@ -216,9 +221,10 @@
 
     @include('layouts._footer')
   </div>
-  
+
   <!-- jQuery -->
   <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+  <script src="{{ asset('js/jquery.min.js') }}"></script>
 
   <!-- Bootstrap 4 -->
   <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -284,9 +290,7 @@
           $(this).focus()
         }
       })
-      .focus(function() {
-      })
-
+      .focus(function() {})
   </script>
 </body>
 

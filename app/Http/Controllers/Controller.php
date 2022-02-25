@@ -38,8 +38,8 @@ class Controller extends BaseController
         $this->initMyauth();
 
         $this->myAuth->auth($this->class, $this->method);
-        
-        
+
+
         $this->loadMenu();
     }
 
@@ -48,7 +48,7 @@ class Controller extends BaseController
         $uri = Route::current()->uri();
 
         $class = explode('/', $uri)[0];
-        
+
         $this->class = $class;
     }
 
@@ -92,11 +92,11 @@ class Controller extends BaseController
         $menu = ModelsMenu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')
             ->where('menu.menuparent', $induk)
             ->orderby(DB::raw('right(menukode,1)'), 'ASC')
-            ->get(['menu.id', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
+            ->get(['menu.id', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode', 'menu.menuparent']);
 
         foreach ($menu as $row) {
             $hasPermission = $this->myAuth->hasPermission($row->class, $row->method);
-            
+
             if ($hasPermission || $row->class == null) {
                 $data[] = [
                     'menuid' => $row->id,
@@ -106,7 +106,9 @@ class Controller extends BaseController
                     'menuno' => substr($row->menukode, -1),
                     'menukode' => $row->menukode,
                     'menuexe' => $row->class . "/" . $row->method,
-                    'child' => $this->getMenu($row->id)
+                    'class' => $row->class,
+                    'child' => $this->getMenu($row->id),
+                    'menuparent' => $row->menuparent,
                 ];
             }
         }
