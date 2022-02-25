@@ -19,12 +19,16 @@ $(document).ready(function() {
         decimalCharacter: ",",
     });
 });
+$(document).ajaxError((event, jqXHR, ajaxSettings, thrownError) => {
+    if (jqXHR.status !== 422) {
+        showDialog(thrownError)
+    }
+})
 
 $(window).on("resize", function(event) {
-    if ($(window).width() > 992) {
+    if ($(window).width() > 990) {
         $("body").removeClass();
         $("body").addClass("sidebar-collapse");
-        // alert($(window).width());
     }
 });
 
@@ -69,10 +73,10 @@ function setErrorMessages(errors) {
 
     $.each(errors, (index, error) => {
         $(`[name=${index}]`).addClass("is-invalid").after(`
-<div class="invalid-feedback">
-${error}
-</div>
-`);
+			<div class="invalid-feedback">
+			${error}
+			</div>
+		`);
     });
 }
 

@@ -27,11 +27,13 @@ class Controller extends BaseController
     public $myAuth;
     public $class;
     public $method;
+    public $breadcrumb;
 
     public function __construct()
     {
         $this->setClass();
         $this->setMethod();
+        $this->setBreadcrumb($this->class);
 
         $this->setMyAuthConfig();
 
@@ -119,5 +121,24 @@ class Controller extends BaseController
     public function hasPermission($class, $method)
     {
         return $this->myAuth->hasPermission($class, $method);
+    }
+
+    public function setBreadcrumb($class): void
+    {
+        $breadcrumbs = [];
+
+        $menu = ModelsMenu::where('menuname', $this->class)->first();
+
+        if (isset($menu)) {
+            $breadcrumbs[] = isset($menu->aco_id) && $menu->aco_id == 0 ? $menu->menuname : '<a href="' . URL::to('/') . '/' . $menu->aco()->class . '/' . $menu->aco()->method . '">' . $menu->menuname . '</a>';
+
+            while (null !== $menu = ModelsMenu::find($menu->menuparent)) {
+                $breadcrumbs[] = isset($menu->aco_id) && $menu->aco_id == 0 ? $menu->menuname : '<a href="' . URL::to('/') . '/' . $menu->aco()->class . '/' . $menu->aco()->method . '">' . $menu->menuname . '</a>';
+            }
+
+            $this->breadcrumb = join(' / ', array_reverse($breadcrumbs));
+        } else {
+            $this->breadcrumb = 'Dashboard';
+        }
     }
 }

@@ -46,4 +46,11 @@ class Menu
     }
     return $str;
   }
+
+  public function setBreadcrumb()
+  {
+    $controller = new Controller;
+
+    return $controller->breadcrumb;
+  }
 }
