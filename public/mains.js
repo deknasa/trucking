@@ -220,6 +220,11 @@ function setCustomBindKeys(grid) {
 					}
 				}
 			}
+
+			console.log($('.ui-jqgrid-bdiv').find('tbody').animate({
+				scrollTop: 200
+			}));
+			console.log($('.table-success').position().top > 300);
 		}
 	});
 }

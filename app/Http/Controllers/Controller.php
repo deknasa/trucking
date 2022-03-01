@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Menu;
 use App\Libraries\Myauth;
+use App\Models\Aco;
 use App\Models\Menu as ModelsMenu;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -33,6 +34,7 @@ class Controller extends BaseController
     {
         $this->setClass();
         $this->setMethod();
+        
         $this->setBreadcrumb($this->class);
 
         $this->setMyAuthConfig();
@@ -124,13 +126,15 @@ class Controller extends BaseController
     {
         $breadcrumbs = [];
 
-        $menu = ModelsMenu::where('menuname', $this->class)->first();
+        $aco = Aco::where('class', $this->class)->first();
+
+        $menu = ModelsMenu::where('aco_id', $aco->id)->first();
 
         if (isset($menu)) {
-            $breadcrumbs[] = isset($menu->aco_id) && $menu->aco_id == 0 ? $menu->menuname : '<a href="' . URL::to('/') . '/' . $menu->aco()->class . '/' . $menu->aco()->method . '">' . $menu->menuname . '</a>';
+            $breadcrumbs[] = isset($menu->aco_id) && $menu->aco_id == 0 ? $menu->menuname : '<a href="' . URL::to('/') . '/' . $menu->aco->class . '/' . $menu->aco->method . '">' . $menu->menuname . '</a>';
 
             while (null !== $menu = ModelsMenu::find($menu->menuparent)) {
-                $breadcrumbs[] = isset($menu->aco_id) && $menu->aco_id == 0 ? $menu->menuname : '<a href="' . URL::to('/') . '/' . $menu->aco()->class . '/' . $menu->aco()->method . '">' . $menu->menuname . '</a>';
+                $breadcrumbs[] = isset($menu->aco_id) && $menu->aco_id == 0 ? $menu->menuname : '<a href="' . URL::to('/') . '/' . $menu->aco->class . '/' . $menu->aco->method . '">' . $menu->menuname . '</a>';
             }
 
             $this->breadcrumb = join(' / ', array_reverse($breadcrumbs));

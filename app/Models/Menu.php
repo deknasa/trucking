@@ -10,9 +10,9 @@ class Menu extends Model
     use HasFactory;
 
     protected $table = 'menu';
-
+    
     public function aco()
     {
-        return Aco::where('id', $this->aco_id)->first();
+        return $this->belongsTo(Aco::class);
     }
 }
