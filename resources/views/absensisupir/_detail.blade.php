@@ -10,7 +10,7 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('absensi_detail.index') }}"
+  let detailIndexUrl = "{{ route('absensisupir_detail.index') }}"
 
   /**
    * Custom Functions

@@ -71,12 +71,12 @@
 </div>
 
 <!-- Detail -->
-@include('absensi._detail')
+@include('absensisupir._detail')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('absensi.index') }}"
-  let getUrl = "{{ route('absensi.get') }}"
+  let indexUrl = "{{ route('absensisupir.index') }}"
+  let getUrl = "{{ route('absensisupir.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -253,7 +253,7 @@
         onClickButton: function() {
           let limit = $(this).jqGrid('getGridParam', 'postData').rows
 
-          window.location.href = `{{ route('absensi.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+          window.location.href = `{{ route('absensisupir.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
 
@@ -374,9 +374,9 @@
       let actionUrl = ``
 
       if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('absensi.export') }}`
+        actionUrl = `{{ route('absensisupir.export') }}`
       } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('absensi.report') }}`
+        actionUrl = `{{ route('absensisupir.report') }}`
       }
 
       /* Clear validation messages */

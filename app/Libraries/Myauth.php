@@ -36,7 +36,8 @@ class Myauth
             'userrole',
             'error',
             'acl',
-            'cabang'
+            'cabang',
+            'absensisupir'
         ],
         'method' => [
             'gridtab',

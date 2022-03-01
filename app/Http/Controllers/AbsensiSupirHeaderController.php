@@ -27,7 +27,7 @@ class AbsensiSupirHeaderController extends Controller
     {
         $title = $this->title;
 
-        return view('absensi.index', compact('title'));
+        return view('absensisupir.index', compact('title'));
     }
 
     public function get($params = [])
@@ -71,7 +71,7 @@ class AbsensiSupirHeaderController extends Controller
             'status' => $this->getStatus(),
         ];
 
-        return view('absensi.add', compact('title', 'noBukti', 'combo', 'kasGantungNoBukti'));
+        return view('absensisupir.add', compact('title', 'noBukti', 'combo', 'kasGantungNoBukti'));
     }
 
     public function store(Request $request)
@@ -87,11 +87,14 @@ class AbsensiSupirHeaderController extends Controller
         $request->merge([
             'uangjalan' => $request->uangjalan
         ]);
-        
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])->post(config('app.api_url') . 'absensi', $request->all());
+        if ($response->status() == 422) {
+            return response($response['messages'], 500);
+        }
 
         return response($response);
     }
@@ -116,7 +119,7 @@ class AbsensiSupirHeaderController extends Controller
             'status' => $this->getStatus(),
         ];
 
-        return view('absensi.edit', compact('title', 'absensi', 'combo'));
+        return view('absensisupir.edit', compact('title', 'absensi', 'combo'));
     }
 
     public function update(Request $request, $id)
@@ -162,7 +165,7 @@ class AbsensiSupirHeaderController extends Controller
                 'status' => $this->getStatus(),
             ];
 
-            return view('absensi.delete', compact('title', 'combo', 'absensi'));
+            return view('absensisupir.delete', compact('title', 'combo', 'absensi'));
         } catch (\Throwable $th) {
             return redirect()->route('absensi.index');
         }
@@ -229,7 +232,7 @@ class AbsensiSupirHeaderController extends Controller
             'forReport' => true
         ];
 
-        foreach($absensis as $absensisIndex => $absensi) {
+        foreach ($absensis as $absensisIndex => $absensi) {
             $detailParams["whereIn[$absensisIndex]"] = $absensi['id'];
         }
 
@@ -256,7 +259,7 @@ class AbsensiSupirHeaderController extends Controller
 
         foreach ($absensis as &$absensi) {
             $absensi['nominal '] = number_format((float) $absensi['nominal'], '2', ',', '.');
-            
+
             foreach ($absensi['absensi_supir_detail'] as &$absensi_supir_detail) {
                 $absensi_supir_detail['trado'] = $absensi_supir_detail['trado']['nama'] ?? '';
                 $absensi_supir_detail['supir'] = $absensi_supir_detail['supir']['namasupir'] ?? '';
