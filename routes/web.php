@@ -83,14 +83,14 @@ Route::middleware('auth')->group(function () {
     Route::get('menu/get', [MenuController::class, 'get'])->name('menu.get');
     Route::resource('menu', MenuController::class);    
 
-    Route::get('absensi/{id}/delete', [AbsensiSupirHeaderController::class, 'delete'])->name('absensi.delete');
-    Route::get('absensi/index', [AbsensiSupirHeaderController::class, 'index']);
-    Route::get('absensi/get', [AbsensiSupirHeaderController::class, 'get'])->name('absensi.get');
-    Route::get('absensi/export', [AbsensiSupirHeaderController::class, 'export'])->name('absensi.export');
-    Route::get('absensi/report', [AbsensiSupirHeaderController::class, 'report'])->name('absensi.report');
-    Route::resource('absensi', AbsensiSupirHeaderController::class);
+    Route::get('absensisupir/{id}/delete', [AbsensiSupirHeaderController::class, 'delete'])->name('absensisupir.delete');
+    Route::get('absensisupir/index', [AbsensiSupirHeaderController::class, 'index']);
+    Route::get('absensisupir/get', [AbsensiSupirHeaderController::class, 'get'])->name('absensisupir.get');
+    Route::get('absensisupir/export', [AbsensiSupirHeaderController::class, 'export'])->name('absensisupir.export');
+    Route::get('absensisupir/report', [AbsensiSupirHeaderController::class, 'report'])->name('absensisupir.report');
+    Route::resource('absensisupir', AbsensiSupirHeaderController::class);
 
-    Route::resource('absensi_detail', AbsensiSupirDetailController::class);
+    Route::resource('absensisupir_detail', AbsensiSupirDetailController::class);
 
     Route::get('userrole/{id}/delete', [UserRoleController::class, 'delete'])->name('userrole.delete');
     Route::get('userrole/field_length', [UserRoleController::class, 'fieldLength'])->name('userrole.field_length');
