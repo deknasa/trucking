@@ -117,14 +117,14 @@ class AbsensiSupirHeaderController extends Controller
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "absensi/$id");
 
-        $absensi = $response['data'];
+        $absensisupir = $response['data'];
         $combo = [
             'trado' => $this->getTrado(),
             'supir' => $this->getSupir(),
             'status' => $this->getStatus(),
         ];
 
-        return view('absensisupir.edit', compact('title', 'absensi', 'combo'));
+        return view('absensisupir.edit', compact('title', 'absensisupir', 'combo'));
     }
 
     public function update(Request $request, $id)
@@ -140,6 +140,8 @@ class AbsensiSupirHeaderController extends Controller
         $request->merge([
             'uangjalan' => $request->uangjalan
         ]);
+
+        $request['modifiedby'] = Auth::user()->name;
 
         $response = Http::withHeaders([
             'Accept' => 'application/json',
@@ -182,6 +184,8 @@ class AbsensiSupirHeaderController extends Controller
 
     public function destroy($id)
     {
+
+        $request['modifiedby'] = Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
