@@ -43,6 +43,7 @@ class AbsensiSupirHeaderController extends Controller
         ];
 
         $response = Http::withHeaders(request()->header())
+            ->withToken(session('access_token'))
             ->get('http://localhost/trucking-laravel/public/api/absensi', $params);
 
         $data = [
@@ -90,11 +91,13 @@ class AbsensiSupirHeaderController extends Controller
         ]);
 
         $request['modifiedby'] = Auth::user()->name;
-        
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'absensi', $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->post(config('app.api_url') . 'absensi', $request->all());
 
         return response($response, $response->status());
     }
@@ -110,7 +113,9 @@ class AbsensiSupirHeaderController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get(config('app.api_url') . "absensi/$id");
+        ])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "absensi/$id");
 
         $absensi = $response['data'];
         $combo = [
@@ -139,7 +144,9 @@ class AbsensiSupirHeaderController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "absensi/$id", $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->patch(config('app.api_url') . "absensi/$id", $request->all());
 
         return response($response);
     }
@@ -156,7 +163,9 @@ class AbsensiSupirHeaderController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "absensi/$id");
+            ])
+                ->withToken(session('access_token'))
+                ->get(config('app.api_url') . "absensi/$id");
 
             $absensisupir = $response['data'];
             $combo = [
@@ -176,28 +185,30 @@ class AbsensiSupirHeaderController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete(config('app.api_url') . "absensi/$id");
+        ])
+            ->withToken(session('access_token'))
+            ->delete(config('app.api_url') . "absensi/$id");
 
         return response($response);
     }
 
     public function getTrado()
     {
-        $response = Http::get(config('app.api_url') . 'trado');
+        $response = Http::withToken(session('access_token'))->get(config('app.api_url') . 'trado');
 
         return $response['data'];
     }
 
     public function getSupir()
     {
-        $response = Http::get(config('app.api_url') . 'supir');
+        $response = Http::withToken(session('access_token'))->get(config('app.api_url') . 'supir');
 
         return $response['data'];
     }
 
     public function getStatus()
     {
-        $response = Http::get(config('app.api_url') . 'absentrado');
+        $response = Http::withToken(session('access_token'))->get(config('app.api_url') . 'absentrado');
 
         return $response['data'];
     }
@@ -211,6 +222,7 @@ class AbsensiSupirHeaderController extends Controller
         ];
 
         $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . "absensi/running_number", $params);
 
         $noBukti = $response['data'] ?? 'No bukti tidak ditemukan';
@@ -237,6 +249,7 @@ class AbsensiSupirHeaderController extends Controller
         }
 
         $absensi_details = Http::withHeaders(request()->header())
+            ->withToken(session('access_token'))
             ->get('http://localhost/trucking-laravel/public/api/absensi_detail', $detailParams)['data'];
 
         foreach ($absensi_details as $absensi_detailsIndex => &$absensi_detail) {
