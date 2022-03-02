@@ -158,14 +158,14 @@ class AbsensiSupirHeaderController extends Controller
                 'Content-Type' => 'application/json'
             ])->get(config('app.api_url') . "absensi/$id");
 
-            $absensi = $response['data'];
+            $absensisupir = $response['data'];
             $combo = [
                 'trado' => $this->getTrado(),
                 'supir' => $this->getSupir(),
                 'status' => $this->getStatus(),
             ];
 
-            return view('absensisupir.delete', compact('title', 'combo', 'absensi'));
+            return view('absensisupir.delete', compact('title', 'combo', 'absensisupir'));
         } catch (\Throwable $th) {
             return redirect()->route('absensi.index');
         }

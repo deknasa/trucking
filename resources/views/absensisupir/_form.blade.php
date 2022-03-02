@@ -22,7 +22,7 @@
                 <label>TANGGAL</label>
               </div>
               <div class="col-12 col-md-4">
-                <input type="text" name="tgl" class="form-control datepicker" value="{{ $absensisupir['tgl'] ?? '' }}">
+                <input type="text" name="tgl" class="form-control datepicker" value="{{ $absensisupir['tgl'] ?? date('d-m-Y') }}">
               </div>
             </div>
 
