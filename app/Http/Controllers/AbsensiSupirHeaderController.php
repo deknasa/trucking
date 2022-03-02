@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -88,15 +89,14 @@ class AbsensiSupirHeaderController extends Controller
             'uangjalan' => $request->uangjalan
         ]);
 
+        $request['modifiedby'] = Auth::user()->name;
+        
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])->post(config('app.api_url') . 'absensi', $request->all());
-        if ($response->status() == 422) {
-            return response($response['messages'], 500);
-        }
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**

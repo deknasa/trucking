@@ -24,9 +24,11 @@
   })()
 
   function loadDetailGrid() {
+  console.log(detailIndexUrl);
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
+        url: detailIndexUrl,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',

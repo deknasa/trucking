@@ -143,12 +143,11 @@
         dataType: 'JSON',
         data: $('form').serializeArray(),
         success: response => {
+          alert('success')
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
 
           if (response.status) {
-            alert(response.message)
-
             if (action != 'delete') {
               window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
             } else {
@@ -161,7 +160,15 @@
           }
         },
         error: error => {
-          alert(`${error.statusText} | ${error.responseText}`)
+          alert('error')
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(error.responseJSON.errors);
+          } else {
+            showDialog(error.statusText)
+          }
         }
       }).always(() => {
         $(this).removeAttr('disabled')

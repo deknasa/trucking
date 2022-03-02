@@ -21,6 +21,10 @@ $(document).ready(function () {
 });
 
 $(document).ajaxError((event, jqXHR, ajaxSettings, thrownError) => {
+	// console.log(event);
+	// console.log(jqXHR);
+	// console.log(ajaxSettings);
+	// console.log(thrownError);
 	if (jqXHR.status !== 422) {
 		showDialog(thrownError)
 	}
