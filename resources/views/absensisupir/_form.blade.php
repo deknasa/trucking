@@ -74,10 +74,10 @@
                           </select>
                         </td>
                         <td>
-                          <input type="time" name="jam[]" class="form-control" value="{{ $absensisupir['jam'] ?? '' }}">
+                          <input type="time" name="jam[]" class="form-control" value="{{ $absensisupir['absensi_supir_detail'][$tradoIndex]['jam'] ?? '' }}">
                         </td>
                         <td>
-                          <input type="text" name="keterangan_detail[]" class="form-control" value="{{ $absensisupir['absensi_supir_detail'][$tradoIndex]['trado']['keterangan'] ?? '' }}">
+                          <input type="text" name="keterangan_detail[]" class="form-control" value="{{ $absensisupir['absensi_supir_detail'][$tradoIndex]['keterangan'] ?? '' }}">
                         </td>
                       </tr>
                       @endforeach
