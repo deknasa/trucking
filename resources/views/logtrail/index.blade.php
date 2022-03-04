@@ -54,10 +54,13 @@
   </div>
 </div>
 
+<!-- Detail -->
+@include('logtrail._detail')
+
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('parameter.index') }}"
-  let getUrl = "{{ route('parameter.get') }}"
+  let indexUrl = "{{ route('logtrail.index') }}"
+  let getUrl = "{{ route('logtrail.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -68,10 +71,9 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'grp'
+  let sortname = 'namatabel'
   let sortorder = 'asc'
   let autoNumericElements = []
-  let rowNum = 10
 
   $(document).ready(function() {
     /* Set page */
@@ -99,11 +101,6 @@
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
 
-    /* Set rowNum */
-    <?php if (isset($_GET['limit'])) { ?>
-      rowNum = "{{ $_GET['limit'] }}"
-    <?php } ?>
-
     $("#jqGrid").jqGrid({
         url: getUrl,
         mtype: "GET",
@@ -113,23 +110,28 @@
         colModel: [{
             label: 'ID',
             name: 'id',
+            align: 'right',
             width: '50px'
           },
           {
-            label: 'GROUP',
-            name: 'grp',
+            label: 'NAMA TABEL',
+            name: 'namatabel',
           },
           {
-            label: 'SUBGROUP',
-            name: 'subgrp',
+            label: 'POSTING DARI',
+            name: 'postingdari',
           },
           {
-            label: 'NAMA PARAMETER',
-            name: 'text',
+            label: 'ID TRANS',
+            name: 'idtrans',
           },
           {
-            label: 'MEMO',
-            name: 'memo',
+            label: 'NO BUKTI TRANS',
+            name: 'nobuktitrans',
+          },
+          {
+            label: 'AKSI',
+            name: 'aksi',
           },
           {
             label: 'MODIFIEDBY',
@@ -143,7 +145,7 @@
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: rowNum,
+        rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
@@ -154,7 +156,16 @@
         page: page,
         pager: pager,
         viewrecords: true,
+        ajaxRowOptions: {
+          async: false,
+        },
         onSelectRow: function(id) {
+          $.jgrid.gridUnload("#logtrailHeader")
+          $.jgrid.gridUnload("#logtrailDetail")
+
+          loadLogtrailHeaderData(id)
+          loadLogtrailDetailData(id)
+
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
@@ -178,10 +189,6 @@
             highlightSearch = ''
           })
 
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
-          }
-
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
@@ -199,7 +206,7 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
-        },
+        }
       })
 
       .jqGrid("navGrid", pager, {
@@ -210,80 +217,14 @@
         del: false,
       })
 
-      .navButtonAdd(pager, {
-        caption: 'Add',
-        title: 'Add',
-        id: 'add',
-        buttonicon: 'fas fa-plus',
-        class: 'btn btn-primary',
-        onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').rows
-
-          window.location.href = `{{ route('parameter.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Edit',
-        title: 'Edit',
-        id: 'edit',
-        buttonicon: 'fas fa-pen',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-          if (selectedId == null || selectedId == '' || selectedId == undefined) {
-            alert('please select a row')
-          } else {
-            window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-          }
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Delete',
-        title: 'Delete',
-        id: 'delete',
-        buttonicon: 'fas fa-trash',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Export',
-        title: 'Export',
-        id: 'export',
-        buttonicon: 'fas fa-file-export',
-        onClickButton: function() {
-          $('#rangeModal').data('action', 'export')
-          $('#rangeModal').find('button:submit').html(`Export`)
-          $('#rangeModal').modal('show')
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Report',
-        title: 'Report',
-        id: 'report',
-        buttonicon: 'fas fa-print',
-        onClickButton: function() {
-          $('#rangeModal').data('action', 'report')
-          $('#rangeModal').find('button:submit').html(`Report`)
-          $('#rangeModal').modal('show')
-        }
-      })
-
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
         defaultSearch: 'cn',
         groupOp: 'AND',
-        disabledKeys: [33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           clearGlobalSearch()
-        },
+        }
       })
 
     /* Append clear filter button */
@@ -291,46 +232,6 @@
 
     /* Append global search */
     loadGlobalSearch()
-
-    $('#add .ui-pg-div')
-      .addClass(`btn-sm btn-primary`)
-      .parent().addClass('px-1')
-
-    $('#edit .ui-pg-div')
-      .addClass('btn-sm btn-success')
-      .parent().addClass('px-1')
-
-    $('#delete .ui-pg-div')
-      .addClass('btn-sm btn-danger')
-      .parent().addClass('px-1')
-
-    $('#report .ui-pg-div')
-      .addClass('btn-sm btn-info')
-      .parent().addClass('px-1')
-
-    $('#export .ui-pg-div')
-      .addClass('btn-sm btn-warning')
-      .parent().addClass('px-1')
-
-    if (!`{{ $myAuth->hasPermission('parameter', 'create') }}`) {
-      $('#add').addClass('ui-disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('parameter', 'edit') }}`) {
-      $('#edit').addClass('ui-disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('parameter', 'delete') }}`) {
-      $('#delete').addClass('ui-disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('parameter', 'export') }}`) {
-      $('#delete').addClass('ui-disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('parameter', 'report') }}`) {
-      $('#delete').addClass('ui-disabled')
-    }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -362,9 +263,9 @@
       let actionUrl = ``
 
       if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('parameter.export') }}`
+        actionUrl = `{{ route('logtrail.export') }}`
       } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('parameter.report') }}`
+        actionUrl = `{{ route('logtrail.report') }}`
       }
 
       /* Clear validation messages */

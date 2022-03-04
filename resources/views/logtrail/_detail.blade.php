@@ -2,15 +2,35 @@
 <div class="container-fluid my-4">
   <div class="row">
     <div class="col-12">
-      <table id="detail"></table>
-      <div id="detailPager"></div>
+      <div id="tabs">
+        <ul>
+          <li><a href="#tabs-1">Header</a></li>
+          <li><a href="#tabs-2">Detail</a></li>
+        </ul>
+        <div id="tabs-1" style="min-height: 80vh;">
+          <table id="logtrailHeader"></table>
+          <div id="logtrailHeaderPager"></div>
+        </div>
+        <div id="tabs-2" style="min-height: 80vh;">
+          <table id="logtrailDetail"></table>
+          <div id="logtrailDetailPager"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('absensisupir_detail.index') }}"
+  $("#tabs").tabs()
+
+  let logtrailHeaderData
+  let logtrailHeaderUrl = `{{ route('logtrail.header') }}`
+  let logtrailGeaderColModel = []
+
+  let logtrailDetailData
+  let logtrailDetailUrl = `{{ route('logtrail.detail') }}`
+  let detailColModel = []
 
   /**
    * Custom Functions
@@ -23,54 +43,16 @@
     };
   })()
 
-  function loadDetailGrid() {
-    let pager = '#detailPager'
+  function loadLogtrailHeaderGrid(id) {
+    let pager = '#logtrailHeaderPager'
 
-    $("#detail").jqGrid({
-        url: detailIndexUrl,
+    $("#logtrailHeader").jqGrid({
+        url: `${logtrailHeaderUrl}?id=${id}`,
+        colModel: logtrailGeaderColModel,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
-        colModel: [{
-            label: 'TRADO',
-            name: 'trado.nama',
-          },
-          {
-            label: 'SUPIR',
-            name: 'supir.namasupir',
-          },
-          {
-            label: 'STATUS',
-            name: 'absen_trado.kodeabsen',
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-          },
-          {
-            label: 'JAM',
-            name: 'jam',
-          },
-          {
-            label: 'UANG JALAN',
-            name: 'uangjalan',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
-          },
-          {
-            label: 'MODIFIEDBY',
-            name: 'modifiedby',
-          },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-          },
-        ],
         autowidth: true,
         shrinkToFit: false,
         height: 350,
@@ -83,7 +65,7 @@
         pager: pager,
         viewrecords: true,
         loadComplete: function(data) {
-          
+
         }
       })
 
@@ -96,13 +78,95 @@
       })
   }
 
-  function loadDetailData(id) {
-    $('#detail').setGridParam({
-      url: detailIndexUrl,
-      postData: {
-        absensi_id: id
+  function loadLogtrailDetailGrid(id) {
+    let pager = '#logtrailDetailPager'
+
+    $("#logtrailDetail").jqGrid({
+        url: `${logtrailDetailUrl}?id=${id}`,
+        colModel: logtrailGeaderColModel,
+        mtype: "GET",
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        datatype: "json",
+        autowidth: true,
+        shrinkToFit: false,
+        height: 350,
+        rowNum: 0,
+        rownumbers: true,
+        rownumWidth: 45,
+        rowList: [10, 20, 50],
+        toolbar: [true, "top"],
+        sortable: true,
+        pager: pager,
+        viewrecords: true,
+        loadComplete: function(data) {
+
+        }
+      })
+
+      .jqGrid("navGrid", pager, {
+        search: false,
+        refresh: false,
+        add: false,
+        edit: false,
+        del: false,
+      })
+  }
+
+  function loadLogtrailHeaderData(id) {
+    $.ajax({
+      url: logtrailHeaderUrl,
+      method: 'GET',
+      dataType: 'JSON',
+      data: {
+        id: id,
+      },
+      success: response => {
+        logtrailGeaderColModel = []
+
+        Object.keys(response.rows[0]).map((value, index) => {
+          logtrailGeaderColModel.push({
+            label: value,
+            name: value,
+          })
+        })
+
+        loadLogtrailHeaderGrid(id)
+
+      },
+      error: error => {
+
       }
-    }).trigger('reloadGrid')
+    })
+  }
+
+  function loadLogtrailDetailData(id) {
+    $.ajax({
+      url: logtrailDetailUrl,
+      method: 'GET',
+      dataType: 'JSON',
+      data: {
+        id: id,
+      },
+      success: response => {
+        logtrailGeaderColModel = []
+
+        if (response.rows[0] !== undefined) {
+          Object.keys(response.rows[0]).map((value, index) => {
+            logtrailGeaderColModel.push({
+              label: value,
+              name: value,
+            })
+          })
+
+          loadLogtrailDetailGrid(id)
+        }
+
+      },
+      error: error => {
+
+      }
+    })
   }
 
   function clearColumnSearch() {

@@ -23,7 +23,6 @@ class MenuController extends Controller
     public function index(Request $request)
     {
 
-
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama Menu',
@@ -228,7 +227,7 @@ class MenuController extends Controller
     public function listFolderFiles($controller)
     {
         // if ($dir === null) {
-        $dir = config('app.apppath') . 'controllers/';
+        $dir = base_path('app/http') . '/controllers/';
         // }
         $ffs = scandir($dir);
         unset($ffs[0], $ffs[1]);
@@ -273,8 +272,9 @@ class MenuController extends Controller
 
     public function listclassall()
     {
+
         // if ($dir === null) {
-        $dir = config('app.apppath') . 'controllers/';
+        $dir = base_path('app/http') . '/controllers/';
         // }
         $ffs = scandir($dir);
         unset($ffs[0], $ffs[1]);

@@ -16,6 +16,7 @@ use App\Http\Controllers\ErrorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LogTrailController;
 use App\Http\Controllers\TradoController;
 
 /*
@@ -47,7 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::get('parameter/export', [ParameterController::class, 'export'])->name('parameter.export');
     Route::get('parameter/get', [ParameterController::class, 'get'])->name('parameter.get');
     Route::resource('parameter', ParameterController::class);
-    
+
     Route::get('error/field_length', [ErrorController::class, 'fieldLength'])->name('error.field_length');
     Route::get('error/{id}/delete', [ErrorController::class, 'delete'])->name('error.delete');
     Route::get('error/index', [ErrorController::class, 'index']);
@@ -81,7 +82,7 @@ Route::middleware('auth')->group(function () {
     Route::get('menu/listclassall', [MenuController::class, 'listclassall'])->name('menu.listclassall');
     Route::get('menu/index', [MenuController::class, 'index']);
     Route::get('menu/get', [MenuController::class, 'get'])->name('menu.get');
-    Route::resource('menu', MenuController::class);    
+    Route::resource('menu', MenuController::class);
 
     Route::get('absensisupir/{id}/delete', [AbsensiSupirHeaderController::class, 'delete'])->name('absensisupir.delete');
     Route::get('absensisupir/index', [AbsensiSupirHeaderController::class, 'index']);
@@ -102,7 +103,7 @@ Route::middleware('auth')->group(function () {
     Route::get('acl/field_length', [AclController::class, 'fieldLength'])->name('acl.field_length');
     Route::get('acl/detail', [AclController::class, 'detail'])->name('acl.detail');
     Route::get('acl/index', [AclController::class, 'index']);
-    Route::resource('acl', AclController::class);    
+    Route::resource('acl', AclController::class);
 
     Route::get('useracl/{id}/delete', [UserAclController::class, 'delete'])->name('useracl.delete');
     Route::get('useracl/field_length', [UserAclController::class, 'fieldLength'])->name('useracl.field_length');
@@ -112,10 +113,17 @@ Route::middleware('auth')->group(function () {
     Route::get('useracl/index', [UserAclController::class, 'index']);
     Route::get('useracl/get', [UserAclController::class, 'get'])->name('useracl.get');
 
-    Route::resource('useracl', UserAclController::class);    
+    Route::resource('useracl', UserAclController::class);
 
     Route::get('trado/field_length', [TradoController::class, 'fieldLength'])->name('trado.field_length');
     Route::get('trado/{id}/delete', [TradoController::class, 'delete'])->name('trado.delete');
     Route::resource('trado', TradoController::class);
 
+    Route::get('logtrail/index', [LogTrailController::class, 'index'])->name('logtrail.index');
+    Route::get('logtrail/get', [LogTrailController::class, 'get'])->name('logtrail.get');
+    Route::get('logtrail/report', [LogTrailController::class, 'report'])->name('logtrail.report');
+    Route::get('logtrail/export', [LogTrailController::class, 'export'])->name('logtrail.export');
+    Route::get('logtrail/header', [LogTrailController::class, 'header'])->name('logtrail.header');
+    Route::get('logtrail/detail', [LogTrailController::class, 'detail'])->name('logtrail.detail');
+    Route::resource('logtrail', LogTrailController::class);
 });

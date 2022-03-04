@@ -37,7 +37,7 @@ class Myauth
             'error',
             'acl',
             'cabang',
-            'absensisupir'
+            'absensisupir',
         ],
         'method' => [
             'gridtab',
@@ -79,7 +79,7 @@ class Myauth
         $method = strtolower($method);
 
         if (!$this->_validatePermission($class, $method)) {
-            exit("You don't have access");
+            abort(401, "You don't have access");
         }
     }
 
