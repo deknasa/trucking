@@ -226,22 +226,16 @@ class MenuController extends Controller
 
     public function listFolderFiles($controller)
     {
-        // if ($dir === null) {
         $dir = base_path('app/http') . '/controllers/';
-        // }
         $ffs = scandir($dir);
         unset($ffs[0], $ffs[1]);
-        // prevent empty ordered elements
         if (count($ffs) < 1)
             return;
         $i = 0;
-        // $data[] = '';
-        // $ff=$controller;
         foreach ($ffs as $ff) {
             if (is_dir($dir . '/' . $ff))
                 $this->listFolderFiles($dir . '/' . $ff);
             elseif (is_file($dir . '/' . $ff) && strpos($ff, '.php') !== false) {
-                // if ($ff == $controller) {
                 $classes = $this->get_php_classes(file_get_contents($dir . '/' . $ff));
                 foreach ($classes as $class) {
                     if ($class == $controller) {
@@ -259,11 +253,9 @@ class MenuController extends Controller
                                     'method' => $method['name'],
                                     'name' => $method['name'] . ' ' . $class
                                 ];
-                                // $this->Macos->save(['class'=>$class, 'method'=>$method['name'], 'displayname'=>$method['docComment']['AclName'],'modifiedby'=>$_SESSION[SESSION_NAME.'username']]);
                             }
                         }
                     }
-                    // }
                 }
             }
         }
@@ -273,17 +265,12 @@ class MenuController extends Controller
     public function listclassall()
     {
 
-        // if ($dir === null) {
         $dir = base_path('app/http') . '/controllers/';
-        // }
         $ffs = scandir($dir);
         unset($ffs[0], $ffs[1]);
-        // prevent empty ordered elements
         if (count($ffs) < 1)
             return;
         $i = 0;
-        // $data[] = '';
-        // $ff=$controller;
         $data[] = [
             'class' => 'NON CONTROLLER',
         ];
@@ -291,14 +278,12 @@ class MenuController extends Controller
             if (is_dir($dir . '/' . $ff))
                 $this->listFolderFiles($dir . '/' . $ff);
             elseif (is_file($dir . '/' . $ff) && strpos($ff, '.php') !== false) {
-                // if ($ff == $controller) {
                 $classes = $this->get_php_classes(file_get_contents($dir . '/' . $ff));
                 foreach ($classes as $class) {
 
                     if (!class_exists($class)) {
                         include_once($dir . $ff);
                     }
-                    // $methods = $this->get_class_methods($class, true);
 
                     $data[] = [
                         'class' => $class,
@@ -360,5 +345,12 @@ class MenuController extends Controller
         }
 
         return $comments;
+    }
+
+    public function resequence()
+    {
+        $title = $this->title;
+        
+        return view('menu.resequence', compact('title'));
     }
 }

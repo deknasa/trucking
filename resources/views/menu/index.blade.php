@@ -1,22 +1,6 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">{{ $title }}</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">{{ $title }}</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Grid -->
 <div class="container-fluid">
     <div class="row">
@@ -259,6 +243,19 @@
                 }
             })
 
+            .navButtonAdd(pager, {
+                caption: 'Resequence',
+                title: 'Resequence',
+                id: 'resequence',
+                buttonicon: 'fas fa-sort',
+                onClickButton: function() {
+                    let actionUrl = `{{ route('menu.resequence') }}`
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+                    window.location.href = actionUrl
+                }
+            })
+
             .jqGrid('filterToolbar', {
                 stringResult: true,
                 searchOnEnter: false,
@@ -277,32 +274,38 @@
         /* Append global search */
         loadGlobalSearch()
 
-        
-    $('#add .ui-pg-div')
-      .addClass(`btn-sm btn-primary`)
-      .parent().addClass('px-1')
 
-    $('#edit .ui-pg-div')
-      .addClass('btn-sm btn-success')
-      .parent().addClass('px-1')
+        $('#add .ui-pg-div')
+            .addClass(`btn-sm btn-primary`)
+            .parent().addClass('px-1')
 
-    $('#delete .ui-pg-div')
-      .addClass('btn-sm btn-danger')
-      .parent().addClass('px-1')
+        $('#edit .ui-pg-div')
+            .addClass('btn-sm btn-success')
+            .parent().addClass('px-1')
 
-      if (!`{{ $myAuth->hasPermission('menu', 'create') }}`) {
-      $('#add').addClass('ui-disabled')
-    }
+        $('#delete .ui-pg-div')
+            .addClass('btn-sm btn-danger')
+            .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('menu', 'edit') }}`) {
-      $('#edit').addClass('ui-disabled')
-    }
+        $('#resequence .ui-pg-div')
+            .addClass('btn-sm btn-info')
+            .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('menu', 'delete') }}`) {
-      $('#delete').addClass('ui-disabled')
-    }
-    
+        if (!`{{ $myAuth->hasPermission('menu', 'create') }}`) {
+            $('#add').addClass('ui-disabled')
+        }
 
+        if (!`{{ $myAuth->hasPermission('menu', 'edit') }}`) {
+            $('#edit').addClass('ui-disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('menu', 'delete') }}`) {
+            $('#delete').addClass('ui-disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('menu', 'resequence') }}`) {
+            $('#delete').addClass('ui-disabled')
+        }
     })
 
     /**

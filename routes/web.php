@@ -82,6 +82,7 @@ Route::middleware('auth')->group(function () {
     Route::get('menu/listclassall', [MenuController::class, 'listclassall'])->name('menu.listclassall');
     Route::get('menu/index', [MenuController::class, 'index']);
     Route::get('menu/get', [MenuController::class, 'get'])->name('menu.get');
+    Route::get('menu/resequence', [MenuController::class, 'resequence'])->name('menu.resequence');
     Route::resource('menu', MenuController::class);
 
     Route::get('absensisupir/{id}/delete', [AbsensiSupirHeaderController::class, 'delete'])->name('absensisupir.delete');

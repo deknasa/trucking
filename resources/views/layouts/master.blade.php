@@ -182,6 +182,9 @@
   <!-- Jquery UI -->
   <link rel="stylesheet" href="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.css') }}">
 
+  <!-- Nestable2 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.css" />
+
   <!-- Custom styles -->
   <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 
@@ -271,6 +274,9 @@
   <!-- Inputmask -->
   <script src="{{ asset('libraries/inputmask/5.0.6/jquery.inputmask.min.js') }}"></script>
 
+  <!-- Nestable2 -->
+  <script src="https:cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.js"></script>
+  
   <!-- Custom global script -->
   <script src="{{ asset('mains.js') }}"></script>
 

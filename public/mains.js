@@ -492,3 +492,7 @@ function showDialog(message = "") {
 		modal: true,
 	});
 }
+
+$(`.dd`).nestable({
+	listNodeName: 'ul'
+})
