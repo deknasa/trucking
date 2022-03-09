@@ -102,7 +102,7 @@ class Myauth
         if (in_array($class, $this->exceptAuth['class'])) {
             return true;
         }
-
+        
         $userRole = DB::table('userrole')
             ->where('user_id', $this->userPK)
             ->get();
@@ -120,7 +120,7 @@ class Myauth
             ->where('useracl.user_id', $userRole[0]->id)
             ->unionAll($data_union)
             ->get();
-
+        
         if ($this->in_array_custom($method, $data->toArray()) == false && in_array($method, $this->exceptAuth['method']) == false) {
             return false;
         }

@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LogTrailController;
 use App\Http\Controllers\TradoController;
+use App\Http\Controllers\ContainerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,4 +129,10 @@ Route::middleware('auth')->group(function () {
     Route::get('logtrail/header', [LogTrailController::class, 'header'])->name('logtrail.header');
     Route::get('logtrail/detail', [LogTrailController::class, 'detail'])->name('logtrail.detail');
     Route::resource('logtrail', LogTrailController::class);
+    
+    Route::get('container/field_length', [ContainerController::class, 'fieldLength'])->name('container.field_length');
+    Route::get('container/{id}/delete', [ContainerController::class, 'delete'])->name('container.delete');
+    Route::get('container/index', [ContainerController::class, 'index']);
+    Route::get('container/get', [ContainerController::class, 'get'])->name('container.get');
+    Route::resource('container', ContainerController::class);
 });
