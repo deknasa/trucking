@@ -93,17 +93,11 @@ class Controller extends BaseController
     {
         $data = [];
 
-        // $menu = ModelsMenu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')
-        //     ->where('menu.menuparent', $induk)
-        //     ->orderby(DB::raw('right(menukode,1)'), 'ASC')
-        //     ->get(['menu.id', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
-
         $menu = ModelsMenu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')
             ->where('menu.menuparent', $induk)
-            ->orderby('menuseq', 'ASC')
+            ->orderby(DB::raw('right(menukode,1)'), 'ASC')
             ->get(['menu.id', 'menu.aco_id', 'menu.menuseq', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
-        // dd($menu->toArray());
-            
+
         foreach ($menu as $index => $row) {
             $hasPermission = $this->myAuth->hasPermission($row->class, $row->method);
 
@@ -123,7 +117,7 @@ class Controller extends BaseController
                 ];
             }
         }
-        
+
         return $data;
     }
 
