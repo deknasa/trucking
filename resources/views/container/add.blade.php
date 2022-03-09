@@ -18,7 +18,7 @@
 </div>
 
 <!-- Form -->
-@include('absensi._form', [
+@include('container._form', [
   'action' => 'add'
 ])
 @endsection

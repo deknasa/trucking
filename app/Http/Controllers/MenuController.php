@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Http;
@@ -22,7 +23,6 @@ class MenuController extends Controller
      */
     public function index(Request $request)
     {
-
 
         $title = $this->title;
         $data = [
@@ -97,10 +97,10 @@ class MenuController extends Controller
         ])
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'menu', $request->all());
-            if ($response->status() == 422) {
-                // return response($response['messages']['class'][0], 500);
-                return response($response['messages'], 500);
-            }
+        if ($response->status() == 422) {
+            // return response($response['messages']['class'][0], 500);
+            return response($response['messages'], 500);
+        }
         return response($response);
     }
 
@@ -227,22 +227,16 @@ class MenuController extends Controller
 
     public function listFolderFiles($controller)
     {
-        // if ($dir === null) {
-        $dir = config('app.apppath') . 'controllers/';
-        // }
+        $dir = base_path('app/http') . '/controllers/';
         $ffs = scandir($dir);
         unset($ffs[0], $ffs[1]);
-        // prevent empty ordered elements
         if (count($ffs) < 1)
             return;
         $i = 0;
-        // $data[] = '';
-        // $ff=$controller;
         foreach ($ffs as $ff) {
             if (is_dir($dir . '/' . $ff))
                 $this->listFolderFiles($dir . '/' . $ff);
             elseif (is_file($dir . '/' . $ff) && strpos($ff, '.php') !== false) {
-                // if ($ff == $controller) {
                 $classes = $this->get_php_classes(file_get_contents($dir . '/' . $ff));
                 foreach ($classes as $class) {
                     if ($class == $controller) {
@@ -260,11 +254,9 @@ class MenuController extends Controller
                                     'method' => $method['name'],
                                     'name' => $method['name'] . ' ' . $class
                                 ];
-                                // $this->Macos->save(['class'=>$class, 'method'=>$method['name'], 'displayname'=>$method['docComment']['AclName'],'modifiedby'=>$_SESSION[SESSION_NAME.'username']]);
                             }
                         }
                     }
-                    // }
                 }
             }
         }
@@ -273,17 +265,13 @@ class MenuController extends Controller
 
     public function listclassall()
     {
-        // if ($dir === null) {
-        $dir = config('app.apppath') . 'controllers/';
-        // }
+
+        $dir = base_path('app/http') . '/controllers/';
         $ffs = scandir($dir);
         unset($ffs[0], $ffs[1]);
-        // prevent empty ordered elements
         if (count($ffs) < 1)
             return;
         $i = 0;
-        // $data[] = '';
-        // $ff=$controller;
         $data[] = [
             'class' => 'NON CONTROLLER',
         ];
@@ -291,14 +279,12 @@ class MenuController extends Controller
             if (is_dir($dir . '/' . $ff))
                 $this->listFolderFiles($dir . '/' . $ff);
             elseif (is_file($dir . '/' . $ff) && strpos($ff, '.php') !== false) {
-                // if ($ff == $controller) {
                 $classes = $this->get_php_classes(file_get_contents($dir . '/' . $ff));
                 foreach ($classes as $class) {
 
                     if (!class_exists($class)) {
                         include_once($dir . $ff);
                     }
-                    // $methods = $this->get_class_methods($class, true);
 
                     $data[] = [
                         'class' => $class,
@@ -360,5 +346,42 @@ class MenuController extends Controller
         }
 
         return $comments;
+    }
+
+    public function resequence()
+    {
+        $title = $this->title;
+
+        return view('menu.resequence', compact('title'));
+    }
+
+    public function storeResequence(Request $request)
+    {
+        try {
+            $this->_updateRecursiveMenu($request->menu);
+
+            return response([
+                'message' => 'Berhasil disimpan'
+            ], 200);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    private function _updateRecursiveMenu($menus, $index = 0, $parent = 0, $level = 0)
+    {
+        foreach ($menus as $menuIndex => $menu) {
+            $menuSequence = $level > 0 ? $index . $menuIndex + 1 : $menuIndex;
+
+            $menuModel = Menu::findOrFail($menu['id']);
+            $menuModel->menuseq = $menuSequence;
+            $menuModel->menuparent = $parent;
+            $menuModel->menukode = $menuSequence;
+            $menuModel->save();
+
+            if (isset($menu['children'])) {
+                $this->_updateRecursiveMenu($menu['children'], $menuSequence, $menu['id'], $level + 1);
+            }
+        }
     }
 }

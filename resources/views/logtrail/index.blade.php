@@ -1,22 +1,6 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="content-header">
-  <div class="container-fluid">
-    <div class="row mb-2">
-      <div class="col-sm-6">
-        <h1 class="m-0">{{ $title }}</h1>
-      </div>
-      <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-          <li class="breadcrumb-item active">{{ $title }}</li>
-        </ol>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Modal for report -->
 <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -71,12 +55,12 @@
 </div>
 
 <!-- Detail -->
-@include('absensi._detail')
+@include('logtrail._detail')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('absensi.index') }}"
-  let getUrl = "{{ route('absensi.get') }}"
+  let indexUrl = "{{ route('logtrail.index') }}"
+  let getUrl = "{{ route('logtrail.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -87,7 +71,7 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'nobukti'
+  let sortname = 'namatabel'
   let sortorder = 'asc'
   let autoNumericElements = []
 
@@ -130,44 +114,32 @@
             width: '50px'
           },
           {
-            label: 'NO BUKTI',
-            name: 'nobukti',
-            align: 'left'
+            label: 'NAMA TABEL',
+            name: 'namatabel',
           },
           {
-            label: 'TANGGAL',
-            name: 'tgl',
-            align: 'left'
+            label: 'POSTING DARI',
+            name: 'postingdari',
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
+            label: 'ID TRANS',
+            name: 'idtrans',
           },
           {
-            label: 'NO BUKTI KGT',
-            name: 'kasgantung_nobukti',
-            align: 'left'
+            label: 'NO BUKTI TRANS',
+            name: 'nobuktitrans',
           },
           {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
+            label: 'AKSI',
+            name: 'aksi',
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
-            align: 'left'
           },
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'left'
           },
         ],
         autowidth: true,
@@ -188,7 +160,11 @@
           async: false,
         },
         onSelectRow: function(id) {
-          loadDetailData(id)
+          $.jgrid.gridUnload("#logtrailHeader")
+          $.jgrid.gridUnload("#logtrailDetail")
+
+          loadLogtrailHeaderData(id)
+          loadLogtrailDetailData(id)
 
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
@@ -200,10 +176,6 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-
-          if (data.message !== "" && data.message !== undefined && data.message !== null) {
-            alert(data.message)
-          }
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -245,66 +217,6 @@
         del: false,
       })
 
-      .navButtonAdd(pager, {
-        caption: 'Add',
-        title: 'Add',
-        id: 'add',
-        buttonicon: 'fas fa-plus',
-        onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').rows
-
-          window.location.href = `{{ route('absensi.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Edit',
-        title: 'Edit',
-        id: 'edit',
-        buttonicon: 'fas fa-pen',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-          window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Delete',
-        title: 'Delete',
-        id: 'delete',
-        buttonicon: 'fas fa-trash',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Export',
-        title: 'Export',
-        id: 'export',
-        buttonicon: 'fas fa-file-export',
-        onClickButton: function() {
-          $('#rangeModal').data('action', 'export')
-          $('#rangeModal').find('button:submit').html(`Export`)
-          $('#rangeModal').modal('show')
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Report',
-        title: 'Report',
-        id: 'report',
-        buttonicon: 'fas fa-print',
-        onClickButton: function() {
-          $('#rangeModal').data('action', 'report')
-          $('#rangeModal').find('button:submit').html(`Report`)
-          $('#rangeModal').modal('show')
-        }
-      })
-
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
@@ -321,30 +233,7 @@
     /* Append global search */
     loadGlobalSearch()
 
-    /* Load detial grid */
-    loadDetailGrid()
-
-    $('#add .ui-pg-div')
-      .addClass(`btn-sm btn-primary`)
-      .parent().addClass('px-1')
-
-    $('#edit .ui-pg-div')
-      .addClass('btn-sm btn-success')
-      .parent().addClass('px-1')
-
-    $('#delete .ui-pg-div')
-      .addClass('btn-sm btn-danger')
-      .parent().addClass('px-1')
-
-    $('#report .ui-pg-div')
-      .addClass('btn-sm btn-info')
-      .parent().addClass('px-1')
-
-    $('#export .ui-pg-div')
-      .addClass('btn-sm btn-warning')
-      .parent().addClass('px-1')
-
-      $('#rangeModal').on('shown.bs.modal', function() {
+    $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {
           autoNumericElement.remove()
@@ -374,9 +263,9 @@
       let actionUrl = ``
 
       if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('absensi.export') }}`
+        actionUrl = `{{ route('logtrail.export') }}`
       } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('absensi.report') }}`
+        actionUrl = `{{ route('logtrail.report') }}`
       }
 
       /* Clear validation messages */

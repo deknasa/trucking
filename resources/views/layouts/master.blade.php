@@ -173,7 +173,7 @@
   <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
 
   <!-- JqGrid -->
-  <link rel="stylesheet" href="{{ asset('libraries/jqgrid/530/css/trirand/ui.jqgrid-bootstrap4.css') }}" />
+  <link rel="stylesheet" href="{{ asset('libraries/jqgrid/560/css/trirand/ui.jqgrid-bootstrap4.css') }}" />
 
   <!-- Select2 -->
   <link rel="stylesheet" href="{{ asset('plugins/select2/4.0.13/css/select2.min.css') }}">
@@ -181,6 +181,9 @@
 
   <!-- Jquery UI -->
   <link rel="stylesheet" href="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.css') }}">
+
+  <!-- Nestable2 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.css" />
 
   <!-- Custom styles -->
   <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
@@ -258,8 +261,8 @@
   <script src="{{ asset('dist/js/adminlte.js') }}"></script>
 
   <!-- JqGrid -->
-  <script src="{{ asset('libraries/jqgrid/530/js/trirand/src/jquery.jqGrid.js') }}"></script>
-  <script src="{{ asset('libraries/jqgrid/530/js/trirand/i18n/grid.locale-en.js') }}"></script>
+  <script src="{{ asset('libraries/jqgrid/560/js/trirand/src/jquery.jqGrid.js') }}"></script>
+  <script src="{{ asset('libraries/jqgrid/560/js/trirand/i18n/grid.locale-en.js') }}"></script>
 
   <!-- Autonumeric -->
   <script src="{{ asset('libraries/autonumeric/4.5.4/autonumeric.min.js') }}"></script>
@@ -273,6 +276,9 @@
   <!-- Inputmask -->
   <script src="{{ asset('libraries/inputmask/5.0.6/jquery.inputmask.min.js') }}"></script>
 
+  <!-- Nestable2 -->
+  <script src="https:cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.js"></script>
+  
   <!-- Custom global script -->
   <script src="{{ asset('mains.js') }}"></script>
 

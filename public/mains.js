@@ -20,6 +20,10 @@ $(document).ready(function() {
     });
 });
 $(document).ajaxError((event, jqXHR, ajaxSettings, thrownError) => {
+    // console.log(event);
+    // console.log(jqXHR);
+    // console.log(ajaxSettings);
+    // console.log(thrownError);
     if (jqXHR.status !== 422) {
         showDialog(thrownError)
     }
@@ -220,6 +224,11 @@ function setCustomBindKeys(grid) {
                     }
                 }
             }
+
+            console.log($('.ui-jqgrid-bdiv').find('tbody').animate({
+                scrollTop: 200
+            }));
+            console.log($('.table-success').position().top > 300);
         }
     });
 }
@@ -575,4 +584,8 @@ $('#search').on('input', function(e) {
     }
 
 
+});
+$("#dialog-message p").html(message);
+$("#dialog-message").dialog({
+    modal: true,
 });

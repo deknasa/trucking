@@ -9,20 +9,20 @@
             <input type="hidden" name="limit" value="{{ $_GET['limit'] ?? 10 }}">
             <input type="hidden" name="sortname" value="{{ $_GET['sortname'] ?? 'id' }}">
             <input type="hidden" name="sortorder" value="{{ $_GET['sortorder'] ?? 'asc' }}">
-            <input type="hidden" name="kasgantung_nobukti" value="{{ $absensi['kasgantung_nobukti'] ?? $kasGantungNoBukti }}">
+            <input type="hidden" name="kasgantung_nobukti" value="{{ $absensisupir['kasgantung_nobukti'] ?? $kasGantungNoBukti }}">
 
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>NO BUKTI</label>
               </div>
               <div class="col-12 col-md-4">
-                <input type="text" name="nobukti" class="form-control" value="{{ $absensi['nobukti'] ?? $noBukti }}" readonly>
+                <input type="text" name="nobukti" class="form-control" value="{{ $absensisupir['nobukti'] ?? $noBukti }}" readonly>
               </div>
               <div class="col-12 col-md-2 col-form-label">
                 <label>TANGGAL</label>
               </div>
               <div class="col-12 col-md-4">
-                <input type="text" name="tgl" class="form-control datepicker" value="{{ $absensi['tgl'] ?? '' }}">
+                <input type="text" name="tgl" class="form-control datepicker" value="{{ $absensisupir['tgl'] ?? date('d-m-Y') }}">
               </div>
             </div>
 
@@ -31,7 +31,7 @@
                 <label>KETERANGAN</label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="keterangan" class="form-control" value="{{ $absensi['keterangan'] ?? '' }}">
+                <input type="text" name="keterangan" class="form-control" value="{{ $absensisupir['keterangan'] ?? '' }}">
               </div>
             </div>
 
@@ -59,25 +59,25 @@
                         <td width="20%">
                           <select name="supir_id[]" class="form-control">
                             @foreach($combo['supir'] as $supirIndex => $supir)
-                            <option value="{{ $supir['id'] }}" {{ $supir['id'] == @$absensi['absensi_supir_detail'][$tradoIndex]['supir']['id'] ? 'selected' : '' }}>{{ $supir['namasupir'] }}</option>
+                            <option value="{{ $supir['id'] }}" {{ $supir['id'] == @$absensisupir['absensi_supir_detail'][$tradoIndex]['supir']['id'] ? 'selected' : '' }}>{{ $supir['namasupir'] }}</option>
                             @endforeach
                           </select>
                         </td>
                         <td>
-                          <input type="text" name="uangjalan[]" class="form-control autonumeric" value="{{ $absensi['absensi_supir_detail'][$tradoIndex]['uangjalan'] ?? '' }}">
+                          <input type="text" name="uangjalan[]" class="form-control autonumeric" value="{{ $absensisupir['absensi_supir_detail'][$tradoIndex]['uangjalan'] ?? '' }}">
                         </td>
                         <td width="20%">
                           <select name="absen_id[]" class="form-control">
                             @foreach($combo['status'] as $status)
-                            <option value="{{ $status['id'] }}" {{ $status['id'] == @$absensi['absensi_supir_detail'][$tradoIndex]['absen_trado']['id'] ? 'selected' : '' }}>{{ $status['kodeabsen'] }}</option>
+                            <option value="{{ $status['id'] }}" {{ $status['id'] == @$absensisupir['absensi_supir_detail'][$tradoIndex]['absen_trado']['id'] ? 'selected' : '' }}>{{ $status['kodeabsen'] }}</option>
                             @endforeach
                           </select>
                         </td>
                         <td>
-                          <input type="time" name="jam[]" class="form-control" value="{{ $absensi['jam'] ?? '' }}">
+                          <input type="time" name="jam[]" class="form-control" value="{{ $absensisupir['absensi_supir_detail'][$tradoIndex]['jam'] ?? '' }}">
                         </td>
                         <td>
-                          <input type="text" name="keterangan_detail[]" class="form-control" value="{{ $absensi['absensi_supir_detail'][$tradoIndex]['trado']['keterangan'] ?? '' }}">
+                          <input type="text" name="keterangan_detail[]" class="form-control" value="{{ $absensisupir['absensi_supir_detail'][$tradoIndex]['keterangan'] ?? '' }}">
                         </td>
                       </tr>
                       @endforeach
@@ -96,7 +96,7 @@
               Simpan
               @endif
             </button>
-            <a href="{{ route('absensi.index') }}" class="btn btn-danger">
+            <a href="{{ route('absensisupir.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
               BATAL
             </a>
@@ -109,18 +109,18 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('absensi.index') }}"
+  let indexUrl = "{{ route('absensisupir.index') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('absensi.store') }}"
+  let actionUrl = "{{ route('absensisupir.store') }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
   /* Set action url */
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('absensi.update', $absensi['id']) }}"
+    actionUrl = "{{ route('absensisupir.update', $absensisupir['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('absensi.destroy', $absensi['id']) }}"
+    actionUrl = "{{ route('absensisupir.destroy', $absensisupir['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
@@ -143,12 +143,11 @@
         dataType: 'JSON',
         data: $('form').serializeArray(),
         success: response => {
+          alert('success')
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
 
           if (response.status) {
-            alert(response.message)
-
             if (action != 'delete') {
               window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
             } else {
@@ -161,7 +160,15 @@
           }
         },
         error: error => {
-          alert(`${error.statusText} | ${error.responseText}`)
+          alert('error')
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(error.responseJSON.errors);
+          } else {
+            showDialog(error.statusText)
+          }
         }
       }).always(() => {
         $(this).removeAttr('disabled')

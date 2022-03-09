@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Menu;
 use App\Libraries\Myauth;
+use App\Models\Aco;
 use App\Models\Menu as ModelsMenu;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -33,6 +34,7 @@ class Controller extends BaseController
     {
         $this->setClass();
         $this->setMethod();
+
         $this->setBreadcrumb($this->class);
 
         $this->setMyAuthConfig();
@@ -91,17 +93,24 @@ class Controller extends BaseController
     {
         $data = [];
 
+        // $menu = ModelsMenu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')
+        //     ->where('menu.menuparent', $induk)
+        //     ->orderby(DB::raw('right(menukode,1)'), 'ASC')
+        //     ->get(['menu.id', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
+
         $menu = ModelsMenu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')
             ->where('menu.menuparent', $induk)
-            ->orderby(DB::raw('right(menukode,1)'), 'ASC')
-            ->get(['menu.id', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode', 'menu.menuparent']);
-
-        foreach ($menu as $row) {
+            ->orderby('menuseq', 'ASC')
+            ->get(['menu.id', 'menu.aco_id', 'menu.menuseq', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
+        // dd($menu->toArray());
+            
+        foreach ($menu as $index => $row) {
             $hasPermission = $this->myAuth->hasPermission($row->class, $row->method);
 
             if ($hasPermission || $row->class == null) {
                 $data[] = [
                     'menuid' => $row->id,
+                    'aco_id' => $row->aco_id,
                     'menuname' => $row->menuname,
                     'menuicon' => $row->menuicon,
                     'link' => $row->link,
@@ -114,7 +123,7 @@ class Controller extends BaseController
                 ];
             }
         }
-
+        
         return $data;
     }
 
@@ -125,20 +134,26 @@ class Controller extends BaseController
 
     public function setBreadcrumb($class): void
     {
-        $breadcrumbs = [];
+        if (!request()->ajax()) {
+            $breadcrumbs = [];
 
-        $menu = ModelsMenu::where('menuname', $this->class)->first();
+            $aco = Aco::where('class', $this->class)->first();
 
-        if (isset($menu)) {
-            $breadcrumbs[] = isset($menu->aco_id) && $menu->aco_id == 0 ? $menu->menuname : '<a href="' . URL::to('/') . '/' . $menu->aco()->class . '/' . $menu->aco()->method . '">' . $menu->menuname . '</a>';
+            if (isset($aco)) {
+                $menu = ModelsMenu::where('aco_id', $aco->id)->first();
 
-            while (null !== $menu = ModelsMenu::find($menu->menuparent)) {
-                $breadcrumbs[] = isset($menu->aco_id) && $menu->aco_id == 0 ? $menu->menuname : '<a href="' . URL::to('/') . '/' . $menu->aco()->class . '/' . $menu->aco()->method . '">' . $menu->menuname . '</a>';
+                if (isset($menu)) {
+                    $breadcrumbs[] = isset($menu->aco_id) && $menu->aco_id == 0 ? $menu->menuname : '<a href="' . URL::to('/') . '/' . $menu->aco->class . '/' . $menu->aco->method . '">' . $menu->menuname . '</a>';
+
+                    while (null !== $menu = ModelsMenu::find($menu->menuparent)) {
+                        $breadcrumbs[] = isset($menu->aco_id) && $menu->aco_id == 0 ? $menu->menuname : '<a href="' . URL::to('/') . '/' . $menu->aco->class . '/' . $menu->aco->method . '">' . $menu->menuname . '</a>';
+                    }
+
+                    $this->breadcrumb = join(' / ', array_reverse($breadcrumbs));
+                }
+            } else {
+                $this->breadcrumb = 'Dashboard';
             }
-
-            $this->breadcrumb = join(' / ', array_reverse($breadcrumbs));
-        } else {
-            $this->breadcrumb = 'Dashboard';
         }
     }
 }

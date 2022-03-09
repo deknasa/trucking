@@ -9,8 +9,8 @@ class Aco extends Model
 {
     use HasFactory;
     
-    public function menu()
-    {
-        return $this->belongsTo(Menu::class);
-    }
+    // public function menu()
+    // {
+    //     return $this->hasOne(Menu::class);
+    // }
 }
