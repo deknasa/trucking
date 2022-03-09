@@ -61,7 +61,6 @@
           // $menuexe = $data['link']!=''?$data['link']:$menuexe;
           if ($x !== "") {
         ?>
-
             <li class="nav-item">
               <a href="javascript:void(0)" class="nav-link" id="<?= $data['menukode'] ?>">
                 <i class="nav-icon <?php echo $data['menuicon'] ?>"></i>

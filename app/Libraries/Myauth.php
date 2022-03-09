@@ -38,6 +38,7 @@ class Myauth
             'acl',
             'cabang',
             'absensisupir',
+            'logtrail',
         ],
         'method' => [
             'gridtab',

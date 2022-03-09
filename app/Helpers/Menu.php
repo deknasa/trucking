@@ -7,6 +7,28 @@ use App\Http\Controllers\Controller;
 
 class Menu
 {
+  public function printRecursiveMenu($menus)
+  {
+    $string = '<ul class="dd-list">';
+
+    foreach ($menus as $menu) {
+      $string .= "
+          <li class='dd-item' data-id='$menu[menuid]' data-name='$menu[menuname]'>
+              <a href='" . URL::to($menu['menuexe']) . "'>
+                <div class='dd-handle font-weight-normal'>
+                <i class='$menu[menuicon]'></i> <span> $menu[menuno]. $menu[menuname] </span>
+                </div>
+              </a>
+            " . (count($menu['child']) > 0 ? Menu::printRecursiveMenu($menu['child']) : '') . "
+          </li>
+      ";
+    }
+
+    $string .= '</ul>';
+
+    return $string;
+  }
+  
   public function print_recursive_list($data)
   {
     $str = "";

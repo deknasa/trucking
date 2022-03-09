@@ -6,45 +6,87 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <div class="card-body">
-          <div class="dd">
-            <ul class="dd-list">
-              <li class="dd-item" data-id="1">
-                <div class="dd-handle">Item 1</div>
-              </li>
-              <li class="dd-item" data-id="2">
-                <div class="dd-handle">Item 2</div>
-              </li>
-              <li class="dd-item" data-id="3">
-                <div class="dd-handle">Item 3</div>
-                <ul class="dd-list">
-                  <li class="dd-item" data-id="4">
-                    <div class="dd-handle">Item 4</div>
-                  </li>
-                  <li class="dd-item" data-id="5" data-foo="bar">
-                    <div class="dd-nodrag">Item 5</div>
-                  </li>
-                </ul>
-              </li>
-            </ul>
+        <form action="#" method="post">
+          <div class="card-body">
+            @csrf
+            <div class="dd">
+              {!! \App\Helpers\Menu::printRecursiveMenu($sqlmenu) !!}
+            </div>
           </div>
-        </div>
-        <div class="card-footer">
-          <button type="submit" id="btnSimpan" class="btn btn-primary">
-            <i class="fa fa-save"></i> Simpan
-          </button>
-          <button type="submit" id="btnSimpan" class="btn btn-secondary">
-            <i class="fa fa-save"></i> Reset
-          </button>
-          <a href="{{ route('menu.index') }}" class="btn btn-danger">
-            <i class="fa fa-window-close"></i>
-            BATAL
-          </a>
-        </div>
+          <div class="card-footer">
+            <button type="submit" id="btnSimpan" class="btn btn-primary">
+              <i class="fa fa-save"></i> Simpan
+            </button>
+            <button type="submit" id="btnSimpan" class="btn btn-secondary">
+              <i class="fa fa-save"></i> Reset
+            </button>
+            <a href="{{ route('menu.index') }}" class="btn btn-danger">
+              <i class="fa fa-window-close"></i>
+              BATAL
+            </a>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </div>
 
+@push('scripts')
+<script>
+  $(document).ready(() => {
+    let beforeDragParent
+    
+    $('.dd').nestable({
+      listNodeName: 'ul',
+      onDragStart: (container, element) => {
+        beforeDragParent = element.parent()
+      },
+      beforeDragStop: (container, element, place) => {
+        if (beforeDragParent[0] !== place[0]) return false
+      },
+      callback: (container, element) => {
+
+      }
+    });
+
+    $('form').submit((e) => {
+      e.preventDefault()
+      
+      $('#btnSimpan').attr('disabled', '')
+      $('#loader').removeClass('d-none')
+
+      let url = `{{ route('menu.resequence.store') }}`
+      let csrfToken = `{{ csrf_token() }}`
+
+      $.ajax({
+        url: url,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          'X-CSRF-TOKEN': csrfToken
+        },
+        data: {
+          menu: $('.dd').nestable('serialize')
+        },
+        success: response => {
+          location.reload()
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(error.responseJSON.errors);
+          } else {
+            showDialog(error.statusText)
+          }
+        }
+      }).always(() => {
+        $('#btnSimpan').removeAttr('disabled')
+      })
+    })
+  })
+</script>
+@endpush
 
 @endsection
