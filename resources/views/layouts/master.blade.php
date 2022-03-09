@@ -206,7 +206,6 @@
     <p></p>
   </div>
 
-  @dd((new \App\Http\Controllers\Controller)->class);
 
   <div class="wrapper">
     @include('layouts._navbar')

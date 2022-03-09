@@ -10,6 +10,11 @@
     width: 4px;
     cursor: col-resize;
   }
+
+  .selected-link{
+    background-color: cyan !important;
+  }
+
 </style>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <div id="split-bar"></div>
@@ -45,7 +50,7 @@
     <!-- Sidebar Menu -->
 
     <nav class="mt-2">
-      <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+      <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="true">
         <?php
 
         use App\Http\Controllers\Controller;
@@ -54,9 +59,15 @@
         $sub = "";
         $plain = "";
         $n = 0;
-        // $current_menu = Menu::where('menuname', (new Controller)->class)->first();
-        // $get_parent = Menu::where('id', $current_menu->menuparent)->first();
-        // $get_all = Menu::where('id', $get_parent->menuparent)->first();
+        $current_menu = Menu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')
+          ->where('acos.class', (new Controller)->class)
+          ->first();
+        $get_parent = Menu::where('id', ($current_menu == null ? '' : $current_menu->menuparent))
+          ->first();
+        $get_all = Menu::where('id', ($current_menu == null ? '' : $get_parent->menuparent))
+          ->first();
+
+
         foreach ($sqlmenu as $data) {
           $n++;
           $x = \App\Helpers\Menu::print_recursive_list($data['child']);
@@ -67,8 +78,9 @@
         ?>
             <!--  $get_parent->menuparent == $data['menuid'] ? 'menu-is-opening menu-open' : ''  -->
             <!-- dump($get_parent->menuparent == $data['menuid']); -->
-             <!-- $get_parent->menuparent == $data['menuid'] ? 'menu-is-opening active' : '' -->
-            <li class="nav-item menu-open ">
+            <!-- $get_parent->menuparent == $data['menuid'] ? 'menu-is-opening active' : '' -->
+            <!-- ($get_all == null ? 0 : ($get_all->menuparent == $data['menuid'] ? 'true' : 'false')) -->
+            <li class="nav-item <?= ($get_all == null ? 0 : ($get_all->id == $data['menuid'] ? 'menu-is-opening menu-open' : '')) ?>">
               <a href="javascript:void(0)" class="nav-link" id="<?= $data['menukode'] ?>">
                 <i class="nav-icon <?php echo $data['menuicon'] ?>"></i>
                 <p>

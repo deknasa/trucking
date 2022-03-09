@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
@@ -15,10 +16,10 @@ class UserRoleController extends Controller
     ];
 
 
-   /**
+    /**
      * Fungsi index
      * @ClassName index
-     */    
+     */
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -51,8 +52,6 @@ class UserRoleController extends Controller
         ];
 
         return view('userrole.index', compact('title', 'data'));
-       
-
     }
 
     public function detail(Request $request)
@@ -82,14 +81,12 @@ class UserRoleController extends Controller
 
             return response($data);
         }
-
-    
     }
 
-   /**
+    /**
      * Fungsi create
      * @ClassName create
-     */    
+     */
     public function create(Request $request)
     {
         $title = $this->title;
@@ -98,15 +95,15 @@ class UserRoleController extends Controller
         ];
         $data['combo'] = $this->combo('entry');
 
-        $user_id='0';
+        $user_id = '0';
         //   dd($data);
-        return view('userrole.add', compact('title','list','user_id', 'data'));
+        return view('userrole.add', compact('title', 'list', 'user_id', 'data'));
     }
 
     public function store(Request $request)
     {
 
-        $request['modifiedby']=Auth::user()->name;
+        $request['modifiedby'] = Auth::user()->name;
         // dd($request->all());
 
         $response = Http::withHeaders([
@@ -114,15 +111,15 @@ class UserRoleController extends Controller
             'Content-Type' => 'application/json',
         ])->post(config('app.api_url') . 'userrole', $request->all());
 
-        
-        
+
+
         return response($response);
     }
 
-   /**
+    /**
      * Fungsi edit
      * @ClassName edit
-     */    
+     */
     public function edit($id)
     {
         $title = $this->title;
@@ -138,13 +135,13 @@ class UserRoleController extends Controller
         ];
         $data['combo'] = $this->combo('entry');
 
-        $user_id=$userrole['user_id'];
-        return view('userrole.edit', compact('title', 'userrole','list','user_id','data'));
+        $user_id = $userrole['user_id'];
+        return view('userrole.edit', compact('title', 'userrole', 'list', 'user_id', 'data'));
     }
 
     public function update(Request $request, $id)
     {
-        $request['modifiedby']=Auth::user()->name;
+        $request['modifiedby'] = Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -153,10 +150,10 @@ class UserRoleController extends Controller
         return response($response);
     }
 
-   /**
+    /**
      * Fungsi delete
      * @ClassName delete
-     */       
+     */
     public function delete($id)
     {
         try {
@@ -167,35 +164,34 @@ class UserRoleController extends Controller
                 'Content-Type' => 'application/json'
             ])->get(config('app.api_url') . "userrole/$id");
 
-            
+
             $userrole = $response['data'];
             $list = [
                 'detail' => $this->detaillist($userrole['user_id']  ?? '0'),
             ];
             $data['combo'] = $this->combo('entry');
 
-            $user_id=$userrole['user_id'];
-            
-        
-           
-            return view('userrole.delete', compact('title', 'userrole','list','user_id','data'));
+            $user_id = $userrole['user_id'];
+
+
+
+            return view('userrole.delete', compact('title', 'userrole', 'list', 'user_id', 'data'));
         } catch (\Throwable $th) {
             return redirect()->route('userrole.index');
         }
     }
 
-    public function destroy($id,Request $request)
+    public function destroy($id, Request $request)
     {
-        $request['modifiedby']=Auth::user()->name;
+        $request['modifiedby'] = Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])->delete(config('app.api_url') . "userrole/$id", $request->all());
 
-        
+
 
         return response($response);
-        
     }
 
     public function fieldLength()
@@ -212,11 +208,8 @@ class UserRoleController extends Controller
         ];
         $response = Http::get(config('app.api_url') . 'userrole/detaillist', $status);
         return $response['data'];
-        
-
-    
     }
-    
+
     public function combo($aksi)
     {
 
@@ -231,9 +224,4 @@ class UserRoleController extends Controller
 
         return $response['data'];
     }
-
-
-
-
-
 }
