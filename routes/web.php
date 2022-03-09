@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TradoController;
+use App\Http\Controllers\ContainerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -118,4 +119,9 @@ Route::middleware('auth')->group(function () {
     Route::get('trado/{id}/delete', [TradoController::class, 'delete'])->name('trado.delete');
     Route::resource('trado', TradoController::class);
 
+    Route::get('container/field_length', [ContainerController::class, 'fieldLength'])->name('container.field_length');
+    Route::get('container/{id}/delete', [ContainerController::class, 'delete'])->name('container.delete');
+    Route::get('container/index', [ContainerController::class, 'index']);
+    Route::get('container/get', [ContainerController::class, 'get'])->name('container.get');
+    Route::resource('container', ContainerController::class);
 });
