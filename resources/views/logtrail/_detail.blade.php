@@ -2,28 +2,17 @@
 <div class="container-fluid my-4">
   <div class="row">
     <div class="col-12">
-      <div id="tabs">
-        <ul>
-          <li><a href="#tabs-1">Header</a></li>
-          <li><a href="#tabs-2">Detail</a></li>
-        </ul>
-        <div id="tabs-1" style="min-height: 80vh;">
-          <table id="logtrailHeader"></table>
-          <div id="logtrailHeaderPager"></div>
-        </div>
-        <div id="tabs-2" style="min-height: 80vh;">
-          <table id="logtrailDetail"></table>
-          <div id="logtrailDetailPager"></div>
-        </div>
-      </div>
+      <table id="logtrailHeader"></table>
+      <div id="logtrailHeaderPager"></div>
+
+      <table id="logtrailDetail"></table>
+      <div id="logtrailDetailPager"></div>
     </div>
   </div>
 </div>
 
 @push('scripts')
 <script>
-  $("#tabs").tabs()
-
   let logtrailHeaderData
   let logtrailHeaderUrl = `{{ route('logtrail.header') }}`
   let logtrailGeaderColModel = []
@@ -49,18 +38,19 @@
     $("#logtrailHeader").jqGrid({
         url: `${logtrailHeaderUrl}?id=${id}`,
         colModel: logtrailGeaderColModel,
+        caption: "Header Grid",
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
         autowidth: true,
         shrinkToFit: false,
+        title: 'Header Grid',
         height: 350,
         rowNum: 0,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
-        toolbar: [true, "top"],
         sortable: true,
         pager: pager,
         viewrecords: true,
@@ -84,6 +74,7 @@
     $("#logtrailDetail").jqGrid({
         url: `${logtrailDetailUrl}?id=${id}`,
         colModel: logtrailGeaderColModel,
+        caption: "Detail Grid",
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -95,7 +86,6 @@
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
-        toolbar: [true, "top"],
         sortable: true,
         pager: pager,
         viewrecords: true,
