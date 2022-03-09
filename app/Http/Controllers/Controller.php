@@ -100,8 +100,7 @@ class Controller extends BaseController
         $menu = ModelsMenu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')
             ->where('menu.menuparent', $induk)
             ->orderby('menuseq', 'ASC')
-            ->get(['menu.id', 'menu.menuseq', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
-
+            ->get(['menu.id', 'menu.aco_id', 'menu.menuseq', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
         // dd($menu->toArray());
             
         foreach ($menu as $index => $row) {
@@ -110,6 +109,7 @@ class Controller extends BaseController
             if ($hasPermission || $row->class == null) {
                 $data[] = [
                     'menuid' => $row->id,
+                    'aco_id' => $row->aco_id,
                     'menuname' => $row->menuname,
                     'menuicon' => $row->menuicon,
                     'link' => $row->link,

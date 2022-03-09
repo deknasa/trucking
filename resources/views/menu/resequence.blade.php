@@ -9,16 +9,17 @@
         <form action="#" method="post">
           <div class="card-body">
             @csrf
-            <div class="dd">
-              {!! \App\Helpers\Menu::printRecursiveMenu($sqlmenu) !!}
+            <div class="row">
+              <div class="col-12">
+                <div class="dd">
+                  {!! \App\Helpers\Menu::printRecursiveMenu($sqlmenu) !!}
+                </div>
+              </div>
             </div>
           </div>
           <div class="card-footer">
             <button type="submit" id="btnSimpan" class="btn btn-primary">
               <i class="fa fa-save"></i> Simpan
-            </button>
-            <button type="submit" id="btnSimpan" class="btn btn-secondary">
-              <i class="fa fa-save"></i> Reset
             </button>
             <a href="{{ route('menu.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
@@ -35,14 +36,15 @@
 <script>
   $(document).ready(() => {
     let beforeDragParent
-    
+
     $('.dd').nestable({
       listNodeName: 'ul',
       onDragStart: (container, element) => {
         beforeDragParent = element.parent()
       },
       beforeDragStop: (container, element, place) => {
-        if (beforeDragParent[0] !== place[0]) return false
+        console.log(place);
+        // if (place.data('isparent')) return false
       },
       callback: (container, element) => {
 
@@ -51,7 +53,7 @@
 
     $('form').submit((e) => {
       e.preventDefault()
-      
+
       $('#btnSimpan').attr('disabled', '')
       $('#loader').removeClass('d-none')
 
