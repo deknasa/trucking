@@ -20,10 +20,6 @@ $(document).ready(function() {
     });
 });
 $(document).ajaxError((event, jqXHR, ajaxSettings, thrownError) => {
-    // console.log(event);
-    // console.log(jqXHR);
-    // console.log(ajaxSettings);
-    // console.log(thrownError);
     if (jqXHR.status !== 422) {
         showDialog(thrownError)
     }
@@ -74,13 +70,17 @@ $.fn.disable = function() {
 
 function setErrorMessages(errors) {
     $(`[name=${Object.keys(errors)[0]}]`).focus();
-
+    
     $.each(errors, (index, error) => {
-        $(`[name=${index}]`).addClass("is-invalid").after(`
-			<div class="invalid-feedback">
-			${error}
-			</div>
-		`);
+        if ($(`[name=${index}]`).length > 0) {
+            $(`[name=${index}]`).addClass("is-invalid").after(`
+                <div class="invalid-feedback">
+                ${error}
+                </div>
+            `);
+        } else {
+            return showDialog(error)
+        }
     });
 }
 
