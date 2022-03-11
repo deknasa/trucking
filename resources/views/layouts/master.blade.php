@@ -277,7 +277,7 @@
   <script src="{{ asset('libraries/inputmask/5.0.6/jquery.inputmask.min.js') }}"></script>
 
   <!-- Nestable2 -->
-  <script src="https:cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.js"></script>
   
   <!-- Custom global script -->
   <script src="{{ asset('mains.js') }}"></script>
