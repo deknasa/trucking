@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AbsensiSupirDetailController;
 use App\Http\Controllers\AbsensiSupirHeaderController;
+use App\Http\Controllers\AbsenTradoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\ParameterController;
@@ -136,4 +137,12 @@ Route::middleware('auth')->group(function () {
     Route::get('container/index', [ContainerController::class, 'index']);
     Route::get('container/get', [ContainerController::class, 'get'])->name('container.get');
     Route::resource('container', ContainerController::class);
+    
+    Route::get('absentrado/field_length', [AbsenTradoController::class, 'fieldLength'])->name('absentrado.field_length');
+    Route::get('absentrado/{id}/delete', [AbsenTradoController::class, 'delete'])->name('absentrado.delete');
+    Route::get('absentrado/index', [AbsenTradoController::class, 'index']);
+    Route::get('absentrado/report', [AbsenTradoController::class, 'report'])->name('absentrado.report');
+    Route::get('absentrado/export', [AbsenTradoController::class, 'export'])->name('absentrado.export');
+    Route::get('absentrado/get', [AbsenTradoController::class, 'get'])->name('absentrado.get');
+    Route::resource('absentrado', AbsenTradoController::class);
 });

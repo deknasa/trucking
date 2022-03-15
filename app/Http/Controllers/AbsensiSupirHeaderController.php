@@ -212,7 +212,7 @@ class AbsensiSupirHeaderController extends Controller
 
     public function getStatus()
     {
-        $response = Http::withToken(session('access_token'))->get(config('app.api_url') . 'absentrado');
+        $response = Http::withToken(session('access_token'))->get(config('app.api_url') . 'absen_trado');
 
         return $response['data'];
     }

@@ -2,21 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Menu;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use app\Helpers\Menu as MenuHelper;
 
-class ParameterController extends Controller
+class AbsenTradoController extends Controller
 {
-    public $title = 'Parameter';
-    public $access_token = 'tes';
+    public $title = 'AbsenTrado';
     public $httpHeaders = [
         'Accept' => 'application/json',
         'Content-Type' => 'application/json',
@@ -32,17 +28,22 @@ class ParameterController extends Controller
     }
 
     /**
-     * Fungsi index
-     * @ClassName index
+     * @ClassName
      */
     public function index(Request $request)
     {
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
+        $data = [
+            'combo' => $this->combo('list'),
+        ];
 
-        return view('parameter.index', compact('title', 'breadcrumb'));
+        return view('absentrado.index', compact('title', 'breadcrumb', 'data'));
     }
 
+    /**
+     * @ClassName
+     */
     public function get($params = [])
     {
         $params = [
@@ -55,7 +56,7 @@ class ParameterController extends Controller
 
         $response = Http::withHeaders(request()->header())
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'parameter', $params);
+            ->get(config('app.api_url') . 'absen_trado', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -68,34 +69,39 @@ class ParameterController extends Controller
         if (request()->ajax()) {
             return response($data, $response->status());
         }
-        
+
         return $data;
     }
 
     /**
-     * Fungsi create
-     * @ClassName create
+     * @ClassName
      */
     public function create(): View
     {
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
+        $combo = [
+            'status' => $this->getStatus()
+        ];
 
-        return view('parameter.add', compact('title', 'breadcrumb'));
+        return view('absentrado.add', compact('title', 'breadcrumb', 'combo'));
     }
 
+    /**
+     * @ClassName
+     */
     public function store(Request $request): Response
     {
         try {
             $request['modifiedby'] = Auth::user()->name;
-    
+
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
             ])
                 ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'parameter', $request->all());
-    
+                ->post(config('app.api_url') . 'absen_trado', $request->all());
+
             return response($response, $response->status());
         } catch (\Throwable $th) {
             throw $th->getMessage();
@@ -103,8 +109,7 @@ class ParameterController extends Controller
     }
 
     /**
-     * Fungsi edit
-     * @ClassName edit
+     * @ClassName
      */
     public function edit($id): View
     {
@@ -115,13 +120,20 @@ class ParameterController extends Controller
             'Content-Type' => 'application/json'
         ])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "parameter/$id");
+            ->get(config('app.api_url') . "absen_trado/$id");
 
-        $parameter = $response['data'];
+        $absenTrado = $response['data'];
 
-        return view('parameter.edit', compact('title', 'parameter'));
+        $combo = [
+            'status' => $this->getStatus()
+        ];
+
+        return view('absentrado.edit', compact('title', 'absenTrado', 'combo'));
     }
 
+    /**
+     * @ClassName
+     */
     public function update(Request $request, $id): Response
     {
         $request['modifiedby'] = Auth::user()->name;
@@ -131,112 +143,115 @@ class ParameterController extends Controller
             'Content-Type' => 'application/json',
         ])
             ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "parameter/$id", $request->all());
+            ->patch(config('app.api_url') . "absen_trado/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
-     * Fungsi delete
-     * @ClassName delete
+     * @ClassName
      */
     public function delete($id)
     {
         try {
             $title = $this->title;
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
+            $response = Http::withHeaders($this->httpHeaders)
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "parameter/$id");
+                ->get(config('app.api_url') . "absen_trado/$id");
 
-            $parameter = $response['data'];
+            $absenTrado = $response['data'];
 
-            return view('parameter.delete', compact('title', 'parameter'));
+            $combo = [
+                'status' => $this->getStatus()
+            ];
+            
+            return view('absentrado.delete', compact('title', 'absenTrado', 'combo'));
         } catch (\Throwable $th) {
-            return redirect()->route('parameter.index');
+            throw $th;
         }
     }
 
+    /**
+     * @ClassName
+     */
     public function destroy($id, Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "parameter/$id", $request->all());
+            ->delete(config('app.api_url') . "absen_trado/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     public function fieldLength(): Response
     {
         $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'parameter/field_length');
+            ->get(config('app.api_url') . 'absen_trado/field_length');
 
         return response($response['data']);
     }
 
+    /**
+     * @ClassName
+     */
     public function report(Request $request): View
     {
         $params['offset'] = $request->dari - 1;
         $params['rows'] = $request->sampai - $request->dari + 1;
 
-        $parameters = $this->get($params)['rows'];
+        $absenTrados = $this->get($params)['rows'];
 
-        return view('reports.parameter', compact('parameters'));
+        return view('reports.absentrado', compact('absenTrados'));
     }
 
+    /**
+     * @ClassName
+     */
     public function export(Request $request): void
     {
         $params = [
             'offset' => $request->dari - 1,
             'rows' => $request->sampai - $request->dari + 1,
         ];
-        
-        $parameters = $this->get($params);
+
+        $absenTrados = $this->get($params);
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Laporan Parameter');
+        $sheet->setCellValue('A1', 'Laporan AbsenTrado');
         $sheet->getStyle("A1")->getFont()->setSize(20);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
 
         $sheet->setCellValue('A2', 'No');
         $sheet->setCellValue('B2', 'ID');
-        $sheet->setCellValue('C2', 'Group');
-        $sheet->setCellValue('D2', 'Sub Group');
-        $sheet->setCellValue('E2', 'Nama Parameter');
-        $sheet->setCellValue('F2', 'Memo');
-        $sheet->setCellValue('G2', 'ModifiedBy');
-        $sheet->setCellValue('H2', 'ModifiedOn');
+        $sheet->setCellValue('C2', 'Kode Absen');
+        $sheet->setCellValue('D2', 'Keterangan');
+        $sheet->setCellValue('E2', 'Status');
+        $sheet->setCellValue('F2', 'ModifiedBy');
+        $sheet->setCellValue('G2', 'ModifiedOn');
 
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
 
         $no = 1;
         $x = 3;
-        foreach ($parameters['rows'] as $row) {
+        foreach ($absenTrados['rows'] as $row) {
             $sheet->setCellValue('A' . $x, $no++);
             $sheet->setCellValue('B' . $x, $row['id']);
-            $sheet->setCellValue('C' . $x, $row['grp']);
-            $sheet->setCellValue('D' . $x, $row['subgrp']);
-            $sheet->setCellValue('E' . $x, $row['text']);
-            $sheet->setCellValue('F' . $x, $row['memo']);
-            $sheet->setCellValue('G' . $x, $row['modifiedby']);
-            $sheet->setCellValue('H' . $x,  date("d-m-Y H:i:s", strtotime($row['updated_at'])));
-            $lastCell = 'H' . $x;
+            $sheet->setCellValue('C' . $x, $row['kodeabsen']);
+            $sheet->setCellValue('D' . $x, $row['keterangan']);
+            $sheet->setCellValue('E' . $x, $row['statusaktif']);
+            $sheet->setCellValue('F' . $x, $row['modifiedby']);
+            $sheet->setCellValue('G' . $x, date("d-m-Y H:i:s", strtotime($row['updated_at'])));
+            $lastCell = 'G' . $x;
             $x++;
         }
 
@@ -250,16 +265,51 @@ class ParameterController extends Controller
             ),
         );
 
-        $sheet->getStyle('A2:H2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF02c4f5');
+        $sheet->getStyle('A2:G2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF02c4f5');
         $sheet->getStyle('A2:' . $lastCell)->applyFromArray($styleArray);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'laporanParameter' . date('dmYHis');
+        $filename = 'laporanAbsenTrado' . date('dmYHis');
 
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
 
         $writer->save('php://output');
+    }
+
+    public function combo($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
+        return $response['data'];
+    }
+
+    public function getStatus(): array
+    {
+        return (new ParameterController)->get([
+            'filters' => json_encode([
+                'groupOp' => 'AND',
+                'rules' => [
+                    [
+                        'field' => 'grp',
+                        'data' => 'STATUS AKTIF',
+                    ],
+                    [
+                        'field' => 'subgrp',
+                        'data' => 'STATUS AKTIF',
+                    ],
+                ],
+            ]),
+        ])['rows'];
     }
 }

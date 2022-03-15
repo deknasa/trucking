@@ -102,7 +102,7 @@ class Myauth
         if (in_array($class, $this->exceptAuth['class'])) {
             return true;
         }
-        
+
         $userRole = DB::table('userrole')
             ->where('user_id', $this->userPK)
             ->get();
@@ -111,16 +111,16 @@ class Myauth
             ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('acl', 'acos.id', '=', 'acl.aco_id')
             ->where('acos.class', 'like', "%$class%")
-            ->where('acl.role_id', $userRole[0]->id);
+            ->where('acl.role_id', Auth::user()->id);
 
         $data = DB::table('acos')
             ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('useracl', 'acos.id', '=', 'useracl.aco_id')
             ->where('acos.class', 'like', "%$class%")
-            ->where('useracl.user_id', $userRole[0]->id)
+            ->where('useracl.user_id', Auth::user()->id)
             ->unionAll($data_union)
             ->get();
-        
+
         if ($this->in_array_custom($method, $data->toArray()) == false && in_array($method, $this->exceptAuth['method']) == false) {
             return false;
         }
