@@ -1,6 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
+
 <!-- Grid -->
 <div class="container-fluid">
     <div class="row">
@@ -213,7 +214,9 @@
 
 
                 loadComplete: function(data) {
-                    $("input").attr("autocomplete", "off");
+                    $(document).unbind('keydown')
+                    setCustomBindKeys($(this))
+                    initResize($(this))
 
                     /* Set global variables */
                     sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -271,7 +274,6 @@
                     window.location.href = `{{ route('user.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
                 }
             })
-
 
             .navButtonAdd(pager, {
                 caption: 'Edit',

@@ -134,6 +134,10 @@
           return true;
         },
         loadComplete: function(data) {
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
+          initResize($(this))
+
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -229,7 +233,7 @@
     /* Append global search */
     loadGlobalSearch()
 
-    
+
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)
       .parent().addClass('px-1')
@@ -242,7 +246,7 @@
       .addClass('btn-sm btn-danger')
       .parent().addClass('px-1')
 
-      if (!`{{ $myAuth->hasPermission('role', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('role', 'create') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
@@ -252,9 +256,7 @@
 
     if (!`{{ $myAuth->hasPermission('role', 'delete') }}`) {
       $('#delete').addClass('ui-disabled')
-    }      
-
-
+    }
   })
 
   /**

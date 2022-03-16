@@ -7,19 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 
-class AclController extends Controller
+class AclController extends MyController
 {
     public $title = 'Acl';
-    public $httpHeader = [
-        'Accept' => 'application/json',
-        'Content-Type' => 'application/json'
-    ];
 
-
-   /**
+    /**
      * Fungsi index
      * @ClassName index
-     */    
+     */
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -52,8 +47,6 @@ class AclController extends Controller
         ];
 
         return view('acl.index', compact('title', 'data'));
-       
-
     }
 
     public function detail(Request $request)
@@ -85,14 +78,12 @@ class AclController extends Controller
 
             return response($data);
         }
-
-    
     }
 
-   /**
+    /**
      * Fungsi create
      * @ClassName create
-     */    
+     */
     public function create(Request $request)
     {
         $title = $this->title;
@@ -101,30 +92,27 @@ class AclController extends Controller
         ];
         $data['combo'] = $this->combo('entry');
 
-        $role_id='0';
+        $role_id = '0';
         //   dd($data);
-        return view('acl.add', compact('title','list','role_id', 'data'));
+        return view('acl.add', compact('title', 'list', 'role_id', 'data'));
     }
 
     public function store(Request $request)
     {
 
-        $request['modifiedby']=Auth::user()->name;
+        $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'acl', $request->all());
+        $response = Http::withHeaders($this->httpHeaders)->post(config('app.api_url') . 'acl', $request->all());
 
-        
-        
+
+
         return response($response);
     }
 
-   /**
+    /**
      * Fungsi edit
      * @ClassName edit
-     */    
+     */
     public function edit($id)
     {
         $title = $this->title;
@@ -140,25 +128,22 @@ class AclController extends Controller
         ];
         $data['combo'] = $this->combo('entry');
 
-        $role_id=$acl['role_id'];
-        return view('acl.edit', compact('title', 'acl','list','role_id','data'));
+        $role_id = $acl['role_id'];
+        return view('acl.edit', compact('title', 'acl', 'list', 'role_id', 'data'));
     }
 
     public function update(Request $request, $id)
     {
-        $request['modifiedby']=Auth::user()->name;
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "acl/$id", $request->all());
+        $request['modifiedby'] = Auth::user()->name;
+        $response = Http::withHeaders($this->httpHeaders)->patch(config('app.api_url') . "acl/$id", $request->all());
 
         return response($response);
     }
 
-   /**
+    /**
      * Fungsi delete
      * @ClassName delete
-     */       
+     */
     public function delete($id)
     {
         try {
@@ -169,40 +154,39 @@ class AclController extends Controller
                 'Content-Type' => 'application/json'
             ])->get(config('app.api_url') . "acl/$id");
 
-            
+
             $acl = $response['data'];
             $list = [
                 'detail' => $this->detaillist($acl['role_id']  ?? '0'),
             ];
             $data['combo'] = $this->combo('entry');
 
-            $role_id=$acl['role_id'];
-            
-        
-           
-            return view('acl.delete', compact('title', 'acl','list','role_id','data'));
+            $role_id = $acl['role_id'];
+
+
+
+            return view('acl.delete', compact('title', 'acl', 'list', 'role_id', 'data'));
         } catch (\Throwable $th) {
             return redirect()->route('acl.index');
         }
     }
 
-    public function destroy($id,Request $request)
+    public function destroy($id, Request $request)
     {
-        $request['modifiedby']=Auth::user()->name;
+        $request['modifiedby'] = Auth::user()->name;
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])->delete(config('app.api_url') . "acl/$id", $request->all());
 
-        
+
 
         return response($response);
-        
     }
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'acl/field_length');
+        $response = Http::withHeaders($this->httpHeaders)->get(config('app.api_url') . 'acl/field_length');
 
         return response($response['data']);
     }
@@ -214,11 +198,8 @@ class AclController extends Controller
         ];
         $response = Http::get(config('app.api_url') . 'acl/detaillist', $status);
         return $response['data'];
-        
-
-    
     }
-    
+
     public function combo($aksi)
     {
 
@@ -228,12 +209,9 @@ class AclController extends Controller
             'subgrp' => 'STATUS AKTIF',
         ];
 
-        $response = Http::withHeaders($this->httpHeader)
+        $response = Http::withHeaders($this->httpHeaders)
             ->get(config('app.api_url') . 'acl/combostatus', $status);
 
         return $response['data'];
     }
-
-
-
 }

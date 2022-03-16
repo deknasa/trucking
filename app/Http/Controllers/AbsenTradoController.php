@@ -10,22 +10,9 @@ use Illuminate\Support\Facades\Http;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class AbsenTradoController extends Controller
+class AbsenTradoController extends MyController
 {
     public $title = 'AbsenTrado';
-    public $httpHeaders = [
-        'Accept' => 'application/json',
-        'Content-Type' => 'application/json',
-    ];
-
-    public function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            parent::__construct();
-
-            return $next($request);
-        });
-    }
 
     /**
      * @ClassName

@@ -39,16 +39,15 @@ class MyController extends Controller
 
             $this->setClass();
             $this->setMethod();
-
+            
             $this->setBreadcrumb($this->class);
-
+            
             $this->setMyAuthConfig();
-
+            
             $this->initMyauth();
-
+            
             $this->myAuth->auth($this->class, $this->method);
-
-
+            
             $this->loadMenu();
 
             return $next($request);
@@ -99,6 +98,36 @@ class MyController extends Controller
 
     public function getMenu($induk = 0)
     {
+        // $data = [];
+
+        // $menu = ModelsMenu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')
+        //     ->where('menu.menuparent', $induk)
+        //     ->orderby(DB::raw('right(menukode,1)'), 'ASC')
+        //     ->get(['menu.id', 'menu.aco_id', 'menu.menuseq', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
+
+        // foreach ($menu as $index => $row) {
+        //     $hasPermission = $this->myAuth->hasPermission($row->class, $row->method);
+
+        //     if ($hasPermission || $row->class == null) {
+        //         $data[] = [
+        //             'menuid' => $row->id,
+        //             'aco_id' => $row->aco_id,
+        //             'menuname' => $row->menuname,
+        //             'menuicon' => $row->menuicon,
+        //             'link' => $row->link,
+        //             'menuno' => substr($row->menukode, -1),
+        //             'menukode' => $row->menukode,
+        //             'menuexe' => $row->class . "/" . $row->method,
+        //             'class' => $row->class,
+        //             'child' => $this->getMenu($row->id),
+        //             'menuparent' => $row->menuparent,
+        //         ];
+        //     }
+        // }
+
+        // return $data;
+
+
         $results = [];
 
         $role = UserRole::where('user_id', Auth::id())->first();
@@ -139,37 +168,6 @@ class MyController extends Controller
         }
 
         return $results;
-
-        /* =================== */
-
-        // $data = [];
-
-        // $menu = ModelsMenu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')
-        //     ->where('menu.menuparent', $induk)
-        //     ->orderby(DB::raw('right(menukode,1)'), 'ASC')
-        //     ->get(['menu.id', 'menu.aco_id', 'menu.menuseq', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
-
-        // foreach ($menu as $index => $row) {
-        //     $hasPermission = $this->myAuth->hasPermission($row->class, $row->method);
-
-        //     if ($hasPermission || $row->class == null) {
-        //         $data[] = [
-        //             'menuid' => $row->id,
-        //             'aco_id' => $row->aco_id,
-        //             'menuname' => $row->menuname,
-        //             'menuicon' => $row->menuicon,
-        //             'link' => $row->link,
-        //             'menuno' => substr($row->menukode, -1),
-        //             'menukode' => $row->menukode,
-        //             'menuexe' => $row->class . "/" . $row->method,
-        //             'class' => $row->class,
-        //             'child' => $this->getMenu($row->id),
-        //             'menuparent' => $row->menuparent,
-        //         ];
-        //     }
-        // }
-
-        // return $data;
     }
 
     public function hasPermission($class, $method)

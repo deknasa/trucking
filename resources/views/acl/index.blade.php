@@ -1,22 +1,6 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="content-header">
-  <div class="container-fluid">
-    <div class="row mb-2">
-      <div class="col-sm-6">
-        <h1 class="m-0">{{ $title }}</h1>
-      </div>
-      <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-          <li class="breadcrumb-item active">{{ $title }}</li>
-        </ol>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
@@ -27,27 +11,23 @@
   </div>
 </div>
 
-<!-- Detail -->
-<!-- @include('acl._detail') -->
-
-
 @push('scripts')
 <script>
-  $(document).ready(function() {
-    let indexUrl = "{{ route('acl.index') }}"
-    let indexRow = 0;
-    let page = 0;
-    let pager = '#jqGridPager'
-    let popup = "";
-    let id = "";
-    let triggerClick = true;
-    let highlightSearch;
-    let totalRecord
-    let limit
-    let postData
-    let sortname = 'rolename'
-    let sortorder = 'asc'
+  let indexUrl = "{{ route('acl.index') }}"
+  let indexRow = 0;
+  let page = 0;
+  let pager = '#jqGridPager'
+  let popup = "";
+  let id = "";
+  let triggerClick = true;
+  let highlightSearch;
+  let totalRecord
+  let limit
+  let postData
+  let sortname = 'rolename'
+  let sortorder = 'asc'
 
+  $(document).ready(function() {
     /* Set page */
     <?php if (isset($_GET['page'])) { ?>
       page = "{{ $_GET['page'] }}"
@@ -126,8 +106,6 @@
         onSelectRow: function(id) {
           row_id = $(this).jqGrid('getGridParam', 'selrow')
           selectedId = $(this).jqGrid('getCell', row_id, 'role_id');
-          console.log(selectedId)
-          console.log('test')
 
           loadDetailData(selectedId)
 
@@ -138,6 +116,9 @@
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         loadComplete: function(data) {
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
+          initResize($(this))
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -203,8 +184,7 @@
         onClickButton: function() {
           row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
           selectedId = $(this).jqGrid('getCell', row_id, 'id');
-          // alert(selectid);
-          console.log(selectedId)
+
           window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
@@ -233,10 +213,8 @@
         }
       })
 
-      .bindKeys() /
-
-      /* Append clear filter button */
-      loadClearFilter()
+    /* Append clear filter button */
+    loadClearFilter()
 
     /* Append global search */
     loadGlobalSearch()
@@ -269,9 +247,6 @@
     if (!`{{ $myAuth->hasPermission('acl', 'delete') }}`) {
       $('#delete').addClass('ui-disabled')
     }
-
-
-
   })
 
   /**
