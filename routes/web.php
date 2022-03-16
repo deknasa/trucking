@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TradoController;
 use App\Http\Controllers\ContainerController;
+use App\Http\Controllers\SupirController;
+use App\Http\Controllers\BankController;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,4 +126,13 @@ Route::middleware('auth')->group(function () {
     Route::get('container/index', [ContainerController::class, 'index']);
     Route::get('container/get', [ContainerController::class, 'get'])->name('container.get');
     Route::resource('container', ContainerController::class);
+
+    Route::get('supir/field_length', [SupirController::class, 'fieldLength'])->name('supir.field_length');
+    Route::get('supir/{id}/delete', [SupirController::class, 'delete'])->name('supir.delete');
+    Route::resource('supir', SupirController::class);
+
+    Route::get('bank/field_length', [BankController::class, 'fieldLength'])->name('bank.field_length');
+    Route::get('bank/{id}/delete', [BankController::class, 'delete'])->name('bank.delete');
+    Route::get('bank/get', [BankController::class, 'get'])->name('bank.get');
+    Route::resource('bank', BankController::class);
 });

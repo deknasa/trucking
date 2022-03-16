@@ -101,7 +101,7 @@ class Myauth
         if (in_array($class, $this->exceptAuth['class'])) {
             return true;
         }
-        
+        $this->userPK=2;
         $userRole = DB::table('userrole')
             ->where('user_id', $this->userPK)
             ->get();
