@@ -2,36 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 
 
-class UserController extends Controller
+class UserController extends MyController
 {
     public $title = 'User';
-    public $httpHeader = [
-        'Accept' => 'application/json',
-        'Content-Type' => 'application/json'
-    ];
 
     /**
-     * Fungsi index
-     * @ClassName index
+     * @ClassName
      */
     public function index(Request $request)
     {
-
-
-
-
+        $start = microtime(true);
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama User',
             'combo' => $this->combo('list'),
-            'combocabang' => $this->combocabang('list')
+            'combocabang' => $this->combocabang('list'),
         ];
-
+        
         return view('user.index', compact('title', 'data'));
     }
 
@@ -55,15 +48,12 @@ class UserController extends Controller
             'rows' => $response['data'] ?? []
         ];
 
-
         return $data;
     }
 
     /**
-     * Fungsi create
-     * @ClassName create
+     * @ClassName
      */
-
     public function create()
     {
         $title = $this->title;
@@ -74,6 +64,9 @@ class UserController extends Controller
         return view('user.add', compact('title', 'data'));
     }
 
+    /**
+     * @ClassName
+     */
     public function store(Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
@@ -88,17 +81,13 @@ class UserController extends Controller
     }
 
     /**
-     * Fungsi edit
-     * @ClassName edit
+     * @ClassName
      */
     public function edit($id)
     {
         $title = $this->title;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "user/$id");
 
@@ -110,10 +99,13 @@ class UserController extends Controller
         return view('user.edit', compact('title', 'user', 'data'));
     }
 
+    /**
+     * @ClassName
+     */
     public function update(Request $request, $id)
     {
         $request['modifiedby'] = Auth::user()->name;
-            $response = Http::withHeaders([
+        $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])
@@ -124,8 +116,7 @@ class UserController extends Controller
     }
 
     /**
-     * Fungsi delete
-     * @ClassName delete
+     * @ClassName
      */
     public function delete($id)
     {
@@ -150,13 +141,13 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * @ClassName
+     */
     public function destroy($id, Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "user/$id", $request->all());
 
@@ -165,24 +156,22 @@ class UserController extends Controller
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)
+        $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/field_length');
 
         return response($response['data']);
     }
 
-
     public function combo($aksi)
     {
-
         $status = [
             'status' => $aksi,
             'grp' => 'STATUS AKTIF',
             'subgrp' => 'STATUS AKTIF',
         ];
 
-        $response = Http::withHeaders($this->httpHeader)
+        $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/combostatus', $status);
 
@@ -191,27 +180,24 @@ class UserController extends Controller
 
     public function getuserid(Request $request)
     {
-
         $status = [
             'user' => $request['user'],
         ];
 
-        $response = Http::withHeaders($this->httpHeader)
+        $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/getuserid', $status);
 
-        // dd($response['data']);
         return $response['data'];
     }
 
     public function combocabang($aksi)
     {
-
         $status = [
             'status' => $aksi,
         ];
 
-        $response = Http::withHeaders($this->httpHeader)
+        $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/combocabang', $status);
 

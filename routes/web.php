@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AbsensiSupirDetailController;
 use App\Http\Controllers\AbsensiSupirHeaderController;
+use App\Http\Controllers\AbsenTradoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\ParameterController;
@@ -10,12 +11,14 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\AclController;
+use App\Http\Controllers\AgenController;
 use App\Http\Controllers\UserAclController;
 use App\Http\Controllers\ErrorController;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LogTrailController;
 use App\Http\Controllers\TradoController;
 use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\SupirController;
@@ -35,6 +38,7 @@ use App\Http\Controllers\BankController;
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('guest')->group(function () {
+    Route::get('login', [AuthController::class, 'index'])->name('login');
     Route::get('login/index', [AuthController::class, 'index'])->name('login');
     Route::post('login', [AuthController::class, 'login'])->name('login.process');
 });
@@ -50,7 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::get('parameter/export', [ParameterController::class, 'export'])->name('parameter.export');
     Route::get('parameter/get', [ParameterController::class, 'get'])->name('parameter.get');
     Route::resource('parameter', ParameterController::class);
-    
+
     Route::get('error/field_length', [ErrorController::class, 'fieldLength'])->name('error.field_length');
     Route::get('error/{id}/delete', [ErrorController::class, 'delete'])->name('error.delete');
     Route::get('error/index', [ErrorController::class, 'index']);
@@ -84,7 +88,9 @@ Route::middleware('auth')->group(function () {
     Route::get('menu/listclassall', [MenuController::class, 'listclassall'])->name('menu.listclassall');
     Route::get('menu/index', [MenuController::class, 'index']);
     Route::get('menu/get', [MenuController::class, 'get'])->name('menu.get');
-    Route::resource('menu', MenuController::class);    
+    Route::get('menu/resequence', [MenuController::class, 'resequence'])->name('menu.resequence');
+    Route::post('menu/resequence', [MenuController::class, 'storeResequence'])->name('menu.resequence.store');
+    Route::resource('menu', MenuController::class);
 
     Route::get('absensisupir/{id}/delete', [AbsensiSupirHeaderController::class, 'delete'])->name('absensisupir.delete');
     Route::get('absensisupir/index', [AbsensiSupirHeaderController::class, 'index']);
@@ -105,7 +111,7 @@ Route::middleware('auth')->group(function () {
     Route::get('acl/field_length', [AclController::class, 'fieldLength'])->name('acl.field_length');
     Route::get('acl/detail', [AclController::class, 'detail'])->name('acl.detail');
     Route::get('acl/index', [AclController::class, 'index']);
-    Route::resource('acl', AclController::class);    
+    Route::resource('acl', AclController::class);
 
     Route::get('useracl/{id}/delete', [UserAclController::class, 'delete'])->name('useracl.delete');
     Route::get('useracl/field_length', [UserAclController::class, 'fieldLength'])->name('useracl.field_length');
@@ -115,12 +121,20 @@ Route::middleware('auth')->group(function () {
     Route::get('useracl/index', [UserAclController::class, 'index']);
     Route::get('useracl/get', [UserAclController::class, 'get'])->name('useracl.get');
 
-    Route::resource('useracl', UserAclController::class);    
+    Route::resource('useracl', UserAclController::class);
 
     Route::get('trado/field_length', [TradoController::class, 'fieldLength'])->name('trado.field_length');
     Route::get('trado/{id}/delete', [TradoController::class, 'delete'])->name('trado.delete');
     Route::resource('trado', TradoController::class);
 
+    Route::get('logtrail/index', [LogTrailController::class, 'index'])->name('logtrail.index');
+    Route::get('logtrail/get', [LogTrailController::class, 'get'])->name('logtrail.get');
+    Route::get('logtrail/report', [LogTrailController::class, 'report'])->name('logtrail.report');
+    Route::get('logtrail/export', [LogTrailController::class, 'export'])->name('logtrail.export');
+    Route::get('logtrail/header', [LogTrailController::class, 'header'])->name('logtrail.header');
+    Route::get('logtrail/detail', [LogTrailController::class, 'detail'])->name('logtrail.detail');
+    Route::resource('logtrail', LogTrailController::class);
+    
     Route::get('container/field_length', [ContainerController::class, 'fieldLength'])->name('container.field_length');
     Route::get('container/{id}/delete', [ContainerController::class, 'delete'])->name('container.delete');
     Route::get('container/index', [ContainerController::class, 'index']);
@@ -135,4 +149,21 @@ Route::middleware('auth')->group(function () {
     Route::get('bank/{id}/delete', [BankController::class, 'delete'])->name('bank.delete');
     Route::get('bank/get', [BankController::class, 'get'])->name('bank.get');
     Route::resource('bank', BankController::class);
+    
+    Route::get('absentrado/field_length', [AbsenTradoController::class, 'fieldLength'])->name('absentrado.field_length');
+    Route::get('absentrado/{id}/delete', [AbsenTradoController::class, 'delete'])->name('absentrado.delete');
+    Route::get('absentrado/index', [AbsenTradoController::class, 'index']);
+    Route::get('absentrado/report', [AbsenTradoController::class, 'report'])->name('absentrado.report');
+    Route::get('absentrado/export', [AbsenTradoController::class, 'export'])->name('absentrado.export');
+    Route::get('absentrado/get', [AbsenTradoController::class, 'get'])->name('absentrado.get');
+    Route::resource('absentrado', AbsenTradoController::class);
+
+    Route::get('agen/field_length', [AgenController::class, 'fieldLength'])->name('agen.field_length');
+    Route::get('agen/{id}/delete', [AgenController::class, 'delete'])->name('agen.delete');
+    Route::get('agen/index', [AgenController::class, 'index']);
+    Route::get('agen/report', [AgenController::class, 'report'])->name('agen.report');
+    Route::get('agen/export', [AgenController::class, 'export'])->name('agen.export');
+    Route::get('agen/get', [AgenController::class, 'get'])->name('agen.get');
+    Route::resource('agen', AgenController::class);
+
 });

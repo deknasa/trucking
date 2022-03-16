@@ -46,7 +46,7 @@ class AuthController extends Controller
             
             session(['access_token' => $token['access_token']]);
 
-            return redirect()->intended(RouteServiceProvider::HOME);
+            return redirect()->route('dashboard');
         } else {
             return redirect()->back()->withErrors([
                 'user_not_found' => 'User not registered'

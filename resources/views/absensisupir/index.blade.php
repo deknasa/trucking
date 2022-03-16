@@ -1,22 +1,6 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="content-header">
-  <div class="container-fluid">
-    <div class="row mb-2">
-      <div class="col-sm-6">
-        <h1 class="m-0">{{ $title }}</h1>
-      </div>
-      <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-          <li class="breadcrumb-item active">{{ $title }}</li>
-        </ol>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Modal for report -->
 <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -197,6 +181,7 @@
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         loadComplete: function(data) {
+          $("input").attr("autocomplete", "off");
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -310,9 +295,10 @@
         searchOnEnter: false,
         defaultSearch: 'cn',
         groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           clearGlobalSearch()
-        }
+        },
       })
 
     /* Append clear filter button */
@@ -344,7 +330,7 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      $('#rangeModal').on('shown.bs.modal', function() {
+    $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {
           autoNumericElement.remove()

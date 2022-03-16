@@ -143,7 +143,6 @@
         dataType: 'JSON',
         data: $('form').serializeArray(),
         success: response => {
-          alert('success')
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
 
@@ -160,7 +159,6 @@
           }
         },
         error: error => {
-          alert('error')
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
@@ -169,8 +167,9 @@
           } else {
             showDialog(error.statusText)
           }
-        }
+        },
       }).always(() => {
+        $('#loader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })

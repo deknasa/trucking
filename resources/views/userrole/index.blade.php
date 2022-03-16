@@ -1,22 +1,6 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="content-header">
-  <div class="container-fluid">
-    <div class="row mb-2">
-      <div class="col-sm-6">
-        <h1 class="m-0">{{ $title }}</h1>
-      </div>
-      <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-          <li class="breadcrumb-item active">{{ $title }}</li>
-        </ol>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
@@ -26,10 +10,6 @@
     </div>
   </div>
 </div>
-
-<!-- Detail -->
-<!-- @include('userrole._detail') -->
-
 
 @push('scripts')
 <script>
@@ -72,8 +52,6 @@
     <?php if (isset($_GET['sortorder'])) { ?>
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
-
-
 
     $("#jqGrid").jqGrid({
         url: indexUrl,
@@ -141,6 +119,9 @@
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         loadComplete: function(data) {
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
+          initResize($(this))
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -153,6 +134,10 @@
           $('.clearsearchclass').click(function() {
             highlightSearch = ''
           })
+
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
+          }
 
           setTimeout(function() {
             if (triggerClick) {
@@ -231,9 +216,10 @@
         searchOnEnter: false,
         defaultSearch: 'cn',
         groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           clearGlobalSearch()
-        }
+        },
       })
 
       .bindKeys() /
@@ -247,7 +233,6 @@
     /* Load detial grid */
     loadDetailGrid()
 
-    
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)
       .parent().addClass('px-1')
@@ -260,7 +245,15 @@
       .addClass('btn-sm btn-danger')
       .parent().addClass('px-1')
 
-      if (!`{{ $myAuth->hasPermission('userrole', 'create') }}`) {
+    $('#report .ui-pg-div')
+      .addClass('btn-sm btn-info')
+      .parent().addClass('px-1')
+
+    $('#export .ui-pg-div')
+      .addClass('btn-sm btn-warning')
+      .parent().addClass('px-1')
+
+    if (!`{{ $myAuth->hasPermission('userrole', 'create') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
@@ -271,97 +264,7 @@
     if (!`{{ $myAuth->hasPermission('userrole', 'delete') }}`) {
       $('#delete').addClass('ui-disabled')
     }
-
-
-
   })
-
-  /**
-   * Custom Functions
-   */
-  var delay = (function() {
-    var timer = 0;
-    return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })()
-
-  function clearColumnSearch() {
-    $('input[id*="gs_"]').val("");
-    $("#resetFilterOptions span#resetFilterOptions").removeClass('aktif');
-    $('select[id*="gs_"]').val("");
-    $("#resetdatafilter").removeClass("active");
-  }
-
-  function clearGlobalSearch() {
-    $("#searchText").val("")
-  }
-
-  function loadClearFilter() {
-    /* Append Button */
-    $('#gsh_' + $.jgrid.jqID($('#jqGrid')[0].id) + '_rn').html(
-      $("<div id='resetfilter' class='reset'><span id='resetdatafilter' class='btn btn-default'> X </span></div>")
-    )
-
-    /* Handle button on click */
-    $("#resetdatafilter").click(function() {
-      highlightSearch = '';
-
-      clearGlobalSearch()
-      clearColumnSearch()
-
-      $("#jqGrid").jqGrid('setGridParam', {
-        search: false,
-        postData: {
-          "filters": ""
-        }
-      }).trigger("reloadGrid");
-    })
-  }
-
-  function loadGlobalSearch() {
-    /* Append global search textfield */
-    $('#t_' + $.jgrid.jqID($('#jqGrid')[0].id)).html($('<form class="form-inline"><div class="form-group" id="titlesearch"><label for="searchText" style="font-weight: normal !important;">Search : </label><input type="text" class="form-control" id="searchText" placeholder="Search" autocomplete="off"></div></form>'));
-
-    /* Handle textfield on input */
-    $(document).on("input", "#searchText", function() {
-      delay(function() {
-        clearColumnSearch()
-
-        var postData = $('#jqGrid').jqGrid("getGridParam", "postData"),
-          colModel = $('#jqGrid').jqGrid("getGridParam", "colModel"),
-          rules = [],
-          searchText = $("#searchText").val(),
-          l = colModel.length,
-          i,
-          cm;
-        for (i = 0; i < l; i++) {
-          cm = colModel[i];
-          if (cm.search !== false && (cm.stype === undefined || cm.stype === "text" || cm.stype === "select")) {
-            rules.push({
-              field: cm.name,
-              op: "cn",
-              data: searchText.toUpperCase()
-            });
-          }
-        }
-        postData.filters = JSON.stringify({
-          groupOp: "OR",
-          rules: rules
-        });
-
-        $('#jqGrid').jqGrid("setGridParam", {
-          search: true
-        });
-        $('#jqGrid').trigger("reloadGrid", [{
-          page: 1,
-          current: true
-        }]);
-        return false;
-      }, 500);
-    });
-  }
 </script>
 @endpush()
 @endsection

@@ -11,8 +11,9 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use app\Helpers\Menu as MenuHelper;
 
-class ParameterController extends Controller
+class ParameterController extends MyController
 {
     public $title = 'Parameter';
     public $access_token = 'tes';
@@ -21,14 +22,14 @@ class ParameterController extends Controller
         'Content-Type' => 'application/json',
     ];
 
-    public function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            parent::__construct();
+    // public function __construct()
+    // {
+    //     $this->middleware(function ($request, $next) {
+    //         parent::__construct();
 
-            return $next($request);
-        });
-    }
+    //         return $next($request);
+    //     });
+    // }
 
     /**
      * Fungsi index
@@ -42,6 +43,9 @@ class ParameterController extends Controller
         return view('parameter.index', compact('title', 'breadcrumb'));
     }
 
+    /**
+     * @ClassName
+     */
     public function get($params = [])
     {
         $params = [
@@ -83,6 +87,9 @@ class ParameterController extends Controller
         return view('parameter.add', compact('title', 'breadcrumb'));
     }
 
+    /**
+     * @ClassName
+     */
     public function store(Request $request): Response
     {
         try {
@@ -159,6 +166,9 @@ class ParameterController extends Controller
         }
     }
 
+    /**
+     * @ClassName
+     */
     public function destroy($id, Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
@@ -182,6 +192,9 @@ class ParameterController extends Controller
         return response($response['data']);
     }
 
+    /**
+     * @ClassName
+     */
     public function report(Request $request): View
     {
         $params['offset'] = $request->dari - 1;
@@ -192,6 +205,9 @@ class ParameterController extends Controller
         return view('reports.parameter', compact('parameters'));
     }
 
+    /**
+     * @ClassName
+     */
     public function export(Request $request): void
     {
         $params = [

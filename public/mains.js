@@ -19,20 +19,16 @@ $(document).ready(function () {
 		decimalCharacter: ",",
 	});
 });
-
 $(document).ajaxError((event, jqXHR, ajaxSettings, thrownError) => {
-	// console.log(event);
-	// console.log(jqXHR);
-	// console.log(ajaxSettings);
-	// console.log(thrownError);
 	if (jqXHR.status !== 422) {
-		showDialog(thrownError)
+		showDialog(thrownError);
 	}
-})
+});
 
 $(window).on("resize", function (event) {
 	if ($(window).width() > 990) {
-		$("body").addClass("sidebar-close sidebar-collapse");
+		$("body").removeClass();
+		$("body").addClass("sidebar-collapse");
 	}
 });
 
@@ -76,11 +72,15 @@ function setErrorMessages(errors) {
 	$(`[name=${Object.keys(errors)[0]}]`).focus();
 
 	$.each(errors, (index, error) => {
-		$(`[name=${index}]`).addClass("is-invalid").after(`
-			<div class="invalid-feedback">
-			${error}
-			</div>
-		`);
+		if ($(`[name=${index}]`).length > 0) {
+			$(`[name=${index}]`).addClass("is-invalid").after(`
+                <div class="invalid-feedback">
+                ${error}
+                </div>
+            `);
+		} else {
+			return showDialog(error);
+		}
 	});
 }
 
@@ -225,10 +225,12 @@ function setCustomBindKeys(grid) {
 				}
 			}
 
-			console.log($('.ui-jqgrid-bdiv').find('tbody').animate({
-				scrollTop: 200
-			}));
-			console.log($('.table-success').position().top > 300);
+			console.log(
+				$(".ui-jqgrid-bdiv").find("tbody").animate({
+					scrollTop: 200,
+				})
+			);
+			console.log($(".table-success").position().top > 300);
 		}
 	});
 }
@@ -492,3 +494,85 @@ function showDialog(message = "") {
 		modal: true,
 	});
 }
+
+$(document).ready(function () {
+	$("#sidebarButton").click(function () {
+		$(".nav-treeview").each(function (i, el) {
+			// console.log($(el));
+			$(el).removeAttr("style");
+		});
+	});
+
+	var url = window.location.href;
+
+	/** add active class and stay opened when selected */
+	var url = window.location;
+
+	// for sidebar menu entirely but not cover treeview
+	$("ul.sidebar-menu a")
+		.filter(function () {
+			return this.href == url;
+		})
+		.parent()
+		.addClass("active");
+
+	// for treeview
+	$("ul.treeview-menu a")
+		.filter(function () {
+			return this.href == url;
+		})
+		.parentsUntil(".sidebar-menu > .treeview-menu")
+		.addClass("active");
+});
+$("#search").keyup(function () {
+	$(this).data("val", $(this).val());
+});
+
+$("#search").on("input", function (e) {
+	var x = event.which || event.keyCode;
+	var code = $(this).val();
+	var test = $("#" + code).attr("id");
+	var attr = $("#" + test).attr("href");
+	if (code === "") {
+		$(".selected").click().removeClass("selected");
+		$(".active").removeClass("active selected-link");
+	} else {
+		if (
+			$("#" + test).hasClass("selected") ||
+			$("#" + test).hasClass("selected-link")
+		) {
+			var prev = $(this).data("val");
+			$("#" + prev)
+				.removeClass("selected")
+				.click();
+			$("#" + prev).removeClass("active selected-link");
+		} else {
+			if (attr != "javascript:void(0)") {
+				var link = $("#" + test).addClass("active selected-link");
+				$(document).on("keypress", function (e) {
+					if (e.keyCode == 13) {
+						if ($(link).hasClass("active")) {
+							$(link)[0].click();
+						} else {
+							return false;
+						}
+					}
+				});
+			} else {
+				if (
+					$("#" + test)
+						.parent(".nav-item")
+						.hasClass("menu-is-opening menu-open") ||
+					$("#" + test)
+						.parent(".nav-item")
+						.hasClass("menu-open")
+				) {
+					$("#" + test).addClass("selected");
+				} else {
+					$("#" + test)[0].click();
+					$("#" + test).addClass("selected");
+				}
+			}
+		}
+	}
+});

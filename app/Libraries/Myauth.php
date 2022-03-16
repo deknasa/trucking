@@ -37,7 +37,8 @@ class Myauth
             'error',
             'acl',
             'cabang',
-            'absensisupir'
+            'absensisupir',
+            'logtrail',
         ],
         'method' => [
             'gridtab',
@@ -49,7 +50,7 @@ class Myauth
             'listmarketingcabang',
             'good',
             'nonaktif',
-            'fieldLength',
+            'fieldlength',
             'griddetail',
             'detail',
             'show',
@@ -79,7 +80,7 @@ class Myauth
         $method = strtolower($method);
 
         if (!$this->_validatePermission($class, $method)) {
-            exit("You don't have access");
+            abort(401, "You don't have access");
         }
     }
 
@@ -98,28 +99,28 @@ class Myauth
         }
 
         /* Check if $class is in exception */
-        if (in_array($class, $this->exceptAuth['class'])) {
+        if (in_array(strtolower($class), $this->exceptAuth['class'])) {
             return true;
         }
-        $this->userPK=2;
-        $userRole = DB::table('userrole')
-            ->where('user_id', $this->userPK)
-            ->get();
 
+        $userRole = DB::table('userrole')
+            ->where('user_id', Auth::user()->id)
+            ->get();
+        
         $data_union = DB::table('acos')
             ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('acl', 'acos.id', '=', 'acl.aco_id')
             ->where('acos.class', 'like', "%$class%")
-            ->where('acl.role_id', $userRole[0]->id);
+            ->where('acl.role_id', $userRole[0]->user_id);
 
         $data = DB::table('acos')
             ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('useracl', 'acos.id', '=', 'useracl.aco_id')
             ->where('acos.class', 'like', "%$class%")
-            ->where('useracl.user_id', $userRole[0]->id)
+            ->where('useracl.user_id', Auth::user()->id)
             ->unionAll($data_union)
             ->get();
-        
+
         if ($this->in_array_custom($method, $data->toArray()) == false && in_array($method, $this->exceptAuth['method']) == false) {
             return false;
         }

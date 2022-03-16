@@ -98,7 +98,7 @@
     <?php if (isset($_GET['sortorder'])) { ?>
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
-    
+
     /* Set rowNum */
     <?php if (isset($_GET['limit'])) { ?>
       rowNum = "{{ $_GET['limit'] }}"
@@ -280,9 +280,10 @@
         searchOnEnter: false,
         defaultSearch: 'cn',
         groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           clearGlobalSearch()
-        }
+        },
       })
 
     /* Append clear filter button */

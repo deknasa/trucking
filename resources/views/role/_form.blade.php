@@ -101,7 +101,6 @@
         })
 
         /* Get field maxlength */
-        // alert(fieldLengthUrl)
         $.ajax({
             url: fieldLengthUrl,
             method: 'GET',

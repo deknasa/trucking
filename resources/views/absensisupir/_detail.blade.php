@@ -24,7 +24,6 @@
   })()
 
   function loadDetailGrid() {
-  console.log(detailIndexUrl);
     let pager = '#detailPager'
 
     $("#detail").jqGrid({

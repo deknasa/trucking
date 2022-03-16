@@ -6,21 +6,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 
-class RoleController extends Controller
+class RoleController extends MyController
 {
     public $title = 'Role';
-    public $httpHeader = [
-        // 'Accept' => 'application/json',
-        // 'Content-Type' => 'application/json'
-    ];
 
     /**
-     * Fungsi index
-     * @ClassName index
+     * @ClassName
      */
     public function index(Request $request)
     {
-
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama Role'
@@ -39,14 +33,9 @@ class RoleController extends Controller
             'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
         ];
 
-        // dd($params);
-
-        // $response = Http::get('http://localhost/trucking-laravel/public/role', $params);
         $response = Http::withHeaders(request()->header())
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'role', $params);
-
-
 
         $data = [
             'total' => $response['attributes']['totalPages'],
@@ -54,19 +43,16 @@ class RoleController extends Controller
             'rows' => $response['data']
         ];
 
-
         return $data;
     }
 
 
     /**
-     * Fungsi create
-     * @ClassName create
+     * @ClassName
      */
     public function create()
     {
         $title = $this->title;
-
 
         return view('role.add', compact('title'));
     }
@@ -74,10 +60,8 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
+        
+        $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'role', $request->all());
 
@@ -85,8 +69,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Fungsi edit
-     * @ClassName edit
+     * @ClassName
      */
     public function edit($id)
     {
@@ -106,10 +89,7 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "role/$id", $request->all());
 
@@ -117,8 +97,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Fungsi delete
-     * @ClassName delete
+     * @ClassName
      */
     public function delete($id)
     {
@@ -144,6 +123,7 @@ class RoleController extends Controller
     public function destroy($id, Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
@@ -169,11 +149,11 @@ class RoleController extends Controller
         $status = [
             'rolename' => $request['rolename'],
         ];
+
         $response = Http::withHeaders($this->httpHeader)
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'role/getroleid', $status);
 
-        // dd($response['data']);
         return $response['data'];
     }
 }

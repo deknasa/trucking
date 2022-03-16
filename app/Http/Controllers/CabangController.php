@@ -6,21 +6,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 
-class CabangController extends Controller
+class CabangController extends MyController
 {
     public $title = 'Cabang';
-    public $httpHeader = [
-        'Accept' => 'application/json',
-        'Content-Type' => 'application/json'
-    ];
-
+    
     /**
      * Fungsi index
      * @ClassName index
      */
     public function index(Request $request)
     {
-
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama Cabang',
@@ -50,7 +45,6 @@ class CabangController extends Controller
             'rows' => $response['data'] ?? []
         ];
 
-
         return $data;
     }
 
@@ -70,10 +64,7 @@ class CabangController extends Controller
     public function store(Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'cabang', $request->all());
 
@@ -105,10 +96,7 @@ class CabangController extends Controller
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "cabang/$id", $request->all());
 
@@ -158,7 +146,7 @@ class CabangController extends Controller
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)
+        $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'cabang/field_length');
 
@@ -175,7 +163,7 @@ class CabangController extends Controller
             'subgrp' => 'STATUS AKTIF',
         ];
 
-        $response = Http::withHeaders($this->httpHeader)
+        $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'cabang/combostatus', $status);
 
