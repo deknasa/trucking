@@ -99,77 +99,77 @@ class MyController extends Controller
 
     public function getMenu($induk = 0)
     {
-        // $results = [];
+        $results = [];
 
-        // $role = UserRole::where('user_id', Auth::id())->first();
+        $role = UserRole::where('user_id', Auth::id())->first();
 
-        // $menus = DB::select("
-        //     SELECT DISTINCT menu.id, menu.aco_id, menu.menuseq, menu.menuname, menu.menuicon, acos.class, acos.method, menu.link, menu.menukode, menu.menuparent FROM menu
-        //     LEFT JOIN useracl ON menu.aco_id = useracl.aco_id
-        //     LEFT JOIN acos ON acos.id = menu.aco_id
-        //     WHERE menuparent = $induk AND (useracl.user_id = " . Auth::id() . " OR menu.aco_id = 0)
-        //     UNION ALL
-        //     SELECT DISTINCT menu.id, menu.aco_id, menu.menuseq, menu.menuname, menu.menuicon, acos.class, acos.method, menu.link, menu.menukode, menu.menuparent FROM menu
-        //     LEFT JOIN acl ON menu.aco_id = acl.aco_id
-        //     LEFT JOIN acos ON acos.id = menu.aco_id
-        //     WHERE menuparent = $induk AND (acl.role_id = " . $role->id . " OR menu.aco_id = 0)
-        //     AND menu.menuname NOT IN (
-        //         SELECT DISTINCT menuname FROM menu
-        //         LEFT JOIN useracl ON menu.aco_id = useracl.aco_id
-        //         LEFT JOIN acos ON acos.id = menu.aco_id
-        //         WHERE menu.menuparent = $induk AND (useracl.user_id = " . Auth::id() . " OR menu.aco_id = 0)
-        //     )
-        //     ORDER BY menu.menukode ASC
-        // ");
+        $menus = DB::select("
+            SELECT DISTINCT menu.id, menu.aco_id, menu.menuseq, menu.menuname, menu.menuicon, acos.class, acos.method, menu.link, menu.menukode, menu.menuparent FROM menu
+            LEFT JOIN useracl ON menu.aco_id = useracl.aco_id
+            LEFT JOIN acos ON acos.id = menu.aco_id
+            WHERE menuparent = $induk AND (useracl.user_id = " . Auth::id() . " OR menu.aco_id = 0)
+            UNION ALL
+            SELECT DISTINCT menu.id, menu.aco_id, menu.menuseq, menu.menuname, menu.menuicon, acos.class, acos.method, menu.link, menu.menukode, menu.menuparent FROM menu
+            LEFT JOIN acl ON menu.aco_id = acl.aco_id
+            LEFT JOIN acos ON acos.id = menu.aco_id
+            WHERE menuparent = $induk AND (acl.role_id = " . $role->id . " OR menu.aco_id = 0)
+            AND menu.menuname NOT IN (
+                SELECT DISTINCT menuname FROM menu
+                LEFT JOIN useracl ON menu.aco_id = useracl.aco_id
+                LEFT JOIN acos ON acos.id = menu.aco_id
+                WHERE menu.menuparent = $induk AND (useracl.user_id = " . Auth::id() . " OR menu.aco_id = 0)
+            )
+            ORDER BY menu.menukode ASC
+        ");
 
-        // foreach (collect($menus) as $menu) {
-        //     $results[] = [
-        //         'menuid' => $menu->id,
-        //         'aco_id' => $menu->aco_id,
-        //         'menuname' => $menu->menuname,
-        //         'menuicon' => $menu->menuicon,
-        //         'link' => $menu->link,
-        //         'menuno' => substr($menu->menukode, -1),
-        //         'menukode' => $menu->menukode,
-        //         'menuexe' => $menu->class . "/" . $menu->method,
-        //         'class' => $menu->class,
-        //         'child' => $this->getMenu($menu->id),
-        //         'menuparent' => $menu->menuparent,
-        //     ];
-        // }
+        foreach (collect($menus) as $menu) {
+            $results[] = [
+                'menuid' => $menu->id,
+                'aco_id' => $menu->aco_id,
+                'menuname' => $menu->menuname,
+                'menuicon' => $menu->menuicon,
+                'link' => $menu->link,
+                'menuno' => substr($menu->menukode, -1),
+                'menukode' => $menu->menukode,
+                'menuexe' => $menu->class . "/" . $menu->method,
+                'class' => $menu->class,
+                'child' => $this->getMenu($menu->id),
+                'menuparent' => $menu->menuparent,
+            ];
+        }
 
-        // return $results;
+        return $results;
 
         /* =================== */
 
-        $data = [];
+        // $data = [];
 
-        $menu = ModelsMenu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')
-            ->where('menu.menuparent', $induk)
-            ->orderby(DB::raw('right(menukode,1)'), 'ASC')
-            ->get(['menu.id', 'menu.aco_id', 'menu.menuseq', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
+        // $menu = ModelsMenu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')
+        //     ->where('menu.menuparent', $induk)
+        //     ->orderby(DB::raw('right(menukode,1)'), 'ASC')
+        //     ->get(['menu.id', 'menu.aco_id', 'menu.menuseq', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
 
-        foreach ($menu as $index => $row) {
-            $hasPermission = $this->myAuth->hasPermission($row->class, $row->method);
+        // foreach ($menu as $index => $row) {
+        //     $hasPermission = $this->myAuth->hasPermission($row->class, $row->method);
 
-            if ($hasPermission || $row->class == null) {
-                $data[] = [
-                    'menuid' => $row->id,
-                    'aco_id' => $row->aco_id,
-                    'menuname' => $row->menuname,
-                    'menuicon' => $row->menuicon,
-                    'link' => $row->link,
-                    'menuno' => substr($row->menukode, -1),
-                    'menukode' => $row->menukode,
-                    'menuexe' => $row->class . "/" . $row->method,
-                    'class' => $row->class,
-                    'child' => $this->getMenu($row->id),
-                    'menuparent' => $row->menuparent,
-                ];
-            }
-        }
+        //     if ($hasPermission || $row->class == null) {
+        //         $data[] = [
+        //             'menuid' => $row->id,
+        //             'aco_id' => $row->aco_id,
+        //             'menuname' => $row->menuname,
+        //             'menuicon' => $row->menuicon,
+        //             'link' => $row->link,
+        //             'menuno' => substr($row->menukode, -1),
+        //             'menukode' => $row->menukode,
+        //             'menuexe' => $row->class . "/" . $row->method,
+        //             'class' => $row->class,
+        //             'child' => $this->getMenu($row->id),
+        //             'menuparent' => $row->menuparent,
+        //         ];
+        //     }
+        // }
 
-        return $data;
+        // return $data;
     }
 
     public function hasPermission($class, $method)
