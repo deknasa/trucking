@@ -12,25 +12,11 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use stdClass;
 
-class UserAclController extends Controller
+class UserAclController extends MyController
 {
     public $title = 'User Acl';
-    public $httpHeader = [
-        'Accept' => 'application/json',
-        'Content-Type' => 'application/json'
-    ];
-
-    public function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            parent::__construct();
-
-            return $next($request);
-        });
-    }
 
    /**
-     * Fungsi index
      * @ClassName index
      */    
     public function index(Request $request)
@@ -217,7 +203,7 @@ class UserAclController extends Controller
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)->get(config('app.api_url') . 'useracl/field_length');
+        $response = Http::withHeaders($this->httpHeaders)->get(config('app.api_url') . 'useracl/field_length');
 
         return response($response['data']);
     }
@@ -243,7 +229,7 @@ class UserAclController extends Controller
             'subgrp' => 'STATUS AKTIF',
         ];
 
-        $response = Http::withHeaders($this->httpHeader)
+        $response = Http::withHeaders($this->httpHeaders)
             ->get(config('app.api_url') . 'useracl/combostatus', $status);
 
         return $response['data'];

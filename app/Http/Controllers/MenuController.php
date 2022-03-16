@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use ReflectionClass;
 
-class MenuController extends Controller
+class MenuController extends MyController
 {
     public $title = 'Menu';
     public $httpHeader = [
@@ -32,15 +32,7 @@ class MenuController extends Controller
 
         return view('menu.index', compact('title', 'data'));
     }
-
-    public function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            parent::__construct();
-
-            return $next($request);
-        });
-    }
+    
     public function get($params = []): array
     {
         $params = [

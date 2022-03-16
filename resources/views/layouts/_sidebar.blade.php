@@ -53,18 +53,20 @@
       <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="true">
         <?php
 
-        use App\Http\Controllers\Controller;
+        use App\Http\Controllers\MyController;
         use App\Models\Menu;
 
         $sub = "";
         $plain = "";
         $n = 0;
         $current_menu = Menu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')
-          ->where('acos.class', (new Controller)->class)
+          ->where('acos.class', (new MyController)->class)
           ->first();
+          // dd($current_menu->menuparent);
         $get_parent = Menu::where('id', ($current_menu == null ? '' : $current_menu->menuparent))
           ->first();
-        $get_all = Menu::where('id', ($current_menu == null ? '' : $get_parent->menuparent))
+        // dd($get_parent == null);
+        $get_all = Menu::where('id', ($get_parent == null ? '' : $get_parent->menuparent))
           ->first();
 
 

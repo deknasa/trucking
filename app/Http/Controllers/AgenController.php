@@ -2,30 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\View\View;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class LogTrailController extends MyController
+class AgenController extends MyController
 {
-    public $title = 'Logtrail';
+    public $title = 'Agen';
 
     /**
-     * Fungsi index
-     * @ClassName index
+     * @ClassName
      */
     public function index(Request $request)
     {
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
 
-        return view('logtrail.index', compact('title', 'breadcrumb'));
+        return view('agen.index', compact('title', 'breadcrumb'));
     }
 
+    /**
+     * @ClassName
+     */
     public function get($params = [])
     {
         $params = [
@@ -38,7 +40,7 @@ class LogTrailController extends MyController
 
         $response = Http::withHeaders(request()->header())
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'logtrail', $params);
+            ->get(config('app.api_url') . 'agen', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -51,34 +53,43 @@ class LogTrailController extends MyController
         if (request()->ajax()) {
             return response($data, $response->status());
         }
-
+        
         return $data;
     }
 
     /**
-     * Fungsi create
-     * @ClassName create
+     * @ClassName
      */
     public function create(): View
     {
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
 
-        return view('logtrail.add', compact('title', 'breadcrumb'));
+        $combo = [
+            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+            'statusapproval' => $this->getParameter('STATUS APPROVAL', 'STATUS APPROVAL'),
+            'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
+            // 'jenisemkl' => $this->getJeniEmkl();
+        ];
+
+        return view('agen.add', compact('title', 'breadcrumb', 'combo'));
     }
 
+    /**
+     * @ClassName
+     */
     public function store(Request $request): Response
     {
         try {
             $request['modifiedby'] = Auth::user()->name;
-
+    
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
             ])
                 ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'logtrail', $request->all());
-
+                ->post(config('app.api_url') . 'agen', $request->all());
+    
             return response($response, $response->status());
         } catch (\Throwable $th) {
             throw $th->getMessage();
@@ -86,8 +97,7 @@ class LogTrailController extends MyController
     }
 
     /**
-     * Fungsi edit
-     * @ClassName edit
+     * @ClassName
      */
     public function edit($id): View
     {
@@ -98,11 +108,11 @@ class LogTrailController extends MyController
             'Content-Type' => 'application/json'
         ])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "logtrail/$id");
+            ->get(config('app.api_url') . "agen/$id");
 
-        $logtrail = $response['data'];
+        $agen = $response['data'];
 
-        return view('logtrail.edit', compact('title', 'logtrail'));
+        return view('agen.edit', compact('title', 'agen'));
     }
 
     public function update(Request $request, $id): Response
@@ -114,14 +124,13 @@ class LogTrailController extends MyController
             'Content-Type' => 'application/json',
         ])
             ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "logtrail/$id", $request->all());
+            ->patch(config('app.api_url') . "agen/$id", $request->all());
 
         return response($response);
     }
 
     /**
-     * Fungsi delete
-     * @ClassName delete
+     * @ClassName
      */
     public function delete($id)
     {
@@ -133,16 +142,19 @@ class LogTrailController extends MyController
                 'Content-Type' => 'application/json'
             ])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "logtrail/$id");
+                ->get(config('app.api_url') . "agen/$id");
 
-            $logtrail = $response['data'];
+            $agen = $response['data'];
 
-            return view('logtrail.delete', compact('title', 'logtrail'));
+            return view('agen.delete', compact('title', 'agen'));
         } catch (\Throwable $th) {
-            return redirect()->route('logtrail.index');
+            return redirect()->route('agen.index');
         }
     }
 
+    /**
+     * @ClassName
+     */
     public function destroy($id, Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
@@ -152,7 +164,7 @@ class LogTrailController extends MyController
             'Content-Type' => 'application/json'
         ])
             ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "logtrail/$id", $request->all());
+            ->delete(config('app.api_url') . "agen/$id", $request->all());
 
         return response($response);
     }
@@ -161,33 +173,39 @@ class LogTrailController extends MyController
     {
         $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'logtrail/field_length');
+            ->get(config('app.api_url') . 'agen/field_length');
 
         return response($response['data']);
     }
 
+    /**
+     * @ClassName
+     */
     public function report(Request $request): View
     {
         $params['offset'] = $request->dari - 1;
         $params['rows'] = $request->sampai - $request->dari + 1;
 
-        $parameters = $this->get($params)['rows'];
+        $agens = $this->get($params)['rows'];
 
-        return view('reports.logtrail', compact('parameters'));
+        return view('reports.agen', compact('agens'));
     }
 
+    /**
+     * @ClassName
+     */
     public function export(Request $request): void
     {
         $params = [
             'offset' => $request->dari - 1,
             'rows' => $request->sampai - $request->dari + 1,
         ];
-
-        $parameters = $this->get($params);
+        
+        $agens = $this->get($params);
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Laporan Logtrail');
+        $sheet->setCellValue('A1', 'Laporan Agen');
         $sheet->getStyle("A1")->getFont()->setSize(20);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
@@ -196,7 +214,7 @@ class LogTrailController extends MyController
         $sheet->setCellValue('B2', 'ID');
         $sheet->setCellValue('C2', 'Group');
         $sheet->setCellValue('D2', 'Sub Group');
-        $sheet->setCellValue('E2', 'Nama Logtrail');
+        $sheet->setCellValue('E2', 'Nama Agen');
         $sheet->setCellValue('F2', 'Memo');
         $sheet->setCellValue('G2', 'ModifiedBy');
         $sheet->setCellValue('H2', 'ModifiedOn');
@@ -210,7 +228,7 @@ class LogTrailController extends MyController
 
         $no = 1;
         $x = 3;
-        foreach ($parameters['rows'] as $row) {
+        foreach ($agens['rows'] as $row) {
             $sheet->setCellValue('A' . $x, $no++);
             $sheet->setCellValue('B' . $x, $row['id']);
             $sheet->setCellValue('C' . $x, $row['grp']);
@@ -244,53 +262,5 @@ class LogTrailController extends MyController
         header('Cache-Control: max-age=0');
 
         $writer->save('php://output');
-    }
-
-    public function header(Request $request)
-    {
-        $params = [
-            'id' => $request->id
-        ];
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "logtrail/header", $params);
-
-        $data = [
-            'total' => $response['attributes']['totalPages'] ?? [],
-            'records' => $response['attributes']['totalRows'] ?? [],
-            'rows' => $response['data'] ?? [],
-            'params' => $params ?? [],
-            'message' => $response['message'] ?? ''
-        ];
-
-        return response($data, $response->status());
-    }
-
-    public function detail(Request $request)
-    {
-        $params = [
-            'id' => $request->id
-        ];
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "logtrail/detail", $params);
-
-        $data = [
-            'total' => $response['attributes']['totalPages'] ?? [],
-            'records' => $response['attributes']['totalRows'] ?? [],
-            'rows' => $response['data'] ?? [],
-            'params' => $params ?? [],
-            'message' => $response['message'] ?? ''
-        ];
-
-        return response($data, $response->status());
     }
 }

@@ -222,7 +222,7 @@
             <div class="col-sm-12">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item active">
-                  {!! \App\Helpers\Menu::setBreadcrumb() !!} / {{ (new \App\Http\Controllers\Controller)->method }}
+                  {!! \App\Helpers\Menu::setBreadcrumb() !!}
                 </li>
               </ol>
             </div>

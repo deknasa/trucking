@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\AclController;
+use App\Http\Controllers\AgenController;
 use App\Http\Controllers\UserAclController;
 use App\Http\Controllers\ErrorController;
 
@@ -145,4 +146,12 @@ Route::middleware('auth')->group(function () {
     Route::get('absentrado/export', [AbsenTradoController::class, 'export'])->name('absentrado.export');
     Route::get('absentrado/get', [AbsenTradoController::class, 'get'])->name('absentrado.get');
     Route::resource('absentrado', AbsenTradoController::class);
+
+    Route::get('agen/field_length', [AgenController::class, 'fieldLength'])->name('agen.field_length');
+    Route::get('agen/{id}/delete', [AgenController::class, 'delete'])->name('agen.delete');
+    Route::get('agen/index', [AgenController::class, 'index']);
+    Route::get('agen/report', [AgenController::class, 'report'])->name('agen.report');
+    Route::get('agen/export', [AgenController::class, 'export'])->name('agen.export');
+    Route::get('agen/get', [AgenController::class, 'get'])->name('agen.get');
+    Route::resource('agen', AgenController::class);
 });

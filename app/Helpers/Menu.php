@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MyController;
 use App\Models\Menu as ModelsMenu;
 use Illuminate\Support\Facades\URL;
 
@@ -14,9 +14,9 @@ class Menu
 
     foreach ($menus as $menu) {
       $string .= "
-          <li class='dd-item ". ($menu['aco_id'] == 0 ? '' : 'dd-nochildren') ."' data-id='$menu[menuid]' data-name='$menu[menuname]'>
+          <li class='dd-item " . ($menu['aco_id'] == 0 ? '' : 'dd-nochildren') . "' data-id='$menu[menuid]' data-name='$menu[menuname]'>
               <a href='" . URL::to($menu['menuexe']) . "'>
-                <div class='dd-handle font-weight-normal ". ($menu['aco_id'] == 0 ? 'bg-secondary text-white' : '') ."'>
+                <div class='dd-handle font-weight-normal " . ($menu['aco_id'] == 0 ? 'bg-secondary text-white' : '') . "'>
                 <i class='$menu[menuicon]'></i> <span> $menu[menuno]. $menu[menuname] </span>
                 </div>
               </a>
@@ -29,14 +29,14 @@ class Menu
 
     return $string;
   }
-  
+
   public function print_recursive_list($data)
   {
     $str = "";
     $current_menu = ModelsMenu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')
-      ->where('acos.class', (new Controller)->class)
+      ->where('acos.class', (new MyController)->class)
       ->first();
-    // $current_menu = ModelsMenu::where('menuname', (new Controller)->class)->first();
+    // $current_menu = ModelsMenu::where('menuname', (new MyController)->class)->first();
     foreach ($data as $index => $list) {
       // sintaks untuk mengkondisikan, jika menuexe nya 0(tidak ada), maka dibuat tanda #, tetapi jika ada, maka mengarah ke base_url menuexe nya
       $menuexe = $list['menuexe'] == "0" ? "#" : $list['menuexe'];
@@ -51,7 +51,7 @@ class Menu
       } else {
 
         // " . ($current_menu->menuparent == $list['menuid'] ? 'menu-is-opening menu-open' : '') . "
-        // ($current_menu[$index]->class == (new Controller)->class ? 'true' : 'false') 
+        // ($current_menu[$index]->class == (new MyController)->class ? 'true' : 'false') 
         $str .=
           "<li class='nav-item " . ($current_menu == null ? 0 : ($current_menu->menuparent == $list['menuid'] ? 'menu-is-opening menu-open' : '')) . "'>
           <a href='javascript:void(0)' class='nav-link' id='" . $list['menukode'] . "'>
@@ -73,8 +73,11 @@ class Menu
 
   public function setBreadcrumb()
   {
-    $controller = new Controller;
+    $myController = new MyController;
+    $myController->setClass();
+    $myController->setMethod();
+    $myController->setBreadcrumb($myController->class);
 
-    return $controller->breadcrumb;
+    return $myController->breadcrumb . ' / ' . $myController->method;
   }
 }

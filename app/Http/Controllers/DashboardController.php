@@ -7,24 +7,8 @@ use App\Providers\AuthServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class DashboardController extends Controller
+class DashboardController extends MyController
 {
-    protected $user;
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            parent::__construct();
-
-            return $next($request);
-        });
-    }
-
     public function index()
     {
         // $test = Menu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')

@@ -50,7 +50,7 @@ class Myauth
             'listmarketingcabang',
             'good',
             'nonaktif',
-            'fieldLength',
+            'fieldlength',
             'griddetail',
             'detail',
             'show',
@@ -99,19 +99,19 @@ class Myauth
         }
 
         /* Check if $class is in exception */
-        if (in_array($class, $this->exceptAuth['class'])) {
+        if (in_array(strtolower($class), $this->exceptAuth['class'])) {
             return true;
         }
 
         $userRole = DB::table('userrole')
-            ->where('user_id', $this->userPK)
+            ->where('user_id', Auth::user()->id)
             ->get();
-
+        
         $data_union = DB::table('acos')
             ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('acl', 'acos.id', '=', 'acl.aco_id')
             ->where('acos.class', 'like', "%$class%")
-            ->where('acl.role_id', Auth::user()->id);
+            ->where('acl.role_id', $userRole[0]->user_id);
 
         $data = DB::table('acos')
             ->select(['acos.id', 'acos.class', 'acos.method'])
