@@ -141,7 +141,7 @@ class MyController extends Controller
             SELECT DISTINCT menu.id, menu.aco_id, menu.menuseq, menu.menuname, menu.menuicon, acos.class, acos.method, menu.link, menu.menukode, menu.menuparent FROM menu
             LEFT JOIN acl ON menu.aco_id = acl.aco_id
             LEFT JOIN acos ON acos.id = menu.aco_id
-            WHERE menuparent = $induk AND (acl.role_id = " . $role->id . " OR menu.aco_id = 0)
+            WHERE menuparent = $induk AND (acl.role_id = " . ($role->id ?? 0) . " OR menu.aco_id = 0)
             AND menu.menuname NOT IN (
                 SELECT DISTINCT menuname FROM menu
                 LEFT JOIN useracl ON menu.aco_id = useracl.aco_id

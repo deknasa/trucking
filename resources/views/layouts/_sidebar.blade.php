@@ -32,7 +32,7 @@
         <img src="{{ asset('dist/img/user.png') }}" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="javascript:void(0)" class="d-block">Admin</a>
+        <a href="javascript:void(0)" class="d-block">{{ Auth::user()->name }}</a>
       </div>
     </div>
 
