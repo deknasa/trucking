@@ -85,7 +85,7 @@ class MyController extends Controller
     public function loadMenu(): void
     {
         $menu = $this->getMenu();
-
+        
         View::share('sqlmenu', $menu);
     }
 
@@ -131,7 +131,7 @@ class MyController extends Controller
         $results = [];
 
         $role = UserRole::where('user_id', Auth::id())->first();
-
+        
         $menus = DB::select("
             SELECT DISTINCT menu.id, menu.aco_id, menu.menuseq, menu.menuname, menu.menuicon, acos.class, acos.method, menu.link, menu.menukode, menu.menuparent FROM menu
             LEFT JOIN useracl ON menu.aco_id = useracl.aco_id

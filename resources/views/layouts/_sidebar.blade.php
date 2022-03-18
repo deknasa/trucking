@@ -16,6 +16,7 @@
   }
 
 </style>
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <div id="split-bar"></div>
   <!-- Brand Logo -->
@@ -68,7 +69,6 @@
         // dd($get_parent == null);
         $get_all = Menu::where('id', ($get_parent == null ? '' : $get_parent->menuparent))
           ->first();
-
 
         foreach ($sqlmenu as $data) {
           $n++;

@@ -23,6 +23,7 @@ use App\Http\Controllers\TradoController;
 use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\SupirController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\AlatBayarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -165,5 +166,10 @@ Route::middleware('auth')->group(function () {
     Route::get('agen/export', [AgenController::class, 'export'])->name('agen.export');
     Route::get('agen/get', [AgenController::class, 'get'])->name('agen.get');
     Route::resource('agen', AgenController::class);
+
+    Route::get('alatbayar/field_length', [AlatBayarController::class, 'fieldLength'])->name('alatbayar.field_length');
+    Route::get('alatbayar/{id}/delete', [AlatBayarController::class, 'delete'])->name('alatbayar.delete');
+    Route::get('alatbayar/get', [AlatBayarController::class, 'get'])->name('alatbayar.get');
+    Route::resource('alatbayar', AlatBayarController::class);
 
 });

@@ -97,12 +97,12 @@ class Myauth
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-
+        
         /* Check if $class is in exception */
         if (in_array(strtolower($class), $this->exceptAuth['class'])) {
             return true;
         }
-
+        
         $userRole = DB::table('userrole')
             ->where('user_id', Auth::user()->id)
             ->get();
@@ -120,7 +120,7 @@ class Myauth
             ->where('useracl.user_id', Auth::user()->id)
             ->unionAll($data_union)
             ->get();
-
+        
         if ($this->in_array_custom($method, $data->toArray()) == false && in_array($method, $this->exceptAuth['method']) == false) {
             return false;
         }
