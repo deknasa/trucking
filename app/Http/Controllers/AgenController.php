@@ -21,8 +21,13 @@ class AgenController extends MyController
     {
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
+        $combo = [
+            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+            'statusapproval' => $this->getParameter('STATUS APPROVAL', 'STATUS APPROVAL'),
+            'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
+        ];
 
-        return view('agen.index', compact('title', 'breadcrumb'));
+        return view('agen.index', compact('title', 'breadcrumb', 'combo'));
     }
 
     /**
@@ -53,7 +58,7 @@ class AgenController extends MyController
         if (request()->ajax()) {
             return response($data, $response->status());
         }
-        
+
         return $data;
     }
 
@@ -69,7 +74,6 @@ class AgenController extends MyController
             'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
             'statusapproval' => $this->getParameter('STATUS APPROVAL', 'STATUS APPROVAL'),
             'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
-            // 'jenisemkl' => $this->getJeniEmkl();
         ];
 
         return view('agen.add', compact('title', 'breadcrumb', 'combo'));
@@ -81,18 +85,26 @@ class AgenController extends MyController
     public function store(Request $request): Response
     {
         try {
+            /* Unformat top */
+            $request->top = str_replace('.', '', $request->top);
+            $request->top = str_replace(',', '.', $request->top);
+
+            $request->merge([
+                'top' => $request->top
+            ]);
+
             $request['modifiedby'] = Auth::user()->name;
-    
+
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
             ])
                 ->withToken(session('access_token'))
                 ->post(config('app.api_url') . 'agen', $request->all());
-    
+
             return response($response, $response->status());
         } catch (\Throwable $th) {
-            throw $th->getMessage();
+            throw $th;
         }
     }
 
@@ -112,11 +124,25 @@ class AgenController extends MyController
 
         $agen = $response['data'];
 
-        return view('agen.edit', compact('title', 'agen'));
+        $combo = [
+            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+            'statusapproval' => $this->getParameter('STATUS APPROVAL', 'STATUS APPROVAL'),
+            'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
+        ];
+
+        return view('agen.edit', compact('title', 'agen', 'combo'));
     }
 
     public function update(Request $request, $id): Response
     {
+        /* Unformat top */
+        $request->top = str_replace('.', '', $request->top);
+        $request->top = str_replace(',', '.', $request->top);
+
+        $request->merge([
+            'top' => $request->top
+        ]);
+
         $request['modifiedby'] = Auth::user()->name;
 
         $response = Http::withHeaders([
@@ -146,7 +172,13 @@ class AgenController extends MyController
 
             $agen = $response['data'];
 
-            return view('agen.delete', compact('title', 'agen'));
+            $combo = [
+                'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+                'statusapproval' => $this->getParameter('STATUS APPROVAL', 'STATUS APPROVAL'),
+                'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
+            ];
+
+            return view('agen.delete', compact('title', 'agen', 'combo'));
         } catch (\Throwable $th) {
             return redirect()->route('agen.index');
         }
@@ -200,67 +232,75 @@ class AgenController extends MyController
             'offset' => $request->dari - 1,
             'rows' => $request->sampai - $request->dari + 1,
         ];
+
+        $agens = $this->get($params)['rows'];
         
-        $agens = $this->get($params);
+        $columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'Kode Agen',
+                'index' => 'kodeagen',
+            ],
+            [
+                'label' => 'Nama Agen',
+                'index' => 'namaagen',
+            ],
+            [
+                'label' => 'Keterangan',
+                'index' => 'keterangan',
+            ],
+            [
+                'label' => 'Status Aktif',
+                'index' => 'statusaktif',
+            ],
+            [
+                'label' => 'Nama Perusahaan',
+                'index' => 'namaperusahaan',
+            ],
+            [
+                'label' => 'Alamat',
+                'index' => 'alamat',
+            ],
+            [
+                'label' => 'No Telp',
+                'index' => 'notelp',
+            ],
+            [
+                'label' => 'No Hp',
+                'index' => 'nohp',
+            ],
+            [
+                'label' => 'Contact Person',
+                'index' => 'contactperson',
+            ],
+            [
+                'label' => 'TOP',
+                'index' => 'top',
+            ],
+            [
+                'label' => 'Status Approval',
+                'index' => 'statusapproval',
+            ],
+            [
+                'label' => 'User approval',
+                'index' => 'userapproval',
+            ],
+            [
+                'label' => 'Tgl Approval',
+                'index' => 'tglapproval',
+            ],
+            [
+                'label' => 'Status Tas',
+                'index' => 'statustas',
+            ],
+            [
+                'label' => 'Jenis Emkl',
+                'index' => 'jenisemkl',
+            ],
+        ];
 
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Laporan Agen');
-        $sheet->getStyle("A1")->getFont()->setSize(20);
-        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:E1');
-
-        $sheet->setCellValue('A2', 'No');
-        $sheet->setCellValue('B2', 'ID');
-        $sheet->setCellValue('C2', 'Group');
-        $sheet->setCellValue('D2', 'Sub Group');
-        $sheet->setCellValue('E2', 'Nama Agen');
-        $sheet->setCellValue('F2', 'Memo');
-        $sheet->setCellValue('G2', 'ModifiedBy');
-        $sheet->setCellValue('H2', 'ModifiedOn');
-
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
-
-        $no = 1;
-        $x = 3;
-        foreach ($agens['rows'] as $row) {
-            $sheet->setCellValue('A' . $x, $no++);
-            $sheet->setCellValue('B' . $x, $row['id']);
-            $sheet->setCellValue('C' . $x, $row['grp']);
-            $sheet->setCellValue('D' . $x, $row['subgrp']);
-            $sheet->setCellValue('E' . $x, $row['text']);
-            $sheet->setCellValue('F' . $x, $row['memo']);
-            $sheet->setCellValue('G' . $x, $row['modifiedby']);
-            $sheet->setCellValue('H' . $x,  date("d-m-Y H:i:s", strtotime($row['updated_at'])));
-            $lastCell = 'H' . $x;
-            $x++;
-        }
-
-        $sheet->setCellValue('E' . $x, "=ROWS(E3:" . $lastCell . ")");
-
-        $styleArray = array(
-            'borders' => array(
-                'allBorders' => array(
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ),
-            ),
-        );
-
-        $sheet->getStyle('A2:H2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF02c4f5');
-        $sheet->getStyle('A2:' . $lastCell)->applyFromArray($styleArray);
-
-        $writer = new Xlsx($spreadsheet);
-        $filename = 'laporanParameter' . date('dmYHis');
-
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
-        header('Cache-Control: max-age=0');
-
-        $writer->save('php://output');
+        $this->toExcel($this->title, $agens, $columns);
     }
 }

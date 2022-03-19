@@ -5,9 +5,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
   <title>{{ $title ?? 'No title' }} | Trucking</title>
+  
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -55,6 +55,50 @@
     @include('layouts._navbar')
 
     @include('layouts._sidebar')
+
+
+    <!-- Modal for report and export -->
+    <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form id="formRange" target="_blank">
+            @csrf
+            <div class="modal-body">
+              <input type="hidden" name="sidx">
+              <input type="hidden" name="sord">
+
+              <div class="form-group row">
+                <div class="col-sm-2 col-form-label">
+                  <label for="">Dari</label>
+                </div>
+                <div class="col-sm-10">
+                  <input type="text" name="dari" class="form-control autonumeric-report" autofocus>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-sm-2 col-form-label">
+                  <label for="">Sampai</label>
+                </div>
+                <div class="col-sm-10">
+                  <input type="text" name="sampai" class="form-control autonumeric-report">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Report</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
 
     <div class="content-wrapper">
       <div class="content-header">
@@ -119,7 +163,7 @@
 
   <!-- Nestable2 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.js"></script>
-  
+
   <!-- Custom global script -->
   <script src="{{ asset('mains.js') }}"></script>
 

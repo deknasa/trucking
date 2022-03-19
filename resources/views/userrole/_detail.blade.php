@@ -10,8 +10,8 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('userrole.detail') }}"
-
+  let detailIndexUrl = "{{ route('userrole.detail') }}"
+  
   /**
    * Custom Functions
    */
@@ -27,6 +27,7 @@
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
+        url: detailIndexUrl,  
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -65,7 +66,7 @@
         pager: pager,
         viewrecords: true,
         loadComplete: function(data) {
-          console.log(data);
+          
         }
       })
 
@@ -80,7 +81,7 @@
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: indexUrl+'?user_id='+id,
+      url: detailIndexUrl + '?user_id=' + id,
       postData: {
         id: id
       }

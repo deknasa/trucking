@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\View\View;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use stdClass;
 
-class UserAclController extends MyController
+class AkunPusatController extends MyController
 {
-    public $title = 'User Acl';
+    public $title = 'Akun Pusat';
 
     /**
      * @ClassName
@@ -22,9 +20,17 @@ class UserAclController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        
+        $combo = [
+            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
 
-        return view('useracl.index', compact('title'));
+        return view('akunpusat.index', compact('title', 'combo'));
     }
+
+    /**
+     * @ClassName
+     */
     public function get($params = [])
     {
         $params = [
@@ -36,12 +42,15 @@ class UserAclController extends MyController
         ];
 
         $response = Http::withHeaders(request()->header())
-            ->get(config('app.api_url') . 'useracl', $params);
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'akun_pusat', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
             'records' => $response['attributes']['totalRows'] ?? [],
-            'rows' => $response['data'] ?? []
+            'rows' => $response['data'] ?? [],
+            'params' => $params ?? [],
+            'message' => $response['message'] ?? ''
         ];
 
         if (request()->ajax()) {
@@ -51,95 +60,66 @@ class UserAclController extends MyController
         return $data;
     }
 
-    public function detail(Request $request)
+    /**
+     * @ClassName
+     */
+    public function create(): View
     {
-        if ($request->ajax()) {
-            $params = [
-                'offset' => (($request->page - 1) * $request->rows),
-                'limit' => $request->rows,
-                'sortIndex' => $request->sidx,
-                'sortOrder' => $request->sord,
-                'search' => json_decode($request->filters, 1) ?? [],
-                'user_id' => $request->user_id,
+        $title = $this->title;
 
-            ];
+        return view('akunpusat.add', compact('title'));
+    }
 
-            $response = Http::withHeaders($request->header())
-                ->get(config('app.api_url') . 'useracl/detail', $params);
+    /**
+     * @ClassName
+     */
+    public function store(Request $request): Response
+    {
+        try {
+            $request['modifiedby'] = Auth::user()->name;
 
-            $data = [
-                'total' => $response['attributes']['totalPages'] ?? [],
-                'records' => $response['attributes']['totalRows'] ?? [],
-                'rows' => $response['data'] ?? []
-            ];
+            $response = Http::withHeaders($this->httpHeaders)
+                ->withToken(session('access_token'))
+                ->post(config('app.api_url') . 'akun_pusat', $request->all());
 
-            return response($data);
+            return response($response, $response->status());
+        } catch (\Throwable $th) {
+            throw $th->getMessage();
         }
     }
 
     /**
      * @ClassName
      */
-    public function create(Request $request)
-    {
-        $title = $this->title;
-
-        $list = [
-            'detail' => $this->detaillist($request->user_id  ?? '0'),
-        ];
-
-        $data['combo'] = $this->combo('entry');
-
-        $user_id = '0';
-
-        return view('useracl.add', compact('title', 'list', 'user_id', 'data'));
-    }
-
-    public function store(Request $request)
-    {
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'useracl', $request->all());
-
-        return response($response);
-    }
-
-    /**
-     * @ClassName
-     */
-    public function edit($id)
+    public function edit($id): View
     {
         $title = $this->title;
 
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get(config('app.api_url') . "useracl/$id");
+        ])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "akun_pusat/$id");
 
-        $useracl = $response['data'];
+        $akunPusat = $response['data'];
 
-        $list = [
-            'detail' => $this->detaillist($useracl['user_id']  ?? '0'),
-        ];
-
-        $data['combo'] = $this->combo('entry');
-
-        $user_id = $useracl['user_id'];
-
-        return view('useracl.edit', compact('title', 'useracl', 'list', 'user_id', 'data'));
+        return view('akunpusat.edit', compact('title', 'akunPusat'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * @ClassName
+     */
+    public function update(Request $request, $id): Response
     {
         $request['modifiedby'] = Auth::user()->name;
 
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "useracl/$id", $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->patch(config('app.api_url') . "akun_pusat/$id", $request->all());
 
         return response($response);
     }
@@ -155,24 +135,21 @@ class UserAclController extends MyController
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "useracl/$id");
+            ])
+                ->withToken(session('access_token'))
+                ->get(config('app.api_url') . "akun_pusat/$id");
 
-            $useracl = $response['data'];
+            $akunPusat = $response['data'];
 
-            $list = [
-                'detail' => $this->detaillist($useracl['user_id']  ?? '0'),
-            ];
-
-            $data['combo'] = $this->combo('entry');
-
-            $user_id = $useracl['user_id'];
-
-            return view('useracl.delete', compact('title', 'useracl', 'list', 'user_id', 'data'));
+            return view('akunpusat.delete', compact('title', 'akunPusat'));
         } catch (\Throwable $th) {
-            return redirect()->route('useracl.index');
+            return redirect()->route('akunpusat.index');
         }
     }
 
+    /**
+     * @ClassName
+     */
     public function destroy($id, Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
@@ -180,60 +157,50 @@ class UserAclController extends MyController
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete(config('app.api_url') . "useracl/$id", $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->delete(config('app.api_url') . "akun_pusat/$id", $request->all());
 
         return response($response);
     }
 
-    public function fieldLength()
+    public function fieldLength(): Response
     {
-        $response = Http::withHeaders($this->httpHeaders)->get(config('app.api_url') . 'useracl/field_length');
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'akun_pusat/field_length');
 
         return response($response['data']);
     }
 
-    public function detaillist($user_id)
-    {
-        $status = [
-            'user_id' => $user_id,
-        ];
-
-        $response = Http::get(config('app.api_url') . 'useracl/detaillist', $status);
-
-        return $response['data'];
-    }
-
-    public function combo($aksi)
-    {
-        $status = [
-            'status' => $aksi,
-            'grp' => 'STATUS AKTIF',
-            'subgrp' => 'STATUS AKTIF',
-        ];
-
-        $response = Http::withHeaders($this->httpHeaders)
-            ->get(config('app.api_url') . 'useracl/combostatus', $status);
-
-        return $response['data'];
-    }
-
+    /**
+     * @ClassName
+     */
     public function report(Request $request): View
     {
-        $request->offset = $request->dari - 1;
-        $request->rows = $request->sampai;
+        $params['offset'] = $request->dari - 1;
+        $params['rows'] = $request->sampai - $request->dari + 1;
 
-        $parameters = $this->get($request)['rows'];
+        $akunPusats = $this->get($params)['rows'];
 
-        return view('reports.parameter', compact('parameters'));
+        return view('reports.akunPusat', compact('akunPusats'));
     }
 
-    public function export(): void
+    /**
+     * @ClassName
+     */
+    public function export(Request $request): void
     {
-        $parameters = $this->get();
+        $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
+        ];
+
+        $akunPusats = $this->get($params);
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Laporan Parameter');
+        $sheet->setCellValue('A1', 'Laporan Akun Pusat');
         $sheet->getStyle("A1")->getFont()->setSize(20);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
@@ -242,7 +209,7 @@ class UserAclController extends MyController
         $sheet->setCellValue('B2', 'ID');
         $sheet->setCellValue('C2', 'Group');
         $sheet->setCellValue('D2', 'Sub Group');
-        $sheet->setCellValue('E2', 'Nama Parameter');
+        $sheet->setCellValue('E2', 'Nama Akun Pusat');
         $sheet->setCellValue('F2', 'Memo');
         $sheet->setCellValue('G2', 'ModifiedBy');
         $sheet->setCellValue('H2', 'ModifiedOn');
@@ -256,7 +223,7 @@ class UserAclController extends MyController
 
         $no = 1;
         $x = 3;
-        foreach ($parameters['rows'] as $row) {
+        foreach ($akunPusats['rows'] as $row) {
             $sheet->setCellValue('A' . $x, $no++);
             $sheet->setCellValue('B' . $x, $row['id']);
             $sheet->setCellValue('C' . $x, $row['grp']);
@@ -283,7 +250,7 @@ class UserAclController extends MyController
         $sheet->getStyle('A2:' . $lastCell)->applyFromArray($styleArray);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'laporanParameter' . date('dmYHis');
+        $filename = 'laporanAkun Pusat' . date('dmYHis');
 
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');

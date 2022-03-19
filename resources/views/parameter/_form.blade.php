@@ -24,49 +24,49 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>ID</label>
               </div>
-              <div class="col-12 col-md-10">
+              <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="id" class="form-control" value="{{ $parameter['id'] ?? '' }}" readonly>
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   GROUP <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-md-10">
+              <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="grp" class="form-control" value="{{ $parameter['grp'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   SUBGROUP <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-md-10">
+              <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="subgrp" class="form-control" value="{{ $parameter['subgrp'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   NAMA PARAMETER <span class="text-danger">*</span></label>
               </div>
-              <div class="col-12 col-md-10">
+              <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="text" class="form-control" value="{{ $parameter['text'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   MEMO <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-md-10">
+              <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="memo" class="form-control" value="{{ $parameter['memo'] ?? '' }}">
               </div>
             </div>
@@ -132,13 +132,7 @@ $indexRow = $_GET['indexRow'] ?? '';
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
 
-          if (response.status) {
-            window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $sortname }}&sortorder={{ $sortorder }}&limit={{ $limit }}`
-          }
-
-          if (response.errors) {
-            setErrorMessages(response.errors)
-          }
+          window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $sortname ?? '' }}&sortorder={{ $sortorder }}&limit={{ $limit }}`
         },
         error: error => {
           if (error.status === 422) {

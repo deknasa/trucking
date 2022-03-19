@@ -13,21 +13,23 @@
 
 @push('scripts')
 <script>
+  let indexUrl = "{{ route('role.index') }}"
+  let getUrl = "{{ route('role.get') }}"
+  let indexRow = 0;
+  let page = 0;
+  let pager = '#jqGridPager'
+  let popup = "";
+  let id = "";
+  let triggerClick = true;
+  let highlightSearch;
+  let totalRecord
+  let limit
+  let postData
+  let sortname = 'id'
+  let sortorder = 'asc'
+  let autoNumericElements = []
+
   $(document).ready(function() {
-    let indexUrl = "{{ route('role.index') }}"
-    let getUrl = "{{ route('role.get') }}"
-    let indexRow = 0;
-    let page = 0;
-    let pager = '#jqGridPager'
-    let popup = "";
-    let id = "";
-    let triggerClick = true;
-    let highlightSearch;
-    let totalRecord
-    let limit
-    let postData
-    let sortname = 'id'
-    let sortorder = 'asc'
     popup = "<?= @$_GET['popup'] ?>" == "" ? "" : "ada";
     id = "<?= @$_GET['name'] ?>" == "" ? "undefined" : "<?= @$_GET['name'] ?>";
 
@@ -121,6 +123,9 @@
             window.close();
           }
         },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('X-CSRF-TOKEN', `{{ csrf_token() }}`)
+        },
         beforeRequest: function() {
           var $requestGrid = $(this);
           if ($requestGrid.data('areFiltersDefaulted') !== true) {
@@ -146,8 +151,12 @@
           postData = $(this).jqGrid('getGridParam', 'postData')
 
           $('.clearsearchclass').click(function() {
-            highlightSearch = ''
+            clearColumnSearch()
           })
+
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
+          }
 
           if (triggerClick) {
             if (id != '') {
@@ -214,6 +223,30 @@
         }
       })
 
+      .navButtonAdd(pager, {
+        caption: 'Export',
+        title: 'Export',
+        id: 'export',
+        buttonicon: 'fas fa-file-export',
+        onClickButton: function() {
+          $('#rangeModal').data('action', 'export')
+          $('#rangeModal').find('button:submit').html(`Export`)
+          $('#rangeModal').modal('show')
+        }
+      })
+
+      .navButtonAdd(pager, {
+        caption: 'Report',
+        title: 'Report',
+        id: 'report',
+        buttonicon: 'fas fa-print',
+        onClickButton: function() {
+          $('#rangeModal').data('action', 'report')
+          $('#rangeModal').find('button:submit').html(`Report`)
+          $('#rangeModal').modal('show')
+        }
+      })
+
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
@@ -225,14 +258,11 @@
         },
       })
 
-      .bindKeys() /
-
-      /* Append clear filter button */
-      loadClearFilter()
+    /* Append clear filter button */
+    loadClearFilter()
 
     /* Append global search */
     loadGlobalSearch()
-
 
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)
@@ -246,6 +276,14 @@
       .addClass('btn-sm btn-danger')
       .parent().addClass('px-1')
 
+    $('#report .ui-pg-div')
+      .addClass('btn-sm btn-info')
+      .parent().addClass('px-1')
+
+    $('#export .ui-pg-div')
+      .addClass('btn-sm btn-warning')
+      .parent().addClass('px-1')
+
     if (!`{{ $myAuth->hasPermission('role', 'create') }}`) {
       $('#add').addClass('ui-disabled')
     }
@@ -257,95 +295,65 @@
     if (!`{{ $myAuth->hasPermission('role', 'delete') }}`) {
       $('#delete').addClass('ui-disabled')
     }
-  })
 
-  /**
-   * Custom Functions
-   */
-  var delay = (function() {
-    var timer = 0;
-    return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })()
+    if (!`{{ $myAuth->hasPermission('role', 'export') }}`) {
+      $('#delete').addClass('ui-disabled')
+    }
 
-  function clearColumnSearch() {
-    $('input[id*="gs_"]').val("");
-    $("#resetFilterOptions span#resetFilterOptions").removeClass('aktif');
-    $('select[id*="gs_"]').val("");
-    $("#resetdatafilter").removeClass("active");
-  }
+    if (!`{{ $myAuth->hasPermission('role', 'report') }}`) {
+      $('#delete').addClass('ui-disabled')
+    }
 
-  function clearGlobalSearch() {
-    $("#searchText").val("")
-  }
+    $('#rangeModal').on('shown.bs.modal', function() {
+      if (autoNumericElements.length > 0) {
+        $.each(autoNumericElements, (index, autoNumericElement) => {
+          autoNumericElement.remove()
+        })
+      }
 
-  function loadClearFilter() {
-    /* Append Button */
-    $('#gsh_' + $.jgrid.jqID($('#jqGrid')[0].id) + '_rn').html(
-      $("<div id='resetfilter' class='reset'><span id='resetdatafilter' class='btn btn-default'> X </span></div>")
-    )
+      $('#formRange [name]:not(:hidden)').first().focus()
 
-    /* Handle button on click */
-    $("#resetdatafilter").click(function() {
-      highlightSearch = '';
+      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
+      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
+      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+      $('#formRange [name=sampai]').val(totalRecord)
 
-      clearGlobalSearch()
-      clearColumnSearch()
-
-      $("#jqGrid").jqGrid('setGridParam', {
-        search: false,
-        postData: {
-          "filters": ""
-        }
-      }).trigger("reloadGrid");
+      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
+        digitGroupSeparator: '.',
+        decimalCharacter: ',',
+        allowDecimalPadding: false,
+        minimumValue: 1,
+        maximumValue: totalRecord
+      })
     })
-  }
 
-  function loadGlobalSearch() {
-    /* Append global search textfield */
-    $('#t_' + $.jgrid.jqID($('#jqGrid')[0].id)).html($('<form class="form-inline"><div class="form-group" id="titlesearch"><label for="searchText" style="font-weight: normal !important;">Search : </label><input type="text" class="form-control" id="searchText" placeholder="Search" autocomplete="off"></div></form>'));
+    $('#formRange').submit(event => {
+      event.preventDefault()
 
-    /* Handle textfield on input */
-    $(document).on("input", "#searchText", function() {
-      delay(function() {
-        clearColumnSearch()
+      let params
+      let actionUrl = ``
 
-        var postData = $('#jqGrid').jqGrid("getGridParam", "postData"),
-          colModel = $('#jqGrid').jqGrid("getGridParam", "colModel"),
-          rules = [],
-          searchText = $("#searchText").val(),
-          l = colModel.length,
-          i,
-          cm;
-        for (i = 0; i < l; i++) {
-          cm = colModel[i];
-          if (cm.search !== false && (cm.stype === undefined || cm.stype === "text" || cm.stype === "select")) {
+      if ($('#rangeModal').data('action') == 'export') {
+        actionUrl = `{{ route('role.export') }}`
+      } else if ($('#rangeModal').data('action') == 'report') {
+        actionUrl = `{{ route('role.report') }}`
+      }
 
-            rules.push({
-              field: cm.name,
-              op: "cn",
-              data: searchText.toUpperCase()
-            });
-          }
+      /* Clear validation messages */
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
+
+      /* Set params value */
+      for (var key in postData) {
+        if (params != "") {
+          params += "&";
         }
-        postData.filters = JSON.stringify({
-          groupOp: "OR",
-          rules: rules
-        });
+        params += key + "=" + encodeURIComponent(postData[key]);
+      }
 
-        $('#jqGrid').jqGrid("setGridParam", {
-          search: true
-        });
-        $('#jqGrid').trigger("reloadGrid", [{
-          page: 1,
-          current: true
-        }]);
-        return false;
-      }, 500);
-    });
-  }
+      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+    })
+  })
 </script>
 @endpush()
 @endsection

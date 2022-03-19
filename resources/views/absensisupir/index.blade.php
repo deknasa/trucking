@@ -199,7 +199,7 @@
           triggerClick = true
 
           $('.clearsearchclass').click(function() {
-            highlightSearch = ''
+            clearColumnSearch()
           })
 
           if (triggerClick) {

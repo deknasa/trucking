@@ -130,7 +130,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="top" class="form-control" value="{{ $agen['top'] ?? '' }}">
+                <input type="text" name="top" class="form-control autonumeric" value="{{ $agen['top'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
@@ -162,17 +162,19 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="tglapproval" class="form-control" value="{{ $agen['tglapproval'] ?? '' }}">
+                <input type="text" name="tglapproval" class="form-control datepicker" value="{{ $agen['tglapproval'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  STATUS TAS <span class="text-danger">*</span>
-                </label>
-              </div>
+              <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS TAS<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
-                <input type="text" name="statustas" class="form-control" value="{{ $agen['statustas'] ?? '' }}">
+                <select name="statustas" class="w-100">
+                  <optgroup label="">
+                    @foreach($combo['statustas'] as $statustas)
+                    <option value="{{ $statustas['id'] }}" {{ $statustas['id'] == @$absenTrado['statustas'] ? 'selected' : '' }}>{{ $statustas['text'] }}</option>
+                    @endforeach
+                  </optgroup>
+                </select>
               </div>
             </div>
             <div class="row form-group">

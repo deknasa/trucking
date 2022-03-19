@@ -37,23 +37,24 @@ class Menu
       ->where('acos.class', (new MyController)->class)
       ->first();
     // $current_menu = ModelsMenu::where('menuname', (new MyController)->class)->first();
-    foreach ($data as $index => $list) {
-      // sintaks untuk mengkondisikan, jika menuexe nya 0(tidak ada), maka dibuat tanda #, tetapi jika ada, maka mengarah ke base_url menuexe nya
-      $menuexe = $list['menuexe'] == "0" ? "#" : $list['menuexe'];
-      $subchild = Menu::print_recursive_list($list['child']);
+    if (count($data) > 0) {
+      foreach ($data as $index => $list) {
+        // sintaks untuk mengkondisikan, jika menuexe nya 0(tidak ada), maka dibuat tanda #, tetapi jika ada, maka mengarah ke base_url menuexe nya
+        $menuexe = $list['menuexe'] == "0" ? "#" : $list['menuexe'];
+        $subchild = Menu::print_recursive_list($list['child']);
 
-      // (request()->is($list['child']) ? 'active' : '')
-      if ($list['menuexe'] !== "/") {
-        $str .= "<li class='nav-item'><a href='" . URL::to($menuexe) . "' id='" . $list['menukode'] . "' class='nav-link " . (request()->is($list['menuexe']) ? 'active' : '') . "' href='" . $menuexe . "'>
+        // (request()->is($list['child']) ? 'active' : '')
+        if ($list['menuexe'] !== "/") {
+          $str .= "<li class='nav-item'><a href='" . URL::to($menuexe) . "' id='" . $list['menukode'] . "' class='nav-link " . (request()->is($list['menuexe']) ? 'active' : '') . "' href='" . $menuexe . "'>
             <i class='" . $list['menuicon'] . " nav-icon'></i>
           <p>" . $list['menuno'] . "." . $list['menuname'] . "</p>
           </a> </li>";
-      } else {
+        } else {
 
-        // " . ($current_menu->menuparent == $list['menuid'] ? 'menu-is-opening menu-open' : '') . "
-        // ($current_menu[$index]->class == (new MyController)->class ? 'true' : 'false') 
-        $str .=
-          "<li class='nav-item " . ($current_menu == null ? 0 : ($current_menu->menuparent == $list['menuid'] ? 'menu-is-opening menu-open' : '')) . "'>
+          // " . ($current_menu->menuparent == $list['menuid'] ? 'menu-is-opening menu-open' : '') . "
+          // ($current_menu[$index]->class == (new MyController)->class ? 'true' : 'false') 
+          $str .=
+            "<li class='nav-item " . ($current_menu == null ? 0 : ($current_menu->menuparent == $list['menuid'] ? 'menu-is-opening menu-open' : '')) . "'>
           <a href='javascript:void(0)' class='nav-link' id='" . $list['menukode'] . "'>
             <i class='" . $list['menuicon'] . "  nav-icon'></i>
             <p>
@@ -66,6 +67,7 @@ class Menu
               " . $subchild . "
           </ul>
         </li>";
+        }
       }
     }
     return $str;

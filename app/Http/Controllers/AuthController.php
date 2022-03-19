@@ -13,7 +13,6 @@ class AuthController extends Controller
 {
     public function index()
     {
-        // dd(route('parameter.index'));
         $title = 'Login';
 
         return view('login', compact('title'));

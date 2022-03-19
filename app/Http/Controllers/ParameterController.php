@@ -16,31 +16,15 @@ use app\Helpers\Menu as MenuHelper;
 class ParameterController extends MyController
 {
     public $title = 'Parameter';
-    public $access_token = 'tes';
-    public $httpHeaders = [
-        'Accept' => 'application/json',
-        'Content-Type' => 'application/json',
-    ];
-
-    // public function __construct()
-    // {
-    //     $this->middleware(function ($request, $next) {
-    //         parent::__construct();
-
-    //         return $next($request);
-    //     });
-    // }
 
     /**
-     * Fungsi index
-     * @ClassName index
+     * @ClassName
      */
     public function index(Request $request)
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
 
-        return view('parameter.index', compact('title', 'breadcrumb'));
+        return view('parameter.index', compact('title'));
     }
 
     /**
@@ -71,20 +55,18 @@ class ParameterController extends MyController
         if (request()->ajax()) {
             return response($data, $response->status());
         }
-        
+
         return $data;
     }
 
     /**
-     * Fungsi create
-     * @ClassName create
+     * @ClassName
      */
     public function create(): View
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
 
-        return view('parameter.add', compact('title', 'breadcrumb'));
+        return view('parameter.add', compact('title'));
     }
 
     /**
@@ -94,14 +76,11 @@ class ParameterController extends MyController
     {
         try {
             $request['modifiedby'] = Auth::user()->name;
-    
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-            ])
+
+            $response = Http::withHeaders($this->httpHeaders)
                 ->withToken(session('access_token'))
                 ->post(config('app.api_url') . 'parameter', $request->all());
-    
+
             return response($response, $response->status());
         } catch (\Throwable $th) {
             throw $th->getMessage();
@@ -109,8 +88,7 @@ class ParameterController extends MyController
     }
 
     /**
-     * Fungsi edit
-     * @ClassName edit
+     * @ClassName
      */
     public function edit($id): View
     {
@@ -128,6 +106,9 @@ class ParameterController extends MyController
         return view('parameter.edit', compact('title', 'parameter'));
     }
 
+    /**
+     * @ClassName
+     */
     public function update(Request $request, $id): Response
     {
         $request['modifiedby'] = Auth::user()->name;
@@ -143,8 +124,7 @@ class ParameterController extends MyController
     }
 
     /**
-     * Fungsi delete
-     * @ClassName delete
+     * @ClassName
      */
     public function delete($id)
     {
@@ -214,67 +194,106 @@ class ParameterController extends MyController
             'offset' => $request->dari - 1,
             'rows' => $request->sampai - $request->dari + 1,
         ];
-        
-        $parameters = $this->get($params);
 
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Laporan Parameter');
-        $sheet->getStyle("A1")->getFont()->setSize(20);
-        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:E1');
+        $parameters = $this->get($params)['rows'];
 
-        $sheet->setCellValue('A2', 'No');
-        $sheet->setCellValue('B2', 'ID');
-        $sheet->setCellValue('C2', 'Group');
-        $sheet->setCellValue('D2', 'Sub Group');
-        $sheet->setCellValue('E2', 'Nama Parameter');
-        $sheet->setCellValue('F2', 'Memo');
-        $sheet->setCellValue('G2', 'ModifiedBy');
-        $sheet->setCellValue('H2', 'ModifiedOn');
+        $columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'ID',
+                'index' => 'id',
+            ],
+            [
+                'label' => 'Group',
+                'index' => 'grp',
+            ],
+            [
+                'label' => 'Subgroup',
+                'index' => 'subgrp',
+            ],
+            [
+                'label' => 'Text',
+                'index' => 'text',
+            ],
+            [
+                'label' => 'Memo',
+                'index' => 'memo',
+            ],
+        ];
 
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
-
-        $no = 1;
-        $x = 3;
-        foreach ($parameters['rows'] as $row) {
-            $sheet->setCellValue('A' . $x, $no++);
-            $sheet->setCellValue('B' . $x, $row['id']);
-            $sheet->setCellValue('C' . $x, $row['grp']);
-            $sheet->setCellValue('D' . $x, $row['subgrp']);
-            $sheet->setCellValue('E' . $x, $row['text']);
-            $sheet->setCellValue('F' . $x, $row['memo']);
-            $sheet->setCellValue('G' . $x, $row['modifiedby']);
-            $sheet->setCellValue('H' . $x,  date("d-m-Y H:i:s", strtotime($row['updated_at'])));
-            $lastCell = 'H' . $x;
-            $x++;
-        }
-
-        $sheet->setCellValue('E' . $x, "=ROWS(E3:" . $lastCell . ")");
-
-        $styleArray = array(
-            'borders' => array(
-                'allBorders' => array(
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ),
-            ),
-        );
-
-        $sheet->getStyle('A2:H2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF02c4f5');
-        $sheet->getStyle('A2:' . $lastCell)->applyFromArray($styleArray);
-
-        $writer = new Xlsx($spreadsheet);
-        $filename = 'laporanParameter' . date('dmYHis');
-
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
-        header('Cache-Control: max-age=0');
-
-        $writer->save('php://output');
+        $this->toExcel($this->title, $parameters, $columns);
     }
+    
+    /* The old code to export */
+    // public function export(Request $request): void
+    // {
+    //     $params = [
+    //         'offset' => $request->dari - 1,
+    //         'rows' => $request->sampai - $request->dari + 1,
+    //     ];
+
+    //     $parameters = $this->get($params);
+
+    //     $spreadsheet = new Spreadsheet();
+    //     $sheet = $spreadsheet->getActiveSheet();
+    //     $sheet->setCellValue('A1', 'Laporan Parameter');
+    //     $sheet->getStyle("A1")->getFont()->setSize(20);
+    //     $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+    //     $sheet->mergeCells('A1:E1');
+
+    //     $sheet->setCellValue('A2', 'No');
+    //     $sheet->setCellValue('B2', 'ID');
+    //     $sheet->setCellValue('C2', 'Group');
+    //     $sheet->setCellValue('D2', 'Sub Group');
+    //     $sheet->setCellValue('E2', 'Nama Parameter');
+    //     $sheet->setCellValue('F2', 'Memo');
+    //     $sheet->setCellValue('G2', 'ModifiedBy');
+    //     $sheet->setCellValue('H2', 'ModifiedOn');
+
+    //     $sheet->getColumnDimension('C')->setAutoSize(true);
+    //     $sheet->getColumnDimension('D')->setAutoSize(true);
+    //     $sheet->getColumnDimension('E')->setAutoSize(true);
+    //     $sheet->getColumnDimension('F')->setAutoSize(true);
+    //     $sheet->getColumnDimension('G')->setAutoSize(true);
+    //     $sheet->getColumnDimension('H')->setAutoSize(true);
+
+    //     $no = 1;
+    //     $x = 3;
+    //     foreach ($parameters['rows'] as $row) {
+    //         $sheet->setCellValue('A' . $x, $no++);
+    //         $sheet->setCellValue('B' . $x, $row['id']);
+    //         $sheet->setCellValue('C' . $x, $row['grp']);
+    //         $sheet->setCellValue('D' . $x, $row['subgrp']);
+    //         $sheet->setCellValue('E' . $x, $row['text']);
+    //         $sheet->setCellValue('F' . $x, $row['memo']);
+    //         $sheet->setCellValue('G' . $x, $row['modifiedby']);
+    //         $sheet->setCellValue('H' . $x,  date("d-m-Y H:i:s", strtotime($row['updated_at'])));
+    //         $lastCell = 'H' . $x;
+    //         $x++;
+    //     }
+
+    //     $sheet->setCellValue('E' . $x, "=ROWS(E3:" . $lastCell . ")");
+
+    //     $styleArray = array(
+    //         'borders' => array(
+    //             'allBorders' => array(
+    //                 'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+    //             ),
+    //         ),
+    //     );
+
+    //     $sheet->getStyle('A2:H2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF02c4f5');
+    //     $sheet->getStyle('A2:' . $lastCell)->applyFromArray($styleArray);
+
+    //     $writer = new Xlsx($spreadsheet);
+    //     $filename = 'laporanParameter' . date('dmYHis');
+
+    //     header('Content-Type: application/vnd.ms-excel');
+    //     header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+    //     header('Cache-Control: max-age=0');
+
+    //     $writer->save('php://output');
+    // }
 }

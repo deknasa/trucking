@@ -12,6 +12,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\AclController;
 use App\Http\Controllers\AgenController;
+use App\Http\Controllers\AkunPusatController;
 use App\Http\Controllers\UserAclController;
 use App\Http\Controllers\ErrorController;
 
@@ -70,6 +71,8 @@ Route::middleware('auth')->group(function () {
     Route::get('role/getroleid', [RoleController::class, 'getroleid']);
     Route::get('role/index', [RoleController::class, 'index']);
     Route::get('role/get', [RoleController::class, 'get'])->name('role.get');
+    Route::get('role/export', [RoleController::class, 'export'])->name('role.export');
+    Route::get('role/report', [RoleController::class, 'report'])->name('role.report');
     Route::resource('role', RoleController::class);
 
     Route::get('user/field_length', [UserController::class, 'fieldLength'])->name('user.field_length');
@@ -77,6 +80,8 @@ Route::middleware('auth')->group(function () {
     Route::get('user/getuserid', [UserController::class, 'getuserid']);
     Route::get('user/index', [UserController::class, 'index']);
     Route::get('user/get', [UserController::class, 'get'])->name('user.get');
+    Route::get('user/export', [UserController::class, 'export'])->name('user.export');
+    Route::get('user/report', [UserController::class, 'report'])->name('user.report');
     Route::resource('user', UserController::class);
 
     Route::get('menu/field_length', [MenuController::class, 'fieldLength'])->name('menu.field_length');
@@ -103,6 +108,9 @@ Route::middleware('auth')->group(function () {
     Route::get('userrole/field_length', [UserRoleController::class, 'fieldLength'])->name('userrole.field_length');
     Route::get('userrole/detail', [UserRoleController::class, 'detail'])->name('userrole.detail');
     Route::get('userrole/index', [UserRoleController::class, 'index']);
+    Route::get('userrole/get', [UserRoleController::class, 'get'])->name('userrole.get');
+    Route::get('userrole/export', [UserRoleController::class, 'export'])->name('userrole.export');
+    Route::get('userrole/report', [UserRoleController::class, 'report'])->name('userrole.report');
     Route::resource('userrole', UserRoleController::class);
 
     Route::get('acl/{id}/delete', [AclController::class, 'delete'])->name('acl.delete');
@@ -132,13 +140,13 @@ Route::middleware('auth')->group(function () {
     Route::get('logtrail/header', [LogTrailController::class, 'header'])->name('logtrail.header');
     Route::get('logtrail/detail', [LogTrailController::class, 'detail'])->name('logtrail.detail');
     Route::resource('logtrail', LogTrailController::class);
-    
+
     Route::get('container/field_length', [ContainerController::class, 'fieldLength'])->name('container.field_length');
     Route::get('container/{id}/delete', [ContainerController::class, 'delete'])->name('container.delete');
     Route::get('container/index', [ContainerController::class, 'index']);
     Route::get('container/get', [ContainerController::class, 'get'])->name('container.get');
     Route::resource('container', ContainerController::class);
-    
+
     Route::get('absentrado/field_length', [AbsenTradoController::class, 'fieldLength'])->name('absentrado.field_length');
     Route::get('absentrado/{id}/delete', [AbsenTradoController::class, 'delete'])->name('absentrado.delete');
     Route::get('absentrado/index', [AbsenTradoController::class, 'index']);
@@ -154,4 +162,12 @@ Route::middleware('auth')->group(function () {
     Route::get('agen/export', [AgenController::class, 'export'])->name('agen.export');
     Route::get('agen/get', [AgenController::class, 'get'])->name('agen.get');
     Route::resource('agen', AgenController::class);
+
+    Route::get('akunpusat/field_length', [AkunPusatController::class, 'fieldLength'])->name('akunpusat.field_length');
+    Route::get('akunpusat/{id}/delete', [AkunPusatController::class, 'delete'])->name('akunpusat.delete');
+    Route::get('akunpusat/index', [AkunPusatController::class, 'index']);
+    Route::get('akunpusat/report', [AkunPusatController::class, 'report'])->name('akunpusat.report');
+    Route::get('akunpusat/export', [AkunPusatController::class, 'export'])->name('akunpusat.export');
+    Route::get('akunpusat/get', [AkunPusatController::class, 'get'])->name('akunpusat.get');
+    Route::resource('akunpusat', AkunPusatController::class);
 });

@@ -11,23 +11,28 @@
   </div>
 </div>
 
+<!-- Detail -->
+@include('userrole._detail')
+
 @push('scripts')
 <script>
-  $(document).ready(function() {
-    let indexUrl = "{{ route('userrole.index') }}"
-    let indexRow = 0;
-    let page = 0;
-    let pager = '#jqGridPager'
-    let popup = "";
-    let id = "";
-    let triggerClick = true;
-    let highlightSearch;
-    let totalRecord
-    let limit
-    let postData
-    let sortname = 'user'
-    let sortorder = 'asc'
+  let indexUrl = "{{ route('userrole.index') }}"
+  let getUrl = "{{ route('userrole.get') }}"
+  let indexRow = 0;
+  let page = 0;
+  let pager = '#jqGridPager'
+  let popup = "";
+  let id = "";
+  let triggerClick = true;
+  let highlightSearch;
+  let totalRecord
+  let limit
+  let postData
+  let sortname = 'user'
+  let sortorder = 'asc'
+  let autoNumericElements = []
 
+  $(document).ready(function() {
     /* Set page */
     <?php if (isset($_GET['page'])) { ?>
       page = "{{ $_GET['page'] }}"
@@ -54,7 +59,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: indexUrl,
+        url: getUrl,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -108,7 +113,6 @@
         onSelectRow: function(id) {
           row_id = $(this).jqGrid('getGridParam', 'selrow')
           selectedId = $(this).jqGrid('getCell', row_id, 'user_id');
-          console.log(selectedId)
 
           loadDetailData(selectedId)
 
@@ -130,9 +134,8 @@
           limit = $(this).jqGrid('getGridParam', 'postData').rows
           postData = $(this).jqGrid('getGridParam', 'postData')
 
-
           $('.clearsearchclass').click(function() {
-            highlightSearch = ''
+            clearColumnSearch()
           })
 
           if (indexRow > $(this).getDataIDs().length - 1) {
@@ -191,8 +194,7 @@
         onClickButton: function() {
           row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
           selectedId = $(this).jqGrid('getCell', row_id, 'id');
-          // alert(selectid);
-          console.log(selectedId)
+
           window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
@@ -203,7 +205,6 @@
         id: 'delete',
         buttonicon: 'fas fa-trash',
         onClickButton: function() {
-          // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
           row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
           selectedId = $(this).jqGrid('getCell', row_id, 'id');
 
@@ -222,7 +223,7 @@
         },
       })
 
-      .bindKeys() /
+      .bindKeys()
 
       /* Append clear filter button */
       loadClearFilter()
@@ -234,23 +235,23 @@
     loadDetailGrid()
 
     $('#add .ui-pg-div')
-      .addClass(`btn-sm btn-primary`)
+      .addClass(`btn btn-sm btn-primary`)
       .parent().addClass('px-1')
 
     $('#edit .ui-pg-div')
-      .addClass('btn-sm btn-success')
+      .addClass('btn btn-sm btn-success')
       .parent().addClass('px-1')
 
     $('#delete .ui-pg-div')
-      .addClass('btn-sm btn-danger')
+      .addClass('btn btn-sm btn-danger')
       .parent().addClass('px-1')
 
     $('#report .ui-pg-div')
-      .addClass('btn-sm btn-info')
+      .addClass('btn btn-sm btn-info')
       .parent().addClass('px-1')
 
     $('#export .ui-pg-div')
-      .addClass('btn-sm btn-warning')
+      .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
     if (!`{{ $myAuth->hasPermission('userrole', 'create') }}`) {
@@ -262,6 +263,14 @@
     }
 
     if (!`{{ $myAuth->hasPermission('userrole', 'delete') }}`) {
+      $('#delete').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('userrole', 'export') }}`) {
+      $('#delete').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('userrole', 'report') }}`) {
       $('#delete').addClass('ui-disabled')
     }
   })

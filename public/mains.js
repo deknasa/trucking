@@ -380,7 +380,7 @@ function loadGlobalSearch() {
 function clearColumnSearch() {
 	$('input[id*="gs_"]').val("");
 	$("#resetFilterOptions span#resetFilterOptions").removeClass("aktif");
-	$('select[id*="gs_"]').val("");
+	$('select[id*="gs_"]').val("").trigger("change");
 	$("#resetdatafilter").removeClass("active");
 }
 
@@ -475,6 +475,7 @@ $(".datepicker")
 	});
 
 $(document).on("input", ".numbernoseparate", function () {
+	console.log('here');
 	this.value = this.value.replace(/\D/g, "");
 });
 

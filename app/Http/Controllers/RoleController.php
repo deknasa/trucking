@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
@@ -60,12 +61,12 @@ class RoleController extends MyController
     public function store(Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
-        
+
         $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'role', $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -93,7 +94,7 @@ class RoleController extends MyController
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "role/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -113,7 +114,6 @@ class RoleController extends MyController
 
             $role = $response['data'];
 
-
             return view('role.delete', compact('title', 'role'));
         } catch (\Throwable $th) {
             return redirect()->route('role.index');
@@ -131,16 +131,58 @@ class RoleController extends MyController
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "role/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
+    }
+
+    /**
+     * @ClassName
+     */
+    public function report(Request $request): View
+    {
+        $params['offset'] = $request->dari - 1;
+        $params['rows'] = $request->sampai - $request->dari + 1;
+
+        $roles = $this->get($params)['rows'];
+
+        return view('reports.role', compact('roles'));
+    }
+
+    /**
+     * @ClassName
+     */
+    public function export(Request $request): void
+    {
+        $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
+        ];
+
+        $roles = $this->get($params)['rows'];
+
+        $columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'ID',
+                'index' => 'id',
+            ],
+            [
+                'label' => 'Role Name',
+                'index' => 'rolename',
+            ],
+        ];
+
+        $this->toExcel($this->title, $roles, $columns);
     }
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)
+        $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'role/field_length');
 
-        return response($response['data']);
+        return response($response['data'], $response->status());
     }
 
     public function getroleid(Request $request)
@@ -150,7 +192,7 @@ class RoleController extends MyController
             'rolename' => $request['rolename'],
         ];
 
-        $response = Http::withHeaders($this->httpHeader)
+        $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'role/getroleid', $status);
 

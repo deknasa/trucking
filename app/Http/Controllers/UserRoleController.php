@@ -17,36 +17,38 @@ class UserRoleController extends MyController
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $params = [
-                'offset' => (($request->page - 1) * $request->rows),
-                'limit' => $request->rows,
-                'sortIndex' => $request->sidx,
-                'sortOrder' => $request->sord,
-                'search' => json_decode($request->filters, 1) ?? [],
-
-            ];
-
-            $response = Http::withHeaders($request->header())
-                ->get(config('app.api_url') . 'userrole', $params);
-
-            $data = [
-                'total' => $response['attributes']['totalPages'] ?? [],
-                'records' => $response['attributes']['totalRows'] ?? [],
-                'rows' => $response['data'] ?? []
-            ];
-
-
-            return response($data);
-        }
-
-
         $title = $this->title;
-        $data = [
-            'pagename' => 'Menu Utama User Role',
+
+        return view('userrole.index', compact('title'));
+    }
+
+    public function get($params = [])
+    {
+        $params = [
+            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
+            'limit' => $params['rows'] ?? request()->rows ?? 0,
+            'sortIndex' => $params['sidx'] ?? request()->sidx,
+            'sortOrder' => $params['sord'] ?? request()->sord,
+            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
         ];
 
-        return view('userrole.index', compact('title', 'data'));
+        $response = Http::withHeaders(request()->header())
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'userrole', $params);
+
+        $data = [
+            'total' => $response['attributes']['totalPages'] ?? [],
+            'records' => $response['attributes']['totalRows'] ?? [],
+            'rows' => $response['data'] ?? [],
+            'params' => $params ?? [],
+            'message' => $response['message'] ?? ''
+        ];
+
+        if (request()->ajax()) {
+            return response($data, $response->status());
+        }
+
+        return $data;
     }
 
     public function detail(Request $request)
@@ -59,7 +61,6 @@ class UserRoleController extends MyController
                 'sortOrder' => $request->sord,
                 'search' => json_decode($request->filters, 1) ?? [],
                 'user_id' => $request->user_id,
-
             ];
 
             $response = Http::withHeaders($request->header())
@@ -70,7 +71,6 @@ class UserRoleController extends MyController
                 'records' => $response['attributes']['totalRows'] ?? [],
                 'rows' => $response['data'] ?? []
             ];
-
 
             return response($data);
         }
@@ -101,7 +101,7 @@ class UserRoleController extends MyController
             'Content-Type' => 'application/json',
         ])->post(config('app.api_url') . 'userrole', $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -127,12 +127,13 @@ class UserRoleController extends MyController
     public function update(Request $request, $id)
     {
         $request['modifiedby'] = Auth::user()->name;
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])->patch(config('app.api_url') . "userrole/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -171,16 +172,14 @@ class UserRoleController extends MyController
         $request['modifiedby'] = Auth::user()->name;
         $response = Http::withHeaders($this->httpHeaders)->delete(config('app.api_url') . "userrole/$id", $request->all());
 
-
-
-        return response($response);
+        return response($response, $response->status());
     }
 
     public function fieldLength()
     {
         $response = Http::withHeaders($this->httpHeaders)->get(config('app.api_url') . 'userrole/field_length');
 
-        return response($response['data']);
+        return response($response['data'], $response->status());
     }
 
     public function detaillist($user_id)

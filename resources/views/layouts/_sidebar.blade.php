@@ -11,10 +11,9 @@
     cursor: col-resize;
   }
 
-  .selected-link{
+  .selected-link {
     background-color: cyan !important;
   }
-
 </style>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <div id="split-bar"></div>
@@ -62,7 +61,7 @@
         $current_menu = Menu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')
           ->where('acos.class', (new MyController)->class)
           ->first();
-          // dd($current_menu->menuparent);
+        // dd($current_menu->menuparent);
         $get_parent = Menu::where('id', ($current_menu == null ? '' : $current_menu->menuparent))
           ->first();
         // dd($get_parent == null);
@@ -110,7 +109,6 @@
         ?>
       </ul>
     </nav>
-
     <!-- /.sidebar-menu -->
   </div>
   <!-- /.sidebar -->
