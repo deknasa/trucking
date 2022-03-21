@@ -40,7 +40,7 @@ Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'index'])->name('login');
-    Route::get('login/index', [AuthController::class, 'index'])->name('login');
+    Route::get('login/index', [AuthController::class, 'index']);
     Route::post('login', [AuthController::class, 'login'])->name('login.process');
 });
 
@@ -128,7 +128,7 @@ Route::middleware('auth')->group(function () {
     Route::get('trado/{id}/delete', [TradoController::class, 'delete'])->name('trado.delete');
     Route::resource('trado', TradoController::class);
 
-    Route::get('logtrail/index', [LogTrailController::class, 'index'])->name('logtrail.index');
+    Route::get('logtrail/index', [LogTrailController::class, 'index']);
     Route::get('logtrail/get', [LogTrailController::class, 'get'])->name('logtrail.get');
     Route::get('logtrail/report', [LogTrailController::class, 'report'])->name('logtrail.report');
     Route::get('logtrail/export', [LogTrailController::class, 'export'])->name('logtrail.export');
