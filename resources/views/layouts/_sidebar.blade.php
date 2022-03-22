@@ -15,6 +15,7 @@
     background-color: cyan !important;
   }
 </style>
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <div id="split-bar"></div>
   <!-- Brand Logo -->
@@ -31,7 +32,7 @@
         <img src="{{ asset('dist/img/user.png') }}" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="javascript:void(0)" class="d-block">Admin</a>
+        <a href="javascript:void(0)" class="d-block">{{ Auth::user()->name }}</a>
       </div>
     </div>
 
@@ -67,7 +68,6 @@
         // dd($get_parent == null);
         $get_all = Menu::where('id', ($get_parent == null ? '' : $get_parent->menuparent))
           ->first();
-
 
         foreach ($sqlmenu as $data) {
           $n++;

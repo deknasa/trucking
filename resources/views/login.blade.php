@@ -33,7 +33,7 @@
         <form action="{{ route('login.process') }}" method="POST">
           @csrf
           <div class="input-group mb-3">
-            <input type="text" name="user" value="admin" id="user" class="form-control @error('user') is-invalid @enderror" placeholder="User ID" autofocus>
+            <input type="text" name="user" value="{{ env('LOGIN_USER', 'admin') }}" id="user" class="form-control @error('user') is-invalid @enderror" placeholder="User ID" autofocus>
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-user"></span>
@@ -46,7 +46,7 @@
             @enderror
           </div>
           <div class="input-group mb-3">
-            <input type="password" name="password" value="123456" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password">
+            <input type="password" name="password" value="{{ env('LOGIN_PASSWORD', '123456') }}" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password">
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-lock"></span>

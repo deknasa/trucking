@@ -14,6 +14,11 @@ class LogTrailController extends MyController
 {
     public $title = 'Logtrail';
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    
     /**
      * Fungsi index
      * @ClassName index

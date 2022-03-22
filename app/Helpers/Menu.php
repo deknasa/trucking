@@ -8,6 +8,16 @@ use Illuminate\Support\Facades\URL;
 
 class Menu
 {
+  public $myController;
+
+  public function __construct()
+  {
+    $this->myController = new MyController;
+    $this->myController->setClass();
+    $this->myController->setMethod();
+    $this->myController->setBreadcrumb($this->myController->class);
+  }
+
   public function printRecursiveMenu($menus)
   {
     $string = '<ul class="dd-list">';
@@ -34,7 +44,7 @@ class Menu
   {
     $str = "";
     $current_menu = ModelsMenu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')
-      ->where('acos.class', (new MyController)->class)
+      ->where('acos.class', (new Menu)->myController->class)
       ->first();
     // $current_menu = ModelsMenu::where('menuname', (new MyController)->class)->first();
     if (count($data) > 0) {
@@ -80,6 +90,6 @@ class Menu
     $myController->setMethod();
     $myController->setBreadcrumb($myController->class);
 
-    return $myController->breadcrumb . ' / ' . $myController->method;
+    return (new Menu)->myController->breadcrumb . ' / ' . (new Menu)->myController->method;
   }
 }

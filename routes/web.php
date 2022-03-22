@@ -22,6 +22,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LogTrailController;
 use App\Http\Controllers\TradoController;
 use App\Http\Controllers\ContainerController;
+use App\Http\Controllers\SupirController;
+use App\Http\Controllers\BankController;
+use App\Http\Controllers\AlatBayarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +41,7 @@ Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'index'])->name('login');
-    Route::get('login/index', [AuthController::class, 'index'])->name('login');
+    Route::get('login/index', [AuthController::class, 'index']);
     Route::post('login', [AuthController::class, 'login'])->name('login.process');
 });
 
@@ -133,7 +136,7 @@ Route::middleware('auth')->group(function () {
     Route::get('trado/{id}/delete', [TradoController::class, 'delete'])->name('trado.delete');
     Route::resource('trado', TradoController::class);
 
-    Route::get('logtrail/index', [LogTrailController::class, 'index'])->name('logtrail.index');
+    Route::get('logtrail/index', [LogTrailController::class, 'index']);
     Route::get('logtrail/get', [LogTrailController::class, 'get'])->name('logtrail.get');
     Route::get('logtrail/report', [LogTrailController::class, 'report'])->name('logtrail.report');
     Route::get('logtrail/export', [LogTrailController::class, 'export'])->name('logtrail.export');
@@ -147,6 +150,15 @@ Route::middleware('auth')->group(function () {
     Route::get('container/get', [ContainerController::class, 'get'])->name('container.get');
     Route::resource('container', ContainerController::class);
 
+    Route::get('supir/field_length', [SupirController::class, 'fieldLength'])->name('supir.field_length');
+    Route::get('supir/{id}/delete', [SupirController::class, 'delete'])->name('supir.delete');
+    Route::resource('supir', SupirController::class);
+
+    Route::get('bank/field_length', [BankController::class, 'fieldLength'])->name('bank.field_length');
+    Route::get('bank/{id}/delete', [BankController::class, 'delete'])->name('bank.delete');
+    Route::get('bank/get', [BankController::class, 'get'])->name('bank.get');
+    Route::resource('bank', BankController::class);
+    
     Route::get('absentrado/field_length', [AbsenTradoController::class, 'fieldLength'])->name('absentrado.field_length');
     Route::get('absentrado/{id}/delete', [AbsenTradoController::class, 'delete'])->name('absentrado.delete');
     Route::get('absentrado/index', [AbsenTradoController::class, 'index']);
@@ -170,4 +182,9 @@ Route::middleware('auth')->group(function () {
     Route::get('akunpusat/export', [AkunPusatController::class, 'export'])->name('akunpusat.export');
     Route::get('akunpusat/get', [AkunPusatController::class, 'get'])->name('akunpusat.get');
     Route::resource('akunpusat', AkunPusatController::class);
+    Route::get('alatbayar/field_length', [AlatBayarController::class, 'fieldLength'])->name('alatbayar.field_length');
+    Route::get('alatbayar/{id}/delete', [AlatBayarController::class, 'delete'])->name('alatbayar.delete');
+    Route::get('alatbayar/get', [AlatBayarController::class, 'get'])->name('alatbayar.get');
+    Route::resource('alatbayar', AlatBayarController::class);
+
 });
