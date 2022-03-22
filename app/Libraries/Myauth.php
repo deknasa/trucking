@@ -39,6 +39,8 @@ class Myauth
             'cabang',
             'absensisupir',
             'logtrail',
+            'agen',
+            'akunpusat',
         ],
         'method' => [
             'gridtab',

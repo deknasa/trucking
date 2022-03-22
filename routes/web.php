@@ -12,6 +12,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\AclController;
 use App\Http\Controllers\AgenController;
+use App\Http\Controllers\AkunPusatController;
 use App\Http\Controllers\UserAclController;
 use App\Http\Controllers\ErrorController;
 
@@ -40,7 +41,7 @@ Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'index'])->name('login');
-    Route::get('login/index', [AuthController::class, 'index'])->name('login');
+    Route::get('login/index', [AuthController::class, 'index']);
     Route::post('login', [AuthController::class, 'login'])->name('login.process');
 });
 
@@ -73,6 +74,8 @@ Route::middleware('auth')->group(function () {
     Route::get('role/getroleid', [RoleController::class, 'getroleid']);
     Route::get('role/index', [RoleController::class, 'index']);
     Route::get('role/get', [RoleController::class, 'get'])->name('role.get');
+    Route::get('role/export', [RoleController::class, 'export'])->name('role.export');
+    Route::get('role/report', [RoleController::class, 'report'])->name('role.report');
     Route::resource('role', RoleController::class);
 
     Route::get('user/field_length', [UserController::class, 'fieldLength'])->name('user.field_length');
@@ -80,6 +83,8 @@ Route::middleware('auth')->group(function () {
     Route::get('user/getuserid', [UserController::class, 'getuserid']);
     Route::get('user/index', [UserController::class, 'index']);
     Route::get('user/get', [UserController::class, 'get'])->name('user.get');
+    Route::get('user/export', [UserController::class, 'export'])->name('user.export');
+    Route::get('user/report', [UserController::class, 'report'])->name('user.report');
     Route::resource('user', UserController::class);
 
     Route::get('menu/field_length', [MenuController::class, 'fieldLength'])->name('menu.field_length');
@@ -106,6 +111,9 @@ Route::middleware('auth')->group(function () {
     Route::get('userrole/field_length', [UserRoleController::class, 'fieldLength'])->name('userrole.field_length');
     Route::get('userrole/detail', [UserRoleController::class, 'detail'])->name('userrole.detail');
     Route::get('userrole/index', [UserRoleController::class, 'index']);
+    Route::get('userrole/get', [UserRoleController::class, 'get'])->name('userrole.get');
+    Route::get('userrole/export', [UserRoleController::class, 'export'])->name('userrole.export');
+    Route::get('userrole/report', [UserRoleController::class, 'report'])->name('userrole.report');
     Route::resource('userrole', UserRoleController::class);
 
     Route::get('acl/{id}/delete', [AclController::class, 'delete'])->name('acl.delete');
@@ -128,14 +136,14 @@ Route::middleware('auth')->group(function () {
     Route::get('trado/{id}/delete', [TradoController::class, 'delete'])->name('trado.delete');
     Route::resource('trado', TradoController::class);
 
-    Route::get('logtrail/index', [LogTrailController::class, 'index'])->name('logtrail.index');
+    Route::get('logtrail/index', [LogTrailController::class, 'index']);
     Route::get('logtrail/get', [LogTrailController::class, 'get'])->name('logtrail.get');
     Route::get('logtrail/report', [LogTrailController::class, 'report'])->name('logtrail.report');
     Route::get('logtrail/export', [LogTrailController::class, 'export'])->name('logtrail.export');
     Route::get('logtrail/header', [LogTrailController::class, 'header'])->name('logtrail.header');
     Route::get('logtrail/detail', [LogTrailController::class, 'detail'])->name('logtrail.detail');
     Route::resource('logtrail', LogTrailController::class);
-    
+
     Route::get('container/field_length', [ContainerController::class, 'fieldLength'])->name('container.field_length');
     Route::get('container/{id}/delete', [ContainerController::class, 'delete'])->name('container.delete');
     Route::get('container/index', [ContainerController::class, 'index']);
@@ -167,6 +175,13 @@ Route::middleware('auth')->group(function () {
     Route::get('agen/get', [AgenController::class, 'get'])->name('agen.get');
     Route::resource('agen', AgenController::class);
 
+    Route::get('akunpusat/field_length', [AkunPusatController::class, 'fieldLength'])->name('akunpusat.field_length');
+    Route::get('akunpusat/{id}/delete', [AkunPusatController::class, 'delete'])->name('akunpusat.delete');
+    Route::get('akunpusat/index', [AkunPusatController::class, 'index']);
+    Route::get('akunpusat/report', [AkunPusatController::class, 'report'])->name('akunpusat.report');
+    Route::get('akunpusat/export', [AkunPusatController::class, 'export'])->name('akunpusat.export');
+    Route::get('akunpusat/get', [AkunPusatController::class, 'get'])->name('akunpusat.get');
+    Route::resource('akunpusat', AkunPusatController::class);
     Route::get('alatbayar/field_length', [AlatBayarController::class, 'fieldLength'])->name('alatbayar.field_length');
     Route::get('alatbayar/{id}/delete', [AlatBayarController::class, 'delete'])->name('alatbayar.delete');
     Route::get('alatbayar/get', [AlatBayarController::class, 'get'])->name('alatbayar.get');

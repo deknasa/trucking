@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,6 @@ class UserController extends MyController
      */
     public function index(Request $request)
     {
-        $start = microtime(true);
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama User',
@@ -152,6 +152,69 @@ class UserController extends MyController
             ->delete(config('app.api_url') . "user/$id", $request->all());
 
         return response($response);
+    }
+
+    /**
+     * @ClassName
+     */
+    public function report(Request $request): View
+    {
+        $params['offset'] = $request->dari - 1;
+        $params['rows'] = $request->sampai - $request->dari + 1;
+
+        $users = $this->get($params)['rows'];
+
+        return view('reports.user', compact('users'));
+    }
+    
+    /**
+     * @ClassName
+     */
+    public function export(Request $request): void
+    {
+        $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
+        ];
+
+        $users = $this->get($params)['rows'];
+
+        dd($users);
+        $columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'ID',
+                'index' => 'id',
+            ],
+            [
+                'label' => 'User',
+                'index' => 'user',
+            ],
+            [
+                'label' => 'Name',
+                'index' => 'name',
+            ],
+            [
+                'label' => 'Cabang id',
+                'index' => 'cabang_id',
+            ],
+            [
+                'label' => 'Karyawan id',
+                'index' => 'karyawan_id',
+            ],
+            [
+                'label' => 'Dashboard',
+                'index' => 'dashboard',
+            ],
+            [
+                'label' => 'Statusaktif',
+                'index' => 'statusaktif',
+            ],
+        ];
+
+        $this->toExcel($this->title, $users, $columns);
     }
 
     public function fieldLength()

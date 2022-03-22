@@ -22,19 +22,54 @@ $indexRow = $_GET['indexRow'] ?? '';
             <input type="hidden" name="indexRow" value="{{ $_GET['indexRow'] ?? 1 }}">
             <input type="hidden" name="page" value="{{ $_GET['page'] ?? 1 }}">
 
-            <div class="row form-group">
-              <label for="staticEmail" class="col-sm-3 col-md-2 col-form-label">ID <span class="text-danger"></span></label>
-              <div class="col-sm-9 col-md-10">
-                <input type="text" name="id" class="form-control" value="{{ $role['id'] ?? '' }}" readonly>
-              </div>
-            </div>
-            <div class="row form-group">
-              <label for="staticEmail" class="col-sm-3 col-md-2 col-form-label">Role<span class="text-danger">*</span></label>
-              <div class="col-sm-9 col-md-10">
-                <input type="text" name="rolename" class="form-control" value="{{ $role['rolename'] ?? '' }}">
-              </div>
-            </div>
 
+            <div class="row form-group">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>ID</label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="id" class="form-control" value="{{ $parameter['id'] ?? '' }}" readonly>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>
+                  GROUP <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="grp" class="form-control" value="{{ $parameter['grp'] ?? '' }}">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>
+                  SUBGROUP <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="subgrp" class="form-control" value="{{ $parameter['subgrp'] ?? '' }}">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>
+                  NAMA PARAMETER <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="text" class="form-control" value="{{ $parameter['text'] ?? '' }}">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>
+                  MEMO <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="memo" class="form-control" value="{{ $parameter['memo'] ?? '' }}">
+              </div>
+            </div>
           </div>
           <div class="card-footer">
             <button type="submit" id="btnSimpan" class="btn btn-primary">
@@ -45,7 +80,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               Simpan
               @endif
             </button>
-            <a href="{{ route('role.index') }}" class="btn btn-danger">
+            <a href="{{ route('parameter.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
               BATAL
             </a>
@@ -58,19 +93,19 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('role.index') }}"
-  let fieldLengthUrl = "{{ route('role.field_length') }}"
+  let indexUrl = "{{ route('parameter.index') }}"
+  let fieldLengthUrl = "{{ route('parameter.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('role.store') }}"
+  let actionUrl = "{{ route('parameter.store') }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
   /* Set action url */
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('role.update', $role['id']) }}"
+    actionUrl = "{{ route('parameter.update', $parameter['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('role.destroy', $role['id']) }}"
+    actionUrl = "{{ route('parameter.destroy', $parameter['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
@@ -83,6 +118,7 @@ $indexRow = $_GET['indexRow'] ?? '';
       e.preventDefault()
     })
 
+    /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
@@ -93,11 +129,16 @@ $indexRow = $_GET['indexRow'] ?? '';
         dataType: 'JSON',
         data: $('form').serializeArray(),
         success: response => {
-          console.log(response);
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
 
-          window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $sortname ?? '' }}&sortorder={{ $sortorder }}&limit={{ $limit }}`
+          if (response.status) {
+            window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $sortname }}&sortorder={{ $sortorder }}&limit={{ $limit }}`
+          }
+
+          if (response.errors) {
+            setErrorMessages(response.errors)
+          }
         },
         error: error => {
           if (error.status === 422) {

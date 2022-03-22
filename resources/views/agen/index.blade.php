@@ -130,6 +130,29 @@
           {
             label: 'STATUS AKTIF',
             name: 'statusaktif',
+            stype: 'select',
+            searchoptions: {
+              value: `:ALL;<?php
+                      $i = 1;
+
+                      foreach ($combo['statusaktif'] as $statusaktif) :
+                        echo "$statusaktif[text]:$statusaktif[text]";
+
+                        if ($i !== count($combo['statusaktif'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'NAMA PERUSAHAAN',
@@ -158,6 +181,29 @@
           {
             label: 'STATUS APPROVAL',
             name: 'statusapproval',
+            stype: 'select',
+            searchoptions: {
+              value: `:ALL;<?php
+                      $i = 1;
+
+                      foreach ($combo['statusapproval'] as $statusapproval) :
+                        echo "$statusapproval[text]:$statusapproval[text]";
+
+                        if ($i !== count($combo['statusapproval'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'USER APPROVAL',
@@ -168,8 +214,31 @@
             name: 'tglapproval',
           },
           {
-            label: 'STATUSTAS',
+            label: 'STATUS TAS',
             name: 'statustas',
+            stype: 'select',
+            searchoptions: {
+              value: `:ALL;<?php
+                      $i = 1;
+
+                      foreach ($combo['statustas'] as $statustas) :
+                        echo "$statustas[text]:$statustas[text]";
+
+                        if ($i !== count($combo['statustas'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'JENIS EMKL',
@@ -219,7 +288,7 @@
           triggerClick = true
 
           $('.clearsearchclass').click(function() {
-            highlightSearch = ''
+            clearColumnSearch()
           })
 
           if (indexRow > $(this).getDataIDs().length - 1) {

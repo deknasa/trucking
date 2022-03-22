@@ -1,49 +1,6 @@
 @extends('layouts.master')
 
 @section('content')
-<!-- Modal for report -->
-<div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form id="formRange" target="_blank">
-        @csrf
-        <div class="modal-body">
-          <input type="hidden" name="sidx">
-          <input type="hidden" name="sord">
-
-          <div class="form-group row">
-            <div class="col-sm-2 col-form-label">
-              <label for="">Dari</label>
-            </div>
-            <div class="col-sm-10">
-              <input type="text" name="dari" class="form-control autonumeric-report" autofocus>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <div class="col-sm-2 col-form-label">
-              <label for="">Sampai</label>
-            </div>
-            <div class="col-sm-10">
-              <input type="text" name="sampai" class="form-control autonumeric-report">
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Report</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
@@ -175,7 +132,7 @@
           triggerClick = true
 
           $('.clearsearchclass').click(function() {
-            highlightSearch = ''
+            clearColumnSearch()
           })
 
           if (indexRow > $(this).getDataIDs().length - 1) {

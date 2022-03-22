@@ -180,7 +180,7 @@
                     postData = $(this).jqGrid('getGridParam', 'postData')
 
                     $('.clearsearchclass').click(function() {
-                        highlightSearch = ''
+                        clearColumnSearch()
                     })
 
                     if (indexRow > $(this).getDataIDs().length - 1) {

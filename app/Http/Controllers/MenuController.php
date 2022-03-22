@@ -72,7 +72,6 @@ class MenuController extends MyController
             'edit' => '0'
         ];
 
-        // dd($data['class']);
         return view('menu.add', compact('title', 'data'));
     }
 
@@ -82,18 +81,14 @@ class MenuController extends MyController
         $request['modifiedby'] = Auth::user()->name;
         $request['class'] = $this->listFolderFiles($request['controller']);
 
-        // dd($request->all());
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'menu', $request->all());
-        if ($response->status() == 422) {
-            // return response($response['messages']['class'][0], 500);
-            return response($response['messages'], 500);
-        }
-        return response($response);
+        
+        return response($response, $response->status());
     }
 
     /**
@@ -119,7 +114,6 @@ class MenuController extends MyController
             'edit' => '1'
         ];
 
-        //  dd($data);
         return view('menu.edit', compact('title', 'menu', 'data'));
     }
 
@@ -134,7 +128,7 @@ class MenuController extends MyController
             ->withToken(session('access_token'))
             ->withToken(session('access_token'))->patch(config('app.api_url') . "menu/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -180,7 +174,7 @@ class MenuController extends MyController
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "menu/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     public function fieldLength()
@@ -189,7 +183,7 @@ class MenuController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'menu/field_length');
 
-        return response($response['data']);
+        return response($response['data'], $response->status());
     }
 
 
@@ -211,9 +205,11 @@ class MenuController extends MyController
         $status = [
             'aco_id' => $aco_id,
         ];
+
         $response = Http::withHeaders($this->httpHeader)
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'menu/getdatanamaacos', $status);
+
         return $response['data'];
     }
 
@@ -304,7 +300,6 @@ class MenuController extends MyController
 
     public function get_class_methods($class, $comment = false)
     {
-        // dd($class);
         $class = 'App\Http\Controllers' . '\\' . $class;
         $r = new ReflectionClass($class);
         $methods = array();
@@ -320,7 +315,6 @@ class MenuController extends MyController
             }
         }
 
-        // dd($methods);
         return $methods;
     }
     public function get_method_comment($obj, $method)

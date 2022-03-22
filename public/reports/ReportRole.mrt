@@ -1,10 +1,10 @@
 {
-  "ReportGuid": "6f487884a09fa0992c4930dcd7fbc5f9",
+  "ReportGuid": "729a5d588665f5d3895a646b612f3faf",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "ReportRole.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1635324638000+0700)/",
+  "ReportChanged": "/Date(1647587275000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -24,25 +24,25 @@
     "DataSources": {
       "0": {
         "Ident": "StiDataTableSource",
-        "Name": "roles",
-        "Alias": "roles",
+        "Name": "role",
+        "Alias": "role",
         "Columns": {
           "0": {
-            "Name": "fid",
+            "Name": "id",
             "Index": -1,
-            "NameInSource": "fid",
-            "Alias": "fid",
+            "NameInSource": "id",
+            "Alias": "id",
             "Type": "System.Int32"
           },
           "1": {
-            "Name": "frolename",
+            "Name": "rolename",
             "Index": -1,
-            "NameInSource": "frolename",
-            "Alias": "frolename",
+            "NameInSource": "rolename",
+            "Alias": "rolename",
             "Type": "System.String"
           }
         },
-        "NameInSource": "roles"
+        "NameInSource": "role"
       }
     }
   },
@@ -101,7 +101,7 @@
             "0": {
               "Ident": "StiText",
               "Name": "Text1",
-              "ClientRectangle": "0,0,9.6,1.2",
+              "ClientRectangle": "0,0,7.2,1.2",
               "ComponentPlacement": "rt.ReportTitleBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -182,16 +182,16 @@
             },
             "2": {
               "Ident": "StiText",
-              "Name": "Text3",
-              "Guid": "7b9b483fc2f3bf4d8452726d4e9a7d94",
-              "ClientRectangle": "2.8,0,16.2,0.6",
+              "Name": "Text2",
+              "Guid": "d228d103ae17094301bb051859a0448c",
+              "ClientRectangle": "2.79,0,16.2,0.6",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "ComponentStyle": "Table Header",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "ROLE NAME"
+                "Value": "ROLENAME"
               },
               "VertAlignment": "Center",
               "Font": ";10;Bold;",
@@ -260,7 +260,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{roles.fid}"
+                "Value": "{role.id}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -290,7 +290,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{roles.frolename}"
+                "Value": "{role.rolename}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -309,7 +309,7 @@
               "Type": "DataColumn"
             }
           },
-          "DataSourceName": "roles"
+          "DataSourceName": "role"
         }
       },
       "PageWidth": 21.01,
