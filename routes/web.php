@@ -61,12 +61,16 @@ Route::middleware('auth')->group(function () {
     Route::get('error/{id}/delete', [ErrorController::class, 'delete'])->name('error.delete');
     Route::get('error/index', [ErrorController::class, 'index']);
     Route::get('error/get', [ErrorController::class, 'get'])->name('error.get');
+    Route::get('error/export', [ErrorController::class, 'export'])->name('error.export');
+    Route::get('error/report', [ErrorController::class, 'report'])->name('error.report');
     Route::resource('error', ErrorController::class);
 
     Route::get('cabang/field_length', [CabangController::class, 'fieldLength'])->name('cabang.field_length');
     Route::get('cabang/{id}/delete', [CabangController::class, 'delete'])->name('cabang.delete');
     Route::get('cabang/index', [CabangController::class, 'index']);
     Route::get('cabang/get', [CabangController::class, 'get'])->name('cabang.get');
+    Route::get('cabang/export', [CabangController::class, 'export'])->name('cabang.export');
+    Route::get('cabang/report', [CabangController::class, 'report'])->name('cabang.report');
     Route::resource('cabang', CabangController::class);
 
     Route::get('role/field_length', [RoleController::class, 'fieldLength'])->name('role.field_length');
@@ -96,6 +100,8 @@ Route::middleware('auth')->group(function () {
     Route::get('menu/get', [MenuController::class, 'get'])->name('menu.get');
     Route::get('menu/resequence', [MenuController::class, 'resequence'])->name('menu.resequence');
     Route::post('menu/resequence', [MenuController::class, 'storeResequence'])->name('menu.resequence.store');
+    Route::get('menu/export', [MenuController::class, 'export'])->name('menu.export');
+    Route::get('menu/report', [MenuController::class, 'report'])->name('menu.report');
     Route::resource('menu', MenuController::class);
 
     Route::get('absensisupir/{id}/delete', [AbsensiSupirHeaderController::class, 'delete'])->name('absensisupir.delete');
@@ -158,7 +164,7 @@ Route::middleware('auth')->group(function () {
     Route::get('bank/{id}/delete', [BankController::class, 'delete'])->name('bank.delete');
     Route::get('bank/get', [BankController::class, 'get'])->name('bank.get');
     Route::resource('bank', BankController::class);
-    
+
     Route::get('absentrado/field_length', [AbsenTradoController::class, 'fieldLength'])->name('absentrado.field_length');
     Route::get('absentrado/{id}/delete', [AbsenTradoController::class, 'delete'])->name('absentrado.delete');
     Route::get('absentrado/index', [AbsenTradoController::class, 'index']);
@@ -186,5 +192,4 @@ Route::middleware('auth')->group(function () {
     Route::get('alatbayar/{id}/delete', [AlatBayarController::class, 'delete'])->name('alatbayar.delete');
     Route::get('alatbayar/get', [AlatBayarController::class, 'get'])->name('alatbayar.get');
     Route::resource('alatbayar', AlatBayarController::class);
-
 });

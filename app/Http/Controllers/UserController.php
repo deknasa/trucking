@@ -77,7 +77,7 @@ class UserController extends MyController
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'user', $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -112,7 +112,7 @@ class UserController extends MyController
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "user/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -151,7 +151,7 @@ class UserController extends MyController
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "user/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -179,7 +179,6 @@ class UserController extends MyController
 
         $users = $this->get($params)['rows'];
 
-        dd($users);
         $columns = [
             [
                 'label' => 'No',
@@ -223,7 +222,7 @@ class UserController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/field_length');
 
-        return response($response['data']);
+        return response($response['data'], $response->status());
     }
 
     public function combo($aksi)

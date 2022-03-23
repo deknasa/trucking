@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class CabangController extends MyController
 {
     public $title = 'Cabang';
-    
+
     /**
      * Fungsi index
      * @ClassName index
@@ -142,6 +142,56 @@ class CabangController extends MyController
             ->delete(config('app.api_url') . "cabang/$id", $request->all());
 
         return response($response);
+    }
+
+    /**
+     * @ClassName
+     */
+    public function report(Request $request)
+    {
+        $params['offset'] = $request->dari - 1;
+        $params['rows'] = $request->sampai - $request->dari + 1;
+
+        $cabangs = $this->get($params)['rows'];
+
+        return view('reports.cabang', compact('cabangs'));
+    }
+
+    /**
+     * @ClassName
+     */
+    public function export(Request $request)
+    {
+        $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
+        ];
+
+        $cabangs = $this->get($params)['rows'];
+
+        $columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'ID',
+                'index' => 'id',
+            ],
+            [
+                'label' => 'Kode Cabang',
+                'index' => 'kodecabang',
+            ],
+            [
+                'label' => 'Nama Cabang',
+                'index' => 'namacabang',
+            ],
+            [
+                'label' => 'Status Aktif',
+                'index' => 'statusaktif',
+            ],
+        ];
+
+        $this->toExcel($this->title, $cabangs, $columns);
     }
 
     public function fieldLength()

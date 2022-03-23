@@ -39,7 +39,7 @@ $indexRow = $_GET['indexRow'] ?? '';
             <div class="form-group row">
               <label for="staticEmail" class="col-sm-3 col-md-2 col-form-label">Pengurutan<span class="text-danger">*</span></label>
               <div class="col-sm-9 col-md-10">
-                <input type="text" name="menuseq" class="form-control" id="menuseq" placeholder="Pengurutan" value="{{ $menu['menuseq'] ?? '' }}">
+                <input type="text" name="menuseq" class="form-control numbernoseparate" id="menuseq" placeholder="Pengurutan" value="{{ $menu['menuseq'] ?? '' }}">
               </div>
             </div>
 

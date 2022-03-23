@@ -282,11 +282,11 @@
     }
 
     if (!`{{ $myAuth->hasPermission('parameter', 'export') }}`) {
-      $('#delete').addClass('ui-disabled')
+      $('#export').addClass('ui-disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('parameter', 'report') }}`) {
-      $('#delete').addClass('ui-disabled')
+      $('#report').addClass('ui-disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
