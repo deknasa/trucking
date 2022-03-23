@@ -76,7 +76,7 @@
 
                       <td>
                         <div class="input-group input-group mb-1">
-                          <select class="form-control select2" name="status[]" id="status">
+                          <select class="form-control select2bs4" name="status[]" id="status">
                             <?php foreach ($data['combo'] as $key => $item) { ?>
                               <option value="<?= $item['id'] ?>" <?= $item['id'] == @$detail['status'] ? 'selected' : '' ?>><?= $item['keterangan'] ?></option>
                             <?php } ?>
@@ -118,46 +118,46 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class=" modal-dialog modal-lg">
 
-    <div class="modal-content">
+      <div class="modal-content">
 
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Form User</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Form User</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
 
-      <!-- Modal body -->
-      <form id="pilih">
+        <!-- Modal body -->
+        <form id="pilih">
 
-        <div class="modal-body">
-          <table class="table table-striped">
+          <div class="modal-body">
+            <table class="table table-striped">
 
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-10">
-                  <table id="jqGrid"></table>
-                  <div id="jqGridPager"></div>
-                </div>
-
-
+              <div class="container-fluid">
                 <div class="row">
-                  <!-- Modal footer -->
-                  <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Pilih</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  <div class="col-10">
+                    <table id="jqGrid"></table>
+                    <div id="jqGridPager"></div>
+                  </div>
+
+
+                  <div class="row">
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Pilih</button>
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </table>
-        </div>
-      </form>
+            </table>
+          </div>
+        </form>
 
 
 
+      </div>
     </div>
   </div>
-</div>
 </div>
 </div>
 
@@ -263,310 +263,9 @@
   });
 
 
-  $("#jqGrid").jqGrid({
-      url: indexUrluser,
-      mtype: "GET",
-      styleUI: 'Bootstrap4',
-      iconSet: 'fontAwesome',
-      datatype: "json",
-      colModel: [{
-          label: 'ID',
-          name: 'id',
-          align: 'right',
-          width: '70px'
-        },
-        {
-          label: 'USER',
-          name: 'user',
-          align: 'left',
-          searchoptions: {
-            sopt: ['cn'],
-            defaultValue: $("#user").val()
-          }
-        },
-
-        {
-          label: 'MODIFIEDBY',
-          name: 'modifiedby',
-          align: 'left'
-        },
-        {
-          label: 'UPDATEDAT',
-          name: 'updated_at',
-          align: 'right'
-        }, {
-          label: 'CREATEDAT',
-          name: 'created_at',
-          align: 'right'
-        },
-      ],
-      // autowidth: true,
-      shrinkToFit: true,
-      width: '100%',
-      modal: true,
-      height: '75%',
-      rowNum: 10,
-      rownumbers: true,
-      rownumWidth: 45,
-      rowList: [10, 20, 50],
-      toolbar: [true, "top"],
-      sortable: true,
-      sortname: sortname,
-      sortorder: sortorder,
-      page: page,
-      pager: pager,
-      viewrecords: true,
-      onSelectRow: function(id) {
-        id = $(this).jqGrid('getCell', id, 'rn') - 1
-        indexRow = id
-        page = $(this).jqGrid('getGridParam', 'page')
-        let rows = $(this).jqGrid('getGridParam', 'postData').rows
-        if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
-
-        var selRowId = $(this).jqGrid("getGridParam", "selrow");
-        var rowData = $(this).jqGrid("getRowData", selRowId)
-        // var rowData = jQuery(this).getRowData(indexRow + 1);
-   
-        localStorage.setItem('getUser_id', JSON.stringify(rowData));
-      },
-      ondblClickRow: function(rowid) {
-        if (popup == "ada") {
-          var rowData = jQuery(this).getRowData(rowid);
-          localStorage.setItem('getUser_id', JSON.stringify(rowData));
-          window.close();
-        }
-      },
-
-      beforeRequest: function() {
-        var $requestGrid = $(this);
-        if ($requestGrid.data('areFiltersDefaulted') !== true) {
-          $requestGrid.data('areFiltersDefaulted', true);
-          setTimeout(function() {
-            $requestGrid[0].triggerToolbar();
-          }, 50);
-          return false;
-        }
-        // Subsequent runs are always allowed
-        return true;
-      },
-      loadComplete: function(data) {
-        /* Set global variables */
-        sortname = $(this).jqGrid("getGridParam", "sortname")
-        sortorder = $(this).jqGrid("getGridParam", "sortorder")
-        totalRecord = $(this).getGridParam("records")
-        limit = $(this).jqGrid('getGridParam', 'postData').rows
-        postData = $(this).jqGrid('getGridParam', 'postData')
-
-        $('.clearsearchclass').click(function() {
-          highlightSearch = ''
-        })
-
-        if (triggerClick) {
-          if (id != '') {
-            indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-            $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-            id = ''
-          } else if (indexRow != undefined) {
-            $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-          }
-
-          if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-            $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-          }
-
-          triggerClick = false
-        } else {
-          $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
-        }
-      }
-    })
-
-    .jqGrid("navGrid", pager, {
-      search: false,
-      refresh: false,
-      add: false,
-      edit: false,
-      del: false,
-    })
-
-
-    .navButtonAdd(pager, {
-      caption: 'Add',
-      title: 'Add',
-      id: 'add',
-      buttonicon: 'fas fa-plus',
-      onClickButton: function() {
-        let limit = $(this).jqGrid('getGridParam', 'postData').rows
-
-        window.location.href = `{{ route('user.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-      }
-    })
-
-    .navButtonAdd(pager, {
-      caption: 'Edit',
-      title: 'Edit',
-      id: 'edit',
-      buttonicon: 'fas fa-pen',
-      onClickButton: function() {
-        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-        window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-      }
-    })
-
-    .navButtonAdd(pager, {
-      caption: 'Delete',
-      title: 'Delete',
-      id: 'delete',
-      buttonicon: 'fas fa-trash',
-      onClickButton: function() {
-        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-        window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-      }
-    })
-
-
-    .jqGrid('filterToolbar', {
-      stringResult: true,
-      searchOnEnter: false,
-      defaultSearch: 'cn',
-      groupOp: 'AND',
-      beforeSearch: function() {
-        clearGlobalSearch()
-      }
-    })
-
-    .bindKeys() /
-
-    /* Append clear filter button */
-    loadClearFilter()
-
-  /* Append global search */
-  loadGlobalSearch()
-
-  $('#add .ui-pg-div')
-    .addClass(`btn-sm btn-primary`)
-    .parent().addClass('px-1')
-
-  $('#edit .ui-pg-div')
-    .addClass('btn-sm btn-success')
-    .parent().addClass('px-1')
-
-  $('#delete .ui-pg-div')
-    .addClass('btn-sm btn-danger')
-    .parent().addClass('px-1')
-
-
-
-  if (!`{{ $myAuth->hasPermission('user', 'create') }}`) {
-    $('#add').addClass('ui-disabled')
-  }
-
-  if (!`{{ $myAuth->hasPermission('user', 'edit') }}`) {
-    $('#edit').addClass('ui-disabled')
-  }
-
-  if (!`{{ $myAuth->hasPermission('user', 'delete') }}`) {
-    $('#delete').addClass('ui-disabled')
-  }
-
-
-
-
-  var delay = (function() {
-    var timer = 0;
-    return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })()
-
-  function clearColumnSearch() {
-    $('input[id*="gs_"]').val("");
-    $("#resetFilterOptions span#resetFilterOptions").removeClass('aktif');
-    $('select[id*="gs_"]').val("");
-    $("#resetdatafilter").removeClass("active");
-  }
-
-  function clearGlobalSearch() {
-    $("#searchText").val("")
-  }
-
-  function loadClearFilter() {
-    /* Append Button */
-    $('#gsh_' + $.jgrid.jqID($('#jqGrid')[0].id) + '_rn').html(
-      $("<div id='resetfilter' class='reset'><span id='resetdatafilter' class='btn btn-default'> X </span></div>")
-    )
-
-    /* Handle button on click */
-    $("#resetdatafilter").click(function() {
-      highlightSearch = '';
-
-      clearGlobalSearch()
-      clearColumnSearch()
-
-      $("#jqGrid").jqGrid('setGridParam', {
-        search: false,
-        postData: {
-          "filters": ""
-        }
-      }).trigger("reloadGrid");
-    })
-  }
-
-  function loadGlobalSearch() {
-    /* Append global search textfield */
-    $('#t_' + $.jgrid.jqID($('#jqGrid')[0].id)).html($('<form class="form-inline"><div class="form-group" id="titlesearch"><label for="searchText" style="font-weight: normal !important;">Search : </label><input type="text" class="form-control" id="searchText" placeholder="Search" autocomplete="off"></div></form>'));
-
-    /* Handle textfield on input */
-    $(document).on("input", "#searchText", function() {
-      delay(function() {
-        clearColumnSearch()
-
-        var postData = $('#jqGrid').jqGrid("getGridParam", "postData"),
-          colModel = $('#jqGrid').jqGrid("getGridParam", "colModel"),
-          rules = [],
-          searchText = $("#searchText").val(),
-          l = colModel.length,
-          i,
-          cm;
-        for (i = 0; i < l; i++) {
-          cm = colModel[i];
-          if (cm.search !== false && (cm.stype === undefined || cm.stype === "text" || cm.stype === "select")) {
-
-            rules.push({
-              field: cm.name,
-              op: "cn",
-              data: searchText.toUpperCase()
-            });
-          }
-        }
-        postData.filters = JSON.stringify({
-          groupOp: "OR",
-          rules: rules
-        });
-
-        $('#jqGrid').jqGrid("setGridParam", {
-          search: true
-        });
-        $('#jqGrid').trigger("reloadGrid", [{
-          page: 1,
-          current: true
-        }]);
-        return false;
-      }, 500);
-    });
-  }
-
-  /*batas*/
-
-
   if (action == 'delete') {
     $('[name]').addClass('disabled')
   }
-
-
 
   function lookupUser(user) {
 

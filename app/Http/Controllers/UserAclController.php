@@ -216,79 +216,50 @@ class UserAclController extends MyController
 
         return $response['data'];
     }
-
+    
+    /**
+     * @ClassName
+     */
     public function report(Request $request): View
     {
-        $request->offset = $request->dari - 1;
-        $request->rows = $request->sampai;
+        $params['offset'] = $request->dari - 1;
+        $params['rows'] = $request->sampai - $request->dari + 1;
 
-        $parameters = $this->get($request)['rows'];
+        $useracls = $this->get($params)['rows'];
 
-        return view('reports.parameter', compact('parameters'));
+        return view('reports.useracl', compact('useracls'));
     }
 
-    public function export(): void
+    /**
+     * @ClassName
+     */
+    public function export(Request $request): void
     {
-        $parameters = $this->get();
+        $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
+        ];
 
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Laporan Parameter');
-        $sheet->getStyle("A1")->getFont()->setSize(20);
-        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:E1');
+        $useracls = $this->get($params)['rows'];
 
-        $sheet->setCellValue('A2', 'No');
-        $sheet->setCellValue('B2', 'ID');
-        $sheet->setCellValue('C2', 'Group');
-        $sheet->setCellValue('D2', 'Sub Group');
-        $sheet->setCellValue('E2', 'Nama Parameter');
-        $sheet->setCellValue('F2', 'Memo');
-        $sheet->setCellValue('G2', 'ModifiedBy');
-        $sheet->setCellValue('H2', 'ModifiedOn');
+        $columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'ID',
+                'index' => 'id',
+            ],
+            [
+                'label' => 'User ID',
+                'index' => 'user_id',
+            ],
+            [
+                'label' => 'User',
+                'index' => 'user',
+            ],
+        ];
 
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
-
-        $no = 1;
-        $x = 3;
-        foreach ($parameters['rows'] as $row) {
-            $sheet->setCellValue('A' . $x, $no++);
-            $sheet->setCellValue('B' . $x, $row['id']);
-            $sheet->setCellValue('C' . $x, $row['grp']);
-            $sheet->setCellValue('D' . $x, $row['subgrp']);
-            $sheet->setCellValue('E' . $x, $row['text']);
-            $sheet->setCellValue('F' . $x, $row['memo']);
-            $sheet->setCellValue('G' . $x, $row['modifiedby']);
-            $sheet->setCellValue('H' . $x,  date("d-m-Y H:i:s", strtotime($row['updated_at'])));
-            $lastCell = 'H' . $x;
-            $x++;
-        }
-
-        $sheet->setCellValue('E' . $x, "=ROWS(E3:" . $lastCell . ")");
-
-        $styleArray = array(
-            'borders' => array(
-                'allBorders' => array(
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ),
-            ),
-        );
-
-        $sheet->getStyle('A2:H2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF02c4f5');
-        $sheet->getStyle('A2:' . $lastCell)->applyFromArray($styleArray);
-
-        $writer = new Xlsx($spreadsheet);
-        $filename = 'laporanParameter' . date('dmYHis');
-
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
-        header('Cache-Control: max-age=0');
-
-        $writer->save('php://output');
+        $this->toExcel($this->title, $useracls, $columns);
     }
 }

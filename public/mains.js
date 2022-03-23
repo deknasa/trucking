@@ -225,12 +225,10 @@ function setCustomBindKeys(grid) {
 				}
 			}
 
-			console.log(
-				$(".ui-jqgrid-bdiv").find("tbody").animate({
-					scrollTop: 200,
-				})
-			);
-			console.log($(".table-success").position().top > 300);
+			$(".ui-jqgrid-bdiv").find("tbody").animate({
+				scrollTop: 200,
+			});
+			$(".table-success").position().top > 300;
 		}
 	});
 }
@@ -380,7 +378,7 @@ function loadGlobalSearch() {
 function clearColumnSearch() {
 	$('input[id*="gs_"]').val("");
 	$("#resetFilterOptions span#resetFilterOptions").removeClass("aktif");
-	$('select[id*="gs_"]').val("").trigger("change");
+	$('select[id*="gs_"]').val("").trigger("change.select2");
 	$("#resetdatafilter").removeClass("active");
 }
 
@@ -400,8 +398,8 @@ function loadClearFilter() {
 	$("#resetdatafilter").click(function () {
 		highlightSearch = "";
 
-		clearGlobalSearch();
 		clearColumnSearch();
+		clearGlobalSearch();
 
 		$("#jqGrid")
 			.jqGrid("setGridParam", {
@@ -475,7 +473,6 @@ $(".datepicker")
 	});
 
 $(document).on("input", ".numbernoseparate", function () {
-	console.log('here');
 	this.value = this.value.replace(/\D/g, "");
 });
 
@@ -499,7 +496,6 @@ function showDialog(message = "") {
 $(document).ready(function () {
 	$("#sidebarButton").click(function () {
 		$(".nav-treeview").each(function (i, el) {
-			// console.log($(el));
 			$(el).removeAttr("style");
 		});
 	});

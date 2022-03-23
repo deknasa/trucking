@@ -201,6 +201,7 @@
         },
         beforeRequest: function() {
           var $requestGrid = $(this);
+
           if ($requestGrid.data('areFiltersDefaulted') !== true) {
             $requestGrid.data('areFiltersDefaulted', true);
             setTimeout(function() {
@@ -208,12 +209,10 @@
             }, 50);
             return false;
           }
+          
           // Subsequent runs are always allowed
           return true;
         },
-
-
-
         loadComplete: function(data) {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -350,8 +349,6 @@
           clearGlobalSearch()
         },
       })
-
-      .bindKeys() /
 
       /* Append clear filter button */
       loadClearFilter()

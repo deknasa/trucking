@@ -126,6 +126,9 @@ Route::middleware('auth')->group(function () {
     Route::get('acl/field_length', [AclController::class, 'fieldLength'])->name('acl.field_length');
     Route::get('acl/detail', [AclController::class, 'detail'])->name('acl.detail');
     Route::get('acl/index', [AclController::class, 'index']);
+    Route::get('acl/export', [AclController::class, 'export'])->name('acl.export');
+    Route::get('acl/report', [AclController::class, 'report'])->name('acl.report');
+    Route::get('acl/get', [AclController::class, 'get'])->name('acl.get');
     Route::resource('acl', AclController::class);
 
     Route::get('useracl/{id}/delete', [UserAclController::class, 'delete'])->name('useracl.delete');

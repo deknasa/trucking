@@ -121,12 +121,15 @@ class UserRoleController extends MyController
             ->get(config('app.api_url') . "userrole/$id");
 
         $userrole = $response['data'];
+
         $list = [
             'detail' => $this->detaillist($userrole['user_id']  ?? '0'),
         ];
+
         $data['combo'] = $this->combo('entry');
 
         $user_id = $userrole['user_id'];
+
         return view('userrole.edit', compact('title', 'userrole', 'list', 'user_id', 'data'));
     }
 
@@ -180,12 +183,61 @@ class UserRoleController extends MyController
     public function destroy($id, Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders(
-            $this->httpHeaders
-                ->withToken(session('access_token'))
-        )->delete(config('app.api_url') . "userrole/$id", $request->all());
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->delete(config('app.api_url') . "userrole/$id", $request->all());
 
         return response($response, $response->status());
+    }
+
+    /**
+     * @ClassName
+     */
+    public function report(Request $request)
+    {
+        $params['offset'] = $request->dari - 1;
+        $params['rows'] = $request->sampai - $request->dari + 1;
+
+        $userroles = $this->get($params)['rows'];
+
+        return view('reports.userrole', compact('userroles'));
+    }
+
+    /**
+     * @ClassName
+     */
+    public function export(Request $request)
+    {
+        $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
+        ];
+
+        $userroles = $this->get($params)['rows'];
+
+        $columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'ID',
+                'index' => 'id',
+            ],
+            [
+                'label' => 'User ID',
+                'index' => 'user_id',
+            ],
+            [
+                'label' => 'User',
+                'index' => 'user',
+            ],
+            [
+                'label' => 'Name',
+                'index' => 'name',
+            ],
+        ];
+
+        $this->toExcel($this->title, $userroles, $columns);
     }
 
     public function fieldLength()
