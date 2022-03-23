@@ -25,7 +25,7 @@ use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\SupirController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\AlatBayarController;
-
+use App\Http\Controllers\BankPelangganController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -192,4 +192,10 @@ Route::middleware('auth')->group(function () {
     Route::get('alatbayar/{id}/delete', [AlatBayarController::class, 'delete'])->name('alatbayar.delete');
     Route::get('alatbayar/get', [AlatBayarController::class, 'get'])->name('alatbayar.get');
     Route::resource('alatbayar', AlatBayarController::class);
+
+    Route::get('bankpelanggan/field_length', [BankPelangganController::class, 'fieldLength'])->name('bankpelanggan.field_length');
+    Route::get('bankpelanggan/{id}/delete', [BankPelangganController::class, 'delete'])->name('bankpelanggan.delete');
+    Route::get('bankpelanggan/get', [BankPelangganController::class, 'get'])->name('bankpelanggan.get');
+    Route::resource('bankpelanggan', BankPelangganController::class);
+
 });
