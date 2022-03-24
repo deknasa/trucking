@@ -1,6 +1,9 @@
+let sidebarIsOpen = false;
+
 $(document).ready(function () {
 	startTime();
 	setFormBindKeys();
+	setSidebarBindKeys();
 
 	/* Remove autocomplete */
 	$("input").attr("autocomplete", "off");
@@ -18,7 +21,28 @@ $(document).ready(function () {
 		digitGroupSeparator: ".",
 		decimalCharacter: ",",
 	});
+
+	$(document).on("click", "#sidebar-overlay", () => {
+		$(document).trigger("sidebar:toggle");
+
+		sidebarIsOpen = false;
+	});
 });
+
+$(document).on("sidebar:toggle", () => {
+	if ($("body").hasClass("sidebar-open")) {
+		sidebarIsOpen = true;
+
+		$("#search").focus();
+	} else if ($("body").hasClass("sidebar-closed")) {
+		sidebarIsOpen = false;
+
+		$("#search").focusout();
+	}
+
+	console.log(sidebarIsOpen);
+});
+
 $(document).ajaxError((event, jqXHR, ajaxSettings, thrownError) => {
 	if (jqXHR.status !== 422) {
 		showDialog(thrownError);
@@ -95,60 +119,85 @@ function removeTags(str) {
  * to move grid page
  */
 function setCustomBindKeys(grid) {
+	setSidebarBindKeys();
+
 	$(document).on("keydown", function (e) {
-		if (
-			e.keyCode == 33 ||
-			e.keyCode == 34 ||
-			e.keyCode == 35 ||
-			e.keyCode == 36 ||
-			e.keyCode == 38 ||
-			e.keyCode == 40
-		) {
-			e.preventDefault();
+		if (!sidebarIsOpen) {
+			if (
+				e.keyCode == 33 ||
+				e.keyCode == 34 ||
+				e.keyCode == 35 ||
+				e.keyCode == 36 ||
+				e.keyCode == 38 ||
+				e.keyCode == 40
+			) {
+				e.preventDefault();
 
-			var gridIds = $("#jqGrid").getDataIDs();
-			var selectedRow = $("#jqGrid").getGridParam("selrow");
-			var currentPage = $(grid).getGridParam("page");
-			var lastPage = $(grid).getGridParam("lastpage");
-			var currentIndex = 0;
-			var row = $(grid).jqGrid("getGridParam", "postData").rows;
+				var gridIds = $("#jqGrid").getDataIDs();
+				var selectedRow = $("#jqGrid").getGridParam("selrow");
+				var currentPage = $(grid).getGridParam("page");
+				var lastPage = $(grid).getGridParam("lastpage");
+				var currentIndex = 0;
+				var row = $(grid).jqGrid("getGridParam", "postData").rows;
 
-			for (var i = 0; i < gridIds.length; i++) {
-				if (gridIds[i] == selectedRow) currentIndex = i;
-			}
-
-			if (triggerClick == false) {
-				if (33 === e.keyCode) {
-					if (currentPage > 1) {
-						$(grid)
-							.jqGrid("setGridParam", {
-								page: parseInt(currentPage) - 1,
-							})
-							.trigger("reloadGrid");
-
-						triggerClick = true;
-					}
-					$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+				for (var i = 0; i < gridIds.length; i++) {
+					if (gridIds[i] == selectedRow) currentIndex = i;
 				}
-				if (34 === e.keyCode) {
-					if (currentPage !== lastPage) {
-						$(grid)
-							.jqGrid("setGridParam", {
-								page: parseInt(currentPage) + 1,
-							})
-							.trigger("reloadGrid");
 
-						triggerClick = true;
+				if (triggerClick == false) {
+					if (33 === e.keyCode) {
+						if (currentPage > 1) {
+							$(grid)
+								.jqGrid("setGridParam", {
+									page: parseInt(currentPage) - 1,
+								})
+								.trigger("reloadGrid");
+
+							triggerClick = true;
+						}
+						$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
 					}
-					$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
-				}
-				if (35 === e.keyCode) {
-					if (currentPage !== lastPage) {
-						$(grid)
-							.jqGrid("setGridParam", {
-								page: lastPage,
-							})
-							.trigger("reloadGrid");
+					if (34 === e.keyCode) {
+						if (currentPage !== lastPage) {
+							$(grid)
+								.jqGrid("setGridParam", {
+									page: parseInt(currentPage) + 1,
+								})
+								.trigger("reloadGrid");
+
+							triggerClick = true;
+						}
+						$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+					}
+					if (35 === e.keyCode) {
+						if (currentPage !== lastPage) {
+							$(grid)
+								.jqGrid("setGridParam", {
+									page: lastPage,
+								})
+								.trigger("reloadGrid");
+							if (e.ctrlKey) {
+								if (
+									$(grid).jqGrid("getGridParam", "selrow") !==
+									$("#customer")
+										.find(">tbody>tr.jqgrow")
+										.filter(":last")
+										.attr("id")
+								) {
+									$(grid)
+										.jqGrid(
+											"setSelection",
+											$(grid)
+												.find(">tbody>tr.jqgrow")
+												.filter(":last")
+												.attr("id")
+										)
+										.trigger("reloadGrid");
+								}
+							}
+
+							triggerClick = true;
+						}
 						if (e.ctrlKey) {
 							if (
 								$(grid).jqGrid("getGridParam", "selrow") !==
@@ -165,70 +214,63 @@ function setCustomBindKeys(grid) {
 									.trigger("reloadGrid");
 							}
 						}
-
-						triggerClick = true;
+						$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
 					}
-					if (e.ctrlKey) {
-						if (
-							$(grid).jqGrid("getGridParam", "selrow") !==
-							$("#customer").find(">tbody>tr.jqgrow").filter(":last").attr("id")
-						) {
-							$(grid)
-								.jqGrid(
-									"setSelection",
-									$(grid).find(">tbody>tr.jqgrow").filter(":last").attr("id")
-								)
-								.trigger("reloadGrid");
-						}
-					}
-					$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
-				}
-				if (36 === e.keyCode) {
-					if (currentPage > 1) {
-						if (e.ctrlKey) {
-							if (
-								$(grid).jqGrid("getGridParam", "selrow") !==
-								$("#customer")
-									.find(">tbody>tr.jqgrow")
-									.filter(":first")
-									.attr("id")
-							) {
-								$(grid).jqGrid(
-									"setSelection",
-									$(grid).find(">tbody>tr.jqgrow").filter(":first").attr("id")
-								);
+					if (36 === e.keyCode) {
+						if (currentPage > 1) {
+							if (e.ctrlKey) {
+								if (
+									$(grid).jqGrid("getGridParam", "selrow") !==
+									$("#customer")
+										.find(">tbody>tr.jqgrow")
+										.filter(":first")
+										.attr("id")
+								) {
+									$(grid).jqGrid(
+										"setSelection",
+										$(grid).find(">tbody>tr.jqgrow").filter(":first").attr("id")
+									);
+								}
 							}
+							$(grid)
+								.jqGrid("setGridParam", {
+									page: 1,
+								})
+								.trigger("reloadGrid");
+
+							triggerClick = true;
 						}
-						$(grid)
-							.jqGrid("setGridParam", {
-								page: 1,
-							})
-							.trigger("reloadGrid");
+						$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+					}
+					if (38 === e.keyCode) {
+						if (currentIndex - 1 >= 0) {
+							$(grid)
+								.resetSelection()
+								.setSelection(gridIds[currentIndex - 1]);
+						}
+					}
+					if (40 === e.keyCode) {
+						if (currentIndex + 1 < gridIds.length) {
+							$(grid)
+								.resetSelection()
+								.setSelection(gridIds[currentIndex + 1]);
+						}
+					}
+				}
 
-						triggerClick = true;
-					}
-					$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
-				}
-				if (38 === e.keyCode) {
-					if (currentIndex - 1 >= 0) {
-						$(grid)
-							.resetSelection()
-							.setSelection(gridIds[currentIndex - 1]);
-					}
-				}
-				if (40 === e.keyCode) {
-					if (currentIndex + 1 < gridIds.length) {
-						$(grid)
-							.resetSelection()
-							.setSelection(gridIds[currentIndex + 1]);
-					}
-				}
+				$(".ui-jqgrid-bdiv").find("tbody").animate({
+					scrollTop: 200,
+				});
+				$(".table-success").position().top > 300;
 			}
+		}
+	});
+}
 
-			$(".ui-jqgrid-bdiv").find("tbody").animate({
-				scrollTop: 200,
-			});
-			$(".table-success").position().top > 300;
+function setSidebarBindKeys() {
+	$(document).on("keydown", (event) => {
+		if (event.keyCode === 77 && event.altKey) {
+			$("#sidebarButton").click();
 		}
 	});
 }
@@ -426,19 +468,25 @@ function tampilkanjam() {
 }
 
 function tampilkantanggal() {
-	var d = new Date();
+	let d = new Date();
 
-	var month = d.getMonth() + 1;
-	var day = d.getDate();
+	let month = d.getMonth() + 1;
 
-	var output =
-		d.getFullYear() +
-		"/" +
-		(("" + month).length < 2 ? "0" : "") +
-		month +
-		"/" +
-		(("" + day).length < 2 ? "0" : "") +
-		day;
+	let monthInstance = new Date(month.toString())
+
+	let monthName = monthInstance.toLocaleString('default', {month: 'long'})
+	
+	let day = d.getDate();
+
+	// var output =
+	// 	d.getFullYear() +
+	// 	" " +
+	// 	(("" + monthName).length < 2 ? "0" : "") +
+	// 	monthName +
+	// 	" " +
+	// 	(("" + day).length < 2 ? "0" : "") +
+	// 	day;
+	let output = `${(("" + day).length < 2 ? "0" : "")} ${day} ${monthName} ${d.getFullYear()}`
 
 	tempattanggal.innerHTML = output;
 }
@@ -495,6 +543,10 @@ function showDialog(message = "") {
 
 $(document).ready(function () {
 	$("#sidebarButton").click(function () {
+		setTimeout(() => {
+			$(document).trigger("sidebar:toggle");
+		}, 0);
+
 		$(".nav-treeview").each(function (i, el) {
 			$(el).removeAttr("style");
 		});

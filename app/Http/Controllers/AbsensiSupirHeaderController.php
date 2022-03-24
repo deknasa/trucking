@@ -145,7 +145,7 @@ class AbsensiSupirHeaderController extends MyController
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "absensi/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -188,7 +188,7 @@ class AbsensiSupirHeaderController extends MyController
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "absensi/$id");
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     public function getTrado()
