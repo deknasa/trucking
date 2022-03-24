@@ -30,14 +30,14 @@ $(document).ready(function () {
 });
 
 $(document).on("sidebar:toggle", () => {
-	if ($("body").hasClass("sidebar-open")) {
-		sidebarIsOpen = true;
-
-		$("#search").focus();
-	} else if ($("body").hasClass("sidebar-closed")) {
+	if ($("body").hasClass("sidebar-collapse")) {
 		sidebarIsOpen = false;
 
 		$("#search").focusout();
+	} else if ($("body").hasClass("sidebar-open")) {
+		sidebarIsOpen = true;
+
+		$("#search").focus();
 	}
 
 	console.log(sidebarIsOpen);
@@ -52,7 +52,7 @@ $(document).ajaxError((event, jqXHR, ajaxSettings, thrownError) => {
 $(window).on("resize", function (event) {
 	if ($(window).width() > 990) {
 		$("body").removeClass();
-		$("body").addClass("sidebar-collapse");
+		$("body").addClass("sidebar-closed");
 	}
 });
 
@@ -472,10 +472,10 @@ function tampilkantanggal() {
 
 	let month = d.getMonth() + 1;
 
-	let monthInstance = new Date(month.toString())
+	let monthInstance = new Date(month.toString());
 
-	let monthName = monthInstance.toLocaleString('default', {month: 'long'})
-	
+	let monthName = monthInstance.toLocaleString("default", { month: "long" });
+
 	let day = d.getDate();
 
 	// var output =
@@ -486,7 +486,9 @@ function tampilkantanggal() {
 	// 	" " +
 	// 	(("" + day).length < 2 ? "0" : "") +
 	// 	day;
-	let output = `${(("" + day).length < 2 ? "0" : "")} ${day} ${monthName} ${d.getFullYear()}`
+	let output = `${
+		("" + day).length < 2 ? "0" : ""
+	} ${day} ${monthName} ${d.getFullYear()}`;
 
 	tempattanggal.innerHTML = output;
 }
@@ -573,6 +575,7 @@ $(document).ready(function () {
 		.parentsUntil(".sidebar-menu > .treeview-menu")
 		.addClass("active");
 });
+
 $("#search").keyup(function () {
 	$(this).data("val", $(this).val());
 });

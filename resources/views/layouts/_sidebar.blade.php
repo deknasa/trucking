@@ -3,6 +3,10 @@
     display: block;
   }
 
+  .sidebar-collapse #sidebar-overlay {
+    display: none;
+  }
+
   #split-bar {
     height: 100%;
     float: right;
