@@ -272,7 +272,103 @@ function setSidebarBindKeys() {
 		if (event.keyCode === 77 && event.altKey) {
 			$("#sidebarButton").click();
 		}
+
+		if (sidebarIsOpen) {
+			let allowedKeyCodes = [13, 37, 38, 39, 40];
+
+			if (allowedKeyCodes.includes(event.keyCode)) {
+				event.preventDefault();
+
+				switch (event.keyCode) {
+					case 13:
+						$(".nav-link.hover")[0].click();
+						break;
+					case 37:
+						setUpOneLevelMenu();
+
+						break;
+					case 38:
+						setPreviousMenuHover();
+
+						break;
+					case 39:
+						setDownOneLevelMenu();
+
+						break;
+					case 40:
+						setNextMenuHover();
+
+						break;
+					default:
+						break;
+				}
+
+				// fillSearchMenuInput();
+			}
+		}
 	});
+}
+
+function setNextMenuHover() {
+	let currentElement = $(".nav-link.hover").first();
+	let nextElement = currentElement
+		.parent(".nav-item")
+		.next()
+		.find(".nav-link")
+		.first();
+
+	if (nextElement.length > 0) {
+		currentElement.removeClass("hover");
+		nextElement.addClass("hover");
+	}
+}
+
+function setPreviousMenuHover() {
+	let currentElement = $(".nav-link.hover").first();
+	let nextElement = currentElement
+		.parent(".nav-item")
+		.prev()
+		.find(".nav-link")
+		.first();
+
+	if (nextElement.length > 0) {
+		currentElement.removeClass("hover");
+		nextElement.addClass("hover");
+	}
+}
+
+function setUpOneLevelMenu() {
+	let currentElement = $(".nav-link.hover").first();
+	let upOneLevelElement = currentElement.parents().eq(2);
+
+	if (upOneLevelElement.length > 0) {
+		currentElement.removeClass("hover");
+		upOneLevelElement.removeClass("menu-is-opening menu-open");
+		upOneLevelElement.find(".nav-link").first().addClass("hover");
+	}
+}
+
+function setDownOneLevelMenu() {
+	let currentElement = $(".nav-link.hover").first();
+	let downOneLevelElement = currentElement
+		.siblings("ul")
+		.css({
+			display: "",
+		})
+		.find(".nav-link")
+		.first();
+
+	if (downOneLevelElement.length > 0) {
+		currentElement.removeClass("hover");
+		currentElement.parent(".nav-item").addClass("menu-open");
+		downOneLevelElement.addClass("hover");
+	}
+}
+
+function fillSearchMenuInput() {
+	let currentElement = $(".nav-link.hover").first();
+
+	$("#search").val(currentElement.attr("id"));
 }
 
 /**

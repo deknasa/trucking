@@ -15,6 +15,11 @@
     cursor: col-resize;
   }
 
+  .nav-link.hover {
+    background-color: rgba(255, 255, 255, .1);
+    color: #fff;
+  }
+
   .selected-link {
     background-color: cyan !important;
   }
@@ -42,7 +47,7 @@
 
     <!-- SidebarSearch Form -->
     <div class="form-inline">
-      <div class="input-group" data-widget="sidebar-search">
+      <div class="input-group">
         <input id="search" class="form-control form-control-sidebar" onpaste="return false;" placeholder="Search">
         <div class="input-group-append">
           <label class="btn btn-sidebar" onclick="return false;">
