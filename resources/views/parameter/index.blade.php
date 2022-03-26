@@ -157,14 +157,14 @@
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
@@ -328,11 +328,16 @@
       })
     })
 
-    $('#formRange').submit(event => {
+    $('#formRange').submit(function(event) {
       event.preventDefault()
 
-      let params
       
+
+      let params
+      let submitButton = $(this).find('button:submit')
+
+      submitButton.attr('disabled', 'disabled')
+
       /* Set params value */
       for (var key in postData) {
         if (params != "") {
@@ -345,49 +350,32 @@
       let offset = parseInt(formRange.find('[name=dari]').val()) - 1
       let limit = parseInt(formRange.find('[name=sampai]').val()) - offset
       params += `&offset=${offset}&limit=${limit}`
+
+      console.log(limit);
       
-      // $.ajax({
-      //   url: `http://localhost/trucking-laravel/public/api/parameter/export?${params}`,
-      //   method: 'GET',
-      //   dataType: 'JSON',
-      //   xhr: (options) => {
-      //     console.log(options);
-      //   },
-      //   success: response => {
-      //     console.log(response);
+      // let xhr = new XMLHttpRequest()
+      // xhr.open('GET', `http://localhost/trucking-laravel/public/api/parameter/export?${params}`, true)
+      // // xhr.setRequestHeader("Authorization", 'Bearer ' + this.token())
+      // xhr.responseType = 'arraybuffer'
+
+      // xhr.onload = function(e) {
+      //   if (this.status === 200) {
+      //     if (this.response !== undefined) {
+      //       let blob = new Blob([this.response], {
+      //         type: "application/vnd.ms-excel"
+      //       })
+      //       let link = document.createElement('a')
+
+      //       link.href = window.URL.createObjectURL(blob)
+      //       link.download = `laporanParameter${(new Date).getTime()}.xlsx`
+      //       link.click()
+
+      //       submitButton.removeAttr('disabled')
+      //     }
       //   }
-      // })
-      let xhr = new XMLHttpRequest()
+      // }
 
-      
-      xhr.open('GET', `http://localhost/trucking-laravel/public/api/parameter/export?${params}`, true)
-      // xhr.setRequestHeader("Authorization", 'Bearer ' + this.token())
-      xhr.responseType = 'arraybuffer'
-
-      xhr.onload = function(e) {
-        if (this.status === 200) {
-          if (this.response !== undefined) {
-            let blob = new Blob([this.response], {
-              type: "application/vnd.ms-excel"
-            })
-            let link = document.createElement('a')
-
-            link.href = window.URL.createObjectURL(blob)
-            link.download = 'test.xlsx'
-            link.click()
-          }
-        }
-      }
-
-      xhr.send()
-
-
-
-
-
-
-
-
+      // xhr.send()
 
       // $.ajax({
       //   url: 'http://localhost/trucking-laravel/public/api/parameter/export',

@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Http\Controllers\MyController;
 use App\Models\Menu as ModelsMenu;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
 class Menu
@@ -18,7 +19,7 @@ class Menu
     $this->myController->setBreadcrumb($this->myController->class);
   }
 
-  public function printRecursiveMenu($menus)
+  public function printRecursiveMenuForResequence($menus)
   {
     $string = '<ul class="dd-list">';
 
@@ -30,13 +31,43 @@ class Menu
                 <i class='$menu[menuicon]'></i> <span> $menu[menuno]. $menu[menuname] </span>
                 </div>
               </a>
-            " . (count($menu['child']) > 0 ? Menu::printRecursiveMenu($menu['child']) : '') . "
+            " . (count($menu['child']) > 0 ? Menu::printRecursiveMenuForResequence($menu['child']) : '') . "
           </li>
       ";
     }
 
     $string .= '</ul>';
 
+    return $string;
+  }
+
+  public function printRecursiveMenu(array $menus, bool $hasParent = false)
+  {
+    $currentMenu = DB::table('menu')
+          ->select('menu.id', 'menu.menuparent')
+          ->join('acos', 'menu.aco_id', 'acos.id')
+          ->where('acos.class', (new Menu())->myController->class)
+          ->first();
+
+    $string = $hasParent ? '<ul class="ml-4 nav nav-treeview">' : '';
+
+    foreach ($menus as $index => $menu) {
+      $string .= '
+      <li class="nav-item">
+        <a id="'. ($menu['menuparent'] == 0 ? $index : $menu['menukode']) .'" href="'. (count($menu['child']) > 0 ? 'javascript:void(0)' : url($menu['menuexe'])) .'" class="nav-link '. (@$currentMenu->id == $menu['menuid'] ? 'active' : '') .'">
+          <i class="nav-icon '. (strtolower($menu['menuicon']) ?? 'far fa-circle') .'"></i>
+          <p>
+            '. ($menu['menuparent'] == 0 ? $index : substr($menu['menukode'], -1)) . '. ' . $menu['menuname'] .'
+            '. (count($menu['child']) > 0 ? '<i class="right fas fa-angle-left"></i>' : '') .'
+          </p>
+        </a>
+        '. (count($menu['child']) > 0 ? Menu::printRecursiveMenu($menu['child'], true) : '') .'
+      </li>
+      ';
+    }
+
+    $string .= $hasParent ? '</ul>' : '';
+    
     return $string;
   }
 

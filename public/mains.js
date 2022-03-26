@@ -4,6 +4,7 @@ $(document).ready(function () {
 	startTime();
 	setFormBindKeys();
 	setSidebarBindKeys();
+	openMenuParents();
 
 	/* Remove autocomplete */
 	$("input").attr("autocomplete", "off");
@@ -28,6 +29,15 @@ $(document).ready(function () {
 		sidebarIsOpen = false;
 	});
 });
+
+function openMenuParents() {
+	let currentMenu = $('a.nav-link.active').first()
+	let parents = currentMenu.parents('li.nav-item')
+
+	parents.each((index, parent) => {
+		$(parent).addClass('menu-open')
+	})
+}
 
 $(document).on("sidebar:toggle", () => {
 	if ($("body").hasClass("sidebar-collapse")) {
