@@ -24,26 +24,59 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 
             <div class="row form-group">
-              <label for="staticEmail" class="col-sm-3 col-md-2 col-form-label">ID <span class="text-danger"></span></label>
-              <div class="col-sm-9 col-md-10">
-                <input type="text" name="id" class="form-control" value="{{ $error['id'] ?? '' }}" readonly>
+              <div class="col-12 col-md-2 col-form-label">
+                <label>ID</label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="id" class="form-control" value="{{ $bankpelanggan['id'] ?? '' }}" readonly>
               </div>
             </div>
-
             <div class="row form-group">
-              <label for="staticEmail" class="col-sm-3 col-md-2 col-form-label">Kode Error<span class="text-danger">*</span></label>
-              <div class="col-sm-9 col-md-10">
-                <input type="text" name="kodeerror" class="form-control" value="{{ $error['kodeerror'] ?? '' }}">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>
+                  KODE BANK <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="kodebank" class="form-control" value="{{ $bankpelanggan['kodebank'] ?? '' }}">
               </div>
             </div>
-
             <div class="row form-group">
-              <label for="staticEmail" class="col-sm-3 col-md-2 col-form-label">Keterangan<span class="text-danger">*</span></label>
-              <div class="col-sm-9 col-md-10">
-                <input type="text" name="keterangan" class="form-control" value="{{ $error['keterangan'] ?? '' }}">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>
+                  NAMA BANK <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="namabank" class="form-control" value="{{ $bankpelanggan['namabank'] ?? '' }}">
               </div>
             </div>
-
+            <div class="row form-group">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>
+                  KETERANGAN <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="keterangan" class="form-control" value="{{ $bankpelanggan['keterangan'] ?? '' }}">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>
+                  STATUS AKTIF <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-md-10">
+                <select name="statusaktif" class="form-control select2bs4">
+                        <option value="">PILIH STATUS</option>
+                        <?php foreach ($combo['statusaktif'] as $key => $item) { 
+                            $selected = @$bankpelanggan['statusaktif'] == $item['id'] ? "selected" : ""
+                        ?>
+                            <option value="{{ $item['id'] }}" {{ $selected }} >{{ $item['text'] }}</option>
+                        <?php } ?>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="card-footer">
             <button type="submit" id="btnSimpan" class="btn btn-primary">
@@ -54,7 +87,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               Simpan
               @endif
             </button>
-            <a href="{{ route('error.index') }}" class="btn btn-danger">
+            <a href="{{ route('bankpelanggan.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
               BATAL
             </a>
@@ -67,27 +100,32 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('error.index') }}"
-  let fieldLengthUrl = "{{ route('error.field_length') }}"
+  let indexUrl = "{{ route('bankpelanggan.index') }}"
+  let fieldLengthUrl = "{{ route('bankpelanggan.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('error.store') }}"
+  let actionUrl = "{{ route('bankpelanggan.store') }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
-
+  
   /* Set action url */
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('error.update', $error['id']) }}"
+    actionUrl = "{{ route('bankpelanggan.update', $bankpelanggan['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('error.destroy', $error['id']) }}"
+    actionUrl = "{{ route('bankpelanggan.destroy', $bankpelanggan['id']) }}"
     method = "DELETE"
   <?php endif; ?>
+  
+  if (action == 'delete') {
+    $('[name]').addClass('disabled')
+  }
 
   $(document).ready(function() {
     $('form').submit(function(e) {
       e.preventDefault()
     })
 
+    /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
@@ -97,11 +135,20 @@ $indexRow = $_GET['indexRow'] ?? '';
         method: method,
         dataType: 'JSON',
         data: $('form').serializeArray(),
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+        },
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
 
-          window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $sortname ?? '' }}&sortorder={{ $sortorder }}&limit={{ $limit }}`
+          if (response.status) {
+            window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $sortname }}&sortorder={{ $sortorder }}&limit={{ $limit }}`
+          }
+
+          if (response.errors) {
+            setErrorMessages(response.errors)
+          }
         },
         error: error => {
           if (error.status === 422) {

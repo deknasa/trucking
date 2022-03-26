@@ -22,7 +22,6 @@ $indexRow = $_GET['indexRow'] ?? '';
             <input type="hidden" name="indexRow" value="{{ $_GET['indexRow'] ?? 1 }}">
             <input type="hidden" name="page" value="{{ $_GET['page'] ?? 1 }}">
 
-
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>ID</label>

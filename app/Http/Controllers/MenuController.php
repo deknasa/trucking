@@ -32,7 +32,7 @@ class MenuController extends MyController
 
         return view('menu.index', compact('title', 'data'));
     }
-    
+
     public function get($params = []): array
     {
         $params = [
@@ -87,7 +87,7 @@ class MenuController extends MyController
         ])
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'menu', $request->all());
-        
+
         return response($response, $response->status());
     }
 
@@ -184,6 +184,72 @@ class MenuController extends MyController
             ->get(config('app.api_url') . 'menu/field_length');
 
         return response($response['data'], $response->status());
+    }
+
+    /**
+     * @ClassName
+     */
+    public function report(Request $request)
+    {
+        $params['offset'] = $request->dari - 1;
+        $params['rows'] = $request->sampai - $request->dari + 1;
+
+        $menus = $this->get($params)['rows'];
+
+        return view('reports.menu', compact('menus'));
+    }
+
+    /**
+     * @ClassName
+     */
+    public function export(Request $request)
+    {
+        $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
+        ];
+
+        $menus = $this->get($params)['rows'];
+
+        $columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'ID',
+                'index' => 'id',
+            ],
+            [
+                'label' => 'Menu Name',
+                'index' => 'menuname',
+            ],
+            [
+                'label' => 'Menu Parent',
+                'index' => 'menuparent',
+            ],
+            [
+                'label' => 'Menu Icon',
+                'index' => 'menuicon',
+            ],
+            [
+                'label' => 'Aco ID',
+                'index' => 'aco_id',
+            ],
+            [
+                'label' => 'Link',
+                'index' => 'link',
+            ],
+            [
+                'label' => 'Menu Exe',
+                'index' => 'menuexe',
+            ],
+            [
+                'label' => 'Menu Kode',
+                'index' => 'menukode',
+            ],
+        ];
+
+        $this->toExcel($this->title, $menus, $columns);
     }
 
 

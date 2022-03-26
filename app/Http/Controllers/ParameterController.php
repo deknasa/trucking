@@ -113,14 +113,11 @@ class ParameterController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "parameter/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -160,7 +157,7 @@ class ParameterController extends MyController
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "parameter/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     public function fieldLength(): Response
@@ -225,7 +222,7 @@ class ParameterController extends MyController
 
         $this->toExcel($this->title, $parameters, $columns);
     }
-    
+
     /* The old code to export */
     // public function export(Request $request): void
     // {

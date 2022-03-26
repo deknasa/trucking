@@ -1,10 +1,10 @@
 {
-  "ReportGuid": "bbb15269510e5cd53025a7afc9ea6157",
+  "ReportGuid": "b3ba677c32f7e640179cd7c900829d5f",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportCabang.mrt",
+  "ReportFile": "ReportUserAcl.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1648010345000+0700)/",
+  "ReportChanged": "/Date(1648026531000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -24,8 +24,8 @@
     "DataSources": {
       "0": {
         "Ident": "StiDataTableSource",
-        "Name": "cabang",
-        "Alias": "cabang",
+        "Name": "useracl",
+        "Alias": "useracl",
         "Columns": {
           "0": {
             "Name": "id",
@@ -35,28 +35,21 @@
             "Type": "System.Int32"
           },
           "1": {
-            "Name": "kodecabang",
+            "Name": "user_id",
             "Index": -1,
-            "NameInSource": "kodecabang",
-            "Alias": "kodecabang",
+            "NameInSource": "user_id",
+            "Alias": "user_id",
             "Type": "System.String"
           },
           "2": {
-            "Name": "namacabang",
+            "Name": "user",
             "Index": -1,
-            "NameInSource": "namacabang",
-            "Alias": "namacabang",
-            "Type": "System.String"
-          },
-          "3": {
-            "Name": "statusaktif",
-            "Index": -1,
-            "NameInSource": "statusaktif",
-            "Alias": "statusaktif",
+            "NameInSource": "user",
+            "Alias": "user",
             "Type": "System.String"
           }
         },
-        "NameInSource": "cabang"
+        "NameInSource": "useracl"
       }
     }
   },
@@ -121,7 +114,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Report Cabang"
+                "Value": "Report User Acl"
               },
               "VertAlignment": "Center",
               "Font": ";24;Bold;",
@@ -197,15 +190,15 @@
             "2": {
               "Ident": "StiText",
               "Name": "Text2",
-              "Guid": "621c6cbd6645cf74658ae1711ee876c0",
-              "ClientRectangle": "2.8,0,5.2,0.6",
+              "Guid": "730751bbdd5e5ffa2c129fb85b58c557",
+              "ClientRectangle": "2.8,0,3,0.6",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "ComponentStyle": "Table Header",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Kode Cabang"
+                "Value": "USER ID"
               },
               "VertAlignment": "Center",
               "Font": ";10;Bold;",
@@ -223,41 +216,15 @@
             "3": {
               "Ident": "StiText",
               "Name": "Text3",
-              "Guid": "e281e6a9b1cb6c12260e96026a5e227e",
-              "ClientRectangle": "8,0,5.6,0.6",
+              "Guid": "abd65a33ea7d96cf7c1bd13c89eb5fcc",
+              "ClientRectangle": "5.8,0,13.2,0.6",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "ComponentStyle": "Table Header",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Nama Cabang"
-              },
-              "VertAlignment": "Center",
-              "Font": ";10;Bold;",
-              "Border": ";;;;;;;solid:0,0,0",
-              "Brush": "solid:156,195,229",
-              "TextBrush": "solid:255,255,255",
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
-              },
-              "Type": "Expression"
-            },
-            "4": {
-              "Ident": "StiText",
-              "Name": "Text4",
-              "Guid": "e5d26c989493f5702f95ab90139fa7f7",
-              "ClientRectangle": "13.6,0,5.4,0.6",
-              "ComponentPlacement": "h.ap.HeaderBand1",
-              "ComponentStyle": "Table Header",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "Status Aktif"
+                "Value": "USER"
               },
               "VertAlignment": "Center",
               "Font": ";10;Bold;",
@@ -326,7 +293,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{cabang.id}"
+                "Value": "{useracl.id}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -347,16 +314,16 @@
             "2": {
               "Ident": "StiText",
               "Name": "Text5",
-              "Guid": "e248769b9b9da7d613128b1ccf8e80eb",
+              "Guid": "c525a52cb724a69fb75cef054599479d",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "2.8,0,5.2,0.6",
+              "ClientRectangle": "2.8,0,3,0.6",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{cabang.kodecabang}"
+                "Value": "{useracl.user_id}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -377,46 +344,16 @@
             "3": {
               "Ident": "StiText",
               "Name": "Text6",
-              "Guid": "d727dd598c9df13ac2a87c0b18abae0b",
+              "Guid": "24ca476f21f832649bf5388a32778e9a",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "8,0,5.6,0.6",
+              "ClientRectangle": "5.8,0,13.2,0.6",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{cabang.namacabang}"
-              },
-              "CanBreak": true,
-              "VertAlignment": "Center",
-              "Border": "All;242,242,242;;;;;;solid:0,0,0",
-              "Brush": "solid:",
-              "TextBrush": "solid:0,0,0",
-              "TextOptions": {
-                "WordWrap": true
-              },
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
-              },
-              "Type": "DataColumn"
-            },
-            "4": {
-              "Ident": "StiText",
-              "Name": "Text7",
-              "Guid": "9d7275c438e5ef9a7b7d3ee747976fa3",
-              "CanGrow": true,
-              "GrowToHeight": true,
-              "ClientRectangle": "13.6,0,5.4,0.6",
-              "ComponentPlacement": "d.DataBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "{cabang.statusaktif}"
+                "Value": "{useracl.user}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -435,7 +372,7 @@
               "Type": "DataColumn"
             }
           },
-          "DataSourceName": "cabang"
+          "DataSourceName": "useracl"
         }
       },
       "PageWidth": 21.01,

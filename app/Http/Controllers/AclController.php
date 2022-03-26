@@ -17,36 +17,40 @@ class AclController extends MyController
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $params = [
-                'offset' => (($request->page - 1) * $request->rows),
-                'limit' => $request->rows,
-                'sortIndex' => $request->sidx,
-                'sortOrder' => $request->sord,
-                'search' => json_decode($request->filters, 1) ?? [],
-
-            ];
-
-            $response = Http::withHeaders($request->header())
-                ->get(config('app.api_url') . 'acl', $params);
-
-            $data = [
-                'total' => $response['attributes']['totalPages'] ?? [],
-                'records' => $response['attributes']['totalRows'] ?? [],
-                'rows' => $response['data'] ?? []
-            ];
-
-
-            return response($data);
-        }
-
-
         $title = $this->title;
+
         $data = [
             'pagename' => 'Menu Utama Acl',
         ];
 
         return view('acl.index', compact('title', 'data'));
+    }
+
+    public function get($params = [])
+    {
+        $params = [
+            'offset' => ((request()->page - 1) * request()->rows),
+            'limit' => request()->rows,
+            'sortIndex' => request()->sidx,
+            'sortOrder' => request()->sord,
+            'search' => json_decode(request()->filters, 1) ?? [],
+
+        ];
+
+        $response = Http::withHeaders(request()->header())
+            ->get(config('app.api_url') . 'acl', $params);
+
+        $data = [
+            'total' => $response['attributes']['totalPages'] ?? [],
+            'records' => $response['attributes']['totalRows'] ?? [],
+            'rows' => $response['data'] ?? []
+        ];
+
+        if (request()->ajax()) {
+            return response($data);
+        }
+
+        return $data;
     }
 
     public function detail(Request $request)
@@ -63,10 +67,8 @@ class AclController extends MyController
 
             ];
 
-            // dump(config('app.api_url') . 'acl/detail');
-            // dd($params);
-
             $response = Http::withHeaders($request->header())
+                ->withToken(session('access_token'))
                 ->get(config('app.api_url') . 'acl/detail', $params);
 
             $data = [
@@ -102,11 +104,13 @@ class AclController extends MyController
 
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders($this->httpHeaders)->post(config('app.api_url') . 'acl', $request->all());
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->post(config('app.api_url') . 'acl', $request->all());
 
 
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -120,7 +124,9 @@ class AclController extends MyController
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->get(config('app.api_url') . "acl/$id");
+        ])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "acl/$id");
 
         $acl = $response['data'];
         $list = [
@@ -135,9 +141,11 @@ class AclController extends MyController
     public function update(Request $request, $id)
     {
         $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders($this->httpHeaders)->patch(config('app.api_url') . "acl/$id", $request->all());
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->patch(config('app.api_url') . "acl/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -152,7 +160,9 @@ class AclController extends MyController
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "acl/$id");
+            ])
+                ->withToken(session('access_token'))
+                ->get(config('app.api_url') . "acl/$id");
 
 
             $acl = $response['data'];
@@ -177,18 +187,64 @@ class AclController extends MyController
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->delete(config('app.api_url') . "acl/$id", $request->all());
+        ])
+            ->withToken(session('access_token'))
+            ->delete(config('app.api_url') . "acl/$id", $request->all());
 
+        return response($response, $response->status());
+    }
 
+    /**
+     * @ClassName
+     */
+    public function report(Request $request)
+    {
+        $params['offset'] = $request->dari - 1;
+        $params['rows'] = $request->sampai - $request->dari + 1;
 
-        return response($response);
+        $acls = $this->get($params)['rows'];
+
+        return view('reports.acl', compact('acls'));
+    }
+
+    /**
+     * @ClassName
+     */
+    public function export(Request $request)
+    {
+        $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
+        ];
+
+        $acls = $this->get($params)['rows'];
+
+        $columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'ID',
+                'index' => 'id',
+            ],
+            [
+                'label' => 'Role ID',
+                'index' => 'role_id',
+            ],
+            [
+                'label' => 'Role Name',
+                'index' => 'rolename',
+            ],
+        ];
+
+        $this->toExcel($this->title, $acls, $columns);
     }
 
     public function fieldLength()
     {
         $response = Http::withHeaders($this->httpHeaders)->get(config('app.api_url') . 'acl/field_length');
 
-        return response($response['data']);
+        return response($response['data'], $response->status());
     }
 
     public function detaillist($role_id)
@@ -210,6 +266,7 @@ class AclController extends MyController
         ];
 
         $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'acl/combostatus', $status);
 
         return $response['data'];

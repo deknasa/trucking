@@ -1,6 +1,49 @@
 @extends('layouts.master')
 
 @section('content')
+<!-- Modal for report -->
+<div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="formRange" target="_blank">
+        @csrf
+        <div class="modal-body">
+          <input type="hidden" name="sidx">
+          <input type="hidden" name="sord">
+
+          <div class="form-group row">
+            <div class="col-sm-2 col-form-label">
+              <label for="">Dari</label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" name="dari" class="form-control autonumeric-report" autofocus>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-2 col-form-label">
+              <label for="">Sampai</label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" name="sampai" class="form-control autonumeric-report">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Report</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
@@ -11,13 +54,10 @@
   </div>
 </div>
 
-<!-- Detail -->
-@include('acl._detail')
-
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('acl.index') }}"
-  let getUrl = `{{ route('acl.get') }}`
+  let indexUrl = "{{ route('bankpelanggan.index') }}"
+  let getUrl = "{{ route('bankpelanggan.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -28,9 +68,10 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'rolename'
+  let sortname = 'kodebank'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let rowNum = 10
 
   $(document).ready(function() {
     /* Set page */
@@ -57,6 +98,11 @@
     <?php if (isset($_GET['sortorder'])) { ?>
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
+    
+    /* Set rowNum */
+    <?php if (isset($_GET['limit'])) { ?>
+      rowNum = "{{ $_GET['limit'] }}"
+    <?php } ?>
 
     $("#jqGrid").jqGrid({
         url: getUrl,
@@ -65,37 +111,43 @@
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
-            label: 'ROLE ID',
-            name: 'role_id',
-            align: 'left',
-            hidden: true
-          },
-          {
             label: 'ID',
             name: 'id',
-            align: 'left',
-            hidden: true
+            width: '50px'
           },
           {
-            label: 'NAMA ROLE',
-            name: 'rolename',
-            align: 'left'
+            label: 'KODE BANK',
+            name: 'kodebank',
+          },
+          {
+            label: 'NAMA BANK',
+            name: 'namabank',
+          },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+          },
+          {
+            label: 'STATUS AKTIF',
+            name: 'statusaktif',
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
-            align: 'left'
+          },
+          {
+            label: 'CREATEDAT',
+            name: 'created_at',
           },
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'right'
           },
         ],
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 10,
+        rowNum: rowNum,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
@@ -107,11 +159,6 @@
         pager: pager,
         viewrecords: true,
         onSelectRow: function(id) {
-          row_id = $(this).jqGrid('getGridParam', 'selrow')
-          selectedId = $(this).jqGrid('getCell', row_id, 'role_id');
-
-          loadDetailData(selectedId)
-
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
@@ -129,33 +176,34 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').rows
           postData = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
-            clearColumnSearch()
+            highlightSearch = ''
           })
 
-          setTimeout(function() {
-            if (triggerClick) {
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
+          }
 
-              if (id != '') {
-                indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-                $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-                id = ''
-              } else if (indexRow != undefined) {
-                $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-              }
-
-              if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-                $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-              }
-
-              triggerClick = false
-            } else {
-              $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+          if (triggerClick) {
+            if (id != '') {
+              indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              id = ''
+            } else if (indexRow != undefined) {
+              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
-          }, 100)
-        }
+            if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+            }
+
+            triggerClick = false
+          } else {
+            $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+          }
+        },
       })
 
       .jqGrid("navGrid", pager, {
@@ -171,10 +219,11 @@
         title: 'Add',
         id: 'add',
         buttonicon: 'fas fa-plus',
+        class: 'btn btn-primary',
         onClickButton: function() {
           let limit = $(this).jqGrid('getGridParam', 'postData').rows
 
-          window.location.href = `{{ route('acl.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+          window.location.href = `{{ route('bankpelanggan.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
 
@@ -184,10 +233,13 @@
         id: 'edit',
         buttonicon: 'fas fa-pen',
         onClickButton: function() {
-          row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          selectedId = $(this).jqGrid('getCell', row_id, 'id');
+          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-          window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+          if (selectedId == null || selectedId == '' || selectedId == undefined) {
+            alert('please select a row')
+          } else {
+            window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+          }
         }
       })
 
@@ -197,36 +249,13 @@
         id: 'delete',
         buttonicon: 'fas fa-trash',
         onClickButton: function() {
-          row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          selectedId = $(this).jqGrid('getCell', row_id, 'id');
+          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
           window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
         }
       })
 
-.navButtonAdd(pager, {
-  caption: 'Export',
-  title: 'Export',
-  id: 'export',
-  buttonicon: 'fas fa-file-export',
-  onClickButton: function() {
-    $('#rangeModal').data('action', 'export')
-    $('#rangeModal').find('button:submit').html(`Export`)
-    $('#rangeModal').modal('show')
-  }
-})
-
-.navButtonAdd(pager, {
-  caption: 'Report',
-  title: 'Report',
-  id: 'report',
-  buttonicon: 'fas fa-print',
-  onClickButton: function() {
-    $('#rangeModal').data('action', 'report')
-    $('#rangeModal').find('button:submit').html(`Report`)
-    $('#rangeModal').modal('show')
-  }
-})
+      
 
       .jqGrid('filterToolbar', {
         stringResult: true,
@@ -244,10 +273,6 @@
     /* Append global search */
     loadGlobalSearch()
 
-    /* Load detial grid */
-    loadDetailGrid()
-
-
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)
       .parent().addClass('px-1')
@@ -261,32 +286,23 @@
       .parent().addClass('px-1')
 
     $('#report .ui-pg-div')
-      .addClass('btn btn-sm btn-info')
+      .addClass('btn-sm btn-info')
       .parent().addClass('px-1')
 
     $('#export .ui-pg-div')
-      .addClass('btn btn-sm btn-warning')
+      .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-
-    if (!`{{ $myAuth->hasPermission('acl', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('bankpelanggan', 'create') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('acl', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('bankpelanggan', 'edit') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('acl', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('bankpelanggan', 'delete') }}`) {
       $('#delete').addClass('ui-disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('acl', 'export') }}`) {
-      $('#export').addClass('ui-disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('acl', 'report') }}`) {
-      $('#report').addClass('ui-disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -317,12 +333,6 @@
 
       let params
       let actionUrl = ``
-
-      if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('acl.export') }}`
-      } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('acl.report') }}`
-      }
 
       /* Clear validation messages */
       $('.is-invalid').removeClass('is-invalid')

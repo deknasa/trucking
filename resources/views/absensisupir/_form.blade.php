@@ -58,6 +58,7 @@
                         </td>
                         <td width="20%">
                           <select name="supir_id[]" class="form-control">
+                            <option value=""></option>
                             @foreach($combo['supir'] as $supirIndex => $supir)
                             <option value="{{ $supir['id'] }}" {{ $supir['id'] == @$absensisupir['absensi_supir_detail'][$tradoIndex]['supir']['id'] ? 'selected' : '' }}>{{ $supir['namasupir'] }}</option>
                             @endforeach
@@ -136,6 +137,7 @@
     /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
       $(this).attr('disabled', '')
+      $('#loader').removeClass('d-none')
 
       $.ajax({
         url: actionUrl,

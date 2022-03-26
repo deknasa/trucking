@@ -52,10 +52,10 @@ $indexRow = $_GET['indexRow'] ?? '';
             <div class="form-group row">
               <label for="staticEmail" class="col-12 col-sm-3 col-md-2 col-form-label">Cabang<span class="text-danger">*</span></label>
               <div class="col-12 col-sm-9 col-md-10">
-                <select id="selectcabang_id" name="cabang_id">
-                  <optgroup label="">
-                    <option value="{{ $user['cabang_id'] ?? '' }}"></option>
-                  </optgroup>
+                <select id="selectcabang_id" name="cabang_id" class="form-select select2bs4" style="width: 100%;">
+                  @foreach($data['combocabang'] as $cabang)
+                  <option value="{{ $cabang['id'] }}">{{ $cabang['namacabang'] }}</option>
+                  @endforeach
                 </select>
               </div>
             </div>
@@ -68,7 +68,7 @@ $indexRow = $_GET['indexRow'] ?? '';
             </div>
 
             <div class="row form-group">
-              <label for="staticEmail" class="col-12 col-sm-3 col-md-2 col-form-label">Dashboard<span class="text-danger">*</span></label>
+              <label for="staticEmail" class="col-12 col-sm-3 col-md-2 col-form-label">Dashboard</label>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="dashboard" class="form-control" value="{{ $user['dashboard'] ?? '' }}">
               </div>
@@ -77,7 +77,7 @@ $indexRow = $_GET['indexRow'] ?? '';
             <div class="form-group row">
               <label for="staticEmail" class="col-12 col-sm-3 col-md-2 col-form-label">Status Aktif<span class="text-danger">*</span></label>
               <div class="col-12 col-sm-9 col-md-10">
-                <select class="form-control select2bs4  <?= @$disable2 ?>" style="width: 100%;" name="statusaktif" id="statusaktif">
+                <select class="form-control select2bs4 <?= @$disable2 ?>" style="width: 100%;" name="statusaktif" id="statusaktif">
                   <?php foreach ($data['combo'] as $status) : ?>;
                   <option value="<?= $status['id'] ?>" <?= $status['id'] == @$user['statusaktif'] ? 'selected' : '' ?>><?= $status['keterangan'] ?></option>
                 <?php endforeach; ?>
@@ -164,17 +164,17 @@ $indexRow = $_GET['indexRow'] ?? '';
       })
     })
 
-    $('#selectcabang_id').select2({
-      data: JSON.parse(`<?php echo json_encode($data['combocabang']); ?>`),
-      theme: 'bootstrap4',
-      width: '100%',
-      templateResult: formatResult,
-      templateSelection: formatSelection,
-      matcher: matcher,
-      escapeMarkup: function(m) {
-        return m;
-      },
-    })
+    // $('#selectcabang_id').select2({
+    //   data: JSON.parse(`<?php echo json_encode($data['combocabang']); ?>`),
+    //   theme: 'bootstrap4',
+    //   width: '100%',
+    //   templateResult: formatResult,
+    //   templateSelection: formatSelection,
+    //   matcher: matcher,
+    //   escapeMarkup: function(m) {
+    //     return m;
+    //   },
+    // })
 
     var firstEmptySelect = false;
 
