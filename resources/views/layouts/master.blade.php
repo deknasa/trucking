@@ -56,7 +56,6 @@
 
     @include('layouts._sidebar')
 
-
     <!-- Modal for report and export -->
     <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
       <div class="modal-dialog">

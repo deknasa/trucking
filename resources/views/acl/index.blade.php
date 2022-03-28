@@ -139,14 +139,14 @@
 
               if (id != '') {
                 indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-                $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
                 id = ''
               } else if (indexRow != undefined) {
-                $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
               }
 
               if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-                $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+                $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
               }
 
               triggerClick = false

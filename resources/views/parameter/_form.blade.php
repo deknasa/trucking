@@ -95,16 +95,18 @@ $indexRow = $_GET['indexRow'] ?? '';
   let indexUrl = "{{ route('parameter.index') }}"
   let fieldLengthUrl = "{{ route('parameter.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('parameter.store') }}"
+  let actionUrl = "{{ config('app.api_url') . 'parameter' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
-  /* Set action url */
+  /* Set id to action url */
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $parameter['id'] }}`
+  <?php endif; ?>
+  
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('parameter.update', $parameter['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('parameter.destroy', $parameter['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
@@ -126,6 +128,9 @@ $indexRow = $_GET['indexRow'] ?? '';
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         data: $('form').serializeArray(),
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
