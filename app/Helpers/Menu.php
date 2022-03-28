@@ -44,30 +44,30 @@ class Menu
   public function printRecursiveMenu(array $menus, bool $hasParent = false)
   {
     $currentMenu = DB::table('menu')
-          ->select('menu.id', 'menu.menuparent')
-          ->join('acos', 'menu.aco_id', 'acos.id')
-          ->where('acos.class', (new Menu())->myController->class)
-          ->first();
+      ->select('menu.id', 'menu.menuparent')
+      ->join('acos', 'menu.aco_id', 'acos.id')
+      ->where('acos.class', (new Menu())->myController->class)
+      ->first();
 
     $string = $hasParent ? '<ul class="ml-4 nav nav-treeview">' : '';
 
     foreach ($menus as $index => $menu) {
       $string .= '
       <li class="nav-item">
-        <a id="'. ($menu['menuparent'] == 0 ? $index : $menu['menukode']) .'" href="'. (count($menu['child']) > 0 ? 'javascript:void(0)' : url($menu['menuexe'])) .'" class="nav-link '. (@$currentMenu->id == $menu['menuid'] ? 'active' : '') .'">
-          <i class="nav-icon '. (strtolower($menu['menuicon']) ?? 'far fa-circle') .'"></i>
+        <a id="' . ($menu['menuparent'] == 0 ? $index : $menu['menukode']) . '" href="' . (count($menu['child']) > 0 ? 'javascript:void(0)' : url($menu['menuexe'])) . '" class="nav-link ' . (@$currentMenu->id == $menu['menuid'] ? 'active hover' : '') . '">
+          <i class="nav-icon ' . (strtolower($menu['menuicon']) ?? 'far fa-circle') . '"></i>
           <p>
-            '. ($menu['menuparent'] == 0 ? $index : substr($menu['menukode'], -1)) . '. ' . $menu['menuname'] .'
-            '. (count($menu['child']) > 0 ? '<i class="right fas fa-angle-left"></i>' : '') .'
+            ' . ($menu['menuparent'] == 0 ? $index : substr($menu['menukode'], -1)) . '. ' . $menu['menuname'] . '
+            ' . (count($menu['child']) > 0 ? '<i class="right fas fa-angle-left"></i>' : '') . '
           </p>
         </a>
-        '. (count($menu['child']) > 0 ? Menu::printRecursiveMenu($menu['child'], true) : '') .'
+        ' . (count($menu['child']) > 0 ? Menu::printRecursiveMenu($menu['child'], true) : '') . '
       </li>
       ';
     }
 
     $string .= $hasParent ? '</ul>' : '';
-    
+
     return $string;
   }
 
@@ -80,7 +80,7 @@ class Menu
     if (count($data) > 0) {
       foreach ($data as $index => $list) {
         // sintaks untuk mengkondisikan, jika menuexe nya 0(tidak ada), maka dibuat tanda #, tetapi jika ada, maka mengarah ke base_url menuexe nya
-        
+
         $menuexe = $list['menuexe'] == "0" ? "#" : $list['menuexe'];
         $subchild = Menu::print_recursive_list($list['child']);
 
