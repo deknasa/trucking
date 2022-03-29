@@ -49,8 +49,6 @@ $(document).on("sidebar:toggle", () => {
 
 		$("#search").focus();
 	}
-
-	console.log(sidebarIsOpen);
 });
 
 $(document).ajaxError((event, jqXHR, ajaxSettings, thrownError) => {
@@ -451,7 +449,7 @@ function setFormBindKeys() {
 		$(el).attr("data-input-index", i);
 	});
 
-	$($(inputs[0])).focus();
+	$($(inputs.filter(':not(button)')[0])).focus();
 
 	inputs.focus(function () {
 		$(this).data("input-index");
@@ -461,7 +459,6 @@ function setFormBindKeys() {
 		let operator;
 		switch (e.keyCode) {
 			case 38:
-				console.log();
 				if ($(this).parents('table').length > 0) {
 					element = $(this).parents('tr').prev('tr').find('td').eq($(this).parent().index()).find('input')
 				} else {
