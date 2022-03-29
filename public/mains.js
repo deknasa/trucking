@@ -461,7 +461,12 @@ function setFormBindKeys() {
 		let operator;
 		switch (e.keyCode) {
 			case 38:
-				element = $(inputs[$(this).data("input-index") - 1]);
+				console.log();
+				if ($(this).parents('table').length > 0) {
+					element = $(this).parents('tr').prev('tr').find('td').eq($(this).parent().index()).find('input')
+				} else {
+					element = $(inputs[$(this).data("input-index") - 1]);
+				}
 
 				break;
 			case 13:
@@ -489,7 +494,8 @@ function setFormBindKeys() {
 		if (element !== undefined) {
 			if (
 				element.is(":not(select, button)") &&
-				element.attr("type") !== "email"
+				element.attr("type") !== "email" &&
+				element.attr("type") !== "time"
 			) {
 				position = element.val().length;
 				element[0].setSelectionRange(position, position);

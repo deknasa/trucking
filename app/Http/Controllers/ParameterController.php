@@ -174,10 +174,11 @@ class ParameterController extends MyController
      */
     public function report(Request $request): View
     {
-        $params['offset'] = $request->dari - 1;
-        $params['rows'] = $request->sampai - $request->dari + 1;
-
-        $parameters = $this->get($params)['rows'];
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter', $request->all());
+        
+        $parameters = $response['data'];
 
         return view('reports.parameter', compact('parameters'));
     }

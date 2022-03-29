@@ -114,6 +114,7 @@
         prmNames: {
           sort: 'sortIndex',
           order: 'sortOrder',
+          rows: 'limit'
         },
         jsonReader: {
           root: 'data',
@@ -321,14 +322,12 @@
         decimalCharacter: ',',
         allowDecimalPadding: false,
         minimumValue: 1,
-        maximumValue: totalRecord
+        maximumValue: totalRecord,
       })
     })
 
     $('#formRange').submit(function(event) {
       event.preventDefault()
-
-      
 
       let params
       let submitButton = $(this).find('button:submit')
@@ -345,76 +344,38 @@
 
       let formRange = $('#formRange')
       let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-      let limit = parseInt(formRange.find('[name=sampai]').val()) - offset
+      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
       params += `&offset=${offset}&limit=${limit}`
 
-      console.log(limit);
-      
-      // let xhr = new XMLHttpRequest()
-      // xhr.open('GET', `http://localhost/trucking-laravel/public/api/parameter/export?${params}`, true)
-      // // xhr.setRequestHeader("Authorization", 'Bearer ' + this.token())
-      // xhr.responseType = 'arraybuffer'
+      if ($('#rangeModal').data('action') == 'export') {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `http://localhost/trucking-laravel/public/api/parameter/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+        xhr.responseType = 'arraybuffer'
 
-      // xhr.onload = function(e) {
-      //   if (this.status === 200) {
-      //     if (this.response !== undefined) {
-      //       let blob = new Blob([this.response], {
-      //         type: "application/vnd.ms-excel"
-      //       })
-      //       let link = document.createElement('a')
+        xhr.onload = function(e) {
+          if (this.status === 200) {
+            if (this.response !== undefined) {
+              let blob = new Blob([this.response], {
+                type: "application/vnd.ms-excel"
+              })
+              let link = document.createElement('a')
 
-      //       link.href = window.URL.createObjectURL(blob)
-      //       link.download = `laporanParameter${(new Date).getTime()}.xlsx`
-      //       link.click()
+              link.href = window.URL.createObjectURL(blob)
+              link.download = `laporanParameter${(new Date).getTime()}.xlsx`
+              link.click()
 
-      //       submitButton.removeAttr('disabled')
-      //     }
-      //   }
-      // }
+              submitButton.removeAttr('disabled')
+            }
+          }
+        }
 
-      // xhr.send()
+        xhr.send()
+      } else if ($('#rangeModal').data('action') == 'report') {
+        window.open(`{{ route('parameter.report') }}?${params}`)
 
-      // $.ajax({
-      //   url: 'http://localhost/trucking-laravel/public/api/parameter/export',
-      //   method: 'GET',
-      //   dataType: 'arraybuffer',
-      //   success: (response) => {
-      //     console.log(response);
-      //     // let blob = new Blob([response], {type: 'application/vnd.ms-excel'})
-      //     // let link = document.createElement('a')
-
-      //     // link.href = window.URL.createObjectURL(blob)
-      //     // link.download = 'tes.xlsx'
-      //     // link.click()
-
-      //     // console.log(blob)
-      //   }
-      // })
-
-      // event.preventDefault()
-
-      // let params
-      // let actionUrl = ``
-
-      // if ($('#rangeModal').data('action') == 'export') {
-      //   actionUrl = `{{ route('parameter.export') }}`
-      // } else if ($('#rangeModal').data('action') == 'report') {
-      //   actionUrl = `{{ route('parameter.report') }}`
-      // }
-
-      // /* Clear validation messages */
-      // $('.is-invalid').removeClass('is-invalid')
-      // $('.invalid-feedback').remove()
-
-      // /* Set params value */
-      // for (var key in postData) {
-      //   if (params != "") {
-      //     params += "&";
-      //   }
-      //   params += key + "=" + encodeURIComponent(postData[key]);
-      // }
-
-      // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+        submitButton.removeAttr('disabled')
+      }
     })
   })
 </script>
