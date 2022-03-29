@@ -103,7 +103,7 @@ $indexRow = $_GET['indexRow'] ?? '';
   <?php if ($action !== 'add') : ?>
     actionUrl += `/{{ $parameter['id'] }}`
   <?php endif; ?>
-  
+
   <?php if ($action == 'edit') : ?>
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
@@ -156,9 +156,12 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     /* Get field maxlength */
     $.ajax({
-      url: fieldLengthUrl,
+      url: `{{ config('app.api_url') . 'parameter/field_length' }}`,
       method: 'GET',
       dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer {{ session('access_token') }}`
+      },
       success: response => {
         $.each(response, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {

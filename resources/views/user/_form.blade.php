@@ -111,16 +111,18 @@ $indexRow = $_GET['indexRow'] ?? '';
   let indexUrl = "{{ route('user.index') }}"
   let fieldLengthUrl = "{{ route('user.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('user.store') }}"
+  let actionUrl = "{{ config('app.api_url') . 'user' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
   /* Set action url */
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $user['id'] }}`
+  <?php endif; ?>
+  
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('user.update', $user['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('user.destroy', $user['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
@@ -141,6 +143,9 @@ $indexRow = $_GET['indexRow'] ?? '';
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         data: $('form').serializeArray(),
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
@@ -229,9 +234,12 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     /* Get field maxlength */
     $.ajax({
-      url: fieldLengthUrl,
+      url: `{{ config('app.api_url') . 'user/field_length' }}`,
       method: 'GET',
       dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer {{ session('access_token') }}`
+      },
       success: response => {
         $.each(response, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {
@@ -240,7 +248,7 @@ $indexRow = $_GET['indexRow'] ?? '';
         })
       },
       error: error => {
-        alert(error)
+        showDialog(error.statusText)
       }
     })
   })

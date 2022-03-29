@@ -159,61 +159,13 @@ class UserController extends MyController
      */
     public function report(Request $request): View
     {
-        $params['offset'] = $request->dari - 1;
-        $params['rows'] = $request->sampai - $request->dari + 1;
-
-        $users = $this->get($params)['rows'];
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user', $request->all());
+        
+        $users = $response['data'];
 
         return view('reports.user', compact('users'));
-    }
-    
-    /**
-     * @ClassName
-     */
-    public function export(Request $request): void
-    {
-        $params = [
-            'offset' => $request->dari - 1,
-            'rows' => $request->sampai - $request->dari + 1,
-        ];
-
-        $users = $this->get($params)['rows'];
-
-        $columns = [
-            [
-                'label' => 'No',
-            ],
-            [
-                'label' => 'ID',
-                'index' => 'id',
-            ],
-            [
-                'label' => 'User',
-                'index' => 'user',
-            ],
-            [
-                'label' => 'Name',
-                'index' => 'name',
-            ],
-            [
-                'label' => 'Cabang id',
-                'index' => 'cabang_id',
-            ],
-            [
-                'label' => 'Karyawan id',
-                'index' => 'karyawan_id',
-            ],
-            [
-                'label' => 'Dashboard',
-                'index' => 'dashboard',
-            ],
-            [
-                'label' => 'Statusaktif',
-                'index' => 'statusaktif',
-            ],
-        ];
-
-        $this->toExcel($this->title, $users, $columns);
     }
 
     public function fieldLength()
