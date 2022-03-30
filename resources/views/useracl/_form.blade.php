@@ -239,11 +239,14 @@
   $(document).on('shown.bs.modal', '#myModal', function() {
     var user = $('#user').val();
     var modal = $(this);
-    console.log(user);
-    console.log($('#gs_user').val(user));
+    
+    $('#gs_user').val(user)
+
     if (typeof user === 'undefined') user = '';
+
     var grid = $("#jqGrid");
     var postdata = grid.jqGrid('getGridParam', 'postData');
+
     jQuery.extend(postdata, {
       _search: true,
       filters: JSON.stringify({
@@ -262,19 +265,19 @@
         clearGlobalSearch()
       }
     });
+
     grid.jqGrid('setGridParam', {
       postData: postdata
     });
+
     grid.trigger("reloadGrid");
   });
-
 
   if (action == 'delete') {
     $('[name]').addClass('disabled')
   }
 
   function lookupUser(user) {
-
     var user = $('#user').val();
     console.log(user);
     if (typeof user === 'undefined') user = '';
@@ -286,23 +289,25 @@
       var url = "<?= URL::to('/') ?>/user?popup=1&currentpage=" + currentpage;
     }
 
-    // console.log(url);
     var winpeserta = window.open(
       url,
       "getUser_id");
+
     var timer = setInterval(function() {
       if (winpeserta.closed) {
         clearInterval(timer);
+
         var getUser_id = localStorage.getItem('getUser_id');
-        console.log(getUser_id);
+
         if (getUser_id) {
           getUser_id = JSON.parse(getUser_id);
           localStorage.removeItem('getUser_id');
+
           var kode = removeTags(getUser_id.id);
           var user = removeTags(getUser_id.user);
+
           $("#user").val(user);
           $('#user_id').val(kode);
-          // setDetail(kode);
         }
       }
     }, 500);
@@ -335,26 +340,20 @@
   function getiduser(e) {
     var keyCode = e.keyCode || e.which;
 
-
-    // var role_id = $('#'+user).val();
-
     if (user_id != '') {
       $('#user_id').val('');
       $.ajax({
         url: "<?= URL::to('/') . '/user/getuserid?user=' ?>" + $('#user').val(),
         method: 'GET',
         dataType: 'JSON',
-        // async: false,
       }).done(function(data) {
         if (data != null) {
           $('#user_id').val(data.id);
         } else {
           $('#user_id').val('');
         }
-
       });
     }
-
   }
 
   $(document).ready(function() {

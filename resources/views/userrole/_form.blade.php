@@ -127,11 +127,13 @@ $indexRow = $_GET['indexRow'] ?? '';
 
   use Illuminate\Support\Facades\URL;
 
-  if ($action == 'edit') : ?>
-    actionUrl = "{{ route('userrole.update', $userrole['id']) }}"
+  if ($action !== 'add') : ?>
+    actionUrl += `/{{ $userrole['id'] }}`
+  <?php endif; ?>
+
+  <?php if ($action == 'edit') : ?>
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('userrole.destroy', $userrole['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
@@ -139,14 +141,10 @@ $indexRow = $_GET['indexRow'] ?? '';
     $('[name]').addClass('disabled')
   }
 
-
-
   function lookupUser(user) {
-
     var user = $('#user').val();
-    console.log(user);
-    if (typeof user === 'undefined') user = '';
 
+    if (typeof user === 'undefined') user = '';
 
     if (user) {
       var url = "<?= URL::to('/') ?>/user?popup=1&currentpage=" + currentpage + "&user=" + user;
@@ -154,9 +152,8 @@ $indexRow = $_GET['indexRow'] ?? '';
       var url = "<?= URL::to('/') ?>/user?popup=1&currentpage=" + currentpage;
     }
 
-    var winpeserta = window.open(
-      url,
-      "getUser_id");
+    var winpeserta = window.open(url, "getUser_id");
+
     var timer = setInterval(function() {
       if (winpeserta.closed) {
         clearInterval(timer);
@@ -172,26 +169,26 @@ $indexRow = $_GET['indexRow'] ?? '';
         }
       }
     }, 500);
-
   }
 
-  function field_data() {
-    $.ajax({
-      url: fieldLengthUrl,
-      method: 'GET',
-      dataType: 'JSON',
-      success: response => {
-        $.each(response, (index, value) => {
-          if (value !== null && value !== 0 && value !== undefined) {
-            $(`[name=${index}]`).attr('maxlength', value)
-          }
-        })
-      },
-      error: error => {
-        alert(error)
-      }
-    });
-  }
+  $.ajax({
+    url: `{{ config('app.api_url') . 'userrole/field_length' }}`,
+    method: 'GET',
+    dataType: 'JSON',
+    headers: {
+      'Authorization': `Bearer {{ session('access_token') }}`
+    },
+    success: response => {
+      $.each(response, (index, value) => {
+        if (value !== null && value !== 0 && value !== undefined) {
+          $(`[name=${index}]`).attr('maxlength', value)
+        }
+      })
+    },
+    error: error => {
+      showDialog(error.statusText)
+    }
+  })
 
   $('#user').on('input', function(e) {
     getiduser(e)
@@ -309,6 +306,9 @@ $indexRow = $_GET['indexRow'] ?? '';
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         data: $('form').serializeArray(),
         success: response => {
           $('.is-invalid').removeClass('is-invalid')

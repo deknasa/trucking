@@ -227,10 +227,11 @@ class UserAclController extends MyController
      */
     public function report(Request $request): View
     {
-        $params['offset'] = $request->dari - 1;
-        $params['rows'] = $request->sampai - $request->dari + 1;
-
-        $useracls = $this->get($params)['rows'];
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'useracl', $request->all());
+        
+        $useracls = $response['data'];
 
         return view('reports.useracl', compact('useracls'));
     }
