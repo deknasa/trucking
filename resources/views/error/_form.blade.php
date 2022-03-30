@@ -70,18 +70,24 @@ $indexRow = $_GET['indexRow'] ?? '';
   let indexUrl = "{{ route('error.index') }}"
   let fieldLengthUrl = "{{ route('error.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('error.store') }}"
+  let actionUrl = "{{ config('app.api_url') . 'error' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
   /* Set action url */
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $error['id'] }}`
+  <?php endif; ?>
+
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('error.update', $error['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('error.destroy', $error['id']) }}"
     method = "DELETE"
   <?php endif; ?>
+
+  if (action == 'delete') {
+    $('[name]').addClass('disabled')
+  }
 
   $(document).ready(function() {
     $('form').submit(function(e) {
@@ -96,6 +102,9 @@ $indexRow = $_GET['indexRow'] ?? '';
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         data: $('form').serializeArray(),
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
@@ -121,9 +130,12 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     /* Get field maxlength */
     $.ajax({
-      url: fieldLengthUrl,
+      url: `{{ config('app.api_url') . 'error/field_length' }}`,
       method: 'GET',
       dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer {{ session('access_token') }}`
+      },
       success: response => {
         $.each(response, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {

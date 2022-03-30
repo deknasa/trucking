@@ -187,7 +187,9 @@ class UserAclController extends MyController
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeaders)->get(config('app.api_url') . 'useracl/field_length');
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'useracl/field_length');
 
         return response($response['data']);
     }
@@ -198,7 +200,9 @@ class UserAclController extends MyController
             'user_id' => $user_id,
         ];
 
-        $response = Http::get(config('app.api_url') . 'useracl/detaillist', $status);
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'useracl/detaillist', $status);
 
         return $response['data'];
     }
@@ -212,11 +216,12 @@ class UserAclController extends MyController
         ];
 
         $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'useracl/combostatus', $status);
 
         return $response['data'];
     }
-    
+
     /**
      * @ClassName
      */

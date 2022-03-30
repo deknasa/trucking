@@ -61,22 +61,20 @@ $indexRow = $_GET['indexRow'] ?? '';
   let indexUrl = "{{ route('role.index') }}"
   let fieldLengthUrl = "{{ route('role.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('role.store') }}"
+  let actionUrl = "{{ config('app.api_url') . 'role' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
-  /* Set action url */
-  <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('role.update', $role['id']) }}"
-    method = "PATCH"
-  <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('role.destroy', $role['id']) }}"
-    method = "DELETE"
+  /* Set id to action url */
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $role['id'] }}`
   <?php endif; ?>
 
-  if (action == 'delete') {
-    $('[name]').addClass('disabled')
-  }
+  <?php if ($action == 'edit') : ?>
+    method = "PATCH"
+  <?php elseif ($action == 'delete') : ?>
+    method = "DELETE"
+  <?php endif; ?>
 
   $(document).ready(function() {
     $('form').submit(function(e) {
@@ -92,6 +90,9 @@ $indexRow = $_GET['indexRow'] ?? '';
         method: method,
         dataType: 'JSON',
         data: $('form').serializeArray(),
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         success: response => {
           console.log(response);
           $('.is-invalid').removeClass('is-invalid')
@@ -117,9 +118,12 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     /* Get field maxlength */
     $.ajax({
-      url: fieldLengthUrl,
+      url: `{{ config('app.api_url') . 'role/field_length' }}`,
       method: 'GET',
       dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer {{ session('access_token') }}`
+      },
       success: response => {
         $.each(response, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {

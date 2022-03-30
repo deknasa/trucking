@@ -139,10 +139,11 @@ class RoleController extends MyController
      */
     public function report(Request $request): View
     {
-        $params['offset'] = $request->dari - 1;
-        $params['rows'] = $request->sampai - $request->dari + 1;
-
-        $roles = $this->get($params)['rows'];
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'role', $request->all());
+        
+        $roles = $response['data'];
 
         return view('reports.role', compact('roles'));
     }

@@ -10,7 +10,7 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('useracl.detail') }}"
+  let detailIndexUrl = "{{ config('app.api_url') . 'useracl/detail' }}"
 
   function loadDetailGrid() {
     let pager = '#detailPager'
@@ -61,6 +61,19 @@
         sortable: true,
         pager: pager,
         viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
         loadComplete: function(data) {}
       })
 

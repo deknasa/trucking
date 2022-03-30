@@ -167,7 +167,7 @@
 <script>
   let indexUrl = "{{ route('useracl.index') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('useracl.store') }}"
+  let actionUrl = "{{ config('app.api_url') . 'useracl' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
   let fieldLengthUrl = "{{ route('useracl.field_length') }}"
@@ -177,13 +177,19 @@
 
   use Illuminate\Support\Facades\URL;
 
-  if ($action == 'edit') : ?>
-    actionUrl = "{{ route('useracl.update', $useracl['id']) }}"
+  if ($action !== 'add') : ?>
+    actionUrl += `/{{ $useracl['id'] }}`
+  <?php endif; ?>
+
+  <?php if ($action == 'edit') : ?>
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('useracl.destroy', $useracl['id']) }}"
     method = "DELETE"
   <?php endif; ?>
+
+  if (action == 'delete') {
+    $('[name]').addClass('disabled')
+  }
 
   /*Modal JQgrid action */
   let indexUrluser = "{{ route('user.index') }}"
@@ -303,23 +309,24 @@
 
   }
 
-  function field_data() {
-    $.ajax({
-      url: fieldLengthUrl,
-      method: 'GET',
-      dataType: 'JSON',
-      success: response => {
-        $.each(response, (index, value) => {
-          if (value !== null && value !== 0 && value !== undefined) {
-            $(`[name=${index}]`).attr('maxlength', value)
-          }
-        })
-      },
-      error: error => {
-        alert(error)
-      }
-    });
-  }
+  $.ajax({
+    url: `{{ config('app.api_url') . 'useracl/field_length' }}`,
+    method: 'GET',
+    dataType: 'JSON',
+    headers: {
+      'Authorization': `Bearer {{ session('access_token') }}`
+    },
+    success: response => {
+      $.each(response, (index, value) => {
+        if (value !== null && value !== 0 && value !== undefined) {
+          $(`[name=${index}]`).attr('maxlength', value)
+        }
+      })
+    },
+    error: error => {
+      showDialog(error.statusText)
+    }
+  })
 
   $('#rolename').on('input', function(e) {
     getidrolename(e)
@@ -350,12 +357,6 @@
 
   }
 
-
-
-
-
-
-
   $(document).ready(function() {
     $('form').submit(function(e) {
       e.preventDefault()
@@ -364,34 +365,40 @@
     /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
       $(this).attr('disabled', '')
+      $('#loader').removeClass('d-none')
 
       $.ajax({
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         data: $('form').serializeArray(),
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
 
           if (response.status) {
-            // alert(response.message)
-
             if (action != 'delete') {
               window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
             } else {
               window.location.href = `${indexUrl}?page={{ $_GET['page'] ?? '' }}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] ?? ''}}&indexRow={{ $_GET['indexRow'] ?? '' }}`
             }
           }
-
-          if (response.errors) {
-            setErrorMessages(response.errors)
-          }
         },
         error: error => {
-          alert(`${error.statusText} | ${error.responseText}`)
-        }
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(error.responseJSON.errors);
+          } else {
+            showDialog(error.statusText)
+          }
+        },
       }).always(() => {
+        $('#loader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })

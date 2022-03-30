@@ -59,7 +59,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: getUrl,
+        url: `{{ config('app.api_url') . 'useracl' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -106,6 +106,19 @@
         page: page,
         pager: pager,
         viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
         onSelectRow: function(id) {
           row_id = $(this).jqGrid('getGridParam', 'selrow')
           selectedId = $(this).jqGrid('getCell', row_id, 'user_id');
@@ -115,7 +128,7 @@
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
-          let rows = $(this).jqGrid('getGridParam', 'postData').rows
+          let rows = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         loadComplete: function(data) {
@@ -127,7 +140,7 @@
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').rows
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
 
           $('.clearsearchclass').click(function() {
@@ -173,7 +186,7 @@
         buttonicon: 'fas fa-plus',
         class: 'btn btn-primary',
         onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').rows
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
 
           window.location.href = `{{ route('useracl.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
@@ -287,6 +300,81 @@
     if (!`{{ $myAuth->hasPermission('useracl', 'report') }}`) {
       $('#report').addClass('ui-disabled')
     }
+
+$('#rangeModal').on('shown.bs.modal', function() {
+  if (autoNumericElements.length > 0) {
+    $.each(autoNumericElements, (index, autoNumericElement) => {
+      autoNumericElement.remove()
+    })
+  }
+
+  $('#formRange [name]:not(:hidden)').first().focus()
+
+  $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
+  $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
+  $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+  $('#formRange [name=sampai]').val(totalRecord)
+
+  autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
+    digitGroupSeparator: '.',
+    decimalCharacter: ',',
+    allowDecimalPadding: false,
+    minimumValue: 1,
+    maximumValue: totalRecord,
+  })
+})
+
+$('#formRange').submit(function(event) {
+  event.preventDefault()
+
+  let params
+  let submitButton = $(this).find('button:submit')
+
+  submitButton.attr('disabled', 'disabled')
+
+  /* Set params value */
+  for (var key in postData) {
+    if (params != "") {
+      params += "&";
+    }
+    params += key + "=" + encodeURIComponent(postData[key]);
+  }
+
+  let formRange = $('#formRange')
+  let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+  let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+  params += `&offset=${offset}&limit=${limit}`
+
+  if ($('#rangeModal').data('action') == 'export') {
+    let xhr = new XMLHttpRequest()
+    xhr.open('GET', `{{ config('app.api_url') }}useracl/export?${params}`, true)
+    xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+    xhr.responseType = 'arraybuffer'
+
+    xhr.onload = function(e) {
+      if (this.status === 200) {
+        if (this.response !== undefined) {
+          let blob = new Blob([this.response], {
+            type: "application/vnd.ms-excel"
+          })
+          let link = document.createElement('a')
+
+          link.href = window.URL.createObjectURL(blob)
+          link.download = `laporanParameter${(new Date).getTime()}.xlsx`
+          link.click()
+
+          submitButton.removeAttr('disabled')
+        }
+      }
+    }
+
+    xhr.send()
+  } else if ($('#rangeModal').data('action') == 'report') {
+    window.open(`{{ route('useracl.report') }}?${params}`)
+
+    submitButton.removeAttr('disabled')
+  }
+})
   })
 </script>
 @endpush()

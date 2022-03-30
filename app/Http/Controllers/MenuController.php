@@ -191,10 +191,11 @@ class MenuController extends MyController
      */
     public function report(Request $request)
     {
-        $params['offset'] = $request->dari - 1;
-        $params['rows'] = $request->sampai - $request->dari + 1;
-
-        $menus = $this->get($params)['rows'];
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'menu', $request->all());
+        
+        $menus = $response['data'];
 
         return view('reports.menu', compact('menus'));
     }

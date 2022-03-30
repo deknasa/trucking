@@ -167,10 +167,11 @@ class ErrorController extends MyController
      */
     public function report(Request $request)
     {
-        $params['offset'] = $request->dari - 1;
-        $params['rows'] = $request->sampai - $request->dari + 1;
-
-        $errors = $this->get($params)['rows'];
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'error', $request->all());
+        
+        $errors = $response['data'];
 
         return view('reports.error', compact('errors'));
     }

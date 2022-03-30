@@ -213,16 +213,18 @@ $indexRow = $_GET['indexRow'] ?? '';
   let indexUrl = "{{ route('agen.index') }}"
   let fieldLengthUrl = "{{ route('agen.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('agen.store') }}"
+  let actionUrl = "{{ config('app.api_url') . 'agen' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
   /* Set action url */
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $agen['id'] }}`
+  <?php endif; ?>
+
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('agen.update', $agen['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('agen.destroy', $agen['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
@@ -244,6 +246,9 @@ $indexRow = $_GET['indexRow'] ?? '';
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         data: $('form').serializeArray(),
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
@@ -275,9 +280,12 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     /* Get field maxlength */
     $.ajax({
-      url: fieldLengthUrl,
+      url: `{{ config('app.api_url') . 'agen/field_length' }}`,
       method: 'GET',
       dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer {{ session('access_token') }}`
+      },
       success: response => {
         $.each(response, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {
