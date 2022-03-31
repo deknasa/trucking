@@ -167,7 +167,7 @@ class ErrorController extends MyController
      */
     public function report(Request $request)
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'error', $request->all());
         
@@ -211,7 +211,7 @@ class ErrorController extends MyController
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'error/field_length');
 

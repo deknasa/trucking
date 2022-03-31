@@ -191,7 +191,7 @@ class MenuController extends MyController
      */
     public function report(Request $request)
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'menu', $request->all());
         

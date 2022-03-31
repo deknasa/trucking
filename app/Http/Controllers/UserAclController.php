@@ -187,7 +187,7 @@ class UserAclController extends MyController
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'useracl/field_length');
 
@@ -200,7 +200,7 @@ class UserAclController extends MyController
             'user_id' => $user_id,
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'useracl/detaillist', $status);
 
@@ -215,7 +215,7 @@ class UserAclController extends MyController
             'subgrp' => 'STATUS AKTIF',
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'useracl/combostatus', $status);
 
@@ -227,7 +227,7 @@ class UserAclController extends MyController
      */
     public function report(Request $request): View
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'useracl', $request->all());
         

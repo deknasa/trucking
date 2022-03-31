@@ -116,7 +116,7 @@ class UserRoleController extends MyController
     {
         $title = $this->title;
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "userrole/$id");
 
@@ -183,7 +183,7 @@ class UserRoleController extends MyController
     public function destroy($id, Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "userrole/$id", $request->all());
 
@@ -242,7 +242,7 @@ class UserRoleController extends MyController
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'userrole/field_length');
 
@@ -254,7 +254,7 @@ class UserRoleController extends MyController
         $status = [
             'user_id' => $user_id,
         ];
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'userrole/detaillist', $status);
 
@@ -270,7 +270,7 @@ class UserRoleController extends MyController
             'subgrp' => 'STATUS AKTIF',
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'userrole/combostatus', $status);
 

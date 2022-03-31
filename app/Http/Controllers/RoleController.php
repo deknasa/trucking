@@ -62,7 +62,7 @@ class RoleController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'role', $request->all());
 
@@ -90,7 +90,7 @@ class RoleController extends MyController
     public function update(Request $request, $id)
     {
         $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "role/$id", $request->all());
 
@@ -139,7 +139,7 @@ class RoleController extends MyController
      */
     public function report(Request $request): View
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'role', $request->all());
         
@@ -179,7 +179,7 @@ class RoleController extends MyController
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'role/field_length');
 
@@ -193,7 +193,7 @@ class RoleController extends MyController
             'rolename' => $request['rolename'],
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'role/getroleid', $status);
 

@@ -164,7 +164,7 @@ class AlatBayarController extends MyController
 
     public function fieldLength(): Response
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'alatbayar/field_length');
 
@@ -173,7 +173,7 @@ class AlatBayarController extends MyController
 
     private function combo()
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->get(config('app.api_url') . 'alatbayar/combo');
         
         return $response['data'];

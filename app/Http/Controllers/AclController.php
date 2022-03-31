@@ -104,7 +104,7 @@ class AclController extends MyController
 
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'acl', $request->all());
 
@@ -141,7 +141,7 @@ class AclController extends MyController
     public function update(Request $request, $id)
     {
         $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "acl/$id", $request->all());
 
@@ -242,7 +242,7 @@ class AclController extends MyController
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeaders)->get(config('app.api_url') . 'acl/field_length');
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->get(config('app.api_url') . 'acl/field_length');
 
         return response($response['data'], $response->status());
     }
@@ -265,7 +265,7 @@ class AclController extends MyController
             'subgrp' => 'STATUS AKTIF',
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'acl/combostatus', $status);
 

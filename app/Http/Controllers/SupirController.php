@@ -167,7 +167,7 @@ class SupirController extends Controller
 
     public function store(Request $request)
     {
-        $response = Http::withHeaders($this->httpHeaders);
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false]);
 
         $response = Http::withHeaders([
             'Accept' => 'application/json',
@@ -203,7 +203,7 @@ class SupirController extends Controller
     {
         $title = $this->title;
 
-        $response = Http::withHeaders($this->httpHeaders)->get(config('app.api_url') . "supir/$id");
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->get(config('app.api_url') . "supir/$id");
 
         $supir = $response['data'];
 
@@ -214,7 +214,7 @@ class SupirController extends Controller
 
     public function update(Request $request, $id)
     {
-        $response = Http::withHeaders($this->httpHeaders)->patch(config('app.api_url') . "supir/$id", $request->all());
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->patch(config('app.api_url') . "supir/$id", $request->all());
 
         if ($response->ok()) {
             $id = $response['data']['id'];
@@ -244,7 +244,7 @@ class SupirController extends Controller
         try {
             $title = $this->title;
 
-            $response = Http::withHeaders($this->httpHeaders)
+            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->get(config('app.api_url') . "supir/$id");
 
             $supir = $response['data'];
@@ -259,7 +259,7 @@ class SupirController extends Controller
 
     public function destroy($id, Request $request)
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
         ->delete(config('app.api_url') . "supir/$id", $request->all());
 
         return response($response);
@@ -267,14 +267,14 @@ class SupirController extends Controller
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeaders)->get(config('app.api_url') . 'supir/field_length');
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->get(config('app.api_url') . 'supir/field_length');
 
         return response($response['data']);
     }
 
     private function combo()
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->get(config('app.api_url') . 'supir/combo');
         
         return $response['data'];

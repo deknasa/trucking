@@ -163,7 +163,7 @@ class BankPelangganController extends MyController
 
     public function fieldLength(): Response
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'bankpelanggan/field_length');
 
@@ -172,7 +172,7 @@ class BankPelangganController extends MyController
 
     private function combo()
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->get(config('app.api_url') . 'bankpelanggan/combo');
         
         return $response['data'];

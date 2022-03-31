@@ -77,7 +77,7 @@ class ParameterController extends MyController
         try {
             $request['modifiedby'] = Auth::user()->name;
 
-            $response = Http::withHeaders($this->httpHeaders)
+            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->post(config('app.api_url') . 'parameter', $request->all());
 
@@ -113,7 +113,7 @@ class ParameterController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "parameter/$id", $request->all());
 
@@ -162,7 +162,7 @@ class ParameterController extends MyController
 
     public function fieldLength(): Response
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'parameter/field_length');
 
@@ -174,7 +174,7 @@ class ParameterController extends MyController
      */
     public function report(Request $request): View
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'parameter', $request->all());
         

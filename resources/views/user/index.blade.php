@@ -455,7 +455,7 @@
 
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `http://localhost/trucking-laravel/public/api/user/export?${params}`, true)
+        xhr.open('GET', `{{ config('app.api_url') }}user/export?${params}`, true)
         xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
         xhr.responseType = 'arraybuffer'
 

@@ -220,7 +220,7 @@ class AbsensiSupirHeaderController extends MyController
             'table' => $table
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "absensi/running_number", $params);
 
