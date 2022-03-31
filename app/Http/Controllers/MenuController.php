@@ -12,10 +12,6 @@ use ReflectionClass;
 class MenuController extends MyController
 {
     public $title = 'Menu';
-    public $httpHeader = [
-        'Accept' => 'application/json',
-        'Content-Type' => 'application/json'
-    ];
 
     /**
      * Fungsi index
@@ -99,11 +95,7 @@ class MenuController extends MyController
     {
         $title = $this->title;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
-            ->withToken(session('access_token'))
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
             ->get(config('app.api_url') . "menu/$id");
 
         $menu = $response['data'];
@@ -167,11 +159,7 @@ class MenuController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
-            ->withToken(session('access_token'))
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
             ->delete(config('app.api_url') . "menu/$id", $request->all());
 
         return response($response, $response->status());
@@ -179,8 +167,7 @@ class MenuController extends MyController
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)
-            ->withToken(session('access_token'))
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
             ->get(config('app.api_url') . 'menu/field_length');
 
         return response($response['data'], $response->status());
@@ -259,8 +246,7 @@ class MenuController extends MyController
         $status = [
             'status' => $aksi,
         ];
-        $response = Http::withHeaders($this->httpHeader)
-            ->withToken(session('access_token'))
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
             ->get(config('app.api_url') . 'menu/combomenuparent', $status);
 
         return $response['data'];
@@ -273,8 +259,7 @@ class MenuController extends MyController
             'aco_id' => $aco_id,
         ];
 
-        $response = Http::withHeaders($this->httpHeader)
-            ->withToken(session('access_token'))
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
             ->get(config('app.api_url') . 'menu/getdatanamaacos', $status);
 
         return $response['data'];
