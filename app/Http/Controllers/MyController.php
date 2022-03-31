@@ -134,12 +134,12 @@ class MyController extends Controller
         $role = UserRole::where('user_id', Auth::id())->first();
         
         $menus = DB::select("
-            SELECT DISTINCT menu.id, menu.aco_id, menu.menuseq, menu.menuname, menu.menuicon, acos.class, acos.method, menu.link, menu.menukode, menu.menuparent FROM menu
+            SELECT DISTINCT menu.id, menu.aco_id, menu.menuexe, menu.menuseq, menu.menuname, menu.menuicon, acos.class, acos.method, menu.link, menu.menukode, menu.menuparent FROM menu
             LEFT JOIN useracl ON menu.aco_id = useracl.aco_id
             LEFT JOIN acos ON acos.id = menu.aco_id
             WHERE menuparent = $induk AND (useracl.user_id = " . Auth::id() . " OR menu.aco_id = 0)
             UNION ALL
-            SELECT DISTINCT menu.id, menu.aco_id, menu.menuseq, menu.menuname, menu.menuicon, acos.class, acos.method, menu.link, menu.menukode, menu.menuparent FROM menu
+            SELECT DISTINCT menu.id, menu.aco_id, menu.menuexe, menu.menuseq, menu.menuname, menu.menuicon, acos.class, acos.method, menu.link, menu.menukode, menu.menuparent FROM menu
             LEFT JOIN acl ON menu.aco_id = acl.aco_id
             LEFT JOIN acos ON acos.id = menu.aco_id
             WHERE menuparent = $induk AND (acl.role_id = " . ($role->id ?? 0) . " OR menu.aco_id = 0)
@@ -151,7 +151,7 @@ class MyController extends Controller
             )
             ORDER BY menu.menukode ASC
         ");
-
+        
         foreach (collect($menus) as $menu) {
             $results[] = [
                 'menuid' => $menu->id,
@@ -161,7 +161,7 @@ class MyController extends Controller
                 'link' => $menu->link,
                 'menuno' => substr($menu->menukode, -1),
                 'menukode' => $menu->menukode,
-                'menuexe' => $menu->class . "/" . $menu->method,
+                'menuexe' => $menu->aco_id == 0 ? $menu->menuexe : $menu->class . "/" . $menu->method,
                 'class' => $menu->class,
                 'child' => $this->getMenu($menu->id),
                 'menuparent' => $menu->menuparent,
