@@ -16,7 +16,7 @@
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
-        url: detailIndexUrl,
+        url: `{{ config('app.api_url') . 'useracl/detail' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -61,6 +61,19 @@
         sortable: true,
         pager: pager,
         viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
         loadComplete: function(data) {}
       })
 
@@ -75,7 +88,7 @@
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: detailIndexUrl + '?role_id=' + id,
+      url: `{{ config('app.api_url') . 'useracl/detail' }}?user_id=${id}`,
       postData: {
         id: id
       }

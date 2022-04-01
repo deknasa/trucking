@@ -18,7 +18,7 @@ class LogTrailController extends MyController
     {
         parent::__construct();
     }
-    
+
     /**
      * Fungsi index
      * @ClassName index
@@ -81,6 +81,7 @@ class LogTrailController extends MyController
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
             ])
+                ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->post(config('app.api_url') . 'logtrail', $request->all());
 
@@ -102,6 +103,7 @@ class LogTrailController extends MyController
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "logtrail/$id");
 
@@ -118,6 +120,7 @@ class LogTrailController extends MyController
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "logtrail/$id", $request->all());
 
@@ -137,6 +140,7 @@ class LogTrailController extends MyController
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
             ])
+                ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "logtrail/$id");
 
@@ -156,6 +160,7 @@ class LogTrailController extends MyController
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "logtrail/$id", $request->all());
 
@@ -261,6 +266,7 @@ class LogTrailController extends MyController
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "logtrail/header", $params);
 
@@ -285,6 +291,7 @@ class LogTrailController extends MyController
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "logtrail/detail", $params);
 

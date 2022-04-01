@@ -196,7 +196,7 @@ class AclController extends MyController
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'acl', $request->all());
-        
+
         $acls = $response['data'];
 
         return view('reports.acl', compact('acls'));
@@ -247,8 +247,9 @@ class AclController extends MyController
         $status = [
             'role_id' => $role_id,
         ];
-        
+
         $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'acl/detaillist', $status);
 
