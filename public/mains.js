@@ -278,6 +278,8 @@ function setCustomBindKeys(grid) {
 function setSidebarBindKeys() {
 	$(document).on("keydown", (event) => {
 		if (event.keyCode === 77 && event.altKey) {
+			event.preventDefault()
+			
 			$("#sidebarButton").click();
 		}
 
