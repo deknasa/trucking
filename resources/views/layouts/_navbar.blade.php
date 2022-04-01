@@ -5,11 +5,12 @@
     </li>
   </ul>
 
+  <img src="{{ asset('dist/img/taslogo.png') }}" alt="AdminLTE Logo" class="brand-image" style="width: 25px; margin-right: 5px;">
   <strong>TAS Trucking System</strong>
 
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
-      <span id="tempattanggal"></span> / <span id="tempatjam"></span>
+      <div class="time-place"></div>
     </li>
   </ul>
 </nav>

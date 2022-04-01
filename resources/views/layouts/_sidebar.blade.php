@@ -35,7 +35,7 @@
   <!-- Brand Logo -->
   <a href="javascript:void(0)" class="brand-link">
     <img src="{{ asset('dist/img/taslogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-    <span class="brand-text font-weight-light">Trucking TAS</span>
+    <span class="brand-text font-weight-light">Menu</span>
   </a>
 
   <!-- Sidebar -->

@@ -109,7 +109,7 @@ $indexRow = $_GET['indexRow'] ?? '';
 <script>
   let indexUrl = "{{ route('acl.index') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('acl.store') }}"
+  let actionUrl = "{{ config('app.api_url') . 'acl' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
   let fieldLengthUrl = "{{ route('acl.field_length') }}"
@@ -119,11 +119,13 @@ $indexRow = $_GET['indexRow'] ?? '';
 
   use Illuminate\Support\Facades\URL;
 
-  if ($action == 'edit') : ?>
-    actionUrl = "{{ route('acl.update', $acl['id']) }}"
+  if ($action !== 'add') : ?>
+    actionUrl += `/{{ $acl['id'] }}`
+  <?php endif; ?>
+
+  <?php if ($action == 'edit') : ?>
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('acl.destroy', $acl['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
@@ -211,8 +213,6 @@ $indexRow = $_GET['indexRow'] ?? '';
     $('[name]').addClass('disabled')
   }
 
-
-
   function lookupRole(rolename) {
 
     var rolename = $('#rolename').val();
@@ -246,23 +246,24 @@ $indexRow = $_GET['indexRow'] ?? '';
 
   }
 
-  function field_data() {
-    $.ajax({
-      url: fieldLengthUrl,
-      method: 'GET',
-      dataType: 'JSON',
-      success: response => {
-        $.each(response, (index, value) => {
-          if (value !== null && value !== 0 && value !== undefined) {
-            $(`[name=${index}]`).attr('maxlength', value)
-          }
-        })
-      },
-      error: error => {
-        showDialog(error.statusText)
-      }
-    });
-  }
+  $.ajax({
+    url: `{{ config('app.api_url') . 'acl/field_length' }}`,
+    method: 'GET',
+    dataType: 'JSON',
+    headers: {
+      'Authorization': `Bearer {{ session('access_token') }}`
+    },
+    success: response => {
+      $.each(response, (index, value) => {
+        if (value !== null && value !== 0 && value !== undefined) {
+          $(`[name=${index}]`).attr('maxlength', value)
+        }
+      })
+    },
+    error: error => {
+      showDialog(error.statusText)
+    }
+  })
 
   $('#rolename').on('input', function(e) {
     getidrolename(e)
@@ -272,15 +273,12 @@ $indexRow = $_GET['indexRow'] ?? '';
     var keyCode = e.keyCode || e.which;
 
 
-    // var role_id = $('#'+user).val();
-
     if (role_id != '') {
       $('#role_id').val('');
       $.ajax({
         url: "<?= URL::to('/') . '/role/getroleid?rolename=' ?>" + $('#rolename').val(),
         method: 'GET',
         dataType: 'JSON',
-        // async: false,
       }).done(function(data) {
         if (data != null) {
           $('#role_id').val(data.id);
@@ -307,6 +305,9 @@ $indexRow = $_GET['indexRow'] ?? '';
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         data: $('form').serializeArray(),
         success: response => {
           $('.is-invalid').removeClass('is-invalid')

@@ -287,12 +287,12 @@ function setSidebarBindKeys() {
 			if (allowedKeyCodes.includes(event.keyCode)) {
 				event.preventDefault();
 
-				$('#search').val('')
+				$("#search").val("");
 
-				if ($('.nav-link.active, .nav-link.hover').length <= 0) {
-					$('.main-sidebar nav .nav-link').first().addClass('hover')
+				if ($(".nav-link.active, .nav-link.hover").length <= 0) {
+					$(".main-sidebar nav .nav-link").first().addClass("hover");
 				}
-				
+
 				switch (event.keyCode) {
 					case 37:
 						setUpOneLevelMenu();
@@ -314,13 +314,13 @@ function setSidebarBindKeys() {
 						break;
 				}
 			} else if (event.keyCode === 13) {
-				let hoveredElement = $('.nav-link.hover')
+				let hoveredElement = $(".nav-link.hover");
 
 				if (hoveredElement.length > 0) {
-					if (hoveredElement.siblings('ul').length > 0) {
-						setDownOneLevelMenu()
+					if (hoveredElement.siblings("ul").length > 0) {
+						setDownOneLevelMenu();
 					} else {
-						hoveredElement[0].click()
+						hoveredElement[0].click();
 					}
 				}
 			}
@@ -332,11 +332,11 @@ function setNextMenuHover() {
 	let currentElement = $(".nav-link.hover").first();
 
 	if (currentElement.length <= 0) {
-		currentElement = $('.nav-link.selected-link')
+		currentElement = $(".nav-link.selected-link");
 	}
-	
+
 	if (currentElement.length <= 0) {
-		currentElement = $('.nav-link.active')
+		currentElement = $(".nav-link.active");
 	}
 
 	let nextElement = currentElement
@@ -355,11 +355,11 @@ function setPreviousMenuHover() {
 	let currentElement = $(".nav-link.hover").first();
 
 	if (currentElement.length <= 0) {
-		currentElement = $('.nav-link.selected-link')
+		currentElement = $(".nav-link.selected-link");
 	}
-	
+
 	if (currentElement.length <= 0) {
-		currentElement = $('.nav-link.active')
+		currentElement = $(".nav-link.active");
 	}
 
 	let nextElement = currentElement
@@ -378,11 +378,11 @@ function setUpOneLevelMenu() {
 	let currentElement = $(".nav-link.hover").first();
 
 	if (currentElement.length <= 0) {
-		currentElement = $('.nav-link.selected-link')
+		currentElement = $(".nav-link.selected-link");
 	}
-	
+
 	if (currentElement.length <= 0) {
-		currentElement = $('.nav-link.active')
+		currentElement = $(".nav-link.active");
 	}
 
 	let upOneLevelElement = currentElement.parents().eq(2);
@@ -398,11 +398,11 @@ function setDownOneLevelMenu() {
 	let currentElement = $(".nav-link.hover").first();
 
 	if (currentElement.length <= 0) {
-		currentElement = $('.nav-link.selected-link')
+		currentElement = $(".nav-link.selected-link");
 	}
-	
+
 	if (currentElement.length <= 0) {
-		currentElement = $('.nav-link.active')
+		currentElement = $(".nav-link.active");
 	}
 
 	let downOneLevelElement = currentElement
@@ -424,13 +424,12 @@ function fillSearchMenuInput() {
 	let currentElement = $(".nav-link.hover").first();
 
 	if (currentElement.length <= 0) {
-		currentElement = $('.nav-link.selected-link')
-	}
-	
-	if (currentElement.length <= 0) {
-		currentElement = $('.nav-link.active')
+		currentElement = $(".nav-link.selected-link");
 	}
 
+	if (currentElement.length <= 0) {
+		currentElement = $(".nav-link.active");
+	}
 
 	$("#search").val(currentElement.attr("id"));
 }
@@ -449,7 +448,7 @@ function setFormBindKeys() {
 		$(el).attr("data-input-index", i);
 	});
 
-	$($(inputs.filter(':not(button)')[0])).focus();
+	$($(inputs.filter(":not(button)")[0])).focus();
 
 	inputs.focus(function () {
 		$(this).data("input-index");
@@ -459,11 +458,11 @@ function setFormBindKeys() {
 		let operator;
 		switch (e.keyCode) {
 			case 38:
-				if ($(this).parents('table').length > 0) {
-					element = $(this).parents('tr').prev('tr').find('td').eq($(this).parent().index()).find('input')
-				} else {
-					element = $(inputs[$(this).data("input-index") - 1]);
-				}
+				// if ($(this).parents('table').length > 0) {
+				// 	element = $(this).parents('tr').prev('tr').find('td').eq($(this).parent().index()).find('input')
+				// } else {
+				element = $(inputs[$(this).data("input-index") - 1]);
+				// }
 
 				break;
 			case 13:
@@ -619,48 +618,15 @@ function loadClearFilter() {
 	});
 }
 
-function tampilkanjam() {
-	var waktu = new Date();
-	var jam = waktu.getHours();
-	var menit = waktu.getMinutes();
-	var detik = waktu.getSeconds();
-	var teksjam = new String();
-	if (menit <= 9) menit = "0" + menit;
-	if (detik <= 9) detik = "0" + detik;
-	teksjam = jam + ":" + menit + ":" + detik;
-	tempatjam.innerHTML = teksjam;
-	setTimeout(tampilkanjam, 1000);
-}
-
-function tampilkantanggal() {
-	let d = new Date();
-
-	let month = d.getMonth() + 1;
-
-	let monthInstance = new Date(month.toString());
-
-	let monthName = monthInstance.toLocaleString("default", { month: "long" });
-
-	let day = d.getDate();
-
-	// var output =
-	// 	d.getFullYear() +
-	// 	" " +
-	// 	(("" + monthName).length < 2 ? "0" : "") +
-	// 	monthName +
-	// 	" " +
-	// 	(("" + day).length < 2 ? "0" : "") +
-	// 	day;
-	let output = `${
-		("" + day).length < 2 ? "0" : ""
-	} ${day} ${monthName} ${d.getFullYear()}`;
-
-	tempattanggal.innerHTML = output;
-}
-
 function startTime() {
-	tampilkanjam();
-	tampilkantanggal();
+	setInterval(() => {
+		$(".time-place").html(
+			new Date().toLocaleString("id", {
+				dateStyle: "long",
+				timeStyle: "medium",
+			}).replaceAll('.', ':')
+		);
+	}, 1000);
 }
 
 $(".datepicker")

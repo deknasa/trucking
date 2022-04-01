@@ -193,10 +193,11 @@ class AclController extends MyController
      */
     public function report(Request $request)
     {
-        $params['offset'] = $request->dari - 1;
-        $params['rows'] = $request->sampai - $request->dari + 1;
-
-        $acls = $this->get($params)['rows'];
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'acl', $request->all());
+        
+        $acls = $response['data'];
 
         return view('reports.acl', compact('acls'));
     }
@@ -246,7 +247,11 @@ class AclController extends MyController
         $status = [
             'role_id' => $role_id,
         ];
-        $response = Http::get(config('app.api_url') . 'acl/detaillist', $status);
+        
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'acl/detaillist', $status);
+
         return $response['data'];
     }
 
