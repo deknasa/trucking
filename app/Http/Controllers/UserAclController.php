@@ -99,10 +99,7 @@ class UserAclController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'useracl', $request->all());
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))->post(config('app.api_url') . 'useracl', $request->all());
 
         return response($response);
     }
@@ -114,10 +111,7 @@ class UserAclController extends MyController
     {
         $title = $this->title;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])->get(config('app.api_url') . "useracl/$id");
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))->get(config('app.api_url') . "useracl/$id");
 
         $useracl = $response['data'];
 
@@ -136,10 +130,7 @@ class UserAclController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "useracl/$id", $request->all());
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))->patch(config('app.api_url') . "useracl/$id", $request->all());
 
         return response($response);
     }
@@ -177,10 +168,7 @@ class UserAclController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])->delete(config('app.api_url') . "useracl/$id", $request->all());
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->delete(config('app.api_url') . "useracl/$id", $request->all());
 
         return response($response);
     }
