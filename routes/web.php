@@ -26,6 +26,12 @@ use App\Http\Controllers\SupirController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\AlatBayarController;
 use App\Http\Controllers\BankPelangganController;
+use App\Http\Controllers\JenisEmklController;
+use App\Http\Controllers\JenisOrderController;
+use App\Http\Controllers\JenisTradoController;
+use App\Http\Controllers\KasGantungDetailController;
+use App\Http\Controllers\KasGantungHeaderController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -192,4 +198,28 @@ Route::middleware('auth')->group(function () {
     Route::get('bankpelanggan/get', [BankPelangganController::class, 'get'])->name('bankpelanggan.get');
     Route::resource('bankpelanggan', BankPelangganController::class);
 
+    Route::get('jenisemkl/field_length', [JenisEmklController::class, 'fieldLength'])->name('jenisemkl.field_length');
+    Route::get('jenisemkl/{id}/delete', [JenisEmklController::class, 'delete'])->name('jenisemkl.delete');
+    Route::get('jenisemkl/get', [JenisEmklController::class, 'get'])->name('jenisemkl.get');
+    Route::resource('jenisemkl', JenisEmklController::class);
+
+    Route::get('jenisorder/field_length', [JenisOrderController::class, 'fieldLength'])->name('jenisorder.field_length');
+    Route::get('jenisorder/{id}/delete', [JenisOrderController::class, 'delete'])->name('jenisorder.delete');
+    Route::get('jenisorder/get', [JenisOrderController::class, 'get'])->name('jenisorder.get');
+    Route::resource('jenisorder', JenisOrderController::class);
+
+    Route::get('jenistrado/field_length', [JenisTradoController::class, 'fieldLength'])->name('jenistrado.field_length');
+    Route::get('jenistrado/{id}/delete', [JenisTradoController::class, 'delete'])->name('jenistrado.delete');
+    Route::get('jenistrado/get', [JenisTradoController::class, 'get'])->name('jenistrado.get');
+    Route::resource('jenistrado', JenisTradoController::class);
+
+
+    Route::get('kasgantung/{id}/delete', [KasGantungHeaderController::class, 'delete'])->name('kasgantung.delete');
+    Route::get('kasgantung/index', [KasGantungHeaderController::class, 'index']);
+    Route::get('kasgantung/get', [KasGantungHeaderController::class, 'get'])->name('kasgantung.get');
+    Route::get('kasgantung/export', [KasGantungHeaderController::class, 'export'])->name('kasgantung.export');
+    Route::get('kasgantung/report', [KasGantungHeaderController::class, 'report'])->name('kasgantung.report');
+    Route::resource('kasgantung', KasGantungHeaderController::class);
+
+    Route::resource('kasgantung_detail', KasGantungDetailController::class);
 });

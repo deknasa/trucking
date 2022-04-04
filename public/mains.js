@@ -19,6 +19,7 @@ $(document).ready(function () {
 		decimalCharacter: ",",
 	});
 });
+
 $(document).ajaxError((event, jqXHR, ajaxSettings, thrownError) => {
 	if (jqXHR.status !== 422) {
 		showDialog(thrownError);
