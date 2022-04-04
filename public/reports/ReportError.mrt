@@ -1,10 +1,10 @@
 {
-  "ReportGuid": "26ab882508b56b2fb2e96663750a73fc",
+  "ReportGuid": "bbb15269510e5cd53025a7afc9ea6157",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "ReportError.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1635933892000+0700)/",
+  "ReportChanged": "/Date(1648011643000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -28,31 +28,24 @@
         "Alias": "error",
         "Columns": {
           "0": {
-            "Name": "fid",
+            "Name": "id",
             "Index": -1,
-            "NameInSource": "fid",
-            "Alias": "fid",
+            "NameInSource": "id",
+            "Alias": "id",
             "Type": "System.Int32"
           },
           "1": {
-            "Name": "fketerangan",
+            "Name": "kodeerror",
             "Index": -1,
-            "NameInSource": "fketerangan",
-            "Alias": "fketerangan",
+            "NameInSource": "kodeerror",
+            "Alias": "kodeerror",
             "Type": "System.String"
           },
           "2": {
-            "Name": "fmodifiedby",
+            "Name": "keterangan",
             "Index": -1,
-            "NameInSource": "fmodifiedby",
-            "Alias": "fmodifiedby",
-            "Type": "System.String"
-          },
-          "3": {
-            "Name": "fmodifiedon",
-            "Index": -1,
-            "NameInSource": "fmodifiedon",
-            "Alias": "fmodifiedon",
+            "NameInSource": "keterangan",
+            "Alias": "keterangan",
             "Type": "System.String"
           }
         },
@@ -115,7 +108,7 @@
             "0": {
               "Ident": "StiText",
               "Name": "Text1",
-              "ClientRectangle": "0,0,6.6,1.2",
+              "ClientRectangle": "0,0,7.2,1.2",
               "ComponentPlacement": "rt.ReportTitleBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -196,16 +189,16 @@
             },
             "2": {
               "Ident": "StiText",
-              "Name": "Text3",
-              "Guid": "7b9b483fc2f3bf4d8452726d4e9a7d94",
-              "ClientRectangle": "2.8,0,8.8,0.6",
+              "Name": "Text2",
+              "Guid": "621c6cbd6645cf74658ae1711ee876c0",
+              "ClientRectangle": "2.8,0,7.6,0.6",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "ComponentStyle": "Table Header",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Keterangan"
+                "Value": "Kode Error"
               },
               "VertAlignment": "Center",
               "Font": ";10;Bold;",
@@ -222,42 +215,16 @@
             },
             "3": {
               "Ident": "StiText",
-              "Name": "Text4",
-              "Guid": "f130aa62b1f985be2ad79fdf761179be",
-              "ClientRectangle": "11.8,0,2.8,0.6",
+              "Name": "Text3",
+              "Guid": "e281e6a9b1cb6c12260e96026a5e227e",
+              "ClientRectangle": "10.4,0,8.6,0.6",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "ComponentStyle": "Table Header",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "MODIFIED BY"
-              },
-              "VertAlignment": "Center",
-              "Font": ";10;Bold;",
-              "Border": ";;;;;;;solid:0,0,0",
-              "Brush": "solid:156,195,229",
-              "TextBrush": "solid:255,255,255",
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
-              },
-              "Type": "Expression"
-            },
-            "4": {
-              "Ident": "StiText",
-              "Name": "Text5",
-              "Guid": "5c7f342f4b31e0f2933b8cb9613348ae",
-              "ClientRectangle": "15,0,3.8,0.6",
-              "ComponentPlacement": "h.ap.HeaderBand1",
-              "ComponentStyle": "Table Header",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "MODIFIED ON"
+                "Value": "Keterangan"
               },
               "VertAlignment": "Center",
               "Font": ";10;Bold;",
@@ -326,7 +293,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{error.fid}"
+                "Value": "{error.id}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -346,17 +313,17 @@
             },
             "2": {
               "Ident": "StiText",
-              "Name": "Text7",
-              "Guid": "0e495134760184402730fe0cf2a838ce",
+              "Name": "Text5",
+              "Guid": "e248769b9b9da7d613128b1ccf8e80eb",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "2.8,0,8.6,0.6",
+              "ClientRectangle": "2.8,0,7.6,0.6",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{error.fketerangan}"
+                "Value": "{error.kodeerror}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -376,17 +343,17 @@
             },
             "3": {
               "Ident": "StiText",
-              "Name": "Text9",
-              "Guid": "cd3b239e91d6ae4352bba29155253e20",
+              "Name": "Text6",
+              "Guid": "d727dd598c9df13ac2a87c0b18abae0b",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "11.8,0,2.8,0.6",
+              "ClientRectangle": "10.4,0,8.6,0.6",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{error.fmodifiedby}"
+                "Value": "{error.keterangan}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -403,36 +370,6 @@
                 "Bottom": 0
               },
               "Type": "DataColumn"
-            },
-            "4": {
-              "Ident": "StiText",
-              "Name": "Text10",
-              "Guid": "4c4806ce13a1eddd6e5adda05f8c912d",
-              "CanGrow": true,
-              "GrowToHeight": true,
-              "ClientRectangle": "15,0,3.8,0.6",
-              "ComponentPlacement": "d.DataBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "{error.fmodifiedon}"
-              },
-              "CanBreak": true,
-              "VertAlignment": "Center",
-              "Border": "All;242,242,242;;;;;;solid:0,0,0",
-              "Brush": "solid:",
-              "TextBrush": "solid:0,0,0",
-              "TextOptions": {
-                "WordWrap": true
-              },
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
-              },
-              "Type": "Expression"
             }
           },
           "DataSourceName": "error"

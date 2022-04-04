@@ -78,7 +78,7 @@ class AkunPusatController extends MyController
         try {
             $request['modifiedby'] = Auth::user()->name;
 
-            $response = Http::withHeaders($this->httpHeaders)
+            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->post(config('app.api_url') . 'akun_pusat', $request->all());
 
@@ -166,7 +166,7 @@ class AkunPusatController extends MyController
 
     public function fieldLength(): Response
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'akun_pusat/field_length');
 

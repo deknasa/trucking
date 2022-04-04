@@ -27,6 +27,7 @@
   let postData
   let sortname = 'id'
   let sortorder = 'asc'
+  let autoNumericElements = []
 
   $(document).ready(function() {
     /* Set page */
@@ -55,7 +56,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: getUrl,
+        url: `{{ config('app.api_url') . 'cabang' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -133,11 +134,24 @@
         page: page,
         pager: pager,
         viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
         onSelectRow: function(id) {
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
-          let rows = $(this).jqGrid('getGridParam', 'postData').rows
+          let rows = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         ondblClickRow: function(rowid) {
@@ -152,7 +166,7 @@
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').rows
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
 
           $('.clearsearchclass').click(function() {
@@ -162,14 +176,14 @@
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
@@ -193,7 +207,7 @@
         id: 'add',
         buttonicon: 'fas fa-plus',
         onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').rows
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
 
           window.location.href = `{{ route('cabang.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
@@ -220,6 +234,30 @@
           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
           window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+        }
+      })
+
+      .navButtonAdd(pager, {
+        caption: 'Export',
+        title: 'Export',
+        id: 'export',
+        buttonicon: 'fas fa-file-export',
+        onClickButton: function() {
+          $('#rangeModal').data('action', 'export')
+          $('#rangeModal').find('button:submit').html(`Export`)
+          $('#rangeModal').modal('show')
+        }
+      })
+
+      .navButtonAdd(pager, {
+        caption: 'Report',
+        title: 'Report',
+        id: 'report',
+        buttonicon: 'fas fa-print',
+        onClickButton: function() {
+          $('#rangeModal').data('action', 'report')
+          $('#rangeModal').find('button:submit').html(`Report`)
+          $('#rangeModal').modal('show')
         }
       })
 
@@ -253,6 +291,14 @@
       .addClass('btn-sm btn-danger')
       .parent().addClass('px-1')
 
+    $('#report .ui-pg-div')
+      .addClass('btn-sm btn-info')
+      .parent().addClass('px-1')
+
+    $('#export .ui-pg-div')
+      .addClass('btn-sm btn-warning')
+      .parent().addClass('px-1')
+
 
     if (!`{{ $myAuth->hasPermission('cabang', 'create') }}`) {
       $('#add').addClass('ui-disabled')
@@ -265,6 +311,89 @@
     if (!`{{ $myAuth->hasPermission('cabang', 'delete') }}`) {
       $('#delete').addClass('ui-disabled')
     }
+
+    if (!`{{ $myAuth->hasPermission('cabang', 'export') }}`) {
+      $('#export').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('cabang', 'report') }}`) {
+      $('#report').addClass('ui-disabled')
+    }
+
+    $('#rangeModal').on('shown.bs.modal', function() {
+      if (autoNumericElements.length > 0) {
+        $.each(autoNumericElements, (index, autoNumericElement) => {
+          autoNumericElement.remove()
+        })
+      }
+
+      $('#formRange [name]:not(:hidden)').first().focus()
+
+      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
+      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
+      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+      $('#formRange [name=sampai]').val(totalRecord)
+
+      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
+        digitGroupSeparator: '.',
+        decimalCharacter: ',',
+        allowDecimalPadding: false,
+        minimumValue: 1,
+        maximumValue: totalRecord
+      })
+    })
+
+    $('#formRange').submit(function(event) {
+      event.preventDefault()
+
+      let params
+      let submitButton = $(this).find('button:submit')
+
+      submitButton.attr('disabled', 'disabled')
+
+      /* Set params value */
+      for (var key in postData) {
+        if (params != "") {
+          params += "&";
+        }
+        params += key + "=" + encodeURIComponent(postData[key]);
+      }
+
+      let formRange = $('#formRange')
+      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+      params += `&offset=${offset}&limit=${limit}`
+
+      if ($('#rangeModal').data('action') == 'export') {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `{{ config('app.api_url') }}cabang/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+        xhr.responseType = 'arraybuffer'
+
+        xhr.onload = function(e) {
+          if (this.status === 200) {
+            if (this.response !== undefined) {
+              let blob = new Blob([this.response], {
+                type: "application/vnd.ms-excel"
+              })
+              let link = document.createElement('a')
+
+              link.href = window.URL.createObjectURL(blob)
+              link.download = `laporanCabang${(new Date).getTime()}.xlsx`
+              link.click()
+
+              submitButton.removeAttr('disabled')
+            }
+          }
+        }
+
+        xhr.send()
+      } else if ($('#rangeModal').data('action') == 'report') {
+        window.open(`{{ route('cabang.report') }}?${params}`)
+
+        submitButton.removeAttr('disabled')
+      }
+    })
   })
 </script>
 @endpush()

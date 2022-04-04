@@ -12,10 +12,6 @@ use ReflectionClass;
 class MenuController extends MyController
 {
     public $title = 'Menu';
-    public $httpHeader = [
-        'Accept' => 'application/json',
-        'Content-Type' => 'application/json'
-    ];
 
     /**
      * Fungsi index
@@ -32,7 +28,7 @@ class MenuController extends MyController
 
         return view('menu.index', compact('title', 'data'));
     }
-    
+
     public function get($params = []): array
     {
         $params = [
@@ -87,7 +83,7 @@ class MenuController extends MyController
         ])
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'menu', $request->all());
-        
+
         return response($response, $response->status());
     }
 
@@ -99,11 +95,7 @@ class MenuController extends MyController
     {
         $title = $this->title;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
-            ->withToken(session('access_token'))
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
             ->get(config('app.api_url') . "menu/$id");
 
         $menu = $response['data'];
@@ -167,11 +159,7 @@ class MenuController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
-            ->withToken(session('access_token'))
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
             ->delete(config('app.api_url') . "menu/$id", $request->all());
 
         return response($response, $response->status());
@@ -179,11 +167,77 @@ class MenuController extends MyController
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeader)
-            ->withToken(session('access_token'))
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
             ->get(config('app.api_url') . 'menu/field_length');
 
         return response($response['data'], $response->status());
+    }
+
+    /**
+     * @ClassName
+     */
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'menu', $request->all());
+        
+        $menus = $response['data'];
+
+        return view('reports.menu', compact('menus'));
+    }
+
+    /**
+     * @ClassName
+     */
+    public function export(Request $request)
+    {
+        $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
+        ];
+
+        $menus = $this->get($params)['rows'];
+
+        $columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'ID',
+                'index' => 'id',
+            ],
+            [
+                'label' => 'Menu Name',
+                'index' => 'menuname',
+            ],
+            [
+                'label' => 'Menu Parent',
+                'index' => 'menuparent',
+            ],
+            [
+                'label' => 'Menu Icon',
+                'index' => 'menuicon',
+            ],
+            [
+                'label' => 'Aco ID',
+                'index' => 'aco_id',
+            ],
+            [
+                'label' => 'Link',
+                'index' => 'link',
+            ],
+            [
+                'label' => 'Menu Exe',
+                'index' => 'menuexe',
+            ],
+            [
+                'label' => 'Menu Kode',
+                'index' => 'menukode',
+            ],
+        ];
+
+        $this->toExcel($this->title, $menus, $columns);
     }
 
 
@@ -192,8 +246,7 @@ class MenuController extends MyController
         $status = [
             'status' => $aksi,
         ];
-        $response = Http::withHeaders($this->httpHeader)
-            ->withToken(session('access_token'))
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
             ->get(config('app.api_url') . 'menu/combomenuparent', $status);
 
         return $response['data'];
@@ -206,8 +259,7 @@ class MenuController extends MyController
             'aco_id' => $aco_id,
         ];
 
-        $response = Http::withHeaders($this->httpHeader)
-            ->withToken(session('access_token'))
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
             ->get(config('app.api_url') . 'menu/getdatanamaacos', $status);
 
         return $response['data'];

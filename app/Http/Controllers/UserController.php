@@ -77,7 +77,7 @@ class UserController extends MyController
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'user', $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -87,7 +87,7 @@ class UserController extends MyController
     {
         $title = $this->title;
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "user/$id");
 
@@ -112,7 +112,7 @@ class UserController extends MyController
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "user/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -147,11 +147,11 @@ class UserController extends MyController
     public function destroy($id, Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "user/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -159,71 +159,22 @@ class UserController extends MyController
      */
     public function report(Request $request): View
     {
-        $params['offset'] = $request->dari - 1;
-        $params['rows'] = $request->sampai - $request->dari + 1;
-
-        $users = $this->get($params)['rows'];
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user', $request->all());
+        
+        $users = $response['data'];
 
         return view('reports.user', compact('users'));
-    }
-    
-    /**
-     * @ClassName
-     */
-    public function export(Request $request): void
-    {
-        $params = [
-            'offset' => $request->dari - 1,
-            'rows' => $request->sampai - $request->dari + 1,
-        ];
-
-        $users = $this->get($params)['rows'];
-
-        dd($users);
-        $columns = [
-            [
-                'label' => 'No',
-            ],
-            [
-                'label' => 'ID',
-                'index' => 'id',
-            ],
-            [
-                'label' => 'User',
-                'index' => 'user',
-            ],
-            [
-                'label' => 'Name',
-                'index' => 'name',
-            ],
-            [
-                'label' => 'Cabang id',
-                'index' => 'cabang_id',
-            ],
-            [
-                'label' => 'Karyawan id',
-                'index' => 'karyawan_id',
-            ],
-            [
-                'label' => 'Dashboard',
-                'index' => 'dashboard',
-            ],
-            [
-                'label' => 'Statusaktif',
-                'index' => 'statusaktif',
-            ],
-        ];
-
-        $this->toExcel($this->title, $users, $columns);
     }
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/field_length');
 
-        return response($response['data']);
+        return response($response['data'], $response->status());
     }
 
     public function combo($aksi)
@@ -234,7 +185,7 @@ class UserController extends MyController
             'subgrp' => 'STATUS AKTIF',
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/combostatus', $status);
 
@@ -247,7 +198,7 @@ class UserController extends MyController
             'user' => $request['user'],
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/getuserid', $status);
 
@@ -260,7 +211,7 @@ class UserController extends MyController
             'status' => $aksi,
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/combocabang', $status);
 

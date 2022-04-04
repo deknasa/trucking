@@ -41,7 +41,8 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $token = Http::withHeaders([
                 'Accept' => 'application/json'
-            ])->post(config('app.api_url') . 'token', $credentials);
+            ])->withOptions(['verify' => false])
+            ->post(config('app.api_url') . 'token', $credentials);
             
             session(['access_token' => $token['access_token']]);
 

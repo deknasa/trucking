@@ -203,7 +203,7 @@ class AgenController extends MyController
 
     public function fieldLength(): Response
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'agen/field_length');
 
@@ -215,10 +215,11 @@ class AgenController extends MyController
      */
     public function report(Request $request): View
     {
-        $params['offset'] = $request->dari - 1;
-        $params['rows'] = $request->sampai - $request->dari + 1;
-
-        $agens = $this->get($params)['rows'];
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'agen', $request->all());
+        
+        $agens = $response['data'];
 
         return view('reports.agen', compact('agens'));
     }

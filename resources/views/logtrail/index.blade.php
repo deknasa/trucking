@@ -102,7 +102,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: getUrl,
+        url: `{{ config('app.api_url') . 'logtrail' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -156,6 +156,19 @@
         page: page,
         pager: pager,
         viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
         ajaxRowOptions: {
           async: false,
         },
@@ -169,7 +182,7 @@
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
-          let rows = $(this).jqGrid('getGridParam', 'postData').rows
+          let rows = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         loadComplete: function(data) {
@@ -181,7 +194,7 @@
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').rows
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
           triggerClick = true
 
@@ -192,14 +205,14 @@
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
@@ -222,6 +235,7 @@
         searchOnEnter: false,
         defaultSearch: 'cn',
         groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           clearGlobalSearch()
         }
@@ -232,56 +246,6 @@
 
     /* Append global search */
     loadGlobalSearch()
-
-    $('#rangeModal').on('shown.bs.modal', function() {
-      if (autoNumericElements.length > 0) {
-        $.each(autoNumericElements, (index, autoNumericElement) => {
-          autoNumericElement.remove()
-        })
-      }
-
-      $('#formRange [name]:not(:hidden)').first().focus()
-
-      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
-      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-      $('#formRange [name=sampai]').val(totalRecord)
-
-      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
-        allowDecimalPadding: false,
-        minimumValue: 1,
-        maximumValue: totalRecord
-      })
-    })
-
-    $('#formRange').submit(event => {
-      event.preventDefault()
-
-      let params
-      let actionUrl = ``
-
-      if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('logtrail.export') }}`
-      } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('logtrail.report') }}`
-      }
-
-      /* Clear validation messages */
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
-
-      /* Set params value */
-      for (var key in postData) {
-        if (params != "") {
-          params += "&";
-        }
-        params += key + "=" + encodeURIComponent(postData[key]);
-      }
-
-      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
-    })
   })
 </script>
 @endpush()

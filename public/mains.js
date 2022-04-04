@@ -1,6 +1,10 @@
+let sidebarIsOpen = false;
+
 $(document).ready(function () {
 	startTime();
 	setFormBindKeys();
+	setSidebarBindKeys();
+	openMenuParents();
 
 	/* Remove autocomplete */
 	$("input").attr("autocomplete", "off");
@@ -18,6 +22,33 @@ $(document).ready(function () {
 		digitGroupSeparator: ".",
 		decimalCharacter: ",",
 	});
+
+	$(document).on("click", "#sidebar-overlay", () => {
+		$(document).trigger("sidebar:toggle");
+
+		sidebarIsOpen = false;
+	});
+});
+
+function openMenuParents() {
+	let currentMenu = $("a.nav-link.active").first();
+	let parents = currentMenu.parents("li.nav-item");
+
+	parents.each((index, parent) => {
+		$(parent).addClass("menu-open");
+	});
+}
+
+$(document).on("sidebar:toggle", () => {
+	if ($("body").hasClass("sidebar-collapse")) {
+		sidebarIsOpen = false;
+
+		$("#search").focusout();
+	} else if ($("body").hasClass("sidebar-open")) {
+		sidebarIsOpen = true;
+
+		$("#search").focus();
+	}
 });
 
 $(document).ajaxError((event, jqXHR, ajaxSettings, thrownError) => {
@@ -29,7 +60,7 @@ $(document).ajaxError((event, jqXHR, ajaxSettings, thrownError) => {
 $(window).on("resize", function (event) {
 	if ($(window).width() > 990) {
 		$("body").removeClass();
-		$("body").addClass("sidebar-collapse");
+		$("body").addClass("sidebar-closed");
 	}
 });
 
@@ -96,60 +127,85 @@ function removeTags(str) {
  * to move grid page
  */
 function setCustomBindKeys(grid) {
+	setSidebarBindKeys();
+
 	$(document).on("keydown", function (e) {
-		if (
-			e.keyCode == 33 ||
-			e.keyCode == 34 ||
-			e.keyCode == 35 ||
-			e.keyCode == 36 ||
-			e.keyCode == 38 ||
-			e.keyCode == 40
-		) {
-			e.preventDefault();
+		if (!sidebarIsOpen) {
+			if (
+				e.keyCode == 33 ||
+				e.keyCode == 34 ||
+				e.keyCode == 35 ||
+				e.keyCode == 36 ||
+				e.keyCode == 38 ||
+				e.keyCode == 40
+			) {
+				e.preventDefault();
 
-			var gridIds = $("#jqGrid").getDataIDs();
-			var selectedRow = $("#jqGrid").getGridParam("selrow");
-			var currentPage = $(grid).getGridParam("page");
-			var lastPage = $(grid).getGridParam("lastpage");
-			var currentIndex = 0;
-			var row = $(grid).jqGrid("getGridParam", "postData").rows;
+				var gridIds = $("#jqGrid").getDataIDs();
+				var selectedRow = $("#jqGrid").getGridParam("selrow");
+				var currentPage = $(grid).getGridParam("page");
+				var lastPage = $(grid).getGridParam("lastpage");
+				var currentIndex = 0;
+				var row = $(grid).jqGrid("getGridParam", "postData").rows;
 
-			for (var i = 0; i < gridIds.length; i++) {
-				if (gridIds[i] == selectedRow) currentIndex = i;
-			}
-
-			if (triggerClick == false) {
-				if (33 === e.keyCode) {
-					if (currentPage > 1) {
-						$(grid)
-							.jqGrid("setGridParam", {
-								page: parseInt(currentPage) - 1,
-							})
-							.trigger("reloadGrid");
-
-						triggerClick = true;
-					}
-					$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+				for (var i = 0; i < gridIds.length; i++) {
+					if (gridIds[i] == selectedRow) currentIndex = i;
 				}
-				if (34 === e.keyCode) {
-					if (currentPage !== lastPage) {
-						$(grid)
-							.jqGrid("setGridParam", {
-								page: parseInt(currentPage) + 1,
-							})
-							.trigger("reloadGrid");
 
-						triggerClick = true;
+				if (triggerClick == false) {
+					if (33 === e.keyCode) {
+						if (currentPage > 1) {
+							$(grid)
+								.jqGrid("setGridParam", {
+									page: parseInt(currentPage) - 1,
+								})
+								.trigger("reloadGrid");
+
+							triggerClick = true;
+						}
+						$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
 					}
-					$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
-				}
-				if (35 === e.keyCode) {
-					if (currentPage !== lastPage) {
-						$(grid)
-							.jqGrid("setGridParam", {
-								page: lastPage,
-							})
-							.trigger("reloadGrid");
+					if (34 === e.keyCode) {
+						if (currentPage !== lastPage) {
+							$(grid)
+								.jqGrid("setGridParam", {
+									page: parseInt(currentPage) + 1,
+								})
+								.trigger("reloadGrid");
+
+							triggerClick = true;
+						}
+						$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+					}
+					if (35 === e.keyCode) {
+						if (currentPage !== lastPage) {
+							$(grid)
+								.jqGrid("setGridParam", {
+									page: lastPage,
+								})
+								.trigger("reloadGrid");
+							if (e.ctrlKey) {
+								if (
+									$(grid).jqGrid("getGridParam", "selrow") !==
+									$("#customer")
+										.find(">tbody>tr.jqgrow")
+										.filter(":last")
+										.attr("id")
+								) {
+									$(grid)
+										.jqGrid(
+											"setSelection",
+											$(grid)
+												.find(">tbody>tr.jqgrow")
+												.filter(":last")
+												.attr("id")
+										)
+										.trigger("reloadGrid");
+								}
+							}
+
+							triggerClick = true;
+						}
 						if (e.ctrlKey) {
 							if (
 								$(grid).jqGrid("getGridParam", "selrow") !==
@@ -166,74 +222,218 @@ function setCustomBindKeys(grid) {
 									.trigger("reloadGrid");
 							}
 						}
-
-						triggerClick = true;
+						$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
 					}
-					if (e.ctrlKey) {
-						if (
-							$(grid).jqGrid("getGridParam", "selrow") !==
-							$("#customer").find(">tbody>tr.jqgrow").filter(":last").attr("id")
-						) {
-							$(grid)
-								.jqGrid(
-									"setSelection",
-									$(grid).find(">tbody>tr.jqgrow").filter(":last").attr("id")
-								)
-								.trigger("reloadGrid");
-						}
-					}
-					$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
-				}
-				if (36 === e.keyCode) {
-					if (currentPage > 1) {
-						if (e.ctrlKey) {
-							if (
-								$(grid).jqGrid("getGridParam", "selrow") !==
-								$("#customer")
-									.find(">tbody>tr.jqgrow")
-									.filter(":first")
-									.attr("id")
-							) {
-								$(grid).jqGrid(
-									"setSelection",
-									$(grid).find(">tbody>tr.jqgrow").filter(":first").attr("id")
-								);
+					if (36 === e.keyCode) {
+						if (currentPage > 1) {
+							if (e.ctrlKey) {
+								if (
+									$(grid).jqGrid("getGridParam", "selrow") !==
+									$("#customer")
+										.find(">tbody>tr.jqgrow")
+										.filter(":first")
+										.attr("id")
+								) {
+									$(grid).jqGrid(
+										"setSelection",
+										$(grid).find(">tbody>tr.jqgrow").filter(":first").attr("id")
+									);
+								}
 							}
-						}
-						$(grid)
-							.jqGrid("setGridParam", {
-								page: 1,
-							})
-							.trigger("reloadGrid");
+							$(grid)
+								.jqGrid("setGridParam", {
+									page: 1,
+								})
+								.trigger("reloadGrid");
 
-						triggerClick = true;
+							triggerClick = true;
+						}
+						$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
 					}
-					$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
-				}
-				if (38 === e.keyCode) {
-					if (currentIndex - 1 >= 0) {
-						$(grid)
-							.resetSelection()
-							.setSelection(gridIds[currentIndex - 1]);
+					if (38 === e.keyCode) {
+						if (currentIndex - 1 >= 0) {
+							$(grid)
+								.resetSelection()
+								.setSelection(gridIds[currentIndex - 1]);
+						}
+					}
+					if (40 === e.keyCode) {
+						if (currentIndex + 1 < gridIds.length) {
+							$(grid)
+								.resetSelection()
+								.setSelection(gridIds[currentIndex + 1]);
+						}
 					}
 				}
-				if (40 === e.keyCode) {
-					if (currentIndex + 1 < gridIds.length) {
-						$(grid)
-							.resetSelection()
-							.setSelection(gridIds[currentIndex + 1]);
+
+				$(".ui-jqgrid-bdiv").find("tbody").animate({
+					scrollTop: 200,
+				});
+				$(".table-success").position().top > 300;
+			}
+		}
+	});
+}
+
+function setSidebarBindKeys() {
+	$(document).on("keydown", (event) => {
+		if (event.keyCode === 77 && event.altKey) {
+			event.preventDefault()
+			
+			$("#sidebarButton").click();
+		}
+
+		if (sidebarIsOpen) {
+			let allowedKeyCodes = [37, 38, 39, 40];
+
+			if (allowedKeyCodes.includes(event.keyCode)) {
+				event.preventDefault();
+
+				$("#search").val("");
+
+				if ($(".nav-link.active, .nav-link.hover").length <= 0) {
+					$(".main-sidebar nav .nav-link").first().addClass("hover");
+				}
+
+				switch (event.keyCode) {
+					case 37:
+						setUpOneLevelMenu();
+
+						break;
+					case 38:
+						setPreviousMenuHover();
+
+						break;
+					case 39:
+						setDownOneLevelMenu();
+
+						break;
+					case 40:
+						setNextMenuHover();
+
+						break;
+					default:
+						break;
+				}
+			} else if (event.keyCode === 13) {
+				let hoveredElement = $(".nav-link.hover");
+
+				if (hoveredElement.length > 0) {
+					if (hoveredElement.siblings("ul").length > 0) {
+						setDownOneLevelMenu();
+					} else {
+						hoveredElement[0].click();
 					}
 				}
 			}
-
-			console.log(
-				$(".ui-jqgrid-bdiv").find("tbody").animate({
-					scrollTop: 200,
-				})
-			);
-			console.log($(".table-success").position().top > 300);
 		}
 	});
+}
+
+function setNextMenuHover() {
+	let currentElement = $(".nav-link.hover").first();
+
+	if (currentElement.length <= 0) {
+		currentElement = $(".nav-link.selected-link");
+	}
+
+	if (currentElement.length <= 0) {
+		currentElement = $(".nav-link.active");
+	}
+
+	let nextElement = currentElement
+		.parent(".nav-item")
+		.next()
+		.find(".nav-link")
+		.first();
+
+	if (nextElement.length > 0) {
+		currentElement.removeClass("selected-link hover");
+		nextElement.addClass("hover");
+	}
+}
+
+function setPreviousMenuHover() {
+	let currentElement = $(".nav-link.hover").first();
+
+	if (currentElement.length <= 0) {
+		currentElement = $(".nav-link.selected-link");
+	}
+
+	if (currentElement.length <= 0) {
+		currentElement = $(".nav-link.active");
+	}
+
+	let nextElement = currentElement
+		.parent(".nav-item")
+		.prev()
+		.find(".nav-link")
+		.first();
+
+	if (nextElement.length > 0) {
+		currentElement.removeClass("selected-link hover");
+		nextElement.addClass("hover");
+	}
+}
+
+function setUpOneLevelMenu() {
+	let currentElement = $(".nav-link.hover").first();
+
+	if (currentElement.length <= 0) {
+		currentElement = $(".nav-link.selected-link");
+	}
+
+	if (currentElement.length <= 0) {
+		currentElement = $(".nav-link.active");
+	}
+
+	let upOneLevelElement = currentElement.parents().eq(2);
+
+	if (upOneLevelElement.length > 0) {
+		currentElement.removeClass("selected-link hover");
+		upOneLevelElement.removeClass("menu-is-opening menu-open");
+		upOneLevelElement.find(".nav-link").first().addClass("hover");
+	}
+}
+
+function setDownOneLevelMenu() {
+	let currentElement = $(".nav-link.hover").first();
+
+	if (currentElement.length <= 0) {
+		currentElement = $(".nav-link.selected-link");
+	}
+
+	if (currentElement.length <= 0) {
+		currentElement = $(".nav-link.active");
+	}
+
+	let downOneLevelElement = currentElement
+		.siblings("ul")
+		.css({
+			display: "",
+		})
+		.find(".nav-link")
+		.first();
+
+	if (downOneLevelElement.length > 0) {
+		currentElement.removeClass("selected-link hover");
+		currentElement.parent(".nav-item").addClass("menu-open");
+		downOneLevelElement.addClass("hover");
+	}
+}
+
+function fillSearchMenuInput() {
+	let currentElement = $(".nav-link.hover").first();
+
+	if (currentElement.length <= 0) {
+		currentElement = $(".nav-link.selected-link");
+	}
+
+	if (currentElement.length <= 0) {
+		currentElement = $(".nav-link.active");
+	}
+
+	$("#search").val(currentElement.attr("id"));
 }
 
 /**
@@ -250,7 +450,7 @@ function setFormBindKeys() {
 		$(el).attr("data-input-index", i);
 	});
 
-	$($(inputs[0])).focus();
+	$($(inputs.filter(":not(button)")[0])).focus();
 
 	inputs.focus(function () {
 		$(this).data("input-index");
@@ -260,7 +460,11 @@ function setFormBindKeys() {
 		let operator;
 		switch (e.keyCode) {
 			case 38:
+				// if ($(this).parents('table').length > 0) {
+				// 	element = $(this).parents('tr').prev('tr').find('td').eq($(this).parent().index()).find('input')
+				// } else {
 				element = $(inputs[$(this).data("input-index") - 1]);
+				// }
 
 				break;
 			case 13:
@@ -288,7 +492,8 @@ function setFormBindKeys() {
 		if (element !== undefined) {
 			if (
 				element.is(":not(select, button)") &&
-				element.attr("type") !== "email"
+				element.attr("type") !== "email" &&
+				element.attr("type") !== "time"
 			) {
 				position = element.val().length;
 				element[0].setSelectionRange(position, position);
@@ -381,7 +586,7 @@ function loadGlobalSearch() {
 function clearColumnSearch() {
 	$('input[id*="gs_"]').val("");
 	$("#resetFilterOptions span#resetFilterOptions").removeClass("aktif");
-	$('select[id*="gs_"]').val("").trigger("change");
+	$('select[id*="gs_"]').val("").trigger("change.select2");
 	$("#resetdatafilter").removeClass("active");
 }
 
@@ -401,8 +606,8 @@ function loadClearFilter() {
 	$("#resetdatafilter").click(function () {
 		highlightSearch = "";
 
-		clearGlobalSearch();
 		clearColumnSearch();
+		clearGlobalSearch();
 
 		$("#jqGrid")
 			.jqGrid("setGridParam", {
@@ -415,40 +620,15 @@ function loadClearFilter() {
 	});
 }
 
-function tampilkanjam() {
-	var waktu = new Date();
-	var jam = waktu.getHours();
-	var menit = waktu.getMinutes();
-	var detik = waktu.getSeconds();
-	var teksjam = new String();
-	if (menit <= 9) menit = "0" + menit;
-	if (detik <= 9) detik = "0" + detik;
-	teksjam = jam + ":" + menit + ":" + detik;
-	tempatjam.innerHTML = teksjam;
-	setTimeout(tampilkanjam, 1000);
-}
-
-function tampilkantanggal() {
-	var d = new Date();
-
-	var month = d.getMonth() + 1;
-	var day = d.getDate();
-
-	var output =
-		d.getFullYear() +
-		"/" +
-		(("" + month).length < 2 ? "0" : "") +
-		month +
-		"/" +
-		(("" + day).length < 2 ? "0" : "") +
-		day;
-
-	tempattanggal.innerHTML = output;
-}
-
 function startTime() {
-	tampilkanjam();
-	tampilkantanggal();
+	setInterval(() => {
+		$(".time-place").html(
+			new Date().toLocaleString("id", {
+				dateStyle: "long",
+				timeStyle: "medium",
+			}).replaceAll('.', ':')
+		);
+	}, 1000);
 }
 
 $(".datepicker")
@@ -476,7 +656,6 @@ $(".datepicker")
 	});
 
 $(document).on("input", ".numbernoseparate", function () {
-	console.log('here');
 	this.value = this.value.replace(/\D/g, "");
 });
 
@@ -499,8 +678,11 @@ function showDialog(message = "") {
 
 $(document).ready(function () {
 	$("#sidebarButton").click(function () {
+		setTimeout(() => {
+			$(document).trigger("sidebar:toggle");
+		}, 0);
+
 		$(".nav-treeview").each(function (i, el) {
-			// console.log($(el));
 			$(el).removeAttr("style");
 		});
 	});
@@ -526,18 +708,20 @@ $(document).ready(function () {
 		.parentsUntil(".sidebar-menu > .treeview-menu")
 		.addClass("active");
 });
+
 $("#search").keyup(function () {
 	$(this).data("val", $(this).val());
 });
 
 $("#search").on("input", function (e) {
-	var x = event.which || event.keyCode;
 	var code = $(this).val();
 	var test = $("#" + code).attr("id");
 	var attr = $("#" + test).attr("href");
+
+	$(".sidebar .hover").removeClass("hover");
+
 	if (code === "") {
 		$(".selected").click().removeClass("selected");
-		$(".active").removeClass("active selected-link");
 	} else {
 		if (
 			$("#" + test).hasClass("selected") ||
@@ -550,10 +734,10 @@ $("#search").on("input", function (e) {
 			$("#" + prev).removeClass("active selected-link");
 		} else {
 			if (attr != "javascript:void(0)") {
-				var link = $("#" + test).addClass("active selected-link");
+				var link = $("#" + test).addClass("selected-link");
 				$(document).on("keypress", function (e) {
 					if (e.keyCode == 13) {
-						if ($(link).hasClass("active")) {
+						if ($(link).hasClass("selected-link")) {
 							$(link)[0].click();
 						} else {
 							return false;

@@ -36,7 +36,7 @@
     let pager = '#logtrailHeaderPager'
 
     $("#logtrailHeader").jqGrid({
-        url: `${logtrailHeaderUrl}?id=${id}`,
+        url: `{{ config('app.api_url') . 'logtrail/header' }}?id=${id}`,
         colModel: logtrailGeaderColModel,
         caption: "Header Grid",
         mtype: "GET",
@@ -47,13 +47,26 @@
         shrinkToFit: false,
         title: 'Header Grid',
         height: 350,
-        rowNum: 0,
+        rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
         sortable: true,
         pager: pager,
         viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
         loadComplete: function(data) {
 
         }
@@ -72,7 +85,7 @@
     let pager = '#logtrailDetailPager'
 
     $("#logtrailDetail").jqGrid({
-        url: `${logtrailDetailUrl}?id=${id}`,
+        url: `{{ config('app.api_url') . 'logtrail/detail' }}?id=${id}`,
         colModel: logtrailGeaderColModel,
         caption: "Detail Grid",
         mtype: "GET",
@@ -82,13 +95,26 @@
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 0,
+        rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
         sortable: true,
         pager: pager,
         viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
         loadComplete: function(data) {
 
         }

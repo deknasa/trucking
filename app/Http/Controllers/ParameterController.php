@@ -77,7 +77,7 @@ class ParameterController extends MyController
         try {
             $request['modifiedby'] = Auth::user()->name;
 
-            $response = Http::withHeaders($this->httpHeaders)
+            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->post(config('app.api_url') . 'parameter', $request->all());
 
@@ -113,14 +113,11 @@ class ParameterController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "parameter/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -160,12 +157,12 @@ class ParameterController extends MyController
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "parameter/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     public function fieldLength(): Response
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'parameter/field_length');
 
@@ -177,10 +174,11 @@ class ParameterController extends MyController
      */
     public function report(Request $request): View
     {
-        $params['offset'] = $request->dari - 1;
-        $params['rows'] = $request->sampai - $request->dari + 1;
-
-        $parameters = $this->get($params)['rows'];
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter', $request->all());
+        
+        $parameters = $response['data'];
 
         return view('reports.parameter', compact('parameters'));
     }
@@ -225,7 +223,7 @@ class ParameterController extends MyController
 
         $this->toExcel($this->title, $parameters, $columns);
     }
-    
+
     /* The old code to export */
     // public function export(Request $request): void
     // {

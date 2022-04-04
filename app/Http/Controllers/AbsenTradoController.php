@@ -143,7 +143,7 @@ class AbsenTradoController extends MyController
         try {
             $title = $this->title;
 
-            $response = Http::withHeaders($this->httpHeaders)
+            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "absen_trado/$id");
 
@@ -166,7 +166,7 @@ class AbsenTradoController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "absen_trado/$id", $request->all());
 
@@ -175,7 +175,7 @@ class AbsenTradoController extends MyController
 
     public function fieldLength(): Response
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'absen_trado/field_length');
 
@@ -274,7 +274,7 @@ class AbsenTradoController extends MyController
             'subgrp' => 'STATUS AKTIF',
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/combostatus', $status);
 

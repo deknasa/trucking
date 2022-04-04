@@ -1,22 +1,6 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="content-header">
-  <div class="container-fluid">
-    <div class="row mb-2">
-      <div class="col-sm-6">
-        <h1 class="m-0">{{ $title }}</h1>
-      </div>
-      <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-          <li class="breadcrumb-item active">{{ $title }}</li>
-        </ol>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
@@ -29,23 +13,23 @@
 
 @push('scripts')
 <script>
+  let indexUrl = "{{ route('error.index') }}"
+  let getUrl = "{{ route('error.get') }}"
+  let indexRow = 0;
+  let page = 0;
+  let pager = '#jqGridPager'
+  let popup = "";
+  let id = "";
+  let triggerClick = true;
+  let highlightSearch;
+  let totalRecord
+  let limit
+  let postData
+  let sortname = 'id'
+  let sortorder = 'asc'
+  let autoNumericElements = []
+
   $(document).ready(function() {
-    let indexUrl = "{{ route('error.index') }}"
-    let getUrl = "{{ route('error.get') }}"
-
-    let indexRow = 0;
-    let page = 0;
-    let pager = '#jqGridPager'
-    let popup = "";
-    let id = "";
-    let triggerClick = true;
-    let highlightSearch;
-    let totalRecord
-    let limit
-    let postData
-    let sortname = 'id'
-    let sortorder = 'asc'
-
     /* Set page */
     <?php if (isset($_GET['page'])) { ?>
       page = "{{ $_GET['page'] }}"
@@ -72,7 +56,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: getUrl,
+        url: `{{ config('app.api_url') . 'error' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -122,39 +106,56 @@
         page: page,
         pager: pager,
         viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
         onSelectRow: function(id) {
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
-          let rows = $(this).jqGrid('getGridParam', 'postData').rows
+          let rows = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         ondblClickRow: function(rowid) {
 
         },
         loadComplete: function(data) {
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
+          initResize($(this))
+
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').rows
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
 
           $('.clearsearchclass').click(function() {
-            highlightSearch = ''
+            clearColumnSearch()
           })
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
@@ -178,7 +179,7 @@
         id: 'add',
         buttonicon: 'fas fa-plus',
         onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').rows
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
 
           window.location.href = `{{ route('error.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
@@ -208,25 +209,48 @@
         }
       })
 
+      .navButtonAdd(pager, {
+        caption: 'Export',
+        title: 'Export',
+        id: 'export',
+        buttonicon: 'fas fa-file-export',
+        onClickButton: function() {
+          $('#rangeModal').data('action', 'export')
+          $('#rangeModal').find('button:submit').html(`Export`)
+          $('#rangeModal').modal('show')
+        }
+      })
+
+      .navButtonAdd(pager, {
+        caption: 'Report',
+        title: 'Report',
+        id: 'report',
+        buttonicon: 'fas fa-print',
+        onClickButton: function() {
+          $('#rangeModal').data('action', 'report')
+          $('#rangeModal').find('button:submit').html(`Report`)
+          $('#rangeModal').modal('show')
+        }
+      })
+
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
         defaultSearch: 'cn',
         groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           clearGlobalSearch()
         }
       })
 
-      .bindKeys() /
-
-      /* Append clear filter button */
-      loadClearFilter()
+    /* Append clear filter button */
+    loadClearFilter()
 
     /* Append global search */
     loadGlobalSearch()
 
-     
+
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)
       .parent().addClass('px-1')
@@ -237,6 +261,14 @@
 
     $('#delete .ui-pg-div')
       .addClass('btn-sm btn-danger')
+      .parent().addClass('px-1')
+
+    $('#report .ui-pg-div')
+      .addClass('btn-sm btn-info')
+      .parent().addClass('px-1')
+
+    $('#export .ui-pg-div')
+      .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
 
@@ -251,95 +283,90 @@
     if (!`{{ $myAuth->hasPermission('error', 'delete') }}`) {
       $('#delete').addClass('ui-disabled')
     }
-  })
 
-  /**
-   * Custom Functions
-   */
-  var delay = (function() {
-    var timer = 0;
-    return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })()
+    if (!`{{ $myAuth->hasPermission('error', 'export') }}`) {
+      $('#export').addClass('ui-disabled')
+    }
 
-  function clearColumnSearch() {
-    $('input[id*="gs_"]').val("");
-    $("#resetFilterOptions span#resetFilterOptions").removeClass('aktif');
-    $('select[id*="gs_"]').val("");
-    $("#resetdatafilter").removeClass("active");
-  }
+    if (!`{{ $myAuth->hasPermission('error', 'report') }}`) {
+      $('#report').addClass('ui-disabled')
+    }
 
-  function clearGlobalSearch() {
-    $("#searchText").val("")
-  }
+    $('#rangeModal').on('shown.bs.modal', function() {
+      if (autoNumericElements.length > 0) {
+        $.each(autoNumericElements, (index, autoNumericElement) => {
+          autoNumericElement.remove()
+        })
+      }
 
-  function loadClearFilter() {
-    /* Append Button */
-    $('#gsh_' + $.jgrid.jqID($('#jqGrid')[0].id) + '_rn').html(
-      $("<div id='resetfilter' class='reset'><span id='resetdatafilter' class='btn btn-default'> X </span></div>")
-    )
+      $('#formRange [name]:not(:hidden)').first().focus()
 
-    /* Handle button on click */
-    $("#resetdatafilter").click(function() {
-      highlightSearch = '';
+      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
+      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
+      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+      $('#formRange [name=sampai]').val(totalRecord)
 
-      clearGlobalSearch()
-      clearColumnSearch()
-
-      $("#jqGrid").jqGrid('setGridParam', {
-        search: false,
-        postData: {
-          "filters": ""
-        }
-      }).trigger("reloadGrid");
+      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
+        digitGroupSeparator: '.',
+        decimalCharacter: ',',
+        allowDecimalPadding: false,
+        minimumValue: 1,
+        maximumValue: totalRecord
+      })
     })
+
+$('#formRange').submit(function(event) {
+  event.preventDefault()
+
+  let params
+  let submitButton = $(this).find('button:submit')
+
+  submitButton.attr('disabled', 'disabled')
+
+  /* Set params value */
+  for (var key in postData) {
+    if (params != "") {
+      params += "&";
+    }
+    params += key + "=" + encodeURIComponent(postData[key]);
   }
 
-  function loadGlobalSearch() {
-    /* Append global search textfield */
-    $('#t_' + $.jgrid.jqID($('#jqGrid')[0].id)).html($('<form class="form-inline"><div class="form-group" id="titlesearch"><label for="searchText" style="font-weight: normal !important;">Search : </label><input type="text" class="form-control" id="searchText" placeholder="Search" autocomplete="off"></div></form>'));
+  let formRange = $('#formRange')
+  let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+  let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+  params += `&offset=${offset}&limit=${limit}`
 
-    /* Handle textfield on input */
-    $(document).on("input", "#searchText", function() {
-      delay(function() {
-        clearColumnSearch()
+  if ($('#rangeModal').data('action') == 'export') {
+    let xhr = new XMLHttpRequest()
+    xhr.open('GET', `{{ config('app.api_url') }}error/export?${params}`, true)
+    xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+    xhr.responseType = 'arraybuffer'
 
-        var postData = $('#jqGrid').jqGrid("getGridParam", "postData"),
-          colModel = $('#jqGrid').jqGrid("getGridParam", "colModel"),
-          rules = [],
-          searchText = $("#searchText").val(),
-          l = colModel.length,
-          i,
-          cm;
-        for (i = 0; i < l; i++) {
-          cm = colModel[i];
-          if (cm.search !== false && (cm.stype === undefined || cm.stype === "text" || cm.stype === "select")) {
+    xhr.onload = function(e) {
+      if (this.status === 200) {
+        if (this.response !== undefined) {
+          let blob = new Blob([this.response], {
+            type: "application/vnd.ms-excel"
+          })
+          let link = document.createElement('a')
 
-            rules.push({
-              field: cm.name,
-              op: "cn",
-              data: searchText.toUpperCase()
-            });
-          }
+          link.href = window.URL.createObjectURL(blob)
+          link.download = `laporanError${(new Date).getTime()}.xlsx`
+          link.click()
+
+          submitButton.removeAttr('disabled')
         }
-        postData.filters = JSON.stringify({
-          groupOp: "OR",
-          rules: rules
-        });
+      }
+    }
 
-        $('#jqGrid').jqGrid("setGridParam", {
-          search: true
-        });
-        $('#jqGrid').trigger("reloadGrid", [{
-          page: 1,
-          current: true
-        }]);
-        return false;
-      }, 500);
-    });
+    xhr.send()
+  } else if ($('#rangeModal').data('action') == 'report') {
+    window.open(`{{ route('error.report') }}?${params}`)
+
+    submitButton.removeAttr('disabled')
   }
+})
+  })
 </script>
 @endpush()
 @endsection

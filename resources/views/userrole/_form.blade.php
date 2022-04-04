@@ -1,4 +1,13 @@
-<?php $id = 1; ?>
+<?php
+
+$id = 1;
+$limit = $_GET['limit'] ?? 10;
+$sortname = $_GET['sortname'] ?? 'id';
+$sortorder = $_GET['sortorder'] ?? 'asc';
+$page = $_GET['page'] ?? '';
+$indexRow = $_GET['indexRow'] ?? '';
+
+?>
 
 <div class="container-fluid">
   <div class="row">
@@ -7,11 +16,11 @@
         <div class="card-header">Form {{ $title }}</div>
         <form action="" method="post">
           <div class="card-body">
-            <div style="margin-left:15px;margin-right:15px;">
+            <div>
               @csrf
-              <input type="hidden" name="limit" value="{{ $_GET['limit'] ?? 10 }}">
-              <input type="hidden" name="sortname" value="{{ $_GET['sortname'] ?? 'id' }}">
-              <input type="hidden" name="sortorder" value="{{ $_GET['sortorder'] ?? 'asc' }}">
+              <input type="hidden" name="limit" value="{{ $limit }}">
+              <input type="hidden" name="sortname" value="{{ $sortname }}">
+              <input type="hidden" name="sortorder" value="{{ $sortorder }}">
               <input type="hidden" name="indexRow" value="{{ $_GET['indexRow'] ?? 1 }}">
               <input type="hidden" name="page" value="{{ $_GET['page'] ?? 1 }}">
 
@@ -55,11 +64,7 @@
 
                         <div class="input-group input-group mb-1">
                           <div class="input-group-prepend">
-
-                            <!-- <span class="input-group-text" name="role_id[]" id="role_id<?= $detailIndex  ?>"> {{ $detail['role_id'] ?? ''}} </span> -->
-                            <!-- <input type="hidden" value="" name="role_id[]"" id=" role_id<?= $detailIndex  ?>" /> -->
                             <input type="hidden" name="role_id[]" id="role_id<?= $detailIndex  ?>" readonly class="form-control role_id" tabindex="-1" value="{{ $detail['role_id'] ?? ''}}">
-
                           </div>
 
                           <input type="text" name="rolename[]" id="rolename<?= $detailIndex  ?>" readonly class="form-control rolename" tabindex="-1" value="{{ $detail['rolename'] ?? ''}}">
@@ -117,17 +122,18 @@
   var currentpage = 0;
   var id;
 
-
   /* Set action url */
   <?php
 
   use Illuminate\Support\Facades\URL;
 
-  if ($action == 'edit') : ?>
-    actionUrl = "{{ route('userrole.update', $userrole['id']) }}"
+  if ($action !== 'add') : ?>
+    actionUrl += `/{{ $userrole['id'] }}`
+  <?php endif; ?>
+
+  <?php if ($action == 'edit') : ?>
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('userrole.destroy', $userrole['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
@@ -135,14 +141,10 @@
     $('[name]').addClass('disabled')
   }
 
-
-
   function lookupUser(user) {
-
     var user = $('#user').val();
-    console.log(user);
-    if (typeof user === 'undefined') user = '';
 
+    if (typeof user === 'undefined') user = '';
 
     if (user) {
       var url = "<?= URL::to('/') ?>/user?popup=1&currentpage=" + currentpage + "&user=" + user;
@@ -150,10 +152,8 @@
       var url = "<?= URL::to('/') ?>/user?popup=1&currentpage=" + currentpage;
     }
 
-    // console.log(url);
-    var winpeserta = window.open(
-      url,
-      "getUser_id");
+    var winpeserta = window.open(url, "getUser_id");
+
     var timer = setInterval(function() {
       if (winpeserta.closed) {
         clearInterval(timer);
@@ -166,30 +166,29 @@
           var user = removeTags(getUser_id.user);
           $("#user").val(user);
           $('#user_id').val(kode);
-          // setDetail(kode);
         }
       }
     }, 500);
-
   }
 
-  function field_data() {
-    $.ajax({
-      url: fieldLengthUrl,
-      method: 'GET',
-      dataType: 'JSON',
-      success: response => {
-        $.each(response, (index, value) => {
-          if (value !== null && value !== 0 && value !== undefined) {
-            $(`[name=${index}]`).attr('maxlength', value)
-          }
-        })
-      },
-      error: error => {
-        alert(error)
-      }
-    });
-  }
+  $.ajax({
+    url: `{{ config('app.api_url') . 'userrole/field_length' }}`,
+    method: 'GET',
+    dataType: 'JSON',
+    headers: {
+      'Authorization': `Bearer {{ session('access_token') }}`
+    },
+    success: response => {
+      $.each(response, (index, value) => {
+        if (value !== null && value !== 0 && value !== undefined) {
+          $(`[name=${index}]`).attr('maxlength', value)
+        }
+      })
+    },
+    error: error => {
+      showDialog(error.statusText)
+    }
+  })
 
   $('#user').on('input', function(e) {
     getiduser(e)
@@ -198,16 +197,12 @@
   function getiduser(e) {
     var keyCode = e.keyCode || e.which;
 
-
-    // var user_id = $('#'+user).val();
-
     if (user_id != '') {
       $('#user_id').val('');
       $.ajax({
         url: "<?= URL::to('/') . '/user/getuserid?user=' ?>" + $('#user').val(),
         method: 'GET',
         dataType: 'JSON',
-        // async: false,
       }).done(function(data) {
         if (data != null) {
           $('#user_id').val(data.id);
@@ -227,10 +222,8 @@
     id += 1;
     $('#plus').attr('onclick', 'add_row(' + id + ')');
 
-
     $('#table_body').append(`
     		<tr id=` + id + `>
-
         <td>
           <div>
             <div class="input-group">
@@ -247,11 +240,7 @@
               <input type="text" name="rolename[]"  id="rolename` + id + `" readonly class="form-control rolename" tabindex="-1" autocomplete="off">
             </div>
           </div>
-
         </td> 
-
-              
-
         <td class="action" style="width:80px;">
         <span class="delete_btn">
         <a href="javascript:;" onclick="del_row(` + id + `)" class="tblItem_del"><span class="fas fa-trash"></span></a>
@@ -259,9 +248,6 @@
 
         </tr>
     `);
-
-
-    // $('#select' + id).select2();
 
     field_data();
   }
@@ -273,23 +259,20 @@
   }
 
   function lookupRole(role_id, id) {
-
     var role = $('#role_id').val();
-    // console.log(role);
+
     if (id == 'default') {
       id = '';
     }
 
     if (typeof role === 'undefined') role = '';
 
-
-
-
     var url = "<?= URL::to('/') ?>/role?popup=1&currentpage=" + currentpage + "&id=" + role;
-    // console.log(url);
+
     var winpeserta = window.open(
       url,
       "getRole_id");
+
     var timer = setInterval(function() {
       if (winpeserta.closed) {
         clearInterval(timer);
@@ -309,9 +292,6 @@
     }, 500);
   }
 
-
-
-
   $(document).ready(function() {
     $('form').submit(function(e) {
       e.preventDefault()
@@ -320,34 +300,34 @@
     /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
       $(this).attr('disabled', '')
+      $('#loader').removeClass('d-none')
 
       $.ajax({
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         data: $('form').serializeArray(),
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
 
-          if (response.status) {
-            // alert(response.message)
-
-            if (action != 'delete') {
-              window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
-            } else {
-              window.location.href = `${indexUrl}?page={{ $_GET['page'] ?? '' }}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] ?? ''}}&indexRow={{ $_GET['indexRow'] ?? '' }}`
-            }
-          }
-
-          if (response.errors) {
-            setErrorMessages(response.errors)
-          }
+          window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $sortname ?? '' }}&sortorder={{ $sortorder }}&limit={{ $limit }}`
         },
         error: error => {
-          alert(`${error.statusText} | ${error.responseText}`)
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(error.responseJSON.errors);
+          } else {
+            showDialog(error.statusText)
+          }
         }
       }).always(() => {
+        $('#loader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })

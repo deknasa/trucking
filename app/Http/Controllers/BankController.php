@@ -163,7 +163,7 @@ class BankController extends Controller
 
     public function fieldLength(): Response
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'bank/field_length');
 
@@ -172,7 +172,7 @@ class BankController extends Controller
 
     private function combo()
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->get(config('app.api_url') . 'bank/combo');
         
         return $response['data'];

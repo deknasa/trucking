@@ -22,7 +22,6 @@ $indexRow = $_GET['indexRow'] ?? '';
             <input type="hidden" name="indexRow" value="{{ $_GET['indexRow'] ?? 1 }}">
             <input type="hidden" name="page" value="{{ $_GET['page'] ?? 1 }}">
 
-
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>ID</label>
@@ -96,16 +95,18 @@ $indexRow = $_GET['indexRow'] ?? '';
   let indexUrl = "{{ route('parameter.index') }}"
   let fieldLengthUrl = "{{ route('parameter.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('parameter.store') }}"
+  let actionUrl = "{{ config('app.api_url') . 'parameter' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
-  /* Set action url */
+  /* Set id to action url */
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $parameter['id'] }}`
+  <?php endif; ?>
+
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('parameter.update', $parameter['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('parameter.destroy', $parameter['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
@@ -127,6 +128,9 @@ $indexRow = $_GET['indexRow'] ?? '';
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         data: $('form').serializeArray(),
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
@@ -152,9 +156,12 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     /* Get field maxlength */
     $.ajax({
-      url: fieldLengthUrl,
+      url: `{{ config('app.api_url') . 'parameter/field_length' }}`,
       method: 'GET',
       dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer {{ session('access_token') }}`
+      },
       success: response => {
         $.each(response, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {

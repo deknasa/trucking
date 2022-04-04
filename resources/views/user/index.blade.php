@@ -65,7 +65,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: getUrl,
+        url: `{{ config('app.api_url') . 'user' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -185,11 +185,24 @@
         page: page,
         pager: pager,
         viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
         onSelectRow: function(id) {
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
-          let rows = $(this).jqGrid('getGridParam', 'postData').rows
+          let rows = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         ondblClickRow: function(rowid) {
@@ -201,6 +214,7 @@
         },
         beforeRequest: function() {
           var $requestGrid = $(this);
+
           if ($requestGrid.data('areFiltersDefaulted') !== true) {
             $requestGrid.data('areFiltersDefaulted', true);
             setTimeout(function() {
@@ -208,12 +222,10 @@
             }, 50);
             return false;
           }
+
           // Subsequent runs are always allowed
           return true;
         },
-
-
-
         loadComplete: function(data) {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -223,7 +235,8 @@
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').rows
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
+          console.log($(this).jqGrid('getGridParam', 'postData'));
           postData = $(this).jqGrid('getGridParam', 'postData')
 
           if (popup == "ada") {
@@ -231,7 +244,7 @@
           } else {
             $('#pilih').hide();
           }
-          
+
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
           })
@@ -239,14 +252,14 @@
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
@@ -271,7 +284,7 @@
         buttonicon: 'fas fa-plus',
         class: 'btn btn-primary',
         onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').rows
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
 
           window.location.href = `{{ route('user.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
@@ -302,18 +315,6 @@
       })
 
       .navButtonAdd(pager, {
-        caption: 'Report',
-        title: 'Report',
-        id: 'report',
-        buttonicon: 'fas fa-print',
-        onClickButton: function() {
-          $('#rangeModal').data('action', 'report')
-          $('#rangeModal').find('button:submit').html(`Report`)
-          $('#rangeModal').modal('show')
-        }
-      })
-
-      .navButtonAdd(pager, {
         caption: 'Export',
         title: 'Export',
         id: 'export',
@@ -321,6 +322,18 @@
         onClickButton: function() {
           $('#rangeModal').data('action', 'export')
           $('#rangeModal').find('button:submit').html(`Export`)
+          $('#rangeModal').modal('show')
+        }
+      })
+
+      .navButtonAdd(pager, {
+        caption: 'Report',
+        title: 'Report',
+        id: 'report',
+        buttonicon: 'fas fa-print',
+        onClickButton: function() {
+          $('#rangeModal').data('action', 'report')
+          $('#rangeModal').find('button:submit').html(`Report`)
           $('#rangeModal').modal('show')
         }
       })
@@ -351,10 +364,8 @@
         },
       })
 
-      .bindKeys() /
-
-      /* Append clear filter button */
-      loadClearFilter()
+    /* Append clear filter button */
+    loadClearFilter()
 
     /* Append global search */
     loadGlobalSearch()
@@ -421,21 +432,13 @@
       })
     })
 
-    $('#formRange').submit(event => {
+    $('#formRange').submit(function(event) {
       event.preventDefault()
 
       let params
-      let actionUrl = ``
+      let submitButton = $(this).find('button:submit')
 
-      if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('user.export') }}`
-      } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('user.report') }}`
-      }
-
-      /* Clear validation messages */
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
+      submitButton.attr('disabled', 'disabled')
 
       /* Set params value */
       for (var key in postData) {
@@ -445,7 +448,40 @@
         params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+      let formRange = $('#formRange')
+      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+      params += `&offset=${offset}&limit=${limit}`
+
+      if ($('#rangeModal').data('action') == 'export') {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `{{ config('app.api_url') }}user/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+        xhr.responseType = 'arraybuffer'
+
+        xhr.onload = function(e) {
+          if (this.status === 200) {
+            if (this.response !== undefined) {
+              let blob = new Blob([this.response], {
+                type: "application/vnd.ms-excel"
+              })
+              let link = document.createElement('a')
+
+              link.href = window.URL.createObjectURL(blob)
+              link.download = `laporanUser${(new Date).getTime()}.xlsx`
+              link.click()
+
+              submitButton.removeAttr('disabled')
+            }
+          }
+        }
+
+        xhr.send()
+      } else if ($('#rangeModal').data('action') == 'report') {
+        window.open(`{{ route('user.report') }}?${params}`)
+
+        submitButton.removeAttr('disabled')
+      }
     })
   })
 </script>

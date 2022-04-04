@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class CabangController extends MyController
 {
     public $title = 'Cabang';
-    
+
     /**
      * Fungsi index
      * @ClassName index
@@ -64,7 +64,7 @@ class CabangController extends MyController
     public function store(Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'cabang', $request->all());
 
@@ -96,7 +96,7 @@ class CabangController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "cabang/$id", $request->all());
 
@@ -144,9 +144,60 @@ class CabangController extends MyController
         return response($response);
     }
 
+    /**
+     * @ClassName
+     */
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'cabang', $request->all());
+        
+        $cabangs = $response['data'];
+
+        return view('reports.cabang', compact('cabangs'));
+    }
+
+    /**
+     * @ClassName
+     */
+    public function export(Request $request)
+    {
+        $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
+        ];
+
+        $cabangs = $this->get($params)['rows'];
+
+        $columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'ID',
+                'index' => 'id',
+            ],
+            [
+                'label' => 'Kode Cabang',
+                'index' => 'kodecabang',
+            ],
+            [
+                'label' => 'Nama Cabang',
+                'index' => 'namacabang',
+            ],
+            [
+                'label' => 'Status Aktif',
+                'index' => 'statusaktif',
+            ],
+        ];
+
+        $this->toExcel($this->title, $cabangs, $columns);
+    }
+
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'cabang/field_length');
 
@@ -163,7 +214,7 @@ class CabangController extends MyController
             'subgrp' => 'STATUS AKTIF',
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'cabang/combostatus', $status);
 

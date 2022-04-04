@@ -11,9 +11,13 @@
   </div>
 </div>
 
+<!-- Detail -->
+@include('acl._detail')
+
 @push('scripts')
 <script>
   let indexUrl = "{{ route('acl.index') }}"
+  let getUrl = `{{ route('acl.get') }}`
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -26,6 +30,7 @@
   let postData
   let sortname = 'rolename'
   let sortorder = 'asc'
+  let autoNumericElements = []
 
   $(document).ready(function() {
     /* Set page */
@@ -53,10 +58,8 @@
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
 
-
-
     $("#jqGrid").jqGrid({
-        url: indexUrl,
+        url: `{{ config('app.api_url') . 'acl' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -103,6 +106,19 @@
         page: page,
         pager: pager,
         viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
         onSelectRow: function(id) {
           row_id = $(this).jqGrid('getGridParam', 'selrow')
           selectedId = $(this).jqGrid('getCell', row_id, 'role_id');
@@ -112,7 +128,7 @@
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
-          let rows = $(this).jqGrid('getGridParam', 'postData').rows
+          let rows = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         loadComplete: function(data) {
@@ -124,12 +140,11 @@
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').rows
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
 
-
           $('.clearsearchclass').click(function() {
-            highlightSearch = ''
+            clearColumnSearch()
           })
 
           setTimeout(function() {
@@ -137,14 +152,14 @@
 
               if (id != '') {
                 indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-                $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
                 id = ''
               } else if (indexRow != undefined) {
-                $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
               }
 
               if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-                $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+                $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
               }
 
               triggerClick = false
@@ -170,7 +185,7 @@
         id: 'add',
         buttonicon: 'fas fa-plus',
         onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').rows
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
 
           window.location.href = `{{ route('acl.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
@@ -195,11 +210,34 @@
         id: 'delete',
         buttonicon: 'fas fa-trash',
         onClickButton: function() {
-          // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
           row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
           selectedId = $(this).jqGrid('getCell', row_id, 'id');
 
           window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+        }
+      })
+
+      .navButtonAdd(pager, {
+        caption: 'Export',
+        title: 'Export',
+        id: 'export',
+        buttonicon: 'fas fa-file-export',
+        onClickButton: function() {
+          $('#rangeModal').data('action', 'export')
+          $('#rangeModal').find('button:submit').html(`Export`)
+          $('#rangeModal').modal('show')
+        }
+      })
+
+      .navButtonAdd(pager, {
+        caption: 'Report',
+        title: 'Report',
+        id: 'report',
+        buttonicon: 'fas fa-print',
+        onClickButton: function() {
+          $('#rangeModal').data('action', 'report')
+          $('#rangeModal').find('button:submit').html(`Report`)
+          $('#rangeModal').modal('show')
         }
       })
 
@@ -208,6 +246,7 @@
         searchOnEnter: false,
         defaultSearch: 'cn',
         groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           clearGlobalSearch()
         }
@@ -235,6 +274,14 @@
       .addClass('btn-sm btn-danger')
       .parent().addClass('px-1')
 
+    $('#report .ui-pg-div')
+      .addClass('btn btn-sm btn-info')
+      .parent().addClass('px-1')
+
+    $('#export .ui-pg-div')
+      .addClass('btn btn-sm btn-warning')
+      .parent().addClass('px-1')
+
 
     if (!`{{ $myAuth->hasPermission('acl', 'create') }}`) {
       $('#add').addClass('ui-disabled')
@@ -247,94 +294,90 @@
     if (!`{{ $myAuth->hasPermission('acl', 'delete') }}`) {
       $('#delete').addClass('ui-disabled')
     }
-  })
 
-  /**
-   * Custom Functions
-   */
-  var delay = (function() {
-    var timer = 0;
-    return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })()
+    if (!`{{ $myAuth->hasPermission('acl', 'export') }}`) {
+      $('#export').addClass('ui-disabled')
+    }
 
-  function clearColumnSearch() {
-    $('input[id*="gs_"]').val("");
-    $("#resetFilterOptions span#resetFilterOptions").removeClass('aktif');
-    $('select[id*="gs_"]').val("");
-    $("#resetdatafilter").removeClass("active");
-  }
+    if (!`{{ $myAuth->hasPermission('acl', 'report') }}`) {
+      $('#report').addClass('ui-disabled')
+    }
 
-  function clearGlobalSearch() {
-    $("#searchText").val("")
-  }
+    $('#rangeModal').on('shown.bs.modal', function() {
+      if (autoNumericElements.length > 0) {
+        $.each(autoNumericElements, (index, autoNumericElement) => {
+          autoNumericElement.remove()
+        })
+      }
 
-  function loadClearFilter() {
-    /* Append Button */
-    $('#gsh_' + $.jgrid.jqID($('#jqGrid')[0].id) + '_rn').html(
-      $("<div id='resetfilter' class='reset'><span id='resetdatafilter' class='btn btn-default'> X </span></div>")
-    )
+      $('#formRange [name]:not(:hidden)').first().focus()
 
-    /* Handle button on click */
-    $("#resetdatafilter").click(function() {
-      highlightSearch = '';
+      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
+      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
+      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+      $('#formRange [name=sampai]').val(totalRecord)
 
-      clearGlobalSearch()
-      clearColumnSearch()
-
-      $("#jqGrid").jqGrid('setGridParam', {
-        search: false,
-        postData: {
-          "filters": ""
-        }
-      }).trigger("reloadGrid");
+      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
+        digitGroupSeparator: '.',
+        decimalCharacter: ',',
+        allowDecimalPadding: false,
+        minimumValue: 1,
+        maximumValue: totalRecord
+      })
     })
-  }
 
-  function loadGlobalSearch() {
-    /* Append global search textfield */
-    $('#t_' + $.jgrid.jqID($('#jqGrid')[0].id)).html($('<form class="form-inline"><div class="form-group" id="titlesearch"><label for="searchText" style="font-weight: normal !important;">Search : </label><input type="text" class="form-control" id="searchText" placeholder="Search" autocomplete="off"></div></form>'));
+    $('#formRange').submit(function(event) {
+      event.preventDefault()
 
-    /* Handle textfield on input */
-    $(document).on("input", "#searchText", function() {
-      delay(function() {
-        clearColumnSearch()
+      let params
+      let submitButton = $(this).find('button:submit')
 
-        var postData = $('#jqGrid').jqGrid("getGridParam", "postData"),
-          colModel = $('#jqGrid').jqGrid("getGridParam", "colModel"),
-          rules = [],
-          searchText = $("#searchText").val(),
-          l = colModel.length,
-          i,
-          cm;
-        for (i = 0; i < l; i++) {
-          cm = colModel[i];
-          if (cm.search !== false && (cm.stype === undefined || cm.stype === "text" || cm.stype === "select")) {
-            rules.push({
-              field: cm.name,
-              op: "cn",
-              data: searchText.toUpperCase()
-            });
+      submitButton.attr('disabled', 'disabled')
+
+      /* Set params value */
+      for (var key in postData) {
+        if (params != "") {
+          params += "&";
+        }
+        params += key + "=" + encodeURIComponent(postData[key]);
+      }
+
+      let formRange = $('#formRange')
+      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+      params += `&offset=${offset}&limit=${limit}`
+
+      if ($('#rangeModal').data('action') == 'export') {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `{{ config('app.api_url') }}acl/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+        xhr.responseType = 'arraybuffer'
+
+        xhr.onload = function(e) {
+          if (this.status === 200) {
+            if (this.response !== undefined) {
+              let blob = new Blob([this.response], {
+                type: "application/vnd.ms-excel"
+              })
+              let link = document.createElement('a')
+
+              link.href = window.URL.createObjectURL(blob)
+              link.download = `laporanAcl${(new Date).getTime()}.xlsx`
+              link.click()
+
+              submitButton.removeAttr('disabled')
+            }
           }
         }
-        postData.filters = JSON.stringify({
-          groupOp: "OR",
-          rules: rules
-        });
 
-        $('#jqGrid').jqGrid("setGridParam", {
-          search: true
-        });
-        $('#jqGrid').trigger("reloadGrid", [{
-          page: 1,
-          current: true
-        }]);
-        return false;
-      }, 500);
-    });
-  }
+        xhr.send()
+      } else if ($('#rangeModal').data('action') == 'report') {
+        window.open(`{{ route('acl.report') }}?${params}`)
+
+        submitButton.removeAttr('disabled')
+      }
+    })
+  })
 </script>
 @endpush()
 @endsection

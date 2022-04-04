@@ -88,7 +88,9 @@ class UserRoleController extends MyController
         ];
         $data['combo'] = $this->combo('entry');
 
+
         $user_id = '0';
+
         return view('userrole.add', compact('title', 'list', 'user_id', 'data'));
     }
 
@@ -96,10 +98,9 @@ class UserRoleController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'userrole', $request->all());
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->post(config('app.api_url') . 'userrole', $request->all());
 
         return response($response, $response->status());
     }
@@ -112,15 +113,20 @@ class UserRoleController extends MyController
     {
         $title = $this->title;
 
-        $response = Http::withHeaders($this->httpHeaders)->get(config('app.api_url') . "userrole/$id");
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "userrole/$id");
 
         $userrole = $response['data'];
+
         $list = [
             'detail' => $this->detaillist($userrole['user_id']  ?? '0'),
         ];
+
         $data['combo'] = $this->combo('entry');
 
         $user_id = $userrole['user_id'];
+
         return view('userrole.edit', compact('title', 'userrole', 'list', 'user_id', 'data'));
     }
 
@@ -128,10 +134,9 @@ class UserRoleController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])->patch(config('app.api_url') . "userrole/$id", $request->all());
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->patch(config('app.api_url') . "userrole/$id", $request->all());
 
         return response($response, $response->status());
     }
@@ -148,7 +153,9 @@ class UserRoleController extends MyController
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "userrole/$id");
+            ])
+                ->withToken(session('access_token'))
+                ->get(config('app.api_url') . "userrole/$id");
 
 
             $userrole = $response['data'];
@@ -170,14 +177,68 @@ class UserRoleController extends MyController
     public function destroy($id, Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders($this->httpHeaders)->delete(config('app.api_url') . "userrole/$id", $request->all());
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->delete(config('app.api_url') . "userrole/$id", $request->all());
 
         return response($response, $response->status());
     }
 
+    /**
+     * @ClassName
+     */
+    public function report(Request $request)
+    {
+        $params['offset'] = $request->dari - 1;
+        $params['rows'] = $request->sampai - $request->dari + 1;
+
+        $userroles = $this->get($params)['rows'];
+
+        return view('reports.userrole', compact('userroles'));
+    }
+
+    /**
+     * @ClassName
+     */
+    public function export(Request $request)
+    {
+        $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
+        ];
+
+        $userroles = $this->get($params)['rows'];
+
+        $columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'ID',
+                'index' => 'id',
+            ],
+            [
+                'label' => 'User ID',
+                'index' => 'user_id',
+            ],
+            [
+                'label' => 'User',
+                'index' => 'user',
+            ],
+            [
+                'label' => 'Name',
+                'index' => 'name',
+            ],
+        ];
+
+        $this->toExcel($this->title, $userroles, $columns);
+    }
+
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeaders)->get(config('app.api_url') . 'userrole/field_length');
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'userrole/field_length');
 
         return response($response['data'], $response->status());
     }
@@ -187,7 +248,10 @@ class UserRoleController extends MyController
         $status = [
             'user_id' => $user_id,
         ];
-        $response = Http::get(config('app.api_url') . 'userrole/detaillist', $status);
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'userrole/detaillist', $status);
+
         return $response['data'];
     }
 
@@ -200,7 +264,8 @@ class UserRoleController extends MyController
             'subgrp' => 'STATUS AKTIF',
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'userrole/combostatus', $status);
 
         return $response['data'];

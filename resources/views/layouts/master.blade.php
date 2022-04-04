@@ -41,7 +41,7 @@
 
 </head>
 
-<body class="sidebar-mini layout-fixed sidebar-collapse">
+<body class="layout-fixed sidebar-collapse">
   <div class="loader d-none" id="loader">
     <h1 id="txt1">Mohon Tunggu</h1>
   </div>
@@ -55,7 +55,6 @@
     @include('layouts._navbar')
 
     @include('layouts._sidebar')
-
 
     <!-- Modal for report and export -->
     <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">

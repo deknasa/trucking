@@ -91,6 +91,7 @@ class AbsensiSupirHeaderController extends MyController
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'absensi', $request->all());
 
@@ -109,6 +110,7 @@ class AbsensiSupirHeaderController extends MyController
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "absensi/$id");
 
@@ -142,10 +144,11 @@ class AbsensiSupirHeaderController extends MyController
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "absensi/$id", $request->all());
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     /**
@@ -161,6 +164,7 @@ class AbsensiSupirHeaderController extends MyController
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
             ])
+                ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "absensi/$id");
 
@@ -185,29 +189,36 @@ class AbsensiSupirHeaderController extends MyController
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "absensi/$id");
 
-        return response($response);
+        return response($response, $response->status());
     }
 
     public function getTrado()
     {
-        $response = Http::withToken(session('access_token'))->get(config('app.api_url') . 'trado');
+        $response = Http::withToken(session('access_token'))
+            ->withOptions(['verify' => false])
+            ->get(config('app.api_url') . 'trado');
 
         return $response['data'];
     }
 
     public function getSupir()
     {
-        $response = Http::withToken(session('access_token'))->get(config('app.api_url') . 'supir');
+        $response = Http::withToken(session('access_token'))
+            ->withOptions(['verify' => false])
+            ->get(config('app.api_url') . 'supir');
 
         return $response['data'];
     }
 
     public function getStatus()
     {
-        $response = Http::withToken(session('access_token'))->get(config('app.api_url') . 'absen_trado');
+        $response = Http::withToken(session('access_token'))
+            ->withOptions(['verify' => false])
+            ->get(config('app.api_url') . 'absen_trado');
 
         return $response['data'];
     }
@@ -221,6 +232,7 @@ class AbsensiSupirHeaderController extends MyController
         ];
 
         $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "absensi/running_number", $params);
 
@@ -248,6 +260,7 @@ class AbsensiSupirHeaderController extends MyController
         }
 
         $absensi_details = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get('http://localhost/trucking-laravel/public/api/absensi_detail', $detailParams)['data'];
 
