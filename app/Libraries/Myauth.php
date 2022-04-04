@@ -106,7 +106,7 @@ class Myauth
         }
         
         $userRole = DB::table('userrole')
-            ->where('user_id', 2) // Auth::user()->id
+            ->where('user_id', Auth::user()->id)
             ->get();
         
         $data_union = DB::table('acos')
@@ -119,7 +119,7 @@ class Myauth
             ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('useracl', 'acos.id', '=', 'useracl.aco_id')
             ->where('acos.class', 'like', "%$class%")
-            ->where('useracl.user_id', 2) // Auth::user()->id
+            ->where('useracl.user_id', Auth::user()->id)
             ->unionAll($data_union)
             ->get();
         
