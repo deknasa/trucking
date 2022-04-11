@@ -1,6 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
+
 <!-- Modal for report -->
 <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
   <div class="modal-dialog">

@@ -16,7 +16,7 @@
                 <label>NO BUKTI</label>
               </div>
               <div class="col-12 col-md-4">
-                <input type="text" name="nobukti" class="form-control" value="{{ $kasgantung['nobukti'] ?? $noBukti }}" readonly>
+                <input type="text" name="nobukti" class="form-control" value="{{ $kasgantung['nobukti'] ?? '-' }}" readonly>
               </div>
               <div class="col-12 col-md-2 col-form-label">
                 <label>TANGGAL</label>
@@ -98,7 +98,7 @@
                       NO BUKTI KAS KELUAR <span class="text-danger">*</span></label>
                   </div>
                   <div class="col-12 col-md-4">
-                    <input type="text" name="nobuktikaskeluar" id="nobuktikaskeluar" class="form-control" value="{{ $kasgantung['nobuktikaskeluar'] ?? '' }}" readonly>
+                    <input type="text" name="nobuktikaskeluar" id="nobuktikaskeluar" class="form-control" value="{{ $kasgantung['nobuktikaskeluar'] ?? '-' }}" readonly>
                   </div>
                 </div>
             </div>
@@ -111,8 +111,9 @@
                   <table class="table table-bordered">
                     <thead>
                       <tr>
-                        <th>Nominal</th>
+                        <th width="50">No</th>
                         <th>Keterangan</th>
+                        <th>Nominal</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
@@ -121,10 +122,13 @@
                       @foreach($kasgantung['kasgantung_detail'] as $kasgantungIndex => $d)
                       <tr id="row">
                         <td>
-                          <input type="text" name="nominal[]" class="form-control text-right" value="{{ number_format($d['nominal'],0) ?? '' }}" oninput="separatorNumber(this)">
+                          <span class="baris">{{ $kasgantungIndex+1 }}</span>
                         </td>
                         <td>
                           <input type="text" name="keterangan_detail[]" class="form-control" value="{{ $d['keterangan'] ?? '' }}">
+                        </td>
+                        <td>
+                          <input type="text" name="nominal[]" class="form-control text-right" value="{{ number_format($d['nominal'],0) ?? '' }}" oninput="separatorNumber(this)">
                         </td>
                         <td>
                           @if($kasgantungIndex > 0)
@@ -136,10 +140,13 @@
                       @else
                       <tr id="row">
                         <td>
-                          <input type="text" name="nominal[]" class="form-control text-right" oninput="separatorNumber(this)">
+                          <span class="baris">1</span>
                         </td>
                         <td>
                           <input type="text" name="keterangan_detail[]" class="form-control">
+                        </td>
+                        <td>
+                          <input type="text" name="nominal[]" class="form-control text-right" oninput="separatorNumber(this)">
                         </td>
                         <td>
                           
@@ -188,32 +195,44 @@
     return true;
   }
 
+  var baris = 1;
+  @if (isset($kasgantung['kasgantung_detail']))
+    baris = "{{count($kasgantung['kasgantung_detail'])}}";
+  @endif
+  
   $("#addrow").click(function () {
     let clone = $('#row').clone();
     clone.find(':last-child').append("<div class='btn btn-danger btn-sm rmv' >Hapus</div>")
     clone.find('input').val('');
 
-    $('table #table_body').append(clone);
+    baris = parseInt(baris)+1;
+    clone.find('.baris').text(baris);
+    $('table #table_body').append(clone);    
   });
 
   $('table').on('click', '.rmv', function () {
     $(this).closest('tr').remove();
+
+    $('.baris').each(function(i, obj) {
+      $(obj).text(i+1);
+    });
+    baris = baris - 1;
   });
 
-  $('#bank_id').change(function() {
-    let value = $(this).val();
-    console.log(postingUrl);
-    if (value!='') {
-      $.get(postingUrl, { group: "NOBUKTI", subgroup: "KASKELUAR", table: "jurnalumumheader" }, function(res){ 
-        $('#nobuktikaskeluar').val(res.data);
-      })
-      .fail(function() {
+  // $('#bank_id').change(function() {
+  //   let value = $(this).val();
+  //   console.log(postingUrl);
+  //   if (value!='') {
+  //     $.get(postingUrl, { group: "NOBUKTI", subgroup: "KASKELUAR", table: "jurnalumumheader" }, function(res){ 
+  //       $('#nobuktikaskeluar').val(res.data);
+  //     })
+  //     .fail(function() {
 
-      })
-    } else {
-      $('#nobuktikaskeluar').val('');
-    }
-  });
+  //     })
+  //   } else {
+  //     $('#nobuktikaskeluar').val('');
+  //   }
+  // });
 
   let indexUrl = "{{ route('kasgantung.index') }}"
   let action = "{{ $action }}"

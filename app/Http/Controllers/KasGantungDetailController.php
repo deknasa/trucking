@@ -24,7 +24,7 @@ class KasGantungDetailController extends Controller
             ->get(config('app.api_url') .'kasgantung_detail', $params);
             
         $data = [
-            'rows' => $response['data']
+            'rows' => $response['data'] ?? []
         ];
 
         return response($data);

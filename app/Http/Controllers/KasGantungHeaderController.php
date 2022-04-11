@@ -61,7 +61,7 @@ class KasGantungHeaderController extends MyController
 
         $noBukti = $this->getNoBukti('KASGANTUNG', 'KASGANTUNG', 'kasgantungheader');
         $kasGantungNoBukti = $this->getNoBukti('KASGANTUNG', 'KASGANTUNG', 'kasgantungheader');
-
+        
         $combo = $this->combo();
 
         return view('kasgantung.add', compact('title', 'noBukti', 'combo', 'kasGantungNoBukti'));

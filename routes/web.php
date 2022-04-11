@@ -222,7 +222,6 @@ Route::middleware('auth')->group(function () {
     Route::get('jenistrado/get', [JenisTradoController::class, 'get'])->name('jenistrado.get');
     Route::resource('jenistrado', JenisTradoController::class);
 
-
     Route::get('kasgantung/{id}/delete', [KasGantungHeaderController::class, 'delete'])->name('kasgantung.delete');
     Route::get('kasgantung/index', [KasGantungHeaderController::class, 'index']);
     Route::get('kasgantung/get', [KasGantungHeaderController::class, 'get'])->name('kasgantung.get');
