@@ -31,6 +31,7 @@ use App\Http\Controllers\JenisOrderController;
 use App\Http\Controllers\JenisTradoController;
 use App\Http\Controllers\KasGantungDetailController;
 use App\Http\Controllers\KasGantungHeaderController;
+use App\Http\Controllers\GudangController;
 
 /*
 |--------------------------------------------------------------------------
@@ -230,4 +231,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('kasgantung', KasGantungHeaderController::class);
 
     Route::resource('kasgantung_detail', KasGantungDetailController::class);
+
+    Route::get('gudang/field_length', [GudangController::class, 'fieldLength'])->name('gudang.field_length');
+    Route::get('gudang/{id}/delete', [GudangController::class, 'delete'])->name('gudang.delete');
+    Route::get('gudang/get', [GudangController::class, 'get'])->name('gudang.get');
+    Route::resource('gudang', GudangController::class);
 });
