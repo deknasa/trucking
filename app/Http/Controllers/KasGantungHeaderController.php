@@ -380,7 +380,7 @@ class KasGantungHeaderController extends MyController
     {
         $response = Http::withHeaders($this->httpHeaders)
             ->get(config('app.api_url') . 'kasgantung/combo');
-
+        
         return $response['data'];
     }
 }
