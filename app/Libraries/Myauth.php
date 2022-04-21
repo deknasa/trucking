@@ -10,7 +10,6 @@ use stdClass;
 
 class Myauth
 {
-
     private $server, $user, $pass, $db;
     public $isLogin, $userPK;
     private $conn;

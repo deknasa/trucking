@@ -32,6 +32,9 @@ use App\Http\Controllers\JenisTradoController;
 use App\Http\Controllers\KasGantungDetailController;
 use App\Http\Controllers\KasGantungHeaderController;
 use App\Http\Controllers\GudangController;
+use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\KelompokController;
+use App\Http\Controllers\KerusakanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -236,4 +239,19 @@ Route::middleware('auth')->group(function () {
     Route::get('gudang/{id}/delete', [GudangController::class, 'delete'])->name('gudang.delete');
     Route::get('gudang/get', [GudangController::class, 'get'])->name('gudang.get');
     Route::resource('gudang', GudangController::class);
+    
+    Route::get('kategori/field_length', [KategoriController::class, 'fieldLength'])->name('kategori.field_length');
+    Route::get('kategori/{id}/delete', [KategoriController::class, 'delete'])->name('kategori.delete');
+    Route::get('kategori/get', [KategoriController::class, 'get'])->name('kategori.get');
+    Route::resource('kategori', KategoriController::class);
+
+    Route::get('kelompok/field_length', [KelompokController::class, 'fieldLength'])->name('kelompok.field_length');
+    Route::get('kelompok/{id}/delete', [KelompokController::class, 'delete'])->name('kelompok.delete');
+    Route::get('kelompok/get', [KelompokController::class, 'get'])->name('kelompok.get');
+    Route::resource('kelompok', KelompokController::class);
+
+    Route::get('kerusakan/field_length', [KerusakanController::class, 'fieldLength'])->name('kerusakan.field_length');
+    Route::get('kerusakan/{id}/delete', [KerusakanController::class, 'delete'])->name('kerusakan.delete');
+    Route::get('kerusakan/get', [KerusakanController::class, 'get'])->name('kerusakan.get');
+    Route::resource('kerusakan', KerusakanController::class);
 });
