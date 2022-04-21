@@ -19,6 +19,7 @@ use App\Models\UserRole;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Support\Facades\Http;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -203,7 +204,7 @@ class MyController extends Controller
 
     public function getParameter(string $group, string $subgroup): array
     {
-        return (new ParameterController)->get([
+        $params = [
             'filters' => json_encode([
                 'groupOp' => 'AND',
                 'rules' => [
@@ -216,8 +217,30 @@ class MyController extends Controller
                         'data' => $subgroup,
                     ],
                 ],
-            ]),
-        ])['rows'];
+            ])
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter', $params);
+
+        return $response['data'] ?? [];
+        // return (new ParameterController)->get([
+        //     'filters' => json_encode([
+        //         'groupOp' => 'AND',
+        //         'rules' => [
+        //             [
+        //                 'field' => 'grp',
+        //                 'data' => $group,
+        //             ],
+        //             [
+        //                 'field' => 'subgrp',
+        //                 'data' => $subgroup,
+        //             ],
+        //         ],
+        //     ]),
+        // ])['rows'];
     }
 
     /* Compatible for single table */

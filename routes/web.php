@@ -32,6 +32,7 @@ use App\Http\Controllers\JenisTradoController;
 use App\Http\Controllers\KasGantungDetailController;
 use App\Http\Controllers\KasGantungHeaderController;
 use App\Http\Controllers\GudangController;
+use App\Http\Controllers\SubKelompokController;
 
 /*
 |--------------------------------------------------------------------------
@@ -236,4 +237,8 @@ Route::middleware('auth')->group(function () {
     Route::get('gudang/{id}/delete', [GudangController::class, 'delete'])->name('gudang.delete');
     Route::get('gudang/get', [GudangController::class, 'get'])->name('gudang.get');
     Route::resource('gudang', GudangController::class);
+    
+    Route::get('sub_kelompok/report', [SubKelompokController::class, 'report'])->name('sub_kelompok.report');
+    Route::get('sub_kelompok/{id}/delete', [SubKelompokController::class, 'delete'])->name('sub_kelompok.delete');
+    Route::resource('sub_kelompok', SubKelompokController::class);
 });
