@@ -54,7 +54,7 @@ class Menu
     foreach ($menus as $index => $menu) {
       $string .= '
       <li class="nav-item">
-        <a id="' . ($menu['menuparent'] == 0 ? $index : $menu['menukode']) . '" href="' . (count($menu['child']) > 0 ? 'javascript:void(0)' : url($menu['menuexe'])) . '" class="nav-link ' . (@$currentMenu->id == $menu['menuid'] ? 'active hover' : '') . '">
+        <a id="' . ($menu['menuparent'] == 0 ? $index : $menu['menukode']) . '" href="' . (count($menu['child']) > 0 ? 'javascript:void(0)' : strtolower(url($menu['menuexe']))) . '" class="nav-link ' . (@$currentMenu->id == $menu['menuid'] ? 'active hover' : '') . '">
           <i class="nav-icon ' . (strtolower($menu['menuicon']) ?? 'far fa-circle') . '"></i>
           <p>
             ' . ($menu['menuparent'] == 0 ? $index : substr($menu['menukode'], -1)) . '. ' . $menu['menuname'] . '

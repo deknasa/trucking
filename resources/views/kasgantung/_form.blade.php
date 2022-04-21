@@ -23,11 +23,11 @@
               </div>
               <div class="col-12 col-md-4">
                 @php
-                  if (isset($kasgantung['tgl'])) {
-                    $tgl = date('d-m-Y',strtotime($kasgantung['tgl']));
-                  } else {
-                    $tgl = date('d-m-Y');
-                  }
+                if (isset($kasgantung['tgl'])) {
+                $tgl = date('d-m-Y',strtotime($kasgantung['tgl']));
+                } else {
+                $tgl = date('d-m-Y');
+                }
                 @endphp
                 <input type="text" name="tgl" class="form-control datepicker" value="{{ $tgl }}">
               </div>
@@ -39,16 +39,16 @@
               </div>
               <div class="col-12 col-md-10">
                 <select name="penerima_id" class="form-control select2bs4">
-                        <option value="">PILIH PENERIMA</option>
-                        <?php foreach ($combo['penerima'] as $key => $item) { 
-                            $selected = @$kasgantung['penerima_id'] == $item['id'] ? "selected" : ""
-                        ?>
-                            <option value="{{ $item['id'] }}" {{ $selected }} >{{ $item['namapenerima'] }}</option>
-                        <?php } ?>
+                  <option value="">PILIH PENERIMA</option>
+                  <?php foreach ($combo['penerima'] as $key => $item) {
+                    $selected = @$kasgantung['penerima_id'] == $item['id'] ? "selected" : ""
+                  ?>
+                    <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['namapenerima'] }}</option>
+                  <?php } ?>
                 </select>
               </div>
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>KETERANGAN</label>
@@ -59,56 +59,56 @@
             </div>
 
             <div class="border p-3">
-                <h6>Posting Pengeluaran</h6>
+              <h6>Posting Pengeluaran</h6>
 
-                <div class="row form-group">
-                  <div class="col-12 col-md-2 col-form-label">
-                    <label>
-                      POST <span class="text-danger">*</span></label>
-                  </div>
-                  <div class="col-12 col-md-4">
-                    <select name="bank_id" id="bank_id" class="form-control select2bs4" {{ @$kasgantung ? 'readonly' : '' }}>
-                            <option value="">PILIH BANK</option>
-                            <?php foreach ($combo['bank'] as $key => $item) { 
-                                $selected = @$kasgantung['bank_id'] == $item['id'] ? "selected" : ""
-                            ?>
-                                <option value="{{ $item['id'] }}" {{ $selected }} >{{ $item['namabank'] }}</option>
-                            <?php } ?>
-                    </select>
-                  </div>
-                  <div class="col-12 col-md-2 col-form-label">
-                    <label>TANGGAL POST</label>
-                  </div>
-                  <div class="col-12 col-md-4">
-                    @php
-                      if (isset($kasgantung['tglkaskeluar'])) {
-                        $tglkaskeluar = date('d-m-Y',strtotime($kasgantung['tglkaskeluar']));
-                      } else {
-                        $tglkaskeluar = date('d-m-Y');
-                      }
-                    @endphp
-
-                    <input type="text" name="tglkaskeluar" class="form-control datepicker" value="{{ $tglkaskeluar }}">
-                  </div>
+              <div class="row form-group">
+                <div class="col-12 col-md-2 col-form-label">
+                  <label>
+                    POST <span class="text-danger">*</span></label>
                 </div>
-
-                <div class="row form-group">
-                  <div class="col-12 col-md-2 col-form-label">
-                    <label>
-                      NO BUKTI KAS KELUAR <span class="text-danger">*</span></label>
-                  </div>
-                  <div class="col-12 col-md-4">
-                    <input type="text" name="nobuktikaskeluar" id="nobuktikaskeluar" class="form-control" value="{{ $kasgantung['nobuktikaskeluar'] ?? '-' }}" readonly>
-                  </div>
+                <div class="col-12 col-md-4">
+                  <select name="bank_id" id="bank_id" class="form-control select2bs4" {{ @$kasgantung ? 'readonly' : '' }}>
+                    <option value="">PILIH BANK</option>
+                    <?php foreach ($combo['bank'] as $key => $item) {
+                      $selected = @$kasgantung['bank_id'] == $item['id'] ? "selected" : ""
+                    ?>
+                      <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['namabank'] }}</option>
+                    <?php } ?>
+                  </select>
                 </div>
+                <div class="col-12 col-md-2 col-form-label">
+                  <label>TANGGAL POST</label>
+                </div>
+                <div class="col-12 col-md-4">
+                  @php
+                  if (isset($kasgantung['tglkaskeluar'])) {
+                  $tglkaskeluar = date('d-m-Y',strtotime($kasgantung['tglkaskeluar']));
+                  } else {
+                  $tglkaskeluar = date('d-m-Y');
+                  }
+                  @endphp
+
+                  <input type="text" name="tglkaskeluar" class="form-control datepicker" value="{{ $tglkaskeluar }}">
+                </div>
+              </div>
+
+              <div class="row form-group">
+                <div class="col-12 col-md-2 col-form-label">
+                  <label>
+                    NO BUKTI KAS KELUAR <span class="text-danger">*</span></label>
+                </div>
+                <div class="col-12 col-md-4">
+                  <input type="text" name="nobuktikaskeluar" id="nobuktikaskeluar" class="form-control" value="{{ $kasgantung['nobuktikaskeluar'] ?? '-' }}" readonly>
+                </div>
+              </div>
             </div>
 
             <button type="button" class="btn btn-primary my-2" id="addrow">Tambah</button>
 
             <div class="row">
-              <div class="col-md-12">
+              <div class="col-12">
                 <div class="table-responsive">
-                  <table class="table table-bordered">
+                  <table class="table table-bordered table-bindkeys">
                     <thead>
                       <tr>
                         <th width="50">No</th>
@@ -132,7 +132,7 @@
                         </td>
                         <td>
                           @if($kasgantungIndex > 0)
-                            <div class='btn btn-danger btn-sm rmv' >Hapus</div>
+                          <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                           @endif
                         </td>
                       </tr>
@@ -149,7 +149,7 @@
                           <input type="text" name="nominal[]" class="form-control text-right" oninput="separatorNumber(this)">
                         </td>
                         <td>
-                          
+
                         </td>
                       </tr>
                       @endif
@@ -158,63 +158,118 @@
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="card-footer">
-            <button type="submit" id="btnSimpan" class="btn btn-primary">
-              <i class="fa fa-save"></i>
-              @if(isset($action) && $action == 'delete')
-              Delete
-              @else
-              Simpan
+            {{--
+            <div class="row">
+              <div class="col-md-12">
+                <div class="table-responsive">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th width="50">No</th>
+                        <th>Keterangan</th>
+                        <th>Nominal</th>
+                        <th>Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody id="table_body" class="form-group">
+                      @if (isset($kasgantung['kasgantung_detail']))
+                      @foreach($kasgantung['kasgantung_detail'] as $kasgantungIndex => $d)
+                      <tr id="row">
+                        <td>
+                          <span class="baris">{{ $kasgantungIndex+1 }}</span>
+            </td>
+            <td>
+              <input type="text" name="keterangan_detail[]" class="form-control" value="{{ $d['keterangan'] ?? '' }}">
+            </td>
+            <td>
+              <input type="text" name="nominal[]" class="form-control text-right" value="{{ number_format($d['nominal'],0) ?? '' }}" oninput="separatorNumber(this)">
+            </td>
+            <td>
+              @if($kasgantungIndex > 0)
+              <div class='btn btn-danger btn-sm rmv'>Hapus</div>
               @endif
-            </button>
-            <a href="{{ route('kasgantung.index') }}" class="btn btn-danger">
-              <i class="fa fa-window-close"></i>
-              BATAL
-            </a>
+            </td>
+            </tr>
+            @endforeach
+            @else
+            <tr id="row">
+              <td>
+                <span class="baris">1</span>
+              </td>
+              <td>
+                <input type="text" name="keterangan_detail[]" class="form-control">
+              </td>
+              <td>
+                <input type="text" name="nominal[]" class="form-control text-right" oninput="separatorNumber(this)">
+              </td>
+              <td>
+
+              </td>
+            </tr>
+            @endif
+            </tbody>
+            </table>
           </div>
-        </form>
       </div>
     </div>
+    --}}
   </div>
+
+  <div class="card-footer">
+    <button type="submit" id="btnSimpan" class="btn btn-primary">
+      <i class="fa fa-save"></i>
+      @if(isset($action) && $action == 'delete')
+      Delete
+      @else
+      Simpan
+      @endif
+    </button>
+    <a href="{{ route('kasgantung.index') }}" class="btn btn-danger">
+      <i class="fa fa-window-close"></i>
+      BATAL
+    </a>
+  </div>
+  </form>
+</div>
+</div>
+</div>
 </div>
 
 @push('scripts')
 <script>
-
   function separatorNumber(object) {
-    var value = parseInt(object.value.replaceAll('.','').replaceAll(',',''));
+    var value = parseInt(object.value.replaceAll('.', '').replaceAll(',', ''));
 
     if ($.isNumeric(value)) {
       object.value = value.toLocaleString();
     } else {
       object.value = '';
     }
-    
+
     return true;
   }
 
   var baris = 1;
-  @if (isset($kasgantung['kasgantung_detail']))
-    baris = "{{count($kasgantung['kasgantung_detail'])}}";
+  @if(isset($kasgantung['kasgantung_detail']))
+  baris = "{{count($kasgantung['kasgantung_detail'])}}";
   @endif
-  
-  $("#addrow").click(function () {
+
+  $("#addrow").click(function() {
     let clone = $('#row').clone();
     clone.find(':last-child').append("<div class='btn btn-danger btn-sm rmv' >Hapus</div>")
     clone.find('input').val('');
 
-    baris = parseInt(baris)+1;
+    baris = parseInt(baris) + 1;
     clone.find('.baris').text(baris);
-    $('table #table_body').append(clone);    
+    $('table #table_body').append(clone);
   });
 
-  $('table').on('click', '.rmv', function () {
+  $('table').on('click', '.rmv', function() {
     $(this).closest('tr').remove();
 
     $('.baris').each(function(i, obj) {
-      $(obj).text(i+1);
+      $(obj).text(i + 1);
     });
     baris = baris - 1;
   });

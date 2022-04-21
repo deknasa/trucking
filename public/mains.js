@@ -278,8 +278,8 @@ function setCustomBindKeys(grid) {
 function setSidebarBindKeys() {
 	$(document).on("keydown", (event) => {
 		if (event.keyCode === 77 && event.altKey) {
-			event.preventDefault()
-			
+			event.preventDefault();
+
 			$("#sidebarButton").click();
 		}
 
@@ -623,10 +623,12 @@ function loadClearFilter() {
 function startTime() {
 	setInterval(() => {
 		$(".time-place").html(
-			new Date().toLocaleString("id", {
-				dateStyle: "long",
-				timeStyle: "medium",
-			}).replaceAll('.', ':')
+			new Date()
+				.toLocaleString("id", {
+					dateStyle: "long",
+					timeStyle: "medium",
+				})
+				.replaceAll(".", ":")
 		);
 	}, 1000);
 }
@@ -762,3 +764,70 @@ $("#search").on("input", function (e) {
 		}
 	}
 });
+
+/* Table bindkeys */
+$(document).on("keydown", ".table-bindkeys [name]", function (event) {
+	switch (event.keyCode) {
+		case 13:
+			event.preventDefault();
+		case 38:
+			incomingElement = $(this)
+				.parents("tr")
+				.prev("tr")
+				.find("td")
+				.eq($(this).parents("td").index())
+				.find("[name]");
+
+			if (incomingElement.length !== 0) {
+				setPrevFocus(incomingElement);
+			}
+			break;
+		case 40:
+			incomingElement = $(this)
+				.parents("tr")
+				.next("tr")
+				.find("td")
+				.eq($(this).parents("td").index())
+				.find("[name]");
+
+			if (incomingElement.length == 0) {
+				$('form button#btnSimpan').focus()
+			} else {
+				incomingElement.focus();
+			}
+			break;
+		default:
+			break;
+	}
+});
+
+$(document)
+	.on("mousedown", "#addrow", function (event) {
+		activeElement = document.activeElement;
+	})
+	.on("mouseup", "#addrow", function (event) {
+		if (
+			$(activeElement).is("input") ||
+			$(activeElement).is("select") ||
+			$(activeElement).is("textarea")
+		) {
+			if (
+				typeof $(activeElement).attr("name") !== "undefined" &&
+				$(activeElement).attr("name") !== false
+			) {
+				activeElement.focus();
+			}
+		} else {
+			$(".table-bindkeys").find("[name]")[0].focus();
+		}
+	});
+
+function setPrevFocus(incomingElement) {
+	position = incomingElement.val().length;
+
+	setTimeout(() => {
+		incomingElement[0].setSelectionRange(position, position);
+	}, 0);
+
+	incomingElement.focus();
+}

@@ -73,7 +73,7 @@ $indexRow = $_GET['indexRow'] ?? '';
 
                       <td>
                         <div class="input-group input-group mb-1">
-                          <select class="form-control select2" name="status[]" id="status">
+                          <select class="form-control select2" name="status[]">
                             <?php foreach ($data['combo'] as $key => $item) { ?>
                               <option value="<?= $item['id'] ?>" <?= $item['id'] == @$detail['status'] ? 'selected' : '' ?>><?= $item['keterangan'] ?></option>
                             <?php } ?>
