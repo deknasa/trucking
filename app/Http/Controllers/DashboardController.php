@@ -16,7 +16,7 @@ class DashboardController extends MyController
         //     ->first();
         // dd($test);
         $title = 'Dashboard';
-
+        
         return view('welcome', compact('title'));
     }
 
