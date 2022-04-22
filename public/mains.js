@@ -807,9 +807,11 @@ $(document)
 	})
 	.on("mouseup", "#addrow", function (event) {
 		if (
-			$(activeElement).is("input") ||
-			$(activeElement).is("select") ||
-			$(activeElement).is("textarea")
+			(
+				$(activeElement).is("input") ||
+				$(activeElement).is("select") ||
+				$(activeElement).is("textarea")
+			) && $(activeElement).parents('.table-bindkeys').length > 0
 		) {
 			if (
 				typeof $(activeElement).attr("name") !== "undefined" &&
