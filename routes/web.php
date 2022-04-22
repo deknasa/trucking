@@ -33,6 +33,7 @@ use App\Http\Controllers\KasGantungDetailController;
 use App\Http\Controllers\KasGantungHeaderController;
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\SubKelompokController;
+use App\Http\Controllers\SupplierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -241,4 +242,8 @@ Route::middleware('auth')->group(function () {
     Route::get('sub_kelompok/report', [SubKelompokController::class, 'report'])->name('sub_kelompok.report');
     Route::get('sub_kelompok/{id}/delete', [SubKelompokController::class, 'delete'])->name('sub_kelompok.delete');
     Route::resource('sub_kelompok', SubKelompokController::class);
+    
+    Route::get('supplier/report', [SupplierController::class, 'report'])->name('supplier.report');
+    Route::get('supplier/{id}/delete', [SupplierController::class, 'delete'])->name('supplier.delete');
+    Route::resource('supplier', SupplierController::class);
 });

@@ -41,7 +41,8 @@ class Myauth
             'logtrail',
             'agen',
             'akunpusat',
-            'kasgantung'
+            'kasgantung',
+            'supplier',
         ],
         'method' => [
             'gridtab',
