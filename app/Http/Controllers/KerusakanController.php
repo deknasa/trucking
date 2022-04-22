@@ -40,7 +40,7 @@ class KerusakanController extends MyController
         $response = Http::withHeaders(request()->header())
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'kerusakan', $params);
-
+            
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
             'records' => $response['attributes']['totalRows'] ?? [],
