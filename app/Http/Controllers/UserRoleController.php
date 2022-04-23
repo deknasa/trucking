@@ -33,6 +33,7 @@ class UserRoleController extends MyController
         ];
 
         $response = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'userrole', $params);
 
@@ -150,10 +151,8 @@ class UserRoleController extends MyController
         try {
             $title = $this->title;
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
+            $response = Http::withHeaders($this->httpHeaders)
+                ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "userrole/$id");
 
