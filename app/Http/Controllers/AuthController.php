@@ -31,7 +31,7 @@ class AuthController extends Controller
             'user' => 'required',
             'password' => 'required'
         ]);
-
+        
         $credentials = [
             'user' => $request->user,
             'password' => $request->password

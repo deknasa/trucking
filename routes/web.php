@@ -37,7 +37,9 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\KerusakanController;
-
+use App\Http\Controllers\KotaController;
+use App\Http\Controllers\MandorController;
+use App\Http\Controllers\MerkController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -263,4 +265,19 @@ Route::middleware('auth')->group(function () {
     Route::get('kerusakan/{id}/delete', [KerusakanController::class, 'delete'])->name('kerusakan.delete');
     Route::get('kerusakan/get', [KerusakanController::class, 'get'])->name('kerusakan.get');
     Route::resource('kerusakan', KerusakanController::class);
+
+    Route::get('kota/field_length', [KotaController::class, 'fieldLength'])->name('kota.field_length');
+    Route::get('kota/{id}/delete', [KotaController::class, 'delete'])->name('kota.delete');
+    Route::get('kota/get', [KotaController::class, 'get'])->name('kota.get');
+    Route::resource('kota', KotaController::class);
+
+    Route::get('mandor/field_length', [MandorController::class, 'fieldLength'])->name('mandor.field_length');
+    Route::get('mandor/{id}/delete', [MandorController::class, 'delete'])->name('mandor.delete');
+    Route::get('mandor/get', [MandorController::class, 'get'])->name('mandor.get');
+    Route::resource('mandor', MandorController::class);
+
+    Route::get('merk/field_length', [MerkController::class, 'fieldLength'])->name('merk.field_length');
+    Route::get('merk/{id}/delete', [MerkController::class, 'delete'])->name('merk.delete');
+    Route::get('merk/get', [MerkController::class, 'get'])->name('merk.get');
+    Route::resource('merk', MerkController::class);
 });
