@@ -62,7 +62,7 @@ class ParameterController extends MyController
     /**
      * @ClassName
      */
-    public function create(): View
+    public function create()
     {
         $title = $this->title;
 
@@ -72,7 +72,7 @@ class ParameterController extends MyController
     /**
      * @ClassName
      */
-    public function store(Request $request): Response
+    public function store(Request $request)
     {
         try {
             $request['modifiedby'] = Auth::user()->name;
@@ -90,7 +90,7 @@ class ParameterController extends MyController
     /**
      * @ClassName
      */
-    public function edit($id): View
+    public function edit($id)
     {
         $title = $this->title;
 
@@ -107,7 +107,7 @@ class ParameterController extends MyController
     /**
      * @ClassName
      */
-    public function update(Request $request, $id): Response
+    public function update(Request $request, $id)
     {
         $request['modifiedby'] = Auth::user()->name;
 
@@ -155,7 +155,7 @@ class ParameterController extends MyController
         return response($response, $response->status());
     }
 
-    public function fieldLength(): Response
+    public function fieldLength()
     {
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
@@ -168,7 +168,7 @@ class ParameterController extends MyController
     /**
      * @ClassName
      */
-    public function report(Request $request): View
+    public function report(Request $request)
     {
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
@@ -183,7 +183,7 @@ class ParameterController extends MyController
     /**
      * @ClassName
      */
-    public function export(Request $request): void
+    public function export(Request $request)
     {
         $params = [
             'offset' => $request->dari - 1,
@@ -222,7 +222,7 @@ class ParameterController extends MyController
     }
 
     /* The old code to export */
-    // public function export(Request $request): void
+    // public function export(Request $request)
     // {
     //     $params = [
     //         'offset' => $request->dari - 1,

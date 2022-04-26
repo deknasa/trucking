@@ -42,6 +42,7 @@ class Myauth
             'akunpusat',
             'kasgantung',
             'supplier',
+            'penerima',
         ],
         'method' => [
             'gridtab',
