@@ -21,6 +21,7 @@ class KasGantungDetailController extends Controller
         ];
 
         $response = Http::withHeaders($request->header())
+            ->withOptions(['verify' => false])
             ->get(config('app.api_url') .'kasgantung_detail', $params);
             
         $data = [

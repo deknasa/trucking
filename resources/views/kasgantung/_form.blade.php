@@ -128,7 +128,7 @@
                           <input type="text" name="keterangan_detail[]" class="form-control" value="{{ $d['keterangan'] ?? '' }}">
                         </td>
                         <td>
-                          <input type="text" name="nominal[]" class="form-control text-right" value="{{ number_format($d['nominal'],0) ?? '' }}" oninput="separatorNumber(this)">
+                          <input type="text" name="nominal[]" class="form-control text-right" value="{{ number_format($d['nominal'],0,'.','.') ?? '' }}" oninput="separatorNumber(this)">
                         </td>
                         <td>
                           @if($kasgantungIndex > 0)
@@ -317,6 +317,7 @@
     /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
       $(this).attr('disabled', '')
+      $('#loader').removeClass('d-none')
 
       $.ajax({
         url: actionUrl,

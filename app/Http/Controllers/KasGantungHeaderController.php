@@ -38,6 +38,7 @@ class KasGantungHeaderController extends MyController
         ];
 
         $response = Http::withHeaders(request()->header())
+        ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') .'kasgantung', $params);
 
@@ -83,10 +84,8 @@ class KasGantungHeaderController extends MyController
 
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'kasgantung', $request->all());
 
@@ -101,10 +100,8 @@ class KasGantungHeaderController extends MyController
     {
         $title = $this->title;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "kasgantung/$id");
         
@@ -132,10 +129,8 @@ class KasGantungHeaderController extends MyController
 
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "kasgantung/$id", $request->all());
 
@@ -151,10 +146,8 @@ class KasGantungHeaderController extends MyController
         try {
             $title = $this->title;
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
+            $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "kasgantung/$id");
 
@@ -170,10 +163,8 @@ class KasGantungHeaderController extends MyController
     public function destroy($id)
     {
         $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "kasgantung/$id");
 
@@ -189,6 +180,7 @@ class KasGantungHeaderController extends MyController
         ];
 
         $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "running_number", $params);
 
@@ -379,6 +371,7 @@ class KasGantungHeaderController extends MyController
     private function combo()
     {
         $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
             ->get(config('app.api_url') . 'kasgantung/combo');
         
         return $response['data'];
