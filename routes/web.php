@@ -40,6 +40,9 @@ use App\Http\Controllers\KerusakanController;
 use App\Http\Controllers\KotaController;
 use App\Http\Controllers\MandorController;
 use App\Http\Controllers\MerkController;
+use App\Http\Controllers\SatuanController;
+use App\Http\Controllers\ZonaController;
+use App\Http\Controllers\TarifController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -280,4 +283,19 @@ Route::middleware('auth')->group(function () {
     Route::get('merk/{id}/delete', [MerkController::class, 'delete'])->name('merk.delete');
     Route::get('merk/get', [MerkController::class, 'get'])->name('merk.get');
     Route::resource('merk', MerkController::class);
+
+    Route::get('satuan/field_length', [SatuanController::class, 'fieldLength'])->name('satuan.field_length');
+    Route::get('satuan/{id}/delete', [SatuanController::class, 'delete'])->name('satuan.delete');
+    Route::get('satuan/get', [SatuanController::class, 'get'])->name('satuan.get');
+    Route::resource('satuan', SatuanController::class);
+
+    Route::get('zona/field_length', [ZonaController::class, 'fieldLength'])->name('zona.field_length');
+    Route::get('zona/{id}/delete', [ZonaController::class, 'delete'])->name('zona.delete');
+    Route::get('zona/get', [ZonaController::class, 'get'])->name('zona.get');
+    Route::resource('zona', ZonaController::class);
+
+    Route::get('tarif/field_length', [TarifController::class, 'fieldLength'])->name('tarif.field_length');
+    Route::get('tarif/{id}/delete', [TarifController::class, 'delete'])->name('tarif.delete');
+    Route::get('tarif/get', [TarifController::class, 'get'])->name('tarif.get');
+    Route::resource('tarif', TarifController::class);
 });
