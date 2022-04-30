@@ -27,46 +27,87 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <label>ID</label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="id" class="form-control" value="{{ $parameter['id'] ?? '' }}" readonly>
+                <input type="text" name="id" class="form-control" value="{{ $pelanggan['id'] ?? '' }}" readonly>
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  GROUP <span class="text-danger">*</span>
+                  kode pelanggan <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="grp" class="form-control" value="{{ $parameter['grp'] ?? '' }}">
+                <input type="text" name="kodepelanggan" class="form-control" value="{{ $pelanggan['kodepelanggan'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  SUBGROUP <span class="text-danger">*</span>
+                  nama pelanggan <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="subgrp" class="form-control" value="{{ $parameter['subgrp'] ?? '' }}">
+                <input type="text" name="namapelanggan" class="form-control" value="{{ $pelanggan['namapelanggan'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  NAMA PARAMETER <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="text" class="form-control" value="{{ $parameter['text'] ?? '' }}">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  MEMO <span class="text-danger">*</span>
+                  telp <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="memo" class="form-control" value="{{ $parameter['memo'] ?? '' }}">
+                <input type="text" name="telp" class="form-control" value="{{ $pelanggan['telp'] ?? '' }}">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  alamat <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="alamat" class="form-control" value="{{ $pelanggan['alamat'] ?? '' }}">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  alamat2 <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="alamat2" class="form-control" value="{{ $pelanggan['alamat2'] ?? '' }}">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  kota <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="kota" class="form-control" value="{{ $pelanggan['kota'] ?? '' }}">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  kode pos <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="kodepos" class="form-control" value="{{ $pelanggan['kodepos'] ?? '' }}">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  keterangan <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="keterangan" class="form-control" value="{{ $pelanggan['keterangan'] ?? '' }}">
               </div>
             </div>
           </div>
@@ -79,7 +120,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               Simpan
               @endif
             </button>
-            <a href="{{ route('parameter.index') }}" class="btn btn-danger">
+            <a href="{{ route('pelanggan.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
               BATAL
             </a>
@@ -92,15 +133,15 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('parameter.index') }}"
+  let indexUrl = "{{ route('pelanggan.index') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ config('app.api_url') . 'parameter' }}"
+  let actionUrl = "{{ config('app.api_url') . 'pelanggan' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
   /* Set id to action url */
   <?php if ($action !== 'add') : ?>
-    actionUrl += `/{{ $parameter['id'] }}`
+    actionUrl += `/{{ $pelanggan['id'] }}`
   <?php endif; ?>
 
   <?php if ($action == 'edit') : ?>
@@ -155,7 +196,7 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     /* Get field maxlength */
     $.ajax({
-      url: `{{ config('app.api_url') . 'parameter/field_length' }}`,
+      url: `{{ config('app.api_url') . 'pelanggan/field_length' }}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {

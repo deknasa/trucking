@@ -37,6 +37,10 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\KerusakanController;
+use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\PenerimaController;
+use App\Http\Controllers\StatusContainerController;
+
 use App\Http\Controllers\KotaController;
 use App\Http\Controllers\MandorController;
 use App\Http\Controllers\MerkController;
@@ -269,6 +273,17 @@ Route::middleware('auth')->group(function () {
     Route::get('kerusakan/get', [KerusakanController::class, 'get'])->name('kerusakan.get');
     Route::resource('kerusakan', KerusakanController::class);
 
+    Route::get('penerima/report', [PenerimaController::class, 'report'])->name('penerima.report');
+    Route::get('penerima/{id}/delete', [PenerimaController::class, 'delete'])->name('penerima.delete');
+    Route::resource('penerima', PenerimaController::class);
+    
+    Route::get('pelanggan/report', [PelangganController::class, 'report'])->name('pelanggan.report');
+    Route::get('pelanggan/{id}/delete', [PelangganController::class, 'delete'])->name('pelanggan.delete');
+    Route::resource('pelanggan', PelangganController::class);
+
+    Route::get('status_container/report', [StatusContainerController::class, 'report'])->name('status_container.report');
+    Route::get('status_container/{id}/delete', [StatusContainerController::class, 'delete'])->name('status_container.delete');
+    Route::resource('status_container', StatusContainerController::class);
     Route::get('kota/field_length', [KotaController::class, 'fieldLength'])->name('kota.field_length');
     Route::get('kota/{id}/delete', [KotaController::class, 'delete'])->name('kota.delete');
     Route::get('kota/get', [KotaController::class, 'get'])->name('kota.get');

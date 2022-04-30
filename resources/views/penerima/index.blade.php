@@ -13,7 +13,7 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('parameter.index') }}"
+  let indexUrl = "{{ route('penerima.index') }}"
   let indexRow = 0;
   let page = 1;
   let pager = '#jqGridPager'
@@ -24,7 +24,7 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'grp'
+  let sortname = 'namapenerima'
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
@@ -61,7 +61,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'parameter' }}`,
+        url: `{{ config('app.api_url') . 'penerima' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -72,20 +72,24 @@
             width: '50px'
           },
           {
-            label: 'GROUP',
-            name: 'grp',
+            label: 'Nama Penerima',
+            name: 'namapenerima',
           },
           {
-            label: 'SUBGROUP',
-            name: 'subgrp',
+            label: 'NPWP',
+            name: 'npwp',
           },
           {
-            label: 'NAMA PARAMETER',
-            name: 'text',
+            label: 'No KTP',
+            name: 'noktp',
           },
           {
-            label: 'MEMO',
-            name: 'memo',
+            label: 'status aktif',
+            name: 'statusaktif',
+          },
+          {
+            label: 'status karyawan',
+            name: 'statuskaryawan',
           },
           {
             label: 'MODIFIEDBY',
@@ -188,7 +192,7 @@
         onClickButton: function() {
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
 
-          window.location.href = `{{ route('parameter.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+          window.location.href = `{{ route('penerima.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
 
@@ -281,23 +285,23 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('penerima', 'create') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('penerima', 'edit') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('penerima', 'delete') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('penerima', 'export') }}`) {
       $('#export').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('penerima', 'report') }}`) {
       $('#report').addClass('ui-disabled')
     }
 
@@ -347,7 +351,7 @@
 
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}parameter/export?${params}`, true)
+        xhr.open('GET', `{{ config('app.api_url') }}penerima/export?${params}`, true)
         xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
         xhr.responseType = 'arraybuffer'
 
@@ -360,7 +364,7 @@
               let link = document.createElement('a')
 
               link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanParameter${(new Date).getTime()}.xlsx`
+              link.download = `laporanPenerima${(new Date).getTime()}.xlsx`
               link.click()
 
               submitButton.removeAttr('disabled')
@@ -370,7 +374,7 @@
 
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('parameter.report') }}?${params}`)
+        window.open(`{{ route('penerima.report') }}?${params}`)
 
         submitButton.removeAttr('disabled')
       }

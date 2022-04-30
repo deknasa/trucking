@@ -27,46 +27,37 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <label>ID</label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="id" class="form-control" value="{{ $parameter['id'] ?? '' }}" readonly>
+                <input type="text" name="id" class="form-control" value="{{ $statusContainer['id'] ?? '' }}" readonly>
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  GROUP <span class="text-danger">*</span>
+                  kode status container <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="grp" class="form-control" value="{{ $parameter['grp'] ?? '' }}">
+                <input type="text" name="kodestatuscontainer" class="form-control" value="{{ $statusContainer['kodestatuscontainer'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  SUBGROUP <span class="text-danger">*</span>
+                  keterangan <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="subgrp" class="form-control" value="{{ $parameter['subgrp'] ?? '' }}">
+                <input type="text" name="keterangan" class="form-control" value="{{ $statusContainer['keterangan'] ?? '' }}">
               </div>
             </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  NAMA PARAMETER <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="text" class="form-control" value="{{ $parameter['text'] ?? '' }}">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  MEMO <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="memo" class="form-control" value="{{ $parameter['memo'] ?? '' }}">
+            <div class="form-group row">
+              <label for="staticEmail" class="col-sm-3 col-md-2 col-form-label">Status Aktif<span class="text-danger">*</span></label>
+              <div class="col-sm-9 col-md-10">
+                <select class="form-control select2bs4  <?= @$disable2 ?>" style="width: 100%;" name="statusaktif">
+                  <?php foreach ($combo['statusaktif'] as $status) : ?>;
+                  <option value="<?= $status['id'] ?>" <?= $status['id'] == @$statusContainer['statusaktif'] ? 'selected' : '' ?>><?= $status['text'] ?></option>
+                <?php endforeach; ?>
+                </select>
               </div>
             </div>
           </div>
@@ -79,7 +70,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               Simpan
               @endif
             </button>
-            <a href="{{ route('parameter.index') }}" class="btn btn-danger">
+            <a href="{{ route('status_container.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
               BATAL
             </a>
@@ -92,15 +83,15 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('parameter.index') }}"
+  let indexUrl = "{{ route('status_container.index') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ config('app.api_url') . 'parameter' }}"
+  let actionUrl = "{{ config('app.api_url') . 'status_container' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
   /* Set id to action url */
   <?php if ($action !== 'add') : ?>
-    actionUrl += `/{{ $parameter['id'] }}`
+    actionUrl += `/{{ $statusContainer['id'] }}`
   <?php endif; ?>
 
   <?php if ($action == 'edit') : ?>
@@ -155,7 +146,7 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     /* Get field maxlength */
     $.ajax({
-      url: `{{ config('app.api_url') . 'parameter/field_length' }}`,
+      url: `{{ config('app.api_url') . 'status_container/field_length' }}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
