@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
 
   <!-- JqGrid -->
-  <link rel="stylesheet" href="{{ asset('libraries/jqgrid/560/css/trirand/ui.jqgrid-bootstrap4.css') }}" />
+  <link rel="stylesheet" href="{{ asset('libraries/jqgrid/570/css/ui.jqgrid-bootstrap4.css') }}" />
 
   <!-- Select2 -->
   <link rel="stylesheet" href="{{ asset('plugins/select2/4.0.13/css/select2.min.css') }}">
@@ -145,8 +145,8 @@
   <script src="{{ asset('dist/js/adminlte.js') }}"></script>
 
   <!-- JqGrid -->
-  <script src="{{ asset('libraries/jqgrid/560/js/trirand/src/jquery.jqGrid.js') }}"></script>
-  <script src="{{ asset('libraries/jqgrid/560/js/trirand/i18n/grid.locale-en.js') }}"></script>
+  <script src="{{ asset('libraries/jqgrid/570/js/jquery.jqGrid.js') }}"></script>
+  <script src="{{ asset('libraries/jqgrid/570/js/i18n/grid.locale-en.js') }}"></script>
 
   <!-- Autonumeric -->
   <script src="{{ asset('libraries/autonumeric/4.5.4/autonumeric.min.js') }}"></script>
