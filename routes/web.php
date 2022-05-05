@@ -44,6 +44,8 @@ use App\Http\Controllers\StatusContainerController;
 use App\Http\Controllers\KotaController;
 use App\Http\Controllers\MandorController;
 use App\Http\Controllers\MerkController;
+use App\Http\Controllers\PenerimaanTruckingController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -295,4 +297,8 @@ Route::middleware('auth')->group(function () {
     Route::get('merk/{id}/delete', [MerkController::class, 'delete'])->name('merk.delete');
     Route::get('merk/get', [MerkController::class, 'get'])->name('merk.get');
     Route::resource('merk', MerkController::class);
+    
+    Route::get('penerimaan_trucking/report', [PenerimaanTruckingController::class, 'report'])->name('penerimaan_trucking.report');
+    Route::get('penerimaan_trucking/{id}/delete', [PenerimaanTruckingController::class, 'delete'])->name('penerimaan_trucking.delete');
+    Route::resource('penerimaan_trucking', PenerimaanTruckingController::class);
 });
