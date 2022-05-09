@@ -49,6 +49,8 @@ use App\Http\Controllers\PenerimaanTruckingController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\ZonaController;
 use App\Http\Controllers\TarifController;
+
+use App\Http\Controllers\PengeluaranTruckingController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -304,6 +306,10 @@ Route::middleware('auth')->group(function () {
     Route::get('penerimaan_trucking/report', [PenerimaanTruckingController::class, 'report'])->name('penerimaan_trucking.report');
     Route::get('penerimaan_trucking/{id}/delete', [PenerimaanTruckingController::class, 'delete'])->name('penerimaan_trucking.delete');
     Route::resource('penerimaan_trucking', PenerimaanTruckingController::class);
+
+    Route::get('pengeluaran_trucking/report', [PengeluaranTruckingController::class, 'report'])->name('pengeluaran_trucking.report');
+    Route::get('pengeluaran_trucking/{id}/delete', [PengeluaranTruckingController::class, 'delete'])->name('pengeluaran_trucking.delete');
+    Route::resource('pengeluaran_trucking', PengeluaranTruckingController::class);
 
     Route::get('satuan/field_length', [SatuanController::class, 'fieldLength'])->name('satuan.field_length');
     Route::get('satuan/{id}/delete', [SatuanController::class, 'delete'])->name('satuan.delete');
