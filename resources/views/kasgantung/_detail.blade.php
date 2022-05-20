@@ -32,7 +32,12 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
-        colModel: [{
+        colModel: [
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+          },
+          {
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
@@ -41,10 +46,6 @@
                 decimalSeparator: ',',
                 thousandsSeparator: '.'
             }
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
           },
           {
             label: 'MODIFIEDBY',
