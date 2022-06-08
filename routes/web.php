@@ -51,6 +51,9 @@ use App\Http\Controllers\ZonaController;
 use App\Http\Controllers\TarifController;
 
 use App\Http\Controllers\PengeluaranTruckingController;
+use App\Http\Controllers\OrderanTruckingController;
+use App\Http\Controllers\ProsesAbsensiSupirController;
+use App\Http\Controllers\MekanikController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -325,4 +328,19 @@ Route::middleware('auth')->group(function () {
     Route::get('tarif/{id}/delete', [TarifController::class, 'delete'])->name('tarif.delete');
     Route::get('tarif/get', [TarifController::class, 'get'])->name('tarif.get');
     Route::resource('tarif', TarifController::class);
+
+    Route::get('orderantrucking/field_length', [OrderanTruckingController::class, 'fieldLength'])->name('orderantrucking.field_length');
+    Route::get('orderantrucking/{id}/delete', [OrderanTruckingController::class, 'delete'])->name('orderantrucking.delete');
+    Route::get('orderantrucking/get', [OrderanTruckingController::class, 'get'])->name('orderantrucking.get');
+    Route::resource('orderantrucking', OrderanTruckingController::class);
+
+    Route::get('prosesabsensisupir/field_length', [ProsesAbsensiSupirController::class, 'fieldLength'])->name('prosesabsensisupir.field_length');
+    Route::get('prosesabsensisupir/{id}/delete', [ProsesAbsensiSupirController::class, 'delete'])->name('prosesabsensisupir.delete');
+    Route::get('prosesabsensisupir/get', [ProsesAbsensiSupirController::class, 'get'])->name('prosesabsensisupir.get');
+    Route::resource('prosesabsensisupir', ProsesAbsensiSupirController::class);
+
+    Route::get('mekanik/field_length', [MekanikController::class, 'fieldLength'])->name('mekanik.field_length');
+    Route::get('mekanik/{id}/delete', [MekanikController::class, 'delete'])->name('mekanik.delete');
+    Route::get('mekanik/get', [MekanikController::class, 'get'])->name('mekanik.get');
+    Route::resource('mekanik', MekanikController::class);
 });
