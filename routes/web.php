@@ -54,6 +54,12 @@ use App\Http\Controllers\PengeluaranTruckingController;
 use App\Http\Controllers\OrderanTruckingController;
 use App\Http\Controllers\ProsesAbsensiSupirController;
 use App\Http\Controllers\MekanikController;
+use App\Http\Controllers\SuratPengantarController;
+use App\Http\Controllers\UpahSupirController;
+use App\Http\Controllers\UpahSupirRincianController;
+use App\Http\Controllers\UpahRitasiController;
+use App\Http\Controllers\UpahRitasiRincianController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -343,4 +349,31 @@ Route::middleware('auth')->group(function () {
     Route::get('mekanik/{id}/delete', [MekanikController::class, 'delete'])->name('mekanik.delete');
     Route::get('mekanik/get', [MekanikController::class, 'get'])->name('mekanik.get');
     Route::resource('mekanik', MekanikController::class);
+
+
+    Route::get('suratpengantar/field_length', [SuratPengantarController::class, 'fieldLength'])->name('suratpengantar.field_length');
+    Route::get('suratpengantar/get_gaji', [SuratPengantarController::class, 'getGaji'])->name('suratpengantar.get_gaji');
+    Route::get('suratpengantar/{id}/delete', [SuratPengantarController::class, 'delete'])->name('suratpengantar.delete');
+    Route::get('suratpengantar/get', [SuratPengantarController::class, 'get'])->name('suratpengantar.get');
+    Route::resource('suratpengantar', SuratPengantarController::class);
+
+
+    Route::get('upahsupir/{id}/delete', [UpahSupirController::class, 'delete'])->name('upahsupir.delete');
+    Route::get('upahsupir/index', [UpahSupirController::class, 'index']);
+    Route::get('upahsupir/get', [UpahSupirController::class, 'get'])->name('upahsupir.get');
+    Route::get('upahsupir/export', [UpahSupirController::class, 'export'])->name('upahsupir.export');
+    Route::get('upahsupir/report', [UpahSupirController::class, 'report'])->name('upahsupir.report');
+    Route::resource('upahsupir', UpahSupirController::class);
+
+    Route::resource('upahsupirrincian', UpahSupirRincianController::class);
+
+    Route::get('upahritasi/{id}/delete', [UpahRitasiController::class, 'delete'])->name('upahritasi.delete');
+    Route::get('upahritasi/index', [UpahRitasiController::class, 'index']);
+    Route::get('upahritasi/get', [UpahRitasiController::class, 'get'])->name('upahritasi.get');
+    Route::get('upahritasi/export', [UpahRitasiController::class, 'export'])->name('upahritasi.export');
+    Route::get('upahritasi/report', [UpahRitasiController::class, 'report'])->name('upahritasi.report');
+    Route::resource('upahritasi', UpahRitasiController::class);
+
+    Route::resource('upahritasirincian', UpahRitasiRincianController::class);
+
 });

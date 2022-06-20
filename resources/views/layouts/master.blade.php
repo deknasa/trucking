@@ -170,6 +170,18 @@
   @stack('scripts')
 
   <script type="text/javascript">
+    function separatorNumber(object) {
+      var value = parseInt(object.value.replaceAll('.', '').replaceAll(',', ''));
+
+      if ($.isNumeric(value)) {
+        object.value = value.toLocaleString();
+      } else {
+        object.value = '';
+      }
+
+      return true;
+    }
+  
     $(".formatdate").datepicker({
         dateFormat: 'dd-mm-yy',
         assumeNearbyYear: true
