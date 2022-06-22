@@ -146,26 +146,6 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  USER APPROVAL <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="userapproval" class="form-control" value="{{ $agen['userapproval'] ?? '' }}">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  TGL APPROVAL <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="tglapproval" class="form-control datepicker" value="{{ $agen['tglapproval'] ?? '' }}">
-              </div>
-            </div>
-            <div class="row form-group">
               <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS TAS<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
                 <select name="statustas" class="w-100">
@@ -238,8 +218,11 @@ $indexRow = $_GET['indexRow'] ?? '';
       e.preventDefault()
     })
 
+    
     /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
+      $('[name=top]').val(AutoNumeric.getNumber('[name=top]'))
+      
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
 

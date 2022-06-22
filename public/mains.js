@@ -19,8 +19,8 @@ $(document).ready(function () {
 	$("input, textarea").attr("spellcheck", "false");
 
 	new AutoNumeric.multiple(".autonumeric", {
-		digitGroupSeparator: ".",
-		decimalCharacter: ",",
+		digitGroupSeparator: ",",
+		decimalCharacter: ".",
 	});
 
 	$(document).on("click", "#sidebar-overlay", () => {
