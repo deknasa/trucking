@@ -205,42 +205,16 @@ class MyController extends Controller
     public function getParameter(string $group, string $subgroup): array
     {
         $params = [
-            'filters' => json_encode([
-                'groupOp' => 'AND',
-                'rules' => [
-                    [
-                        'field' => 'grp',
-                        'data' => $group,
-                    ],
-                    [
-                        'field' => 'subgrp',
-                        'data' => $subgroup,
-                    ],
-                ],
-            ])
+            'grp' => $group,
+            'subgrp' => $subgroup
         ];
-
+        
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'parameter', $params);
-
+            ->get(config('app.api_url') . 'parameter/combo', $params);
+        
         return $response['data'] ?? [];
-        // return (new ParameterController)->get([
-        //     'filters' => json_encode([
-        //         'groupOp' => 'AND',
-        //         'rules' => [
-        //             [
-        //                 'field' => 'grp',
-        //                 'data' => $group,
-        //             ],
-        //             [
-        //                 'field' => 'subgrp',
-        //                 'data' => $subgroup,
-        //             ],
-        //         ],
-        //     ]),
-        // ])['rows'];
     }
 
     /* Compatible for single table */
