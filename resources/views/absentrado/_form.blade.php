@@ -89,7 +89,7 @@ $indexRow = $_GET['indexRow'] ?? '';
   let indexUrl = "{{ route('absentrado.index') }}"
   let fieldLengthUrl = "{{ route('absentrado.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl =  "{{ config('app.api_url') . 'absentrado.' }}" 
+  let actionUrl =  "{{ config('app.api_url') . 'absentrado' }}" 
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
