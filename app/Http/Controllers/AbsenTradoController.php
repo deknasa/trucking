@@ -68,7 +68,7 @@ class AbsenTradoController extends MyController
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
         $combo = [
-            'status' => $this->getStatus()
+            'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
         ];
 
         return view('absentrado.add', compact('title', 'breadcrumb', 'combo'));
@@ -112,7 +112,7 @@ class AbsenTradoController extends MyController
         $absenTrado = $response['data'];
 
         $combo = [
-            'status' => $this->getStatus()
+            'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
         ];
 
         return view('absentrado.edit', compact('title', 'absenTrado', 'combo'));
@@ -150,7 +150,7 @@ class AbsenTradoController extends MyController
             $absenTrado = $response['data'];
 
             $combo = [
-                'status' => $this->getStatus()
+                'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
             ];
             
             return view('absentrado.delete', compact('title', 'absenTrado', 'combo'));

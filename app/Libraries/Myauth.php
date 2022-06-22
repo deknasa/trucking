@@ -62,7 +62,10 @@ class Myauth
             'show',
             'cetak',
             'getdetail',
-            'report'
+            'report',
+            'create',
+            'add',
+            'delete'
         ],
     ];
 
