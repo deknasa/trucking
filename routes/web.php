@@ -59,6 +59,7 @@ use App\Http\Controllers\UpahSupirController;
 use App\Http\Controllers\UpahSupirRincianController;
 use App\Http\Controllers\UpahRitasiController;
 use App\Http\Controllers\UpahRitasiRincianController;
+use App\Http\Controllers\RitasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -376,4 +377,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('upahritasirincian', UpahRitasiRincianController::class);
 
+    Route::get('ritasi/field_length', [RitasiController::class, 'fieldLength'])->name('ritasi.field_length');
+    Route::get('ritasi/{id}/delete', [RitasiController::class, 'delete'])->name('ritasi.delete');
+    Route::get('ritasi/get', [RitasiController::class, 'get'])->name('ritasi.get');
+    Route::resource('ritasi', RitasiController::class);
 });

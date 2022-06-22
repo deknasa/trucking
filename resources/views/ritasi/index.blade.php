@@ -1,49 +1,6 @@
 @extends('layouts.master')
 
 @section('content')
-<!-- Modal for report -->
-<div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form id="formRange" target="_blank">
-        @csrf
-        <div class="modal-body">
-          <input type="hidden" name="sidx">
-          <input type="hidden" name="sord">
-
-          <div class="form-group row">
-            <div class="col-sm-2 col-form-label">
-              <label for="">Dari</label>
-            </div>
-            <div class="col-sm-10">
-              <input type="text" name="dari" class="form-control autonumeric-report" autofocus>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <div class="col-sm-2 col-form-label">
-              <label for="">Sampai</label>
-            </div>
-            <div class="col-sm-10">
-              <input type="text" name="sampai" class="form-control autonumeric-report">
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Report</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
@@ -56,8 +13,8 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('suratpengantar.index') }}"
-  let getUrl = "{{ route('suratpengantar.get') }}"
+  let indexUrl = "{{ route('ritasi.index') }}"
+  let getUrl = "{{ route('ritasi.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -98,7 +55,7 @@
     <?php if (isset($_GET['sortorder'])) { ?>
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
-    
+
     /* Set rowNum */
     <?php if (isset($_GET['limit'])) { ?>
       rowNum = "{{ $_GET['limit'] }}"
@@ -110,7 +67,8 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
-        colModel: [{
+        colModel: [
+          {
             label: 'ID',
             name: 'id',
             width: '50px'
@@ -120,25 +78,25 @@
             name: 'nobukti',
           },
           {
-            label: 'TGLBUKTI',
+            label: 'TGL BUKTI',
             name: 'tglbukti',
           },
           {
-            label: 'PELANGGAN',
-            name: 'pelanggan_id',
+            label: 'STATUS RITASI',
+            name: 'statusritasi',
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
+            label: 'SURATPENGANTAR NOBUKTI',
+            name: 'suratpengantar_nobukti',
           },
-          // {
-          //   label: 'NOURUTORDER',
-          //   name: 'nourutorder',
-          // },
-          // {
-          //   label: 'UPAH',
-          //   name: 'upah_id',
-          // },
+          {
+            label: 'SUPIR',
+            name: 'supir_id',
+          },
+          {
+            label: 'TRADO',
+            name: 'trado_id',
+          },
           {
             label: 'DARI',
             name: 'dari_id',
@@ -148,91 +106,18 @@
             name: 'sampai_id',
           },
           {
-            label: 'CONTAINER',
-            name: 'container_id'
+            label: 'JARAK',
+            name: 'jarak',
           },
           {
-            label: 'NO CONT',
-            name: 'nocont'
-          },
-          {
-            label: 'NO CONT2',
-            name: 'nocont2'
-          },
-          {
-            label: 'STATUS CONTAINER',
-            name: 'statuscontainer_id',
-          },
-          {
-            label: 'TRADO',
-            name: 'trado_id',
-          },
-          {
-            label: 'SUPIR',
-            name: 'supir_id',
-          },
-          {
-            label: 'NOJOB',
-            name: 'nojob',
-          },
-          {
-            label: 'NOJOB2',
-            name: 'nojob2',
-          },
-          {
-            label: 'STATUSLONGTRIP',
-            name: 'statuslongtrip',
-          },
-          {
-            label: 'GAJI SUPIR',
-            name: 'gajisupir',
+            label: 'GAJI',
+            name: 'gaji',
+            align: 'right',
             formatter: 'currency',
             formatoptions: {
                 decimalSeparator: ',',
                 thousandsSeparator: '.'
             }
-          },
-          {
-            label: 'GAJI KENEK',
-            name: 'gajikenek',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
-          },
-          {
-            label: 'AGEN',
-            name: 'agen_id',
-          },
-          {
-            label: 'JENIS ORDER',
-            name: 'jenisorder_id',
-          },
-          {
-            label: 'STATUS PERALIHAN',
-            name: 'statusperalihan',
-          },
-          {
-            label: 'TARIF',
-            name: 'tarif_id',
-          },
-          {
-            label: 'NOMINAL PERALIHAN',
-            name: 'nominalperalihan',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
-          },
-          {
-            label: 'NO SP',
-            name: 'nosp',
-          },
-          {
-            label: 'TGLSP',
-            name: 'tglsp',
           },
           {
             label: 'MODIFIEDBY',
@@ -278,7 +163,7 @@
           triggerClick = true
 
           $('.clearsearchclass').click(function() {
-            highlightSearch = ''
+            clearColumnSearch()
           })
 
           if (indexRow > $(this).getDataIDs().length - 1) {
@@ -288,14 +173,14 @@
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
@@ -322,7 +207,7 @@
         onClickButton: function() {
           let limit = $(this).jqGrid('getGridParam', 'postData').rows
 
-          window.location.href = `{{ route('suratpengantar.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+          window.location.href = `{{ route('ritasi.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
       })
 
@@ -354,16 +239,15 @@
         }
       })
 
-      
-
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
         defaultSearch: 'cn',
         groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           clearGlobalSearch()
-        }
+        },
       })
 
     /* Append clear filter button */
@@ -392,15 +276,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('suratpengantar', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('ritasi', 'create') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('suratpengantar', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('ritasi', 'edit') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('suratpengantar', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('ritasi', 'delete') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

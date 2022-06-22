@@ -74,7 +74,16 @@ class SuratPengantarController extends MyController
     {
         try {
             $request['modifiedby'] = Auth::user()->name;
-            
+
+            $request['gajisupir'] = str_replace('.', '', $request['gajisupir']);
+            $request['gajisupir'] = str_replace(',', '', $request['gajisupir']);
+
+            $request['gajikenek'] = str_replace('.', '', $request['gajikenek']);
+            $request['gajikenek'] = str_replace(',', '', $request['gajikenek']);
+
+            $request['komisisupir'] = str_replace('.', '', $request['komisisupir']);
+            $request['komisisupir'] = str_replace(',', '', $request['komisisupir']);
+        
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
@@ -114,6 +123,15 @@ class SuratPengantarController extends MyController
     public function update(Request $request, $id): Response
     {
         $request['modifiedby'] = Auth::user()->name;
+
+        $request['gajisupir'] = str_replace('.', '', $request['gajisupir']);
+        $request['gajisupir'] = str_replace(',', '', $request['gajisupir']);
+
+        $request['gajikenek'] = str_replace('.', '', $request['gajikenek']);
+        $request['gajikenek'] = str_replace(',', '', $request['gajikenek']);
+
+        $request['komisisupir'] = str_replace('.', '', $request['komisisupir']);
+        $request['komisisupir'] = str_replace(',', '', $request['komisisupir']);
 
         $response = Http::withHeaders([
             'Accept' => 'application/json',
