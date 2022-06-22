@@ -687,6 +687,8 @@ $indexRow = $_GET['indexRow'] ?? '';
 
           if (response.status) {
             window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $sortname }}&sortorder={{ $sortorder }}&limit={{ $limit }}`
+          } else {
+            showDialog(response.message)
           }
 
           if (response.errors) {
