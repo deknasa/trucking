@@ -105,7 +105,8 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: getUrl,
+        url: `{{ config('app.api_url') . 'absentrado' }}`,
+        // url: getUrl,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
