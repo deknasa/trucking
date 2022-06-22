@@ -289,15 +289,15 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('userrole', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('userrole', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('userrole', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('userrole', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('userrole', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('userrole', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

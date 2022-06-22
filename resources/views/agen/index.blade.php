@@ -438,24 +438,24 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('agen', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('agen', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('agen', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('agen', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('agen', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('agen', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('agen', 'export') }}`) {
-      $('#delete').addClass('ui-disabled')
+      $('#export').addClass('ui-disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('agen', 'report') }}`) {
-      $('#delete').addClass('ui-disabled')
+      $('#report').addClass('ui-disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {

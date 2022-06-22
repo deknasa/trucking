@@ -262,15 +262,15 @@
       .parent().addClass('px-1')
 
 
-    if (!`{{ $myAuth->hasPermission('container', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('container', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('container', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('container', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('container', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('container', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
   })

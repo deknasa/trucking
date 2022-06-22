@@ -359,15 +359,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('akunpusat', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('akunpusat', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('akunpusat', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('akunpusat', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('akunpusat', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('akunpusat', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

@@ -241,15 +241,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('zona', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('zona', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('zona', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('zona', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('zona', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('zona', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

@@ -300,15 +300,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('status_container', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('status_container', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('status_container', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('status_container', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('status_container', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('status_container', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

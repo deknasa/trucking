@@ -392,15 +392,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('suratpengantar', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('suratpengantar', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('suratpengantar', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('suratpengantar', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('suratpengantar', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('suratpengantar', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

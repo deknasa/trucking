@@ -259,15 +259,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('prosesabsensisupir', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('prosesabsensisupir', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('prosesabsensisupir', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('prosesabsensisupir', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('prosesabsensisupir', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('prosesabsensisupir', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

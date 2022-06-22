@@ -241,15 +241,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('mandor', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('mandor', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('mandor', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('mandor', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('mandor', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('mandor', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

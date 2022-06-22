@@ -276,15 +276,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('ritasi', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('ritasi', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('ritasi', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('ritasi', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('ritasi', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('ritasi', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

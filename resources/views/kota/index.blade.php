@@ -241,15 +241,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('kota', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('kota', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('kota', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('kota', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('kota', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('kota', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

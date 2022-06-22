@@ -285,15 +285,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('penerima', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('penerima', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('penerima', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('penerima', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('penerima', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('penerima', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

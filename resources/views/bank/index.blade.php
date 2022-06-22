@@ -304,15 +304,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('bank', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('bank', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('bank', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('bank', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('bank', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('bank', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

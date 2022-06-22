@@ -297,15 +297,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('pelanggan', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('pelanggan', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pelanggan', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('pelanggan', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pelanggan', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('pelanggan', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

@@ -397,15 +397,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('user', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('user', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('user', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('user', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('user', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('user', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

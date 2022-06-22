@@ -285,15 +285,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('mekanik', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('mekanik', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('mekanik', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('mekanik', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('mekanik', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('mekanik', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

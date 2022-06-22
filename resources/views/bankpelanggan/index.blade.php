@@ -293,15 +293,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('bankpelanggan', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('bankpelanggan', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('bankpelanggan', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('bankpelanggan', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('bankpelanggan', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('bankpelanggan', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

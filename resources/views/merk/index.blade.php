@@ -241,15 +241,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('merk', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('merk', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('merk', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('merk', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('merk', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('merk', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

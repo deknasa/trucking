@@ -300,15 +300,15 @@
       .parent().addClass('px-1')
 
 
-    if (!`{{ $myAuth->hasPermission('cabang', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('cabang', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('cabang', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('cabang', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('cabang', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('cabang', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

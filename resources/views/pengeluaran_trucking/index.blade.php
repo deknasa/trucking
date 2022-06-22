@@ -281,15 +281,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('pengeluaran_trucking', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengeluaran_trucking', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaran_trucking', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengeluaran_trucking', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaran_trucking', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengeluaran_trucking', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

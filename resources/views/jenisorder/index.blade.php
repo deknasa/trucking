@@ -241,15 +241,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('jenisorder', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('jenisorder', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jenisorder', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('jenisorder', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jenisorder', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('jenisorder', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

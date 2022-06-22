@@ -297,15 +297,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('alatbayar', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('alatbayar', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('alatbayar', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('alatbayar', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('alatbayar', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('alatbayar', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

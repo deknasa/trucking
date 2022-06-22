@@ -281,15 +281,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('penerimaan_trucking', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('penerimaan_trucking', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('penerimaan_trucking', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('penerimaan_trucking', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('penerimaan_trucking', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('penerimaan_trucking', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

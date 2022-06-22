@@ -237,15 +237,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('satuan', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('satuan', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('satuan', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('satuan', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('satuan', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('satuan', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

@@ -241,15 +241,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('gudang', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('gudang', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('gudang', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('gudang', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('gudang', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('gudang', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

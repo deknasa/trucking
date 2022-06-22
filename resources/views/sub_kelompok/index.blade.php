@@ -285,15 +285,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('sub_kelompok', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('sub_kelompok', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('sub_kelompok', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('sub_kelompok', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('sub_kelompok', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('sub_kelompok', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

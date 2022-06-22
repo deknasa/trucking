@@ -245,15 +245,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('kategori', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('kategori', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('kategori', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('kategori', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('kategori', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('kategori', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

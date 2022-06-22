@@ -344,15 +344,15 @@
       .addClass('btn-sm btn-info')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('menu', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('menu', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('menu', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('menu', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('menu', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('menu', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

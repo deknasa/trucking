@@ -241,15 +241,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('kelompok', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('kelompok', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('kelompok', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('kelompok', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('kelompok', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('kelompok', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

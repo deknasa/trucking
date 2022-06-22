@@ -173,6 +173,19 @@
         page: page,
         pager: pager,
         viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
         onSelectRow: function(id) {
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
@@ -331,24 +344,24 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('absentrado', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('absentrado', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('absentrado', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('absentrado', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('absentrado', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('absentrado', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('absentrado', 'export') }}`) {
-      $('#delete').addClass('ui-disabled')
+      $('#export').addClass('ui-disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('absentrado', 'report') }}`) {
-      $('#delete').addClass('ui-disabled')
+      $('#report').addClass('ui-disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {

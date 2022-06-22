@@ -299,15 +299,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('orderantrucking', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('orderantrucking', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('orderantrucking', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('orderantrucking', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('orderantrucking', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('orderantrucking', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

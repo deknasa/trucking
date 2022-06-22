@@ -285,15 +285,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('tarif', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('tarif', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('tarif', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('tarif', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('tarif', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('tarif', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 

@@ -237,15 +237,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('jenisemkl', 'create') }}`) {
+    if (!`{{ $myAuth->hasPermission('jenisemkl', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jenisemkl', 'edit') }}`) {
+    if (!`{{ $myAuth->hasPermission('jenisemkl', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jenisemkl', 'delete') }}`) {
+    if (!`{{ $myAuth->hasPermission('jenisemkl', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 
