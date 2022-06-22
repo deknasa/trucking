@@ -72,12 +72,20 @@ use App\Http\Controllers\UpahRitasiRincianController;
 */
 
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+// Route::get('/', function(){
+//     return redirect()->route('login');
+// });
 
 Route::middleware('guest')->group(function () {
-    Route::get('login', [AuthController::class, 'index'])->name('login');
-    Route::get('login/index', [AuthController::class, 'index']);
+    Route::get('login/index', [AuthController::class, 'index'])->name('login');
     Route::post('login', [AuthController::class, 'login'])->name('login.process');
-});
+  });
+
+// Route::middleware('guest')->group(function () {
+//     Route::get('login', [AuthController::class, 'index'])->name('login');
+//     Route::get('login/index', [AuthController::class, 'index']);
+//     Route::post('login', [AuthController::class, 'login'])->name('login.process');
+// });
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('/');

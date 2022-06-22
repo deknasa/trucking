@@ -14,8 +14,9 @@ class AgenController extends MyController
 {
     public $title = 'Agen';
 
-    /**
-     * @ClassName
+      /**
+     * Fungsi index
+     * @ClassName index
      */
     public function index(Request $request)
     {
@@ -62,8 +63,9 @@ class AgenController extends MyController
         return $data;
     }
 
-    /**
-     * @ClassName
+   /**
+     * Fungsi create
+     * @ClassName create
      */
     public function create(): View
     {
@@ -109,7 +111,8 @@ class AgenController extends MyController
     }
 
     /**
-     * @ClassName
+     * Fungsi edit
+     * @ClassName edit
      */
     public function edit($id): View
     {
@@ -155,8 +158,9 @@ class AgenController extends MyController
         return response($response);
     }
 
-    /**
-     * @ClassName
+     /**
+     * Fungsi delete
+     * @ClassName delete
      */
     public function delete($id)
     {
