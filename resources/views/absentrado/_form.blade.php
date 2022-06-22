@@ -87,19 +87,20 @@ $indexRow = $_GET['indexRow'] ?? '';
 @push('scripts')
 <script>
   let indexUrl = "{{ route('absentrado.index') }}"
-  let fieldLengthUrl = "{{ route('absentrado.field_length') }}"
   let action = "{{ $action }}"
   let actionUrl =  "{{ config('app.api_url') . 'absentrado' }}" 
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
-
   /* Set action url */
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $absenTrado['id'] }}`
+    
+  <?php endif; ?>
+
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('absentrado.update', $absenTrado['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('absentrado.destroy', $absenTrado['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 

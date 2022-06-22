@@ -102,10 +102,8 @@ class AbsenTradoController extends MyController
     {
         $title = $this->title;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "absen_trado/$id");
 
@@ -125,10 +123,8 @@ class AbsenTradoController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "absen_trado/$id", $request->all());
 
@@ -144,10 +140,13 @@ class AbsenTradoController extends MyController
             $title = $this->title;
 
             $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
-                ->withToken(session('access_token'))
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "absen_trado/$id");
 
             $absenTrado = $response['data'];
+
+
 
             $combo = [
                 'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
@@ -165,7 +164,6 @@ class AbsenTradoController extends MyController
     public function destroy($id, Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
-
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "absen_trado/$id", $request->all());
@@ -176,7 +174,8 @@ class AbsenTradoController extends MyController
     public function fieldLength(): Response
     {
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'absen_trado/field_length');
 
         return response($response['data']);
