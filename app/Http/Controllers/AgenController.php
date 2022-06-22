@@ -14,7 +14,7 @@ class AgenController extends MyController
 {
     public $title = 'Agen';
 
-      /**
+    /**
      * Fungsi index
      * @ClassName index
      */
@@ -63,7 +63,7 @@ class AgenController extends MyController
         return $data;
     }
 
-   /**
+    /**
      * Fungsi create
      * @ClassName create
      */
@@ -158,7 +158,7 @@ class AgenController extends MyController
         return response($response);
     }
 
-     /**
+    /**
      * Fungsi delete
      * @ClassName delete
      */
@@ -222,7 +222,7 @@ class AgenController extends MyController
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'agen', $request->all());
-        
+
         $agens = $response['data'];
 
         return view('reports.agen', compact('agens'));
@@ -239,7 +239,7 @@ class AgenController extends MyController
         ];
 
         $agens = $this->get($params)['rows'];
-        
+
         $columns = [
             [
                 'label' => 'No',
