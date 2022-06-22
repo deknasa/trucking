@@ -249,7 +249,7 @@
         buttonicon: 'fas fa-plus',
         class: 'btn btn-primary',
         onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').rows
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
 
           window.location.href = `{{ route('absentrado.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
