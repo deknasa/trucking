@@ -204,6 +204,7 @@ $indexRow = $_GET['indexRow'] ?? '';
 
   <?php if ($action == 'edit') : ?>
     method = "PATCH"
+    
   <?php elseif ($action == 'delete') : ?>
     method = "DELETE"
   <?php endif; ?>

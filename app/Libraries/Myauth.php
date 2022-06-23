@@ -45,6 +45,7 @@ class Myauth
             'penerima',
             'pelanggan',
             'status_container',
+            'absentrado',
         ],
         'method' => [
             'gridtab',
