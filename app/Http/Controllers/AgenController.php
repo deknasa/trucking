@@ -97,10 +97,8 @@ class AgenController extends MyController
 
             $request['modifiedby'] = Auth::user()->name;
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-            ])
+            $response = Http::withHeaders($this->httpHeaders)
+                ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->post(config('app.api_url') . 'agen', $request->all());
 
@@ -118,10 +116,8 @@ class AgenController extends MyController
     {
         $title = $this->title;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "agen/$id");
 
@@ -148,10 +144,8 @@ class AgenController extends MyController
 
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "agen/$id", $request->all());
 
@@ -167,10 +161,8 @@ class AgenController extends MyController
         try {
             $title = $this->title;
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
+            $response = Http::withHeaders($this->httpHeaders)
+                ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "agen/$id");
 
@@ -195,10 +187,8 @@ class AgenController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "agen/$id", $request->all());
 
@@ -207,7 +197,8 @@ class AgenController extends MyController
 
     public function fieldLength(): Response
     {
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'agen/field_length');
 
@@ -219,7 +210,8 @@ class AgenController extends MyController
      */
     public function report(Request $request): View
     {
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'agen', $request->all());
 
