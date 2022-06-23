@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class BankController extends Controller
+class BankController extends MyController
 {
     public $title = 'Bank';
     public $access_token = 'tes';
@@ -28,9 +28,8 @@ class BankController extends Controller
     public function index(Request $request)
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
 
-        return view('bank.index', compact('title', 'breadcrumb'));
+        return view('bank.index', compact('title'));
     }
 
     public function get($params = [])
@@ -65,10 +64,9 @@ class BankController extends Controller
     public function create()
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
         $combo = $this->combo();
 
-        return view('bank.add', compact('title', 'breadcrumb','combo'));
+        return view('bank.add', compact('title','combo'));
     }
 
     public function store(Request $request): Response
@@ -76,16 +74,12 @@ class BankController extends Controller
         try {
             $request['modifiedby'] = Auth::user()->name;
             
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-            ])
+            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->post(config('app.api_url') . 'bank', $request->all());
-    
+            
             return response($response, $response->status());
         } catch (\Throwable $th) {
-            dd($th->getMessage());
             throw $th->getMessage();
         }
     }
@@ -135,9 +129,10 @@ class BankController extends Controller
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
             ])
+                ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "bank/$id");
-
+            
             $bank = $response['data'];
             $combo = $this->combo();
 
@@ -155,6 +150,7 @@ class BankController extends Controller
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "bank/$id", $request->all());
 
@@ -173,6 +169,7 @@ class BankController extends Controller
     private function combo()
     {
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'bank/combo');
         
         return $response['data'];

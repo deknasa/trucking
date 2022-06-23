@@ -141,9 +141,13 @@ $indexRow = $_GET['indexRow'] ?? '';
   let indexUrl = "{{ route('bank.index') }}"
   let fieldLengthUrl = "{{ route('bank.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('bank.store') }}"
+  let actionUrl = "{{ config('app.api_url') . 'bank' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
+
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $bank['id'] }}`
+  <?php endif; ?>
 
   /* Set action url */
   <?php if ($action == 'edit') : ?>
@@ -167,14 +171,14 @@ $indexRow = $_GET['indexRow'] ?? '';
     $('#btnSimpan').click(function() {
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
-
+      
       $.ajax({
         url: actionUrl,
         method: method,
         dataType: 'JSON',
         data: $('form').serializeArray(),
         headers: {
-            'X-CSRF-TOKEN': csrfToken,
+          'Authorization': `Bearer {{ session('access_token') }}`
         },
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
@@ -206,9 +210,12 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     /* Get field maxlength */
     $.ajax({
-      url: fieldLengthUrl,
+      url: `{{ config('app.api_url') . 'bank/field_length' }}`,
       method: 'GET',
       dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer {{ session('access_token') }}`
+      },
       success: response => {
         $.each(response, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {
