@@ -91,19 +91,22 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('mekanik.index') }}"
-  let fieldLengthUrl = "{{ route('mekanik.field_length') }}"
+let indexUrl = "{{ route('mekanik.index') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('mekanik.store') }}"
+  let actionUrl =  "{{ config('app.api_url') . 'mekanik' }}" 
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
   /* Set action url */
+
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $mekanik['id'] }}`
+    
+  <?php endif; ?>
+
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('mekanik.update', $mekanik['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('mekanik.destroy', $mekanik['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
@@ -125,10 +128,11 @@ $indexRow = $_GET['indexRow'] ?? '';
         url: actionUrl,
         method: method,
         dataType: 'JSON',
-        data: $('form').serializeArray(),
         headers: {
-            'X-CSRF-TOKEN': csrfToken,
+          'Authorization': `Bearer {{ session('access_token') }}`
         },
+        data: $('form').serializeArray(),
+
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
@@ -162,6 +166,9 @@ $indexRow = $_GET['indexRow'] ?? '';
       url: fieldLengthUrl,
       method: 'GET',
       dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer {{ session('access_token') }}`
+      },
       success: response => {
         $.each(response, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {

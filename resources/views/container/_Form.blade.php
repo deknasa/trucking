@@ -61,18 +61,21 @@
 @push('scripts')
 <script>
     let indexUrl = "{{ route('container.index') }}"
-    let fieldLengthUrl = "{{ route('container.field_length') }}"
     let action = "{{ $action }}"
-    let actionUrl = "{{ route('container.store') }}"
+    let actionUrl = "{{ config('app.api_url') . 'container' }}"
     let method = "POST"
     let csrfToken = "{{ csrf_token() }}"
 
     /* Set action url */
+
+    <?php if ($action !== 'add') : ?>
+        actionUrl += `/{{ $absenTrado['id'] }}`
+
+    <?php endif; ?>
+
     <?php if ($action == 'edit') : ?>
-        actionUrl = "{{ route('container.update', $container['id']) }}"
         method = "PATCH"
     <?php elseif ($action == 'delete') : ?>
-        actionUrl = "{{ route('container.destroy', $container['id']) }}"
         method = "DELETE"
     <?php endif; ?>
 
@@ -93,13 +96,16 @@
                 url: actionUrl,
                 method: method,
                 dataType: 'JSON',
+                headers: {
+                    'Authorization': `Bearer {{ session('access_token') }}`
+                },
                 data: $('form').serializeArray(),
                 success: response => {
                     $('.is-invalid').removeClass('is-invalid')
                     $('.invalid-feedback').remove()
 
                     if (response.status) {
-                            window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
+                        window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
                     }
 
                     if (response.errors) {
@@ -119,6 +125,10 @@
             url: fieldLengthUrl,
             method: 'GET',
             dataType: 'JSON',
+            headers: {
+                'Authorization': `Bearer {{ session('access_token') }}`
+            },
+
             success: response => {
                 $.each(response, (index, value) => {
                     if (value !== null && value !== 0 && value !== undefined) {

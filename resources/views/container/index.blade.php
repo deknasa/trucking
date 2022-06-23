@@ -31,8 +31,6 @@
 <script>
   $(document).ready(function() {
     let indexUrl = "{{ route('container.index') }}"
-    let getUrl = "{{ route('container.get') }}"
-
     let indexRow = 0;
     let page = 0;
     let pager = '#jqGridPager'
@@ -45,6 +43,8 @@
     let postData
     let sortname = 'id'
     let sortorder = 'asc'
+    let autoNumericElements = []
+    let rowNum = 10
 
     /* Set page */
     <?php if (isset($_GET['page'])) { ?>
@@ -71,8 +71,12 @@
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
 
+    <?php if (isset($_GET['limit'])) { ?>
+      rowNum = "{{ $_GET['limit'] }}"
+    <?php } ?>
+
     $("#jqGrid").jqGrid({
-        url: getUrl,
+        url: `{{ config('app.api_url') . 'container' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -107,12 +111,12 @@
 
                       ?>
             `,
-                            dataInit: function(element) {
-                                $(element).select2({
-                                    width: 'resolve',
-                                    theme: "bootstrap4"
-                                });
-                            }
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
             },
           },
           {
@@ -144,12 +148,25 @@
         page: page,
         pager: pager,
         viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
         onSelectRow: function(id) {
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
-          let rows = $(this).jqGrid('getGridParam', 'postData').rows
-          if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         ondblClickRow: function(rowid) {
 
@@ -159,7 +176,7 @@
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').rows
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
 
           $('.clearsearchclass').click(function() {
@@ -200,7 +217,7 @@
         id: 'add',
         buttonicon: 'fas fa-plus',
         onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').rows
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
 
           window.location.href = `{{ route('container.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }
@@ -248,7 +265,7 @@
     /* Append global search */
     loadGlobalSearch()
 
-     
+
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)
       .parent().addClass('px-1')

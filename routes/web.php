@@ -202,6 +202,8 @@ Route::middleware('auth')->group(function () {
     Route::get('container/get', [ContainerController::class, 'get'])->name('container.get');
     Route::resource('container', ContainerController::class);
 
+
+
     Route::get('supir/field_length', [SupirController::class, 'fieldLength'])->name('supir.field_length');
     Route::get('supir/{id}/delete', [SupirController::class, 'delete'])->name('supir.delete');
     Route::resource('supir', SupirController::class);
@@ -356,6 +358,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('mekanik/field_length', [MekanikController::class, 'fieldLength'])->name('mekanik.field_length');
     Route::get('mekanik/{id}/delete', [MekanikController::class, 'delete'])->name('mekanik.delete');
+    Route::get('mekanik/index', [MekanikController::class, 'index']);
     Route::get('mekanik/get', [MekanikController::class, 'get'])->name('mekanik.get');
     Route::resource('mekanik', MekanikController::class);
 

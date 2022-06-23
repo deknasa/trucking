@@ -46,6 +46,8 @@ class Myauth
             'pelanggan',
             'status_container',
             'absentrado',
+            'mekanik',
+            'container',
         ],
         'method' => [
             'gridtab',
