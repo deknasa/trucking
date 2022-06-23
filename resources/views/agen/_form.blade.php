@@ -234,16 +234,6 @@ $indexRow = $_GET['indexRow'] ?? '';
             setErrorMessages(response.errors)
           }
         },
-        error: error => {
-          if (error.status === 422) {
-            $('.is-invalid').removeClass('is-invalid')
-            $('.invalid-feedback').remove()
-
-            setErrorMessages(error.responseJSON.errors);
-          } else {
-            showDialog(error.statusText)
-          }
-        },
       }).always(() => {
         $('#loader').addClass('d-none')
         $(this).removeAttr('disabled')

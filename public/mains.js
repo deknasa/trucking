@@ -53,7 +53,7 @@ $(document).on("sidebar:toggle", () => {
 
 $(document).ajaxError((event, jqXHR, ajaxSettings, thrownError) => {
 	if (jqXHR.status !== 422) {
-		showDialog(thrownError);
+		showDialog(thrownError, jqXHR.responseJSON.message);
 	}
 });
 
@@ -671,8 +671,9 @@ $(document)
 		document.querySelector(".select2-search__field").focus();
 	});
 
-function showDialog(message = "") {
-	$("#dialog-message p").html(message);
+function showDialog(statusText = "", message = "") {
+	$("#dialog-message").find('p').remove()
+	$("#dialog-message").append(`<p> ${statusText} </p><p> ${message} </p>`);
 	$("#dialog-message").dialog({
 		modal: true,
 	});
