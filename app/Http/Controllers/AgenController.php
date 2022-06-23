@@ -74,7 +74,6 @@ class AgenController extends MyController
 
         $combo = [
             'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
-            'statusapproval' => $this->getParameter('STATUS APPROVAL', 'STATUS APPROVAL'),
             'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
         ];
 
@@ -125,7 +124,6 @@ class AgenController extends MyController
 
         $combo = [
             'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
-            'statusapproval' => $this->getParameter('STATUS APPROVAL', 'STATUS APPROVAL'),
             'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
         ];
 
@@ -170,7 +168,6 @@ class AgenController extends MyController
 
             $combo = [
                 'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
-                'statusapproval' => $this->getParameter('STATUS APPROVAL', 'STATUS APPROVAL'),
                 'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
             ];
 

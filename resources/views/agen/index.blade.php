@@ -133,18 +133,18 @@
             stype: 'select',
             searchoptions: {
               value: `:ALL;<?php
-                      $i = 1;
+                            $i = 1;
 
-                      foreach ($combo['statusaktif'] as $statusaktif) :
-                        echo "$statusaktif[text]:$statusaktif[text]";
+                            foreach ($combo['statusaktif'] as $statusaktif) :
+                              echo "$statusaktif[text]:$statusaktif[text]";
 
-                        if ($i !== count($combo['statusaktif'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
+                              if ($i !== count($combo['statusaktif'])) {
+                                echo ";";
+                              }
+                              $i++;
+                            endforeach
 
-                      ?>
+                            ?>
             `,
               dataInit: function(element) {
                 $(element).select2({
@@ -184,18 +184,18 @@
             stype: 'select',
             searchoptions: {
               value: `:ALL;<?php
-                      $i = 1;
+                            $i = 1;
 
-                      foreach ($combo['statusapproval'] as $statusapproval) :
-                        echo "$statusapproval[text]:$statusapproval[text]";
+                            foreach ($combo['statusapproval'] as $statusapproval) :
+                              echo "$statusapproval[text]:$statusapproval[text]";
 
-                        if ($i !== count($combo['statusapproval'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
+                              if ($i !== count($combo['statusapproval'])) {
+                                echo ";";
+                              }
+                              $i++;
+                            endforeach
 
-                      ?>
+                            ?>
             `,
               dataInit: function(element) {
                 $(element).select2({
@@ -219,18 +219,18 @@
             stype: 'select',
             searchoptions: {
               value: `:ALL;<?php
-                      $i = 1;
+                            $i = 1;
 
-                      foreach ($combo['statustas'] as $statustas) :
-                        echo "$statustas[text]:$statustas[text]";
+                            foreach ($combo['statustas'] as $statustas) :
+                              echo "$statustas[text]:$statustas[text]";
 
-                        if ($i !== count($combo['statustas'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
+                              if ($i !== count($combo['statustas'])) {
+                                echo ";";
+                              }
+                              $i++;
+                            endforeach
 
-                      ?>
+                            ?>
             `,
               dataInit: function(element) {
                 $(element).select2({
@@ -401,6 +401,32 @@
         }
       })
 
+      .navButtonAdd(pager, {
+        caption: 'UN/APPROVE',
+        title: 'UN/APPROVE',
+        id: 'approval',
+        buttonicon: 'fas fa-check',
+        onClickButton: function(a, b, c) {
+          let id = $(this).getGridParam('selrow')
+
+          $('#loader').removeClass('d-none')
+
+          $.ajax({
+            url: `{{ config('app.api_url') }}agen/${id}/approval`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+              request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+              $(this).trigger('reloadGrid')
+            }
+          }).always(() => {
+            $('#loader').addClass('d-none')
+          })
+        }
+      })
+
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
@@ -438,6 +464,14 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
+    $('#approval .ui-pg-div')
+      .addClass('btn-sm')
+      .css({
+        'background': '#6619ff',
+        'color': '#fff'
+      })
+      .parent().addClass('px-1')
+
     if (!`{{ $myAuth->hasPermission('agen', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
@@ -456,6 +490,10 @@
 
     if (!`{{ $myAuth->hasPermission('agen', 'report') }}`) {
       $('#report').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('agen', 'approval') }}`) {
+      $('#approval').addClass('ui-disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -481,57 +519,57 @@
       })
     })
 
-$('#formRange').submit(function(event) {
-  event.preventDefault()
+    $('#formRange').submit(function(event) {
+      event.preventDefault()
 
-  let params
-  let submitButton = $(this).find('button:submit')
+      let params
+      let submitButton = $(this).find('button:submit')
 
-  submitButton.attr('disabled', 'disabled')
+      submitButton.attr('disabled', 'disabled')
 
-  /* Set params value */
-  for (var key in postData) {
-    if (params != "") {
-      params += "&";
-    }
-    params += key + "=" + encodeURIComponent(postData[key]);
-  }
-
-  let formRange = $('#formRange')
-  let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-  let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
-  params += `&offset=${offset}&limit=${limit}`
-
-  if ($('#rangeModal').data('action') == 'export') {
-    let xhr = new XMLHttpRequest()
-    xhr.open('GET', `{{ config('app.api_url') }}agen/export?${params}`, true)
-    xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
-    xhr.responseType = 'arraybuffer'
-
-    xhr.onload = function(e) {
-      if (this.status === 200) {
-        if (this.response !== undefined) {
-          let blob = new Blob([this.response], {
-            type: "application/vnd.ms-excel"
-          })
-          let link = document.createElement('a')
-
-          link.href = window.URL.createObjectURL(blob)
-          link.download = `laporanParameter${(new Date).getTime()}.xlsx`
-          link.click()
-
-          submitButton.removeAttr('disabled')
+      /* Set params value */
+      for (var key in postData) {
+        if (params != "") {
+          params += "&";
         }
+        params += key + "=" + encodeURIComponent(postData[key]);
       }
-    }
 
-    xhr.send()
-  } else if ($('#rangeModal').data('action') == 'report') {
-    window.open(`{{ route('agen.report') }}?${params}`)
+      let formRange = $('#formRange')
+      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+      params += `&offset=${offset}&limit=${limit}`
 
-    submitButton.removeAttr('disabled')
-  }
-})
+      if ($('#rangeModal').data('action') == 'export') {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `{{ config('app.api_url') }}agen/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+        xhr.responseType = 'arraybuffer'
+
+        xhr.onload = function(e) {
+          if (this.status === 200) {
+            if (this.response !== undefined) {
+              let blob = new Blob([this.response], {
+                type: "application/vnd.ms-excel"
+              })
+              let link = document.createElement('a')
+
+              link.href = window.URL.createObjectURL(blob)
+              link.download = `laporanParameter${(new Date).getTime()}.xlsx`
+              link.click()
+
+              submitButton.removeAttr('disabled')
+            }
+          }
+        }
+
+        xhr.send()
+      } else if ($('#rangeModal').data('action') == 'report') {
+        window.open(`{{ route('agen.report') }}?${params}`)
+
+        submitButton.removeAttr('disabled')
+      }
+    })
   })
 </script>
 @endpush()
