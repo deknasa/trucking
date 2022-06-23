@@ -73,9 +73,9 @@ use App\Http\Controllers\RitasiController;
 */
 
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-// Route::get('/', function(){
-//     return redirect()->route('login');
-// });
+Route::get('/', function(){
+    return redirect()->route('login');
+});
 
 Route::middleware('guest')->group(function () {
     Route::get('login/index', [AuthController::class, 'index'])->name('login');
