@@ -643,19 +643,23 @@ $indexRow = $_GET['indexRow'] ?? '';
 </script>
 
 <script>
+ 
+
   let indexUrl = "{{ route('suratpengantar.index') }}"
-  let fieldLengthUrl = "{{ route('suratpengantar.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('suratpengantar.store') }}"
+  let actionUrl =  "{{ config('app.api_url') . 'suratpengantar' }}" 
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
   /* Set action url */
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $suratpengantar['id'] }}`
+    
+  <?php endif; ?>
+
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('suratpengantar.update', $suratpengantar['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('suratpengantar.destroy', $suratpengantar['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
@@ -679,8 +683,12 @@ $indexRow = $_GET['indexRow'] ?? '';
         dataType: 'JSON',
         data: $('form').serializeArray(),
         headers: {
-            'X-CSRF-TOKEN': csrfToken,
+          'Authorization': `Bearer {{ session('access_token') }}`
         },
+
+        // headers: {
+        //     'X-CSRF-TOKEN': csrfToken,
+        // },
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
@@ -716,6 +724,10 @@ $indexRow = $_GET['indexRow'] ?? '';
       url: fieldLengthUrl,
       method: 'GET',
       dataType: 'JSON',
+      headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
+
       success: response => {
         $.each(response, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {

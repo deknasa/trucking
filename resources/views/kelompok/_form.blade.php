@@ -90,19 +90,22 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
+  
   let indexUrl = "{{ route('kelompok.index') }}"
-  let fieldLengthUrl = "{{ route('kelompok.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('kelompok.store') }}"
+  let actionUrl =  "{{ config('app.api_url') . 'kelompok' }}" 
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
   /* Set action url */
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $kelompok['id'] }}`
+    
+  <?php endif; ?>
+
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('kelompok.update', $kelompok['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('kelompok.destroy', $kelompok['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
@@ -124,6 +127,9 @@ $indexRow = $_GET['indexRow'] ?? '';
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        headers: {
+        'Authorization': `Bearer {{ session('access_token') }}`
+      },
         data: $('form').serializeArray(),
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
@@ -152,6 +158,9 @@ $indexRow = $_GET['indexRow'] ?? '';
       url: fieldLengthUrl,
       method: 'GET',
       dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer {{ session('access_token') }}`
+      },
       success: response => {
         $.each(response, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {

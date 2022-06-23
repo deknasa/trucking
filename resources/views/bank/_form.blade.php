@@ -152,14 +152,16 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
+
   let indexUrl = "{{ route('bank.index') }}"
-  let fieldLengthUrl = "{{ route('bank.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ config('app.api_url') . 'bank' }}"
+  let actionUrl =  "{{ config('app.api_url') . 'bank' }}" 
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
-  <?php if ($action !== 'add') : ?>
+
+  
+<?php if ($action !== 'add') : ?>
     actionUrl += `/{{ $bank['id'] }}`
   <?php endif; ?>
 

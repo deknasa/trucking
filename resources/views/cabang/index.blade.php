@@ -14,7 +14,6 @@
 @push('scripts')
 <script>
   let indexUrl = "{{ route('cabang.index') }}"
-  let getUrl = "{{ route('cabang.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -151,8 +150,8 @@
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
-          let rows = $(this).jqGrid('getGridParam', 'postData').limit
-          if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         ondblClickRow: function(rowid) {
 

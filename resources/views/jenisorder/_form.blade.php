@@ -90,19 +90,23 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
+
+
   let indexUrl = "{{ route('jenisorder.index') }}"
-  let fieldLengthUrl = "{{ route('jenisorder.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('jenisorder.store') }}"
+  let actionUrl =  "{{ config('app.api_url') . 'jenisorder' }}" 
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
   /* Set action url */
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $jenisorder['id'] }}`
+    
+  <?php endif; ?>
+
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('jenisorder.update', $jenisorder['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('jenisorder.destroy', $jenisorder['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
@@ -124,6 +128,9 @@ $indexRow = $_GET['indexRow'] ?? '';
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        headers: {
+        'Authorization': `Bearer {{ session('access_token') }}`
+      },
         data: $('form').serializeArray(),
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
@@ -152,6 +159,9 @@ $indexRow = $_GET['indexRow'] ?? '';
       url: fieldLengthUrl,
       method: 'GET',
       dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer {{ session('access_token') }}`
+      },
       success: response => {
         $.each(response, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {

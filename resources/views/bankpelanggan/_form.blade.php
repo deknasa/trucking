@@ -100,19 +100,25 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
+
+
   let indexUrl = "{{ route('bankpelanggan.index') }}"
-  let fieldLengthUrl = "{{ route('bankpelanggan.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('bankpelanggan.store') }}"
+  let actionUrl =  "{{ config('app.api_url') . 'bankpelanggan' }}" 
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
+
   
   /* Set action url */
+
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $bankpelanggan['id'] }}`
+    
+  <?php endif; ?>
+
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('bankpelanggan.update', $bankpelanggan['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('bankpelanggan.destroy', $bankpelanggan['id']) }}"
     method = "DELETE"
   <?php endif; ?>
   
@@ -134,6 +140,9 @@ $indexRow = $_GET['indexRow'] ?? '';
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         data: $('form').serializeArray(),
         headers: {
             'X-CSRF-TOKEN': csrfToken,
@@ -171,6 +180,9 @@ $indexRow = $_GET['indexRow'] ?? '';
       url: fieldLengthUrl,
       method: 'GET',
       dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer {{ session('access_token') }}`
+      },
       success: response => {
         $.each(response, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {

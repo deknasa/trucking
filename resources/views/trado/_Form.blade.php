@@ -444,19 +444,24 @@
 
 @push('scripts')
 <script>
+
+
     let indexUrl = "{{ route('trado.index') }}"
-    let fieldLengthUrl = "{{ route('trado.field_length') }}"
-    let action = "{{ $action }}"
-    let actionUrl = "{{ route('trado.store') }}"
-    let method = "POST"
-    let csrfToken = "{{ csrf_token() }}"
+  let action = "{{ $action }}"
+  let actionUrl =  "{{ config('app.api_url') . 'trado' }}" 
+  let method = "POST"
+  let csrfToken = "{{ csrf_token() }}"
+
+  /* Set action url */
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $trado['id'] }}`
+    
+  <?php endif; ?>
 
     /* Set action url */
     <?php if ($action == 'edit') : ?>
-        actionUrl = "{{ route('trado.update', $trado['id']) }}?_method=PUT"
         method = "POST"
     <?php elseif ($action == 'delete') : ?>
-        actionUrl = "{{ route('trado.destroy', $trado['id']) }}"
         method = "POST"
     <?php endif; ?>
     
@@ -645,6 +650,10 @@
             url: fieldLengthUrl,
             method: 'GET',
             dataType: 'JSON',
+            headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
+
             success: response => {
                 $.each(response, (index, value) => {
                     if (value !== null && value !== 0 && value !== undefined) {

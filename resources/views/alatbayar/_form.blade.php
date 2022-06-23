@@ -132,19 +132,25 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
+
+
   let indexUrl = "{{ route('alatbayar.index') }}"
-  let fieldLengthUrl = "{{ route('alatbayar.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('alatbayar.store') }}"
+  let actionUrl =  "{{ config('app.api_url') . 'alatbayar' }}" 
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
+
   
   /* Set action url */
+
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $alatbayar['id'] }}`
+    
+  <?php endif; ?>
+
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('alatbayar.update', $alatbayar['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('alatbayar.destroy', $alatbayar['id']) }}"
     method = "DELETE"
   <?php endif; ?>
   
@@ -166,6 +172,9 @@ $indexRow = $_GET['indexRow'] ?? '';
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         data: $('form').serializeArray(),
         headers: {
             'X-CSRF-TOKEN': csrfToken,
@@ -203,6 +212,9 @@ $indexRow = $_GET['indexRow'] ?? '';
       url: fieldLengthUrl,
       method: 'GET',
       dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer {{ session('access_token') }}`
+      },
       success: response => {
         $.each(response, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {

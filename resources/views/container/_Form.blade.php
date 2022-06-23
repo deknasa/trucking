@@ -66,10 +66,11 @@
     let method = "POST"
     let csrfToken = "{{ csrf_token() }}"
 
+    
     /* Set action url */
 
     <?php if ($action !== 'add') : ?>
-        actionUrl += `/{{ $absenTrado['id'] }}`
+        actionUrl += `/{{ $container['id'] }}`
 
     <?php endif; ?>
 

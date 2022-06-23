@@ -57,7 +57,6 @@
 @push('scripts')
 <script>
   let indexUrl = "{{ route('bank.index') }}"
-  let getUrl = "{{ route('bank.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'

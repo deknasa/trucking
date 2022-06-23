@@ -77,19 +77,25 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
+
+
   let indexUrl = "{{ route('cabang.index') }}"
-  let fieldLengthUrl = "{{ route('cabang.field_length') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('cabang.store') }}"
+  let actionUrl =  "{{ config('app.api_url') . 'cabang' }}" 
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
+
   /* Set action url */
+
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $cabang['id'] }}`
+    
+  <?php endif; ?>
+
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('cabang.update', $cabang['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('cabang.destroy', $cabang['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
@@ -110,6 +116,9 @@ $indexRow = $_GET['indexRow'] ?? '';
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         data: $('form').serializeArray(),
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
@@ -136,6 +145,9 @@ $indexRow = $_GET['indexRow'] ?? '';
       url: fieldLengthUrl,
       method: 'GET',
       dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer {{ session('access_token') }}`
+      },
       success: response => {
         $.each(response, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {
