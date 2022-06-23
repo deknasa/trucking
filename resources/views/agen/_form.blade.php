@@ -134,18 +134,6 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
             <div class="row form-group">
-              <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS APPROVAL<span class="text-danger">*</span></label>
-              <div class="col-12 col-md-10">
-                <select name="statusapproval" class="w-100">
-                  <optgroup label="">
-                    @foreach($combo['statusapproval'] as $statusapproval)
-                    <option value="{{ $statusapproval['id'] }}" {{ $statusapproval['id'] == @$absenTrado['statusaktif'] ? 'selected' : '' }}>{{ $statusapproval['text'] }}</option>
-                    @endforeach
-                  </optgroup>
-                </select>
-              </div>
-            </div>
-            <div class="row form-group">
               <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS TAS<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
                 <select name="statustas" class="w-100">
