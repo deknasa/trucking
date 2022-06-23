@@ -12,7 +12,22 @@
 </div>
 
 @push('scripts')
+<script src="{{ asset('js/app.js') }}"></script>
 <script>
+  Echo.channel('export')
+    .listen('UpdateExportProgress', event => {
+      $('.modal-body').append(`<div id="progressbar"></div>`)
+      
+      $(document).find('#progressbar').progressbar({
+        value: event.progress
+      })
+
+      if (event.progress >= 100) {
+        $('#progressbar').remove()
+      }
+    })
+
+
   let indexUrl = "{{ route('parameter.index') }}"
   let indexRow = 0;
   let page = 1;
@@ -366,6 +381,10 @@
               submitButton.removeAttr('disabled')
             }
           }
+        }
+
+        xhr.onerror = () => {
+          submitButton.removeAttr('disabled')
         }
 
         xhr.send()
