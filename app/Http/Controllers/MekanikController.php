@@ -11,10 +11,7 @@ class MekanikController extends MyController
 {
     public $title = 'Mekanik';
 
-    public $httpHeaders = [
-        'Accept' => 'application/json',
-        'Content-Type' => 'application/json',
-    ];
+ 
 
     // public function __construct()
     // {
@@ -28,8 +25,8 @@ class MekanikController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-
-        return view('mekanik.index', compact('title'));
+        $breadcrumb = $this->breadcrumb;
+        return view('mekanik.index', compact('title', 'breadcrumb'));
     }
 
     public function get($params = [])

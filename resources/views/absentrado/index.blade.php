@@ -56,8 +56,8 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('absentrado.index') }}"
-  let getUrl = "{{ route('absentrado.get') }}"
+    let indexUrl = "{{ route('absentrado.index') }}"
+
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'

@@ -6,7 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 
-class ContainerController extends Controller
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\Response;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
+class ContainerController extends MyController
 {
     public $title = 'Container';
     public $httpHeader = [
@@ -22,12 +27,12 @@ class ContainerController extends Controller
     {
 
         $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
         $data = [
-            'pagename' => 'Menu Utama Container',
-            'combo' => $this->combo('list')
+            'combo' => $this->combo('list'),
         ];
 
-        return view('container.index', compact('title', 'data'));
+        return view('container.index', compact('title', 'breadcrumb', 'data'));
     }
 
     public function get($params = []): array
@@ -39,7 +44,6 @@ class ContainerController extends Controller
             'sortOrder' => $params['sord'] ?? request()->sord,
             'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
         ];
-        
         $response = Http::withHeaders(request()->header())
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'container', $params);
@@ -167,16 +171,19 @@ class ContainerController extends Controller
 
     public function combo($aksi)
     {
+
         $status = [
             'status' => $aksi,
             'grp' => 'STATUS AKTIF',
             'subgrp' => 'STATUS AKTIF',
         ];
 
-        $response = Http::withHeaders($this->httpHeader)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'container/combostatus', $status);
+            ->get(config('app.api_url') . 'user/combostatus', $status);
 
         return $response['data'];
     }
+
+    
 }

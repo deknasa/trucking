@@ -47,6 +47,8 @@ class Myauth
             'status_container',
             'absentrado',
             'bank',
+            'mekanik',
+            'container',
         ],
         'method' => [
             'gridtab',

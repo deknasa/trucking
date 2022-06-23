@@ -14,6 +14,7 @@ class AbsenTradoController extends MyController
 {
     public $title = 'AbsenTrado';
 
+    
     /**
      * @ClassName
      */

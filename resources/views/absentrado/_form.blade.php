@@ -88,7 +88,7 @@ $indexRow = $_GET['indexRow'] ?? '';
 <script>
   let indexUrl = "{{ route('absentrado.index') }}"
   let action = "{{ $action }}"
-  let actionUrl =  "{{ config('app.api_url') . 'absentrado' }}" 
+  let actionUrl =  "{{ config('app.api_url') . 'absen_trado' }}" 
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
