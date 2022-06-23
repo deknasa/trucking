@@ -102,7 +102,14 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="kodepenerimaan" class="form-control" value="{{ $bank['kodepenerimaan'] ?? '' }}">
+                <select name="kodepenerimaan" class="form-control select2bs4">
+                        <option value="">PILIH PENERIMAAN</option>
+                        <?php foreach ($combo['kodepenerimaan'] as $key => $item) { 
+                            $selected = @$bank['kodepenerimaan'] == $item['id'] ? "selected" : ""
+                        ?>
+                            <option value="{{ $item['id'] }}" {{ $selected }} >{{ $item['text'] }}</option>
+                        <?php } ?>
+                </select>
               </div>
             </div>
             <div class="row form-group">
@@ -112,7 +119,14 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="kodepengeluaran" class="form-control" value="{{ $bank['kodepengeluaran'] ?? '' }}">
+                <select name="kodepengeluaran" class="form-control select2bs4">
+                        <option value="">PILIH PENGELUARAN</option>
+                        <?php foreach ($combo['kodepengeluaran'] as $key => $item) { 
+                            $selected = @$bank['kodepengeluaran'] == $item['id'] ? "selected" : ""
+                        ?>
+                            <option value="{{ $item['id'] }}" {{ $selected }} >{{ $item['text'] }}</option>
+                        <?php } ?>
+                </select>
               </div>
             </div>
           </div>
@@ -151,10 +165,8 @@ $indexRow = $_GET['indexRow'] ?? '';
 
   /* Set action url */
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('bank.update', $bank['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('bank.destroy', $bank['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 

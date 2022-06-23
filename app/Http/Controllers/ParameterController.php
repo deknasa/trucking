@@ -93,7 +93,7 @@ class ParameterController extends MyController
     public function edit($id)
     {
         $title = $this->title;
-
+        
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))

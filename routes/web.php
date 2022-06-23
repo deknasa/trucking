@@ -207,6 +207,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('supir', SupirController::class);
 
     Route::get('bank/field_length', [BankController::class, 'fieldLength'])->name('bank.field_length');
+    Route::get('bank/index', [BankController::class, 'index']);
     Route::get('bank/{id}/delete', [BankController::class, 'delete'])->name('bank.delete');
     Route::get('bank/get', [BankController::class, 'get'])->name('bank.get');
     Route::resource('bank', BankController::class);

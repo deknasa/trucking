@@ -138,12 +138,10 @@
           {
             label: 'KODE PENERIMAAN',
             name: 'kodepenerimaan',
-            align: 'center'
           },
           {
             label: 'KODE PENGELUARAN',
             name: 'kodepengeluaran',
-            align: 'center'
           },
           {
             label: 'MODIFIEDBY',

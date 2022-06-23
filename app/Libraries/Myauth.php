@@ -46,6 +46,7 @@ class Myauth
             'pelanggan',
             'status_container',
             'absentrado',
+            'bank',
         ],
         'method' => [
             'gridtab',
@@ -134,7 +135,7 @@ class Myauth
         if ($this->in_array_custom($method, $data->toArray()) == false && in_array($method, $this->exceptAuth['method']) == false) {
             return false;
         }
-
+        
         return true;
     }
 
