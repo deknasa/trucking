@@ -118,11 +118,6 @@
             align: 'center'
           },
           {
-            label: 'TGL',
-            name: 'tgl',
-            align: 'center'
-          },
-          {
             label: 'NOM PINJ SALDO AWAL',
             name: 'nominalpinjamansaldoawal',
             align: 'center'
@@ -133,13 +128,13 @@
             align: 'center'
           },
           {
-            label: 'TGL EXP SIM',
-            name: 'tglexpsim',
+            label: 'SIM',
+            name: 'nosim',
             align: 'center'
           },
           {
-            label: 'SIM',
-            name: 'nosim',
+            label: 'TGL EXP SIM',
+            name: 'tglexpsim',
             align: 'center'
           },
           {
@@ -362,6 +357,26 @@
 
     /* Append global search */
     loadGlobalSearch()
+
+    $('#add .ui-pg-div')
+      .addClass(`btn-sm btn-primary`)
+      .parent().addClass('px-1')
+
+    $('#edit .ui-pg-div')
+      .addClass('btn-sm btn-success')
+      .parent().addClass('px-1')
+
+    $('#delete .ui-pg-div')
+      .addClass('btn-sm btn-danger')
+      .parent().addClass('px-1')
+
+    $('#report .ui-pg-div')
+      .addClass('btn-sm btn-info')
+      .parent().addClass('px-1')
+
+    $('#export .ui-pg-div')
+      .addClass('btn-sm btn-warning')
+      .parent().addClass('px-1')
   })
 
   /**
