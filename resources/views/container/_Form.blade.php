@@ -13,22 +13,30 @@
                         <input type="hidden" name="page" value="{{ $_GET['page'] ?? 1 }}">
 
                         <div class="row form-group">
-                            <label for="staticEmail" class="col-sm-3 col-form-label">ID <span class="text-danger"></span></label>
-                            <div class="col-sm-2">
+                            <label for="staticEmail" class="col-12 col-md-2 col-form-label">ID <span class="text-danger"></span></label>
+                            <div class="col-12 col-md-10">
                                 <input type="text" name="id" class="form-control" value="{{ $container['id'] ?? '' }}" readonly>
                             </div>
                         </div>
 
                         <div class="row form-group">
-                            <label for="staticEmail" class="col-sm-3 col-form-label">Keterangan <span class="text-danger">*</span></label>
-                            <div class="col-sm-3">
+                            <label for="staticEmail" class="col-12 col-md-2 col-form-label">Kode Container <span class="text-danger">*</span></label>
+                            <div class="col-12 col-md-10">
+                                <input type="text" name="kodecontainer" class="form-control" value="{{ $container['kodecontainer'] ?? '' }}">
+                            </div>
+                        </div>
+
+
+                        <div class="row form-group">
+                            <label for="staticEmail" class="col-12 col-md-2 col-form-label">Keterangan <span class="text-danger">*</span></label>
+                            <div class="col-12 col-md-10">
                                 <input type="text" name="keterangan" class="form-control" value="{{ $container['keterangan'] ?? '' }}">
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="staticEmail" class="col-sm-3 col-form-label">Status Aktif<span class="text-danger">*</span></label>
-                            <div class="col-sm-4">
+                            <label for="staticEmail" class="col-12 col-md-2 col-form-label">Status Aktif<span class="text-danger">*</span></label>
+                            <div class="col-12 col-md-10">
                                 <select class="form-control select2bs4  <?= @$disable2 ?>" style="width: 100%;" name="statusaktif" id="statusaktif">
                                     <?php foreach ($data['combo'] as $status) : ?>;
                                     <option value="<?= $status['id'] ?>" <?= $status['id'] == @$container['statusaktif'] ? 'selected' : '' ?>><?= $status['keterangan'] ?></option>

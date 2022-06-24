@@ -56,7 +56,7 @@
 
 @push('scripts')
 <script>
-    let indexUrl = "{{ route('absentrado.index') }}"
+  let indexUrl = "{{ route('absentrado.index') }}"
 
   let indexRow = 0;
   let page = 0;

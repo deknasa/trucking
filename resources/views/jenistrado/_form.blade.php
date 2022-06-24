@@ -52,18 +52,14 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  STATUS AKTIF <span class="text-danger">*</span></label>
-              </div>
+              <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
-                <select name="statusaktif" class="form-control select2bs4">
-                        <option value="">PILIH STATUS</option>
-                        <?php foreach ($combo['statusaktif'] as $key => $item) { 
-                            $selected = @$jenistrado['statusaktif'] == $item['id'] ? "selected" : ""
-                        ?>
-                            <option value="{{ $item['id'] }}" {{ $selected }} >{{ $item['text'] }}</option>
-                        <?php } ?>
+                <select name="statusaktif" class="w-100">
+                  <optgroup label="">
+                    @foreach($combo['status'] as $status)
+                    <option value="{{ $status['id'] }}" {{ $status['id'] == @$jenistrado['statusaktif'] ? 'selected' : '' }}>{{ $status['text'] }}</option>
+                    @endforeach
+                  </optgroup>
                 </select>
               </div>
             </div>
@@ -90,18 +86,16 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
-
-
   let indexUrl = "{{ route('jenistrado.index') }}"
   let action = "{{ $action }}"
-  let actionUrl =  "{{ config('app.api_url') . 'jenistrado' }}" 
+  let actionUrl = "{{ config('app.api_url') . 'jenistrado' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
   /* Set action url */
   <?php if ($action !== 'add') : ?>
     actionUrl += `/{{ $jenistrado['id'] }}`
-    
+
   <?php endif; ?>
 
   <?php if ($action == 'edit') : ?>
@@ -129,8 +123,8 @@ $indexRow = $_GET['indexRow'] ?? '';
         method: method,
         dataType: 'JSON',
         headers: {
-        'Authorization': `Bearer {{ session('access_token') }}`
-      },
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         data: $('form').serializeArray(),
         success: response => {
           $('.is-invalid').removeClass('is-invalid')

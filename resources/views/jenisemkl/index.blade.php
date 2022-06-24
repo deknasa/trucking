@@ -61,7 +61,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-      url: `{{ config('app.api_url') . 'jenisemkl' }}`,
+        url: `{{ config('app.api_url') . 'jenisemkl' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -78,6 +78,32 @@
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+          },
+          {
+            label: 'STATUS',
+            name: 'statusaktif',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combo'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combo'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'MODIFIEDBY',

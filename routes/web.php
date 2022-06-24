@@ -206,12 +206,15 @@ Route::middleware('auth')->group(function () {
 
     Route::get('supir/field_length', [SupirController::class, 'fieldLength'])->name('supir.field_length');
     Route::get('supir/{id}/delete', [SupirController::class, 'delete'])->name('supir.delete');
+    Route::get('supir/get', [SupirController::class, 'get'])->name('bank.get');
+    Route::get('supir/index', [SupirController::class, 'index']);
     Route::resource('supir', SupirController::class);
 
     Route::get('bank/field_length', [BankController::class, 'fieldLength'])->name('bank.field_length');
     Route::get('bank/index', [BankController::class, 'index']);
     Route::get('bank/{id}/delete', [BankController::class, 'delete'])->name('bank.delete');
     Route::get('bank/get', [BankController::class, 'get'])->name('bank.get');
+    Route::get('bank/index', [BankController::class, 'index']);
     Route::resource('bank', BankController::class);
 
     Route::get('absentrado/field_length', [AbsenTradoController::class, 'fieldLength'])->name('absentrado.field_length');
@@ -237,29 +240,35 @@ Route::middleware('auth')->group(function () {
     Route::get('akunpusat/export', [AkunPusatController::class, 'export'])->name('akunpusat.export');
     Route::get('akunpusat/get', [AkunPusatController::class, 'get'])->name('akunpusat.get');
     Route::resource('akunpusat', AkunPusatController::class);
+
     Route::get('alatbayar/field_length', [AlatBayarController::class, 'fieldLength'])->name('alatbayar.field_length');
     Route::get('alatbayar/{id}/delete', [AlatBayarController::class, 'delete'])->name('alatbayar.delete');
     Route::get('alatbayar/get', [AlatBayarController::class, 'get'])->name('alatbayar.get');
+    Route::get('alatbayar/index', [AlatBayarController::class, 'index']);
     Route::resource('alatbayar', AlatBayarController::class);
 
     Route::get('bankpelanggan/field_length', [BankPelangganController::class, 'fieldLength'])->name('bankpelanggan.field_length');
     Route::get('bankpelanggan/{id}/delete', [BankPelangganController::class, 'delete'])->name('bankpelanggan.delete');
     Route::get('bankpelanggan/get', [BankPelangganController::class, 'get'])->name('bankpelanggan.get');
+    Route::get('bankpelanggan/index', [BankPelangganController::class, 'index']);
     Route::resource('bankpelanggan', BankPelangganController::class);
 
     Route::get('jenisemkl/field_length', [JenisEmklController::class, 'fieldLength'])->name('jenisemkl.field_length');
     Route::get('jenisemkl/{id}/delete', [JenisEmklController::class, 'delete'])->name('jenisemkl.delete');
     Route::get('jenisemkl/get', [JenisEmklController::class, 'get'])->name('jenisemkl.get');
+    Route::get('jenisemkl/index', [JenisEmklController::class, 'index']);
     Route::resource('jenisemkl', JenisEmklController::class);
 
     Route::get('jenisorder/field_length', [JenisOrderController::class, 'fieldLength'])->name('jenisorder.field_length');
     Route::get('jenisorder/{id}/delete', [JenisOrderController::class, 'delete'])->name('jenisorder.delete');
     Route::get('jenisorder/get', [JenisOrderController::class, 'get'])->name('jenisorder.get');
+    Route::get('jenisorder/index', [JenisOrderController::class, 'index']);
     Route::resource('jenisorder', JenisOrderController::class);
 
     Route::get('jenistrado/field_length', [JenisTradoController::class, 'fieldLength'])->name('jenistrado.field_length');
     Route::get('jenistrado/{id}/delete', [JenisTradoController::class, 'delete'])->name('jenistrado.delete');
     Route::get('jenistrado/get', [JenisTradoController::class, 'get'])->name('jenistrado.get');
+    Route::get('jenistrado/index', [JenisTradoController::class, 'index']);
     Route::resource('jenistrado', JenisTradoController::class);
 
     Route::get('kasgantung/{id}/delete', [KasGantungHeaderController::class, 'delete'])->name('kasgantung.delete');
@@ -274,87 +283,115 @@ Route::middleware('auth')->group(function () {
     Route::get('gudang/field_length', [GudangController::class, 'fieldLength'])->name('gudang.field_length');
     Route::get('gudang/{id}/delete', [GudangController::class, 'delete'])->name('gudang.delete');
     Route::get('gudang/get', [GudangController::class, 'get'])->name('gudang.get');
+    Route::get('gudang/index', [GudangController::class, 'index']);
     Route::resource('gudang', GudangController::class);
     
     Route::get('sub_kelompok/report', [SubKelompokController::class, 'report'])->name('sub_kelompok.report');
     Route::get('sub_kelompok/{id}/delete', [SubKelompokController::class, 'delete'])->name('sub_kelompok.delete');
+    Route::get('sub_kelompok/get', [SubKelompokController::class, 'get'])->name('gudang.get');
+    Route::get('sub_kelompok/index', [SubKelompokController::class, 'index']);
     Route::resource('sub_kelompok', SubKelompokController::class);
     
     Route::get('supplier/report', [SupplierController::class, 'report'])->name('supplier.report');
     Route::get('supplier/{id}/delete', [SupplierController::class, 'delete'])->name('supplier.delete');
+    Route::get('supplier/get', [SupplierController::class, 'get'])->name('gudang.get');
+    Route::get('supplier/index', [SupplierController::class, 'index']);
     Route::resource('supplier', SupplierController::class);
+
     Route::get('kategori/field_length', [KategoriController::class, 'fieldLength'])->name('kategori.field_length');
     Route::get('kategori/{id}/delete', [KategoriController::class, 'delete'])->name('kategori.delete');
     Route::get('kategori/get', [KategoriController::class, 'get'])->name('kategori.get');
+    Route::get('kategori/index', [KategoriController::class, 'index']);
     Route::resource('kategori', KategoriController::class);
 
     Route::get('kelompok/field_length', [KelompokController::class, 'fieldLength'])->name('kelompok.field_length');
     Route::get('kelompok/{id}/delete', [KelompokController::class, 'delete'])->name('kelompok.delete');
     Route::get('kelompok/get', [KelompokController::class, 'get'])->name('kelompok.get');
+    Route::get('kelompok/index', [KelompokController::class, 'index']);
     Route::resource('kelompok', KelompokController::class);
 
     Route::get('kerusakan/field_length', [KerusakanController::class, 'fieldLength'])->name('kerusakan.field_length');
     Route::get('kerusakan/{id}/delete', [KerusakanController::class, 'delete'])->name('kerusakan.delete');
     Route::get('kerusakan/get', [KerusakanController::class, 'get'])->name('kerusakan.get');
+    Route::get('kerusakan/index', [KerusakanController::class, 'index']);
     Route::resource('kerusakan', KerusakanController::class);
 
     Route::get('penerima/report', [PenerimaController::class, 'report'])->name('penerima.report');
     Route::get('penerima/{id}/delete', [PenerimaController::class, 'delete'])->name('penerima.delete');
+    Route::get('penerima/get', [PenerimaController::class, 'get'])->name('kerusakan.get');
+    Route::get('penerima/index', [PenerimaController::class, 'index']);
     Route::resource('penerima', PenerimaController::class);
     
     Route::get('pelanggan/report', [PelangganController::class, 'report'])->name('pelanggan.report');
     Route::get('pelanggan/{id}/delete', [PelangganController::class, 'delete'])->name('pelanggan.delete');
+    Route::get('pelanggan/get', [PelangganController::class, 'get'])->name('kerusakan.get');
+    Route::get('pelanggan/index', [PelangganController::class, 'index']);
     Route::resource('pelanggan', PelangganController::class);
 
     Route::get('status_container/report', [StatusContainerController::class, 'report'])->name('status_container.report');
     Route::get('status_container/{id}/delete', [StatusContainerController::class, 'delete'])->name('status_container.delete');
+    Route::get('status_container/get', [StatusContainerController::class, 'get'])->name('kerusakan.get');
+    Route::get('status_container/index', [StatusContainerController::class, 'index']);
     Route::resource('status_container', StatusContainerController::class);
+
     Route::get('kota/field_length', [KotaController::class, 'fieldLength'])->name('kota.field_length');
     Route::get('kota/{id}/delete', [KotaController::class, 'delete'])->name('kota.delete');
     Route::get('kota/get', [KotaController::class, 'get'])->name('kota.get');
+    Route::get('kota/index', [KotaController::class, 'index']);
     Route::resource('kota', KotaController::class);
 
     Route::get('mandor/field_length', [MandorController::class, 'fieldLength'])->name('mandor.field_length');
     Route::get('mandor/{id}/delete', [MandorController::class, 'delete'])->name('mandor.delete');
     Route::get('mandor/get', [MandorController::class, 'get'])->name('mandor.get');
+    Route::get('mandor/index', [MandorController::class, 'index']);
     Route::resource('mandor', MandorController::class);
 
     Route::get('merk/field_length', [MerkController::class, 'fieldLength'])->name('merk.field_length');
     Route::get('merk/{id}/delete', [MerkController::class, 'delete'])->name('merk.delete');
     Route::get('merk/get', [MerkController::class, 'get'])->name('merk.get');
+    Route::get('merk/index', [MerkController::class, 'index']);
     Route::resource('merk', MerkController::class);
     
     Route::get('penerimaan_trucking/report', [PenerimaanTruckingController::class, 'report'])->name('penerimaan_trucking.report');
     Route::get('penerimaan_trucking/{id}/delete', [PenerimaanTruckingController::class, 'delete'])->name('penerimaan_trucking.delete');
+    Route::get('penerimaan_trucking/get', [PenerimaanTruckingController::class, 'get'])->name('merk.get');
+    Route::get('penerimaan_trucking/index', [PenerimaanTruckingController::class, 'index']);
     Route::resource('penerimaan_trucking', PenerimaanTruckingController::class);
 
     Route::get('pengeluaran_trucking/report', [PengeluaranTruckingController::class, 'report'])->name('pengeluaran_trucking.report');
     Route::get('pengeluaran_trucking/{id}/delete', [PengeluaranTruckingController::class, 'delete'])->name('pengeluaran_trucking.delete');
+    Route::get('pengeluaran_trucking/get', [PengeluaranTruckingController::class, 'get'])->name('merk.get');
+    Route::get('pengeluaran_trucking/index', [PengeluaranTruckingController::class, 'index']);
     Route::resource('pengeluaran_trucking', PengeluaranTruckingController::class);
 
     Route::get('satuan/field_length', [SatuanController::class, 'fieldLength'])->name('satuan.field_length');
     Route::get('satuan/{id}/delete', [SatuanController::class, 'delete'])->name('satuan.delete');
     Route::get('satuan/get', [SatuanController::class, 'get'])->name('satuan.get');
+    Route::get('satuan/index', [SatuanController::class, 'index']);
     Route::resource('satuan', SatuanController::class);
 
     Route::get('zona/field_length', [ZonaController::class, 'fieldLength'])->name('zona.field_length');
     Route::get('zona/{id}/delete', [ZonaController::class, 'delete'])->name('zona.delete');
     Route::get('zona/get', [ZonaController::class, 'get'])->name('zona.get');
+    Route::get('zona/index', [ZonaController::class, 'index']);
     Route::resource('zona', ZonaController::class);
 
     Route::get('tarif/field_length', [TarifController::class, 'fieldLength'])->name('tarif.field_length');
     Route::get('tarif/{id}/delete', [TarifController::class, 'delete'])->name('tarif.delete');
     Route::get('tarif/get', [TarifController::class, 'get'])->name('tarif.get');
+    Route::get('tarif/index', [TarifController::class, 'index']);
     Route::resource('tarif', TarifController::class);
 
     Route::get('orderantrucking/field_length', [OrderanTruckingController::class, 'fieldLength'])->name('orderantrucking.field_length');
     Route::get('orderantrucking/{id}/delete', [OrderanTruckingController::class, 'delete'])->name('orderantrucking.delete');
     Route::get('orderantrucking/get', [OrderanTruckingController::class, 'get'])->name('orderantrucking.get');
+    Route::get('orderantrucking/index', [OrderanTruckingController::class, 'index']);
     Route::resource('orderantrucking', OrderanTruckingController::class);
 
     Route::get('prosesabsensisupir/field_length', [ProsesAbsensiSupirController::class, 'fieldLength'])->name('prosesabsensisupir.field_length');
     Route::get('prosesabsensisupir/{id}/delete', [ProsesAbsensiSupirController::class, 'delete'])->name('prosesabsensisupir.delete');
     Route::get('prosesabsensisupir/get', [ProsesAbsensiSupirController::class, 'get'])->name('prosesabsensisupir.get');
+    Route::get('prosesabsensisupir/index', [ProsesAbsensiSupirController::class, 'index']);
     Route::resource('prosesabsensisupir', ProsesAbsensiSupirController::class);
 
     Route::get('mekanik/field_length', [MekanikController::class, 'fieldLength'])->name('mekanik.field_length');
@@ -368,6 +405,7 @@ Route::middleware('auth')->group(function () {
     Route::get('suratpengantar/get_gaji', [SuratPengantarController::class, 'getGaji'])->name('suratpengantar.get_gaji');
     Route::get('suratpengantar/{id}/delete', [SuratPengantarController::class, 'delete'])->name('suratpengantar.delete');
     Route::get('suratpengantar/get', [SuratPengantarController::class, 'get'])->name('suratpengantar.get');
+    Route::get('suratpengantar/index', [SuratPengantarController::class, 'index']);
     Route::resource('suratpengantar', SuratPengantarController::class);
 
 
@@ -392,5 +430,7 @@ Route::middleware('auth')->group(function () {
     Route::get('ritasi/field_length', [RitasiController::class, 'fieldLength'])->name('ritasi.field_length');
     Route::get('ritasi/{id}/delete', [RitasiController::class, 'delete'])->name('ritasi.delete');
     Route::get('ritasi/get', [RitasiController::class, 'get'])->name('ritasi.get');
+    Route::get('ritasi/index', [RitasiController::class, 'index']);
+    
     Route::resource('ritasi', RitasiController::class);
 });

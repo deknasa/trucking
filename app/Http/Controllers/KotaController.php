@@ -64,7 +64,7 @@ class KotaController extends MyController
         $title = $this->title;
         $combo = $this->combo();
 
-        return view('kota.add', compact('title','combo'));
+        return view('kota.add', compact('title', 'combo'));
     }
 
     /**
@@ -93,16 +93,19 @@ class KotaController extends MyController
         $title = $this->title;
         $combo = $this->combo();
 
+
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "kota/$id");
-        
+
         $kota = $response['data'];
 
-        return view('kota.edit', compact('title', 'kota','combo'));
+        return view('kota.edit', compact('title', 'kota', 'combo'));
     }
 
     /**
@@ -140,7 +143,7 @@ class KotaController extends MyController
 
             $kota = $response['data'];
 
-            return view('kota.delete', compact('title', 'kota','combo'));
+            return view('kota.delete', compact('title', 'kota', 'combo'));
         } catch (\Throwable $th) {
             return redirect()->route('kota.index');
         }
@@ -176,8 +179,7 @@ class KotaController extends MyController
     {
         $response = Http::withHeaders($this->httpHeaders)
             ->get(config('app.api_url') . 'kota/combo');
-        
+
         return $response['data'];
     }
-
 }

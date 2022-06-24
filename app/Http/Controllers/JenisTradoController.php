@@ -19,9 +19,15 @@ class JenisTradoController extends MyController
      */
     public function index(Request $request)
     {
-        $title = $this->title;
+      
 
-        return view('jenistrado.index', compact('title'));
+        $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
+        $data = [
+            'combo' => $this->combo('list'),
+        ];
+
+        return view('jenistrado.index', compact('title', 'breadcrumb', 'data'));
     }
 
     /**
@@ -61,10 +67,15 @@ class JenisTradoController extends MyController
      */
     public function create(): View
     {
-        $title = $this->title;
-        $combo = $this->combo();
+      
 
-        return view('jenistrado.add', compact('title','combo'));
+        $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
+        $combo = [
+            'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
+
+        return view('jenistrado.add', compact('title', 'breadcrumb', 'combo'));
     }
 
     /**
@@ -90,19 +101,21 @@ class JenisTradoController extends MyController
      */
     public function edit($id): View
     {
+       
         $title = $this->title;
-        $combo = $this->combo();
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "jenistrado/$id");
 
         $jenistrado = $response['data'];
 
-        return view('jenistrado.edit', compact('title', 'jenistrado','combo'));
+        $combo = [
+            'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
+
+        return view('jenistrado.edit', compact('title', 'jenistrado', 'combo'));
     }
 
     /**
@@ -128,19 +141,23 @@ class JenisTradoController extends MyController
     public function delete($id)
     {
         try {
+           
             $title = $this->title;
-            $combo = $this->combo();
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
-                ->withToken(session('access_token'))
+            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "jenistrado/$id");
 
             $jenistrado = $response['data'];
 
-            return view('jenistrado.delete', compact('title', 'jenistrado','combo'));
+
+
+            $combo = [
+                'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+            ];
+            
+            return view('jenistrado.delete', compact('title', 'jenistrado', 'combo'));
         } catch (\Throwable $th) {
             return redirect()->route('jenistrado.index');
         }
@@ -172,11 +189,19 @@ class JenisTradoController extends MyController
         return response($response['data']);
     }
 
-    private function combo()
+    public function combo($aksi)
     {
-        $response = Http::withHeaders($this->httpHeaders)
-            ->get(config('app.api_url') . 'jenistrado/combo');
-        
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
         return $response['data'];
     }
 

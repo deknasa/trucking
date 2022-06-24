@@ -51,6 +51,20 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <input type="text" name="keterangan" class="form-control" value="{{ $jenisemkl['keterangan'] ?? '' }}">
               </div>
             </div>
+            <div class="row form-group">
+              <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS<span class="text-danger">*</span></label>
+              <div class="col-12 col-md-10">
+                <select name="statusaktif" class="w-100">
+                  <optgroup label="">
+                    @foreach($combo['status'] as $status)
+                    <option value="{{ $status['id'] }}" {{ $status['id'] == @$jenisemkl['statusaktif'] ? 'selected' : '' }}>{{ $status['text'] }}</option>
+                    @endforeach
+                  </optgroup>
+                </select>
+              </div>
+            </div>
+
+
           </div>
           <div class="card-footer">
             <button type="submit" id="btnSimpan" class="btn btn-primary">

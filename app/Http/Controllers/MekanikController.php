@@ -24,9 +24,14 @@ class MekanikController extends MyController
 
     public function index(Request $request)
     {
+
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
-        return view('mekanik.index', compact('title', 'breadcrumb'));
+        $data = [
+            'combo' => $this->combo('list'),
+        ];
+
+        return view('mekanik.index', compact('title', 'breadcrumb', 'data'));
     }
 
     public function get($params = [])
@@ -166,11 +171,20 @@ class MekanikController extends MyController
         return response($response['data']);
     }
 
-    private function combo()
+   
+    public function combo($aksi)
     {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'mekanik/combo');
-        
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
         return $response['data'];
     }
 }

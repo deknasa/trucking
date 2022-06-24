@@ -88,6 +88,11 @@
             width: '70px'
           },
           {
+            label: 'KODE CONTAINER',
+            name: 'kodecontainer',
+            align: 'left'
+          },
+          {
             label: 'KETERANGAN',
             name: 'keterangan',
             align: 'left'
