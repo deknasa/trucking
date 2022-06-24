@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class SupirController extends Controller
+class SupirController extends MyController
 {
     public $title = 'Supir';
 
@@ -25,7 +25,8 @@ class SupirController extends Controller
                 'search' => json_decode($request->filters, 1) ?? [],
             ];
             
-            $response = Http::withHeaders($request->header())
+            $response = Http::withHeaders($request->header())->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
                 ->get(config('app.api_url') . 'supir', $params);
             
             $rows = $response['data'];
@@ -167,12 +168,11 @@ class SupirController extends Controller
 
     public function store(Request $request)
     {
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false]);
+        // $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false]);
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'supir', $request->all());
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+        ->post(config('app.api_url') . 'supir', $request->all());
 
         if ($response->ok()) {
             $id = $response['data']['id'];
@@ -203,7 +203,8 @@ class SupirController extends Controller
     {
         $title = $this->title;
 
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->get(config('app.api_url') . "supir/$id");
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))->get(config('app.api_url') . "supir/$id");
 
         $supir = $response['data'];
 
@@ -214,7 +215,8 @@ class SupirController extends Controller
 
     public function update(Request $request, $id)
     {
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->patch(config('app.api_url') . "supir/$id", $request->all());
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))->patch(config('app.api_url') . "supir/$id", $request->all());
 
         if ($response->ok()) {
             $id = $response['data']['id'];
@@ -245,6 +247,7 @@ class SupirController extends Controller
             $title = $this->title;
 
             $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . "supir/$id");
 
             $supir = $response['data'];
@@ -260,6 +263,7 @@ class SupirController extends Controller
     public function destroy($id, Request $request)
     {
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
         ->delete(config('app.api_url') . "supir/$id", $request->all());
 
         return response($response);
@@ -267,7 +271,8 @@ class SupirController extends Controller
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->get(config('app.api_url') . 'supir/field_length');
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))->get(config('app.api_url') . 'supir/field_length');
 
         return response($response['data']);
     }
@@ -275,6 +280,7 @@ class SupirController extends Controller
     private function combo()
     {
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'supir/combo');
         
         return $response['data'];
