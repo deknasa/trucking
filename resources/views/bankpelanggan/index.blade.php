@@ -127,8 +127,30 @@
             name: 'keterangan',
           },
           {
-            label: 'STATUS AKTIF',
+            label: 'STATUS',
             name: 'statusaktif',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combo'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combo'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'MODIFIEDBY',
