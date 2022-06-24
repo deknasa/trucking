@@ -103,7 +103,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: getUrl,
+        url: `{{ config('app.api_url') . 'upahritasi' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -171,6 +171,19 @@
         page: page,
         pager: pager,
         viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
         ajaxRowOptions: {
           async: false,
         },
@@ -180,8 +193,8 @@
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
-          let rows = $(this).jqGrid('getGridParam', 'postData').rows
-          if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
           $("input").attr("autocomplete", "off");
@@ -197,7 +210,7 @@
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').rows
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
           triggerClick = true
 
@@ -239,7 +252,7 @@
         id: 'add',
         buttonicon: 'fas fa-plus',
         onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').rows
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
 
           window.location.href = `{{ route('upahritasi.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
         }

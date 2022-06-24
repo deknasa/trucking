@@ -93,12 +93,7 @@ class KotaController extends MyController
         $title = $this->title;
         $combo = $this->combo();
 
-
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "kota/$id");
@@ -111,64 +106,29 @@ class KotaController extends MyController
     /**
      * @ClassName
      */
-    public function update(Request $request, $id): Response
-    {
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
-            ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "kota/$id", $request->all());
-
-        return response($response);
-    }
-
-    /**
-     * @ClassName
-     */
     public function delete($id)
     {
-        try {
+        // try {
             $title = $this->title;
             $combo = $this->combo();
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
+            $response = Http::withHeaders($this->httpHeaders)
+                ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "kota/$id");
 
             $kota = $response['data'];
 
             return view('kota.delete', compact('title', 'kota', 'combo'));
-        } catch (\Throwable $th) {
-            return redirect()->route('kota.index');
-        }
-    }
-
-    /**
-     * @ClassName
-     */
-    public function destroy($id, Request $request)
-    {
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
-            ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "kota/$id", $request->all());
-
-        return response($response);
+        // } catch (\Throwable $th) {
+        //     return redirect()->route('kota.index');
+        // }
     }
 
     public function fieldLength(): Response
     {
         $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'kota/field_length');
 
@@ -178,6 +138,8 @@ class KotaController extends MyController
     private function combo()
     {
         $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'kota/combo');
 
         return $response['data'];
