@@ -19,9 +19,15 @@ class KerusakanController extends MyController
      */
     public function index(Request $request)
     {
-        $title = $this->title;
+    
 
-        return view('kerusakan.index', compact('title'));
+        $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
+        $data = [
+            'combo' => $this->combo('list'),
+        ];
+
+        return view('kerusakan.index', compact('title', 'breadcrumb', 'data'));
     }
 
     /**
@@ -61,10 +67,14 @@ class KerusakanController extends MyController
      */
     public function create(): View
     {
-        $title = $this->title;
-        $combo = $this->combo();
 
-        return view('kerusakan.add', compact('title','combo'));
+        $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
+        $combo = [
+            'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
+
+        return view('kerusakan.add', compact('title', 'breadcrumb', 'combo'));
     }
 
     /**
@@ -90,19 +100,21 @@ class KerusakanController extends MyController
      */
     public function edit($id): View
     {
+     
         $title = $this->title;
-        $combo = $this->combo();
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "kerusakan/$id");
 
         $kerusakan = $response['data'];
 
-        return view('kerusakan.edit', compact('title', 'kerusakan','combo'));
+        $combo = [
+            'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
+
+        return view('kerusakan.edit', compact('title', 'kerusakan', 'combo'));
     }
 
     /**
@@ -128,19 +140,23 @@ class KerusakanController extends MyController
     public function delete($id)
     {
         try {
+            
             $title = $this->title;
-            $combo = $this->combo();
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
-                ->withToken(session('access_token'))
+            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "kerusakan/$id");
 
             $kerusakan = $response['data'];
 
-            return view('kerusakan.delete', compact('title', 'kerusakan','combo'));
+
+
+            $combo = [
+                'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+            ];
+            
+            return view('kerusakan.delete', compact('title', 'kerusakan', 'combo'));
         } catch (\Throwable $th) {
             return redirect()->route('kerusakan.index');
         }
@@ -172,11 +188,19 @@ class KerusakanController extends MyController
         return response($response['data']);
     }
 
-    private function combo()
+    public function combo($aksi)
     {
-        $response = Http::withHeaders($this->httpHeaders)
-            ->get(config('app.api_url') . 'kerusakan/combo');
-        
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
         return $response['data'];
     }
 

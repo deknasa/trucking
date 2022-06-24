@@ -19,9 +19,15 @@ class JenisEmklController extends MyController
      */
     public function index(Request $request)
     {
-        $title = $this->title;
+      
 
-        return view('jenisemkl.index', compact('title'));
+        $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
+        $data = [
+            'combo' => $this->combo('list'),
+        ];
+
+        return view('jenisemkl.index', compact('title', 'breadcrumb', 'data'));
     }
 
     /**
@@ -61,9 +67,15 @@ class JenisEmklController extends MyController
      */
     public function create(): View
     {
-        $title = $this->title;
+       
 
-        return view('jenisemkl.add', compact('title'));
+        $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
+        $combo = [
+            'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
+
+        return view('jenisemkl.add', compact('title', 'breadcrumb', 'combo'));
     }
 
     /**
@@ -89,18 +101,20 @@ class JenisEmklController extends MyController
      */
     public function edit($id): View
     {
+       
         $title = $this->title;
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "jenisemkl/$id");
 
         $jenisemkl = $response['data'];
 
-        return view('jenisemkl.edit', compact('title', 'jenisemkl'));
+        $combo = [
+            'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
+
+        return view('jenisemkl.edit', compact('title', 'jenisemkl', 'combo'));
     }
 
     /**
@@ -128,16 +142,20 @@ class JenisEmklController extends MyController
         try {
             $title = $this->title;
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
-                ->withToken(session('access_token'))
+            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "jenisemkl/$id");
 
             $jenisemkl = $response['data'];
 
-            return view('jenisemkl.delete', compact('title', 'jenisemkl'));
+
+
+            $combo = [
+                'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+            ];
+            
+            return view('jenisemkl.delete', compact('title', 'jenisemkl', 'combo'));
         } catch (\Throwable $th) {
             return redirect()->route('jenisemkl.index');
         }
@@ -167,6 +185,22 @@ class JenisEmklController extends MyController
             ->get(config('app.api_url') . 'jenisemkl/field_length');
 
         return response($response['data']);
+    }
+
+    public function combo($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
+        return $response['data'];
     }
 
 }

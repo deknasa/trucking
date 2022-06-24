@@ -19,9 +19,14 @@ class MandorController extends MyController
      */
     public function index(Request $request)
     {
+  
         $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
+        $data = [
+            'combo' => $this->combo('list'),
+        ];
 
-        return view('mandor.index', compact('title'));
+        return view('mandor.index', compact('title', 'breadcrumb', 'data'));
     }
 
     /**
@@ -61,10 +66,15 @@ class MandorController extends MyController
      */
     public function create(): View
     {
-        $title = $this->title;
-        $combo = $this->combo();
+      
 
-        return view('mandor.add', compact('title','combo'));
+        $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
+        $combo = [
+            'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
+
+        return view('mandor.add', compact('title', 'breadcrumb', 'combo'));
     }
 
     /**
@@ -90,19 +100,21 @@ class MandorController extends MyController
      */
     public function edit($id): View
     {
+        
         $title = $this->title;
-        $combo = $this->combo();
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "mandor/$id");
 
         $mandor = $response['data'];
 
-        return view('mandor.edit', compact('title', 'mandor','combo'));
+        $combo = [
+            'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
+
+        return view('mandor.edit', compact('title', 'mandor', 'combo'));
     }
 
     /**
@@ -128,19 +140,23 @@ class MandorController extends MyController
     public function delete($id)
     {
         try {
+           
             $title = $this->title;
-            $combo = $this->combo();
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
-                ->withToken(session('access_token'))
+            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "mandor/$id");
 
             $mandor = $response['data'];
 
-            return view('mandor.delete', compact('title', 'mandor','combo'));
+
+
+            $combo = [
+                'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+            ];
+            
+            return view('mandor.delete', compact('title', 'mandor', 'combo'));
         } catch (\Throwable $th) {
             return redirect()->route('mandor.index');
         }
@@ -172,12 +188,19 @@ class MandorController extends MyController
         return response($response['data']);
     }
 
-    private function combo()
+    public function combo($aksi)
     {
-        $response = Http::withHeaders($this->httpHeaders)
-            ->get(config('app.api_url') . 'mandor/combo');
-        
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
         return $response['data'];
     }
-
 }

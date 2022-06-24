@@ -14,10 +14,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class ContainerController extends MyController
 {
     public $title = 'Container';
-    public $httpHeader = [
-        'Accept' => 'application/json',
-        'Content-Type' => 'application/json'
-    ];
+
 
     /**
      * Fungsi index
@@ -25,6 +22,8 @@ class ContainerController extends MyController
      */
     public function index(Request $request)
     {
+
+
 
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
