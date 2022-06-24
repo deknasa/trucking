@@ -313,6 +313,7 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
+      alert('here')
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
 
