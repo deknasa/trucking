@@ -64,16 +64,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
 
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  Coa ID <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="coa_id" class="form-control" value="{{ $supplier['coa_id'] ?? '' }}">
-              </div>
-            </div>
+            
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -130,16 +121,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
 
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  Status Supllier <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="statussupllier" class="form-control" value="{{ $supplier['statussupllier'] ?? '' }}">
-              </div>
-            </div>
+           
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -207,16 +189,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
 
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  Nama Bank <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="namabank" class="form-control" value="{{ $supplier['namabank'] ?? '' }}">
-              </div>
-            </div>
+       
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -251,16 +224,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
 
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  Batas Kredit <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="bataskredit" class="form-control" value="{{ $supplier['bataskredit'] ?? '' }}">
-              </div>
-            </div>
+     
 
           </div>
           <div class="card-footer">

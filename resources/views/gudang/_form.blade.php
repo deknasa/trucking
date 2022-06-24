@@ -42,37 +42,18 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  STATUS AKTIF <span class="text-danger">*</span></label>
-              </div>
+              <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
-                <select name="statusaktif" class="form-control select2bs4">
-                        <option value="">PILIH STATUS</option>
-                        <?php foreach ($combo['statusaktif'] as $key => $item) { 
-                            $selected = @$gudang['statusaktif'] == $item['id'] ? "selected" : ""
-                        ?>
-                            <option value="{{ $item['id'] }}" {{ $selected }} >{{ $item['text'] }}</option>
-                        <?php } ?>
+                <select name="statusaktif" class="w-100">
+                  <optgroup label="">
+                    @foreach($combo['status'] as $status)
+                    <option value="{{ $status['id'] }}" {{ $status['id'] == @$gudang['statusaktif'] ? 'selected' : '' }}>{{ $status['text'] }}</option>
+                    @endforeach
+                  </optgroup>
                 </select>
               </div>
             </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  STATUS GUDANG <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-md-10">
-                <select name="statusgudang" class="form-control select2bs4">
-                        <option value="">PILIH STATUS</option>
-                        <?php foreach ($combo['statusgudang'] as $key => $item) { 
-                            $selected = @$gudang['statusgudang'] == $item['id'] ? "selected" : ""
-                        ?>
-                            <option value="{{ $item['id'] }}" {{ $selected }} >{{ $item['text'] }}</option>
-                        <?php } ?>
-                </select>
-              </div>
-            </div>
+            
           </div>
           <div class="card-footer">
             <button type="submit" id="btnSimpan" class="btn btn-primary">

@@ -19,9 +19,14 @@ class GudangController extends MyController
      */
     public function index(Request $request)
     {
+ 
         $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
+        $data = [
+            'combo' => $this->combo('list'),
+        ];
 
-        return view('gudang.index', compact('title'));
+        return view('gudang.index', compact('title', 'breadcrumb', 'data'));
     }
 
     /**
@@ -61,10 +66,14 @@ class GudangController extends MyController
      */
     public function create(): View
     {
-        $title = $this->title;
-        $combo = $this->combo();
 
-        return view('gudang.add', compact('title','combo'));
+        $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
+        $combo = [
+            'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
+
+        return view('gudang.add', compact('title', 'breadcrumb', 'combo'));
     }
 
     /**
@@ -90,19 +99,21 @@ class GudangController extends MyController
      */
     public function edit($id): View
     {
+       
         $title = $this->title;
-        $combo = $this->combo();
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "gudang/$id");
 
         $gudang = $response['data'];
 
-        return view('gudang.edit', compact('title', 'gudang','combo'));
+        $combo = [
+            'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
+
+        return view('gudang.edit', compact('title', 'gudang', 'combo'));
     }
 
     /**
@@ -120,6 +131,8 @@ class GudangController extends MyController
             ->patch(config('app.api_url') . "gudang/$id", $request->all());
 
         return response($response);
+
+        
     }
 
     /**
@@ -128,19 +141,23 @@ class GudangController extends MyController
     public function delete($id)
     {
         try {
+        
             $title = $this->title;
-            $combo = $this->combo();
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
-                ->withToken(session('access_token'))
+            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "gudang/$id");
 
             $gudang = $response['data'];
 
-            return view('gudang.delete', compact('title', 'gudang','combo'));
+
+
+            $combo = [
+                'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+            ];
+            
+            return view('gudang.delete', compact('title', 'gudang', 'combo'));
         } catch (\Throwable $th) {
             return redirect()->route('gudang.index');
         }
@@ -172,11 +189,19 @@ class GudangController extends MyController
         return response($response['data']);
     }
 
-    private function combo()
+    public function combo($aksi)
     {
-        $response = Http::withHeaders($this->httpHeaders)
-            ->get(config('app.api_url') . 'gudang/combo');
-        
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
         return $response['data'];
     }
 
