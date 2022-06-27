@@ -66,8 +66,7 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
-        colModel: [
-          {
+        colModel: [{
             label: 'id',
             name: 'id',
             width: '50px'
@@ -84,7 +83,7 @@
             label: 'alamat',
             name: 'alamat',
           },
-         
+
           {
             label: 'kota',
             name: 'kota',
@@ -130,7 +129,7 @@
             label: 'rekeningbank',
             name: 'rekeningbank',
           },
-    
+
           {
             label: 'jabatan',
             name: 'jabatan',
@@ -138,12 +137,56 @@
           {
             label: 'statusdaftarharga',
             name: 'statusdaftarharga',
+            width: 100,
+            stype: 'select',
+            searchoptions: {
+              value: `:ALL;
+              <?php
+              foreach ($combo['statusdaftarharga'] as $index => $statusdaftarharga) {
+                echo "$statusdaftarharga[text]:$statusdaftarharga[text]";
+
+                if ($index < count($combo['statusdaftarharga']) - 1) {
+                  echo ';';
+                }
+              }
+              ?>`,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+          },
+          {
+            label: 'statusaktif',
+            name: 'statusaktif',
+            width: 100,
+            stype: 'select',
+            searchoptions: {
+              value: `:ALL;
+              <?php
+              foreach ($combo['statusaktif'] as $index => $statusaktif) {
+                echo "$statusaktif[text]:$statusaktif[text]";
+
+                if ($index < count($combo['statusaktif']) - 1) {
+                  echo ';';
+                }
+              }
+              ?>`,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'kategoriusaha',
             name: 'kategoriusaha',
           },
- 
+
           {
             label: 'modifiedby',
             name: 'modifiedby',

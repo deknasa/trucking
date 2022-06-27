@@ -159,7 +159,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="top" class="form-control" value="{{ $supplier['top'] ?? '' }}">
+                <input type="text" name="top" class="form-control numbernoseparate text-right" value="{{ $supplier['top'] ?? '' }}">
               </div>
             </div>
 
@@ -196,14 +196,14 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
 
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  Status Daftar Harga <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="statusdaftarharga" class="form-control" value="{{ $supplier['statusdaftarharga'] ?? '' }}">
+            <div class="form-group row">
+              <label for="staticEmail" class="col-sm-3 col-md-2 col-form-label">Status Daftar Harga<span class="text-danger">*</span></label>
+              <div class="col-sm-9 col-md-10">
+                <select class="form-control select2bs4  <?= @$disable2 ?>" style="width: 100%;" name="statusdaftarharga" id="statusdaftarharga">
+                  <?php foreach ($combo['statusdaftarharga'] as $statusdaftarharga) : ?>;
+                  <option value="<?= $statusdaftarharga['id'] ?>" <?= $statusdaftarharga['id'] == @$supplier['statusdaftarharga'] ? 'selected' : '' ?>><?= $statusdaftarharga['text'] ?></option>
+                <?php endforeach; ?>
+                </select>
               </div>
             </div>
 
@@ -217,7 +217,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <input type="text" name="kategoriusaha" class="form-control" value="{{ $supplier['kategoriusaha'] ?? '' }}">
               </div>
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
@@ -228,7 +228,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <input type="text" name="namarekening" class="form-control" value="{{ $supplier['namarekening'] ?? '' }}">
               </div>
             </div>
-            
+
             <div class="form-group row">
               <label for="staticEmail" class="col-sm-3 col-md-2 col-form-label">Status Aktif<span class="text-danger">*</span></label>
               <div class="col-sm-9 col-md-10">
@@ -290,7 +290,6 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
-      alert('here')
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
 
