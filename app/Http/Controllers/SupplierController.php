@@ -20,25 +20,33 @@ class SupplierController extends MyController
     {
         $title = $this->title;
 
-        return view('supplier.add', compact('title'));
+        $combo = [
+            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
+
+        return view('supplier.add', compact('title', 'combo'));
     }
 
-    
+
     public function edit($id)
     {
         $title = $this->title;
+
+        $combo = [
+            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
 
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "supplier/$id");
 
-        
+
         $supplier = $response['data'];
 
         return view('supplier.edit', compact('title', 'supplier'));
     }
-    
+
     public function delete($id)
     {
         try {

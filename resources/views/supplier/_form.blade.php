@@ -67,17 +67,6 @@ $indexRow = $_GET['indexRow'] ?? '';
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  Coa ID <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="coa_id" class="form-control" value="{{ $supplier['coa_id'] ?? '' }}">
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
                   Kota <span class="text-danger">*</span>
                 </label>
               </div>
@@ -127,17 +116,6 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="email" class="form-control" value="{{ $supplier['email'] ?? '' }}">
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  Status Supllier <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="statussupllier" class="form-control" value="{{ $supplier['statussupllier'] ?? '' }}">
               </div>
             </div>
 
@@ -210,17 +188,6 @@ $indexRow = $_GET['indexRow'] ?? '';
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  Nama Bank <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="namabank" class="form-control" value="{{ $supplier['namabank'] ?? '' }}">
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
                   Jabatan <span class="text-danger">*</span>
                 </label>
               </div>
@@ -250,18 +217,28 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <input type="text" name="kategoriusaha" class="form-control" value="{{ $supplier['kategoriusaha'] ?? '' }}">
               </div>
             </div>
-
+            
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  Batas Kredit <span class="text-danger">*</span>
+                  Nama Rekening <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="bataskredit" class="form-control" value="{{ $supplier['bataskredit'] ?? '' }}">
+                <input type="text" name="namarekening" class="form-control" value="{{ $supplier['namarekening'] ?? '' }}">
               </div>
             </div>
-
+            
+            <div class="form-group row">
+              <label for="staticEmail" class="col-sm-3 col-md-2 col-form-label">Status Aktif<span class="text-danger">*</span></label>
+              <div class="col-sm-9 col-md-10">
+                <select class="form-control select2bs4  <?= @$disable2 ?>" style="width: 100%;" name="statusaktif" id="statusaktif">
+                  <?php foreach ($combo['statusaktif'] as $statusaktif) : ?>;
+                  <option value="<?= $statusaktif['id'] ?>" <?= $statusaktif['id'] == @$supplier['statusaktif'] ? 'selected' : '' ?>><?= $statusaktif['text'] ?></option>
+                <?php endforeach; ?>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="card-footer">
             <button type="submit" id="btnSimpan" class="btn btn-primary">
@@ -337,8 +314,6 @@ $indexRow = $_GET['indexRow'] ?? '';
             $('.invalid-feedback').remove()
 
             setErrorMessages(error.responseJSON.errors);
-          } else {
-            showDialog(error.statusText)
           }
         },
       }).always(() => {
