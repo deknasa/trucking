@@ -84,10 +84,7 @@
             label: 'alamat',
             name: 'alamat',
           },
-          {
-            label: 'coa_id',
-            name: 'coa_id',
-          },
+         
           {
             label: 'kota',
             name: 'kota',
@@ -108,10 +105,7 @@
             label: 'email',
             name: 'email',
           },
-          {
-            label: 'statussupllier',
-            name: 'statussupllier',
-          },
+
           {
             label: 'web',
             name: 'web',
@@ -136,10 +130,7 @@
             label: 'rekeningbank',
             name: 'rekeningbank',
           },
-          {
-            label: 'namabank',
-            name: 'namabank',
-          },
+    
           {
             label: 'jabatan',
             name: 'jabatan',
@@ -152,10 +143,7 @@
             label: 'kategoriusaha',
             name: 'kategoriusaha',
           },
-          {
-            label: 'bataskredit',
-            name: 'bataskredit',
-          },
+ 
           {
             label: 'modifiedby',
             name: 'modifiedby',

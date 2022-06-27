@@ -27,10 +27,14 @@ class BankPelangganController extends MyController
 
     public function index(Request $request)
     {
+   
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
+        $data = [
+            'combo' => $this->combo('list'),
+        ];
 
-        return view('bankpelanggan.index', compact('title', 'breadcrumb'));
+        return view('bankpelanggan.index', compact('title', 'breadcrumb', 'data'));
     }
 
     public function get($params = [])
@@ -64,11 +68,14 @@ class BankPelangganController extends MyController
 
     public function create()
     {
+   
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
-        $combo = $this->combo();
+        $combo = [
+            'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
 
-        return view('bankpelanggan.add', compact('title', 'breadcrumb','combo'));
+        return view('bankpelanggan.add', compact('title', 'breadcrumb', 'combo'));
     }
 
     public function store(Request $request): Response
@@ -97,19 +104,21 @@ class BankPelangganController extends MyController
 
     public function edit($id)
     {
+       
         $title = $this->title;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "bankpelanggan/$id");
 
         $bankpelanggan = $response['data'];
-        $combo = $this->combo();
 
-        return view('bankpelanggan.edit', compact('title', 'bankpelanggan','combo'));
+        $combo = [
+            'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
+
+        return view('bankpelanggan.edit', compact('title', 'bankpelanggan', 'combo'));
     }
 
     public function update(Request $request, $id): Response
@@ -129,19 +138,23 @@ class BankPelangganController extends MyController
     public function delete($id)
     {
         try {
+           
             $title = $this->title;
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
-                ->withToken(session('access_token'))
+            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "bankpelanggan/$id");
 
             $bankpelanggan = $response['data'];
-            $combo = $this->combo();
 
-            return view('bankpelanggan.delete', compact('title', 'bankpelanggan','combo'));
+
+
+            $combo = [
+                'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+            ];
+            
+            return view('bankpelanggan.delete', compact('title', 'bankpelanggan', 'combo'));
         } catch (\Throwable $th) {
             return redirect()->route('bankpelanggan.index');
         }
@@ -170,11 +183,21 @@ class BankPelangganController extends MyController
         return response($response['data']);
     }
 
-    private function combo()
+
+    public function combo($aksi)
     {
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'bankpelanggan/combo');
-        
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
         return $response['data'];
     }
 }

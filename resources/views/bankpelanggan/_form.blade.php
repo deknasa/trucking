@@ -62,18 +62,14 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  STATUS AKTIF <span class="text-danger">*</span></label>
-              </div>
+              <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
-                <select name="statusaktif" class="form-control select2bs4">
-                        <option value="">PILIH STATUS</option>
-                        <?php foreach ($combo['statusaktif'] as $key => $item) { 
-                            $selected = @$bankpelanggan['statusaktif'] == $item['id'] ? "selected" : ""
-                        ?>
-                            <option value="{{ $item['id'] }}" {{ $selected }} >{{ $item['text'] }}</option>
-                        <?php } ?>
+                <select name="statusaktif" class="w-100">
+                  <optgroup label="">
+                    @foreach($combo['status'] as $status)
+                    <option value="{{ $status['id'] }}" {{ $status['id'] == @$bankpelanggan['statusaktif'] ? 'selected' : '' }}>{{ $status['text'] }}</option>
+                    @endforeach
+                  </optgroup>
                 </select>
               </div>
             </div>
@@ -144,9 +140,6 @@ $indexRow = $_GET['indexRow'] ?? '';
           'Authorization': `Bearer {{ session('access_token') }}`
         },
         data: $('form').serializeArray(),
-        headers: {
-            'X-CSRF-TOKEN': csrfToken,
-        },
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()

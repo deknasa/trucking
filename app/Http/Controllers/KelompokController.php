@@ -19,9 +19,14 @@ class KelompokController extends MyController
      */
     public function index(Request $request)
     {
-        $title = $this->title;
 
-        return view('kelompok.index', compact('title'));
+        $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
+        $data = [
+            'combo' => $this->combo('list'),
+        ];
+
+        return view('kelompok.index', compact('title', 'breadcrumb', 'data'));
     }
 
     /**
@@ -61,10 +66,14 @@ class KelompokController extends MyController
      */
     public function create(): View
     {
-        $title = $this->title;
-        $combo = $this->combo();
 
-        return view('kelompok.add', compact('title','combo'));
+        $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
+        $combo = [
+            'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
+
+        return view('kelompok.add', compact('title', 'breadcrumb', 'combo'));
     }
 
     /**
@@ -90,19 +99,21 @@ class KelompokController extends MyController
      */
     public function edit($id): View
     {
+  
         $title = $this->title;
-        $combo = $this->combo();
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "kelompok/$id");
 
         $kelompok = $response['data'];
 
-        return view('kelompok.edit', compact('title', 'kelompok','combo'));
+        $combo = [
+            'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        ];
+
+        return view('kelompok.edit', compact('title', 'kelompok', 'combo'));
     }
 
     /**
@@ -128,19 +139,23 @@ class KelompokController extends MyController
     public function delete($id)
     {
         try {
+           
             $title = $this->title;
-            $combo = $this->combo();
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
-                ->withToken(session('access_token'))
+            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "kelompok/$id");
 
             $kelompok = $response['data'];
 
-            return view('kelompok.delete', compact('title', 'kelompok','combo'));
+
+
+            $combo = [
+                'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+            ];
+            
+            return view('kelompok.delete', compact('title', 'kelompok', 'combo'));
         } catch (\Throwable $th) {
             return redirect()->route('kelompok.index');
         }
@@ -172,11 +187,20 @@ class KelompokController extends MyController
         return response($response['data']);
     }
 
-    private function combo()
+    public function combo($aksi)
     {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
         $response = Http::withHeaders($this->httpHeaders)
-            ->get(config('app.api_url') . 'kelompok/combo');
-        
+        ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
         return $response['data'];
     }
 
