@@ -137,10 +137,33 @@
           {
             label: 'STATUS AKTIF',
             name: 'statusaktif',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combo'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combo'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'TGL MULAI BERLAKU',
-            name: 'tglmulaiberlaku'
+            name: 'tglmulaiberlaku',
+            formatter: 'date', formatoptions: { newformat: 'd-m-Y' }
           },
           {
             label: 'STATUS LUAR KOTA',
@@ -154,7 +177,8 @@
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'left'
+            align: 'left',
+            formatter: 'date', formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y H:i:s" },
           },
         ],
         autowidth: true,

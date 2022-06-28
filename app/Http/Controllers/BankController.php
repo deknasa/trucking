@@ -28,8 +28,11 @@ class BankController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-
-        return view('bank.index', compact('title'));
+        $data = [
+            'combo' => $this->comboStatusAktif('list'),
+        ];
+        
+        return view('bank.index', compact('title','data'));
     }
 
     public function get($params = [])
@@ -154,6 +157,7 @@ class BankController extends MyController
     public function fieldLength(): Response
     {
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'bank/field_length');
 
@@ -166,6 +170,23 @@ class BankController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'bank/combo');
         
+        return $response['data'];
+    }
+
+    public function comboStatusAktif($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
         return $response['data'];
     }
 }

@@ -112,6 +112,7 @@
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
+            formatter: 'date', formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y H:i:s" },
           },
         ],
         autowidth: true,

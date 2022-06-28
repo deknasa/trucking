@@ -92,6 +92,28 @@
           {
             label: 'STATUS AKTIF',
             name: 'statusaktif',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combo'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combo'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'TUJUAN ASAL',
@@ -122,6 +144,7 @@
           {
             label: 'TGL BERLAKU',
             name: 'tglberlaku',
+            formatter: 'date', formatoptions: { newformat: 'd-m-Y' }
           },
           {
             label: 'STATUS PENYESUAIAN HARGA',
@@ -134,6 +157,7 @@
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
+            formatter: 'date', formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y H:i:s" },
           },
         ],
         autowidth: true,
@@ -168,7 +192,7 @@
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
-          if (indexRow >= rlimitows) indexRow = (indexRow - limit * (page - 1))
+          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
           $(document).unbind('keydown')
