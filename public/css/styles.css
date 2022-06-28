@@ -144,3 +144,13 @@
 .ui-dialog {
     z-index: 9999 !important;
 }
+
+.btn-purple {
+    background-color: #6619ff;
+    color: #fff;
+}
+
+.btn-purple:hover {
+    color: #fff !important;
+    background-color: #5012cb;
+}
