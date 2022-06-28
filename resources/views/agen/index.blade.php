@@ -50,6 +50,26 @@
     <div class="col-12">
       <table id="jqGrid"></table>
       <div id="jqGridPager"></div>
+      <div id="buttonContainer">
+        <button id="add" class="btn btn-primary btn-sm mb-2">
+          <i class="fa fa-plus"></i> ADD
+        </button>
+        <button id="edit" class="btn btn-success btn-sm mb-2">
+          <i class="fa fa-pen"></i> EDIT
+        </button>
+        <button id="delete" class="btn btn-danger btn-sm mb-2">
+          <i class="fa fa-trash"></i> DELETE
+        </button>
+        <button id="export" class="btn btn-warning btn-sm mb-2">
+          <i class="fa fa-file-export"></i> EXPORT
+        </button>
+        <button id="report" class="btn btn-info btn-sm mb-2">
+          <i class="fa fa-print"></i> REPORT
+        </button>
+        <button id="approval" class="btn btn-purple btn-sm mb-2">
+          <i class="fa fa-check"></i> UN/APPROVAL
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -336,96 +356,96 @@
         del: false,
       })
 
-      .navButtonAdd(pager, {
-        caption: 'Add',
-        title: 'Add',
-        id: 'add',
-        buttonicon: 'fas fa-plus',
-        class: 'btn btn-primary',
-        onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+      // .navButtonAdd(pager, {
+      //   caption: 'Add',
+      //   title: 'Add',
+      //   id: 'add',
+      //   buttonicon: 'fas fa-plus',
+      //   class: 'btn btn-primary',
+      //   onClickButton: function() {
+      //     let limit = $(this).jqGrid('getGridParam', 'postData').limit
 
-          window.location.href = `{{ route('agen.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-        }
-      })
+      //     window.location.href = `{{ route('agen.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      //   }
+      // })
 
-      .navButtonAdd(pager, {
-        caption: 'Edit',
-        title: 'Edit',
-        id: 'edit',
-        buttonicon: 'fas fa-pen',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+      // .navButtonAdd(pager, {
+      //   caption: 'Edit',
+      //   title: 'Edit',
+      //   id: 'edit',
+      //   buttonicon: 'fas fa-pen',
+      //   onClickButton: function() {
+      //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-          if (selectedId == null || selectedId == '' || selectedId == undefined) {
-            alert('please select a row')
-          } else {
-            window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-          }
-        }
-      })
+      //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
+      //       alert('please select a row')
+      //     } else {
+      //       window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      //     }
+      //   }
+      // })
 
-      .navButtonAdd(pager, {
-        caption: 'Delete',
-        title: 'Delete',
-        id: 'delete',
-        buttonicon: 'fas fa-trash',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+      // .navButtonAdd(pager, {
+      //   caption: 'Delete',
+      //   title: 'Delete',
+      //   id: 'delete',
+      //   buttonicon: 'fas fa-trash',
+      //   onClickButton: function() {
+      //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-        }
-      })
+      //     window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+      //   }
+      // })
 
-      .navButtonAdd(pager, {
-        caption: 'Export',
-        title: 'Export',
-        id: 'export',
-        buttonicon: 'fas fa-file-export',
-        onClickButton: function() {
-          $('#rangeModal').data('action', 'export')
-          $('#rangeModal').find('button:submit').html(`Export`)
-          $('#rangeModal').modal('show')
-        }
-      })
+      // .navButtonAdd(pager, {
+      //   caption: 'Export',
+      //   title: 'Export',
+      //   id: 'export',
+      //   buttonicon: 'fas fa-file-export',
+      //   onClickButton: function() {
+      //     $('#rangeModal').data('action', 'export')
+      //     $('#rangeModal').find('button:submit').html(`Export`)
+      //     $('#rangeModal').modal('show')
+      //   }
+      // })
 
-      .navButtonAdd(pager, {
-        caption: 'Report',
-        title: 'Report',
-        id: 'report',
-        buttonicon: 'fas fa-print',
-        onClickButton: function() {
-          $('#rangeModal').data('action', 'report')
-          $('#rangeModal').find('button:submit').html(`Report`)
-          $('#rangeModal').modal('show')
-        }
-      })
+      // .navButtonAdd(pager, {
+      //   caption: 'Report',
+      //   title: 'Report',
+      //   id: 'report',
+      //   buttonicon: 'fas fa-print',
+      //   onClickButton: function() {
+      //     $('#rangeModal').data('action', 'report')
+      //     $('#rangeModal').find('button:submit').html(`Report`)
+      //     $('#rangeModal').modal('show')
+      //   }
+      // })
 
-      .navButtonAdd(pager, {
-        caption: 'UN/APPROVE',
-        title: 'UN/APPROVE',
-        id: 'approval',
-        buttonicon: 'fas fa-check',
-        onClickButton: function(a, b, c) {
-          let id = $(this).getGridParam('selrow')
+      // .navButtonAdd(pager, {
+      //   caption: 'UN/APPROVE',
+      //   title: 'UN/APPROVE',
+      //   id: 'approval',
+      //   buttonicon: 'fas fa-check',
+      //   onClickButton: function(a, b, c) {
+      //     let id = $(this).getGridParam('selrow')
 
-          $('#loader').removeClass('d-none')
+      //     $('#loader').removeClass('d-none')
 
-          $.ajax({
-            url: `{{ config('app.api_url') }}agen/${id}/approval`,
-            method: 'POST',
-            dataType: 'JSON',
-            beforeSend: request => {
-              request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-            },
-            success: response => {
-              $(this).trigger('reloadGrid')
-            }
-          }).always(() => {
-            $('#loader').addClass('d-none')
-          })
-        }
-      })
+      //     $.ajax({
+      //       url: `{{ config('app.api_url') }}agen/${id}/approval`,
+      //       method: 'POST',
+      //       dataType: 'JSON',
+      //       beforeSend: request => {
+      //         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      //       },
+      //       success: response => {
+      //         $(this).trigger('reloadGrid')
+      //       }
+      //     }).always(() => {
+      //       $('#loader').addClass('d-none')
+      //     })
+      //   }
+      // })
 
       .jqGrid('filterToolbar', {
         stringResult: true,
@@ -570,6 +590,67 @@
         submitButton.removeAttr('disabled')
       }
     })
+
+    /* Handle button add on click */
+    $('#add').click(function() {
+      let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
+
+      window.location.href = `{{ route('agen.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+    })
+
+    /* Handle button edit on click */
+    $('#edit').click(function() {
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+      if (selectedId == null || selectedId == '' || selectedId == undefined) {
+        alert('please select a row')
+      } else {
+        window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      }
+    })
+
+    /* Handle button delete on click */
+    $('#delete').click(function() {
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+    })
+
+    /* Handle button approval on click */
+    $('#approval').click(function() {
+      let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+
+      $('#loader').removeClass('d-none')
+
+      $.ajax({
+        url: `{{ config('app.api_url') }}agen/${id}/approval`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+        success: response => {
+          $('#jqGrid').trigger('reloadGrid')
+        }
+      }).always(() => {
+        $('#loader').addClass('d-none')
+      })
+    })
+
+    /* Handle button export on click */
+    $('#export').click(function() {
+      $('#rangeModal').data('action', 'export')
+      $('#rangeModal').find('button:submit').html(`Export`)
+      $('#rangeModal').modal('show')
+    })
+
+    /* Handle button report on click */
+    $('#report').click(function() {
+      $('#rangeModal').data('action', 'report')
+      $('#rangeModal').find('button:submit').html(`Report`)
+      $('#rangeModal').modal('show')
+    })
+
   })
 </script>
 @endpush()

@@ -13,32 +13,47 @@ class SupplierController extends MyController
     {
         $title = $this->title;
 
-        return view('supplier.index', compact('title'));
+        $combo = [
+            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+            'statusdaftarharga' => $this->getParameter('STATUS DAFTAR HARGA', 'STATUS DAFTAR HARGA'),
+        ];
+
+        return view('supplier.index', compact('title', 'combo'));
     }
 
     public function create()
     {
         $title = $this->title;
 
-        return view('supplier.add', compact('title'));
+        $combo = [
+            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+            'statusdaftarharga' => $this->getParameter('STATUS DAFTAR HARGA', 'STATUS DAFTAR HARGA'),
+        ];
+
+        return view('supplier.add', compact('title', 'combo'));
     }
 
-    
+
     public function edit($id)
     {
         $title = $this->title;
+
+        $combo = [
+            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+            'statusdaftarharga' => $this->getParameter('STATUS DAFTAR HARGA', 'STATUS DAFTAR HARGA'),
+        ];
 
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "supplier/$id");
 
-        
+
         $supplier = $response['data'];
 
-        return view('supplier.edit', compact('title', 'supplier'));
+        return view('supplier.edit', compact('title', 'supplier', 'combo'));
     }
-    
+
     public function delete($id)
     {
         try {
@@ -49,9 +64,14 @@ class SupplierController extends MyController
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "supplier/$id");
 
+            $combo = [
+                'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+                'statusdaftarharga' => $this->getParameter('STATUS DAFTAR HARGA', 'STATUS DAFTAR HARGA'),
+            ];
+
             $supplier = $response['data'];
 
-            return view('supplier.delete', compact('title', 'supplier'));
+            return view('supplier.delete', compact('title', 'supplier', 'combo'));
         } catch (\Throwable $th) {
             return redirect()->route('supplier.index');
         }
