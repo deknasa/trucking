@@ -60,7 +60,9 @@ $(document).ajaxError((event, jqXHR, ajaxSettings, thrownError) => {
 $(window).on("resize", function (event) {
 	if ($(window).width() > 990) {
 		$("body").removeClass();
-		$("body").addClass("sidebar-closed");
+		setTimeout(() => {
+			$("body").addClass("sidebar-closed sidebar-collapse");
+		}, 0);
 	}
 });
 
@@ -672,7 +674,7 @@ $(document)
 	});
 
 function showDialog(statusText = "", message = "") {
-	$("#dialog-message").find('p').remove()
+	$("#dialog-message").find("p").remove();
 	$("#dialog-message").append(`<p> ${statusText} </p><p> ${message} </p>`);
 	$("#dialog-message").dialog({
 		modal: true,
@@ -792,7 +794,7 @@ $(document).on("keydown", ".table-bindkeys [name]", function (event) {
 				.find("[name]");
 
 			if (incomingElement.length == 0) {
-				$('form button#btnSimpan').focus()
+				$("form button#btnSimpan").focus();
 			} else {
 				incomingElement.focus();
 			}
@@ -808,11 +810,10 @@ $(document)
 	})
 	.on("mouseup", "#addrow", function (event) {
 		if (
-			(
-				$(activeElement).is("input") ||
+			($(activeElement).is("input") ||
 				$(activeElement).is("select") ||
-				$(activeElement).is("textarea")
-			) && $(activeElement).parents('.table-bindkeys').length > 0
+				$(activeElement).is("textarea")) &&
+			$(activeElement).parents(".table-bindkeys").length > 0
 		) {
 			if (
 				typeof $(activeElement).attr("name") !== "undefined" &&

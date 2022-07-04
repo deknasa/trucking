@@ -70,7 +70,7 @@
     </div>
   </div>
   <p>Copyright &copy; <?= Date("Y") ?></p>
-  <p>Halaman ini dimuat selama <strong>{{ (microtime(true) - LARAVEL_START) }}</strong> detik</p>
+  <p>Halaman ini dimuat selama <strong>{{ number_format(microtime(true) - LARAVEL_START, 2) }}</strong> detik</p>
 
   <!-- jQuery -->
   <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>

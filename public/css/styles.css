@@ -110,6 +110,13 @@
 }*/
 }
 
+#customPager {
+    background: #fff;
+    position: sticky;
+    bottom: 0;
+    overflow-x: scroll;
+}
+
 /* Make jqgrid pager sticky to bottom */
 .ui-jqgrid-pager.ui-jqgrid-pager {
     background: #fff;
