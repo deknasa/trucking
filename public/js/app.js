@@ -2101,8 +2101,10 @@ window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/d
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: "pusher",
   key: "tes",
-  wsHost: '127.0.0.1',
+  wsHost: 'web.transporindo.com',
   wsPort: 6001,
+  wssHost: 'web.transporindo.com',
+  wssPort: 6001,
   forceTLS: false,
   disableStats: true
 });
