@@ -12,6 +12,7 @@
 </div>
 
 @push('scripts')
+<script src="{{ asset('js/app.js') }}"></script>
 <script>
   let indexUrl = "{{ route('parameter.index') }}"
   let indexRow = 0;
@@ -366,6 +367,10 @@
               submitButton.removeAttr('disabled')
             }
           }
+        }
+
+        xhr.onerror = () => {
+          submitButton.removeAttr('disabled')
         }
 
         xhr.send()
