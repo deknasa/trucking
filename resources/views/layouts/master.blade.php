@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>{{ $title ?? 'No title' }} | Trucking</title>
-  
+
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
   <!-- Google Font: Source Sans Pro -->
@@ -36,6 +36,7 @@
 
   <!-- Custom styles -->
   <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/pager.css') }}">
 
   <link rel="stylesheet" href="{{ asset('plugins/dropzone/dropzone.css') }}">
 
@@ -164,6 +165,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.js"></script>
 
   <!-- Custom global script -->
+  <script src="{{ asset('js/pager.js') }}"></script>
+
   <script src="{{ asset('mains.js') }}"></script>
 
   <!-- Custom page script -->
@@ -181,7 +184,7 @@
 
       return true;
     }
-  
+
     $(".formatdate").datepicker({
         dateFormat: 'dd-mm-yy',
         assumeNearbyYear: true
@@ -203,6 +206,24 @@
         }
       })
       .focus(function() {})
+
+
+    $(document).ready(function() {
+      Echo.channel('export')
+        .listen('UpdateExportProgress', event => {
+          $('.modal-body').append(`<div id="progressbar"></div>`)
+
+          $(document).find('#progressbar').progressbar({
+            value: event.progress
+          })
+
+          $('.ui-progressbar-value').addClass('text-center').text(`${parseInt(event.progress)}%`)
+
+          if (event.progress >= 100) {
+            $(document).find('#progressbar').remove()
+          }
+        })
+    })
   </script>
 </body>
 

@@ -72,8 +72,8 @@
             <i class="fa fa-check"></i> UN/APPROVAL
           </button>
         </div>
-        <div id="pagerButtonContainer" class="col-12 col-md-3 d-flex justify-content-center"></div>
-        <div id="pagerInfo" class="col-12 col-md-4"></div>
+        <div id="pagerHandler" class="col-12 col-md-3 d-flex justify-content-center align-items-center"></div>
+        <div id="pagerInfo" class="col-12 col-md-4 d-flex justify-content-end align-items-center"></div>
       </div>
     </div>
   </div>
@@ -82,19 +82,6 @@
 @push('scripts')
 <script src="{{ asset('js/app.js') }}"></script>
 <script>
-  Echo.channel('export')
-    .listen('UpdateExportProgress', event => {
-      $('.modal-body').append(`<div id="progressbar"></div>`)
-
-      $(document).find('#progressbar').progressbar({
-        value: event.progress
-      })
-
-      if (event.progress >= 100) {
-        $('#progressbar').remove()
-      }
-    })
-
   let indexUrl = "{{ route('agen.index') }}"
   let getUrl = "{{ route('agen.get') }}"
   let indexRow = 0;
@@ -304,7 +291,7 @@
         sortname: sortname,
         sortorder: sortorder,
         page: page,
-        pager: pager,
+        // pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',
@@ -326,20 +313,10 @@
           let rows = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
-        gridComplete: () => {
-          let centerPager = $('#jqGridPager_center')
-          let rightPager = $('#jqGridPager_right')
-          let pagerInput = $('#input_jqGridPager input')
-          centerPager.addClass('d-flex align-items-center justify-content-center')
-          centerPager.find('#input_jqGridPager').addClass('d-flex align-items-center')
-
-          $('#pagerButtonContainer').append(centerPager)
-          $('#pagerInfo').append(rightPager)
-          pagerInput.val($('#jqGrid').getGridParam('page'))
-
-          $('#jqGridPager').remove()
-        },
         loadComplete: function(data) {
+          loadPagerHandler('#pagerHandler', $(this))
+          loadPagerInfo('#pagerInfo', $(this))
+          
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
