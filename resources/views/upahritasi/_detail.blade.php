@@ -27,7 +27,7 @@
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
-        url: detailIndexUrl,
+        url: `{{ config('app.api_url') . 'upahritasirincian' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',

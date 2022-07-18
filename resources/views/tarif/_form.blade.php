@@ -138,7 +138,7 @@ $indexRow = $_GET['indexRow'] ?? '';
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  NOMINAL TON<span class="text-danger">*</span>
+                  NOMINAL TON
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
