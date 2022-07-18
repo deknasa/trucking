@@ -78,7 +78,6 @@
 </div>
 
 @push('scripts')
-<script src="{{ asset('js/app.js') }}"></script>
 <script>
   let indexUrl = "{{ route('agen.index') }}"
   let getUrl = "{{ route('agen.get') }}"
