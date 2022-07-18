@@ -73,14 +73,14 @@ use App\Http\Controllers\RitasiController;
 */
 
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('/', function(){
+Route::get('/', function () {
     return redirect()->route('login');
 });
 
 Route::middleware('guest')->group(function () {
     Route::get('login/index', [AuthController::class, 'index'])->name('login');
     Route::post('login', [AuthController::class, 'login'])->name('login.process');
-  });
+});
 
 // Route::middleware('guest')->group(function () {
 //     Route::get('login', [AuthController::class, 'index'])->name('login');
@@ -285,13 +285,13 @@ Route::middleware('auth')->group(function () {
     Route::get('gudang/get', [GudangController::class, 'get'])->name('gudang.get');
     Route::get('gudang/index', [GudangController::class, 'index']);
     Route::resource('gudang', GudangController::class);
-    
-    Route::get('sub_kelompok/report', [SubKelompokController::class, 'report'])->name('sub_kelompok.report');
-    Route::get('sub_kelompok/{id}/delete', [SubKelompokController::class, 'delete'])->name('sub_kelompok.delete');
-    Route::get('sub_kelompok/get', [SubKelompokController::class, 'get'])->name('gudang.get');
-    Route::get('sub_kelompok/index', [SubKelompokController::class, 'index']);
-    Route::resource('sub_kelompok', SubKelompokController::class);
-    
+
+    Route::get('subkelompok/report', [SubKelompokController::class, 'report'])->name('subkelompok.report');
+    Route::get('subkelompok/{id}/delete', [SubKelompokController::class, 'delete'])->name('subkelompok.delete');
+    Route::get('subkelompok/get', [SubKelompokController::class, 'get'])->name('gudang.get');
+    Route::get('subkelompok/index', [SubKelompokController::class, 'index']);
+    Route::resource('subkelompok', SubKelompokController::class);
+
     Route::get('supplier/report', [SupplierController::class, 'report'])->name('supplier.report');
     Route::get('supplier/{id}/delete', [SupplierController::class, 'delete'])->name('supplier.delete');
     Route::get('supplier/get', [SupplierController::class, 'get'])->name('gudang.get');
@@ -321,7 +321,7 @@ Route::middleware('auth')->group(function () {
     Route::get('penerima/get', [PenerimaController::class, 'get'])->name('kerusakan.get');
     Route::get('penerima/index', [PenerimaController::class, 'index']);
     Route::resource('penerima', PenerimaController::class);
-    
+
     Route::get('pelanggan/report', [PelangganController::class, 'report'])->name('pelanggan.report');
     Route::get('pelanggan/{id}/delete', [PelangganController::class, 'delete'])->name('pelanggan.delete');
     Route::get('pelanggan/get', [PelangganController::class, 'get'])->name('kerusakan.get');
@@ -351,7 +351,7 @@ Route::middleware('auth')->group(function () {
     Route::get('merk/get', [MerkController::class, 'get'])->name('merk.get');
     Route::get('merk/index', [MerkController::class, 'index']);
     Route::resource('merk', MerkController::class);
-    
+
     Route::get('penerimaan_trucking/report', [PenerimaanTruckingController::class, 'report'])->name('penerimaan_trucking.report');
     Route::get('penerimaan_trucking/{id}/delete', [PenerimaanTruckingController::class, 'delete'])->name('penerimaan_trucking.delete');
     Route::get('penerimaan_trucking/get', [PenerimaanTruckingController::class, 'get'])->name('merk.get');
@@ -431,6 +431,6 @@ Route::middleware('auth')->group(function () {
     Route::get('ritasi/{id}/delete', [RitasiController::class, 'delete'])->name('ritasi.delete');
     Route::get('ritasi/get', [RitasiController::class, 'get'])->name('ritasi.get');
     Route::get('ritasi/index', [RitasiController::class, 'index']);
-    
+
     Route::resource('ritasi', RitasiController::class);
 });

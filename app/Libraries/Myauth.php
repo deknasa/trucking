@@ -72,7 +72,7 @@ class Myauth
             'ritasi',
             'satuan',
             'status_container',
-            'sub_kelompok',
+            'subkelompok',
             'supir',
             'supplier',
             'suratpengantar',
