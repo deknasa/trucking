@@ -2,7 +2,7 @@
 
 @section('content')
 <!-- Form -->
-@include('parameter._form', [
+@include('akunpusat._form', [
   'action' => 'edit'
 ])
 @endsection
