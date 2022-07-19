@@ -19,7 +19,7 @@ class StatusContainerController extends MyController
             'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
         ];
 
-        return view('status_container.index', compact('title', 'combo'));
+        return view('statuscontainer.index', compact('title', 'combo'));
     }
 
     /**
@@ -32,7 +32,7 @@ class StatusContainerController extends MyController
             'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
         ];
 
-        return view('status_container.add', compact('title', 'combo'));
+        return view('statuscontainer.add', compact('title', 'combo'));
     }
     
     /**
@@ -45,14 +45,14 @@ class StatusContainerController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "status_container/$id");
+            ->get(config('app.api_url') . "statuscontainer/$id");
 
         $statusContainer = $response['data'];
         $combo = [
             'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
         ];
 
-        return view('status_container.edit', compact('title', 'statusContainer', 'combo'));
+        return view('statuscontainer.edit', compact('title', 'statusContainer', 'combo'));
     }
     
     /**
@@ -66,14 +66,14 @@ class StatusContainerController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "status_container/$id");
+                ->get(config('app.api_url') . "statuscontainer/$id");
 
             $statusContainer = $response['data'];
             $combo = [
                 'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
             ];
 
-            return view('status_container.delete', compact('title', 'statusContainer', 'combo'));
+            return view('statuscontainer.delete', compact('title', 'statusContainer', 'combo'));
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -87,10 +87,10 @@ class StatusContainerController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'status_container', $request->all());
+            ->get(config('app.api_url') . 'statuscontainer', $request->all());
 
         $statusContainers = $response['data'];
 
-        return view('reports.status_container', compact('statusContainers'));
+        return view('reports.statuscontainer', compact('statusContainers'));
     }
 }

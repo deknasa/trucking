@@ -13,6 +13,10 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class AkunPusatController extends MyController
 {
     public $title = 'Akun Pusat';
+    public $httpHeaders = [
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json'
+    ];
 
     /**
      * @ClassName
@@ -20,7 +24,7 @@ class AkunPusatController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        
+
         $combo = [
             'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
         ];
@@ -31,146 +35,67 @@ class AkunPusatController extends MyController
     /**
      * @ClassName
      */
-    public function get($params = [])
-    {
-        $params = [
-            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
-            'limit' => $params['rows'] ?? request()->rows ?? 0,
-            'sortIndex' => $params['sidx'] ?? request()->sidx,
-            'sortOrder' => $params['sord'] ?? request()->sord,
-            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
-        ];
-
-        $response = Http::withHeaders(request()->header())
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'akun_pusat', $params);
-
-        $data = [
-            'total' => $response['attributes']['totalPages'] ?? [],
-            'records' => $response['attributes']['totalRows'] ?? [],
-            'rows' => $response['data'] ?? [],
-            'params' => $params ?? [],
-            'message' => $response['message'] ?? ''
-        ];
-
-        if (request()->ajax()) {
-            return response($data, $response->status());
-        }
-
-        return $data;
-    }
-
-    /**
-     * @ClassName
-     */
-    public function create(): View
+    public function create()
     {
         $title = $this->title;
 
-        return view('akunpusat.add', compact('title'));
+        $combo = [
+            'statuscoa' => $this->getParameter('STATUS COA', 'STATUS COA'),
+            'statusaccountpayable' => $this->getParameter('STATUS ACCOUNT PAYABLE', 'STATUS ACCOUNT PAYABLE'),
+            'statusneraca' => $this->getParameter('STATUS NERACA', 'STATUS NERACA'),
+            'statuslabarugi' => $this->getParameter('STATUS LABA RUGI', 'STATUS LABA RUGI'),
+            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF')
+        ];
+
+        return view('akunpusat.add', compact('title', 'combo'));
     }
 
-    /**
-     * @ClassName
-     */
-    public function store(Request $request): Response
-    {
-        try {
-            $request['modifiedby'] = Auth::user()->name;
-
-            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
-                ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'akun_pusat', $request->all());
-
-            return response($response, $response->status());
-        } catch (\Throwable $th) {
-            throw $th->getMessage();
-        }
-    }
-
-    /**
-     * @ClassName
-     */
-    public function edit($id): View
+    public function edit($id)
     {
         $title = $this->title;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $combo = [
+            'statuscoa' => $this->getParameter('STATUS COA', 'STATUS COA'),
+            'statusaccountpayable' => $this->getParameter('STATUS ACCOUNT PAYABLE', 'STATUS ACCOUNT PAYABLE'),
+            'statusneraca' => $this->getParameter('STATUS NERACA', 'STATUS NERACA'),
+            'statuslabarugi' => $this->getParameter('STATUS LABA RUGI', 'STATUS LABA RUGI'),
+            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF')
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "akun_pusat/$id");
+            ->get(config('app.api_url') . "akunpusat/$id");
 
         $akunPusat = $response['data'];
 
-        return view('akunpusat.edit', compact('title', 'akunPusat'));
+        return view('akunpusat.edit', compact('title', 'akunPusat', 'combo'));
     }
 
-    /**
-     * @ClassName
-     */
-    public function update(Request $request, $id): Response
-    {
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
-            ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "akun_pusat/$id", $request->all());
-
-        return response($response);
-    }
-
-    /**
-     * @ClassName
-     */
     public function delete($id)
     {
         try {
             $title = $this->title;
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
+            $combo = [
+                'statuscoa' => $this->getParameter('STATUS COA', 'STATUS COA'),
+                'statusaccountpayable' => $this->getParameter('STATUS ACCOUNT PAYABLE', 'STATUS ACCOUNT PAYABLE'),
+                'statusneraca' => $this->getParameter('STATUS NERACA', 'STATUS NERACA'),
+                'statuslabarugi' => $this->getParameter('STATUS LABA RUGI', 'STATUS LABA RUGI'),
+                'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF')
+            ];
+
+            $response = Http::withHeaders($this->httpHeaders)
+                ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "akun_pusat/$id");
+                ->get(config('app.api_url') . "akunpusat/$id");
 
             $akunPusat = $response['data'];
 
-            return view('akunpusat.delete', compact('title', 'akunPusat'));
+            return view('akunpusat.delete', compact('title', 'akunPusat', 'combo'));
         } catch (\Throwable $th) {
-            return redirect()->route('akunpusat.index');
+            throw $th;
         }
-    }
-
-    /**
-     * @ClassName
-     */
-    public function destroy($id, Request $request)
-    {
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
-            ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "akun_pusat/$id", $request->all());
-
-        return response($response);
-    }
-
-    public function fieldLength(): Response
-    {
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'akun_pusat/field_length');
-
-        return response($response['data']);
     }
 
     /**

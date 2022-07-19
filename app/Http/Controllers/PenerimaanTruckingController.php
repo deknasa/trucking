@@ -16,7 +16,7 @@ class PenerimaanTruckingController extends MyController
     {
         $title = $this->title;
 
-        return view('penerimaan_trucking.index', compact('title'));
+        return view('penerimaantrucking.index', compact('title'));
     }
     
     /**
@@ -26,7 +26,7 @@ class PenerimaanTruckingController extends MyController
     {
         $title = $this->title;
 
-        return view('penerimaan_trucking.add', compact('title'));
+        return view('penerimaantrucking.add', compact('title'));
     }
 
     /**
@@ -39,11 +39,11 @@ class PenerimaanTruckingController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "penerimaan_trucking/$id");
+            ->get(config('app.api_url') . "penerimaantrucking/$id");
 
         $penerimaanTrucking = $response['data'];
 
-        return view('penerimaan_trucking.edit', compact('title', 'penerimaanTrucking'));
+        return view('penerimaantrucking.edit', compact('title', 'penerimaanTrucking'));
     }
 
     /**
@@ -57,13 +57,13 @@ class PenerimaanTruckingController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "penerimaan_trucking/$id");
+                ->get(config('app.api_url') . "penerimaantrucking/$id");
 
             $penerimaanTrucking = $response['data'];
 
-            return view('penerimaan_trucking.delete', compact('title', 'penerimaanTrucking'));
+            return view('penerimaantrucking.delete', compact('title', 'penerimaanTrucking'));
         } catch (\Throwable $th) {
-            return redirect()->route('penerimaan_trucking.index');
+            return redirect()->route('penerimaantrucking.index');
         }
     }
     
@@ -75,10 +75,10 @@ class PenerimaanTruckingController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaan_trucking', $request->all());
+            ->get(config('app.api_url') . 'penerimaantrucking', $request->all());
 
         $penerimaanTruckings = $response['data'];
 
-        return view('reports.penerimaan_trucking', compact('penerimaanTr$penerimaanTruckings'));
+        return view('reports.penerimaantrucking', compact('penerimaanTr$penerimaanTruckings'));
     }
 }

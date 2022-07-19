@@ -2,7 +2,7 @@
 
 @section('content')
 <!-- Form -->
-@include('sub_kelompok._form', [
-  'action' => 'add'
+@include('subkelompok._form', [
+  'action' => 'delete'
 ])
 @endsection

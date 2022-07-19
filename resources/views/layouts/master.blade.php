@@ -172,10 +172,12 @@
   <!-- Custom page script -->
   @stack('scripts')
 
+  <script src="{{ asset('js/app.js') }}"></script>
+  
   <script type="text/javascript">
     let accessToken = `{{session('access_token')}}`
     let apiUrl = `{{ config('app.api_url') }}`
-    
+
     function separatorNumber(object) {
       var value = parseInt(object.value.replaceAll('.', '').replaceAll(',', ''));
 

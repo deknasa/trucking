@@ -22,52 +22,147 @@ $indexRow = $_GET['indexRow'] ?? '';
             <input type="hidden" name="indexRow" value="{{ $_GET['indexRow'] ?? 1 }}">
             <input type="hidden" name="page" value="{{ $_GET['page'] ?? 1 }}">
 
-
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>ID</label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="id" class="form-control" value="{{ $parameter['id'] ?? '' }}" readonly>
+                <input type="text" name="id" class="form-control" value="{{ $akunPusat['id'] ?? '' }}" readonly>
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>
-                  GROUP <span class="text-danger">*</span>
+                  coa <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="grp" class="form-control" value="{{ $parameter['grp'] ?? '' }}">
+                <input type="text" name="coa" class="form-control" value="{{ $akunPusat['coa'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>
-                  SUBGROUP <span class="text-danger">*</span>
+                  keterangan coa <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="subgrp" class="form-control" value="{{ $parameter['subgrp'] ?? '' }}">
+                <input type="text" name="keterangancoa" class="form-control" value="{{ $akunPusat['keterangancoa'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>
-                  NAMA PARAMETER <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="text" class="form-control" value="{{ $parameter['text'] ?? '' }}">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  MEMO <span class="text-danger">*</span>
+                  type <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="memo" class="form-control" value="{{ $parameter['memo'] ?? '' }}">
+                <input type="text" name="type" class="form-control" value="{{ $akunPusat['type'] ?? '' }}">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>
+                  level <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="level" class="form-control" value="{{ $akunPusat['level'] ?? '' }}">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>
+                  aktif <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="aktif" class="form-control" value="{{ $akunPusat['aktif'] ?? '' }}">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>
+                  parent <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="parent" class="form-control" value="{{ $akunPusat['parent'] ?? '' }}">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS COA<span class="text-danger">*</span></label>
+              <div class="col-12 col-md-10">
+                <select name="statuscoa" class="w-100">
+                  <optgroup label="">
+                    <option selected hidden disabled></option>
+                    @foreach($combo['statuscoa'] as $statuscoa)
+                    <option value="{{ $statuscoa['id'] }}" {{ $statuscoa['id'] == @$akunPusat['statuscoa'] ? 'selected' : '' }}>{{ $statuscoa['text'] }}</option>
+                    @endforeach
+                  </optgroup>
+                </select>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS ACCOUNT PAYABLE<span class="text-danger">*</span></label>
+              <div class="col-12 col-md-10">
+                <select name="statusaccountpayable" class="w-100">
+                  <optgroup label="">
+                    <option selected hidden disabled></option>
+                    @foreach($combo['statusaccountpayable'] as $statusaccountpayable)
+                    <option value="{{ $statusaccountpayable['id'] }}" {{ $statusaccountpayable['id'] == @$akunPusat['statusaccountpayable'] ? 'selected' : '' }}>{{ $statusaccountpayable['text'] }}</option>
+                    @endforeach
+                  </optgroup>
+                </select>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS NERACA<span class="text-danger">*</span></label>
+              <div class="col-12 col-md-10">
+                <select name="statusneraca" class="w-100">
+                  <optgroup label="">
+                    <option selected hidden disabled></option>
+                    @foreach($combo['statusneraca'] as $statusneraca)
+                    <option value="{{ $statusneraca['id'] }}" {{ $statusneraca['id'] == @$akunPusat['statusneraca'] ? 'selected' : '' }}>{{ $statusneraca['text'] }}</option>
+                    @endforeach
+                  </optgroup>
+                </select>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS LABA RUGI<span class="text-danger">*</span></label>
+              <div class="col-12 col-md-10">
+                <select name="statuslabarugi" class="w-100">
+                  <optgroup label="">
+                    <option selected hidden disabled></option>
+                    @foreach($combo['statuslabarugi'] as $statuslabarugi)
+                    <option value="{{ $statuslabarugi['id'] }}" {{ $statuslabarugi['id'] == @$akunPusat['statuslabarugi'] ? 'selected' : '' }}>{{ $statuslabarugi['text'] }}</option>
+                    @endforeach
+                  </optgroup>
+                </select>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>
+                  coamain <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="coamain" class="form-control" value="{{ $akunPusat['coamain'] ?? '' }}">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS AKTIF<span class="text-danger">*</span></label>
+              <div class="col-12 col-md-10">
+                <select name="statusaktif" class="w-100">
+                  <optgroup label="">
+                    <option selected hidden disabled></option>
+                    @foreach($combo['statusaktif'] as $statusaktif)
+                    <option value="{{ $statusaktif['id'] }}" {{ $statusaktif['id'] == @$akunPusat['statusaktif'] ? 'selected' : '' }}>{{ $statusaktif['text'] }}</option>
+                    @endforeach
+                  </optgroup>
+                </select>
               </div>
             </div>
           </div>
@@ -80,7 +175,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               Simpan
               @endif
             </button>
-            <a href="{{ route('parameter.index') }}" class="btn btn-danger">
+            <a href="{{ route('akunpusat.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
               BATAL
             </a>
@@ -93,18 +188,16 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
-  
   let indexUrl = "{{ route('akunpusat.index') }}"
   let action = "{{ $action }}"
-  let actionUrl =  "{{ config('app.api_url') . 'akunpusat' }}" 
+  let actionUrl = "{{ config('app.api_url') . 'akunpusat' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
   /* Set action url */
-
   <?php if ($action !== 'add') : ?>
-    actionUrl += `/{{ $akunpusat['id'] }}`
-    
+    actionUrl += `/{{ $akunPusat['id'] }}`
+
   <?php endif; ?>
   <?php if ($action == 'edit') : ?>
     method = "PATCH"
