@@ -346,41 +346,41 @@
 
     /* Handle button add on click */
     $('#add').click(function() {
-          let limit = $("#jqGrid").jqGrid('getGridParam', 'postData').limit
+      let limit = $("#jqGrid").jqGrid('getGridParam', 'postData').limit
 
-          window.location.href = `{{ route('statuscontainer.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      window.location.href = `{{ route('statuscontainer.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
     })
 
     /* Handle button edit on click */
     $('#edit').click(function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-          if (selectedId == null || selectedId == '' || selectedId == undefined) {
-            alert('please select a row')
-          } else {
-            window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-          }
+      if (selectedId == null || selectedId == '' || selectedId == undefined) {
+        alert('please select a row')
+      } else {
+        window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      }
     })
 
     /* Handle button delete on click */
     $('#delete').click(function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
     })
 
     /* Handle button export on click */
     $('#export').click(function() {
-          $('#rangeModal').data('action', 'export')
-          $('#rangeModal').find('button:submit').html(`Export`)
-          $('#rangeModal').modal('show')
+      $('#rangeModal').data('action', 'export')
+      $('#rangeModal').find('button:submit').html(`Export`)
+      $('#rangeModal').modal('show')
     })
 
     /* Handle button report on click */
     $('#report').click(function() {
-          $('#rangeModal').data('action', 'report')
-          $('#rangeModal').find('button:submit').html(`Report`)
-          $('#rangeModal').modal('show')
+      $('#rangeModal').data('action', 'report')
+      $('#rangeModal').find('button:submit').html(`Report`)
+      $('#rangeModal').modal('show')
     })
   })
 </script>

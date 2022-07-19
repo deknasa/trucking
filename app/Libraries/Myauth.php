@@ -66,7 +66,7 @@ class Myauth
             'orderantrucking',
             'pelanggan',
             'penerima',
-            'perimaantrucking',
+            'penerimaantrucking',
             'pengeluarantrucking',
             'prosesabsensisupir',
             'ritasi',

@@ -80,7 +80,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               Simpan
               @endif
             </button>
-            <a href="{{ route('penerimaan_trucking.index') }}" class="btn btn-danger">
+            <a href="{{ route('penerimaantrucking.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
               BATAL
             </a>
@@ -93,9 +93,9 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('penerimaan_trucking.index') }}"
+  let indexUrl = "{{ route('penerimaantrucking.index') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ config('app.api_url') . 'penerimaan_trucking' }}"
+  let actionUrl = "{{ config('app.api_url') . 'penerimaantrucking' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
@@ -156,7 +156,7 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     /* Get field maxlength */
     $.ajax({
-      url: `{{ config('app.api_url') . 'penerimaan_trucking/field_length' }}`,
+      url: `{{ config('app.api_url') . 'penerimaantrucking/field_length' }}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
