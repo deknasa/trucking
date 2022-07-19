@@ -328,11 +328,11 @@ Route::middleware('auth')->group(function () {
     Route::get('pelanggan/index', [PelangganController::class, 'index']);
     Route::resource('pelanggan', PelangganController::class);
 
-    Route::get('status_container/report', [StatusContainerController::class, 'report'])->name('status_container.report');
-    Route::get('status_container/{id}/delete', [StatusContainerController::class, 'delete'])->name('status_container.delete');
-    Route::get('status_container/get', [StatusContainerController::class, 'get'])->name('kerusakan.get');
-    Route::get('status_container/index', [StatusContainerController::class, 'index']);
-    Route::resource('status_container', StatusContainerController::class);
+    Route::get('statuscontainer/report', [StatusContainerController::class, 'report'])->name('statuscontainer.report');
+    Route::get('statuscontainer/{id}/delete', [StatusContainerController::class, 'delete'])->name('statuscontainer.delete');
+    Route::get('statuscontainer/get', [StatusContainerController::class, 'get'])->name('kerusakan.get');
+    Route::get('statuscontainer/index', [StatusContainerController::class, 'index']);
+    Route::resource('statuscontainer', StatusContainerController::class)->parameters(['statuscontainer' => 'statusContainer']);
 
     Route::get('kota/field_length', [KotaController::class, 'fieldLength'])->name('kota.field_length');
     Route::get('kota/{id}/delete', [KotaController::class, 'delete'])->name('kota.delete');

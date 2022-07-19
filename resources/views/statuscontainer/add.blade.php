@@ -2,7 +2,7 @@
 
 @section('content')
 <!-- Form -->
-@include('status_container._form', [
+@include('statuscontainer._form', [
   'action' => 'add'
 ])
 @endsection
