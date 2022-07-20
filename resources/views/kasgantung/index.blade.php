@@ -51,6 +51,23 @@
     <div class="col-12">
       <table id="jqGrid"></table>
       <div id="jqGridPager"></div>
+
+      <div id="customPager" class="row bg-white">
+        <div id="buttonContainer" class="col-12 col-md-5 text-center text-md-left">
+          <button id="add" class="btn btn-primary btn-sm mb-1">
+            <i class="fa fa-plus"></i> ADD
+          </button>
+          <button id="edit" class="btn btn-success btn-sm mb-1">
+            <i class="fa fa-pen"></i> EDIT
+          </button>
+          <button id="delete" class="btn btn-danger btn-sm mb-1">
+            <i class="fa fa-trash"></i> DELETE
+          </button>
+        </div>
+        <div id="pagerButtonContainer" class="col-12 col-md-3 d-flex justify-content-center"></div>
+        <div id="pagerInfo" class="col-12 col-md-4"></div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -102,8 +119,13 @@
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
 
+    /* Set rowNum */
+    <?php if (isset($_GET['limit'])) { ?>
+      rowNum = "{{ $_GET['limit'] }}"
+    <?php } ?>
+
     $("#jqGrid").jqGrid({
-        url: getUrl,
+        url: `{{ config('app.api_url') . 'kasgantung' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -111,7 +133,6 @@
         colModel: [{
             label: 'ID',
             name: 'id',
-            align: 'right',
             width: '50px'
           },
           {
@@ -122,11 +143,12 @@
           {
             label: 'TANGGAL',
             name: 'tgl',
-            align: 'left'
+            formatter: "date",
+            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y" }
           },
           {
             label: 'PENERIMA',
-            name: 'penerima.namapenerima',
+            name: 'penerima_id',
             align: 'left'
           },
           {
@@ -136,7 +158,7 @@
           },
           {
             label: 'BANK',
-            name: 'bank.namabank',
+            name: 'bank_id',
             align: 'left'
           },
           {
@@ -147,7 +169,8 @@
           {
             label: 'TANGGAL KAS KELUAR',
             name: 'tglkaskeluar',
-            align: 'left'
+            formatter: "date",
+            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y" }
           },
           {
             label: 'MODIFIEDBY',
@@ -157,7 +180,8 @@
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'left'
+            formatter: "date",
+            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y H:i:s" }
           },
         ],
         autowidth: true,
@@ -174,8 +198,18 @@
         page: page,
         pager: pager,
         viewrecords: true,
-        ajaxRowOptions: {
-          async: false,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
           loadDetailData(id)
@@ -183,8 +217,9 @@
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
-          let rows = $(this).jqGrid('getGridParam', 'postData').rows
-          if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+
+          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
           $("input").attr("autocomplete", "off");
@@ -200,7 +235,7 @@
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').rows
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
           triggerClick = true
 
@@ -236,41 +271,41 @@
         del: false,
       })
 
-      .navButtonAdd(pager, {
-        caption: 'Add',
-        title: 'Add',
-        id: 'add',
-        buttonicon: 'fas fa-plus',
-        onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').rows
+      // .navButtonAdd(pager, {
+      //   caption: 'Add',
+      //   title: 'Add',
+      //   id: 'add',
+      //   buttonicon: 'fas fa-plus',
+      //   onClickButton: function() {
+      //     let limit = $(this).jqGrid('getGridParam', 'postData').rows
 
-          window.location.href = `{{ route('kasgantung.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-        }
-      })
+      //     window.location.href = `{{ route('kasgantung.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      //   }
+      // })
 
-      .navButtonAdd(pager, {
-        caption: 'Edit',
-        title: 'Edit',
-        id: 'edit',
-        buttonicon: 'fas fa-pen',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+      // .navButtonAdd(pager, {
+      //   caption: 'Edit',
+      //   title: 'Edit',
+      //   id: 'edit',
+      //   buttonicon: 'fas fa-pen',
+      //   onClickButton: function() {
+      //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-          window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-        }
-      })
+      //     window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      //   }
+      // })
 
-      .navButtonAdd(pager, {
-        caption: 'Delete',
-        title: 'Delete',
-        id: 'delete',
-        buttonicon: 'fas fa-trash',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+      // .navButtonAdd(pager, {
+      //   caption: 'Delete',
+      //   title: 'Delete',
+      //   id: 'delete',
+      //   buttonicon: 'fas fa-trash',
+      //   onClickButton: function() {
+      //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-        }
-      })
+      //     window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+      //   }
+      // })
 
       // .navButtonAdd(pager, {
       //   caption: 'Export',
@@ -335,6 +370,31 @@
     $('#export .ui-pg-div')
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
+
+      /* Handle button add on click */
+    $('#add').click(function() {
+      let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
+
+      window.location.href = `{{ route('kasgantung.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+    })
+
+    /* Handle button edit on click */
+    $('#edit').click(function() {
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+      if (selectedId == null || selectedId == '' || selectedId == undefined) {
+        alert('please select a row')
+      } else {
+        window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      }
+    })
+
+    /* Handle button delete on click */
+    $('#delete').click(function() {
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+    })
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {

@@ -448,6 +448,7 @@
 
     let indexUrl = "{{ route('trado.index') }}"
   let action = "{{ $action }}"
+
   let actionUrl =  "{{ config('app.api_url') . 'trado' }}" 
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
@@ -455,7 +456,6 @@
   /* Set action url */
   <?php if ($action !== 'add') : ?>
     actionUrl += `/{{ $trado['id'] }}`
-    
   <?php endif; ?>
 
     /* Set action url */
@@ -477,6 +477,7 @@
             'stnk':{},
             'bpkb':{}
         };
+        var baseurl = "http://localhost:8080/trucking-laravel/public";
 
         const dropzones = []
           $('.dropzone').each(function(i, el){
@@ -525,7 +526,7 @@
 
                                 if (name=='g_trado') {
                                     wrapperThis.emit("addedfile", obj);
-                                    wrapperThis.emit("thumbnail", obj, "<?= config('app.api_url') . '/uploads/trado' ?>/" + imgTrado[idx]);
+                                    wrapperThis.emit("thumbnail", obj, baseurl+'/uploads/trado/' + imgTrado[idx]);
                                     wrapperThis.emit("complete", obj);
                                     wrapperThis.files.push(obj);
                                     attachArray.trado[obj.upload.uuid] = imgTrado[idx];
@@ -551,7 +552,7 @@
 
                                 if (name=='g_bpkb') {
                                     wrapperThis.emit("addedfile", obj);
-                                    wrapperThis.emit("thumbnail", obj, "<?= config('app.api_url') . '/uploads/bpkb' ?>/" + imgBpkb[idx]);
+                                    wrapperThis.emit("thumbnail", obj, baseurl+'/uploads/bpkb/' + imgBpkb[idx]);
                                     wrapperThis.emit("complete", obj);
                                     wrapperThis.files.push(obj);
                                     attachArray.bpkb[obj.upload.uuid] = imgBpkb[idx];
@@ -577,7 +578,7 @@
 
                                 if (name=='g_stnk') {
                                     wrapperThis.emit("addedfile", obj);
-                                    wrapperThis.emit("thumbnail", obj, "<?= config('app.api_url') . '/uploads/stnk' ?>/" + imgStnk[idx]);
+                                    wrapperThis.emit("thumbnail", obj, baseurl+'/uploads/stnk/' + imgStnk[idx]);
                                     wrapperThis.emit("complete", obj);
                                     wrapperThis.files.push(obj);
                                     attachArray.stnk[obj.upload.uuid] = imgStnk[idx];
@@ -597,7 +598,11 @@
             e.preventDefault();
             e.stopPropagation();
 
-            let form = new FormData($('form')[0])
+            let form = new FormData($('form')[0]);
+            
+            $.each($('form').serializeArray(), function( index, value ) {
+                form.append(value.name,value.value);
+            });
 
             if (action=='edit') {
                 form.append('g_all', JSON.stringify(attachArray))
@@ -610,17 +615,21 @@
               })
             })
 
+            if(action=='edit') {
+                form.append('_method','PUT')
+            }
+
             if(action=='delete') {
                 form.append('_method','DELETE')
             }
-            // console.log(form.get('sortIndex'));
+
             $.ajax({
                 url: actionUrl,
                 method: method,
                 dataType: 'JSON',
                 // data: $('form').serializeArray(),
                 headers: {
-                    'X-CSRF-TOKEN': csrfToken,
+                    'Authorization': `Bearer {{ session('access_token') }}`
                 },
                 data: form,
                 processData: false,
@@ -638,22 +647,29 @@
                     }
                 },
                 error: error => {
-                    alert(`${error.statusText} | ${error.responseText}`)
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+
+                        setErrorMessages(error.responseJSON.errors);
+                      } else {
+                        showDialog(error.statusText)
+                      }
                 },
             }).always(() => {
+                $('#loader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
         })
 
         /* Get field maxlength */
         $.ajax({
-            url: fieldLengthUrl,
+            url: "{{ config('app.api_url') . 'trado/field_length' }}" ,
             method: 'GET',
             dataType: 'JSON',
             headers: {
-          'Authorization': `Bearer {{ session('access_token') }}`
-        },
-
+              'Authorization': `Bearer {{ session('access_token') }}`
+            },
             success: response => {
                 $.each(response, (index, value) => {
                     if (value !== null && value !== 0 && value !== undefined) {
