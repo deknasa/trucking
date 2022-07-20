@@ -102,7 +102,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: getUrl,
+        url: `{{ config('app.api_url') . 'absensisupirheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -170,6 +170,19 @@
         viewrecords: true,
         ajaxRowOptions: {
           async: false,
+        },
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
           loadDetailData(id)

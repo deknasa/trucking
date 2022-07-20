@@ -14,11 +14,7 @@ use stdClass;
 class AbsensiSupirHeaderController extends MyController
 {
     public $title = 'Absensi';
-
-    /**
-     * Fungsi index
-     * @ClassName index
-     */
+    
     public function index(Request $request)
     {
         $title = $this->title;
@@ -26,41 +22,9 @@ class AbsensiSupirHeaderController extends MyController
         return view('absensisupir.index', compact('title'));
     }
 
-    public function get($params = [])
-    {
-        $params = [
-            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
-            'limit' => $params['rows'] ?? request()->rows ?? 0,
-            'sortIndex' => $params['sidx'] ?? request()->sidx,
-            'sortOrder' => $params['sord'] ?? request()->sord,
-            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
-            'withRelations' => $params['withRelations'] ?? request()->withRelations ?? false,
-        ];
-
-        $response = Http::withHeaders(request()->header())
-            ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/absensi', $params);
-
-        $data = [
-            'total' => $response['attributes']['totalPages'] ?? [],
-            'records' => $response['attributes']['totalRows'] ?? [],
-            'rows' => $response['data'] ?? [],
-            'params' => $response['params'] ?? [],
-        ];
-
-        return $data;
-    }
-
-    /**
-     * Fungsi create
-     * @ClassName create
-     */
     public function create()
     {
         $title = $this->title;
-
-        $noBukti = $this->getNoBukti('ABSENSI', 'ABSENSI', 'absensisupirheader');
-        $kasGantungNoBukti = $this->getNoBukti('ABSENSI', 'ABSENSI', 'absensisupirheader');
 
         $combo = [
             'trado' => $this->getTrado(),
@@ -68,40 +32,9 @@ class AbsensiSupirHeaderController extends MyController
             'status' => $this->getStatus(),
         ];
 
-        return view('absensisupir.add', compact('title', 'noBukti', 'combo', 'kasGantungNoBukti'));
+        return view('absensisupir.add', compact('title', 'combo'));
     }
 
-    public function store(Request $request)
-    {
-        /* Unformat uangjalan */
-        $request->uangjalan = array_map(function ($uangjalan) {
-            $uangjalan = str_replace('.', '', $uangjalan);
-            $uangjalan = str_replace(',', '.', $uangjalan);
-
-            return $uangjalan;
-        }, $request->uangjalan);
-
-        $request->merge([
-            'uangjalan' => $request->uangjalan
-        ]);
-
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->post(config('app.api_url') . 'absensi', $request->all());
-
-        return response($response, $response->status());
-    }
-
-    /**
-     * Fungsi edit
-     * @ClassName edit
-     */
     public function edit($id)
     {
         $title = $this->title;
@@ -123,38 +56,7 @@ class AbsensiSupirHeaderController extends MyController
 
         return view('absensisupir.edit', compact('title', 'absensisupir', 'combo'));
     }
-
-    public function update(Request $request, $id)
-    {
-        /* Unformat uangjalan */
-        $request->uangjalan = array_map(function ($uangjalan) {
-            $uangjalan = str_replace('.', '', $uangjalan);
-            $uangjalan = str_replace(',', '.', $uangjalan);
-
-            return $uangjalan;
-        }, $request->uangjalan);
-
-        $request->merge([
-            'uangjalan' => $request->uangjalan
-        ]);
-
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "absensi/$id", $request->all());
-
-        return response($response, $response->status());
-    }
-
-    /**
-     * Fungsi delete
-     * @ClassName delete
-     */
+    
     public function delete($id)
     {
         try {
@@ -179,21 +81,6 @@ class AbsensiSupirHeaderController extends MyController
         } catch (\Throwable $th) {
             return redirect()->route('absensi.index');
         }
-    }
-
-    public function destroy($id)
-    {
-
-        $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "absensi/$id");
-
-        return response($response, $response->status());
     }
 
     public function getTrado()
@@ -221,24 +108,6 @@ class AbsensiSupirHeaderController extends MyController
             ->get(config('app.api_url') . 'absen_trado');
 
         return $response['data'];
-    }
-
-    public function getNoBukti($group, $subgroup, $table)
-    {
-        $params = [
-            'group' => $group,
-            'subgroup' => $subgroup,
-            'table' => $table
-        ];
-
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "absensi/running_number", $params);
-
-        $noBukti = $response['data'] ?? 'No bukti tidak ditemukan';
-
-        return $noBukti;
     }
 
     public function report(Request $request)
