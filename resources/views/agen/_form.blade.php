@@ -100,7 +100,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="notelp" class="form-control" value="{{ $agen['notelp'] ?? '' }}">
+                <input type="text" name="notelp" class="form-control numbernoseparate" value="{{ $agen['notelp'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
@@ -110,7 +110,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="nohp" class="form-control" value="{{ $agen['nohp'] ?? '' }}">
+                <input type="text" name="nohp" class="form-control numbernoseparate" value="{{ $agen['nohp'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
