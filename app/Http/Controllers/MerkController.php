@@ -100,7 +100,7 @@ class MerkController extends MyController
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])
+        ])->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "merk/$id");
 
@@ -138,7 +138,7 @@ class MerkController extends MyController
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])
+            ])->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "merk/$id");
 
@@ -178,7 +178,7 @@ class MerkController extends MyController
 
     private function combo()
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
             ->get(config('app.api_url') . 'merk/combo');
         
         return $response['data'];

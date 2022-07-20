@@ -99,11 +99,19 @@ class UpahRitasiController extends MyController
             return $nominal;
         }, $request->nominaltol);
 
+        $request->liter = array_map(function ($nominal) {
+            $nominal = str_replace('.', '', $nominal);
+            $nominal = str_replace(',', '', $nominal);
+
+            return $nominal;
+        }, $request->liter);
+
         $request->merge([
             'nominalsupir' => $request->nominalsupir,
             'nominalkenek' => $request->nominalkenek,
             'nominalkomisi' => $request->nominalkomisi,
             'nominaltol' => $request->nominaltol,
+            'liter' => $request->liter,
         ]);
 
         $request['modifiedby'] = Auth::user()->name;
@@ -167,11 +175,19 @@ class UpahRitasiController extends MyController
             return $nominal;
         }, $request->nominaltol);
 
+        $request->liter = array_map(function ($nominal) {
+            $nominal = str_replace('.', '', $nominal);
+            $nominal = str_replace(',', '', $nominal);
+
+            return $nominal;
+        }, $request->liter);
+
         $request->merge([
             'nominalsupir' => $request->nominalsupir,
             'nominalkenek' => $request->nominalkenek,
             'nominalkomisi' => $request->nominalkomisi,
             'nominaltol' => $request->nominaltol,
+            'liter' => $request->liter,
         ]);
 
         $request['modifiedby'] = Auth::user()->name;

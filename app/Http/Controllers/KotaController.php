@@ -100,7 +100,7 @@ class KotaController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "kota/$id");
-
+        
         $kota = $response['data'];
 
         return view('kota.edit', compact('title', 'kota', 'combo'));
