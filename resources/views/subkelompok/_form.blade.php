@@ -52,15 +52,16 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <input type="text" name="keterangan" class="form-control" value="{{ $subKelompok['keterangan'] ?? '' }}">
               </div>
             </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  Kelompok <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="kelompok_id" class="form-control" value="{{ $subKelompok['kelompok_id'] ?? '' }}">
+            
+            <div class="form-group row">
+              <label for="staticEmail" class="col-sm-3 col-md-2 col-form-label">Kelompok<span class="text-danger">*</span></label>
+              <div class="col-sm-9 col-md-10">
+                <select class="form-control select2bs4  <?= @$disable2 ?>" style="width: 100%;" name="kelompok_id">
+                  <option value="" hidden selected disabled></option>
+                  <?php foreach ($combo['kelompok'] as $kelompok) : ?>;
+                  <option value="<?= $kelompok['id'] ?>" <?= $kelompok['id'] == @$subKelompok['kelompok_id'] ? 'selected' : '' ?>><?= $kelompok['keterangan'] ?></option>
+                <?php endforeach; ?>
+                </select>
               </div>
             </div>
             
@@ -68,6 +69,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               <label for="staticEmail" class="col-sm-3 col-md-2 col-form-label">Status Aktif<span class="text-danger">*</span></label>
               <div class="col-sm-9 col-md-10">
                 <select class="form-control select2bs4  <?= @$disable2 ?>" style="width: 100%;" name="statusaktif">
+                    <option value="" hidden selected disabled></option>
                   <?php foreach ($combo['statusaktif'] as $status) : ?>;
                   <option value="<?= $status['id'] ?>" <?= $status['id'] == @$subKelompok['statusaktif'] ? 'selected' : '' ?>><?= $status['text'] ?></option>
                 <?php endforeach; ?>
@@ -85,7 +87,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               Simpan
               @endif
             </button>
-            <a href="{{ route('sub_kelompok.index') }}" class="btn btn-danger">
+            <a href="{{ route('subkelompok.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
               BATAL
             </a>
@@ -98,9 +100,9 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('sub_kelompok.index') }}"
+  let indexUrl = "{{ route('subkelompok.index') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ config('app.api_url') . 'sub_kelompok' }}"
+  let actionUrl = "{{ config('app.api_url') . 'subkelompok' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
@@ -161,7 +163,7 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     /* Get field maxlength */
     $.ajax({
-      url: `{{ config('app.api_url') . 'sub_kelompok/field_length' }}`,
+      url: `{{ config('app.api_url') . 'subkelompok/field_length' }}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {

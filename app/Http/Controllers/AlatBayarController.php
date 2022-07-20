@@ -77,10 +77,7 @@ class AlatBayarController extends MyController
         try {
             $request['modifiedby'] = Auth::user()->name;
             
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-            ])
+            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->post(config('app.api_url') . 'alatbayar', $request->all());
             
@@ -100,10 +97,7 @@ class AlatBayarController extends MyController
     {
         $title = $this->title;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "alatbayar/$id");
 
@@ -117,10 +111,8 @@ class AlatBayarController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "alatbayar/$id", $request->all());
 
@@ -132,10 +124,8 @@ class AlatBayarController extends MyController
         try {
             $title = $this->title;
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
+            $response = Http::withHeaders($this->httpHeaders)
+                ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "alatbayar/$id");
 
@@ -152,10 +142,8 @@ class AlatBayarController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "alatbayar/$id", $request->all());
 
@@ -174,6 +162,7 @@ class AlatBayarController extends MyController
     private function combo()
     {
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'alatbayar/combo');
         
         return $response['data'];

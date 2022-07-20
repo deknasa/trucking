@@ -122,7 +122,14 @@
                     }
                 },
                 error: error => {
-                    alert(`${error.statusText} | ${error.responseText}`)
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+
+                        setErrorMessages(error.responseJSON.errors);
+                      } else {
+                        showDialog(error.statusText)
+                      }
                 },
             }).always(() => {
                 $(this).removeAttr('disabled')

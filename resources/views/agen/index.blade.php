@@ -49,26 +49,29 @@
   <div class="row">
     <div class="col-12">
       <table id="jqGrid"></table>
-      <div id="jqGridPager"></div>
-      <div id="buttonContainer">
-        <button id="add" class="btn btn-primary btn-sm mb-2">
-          <i class="fa fa-plus"></i> ADD
-        </button>
-        <button id="edit" class="btn btn-success btn-sm mb-2">
-          <i class="fa fa-pen"></i> EDIT
-        </button>
-        <button id="delete" class="btn btn-danger btn-sm mb-2">
-          <i class="fa fa-trash"></i> DELETE
-        </button>
-        <button id="export" class="btn btn-warning btn-sm mb-2">
-          <i class="fa fa-file-export"></i> EXPORT
-        </button>
-        <button id="report" class="btn btn-info btn-sm mb-2">
-          <i class="fa fa-print"></i> REPORT
-        </button>
-        <button id="approval" class="btn btn-purple btn-sm mb-2">
-          <i class="fa fa-check"></i> UN/APPROVAL
-        </button>
+      <div id="jqGridPager" class="row bg-white">
+        <div id="buttonContainer" class="col-12 col-md-7 text-center text-md-left">
+          <button id="add" class="btn btn-primary btn-sm mb-1">
+            <i class="fa fa-plus"></i> ADD
+          </button>
+          <button id="edit" class="btn btn-success btn-sm mb-1">
+            <i class="fa fa-pen"></i> EDIT
+          </button>
+          <button id="delete" class="btn btn-danger btn-sm mb-1">
+            <i class="fa fa-trash"></i> DELETE
+          </button>
+          <button id="export" class="btn btn-warning btn-sm mb-1">
+            <i class="fa fa-file-export"></i> EXPORT
+          </button>
+          <button id="report" class="btn btn-info btn-sm mb-1">
+            <i class="fa fa-print"></i> REPORT
+          </button>
+          <button id="approval" class="btn btn-purple btn-sm mb-1">
+            <i class="fa fa-check"></i> UN/APPROVAL
+          </button>
+        </div>
+        <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
+        <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
       </div>
     </div>
   </div>
@@ -80,7 +83,6 @@
   let getUrl = "{{ route('agen.get') }}"
   let indexRow = 0;
   let page = 0;
-  let pager = '#jqGridPager'
   let popup = "";
   let id = "";
   let triggerClick = true;
@@ -197,6 +199,8 @@
           {
             label: 'TOP',
             name: 'top',
+            align: 'right',
+            formatter: currencyFormat
           },
           {
             label: 'STATUS APPROVAL',
@@ -232,6 +236,7 @@
           {
             label: 'TGL APPROVAL',
             name: 'tglapproval',
+            formatter: dateFormat
           },
           {
             label: 'STATUS TAS',
@@ -269,8 +274,12 @@
             name: 'modifiedby',
           },
           {
+            label: 'CREATEDAT',
+            name: 'created_at',
+          },
+          {
             label: 'UPDATEDAT',
-            name: 'updated_at',
+            name: 'updated_at'
           },
         ],
         autowidth: true,
@@ -285,7 +294,6 @@
         sortname: sortname,
         sortorder: sortorder,
         page: page,
-        pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',
@@ -308,6 +316,9 @@
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         loadComplete: function(data) {
+          loadPagerHandler('#pagerHandler', $(this))
+          loadPagerInfo('#pagerInfo', $(this))
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -347,105 +358,6 @@
           }
         },
       })
-
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
-
-      // .navButtonAdd(pager, {
-      //   caption: 'Add',
-      //   title: 'Add',
-      //   id: 'add',
-      //   buttonicon: 'fas fa-plus',
-      //   class: 'btn btn-primary',
-      //   onClickButton: function() {
-      //     let limit = $(this).jqGrid('getGridParam', 'postData').limit
-
-      //     window.location.href = `{{ route('agen.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-      //   }
-      // })
-
-      // .navButtonAdd(pager, {
-      //   caption: 'Edit',
-      //   title: 'Edit',
-      //   id: 'edit',
-      //   buttonicon: 'fas fa-pen',
-      //   onClickButton: function() {
-      //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
-      //       alert('please select a row')
-      //     } else {
-      //       window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-      //     }
-      //   }
-      // })
-
-      // .navButtonAdd(pager, {
-      //   caption: 'Delete',
-      //   title: 'Delete',
-      //   id: 'delete',
-      //   buttonicon: 'fas fa-trash',
-      //   onClickButton: function() {
-      //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      //     window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-      //   }
-      // })
-
-      // .navButtonAdd(pager, {
-      //   caption: 'Export',
-      //   title: 'Export',
-      //   id: 'export',
-      //   buttonicon: 'fas fa-file-export',
-      //   onClickButton: function() {
-      //     $('#rangeModal').data('action', 'export')
-      //     $('#rangeModal').find('button:submit').html(`Export`)
-      //     $('#rangeModal').modal('show')
-      //   }
-      // })
-
-      // .navButtonAdd(pager, {
-      //   caption: 'Report',
-      //   title: 'Report',
-      //   id: 'report',
-      //   buttonicon: 'fas fa-print',
-      //   onClickButton: function() {
-      //     $('#rangeModal').data('action', 'report')
-      //     $('#rangeModal').find('button:submit').html(`Report`)
-      //     $('#rangeModal').modal('show')
-      //   }
-      // })
-
-      // .navButtonAdd(pager, {
-      //   caption: 'UN/APPROVE',
-      //   title: 'UN/APPROVE',
-      //   id: 'approval',
-      //   buttonicon: 'fas fa-check',
-      //   onClickButton: function(a, b, c) {
-      //     let id = $(this).getGridParam('selrow')
-
-      //     $('#loader').removeClass('d-none')
-
-      //     $.ajax({
-      //       url: `{{ config('app.api_url') }}agen/${id}/approval`,
-      //       method: 'POST',
-      //       dataType: 'JSON',
-      //       beforeSend: request => {
-      //         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-      //       },
-      //       success: response => {
-      //         $(this).trigger('reloadGrid')
-      //       }
-      //     }).always(() => {
-      //       $('#loader').addClass('d-none')
-      //     })
-      //   }
-      // })
 
       .jqGrid('filterToolbar', {
         stringResult: true,

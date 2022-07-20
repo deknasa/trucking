@@ -1,0 +1,12 @@
+#pagerHandler > button{
+  border: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 5px;
+}
+
+#pagerHandler > input{
+  width: 50px;
+  height: 25px;
+  text-align: center;
+}

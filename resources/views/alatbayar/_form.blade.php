@@ -176,9 +176,6 @@ $indexRow = $_GET['indexRow'] ?? '';
           'Authorization': `Bearer {{ session('access_token') }}`
         },
         data: $('form').serializeArray(),
-        headers: {
-            'X-CSRF-TOKEN': csrfToken,
-        },
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()

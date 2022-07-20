@@ -7,6 +7,23 @@
     <div class="col-12">
       <table id="jqGrid"></table>
       <div id="jqGridPager"></div>
+
+      <div id="customPager" class="row bg-white">
+        <div id="buttonContainer" class="col-12 col-md-5 text-center text-md-left">
+          <button id="add" class="btn btn-primary btn-sm mb-1">
+            <i class="fa fa-plus"></i> ADD
+          </button>
+          <button id="edit" class="btn btn-success btn-sm mb-1">
+            <i class="fa fa-pen"></i> EDIT
+          </button>
+          <button id="delete" class="btn btn-danger btn-sm mb-1">
+            <i class="fa fa-trash"></i> DELETE
+          </button>
+        </div>
+        <div id="pagerButtonContainer" class="col-12 col-md-3 d-flex justify-content-center"></div>
+        <div id="pagerInfo" class="col-12 col-md-4"></div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -112,7 +129,8 @@
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            formatter: 'date', formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y H:i:s" },
+            formatter: "date",
+            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y H:i:s" }
           },
         ],
         autowidth: true,
@@ -198,46 +216,46 @@
         del: false,
       })
 
-      .navButtonAdd(pager, {
-        caption: 'Add',
-        title: 'Add',
-        id: 'add',
-        buttonicon: 'fas fa-plus',
-        class: 'btn btn-primary',
-        onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+      // .navButtonAdd(pager, {
+      //   caption: 'Add',
+      //   title: 'Add',
+      //   id: 'add',
+      //   buttonicon: 'fas fa-plus',
+      //   class: 'btn btn-primary',
+      //   onClickButton: function() {
+      //     let limit = $(this).jqGrid('getGridParam', 'postData').limit
 
-          window.location.href = `{{ route('zona.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-        }
-      })
+      //     window.location.href = `{{ route('zona.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      //   }
+      // })
 
-      .navButtonAdd(pager, {
-        caption: 'Edit',
-        title: 'Edit',
-        id: 'edit',
-        buttonicon: 'fas fa-pen',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+      // .navButtonAdd(pager, {
+      //   caption: 'Edit',
+      //   title: 'Edit',
+      //   id: 'edit',
+      //   buttonicon: 'fas fa-pen',
+      //   onClickButton: function() {
+      //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-          if (selectedId == null || selectedId == '' || selectedId == undefined) {
-            alert('please select a row')
-          } else {
-            window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-          }
-        }
-      })
+      //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
+      //       alert('please select a row')
+      //     } else {
+      //       window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      //     }
+      //   }
+      // })
 
-      .navButtonAdd(pager, {
-        caption: 'Delete',
-        title: 'Delete',
-        id: 'delete',
-        buttonicon: 'fas fa-trash',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+      // .navButtonAdd(pager, {
+      //   caption: 'Delete',
+      //   title: 'Delete',
+      //   id: 'delete',
+      //   buttonicon: 'fas fa-trash',
+      //   onClickButton: function() {
+      //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-        }
-      })
+      //     window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+      //   }
+      // })
 
       .jqGrid('filterToolbar', {
         stringResult: true,
@@ -287,6 +305,31 @@
     if (!`{{ $myAuth->hasPermission('zona', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
+
+    /* Handle button add on click */
+    $('#add').click(function() {
+      let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
+
+      window.location.href = `{{ route('zona.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+    })
+
+    /* Handle button edit on click */
+    $('#edit').click(function() {
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+      if (selectedId == null || selectedId == '' || selectedId == undefined) {
+        alert('please select a row')
+      } else {
+        window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      }
+    })
+
+    /* Handle button delete on click */
+    $('#delete').click(function() {
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+    })
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {

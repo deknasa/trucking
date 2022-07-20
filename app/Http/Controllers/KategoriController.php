@@ -20,8 +20,12 @@ class KategoriController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $data = [
+            'pagename' => 'Menu Utama Kategori',
+            'combo' => $this->comboStatusAktif('list')
+        ];
 
-        return view('kategori.index', compact('title'));
+        return view('kategori.index', compact('title','data'));
     }
 
     /**
@@ -180,4 +184,19 @@ class KategoriController extends MyController
         return $response['data'];
     }
 
+    public function comboStatusAktif($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'cabang/combostatus', $status);
+
+        return $response['data'];
+    }
 }

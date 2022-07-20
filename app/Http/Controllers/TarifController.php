@@ -104,7 +104,7 @@ class TarifController extends MyController
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->withOptions(['verify' => false])
+        ])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "tarif/$id");
 
@@ -147,7 +147,7 @@ class TarifController extends MyController
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])->withOptions(['verify' => false])
+            ])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "tarif/$id");
 
@@ -169,7 +169,7 @@ class TarifController extends MyController
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])->withOptions(['verify' => false])
+        ])
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "tarif/$id", $request->all());
 
@@ -179,7 +179,6 @@ class TarifController extends MyController
     public function fieldLength(): Response
     {
         $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'tarif/field_length');
 
@@ -189,7 +188,6 @@ class TarifController extends MyController
     private function combo()
     {
         $response = Http::withHeaders($this->httpHeaders)
-        ->withOptions(['verify' => false])
             ->get(config('app.api_url') . 'tarif/combo');
         
         return $response['data'];
@@ -204,8 +202,7 @@ class TarifController extends MyController
             'subgrp' => 'STATUS AKTIF',
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)
-        ->withOptions(['verify' => false])
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/combostatus', $status);
 

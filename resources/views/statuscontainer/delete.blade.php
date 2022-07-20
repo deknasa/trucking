@@ -2,7 +2,7 @@
 
 @section('content')
 <!-- Form -->
-@include('penerimaan_trucking._form', [
+@include('statuscontainer._form', [
   'action' => 'delete'
 ])
 @endsection

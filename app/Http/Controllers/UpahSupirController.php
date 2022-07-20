@@ -415,8 +415,7 @@ class UpahSupirController extends MyController
             'subgrp' => 'STATUS AKTIF',
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)
-        ->withOptions(['verify' => false])
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/combostatus', $status);
 

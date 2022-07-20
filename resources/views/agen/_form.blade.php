@@ -192,7 +192,7 @@ $indexRow = $_GET['indexRow'] ?? '';
 
   <?php if ($action == 'edit') : ?>
     method = "PATCH"
-    
+
   <?php elseif ($action == 'delete') : ?>
     method = "DELETE"
   <?php endif; ?>
@@ -206,11 +206,11 @@ $indexRow = $_GET['indexRow'] ?? '';
       e.preventDefault()
     })
 
-    
+
     /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
       $('[name=top]').val(AutoNumeric.getNumber('[name=top]'))
-      
+
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
 
@@ -226,14 +226,16 @@ $indexRow = $_GET['indexRow'] ?? '';
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
 
-          if (response.status) {
-            window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $sortname }}&sortorder={{ $sortorder }}&limit={{ $limit }}`
-          }
-
-          if (response.errors) {
-            setErrorMessages(response.errors)
-          }
+          window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $sortname ?? '' }}&sortorder={{ $sortorder }}&limit={{ $limit }}`
         },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(error.responseJSON.errors);
+          }
+        }
       }).always(() => {
         $('#loader').addClass('d-none')
         $(this).removeAttr('disabled')

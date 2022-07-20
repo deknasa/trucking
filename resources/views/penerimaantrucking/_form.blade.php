@@ -27,17 +27,17 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <label>ID</label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="id" class="form-control" value="{{ $statusContainer['id'] ?? '' }}" readonly>
+                <input type="text" name="id" class="form-control" value="{{ $penerimaanTrucking['id'] ?? '' }}" readonly>
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  kode status container <span class="text-danger">*</span>
+                  kode penerimaan <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="kodestatuscontainer" class="form-control" value="{{ $statusContainer['kodestatuscontainer'] ?? '' }}">
+                <input type="text" name="kodepenerimaan" class="form-control" value="{{ $penerimaanTrucking['kodepenerimaan'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
@@ -47,17 +47,27 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="keterangan" class="form-control" value="{{ $statusContainer['keterangan'] ?? '' }}">
+                <input type="text" name="keterangan" class="form-control" value="{{ $penerimaanTrucking['keterangan'] ?? '' }}">
               </div>
             </div>
-            <div class="form-group row">
-              <label for="staticEmail" class="col-sm-3 col-md-2 col-form-label">Status Aktif<span class="text-danger">*</span></label>
-              <div class="col-sm-9 col-md-10">
-                <select class="form-control select2bs4  <?= @$disable2 ?>" style="width: 100%;" name="statusaktif">
-                  <?php foreach ($combo['statusaktif'] as $status) : ?>;
-                  <option value="<?= $status['id'] ?>" <?= $status['id'] == @$statusContainer['statusaktif'] ? 'selected' : '' ?>><?= $status['text'] ?></option>
-                <?php endforeach; ?>
-                </select>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  coa <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="coa" class="form-control" value="{{ $penerimaanTrucking['coa'] ?? '' }}">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  format bukti <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="formatbukti" class="form-control" value="{{ $penerimaanTrucking['formatbukti'] ?? '' }}">
               </div>
             </div>
           </div>
@@ -70,7 +80,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               Simpan
               @endif
             </button>
-            <a href="{{ route('status_container.index') }}" class="btn btn-danger">
+            <a href="{{ route('penerimaantrucking.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
               BATAL
             </a>
@@ -83,15 +93,15 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('status_container.index') }}"
+  let indexUrl = "{{ route('penerimaantrucking.index') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ config('app.api_url') . 'status_container' }}"
+  let actionUrl = "{{ config('app.api_url') . 'penerimaantrucking' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
   /* Set id to action url */
   <?php if ($action !== 'add') : ?>
-    actionUrl += `/{{ $statusContainer['id'] }}`
+    actionUrl += `/{{ $penerimaanTrucking['id'] }}`
   <?php endif; ?>
 
   <?php if ($action == 'edit') : ?>
@@ -146,7 +156,7 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     /* Get field maxlength */
     $.ajax({
-      url: `{{ config('app.api_url') . 'status_container/field_length' }}`,
+      url: `{{ config('app.api_url') . 'penerimaantrucking/field_length' }}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {

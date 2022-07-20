@@ -21,7 +21,11 @@ class SatuanController extends MyController
     {
         $title = $this->title;
 
-        return view('satuan.index', compact('title'));
+        $data = [
+            'combo' => $this->comboStatusAktif('list'),
+        ];
+
+        return view('satuan.index', compact('title','data'));
     }
 
     /**
@@ -180,4 +184,19 @@ class SatuanController extends MyController
         return $response['data'];
     }
 
+    public function comboStatusAktif($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
+        return $response['data'];
+    }
 }
