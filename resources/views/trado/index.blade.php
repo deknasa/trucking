@@ -131,10 +131,22 @@
           {
             label: 'KM AWAL',
             name: 'kmawal',
+            align: 'right',
+            formatter: 'currency',
+            formatoptions: {
+                decimalSeparator: ',',
+                thousandsSeparator: '.'
+            }
           },
           {
             label: 'KM GANTI OLI AKHIR',
             name: 'kmakhirgantioli',
+            align: 'right',
+            formatter: 'currency',
+            formatoptions: {
+                decimalSeparator: ',',
+                thousandsSeparator: '.'
+            }
           },
           // {
           //   label: 'TGL STNK MATI',
@@ -238,7 +250,7 @@
           },
           {
             label: 'BAHAN BAKAR',
-            name: 'bahanbakar',
+            name: 'jenisbahanbakar',
           },
           {
             label: 'JLH SUMBU',

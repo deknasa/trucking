@@ -82,16 +82,7 @@
                 </div>
             </div>
 
-            <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Tgl <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                    <?php 
-                        $tgl = @$supir['tgl'] ? date('d-m-Y',strtotime(@$supir['tgl'])) : '';
-                        $tgl = $tgl=='01-01-1900'?'':$tgl; 
-                    ?>
-                    <input type="text" class="form-control formatdate" name="tgl" value="{{ $tgl }}">
-                </div>
-            </div>
+            
 
             <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Nominal Pinjaman</label>
