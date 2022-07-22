@@ -476,6 +476,11 @@
           }
         }
 
+        xhr.onerror = (error) => {
+          console.log(error);
+          submitButton.removeAttr('disabled')
+        }
+
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
         window.open(`{{ route('user.report') }}?${params}`)

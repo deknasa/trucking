@@ -77,10 +77,8 @@ class MenuController extends MyController
         $request['modifiedby'] = Auth::user()->name;
         $request['class'] = $this->listFolderFiles($request['controller']);
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'menu', $request->all());
 
@@ -113,10 +111,8 @@ class MenuController extends MyController
     {
         $request['modifiedby'] = $this->listclassall();
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->withToken(session('access_token'))->patch(config('app.api_url') . "menu/$id", $request->all());
 
@@ -129,30 +125,23 @@ class MenuController extends MyController
      */
     public function delete($id)
     {
-        try {
-            $title = $this->title;
+        $title = $this->title;
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
-                ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "menu/$id");
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "menu/$id");
 
-            $menu = $response['data'];
+        $menu = $response['data'];
 
-            $data = [
-                'nama' => '',
-                'combo' => $this->combo('entry'),
-                'class' => $this->listclassall(),
+        $data = [
+            'nama' => '',
+            'combo' => $this->combo('entry'),
+            'class' => $this->listclassall(),
+            'edit' => '0'
+        ];
 
-                'edit' => '0'
-            ];
-
-            return view('menu.delete', compact('title', 'menu', 'data'));
-        } catch (\Throwable $th) {
-            return redirect()->route('menu.index');
-        }
+        return view('menu.delete', compact('title', 'menu', 'data'));
     }
 
     public function destroy($id, Request $request)
@@ -181,7 +170,7 @@ class MenuController extends MyController
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'menu', $request->all());
-        
+
         $menus = $response['data'];
 
         return view('reports.menu', compact('menus'));
