@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class TradoController extends Controller
+class TradoController extends MyController
 {
     public $title = 'Trado';
 
@@ -26,7 +26,8 @@ class TradoController extends Controller
             ];
             
             $response = Http::withHeaders($request->header())
-                ->get(config('app.api_url') . 'api/trado', $params);
+                ->withToken(session('access_token'))
+                ->get(config('app.api_url') . 'trado', $params);
 
             $rows = $response['data'];
 
@@ -98,8 +99,11 @@ class TradoController extends Controller
         }
 
         $title = $this->title;
+        $data = [
+            'combo' => $this->comboStatusAktif('list'),
+        ];
 
-        return view('trado.index', compact('title'));
+        return view('trado.index', compact('title','data'));
     }
 
 
@@ -118,7 +122,7 @@ class TradoController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post(config('app.api_url') . 'api/trado', $request->all());
+        ])->withOptions(['verify' => false])->withToken(session('access_token'))->post(config('app.api_url') . 'api/trado', $request->all());
 
         if ($response->ok()) {
             $id = $response['data']['id'];
@@ -132,7 +136,7 @@ class TradoController extends Controller
                         }
                     }
                 }
-                $res = $res->post(config('app.api_url') . 'api/trado/upload_image/'.$id);
+                $res = $res->post(config('app.api_url') . 'trado/upload_image/'.$id);
             }
             return response($res);
         } else {
@@ -149,8 +153,8 @@ class TradoController extends Controller
     {
         $title = $this->title;
 
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->get(config('app.api_url') . "api/trado/$id");
-
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))->get(config('app.api_url') . "trado/$id");
+        
         $trado = $response['data'];
 
         $combo = $this->combo();
@@ -160,7 +164,7 @@ class TradoController extends Controller
 
     public function update(Request $request, $id)
     {
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->patch(config('app.api_url') . "api/trado/$id", $request->all());
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))->patch(config('app.api_url') . "trado/$id", $request->all());
 
         if ($response->ok()) {
             $id = $response['data']['id'];
@@ -174,7 +178,7 @@ class TradoController extends Controller
                         }
                     }
                 }
-                $res = $res->post(config('app.api_url') . 'api/trado/upload_image/'.$id,[
+                $res = $res->post(config('app.api_url') . 'trado/upload_image/'.$id,[
                     'name' => 'g_all',
                     'contents' => $request['g_all']
                 ]);
@@ -190,8 +194,8 @@ class TradoController extends Controller
         try {
             $title = $this->title;
 
-            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
-            ->get(config('app.api_url') . "api/trado/$id");
+            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
+            ->get(config('app.api_url') . "trado/$id");
 
             $trado = $response['data'];
 
@@ -205,15 +209,15 @@ class TradoController extends Controller
 
     public function destroy($id, Request $request)
     {
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
-        ->delete(config('app.api_url') . "api/trado/$id", $request->all());
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
+        ->delete(config('app.api_url') . "trado/$id", $request->all());
 
         return response($response);
     }
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->get(config('app.api_url') . 'api/trado/field_length');
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))->get(config('app.api_url') . 'trado/field_length');
 
         return response($response['data']);
     }
@@ -222,8 +226,25 @@ class TradoController extends Controller
     private function combo()
     {
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'api/trado/combo');
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'trado/combo');
         
+        return $response['data'];
+    }
+
+    public function comboStatusAktif($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
         return $response['data'];
     }
 }

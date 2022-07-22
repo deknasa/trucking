@@ -23,13 +23,13 @@
               </div>
               <div class="col-12 col-md-4">
                 @php
-                if (isset($kasgantung['tgl'])) {
-                $tgl = date('d-m-Y',strtotime($kasgantung['tgl']));
+                if (isset($kasgantung['tglbukti'])) {
+                $tglbukti = date('d-m-Y',strtotime($kasgantung['tglbukti']));
                 } else {
-                $tgl = date('d-m-Y');
+                $tglbukti = date('d-m-Y');
                 }
                 @endphp
-                <input type="text" name="tgl" class="form-control datepicker" value="{{ $tgl }}">
+                <input type="text" name="tglbukti" class="form-control datepicker" value="{{ $tglbukti }}">
               </div>
             </div>
             <div class="row form-group">
@@ -98,7 +98,7 @@
                     NO BUKTI KAS KELUAR <span class="text-danger">*</span></label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <input type="text" name="nobuktikaskeluar" id="nobuktikaskeluar" class="form-control" value="{{ $kasgantung['nobuktikaskeluar'] ?? '-' }}" readonly>
+                  <input type="text" name="pengeluaran_nobukti" id="pengeluaran_nobukti" class="form-control" value="{{ $kasgantung['pengeluaran_nobukti'] ?? '-' }}" readonly>
                 </div>
               </div>
             </div>

@@ -100,7 +100,14 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="sistemton" class="form-control" value="{{ $tarif['sistemton'] ?? '' }}">
+                <select name="sistemton" class="form-control select2bs4">
+                        <option value="">PILIH SISTEM TON</option>
+                        <?php foreach ($combo['sistemton'] as $key => $item) { 
+                            $selected = @$tarif['sistemton'] == $item['id'] ? "selected" : ""
+                        ?>
+                            <option value="{{ $item['id'] }}" {{ $selected }} >{{ $item['text'] }}</option>
+                        <?php } ?>
+                </select>
               </div>
             </div>
             <div class="row form-group">

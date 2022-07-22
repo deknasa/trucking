@@ -118,8 +118,8 @@ $indexRow = $_GET['indexRow'] ?? '';
   /* Set action url */
   <?php if ($action !== 'add') : ?>
     actionUrl += `/{{ $kota['id'] }}`
-    
   <?php endif; ?>
+
   <?php if ($action == 'edit') : ?>
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>

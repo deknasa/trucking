@@ -22,9 +22,6 @@ class ContainerController extends MyController
      */
     public function index(Request $request)
     {
-
-
-
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
         $data = [
@@ -92,7 +89,7 @@ class ContainerController extends MyController
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])
+        ])->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "container/$id");
 
@@ -130,7 +127,7 @@ class ContainerController extends MyController
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])
+            ])->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "container/$id");
 
