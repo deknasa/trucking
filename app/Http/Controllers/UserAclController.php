@@ -99,7 +99,10 @@ class UserAclController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))->post(config('app.api_url') . 'useracl', $request->all());
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->post(config('app.api_url') . 'useracl', $request->all());
 
         return response($response);
     }
@@ -111,7 +114,10 @@ class UserAclController extends MyController
     {
         $title = $this->title;
 
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))->get(config('app.api_url') . "useracl/$id");
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "useracl/$id");
 
         $useracl = $response['data'];
 
@@ -130,7 +136,10 @@ class UserAclController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))->patch(config('app.api_url') . "useracl/$id", $request->all());
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->patch(config('app.api_url') . "useracl/$id", $request->all());
 
         return response($response);
     }
@@ -140,28 +149,24 @@ class UserAclController extends MyController
      */
     public function delete($id)
     {
-        try {
-            $title = $this->title;
+        $title = $this->title;
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])->get(config('app.api_url') . "useracl/$id");
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "useracl/$id");
 
-            $useracl = $response['data'];
+        $useracl = $response['data'];
 
-            $list = [
-                'detail' => $this->detaillist($useracl['user_id']  ?? '0'),
-            ];
+        $list = [
+            'detail' => $this->detaillist($useracl['user_id']  ?? '0'),
+        ];
 
-            $data['combo'] = $this->combo('entry');
+        $data['combo'] = $this->combo('entry');
 
-            $user_id = $useracl['user_id'];
+        $user_id = $useracl['user_id'];
 
-            return view('useracl.delete', compact('title', 'useracl', 'list', 'user_id', 'data'));
-        } catch (\Throwable $th) {
-            return redirect()->route('useracl.index');
-        }
+        return view('useracl.delete', compact('title', 'useracl', 'list', 'user_id', 'data'));
     }
 
     public function destroy($id, Request $request)
@@ -188,7 +193,8 @@ class UserAclController extends MyController
             'user_id' => $user_id,
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'useracl/detaillist', $status);
 
@@ -203,7 +209,8 @@ class UserAclController extends MyController
             'subgrp' => 'STATUS AKTIF',
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'useracl/combostatus', $status);
 
@@ -215,10 +222,11 @@ class UserAclController extends MyController
      */
     public function report(Request $request): View
     {
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'useracl', $request->all());
-        
+
         $useracls = $response['data'];
 
         return view('reports.useracl', compact('useracls'));
