@@ -272,7 +272,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Bahan Bakar <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" name="bahanbakar" value="{{ $trado['bahanbakar'] ?? '' }}">
+                    <input type="text" class="form-control" name="jenisbahanbakar" value="{{ $trado['jenisbahanbakar'] ?? '' }}">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
@@ -452,6 +452,8 @@
   let actionUrl =  "{{ config('app.api_url') . 'trado' }}" 
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
+  let baseurl = "{{ config('app.api_url') }}"
+    baseurl = baseurl.replace('api/','');
 
   /* Set action url */
   <?php if ($action !== 'add') : ?>
@@ -477,7 +479,6 @@
             'stnk':{},
             'bpkb':{}
         };
-        var baseurl = "http://localhost:8080/trucking-laravel/public";
 
         const dropzones = []
           $('.dropzone').each(function(i, el){

@@ -85,6 +85,7 @@ Route::get('/', function () {
 
 Route::middleware('guest')->group(function () {
     Route::get('login/index', [AuthController::class, 'index'])->name('login');
+    Route::get('login', [AuthController::class, 'index'])->name('login');
     Route::post('login', [AuthController::class, 'login'])->name('login.process');
 });
 

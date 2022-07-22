@@ -142,7 +142,7 @@
           },
           {
             label: 'TANGGAL',
-            name: 'tgl',
+            name: 'tglbukti',
             formatter: "date",
             formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y" }
           },
@@ -163,7 +163,7 @@
           },
           {
             label: 'NO BUKTI KAS KELUAR',
-            name: 'nobuktikaskeluar',
+            name: 'pengeluaran_nobukti',
             align: 'left'
           },
           {

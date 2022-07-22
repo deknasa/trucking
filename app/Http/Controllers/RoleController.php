@@ -24,30 +24,6 @@ class RoleController extends MyController
         return view('role.index', compact('title', 'data'));
     }
 
-    public function get($params = []): array
-    {
-        $params = [
-            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
-            'limit' => $params['rows'] ?? request()->rows ?? 0,
-            'sortIndex' => $params['sidx'] ?? request()->sidx,
-            'sortOrder' => $params['sord'] ?? request()->sord,
-            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
-        ];
-
-        $response = Http::withHeaders(request()->header())
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'role', $params);
-
-        $data = [
-            'total' => $response['attributes']['totalPages'],
-            'records' => $response['attributes']['totalRows'],
-            'rows' => $response['data']
-        ];
-
-        return $data;
-    }
-
-
     /**
      * @ClassName
      */
@@ -62,7 +38,8 @@ class RoleController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'role', $request->all());
 
@@ -76,25 +53,14 @@ class RoleController extends MyController
     {
         $title = $this->title;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "role/$id");
 
         $role = $response['data'];
+
         return view('role.edit', compact('title', 'role'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "role/$id", $request->all());
-
-        return response($response, $response->status());
     }
 
     /**
@@ -102,36 +68,16 @@ class RoleController extends MyController
      */
     public function delete($id)
     {
-        try {
-            $title = $this->title;
+        $title = $this->title;
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
-                ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "role/$id");
-
-            $role = $response['data'];
-
-            return view('role.delete', compact('title', 'role'));
-        } catch (\Throwable $th) {
-            return redirect()->route('role.index');
-        }
-    }
-
-    public function destroy($id, Request $request)
-    {
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "role/$id", $request->all());
+            ->get(config('app.api_url') . "role/$id");
 
-        return response($response, $response->status());
+        $role = $response['data'];
+
+        return view('role.delete', compact('title', 'role'));
     }
 
     /**
@@ -139,10 +85,11 @@ class RoleController extends MyController
      */
     public function report(Request $request): View
     {
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'role', $request->all());
-        
+
         $roles = $response['data'];
 
         return view('reports.role', compact('roles'));
@@ -179,7 +126,8 @@ class RoleController extends MyController
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'role/field_length');
 
@@ -193,7 +141,8 @@ class RoleController extends MyController
             'rolename' => $request['rolename'],
         ];
 
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'role/getroleid', $status);
 

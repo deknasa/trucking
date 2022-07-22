@@ -487,7 +487,7 @@
               let link = document.createElement('a')
 
               link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanParameter${(new Date).getTime()}.xlsx`
+              link.download = `laporanAgen${(new Date).getTime()}.xlsx`
               link.click()
 
               submitButton.removeAttr('disabled')

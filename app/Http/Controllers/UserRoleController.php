@@ -148,29 +148,23 @@ class UserRoleController extends MyController
      */
     public function delete($id)
     {
-        try {
-            $title = $this->title;
+        $title = $this->title;
 
-            $response = Http::withHeaders($this->httpHeaders)
-                ->withOptions(['verify' => false])
-                ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "userrole/$id");
-
-
-            $userrole = $response['data'];
-            $list = [
-                'detail' => $this->detaillist($userrole['user_id']  ?? '0'),
-            ];
-            $data['combo'] = $this->combo('entry');
-
-            $user_id = $userrole['user_id'];
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "userrole/$id");
 
 
+        $userrole = $response['data'];
+        $list = [
+            'detail' => $this->detaillist($userrole['user_id']  ?? '0'),
+        ];
+        $data['combo'] = $this->combo('entry');
 
-            return view('userrole.delete', compact('title', 'userrole', 'list', 'user_id', 'data'));
-        } catch (\Throwable $th) {
-            return redirect()->route('userrole.index');
-        }
+        $user_id = $userrole['user_id'];
+
+        return view('userrole.delete', compact('title', 'userrole', 'list', 'user_id', 'data'));
     }
 
     public function destroy($id, Request $request)
