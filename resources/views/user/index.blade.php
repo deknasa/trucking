@@ -31,7 +31,7 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'id'
+  let sortname = 'user'
   let sortorder = 'asc'
   let autoNumericElements = []
 

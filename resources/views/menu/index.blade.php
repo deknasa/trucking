@@ -6,7 +6,30 @@
   <div class="row">
     <div class="col-12">
       <table id="jqGrid"></table>
-      <div id="jqGridPager"></div>
+      <div id="jqGridPager" class="row bg-white">
+        <div id="buttonContainer" class="col-12 col-md-7 text-center text-md-left">
+          <button id="add" class="btn btn-primary btn-sm mb-1">
+            <i class="fa fa-plus"></i> ADD
+          </button>
+          <button id="edit" class="btn btn-success btn-sm mb-1">
+            <i class="fa fa-pen"></i> EDIT
+          </button>
+          <button id="delete" class="btn btn-danger btn-sm mb-1">
+            <i class="fa fa-trash"></i> DELETE
+          </button>
+          <button id="export" class="btn btn-warning btn-sm mb-1">
+            <i class="fa fa-file-export"></i> EXPORT
+          </button>
+          <button id="report" class="btn btn-info btn-sm mb-1">
+            <i class="fa fa-print"></i> REPORT
+          </button>
+          <button id="resequence" class="btn btn-purple btn-sm mb-1">
+            <i class="fas fa-sort"></i> RESEQUENCE
+          </button>
+        </div>
+        <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
+        <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -25,7 +48,7 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'id'
+  let sortname = 'menuname'
   let sortorder = 'asc'
   let autoNumericElements = []
 
@@ -156,7 +179,6 @@
         sortname: sortname,
         sortorder: sortorder,
         page: page,
-        pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',
@@ -178,10 +200,10 @@
           let rows = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
-        ondblClickRow: function(rowid) {
-
-        },
         loadComplete: function(data) {
+          loadPagerHandler('#pagerHandler', $(this))
+          loadPagerInfo('#pagerInfo', $(this))
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -218,87 +240,6 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
-        }
-      })
-
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Add',
-        title: 'Add',
-        id: 'add',
-        buttonicon: 'fas fa-plus',
-        onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
-
-          window.location.href = `{{ route('menu.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Edit',
-        title: 'Edit',
-        id: 'edit',
-        buttonicon: 'fas fa-pen',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-          window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Delete',
-        title: 'Delete',
-        id: 'delete',
-        buttonicon: 'fas fa-trash',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Export',
-        title: 'Export',
-        id: 'export',
-        buttonicon: 'fas fa-file-export',
-        onClickButton: function() {
-          $('#rangeModal').data('action', 'export')
-          $('#rangeModal').find('button:submit').html(`Export`)
-          $('#rangeModal').modal('show')
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Report',
-        title: 'Report',
-        id: 'report',
-        buttonicon: 'fas fa-print',
-        onClickButton: function() {
-          $('#rangeModal').data('action', 'report')
-          $('#rangeModal').find('button:submit').html(`Report`)
-          $('#rangeModal').modal('show')
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Resequence',
-        title: 'Resequence',
-        id: 'resequence',
-        buttonicon: 'fas fa-sort',
-        onClickButton: function() {
-          let actionUrl = `{{ route('menu.resequence') }}`
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-          window.location.href = actionUrl
         }
       })
 
@@ -442,6 +383,50 @@
         submitButton.removeAttr('disabled')
       }
     })
+
+    /* Handle button add on click */
+    $('#add').click(function() {
+      let limit = $("#jqGrid").jqGrid('getGridParam', 'postData').limit
+
+      window.location.href = `{{ route('menu.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+    })
+
+    /* Handle button edit on click */
+    $('#edit').click(function() {
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+      window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+    })
+
+    /* Handle button delete on click */
+    $('#delete').click(function() {
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+    })
+
+    /* Handle button export on click */
+    $('#export').click(function() {
+      $('#rangeModal').data('action', 'export')
+      $('#rangeModal').find('button:submit').html(`Export`)
+      $('#rangeModal').modal('show')
+    })
+
+    /* Handle button report on click */
+    $('#report').click(function() {
+      $('#rangeModal').data('action', 'report')
+      $('#rangeModal').find('button:submit').html(`Report`)
+      $('#rangeModal').modal('show')
+    })
+
+    /* Handle button approval on click */
+    $('#resequence').click(function() {
+      let actionUrl = `{{ route('menu.resequence') }}`
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+      window.location.href = actionUrl
+    })
+
   })
 </script>
 @endpush()
