@@ -165,7 +165,7 @@ function setErrorMessages(errors) {
 	$(`[name=${Object.keys(errors)[0]}]`).focus();
 
 	$.each(errors, (index, error) => {
-		if ($(`[name=${index}]`).length > 0) {
+		if ($(`[name="${index}"]`).length > 0) {
 			$(`[name=${index}]`).addClass("is-invalid").after(`
                 <div class="invalid-feedback">
                 ${error}

@@ -138,7 +138,8 @@ class AclController extends MyController
     public function update(Request $request, $id)
     {
         $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "acl/$id", $request->all());
 
@@ -151,31 +152,22 @@ class AclController extends MyController
      */
     public function delete($id)
     {
-        try {
-            $title = $this->title;
+        $title = $this->title;
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
-                ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "acl/$id");
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "acl/$id");
 
+        $acl = $response['data'];
+        $list = [
+            'detail' => $this->detaillist($acl['role_id']  ?? '0'),
+        ];
+        $data['combo'] = $this->combo('entry');
 
-            $acl = $response['data'];
-            $list = [
-                'detail' => $this->detaillist($acl['role_id']  ?? '0'),
-            ];
-            $data['combo'] = $this->combo('entry');
+        $role_id = $acl['role_id'];
 
-            $role_id = $acl['role_id'];
-
-
-
-            return view('acl.delete', compact('title', 'acl', 'list', 'role_id', 'data'));
-        } catch (\Throwable $th) {
-            return redirect()->route('acl.index');
-        }
+        return view('acl.delete', compact('title', 'acl', 'list', 'role_id', 'data'));
     }
 
     public function destroy($id, Request $request)

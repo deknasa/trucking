@@ -10,7 +10,8 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('absensisupir_detail.index') }}"
+
+  let detailIndexUrl = "{{ config('app.api_url') . 'absensisupirheader' }}"
 
   /**
    * Custom Functions
@@ -34,15 +35,15 @@
         datatype: "json",
         colModel: [{
             label: 'TRADO',
-            name: 'trado.nama',
+            name: 'trado',
           },
           {
             label: 'SUPIR',
-            name: 'supir.namasupir',
+            name: 'supir',
           },
           {
             label: 'STATUS',
-            name: 'absen_trado.kodeabsen',
+            name: 'absentrado',
           },
           {
             label: 'KETERANGAN',
@@ -58,8 +59,8 @@
             align: 'right',
             formatter: 'currency',
             formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
+              decimalSeparator: ',',
+              thousandsSeparator: '.'
             }
           },
           {
@@ -82,8 +83,21 @@
         sortable: true,
         pager: pager,
         viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
         loadComplete: function(data) {
-          
+
         }
       })
 
@@ -98,10 +112,7 @@
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: detailIndexUrl,
-      postData: {
-        absensi_id: id
-      }
+      url: `${detailIndexUrl}/${id}/detail`,
     }).trigger('reloadGrid')
   }
 

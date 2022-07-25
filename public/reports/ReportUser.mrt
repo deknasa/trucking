@@ -1,10 +1,10 @@
 {
-  "ReportGuid": "729a5d588665f5d3895a646b612f3faf",
+  "ReportGuid": "4cd12a287a2cd232c79f623dc9a607c7",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "ReportUser.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1647577001000+0700)/",
+  "ReportChanged": "/Date(1658723025000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -35,10 +35,10 @@
             "Type": "System.Int32"
           },
           "1": {
-            "Name": "userid",
+            "Name": "user",
             "Index": -1,
             "NameInSource": "user",
-            "Alias": "userid",
+            "Alias": "user",
             "Type": "System.String"
           },
           "2": {
@@ -455,7 +455,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{user.userid}"
+                "Value": "{user.user}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",

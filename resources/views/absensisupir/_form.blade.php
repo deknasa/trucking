@@ -1,3 +1,13 @@
+<?php
+
+$limit = $_GET['limit'] ?? 10;
+$sortname = $_GET['sortname'] ?? 'id';
+$sortorder = $_GET['sortorder'] ?? 'asc';
+$page = $_GET['page'] ?? '';
+$indexRow = $_GET['indexRow'] ?? '';
+
+?>
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
@@ -6,17 +16,16 @@
         <form action="" method="post">
           <div class="card-body">
             @csrf
-            <input type="hidden" name="limit" value="{{ $_GET['limit'] ?? 10 }}">
-            <input type="hidden" name="sortIndex" value="{{ $_GET['sortname'] ?? 'id' }}">
-            <input type="hidden" name="sortOrder" value="{{ $_GET['sortorder'] ?? 'asc' }}">
-            <input type="hidden" name="kasgantung_nobukti" value="{{ $absensisupir['kasgantung_nobukti'] ?? $kasGantungNoBukti }}">
+            <input type="hidden" name="limit" value="{{ $limit }}">
+            <input type="hidden" name="sortname" value="{{ $sortname }}">
+            <input type="hidden" name="sortorder" value="{{ $sortorder }}">
 
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>NO BUKTI</label>
               </div>
               <div class="col-12 col-md-4">
-                <input type="text" name="nobukti" class="form-control" value="{{ $absensisupir['nobukti'] ?? $noBukti }}" readonly>
+                <input type="text" name="nobukti" class="form-control" value="{{ $absensisupir['nobukti'] ?? '-' }}" readonly>
               </div>
               <div class="col-12 col-md-2 col-form-label">
                 <label>TANGGAL</label>
@@ -112,7 +121,7 @@
 <script>
   let indexUrl = "{{ route('absensisupir.index') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('absensisupir.store') }}"
+  let actionUrl = "{{ config('app.api_url') . 'absensisupirheader' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
@@ -143,6 +152,9 @@
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         data: $('form').serializeArray(),
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
