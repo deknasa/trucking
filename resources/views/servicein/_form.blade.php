@@ -101,7 +101,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                       @foreach($servicein['serviceindetail'] as $serviceinIndex => $d)
                       <tr id="row">
                         <td>
-                          <span class="baris">{{ $serviceinIndex+1 }}</span>
+                          <div class="baris">{{ $serviceinIndex+1 }}</div>
                         </td>
                         <td>
                           <select name="mekanik_id[]" class="form-control select2bs4">
@@ -127,7 +127,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                       @else
                       <tr id="row">
                         <td>
-                          <span class="baris">1</span>
+                          <div class="baris">1</div>
                         </td>
                         <td>
                           <select name="mekanik_id[]" class="form-control select2bs4">
