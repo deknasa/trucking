@@ -81,6 +81,9 @@ class Myauth
             'upahsupir',
             'zona',
             'tarif',
+            'servicein',
+            'serviceout',
+
         ],
         'method' => [
             'gridtab',
