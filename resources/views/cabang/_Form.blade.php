@@ -77,11 +77,9 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
-
-
   let indexUrl = "{{ route('cabang.index') }}"
   let action = "{{ $action }}"
-  let actionUrl =  "{{ config('app.api_url') . 'cabang' }}" 
+  let actionUrl = "{{ config('app.api_url') . 'cabang' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
 
@@ -90,7 +88,7 @@ $indexRow = $_GET['indexRow'] ?? '';
 
   <?php if ($action !== 'add') : ?>
     actionUrl += `/{{ $cabang['id'] }}`
-    
+
   <?php endif; ?>
 
   <?php if ($action == 'edit') : ?>
@@ -111,6 +109,7 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     $('#btnSimpan').click(function() {
       $(this).attr('disabled', '')
+      $('#loader').removeClass('d-none')
 
       $.ajax({
         url: actionUrl,
@@ -124,18 +123,20 @@ $indexRow = $_GET['indexRow'] ?? '';
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
 
-          if (response.status) {
-            window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
-          }
-
-          if (response.errors) {
-            setErrorMessages(response.errors)
-          }
+          window.location.href = `${indexUrl}?page=${response.data.page ?? 1}&id=${response.data.id ?? 1}&sortname={{ $_GET['sortname'] ?? '' }}&sortorder={{ $_GET['sortorder'] }}&limit={{ $_GET['limit'] }}`
         },
         error: error => {
-          alert(`${error.statusText} | ${error.responseText}`)
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(error.responseJSON.errors);
+          } else {
+            showDialog(error.statusText)
+          }
         },
       }).always(() => {
+        $('#loader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
