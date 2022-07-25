@@ -60,6 +60,12 @@ use App\Http\Controllers\UpahSupirRincianController;
 use App\Http\Controllers\UpahRitasiController;
 use App\Http\Controllers\UpahRitasiRincianController;
 use App\Http\Controllers\RitasiController;
+use App\Http\Controllers\ServiceInHeaderController;
+use App\Http\Controllers\ServiceInDetailController;
+use App\Http\Controllers\ServiceOutHeaderController;
+use App\Http\Controllers\ServiceOutDetailController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -434,4 +440,25 @@ Route::middleware('auth')->group(function () {
     Route::get('ritasi/index', [RitasiController::class, 'index']);
 
     Route::resource('ritasi', RitasiController::class);
+    
+    Route::get('servicein/{id}/delete', [ServiceInHeaderController::class, 'delete'])->name('servicein.delete');
+    Route::get('servicein/index', [ServiceInHeaderController::class, 'index']);
+    Route::get('servicein/get', [ServiceInHeaderController::class, 'get'])->name('servicein.get');
+    Route::get('servicein/export', [ServiceInHeaderController::class, 'export'])->name('servicein.export');
+    Route::get('servicein/report', [ServiceInHeaderController::class, 'report'])->name('servicein.report');
+    Route::resource('servicein', ServiceInHeaderController::class);
+
+    Route::resource('serviceindetail', ServiceInDetailController::class);
+
+    Route::get('serviceout/{id}/delete', [ServiceOutHeaderController::class, 'delete'])->name('serviceout.delete');
+    Route::get('serviceout/index', [ServiceOutHeaderController::class, 'index']);
+    Route::get('serviceout/get', [ServiceOutHeaderController::class, 'get'])->name('serviceout.get');
+    Route::get('serviceout/export', [ServiceoutHeaderController::class, 'export'])->name('serviceout.export');
+    Route::get('serviceout/report', [ServiceOutHeaderController::class, 'report'])->name('serviceout.report');
+    Route::resource('serviceout', ServiceOutHeaderController::class);
+
+    Route::resource('serviceoutdetail', ServiceOutDetailController::class);
 });
+
+
+
