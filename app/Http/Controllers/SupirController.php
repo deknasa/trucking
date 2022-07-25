@@ -155,7 +155,11 @@ class SupirController extends MyController
 
         $title = $this->title;
 
-        return view('supir.index', compact('title'));
+        $data = [
+            'combo' => $this->comboStatusAktif('list'),
+        ];
+
+        return view('supir.index', compact('title','data'));
     }
 
     public function create()
@@ -283,6 +287,21 @@ class SupirController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'supir/combo');
         
+        return $response['data'];
+    }
+
+    public function comboStatusAktif($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
         return $response['data'];
     }
 }

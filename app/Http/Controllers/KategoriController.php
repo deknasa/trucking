@@ -20,8 +20,12 @@ class KategoriController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $data = [
+            'pagename' => 'Menu Utama Kategori',
+            'combo' => $this->comboStatusAktif('list')
+        ];
 
-        return view('kategori.index', compact('title'));
+        return view('kategori.index', compact('title','data'));
     }
 
     /**
@@ -96,7 +100,7 @@ class KategoriController extends MyController
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])
+        ])->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "kategori/$id");
 
@@ -134,7 +138,7 @@ class KategoriController extends MyController
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])
+            ])->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "kategori/$id");
 
@@ -156,7 +160,7 @@ class KategoriController extends MyController
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])
+        ])->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "kategori/$id", $request->all());
 
@@ -174,10 +178,25 @@ class KategoriController extends MyController
 
     private function combo()
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
             ->get(config('app.api_url') . 'kategori/combo');
         
         return $response['data'];
     }
 
+    public function comboStatusAktif($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'cabang/combostatus', $status);
+
+        return $response['data'];
+    }
 }

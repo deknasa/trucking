@@ -16,7 +16,6 @@ class ErrorController extends MyController
      */
     public function index(Request $request)
     {
-
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama Error'
@@ -26,40 +25,12 @@ class ErrorController extends MyController
     }
 
     /**
-     * @ClassName
-     */
-    public function get($params = []): array
-    {
-        $params = [
-            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
-            'limit' => $params['rows'] ?? request()->rows ?? 0,
-            'sortIndex' => $params['sidx'] ?? request()->sidx,
-            'sortOrder' => $params['sord'] ?? request()->sord,
-            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
-        ];
-
-        $response = Http::withHeaders(request()->header())
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'error', $params);
-
-        $data = [
-            'total' => $response['attributes']['totalPages'] ?? [],
-            'records' => $response['attributes']['totalRows'] ?? [],
-            'rows' => $response['data'] ?? []
-        ];
-
-
-        return $data;
-    }
-
-    /**
      * Fungsi create
      * @ClassName create
      */
     public function create()
     {
         $title = $this->title;
-
 
         return view('error.add', compact('title'));
     }
@@ -71,11 +42,9 @@ class ErrorController extends MyController
     {
 
         $request['modifiedby'] = Auth::user()->name;
-        
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->post(config('app.api_url') . 'error', $request->all());
 
@@ -89,10 +58,8 @@ class ErrorController extends MyController
     public function edit($id)
     {
         $title = $this->title;
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "error/$id");
 
@@ -109,10 +76,8 @@ class ErrorController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "error/$id", $request->all());
 
@@ -126,23 +91,17 @@ class ErrorController extends MyController
      */
     public function delete($id)
     {
-        try {
-            $title = $this->title;
+        $title = $this->title;
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
-                ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "error/$id");
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "error/$id");
 
-            $error = $response['data'];
+        $error = $response['data'];
 
 
-            return view('error.delete', compact('title', 'error'));
-        } catch (\Throwable $th) {
-            return redirect()->route('error.index');
-        }
+        return view('error.delete', compact('title', 'error'));
     }
 
     /**
@@ -152,10 +111,8 @@ class ErrorController extends MyController
     {
         $request['modifiedby'] = Auth::user()->name;
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "error/$id", $request->all());
 
@@ -167,10 +124,11 @@ class ErrorController extends MyController
      */
     public function report(Request $request)
     {
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'error', $request->all());
-        
+
         $errors = $response['data'];
 
         return view('reports.error', compact('errors'));
@@ -211,12 +169,11 @@ class ErrorController extends MyController
 
     public function fieldLength()
     {
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'error/field_length');
 
         return response($response['data'], $response->status());
     }
-
-
 }

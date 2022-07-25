@@ -80,6 +80,10 @@ class Myauth
             'upahritasi',
             'upahsupir',
             'zona',
+            'tarif',
+            'servicein',
+            'serviceout',
+
         ],
         'method' => [
             'gridtab',

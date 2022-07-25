@@ -22,8 +22,11 @@ class UpahRitasiController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $data = [
+            'combo' => $this->comboStatusAktif('list'),
+        ];
 
-        return view('upahritasi.index', compact('title'));
+        return view('upahritasi.index', compact('title','data'));
     }
 
     public function get($params = [])
@@ -96,11 +99,19 @@ class UpahRitasiController extends MyController
             return $nominal;
         }, $request->nominaltol);
 
+        $request->liter = array_map(function ($nominal) {
+            $nominal = str_replace('.', '', $nominal);
+            $nominal = str_replace(',', '', $nominal);
+
+            return $nominal;
+        }, $request->liter);
+
         $request->merge([
             'nominalsupir' => $request->nominalsupir,
             'nominalkenek' => $request->nominalkenek,
             'nominalkomisi' => $request->nominalkomisi,
             'nominaltol' => $request->nominaltol,
+            'liter' => $request->liter,
         ]);
 
         $request['modifiedby'] = Auth::user()->name;
@@ -164,11 +175,19 @@ class UpahRitasiController extends MyController
             return $nominal;
         }, $request->nominaltol);
 
+        $request->liter = array_map(function ($nominal) {
+            $nominal = str_replace('.', '', $nominal);
+            $nominal = str_replace(',', '', $nominal);
+
+            return $nominal;
+        }, $request->liter);
+
         $request->merge([
             'nominalsupir' => $request->nominalsupir,
             'nominalkenek' => $request->nominalkenek,
             'nominalkomisi' => $request->nominalkomisi,
             'nominaltol' => $request->nominaltol,
+            'liter' => $request->liter,
         ]);
 
         $request['modifiedby'] = Auth::user()->name;
@@ -400,6 +419,22 @@ class UpahRitasiController extends MyController
         ->withOptions(['verify' => false])
             ->get(config('app.api_url') . 'upahritasi/combo');
         
+        return $response['data'];
+    }
+
+    public function comboStatusAktif($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
         return $response['data'];
     }
 }

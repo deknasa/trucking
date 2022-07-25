@@ -20,8 +20,11 @@ class KotaController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $data = [
+            'combo' => $this->comboStatusAktif('list'),
+        ];
 
-        return view('kota.index', compact('title'));
+        return view('kota.index', compact('title', 'data'));
     }
 
     /**
@@ -97,7 +100,7 @@ class KotaController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "kota/$id");
-
+        
         $kota = $response['data'];
 
         return view('kota.edit', compact('title', 'kota', 'combo'));
@@ -141,6 +144,22 @@ class KotaController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'kota/combo');
+
+        return $response['data'];
+    }
+
+    public function comboStatusAktif($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
 
         return $response['data'];
     }

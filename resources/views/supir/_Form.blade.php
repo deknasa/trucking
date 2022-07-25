@@ -82,16 +82,7 @@
                 </div>
             </div>
 
-            <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Tgl <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                    <?php 
-                        $tgl = @$supir['tgl'] ? date('d-m-Y',strtotime(@$supir['tgl'])) : '';
-                        $tgl = $tgl=='01-01-1900'?'':$tgl; 
-                    ?>
-                    <input type="text" class="form-control formatdate" name="tgl" value="{{ $tgl }}">
-                </div>
-            </div>
+            
 
             <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Nominal Pinjaman</label>
@@ -209,7 +200,14 @@
             <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Zona <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" name="zona_id" class="form-control" value="{{ $supir['zona'] ?? '' }}">
+                  <select name="zona_id" class="form-control select2bs4">
+                        <option value="">PILIH ZONA</option>
+                        <?php foreach ($combo['zona'] as $key => $item) { 
+                            $selected = @$supir['zona_id'] == $item['id'] ? "selected" : ""
+                        ?>
+                            <option value="{{ $item['id'] }}" {{ $selected }} >{{ $item['zona'] }}</option>
+                        <?php } ?>
+                    </select>
                 </div>
             </div>
 
@@ -387,24 +385,27 @@
     let indexUrl = "{{ route('supir.index') }}"
     let fieldLengthUrl = "{{ route('supir.field_length') }}"
     let action = "{{ $action }}"
-    let actionUrl = "{{ route('supir.store') }}"
+    let actionUrl = "{{ config('app.api_url') . 'supir' }}"
     let method = "POST"
     let csrfToken = "{{ csrf_token() }}"
     let api = "{{ config('app.api_url') }}"
     api = api.replace('api/','');
 
+    <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $supir['id'] }}`
+    <?php endif; ?>
+
     /* Set action url */
     <?php if ($action == 'edit') : ?>
-        actionUrl = "{{ route('supir.update', $supir['id']) }}?_method=PUT"
         method = "POST"
     <?php elseif ($action == 'delete') : ?>
-        actionUrl = "{{ route('supir.destroy', $supir['id']) }}"
         method = "POST"
     <?php endif; ?>
     
     Dropzone.autoDiscover = false;
 
     $(document).ready(function() {
+
         $('form').submit(function(e) {
             e.preventDefault()
         })
@@ -624,6 +625,10 @@
 
             let form = new FormData($('form')[0])
 
+            $.each($('form').serializeArray(), function( index, value ) {
+                form.append(value.name,value.value);
+            });
+            
             if (action=='edit') {
                 form.append('g_all', JSON.stringify(attachArray))
             }
@@ -635,17 +640,21 @@
               })
             })
 
+            if(action=='edit') {
+                form.append('_method','PUT')
+            }
+
             if(action=='delete') {
                 form.append('_method','DELETE')
             }
-            // console.log(form.get('sortIndex'));
+
             $.ajax({
                 url: actionUrl,
                 method: method,
                 dataType: 'JSON',
                 // data: $('form').serializeArray(),
                 headers: {
-                    'X-CSRF-TOKEN': csrfToken,
+                    'Authorization': `Bearer {{ session('access_token') }}`
                 },
                 data: form,
                 processData: false,
@@ -663,9 +672,17 @@
                     }
                 },
                 error: error => {
-                    alert(`${error.statusText} | ${error.responseText}`)
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+
+                        setErrorMessages(error.responseJSON.errors);
+                      } else {
+                        showDialog(error.statusText)
+                      }
                 },
             }).always(() => {
+                $('#loader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
         })

@@ -23,6 +23,23 @@
     <div class="col-12">
       <table id="jqGrid"></table>
       <div id="jqGridPager"></div>
+
+      <div id="customPager" class="row bg-white">
+        <div id="buttonContainer" class="col-12 col-md-5 text-center text-md-left">
+          <button id="add" class="btn btn-primary btn-sm mb-1">
+            <i class="fa fa-plus"></i> ADD
+          </button>
+          <button id="edit" class="btn btn-success btn-sm mb-1">
+            <i class="fa fa-pen"></i> EDIT
+          </button>
+          <button id="delete" class="btn btn-danger btn-sm mb-1">
+            <i class="fa fa-trash"></i> DELETE
+          </button>
+        </div>
+        <div id="pagerButtonContainer" class="col-12 col-md-3 d-flex justify-content-center"></div>
+        <div id="pagerInfo" class="col-12 col-md-4"></div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -71,7 +88,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: indexUrl,
+        url: `{{ config('app.api_url') . 'supir' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -79,113 +96,119 @@
         colModel: [{
             label: 'ID',
             name: 'id',
-            align: 'center',
             width: '50px'
           },
           {
             label: 'NAMA',
             name: 'namasupir',
-            align: 'center'
           },
           {
             label: 'TGL LAHIR',
             name: 'tgllahir',
-            align: 'center'
+            formatter: "date",
+            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y" }
           },
           {
             label: 'ALAMAT',
             name: 'alamat',
-            align: 'center'
           },
           {
             label: 'KOTA',
             name: 'kota',
-            align: 'center'
           },
           {
             label: 'TELP',
             name: 'telp',
-            align: 'center'
           },
           {
             label: 'STATUS AKTIF',
             name: 'statusaktif',
-            align: 'center'
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combo'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combo'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'NOMINAL DEPOSIT',
             name: 'nominaldepositsa',
-            align: 'center'
           },
           {
             label: 'NOM PINJ SALDO AWAL',
             name: 'nominalpinjamansaldoawal',
-            align: 'center'
           },
           {
             label: 'SUPIR LAMA',
             name: 'supirold_id',
-            align: 'center'
           },
           {
             label: 'SIM',
             name: 'nosim',
-            align: 'center'
           },
           {
             label: 'TGL EXP SIM',
             name: 'tglexpsim',
-            align: 'center'
+            formatter: "date",
+            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y" }
           },
           {
             label: 'TGL TERBIT SIM',
             name: 'tglterbitsim',
-            align: 'center'
+            formatter: "date",
+            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y" }
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-            align: 'center'
           },
           {
             label: 'KTP',
             name: 'noktp',
-            align: 'center'
           },
           {
             label: 'KK',
             name: 'nokk',
-            align: 'center'
           },
           {
             label: 'STATUS ADA UPDATE GBR',
             name: 'statusadaupdategambar',
-            align: 'center'
           },
           {
             label: 'STATUS LUAR KOTA',
             name: 'statusluarkota',
-            align: 'center'
           },
           {
             label: 'ZONA TERTENTU',
             name: 'statuszonatertentu',
-            align: 'center'
           },
           {
             label: 'ZONA',
             name: 'zona_id',
-            align: 'center'
           },
           {
             label: 'angsuranpinjaman',
             name: 'angsuranpinjaman',
-            align: 'center'
           },
           {
             label: 'plafondeposito',
             name: 'plafondeposito',
-            align: 'center'
           },
           {
             label: 'PHOTO SUPIR',
@@ -210,37 +233,34 @@
           {
             label: 'PHOTO SKCK',
             name: 'photoskck',
-            align: 'center'
           },
           {
             label: 'PHOTO DOMISILI',
             name: 'photodomisili',
-            align: 'center'
           },
           {
             label: 'TGL BERHENTI SUPIR',
             name: 'tglberhentisupir',
-            align: 'center'
+            formatter: "date",
+            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y" }
           },
           {
             label: 'KET RESIGN',
             name: 'keteranganresign',
-            align: 'center'
           },
           {
             label: 'STATUS BLACKLIST',
             name: 'statusblacklist',
-            align: 'center'
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
-            align: 'center'
           },
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'center'
+            formatter: "date",
+            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y H:i:s" }
           },
         ],
         autowidth: true,
@@ -257,19 +277,32 @@
         page: page,
         pager: pager,
         viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
         onSelectRow: function(id) {
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
-          let rows = $(this).jqGrid('getGridParam', 'postData').rows
-          if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').rows
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
 
           $('.clearsearchclass').click(function() {
@@ -304,41 +337,41 @@
         del: false,
       })
 
-      .navButtonAdd(pager, {
-        caption: 'Add',
-        title: 'Add',
-        id: 'add',
-        buttonicon: 'fas fa-plus',
-        onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').rows
+      // .navButtonAdd(pager, {
+      //   caption: 'Add',
+      //   title: 'Add',
+      //   id: 'add',
+      //   buttonicon: 'fas fa-plus',
+      //   onClickButton: function() {
+      //     let limit = $(this).jqGrid('getGridParam', 'postData').rows
 
-          window.location.href = `{{ route('supir.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-        }
-      })
+      //     window.location.href = `{{ route('supir.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      //   }
+      // })
 
-      .navButtonAdd(pager, {
-        caption: 'Edit',
-        title: 'Edit',
-        id: 'edit',
-        buttonicon: 'fas fa-pen',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+      // .navButtonAdd(pager, {
+      //   caption: 'Edit',
+      //   title: 'Edit',
+      //   id: 'edit',
+      //   buttonicon: 'fas fa-pen',
+      //   onClickButton: function() {
+      //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
           
-          window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-        }
-      })
+      //     window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      //   }
+      // })
 
-      .navButtonAdd(pager, {
-        caption: 'Delete',
-        title: 'Delete',
-        id: 'delete',
-        buttonicon: 'fas fa-trash',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+      // .navButtonAdd(pager, {
+      //   caption: 'Delete',
+      //   title: 'Delete',
+      //   id: 'delete',
+      //   buttonicon: 'fas fa-trash',
+      //   onClickButton: function() {
+      //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
           
-          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-        }
-      })
+      //     window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+      //   }
+      // })
 
       .jqGrid('filterToolbar', {
         stringResult: true,
@@ -377,6 +410,32 @@
     $('#export .ui-pg-div')
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
+
+
+      /* Handle button add on click */
+    $('#add').click(function() {
+      let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
+
+      window.location.href = `{{ route('supir.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+    })
+
+    /* Handle button edit on click */
+    $('#edit').click(function() {
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+      if (selectedId == null || selectedId == '' || selectedId == undefined) {
+        alert('please select a row')
+      } else {
+        window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      }
+    })
+
+    /* Handle button delete on click */
+    $('#delete').click(function() {
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+    })
   })
 
   /**

@@ -21,7 +21,11 @@ class SatuanController extends MyController
     {
         $title = $this->title;
 
-        return view('satuan.index', compact('title'));
+        $data = [
+            'combo' => $this->comboStatusAktif('list'),
+        ];
+
+        return view('satuan.index', compact('title','data'));
     }
 
     /**
@@ -96,7 +100,7 @@ class SatuanController extends MyController
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])
+        ])->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "satuan/$id");
 
@@ -134,7 +138,7 @@ class SatuanController extends MyController
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])
+            ])->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "satuan/$id");
 
@@ -156,7 +160,7 @@ class SatuanController extends MyController
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])
+        ])->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "satuan/$id", $request->all());
 
@@ -166,6 +170,7 @@ class SatuanController extends MyController
     public function fieldLength(): Response
     {
         $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'satuan/field_length');
 
@@ -174,10 +179,25 @@ class SatuanController extends MyController
 
     private function combo()
     {
-        $response = Http::withHeaders($this->httpHeaders)
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
             ->get(config('app.api_url') . 'satuan/combo');
         
         return $response['data'];
     }
 
+    public function comboStatusAktif($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
+        return $response['data'];
+    }
 }

@@ -17,8 +17,8 @@ $indexRow = $_GET['indexRow'] ?? '';
           <div class="card-body">
             @csrf
             <input type="hidden" name="limit" value="{{ $limit }}">
-            <input type="hidden" name="sortname" value="{{ $sortname }}">
-            <input type="hidden" name="sortorder" value="{{ $sortorder }}">
+            <input type="hidden" name="sortIndex" value="{{ $sortname }}">
+            <input type="hidden" name="sortOrder" value="{{ $sortorder }}">
             <input type="hidden" name="indexRow" value="{{ $_GET['indexRow'] ?? 1 }}">
             <input type="hidden" name="page" value="{{ $_GET['page'] ?? 1 }}">
 
@@ -118,8 +118,8 @@ $indexRow = $_GET['indexRow'] ?? '';
   /* Set action url */
   <?php if ($action !== 'add') : ?>
     actionUrl += `/{{ $kota['id'] }}`
-    
   <?php endif; ?>
+
   <?php if ($action == 'edit') : ?>
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>

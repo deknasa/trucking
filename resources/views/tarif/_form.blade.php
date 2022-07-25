@@ -17,8 +17,8 @@ $indexRow = $_GET['indexRow'] ?? '';
           <div class="card-body">
             @csrf
             <input type="hidden" name="limit" value="{{ $limit }}">
-            <input type="hidden" name="sortname" value="{{ $sortname }}">
-            <input type="hidden" name="sortorder" value="{{ $sortorder }}">
+            <input type="hidden" name="sortIndex" value="{{ $sortname }}">
+            <input type="hidden" name="sortOrder" value="{{ $sortorder }}">
             <input type="hidden" name="indexRow" value="{{ $_GET['indexRow'] ?? 1 }}">
             <input type="hidden" name="page" value="{{ $_GET['page'] ?? 1 }}">
 
@@ -100,7 +100,14 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="sistemton" class="form-control" value="{{ $tarif['sistemton'] ?? '' }}">
+                <select name="sistemton" class="form-control select2bs4">
+                        <option value="">PILIH SISTEM TON</option>
+                        <?php foreach ($combo['sistemton'] as $key => $item) { 
+                            $selected = @$tarif['sistemton'] == $item['id'] ? "selected" : ""
+                        ?>
+                            <option value="{{ $item['id'] }}" {{ $selected }} >{{ $item['text'] }}</option>
+                        <?php } ?>
+                </select>
               </div>
             </div>
             <div class="row form-group">
@@ -138,7 +145,7 @@ $indexRow = $_GET['indexRow'] ?? '';
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  NOMINAL TON<span class="text-danger">*</span>
+                  NOMINAL TON
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">

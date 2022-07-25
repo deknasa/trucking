@@ -10,8 +10,7 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('upahritasirincian.index') }}"
-
+  let detailIndexUrl = "{{ route('serviceindetail.index') }}"
   /**
    * Custom Functions
    */
@@ -27,69 +26,19 @@
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
-        url: `{{ config('app.api_url') . 'upahritasirincian' }}`,
+        url: `{{ config('app.api_url') . 'serviceindetail' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [
           {
-            label: 'CONTAINER',
-            name: 'container_id',
+            label: 'MEKANIK',
+            name: 'mekanik_id',
           },
           {
-            label: 'STATUS CONTAINER',
-            name: 'statuscontainer_id',
-          },
-          {
-            label: 'NOMINAL SUPIR',
-            name: 'nominalsupir',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
-          },
-          {
-            label: 'NOMINAL KENEK',
-            name: 'nominalkenek',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
-          },
-          {
-            label: 'NOMINAL KOMISI',
-            name: 'nominalkomisi',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
-          },
-          {
-            label: 'NOMINAL TOL',
-            name: 'nominaltol',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
-          },
-          {
-            label: 'LITER',
-            name: 'liter',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
+            label: 'KETERANGAN',
+            name: 'keterangan',
           }
         ],
         autowidth: true,
@@ -104,7 +53,7 @@
         pager: pager,
         viewrecords: true,
         loadComplete: function(data) {
-          
+
         }
       })
 
@@ -121,7 +70,7 @@
     $('#detail').setGridParam({
       url: detailIndexUrl,
       postData: {
-        upahritasi_id: id
+        servicein_id: id
       }
     }).trigger('reloadGrid')
   }

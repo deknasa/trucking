@@ -7,8 +7,8 @@
                     <div class="card-body">
                         @csrf
                         <input type="hidden" name="limit" value="{{ $_GET['limit'] ?? 10 }}">
-                        <input type="hidden" name="sortname" value="{{ $_GET['sidx'] ?? 'id' }}">
-                        <input type="hidden" name="sortorder" value="{{ $_GET['sord'] ?? 'asc' }}">
+                        <input type="hidden" name="sortIndex" value="{{ $_GET['sidx'] ?? 'id' }}">
+                        <input type="hidden" name="sortOrder" value="{{ $_GET['sord'] ?? 'asc' }}">
                         <input type="hidden" name="indexRow" value="{{ $_GET['indexRow'] ?? 1 }}">
                         <input type="hidden" name="page" value="{{ $_GET['page'] ?? 1 }}">
 
@@ -122,7 +122,14 @@
                     }
                 },
                 error: error => {
-                    alert(`${error.statusText} | ${error.responseText}`)
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+
+                        setErrorMessages(error.responseJSON.errors);
+                      } else {
+                        showDialog(error.statusText)
+                      }
                 },
             }).always(() => {
                 $(this).removeAttr('disabled')

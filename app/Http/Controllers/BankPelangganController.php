@@ -177,6 +177,7 @@ class BankPelangganController extends MyController
     public function fieldLength(): Response
     {
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'bankpelanggan/field_length');
 

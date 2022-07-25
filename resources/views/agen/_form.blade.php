@@ -17,8 +17,8 @@ $indexRow = $_GET['indexRow'] ?? '';
           <div class="card-body">
             @csrf
             <input type="hidden" name="limit" value="{{ $limit }}">
-            <input type="hidden" name="sortname" value="{{ $sortname }}">
-            <input type="hidden" name="sortorder" value="{{ $sortorder }}">
+            <input type="hidden" name="sortIndex" value="{{ $sortname }}">
+            <input type="hidden" name="sortOrder" value="{{ $sortorder }}">
             <input type="hidden" name="indexRow" value="{{ $_GET['indexRow'] ?? 1 }}">
             <input type="hidden" name="page" value="{{ $_GET['page'] ?? 1 }}">
 
@@ -100,7 +100,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="notelp" class="form-control" value="{{ $agen['notelp'] ?? '' }}">
+                <input type="text" name="notelp" class="form-control numbernoseparate" value="{{ $agen['notelp'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
@@ -110,7 +110,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="nohp" class="form-control" value="{{ $agen['nohp'] ?? '' }}">
+                <input type="text" name="nohp" class="form-control numbernoseparate" value="{{ $agen['nohp'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
