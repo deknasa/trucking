@@ -418,7 +418,7 @@
         maximumValue: totalRecord
       })
     })
-
+    
     $('#formRange').submit(event => {
       event.preventDefault()
 

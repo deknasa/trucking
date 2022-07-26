@@ -41,11 +41,7 @@
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
+            formatter: currencyFormat
           },
           {
             label: 'MODIFIEDBY',
@@ -82,14 +78,16 @@
   }
 
   function loadDetailData(id) {
-    $('#detail').setGridParam({
-      url: detailIndexUrl,
-      postData: {
-        kasgantung_id: id
-      }
-    }).trigger('reloadGrid')
+    setTimeout(function(){
+        $('#detail').setGridParam({
+        url: detailIndexUrl,
+        postData: {
+          kasgantung_id: id
+        }
+      }).trigger('reloadGrid')
+    },800); 
   }
-
+    
   function clearColumnSearch() {
     $('input[id*="gs_"]').val("");
     $("#resetFilterOptions span#resetFilterOptions").removeClass('aktif');

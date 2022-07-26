@@ -118,12 +118,14 @@
   }
 
   function loadDetailData(id) {
-    $('#detail').setGridParam({
-      url: detailIndexUrl,
-      postData: {
-        upahritasi_id: id
-      }
-    }).trigger('reloadGrid')
+    setTimeout(function(){
+      $('#detail').setGridParam({
+        url: detailIndexUrl,
+        postData: {
+          upahritasi_id: id
+        }
+      }).trigger('reloadGrid')
+    },800);
   }
 
   function clearColumnSearch() {

@@ -177,9 +177,7 @@
                           <input type="text" name="liter[]" class="form-control text-right" value="{{ number_format($d['liter'],0,'.','.') ?? '' }}" oninput="separatorNumber(this)">
                         </td>
                         <td>
-                          @if($upahritasiIndex > 0)
                           <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                          @endif
                         </td>
                       </tr>
                       @endforeach
@@ -220,7 +218,7 @@
                           <input type="text" name="liter[]" class="form-control text-right" oninput="separatorNumber(this)">
                         </td>
                         <td>
-
+                          <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                         </td>
                       </tr>
                       @endif
@@ -278,7 +276,7 @@
     clone.find("span").remove();
     clone.find("select").select2({theme : 'bootstrap4'});
     clone.find("select").val('').change();
-    clone.find('td').last().append("<div class='btn btn-danger btn-sm rmv' >Hapus</div>")
+    // clone.find('td').last().append("<div class='btn btn-danger btn-sm rmv' >Hapus</div>")
     clone.find('input').val('');
 
     baris = parseInt(baris) + 1;
@@ -289,12 +287,16 @@
   });
 
   $('table').on('click', '.rmv', function() {
-    $(this).closest('tr').remove();
+    var rowCount = $('table tr').length;
+    
+    if (rowCount > 2) {
+      $(this).closest('tr').remove();
 
-    $('.baris').each(function(i, obj) {
-      $(obj).text(i + 1);
-    });
-    baris = baris - 1;
+      $('.baris').each(function(i, obj) {
+        $(obj).text(i + 1);
+      });
+      baris = baris - 1;
+    }
   });
 
   // $('#bank_id').change(function() {
@@ -314,17 +316,20 @@
 
   let indexUrl = "{{ route('upahritasi.index') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('upahritasi.store') }}"
+  let actionUrl = "{{ config('app.api_url') . 'upahritasi' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
   let postingUrl = "{{ Config::get('app.api_url').'running_number' }}"
 
   /* Set action url */
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $upahritasi['id'] }}`
+  <?php endif; ?>
+
+  /* Set action url */
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('upahritasi.update', $upahritasi['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('upahritasi.destroy', $upahritasi['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
@@ -347,6 +352,9 @@
         method: method,
         dataType: 'JSON',
         data: $('form').serializeArray(),
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()

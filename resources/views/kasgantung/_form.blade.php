@@ -108,7 +108,7 @@
             <div class="row">
               <div class="col-12">
                 <div class="table-responsive">
-                  <table class="table table-bordered table-bindkeys">
+                  <table id="tableDetail" class="table table-bordered table-bindkeys">
                     <thead>
                       <tr>
                         <th width="50">No</th>
@@ -131,9 +131,7 @@
                           <input type="text" name="nominal[]" class="form-control text-right" value="{{ number_format($d['nominal'],0,'.','.') ?? '' }}" oninput="separatorNumber(this)">
                         </td>
                         <td>
-                          @if($kasgantungIndex > 0)
                           <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                          @endif
                         </td>
                       </tr>
                       @endforeach
@@ -149,7 +147,7 @@
                           <input type="text" name="nominal[]" class="form-control text-right" oninput="separatorNumber(this)">
                         </td>
                         <td>
-
+                          <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                         </td>
                       </tr>
                       @endif
@@ -257,7 +255,7 @@
 
   $("#addrow").click(function() {
     let clone = $('#row').clone();
-    clone.find(':last-child').append("<div class='btn btn-danger btn-sm rmv' >Hapus</div>")
+    // clone.find(':last-child').append("<div class='btn btn-danger btn-sm rmv' >Hapus</div>")
     clone.find('input').val('');
 
     baris = parseInt(baris) + 1;
@@ -266,12 +264,16 @@
   });
 
   $('table').on('click', '.rmv', function() {
-    $(this).closest('tr').remove();
+    var rowCount = $('#tableDetail tr').length;
+    console.log(rowCount);
+    if (rowCount > 2) {
+      $(this).closest('tr').remove();
 
-    $('.baris').each(function(i, obj) {
-      $(obj).text(i + 1);
-    });
-    baris = baris - 1;
+      $('.baris').each(function(i, obj) {
+        $(obj).text(i + 1);
+      });
+      baris = baris - 1;
+    }
   });
 
   // $('#bank_id').change(function() {
@@ -291,17 +293,20 @@
 
   let indexUrl = "{{ route('kasgantung.index') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ route('kasgantung.store') }}"
+  let actionUrl = "{{ config('app.api_url') . 'kasgantung' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
   let postingUrl = "{{ Config::get('app.api_url').'running_number' }}"
 
   /* Set action url */
+  <?php if ($action !== 'add') : ?>
+    actionUrl += `/{{ $kasgantung['id'] }}`
+  <?php endif; ?>
+
+  /* Set action url */
   <?php if ($action == 'edit') : ?>
-    actionUrl = "{{ route('kasgantung.update', $kasgantung['id']) }}"
     method = "PATCH"
   <?php elseif ($action == 'delete') : ?>
-    actionUrl = "{{ route('kasgantung.destroy', $kasgantung['id']) }}"
     method = "DELETE"
   <?php endif; ?>
 
@@ -324,6 +329,9 @@
         method: method,
         dataType: 'JSON',
         data: $('form').serializeArray(),
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
