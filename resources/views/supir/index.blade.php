@@ -22,10 +22,8 @@
   <div class="row">
     <div class="col-12">
       <table id="jqGrid"></table>
-      <div id="jqGridPager"></div>
-
-      <div id="customPager" class="row bg-white">
-        <div id="buttonContainer" class="col-12 col-md-5 text-center text-md-left">
+      <div id="jqGridPager" class="row bg-white">
+        <div id="buttonContainer" class="col-12 col-md-7 text-center text-md-left">
           <button id="add" class="btn btn-primary btn-sm mb-1">
             <i class="fa fa-plus"></i> ADD
           </button>
@@ -36,8 +34,8 @@
             <i class="fa fa-trash"></i> DELETE
           </button>
         </div>
-        <div id="pagerButtonContainer" class="col-12 col-md-3 d-flex justify-content-center"></div>
-        <div id="pagerInfo" class="col-12 col-md-4"></div>
+        <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
+        <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
       </div>
 
     </div>
@@ -275,7 +273,6 @@
         sortname: sortname,
         sortorder: sortorder,
         page: page,
-        pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',
@@ -298,6 +295,9 @@
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
+          loadPagerHandler('#pagerHandler', $(this))
+          loadPagerInfo('#pagerInfo', $(this))
+          
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")

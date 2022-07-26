@@ -27,7 +27,7 @@
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
-        url: `{{ config('app.api_url') . 'kasgantung_detail' }}`,
+        url: `{{ route('kasgantung_detail.index') }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
