@@ -182,10 +182,12 @@ class UserRoleController extends MyController
      */
     public function report(Request $request)
     {
-        $params['offset'] = $request->dari - 1;
-        $params['rows'] = $request->sampai - $request->dari + 1;
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'userrole', $request->all());
 
-        $userroles = $this->get($params)['rows'];
+        $userroles = $response['data'];
 
         return view('reports.userrole', compact('userroles'));
     }
