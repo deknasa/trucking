@@ -45,51 +45,31 @@
             label: 'NOMINAL SUPIR',
             name: 'nominalsupir',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
+            formatter: currencyFormat
           },
           {
             label: 'NOMINAL KENEK',
             name: 'nominalkenek',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
+            formatter: currencyFormat
           },
           {
             label: 'NOMINAL KOMISI',
             name: 'nominalkomisi',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
+            formatter: currencyFormat
           },
           {
             label: 'NOMINAL TOL',
             name: 'nominaltol',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
+            formatter: currencyFormat
           },
           {
             label: 'LITER',
             name: 'liter',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
+            formatter: currencyFormat
           }
         ],
         autowidth: true,

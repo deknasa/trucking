@@ -142,7 +142,8 @@
           {
             label: 'JARAK',
             name: 'jarak',
-            align: 'right'
+            align: 'right',
+            formatter: currencyFormat
           },
           {
             label: 'ZONA',
