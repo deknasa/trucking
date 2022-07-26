@@ -26,15 +26,15 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <label>NO BUKTI</label>
               </div>
               <div class="col-12 col-md-4">
-                <input type="text" name="nobukti" class="form-control" value="{{ $servicein['nobukti'] ?? '-' }}" readonly>
+                <input type="text" name="nobukti" class="form-control" value="{{ $serviceout['nobukti'] ?? '-' }}" readonly>
               </div>
               <div class="col-12 col-md-2 col-form-label">
                 <label>TANGGAL BUKTI</label>
               </div>
               <div class="col-12 col-md-4">
                 @php
-                if (isset($servicein['tglbukti'])) {
-                $tglbukti = date('d-m-Y',strtotime($servicein['tglbukti']));
+                if (isset($serviceout['tglbukti'])) {
+                $tglbukti = date('d-m-Y',strtotime($serviceout['tglbukti']));
                 } else {
                 $tglbukti = date('d-m-Y');
                 }
@@ -51,7 +51,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <select name="trado_id" class="form-control select2bs4">
                   <option value="">PILIH TRADO</option>
                   <?php foreach ($combo['trado'] as $key => $item) {
-                    $selected = @$servicein['trado_id'] == $item['id'] ? "selected" : ""
+                    $selected = @$serviceout['trado_id'] == $item['id'] ? "selected" : ""
                   ?>
                     <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['keterangan'] }}</option>
                   <?php } ?>
@@ -60,17 +60,17 @@ $indexRow = $_GET['indexRow'] ?? '';
             </div>
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
-                <label>TANGGAL MASUK</label>
+                <label>TANGGAL KELUAR</label>
               </div>
               <div class="col-12 col-md-4">
                 @php
-                if (isset($servicein['tglmasuk'])) {
-                $tglmasuk = date('d-m-Y',strtotime($servicein['tglmasuk']));
+                if (isset($serviceout['tglkeluar'])) {
+                $tglkeluar = date('d-m-Y',strtotime($serviceout['tglkeluar']));
                 } else {
-                $tglmasuk = date('d-m-Y');
+                $tglkeluar = date('d-m-Y');
                 }
                 @endphp
-                <input type="text" name="tglmasuk" class="form-control datepicker" value="{{ $tglmasuk }}">
+                <input type="text" name="tglkeluar" class="form-control datepicker" value="{{ $tglkeluar }}">
               </div>
             </div>
             <div class="row form-group">
@@ -78,7 +78,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <label>KETERANGAN</label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="keterangan" class="form-control" value="{{ $servicein['keterangan'] ?? '' }}">
+                <input type="text" name="keterangan" class="form-control" value="{{ $serviceout['keterangan'] ?? '' }}">
               </div>
             </div>
 
@@ -91,25 +91,25 @@ $indexRow = $_GET['indexRow'] ?? '';
                     <thead>
                       <tr>
                         <th width="50">No</th>
-                        <th>Mekanik</th>
+                        <th>No bukti Service in</th>
                         <th>Keterangan</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
                     <tbody id="table_body" class="form-group">
-                      @if (isset($servicein['serviceindetail']))
-                      @foreach($servicein['serviceindetail'] as $serviceinIndex => $d)
+                      @if (isset($serviceout['serviceoutdetail']))
+                      @foreach($serviceout['serviceoutdetail'] as $serviceoutIndex => $d)
                       <tr id="row">
                         <td>
-                          <div class="baris">{{ $serviceinIndex+1 }}</div>
+                          <div class="baris">{{ $serviceoutIndex+1 }}</div>
                         </td>
                         <td>
-                          <select name="mekanik_id[]" class="form-control select2bs4">
-                            <option value="">MEKANIK</option>
-                            <?php foreach ($combo['mekanik'] as $key => $item) {
-                              $selected = @$d['mekanik_id'] == $item['id'] ? "selected" : ""
+                          <select name="servicein_nobukti[]" class="form-control select2bs4">
+                            <option value="">NO BUKTI SERVICE IN</option>
+                            <?php foreach ($combo['servicein'] as $key => $item) {
+                              $selected = @$d['servicein_nobukti'] == $item['nobukti'] ? "selected" : ""
                             ?>
-                              <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['namamekanik'] }}</option>
+                              <option value="{{ $item['nobukti'] }}" {{ $selected }}>{{ $item['nobukti'] }}</option>
                             <?php } ?>
                           </select>
                         </td>
@@ -118,7 +118,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                         </td>
 
                         <td>
-                          @if($serviceinIndex > 0)
+                          @if($serviceoutIndex > 0)
                           <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                           @endif
                         </td>
@@ -129,14 +129,16 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <td>
                           <div class="baris">1</div>
                         </td>
+
                         <td>
-                          <select name="mekanik_id[]" class="form-control select2bs4">
-                            <option value="">MEKANIK</option>
-                            <?php foreach ($combo['mekanik'] as $key => $item) { ?>
-                              <option value="{{ $item['id'] }}">{{ $item['namamekanik'] }}</option>
+                          <select name="servicein_nobukti[]" class="form-control select2bs4">
+                            <option value="">NO BUKTI SERVICE IN</option>
+                            <?php foreach ($combo['servicein'] as $key => $item) { ?>
+                              <option value="{{ $item['nobukti'] }}">{{ $item['nobukti'] }}</option>
                             <?php } ?>
                           </select>
                         </td>
+
                         <td>
                           <input type="text" name="keterangan_detail[]" class="form-control">
                         </td>
@@ -160,7 +162,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               Simpan
               @endif
             </button>
-            <a href="{{ route('servicein.index') }}" class="btn btn-danger">
+            <a href="{{ route('serviceout.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
               BATAL
             </a>
@@ -186,8 +188,8 @@ $indexRow = $_GET['indexRow'] ?? '';
   // }
 
   var baris = 1;
-  @if(isset($servicein['serviceindetail']))
-  baris = "{{count($servicein['serviceindetail'])}}";
+  @if(isset($serviceout['serviceoutdetail']))
+  baris = "{{count($serviceout['serviceoutdetail'])}}";
   @endif;
 
   $("#addrow").click(function() {
@@ -217,17 +219,16 @@ $indexRow = $_GET['indexRow'] ?? '';
     });
     baris = baris - 1;
   });
-
-  let indexUrl = "{{ route('servicein.index') }}"
+  let indexUrl = "{{ route('serviceout.index') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ config('app.api_url') . 'servicein' }}"
+  let actionUrl = "{{ config('app.api_url') . 'serviceout' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
   let postingUrl = "{{ Config::get('app.api_url').'running_number' }}"
 
   /* Set action url */
   <?php if ($action !== 'add') : ?>
-    actionUrl += `/{{ $servicein['id'] }}`
+    actionUrl += `/{{ $serviceout['id'] }}`
 
   <?php endif; ?>
 
@@ -236,7 +237,7 @@ $indexRow = $_GET['indexRow'] ?? '';
   <?php elseif ($action == 'delete') : ?>
     method = "DELETE"
   <?php endif; ?>
-
+  
   if (action == 'delete') {
     $('[name]').addClass('disabled')
   }
@@ -251,7 +252,6 @@ $indexRow = $_GET['indexRow'] ?? '';
 
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
-
       $.ajax({
         url: actionUrl,
         method: method,

@@ -1,13 +1,17 @@
 @extends('layouts.master')
 
 @section('content')
+
+
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
       <table id="jqGrid"></table>
-      <div id="jqGridPager" class="row bg-white">
-        <div id="buttonContainer" class="col-12 col-md-7 text-center text-md-left">
+      <div id="jqGridPager"></div>
+
+      <div id="customPager" class="row bg-white">
+        <div id="buttonContainer" class="col-12 col-md-5 text-center text-md-left">
           <button id="add" class="btn btn-primary btn-sm mb-1">
             <i class="fa fa-plus"></i> ADD
           </button>
@@ -18,16 +22,21 @@
             <i class="fa fa-trash"></i> DELETE
           </button>
         </div>
-        <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
-        <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
+        <div id="pagerButtonContainer" class="col-12 col-md-3 d-flex justify-content-center"></div>
+        <div id="pagerInfo" class="col-12 col-md-4"></div>
       </div>
+
     </div>
   </div>
 </div>
 
+<!-- Detail -->
+@include('serviceout._detail')
+
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('mandor.index') }}"
+  let indexUrl = "{{ route('serviceout.index') }}"
+  let getUrl = "{{ route('serviceout.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -38,11 +47,10 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'namamandor'
+  let sortname = 'id'
   let sortorder = 'asc'
   let autoNumericElements = []
-  let rowNum = 10
-
+  // console.log(getUrl);
   $(document).ready(function() {
     /* Set page */
     <?php if (isset($_GET['page'])) { ?>
@@ -68,14 +76,9 @@
     <?php if (isset($_GET['sortorder'])) { ?>
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
-
-    /* Set rowNum */
-    <?php if (isset($_GET['limit'])) { ?>
-      rowNum = "{{ $_GET['limit'] }}"
-    <?php } ?>
-
     $("#jqGrid").jqGrid({
-      url: `{{ config('app.api_url') . 'mandor' }}`,
+        url: `{{ config('app.api_url') . 'serviceout' }}`,
+        // url: getUrl,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -83,57 +86,64 @@
         colModel: [{
             label: 'ID',
             name: 'id',
+            align: 'right',
             width: '50px'
           },
           {
-            label: 'NAMA MANDOR',
-            name: 'namamandor',
+            label: 'NO BUKTI',
+            name: 'nobukti',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL BUKTI',
+            name: 'tglbukti',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'TRADO ID',
+            name: 'trado_id',
+            align: 'left'
+          },
+          {
+            label: 'TGL KELUAR',
+            name: 'tglkeluar',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-          },
-          {
-            label: 'STATUS',
-            name: 'statusaktif',
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combo'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combo'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
+            align: 'left'
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
+            align: 'left'
           },
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
+            align: 'left',
             formatter: "date",
-            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y H:i:s" }
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
         ],
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: rowNum,
+        rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
@@ -142,6 +152,7 @@
         sortname: sortname,
         sortorder: sortorder,
         page: page,
+        pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',
@@ -156,20 +167,27 @@
         loadBeforeSend: (jqXHR) => {
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
+        ajaxRowOptions: {
+          async: false,
+        },
         onSelectRow: function(id) {
+          loadDetailData(id)
+
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
-          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+          let rows = $(this).jqGrid('getGridParam', 'postData').limit
+          if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         loadComplete: function(data) {
-          loadPagerHandler('#pagerHandler', $(this))
-          loadPagerInfo('#pagerInfo', $(this))
-
+          $("input").attr("autocomplete", "off");
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
+
+          if (data.message !== "" && data.message !== undefined && data.message !== null) {
+            alert(data.message)
+          }
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -182,11 +200,6 @@
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
           })
-
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
-          }
-
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
@@ -204,7 +217,7 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
-        },
+        }
       })
 
       .jqGrid("navGrid", pager, {
@@ -214,47 +227,6 @@
         edit: false,
         del: false,
       })
-
-      // .navButtonAdd(pager, {
-      //   caption: 'Add',
-      //   title: 'Add',
-      //   id: 'add',
-      //   buttonicon: 'fas fa-plus',
-      //   class: 'btn btn-primary',
-      //   onClickButton: function() {
-      //     let limit = $(this).jqGrid('getGridParam', 'postData').limit
-
-      //     window.location.href = `{{ route('mandor.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-      //   }
-      // })
-
-      // .navButtonAdd(pager, {
-      //   caption: 'Edit',
-      //   title: 'Edit',
-      //   id: 'edit',
-      //   buttonicon: 'fas fa-pen',
-      //   onClickButton: function() {
-      //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
-      //       alert('please select a row')
-      //     } else {
-      //       window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-      //     }
-      //   }
-      // })
-
-      // .navButtonAdd(pager, {
-      //   caption: 'Delete',
-      //   title: 'Delete',
-      //   id: 'delete',
-      //   buttonicon: 'fas fa-trash',
-      //   onClickButton: function() {
-      //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      //     window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-      //   }
-      // })
 
       .jqGrid('filterToolbar', {
         stringResult: true,
@@ -272,6 +244,9 @@
 
     /* Append global search */
     loadGlobalSearch()
+
+    /* Load detial grid */
+    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)
@@ -293,23 +268,10 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('mandor', 'store') }}`) {
-      $('#add').addClass('ui-disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('mandor', 'update') }}`) {
-      $('#edit').addClass('ui-disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('mandor', 'destroy') }}`) {
-      $('#delete').addClass('ui-disabled')
-    }
-
-    /* Handle button add on click */
     $('#add').click(function() {
       let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
 
-      window.location.href = `{{ route('mandor.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      window.location.href = `{{ route('serviceout.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
     })
 
     /* Handle button edit on click */
@@ -329,6 +291,7 @@
 
       window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
     })
+
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -358,6 +321,12 @@
 
       let params
       let actionUrl = ``
+
+      if ($('#rangeModal').data('action') == 'export') {
+        actionUrl = `{{ route('serviceout.export') }}`
+      } else if ($('#rangeModal').data('action') == 'report') {
+        actionUrl = `{{ route('serviceout.report') }}`
+      }
 
       /* Clear validation messages */
       $('.is-invalid').removeClass('is-invalid')

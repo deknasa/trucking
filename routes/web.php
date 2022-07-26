@@ -65,8 +65,6 @@ use App\Http\Controllers\ServiceInDetailController;
 use App\Http\Controllers\ServiceOutHeaderController;
 use App\Http\Controllers\ServiceOutDetailController;
 
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -293,11 +291,11 @@ Route::middleware('auth')->group(function () {
     Route::get('gudang/index', [GudangController::class, 'index']);
     Route::resource('gudang', GudangController::class);
 
-    Route::get('subkelompok/report', [SubKelompokController::class, 'report'])->name('subkelompok.report');
-    Route::get('subkelompok/{id}/delete', [SubKelompokController::class, 'delete'])->name('subkelompok.delete');
-    Route::get('subkelompok/get', [SubKelompokController::class, 'get'])->name('gudang.get');
-    Route::get('subkelompok/index', [SubKelompokController::class, 'index']);
-    Route::resource('subkelompok', SubKelompokController::class);
+    Route::get('sub_kelompok/report', [SubKelompokController::class, 'report'])->name('sub_kelompok.report');
+    Route::get('sub_kelompok/{id}/delete', [SubKelompokController::class, 'delete'])->name('sub_kelompok.delete');
+    Route::get('sub_kelompok/get', [SubKelompokController::class, 'get'])->name('gudang.get');
+    Route::get('sub_kelompok/index', [SubKelompokController::class, 'index']);
+    Route::resource('sub_kelompok', SubKelompokController::class);
 
     Route::get('supplier/report', [SupplierController::class, 'report'])->name('supplier.report');
     Route::get('supplier/{id}/delete', [SupplierController::class, 'delete'])->name('supplier.delete');
@@ -359,11 +357,11 @@ Route::middleware('auth')->group(function () {
     Route::get('merk/index', [MerkController::class, 'index']);
     Route::resource('merk', MerkController::class);
 
-    Route::get('penerimaantrucking/report', [PenerimaanTruckingController::class, 'report'])->name('penerimaantrucking.report');
-    Route::get('penerimaantrucking/{id}/delete', [PenerimaanTruckingController::class, 'delete'])->name('penerimaantrucking.delete');
-    Route::get('penerimaantrucking/get', [PenerimaanTruckingController::class, 'get'])->name('merk.get');
-    Route::get('penerimaantrucking/index', [PenerimaanTruckingController::class, 'index']);
-    Route::resource('penerimaantrucking', PenerimaanTruckingController::class);
+    Route::get('penerimaan_trucking/report', [PenerimaanTruckingController::class, 'report'])->name('penerimaan_trucking.report');
+    Route::get('penerimaan_trucking/{id}/delete', [PenerimaanTruckingController::class, 'delete'])->name('penerimaan_trucking.delete');
+    Route::get('penerimaan_trucking/get', [PenerimaanTruckingController::class, 'get'])->name('merk.get');
+    Route::get('penerimaan_trucking/index', [PenerimaanTruckingController::class, 'index']);
+    Route::resource('penerimaan_trucking', PenerimaanTruckingController::class);
 
     Route::get('pengeluaran_trucking/report', [PengeluaranTruckingController::class, 'report'])->name('pengeluaran_trucking.report');
     Route::get('pengeluaran_trucking/{id}/delete', [PengeluaranTruckingController::class, 'delete'])->name('pengeluaran_trucking.delete');
@@ -440,7 +438,7 @@ Route::middleware('auth')->group(function () {
     Route::get('ritasi/index', [RitasiController::class, 'index']);
 
     Route::resource('ritasi', RitasiController::class);
-    
+
     Route::get('servicein/{id}/delete', [ServiceInHeaderController::class, 'delete'])->name('servicein.delete');
     Route::get('servicein/index', [ServiceInHeaderController::class, 'index']);
     Route::get('servicein/get', [ServiceInHeaderController::class, 'get'])->name('servicein.get');
@@ -453,12 +451,9 @@ Route::middleware('auth')->group(function () {
     Route::get('serviceout/{id}/delete', [ServiceOutHeaderController::class, 'delete'])->name('serviceout.delete');
     Route::get('serviceout/index', [ServiceOutHeaderController::class, 'index']);
     Route::get('serviceout/get', [ServiceOutHeaderController::class, 'get'])->name('serviceout.get');
-    Route::get('serviceout/export', [ServiceoutHeaderController::class, 'export'])->name('serviceout.export');
+    Route::get('serviceout/export', [ServiceOutHeaderController::class, 'export'])->name('serviceout.export');
     Route::get('serviceout/report', [ServiceOutHeaderController::class, 'report'])->name('serviceout.report');
     Route::resource('serviceout', ServiceOutHeaderController::class);
 
     Route::resource('serviceoutdetail', ServiceOutDetailController::class);
 });
-
-
-

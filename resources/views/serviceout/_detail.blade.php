@@ -10,8 +10,7 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('kasgantung_detail.index') }}"
-
+  let detailIndexUrl = "{{ route('serviceoutdetail.index') }}"
   /**
    * Custom Functions
    */
@@ -27,34 +26,20 @@
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
-        url: `{{ route('kasgantung_detail.index') }}`,
+        url: `{{ config('app.api_url') . 'serviceoutdetail' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [
           {
+            label: 'NO BUKTI SERVICE IN',
+            name: 'servicein_nobukti',
+          },
+          {
             label: 'KETERANGAN',
             name: 'keterangan',
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
-          },
-          {
-            label: 'MODIFIEDBY',
-            name: 'modifiedby',
-          },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-          },
+          }
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -68,7 +53,7 @@
         pager: pager,
         viewrecords: true,
         loadComplete: function(data) {
-          
+
         }
       })
 
@@ -85,7 +70,7 @@
     $('#detail').setGridParam({
       url: detailIndexUrl,
       postData: {
-        kasgantung_id: id
+        serviceout_id: id
       }
     }).trigger('reloadGrid')
   }

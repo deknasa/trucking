@@ -97,7 +97,9 @@
           {
             label: 'TANGGAL BUKTI',
             name: 'tglbukti',
-            align: 'left'
+            align: 'left',
+            formatter: "date",
+            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y" }
           },
           {
             label: 'TRADO ID',
@@ -107,7 +109,9 @@
           {
             label: 'TGL MASUK',
             name: 'tglmasuk',
-            align: 'left'
+            align: 'left',
+            formatter: "date",
+            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y" }
           },
           {
             label: 'KETERANGAN',
@@ -127,7 +131,9 @@
             {
               label: 'UPDATEDAT',
               name: 'updated_at',
-              align: 'left'
+              align: 'left',
+              formatter: "date",
+            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y H:i:s" }
             },
           ],
           autowidth: true,
