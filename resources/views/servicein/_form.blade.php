@@ -82,7 +82,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
 
-            <button type="button" class="btn btn-primary my-2" id="addrow">Tambah</button>
+            <!-- <button type="button" class="btn btn-primary my-2" id="addrow">Tambah</button> -->
 
             <div class="row">
               <div class="col-12">
@@ -147,6 +147,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                       @endif
                     </tbody>
                   </table>
+                  <button type="button" class="btn btn-primary my-2" id="addrow">Tambah</button>
                 </div>
               </div>
             </div>

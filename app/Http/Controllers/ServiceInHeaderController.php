@@ -2,30 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use stdClass;
 
 class ServiceInHeaderController extends MyController
 {
     public $title = 'Service in';
-   // /**
+    // /**
     //  * Fungsi index
     //  * @ClassName index
     //  */
     public function index(Request $request)
     {
         $title = $this->title;
-        
+
         return view('servicein.index', compact('title'));
     }
 
-       // /**
+    // /**
     //  * Fungsi store
     //  * @ClassName store
     //  */
@@ -44,10 +39,9 @@ class ServiceInHeaderController extends MyController
         } catch (\Throwable $th) {
             throw $th->getMessage();
         }
-        
     }
 
-       // /**
+    // /**
     //  * Fungsi get
     //  * @ClassName get
     //  */
@@ -87,7 +81,7 @@ class ServiceInHeaderController extends MyController
 
         $combo = $this->combo();
 
-        return view('servicein.add', compact('title' , 'combo'));
+        return view('servicein.add', compact('title', 'combo'));
     }
 
     // /**
@@ -111,7 +105,7 @@ class ServiceInHeaderController extends MyController
         return view('servicein.edit', compact('title', 'servicein', 'combo', 'serviceNoBukti'));
     }
 
-       // /**
+    // /**
     //  * Fungsi update
     //  * @ClassName update
     //  */
@@ -162,7 +156,7 @@ class ServiceInHeaderController extends MyController
         }
     }
 
-       // /**
+    // /**
     //  * Fungsi destroy
     //  * @ClassName destroy
     //  */
@@ -177,7 +171,7 @@ class ServiceInHeaderController extends MyController
         return response($response);
     }
 
-       // /**
+    // /**
     //  * Fungsi getNoBukti
     //  * @ClassName getNoBukti
     //  */
@@ -199,15 +193,15 @@ class ServiceInHeaderController extends MyController
         return $noBukti;
     }
 
-   // /**
+    // /**
     //  * Fungsi combo
     //  * @ClassName combo
     //  */
     private function combo()
     {
         $response = Http::withHeaders($this->httpHeaders)
-        ->withToken(session('access_token'))
-        ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->withOptions(['verify' => false])
             ->get(config('app.api_url') . 'servicein/combo');
 
         return $response['data'];

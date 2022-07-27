@@ -31,7 +31,7 @@
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        datatype: "local",
         colModel: [
           {
             label: 'KETERANGAN',
@@ -78,14 +78,13 @@
   }
 
   function loadDetailData(id) {
-    setTimeout(function(){
-        $('#detail').setGridParam({
-        url: detailIndexUrl,
-        postData: {
-          kasgantung_id: id
-        }
-      }).trigger('reloadGrid')
-    },800); 
+    $('#detail').setGridParam({
+      url: detailIndexUrl,
+      datatype: 'json',
+      postData: {
+        kasgantung_id: id
+      }
+    }).trigger('reloadGrid')
   }
     
   function clearColumnSearch() {

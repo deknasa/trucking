@@ -31,7 +31,7 @@
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        datatype: "local",
         colModel: [
           {
             label: 'CONTAINER',
@@ -98,14 +98,13 @@
   }
 
   function loadDetailData(id) {
-    setTimeout(function(){
-      $('#detail').setGridParam({
-        url: detailIndexUrl,
-        postData: {
-          upahritasi_id: id
-        }
-      }).trigger('reloadGrid')
-    },800);
+    $('#detail').setGridParam({
+      url: detailIndexUrl,
+      datatype: 'json',
+      postData: {
+        upahritasi_id: id
+      }
+    }).trigger('reloadGrid')
   }
 
   function clearColumnSearch() {
