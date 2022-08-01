@@ -30,9 +30,9 @@
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
-        colModel: [
-          {
+      datatype: "local",
+        //datatype: "json",
+        colModel: [{
             label: 'NO BUKTI SERVICE IN',
             name: 'servicein_nobukti',
           },
@@ -52,9 +52,7 @@
         sortable: true,
         pager: pager,
         viewrecords: true,
-        loadComplete: function(data) {
-
-        }
+        loadComplete: function(data) {}
       })
 
       .jqGrid("navGrid", pager, {
@@ -69,6 +67,7 @@
   function loadDetailData(id) {
     $('#detail').setGridParam({
       url: detailIndexUrl,
+datatype: "json",
       postData: {
         serviceout_id: id
       }

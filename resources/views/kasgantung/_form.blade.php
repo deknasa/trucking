@@ -103,7 +103,6 @@
               </div>
             </div>
 
-            <button type="button" class="btn btn-primary my-2" id="addrow">Tambah</button>
 
             <div class="row">
               <div class="col-12">
@@ -152,10 +151,22 @@
                       </tr>
                       @endif
                     </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colspan="3"></td>
+                        <td>
+                          <button type="button" class="btn btn-primary btn-sm my-2" id="addrow">Tambah</button>
+                        </td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
               </div>
             </div>
+
+            <!-- <div class="text-right">
+              <button type="button" class="btn btn-primary btn-sm my-2" id="addrow">Tambah</button>
+            </div> -->
 
             <!-- {{--
             <div class="row">
@@ -253,27 +264,56 @@
   baris = "{{count($kasgantung['kasgantung_detail'])}}";
   @endif
 
-  $("#addrow").click(function() {
-    let clone = $('#row').clone();
-    // clone.find(':last-child').append("<div class='btn btn-danger btn-sm rmv' >Hapus</div>")
-    clone.find('input').val('');
+  let html = `<tr id="row">
+                        <td>
+                          <span class="baris">1</span>
+                        </td>
+                        <td>
+                          <input type="text" name="keterangan_detail[]" class="form-control">
+                        </td>
+                        <td>
+                          <input type="text" name="nominal[]" class="form-control text-right" oninput="separatorNumber(this)">
+                        </td>
+                        <td>
+                          <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                        </td>
+                      </tr>`;
 
-    baris = parseInt(baris) + 1;
-    clone.find('.baris').text(baris);
-    $('table #table_body').append(clone);
+  $("#addrow").click(function() {
+    let rowCount = $('#row').length;
+    if (rowCount > 0) {
+      let clone = $('#row').clone();
+      
+      // clone.find(':last-child').append("<div class='btn btn-danger btn-sm rmv' >Hapus</div>")
+      clone.find('input').val('');
+
+      baris = parseInt(baris) + 1;
+      clone.find('.baris').text(baris);
+      $('table #table_body').append(clone);
+  } else {
+    baris = 1;
+    $('#table_body').append(html);
+  }
+
   });
 
   $('table').on('click', '.rmv', function() {
-    var rowCount = $('#tableDetail tr').length;
-    console.log(rowCount);
-    if (rowCount > 2) {
-      $(this).closest('tr').remove();
+    $(this).closest('tr').remove();
 
       $('.baris').each(function(i, obj) {
         $(obj).text(i + 1);
       });
       baris = baris - 1;
-    }
+    // var rowCount = $('#tableDetail tr').length;
+    // console.log(rowCount);
+    // if (rowCount > 2) {
+    //   $(this).closest('tr').remove();
+
+    //   $('.baris').each(function(i, obj) {
+    //     $(obj).text(i + 1);
+    //   });
+    //   baris = baris - 1;
+    // }
   });
 
   // $('#bank_id').change(function() {

@@ -7,7 +7,7 @@ $(document).ready(function () {
 	setFormBindKeys();
 	setSidebarBindKeys();
 	openMenuParents();
-	// setNumberSeparators()
+	setNumberSeparators()
 
 	/* Remove autocomplete */
 	$("input").attr("autocomplete", "off");
