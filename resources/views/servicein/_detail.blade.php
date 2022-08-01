@@ -30,7 +30,7 @@
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        datatype: "local",
         colModel: [
           {
             label: 'MEKANIK',
@@ -69,6 +69,7 @@
   function loadDetailData(id) {
     $('#detail').setGridParam({
       url: detailIndexUrl,
+      datatype: "json",
       postData: {
         servicein_id: id
       }

@@ -4,7 +4,6 @@ $sortname = $_GET['sortname'] ?? 'id';
 $sortorder = $_GET['sortorder'] ?? 'asc';
 $page = $_GET['page'] ?? '';
 $indexRow = $_GET['indexRow'] ?? '';
-
 ?>
 
 <div class="container-fluid">
@@ -82,7 +81,6 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
 
-            <!-- <button type="button" class="btn btn-primary my-2" id="addrow">Tambah</button> -->
 
             <div class="row">
               <div class="col-12">
@@ -91,7 +89,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                     <thead>
                       <tr>
                         <th width="50">No</th>
-                        <th>Mekanik</th>
+                        <th width="500">Mekanik</th>
                         <th>Keterangan</th>
                         <th>Aksi</th>
                       </tr>
@@ -116,11 +114,8 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <td>
                           <input type="text" name="keterangan_detail[]" class="form-control" value="{{ $d['keterangan'] ?? '' }}">
                         </td>
-
                         <td>
-                          @if($serviceinIndex > 0)
                           <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                          @endif
                         </td>
                       </tr>
                       @endforeach
@@ -141,17 +136,25 @@ $indexRow = $_GET['indexRow'] ?? '';
                           <input type="text" name="keterangan_detail[]" class="form-control">
                         </td>
                         <td>
-
+                          <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                         </td>
                       </tr>
                       @endif
                     </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colspan="3"></td>
+                        <td>
+                          <button type="button" class="btn btn-primary btn-sm my-2" id="addrow">Tambah</button>
+                        </td>
+                      </tr>
+                    </tfoot>
                   </table>
-                  <button type="button" class="btn btn-primary my-2" id="addrow">Tambah</button>
                 </div>
               </div>
             </div>
           </div>
+
           <div class="card-footer">
             <button type="submit" id="btnSimpan" class="btn btn-primary">
               <i class="fa fa-save"></i>
@@ -191,23 +194,55 @@ $indexRow = $_GET['indexRow'] ?? '';
   baris = "{{count($servicein['serviceindetail'])}}";
   @endif;
 
+  //ambil data untuk select option
+  let comboMekanik = `<?= json_encode($combo['mekanik']) ?>`;
+  comboMekanik = JSON.parse(comboMekanik);
+  let htmlComboMekanik = '';
+  $.each(comboMekanik, function(index, value) {
+    htmlComboMekanik += `<option value='${value.id}'>${value.namamekanik}</option>`;
+  });
+
+  let html = `<tr id="row">
+      <td>
+        <div class="baris">1</div>
+      </td>
+      <td>
+        <select name="mekanik_id[]" class="form-control select2bs4">
+          <option value="">MEKANIK</option>
+          ${htmlComboMekanik}
+        </select>
+      </td>
+      <td>
+        <input type="text" name="keterangan_detail[]" class="form-control">
+      </td>
+      <td>
+        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+      </td>
+    </tr>`;
+
   $("#addrow").click(function() {
-    let clone = $('#row').clone();
-    clone.find("span").remove();
-    clone.find("select").select2({
-      theme: 'bootstrap4'
-    });
-    clone.find("select").val('').change();
-    clone.find('td').last().append("<div class='btn btn-danger btn-sm rmv' >Hapus</div>")
-    clone.find('input').val('');
+    let rowCount = $('#row').length;
+    if (rowCount > 0) {
+      let clone = $('#row').clone();
+      clone.find("span").remove();
+      clone.find("select").select2({
+        theme: 'bootstrap4'
+      });
+      clone.find("select").val('').change();
+      clone.find('input').val('');
 
-    baris = parseInt(baris) + 1;
-    clone.find('.baris').text(baris);
-    $('table #table_body').append(clone);
+      baris = parseInt(baris) + 1;
+      clone.find('.baris').text(baris);
+      $('table #table_body').append(clone);
 
-    $('#row').find('select').select2({
-      theme: 'bootstrap4'
-    });
+      $('#row').find('select').select2({
+        theme: 'bootstrap4'
+      });
+    } else {
+      baris = 1;
+      $('#table_body').append(html);
+    }
+
   });
 
   $('table').on('click', '.rmv', function() {
@@ -229,7 +264,6 @@ $indexRow = $_GET['indexRow'] ?? '';
   /* Set action url */
   <?php if ($action !== 'add') : ?>
     actionUrl += `/{{ $servicein['id'] }}`
-
   <?php endif; ?>
 
   <?php if ($action == 'edit') : ?>
@@ -249,7 +283,6 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
-
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
 
@@ -257,10 +290,10 @@ $indexRow = $_GET['indexRow'] ?? '';
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        data: $('form').serializeArray(),
         headers: {
           'Authorization': `Bearer {{ session('access_token') }}`
         },
-        data: $('form').serializeArray(),
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()

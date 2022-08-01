@@ -2,16 +2,56 @@
 
 @section('content')
 
+<!-- Modal for report -->
+<div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="formRange" target="_blank">
+        @csrf
+        <div class="modal-body">
+          <input type="hidden" name="sidx">
+          <input type="hidden" name="sord">
+
+          <div class="form-group row">
+            <div class="col-sm-2 col-form-label">
+              <label for="">Dari</label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" name="dari" class="form-control autonumeric-report" autofocus>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-2 col-form-label">
+              <label for="">Sampai</label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" name="sampai" class="form-control autonumeric-report">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Report</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
       <table id="jqGrid"></table>
-      <div id="jqGridPager"></div>
-
-      <div id="customPager" class="row bg-white">
-        <div id="buttonContainer" class="col-12 col-md-5 text-center text-md-left">
+      <div id="jqGridPager" class="row bg-white">
+        <div id="buttonContainer" class="col-12 col-md-7 text-center text-md-left">
           <button id="add" class="btn btn-primary btn-sm mb-1">
             <i class="fa fa-plus"></i> ADD
           </button>
@@ -22,8 +62,8 @@
             <i class="fa fa-trash"></i> DELETE
           </button>
         </div>
-        <div id="pagerButtonContainer" class="col-12 col-md-3 d-flex justify-content-center"></div>
-        <div id="pagerInfo" class="col-12 col-md-4"></div>
+        <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
+        <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
       </div>
 
     </div>
@@ -47,9 +87,10 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'id'
+  let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+
   // console.log(getUrl);
   $(document).ready(function() {
     /* Set page */
@@ -76,6 +117,12 @@
     <?php if (isset($_GET['sortorder'])) { ?>
       sortorder = "{{ $_GET['sortorder'] }}"
     <?php } ?>
+
+    /* Set rowNum */
+    <?php if (isset($_GET['limit'])) { ?>
+      rowNum = "{{ $_GET['limit'] }}"
+    <?php } ?>
+
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'serviceout' }}`,
         // url: getUrl,
@@ -152,7 +199,6 @@
         sortname: sortname,
         sortorder: sortorder,
         page: page,
-        pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',
@@ -167,19 +213,20 @@
         loadBeforeSend: (jqXHR) => {
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
-        ajaxRowOptions: {
-          async: false,
-        },
         onSelectRow: function(id) {
           loadDetailData(id)
 
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
-          let rows = $(this).jqGrid('getGridParam', 'postData').limit
-          if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+
+          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
+          loadPagerHandler('#pagerHandler', $(this))
+          loadPagerInfo('#pagerInfo', $(this))
+
           $("input").attr("autocomplete", "off");
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -200,6 +247,7 @@
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
           })
+
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
@@ -268,6 +316,7 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
+    /* Handle button add on click */
     $('#add').click(function() {
       let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
 
@@ -285,13 +334,19 @@
       }
     })
 
+       /* Handle button add on click */
+       $('#add').click(function() {
+      let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
+
+      window.location.href = `{{ route('serviceout.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+    })
+
     /* Handle button delete on click */
     $('#delete').click(function() {
       selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
       window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
     })
-
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
