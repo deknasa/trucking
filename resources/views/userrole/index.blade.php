@@ -154,6 +154,9 @@
         },
         data: $(this).serializeArray(),
         success: response => {
+          triggerClick = true
+          indexRow = response.data.id
+
           $('#jqGrid').trigger('reloadGrid', {
             page: response.page
           })
