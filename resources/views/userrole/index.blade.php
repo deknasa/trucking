@@ -477,6 +477,7 @@
       $('#crudForm').data('action', 'add')
       $('#crudForm [name=user]').val('')
       $('#crudForm [name=user_id]').val('')
+      $('#crudModal').find('button:submit').text('SIMPAN')
       $('#crudModal').find('.modal-title').text('Add User Role')
       $('#crudModal').modal('show')
 
@@ -548,6 +549,7 @@
       $('.invalid-feedback').remove()
 
       $('#crudForm').data('action', 'edit')
+      $('#crudModal').find('button:submit').text('SIMPAN')
       $('#crudModal').find('.modal-title').text('Edit User Role')
       $('#crudModal').modal('show')
 
@@ -663,6 +665,7 @@
 
       $('#crudModal').find('.modal-title').text('Delete User Role')
       $('#crudModal').modal('show')
+      $('#crudModal').find('button:submit').text('DELETE')
       $('#crudForm [name]').addClass('disabled')
       $('#crudForm').data('action', 'delete')
 
