@@ -38,13 +38,11 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\KerusakanController;
 use App\Http\Controllers\PelangganController;
-use App\Http\Controllers\PenerimaController;
 use App\Http\Controllers\StatusContainerController;
 
 use App\Http\Controllers\KotaController;
 use App\Http\Controllers\MandorController;
 use App\Http\Controllers\MerkController;
-use App\Http\Controllers\PenerimaanTruckingController;
 
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\ZonaController;
@@ -65,6 +63,8 @@ use App\Http\Controllers\ServiceInDetailController;
 use App\Http\Controllers\ServiceOutHeaderController;
 use App\Http\Controllers\ServiceOutDetailController;
 
+use App\Http\Controllers\PenerimaanHeaderController;
+use App\Http\Controllers\PenerimaanDetailController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -456,4 +456,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('serviceout', ServiceOutHeaderController::class);
 
     Route::resource('serviceoutdetail', ServiceOutDetailController::class);
+
+    Route::get('penerimaan/{id}/delete', [PenerimaanHeaderController::class, 'delete'])->name('penerimaan.delete');
+    Route::get('penerimaan/index', [PenerimaanHeaderController::class, 'index']);
+    Route::get('penerimaan/get', [PenerimaanHeaderController::class, 'get'])->name('penerimaan.get');
+    Route::get('penerimaan/export', [PenerimaanHeaderController::class, 'export'])->name('penerimaan.export');
+    Route::get('penerimaan/report', [PenerimaanHeaderController::class, 'report'])->name('penerimaan.report');
+    Route::resource('penerimaan', PenerimaanHeaderController::class);
+
+    Route::resource('penerimaandetail', PenerimaanDetailController::class);
 });

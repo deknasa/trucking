@@ -10,7 +10,7 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('serviceoutdetail.index') }}"
+  let detailIndexUrl = "{{ route('penerimaandetail.index') }}"
   /**
    * Custom Functions
    */
@@ -26,18 +26,83 @@
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
-        url: `{{ config('app.api_url') . 'serviceoutdetail' }}`,
+        url: `{{ config('app.api_url') . 'penerimaandetail' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
-        colModel: [{
-            label: 'NO BUKTI SERVICE IN',
-            name: 'servicein_nobukti',
+        datatype: "local",
+        //datatype: "json",
+        colModel: [
+          // {
+          //   label: 'PENERIMAAN',
+          //   name: 'penerimaan_id',
+          // },
+          // {
+          //   label: 'NO BUKTI',
+          //   name: 'nobukti',
+          // }, 
+          {
+            label: 'NO WARKAT',
+            name: 'nowarkat',
+          }, 
+          {
+            label: 'TGL JATUH TEMPO',
+            name: 'tgljatuhtempo',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          }, 
+          {
+            label: 'NOMINAL',
+            name: 'nominal',
+            align: 'right',
+            formatter: 'currency',
+            formatoptions: {
+                decimalSeparator: ',',
+                thousandsSeparator: '.'
+            }
+          },
+          {
+            label: 'COA DEBET',
+            name: 'coadebet',
+          },
+          {
+            label: 'COA KREDIT',
+            name: 'coakredit',
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+          },
+          {
+            label: 'BANK ID',
+            name: 'bank_id',
+          },
+          {
+            label: 'PELANGGAN ID',
+            name: 'pelanggan_id',
+          },
+          {
+            label: 'INVOICE NO BUKTI',
+            name: 'invoice_nobukti',
+          },
+          {
+            label: 'BANK PELANGGAN ID',
+            name: 'bankpelanggan_id',
+          },
+          {
+            label: 'JENIS BIAYA',
+            name: 'jenisbiaya',
+          },
+          {
+            label: 'PENERIMAAN PIUTANG NO BUKTI',
+            name: 'penerimaanpiutang_nobukti',
+          },
+          {
+            label: 'BULAN BEBAN',
+            name: 'bulanbeban',
           }
         ],
         autowidth: true,
@@ -51,7 +116,8 @@
         sortable: true,
         pager: pager,
         viewrecords: true,
-        loadComplete: function(data) {}
+        loadComplete: function(data) {
+        }
       })
 
       .jqGrid("navGrid", pager, {
@@ -66,8 +132,9 @@
   function loadDetailData(id) {
     $('#detail').setGridParam({
       url: detailIndexUrl,
+      datatype: "json",
       postData: {
-        serviceout_id: id
+        penerimaan_id: id
       }
     }).trigger('reloadGrid')
   }

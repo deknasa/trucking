@@ -1,6 +1,50 @@
 @extends('layouts.master')
 
 @section('content')
+
+<!-- Modal for report -->
+<div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="formRange" target="_blank">
+        @csrf
+        <div class="modal-body">
+          <input type="hidden" name="sidx">
+          <input type="hidden" name="sord">
+
+          <div class="form-group row">
+            <div class="col-sm-2 col-form-label">
+              <label for="">Dari</label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" name="dari" class="form-control autonumeric-report" autofocus>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-2 col-form-label">
+              <label for="">Sampai</label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" name="sampai" class="form-control autonumeric-report">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Report</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
@@ -31,11 +75,15 @@
   </div>
 </div>
 
+<!-- Detail -->
+@include('penerimaan._detail')
+
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('penerima.index') }}"
+  let indexUrl = "{{ route('penerimaan.index') }}"
+  let getUrl = "{{ route('penerimaan.get') }}"
   let indexRow = 0;
-  let page = 1;
+  let page = 0;
   let pager = '#jqGridPager'
   let popup = "";
   let id = "";
@@ -44,11 +92,11 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'namapenerima'
+  let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
-  let rowNum = 10
 
+ 
   $(document).ready(function() {
     /* Set page */
     <?php if (isset($_GET['page'])) { ?>
@@ -81,7 +129,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'penerima' }}`,
+        url: `{{ config('app.api_url') . 'penerimaan' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -147,22 +195,30 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+          loadDetailData(id)
+
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
+
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
           loadPagerHandler('#pagerHandler', $(this))
           loadPagerInfo('#pagerInfo', $(this))
-          
+
+          $("input").attr("autocomplete", "off");
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
 
-          /* Set global variables */
-          sortname = $(this).jqGrid("getGridParam", "sortname")
+          if (data.message !== "" && data.message !== undefined && data.message !== null) {
+            alert(data.message)
+          }
+
+         /* Set global variables */
+         sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
@@ -173,28 +229,24 @@
             clearColumnSearch()
           })
 
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
-          }
-
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
-        },
+        }
       })
 
       .jqGrid("navGrid", pager, {
@@ -222,6 +274,9 @@
     /* Append global search */
     loadGlobalSearch()
 
+    /* Load detail grid */
+    loadDetailGrid()
+
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)
       .parent().addClass('px-1')
@@ -242,25 +297,31 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('penerima', 'store') }}`) {
-      $('#add').addClass('ui-disabled')
-    }
+/* Handle button add on click */
+    $('#add').click(function() {
+      let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
 
-    if (!`{{ $myAuth->hasPermission('penerima', 'update') }}`) {
-      $('#edit').addClass('ui-disabled')
-    }
+      window.location.href = `{{ route('penerimaan.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+    })
 
-    if (!`{{ $myAuth->hasPermission('penerima', 'destroy') }}`) {
-      $('#delete').addClass('ui-disabled')
-    }
+    /* Handle button edit on click */
+    $('#edit').click(function() {
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-    if (!`{{ $myAuth->hasPermission('penerima', 'export') }}`) {
-      $('#export').addClass('ui-disabled')
-    }
+      if (selectedId == null || selectedId == '' || selectedId == undefined) {
+        alert('please select a row')
+      } else {
+        window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      }
+    })
 
-    if (!`{{ $myAuth->hasPermission('penerima', 'report') }}`) {
-      $('#report').addClass('ui-disabled')
-    }
+
+    /* Handle button delete on click */
+    $('#delete').click(function() {
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+    })
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -281,17 +342,25 @@
         decimalCharacter: ',',
         allowDecimalPadding: false,
         minimumValue: 1,
-        maximumValue: totalRecord,
+        maximumValue: totalRecord
       })
     })
 
-    $('#formRange').submit(function(event) {
+    $('#formRange').submit(event => {
       event.preventDefault()
 
       let params
-      let submitButton = $(this).find('button:submit')
+      let actionUrl = ``
 
-      submitButton.attr('disabled', 'disabled')
+      if ($('#rangeModal').data('action') == 'export') {
+        actionUrl = `{{ route('penerimaan.export') }}`
+      } else if ($('#rangeModal').data('action') == 'report') {
+        actionUrl = `{{ route('penerimaan.report') }}`
+      }
+
+      /* Clear validation messages */
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
 
       /* Set params value */
       for (var key in postData) {
@@ -301,79 +370,7 @@
         params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-      let formRange = $('#formRange')
-      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
-      params += `&offset=${offset}&limit=${limit}`
-
-      if ($('#rangeModal').data('action') == 'export') {
-        let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}penerima/export?${params}`, true)
-        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
-        xhr.responseType = 'arraybuffer'
-
-        xhr.onload = function(e) {
-          if (this.status === 200) {
-            if (this.response !== undefined) {
-              let blob = new Blob([this.response], {
-                type: "application/vnd.ms-excel"
-              })
-              let link = document.createElement('a')
-
-              link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanPenerima${(new Date).getTime()}.xlsx`
-              link.click()
-
-              submitButton.removeAttr('disabled')
-            }
-          }
-        }
-
-        xhr.send()
-      } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('penerima.report') }}?${params}`)
-
-        submitButton.removeAttr('disabled')
-      }
-    })
-
-    /* Handle button add on click */
-    $('#add').click(function() {
-      let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
-
-      window.location.href = `{{ route('penerima.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-    })
-
-    /* Handle button edit on click */
-    $('#edit').click(function() {
-      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      if (selectedId == null || selectedId == '' || selectedId == undefined) {
-        alert('please select a row')
-      } else {
-        window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-      }
-    })
-
-    /* Handle button delete on click */
-    $('#delete').click(function() {
-      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-    })
-
-    /* Handle button export on click */
-    $('#export').click(function() {
-      $('#rangeModal').data('action', 'export')
-      $('#rangeModal').find('button:submit').html(`Export`)
-      $('#rangeModal').modal('show')
-    })
-
-    /* Handle button report on click */
-    $('#report').click(function() {
-      $('#rangeModal').data('action', 'report')
-      $('#rangeModal').find('button:submit').html(`Report`)
-      $('#rangeModal').modal('show')
+      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
 </script>

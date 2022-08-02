@@ -61,6 +61,9 @@
           <button id="delete" class="btn btn-danger btn-sm mb-1">
             <i class="fa fa-trash"></i> DELETE
           </button>
+          <button id="approval" class="btn btn-purple btn-sm mb-1">
+            <i class="fa fa-check"></i> UN/APPROVAL
+          </button>
         </div>
         <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
         <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
@@ -71,12 +74,12 @@
 </div>
 
 <!-- Detail -->
-@include('serviceout._detail')
+@include('penerimaan._detail')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('serviceout.index') }}"
-  let getUrl = "{{ route('serviceout.get') }}"
+  let indexUrl = "{{ route('penerimaan.index') }}"
+  let getUrl = "{{ route('penerimaan.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -91,7 +94,6 @@
   let sortorder = 'asc'
   let autoNumericElements = []
 
-  // console.log(getUrl);
   $(document).ready(function() {
     /* Set page */
     <?php if (isset($_GET['page'])) { ?>
@@ -123,9 +125,9 @@
       rowNum = "{{ $_GET['limit'] }}"
     <?php } ?>
 
+
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'serviceout' }}`,
-        // url: getUrl,
+        url: `{{ config('app.api_url') . 'penerimaan' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -152,13 +154,28 @@
             }
           },
           {
-            label: 'TRADO ID',
-            name: 'trado_id',
+            label: 'PELANGGAN ID',
+            name: 'pelanggan_id',
             align: 'left'
           },
           {
-            label: 'TGL KELUAR',
-            name: 'tglkeluar',
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            align: 'left'
+          },
+          {
+            label: 'POSTING DARI',
+            name: 'postingdari',
+            align: 'left'
+          },
+          {
+            label: 'DITERIMA DARI',
+            name: 'diterimadari',
+            align: 'left'
+          },
+          {
+            label: 'TGL LUNAS',
+            name: 'tgllunas',
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -167,9 +184,59 @@
             }
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
+            label: 'CABANG ID',
+            name: 'cabang_id',
             align: 'left'
+          },
+          {
+            label: 'STATUS KAS',
+            name: 'statuskas',
+            align: 'left'
+          },
+          {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            align: 'left'
+          },
+          {
+            label: 'USER APPROVAL',
+            name: 'userapproval',
+            align: 'left'
+          },
+          {
+            label: 'TGL APPROVAL',
+            name: 'tglapproval',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'NO RESI',
+            name: 'noresi',
+            align: 'left'
+          },
+          {
+            label: 'STATUS BERKAS',
+            name: 'statusberkas',
+            align: 'left'
+          },
+          // {
+          //   label: 'USER BERKAS',
+          //   name: 'userberkas',
+          //   align: 'left'
+          // },
+          {
+            label: 'TGL BERKAS',
+            name: 'tglberkas',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'MODIFIEDBY',
@@ -287,14 +354,13 @@
         },
       })
 
-
     /* Append clear filter button */
     loadClearFilter()
 
     /* Append global search */
     loadGlobalSearch()
 
-    /* Load detial grid */
+    /* Load detail grid */
     loadDetailGrid()
 
     $('#add .ui-pg-div')
@@ -317,11 +383,20 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
+    $('#approval .ui-pg-div')
+      .addClass('btn-sm')
+      .css({
+        'background': '#6619ff',
+        'color': '#fff'
+      })
+      .parent().addClass('px-1')
+
+
     /* Handle button add on click */
     $('#add').click(function() {
       let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
 
-      window.location.href = `{{ route('serviceout.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      window.location.href = `{{ route('penerimaan.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
     })
 
     /* Handle button edit on click */
@@ -335,13 +410,6 @@
       }
     })
 
-       /* Handle button add on click */
-       $('#add').click(function() {
-      let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
-
-      window.location.href = `{{ route('serviceout.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-    })
-
 
     /* Handle button delete on click */
     $('#delete').click(function() {
@@ -350,6 +418,26 @@
       window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
     })
 
+    /* Handle button approval on click */
+    $('#approval').click(function() {
+      let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+
+      $('#loader').removeClass('d-none')
+
+      $.ajax({
+        url: `{{ config('app.api_url') }}penerimaan/${id}/approval`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+        success: response => {
+          $('#jqGrid').trigger('reloadGrid')
+        }
+      }).always(() => {
+        $('#loader').addClass('d-none')
+      })
+    })
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -381,9 +469,9 @@
       let actionUrl = ``
 
       if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('serviceout.export') }}`
+        actionUrl = `{{ route('penerimaan.export') }}`
       } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('serviceout.report') }}`
+        actionUrl = `{{ route('penerimaan.report') }}`
       }
 
       /* Clear validation messages */

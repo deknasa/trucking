@@ -4,7 +4,6 @@ $sortname = $_GET['sortname'] ?? 'id';
 $sortorder = $_GET['sortorder'] ?? 'asc';
 $page = $_GET['page'] ?? '';
 $indexRow = $_GET['indexRow'] ?? '';
-
 ?>
 
 <div class="container-fluid">
@@ -82,8 +81,6 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
 
-            <button type="button" class="btn btn-primary my-2" id="addrow">Tambah</button>
-
             <div class="row">
               <div class="col-12">
                 <div class="table-responsive">
@@ -91,7 +88,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                     <thead>
                       <tr>
                         <th width="50">No</th>
-                        <th>No bukti Service in</th>
+                        <th width="300">No bukti Service in</th>
                         <th>Keterangan</th>
                         <th>Aksi</th>
                       </tr>
@@ -116,11 +113,8 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <td>
                           <input type="text" name="keterangan_detail[]" class="form-control" value="{{ $d['keterangan'] ?? '' }}">
                         </td>
-
                         <td>
-                          @if($serviceoutIndex > 0)
                           <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                          @endif
                         </td>
                       </tr>
                       @endforeach
@@ -129,7 +123,6 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <td>
                           <div class="baris">1</div>
                         </td>
-
                         <td>
                           <select name="servicein_nobukti[]" class="form-control select2bs4">
                             <option value="">NO BUKTI SERVICE IN</option>
@@ -138,21 +131,29 @@ $indexRow = $_GET['indexRow'] ?? '';
                             <?php } ?>
                           </select>
                         </td>
-
                         <td>
                           <input type="text" name="keterangan_detail[]" class="form-control">
                         </td>
                         <td>
-
+                          <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                         </td>
                       </tr>
                       @endif
                     </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colspan="3"></td>
+                        <td>
+                          <button type="button" class="btn btn-primary btn-sm my-2" id="addrow">Tambah</button>
+                        </td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
               </div>
             </div>
           </div>
+
           <div class="card-footer">
             <button type="submit" id="btnSimpan" class="btn btn-primary">
               <i class="fa fa-save"></i>
@@ -192,23 +193,55 @@ $indexRow = $_GET['indexRow'] ?? '';
   baris = "{{count($serviceout['serviceoutdetail'])}}";
   @endif;
 
-  $("#addrow").click(function() {
-    let clone = $('#row').clone();
-    clone.find("span").remove();
-    clone.find("select").select2({
-      theme: 'bootstrap4'
-    });
-    clone.find("select").val('').change();
-    clone.find('td').last().append("<div class='btn btn-danger btn-sm rmv' >Hapus</div>")
-    clone.find('input').val('');
+  //ambil data untuk select option
+  let comboNobukti = `<?= json_encode($combo['servicein']) ?>`;
+  comboNobukti = JSON.parse(comboNobukti);
+  let htmlComboNobukti = '';
+  $.each(comboNobukti, function(index, value) {
+    htmlComboNobukti += `<option value='${value.nobukti}'>${value.nobukti}</option>`;
+  });
 
-    baris = parseInt(baris) + 1;
-    clone.find('.baris').text(baris);
-    $('table #table_body').append(clone);
+  let html = `<tr id="row">
+      <td>
+        <div class="baris">1</div>
+      </td>
+      <td>
+        <select name="servicein_nobukti[]" class="form-control select2bs4">
+          <option value="">NO BUKTI SERVICE IN</option>
+          ${htmlComboNobukti}
+        </select>
+      </td>
+      <td>
+        <input type="text" name="keterangan_detail[]" class="form-control">
+      </td>
+      <td>
+        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+      </td>
+    </tr>`;
 
-    $('#row').find('select').select2({
-      theme: 'bootstrap4'
-    });
+    $("#addrow").click(function() {
+    let rowCount = $('#row').length;
+    if (rowCount > 0) {
+      let clone = $('#row').clone();
+      clone.find("span").remove();
+      clone.find("select").select2({
+        theme: 'bootstrap4'
+      });
+      clone.find("select").val('').change();
+      clone.find('input').val('');
+
+      baris = parseInt(baris) + 1;
+      clone.find('.baris').text(baris);
+      $('table #table_body').append(clone);
+
+      $('#row').find('select').select2({
+        theme: 'bootstrap4'
+      });
+    } else {
+      baris = 1;
+      $('#table_body').append(html);
+    }
+
   });
 
   $('table').on('click', '.rmv', function() {
@@ -219,6 +252,7 @@ $indexRow = $_GET['indexRow'] ?? '';
     });
     baris = baris - 1;
   });
+
   let indexUrl = "{{ route('serviceout.index') }}"
   let action = "{{ $action }}"
   let actionUrl = "{{ config('app.api_url') . 'serviceout' }}"
@@ -229,7 +263,6 @@ $indexRow = $_GET['indexRow'] ?? '';
   /* Set action url */
   <?php if ($action !== 'add') : ?>
     actionUrl += `/{{ $serviceout['id'] }}`
-
   <?php endif; ?>
 
   <?php if ($action == 'edit') : ?>
@@ -237,7 +270,7 @@ $indexRow = $_GET['indexRow'] ?? '';
   <?php elseif ($action == 'delete') : ?>
     method = "DELETE"
   <?php endif; ?>
-  
+
   if (action == 'delete') {
     $('[name]').addClass('disabled')
   }
@@ -249,17 +282,17 @@ $indexRow = $_GET['indexRow'] ?? '';
 
     /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
-
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
+
       $.ajax({
         url: actionUrl,
         method: method,
         dataType: 'JSON',
+        data: $('form').serializeArray(),
         headers: {
           'Authorization': `Bearer {{ session('access_token') }}`
         },
-        data: $('form').serializeArray(),
         success: response => {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
