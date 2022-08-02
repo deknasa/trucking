@@ -57,8 +57,8 @@
                       <button id="lookupToggler" class="btn btn-secondary" type="button">...</button>
                     </div>
                   </div>
-                  <div class="row" id="lookup">
-                    <div class="col-12" style="overflow-x: scroll;">
+                  <div class="row bg-white position-absolute" id="lookup" style="z-index: 9999; width: 100%;">
+                    <div class="col-12">
                       <div id="lookup">
                         @include('userrole._lookup')
                       </div>
@@ -75,28 +75,15 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {{--
-                  @foreach($combo['role'] as $role)
-                  <tr>
-                    <td><input type="hidden" name="role_id[]" value="{{ $role['role_id'] }}">{{ $role['rolename'] }}</td>
-                  <td width="25%">
-                    <select name="status[]" id="">
-                      @foreach($combo['statusaktif'] as $statusaktif)
-                      <option value="{{ $statusaktif['id'] }}">{{ $statusaktif['text'] }}</option>
-                      @endforeach
-                    </select>
-                  </td>
-                  </tr>
-                  @endforeach
-                  --}}
+                  
                 </tbody>
               </table>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Simpan</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+          <button type="button" id="btnSimpan" class="btn btn-primary">SIMPAN</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">BATAL</button>
         </div>
       </div>
     </form>
@@ -127,11 +114,16 @@
   $(document).ready(function() {
     $('#lookup').hide()
 
-    $('#crudForm').submit(function(event) {
+    $('#crudModal').on('shown.bs.modal', function() {
+      userRoleLookup.setGridWidth($('#lookup').prev().width())
+    })
+    
+    $('#btnSimpan').click(function(event) {
       event.preventDefault()
 
-      let action = $(this).data('action')
-      let userId = $(this).find('[name=user_id]').val()
+      let form = $('#crudForm')
+      let action = form.data('action')
+      let userId = form.find('[name=user_id]').val()
       let url = `{{ config('app.api_url') . 'userrole' }}`
       let method = 'POST'
 
@@ -152,11 +144,8 @@
         headers: {
           'Authorization': `Bearer {{ session('access_token') }}`
         },
-        data: $(this).serializeArray(),
+        data: form.serializeArray(),
         success: response => {
-          triggerClick = true
-          indexRow = response.data.id
-
           $('#jqGrid').trigger('reloadGrid', {
             page: response.page
           })
@@ -179,6 +168,7 @@
     })
 
     $('#lookupToggler').click(function(event) {
+      userRoleLookup.setGridWidth($('#lookup').prev().width())
       $('#lookup').toggle()
     })
 
@@ -480,7 +470,7 @@
       $('#crudForm').data('action', 'add')
       $('#crudForm [name=user]').val('')
       $('#crudForm [name=user_id]').val('')
-      $('#crudModal').find('button:submit').text('SIMPAN')
+      $('#crudModal').find('#btnSimpan').text('SIMPAN')
       $('#crudModal').find('.modal-title').text('Add User Role')
       $('#crudModal').modal('show')
 
@@ -552,7 +542,7 @@
       $('.invalid-feedback').remove()
 
       $('#crudForm').data('action', 'edit')
-      $('#crudModal').find('button:submit').text('SIMPAN')
+      $('#crudModal').find('#btnSimpan').text('SIMPAN')
       $('#crudModal').find('.modal-title').text('Edit User Role')
       $('#crudModal').modal('show')
 
@@ -668,7 +658,7 @@
 
       $('#crudModal').find('.modal-title').text('Delete User Role')
       $('#crudModal').modal('show')
-      $('#crudModal').find('button:submit').text('DELETE')
+      $('#crudModal').find('#btnSimpan').text('DELETE')
       $('#crudForm [name]').addClass('disabled')
       $('#crudForm').data('action', 'delete')
 
