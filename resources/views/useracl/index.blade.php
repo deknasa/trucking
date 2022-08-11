@@ -338,7 +338,7 @@
     /* Handle button edit on click */
     $('#edit').click(function() {
       row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-      selectedId = $(this).jqGrid('getCell', row_id, 'id');
+      selectedId = $("#jqGrid").jqGrid('getCell', row_id, 'id');
 
       window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
     })
@@ -346,7 +346,7 @@
     /* Handle button delete on click */
     $('#delete').click(function() {
       row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-      selectedId = $(this).jqGrid('getCell', row_id, 'id');
+      selectedId = $("#jqGrid").jqGrid('getCell', row_id, 'id');
 
       window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
     })

@@ -55,12 +55,16 @@
             }
           }, 
           {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+          },
+          {
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
             formatter: 'currency',
             formatoptions: {
-                decimalSeparator: ',',
+              decimalSeparator: ',',
                 thousandsSeparator: '.'
             }
           },
@@ -72,16 +76,13 @@
             label: 'COA KREDIT',
             name: 'coakredit',
           },
+         
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-          },
-          {
-            label: 'BANK ID',
+            label: 'BANK',
             name: 'bank_id',
           },
           {
-            label: 'PELANGGAN ID',
+            label: 'PELANGGAN',
             name: 'pelanggan_id',
           },
           {

@@ -27,11 +27,11 @@
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
-        url: `{{ config('app.api_url') . 'kasgantung_detail' }}`,
+        url: `{{ route('kasgantung_detail.index') }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        datatype: "local",
         colModel: [
           {
             label: 'KETERANGAN',
@@ -41,11 +41,7 @@
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
+            formatter: currencyFormat
           },
           {
             label: 'MODIFIEDBY',
@@ -84,12 +80,13 @@
   function loadDetailData(id) {
     $('#detail').setGridParam({
       url: detailIndexUrl,
+      datatype: 'json',
       postData: {
         kasgantung_id: id
       }
     }).trigger('reloadGrid')
   }
-
+    
   function clearColumnSearch() {
     $('input[id*="gs_"]').val("");
     $("#resetFilterOptions span#resetFilterOptions").removeClass('aktif');

@@ -342,14 +342,16 @@
       window.location.href = `{{ route('serviceout.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
     })
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> c6fa94816c9151101ffcca2b9e8f1dab95053484
     /* Handle button delete on click */
     $('#delete').click(function() {
       selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
       window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
     })
-
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {

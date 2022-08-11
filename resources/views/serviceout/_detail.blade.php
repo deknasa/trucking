@@ -30,7 +30,12 @@
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
+<<<<<<< HEAD
         datatype: "json",
+=======
+      datatype: "local",
+        //datatype: "json",
+>>>>>>> c6fa94816c9151101ffcca2b9e8f1dab95053484
         colModel: [{
             label: 'NO BUKTI SERVICE IN',
             name: 'servicein_nobukti',
@@ -66,6 +71,7 @@
   function loadDetailData(id) {
     $('#detail').setGridParam({
       url: detailIndexUrl,
+datatype: "json",
       postData: {
         serviceout_id: id
       }

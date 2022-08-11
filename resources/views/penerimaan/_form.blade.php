@@ -147,6 +147,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               <div class="col-12 col-md-10">
                 <select name="statusberkas" class="form-control select2bs4">
                   <option value="">STATUS BERKAS</option>
+               
                   <?php foreach ($combo['statusberkas'] as $key => $item) {
                     $selected = @$penerimaan['statusberkas'] == $item['id'] ? "selected" : ""
                   ?>
@@ -155,7 +156,6 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </select>
               </div>
             </div> -->
-
 
             <div class="row">
               <div class="col-12">
@@ -195,7 +195,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                           $tgljatuhtempo = date('d-m-Y');
                           }
                           @endphp
-                          <input type="date" name="tgljatuhtempo[]" class="form-control" value="{{ $tgljatuhtempo }}">
+                          <input type="date" name="tgljatuhtempo[]" class="form-control" value="{{ $d['tgljatuhtempo'] }}">
                         </td>
                         <td>
                           <input type="text" name="nominal[]" class="form-control text-right" value="{{ number_format($d['nominal'],0,'.','.') ?? '' }}" oninput="separatorNumber(this)">
@@ -359,18 +359,17 @@ $indexRow = $_GET['indexRow'] ?? '';
         <div class="baris">1</div>
       </td>
       <td>
-                          <input type="text" name="nowarkat[]" class="form-control">
-                        </td>
-                        <td>
-                          <input type="date" name="tgljatuhtempo[]" class="form-control">
-                        </td>
-                        <td>
-                          <input type="text" name="nominal[]" class="form-control text-right"  oninput="separatorNumber(this)">
-                        </td>
-                        <td>
-                          <input type="text" name="keterangan_detail[]" class="form-control">
-                        </td>
-
+        <input type="text" name="nowarkat[]" class="form-control">
+      </td>
+      <td>
+        <input type="date" name="tgljatuhtempo[]" class="form-control">
+      </td>
+      <td>
+        <input type="text" name="nominal[]" class="form-control text-right"  oninput="separatorNumber(this)">
+      </td>
+      <td>
+        <input type="text" name="keterangan_detail[]" class="form-control">
+      </td>
       <td>
         <select name="bank_id[]" class="form-control select2bs4">
           <option value="">BANK</option>
@@ -385,8 +384,8 @@ $indexRow = $_GET['indexRow'] ?? '';
         </select>
       </td>
       <td>
-                          <input type="text" name="jenisbiaya[]" class="form-control">
-                        </td>
+        <input type="text" name="jenisbiaya[]" class="form-control">
+       </td>
       <td>
         <div class='btn btn-danger btn-sm rmv'>Hapus</div>
       </td>                       

@@ -28,7 +28,7 @@ class MekanikController extends MyController
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
         $data = [
-            'combo' => $this->combo('list'),
+            'combo' => $this->comboStatusAktif('list'),
         ];
 
         return view('mekanik.index', compact('title', 'breadcrumb', 'data'));
@@ -68,7 +68,7 @@ class MekanikController extends MyController
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
         $combo = $this->combo();
-
+        
         return view('mekanik.add', compact('title', 'breadcrumb','combo'));
     }
 
@@ -103,7 +103,7 @@ class MekanikController extends MyController
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ])
+        ])->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "mekanik/$id");
 
@@ -135,7 +135,7 @@ class MekanikController extends MyController
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
-            ])
+            ])->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "mekanik/$id");
 
@@ -171,20 +171,27 @@ class MekanikController extends MyController
         return response($response['data']);
     }
 
-   
-    public function combo($aksi)
+    private function combo()
     {
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
+            ->get(config('app.api_url') . 'mekanik/combo');
+        
+        return $response['data'];
+    }
 
+    public function comboStatusAktif($aksi)
+    {
         $status = [
             'status' => $aksi,
             'grp' => 'STATUS AKTIF',
             'subgrp' => 'STATUS AKTIF',
         ];
-
+        
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/combostatus', $status);
-
+        
         return $response['data'];
     }
 }

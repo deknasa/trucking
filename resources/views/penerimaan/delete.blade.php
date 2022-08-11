@@ -2,7 +2,7 @@
 
 @section('content')
 <!-- Form -->
-@include('servicein._form', [
+@include('penerimaan._form', [
   'action' => 'delete'
 ])
 @endsection

@@ -154,7 +154,7 @@
             }
           },
           {
-            label: 'PELANGGAN ID',
+            label: 'PELANGGAN ',
             name: 'pelanggan_id',
             align: 'left'
           },
@@ -163,16 +163,16 @@
             name: 'keterangan',
             align: 'left'
           },
-          {
-            label: 'POSTING DARI',
-            name: 'postingdari',
-            align: 'left'
-          },
-          {
-            label: 'DITERIMA DARI',
-            name: 'diterimadari',
-            align: 'left'
-          },
+          // {
+          //   label: 'POSTING DARI',
+          //   name: 'postingdari',
+          //   align: 'left'
+          // },
+          // {
+          //   label: 'DITERIMA DARI',
+          //   name: 'diterimadari',
+          //   align: 'left'
+          // },
           {
             label: 'TGL LUNAS',
             name: 'tgllunas',
@@ -184,7 +184,7 @@
             }
           },
           {
-            label: 'CABANG ID',
+            label: 'CABANG',
             name: 'cabang_id',
             align: 'left'
           },
@@ -194,50 +194,51 @@
             align: 'left'
           },
           {
-            label: 'STATUS APPROVAL',
-            name: 'statusapproval',
-            align: 'left'
-          },
-          {
-            label: 'USER APPROVAL',
-            name: 'userapproval',
-            align: 'left'
-          },
-          {
-            label: 'TGL APPROVAL',
-            name: 'tglapproval',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
             label: 'NO RESI',
             name: 'noresi',
             align: 'left'
           },
           {
-            label: 'STATUS BERKAS',
-            name: 'statusberkas',
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
             align: 'left'
           },
+          // {
+          //   label: 'USER APPROVAL',
+          //   name: 'userapproval',
+          //   align: 'left'
+          // },
+          // {
+          //   label: 'TGL APPROVAL',
+          //   name: 'tglapproval',
+          //   align: 'left',
+          //   formatter: "date",
+          //   formatoptions: {
+          //     srcformat: "ISO8601Long",
+          //     newformat: "d-m-Y"
+          //   }
+          // },
+         
+          // {
+          //   label: 'STATUS BERKAS',
+          //   name: 'statusberkas',
+          //   align: 'left'
+          // },
           // {
           //   label: 'USER BERKAS',
           //   name: 'userberkas',
           //   align: 'left'
           // },
-          {
-            label: 'TGL BERKAS',
-            name: 'tglberkas',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
+          // {
+          //   label: 'TGL BERKAS',
+          //   name: 'tglberkas',
+          //   align: 'left',
+          //   formatter: "date",
+          //   formatoptions: {
+          //     srcformat: "ISO8601Long",
+          //     newformat: "d-m-Y"
+          //   }
+          // },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',

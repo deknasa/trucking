@@ -98,35 +98,29 @@ class PenerimaanHeaderController extends MyController
         return view('penerimaan.edit', compact('title', 'penerimaan', 'combo'));
     }
 
+    // /**
+    //  * Fungsi delete
+    //  * @ClassName delete
+    //  */
+    public function delete($id)
+    {
+        try {
+            $title = $this->title;
 
-   
+            $response = Http::withHeaders($this->httpHeaders)
+                ->withOptions(['verify' => false])
+                ->withToken(session('access_token'))
+                ->get(config('app.api_url') . "penerimaan/$id");
 
-    /**
-     * Fungsi delete
-     * @ClassName delete
-     */
-    // public function delete($id)
-    // {
-    //     try {
-    //         $title = $this->title;
+            $penerimaan = $response['data'];
+            $combo = $this->combo();
 
-    //         $response = Http::withHeaders($this->httpHeaders)
-    //             ->withOptions(['verify' => false])
-    //             ->withToken(session('access_token'))
-    //             ->get(config('app.api_url') . "penerimaan/$id");
+            return view('penerimaan.delete', compact('title', 'combo', 'penerimaan'));
+        } catch (\Throwable $th) {
+            return redirect()->route('penerimaan.index');
+        }
+    }
 
-    //         $penerimaan = $response['data'];
-
-    //         $combo = [
-    //             'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
-    //             'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
-    //         ];
-
-    //         return view('penerimaan.delete', compact('title', 'penerimaan', 'combo'));
-    //     } catch (\Throwable $th) {
-    //         return redirect()->route('penerimaan.index');
-    //     }
-    // }
 
     /**
      * @ClassName
@@ -188,99 +182,4 @@ class PenerimaanHeaderController extends MyController
         return $response['data'];
     }
 
-    // /**
-    //  * @ClassName
-    //  */
-    // public function report(Request $request): View
-    // {
-    //     $response = Http::withHeaders($this->httpHeaders)
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'agen', $request->all());
-
-    //     $agens = $response['data'];
-
-    //     return view('reports.agen', compact('agens'));
-    // }
-
-    // /**
-    //  * @ClassName
-    //  */
-    // public function export(Request $request): void
-    // {
-    //     $params = [
-    //         'offset' => $request->dari - 1,
-    //         'rows' => $request->sampai - $request->dari + 1,
-    //     ];
-
-    //     $agens = $this->get($params)['rows'];
-
-    //     $columns = [
-    //         [
-    //             'label' => 'No',
-    //         ],
-    //         [
-    //             'label' => 'Kode Agen',
-    //             'index' => 'kodeagen',
-    //         ],
-    //         [
-    //             'label' => 'Nama Agen',
-    //             'index' => 'namaagen',
-    //         ],
-    //         [
-    //             'label' => 'Keterangan',
-    //             'index' => 'keterangan',
-    //         ],
-    //         [
-    //             'label' => 'Status Aktif',
-    //             'index' => 'statusaktif',
-    //         ],
-    //         [
-    //             'label' => 'Nama Perusahaan',
-    //             'index' => 'namaperusahaan',
-    //         ],
-    //         [
-    //             'label' => 'Alamat',
-    //             'index' => 'alamat',
-    //         ],
-    //         [
-    //             'label' => 'No Telp',
-    //             'index' => 'notelp',
-    //         ],
-    //         [
-    //             'label' => 'No Hp',
-    //             'index' => 'nohp',
-    //         ],
-    //         [
-    //             'label' => 'Contact Person',
-    //             'index' => 'contactperson',
-    //         ],
-    //         [
-    //             'label' => 'TOP',
-    //             'index' => 'top',
-    //         ],
-    //         [
-    //             'label' => 'Status Approval',
-    //             'index' => 'statusapproval',
-    //         ],
-    //         [
-    //             'label' => 'User approval',
-    //             'index' => 'userapproval',
-    //         ],
-    //         [
-    //             'label' => 'Tgl Approval',
-    //             'index' => 'tglapproval',
-    //         ],
-    //         [
-    //             'label' => 'Status Tas',
-    //             'index' => 'statustas',
-    //         ],
-    //         [
-    //             'label' => 'Jenis Emkl',
-    //             'index' => 'jenisemkl',
-    //         ],
-    //     ];
-
-    //     $this->toExcel($this->title, $agens, $columns);
-    // }
 }

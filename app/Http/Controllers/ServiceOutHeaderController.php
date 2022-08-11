@@ -32,7 +32,7 @@ class ServiceOutHeaderController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'serviceinheader', $request->all());
+                ->post(config('app.api_url') . 'serviceout', $request->all());
 
 
             return response($response, $response->status());
