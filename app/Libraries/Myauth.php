@@ -82,6 +82,7 @@ class Myauth
             'zona',
             'servicein',
             'serviceout',
+            'penerimaan',
         ],
         'method' => [
             'gridtab',
