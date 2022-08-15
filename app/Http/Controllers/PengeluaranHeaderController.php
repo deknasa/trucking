@@ -3,49 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\View\View;
 
-class ServiceOutHeaderController extends MyController
+class PengeluaranHeaderController extends MyController
 {
+    public $title = 'pengeluaran';
 
-     /**
+    /**
      * @ClassName
      */
-    public $title = 'Service out';
-
     public function index(Request $request)
     {
         $title = $this->title;
-        
-        return view('serviceout.index', compact('title'));
+        $breadcrumb = $this->breadcrumb;
+        $combo = [
+            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+            'statusapproval' => $this->getParameter('STATUS APPROVAL', 'STATUS APPROVAL'),
+            'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
+        ];
+
+        return view('pengeluaran.index', compact('title', 'breadcrumb', 'combo'));
     }
 
-     /**
-     * @ClassName
-     */
-    public function store(Request $request)
-    {
-        try {
-            $request['modifiedby'] = Auth::user()->name;
-
-            $response = Http::withHeaders($this->httpHeaders)
-                ->withOptions(['verify' => false])
-                ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'serviceout', $request->all());
-
-
-            return response($response, $response->status());
-        } catch (\Throwable $th) {
-            throw $th->getMessage();
-        }
-        
-    }
-   
-      // /**
-    //  * Fungsi get
-    //  * @ClassName get
-    //  */
     public function get($params = [])
     {
         $params = [
@@ -54,73 +36,63 @@ class ServiceOutHeaderController extends MyController
             'sortIndex' => $params['sidx'] ?? request()->sidx,
             'sortOrder' => $params['sord'] ?? request()->sord,
             'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
-            'withRelations' => $params['withRelations'] ?? request()->withRelations ?? false,
         ];
 
         $response = Http::withHeaders(request()->header())
-            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'serviceout', $params);
+            ->get(config('app.api_url') . 'pengeluaran', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
             'records' => $response['attributes']['totalRows'] ?? [],
             'rows' => $response['data'] ?? [],
-            'params' => $response['params'] ?? [],
+            'params' => $params ?? [],
+            'message' => $response['message'] ?? ''
         ];
+
+        if (request()->ajax()) {
+            return response($data, $response->status());
+        }
 
         return $data;
     }
 
-     /**
-     * @ClassName
+    /**
+     * Fungsi create
+     * @ClassName create
      */
-    public function create()
+    public function create(): View
     {
         $title = $this->title;
-
+        $breadcrumb = $this->breadcrumb;
         $combo = $this->combo();
 
-        return view('serviceout.add', compact('title' , 'combo'));
+        return view('pengeluaran.add', compact('title', 'breadcrumb', 'combo'));
     }
 
-     /**
-     * @ClassName
+    /**
+     * Fungsi edit
+     * @ClassName edit
      */
-    public function edit($id)
+    public function edit($id): View
     {
         $title = $this->title;
 
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "serviceout/$id");
-
-        $serviceout = $response['data'];
+            ->get(config('app.api_url') . "pengeluaran/$id");
+        $pengeluaran = $response['data'];
 
         $combo = $this->combo();
 
-        return view('serviceout.edit', compact('title', 'serviceout', 'combo'));
+        return view('pengeluaran.edit', compact('title', 'pengeluaran', 'combo'));
     }
 
-     /**
-     * @ClassName
-     */
-    public function update(Request $request, $id)
-    {
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "serviceout/$id", $request->all());
-
-        return response($response);
-    }
-
-     /**
-     * @ClassName
-     */
+    // /**
+    //  * Fungsi delete
+    //  * @ClassName delete
+    //  */
     public function delete($id)
     {
         try {
@@ -129,31 +101,38 @@ class ServiceOutHeaderController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "serviceout/$id");
+                ->get(config('app.api_url') . "pengeluaran/$id");
 
-            $serviceout = $response['data'];
+            $pengeluaran = $response['data'];
             $combo = $this->combo();
 
-            return view('serviceout.delete', compact('title', 'combo', 'serviceout'));
+            return view('pengeluaran.delete', compact('title', 'combo', 'pengeluaran'));
         } catch (\Throwable $th) {
-            return redirect()->route('serviceout.index');
+            return redirect()->route('pengeluaran.index');
         }
     }
 
-     /**
-     * @ClassName
-     */
-    public function destroy($id)
+
+    // /**
+    //  * Fungsi destroy
+    //  * @ClassName destroy
+    //  */
+    public function destroy($id, Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
+
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "serviceout/$id");
+            ->delete(config('app.api_url') . "agen/$id", $request->all());
 
         return response($response);
     }
 
+    // /**
+    //  * Fungsi getNoBukti
+    //  * @ClassName getNoBukti
+    //  */
     public function getNoBukti($group, $subgroup, $table)
     {
         $params = [
@@ -173,14 +152,17 @@ class ServiceOutHeaderController extends MyController
     }
 
 
+
+    // /**
+    //  * Fungsi combo
+    //  * @ClassName combo
+    //  */
     private function combo()
     {
         $response = Http::withHeaders($this->httpHeaders)
-        ->withToken(session('access_token'))
-        ->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'serviceout/combo');
-
+            ->withToken(session('access_token'))
+            ->withOptions(['verify' => false])
+            ->get(config('app.api_url') . 'pengeluaran/combo');
         return $response['data'];
     }
-
 }

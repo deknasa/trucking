@@ -61,6 +61,9 @@
           <button id="delete" class="btn btn-danger btn-sm mb-1">
             <i class="fa fa-trash"></i> DELETE
           </button>
+          <button id="approval" class="btn btn-purple btn-sm mb-1">
+            <i class="fa fa-check"></i> UN/APPROVAL
+          </button>
         </div>
         <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
         <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
@@ -71,12 +74,12 @@
 </div>
 
 <!-- Detail -->
-@include('servicein._detail')
+@include('pengeluaran._detail')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('servicein.index') }}"
-  let getUrl = "{{ route('servicein.get') }}"
+  let indexUrl = "{{ route('pengeluaran.index') }}"
+  let getUrl = "{{ route('pengeluaran.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -124,7 +127,7 @@
 
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'servicein' }}`,
+        url: `{{ config('app.api_url') . 'pengeluaran' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -151,23 +154,58 @@
             }
           },
           {
-            label: 'TRADO ID',
-            name: 'trado_id',
+            label: 'PELANGGAN ',
+            name: 'pelanggan_id',
             align: 'left'
-          },
-          {
-            label: 'TGL MASUK',
-            name: 'tglmasuk',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            align: 'left'
+          },
+          {
+            label: 'STATUS JNS TRANSAKSI',
+            name: 'statusjenistransaksi',
+            align: 'left'
+          },
+          {
+            label: 'POSTING DARI',
+            name: 'postingdari',
+            align: 'left'
+          },
+          {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            align: 'left'
+          },
+          {
+            label: 'DIBAYARKAN KE',
+            name: 'dibayarke',
+            align: 'left'
+          },
+          {
+            label: 'CABANG',
+            name: 'cabang_id',
+            align: 'left'
+          },
+          {
+            label: 'BANK',
+            name: 'bank_id',
+            align: 'left'
+          },
+          {
+            label: 'TRANSFER KE NO REK',
+            name: 'transferkeac',
+            align: 'left'
+          }, 
+          {
+            label: 'TRANSFER NAMA REK',
+            name: 'transferkean',
+            align: 'left'
+          },
+          {
+            label: 'TRANSFER NAMA BANK',
+            name: 'transferkebank',
             align: 'left'
           },
           {
@@ -235,8 +273,8 @@
             alert(data.message)
           }
 
-           /* Set global variables */
-           sortname = $(this).jqGrid("getGridParam", "sortname")
+          /* Set global variables */
+          sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
@@ -315,18 +353,20 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-<<<<<<< HEAD
+    $('#approval .ui-pg-div')
+      .addClass('btn-sm')
+      .css({
+        'background': '#6619ff',
+        'color': '#fff'
+      })
+      .parent().addClass('px-1')
+
 
     /* Handle button add on click */
     $('#add').click(function() {
-=======
-   
-/* Handle button add on click */
-$('#add').click(function() {
->>>>>>> c6fa94816c9151101ffcca2b9e8f1dab95053484
       let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
 
-      window.location.href = `{{ route('servicein.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      window.location.href = `{{ route('pengeluaran.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
     })
 
     /* Handle button edit on click */
@@ -348,6 +388,27 @@ $('#add').click(function() {
       window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
     })
 
+    /* Handle button approval on click */
+    $('#approval').click(function() {
+      let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+
+      $('#loader').removeClass('d-none')
+
+      $.ajax({
+        url: `{{ config('app.api_url') }}pengeluaran/${id}/approval`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+        success: response => {
+          $('#jqGrid').trigger('reloadGrid')
+        }
+      }).always(() => {
+        $('#loader').addClass('d-none')
+      })
+    })
+
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {
@@ -357,7 +418,6 @@ $('#add').click(function() {
 
       $('#formRange [name]:not(:hidden)').first().focus()
 
-<<<<<<< HEAD
       $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
       $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
       $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
@@ -373,38 +433,15 @@ $('#add').click(function() {
     })
 
     $('#formRange').submit(event => {
-=======
-$('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
-$('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-$('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-$('#formRange [name=sampai]').val(totalRecord)
-
-autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-  digitGroupSeparator: '.',
-  decimalCharacter: ',',
-  allowDecimalPadding: false,
-  minimumValue: 1,
-  maximumValue: totalRecord
-})
-})
-
-$('#formRange').submit(event => {
->>>>>>> c6fa94816c9151101ffcca2b9e8f1dab95053484
       event.preventDefault()
 
       let params
       let actionUrl = ``
 
       if ($('#rangeModal').data('action') == 'export') {
-<<<<<<< HEAD
-        actionUrl = `{{ route('servicein.export') }}`
+        actionUrl = `{{ route('pengeluaran.export') }}`
       } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('servicein.report') }}`
-=======
-        actionUrl = `{{ route('kasgantung.export') }}`
-      } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('kasgantung.report') }}`
->>>>>>> c6fa94816c9151101ffcca2b9e8f1dab95053484
+        actionUrl = `{{ route('pengeluaran.report') }}`
       }
 
       /* Clear validation messages */

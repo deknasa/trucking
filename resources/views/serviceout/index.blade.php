@@ -287,6 +287,7 @@
         },
       })
 
+
     /* Append clear filter button */
     loadClearFilter()
 
@@ -341,6 +342,10 @@
       window.location.href = `{{ route('serviceout.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
     })
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> c6fa94816c9151101ffcca2b9e8f1dab95053484
     /* Handle button delete on click */
     $('#delete').click(function() {
       selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')

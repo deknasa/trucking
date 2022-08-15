@@ -190,6 +190,7 @@
       return true;
     }
 
+    
     $(".formatdate").datepicker({
         dateFormat: 'dd-mm-yy',
         assumeNearbyYear: true
@@ -211,7 +212,6 @@
         }
       })
       .focus(function() {})
-
 
     $(document).ready(function() {
       Echo.channel('export')

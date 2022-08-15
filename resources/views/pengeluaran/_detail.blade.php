@@ -10,7 +10,7 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('penerimaandetail.index') }}"
+  let detailIndexUrl = "{{ route('pengeluarandetail.index') }}"
   /**
    * Custom Functions
    */
@@ -21,12 +21,11 @@
       timer = setTimeout(callback, ms);
     };
   })()
-
   function loadDetailGrid() {
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
-        url: `{{ config('app.api_url') . 'penerimaandetail' }}`,
+        url: `{{ config('app.api_url') . 'pengeluarandetail' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -34,13 +33,17 @@
         //datatype: "json",
         colModel: [
           // {
-          //   label: 'PENERIMAAN',
-          //   name: 'penerimaan_id',
+          //   label: 'PENGELUARAN',
+          //   name: 'pengeluaran_id',
           // },
-          // {
-          //   label: 'NO BUKTI',
-          //   name: 'nobukti',
-          // }, 
+          {
+            label: 'NO BUKTI',
+            name: 'nobukti',
+          }, 
+          {
+            label: 'ALAT BAYAR',
+            name: 'alatbayar_id',
+          }, 
           {
             label: 'NO WARKAT',
             name: 'nowarkat',
@@ -55,10 +58,6 @@
             }
           }, 
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-          },
-          {
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
@@ -68,14 +67,6 @@
                 thousandsSeparator: '.'
             }
           },
-          // {
-          //   label: 'COA DEBET',
-          //   name: 'coadebet',
-          // },
-          // {
-          //   label: 'COA KREDIT',
-          //   name: 'coakredit',
-          // },
           {
             label: 'COA DEBET',
             name: 'coadebet',
@@ -84,50 +75,18 @@
             label: 'COA KREDIT',
             name: 'coakredit',
           },
-         
           {
-            label: 'BANK',
-            name: 'bank_id',
-          },
-          // {
-          //   label: 'PELANGGAN',
-          //   name: 'pelanggan_id',
-          // },
-          // {
-          //   label: 'INVOICE NO BUKTI',
-          //   name: 'invoice_nobukti',
-          // },
-          {
-            label: 'PELANGGAN',
-            name: 'pelanggan_id',
-          },
-          {
-            label: 'INVOICE NO BUKTI',
-            name: 'invoice_nobukti',
-          },
-          {
-            label: 'BANK PELANGGAN ID',
-            name: 'bankpelanggan_id',
-          },
-          {
-            label: 'JENIS BIAYA',
-            name: 'jenisbiaya',
-          },
-          // {
-          //   label: 'PENERIMAAN PIUTANG NO BUKTI',
-          //   name: 'penerimaanpiutang_nobukti',
-          // },
-          // {
-          //   label: 'BULAN BEBAN',
-          //   name: 'bulanbeban',
-          // }
-          {
-            label: 'PENERIMAAN PIUTANG NO BUKTI',
-            name: 'penerimaanpiutang_nobukti',
-          },
+            label: 'KETERANGAN',
+            name: 'keterangan',
+          }, 
           {
             label: 'BULAN BEBAN',
             name: 'bulanbeban',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           }
         ],
         autowidth: true,
@@ -159,7 +118,7 @@
       url: detailIndexUrl,
       datatype: "json",
       postData: {
-        penerimaan_id: id
+        pengeluaran_id: id
       }
     }).trigger('reloadGrid')
   }

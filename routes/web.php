@@ -38,13 +38,11 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\KerusakanController;
 use App\Http\Controllers\PelangganController;
-use App\Http\Controllers\PenerimaController;
 use App\Http\Controllers\StatusContainerController;
 
 use App\Http\Controllers\KotaController;
 use App\Http\Controllers\MandorController;
 use App\Http\Controllers\MerkController;
-use App\Http\Controllers\PenerimaanTruckingController;
 
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\ZonaController;
@@ -67,6 +65,12 @@ use App\Http\Controllers\ServiceOutDetailController;
 
 use App\Http\Controllers\PenerimaanHeaderController;
 use App\Http\Controllers\PenerimaanDetailController;
+<<<<<<< HEAD
+=======
+
+use App\Http\Controllers\PengeluaranHeaderController;
+use App\Http\Controllers\PengeluaranDetailController;
+>>>>>>> 9f641d0b9201daf96d6d501afa3671e3124ff4d9
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -467,4 +471,17 @@ Route::middleware('auth')->group(function () {
     Route::resource('penerimaan', PenerimaanHeaderController::class);
 
     Route::resource('penerimaandetail', PenerimaanDetailController::class);
+<<<<<<< HEAD
+=======
+
+    //pengeluaran
+    Route::get('pengeluaran/{id}/delete', [PengeluaranHeaderController::class, 'delete'])->name('pengeluaran.delete');
+    Route::get('pengeluaran/index', [PengeluaranHeaderController::class, 'index']);
+    Route::get('pengeluaran/get', [PengeluaranHeaderController::class, 'get'])->name('pengeluaran.get');
+    Route::get('pengeluaran/export', [PengeluaranHeaderController::class, 'export'])->name('pengeluaran.export');
+    Route::get('pengeluaran/report', [PengeluaranHeaderController::class, 'report'])->name('pengeluaran.report');
+    Route::resource('pengeluaran', PengeluaranHeaderController::class);
+
+    Route::resource('pengeluarandetail', PengeluaranDetailController::class);
+>>>>>>> 9f641d0b9201daf96d6d501afa3671e3124ff4d9
 });
