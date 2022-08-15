@@ -73,9 +73,9 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <select name="statusjenistransaksi" class="form-control select2bs4">
                   <option value="">STATUS JENIS TRANSAKSI</option>
                   <?php foreach ($combo['statusjenistransaksi'] as $key => $item) {
-                    $selected = @$pengeluaran['id'] == $item['id'] ? "selected" : ""
+                    $selected = @$pengeluaran['statusjenistransaksi'] == $item['id'] ? "selected" : ""
                   ?>
-                    <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['grp'] }}</option>
+                    <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['text'] }}</option>
                   <?php } ?>
                 </select>
               </div>
