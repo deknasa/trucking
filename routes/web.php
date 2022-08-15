@@ -65,6 +65,9 @@ use App\Http\Controllers\ServiceOutDetailController;
 
 use App\Http\Controllers\PenerimaanHeaderController;
 use App\Http\Controllers\PenerimaanDetailController;
+
+use App\Http\Controllers\PengeluaranHeaderController;
+use App\Http\Controllers\PengeluaranDetailController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -465,4 +468,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('penerimaan', PenerimaanHeaderController::class);
 
     Route::resource('penerimaandetail', PenerimaanDetailController::class);
+
+    //pengeluaran
+    Route::get('pengeluaran/{id}/delete', [PengeluaranHeaderController::class, 'delete'])->name('pengeluaran.delete');
+    Route::get('pengeluaran/index', [PengeluaranHeaderController::class, 'index']);
+    Route::get('pengeluaran/get', [PengeluaranHeaderController::class, 'get'])->name('pengeluaran.get');
+    Route::get('pengeluaran/export', [PengeluaranHeaderController::class, 'export'])->name('pengeluaran.export');
+    Route::get('pengeluaran/report', [PengeluaranHeaderController::class, 'report'])->name('pengeluaran.report');
+    Route::resource('pengeluaran', PengeluaranHeaderController::class);
+
+    Route::resource('pengeluarandetail', PengeluaranDetailController::class);
 });

@@ -7,13 +7,10 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-
-class PenerimaanHeaderController extends MyController
+class PengeluaranHeaderController extends MyController
 {
-    public $title = 'penerimaan';
+    public $title = 'pengeluaran';
 
     /**
      * @ClassName
@@ -28,13 +25,9 @@ class PenerimaanHeaderController extends MyController
             'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
         ];
 
-        return view('penerimaan.index', compact('title', 'breadcrumb', 'combo'));
+        return view('pengeluaran.index', compact('title', 'breadcrumb', 'combo'));
     }
 
-    // /**
-    //  * Fungsi get
-    //  * @ClassName get
-    //  */
     public function get($params = [])
     {
         $params = [
@@ -47,7 +40,7 @@ class PenerimaanHeaderController extends MyController
 
         $response = Http::withHeaders(request()->header())
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaan', $params);
+            ->get(config('app.api_url') . 'pengeluaran', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -65,6 +58,19 @@ class PenerimaanHeaderController extends MyController
     }
 
     /**
+     * Fungsi create
+     * @ClassName create
+     */
+    public function create(): View
+    {
+        $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
+        $combo = $this->combo();
+
+        return view('pengeluaran.add', compact('title', 'breadcrumb', 'combo'));
+    }
+
+    /**
      * Fungsi edit
      * @ClassName edit
      */
@@ -75,12 +81,12 @@ class PenerimaanHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "penerimaan/$id");
-        $penerimaan = $response['data'];
+            ->get(config('app.api_url') . "pengeluaran/$id");
+        $pengeluaran = $response['data'];
 
         $combo = $this->combo();
 
-        return view('penerimaan.edit', compact('title', 'penerimaan', 'combo'));
+        return view('pengeluaran.edit', compact('title', 'pengeluaran', 'combo'));
     }
 
     // /**
@@ -95,21 +101,22 @@ class PenerimaanHeaderController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "penerimaan/$id");
+                ->get(config('app.api_url') . "pengeluaran/$id");
 
-            $penerimaan = $response['data'];
+            $pengeluaran = $response['data'];
             $combo = $this->combo();
 
-            return view('penerimaan.delete', compact('title', 'combo', 'penerimaan'));
+            return view('pengeluaran.delete', compact('title', 'combo', 'pengeluaran'));
         } catch (\Throwable $th) {
-            return redirect()->route('penerimaan.index');
+            return redirect()->route('pengeluaran.index');
         }
     }
 
 
-    /**
-     * @ClassName
-     */
+    // /**
+    //  * Fungsi destroy
+    //  * @ClassName destroy
+    //  */
     public function destroy($id, Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
@@ -120,16 +127,6 @@ class PenerimaanHeaderController extends MyController
             ->delete(config('app.api_url') . "agen/$id", $request->all());
 
         return response($response);
-    }
-
-    public function fieldLength(): Response
-    {
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'agen/field_length');
-
-        return response($response['data']);
     }
 
     // /**
@@ -154,6 +151,8 @@ class PenerimaanHeaderController extends MyController
         return $noBukti;
     }
 
+
+
     // /**
     //  * Fungsi combo
     //  * @ClassName combo
@@ -163,8 +162,7 @@ class PenerimaanHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'penerimaan/combo');
+            ->get(config('app.api_url') . 'pengeluaran/combo');
         return $response['data'];
     }
-
 }
