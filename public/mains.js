@@ -7,7 +7,9 @@ $(document).ready(function () {
 	setFormBindKeys();
 	setSidebarBindKeys();
 	openMenuParents();
-	setNumberSeparators()
+	setNumberSeparators();
+	initDatepicker();
+	initSelect2();
 
 	/* Remove autocomplete */
 	$("input").attr("autocomplete", "off");
@@ -60,33 +62,33 @@ function dateFormat(value) {
 }
 
 function setNumberSeparators() {
-  $.ajax({
-    url: `${apiUrl}parameter`,
-    method: 'GET',
-    async: false,
-    data: {
-      filters: JSON.stringify({
-        "groupOp": "AND",
-        "rules": [{
-          "field": "grp",
-          "op": "cn",
-          "data": "FORMAT ANGKA"
-        }]
-      })
-    },
-    beforeSend: jqXHR => {
-      jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-    },
-    success: response => {
-      response.data.forEach(data => {
-        if (data.subgrp == 'DESIMAL') {
-          decimalSeparator = data.text
-        } else if (data.subgrp == 'RIBUAN') {
-          thousandSeparator = data.text
-        }
-      });
-    }
-  })
+	$.ajax({
+		url: `${apiUrl}parameter`,
+		method: 'GET',
+		async: false,
+		data: {
+			filters: JSON.stringify({
+				"groupOp": "AND",
+				"rules": [{
+					"field": "grp",
+					"op": "cn",
+					"data": "FORMAT ANGKA"
+				}]
+			})
+		},
+		beforeSend: jqXHR => {
+			jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+		},
+		success: response => {
+			response.data.forEach(data => {
+				if (data.subgrp == 'DESIMAL') {
+					decimalSeparator = data.text
+				} else if (data.subgrp == 'RIBUAN') {
+					thousandSeparator = data.text
+				}
+			});
+		}
+	})
 }
 
 function openMenuParents() {
@@ -694,43 +696,63 @@ function startTime() {
 	}, 1000);
 }
 
-$(".datepicker")
-	.datepicker({
-		dateFormat: "dd-mm-yy",
-		assumeNearbyYear: true,
-	})
-	.inputmask({
-		inputFormat: "dd-mm-yyyy",
-		alias: "datetime",
-	})
-	.focusout(function (e) {
-		let val = $(this).val();
-		if (val.match("[a-zA-Z]") == null) {
-			if (val.length == 8) {
-				$(this)
-					.inputmask({
-						inputFormat: "dd-mm-yyyy",
-					})
-					.val([val.slice(0, 6), "20", val.slice(6)].join(""));
+function initDatepicker() {
+	$(document).find(".datepicker")
+		.datepicker({
+			dateFormat: "dd-mm-yy",
+			assumeNearbyYear: true,
+		})
+		.inputmask({
+			inputFormat: "dd-mm-yyyy",
+			alias: "datetime",
+		})
+		.focusout(function (e) {
+			let val = $(this).val();
+			if (val.match("[a-zA-Z]") == null) {
+				if (val.length == 8) {
+					$(this)
+						.inputmask({
+							inputFormat: "dd-mm-yyyy",
+						})
+						.val([val.slice(0, 6), "20", val.slice(6)].join(""));
+				}
+			} else {
+				$(this).focus();
 			}
-		} else {
-			$(this).focus();
-		}
-	});
+		});
+}
+
+function destroyDatepicker() {
+	let datepickerElements = $(document).find('.datepicker')
+
+	$.each(datepickerElements, (index, datepickerElement) => {
+		$(datepickerElement).datepicker('destroy')
+	})
+}
 
 $(document).on("input", ".numbernoseparate", function () {
 	this.value = this.value.replace(/\D/g, "");
 });
 
 /* Select2: Autofocus search input on open */
-$(document)
-	.find("select")
-	.select2({
-		theme: "bootstrap4",
+function initSelect2() {
+	$(document)
+		.find("select")
+		.select2({
+			theme: "bootstrap4",
+		})
+		.on("select2:open", function (e) {
+			document.querySelector(".select2-search__field").focus();
+		});
+}
+
+function destroySelect2() {
+	let select2Elements = $(document).find('select')
+
+	$.each(select2Elements, (index, select2Element) => {
+		$(select2Element).select2('destroy')
 	})
-	.on("select2:open", function (e) {
-		document.querySelector(".select2-search__field").focus();
-	});
+}
 
 function showDialog(statusText = "", message = "") {
 	$("#dialog-message").find("p").remove();

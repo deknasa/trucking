@@ -163,11 +163,11 @@
             name: 'keterangan',
             align: 'left'
           },
-          // {
-          //   label: 'POSTING DARI',
-          //   name: 'postingdari',
-          //   align: 'left'
-          // },
+          {
+            label: 'BANK',
+            name: 'bank_id',
+            align: 'left'
+          },
           // {
           //   label: 'DITERIMA DARI',
           //   name: 'diterimadari',

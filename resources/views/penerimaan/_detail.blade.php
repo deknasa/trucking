@@ -68,18 +68,18 @@
                 thousandsSeparator: '.'
             }
           },
-          // {
-          //   label: 'COA DEBET',
-          //   name: 'coadebet',
-          // },
-          // {
-          //   label: 'COA KREDIT',
-          //   name: 'coakredit',
-          // },
           {
             label: 'COA DEBET',
             name: 'coadebet',
           },
+          // {
+          //   label: 'COA KREDIT',
+          //   name: 'coakredit',
+          // },
+          // {
+          //   label: 'COA DEBET',
+          //   name: 'coadebet',
+          // },
           {
             label: 'COA KREDIT',
             name: 'coakredit',
@@ -97,22 +97,22 @@
           //   label: 'INVOICE NO BUKTI',
           //   name: 'invoice_nobukti',
           // },
+          // {
+          //   label: 'PELANGGAN',
+          //   name: 'pelanggan_id',
+          // },
+          // {
+          //   label: 'INVOICE NO BUKTI',
+          //   name: 'invoice_nobukti',
+          // },
           {
-            label: 'PELANGGAN',
-            name: 'pelanggan_id',
-          },
-          {
-            label: 'INVOICE NO BUKTI',
-            name: 'invoice_nobukti',
-          },
-          {
-            label: 'BANK PELANGGAN ID',
+            label: 'BANK PELANGGAN',
             name: 'bankpelanggan_id',
           },
-          {
-            label: 'JENIS BIAYA',
-            name: 'jenisbiaya',
-          },
+          // {
+          //   label: 'JENIS BIAYA',
+          //   name: 'jenisbiaya',
+          // },
           // {
           //   label: 'PENERIMAAN PIUTANG NO BUKTI',
           //   name: 'penerimaanpiutang_nobukti',
@@ -121,14 +121,14 @@
           //   label: 'BULAN BEBAN',
           //   name: 'bulanbeban',
           // }
-          {
-            label: 'PENERIMAAN PIUTANG NO BUKTI',
-            name: 'penerimaanpiutang_nobukti',
-          },
-          {
-            label: 'BULAN BEBAN',
-            name: 'bulanbeban',
-          }
+          // {
+          //   label: 'PENERIMAAN PIUTANG NO BUKTI',
+          //   name: 'penerimaanpiutang_nobukti',
+          // },
+          // {
+          //   label: 'BULAN BEBAN',
+          //   name: 'bulanbeban',
+          // }
         ],
         autowidth: true,
         shrinkToFit: false,
