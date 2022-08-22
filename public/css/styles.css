@@ -161,3 +161,7 @@
     color: #fff !important;
     background-color: #5012cb;
 }
+
+.highlight {
+    background-color: yellow;
+}

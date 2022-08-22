@@ -113,12 +113,18 @@
             label: 'UPDATEDAT',
             name: 'updated_at',
             formatter: "date",
-            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y H:i:s" }
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           }, {
             label: 'CREATEDAT',
             name: 'created_at',
             formatter: "date",
-            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y H:i:s" }
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
         ],
         autowidth: true,
@@ -191,6 +197,8 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
+
+          setHighlight($(this))
         }
       })
 

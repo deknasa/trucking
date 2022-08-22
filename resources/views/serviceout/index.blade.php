@@ -265,6 +265,8 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
+
+          setHighlight($(this))
         }
       })
 
@@ -335,17 +337,13 @@
       }
     })
 
-       /* Handle button add on click */
-       $('#add').click(function() {
+    /* Handle button add on click */
+    $('#add').click(function() {
       let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
 
       window.location.href = `{{ route('serviceout.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
     })
 
-<<<<<<< HEAD
-
-=======
->>>>>>> c6fa94816c9151101ffcca2b9e8f1dab95053484
     /* Handle button delete on click */
     $('#delete').click(function() {
       selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')

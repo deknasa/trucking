@@ -235,8 +235,8 @@
             alert(data.message)
           }
 
-           /* Set global variables */
-           sortname = $(this).jqGrid("getGridParam", "sortname")
+          /* Set global variables */
+          sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
@@ -264,6 +264,8 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
+
+          setHighlight($(this))
         }
       })
 
@@ -315,15 +317,9 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-<<<<<<< HEAD
 
     /* Handle button add on click */
     $('#add').click(function() {
-=======
-   
-/* Handle button add on click */
-$('#add').click(function() {
->>>>>>> c6fa94816c9151101ffcca2b9e8f1dab95053484
       let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
 
       window.location.href = `{{ route('servicein.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
@@ -356,8 +352,6 @@ $('#add').click(function() {
       }
 
       $('#formRange [name]:not(:hidden)').first().focus()
-
-<<<<<<< HEAD
       $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
       $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
       $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
@@ -373,38 +367,15 @@ $('#add').click(function() {
     })
 
     $('#formRange').submit(event => {
-=======
-$('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
-$('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-$('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-$('#formRange [name=sampai]').val(totalRecord)
-
-autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-  digitGroupSeparator: '.',
-  decimalCharacter: ',',
-  allowDecimalPadding: false,
-  minimumValue: 1,
-  maximumValue: totalRecord
-})
-})
-
-$('#formRange').submit(event => {
->>>>>>> c6fa94816c9151101ffcca2b9e8f1dab95053484
       event.preventDefault()
 
       let params
       let actionUrl = ``
 
       if ($('#rangeModal').data('action') == 'export') {
-<<<<<<< HEAD
         actionUrl = `{{ route('servicein.export') }}`
       } else if ($('#rangeModal').data('action') == 'report') {
         actionUrl = `{{ route('servicein.report') }}`
-=======
-        actionUrl = `{{ route('kasgantung.export') }}`
-      } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('kasgantung.report') }}`
->>>>>>> c6fa94816c9151101ffcca2b9e8f1dab95053484
       }
 
       /* Clear validation messages */

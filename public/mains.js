@@ -1,6 +1,6 @@
 let sidebarIsOpen = false;
-let thousandSeparator = ','
-let decimalSeparator = '.'
+let thousandSeparator = ",";
+let decimalSeparator = ".";
 
 $(document).ready(function () {
 	startTime();
@@ -35,60 +35,86 @@ $(document).ready(function () {
 	});
 });
 
+function setHighlight(grid) {
+	let stringFilters
+	let filters
+	let gridId
+
+	stringFilters = grid.getGridParam("postData").filters
+
+	if (stringFilters) {
+		filters = JSON.parse(stringFilters)
+	}
+
+	gridId = $(grid).getGridParam().id
+
+	if (filters) {
+		filters.rules.forEach((rule) => {
+			$(grid)
+				.find(`tbody tr td[aria-describedby=${gridId}_${rule.field}]`)
+				.highlight(rule.data);
+		});
+	}
+}
+
 function currencyFormat(value) {
-	let result = parseFloat(value).toLocaleString('en-US', {
+	let result = parseFloat(value).toLocaleString("en-US", {
 		minimumFractionDigits: 2,
-		maximumFractionDigits: 2
-	})
+		maximumFractionDigits: 2,
+	});
 
-	result = result.replace(/\./g, '*')
-	result = result.replace(/,/g, thousandSeparator)
-	result = result.replace(/\*/g, decimalSeparator)
+	result = result.replace(/\./g, "*");
+	result = result.replace(/,/g, thousandSeparator);
+	result = result.replace(/\*/g, decimalSeparator);
 
-	return result
+	return result;
 }
 
 function dateFormat(value) {
-	let date = new Date(value)
+	let date = new Date(value);
 
-	let seconds = date.getSeconds('default')
-	let minutes = date.getMinutes('default')
-	let hours = date.getHours('default')
-	let day = date.getDate('default')
-	let month = date.getMonth('default') + 1
-	let year = date.getFullYear('default')
+	let seconds = date.getSeconds("default");
+	let minutes = date.getMinutes("default");
+	let hours = date.getHours("default");
+	let day = date.getDate("default");
+	let month = date.getMonth("default") + 1;
+	let year = date.getFullYear("default");
 
-	return `${day.toString().padStart(2, "0")}-${month.toString().padStart(2, "0")}-${year}`
+	return `${day.toString().padStart(2, "0")}-${month
+		.toString()
+		.padStart(2, "0")}-${year}`;
 }
 
 function setNumberSeparators() {
 	$.ajax({
 		url: `${apiUrl}parameter`,
-		method: 'GET',
+		method: "GET",
 		async: false,
 		data: {
 			filters: JSON.stringify({
-				"groupOp": "AND",
-				"rules": [{
-					"field": "grp",
-					"op": "cn",
-					"data": "FORMAT ANGKA"
-				}]
-			})
+				groupOp: "AND",
+				rules: [
+					{
+						field: "grp",
+						op: "cn",
+						data: "FORMAT ANGKA",
+					},
+				],
+			}),
 		},
-		beforeSend: jqXHR => {
-			jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+		beforeSend: (jqXHR) => {
+			jqXHR.setRequestHeader("Authorization", `Bearer ${accessToken}`);
 		},
-		success: response => {
-			response.data.forEach(data => {
-				if (data.subgrp == 'DESIMAL') {
-					decimalSeparator = data.text
-				} else if (data.subgrp == 'RIBUAN') {
-					thousandSeparator = data.text
+		success: (response) => {
+			response.data.forEach((data) => {
+				if (data.subgrp == "DESIMAL") {
+					decimalSeparator = data.text;
+				} else if (data.subgrp == "RIBUAN") {
+					thousandSeparator = data.text;
 				}
 			});
-		}
-	})
+		},
+	});
 }
 
 function openMenuParents() {
@@ -697,7 +723,8 @@ function startTime() {
 }
 
 function initDatepicker() {
-	$(document).find(".datepicker")
+	$(document)
+		.find(".datepicker")
 		.datepicker({
 			dateFormat: "dd-mm-yy",
 			assumeNearbyYear: true,
@@ -723,11 +750,11 @@ function initDatepicker() {
 }
 
 function destroyDatepicker() {
-	let datepickerElements = $(document).find('.datepicker')
+	let datepickerElements = $(document).find(".datepicker");
 
 	$.each(datepickerElements, (index, datepickerElement) => {
-		$(datepickerElement).datepicker('destroy')
-	})
+		$(datepickerElement).datepicker("destroy");
+	});
 }
 
 $(document).on("input", ".numbernoseparate", function () {
@@ -747,11 +774,11 @@ function initSelect2() {
 }
 
 function destroySelect2() {
-	let select2Elements = $(document).find('select')
+	let select2Elements = $(document).find("select");
 
 	$.each(select2Elements, (index, select2Element) => {
-		$(select2Element).select2('destroy')
-	})
+		$(select2Element).select2("destroy");
+	});
 }
 
 function showDialog(statusText = "", message = "") {
