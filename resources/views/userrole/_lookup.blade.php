@@ -136,6 +136,7 @@
         }
 
         $(this).setGridWidth($('#lookup').prev().width())
+        setHighlight($(this))
       }
     })
 
