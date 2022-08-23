@@ -235,8 +235,8 @@
             alert(data.message)
           }
 
-           /* Set global variables */
-           sortname = $(this).jqGrid("getGridParam", "sortname")
+          /* Set global variables */
+          sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
@@ -264,6 +264,8 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
+
+          setHighlight($(this))
         }
       })
 
@@ -315,9 +317,9 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-   
-/* Handle button add on click */
-$('#add').click(function() {
+
+    /* Handle button add on click */
+    $('#add').click(function() {
       let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
 
       window.location.href = `{{ route('servicein.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
@@ -350,31 +352,30 @@ $('#add').click(function() {
       }
 
       $('#formRange [name]:not(:hidden)').first().focus()
+      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
+      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
+      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+      $('#formRange [name=sampai]').val(totalRecord)
 
-$('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
-$('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-$('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-$('#formRange [name=sampai]').val(totalRecord)
+      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
+        digitGroupSeparator: '.',
+        decimalCharacter: ',',
+        allowDecimalPadding: false,
+        minimumValue: 1,
+        maximumValue: totalRecord
+      })
+    })
 
-autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-  digitGroupSeparator: '.',
-  decimalCharacter: ',',
-  allowDecimalPadding: false,
-  minimumValue: 1,
-  maximumValue: totalRecord
-})
-})
-
-$('#formRange').submit(event => {
+    $('#formRange').submit(event => {
       event.preventDefault()
 
       let params
       let actionUrl = ``
 
       if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('kasgantung.export') }}`
+        actionUrl = `{{ route('servicein.export') }}`
       } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('kasgantung.report') }}`
+        actionUrl = `{{ route('servicein.report') }}`
       }
 
       /* Clear validation messages */

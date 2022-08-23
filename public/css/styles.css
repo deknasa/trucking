@@ -180,3 +180,7 @@
 .modal.modal-fullscreen .modal-body {
 	overflow-y: auto;
 }
+
+.highlight {
+    background-color: yellow;
+}

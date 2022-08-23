@@ -122,7 +122,9 @@
 
   <!-- jQuery -->
   <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-  <script src="{{ asset('js/jquery.min.js') }}"></script>
+  
+  <!-- Highlight -->
+  <script src="{{ asset('js/highlight.js') }}"></script>
 
   <!-- Bootstrap 4 -->
   <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -190,6 +192,7 @@
       return true;
     }
 
+    
     $(".formatdate").datepicker({
         dateFormat: 'dd-mm-yy',
         assumeNearbyYear: true
@@ -211,7 +214,6 @@
         }
       })
       .focus(function() {})
-
 
     $(document).ready(function() {
       Echo.channel('export')

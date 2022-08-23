@@ -41,9 +41,11 @@ class ServiceOutHeaderController extends MyController
         }
         
     }
-
-
-    
+   
+      // /**
+    //  * Fungsi get
+    //  * @ClassName get
+    //  */
     public function get($params = [])
     {
         $params = [

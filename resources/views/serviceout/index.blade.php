@@ -265,6 +265,8 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
+
+          setHighlight($(this))
         }
       })
 
@@ -286,6 +288,7 @@
           clearGlobalSearch()
         },
       })
+
 
     /* Append clear filter button */
     loadClearFilter()
@@ -334,8 +337,8 @@
       }
     })
 
-       /* Handle button add on click */
-       $('#add').click(function() {
+    /* Handle button add on click */
+    $('#add').click(function() {
       let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
 
       window.location.href = `{{ route('serviceout.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`

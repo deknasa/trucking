@@ -53,7 +53,6 @@
         pager: pager,
         viewrecords: true,
         loadComplete: function(data) {
-
         }
       })
 

@@ -323,6 +323,8 @@
             }
 
           }, 100)
+
+          setHighlight($(this))
         }
       })
 
