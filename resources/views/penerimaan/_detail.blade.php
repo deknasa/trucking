@@ -109,10 +109,14 @@
             label: 'BANK PELANGGAN',
             name: 'bankpelanggan_id',
           },
-          // {
-          //   label: 'JENIS BIAYA',
-          //   name: 'jenisbiaya',
-          // },
+          {
+            label: 'JENIS BIAYA',
+            name: 'jenisbiaya',
+          },
+          {
+            label: 'PELANGGAN',
+            name: 'pelanggan_id',
+          },
           // {
           //   label: 'PENERIMAAN PIUTANG NO BUKTI',
           //   name: 'penerimaanpiutang_nobukti',

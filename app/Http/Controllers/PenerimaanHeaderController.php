@@ -72,7 +72,7 @@ class PenerimaanHeaderController extends MyController
     {
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
-
+        
         $combo = $this->combo();
 
         return view('penerimaan.add', compact('title', 'breadcrumb', 'combo'));
