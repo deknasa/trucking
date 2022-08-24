@@ -190,6 +190,8 @@
             }
 
           }, 100)
+
+          setHighlight($(this))
         }
       })
 

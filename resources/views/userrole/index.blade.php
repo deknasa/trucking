@@ -198,6 +198,8 @@
             }
 
           }, 100)
+
+          setHighlight($(this))
         }
       })
 

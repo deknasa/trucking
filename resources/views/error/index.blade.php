@@ -184,6 +184,8 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
+
+          setHighlight($(this))
         }
       })
 
