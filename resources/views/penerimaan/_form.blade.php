@@ -443,9 +443,17 @@ $indexRow = $_GET['indexRow'] ?? '';
       let value = $(this).val()
       let tipe = 'KAS'
 
-      if (value == 131) {
+      //lokal
+      // if (value == 131) {
+      //   tipe = 'KAS'
+      // } else if (value == 134) {
+      //   tipe = 'BANK'
+      // }
+
+      //web
+      if (value == 145) {
         tipe = 'KAS'
-      } else if (value == 134) {
+      } else if (value == 146) {
         tipe = 'BANK'
       }
 
