@@ -57,10 +57,10 @@
                       <button id="lookupToggler" class="btn btn-secondary" type="button">...</button>
                     </div>
                   </div>
-                  <div class="row bg-white position-absolute" id="lookup" style="z-index: 9999; width: 100%;">
+                  <div class="row position-absolute" id="lookup" style="z-index: 1;">
                     <div class="col-12">
-                      <div id="lookup">
-                        @include('userrole._lookup')
+                      <div id="lookup" class="shadow-lg">
+                        @include('partials.lookups.user')
                       </div>
                     </div>
                   </div>
@@ -75,15 +75,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                  
+
                 </tbody>
               </table>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" id="btnSimpan" class="btn btn-primary">SIMPAN</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">BATAL</button>
+          <div class="mr-auto">
+            <button type="button" id="btnSimpan" class="btn btn-primary">SIMPAN</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">BATAL</button>
+          </div>
         </div>
       </div>
     </form>
@@ -115,9 +117,18 @@
     $('#lookup').hide()
 
     $('#crudModal').on('shown.bs.modal', function() {
-      userRoleLookup.setGridWidth($('#lookup').prev().width())
+      userLookup.setGridWidth($('#lookup').prev().width())
+      userLookup.setGridParam({
+        onSelectRow: function(id) {
+          let rowData = $(this).getRowData(id)
+
+          $('#crudForm [name=user]').first().val(rowData.user.replace('<span class="highlight">', '').replace('</span>', ''))
+          $('#crudForm [name=user_id]').first().val(id)
+          $('#lookup').hide()
+        }
+      })
     })
-    
+
     $('#btnSimpan').click(function(event) {
       event.preventDefault()
 
@@ -136,6 +147,9 @@
       } else if (action === 'delete') {
         method = 'DELETE'
       }
+
+      $('#loader').removeClass('d-none')
+      $(this).attr('disabled', 'disabled')
 
       $.ajax({
         url: url,
@@ -164,11 +178,14 @@
             showDialog(error.statusText)
           }
         }
+      }).always(() => {
+        $('#loader').addClass('d-none')
+        $(this).removeAttr('disabled')
       })
     })
 
     $('#lookupToggler').click(function(event) {
-      userRoleLookup.setGridWidth($('#lookup').prev().width())
+      userLookup.setGridWidth($('#lookup').prev().width())
       $('#lookup').toggle()
     })
 
@@ -176,8 +193,8 @@
       $('#lookup').show()
 
       delay(() => {
-        let postData = userRoleLookup.getGridParam('postData')
-        let colModels = userRoleLookup.getGridParam('colModel')
+        let postData = userLookup.getGridParam('postData')
+        let colModels = userLookup.getGridParam('colModel')
         let rules = []
 
         colModels = colModels.filter((colModel) => {
@@ -197,7 +214,7 @@
           rules: rules
         })
 
-        userRoleLookup.trigger('reloadGrid', {
+        userLookup.trigger('reloadGrid', {
           page: 1
         })
       }, 500)

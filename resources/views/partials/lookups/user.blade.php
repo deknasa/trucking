@@ -3,7 +3,7 @@
 
 @push('scripts')
 <script>
-  let userRoleLookup = $('#userLookup').jqGrid({
+  let userLookup = $('#userLookup').jqGrid({
       url: `{{ config('app.api_url') . 'user' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -68,7 +68,6 @@
       rownumbers: true,
       rownumWidth: 45,
       rowList: [10, 20, 50],
-      // toolbar: [true, "top"],
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
@@ -88,18 +87,7 @@
       loadBeforeSend: (jqXHR) => {
         jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
-      onSelectRow: function(id) {
-        let rowData = $(this).getRowData(id)
-
-        $('#crudForm [name=user]').first().val(rowData.user)
-        $('#crudForm [name=user_id]').first().val(id)
-        $('#lookup').hide()
-      },
       loadComplete: function(data) {
-        $(document).unbind('keydown')
-        setCustomBindKeys($(this))
-        initResize($(this))
-
         /* Set global variables */
         sortname = $(this).jqGrid("getGridParam", "sortname")
         sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -107,33 +95,9 @@
         limit = $(this).jqGrid('getGridParam', 'postData').limit
         postData = $(this).jqGrid('getGridParam', 'postData')
 
-        if (popup == "ada") {
-          $('#pilih').show();
-        } else {
-          $('#pilih').hide();
-        }
-
         $('.clearsearchclass').click(function() {
           clearColumnSearch()
         })
-
-        if (triggerClick) {
-          if (id != '') {
-            indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-            $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-            id = ''
-          } else if (indexRow != undefined) {
-            $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-          }
-
-          if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-            $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-          }
-
-          triggerClick = false
-        } else {
-          $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
-        }
 
         $(this).setGridWidth($('#lookup').prev().width())
         setHighlight($(this))
@@ -145,9 +109,9 @@
       searchOnEnter: false,
       defaultSearch: 'cn',
       groupOp: 'AND',
-      disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+      disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch()
+
       },
     })
 </script>
