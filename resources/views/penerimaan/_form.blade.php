@@ -57,6 +57,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </select>
               </div>
             </div>
+
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>KETERANGAN</label>
@@ -66,22 +67,6 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
 
-            <!-- <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>POSTING DARI</label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="keterangan" class="form-control" value="{{ $penerimaan['postingdari'] ?? '' }}">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>DITERIMA DARI</label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="keterangan" class="form-control" value="{{ $penerimaan['diterimadari'] ?? '' }}">
-              </div>
-            </div> -->
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>TANGGAL LUNAS</label>
@@ -118,6 +103,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               <div class="col-12 col-md-2 col-form-label">
                 <label>STATUS KAS</label>
               </div>
+              
               <div class="col-12 col-md-10">
                 <select name="statuskas" class="form-control select2bs4">
                   <option value="">PILIH STATUS KAS</option>
@@ -136,8 +122,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <label id="bank">BANK</label>
               </div>
               <div class="col-12 col-md-10">
-
-                <select id="bankkas" name="bank_id" class="form-control select2bs4">
+                <select name="bank_id" class="form-control select2bs4">
                   <option value="">PILIH BANK</option>
                   <?php foreach ($combo['bank'] as $key => $item) {
                     $selected = @$penerimaan['bank_id'] == $item['id'] ? "selected" : ""
@@ -180,9 +165,11 @@ $indexRow = $_GET['indexRow'] ?? '';
                       @if (isset($penerimaan['penerimaandetail']))
                       @foreach($penerimaan['penerimaandetail'] as $penerimaanIndex => $d)
                       <tr id="row">
+
                         <td>
                           <div class="baris">{{ $penerimaanIndex+1 }}</div>
                         </td>
+
                         <td>
                           <input type="text" name="nowarkat[]" clas s="form-control" value="{{ $d['nowarkat'] ?? '' }}">
                         </td>
@@ -196,12 +183,15 @@ $indexRow = $_GET['indexRow'] ?? '';
                           @endphp
                           <input type="text" name="tgljatuhtempo[]" class="form-control datepicker" value="{{ $d['tgljatuhtempo'] }}">
                         </td>
+
                         <td>
                           <input type="text" name="nominal[]" class="form-control text-right" value="{{ number_format($d['nominal'],0,'.','.') ?? '' }}" oninput="separatorNumber(this)">
                         </td>
+
                         <td>
                           <input type="text" name="keterangan_detail[]" class="form-control" value="{{ $d['keterangan'] ?? '' }}">
                         </td>
+
                         <td>
                           <select name="coakredit[]" class="form-control select2bs4">
                             <option value="">COA KREDIT</option>
@@ -212,6 +202,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                             <?php } ?>
                           </select>
                         </td>
+
                         <td>
                           <select name="bankpelanggan_id[]" class="form-control select2bs4">
                             <option value="">PELANGGAN</option>
@@ -230,6 +221,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <td>
                           <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                         </td>
+
                       </tr>
                       @endforeach
                       @else
@@ -237,15 +229,19 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <td>
                           <div class="baris">1</div>
                         </td>
+
                         <td>
                           <input type="text" name="nowarkat[]" class="form-control">
                         </td>
+
                         <td>
                           <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">
                         </td>
+
                         <td>
                           <input type="text" name="nominal[]" class="form-control text-right" oninput="separatorNumber(this)">
                         </td>
+
                         <td>
                           <input type="text" name="keterangan_detail[]" class="form-control">
                         </td>
@@ -255,13 +251,11 @@ $indexRow = $_GET['indexRow'] ?? '';
                             <option value="">COA KREDIT</option>
                             <?php foreach ($combo['coa'] as $key => $item) {
                             ?>
-                              <!--ok <option value="{{ $item['id'] }}">{{ $item['keterangancoa'] }}</option> -->
-                              <!-- eror <option value="{{ $item['coa'] }}">{{ $item['keterangancoa'] }}</option> -->
-
                               <option value="{{ $item['id'] }}">{{ $item['keterangancoa'] }}</option>
                             <?php } ?>
                           </select>
                         </td>
+
                         <td>
                           <select name="bankpelanggan_id[]" class="form-control select2bs4">
                             <option value="">PELANGGAN</option>
@@ -275,6 +269,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <td>
                           <input type="text" name="jenisbiaya[]" class="form-control">
                         </td>
+
                         <td>
                           <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                         </td>
