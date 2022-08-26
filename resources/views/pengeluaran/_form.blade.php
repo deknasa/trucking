@@ -66,7 +66,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <input type="text" name="keterangan" class="form-control" value="{{ $pengeluaran['keterangan'] ?? '' }}">
               </div>
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>CABANG</label>
@@ -98,8 +98,8 @@ $indexRow = $_GET['indexRow'] ?? '';
                   <?php } ?>
                 </select>
               </div>
-            </div>           
-            
+            </div>
+
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>DIBAYAR KE</label>
@@ -179,6 +179,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <td>
                           <div class="baris">{{ $pengeluaranIndex+1 }}</div>
                         </td>
+
                         <td>
                           <select name="alatbayar_id[]" class="form-control select2bs4">
                             <option value="">ALAT BAYAR</option>
@@ -193,7 +194,6 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <td>
                           <input type="text" name="nowarkat[]" class="form-control" value="{{ $d['nowarkat'] ?? '' }}">
                         </td>
-
                         <td>
                           @php
                           if (isset($d['tgljatuhtempo'])) {
@@ -364,13 +364,6 @@ $indexRow = $_GET['indexRow'] ?? '';
     htmlComboCoa += `<option value='${value.id}'>${value.keterangancoa}</option>`;
   });
 
-  // let comboCoaKredit = `<?= json_encode($combo['akunpusat']) ?>`;
-  // comboCoaKredit = JSON.parse(comboCoaKredit);
-  // let htmlComboCoaKredit = '';
-  // $.each(comboCoaKredit, function(index, value) {
-  //   htmlComboCoaKredit += `<option value='${value.id}'>${value.keterangancoa}</option>`;
-  // });
-
   let html = `<tr id="row">
       <td>
         <div class="baris">1</div>
@@ -415,7 +408,7 @@ $indexRow = $_GET['indexRow'] ?? '';
       </td>                       
     </tr>`;
 
-    $("#addrow").click(function() {
+  $("#addrow").click(function() {
     destroyDatepicker()
     destroySelect2()
     let rowCount = $('#detailRow').length;

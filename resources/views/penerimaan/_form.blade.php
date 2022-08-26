@@ -153,7 +153,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <th width="200">Tgl jatuh tempo</th>
                         <th>Nominal</th>
                         <th>Keterangan</th>
-                        <th width="200">Coa Kredit</th>
+                        <th width="350">Coa Kredit</th>
                         <!-- <th>Coa Debet</th> -->
                         <!-- <th>Pelanggan</th> -->
                         <th width="200">Bank Pelanggan</th>
@@ -173,6 +173,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <td>
                           <input type="text" name="nowarkat[]" clas s="form-control" value="{{ $d['nowarkat'] ?? '' }}">
                         </td>
+
                         <td>
                           @php
                           if (isset($d['tgljatuhtempo'])) {

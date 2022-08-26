@@ -24,7 +24,6 @@ class PengeluaranDetailController extends Controller
         ->withOptions(['verify' => false])
         ->get(config('app.api_url') .'pengeluarandetail', $params);
         
-        //  dd($response->getBody()->getContents());
         $data = [
             'rows' => $response['data'] ?? []
         ];
