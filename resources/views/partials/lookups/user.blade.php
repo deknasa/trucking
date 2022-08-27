@@ -63,7 +63,7 @@
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
-      height: 250,
+      height: 450,
       rowNum: 10,
       rownumbers: true,
       rownumWidth: 45,
@@ -84,10 +84,46 @@
         total: 'attributes.totalPages',
         records: 'attributes.totalRows',
       },
+      onSelectRow: function(id) {
+        activeGrid = $(this)
+        id = $(this).jqGrid('getCell', id, 'rn') - 1
+        indexRow = id
+        page = $(this).jqGrid('getGridParam', 'page')
+        let rows = $(this).jqGrid('getGridParam', 'postData').limit
+        if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
+      },
       loadBeforeSend: (jqXHR) => {
         jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       loadComplete: function(data) {
+        if (detectDeviceType() == 'desktop') {
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
+          initResize($(this))
+
+          if (indexRow - 1 > $('#userLookup').getGridParam().reccount) {
+            indexRow = $('#userLookup').getGridParam().reccount - 1
+          }
+
+          if (triggerClick) {
+            if (id != '') {
+              indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+              $(`#userLookup [id="${$('#userLookup').getDataIDs()[indexRow]}"]`).click()
+              id = ''
+            } else if (indexRow != undefined) {
+              $(`#userLookup [id="${$('#userLookup').getDataIDs()[indexRow]}"]`).click()
+            }
+
+            if ($('#userLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#userLookup [id="` + $('#userLookup').getDataIDs()[0] + `"]`).click()
+            }
+
+            triggerClick = false
+          } else {
+            $('#userLookup').setSelection($('#userLookup').getDataIDs()[indexRow])
+          }
+        }
+
         /* Set global variables */
         sortname = $(this).jqGrid("getGridParam", "sortname")
         sortorder = $(this).jqGrid("getGridParam", "sortorder")

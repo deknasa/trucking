@@ -36,17 +36,17 @@ $(document).ready(function () {
 });
 
 function setHighlight(grid) {
-	let stringFilters
-	let filters
-	let gridId
+	let stringFilters;
+	let filters;
+	let gridId;
 
-	stringFilters = grid.getGridParam("postData").filters
+	stringFilters = grid.getGridParam("postData").filters;
 
 	if (stringFilters) {
-		filters = JSON.parse(stringFilters)
+		filters = JSON.parse(stringFilters);
 	}
 
-	gridId = $(grid).getGridParam().id
+	gridId = $(grid).getGridParam().id;
 
 	if (filters) {
 		filters.rules.forEach((rule) => {
@@ -226,16 +226,17 @@ function setCustomBindKeys(grid) {
 				e.keyCode == 35 ||
 				e.keyCode == 36 ||
 				e.keyCode == 38 ||
-				e.keyCode == 40
+				e.keyCode == 40 ||
+				e.keyCode == 13
 			) {
 				e.preventDefault();
 
-				var gridIds = $("#jqGrid").getDataIDs();
-				var selectedRow = $("#jqGrid").getGridParam("selrow");
-				var currentPage = $(grid).getGridParam("page");
-				var lastPage = $(grid).getGridParam("lastpage");
+				var gridIds = $(activeGrid).getDataIDs();
+				var selectedRow = $(activeGrid).getGridParam("selrow");
+				var currentPage = $(activeGrid).getGridParam("page");
+				var lastPage = $(activeGrid).getGridParam("lastpage");
 				var currentIndex = 0;
-				var row = $(grid).jqGrid("getGridParam", "postData").rows;
+				var row = $(activeGrid).jqGrid("getGridParam", "postData").rows;
 
 				for (var i = 0; i < gridIds.length; i++) {
 					if (gridIds[i] == selectedRow) currentIndex = i;
@@ -244,7 +245,7 @@ function setCustomBindKeys(grid) {
 				if (triggerClick == false) {
 					if (33 === e.keyCode) {
 						if (currentPage > 1) {
-							$(grid)
+							$(activeGrid)
 								.jqGrid("setGridParam", {
 									page: parseInt(currentPage) - 1,
 								})
@@ -252,11 +253,11 @@ function setCustomBindKeys(grid) {
 
 							triggerClick = true;
 						}
-						$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+						$(activeGrid).triggerHandler("jqGridKeyUp"), e.preventDefault();
 					}
 					if (34 === e.keyCode) {
 						if (currentPage !== lastPage) {
-							$(grid)
+							$(activeGrid)
 								.jqGrid("setGridParam", {
 									page: parseInt(currentPage) + 1,
 								})
@@ -264,27 +265,27 @@ function setCustomBindKeys(grid) {
 
 							triggerClick = true;
 						}
-						$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+						$(activeGrid).triggerHandler("jqGridKeyUp"), e.preventDefault();
 					}
 					if (35 === e.keyCode) {
 						if (currentPage !== lastPage) {
-							$(grid)
+							$(activeGrid)
 								.jqGrid("setGridParam", {
 									page: lastPage,
 								})
 								.trigger("reloadGrid");
 							if (e.ctrlKey) {
 								if (
-									$(grid).jqGrid("getGridParam", "selrow") !==
+									$(activeGrid).jqGrid("getGridParam", "selrow") !==
 									$("#customer")
 										.find(">tbody>tr.jqgrow")
 										.filter(":last")
 										.attr("id")
 								) {
-									$(grid)
+									$(activeGrid)
 										.jqGrid(
 											"setSelection",
-											$(grid)
+											$(activeGrid)
 												.find(">tbody>tr.jqgrow")
 												.filter(":last")
 												.attr("id")
@@ -297,39 +298,45 @@ function setCustomBindKeys(grid) {
 						}
 						if (e.ctrlKey) {
 							if (
-								$(grid).jqGrid("getGridParam", "selrow") !==
+								$(activeGrid).jqGrid("getGridParam", "selrow") !==
 								$("#customer")
 									.find(">tbody>tr.jqgrow")
 									.filter(":last")
 									.attr("id")
 							) {
-								$(grid)
+								$(activeGrid)
 									.jqGrid(
 										"setSelection",
-										$(grid).find(">tbody>tr.jqgrow").filter(":last").attr("id")
+										$(activeGrid)
+											.find(">tbody>tr.jqgrow")
+											.filter(":last")
+											.attr("id")
 									)
 									.trigger("reloadGrid");
 							}
 						}
-						$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+						$(activeGrid).triggerHandler("jqGridKeyUp"), e.preventDefault();
 					}
 					if (36 === e.keyCode) {
 						if (currentPage > 1) {
 							if (e.ctrlKey) {
 								if (
-									$(grid).jqGrid("getGridParam", "selrow") !==
+									$(activeGrid).jqGrid("getGridParam", "selrow") !==
 									$("#customer")
 										.find(">tbody>tr.jqgrow")
 										.filter(":first")
 										.attr("id")
 								) {
-									$(grid).jqGrid(
+									$(activeGrid).jqGrid(
 										"setSelection",
-										$(grid).find(">tbody>tr.jqgrow").filter(":first").attr("id")
+										$(activeGrid)
+											.find(">tbody>tr.jqgrow")
+											.filter(":first")
+											.attr("id")
 									);
 								}
 							}
-							$(grid)
+							$(activeGrid)
 								.jqGrid("setGridParam", {
 									page: 1,
 								})
@@ -337,20 +344,31 @@ function setCustomBindKeys(grid) {
 
 							triggerClick = true;
 						}
-						$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+						$(activeGrid).triggerHandler("jqGridKeyUp"), e.preventDefault();
 					}
 					if (38 === e.keyCode) {
 						if (currentIndex - 1 >= 0) {
-							$(grid)
+							$(activeGrid)
 								.resetSelection()
 								.setSelection(gridIds[currentIndex - 1]);
 						}
 					}
 					if (40 === e.keyCode) {
 						if (currentIndex + 1 < gridIds.length) {
-							$(grid)
+							$(activeGrid)
 								.resetSelection()
 								.setSelection(gridIds[currentIndex + 1]);
+						}
+					}
+					if (13 === e.keyCode) {
+						let rowId = $(activeGrid).getGridParam("selrow");
+						let ondblClickRowHandler = $(activeGrid).jqGrid(
+							"getGridParam",
+							"ondblClickRow"
+						);
+
+						if (ondblClickRowHandler) {
+							ondblClickRowHandler.call($(activeGrid)[0], rowId);
 						}
 					}
 				}
@@ -942,4 +960,18 @@ function setPrevFocus(incomingElement) {
 	}, 0);
 
 	incomingElement.focus();
+}
+
+function detectDeviceType() {
+	const ua = navigator.userAgent;
+	if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+		return "tablet";
+	} else if (
+		/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+			ua
+		)
+	) {
+		return "mobile";
+	}
+	return "desktop";
 }

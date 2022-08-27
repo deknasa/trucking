@@ -118,15 +118,34 @@
 
     $('#crudModal').on('shown.bs.modal', function() {
       userLookup.setGridWidth($('#lookup').prev().width())
-      userLookup.setGridParam({
-        onSelectRow: function(id) {
-          let rowData = $(this).getRowData(id)
 
-          $('#crudForm [name=user]').first().val(rowData.user.replace('<span class="highlight">', '').replace('</span>', ''))
-          $('#crudForm [name=user_id]').first().val(id)
-          $('#lookup').hide()
-        }
-      })
+      if (detectDeviceType() == 'desktop') {
+        userLookup.setGridParam({
+          ondblClickRow: function(id) {
+            let rowData = $(this).getRowData(id)
+
+            $('#crudForm [name=user]').first().val(rowData.user.replaceAll('<span class="highlight">', '').replaceAll('</span>', ''))
+            $('#crudForm [name=user_id]').first().val(id)
+            $('#lookup').hide()
+          }
+        })
+      } else if (detectDeviceType() == 'mobile') {
+        userLookup.setGridParam({
+          onSelectRow: function(id) {
+            let rowData = $(this).getRowData(id)
+
+            $('#crudForm [name=user]').first().val(rowData.user.replaceAll('<span class="highlight">', '').replaceAll('</span>', ''))
+            $('#crudForm [name=user_id]').first().val(id)
+            $('#lookup').hide()
+          }
+        })
+      }
+
+      $('#crudModal').find("[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit").first().focus()
+    })
+
+    $('#crudModal').on('hidden.bs.modal', function() {
+      activeGrid = '#jqGrid'
     })
 
     $('#btnSimpan').click(function(event) {
@@ -187,10 +206,22 @@
     $('#lookupToggler').click(function(event) {
       userLookup.setGridWidth($('#lookup').prev().width())
       $('#lookup').toggle()
+
+      if (detectDeviceType() != 'desktop') {
+        userLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      if (detectDeviceType() == 'desktop') {
+        activeGrid = userLookup
+      }
     })
 
     $('[name=user]').on('input', function(event) {
       $('#lookup').show()
+
+      if (detectDeviceType() != 'desktop') {
+        userLookup.setGridHeight(window.innerHeight / 1.5)
+      }
 
       delay(() => {
         let postData = userLookup.getGridParam('postData')
@@ -285,6 +316,7 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+          activeGrid = $(this)
           row_id = $(this).jqGrid('getGridParam', 'selrow')
           selectedId = $(this).jqGrid('getCell', row_id, 'user_id');
 
@@ -297,6 +329,8 @@
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         loadComplete: function(data) {
+          activeGrid = $(this)
+
           loadPagerHandler('#pagerHandler', $(this))
           loadPagerInfo('#pagerInfo', $(this))
 
@@ -483,6 +517,7 @@
 
     /* Handle button add on click */
     $('#add').click(function() {
+      $('#crudModal').modal('show')
       $('.is-invalid').removeClass('is-invalid')
       $('.invalid-feedback').remove()
 
@@ -491,7 +526,6 @@
       $('#crudForm [name=user_id]').val('')
       $('#crudModal').find('#btnSimpan').text('SIMPAN')
       $('#crudModal').find('.modal-title').text('Add User Role')
-      $('#crudModal').modal('show')
 
       let roles
       let statuses
