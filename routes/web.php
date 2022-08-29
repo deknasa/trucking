@@ -62,12 +62,13 @@ use App\Http\Controllers\ServiceInHeaderController;
 use App\Http\Controllers\ServiceInDetailController;
 use App\Http\Controllers\ServiceOutHeaderController;
 use App\Http\Controllers\ServiceOutDetailController;
-
 use App\Http\Controllers\PenerimaanHeaderController;
 use App\Http\Controllers\PenerimaanDetailController;
-
 use App\Http\Controllers\PengeluaranHeaderController;
 use App\Http\Controllers\PengeluaranDetailController;
+
+use App\Http\Controllers\PenerimaanTruckingHeaderController;
+use App\Http\Controllers\PenerimaanTruckingDetailController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -478,4 +479,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('pengeluaran', PengeluaranHeaderController::class);
 
     Route::resource('pengeluarandetail', PengeluaranDetailController::class);
+
+    //penerimaan trucking
+    Route::get('penerimaantrucking/{id}/delete', [PenerimaanTruckingHeaderController::class, 'delete'])->name('penerimaantrucking.delete');
+    Route::get('penerimaantrucking/index', [PenerimaanTruckingHeaderController::class, 'index']);
+    Route::get('penerimaantrucking/get', [PenerimaanTruckingHeaderController::class, 'get'])->name('penerimaantrucking.get');
+    Route::get('penerimaantrucking/export', [PenerimaanTruckingHeaderController::class, 'export'])->name('penerimaantrucking.export');
+    Route::get('penerimaantrucking/report', [PenerimaanTruckingHeaderController::class, 'report'])->name('penerimaantrucking.report');
+    Route::resource('penerimaantrucking', PenerimaanTruckingHeaderController::class);
+
+    Route::resource('penerimaantruckingdetail', PenerimaanTruckingDetailController::class);
 });

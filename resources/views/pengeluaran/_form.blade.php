@@ -202,7 +202,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                           $tgljatuhtempo = date('d-m-Y');
                           }
                           @endphp
-                          <input type="text" name="tgljatuhtempo[]" class="form-control datepicker" value="{{ $d['tgljatuhtempo'] }}">
+                          <input type="text" name="tgljatuhtempo[]" class="form-control datepicker" value="{{ $tgljatuhtempo }}">
                         </td>
 
                         <td>
@@ -232,7 +232,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                           $bulanbeban = date('d-m-Y');
                           }
                           @endphp
-                          <input type="text" name="bulanbeban[]" class="form-control datepicker" value="{{ $d['bulanbeban'] }}">
+                          <input type="text" name="bulanbeban[]" class="form-control datepicker" value="{{ $bulanbeban }}">
                         </td>
 
                         <td>
