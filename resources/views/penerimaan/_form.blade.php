@@ -182,7 +182,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                           $tgljatuhtempo = date('d-m-Y');
                           }
                           @endphp
-                          <input type="text" name="tgljatuhtempo[]" class="form-control datepicker" value="{{ $d['tgljatuhtempo'] }}">
+                          <input type="text" name="tgljatuhtempo[]" class="form-control datepicker" value="{{ $tgljatuhtempo }}">
                         </td>
 
                         <td>

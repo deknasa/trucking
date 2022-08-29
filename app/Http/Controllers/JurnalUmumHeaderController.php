@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
-class JurnalUmumController extends MyController
+class JurnalUmumHeaderController extends MyController
 {
     public $title = 'Jurnal Umum';
     
@@ -38,7 +38,7 @@ class JurnalUmumController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'jurnalumum', $request->all());
+                ->post(config('app.api_url') . 'jurnalumumheader', $request->all());
 
 
             return response($response, $response->status());
@@ -62,7 +62,7 @@ class JurnalUmumController extends MyController
         $response = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'jurnalumum', $params);
+            ->get(config('app.api_url') . 'jurnalumumheader', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -79,9 +79,9 @@ class JurnalUmumController extends MyController
     {
         $title = $this->title;
 
-        // $combo = $this->combo();
+        $combo = $this->combo();
 
-        return view('jurnalumum.add', compact('title'));
+        return view('jurnalumum.add', compact('title','combo'));
     }
 
     
@@ -92,16 +92,16 @@ class JurnalUmumController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "jurnalumum/$id");
+            ->get(config('app.api_url') . "jurnalumumheader/$id");
             // dd($response->getBody()->getContents());
 
         $jurnalumum = $response['data'];
         $detail = $response['detail'];
         $jurnalNoBukti = $this->getNoBukti('JURNAL UMUM', 'JURNAL UMUM', 'jurnalumumheader');
 
-        // $combo = $this->combo();
+        $combo = $this->combo();
 
-        return view('jurnalumum.edit', compact('title', 'jurnalumum','detail', 'jurnalNoBukti'));
+        return view('jurnalumum.edit', compact('title', 'jurnalumum','combo','detail', 'jurnalNoBukti'));
     }
 
     
@@ -124,7 +124,7 @@ class JurnalUmumController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "jurnalumum/$id", $request->all());
+            ->patch(config('app.api_url') . "jurnalumumheader/$id", $request->all());
 
         return response($response);
     }
@@ -139,14 +139,14 @@ class JurnalUmumController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "jurnalumum/$id");
+                ->get(config('app.api_url') . "jurnalumumheader/$id");
 
             $jurnalumum = $response['data'];
             $detail = $response['detail'];
             
-            // $combo = $this->combo();
+            $combo = $this->combo();
 
-            return view('jurnalumum.delete', compact('title', 'jurnalumum', 'detail'));
+            return view('jurnalumum.delete', compact('title','combo', 'jurnalumum', 'detail'));
         } catch (\Throwable $th) {
             return redirect()->route('jurnalumum.index');
         }
@@ -160,7 +160,7 @@ class JurnalUmumController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "jurnalumum/$id");
+            ->delete(config('app.api_url') . "jurnalumumheader/$id");
 
             
         return response($response);
@@ -186,5 +186,14 @@ class JurnalUmumController extends MyController
         return $noBukti;
     }
 
+    private function combo()
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withToken(session('access_token'))
+        ->withOptions(['verify' => false])
+            ->get(config('app.api_url') . 'jurnalumumheader/combo');
+
+        return $response['data'];
+    }
 
 }

@@ -1,6 +1,50 @@
 @extends('layouts.master')
 
 @section('content')
+
+<!-- Modal for report -->
+<div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="formRange" target="_blank">
+        @csrf
+        <div class="modal-body">
+          <input type="hidden" name="sidx">
+          <input type="hidden" name="sord">
+
+          <div class="form-group row">
+            <div class="col-sm-2 col-form-label">
+              <label for="">Dari</label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" name="dari" class="form-control autonumeric-report" autofocus>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-2 col-form-label">
+              <label for="">Sampai</label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" name="sampai" class="form-control autonumeric-report">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Report</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
@@ -17,25 +61,27 @@
           <button id="delete" class="btn btn-danger btn-sm mb-1">
             <i class="fa fa-trash"></i> DELETE
           </button>
-          <button id="export" class="btn btn-warning btn-sm mb-1">
-            <i class="fa fa-file-export"></i> EXPORT
-          </button>
-          <button id="report" class="btn btn-info btn-sm mb-1">
-            <i class="fa fa-print"></i> REPORT
-          </button>
+          <!-- <button id="approval" class="btn btn-purple btn-sm mb-1">
+            <i class="fa fa-check"></i> UN/APPROVAL
+          </button> -->
         </div>
         <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
         <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
       </div>
+
     </div>
   </div>
 </div>
 
+<!-- Detail -->
+@include('penerimaantrucking._detail')
+
 @push('scripts')
 <script>
   let indexUrl = "{{ route('penerimaantrucking.index') }}"
+  let getUrl = "{{ route('penerimaantrucking.get') }}"
   let indexRow = 0;
-  let page = 1;
+  let page = 0;
   let pager = '#jqGridPager'
   let popup = "";
   let id = "";
@@ -44,10 +90,9 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'kodepenerimaan'
+  let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
-  let rowNum = 10
 
   $(document).ready(function() {
     /* Set page */
@@ -80,6 +125,7 @@
       rowNum = "{{ $_GET['limit'] }}"
     <?php } ?>
 
+
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'penerimaantrucking' }}`,
         mtype: "GET",
@@ -89,37 +135,64 @@
         colModel: [{
             label: 'ID',
             name: 'id',
+            align: 'right',
             width: '50px'
           },
           {
-            label: 'kode penerimaan',
-            name: 'kodepenerimaan',
+            label: 'NO BUKTI',
+            name: 'nobukti',
+            align: 'left'
           },
           {
-            label: 'keterangan',
-            name: 'keterangan',
+            label: 'TANGGAL BUKTI',
+            name: 'tglbukti',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
-            label: 'coa',
+            label: 'BANK',
+            name: 'bank_id',
+            align: 'left'
+          },
+          {
+            label: 'COA',
             name: 'coa',
+            align: 'left'
           },
           {
-            label: 'formatbukti',
-            name: 'formatbukti',
+            label: 'NO BUKTI PENERIMAAN',
+            name: 'penerimaan_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'TGL BUKTI PENERIMAAN',
+            name: 'penerimaan_tgl',
+            align: 'left'
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
+            align: 'left'
           },
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
         ],
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: rowNum,
+        rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
@@ -143,19 +216,27 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+          loadDetailData(id)
+
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
+
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
           loadPagerHandler('#pagerHandler', $(this))
           loadPagerInfo('#pagerInfo', $(this))
 
+          $("input").attr("autocomplete", "off");
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
+
+          if (data.message !== "" && data.message !== undefined && data.message !== null) {
+            alert(data.message)
+          }
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -169,21 +250,17 @@
             clearColumnSearch()
           })
 
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
-          }
-
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
@@ -192,7 +269,7 @@
           }
 
           setHighlight($(this))
-        },
+        }
       })
 
       .jqGrid("navGrid", pager, {
@@ -220,6 +297,9 @@
     /* Append global search */
     loadGlobalSearch()
 
+    /* Load detail grid */
+    loadDetailGrid()
+
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)
       .parent().addClass('px-1')
@@ -240,25 +320,61 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'store') }}`) {
-      $('#add').addClass('ui-disabled')
-    }
+    $('#approval .ui-pg-div')
+      .addClass('btn-sm')
+      .css({
+        'background': '#6619ff',
+        'color': '#fff'
+      })
+      .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'update') }}`) {
-      $('#edit').addClass('ui-disabled')
-    }
 
-    if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'destroy') }}`) {
-      $('#delete').addClass('ui-disabled')
-    }
+    /* Handle button add on click */
+    $('#add').click(function() {
+      let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
 
-    if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'export') }}`) {
-      $('#export').addClass('ui-disabled')
-    }
+      window.location.href = `{{ route('penerimaantrucking.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+    })
 
-    if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'report') }}`) {
-      $('#report').addClass('ui-disabled')
-    }
+    /* Handle button edit on click */
+    $('#edit').click(function() {
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+      if (selectedId == null || selectedId == '' || selectedId == undefined) {
+        alert('please select a row')
+      } else {
+        window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      }
+    })
+
+
+    /* Handle button delete on click */
+    $('#delete').click(function() {
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+    })
+
+    /* Handle button approval on click */
+    $('#approval').click(function() {
+      let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+
+      $('#loader').removeClass('d-none')
+
+      $.ajax({
+        url: `{{ config('app.api_url') }}penerimaantrucking/${id}/approval`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+        success: response => {
+          $('#jqGrid').trigger('reloadGrid')
+        }
+      }).always(() => {
+        $('#loader').addClass('d-none')
+      })
+    })
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -279,17 +395,25 @@
         decimalCharacter: ',',
         allowDecimalPadding: false,
         minimumValue: 1,
-        maximumValue: totalRecord,
+        maximumValue: totalRecord
       })
     })
 
-    $('#formRange').submit(function(event) {
+    $('#formRange').submit(event => {
       event.preventDefault()
 
       let params
-      let submitButton = $(this).find('button:submit')
+      let actionUrl = ``
 
-      submitButton.attr('disabled', 'disabled')
+      if ($('#rangeModal').data('action') == 'export') {
+        actionUrl = `{{ route('penerimaantrucking.export') }}`
+      } else if ($('#rangeModal').data('action') == 'report') {
+        actionUrl = `{{ route('penerimaantrucking.report') }}`
+      }
+
+      /* Clear validation messages */
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
 
       /* Set params value */
       for (var key in postData) {
@@ -299,79 +423,7 @@
         params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-      let formRange = $('#formRange')
-      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
-      params += `&offset=${offset}&limit=${limit}`
-
-      if ($('#rangeModal').data('action') == 'export') {
-        let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}penerimaantrucking/export?${params}`, true)
-        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
-        xhr.responseType = 'arraybuffer'
-
-        xhr.onload = function(e) {
-          if (this.status === 200) {
-            if (this.response !== undefined) {
-              let blob = new Blob([this.response], {
-                type: "application/vnd.ms-excel"
-              })
-              let link = document.createElement('a')
-
-              link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanPenerimaanTrucking${(new Date).getTime()}.xlsx`
-              link.click()
-
-              submitButton.removeAttr('disabled')
-            }
-          }
-        }
-
-        xhr.send()
-      } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('penerimaantrucking.report') }}?${params}`)
-
-        submitButton.removeAttr('disabled')
-      }
-    })
-
-    /* Handle button add on click */
-    $('#add').click(function() {
-      let limit = $("#jqGrid").jqGrid('getGridParam', 'postData').limit
-
-      window.location.href = `{{ route('penerimaantrucking.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-    })
-
-    /* Handle button edit on click */
-    $('#edit').click(function() {
-      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      if (selectedId == null || selectedId == '' || selectedId == undefined) {
-        alert('please select a row')
-      } else {
-        window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-      }
-    })
-
-    /* Handle button delete on click */
-    $('#delete').click(function() {
-      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-    })
-
-    /* Handle button export on click */
-    $('#export').click(function() {
-      $('#rangeModal').data('action', 'export')
-      $('#rangeModal').find('button:submit').html(`Export`)
-      $('#rangeModal').modal('show')
-    })
-
-    /* Handle button report on click */
-    $('#report').click(function() {
-      $('#rangeModal').data('action', 'report')
-      $('#rangeModal').find('button:submit').html(`Report`)
-      $('#rangeModal').modal('show')
+      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
 </script>

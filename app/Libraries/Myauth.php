@@ -84,7 +84,8 @@ class Myauth
             'serviceout',
             'penerimaan',
             'pengeluaran',
-            'jurnalumum',
+            'pengeluarantrucking',
+            'jurnalumumheader',
         ],
         'method' => [
             'gridtab',
