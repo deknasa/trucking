@@ -57,62 +57,13 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </select>
               </div>
             </div>
+
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>KETERANGAN</label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="keterangan" class="form-control" value="{{ $pengeluaran['keterangan'] ?? '' }}">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>STATUS JENIS TRANSAKSI</label>
-              </div>
-              <div class="col-12 col-md-10">
-                <select name="statusjenistransaksi" class="form-control select2bs4">
-                  <option value="">STATUS JENIS TRANSAKSI</option>
-                  <?php foreach ($combo['statusjenistransaksi'] as $key => $item) {
-                    $selected = @$pengeluaran['statusjenistransaksi'] == $item['id'] ? "selected" : ""
-                  ?>
-                    <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['text'] }}</option>
-                  <?php } ?>
-                </select>
-              </div>
-            </div>
-            <!-- <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>STATUS JENIS TRANSAKSI</label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="number" name="statusjenistransaksi" class="form-control" value="{{ $pengeluaran['statusjenistransaksi'] ?? '' }}">
-              </div>
-            </div> -->
-
-            <!-- <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>POSTING DARI</label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="postingdari" class="form-control" value="{{ $pengeluaran['postingdari'] ?? '' }}">
-              </div>
-            </div> -->
-
-            <!-- <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>STATUS APPROVAL</label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="hidden" name="statusapproval" class="form-control" value="{{ $pengeluaran['statusapproval'] ?? 0 }}">
-              </div>
-            </div> -->
-
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>DIBAYAR KE</label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="dibayarke" class="form-control" value="{{ $pengeluaran['dibayarke'] ?? '' }}">
               </div>
             </div>
 
@@ -134,11 +85,37 @@ $indexRow = $_GET['indexRow'] ?? '';
 
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
-                <label>BANK</label>
+                <label>STATUS JENIS TRANSAKSI</label>
+              </div>
+
+              <div class="col-12 col-md-10">
+                <select name="statusjenistransaksi" class="form-control select2bs4">
+                  <option value="">PILIH STATUS JENIS TRANSAKSI</option>
+                  <?php foreach ($combo['statusjenistransaksi'] as $key => $item) {
+                    $selected = @$pengeluaran['statusjenistransaksi'] == $item['id'] ? "selected" : ""
+                  ?>
+                    <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['text'] }}</option>
+                  <?php } ?>
+                </select>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>DIBAYAR KE</label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="dibayarke" class="form-control" value="{{ $pengeluaran['dibayarke'] ?? '' }}">
+              </div>
+            </div>
+
+            <div class="row form-group" id="bank">
+              <div class="col-12 col-md-2 col-form-label">
+                <label id="bank">BANK</label>
               </div>
               <div class="col-12 col-md-10">
                 <select name="bank_id" class="form-control select2bs4">
-                  <option value="">BANK</option>
+                  <option value="">PILIH BANK</option>
                   <?php foreach ($combo['bank'] as $key => $item) {
                     $selected = @$pengeluaran['bank_id'] == $item['id'] ? "selected" : ""
                   ?>
@@ -189,6 +166,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <!-- <th>Coa Debet</th>
                         <th>Coa Kredit</th>  -->
                         <th>Keterangan</th>
+                        <th width="200">Coa Debet</th>
                         <th>Bulan beban</th>
                         <th>Aksi</th>
                       </tr>
@@ -197,6 +175,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                       @if (isset($pengeluaran['pengeluarandetail']))
                       @foreach($pengeluaran['pengeluarandetail'] as $pengeluaranIndex => $d)
                       <tr id="row">
+
                         <td>
                           <div class="baris">{{ $pengeluaranIndex+1 }}</div>
                         </td>
@@ -215,7 +194,6 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <td>
                           <input type="text" name="nowarkat[]" class="form-control" value="{{ $d['nowarkat'] ?? '' }}">
                         </td>
-
                         <td>
                           @php
                           if (isset($d['tgljatuhtempo'])) {
@@ -224,37 +202,26 @@ $indexRow = $_GET['indexRow'] ?? '';
                           $tgljatuhtempo = date('d-m-Y');
                           }
                           @endphp
-                          <input type="date" name="tgljatuhtempo[]" class="form-control" value="{{ $d['tgljatuhtempo'] }}">
+                          <input type="text" name="tgljatuhtempo[]" class="form-control datepicker" value="{{ $d['tgljatuhtempo'] }}">
                         </td>
 
                         <td>
                           <input type="text" name="nominal[]" class="form-control text-right" value="{{ number_format($d['nominal'],0,'.','.') ?? '' }}" oninput="separatorNumber(this)">
                         </td>
-<!-- 
-                        <td>
-                          <select name="coa_id[]" class="form-control select2bs4">
-                            <option value="">COA DEBET</option>
-                            <?php foreach ($combo['akunpusat'] as $key => $item) {
-                              $selected = @$d['coa_id'] == $item['id'] ? "selected" : ""
-                            ?>
-                              <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['keterangancoa'] }}</option>
-                            <?php } ?>
-                          </select>
-                        </td>
-
-                        <td>
-                          <select name="coa_id[]" class="form-control select2bs4">
-                            <option value="">COA KREDIT</option>
-                            <?php foreach ($combo['akunpusat'] as $key => $item) {
-                              $selected = @$d['coa_id'] == $item['id'] ? "selected" : ""
-                            ?>
-                              <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['keterangancoa'] }}</option>
-                            <?php } ?>
-                          </select>
-                        </td> -->
 
                         <td>
                           <input type="text" name="keterangan_detail[]" class="form-control" value="{{ $d['keterangan'] ?? '' }}">
+                        </td>
+
+                        <td>
+                          <select name="coadebet[]" class="form-control select2bs4">
+                            <option value="">COA DEBET</option>
+                            <?php foreach ($combo['akunpusat'] as $key => $item) {
+                              $selected = @$d['coadebet'] == $item['id'] ? "selected" : ""
+                            ?>
+                              <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['keterangancoa'] }}</option>
+                            <?php } ?>
+                          </select>
                         </td>
 
                         <td>
@@ -265,7 +232,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                           $bulanbeban = date('d-m-Y');
                           }
                           @endphp
-                          <input type="date" name="bulanbeban[]" class="form-control" value="{{ $d['bulanbeban'] }}">
+                          <input type="text" name="bulanbeban[]" class="form-control datepicker" value="{{ $d['bulanbeban'] }}">
                         </td>
 
                         <td>
@@ -279,6 +246,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <td>
                           <div class="baris">1</div>
                         </td>
+
                         <td>
                           <select name="alatbayar_id[]" class="form-control select2bs4">
                             <option value="">ALAT BAYAR</option>
@@ -292,14 +260,21 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <td>
                           <input type="text" name="nowarkat[]" class="form-control">
                         </td>
+
                         <td>
-                          <input type="date" name="tgljatuhtempo[]" class="form-control">
+                          <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">
                         </td>
+
                         <td>
                           <input type="text" name="nominal[]" class="form-control text-right" oninput="separatorNumber(this)">
                         </td>
-                        <!-- <td>
-                          <select name="coa_id[]" class="form-control select2bs4">
+
+                        <td>
+                          <input type="text" name="keterangan_detail[]" class="form-control">
+                        </td>
+
+                        <td>
+                          <select name="coadebet[]" class="form-control select2bs4">
                             <option value="">COA DEBET</option>
                             <?php foreach ($combo['akunpusat'] as $key => $item) {
                             ?>
@@ -309,30 +284,19 @@ $indexRow = $_GET['indexRow'] ?? '';
                         </td>
 
                         <td>
-                          <select name="coa_id[]" class="form-control select2bs4">
-                            <option value="">COA KREDIT</option>
-                            <?php foreach ($combo['akunpusat'] as $key => $item) {
-                            ?>
-                              <option value="{{ $item['id'] }}">{{ $item['keterangancoa'] }}</option>
-                            <?php } ?>
-                          </select>
-                        </td> -->
-                        <td>
-                          <input type="text" name="keterangan_detail[]" class="form-control">
+                          <input type="text" name="bulanbeban[]" class="form-control datepicker">
                         </td>
 
                         <td>
-                          <input type="date" name="bulanbeban[]" class="form-control">
-                        </td>
-                        <td>
                           <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                         </td>
+
                       </tr>
                       @endif
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td colspan="7"></td>
+                        <td colspan="8"></td>
                         <td>
                           <button type="button" class="btn btn-primary btn-sm my-2" id="addrow">Tambah</button>
                         </td>
@@ -393,18 +357,11 @@ $indexRow = $_GET['indexRow'] ?? '';
     htmlComboAlatBayar += `<option value='${value.id}'>${value.namaalatbayar}</option>`;
   });
 
-  let comboCoaDebet = `<?= json_encode($combo['akunpusat']) ?>`;
-  comboCoaDebet = JSON.parse(comboCoaDebet);
-  let htmlComboCoaDebet = '';
-  $.each(comboCoaDebet, function(index, value) {
-    htmlComboCoaDebet += `<option value='${value.id}'>${value.keterangancoa}</option>`;
-  });
-
-  let comboCoaKredit = `<?= json_encode($combo['akunpusat']) ?>`;
-  comboCoaKredit = JSON.parse(comboCoaKredit);
-  let htmlComboCoaKredit = '';
-  $.each(comboCoaKredit, function(index, value) {
-    htmlComboCoaKredit += `<option value='${value.id}'>${value.keterangancoa}</option>`;
+  let comboCoa = `<?= json_encode($combo['akunpusat']) ?>`;
+  comboCoa = JSON.parse(comboCoa);
+  let htmlComboCoa = '';
+  $.each(comboCoa, function(index, value) {
+    htmlComboCoa += `<option value='${value.id}'>${value.keterangancoa}</option>`;
   });
 
   let html = `<tr id="row">
@@ -424,21 +381,26 @@ $indexRow = $_GET['indexRow'] ?? '';
       </td>
 
       <td>
-        <input type="date" name="tgljatuhtempo[]" class="form-control">
+        <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">
       </td>
 
       <td>
         <input type="text" name="nominal[]" class="form-control text-right"  oninput="separatorNumber(this)">
       </td>
 
-   
-
       <td>
         <input type="text" name="keterangan_detail[]" class="form-control">
       </td>
 
       <td>
-        <input type="date" name="bulanbeban[]" class="form-control">
+         <select name="coadebet[]" class="form-control select2bs4">
+          <option value="">COA DEBET</option>
+          ${htmlComboCoa}
+        </select>
+       </td>
+
+      <td>
+        <input type="text" name="bulanbeban[]" class="form-control datepicker">
       </td>
 
       <td>
@@ -447,9 +409,11 @@ $indexRow = $_GET['indexRow'] ?? '';
     </tr>`;
 
   $("#addrow").click(function() {
-    let rowCount = $('#row').length;
+    destroyDatepicker()
+    destroySelect2()
+    let rowCount = $('#detailRow').length;
     if (rowCount > 0) {
-      let clone = $('#row').clone();
+      let clone = $('#detailRow').clone();
       clone.find("span").remove();
       clone.find("select").select2({
         theme: 'bootstrap4'
@@ -461,7 +425,7 @@ $indexRow = $_GET['indexRow'] ?? '';
       clone.find('.baris').text(baris);
       $('table #table_body').append(clone);
 
-      $('#row').find('select').select2({
+      $('#detailRow').find('select').select2({
         theme: 'bootstrap4'
       });
     } else {
@@ -469,8 +433,12 @@ $indexRow = $_GET['indexRow'] ?? '';
       $('#table_body').append(html);
     }
 
+    initDatepicker()
+    initSelect2()
+
     // resetFormatDate();
   });
+
 
   $('table').on('click', '.rmv', function() {
     $(this).closest('tr').remove();
@@ -504,6 +472,48 @@ $indexRow = $_GET['indexRow'] ?? '';
   }
 
   $(document).ready(function() {
+    $('[name=statusjenistransaksi]').change(function() {
+      let value = $(this).val()
+      let tipe = 'KAS'
+
+      //lokal & web
+      if (value == 54) {
+        tipe = 'KAS'
+      } else if (value == 55) {
+        tipe = 'BANK'
+      }
+
+      $.ajax({
+        url: `${apiUrl}bank`,
+        method: 'GET',
+        async: false,
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "tipe",
+              "op": "cn",
+              "data": tipe
+            }]
+          })
+        },
+        beforeSend: jqXHR => {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
+        success: response => {
+          $('[name=bank_id]').html(`
+            ${
+              response.data.map((bank, index) => {
+                return `
+                  <option value="${bank.id}">  ${bank.namabank} </option>
+                `
+              }).join(' ')
+            }  
+          `)
+          //  console.log(response);
+        }
+      })
+    })
     $('form').submit(function(e) {
       e.preventDefault()
     })

@@ -72,14 +72,6 @@
             label: 'COA DEBET',
             name: 'coadebet',
           },
-          // {
-          //   label: 'COA KREDIT',
-          //   name: 'coakredit',
-          // },
-          // {
-          //   label: 'COA DEBET',
-          //   name: 'coadebet',
-          // },
           {
             label: 'COA KREDIT',
             name: 'coakredit',
