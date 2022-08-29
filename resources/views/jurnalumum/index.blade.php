@@ -72,8 +72,8 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('jurnalumum.index') }}"
-  let getUrl = "{{ route('jurnalumum.get') }}"
+  let indexUrl = "{{ route('jurnalumumheader.index') }}"
+  let getUrl = "{{ route('jurnalumumheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -121,7 +121,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'jurnalumum' }}`,
+        url: `{{ config('app.api_url') . 'jurnalumumheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -328,7 +328,7 @@
      $('#add').click(function() {
       let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
 
-      window.location.href = `{{ route('jurnalumum.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      window.location.href = `{{ route('jurnalumumheader.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
     })
 
     /* Handle button edit on click */
@@ -378,9 +378,9 @@
       let actionUrl = ``
 
       if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('jurnalumum.export') }}`
+        actionUrl = `{{ route('jurnalumumheader.export') }}`
       } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('jurnalumum.report') }}`
+        actionUrl = `{{ route('jurnalumumheader.report') }}`
       }
 
       /* Clear validation messages */

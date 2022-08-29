@@ -73,13 +73,27 @@ $indexRow = $_GET['indexRow'] ?? '';
                           <div class="baris">{{ $jurnalumumIndex+1 }}</div>
                         </td>
                         <td>
-                            <input type="text" name="coadebet_detail[]" class="form-control" value="{{ $d['coadebet'] ?? '' }}">  
+                          <select name="coadebet_detail[]" style="width:100%" class="form-control select2bs4">
+                            <option value="" >COA DEBET</option>
+                            <?php foreach ($combo['coa'] as $key => $item) {
+                              $selected = @$d['coadebet'] == $item['coa'] ? "selected" : ""
+                            ?>
+                              <option value="{{ $item['coa'] }}" {{ $selected }}>{{ $item['coa'] }}</option>
+                            <?php } ?>
+                          </select>
                         </td>
                         <td>
-                            <input type="text" name="coakredit_detail[]" class="form-control" value="{{ $d['coakredit'] ?? '' }}">  
+                          <select name="coakredit_detail[]" style="width:100%" class="form-control select2bs4">
+                            <option value="" >COA KREDIT</option>
+                            <?php foreach ($combo['coa'] as $key => $item) {
+                              $selected = @$d['coakredit'] == $item['coa'] ? "selected" : ""
+                            ?>
+                            <option value="{{ $item['coa'] }}" {{ $selected }}>{{ $item['coa'] }}</option>
+                            <?php } ?>
+                          </select>
                         </td>
                         <td>
-                            <input type="text" name="nominal_detail[]" class="form-control text-right" value="{{ number_format($d['nominal']??0,0,'.','.') }}" oninput="separatorNumber(this)"> 
+                            <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control text-right" value="{{ number_format($d['nominal']??0,0,',' , ',') }}" oninput="separatorNumber(this)"> 
                         </td>
                         <td>
                           <input type="text" name="keterangan_detail[]" class="form-control" value="{{ $d['keterangan'] ?? '' }}">
@@ -95,13 +109,23 @@ $indexRow = $_GET['indexRow'] ?? '';
                           <div class="baris">1</div>
                         </td>
                         <td>
-                            <input type="text" name="coadebet_detail[]" class="form-control">   
+                          <select name="coadebet_detail[]" style="width:100%" class="form-control select2bs4">
+                            <option value="">COA DEBET</option>
+                            <?php foreach ($combo['coa'] as $key => $item) { ?>
+                              <option value="{{ $item['coa'] }}">{{ $item['coa'] }}</option>
+                            <?php } ?>
+                          </select>   
                         </td>
                         <td>
-                            <input type="text" name="coakredit_detail[]" class="form-control">   
+                          <select name="coakredit_detail[]" style="width:100%" class="form-control select2bs4">
+                            <option value="" >COA KREDIT</option>
+                            <?php foreach ($combo['coa'] as $key => $item) { ?>
+                              <option value="{{ $item['coa'] }}">{{ $item['coa'] }}</option>
+                            <?php } ?>
+                          </select>
                         </td>
                         <td>
-                            <input type="text" name="nominal_detail[]" class="form-control" oninput="separatorNumber(this)">   
+                            <input type="text" name="nominal_detail[]" style="text-align:right" class="form-control" oninput="separatorNumber(this)">   
                         </td>
                         <td>
                           <input type="text" name="keterangan_detail[]" class="form-control">
@@ -135,7 +159,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               Simpan
               @endif
             </button>
-            <a href="{{ route('jurnalumum.index') }}" class="btn btn-danger">
+            <a href="{{ route('jurnalumumheader.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
               BATAL
             </a>
@@ -165,18 +189,32 @@ $indexRow = $_GET['indexRow'] ?? '';
   baris = "{{count($jurnalumum['jurnalumumdetail'])}}";
   @endif;
 
+  //ambil data untuk select option
+  let comboCoa = `<?= json_encode($combo['coa']) ?>`;
+  comboCoa = JSON.parse(comboCoa);
+  let htmlComboCoa = '';
+  $.each(comboCoa, function(index, value) {
+    htmlComboCoa += `<option value='${value.coa}'>${value.coa}</option>`;
+  });
+
   let html = `<tr id="row">
         <td>
         <div class="baris">1</div>
       </td>
       <td>
-        <input type="text" name="coadebet_detail[]" class="form-control">   
+        <select name="coadebet_detail[]" style="width:100%" class="form-control select2bs4">
+          <option value="">COA DEBET</option>
+          ${htmlComboCoa}
+        </select>
       </td>
       <td>
-        <input type="text" name="coakredit_detail[]" class="form-control">   
+        <select name="coakredit_detail[]" style="width:100%" class="form-control select2bs4">
+          <option value="" >COA KREDIT</option>
+          ${htmlComboCoa}
+        </select>
       </td>
       <td>
-        <input type="text" name="nominal_detail[]" class="form-control" oninput="separatorNumber(this)">   
+        <input type="text" name="nominal_detail[]" style="text-align:right" class="form-control" oninput="separatorNumber(this)">   
       </td>
       <td>
         <input type="text" name="keterangan_detail[]" class="form-control">
@@ -191,13 +229,19 @@ $indexRow = $_GET['indexRow'] ?? '';
     if (rowCount > 0) {
       let clone = $('#row').clone();
       clone.find("span").remove();
-      
+      clone.find("select").select2({
+        theme: 'bootstrap4'
+      });
+      clone.find("select").val('').change();
       clone.find('input').val('');
 
       baris = parseInt(baris) + 1;
       clone.find('.baris').text(baris);
       $('table #table_body').append(clone);
 
+      $('#row').find('select').select2({
+        theme: 'bootstrap4'
+      });
     } else {
       baris = 1;
       $('#table_body').append(html);
@@ -214,9 +258,9 @@ $indexRow = $_GET['indexRow'] ?? '';
     baris = baris - 1;
   });
 
-  let indexUrl = "{{ route('jurnalumum.index') }}"
+  let indexUrl = "{{ route('jurnalumumheader.index') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ config('app.api_url') . 'jurnalumum' }}"
+  let actionUrl = "{{ config('app.api_url') . 'jurnalumumheader' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
   let postingUrl = "{{ Config::get('app.api_url').'running_number' }}"

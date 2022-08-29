@@ -69,7 +69,7 @@ use App\Http\Controllers\PenerimaanDetailController;
 use App\Http\Controllers\PengeluaranHeaderController;
 use App\Http\Controllers\PengeluaranDetailController;
 
-use App\Http\Controllers\JurnalUmumController;
+use App\Http\Controllers\JurnalUmumHeaderController;
 use App\Http\Controllers\JurnalUmumDetailController;
 
 
@@ -484,12 +484,12 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('pengeluarandetail', PengeluaranDetailController::class);
 
-    Route::get('jurnalumum/index', [JurnalUmumController::class, 'index']);
-    Route::get('jurnalumum/{id}/delete', [JurnalUmumController::class, 'delete'])->name('jurnalumum.delete');
-    Route::get('jurnalumum/get', [JurnalUmumController::class, 'get'])->name('jurnalumum.get');
-    Route::get('jurnalumum/export', [JurnalUmumController::class, 'export'])->name('jurnalumum.export');
-    Route::get('jurnalumum/report', [JurnalUmumController::class, 'report'])->name('jurnalumum.report');
-    Route::resource('jurnalumum', JurnalUmumController::class);
+    Route::get('jurnalumumheader/index', [JurnalUmumHeaderController::class, 'index']);
+    Route::get('jurnalumumheader/{id}/delete', [JurnalUmumHeaderController::class, 'delete'])->name('jurnalumumheader.delete');
+    Route::get('jurnalumumheader/get', [JurnalUmumHeaderController::class, 'get'])->name('jurnalumumheader.get');
+    Route::get('jurnalumumheader/export', [JurnalUmumHeaderController::class, 'export'])->name('jurnalumumheader.export');
+    Route::get('jurnalumumheader/report', [JurnalUmumHeaderController::class, 'report'])->name('jurnalumumheader.report');
+    Route::resource('jurnalumumheader', JurnalUmumHeaderController::class);
     
     Route::resource('jurnalumumdetail', JurnalUmumDetailController::class);
 
