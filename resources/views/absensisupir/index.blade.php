@@ -195,11 +195,7 @@
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
+            formatter: currencyFormat
           },
           {
             label: 'MODIFIEDBY',

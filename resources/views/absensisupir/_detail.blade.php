@@ -56,11 +56,7 @@
             label: 'UANG JALAN',
             name: 'uangjalan',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
+            formatter: currencyFormat
           },
           {
             label: 'MODIFIEDBY',

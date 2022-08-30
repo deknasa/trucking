@@ -36,7 +36,7 @@ class Myauth
             'error',
             'acl',
             'cabang',
-            'absensisupir',
+            'absensisupirheader',
             'logtrail',
             'agen',
             'akunpusat',
