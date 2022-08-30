@@ -10,7 +10,6 @@
 
 @push('scripts')
 <script>
-
   let detailIndexUrl = "{{ config('app.api_url') . 'absensisupirheader' }}"
 
   /**
@@ -28,22 +27,22 @@
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
-        url: detailIndexUrl,
+        url: `${detailIndexUrl}/1/detail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
             label: 'TRADO',
-            name: 'trado',
+            name: 'trado.keterangan',
           },
           {
             label: 'SUPIR',
-            name: 'supir',
+            name: 'supir.namasupir',
           },
           {
             label: 'STATUS',
-            name: 'absentrado',
+            name: 'absentrado.keterangan',
           },
           {
             label: 'KETERANGAN',
@@ -96,8 +95,11 @@
         loadBeforeSend: (jqXHR) => {
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
+        onSelectRow: function(id) {
+          activeGrid = $(this)
+        },
         loadComplete: function(data) {
-
+          initResize($(this))
         }
       })
 
