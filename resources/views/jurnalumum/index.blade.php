@@ -60,6 +60,9 @@
           <button id="delete" class="btn btn-danger btn-sm mb-1">
             <i class="fa fa-trash"></i> DELETE
           </button>
+          <button id="approval" class="btn btn-purple btn-sm mb-1">
+            <i class="fa fa-check"></i> UN/APPROVAL
+          </button>
         </div>
         <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
         <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
@@ -323,6 +326,14 @@
     $('#export .ui-pg-div')
     .addClass('btn-sm btn-warning')
     .parent().addClass('px-1')
+    
+    $('#approval .ui-pg-div')
+      .addClass('btn-sm')
+      .css({
+        'background': '#6619ff',
+        'color': '#fff'
+      })
+      .parent().addClass('px-1')
 
      /* Handle button add on click */
      $('#add').click(function() {
@@ -347,6 +358,27 @@
       selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
       window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+    })
+
+     /* Handle button approval on click */
+     $('#approval').click(function() {
+      let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+
+      $('#loader').removeClass('d-none')
+
+      $.ajax({
+        url: `{{ config('app.api_url') }}jurnalumumheader/${id}/approval`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+        success: response => {
+          $('#jqGrid').trigger('reloadGrid')
+        }
+      }).always(() => {
+        $('#loader').addClass('d-none')
+      })
     })
 
     $('#rangeModal').on('shown.bs.modal', function() {

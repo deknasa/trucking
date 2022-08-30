@@ -13,8 +13,10 @@ class JurnalUmumHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        
-        return view('jurnalumum.index', compact('title'));
+        $combo = [
+            'statusapproval' => $this->getParameter('STATUS APPROVAL', 'STATUS APPROVAL'),
+        ];
+        return view('jurnalumum.index', compact('title','combo'));
     }
 
     
