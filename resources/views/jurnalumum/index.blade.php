@@ -91,6 +91,7 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
+  let status
 
   $(document).ready(function() { 
     /* Set page */
@@ -251,7 +252,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          triggerClick = true 
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -345,19 +346,54 @@
     /* Handle button edit on click */
     $('#edit').click(function() {
       selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+      var celValue = $("#jqGrid").jqGrid('getCell', selectedId, 'statusapproval');
+      var nobukti = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+      var sub = nobukti.substring(0,3);
+      
+      // if(sub == 'ADJ')
+      // {
+      //   if(celValue == 'NON APPROVAL')
+      //   {
+      //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
+      //       alert('please select a row')
+      //     } else {
+      //       window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      //     }
+      //   }else{
+      //     showDialog('Sudah diapproval. data tidak bisa diedit')
+      //   }
+      // }else{
+      //   showDialog('Data bukan entrian dari jurnal umum. data tidak bisa diedit')
+      // }
 
       if (selectedId == null || selectedId == '' || selectedId == undefined) {
         alert('please select a row')
       } else {
         window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
       }
+      
     })
 
     /* Handle button delete on click */
     $('#delete').click(function() {
       selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+      var celValue = $("#jqGrid").jqGrid('getCell', selectedId, 'statusapproval');
+      var nobukti = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+      var sub = nobukti.substring(0,3);
+      
+      if(sub == 'ADJ')
+      {
+        if(celValue == 'NON APPROVAL')
+        {
+          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+        }else{
+          showDialog('Sudah diapproval. data tidak bisa dihapus')
+        }
+      }else{
+        showDialog('Data bukan entrian dari jurnal umum. data tidak bisa dihapus')
+      }
+    
+      
     })
 
      /* Handle button approval on click */

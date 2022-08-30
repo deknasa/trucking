@@ -93,7 +93,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                           </select>
                         </td>
                         <td>
-                            <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control text-right" value="{{ number_format($d['nominal']??0,0,',' , ',') }}" oninput="separatorNumber(this)"> 
+                            <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control text-right autonumeric" value="{{ number_format($d['nominal']??0,0,',' , ',') }}"> 
                         </td>
                         <td>
                           <input type="text" name="keterangan_detail[]" class="form-control" value="{{ $d['keterangan'] ?? '' }}">
@@ -125,7 +125,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                           </select>
                         </td>
                         <td>
-                            <input type="text" name="nominal_detail[]" style="text-align:right" class="form-control" oninput="separatorNumber(this)">   
+                            <input type="text" name="nominal_detail[]" style="text-align:right" class="form-control autonumeric">   
                         </td>
                         <td>
                           <input type="text" name="keterangan_detail[]" class="form-control">
@@ -214,7 +214,7 @@ $indexRow = $_GET['indexRow'] ?? '';
         </select>
       </td>
       <td>
-        <input type="text" name="nominal_detail[]" style="text-align:right" class="form-control" oninput="separatorNumber(this)">   
+        <input type="text" name="nominal_detail[]" style="text-align:right" class="form-control autonumeric">   
       </td>
       <td>
         <input type="text" name="keterangan_detail[]" class="form-control">
