@@ -5,15 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-class PenerimaanHeaderController extends MyController
+class PenerimaanTruckingHeaderController extends MyController
 {
-    public $title = 'penerimaan';
+    public $title = 'penerimaan trucking';
 
     /**
      * @ClassName
@@ -28,7 +29,7 @@ class PenerimaanHeaderController extends MyController
             'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
         ];
 
-        return view('penerimaan.index', compact('title', 'breadcrumb', 'combo'));
+        return view('penerimaantrucking.index', compact('title', 'breadcrumb', 'combo'));
     }
 
     // /**
@@ -37,6 +38,7 @@ class PenerimaanHeaderController extends MyController
     //  */
     public function get($params = [])
     {
+        dd('dasda');
         $params = [
             'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
             'limit' => $params['rows'] ?? request()->rows ?? 0,
@@ -44,10 +46,10 @@ class PenerimaanHeaderController extends MyController
             'sortOrder' => $params['sord'] ?? request()->sord,
             'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
         ];
-
+        
         $response = Http::withHeaders(request()->header())
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaan', $params);
+            ->get(config('app.api_url') . 'penerimaantruckingdetail', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -75,7 +77,7 @@ class PenerimaanHeaderController extends MyController
         
         $combo = $this->combo();
 
-        return view('penerimaan.add', compact('title', 'breadcrumb', 'combo'));
+        return view('penerimaantrucking.add', compact('title', 'breadcrumb', 'combo'));
     }
 
 
@@ -90,12 +92,12 @@ class PenerimaanHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "penerimaan/$id");
-        $penerimaan = $response['data'];
+            ->get(config('app.api_url') . "penerimaantrucking/$id");
+        $penerimaantrucking = $response['data'];
 
         $combo = $this->combo();
 
-        return view('penerimaan.edit', compact('title', 'penerimaan', 'combo'));
+        return view('penerimaantrucking.edit', compact('title', 'penerimaantrucking', 'combo'));
     }
 
     // /**
@@ -110,14 +112,14 @@ class PenerimaanHeaderController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "penerimaan/$id");
+                ->get(config('app.api_url') . "penerimaantrucking/$id");
 
-            $penerimaan = $response['data'];
+            $penerimaantrucking = $response['data'];
             $combo = $this->combo();
 
-            return view('penerimaan.delete', compact('title', 'combo', 'penerimaan'));
+            return view('penerimaantrucking.delete', compact('title', 'combo', 'penerimaantrucking'));
         } catch (\Throwable $th) {
-            return redirect()->route('penerimaan.index');
+            return redirect()->route('penerimaantrucking.index');
         }
     }
 
@@ -178,7 +180,7 @@ class PenerimaanHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'penerimaan/combo');
+            ->get(config('app.api_url') . 'penerimaantrucking/combo');
         return $response['data'];
     }
 

@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 
-class PengeluaranDetailController extends Controller
+class PenerimaanTruckingDetailController extends Controller
 {
-    public $title = 'Pengeluaran Detail';
+    public $title = 'Penerimaan Trucking Detail';
 
     /**
      * Fungsi index
@@ -17,16 +17,18 @@ class PengeluaranDetailController extends Controller
     public function index(Request $request)
     {
         $params = [
-            'pengeluaran_id' => $request->pengeluaran_id,
+            'penerimaantrucking_id' => $request->penerimaantrucking_id,
             'whereIn' => $request->whereIn
         ];
+
         $response = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->get(config('app.api_url') .'pengeluarandetail', $params);
-        
+            ->withOptions(['verify' => false])
+            ->get(config('app.api_url') .'penerimaantruckingdetail', $params);
+            
         $data = [
             'rows' => $response['data'] ?? []
         ];
+
         return response($data);
     }
 }

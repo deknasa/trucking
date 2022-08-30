@@ -1,7 +1,6 @@
 @extends('layouts.master')
 
 @section('content')
-
 <!-- Modal for report -->
 <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -61,25 +60,23 @@
           <button id="delete" class="btn btn-danger btn-sm mb-1">
             <i class="fa fa-trash"></i> DELETE
           </button>
-          <!-- <button id="approval" class="btn btn-purple btn-sm mb-1">
+          <button id="approval" class="btn btn-purple btn-sm mb-1">
             <i class="fa fa-check"></i> UN/APPROVAL
-          </button> -->
+          </button>
         </div>
         <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
         <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
       </div>
-
     </div>
   </div>
 </div>
-
 <!-- Detail -->
-@include('penerimaantrucking._detail')
+@include('jurnalumum._detail')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('penerimaantrucking.index') }}"
-  let getUrl = "{{ route('penerimaantrucking.get') }}"
+  let indexUrl = "{{ route('jurnalumumheader.index') }}"
+  let getUrl = "{{ route('jurnalumumheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -93,8 +90,10 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let rowNum = 10
+  let status
 
-  $(document).ready(function() {
+  $(document).ready(function() { 
     /* Set page */
     <?php if (isset($_GET['page'])) { ?>
       page = "{{ $_GET['page'] }}"
@@ -125,9 +124,8 @@
       rowNum = "{{ $_GET['limit'] }}"
     <?php } ?>
 
-
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'penerimaantrucking' }}`,
+        url: `{{ config('app.api_url') . 'jurnalumumheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -154,24 +152,34 @@
             }
           },
           {
-            label: 'BANK',
-            name: 'bank_id',
+            label: 'KETERANGAN',
+            name: 'keterangan',
             align: 'left'
           },
           {
-            label: 'COA',
-            name: 'coa',
+            label: 'POSTING DARI',
+            name: 'postingdari',
             align: 'left'
           },
           {
-            label: 'NO BUKTI PENERIMAAN',
-            name: 'penerimaan_nobukti',
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
             align: 'left'
           },
           {
-            label: 'TGL BUKTI PENERIMAAN',
-            name: 'penerimaan_tgl',
+            label: 'USER APPROVAL',
+            name: 'userapproval',
             align: 'left'
+          },
+          {
+            label: 'TANGGAL APPROVAL',
+            name: 'tglapproval',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
           {
             label: 'MODIFIEDBY',
@@ -244,7 +252,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          triggerClick = true 
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -290,8 +298,8 @@
           clearGlobalSearch()
         },
       })
-
-    /* Append clear filter button */
+    
+      /* Append clear filter button */
     loadClearFilter()
 
     /* Append global search */
@@ -301,25 +309,25 @@
     loadDetailGrid()
 
     $('#add .ui-pg-div')
-      .addClass(`btn-sm btn-primary`)
-      .parent().addClass('px-1')
+    .addClass(`btn-sm btn-primary`)
+    .parent().addClass('px-1')
 
     $('#edit .ui-pg-div')
-      .addClass('btn-sm btn-success')
-      .parent().addClass('px-1')
+    .addClass('btn-sm btn-success')
+    .parent().addClass('px-1')
 
     $('#delete .ui-pg-div')
-      .addClass('btn-sm btn-danger')
-      .parent().addClass('px-1')
+    .addClass('btn-sm btn-danger')
+    .parent().addClass('px-1')
 
     $('#report .ui-pg-div')
-      .addClass('btn-sm btn-info')
-      .parent().addClass('px-1')
+    .addClass('btn-sm btn-info')
+    .parent().addClass('px-1')
 
     $('#export .ui-pg-div')
-      .addClass('btn-sm btn-warning')
-      .parent().addClass('px-1')
-
+    .addClass('btn-sm btn-warning')
+    .parent().addClass('px-1')
+    
     $('#approval .ui-pg-div')
       .addClass('btn-sm')
       .css({
@@ -328,41 +336,74 @@
       })
       .parent().addClass('px-1')
 
-
-    /* Handle button add on click */
-    $('#add').click(function() {
+     /* Handle button add on click */
+     $('#add').click(function() {
       let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
 
-      window.location.href = `{{ route('penerimaantrucking.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      window.location.href = `{{ route('jurnalumumheader.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
     })
 
     /* Handle button edit on click */
     $('#edit').click(function() {
       selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+      var celValue = $("#jqGrid").jqGrid('getCell', selectedId, 'statusapproval');
+      var nobukti = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+      var sub = nobukti.substring(0,3);
+      
+      // if(sub == 'ADJ')
+      // {
+      //   if(celValue == 'NON APPROVAL')
+      //   {
+      //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
+      //       alert('please select a row')
+      //     } else {
+      //       window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      //     }
+      //   }else{
+      //     showDialog('Sudah diapproval. data tidak bisa diedit')
+      //   }
+      // }else{
+      //   showDialog('Data bukan entrian dari jurnal umum. data tidak bisa diedit')
+      // }
 
       if (selectedId == null || selectedId == '' || selectedId == undefined) {
         alert('please select a row')
       } else {
         window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
       }
+      
     })
-
 
     /* Handle button delete on click */
     $('#delete').click(function() {
       selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+      var celValue = $("#jqGrid").jqGrid('getCell', selectedId, 'statusapproval');
+      var nobukti = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+      var sub = nobukti.substring(0,3);
+      
+      if(sub == 'ADJ')
+      {
+        if(celValue == 'NON APPROVAL')
+        {
+          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+        }else{
+          showDialog('Sudah diapproval. data tidak bisa dihapus')
+        }
+      }else{
+        showDialog('Data bukan entrian dari jurnal umum. data tidak bisa dihapus')
+      }
+    
+      
     })
 
-    /* Handle button approval on click */
-    $('#approval').click(function() {
+     /* Handle button approval on click */
+     $('#approval').click(function() {
       let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
 
       $('#loader').removeClass('d-none')
 
       $.ajax({
-        url: `{{ config('app.api_url') }}penerimaantrucking/${id}/approval`,
+        url: `{{ config('app.api_url') }}jurnalumumheader/${id}/approval`,
         method: 'POST',
         dataType: 'JSON',
         beforeSend: request => {
@@ -384,7 +425,6 @@
       }
 
       $('#formRange [name]:not(:hidden)').first().focus()
-
       $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
       $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
       $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
@@ -406,9 +446,9 @@
       let actionUrl = ``
 
       if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('penerimaantrucking.export') }}`
+        actionUrl = `{{ route('jurnalumumheader.export') }}`
       } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('penerimaantrucking.report') }}`
+        actionUrl = `{{ route('jurnalumumheader.report') }}`
       }
 
       /* Clear validation messages */
@@ -426,6 +466,7 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
+
 </script>
 @endpush()
 @endsection

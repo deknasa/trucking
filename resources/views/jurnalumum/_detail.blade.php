@@ -10,7 +10,7 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('pengeluarandetail.index') }}"
+  let detailIndexUrl = "{{ route('jurnalumumdetail.index') }}"
   /**
    * Custom Functions
    */
@@ -21,51 +21,24 @@
       timer = setTimeout(callback, ms);
     };
   })()
+
   function loadDetailGrid() {
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
-        url: `{{ config('app.api_url') . 'pengeluarandetail' }}`,
+        url: `{{ config('app.api_url') . 'jurnalumumdetail' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        //datatype: "json",
         colModel: [
-          // {
-          //   label: 'PENGELUARAN',
-          //   name: 'pengeluaran_id',
-          // },
           {
             label: 'NO BUKTI',
             name: 'nobukti',
-          }, 
+          },
           {
-            label: 'ALAT BAYAR',
-            name: 'alatbayar_id',
-          }, 
-          {
-            label: 'NO WARKAT',
-            name: 'nowarkat',
-          }, 
-          {
-            label: 'TGL JATUH TEMPO',
-            name: 'tgljatuhtempo',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          }, 
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
+            label: 'TGL BUKTI',
+            name: 'tglbukti',
           },
           {
             label: 'COA DEBET',
@@ -76,17 +49,15 @@
             name: 'coakredit',
           },
           {
+            label: 'NOMINAL',
+            name: 'nominal',
+            formatter: 'number', 
+            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            align: "right",
+          },
+          {
             label: 'KETERANGAN',
             name: 'keterangan',
-          }, 
-          {
-            label: 'BULAN BEBAN',
-            name: 'bulanbeban',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
           }
         ],
         autowidth: true,
@@ -118,7 +89,7 @@
       url: detailIndexUrl,
       datatype: "json",
       postData: {
-        pengeluaran_id: id
+        jurnalumum_id: id
       }
     }).trigger('reloadGrid')
   }

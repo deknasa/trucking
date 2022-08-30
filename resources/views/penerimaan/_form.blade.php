@@ -57,6 +57,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </select>
               </div>
             </div>
+
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>KETERANGAN</label>
@@ -66,22 +67,6 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
 
-            <!-- <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>POSTING DARI</label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="keterangan" class="form-control" value="{{ $penerimaan['postingdari'] ?? '' }}">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>DITERIMA DARI</label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="keterangan" class="form-control" value="{{ $penerimaan['diterimadari'] ?? '' }}">
-              </div>
-            </div> -->
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>TANGGAL LUNAS</label>
@@ -114,33 +99,20 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
 
-            <script>
-              // $('#statuskas').change(function() {
-              //     console.log('here');
-              //     //console.log($("#statuskas option:selected").val());
-              //     var value = $(this).val();
-              //     if (value == 'BUKAN KAS') {
-              //       $('#bank').hide()
-              //     } else {
-              //       $('#bank').show()
-              //     }
-              //   })
-  
-            
-            </script>
-
-            <div id="statuskas" class="row form-group">
+            <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>STATUS KAS</label>
               </div>
+              
               <div class="col-12 col-md-10">
                 <select name="statuskas" class="form-control select2bs4">
-                  <option id="statuskas" value="">STATUS KAS</option>
+                  <option value="">PILIH STATUS KAS</option>
                   <?php foreach ($combo['statuskas'] as $key => $item) {
                     $selected = @$penerimaan['statuskas'] == $item['id'] ? "selected" : ""
                   ?>
                     <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['text'] }}</option>
-                  <?php } ?>
+                  <?php }
+                  ?>
                 </select>
               </div>
             </div>
@@ -161,18 +133,6 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
 
-
-            <!-- <script>
-              function tampil_bank(param) {
-                if (param == 1)
-                  document.getElementById("showbank").style.visibility = 'visible';
-                else
-                  document.getElementById("showbank").style.visibility = 'hidden';
-
-              }
-            </script> -->
-
-
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>NO RESI</label>
@@ -181,23 +141,6 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <input type="text" name="noresi" class="form-control" value="{{ $penerimaan['noresi'] ?? '' }}">
               </div>
             </div>
-            <!-- 
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>STATUS BERKAS</label>
-              </div>
-              <div class="col-12 col-md-10">
-                <select name="statusberkas" class="form-control select2bs4">
-                  <option value="">STATUS BERKAS</option>
-               
-                  <?php foreach ($combo['statusberkas'] as $key => $item) {
-                    $selected = @$penerimaan['statusberkas'] == $item['id'] ? "selected" : ""
-                  ?>
-                    <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['text'] }}</option>
-                  <?php } ?>
-                </select>
-              </div>
-            </div> -->
 
             <div class="row">
               <div class="col-12">
@@ -207,10 +150,10 @@ $indexRow = $_GET['indexRow'] ?? '';
                       <tr>
                         <th width="50">No</th>
                         <th>No warkat</th>
-                        <th>Tgl jatuh tempo</th>
+                        <th width="200">Tgl jatuh tempo</th>
                         <th>Nominal</th>
                         <th>Keterangan</th>
-                        <th width="200">Coa Kredit</th>
+                        <th width="350">Coa Kredit</th>
                         <!-- <th>Coa Debet</th> -->
                         <!-- <th>Pelanggan</th> -->
                         <th width="200">Bank Pelanggan</th>
@@ -222,12 +165,15 @@ $indexRow = $_GET['indexRow'] ?? '';
                       @if (isset($penerimaan['penerimaandetail']))
                       @foreach($penerimaan['penerimaandetail'] as $penerimaanIndex => $d)
                       <tr id="row">
+
                         <td>
                           <div class="baris">{{ $penerimaanIndex+1 }}</div>
                         </td>
+
                         <td>
                           <input type="text" name="nowarkat[]" clas s="form-control" value="{{ $d['nowarkat'] ?? '' }}">
                         </td>
+
                         <td>
                           @php
                           if (isset($d['tgljatuhtempo'])) {
@@ -236,16 +182,16 @@ $indexRow = $_GET['indexRow'] ?? '';
                           $tgljatuhtempo = date('d-m-Y');
                           }
                           @endphp
-                          <input type="date" name="tgljatuhtemp
-                          o[]" class="form-control" value="{{ $d['tgljatuhtempo'] }}">
+                          <input type="text" name="tgljatuhtempo[]" class="form-control datepicker" value="{{ $tgljatuhtempo }}">
                         </td>
+
                         <td>
                           <input type="text" name="nominal[]" class="form-control text-right" value="{{ number_format($d['nominal'],0,'.','.') ?? '' }}" oninput="separatorNumber(this)">
                         </td>
+
                         <td>
                           <input type="text" name="keterangan_detail[]" class="form-control" value="{{ $d['keterangan'] ?? '' }}">
                         </td>
-
 
                         <td>
                           <select name="coakredit[]" class="form-control select2bs4">
@@ -257,6 +203,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                             <?php } ?>
                           </select>
                         </td>
+
                         <td>
                           <select name="bankpelanggan_id[]" class="form-control select2bs4">
                             <option value="">PELANGGAN</option>
@@ -275,6 +222,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <td>
                           <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                         </td>
+
                       </tr>
                       @endforeach
                       @else
@@ -282,15 +230,19 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <td>
                           <div class="baris">1</div>
                         </td>
+
                         <td>
                           <input type="text" name="nowarkat[]" class="form-control">
                         </td>
+
                         <td>
                           <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">
                         </td>
+
                         <td>
                           <input type="text" name="nominal[]" class="form-control text-right" oninput="separatorNumber(this)">
                         </td>
+
                         <td>
                           <input type="text" name="keterangan_detail[]" class="form-control">
                         </td>
@@ -299,12 +251,12 @@ $indexRow = $_GET['indexRow'] ?? '';
                           <select name="coakredit[]" class="form-control select2bs4">
                             <option value="">COA KREDIT</option>
                             <?php foreach ($combo['coa'] as $key => $item) {
-
                             ?>
                               <option value="{{ $item['id'] }}">{{ $item['keterangancoa'] }}</option>
                             <?php } ?>
                           </select>
                         </td>
+
                         <td>
                           <select name="bankpelanggan_id[]" class="form-control select2bs4">
                             <option value="">PELANGGAN</option>
@@ -318,6 +270,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <td>
                           <input type="text" name="jenisbiaya[]" class="form-control">
                         </td>
+
                         <td>
                           <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                         </td>
@@ -360,56 +313,6 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 @push('scripts')
 <script>
-
-function myFunction() {
-  var x = document.getElementById("bank");
-  if ($("#statuskas option:selected").val() == 'STATUS BUKAN KAS') {
-  				$('#bank').prop('hidden', 'true');
-  			} else {
-  				$('#bank').prop('hidden', false);
-  			}
-
-  // if (x.style.display === "none") {
-  //   x.style.display = "block";
-  // } else {
-  //   x.style.display = "none";
-  // }
-}
-
-// console.log("here");
-//     $("#statuskas").load(function(){
-//                 $('#statuskas').change(function() {
-//                   var value = $(this).val();
-//                   if (value == 'Bank') {
-//                     $('#bank').hide()
-//                   } else {
-//                     $('#bank').show()
-//                   }
-//                 })
-//               });
-
-  //   $("#statuskas").load(function(){
-  // $("#statuskas").change(function() {
-  // 			console.log($("#statuskas option:selected").val());
-  // 			if ($("#statuskas option:selected").val() == 'STATUS BUKAN KAS') {
-  // 				$('#bank_id').prop('hidden', 'true');
-  // 			} else {
-  // 				$('#bank_id').prop('hidden', false);
-  // 			}
-  // 		});
-  // });
-  // function separatorNumber(object) {
-  //   var value = parseInt(object.value.replaceAll('.', '').replaceAll(',', ''));
-
-  //   if ($.isNumeric(value)) {
-  //     object.value = value.toLocaleString();
-  //   } else {
-  //     object.value = '';
-  //   }
-
-  //   return true;
-  // }
-
   var baris = 1;
   @if(isset($penerimaan['penerimaandetail']))
   baris = "{{count($penerimaan['penerimaandetail'])}}";
@@ -522,6 +425,7 @@ function myFunction() {
 
   <?php if ($action == 'edit') : ?>
     method = "PATCH"
+
   <?php elseif ($action == 'delete') : ?>
     method = "DELETE"
   <?php endif; ?>
@@ -531,6 +435,56 @@ function myFunction() {
   }
 
   $(document).ready(function() {
+    $('[name=statuskas]').change(function() {
+      let value = $(this).val()
+      let tipe = 'KAS'
+
+      //lokal
+      // if (value == 131) {
+      //   tipe = 'KAS'
+      // } else if (value == 134) {
+      //   tipe = 'BANK'
+      // }
+
+      //web
+      if (value == 145) {
+        tipe = 'KAS'
+      } else if (value == 146) {
+        tipe = 'BANK'
+      }
+
+      $.ajax({
+        url: `${apiUrl}bank`,
+        method: 'GET',
+        async: false,
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "tipe",
+              "op": "cn",
+              "data": tipe
+            }]
+          })
+        },
+        beforeSend: jqXHR => {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
+        success: response => {
+          $('[name=bank_id]').html(`
+            ${
+              response.data.map((bank, index) => {
+                return `
+                  <option value="${bank.id}">  ${bank.namabank} </option>
+                `
+              }).join(' ')
+            }  
+          `)
+          //  console.log(response);
+        }
+      })
+    })
+
     $('form').submit(function(e) {
       e.preventDefault()
     })

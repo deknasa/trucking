@@ -62,12 +62,17 @@ use App\Http\Controllers\ServiceInHeaderController;
 use App\Http\Controllers\ServiceInDetailController;
 use App\Http\Controllers\ServiceOutHeaderController;
 use App\Http\Controllers\ServiceOutDetailController;
-
 use App\Http\Controllers\PenerimaanHeaderController;
 use App\Http\Controllers\PenerimaanDetailController;
-
 use App\Http\Controllers\PengeluaranHeaderController;
 use App\Http\Controllers\PengeluaranDetailController;
+
+use App\Http\Controllers\PenerimaanTruckingHeaderController;
+use App\Http\Controllers\PenerimaanTruckingDetailController;
+use App\Http\Controllers\JurnalUmumHeaderController;
+use App\Http\Controllers\JurnalUmumDetailController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -478,4 +483,24 @@ Route::middleware('auth')->group(function () {
     Route::resource('pengeluaran', PengeluaranHeaderController::class);
 
     Route::resource('pengeluarandetail', PengeluaranDetailController::class);
+
+    //penerimaan trucking
+    Route::get('penerimaantrucking/{id}/delete', [PenerimaanTruckingHeaderController::class, 'delete'])->name('penerimaantrucking.delete');
+    Route::get('penerimaantrucking/index', [PenerimaanTruckingHeaderController::class, 'index']);
+    Route::get('penerimaantrucking/get', [PenerimaanTruckingHeaderController::class, 'get'])->name('penerimaantrucking.get');
+    Route::get('penerimaantrucking/export', [PenerimaanTruckingHeaderController::class, 'export'])->name('penerimaantrucking.export');
+    Route::get('penerimaantrucking/report', [PenerimaanTruckingHeaderController::class, 'report'])->name('penerimaantrucking.report');
+    Route::resource('penerimaantrucking', PenerimaanTruckingHeaderController::class);
+
+    Route::resource('penerimaantruckingdetail', PenerimaanTruckingDetailController::class);
+    
+    Route::get('jurnalumumheader/index', [JurnalUmumHeaderController::class, 'index']);
+    Route::get('jurnalumumheader/{id}/delete', [JurnalUmumHeaderController::class, 'delete'])->name('jurnalumumheader.delete');
+    Route::get('jurnalumumheader/get', [JurnalUmumHeaderController::class, 'get'])->name('jurnalumumheader.get');
+    Route::get('jurnalumumheader/export', [JurnalUmumHeaderController::class, 'export'])->name('jurnalumumheader.export');
+    Route::get('jurnalumumheader/report', [JurnalUmumHeaderController::class, 'report'])->name('jurnalumumheader.report');
+    Route::resource('jurnalumumheader', JurnalUmumHeaderController::class);
+    
+    Route::resource('jurnalumumdetail', JurnalUmumDetailController::class);
+
 });

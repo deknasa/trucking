@@ -6,27 +6,28 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 
-class PengeluaranDetailController extends Controller
+class JurnalUmumDetailController extends Controller
 {
-    public $title = 'Pengeluaran Detail';
+    public $title = 'Jurnal Umum Detail';
 
-    /**
-     * Fungsi index
-     * @ClassName index
-     */
     public function index(Request $request)
     {
         $params = [
-            'pengeluaran_id' => $request->pengeluaran_id,
+            'jurnalumum_id' => $request->jurnalumum_id,
             'whereIn' => $request->whereIn
         ];
+
         $response = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->get(config('app.api_url') .'pengeluarandetail', $params);
-        
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') .'jurnalumumdetail', $params);
+            
         $data = [
             'rows' => $response['data'] ?? []
         ];
+
         return response($data);
     }
 }
+
+
