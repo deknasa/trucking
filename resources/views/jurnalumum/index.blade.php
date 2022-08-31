@@ -91,7 +91,6 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
-  let status
 
   $(document).ready(function() { 
     /* Set page */
@@ -346,54 +345,67 @@
     /* Handle button edit on click */
     $('#edit').click(function() {
       selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-      var celValue = $("#jqGrid").jqGrid('getCell', selectedId, 'statusapproval');
-      var nobukti = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
-      var sub = nobukti.substring(0,3);
-      
-      // if(sub == 'ADJ')
-      // {
-      //   if(celValue == 'NON APPROVAL')
-      //   {
-      //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
-      //       alert('please select a row')
-      //     } else {
-      //       window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-      //     }
-      //   }else{
-      //     showDialog('Sudah diapproval. data tidak bisa diedit')
-      //   }
-      // }else{
-      //   showDialog('Data bukan entrian dari jurnal umum. data tidak bisa diedit')
-      // }
-
-      if (selectedId == null || selectedId == '' || selectedId == undefined) {
-        alert('please select a row')
-      } else {
-        window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-      }
+      $('#loader').removeClass('d-none')
+      $.ajax({
+        url: `{{ config('app.api_url') }}jurnalumumheader/${selectedId}/cekapproval`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+        success: response => {
+          var kodenobukti = response.kodenobukti
+          if(kodenobukti == '1')
+          {
+            var kodestatus = response.kodestatus
+            if(kodestatus == '1')
+            {
+              showDialog(response.message['keterangan'])
+            }else{
+              window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+            }
+            
+          }else{
+            showDialog(response.message['keterangan'])
+          }
+        }
+      }).always(() => {
+        $('#loader').addClass('d-none')
+      })
       
     })
 
     /* Handle button delete on click */
     $('#delete').click(function() {
       selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-      var celValue = $("#jqGrid").jqGrid('getCell', selectedId, 'statusapproval');
-      var nobukti = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
-      var sub = nobukti.substring(0,3);
-      
-      if(sub == 'ADJ')
-      {
-        if(celValue == 'NON APPROVAL')
-        {
-          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-        }else{
-          showDialog('Sudah diapproval. data tidak bisa dihapus')
+      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+      $('#loader').removeClass('d-none')
+      $.ajax({
+        url: `{{ config('app.api_url') }}jurnalumumheader/${selectedId}/cekapproval`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+        success: response => {
+          var kodenobukti = response.kodenobukti
+          if(kodenobukti == '1')
+          {
+            var kodestatus = response.kodestatus
+            if(kodestatus == '1')
+            {
+              showDialog(response.message['keterangan'])
+            }else{
+              window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+            }
+            
+          }else{
+            showDialog(response.message['keterangan'])
+          }
         }
-      }else{
-        showDialog('Data bukan entrian dari jurnal umum. data tidak bisa dihapus')
-      }
-    
-      
+      }).always(() => {
+        $('#loader').addClass('d-none')
+      })
     })
 
      /* Handle button approval on click */

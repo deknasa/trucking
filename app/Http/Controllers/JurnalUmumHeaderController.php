@@ -198,4 +198,5 @@ class JurnalUmumHeaderController extends MyController
         return $response['data'];
     }
 
+
 }
