@@ -7,6 +7,7 @@ $(document).ready(function () {
 	setSidebarBindKeys();
 	openMenuParents();
 	setNumberSeparators();
+	setFormBindKeys();
 	initDatepicker();
 	initSelect2();
 	initAutoNumeric();
