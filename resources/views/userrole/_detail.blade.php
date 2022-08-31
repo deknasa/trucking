@@ -75,6 +75,9 @@
           total: 'attributes.totalPages',
           records: 'attributes.totalRows',
         },
+        onSelectRow: function(id) {
+          activeGrid = $(this)
+        },
         loadBeforeSend: (jqXHR) => {
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },

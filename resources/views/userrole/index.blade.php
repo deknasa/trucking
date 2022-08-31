@@ -7,7 +7,7 @@
     <div class="col-12">
       <table id="jqGrid"></table>
       <div id="jqGridPager" class="row bg-white">
-        <div id="buttonContainer" class="col-12 col-md-7 text-center text-md-left">
+        <div id="buttonContainer" class="col-12 col-md-7 text-center text-md-left justify-content-center align-items-center">
           <button id="add" class="btn btn-primary btn-sm mb-1">
             <i class="fa fa-plus"></i> ADD
           </button>
@@ -28,6 +28,67 @@
         <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="modal fade modal-fullscreen" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="#" id="crudForm">
+      <div class="modal-content">
+        <div class="modal-header bg-primary">
+          <h5 class="modal-title" id="crudModalLabel"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="card">
+            <div class="card-body">
+              <input type="hidden" name="user_id">
+
+              <div class="row form-group">
+                <div class="col-12 col-md-1">
+                  <label>USER</label>
+                </div>
+                <div class="col-12 col-md-11">
+                  <div class="input-group">
+                    <input type="text" name="user" class="form-control">
+                    <div class="input-group-append">
+                      <button id="lookupToggler" class="btn btn-secondary" type="button">...</button>
+                    </div>
+                  </div>
+                  <div class="row position-absolute" id="lookup" style="z-index: 1;">
+                    <div class="col-12">
+                      <div id="lookup" class="shadow-lg">
+                        @include('partials.lookups.user')
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <table class="table table-borderd" id="roleList">
+                <thead class="table-secondary">
+                  <tr>
+                    <th>Role</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="mr-auto">
+            <button type="button" id="btnSimpan" class="btn btn-primary">SIMPAN</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">BATAL</button>
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -53,30 +114,142 @@
   let autoNumericElements = []
 
   $(document).ready(function() {
-    /* Set page */
-    <?php if (isset($_GET['page'])) { ?>
-      page = "{{ $_GET['page'] }}"
-    <?php } ?>
+    $('#lookup').hide()
 
-    /* Set id */
-    <?php if (isset($_GET['id'])) { ?>
-      id = "{{ $_GET['id'] }}"
-    <?php } ?>
+    $('#crudModal').on('shown.bs.modal', function() {
+      userLookup.setGridWidth($('#lookup').prev().width())
 
-    /* Set indexRow */
-    <?php if (isset($_GET['indexRow'])) { ?>
-      indexRow = "{{ $_GET['indexRow'] }}"
-    <?php } ?>
+      if (detectDeviceType() == 'desktop') {
+        userLookup.setGridParam({
+          ondblClickRow: function(id) {
+            let rowData = $(this).getRowData(id)
 
-    /* Set sortname */
-    <?php if (isset($_GET['sortname'])) { ?>
-      sortname = "{{ $_GET['sortname'] }}"
-    <?php } ?>
+            $('#crudForm [name=user]').first().val(rowData.user.replaceAll('<span class="highlight">', '').replaceAll('</span>', ''))
+            $('#crudForm [name=user_id]').first().val(id)
+            $('#lookup').hide()
+          }
+        })
+      } else if (detectDeviceType() == 'mobile') {
+        userLookup.setGridParam({
+          onSelectRow: function(id) {
+            let rowData = $(this).getRowData(id)
 
-    /* Set sortorder */
-    <?php if (isset($_GET['sortorder'])) { ?>
-      sortorder = "{{ $_GET['sortorder'] }}"
-    <?php } ?>
+            $('#crudForm [name=user]').first().val(rowData.user.replaceAll('<span class="highlight">', '').replaceAll('</span>', ''))
+            $('#crudForm [name=user_id]').first().val(id)
+            $('#lookup').hide()
+          }
+        })
+      }
+
+      $('#crudModal').find("[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit").first().focus()
+    })
+
+    $('#crudModal').on('hidden.bs.modal', function() {
+      activeGrid = '#jqGrid'
+    })
+
+    $('#btnSimpan').click(function(event) {
+      event.preventDefault()
+
+      let form = $('#crudForm')
+      let action = form.data('action')
+      let userId = form.find('[name=user_id]').val()
+      let url = `{{ config('app.api_url') . 'userrole' }}`
+      let method = 'POST'
+
+      if (action != 'add') {
+        url += `/${userRoleId}`
+      }
+
+      if (action === 'edit') {
+        method = 'PATCH'
+      } else if (action === 'delete') {
+        method = 'DELETE'
+      }
+
+      $('#loader').removeClass('d-none')
+      $(this).attr('disabled', 'disabled')
+
+      $.ajax({
+        url: url,
+        method: method,
+        dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
+        data: form.serializeArray(),
+        success: response => {
+          $('#jqGrid').trigger('reloadGrid', {
+            page: response.page
+          })
+
+          $('#crudModal').modal('hide')
+          $('#crudModal').find('#crudForm').trigger('reset')
+          $('#crudModal').find('#crudForm select').val(1).trigger("change.select2")
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(error.responseJSON.errors);
+          } else {
+            showDialog(error.statusText)
+          }
+        }
+      }).always(() => {
+        $('#loader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+    })
+
+    $('#lookupToggler').click(function(event) {
+      userLookup.setGridWidth($('#lookup').prev().width())
+      $('#lookup').toggle()
+
+      if (detectDeviceType() != 'desktop') {
+        userLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      if (detectDeviceType() == 'desktop') {
+        activeGrid = userLookup
+      }
+    })
+
+    $('[name=user]').on('input', function(event) {
+      $('#lookup').show()
+
+      if (detectDeviceType() != 'desktop') {
+        userLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      delay(() => {
+        let postData = userLookup.getGridParam('postData')
+        let colModels = userLookup.getGridParam('colModel')
+        let rules = []
+
+        colModels = colModels.filter((colModel) => {
+          return colModel.name !== 'rn'
+        })
+
+        colModels.forEach(colModel => {
+          rules.push({
+            field: colModel.name,
+            op: 'cn',
+            data: $(this).val()
+          })
+        });
+
+        postData.filters = JSON.stringify({
+          groupOp: 'OR',
+          rules: rules
+        })
+
+        userLookup.trigger('reloadGrid', {
+          page: 1
+        })
+      }, 500)
+    })
 
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'userrole' }}`,
@@ -143,6 +316,7 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+          activeGrid = $(this)
           row_id = $(this).jqGrid('getGridParam', 'selrow')
           selectedId = $(this).jqGrid('getCell', row_id, 'user_id');
 
@@ -155,6 +329,8 @@
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         loadComplete: function(data) {
+          activeGrid = $(this)
+
           loadPagerHandler('#pagerHandler', $(this))
           loadPagerInfo('#pagerInfo', $(this))
 
@@ -213,6 +389,7 @@
           clearGlobalSearch()
         },
       })
+
 
     /* Append clear filter button */
     loadClearFilter()
@@ -340,25 +517,294 @@
 
     /* Handle button add on click */
     $('#add').click(function() {
-      let limit = $("#jqGrid").jqGrid('getGridParam', 'postData').limit
+      $('#crudModal').modal('show')
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
 
-      window.location.href = `{{ route('userrole.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      $('#crudForm').data('action', 'add')
+      $('#crudForm [name=user]').val('')
+      $('#crudForm [name=user_id]').val('')
+      $('#crudModal').find('#btnSimpan').text('SIMPAN')
+      $('#crudModal').find('.modal-title').text('Add User Role')
+
+      let roles
+      let statuses
+
+      $.ajax({
+        url: `{{ config('app.api_url') . 'role' }}`,
+        method: 'GET',
+        dataType: 'JSON',
+        async: false,
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
+        success: response => {
+          roles = response.data
+        }
+      })
+
+      $.ajax({
+        url: `{{ config('app.api_url') . 'parameter/combo' }}`,
+        method: 'GET',
+        dataType: 'JSON',
+        async: false,
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
+        data: {
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF'
+        },
+        success: response => {
+          statuses = response.data
+        }
+      })
+
+      $('table#roleList tbody').html(`
+        ${roles.map((role) => {
+          return `
+          <tr>
+            <td><input type="hidden" name="role_id[]" value="${role.id}">${role.rolename}</td>
+            <td width="25%">
+              <select name="status[]">
+                ${
+                  statuses.map((status) => {
+                    return `<option value="${status.id}">${status.text}</option>`
+                  })
+                }
+              </select>
+            </td>
+          </tr>`
+        })}
+      `)
+
+      $(document)
+        .find("#crudModal select")
+        .select2({
+          theme: "bootstrap4",
+          dropdownParent: $('#crudModal')
+        })
+        .on("select2:open", function(e) {
+          document.querySelector(".select2-search__field").focus();
+        });
     })
 
     /* Handle button edit on click */
     $('#edit').click(function() {
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
+
+      $('#crudForm').data('action', 'edit')
+      $('#crudModal').find('#btnSimpan').text('SIMPAN')
+      $('#crudModal').find('.modal-title').text('Edit User Role')
+      $('#crudModal').modal('show')
+
       row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
       selectedId = $("#jqGrid").jqGrid('getCell', row_id, 'id');
 
-      window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      let userRole
+      let roles
+      let statuses
+      let user
+
+      $.ajax({
+        url: `{{ config('app.api_url') . 'parameter/combo' }}`,
+        method: 'GET',
+        dataType: 'JSON',
+        async: false,
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
+        data: {
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF'
+        },
+        success: response => {
+          statuses = response.data
+        }
+      })
+
+      $.ajax({
+        url: `{{ config('app.api_url') . 'user' }}`,
+        method: 'GET',
+        dataType: 'JSON',
+        async: false,
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
+        data: {
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF'
+        },
+        success: response => {
+          user = response.data
+        }
+      })
+
+      $.ajax({
+        url: `{{ config('app.api_url') . 'userrole' }}/${selectedId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        async: false,
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
+        success: response => {
+          userRole = response.data
+        }
+      })
+
+      $.ajax({
+        url: `{{ config('app.api_url') . 'userrole/detaillist' }}`,
+        method: 'GET',
+        dataType: 'JSON',
+        async: false,
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
+        data: {
+          user_id: userRole.user_id
+        },
+        success: response => {
+          roles = response.data
+        }
+      })
+
+      userRoleId = userRole.id
+
+      $('#crudForm [name=user_id]').val(userRole.user_id)
+      $('#crudForm [name=user]').val(userRole.user)
+
+      $('table#roleList tbody').html(`
+        ${roles.map((role) => {
+          return `
+            <tr>
+            <td><input type="hidden" name="role_id[]" value="${role.role_id}">${role.rolename}</td>
+            <td width="25%">
+              <select name="status[]">
+                ${
+                  statuses.map((status) => {
+                    return `<option value="${status.id}" ${status.id == role.status ? 'selected' : ''}>${status.text}</option>`
+                  })
+                }
+              </select>
+            </td>
+          </tr>`
+        })}
+      `)
+
+      $(document)
+        .find("#crudModal select")
+        .select2({
+          theme: "bootstrap4",
+          dropdownParent: $('#crudModal')
+        })
+        .on("select2:open", function(e) {
+          document.querySelector(".select2-search__field").focus();
+        });
     })
 
     /* Handle button delete on click */
     $('#delete').click(function() {
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
+
+      $('#crudModal').find('.modal-title').text('Delete User Role')
+      $('#crudModal').modal('show')
+      $('#crudModal').find('#btnSimpan').text('DELETE')
+      $('#crudForm [name]').addClass('disabled')
+      $('#crudForm').data('action', 'delete')
+
       row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
       selectedId = $("#jqGrid").jqGrid('getCell', row_id, 'id');
 
-      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+      let userRole
+      let roles
+      let statuses
+
+      $.ajax({
+        url: `{{ config('app.api_url') . 'parameter/combo' }}`,
+        method: 'GET',
+        dataType: 'JSON',
+        async: false,
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
+        data: {
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF'
+        },
+        success: response => {
+          statuses = response.data
+        }
+      })
+
+      $.ajax({
+        url: `{{ config('app.api_url') . 'userrole' }}/${selectedId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        async: false,
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
+        success: response => {
+          userRole = response.data
+        }
+      })
+
+      $.ajax({
+        url: `{{ config('app.api_url') . 'userrole/detaillist' }}`,
+        method: 'GET',
+        dataType: 'JSON',
+        async: false,
+        headers: {
+          'Authorization': `Bearer {{ session('access_token') }}`
+        },
+        data: {
+          user_id: userRole.user_id
+        },
+        success: response => {
+          roles = response.data
+        }
+      })
+
+      userRoleId = userRole.id
+
+      $('#crudForm [name=user_id]').val(userRole.id)
+      $('#crudForm [name=user]').val(userRole.user)
+
+      $('table#roleList tbody').html(`
+        ${roles.map((role) => {
+          return `
+            <tr>
+            <td><input type="hidden" name="role_id[]" value="${role.role_id}">${role.rolename}</td>
+            <td width="25%">
+              <select name="status[]">
+                ${
+                  statuses.map((status) => {
+                    return `<option value="${status.id}" ${status.id == role.status ? 'selected' : ''}>${status.text}</option>`
+                  })
+                }
+              </select>
+            </td>
+          </tr>`
+        })}
+      `)
+
+      $(document)
+        .find("#crudModal select")
+        .select2({
+          theme: "bootstrap4",
+          dropdownParent: $('#crudModal')
+        })
+        .on("select2:open", function(e) {
+          document.querySelector(".select2-search__field").focus();
+        });
+
+      // row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+      // selectedId = $("#jqGrid").jqGrid('getCell', row_id, 'id');
+
+      // window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
     })
 
     /* Handle button export on click */

@@ -18,38 +18,12 @@ class UserRoleController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        // $combo = [
+        //     'role' => $this->detaillist($request->user_id  ?? '0'),
+        //     'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF')
+        // ];
 
         return view('userrole.index', compact('title'));
-    }
-
-    public function get($params = [])
-    {
-        $params = [
-            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
-            'limit' => $params['rows'] ?? request()->rows ?? 0,
-            'sortIndex' => $params['sidx'] ?? request()->sidx,
-            'sortOrder' => $params['sord'] ?? request()->sord,
-            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
-        ];
-
-        $response = Http::withHeaders(request()->header())
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'userrole', $params);
-
-        $data = [
-            'total' => $response['attributes']['totalPages'] ?? [],
-            'records' => $response['attributes']['totalRows'] ?? [],
-            'rows' => $response['data'] ?? [],
-            'params' => $params ?? [],
-            'message' => $response['message'] ?? ''
-        ];
-
-        if (request()->ajax()) {
-            return response($data, $response->status());
-        }
-
-        return $data;
     }
 
     public function detail(Request $request)
