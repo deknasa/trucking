@@ -440,18 +440,18 @@ $indexRow = $_GET['indexRow'] ?? '';
       let tipe = 'KAS'
 
       //lokal
-      if (value == 131) {
-        tipe = 'KAS'
-      } else if (value == 134) {
-        tipe = 'BANK'
-      }
-
-      //web
-      // if (value == 145) {
+      // if (value == 131) {
       //   tipe = 'KAS'
-      // } else if (value == 146) {
+      // } else if (value == 134) {
       //   tipe = 'BANK'
       // }
+
+      //web
+      if (value == 145) {
+        tipe = 'KAS'
+      } else if (value == 146) {
+        tipe = 'BANK'
+      }
 
       $.ajax({
         url: `${apiUrl}bank`,
