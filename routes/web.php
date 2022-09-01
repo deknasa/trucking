@@ -69,8 +69,11 @@ use App\Http\Controllers\PengeluaranDetailController;
 
 use App\Http\Controllers\PenerimaanTruckingHeaderController;
 use App\Http\Controllers\PenerimaanTruckingDetailController;
+use App\Http\Controllers\PengeluaranTruckingHeaderController;
+use App\Http\Controllers\PengeluaranTruckingDetailController;
 use App\Http\Controllers\JurnalUmumHeaderController;
 use App\Http\Controllers\JurnalUmumDetailController;
+
 
 
 /*
@@ -502,5 +505,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('jurnalumumheader', JurnalUmumHeaderController::class);
     
     Route::resource('jurnalumumdetail', JurnalUmumDetailController::class);
+
+    Route::get('pengeluarantruckingheader/index', [PengeluaranTruckingHeaderController::class, 'index']);
+    Route::get('pengeluarantruckingheader/{id}/delete', [PengeluaranTruckingHeaderController::class, 'delete'])->name('pengeluarantruckingheader.delete');
+    Route::get('pengeluarantruckingheader/get', [PengeluaranTruckingHeaderController::class, 'get'])->name('pengeluarantruckingheader.get');
+    Route::get('pengeluarantruckingheader/export', [PengeluaranTruckingHeaderController::class, 'export'])->name('pengeluarantruckingheader.export');
+    Route::get('pengeluarantruckingheader/report', [PengeluaranTruckingHeaderController::class, 'report'])->name('pengeluarantruckingheader.report');
+    Route::resource('pengeluarantruckingheader', PengeluaranTruckingHeaderController::class);
+    
+    Route::resource('pengeluarantruckingdetail', PengeluaranTruckingDetailController::class);
 
 });
