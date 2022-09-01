@@ -14,7 +14,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class PenerimaanTruckingHeaderController extends MyController
 {
-    public $title = 'penerimaan trucking';
+    public $title = 'Penerimaan Trucking';
 
     /**
      * @ClassName
@@ -38,7 +38,6 @@ class PenerimaanTruckingHeaderController extends MyController
     //  */
     public function get($params = [])
     {
-        dd('dasda');
         $params = [
             'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
             'limit' => $params['rows'] ?? request()->rows ?? 0,
@@ -46,10 +45,10 @@ class PenerimaanTruckingHeaderController extends MyController
             'sortOrder' => $params['sord'] ?? request()->sord,
             'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
         ];
-        
+
         $response = Http::withHeaders(request()->header())
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaantruckingdetail', $params);
+            ->get(config('app.api_url') . 'penerimaantrucking', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -74,10 +73,21 @@ class PenerimaanTruckingHeaderController extends MyController
     {
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
-        
         $combo = $this->combo();
-
         return view('penerimaantrucking.add', compact('title', 'breadcrumb', 'combo'));
+    }
+
+    // /**
+    //  * Fungsi combo
+    //  * @ClassName combo
+    //  */
+    private function combo()
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->withOptions(['verify' => false])
+            ->get(config('app.api_url') . 'penerimaantrucking/combo');
+        return $response['data'];
     }
 
 
@@ -170,18 +180,4 @@ class PenerimaanTruckingHeaderController extends MyController
 
         return $noBukti;
     }
-
-    // /**
-    //  * Fungsi combo
-    //  * @ClassName combo
-    //  */
-    private function combo()
-    {
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withToken(session('access_token'))
-            ->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'penerimaantrucking/combo');
-        return $response['data'];
-    }
-
 }

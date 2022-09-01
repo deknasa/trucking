@@ -27,7 +27,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <label>ID</label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="id" class="form-control" value="{{ $penerimaanTrucking['id'] ?? '' }}" readonly>
+                <input type="text" name="id" class="form-control" value="{{ $penerimaantrucking['id'] ?? '' }}" readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -37,7 +37,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="kodepenerimaan" class="form-control" value="{{ $penerimaanTrucking['kodepenerimaan'] ?? '' }}">
+                <input type="text" name="kodepenerimaan" class="form-control" value="{{ $penerimaantrucking['kodepenerimaan'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
@@ -47,7 +47,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="keterangan" class="form-control" value="{{ $penerimaanTrucking['keterangan'] ?? '' }}">
+                <input type="text" name="keterangan" class="form-control" value="{{ $penerimaantrucking['keterangan'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
@@ -57,7 +57,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="coa" class="form-control" value="{{ $penerimaanTrucking['coa'] ?? '' }}">
+                <input type="text" name="coa" class="form-control" value="{{ $penerimaantrucking['coa'] ?? '' }}">
               </div>
             </div>
             <div class="row form-group">
@@ -67,7 +67,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="formatbukti" class="form-control" value="{{ $penerimaanTrucking['formatbukti'] ?? '' }}">
+                <input type="text" name="formatbukti" class="form-control" value="{{ $penerimaantrucking['formatbukti'] ?? '' }}">
               </div>
             </div>
           </div>
@@ -101,7 +101,7 @@ $indexRow = $_GET['indexRow'] ?? '';
 
   /* Set id to action url */
   <?php if ($action !== 'add') : ?>
-    actionUrl += `/{{ $penerimaanTrucking['id'] }}`
+    actionUrl += `/{{ $penerimaantrucking['id'] }}`
   <?php endif; ?>
 
   <?php if ($action == 'edit') : ?>

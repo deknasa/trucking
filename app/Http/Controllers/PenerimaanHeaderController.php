@@ -13,7 +13,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class PenerimaanHeaderController extends MyController
 {
-    public $title = 'penerimaan';
+    public $title = 'Penerimaan Kas';
 
     /**
      * @ClassName
