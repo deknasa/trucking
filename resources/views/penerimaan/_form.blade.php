@@ -103,7 +103,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               <div class="col-12 col-md-2 col-form-label">
                 <label>STATUS KAS</label>
               </div>
-              
+
               <div class="col-12 col-md-10">
                 <select name="statuskas" class="form-control select2bs4">
                   <option value="">PILIH STATUS KAS</option>
@@ -195,7 +195,7 @@ $indexRow = $_GET['indexRow'] ?? '';
 
                         <td>
                           <select name="coakredit[]" class="form-control select2bs4">
-                            <option value="" >COA KREDIT</option>
+                            <option value="">COA KREDIT</option>
                             <?php foreach ($combo['coa'] as $key => $item) {
                               $selected = @$d['coakredit'] == $item['coa'] ? "selected" : ""
                             ?>
