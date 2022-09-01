@@ -7,7 +7,6 @@ $(document).ready(function () {
 	setSidebarBindKeys();
 	openMenuParents();
 	setNumberSeparators();
-	setFormBindKeys();
 	initDatepicker();
 	initSelect2();
 	initAutoNumeric();
@@ -586,12 +585,20 @@ function fillSearchMenuInput() {
 /**
  * Move to closest input when using press enter
  */
-function setFormBindKeys(form) {
-	let inputs = form.find(
-		"[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit"
-	);
+function setFormBindKeys(form = null) {
 	let element;
 	let position;
+	let inputs;
+
+	if (form !== null) {
+		inputs = form.find(
+			"[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit"
+		);
+	} else {
+		inputs = $(document).find(
+			"[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit"
+		);
+	}
 
 	inputs.each(function (i, el) {
 		$(el).attr("data-input-index", i);

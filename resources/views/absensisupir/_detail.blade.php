@@ -42,7 +42,7 @@
           },
           {
             label: 'STATUS',
-            name: 'absentrado.keterangan',
+            name: 'absen_trado.keterangan',
           },
           {
             label: 'KETERANGAN',
