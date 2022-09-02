@@ -136,7 +136,6 @@
   <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
 
   <!-- Daterangepicker -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
   <script src="{{ asset('plugins/dropzone/dropzone.js') }}"></script>
 
   <!-- daterangepicker -->

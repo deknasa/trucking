@@ -139,7 +139,6 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('absensisupirheader.index') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -586,7 +585,7 @@
               <input type="hidden" name="trado_id[]" value="${trado.id}">
               <td>${trado.keterangan}</td>
               <td>
-                <select class="form-control" name="supir_id[]">
+                <select class="form-control w-100" name="supir_id[]">
                   <option hidden selected value="">-- PILIH SUPIR --</option>
                 </select>
               </td>
@@ -594,12 +593,12 @@
                   <input type="text" class="form-control autonumeric" name="uangjalan[]"></input>
               </td>
               <td>
-                <select class="form-control" name="absen_id[]">
+                <select class="form-control w-100" name="absen_id[]">
                   <option hidden selected value="">-- PILIH STATUS --</option>
                 </select>
               </td>
               <td>
-                  <input type="time" class="form-control" name="jam[]"></input>
+                  <input type="text" class="form-control inputmask-time" name="jam[]"></input>
               </td>
               <td>
                   <input type="text" class="form-control" name="keterangan_detail[]"></input>
@@ -610,6 +609,10 @@
 
         initSelect2($('#crudForm').find('select'))
         initAutoNumeric($('#crudForm').find('.autonumeric'))
+        Inputmask("datetime", {
+          inputFormat: "HH:MM",
+          max: 24
+        }).mask(".inputmask-time");
       },
       error: error => {
         showDialog(error.statusText)
@@ -696,16 +699,16 @@
               <input type="hidden" name="trado_id[]" value="${trado.id}">
               <td>${trado.keterangan}</td>
               <td>
-                <select class="form-control" name="supir_id[]"></select>
+                <select class="form-control w-100" name="supir_id[]"></select>
               </td>
               <td>
                   <input type="text" class="form-control autonumeric" name="uangjalan[]"></input>
               </td>
               <td>
-                <select class="form-control" name="absen_id[]"></select>
+                <select class="form-control w-100" name="absen_id[]"></select>
               </td>
               <td>
-                  <input type="time" class="form-control" name="jam[]"></input>
+                  <input type="text" class="form-control inputmask-time" name="jam[]"></input>
               </td>
               <td>
                   <input type="text" class="form-control" name="keterangan_detail[]"></input>
@@ -715,6 +718,10 @@
         })
 
         initSelect2($('#crudForm').find('select'))
+        Inputmask("datetime", {
+          inputFormat: "HH:MM",
+          max: 24
+        }).mask(".inputmask-time");
       },
       error: error => {
         showDialog(error.statusText)
@@ -833,13 +840,13 @@
               <input type="hidden" name="trado_id[]" value="${trado.id}">
               <td>${trado.keterangan}</td>
               <td>
-                <select class="form-control" name="supir_id[]"></select>
+                <select class="form-control w-100" name="supir_id[]"></select>
               </td>
               <td>
                   <input type="text" class="form-control autonumeric" name="uangjalan[]"></input>
               </td>
               <td>
-                <select class="form-control" name="absen_id[]"></select>
+                <select class="form-control w-100" name="absen_id[]"></select>
               </td>
               <td>
                   <input type="time" class="form-control" name="jam[]"></input>

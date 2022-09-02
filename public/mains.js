@@ -6,16 +6,13 @@ $(document).ready(function () {
 	startTime();
 	setSidebarBindKeys();
 	openMenuParents();
-	setNumberSeparators();
+	// setNumberSeparators();
 	initDatepicker();
 	initSelect2();
 	initAutoNumeric();
 	initDisabled();
 
 	/* Remove autocomplete */
-	$("input").attr("autocomplete", "off");
-	$("input, textarea").attr("spellcheck", "false");
-
 	$("input").attr("autocomplete", "off");
 	$("input, textarea").attr("spellcheck", "false");
 
