@@ -103,7 +103,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               <div class="col-12 col-md-2 col-form-label">
                 <label>STATUS KAS</label>
               </div>
-              
+
               <div class="col-12 col-md-10">
                 <select name="statuskas" class="form-control select2bs4">
                   <option value="">PILIH STATUS KAS</option>
@@ -153,7 +153,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                         <th width="200">Tgl jatuh tempo</th>
                         <th>Nominal</th>
                         <th>Keterangan</th>
-                        <th width="350">Coa Kredit</th>
+                        <th width="300">Coa Kredit</th>
                         <!-- <th>Coa Debet</th> -->
                         <!-- <th>Pelanggan</th> -->
                         <th width="200">Bank Pelanggan</th>
@@ -197,7 +197,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                           <select name="coakredit[]" class="form-control select2bs4">
                             <option value="">COA KREDIT</option>
                             <?php foreach ($combo['coa'] as $key => $item) {
-                              $selected = @$d['coakredit'] == $item['id'] ? "selected" : ""
+                              $selected = @$d['coakredit'] == $item['coa'] ? "selected" : ""
                             ?>
                               <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['keterangancoa'] }}</option>
                             <?php } ?>

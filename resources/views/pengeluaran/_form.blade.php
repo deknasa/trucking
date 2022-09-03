@@ -217,7 +217,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                           <select name="coadebet[]" class="form-control select2bs4">
                             <option value="">COA DEBET</option>
                             <?php foreach ($combo['akunpusat'] as $key => $item) {
-                              $selected = @$d['coadebet'] == $item['id'] ? "selected" : ""
+                              $selected = @$d['coadebet'] == $item['coa'] ? "selected" : ""
                             ?>
                               <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['keterangancoa'] }}</option>
                             <?php } ?>

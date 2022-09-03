@@ -10,7 +10,7 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('penerimaantruckingdetail.index') }}"
+  let detailIndexUrl = "{{ route('pengeluarantruckingdetail.index') }}"
   /**
    * Custom Functions
    */
@@ -26,36 +26,31 @@
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
-        url: `{{ config('app.api_url') . 'penerimaantruckingdetail' }}`,
+        url: `{{ config('app.api_url') . 'pengeluarantruckingdetail' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        //datatype: "json",
         colModel: [
           {
             label: 'NO BUKTI',
             name: 'nobukti',
-          }, 
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
           },
           {
             label: 'SUPIR',
             name: 'supir_id',
           },
-          // {
-          //   label: 'NO BUKTI PENGELUARAN',
-          //   name: 'pengeluarantruckingheader_nobukti',
-          // },
-         
+          {
+            label: 'NO BUKTI PENERIMAAN TRUCKING',
+            name: 'penerimaantruckingheader_nobukti',
+          },
+          {
+            label: 'NOMINAL',
+            name: 'nominal',
+            formatter: 'number', 
+            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            align: "right",
+          }
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -86,7 +81,7 @@
       url: detailIndexUrl,
       datatype: "json",
       postData: {
-        penerimaantrucking_id: id
+        pengeluarantruckingheader_id: id
       }
     }).trigger('reloadGrid')
   }
