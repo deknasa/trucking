@@ -6,27 +6,6 @@
   <div class="row">
     <div class="col-12">
       <table id="jqGrid"></table>
-      <div id="jqGridPager" class="row bg-white">
-        <div id="buttonContainer" class="col-12 col-md-7 text-center text-md-left">
-          <button id="add" class="btn btn-primary btn-sm mb-1">
-            <i class="fa fa-plus"></i> ADD
-          </button>
-          <button id="edit" class="btn btn-success btn-sm mb-1">
-            <i class="fa fa-pen"></i> EDIT
-          </button>
-          <button id="delete" class="btn btn-danger btn-sm mb-1">
-            <i class="fa fa-trash"></i> DELETE
-          </button>
-          <button id="export" class="btn btn-warning btn-sm mb-1">
-            <i class="fa fa-file-export"></i> EXPORT
-          </button>
-          <button id="report" class="btn btn-info btn-sm mb-1">
-            <i class="fa fa-print"></i> REPORT
-          </button>
-        </div>
-        <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
-        <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
-      </div>
     </div>
   </div>
 </div>
@@ -143,6 +122,7 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+          activeGrid = $(this)
           id = $(this).jqGrid('getCell', id, 'rn') - 1
           indexRow = id
           page = $(this).jqGrid('getGridParam', 'page')
@@ -150,9 +130,6 @@
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
-          loadPagerHandler('#pagerHandler', $(this))
-          loadPagerInfo('#pagerInfo', $(this))
-
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -204,6 +181,59 @@
         beforeSearch: function() {
           clearGlobalSearch()
         },
+      })
+
+      .customPager({
+        buttons: [{
+            innerHTML: '<i class="fa fa-plus"></i> ADD',
+            class: 'btn btn-primary btn-sm mr-1',
+            onClick: () => {
+              let limit = $("#jqGrid").jqGrid('getGridParam', 'postData').limit
+
+              window.location.href = `{{ route('parameter.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+            }
+          },
+          {
+            innerHTML: '<i class="fa fa-pen"></i> EDIT',
+            class: 'btn btn-success btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                alert('please select a row')
+              } else {
+                window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+              }
+            }
+          },
+          {
+            innerHTML: '<i class="fa fa-trash"></i> DELETE',
+            class: 'btn btn-danger btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+              window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+            }
+          },
+          {
+            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'export')
+              $('#rangeModal').find('button:submit').html(`Export`)
+              $('#rangeModal').modal('show')
+            }
+          },
+          {
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'report')
+              $('#rangeModal').find('button:submit').html(`Report`)
+              $('#rangeModal').modal('show')
+            }
+          },
+        ]
       })
 
     /* Append clear filter button */
@@ -329,45 +359,6 @@
 
         submitButton.removeAttr('disabled')
       }
-    })
-
-    /* Handle button add on click */
-    $('#add').click(function() {
-      let limit = $("#jqGrid").jqGrid('getGridParam', 'postData').limit
-
-      window.location.href = `{{ route('parameter.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-    })
-
-    /* Handle button edit on click */
-    $('#edit').click(function() {
-      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      if (selectedId == null || selectedId == '' || selectedId == undefined) {
-        alert('please select a row')
-      } else {
-        window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-      }
-    })
-
-    /* Handle button delete on click */
-    $('#delete').click(function() {
-      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-    })
-
-    /* Handle button export on click */
-    $('#export').click(function() {
-      $('#rangeModal').data('action', 'export')
-      $('#rangeModal').find('button:submit').html(`Export`)
-      $('#rangeModal').modal('show')
-    })
-
-    /* Handle button report on click */
-    $('#report').click(function() {
-      $('#rangeModal').data('action', 'report')
-      $('#rangeModal').find('button:submit').html(`Report`)
-      $('#rangeModal').modal('show')
     })
   })
 </script>

@@ -6,27 +6,6 @@
   <div class="row">
     <div class="col-12">
       <table id="jqGrid"></table>
-      <div id="jqGridPager" class="row bg-white">
-        <div id="buttonContainer" class="col-12 col-md-7 text-center text-md-left justify-content-center align-items-center">
-          <button id="add" class="btn btn-primary btn-sm mb-1">
-            <i class="fa fa-plus"></i> ADD
-          </button>
-          <button id="edit" class="btn btn-success btn-sm mb-1">
-            <i class="fa fa-pen"></i> EDIT
-          </button>
-          <button id="delete" class="btn btn-danger btn-sm mb-1">
-            <i class="fa fa-trash"></i> DELETE
-          </button>
-          <button id="export" class="btn btn-warning btn-sm mb-1">
-            <i class="fa fa-file-export"></i> EXPORT
-          </button>
-          <button id="report" class="btn btn-info btn-sm mb-1">
-            <i class="fa fa-print"></i> REPORT
-          </button>
-        </div>
-        <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
-        <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
-      </div>
     </div>
   </div>
 </div>
@@ -329,11 +308,6 @@
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         loadComplete: function(data) {
-          activeGrid = $(this)
-
-          loadPagerHandler('#pagerHandler', $(this))
-          loadPagerInfo('#pagerInfo', $(this))
-
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -388,6 +362,322 @@
         beforeSearch: function() {
           clearGlobalSearch()
         },
+      })
+
+      .customPager({
+        buttons: [
+          {
+            id: 'add',
+            innerHTML: '<i class="fa fa-plus"></i> ADD',
+            class: 'btn btn-primary btn-sm mr-1',
+            onClick: function(event) {
+              $('.is-invalid').removeClass('is-invalid')
+              $('.invalid-feedback').remove()
+
+              $('#crudForm').data('action', 'add')
+              $('#crudForm [name=user]').val('')
+              $('#crudForm [name=user_id]').val('')
+              $('#crudModal').find('#btnSimpan').text('SIMPAN')
+              $('#crudModal').find('.modal-title').text('Add User Role')
+              $('#crudModal').modal('show')
+
+              let roles
+              let statuses
+
+              $.ajax({
+                url: `{{ config('app.api_url') . 'role' }}`,
+                method: 'GET',
+                dataType: 'JSON',
+                async: false,
+                headers: {
+                  'Authorization': `Bearer {{ session('access_token') }}`
+                },
+                success: response => {
+                  roles = response.data
+                }
+              })
+
+              $.ajax({
+                url: `{{ config('app.api_url') . 'parameter/combo' }}`,
+                method: 'GET',
+                dataType: 'JSON',
+                async: false,
+                headers: {
+                  'Authorization': `Bearer {{ session('access_token') }}`
+                },
+                data: {
+                  grp: 'STATUS AKTIF',
+                  subgrp: 'STATUS AKTIF'
+                },
+                success: response => {
+                  statuses = response.data
+                }
+              })
+
+              $('table#roleList tbody').html(`
+                ${roles.map((role) => {
+                  return `
+                  <tr>
+                    <td><input type="hidden" name="role_id[]" value="${role.id}">${role.rolename}</td>
+                    <td width="25%">
+                      <select name="status[]">
+                        ${
+                          statuses.map((status) => {
+                            return `<option value="${status.id}">${status.text}</option>`
+                          })
+                        }
+                      </select>
+                    </td>
+                  </tr>`
+                })}
+              `)
+              $(document)
+                .find("#crudModal select")
+                .select2({
+                  theme: "bootstrap4",
+                  dropdownParent: $('#crudModal')
+                })
+                .on("select2:open", function(e) {
+                  document.querySelector(".select2-search__field").focus();
+                });
+            }
+          },
+          {
+            innerHTML: '<i class="fa fa-pen"></i> EDIT',
+            class: 'btn btn-success btn-sm mr-1',
+            onClick: () => {
+              $('.is-invalid').removeClass('is-invalid')
+              $('.invalid-feedback').remove()
+
+              $('#crudForm').data('action', 'edit')
+              $('#crudModal').find('#btnSimpan').text('SIMPAN')
+              $('#crudModal').find('.modal-title').text('Edit User Role')
+              $('#crudModal').modal('show')
+
+              row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              selectedId = $("#jqGrid").jqGrid('getCell', row_id, 'id');
+
+              let userRole
+              let roles
+              let statuses
+              let user
+
+              $.ajax({
+                url: `{{ config('app.api_url') . 'parameter/combo' }}`,
+                method: 'GET',
+                dataType: 'JSON',
+                async: false,
+                headers: {
+                  'Authorization': `Bearer {{ session('access_token') }}`
+                },
+                data: {
+                  grp: 'STATUS AKTIF',
+                  subgrp: 'STATUS AKTIF'
+                },
+                success: response => {
+                  statuses = response.data
+                }
+              })
+
+              $.ajax({
+                url: `{{ config('app.api_url') . 'user' }}`,
+                method: 'GET',
+                dataType: 'JSON',
+                async: false,
+                headers: {
+                  'Authorization': `Bearer {{ session('access_token') }}`
+                },
+                data: {
+                  grp: 'STATUS AKTIF',
+                  subgrp: 'STATUS AKTIF'
+                },
+                success: response => {
+                  user = response.data
+                }
+              })
+
+              $.ajax({
+                url: `{{ config('app.api_url') . 'userrole' }}/${selectedId}`,
+                method: 'GET',
+                dataType: 'JSON',
+                async: false,
+                headers: {
+                  'Authorization': `Bearer {{ session('access_token') }}`
+                },
+                success: response => {
+                  userRole = response.data
+                }
+              })
+
+              $.ajax({
+                url: `{{ config('app.api_url') . 'userrole/detaillist' }}`,
+                method: 'GET',
+                dataType: 'JSON',
+                async: false,
+                headers: {
+                  'Authorization': `Bearer {{ session('access_token') }}`
+                },
+                data: {
+                  user_id: userRole.user_id
+                },
+                success: response => {
+                  roles = response.data
+                }
+              })
+
+              userRoleId = userRole.id
+
+              $('#crudForm [name=user_id]').val(userRole.user_id)
+              $('#crudForm [name=user]').val(userRole.user)
+
+              $('table#roleList tbody').html(`
+                ${roles.map((role) => {
+                  return `
+                    <tr>
+                    <td><input type="hidden" name="role_id[]" value="${role.role_id}">${role.rolename}</td>
+                    <td width="25%">
+                      <select name="status[]">
+                        ${
+                          statuses.map((status) => {
+                            return `<option value="${status.id}" ${status.id == role.status ? 'selected' : ''}>${status.text}</option>`
+                          })
+                        }
+                      </select>
+                    </td>
+                  </tr>`
+                })}
+              `)
+
+              $(document)
+                .find("#crudModal select")
+                .select2({
+                  theme: "bootstrap4",
+                  dropdownParent: $('#crudModal')
+                })
+                .on("select2:open", function(e) {
+                  document.querySelector(".select2-search__field").focus();
+                });
+            }
+          },
+          {
+            innerHTML: '<i class="fa fa-trash"></i> DELETE',
+            class: 'btn btn-danger btn-sm mr-1',
+            onClick: () => {
+              $('.is-invalid').removeClass('is-invalid')
+              $('.invalid-feedback').remove()
+
+              $('#crudModal').find('.modal-title').text('Delete User Role')
+              $('#crudModal').modal('show')
+              $('#crudModal').find('#btnSimpan').text('DELETE')
+              $('#crudForm [name]').addClass('disabled')
+              $('#crudForm').data('action', 'delete')
+
+              row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              selectedId = $("#jqGrid").jqGrid('getCell', row_id, 'id');
+
+              let userRole
+              let roles
+              let statuses
+
+              $.ajax({
+                url: `{{ config('app.api_url') . 'parameter/combo' }}`,
+                method: 'GET',
+                dataType: 'JSON',
+                async: false,
+                headers: {
+                  'Authorization': `Bearer {{ session('access_token') }}`
+                },
+                data: {
+                  grp: 'STATUS AKTIF',
+                  subgrp: 'STATUS AKTIF'
+                },
+                success: response => {
+                  statuses = response.data
+                }
+              })
+
+              $.ajax({
+                url: `{{ config('app.api_url') . 'userrole' }}/${selectedId}`,
+                method: 'GET',
+                dataType: 'JSON',
+                async: false,
+                headers: {
+                  'Authorization': `Bearer {{ session('access_token') }}`
+                },
+                success: response => {
+                  userRole = response.data
+                }
+              })
+
+              $.ajax({
+                url: `{{ config('app.api_url') . 'userrole/detaillist' }}`,
+                method: 'GET',
+                dataType: 'JSON',
+                async: false,
+                headers: {
+                  'Authorization': `Bearer {{ session('access_token') }}`
+                },
+                data: {
+                  user_id: userRole.user_id
+                },
+                success: response => {
+                  roles = response.data
+                }
+              })
+
+              userRoleId = userRole.id
+
+              $('#crudForm [name=user_id]').val(userRole.id)
+              $('#crudForm [name=user]').val(userRole.user)
+
+              $('table#roleList tbody').html(`
+                ${roles.map((role) => {
+                  return `
+                    <tr>
+                    <td><input type="hidden" name="role_id[]" value="${role.role_id}">${role.rolename}</td>
+                    <td width="25%">
+                      <select name="status[]">
+                        ${
+                          statuses.map((status) => {
+                            return `<option value="${status.id}" ${status.id == role.status ? 'selected' : ''}>${status.text}</option>`
+                          })
+                        }
+                      </select>
+                    </td>
+                  </tr>`
+                })}
+              `)
+
+              $(document)
+                .find("#crudModal select")
+                .select2({
+                  theme: "bootstrap4",
+                  dropdownParent: $('#crudModal')
+                })
+                .on("select2:open", function(e) {
+                  document.querySelector(".select2-search__field").focus();
+                });
+              }
+          },
+          {
+            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'export')
+              $('#rangeModal').find('button:submit').html(`Export`)
+              $('#rangeModal').modal('show')
+            }
+          },
+          {
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'report')
+              $('#rangeModal').find('button:submit').html(`Report`)
+              $('#rangeModal').modal('show')
+            }
+          },
+        ]
       })
 
 
@@ -513,312 +803,6 @@
 
         submitButton.removeAttr('disabled')
       }
-    })
-
-    /* Handle button add on click */
-    $('#add').click(function() {
-      $('#crudModal').modal('show')
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
-
-      $('#crudForm').data('action', 'add')
-      $('#crudForm [name=user]').val('')
-      $('#crudForm [name=user_id]').val('')
-      $('#crudModal').find('#btnSimpan').text('SIMPAN')
-      $('#crudModal').find('.modal-title').text('Add User Role')
-
-      let roles
-      let statuses
-
-      $.ajax({
-        url: `{{ config('app.api_url') . 'role' }}`,
-        method: 'GET',
-        dataType: 'JSON',
-        async: false,
-        headers: {
-          'Authorization': `Bearer {{ session('access_token') }}`
-        },
-        success: response => {
-          roles = response.data
-        }
-      })
-
-      $.ajax({
-        url: `{{ config('app.api_url') . 'parameter/combo' }}`,
-        method: 'GET',
-        dataType: 'JSON',
-        async: false,
-        headers: {
-          'Authorization': `Bearer {{ session('access_token') }}`
-        },
-        data: {
-          grp: 'STATUS AKTIF',
-          subgrp: 'STATUS AKTIF'
-        },
-        success: response => {
-          statuses = response.data
-        }
-      })
-
-      $('table#roleList tbody').html(`
-        ${roles.map((role) => {
-          return `
-          <tr>
-            <td><input type="hidden" name="role_id[]" value="${role.id}">${role.rolename}</td>
-            <td width="25%">
-              <select name="status[]">
-                ${
-                  statuses.map((status) => {
-                    return `<option value="${status.id}">${status.text}</option>`
-                  })
-                }
-              </select>
-            </td>
-          </tr>`
-        })}
-      `)
-
-      $(document)
-        .find("#crudModal select")
-        .select2({
-          theme: "bootstrap4",
-          dropdownParent: $('#crudModal')
-        })
-        .on("select2:open", function(e) {
-          document.querySelector(".select2-search__field").focus();
-        });
-    })
-
-    /* Handle button edit on click */
-    $('#edit').click(function() {
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
-
-      $('#crudForm').data('action', 'edit')
-      $('#crudModal').find('#btnSimpan').text('SIMPAN')
-      $('#crudModal').find('.modal-title').text('Edit User Role')
-      $('#crudModal').modal('show')
-
-      row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-      selectedId = $("#jqGrid").jqGrid('getCell', row_id, 'id');
-
-      let userRole
-      let roles
-      let statuses
-      let user
-
-      $.ajax({
-        url: `{{ config('app.api_url') . 'parameter/combo' }}`,
-        method: 'GET',
-        dataType: 'JSON',
-        async: false,
-        headers: {
-          'Authorization': `Bearer {{ session('access_token') }}`
-        },
-        data: {
-          grp: 'STATUS AKTIF',
-          subgrp: 'STATUS AKTIF'
-        },
-        success: response => {
-          statuses = response.data
-        }
-      })
-
-      $.ajax({
-        url: `{{ config('app.api_url') . 'user' }}`,
-        method: 'GET',
-        dataType: 'JSON',
-        async: false,
-        headers: {
-          'Authorization': `Bearer {{ session('access_token') }}`
-        },
-        data: {
-          grp: 'STATUS AKTIF',
-          subgrp: 'STATUS AKTIF'
-        },
-        success: response => {
-          user = response.data
-        }
-      })
-
-      $.ajax({
-        url: `{{ config('app.api_url') . 'userrole' }}/${selectedId}`,
-        method: 'GET',
-        dataType: 'JSON',
-        async: false,
-        headers: {
-          'Authorization': `Bearer {{ session('access_token') }}`
-        },
-        success: response => {
-          userRole = response.data
-        }
-      })
-
-      $.ajax({
-        url: `{{ config('app.api_url') . 'userrole/detaillist' }}`,
-        method: 'GET',
-        dataType: 'JSON',
-        async: false,
-        headers: {
-          'Authorization': `Bearer {{ session('access_token') }}`
-        },
-        data: {
-          user_id: userRole.user_id
-        },
-        success: response => {
-          roles = response.data
-        }
-      })
-
-      userRoleId = userRole.id
-
-      $('#crudForm [name=user_id]').val(userRole.user_id)
-      $('#crudForm [name=user]').val(userRole.user)
-
-      $('table#roleList tbody').html(`
-        ${roles.map((role) => {
-          return `
-            <tr>
-            <td><input type="hidden" name="role_id[]" value="${role.role_id}">${role.rolename}</td>
-            <td width="25%">
-              <select name="status[]">
-                ${
-                  statuses.map((status) => {
-                    return `<option value="${status.id}" ${status.id == role.status ? 'selected' : ''}>${status.text}</option>`
-                  })
-                }
-              </select>
-            </td>
-          </tr>`
-        })}
-      `)
-
-      $(document)
-        .find("#crudModal select")
-        .select2({
-          theme: "bootstrap4",
-          dropdownParent: $('#crudModal')
-        })
-        .on("select2:open", function(e) {
-          document.querySelector(".select2-search__field").focus();
-        });
-    })
-
-    /* Handle button delete on click */
-    $('#delete').click(function() {
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
-
-      $('#crudModal').find('.modal-title').text('Delete User Role')
-      $('#crudModal').modal('show')
-      $('#crudModal').find('#btnSimpan').text('DELETE')
-      $('#crudForm [name]').addClass('disabled')
-      $('#crudForm').data('action', 'delete')
-
-      row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-      selectedId = $("#jqGrid").jqGrid('getCell', row_id, 'id');
-
-      let userRole
-      let roles
-      let statuses
-
-      $.ajax({
-        url: `{{ config('app.api_url') . 'parameter/combo' }}`,
-        method: 'GET',
-        dataType: 'JSON',
-        async: false,
-        headers: {
-          'Authorization': `Bearer {{ session('access_token') }}`
-        },
-        data: {
-          grp: 'STATUS AKTIF',
-          subgrp: 'STATUS AKTIF'
-        },
-        success: response => {
-          statuses = response.data
-        }
-      })
-
-      $.ajax({
-        url: `{{ config('app.api_url') . 'userrole' }}/${selectedId}`,
-        method: 'GET',
-        dataType: 'JSON',
-        async: false,
-        headers: {
-          'Authorization': `Bearer {{ session('access_token') }}`
-        },
-        success: response => {
-          userRole = response.data
-        }
-      })
-
-      $.ajax({
-        url: `{{ config('app.api_url') . 'userrole/detaillist' }}`,
-        method: 'GET',
-        dataType: 'JSON',
-        async: false,
-        headers: {
-          'Authorization': `Bearer {{ session('access_token') }}`
-        },
-        data: {
-          user_id: userRole.user_id
-        },
-        success: response => {
-          roles = response.data
-        }
-      })
-
-      userRoleId = userRole.id
-
-      $('#crudForm [name=user_id]').val(userRole.id)
-      $('#crudForm [name=user]').val(userRole.user)
-
-      $('table#roleList tbody').html(`
-        ${roles.map((role) => {
-          return `
-            <tr>
-            <td><input type="hidden" name="role_id[]" value="${role.role_id}">${role.rolename}</td>
-            <td width="25%">
-              <select name="status[]">
-                ${
-                  statuses.map((status) => {
-                    return `<option value="${status.id}" ${status.id == role.status ? 'selected' : ''}>${status.text}</option>`
-                  })
-                }
-              </select>
-            </td>
-          </tr>`
-        })}
-      `)
-
-      $(document)
-        .find("#crudModal select")
-        .select2({
-          theme: "bootstrap4",
-          dropdownParent: $('#crudModal')
-        })
-        .on("select2:open", function(e) {
-          document.querySelector(".select2-search__field").focus();
-        });
-
-      // row_id = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-      // selectedId = $("#jqGrid").jqGrid('getCell', row_id, 'id');
-
-      // window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-    })
-
-    /* Handle button export on click */
-    $('#export').click(function() {
-      $('#rangeModal').data('action', 'export')
-      $('#rangeModal').find('button:submit').html(`Export`)
-      $('#rangeModal').modal('show')
-    })
-
-    /* Handle button report on click */
-    $('#report').click(function() {
-      $('#rangeModal').data('action', 'report')
-      $('#rangeModal').find('button:submit').html(`Report`)
-      $('#rangeModal').modal('show')
     })
   })
 </script>

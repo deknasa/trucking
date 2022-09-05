@@ -3,7 +3,6 @@
   <div class="row">
     <div class="col-12">
       <table id="detail"></table>
-      <div id="detailPager"></div>
     </div>
   </div>
 </div>
@@ -24,8 +23,6 @@
   })()
 
   function loadDetailGrid() {
-    let pager = '#detailPager'
-
     $("#detail").jqGrid({
         url: `{{ config('app.api_url') . 'userrole/detail' }}`,
         mtype: "GET",
@@ -63,7 +60,6 @@
         rowList: [10, 20, 50],
         toolbar: [true, "top"],
         sortable: true,
-        pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',
@@ -82,17 +78,11 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         loadComplete: function(data) {
-
+          initResize($(this))
         }
       })
 
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
+      .customPager()
   }
 
   function loadDetailData(id) {

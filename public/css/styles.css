@@ -118,7 +118,7 @@
 }
 
 /* Make jqgrid pager sticky to bottom */
-.ui-jqgrid-pager.ui-jqgrid-pager {
+.grid-pager {
 	background: #fff;
 	position: sticky;
 	bottom: 0;
