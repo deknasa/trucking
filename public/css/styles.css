@@ -1,105 +1,105 @@
 .ui-jqgrid-bdiv td {
-    padding: 6px;
+	padding: 6px;
 }
 
 .ui-jqgrid {
-    width: 100%;
-    background-color: white;
-    top: -10px;
-    margin-top: 10px;
+	width: 100%;
+	background-color: white;
+	top: -10px;
+	margin-top: 10px;
 }
 
 .tambah {
-    padding-right: 8px;
+	padding-right: 8px;
 }
 
 .edit {
-    padding-right: 8px;
+	padding-right: 8px;
 }
 
 #resetdatafilter {
-    text-align: center;
-    background-color: #d6d4d4;
-    border: none;
+	text-align: center;
+	background-color: #d6d4d4;
+	border: none;
 }
 
 #resetfilter:hover {
-    background-color: #9e9e9e;
+	background-color: #9e9e9e;
 }
 
 .ui-jqgrid .ui-jqgrid-bdiv {
-    position: relative;
-    margin: 0;
-    padding: 0;
-    overflow: auto;
-    z-index: 101;
+	position: relative;
+	margin: 0;
+	padding: 0;
+	overflow: auto;
+	z-index: 101;
 }
 
 .hidden {
-    display: none;
+	display: none;
 }
 
 .loader {
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    opacity: 0.8;
-    z-index: 9999;
-    background: url('../images/loading-red.gif') 50% 50% no-repeat
-        rgb(249, 249, 249);
-    background-size: 50px;
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	opacity: 0.8;
+	z-index: 9999;
+	background: url("../images/loading-red.gif") 50% 50% no-repeat
+		rgb(249, 249, 249);
+	background-size: 50px;
 }
 
 #txt1 {
-    position: fixed;
-    top: 56%;
-    left: 50%;
-    text-align: center;
-    transform: translate(-50%, -50%);
-    color: black;
+	position: fixed;
+	top: 56%;
+	left: 50%;
+	text-align: center;
+	transform: translate(-50%, -50%);
+	color: black;
 }
 
 .dropzone {
-    background: white;
-    border-radius: 5px;
-    border: 2px dashed rgb(0, 135, 247);
-    border-image: none;
-    margin-left: auto;
-    margin-right: auto;
+	background: white;
+	border-radius: 5px;
+	border: 2px dashed rgb(0, 135, 247);
+	border-image: none;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 #jqGridPager_right {
-    width: 15% !important;
+	width: 15% !important;
 }
 
 /* Make jqgrid pager responsive */
 @media only screen and (max-width: 1000px) {
-    .ui-pager-control {
-        display: block;
-        height: auto;
-    }
+	.ui-pager-control {
+		display: block;
+		height: auto;
+	}
 
-    .ui-pager-control table {
-        display: flex;
-        justify-content: center;
-    }
+	.ui-pager-control table {
+		display: flex;
+		justify-content: center;
+	}
 
-    #jqGridPager_left,
-    #jqGridPager_center {
-        display: table-row;
-        display: flex;
-        justify-content: center;
-        padding: 0 5px;
-    }
+	#jqGridPager_left,
+	#jqGridPager_center {
+		display: table-row;
+		display: flex;
+		justify-content: center;
+		padding: 0 5px;
+	}
 
-    #jqGridPager_right {
-        display: none;
-    }
+	#jqGridPager_right {
+		display: none;
+	}
 
-    /* Dynamic way to make responsive pager, but doesnt work on some android browsers */
-    /*.ui-pager-control table tr td:not(.ui-pager-control table tr td *) {
+	/* Dynamic way to make responsive pager, but doesnt work on some android browsers */
+	/*.ui-pager-control table tr td:not(.ui-pager-control table tr td *) {
 	display: table-row;
 	display: flex;
 	justify-content: center;
@@ -111,55 +111,93 @@
 }
 
 #jqGridPager {
-    background: #fff;
-    position: sticky;
-    bottom: 0;
-    overflow-x: scroll;
+	background: #fff;
+	position: sticky;
+	bottom: 0;
+	overflow-x: scroll;
 }
 
 /* Make jqgrid pager sticky to bottom */
-.ui-jqgrid-pager.ui-jqgrid-pager {
-    background: #fff;
-    position: sticky;
-    bottom: 0;
-    overflow-x: scroll;
+.grid-pager {
+	background: #fff;
+	position: sticky;
+	bottom: 0;
+	overflow-x: scroll;
 }
 
 [id^="gview_"] {
-    z-index: 0;
+	z-index: 0;
 }
 
 /* Override default left pager width(10px) */
 .ui-pg-table td {
-    width: auto !important;
+	width: auto !important;
 }
 
 * {
-    font-size: 14px;
-    text-transform: uppercase;
+	font-size: 14px;
+	text-transform: uppercase;
 }
 
 .content-header {
-    padding-top: 0.5rem!important;
-    padding-bottom: 0.5rem!important;
+	padding-top: 0.5rem !important;
+	padding-bottom: 0.5rem !important;
 }
 
 .autonumeric {
-    text-align: right !important;
+	text-align: right !important;
 }
 
 .ui-dialog {
-    z-index: 9999 !important;
+	z-index: 9999 !important;
 }
 
 .btn-purple {
-    background-color: #6619ff;
-    color: #fff;
+	background-color: #6619ff;
+	color: #fff;
 }
 
 .btn-purple:hover {
-    color: #fff !important;
-    background-color: #5012cb;
+	color: #fff !important;
+	background-color: #5012cb;
+}
+
+.modal.modal-fullscreen .modal-dialog {
+	width: 100vw;
+	height: 100vh;
+	margin: 0;
+	padding: 0;
+	max-width: none;
+}
+
+.modal.modal-fullscreen .modal-content {
+	height: auto;
+	height: 100vh;
+	border-radius: 0;
+	border: none;
+}
+
+.modal.modal-fullscreen .modal-body {
+	overflow-y: auto;
+}
+
+.modal.modal-fullscreen .modal-dialog {
+	width: 100vw;
+	height: 100vh;
+	margin: 0;
+	padding: 0;
+	max-width: none;
+}
+
+.modal.modal-fullscreen .modal-content {
+	height: auto;
+	height: 100vh;
+	border-radius: 0;
+	border: none;
+}
+
+.modal.modal-fullscreen .modal-body {
+	overflow-y: auto;
 }
 
 .highlight {

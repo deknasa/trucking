@@ -136,7 +136,6 @@
   <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
 
   <!-- Daterangepicker -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
   <script src="{{ asset('plugins/dropzone/dropzone.js') }}"></script>
 
   <!-- daterangepicker -->
@@ -177,7 +176,7 @@
   <script src="{{ asset('js/app.js') }}"></script>
   
   <script type="text/javascript">
-    let accessToken = `{{session('access_token')}}`
+    let accessToken = `{{ session('access_token') }}`
     let apiUrl = `{{ config('app.api_url') }}`
 
     function separatorNumber(object) {
