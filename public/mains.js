@@ -612,67 +612,71 @@ function setFormBindKeys(form = null) {
 		);
 	}
 
-	inputs.each(function (i, el) {
-		$(el).attr("data-input-index", i);
-	});
-
 	$($(inputs.filter(":not(button)")[0])).focus();
 
-	inputs.focus(function () {
-		$(this).data("input-index");
-	});
+	if (!$("#crudForm").attr("has-binded")) {
+		inputs.each(function (i, el) {
+			$(el).attr("data-input-index", i);
+		});
 
-	inputs.keydown(function (e) {
-		let operator;
-		switch (e.keyCode) {
-			case 38:
-				// if ($(this).parents('table').length > 0) {
-				// 	element = $(this).parents('tr').prev('tr').find('td').eq($(this).parent().index()).find('input')
-				// } else {
-				element = $(inputs[$(this).data("input-index") - 1]);
-				// }
+		inputs.focus(function () {
+			$(this).data("input-index");
+		});
 
-				break;
-			case 13:
-				if (e.shiftKey) {
+		inputs.keydown(function (e) {
+			let operator;
+			switch (e.keyCode) {
+				case 38:
+					// if ($(this).parents('table').length > 0) {
+					// 	element = $(this).parents('tr').prev('tr').find('td').eq($(this).parent().index()).find('input')
+					// } else {
 					element = $(inputs[$(this).data("input-index") - 1]);
-				} else if (e.ctrlKey) {
-					$(this).closest("form").find("button:submit").click();
-				} else {
+					// }
+
+					break;
+				case 13:
+					if (e.shiftKey) {
+						element = $(inputs[$(this).data("input-index") - 1]);
+					} else if (e.ctrlKey) {
+						$(this).closest("form").find("button:submit").click();
+					} else {
+						element = $(inputs[$(this).data("input-index") + 1]);
+
+						if (e.keyCode == 13 && $(this).is("button")) {
+							$(this).click();
+						}
+					}
+
+					break;
+				case 40:
 					element = $(inputs[$(this).data("input-index") + 1]);
 
-					if (e.keyCode == 13 && $(this).is("button")) {
-						$(this).click();
-					}
-				}
-
-				break;
-			case 40:
-				element = $(inputs[$(this).data("input-index") + 1]);
-
-				break;
-			default:
-				return;
-		}
-
-		if (element !== undefined) {
-			if (
-				element.is(":not(select, button)") &&
-				element.attr("type") !== "email" &&
-				element.attr("type") !== "time"
-			) {
-				position = element.val().length;
-				element[0].setSelectionRange(position, position);
+					break;
+				default:
+					return;
 			}
 
-			element.hasClass("hasDatePicker")
-				? $(".ui-datepicker").show()
-				: $(".ui-datepicker").hide();
-			element.focus();
-		}
+			if (element !== undefined) {
+				if (
+					element.is(":not(select, button)") &&
+					element.attr("type") !== "email" &&
+					element.attr("type") !== "time"
+				) {
+					position = element.val().length;
+					element[0].setSelectionRange(position, position);
+				}
 
-		e.preventDefault();
-	});
+				element.hasClass("hasDatePicker")
+					? $(".ui-datepicker").show()
+					: $(".ui-datepicker").hide();
+				element.focus();
+			}
+
+			e.preventDefault();
+		});
+
+		form.attr("has-binded", true);
+	}
 }
 
 function initResize(grid) {
