@@ -1,12 +1,11 @@
 let sidebarIsOpen = false;
-let thousandSeparator = ",";
-let decimalSeparator = ".";
+let formats;
 
 $(document).ready(function () {
+	setFormats();
 	startTime();
 	setSidebarBindKeys();
 	openMenuParents();
-	// setNumberSeparators();
 	initDatepicker();
 	initSelect2();
 	initAutoNumeric();
@@ -23,6 +22,22 @@ $(document).ready(function () {
 	});
 });
 
+function setFormats() {
+	$.ajax({
+		url: `${appUrl}/formats/global.json`,
+		method: "GET",
+		dataType: "JSON",
+		async: false,
+		cache: false,
+		success: (response) => {
+			formats = response;
+		},
+		error: (error) => {
+			showDialog(error.statusText);
+		},
+	});
+}
+
 function initDisabled() {
 	$(".disabled").each(function () {
 		$(this).disable();
@@ -31,8 +46,8 @@ function initDisabled() {
 
 function initAutoNumeric(elements = null) {
 	let option = {
-		digitGroupSeparator: ",",
-		decimalCharacter: ".",
+		digitGroupSeparator: formats.THOUSANDSEPARATOR,
+		decimalCharacter: formats.DECIMALSEPARATOR,
 	};
 
 	if (elements == null) {
@@ -89,8 +104,8 @@ function currencyFormat(value) {
 	});
 
 	result = result.replace(/\./g, "*");
-	result = result.replace(/,/g, thousandSeparator);
-	result = result.replace(/\*/g, decimalSeparator);
+	result = result.replace(/,/g, formats.THOUSANDSEPARATOR);
+	result = result.replace(/\*/g, formats.DECIMALSEPARATOR);
 
 	return result;
 }

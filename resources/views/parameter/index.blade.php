@@ -10,6 +10,84 @@
   </div>
 </div>
 
+<div class="modal fade modal-fullscreen" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="#" id="crudForm">
+      <div class="modal-content">
+        <div class="modal-header bg-primary">
+          <h5 class="modal-title" id="crudModalTitle"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="" method="post">
+          <div class="modal-body">
+            <input type="hidden" name="id">
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>ID</label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="id" class="form-control" readonly>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  GROUP <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="grp" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  SUBGROUP <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="subgrp" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  NAMA PARAMETER <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="text" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  MEMO <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="memo" class="form-control">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-start">
+            <button id="btnSubmit" class="btn btn-primary">
+              <i class="fa fa-save"></i>
+              Simpan
+            </button>
+            <button class="btn btn-secondary" data-dismiss="modal">
+              <i class="fa fa-times"></i>
+              Batal
+            </button>
+          </div>
+        </form>
+      </div>
+    </form>
+  </div>
+</div>
+
 @push('scripts')
 <script>
   let indexUrl = "{{ route('parameter.index') }}"
@@ -29,36 +107,6 @@
   let rowNum = 10
 
   $(document).ready(function() {
-    /* Set page */
-    <?php if (isset($_GET['page'])) { ?>
-      page = "{{ $_GET['page'] }}"
-    <?php } ?>
-
-    /* Set id */
-    <?php if (isset($_GET['id'])) { ?>
-      id = "{{ $_GET['id'] }}"
-    <?php } ?>
-
-    /* Set indexRow */
-    <?php if (isset($_GET['indexRow'])) { ?>
-      indexRow = "{{ $_GET['indexRow'] }}"
-    <?php } ?>
-
-    /* Set sortname */
-    <?php if (isset($_GET['sortname'])) { ?>
-      sortname = "{{ $_GET['sortname'] }}"
-    <?php } ?>
-
-    /* Set sortorder */
-    <?php if (isset($_GET['sortorder'])) { ?>
-      sortorder = "{{ $_GET['sortorder'] }}"
-    <?php } ?>
-
-    /* Set rowNum */
-    <?php if (isset($_GET['limit'])) { ?>
-      rowNum = "{{ $_GET['limit'] }}"
-    <?php } ?>
-
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'parameter' }}`,
         mtype: "GET",
@@ -119,12 +167,11 @@
           records: 'attributes.totalRows',
         },
         loadBeforeSend: (jqXHR) => {
-          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
         },
         onSelectRow: function(id) {
           activeGrid = $(this)
-          id = $(this).jqGrid('getCell', id, 'rn') - 1
-          indexRow = id
+          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
@@ -185,37 +232,35 @@
 
       .customPager({
         buttons: [{
+            id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: () => {
-              let limit = $("#jqGrid").jqGrid('getGridParam', 'postData').limit
-
-              window.location.href = `{{ route('parameter.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+              createParameter()
             }
           },
           {
+            id: 'edit',
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
             class: 'btn btn-success btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                alert('please select a row')
-              } else {
-                window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-              }
+              editParameter(selectedId)
             }
           },
           {
+            id: 'delete',
             innerHTML: '<i class="fa fa-trash"></i> DELETE',
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-              window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+              deleteParameter(selectedId)
             }
           },
           {
+            id: 'export',
             innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
@@ -225,6 +270,7 @@
             }
           },
           {
+            id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
@@ -329,7 +375,7 @@
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
         xhr.open('GET', `{{ config('app.api_url') }}parameter/export?${params}`, true)
-        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+        xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`)
         xhr.responseType = 'arraybuffer'
 
         xhr.onload = function(e) {
@@ -360,7 +406,205 @@
         submitButton.removeAttr('disabled')
       }
     })
+
+    $('#btnSubmit').click(function(event) {
+      event.preventDefault()
+
+      let method
+      let url
+      let form = $('#crudForm')
+      let parameterId = form.find('[name=id]').val()
+      let action = form.data('action')
+      let data = $('#crudForm').serializeArray()
+
+      data.push({
+        name: 'sortIndex',
+        value: $('#jqGrid').getGridParam().sortname
+      })
+      data.push({
+        name: 'sortOrder',
+        value: $('#jqGrid').getGridParam().sortorder
+      })
+      data.push({
+        name: 'filters',
+        value: $('#jqGrid').getGridParam('postData').filters
+      })
+      data.push({
+        name: 'indexRow',
+        value: indexRow
+      })
+      data.push({
+        name: 'page',
+        value: page
+      })
+      data.push({
+        name: 'limit',
+        value: limit
+      })
+
+      switch (action) {
+        case 'add':
+          method = 'POST'
+          url = `${apiUrl}parameter`
+          break;
+        case 'edit':
+          method = 'PATCH'
+          url = `${apiUrl}parameter/${parameterId}`
+          break;
+        case 'delete':
+          method = 'DELETE'
+          url = `${apiUrl}parameter/${parameterId}`
+          break;
+        default:
+          method = 'POST'
+          url = `${apiUrl}parameter`
+          break;
+      }
+
+      $(this).attr('disabled', '')
+      $('#loader').removeClass('d-none')
+
+      $.ajax({
+        url: url,
+        method: method,
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          $('#crudForm').trigger('reset')
+          $('#crudModal').modal('hide')
+
+          id = response.data.id
+
+          $('#jqGrid').trigger('reloadGrid', {
+            page: response.data.page
+          })
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.statusText)
+          }
+        },
+      }).always(() => {
+        $('#loader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+    })
   })
+
+  $('#crudModal').on('shown.bs.modal', () => {
+    let form = $('#crudForm')
+
+    setFormBindKeys(form)
+    activeGrid = null
+
+    getMaxLength(form)
+  })
+
+  $('#crudModal').on('hidden.bs.modal', () => {
+    activeGrid = '#jqGrid'
+  })
+
+  function createParameter() {
+    let form = $('#crudForm')
+
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Simpan
+    `)
+    form.data('action', 'add')
+    $('#crudModalTitle').text('Create Parameter')
+    $('#crudModal').modal('show')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+  }
+
+  function editParameter(parameterId) {
+    let form = $('#crudForm')
+
+    form.data('action', 'edit')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Simpan
+    `)
+    $('#crudModalTitle').text('Edit Parameter')
+    $('#crudModal').modal('show')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    $.ajax({
+      url: `${apiUrl}parameter/${parameterId}`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          form.find(`[name="${index}"]`).val(value)
+        })
+      }
+    })
+  }
+
+  function deleteParameter(parameterId) {
+    let form = $('#crudForm')
+
+    form.data('action', 'delete')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Hapus
+    `)
+    $('#crudModalTitle').text('Delete Parameter')
+    $('#crudModal').modal('show')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    $.ajax({
+      url: `${apiUrl}parameter/${parameterId}`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          form.find(`[name="${index}"]`).val(value)
+        })
+      }
+    })
+  }
+
+  function getMaxLength(form) {
+    $.ajax({
+      url: `${apiUrl}parameter/field_length`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+            form.find(`[name=${index}]`).attr('maxlength', value)
+          }
+        })
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
+  }
 </script>
 @endpush()
 @endsection
