@@ -203,3 +203,7 @@
 .highlight {
     background-color: yellow;
 }
+
+.overflow-x-hidden {
+	overflow-x: hidden;
+}

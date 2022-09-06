@@ -187,7 +187,7 @@ $.fn.customPager = function (option = {}) {
 	let pagerInfoId = `${grid.getGridParam().id}InfoHandler`;
 
 	$(`#gbox_${$(this).getGridParam().id}`).after(`
-		<div class="col-12 bg-white grid-pager">
+		<div class="col-12 bg-white grid-pager overflow-x-hidden">
 			<div class="row d-flex align-items-center text-center text-md-left">
 				<div class="col-12 col-md-6">
 					${
