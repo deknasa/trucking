@@ -30,6 +30,8 @@ class PenerimaanTruckingHeaderController extends MyController
         ];
 
         return view('penerimaantrucking.index', compact('title', 'breadcrumb', 'combo'));
+        // return view('penerimaantrucking.index', compact('title', 'breadcrumb'));
+
     }
 
     // /**
@@ -73,21 +75,10 @@ class PenerimaanTruckingHeaderController extends MyController
     {
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
+        
         $combo = $this->combo();
-        return view('penerimaantrucking.add', compact('title', 'breadcrumb', 'combo'));
-    }
 
-    // /**
-    //  * Fungsi combo
-    //  * @ClassName combo
-    //  */
-    private function combo()
-    {
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withToken(session('access_token'))
-            ->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'penerimaantrucking/combo');
-        return $response['data'];
+        return view('penerimaantrucking.add', compact('title', 'breadcrumb', 'combo'));
     }
 
 
@@ -180,4 +171,19 @@ class PenerimaanTruckingHeaderController extends MyController
 
         return $noBukti;
     }
+
+    // /**
+    //  * Fungsi combo
+    //  * @ClassName combo
+    //  */
+    private function combo()
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->withOptions(['verify' => false])
+            ->get(config('app.api_url') . 'penerimaantrucking/combo');
+        return $response['data'];
+
+    }
+
 }

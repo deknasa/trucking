@@ -1,90 +1,94 @@
 function loadPagerHandler(element, grid) {
-	$(element).html("");
+	$(element).html(`
+		<button id="${
+			grid.getGridParam().id
+		}_firstPageButton" class="btn btn-sm btn-light mr-2">
+			<span class="fas fa-angle-double-left"></span>
+		</button>
 
-	let params = grid.getGridParam();
+		<button id="${
+			grid.getGridParam().id
+		}_previousPageButton" class="btn btn-sm btn-light">
+			<span class="fas fa-angle-left"></span>
+		</button>
+		
+		<div class="input-group input-group-sm mx-2 d-flex align-items-center my-1">
+			<span>Page</span>
+			<input id="${grid.getGridParam().id}_pagerInput" class="form-control" value="${
+		grid.getGridParam().page
+	}">
+			<span id="${grid.getGridParam().id}_totalPage">of ${
+		grid.getGridParam().lastpage
+	}</span>
+		</div>
 
-	let previousPageHandler = document.createElement("button");
-	previousPageHandler.className = "mr-2";
-	previousPageHandler.onclick = function () {
-		toPreviousPage(grid, params.page);
-	};
+		<button id="${
+			grid.getGridParam().id
+		}_nextPageButton" class="btn btn-sm btn-light">
+			<span class="fas fa-angle-right"></span>
+		</button>
 
-	let previousPageIcon = document.createElement("i");
-	previousPageIcon.className = "fas fa-angle-left";
+		<button id="${
+			grid.getGridParam().id
+		}_lastPageButton" class="btn btn-sm btn-light ml-2">
+			<span class="fas fa-angle-double-right"></span>
+		</button>
 
-	let firstPageHandler = document.createElement("button");
-	firstPageHandler.className = "mr-2";
-	firstPageHandler.onclick = function () {
-		toFirstPage(grid);
-	};
+		<select id="${grid.getGridParam().id}_rowList" class="ml-2">
+			${grid
+				.getGridParam()
+				.rowList.map((row, index) => {
+					return `<option value="${row}">${row}</option>`;
+				})
+				.join("")}
+		</select>
+	`);
 
-	let firstPageIcon = document.createElement("i");
-	firstPageIcon.className = "fas fa-angle-double-left";
+	$(document).on(
+		"click",
+		`#${grid.getGridParam().id}_firstPageButton`,
+		function () {
+			toFirstPage(grid);
+		}
+	);
 
-	let pagerInput = document.createElement("input");
-	pagerInput.className = "form-control";
-	pagerInput.value = parseInt(params.page);
-	pagerInput.onkeydown = function (event) {
+	$(document).on(
+		"click",
+		`#${grid.getGridParam().id}_previousPageButton`,
+		function () {
+			toPreviousPage(grid);
+		}
+	);
+
+	$(document).on(
+		"click",
+		`#${grid.getGridParam().id}_nextPageButton`,
+		function () {
+			toNextPage(grid);
+		}
+	);
+
+	$(document).on(
+		"click",
+		`#${grid.getGridParam().id}_lastPageButton`,
+		function () {
+			toLastPage(grid);
+		}
+	);
+
+	$(`#${grid.getGridParam().id}_pagerInput`).keydown(function (event) {
 		if (event.which === 13) {
-			jumpToPage(grid, event.target.value);
+			jumpToPage(grid, $(this).val());
 		}
-	};
-
-	let nextPageHandler = document.createElement("button");
-	nextPageHandler.className = "ml-2";
-	nextPageHandler.onclick = function () {
-		toNextPage(grid, params.page);
-	};
-
-	let nextPageIcon = document.createElement("i");
-	nextPageIcon.className = "fas fa-angle-right";
-
-	let lastPageHandler = document.createElement("button");
-	lastPageHandler.className = "ml-2";
-	lastPageHandler.onclick = function () {
-		toLastPage(grid);
-	};
-
-	let lastPageIcon = document.createElement("i");
-	lastPageIcon.className = "fas fa-angle-double-right";
-
-	let perPageSelect = document.createElement("select");
-	perPageSelect.className = "ml-2";
-	params.rowList.forEach((rowList) => {
-		let option = document.createElement("option");
-		option.value = rowList;
-		option.innerHTML = rowList;
-
-		if (params.rowNum == rowList) {
-			option.setAttribute("selected", "selected");
-		}
-
-		perPageSelect.append(option);
 	});
-	perPageSelect.onchange = function (event) {
-		setPerPage(grid, event.target.value);
-	};
 
-	firstPageHandler.append(firstPageIcon);
-	$(element).append(firstPageHandler);
-
-	previousPageHandler.append(previousPageIcon);
-	$(element).append(previousPageHandler);
-
-	$(element).append(pagerInput);
-
-	nextPageHandler.append(nextPageIcon);
-	$(element).append(nextPageHandler);
-
-	lastPageHandler.append(lastPageIcon);
-	$(element).append(lastPageHandler);
-
-	$(element).append(perPageSelect);
-	$(element).find("input").before("page ");
-	$(element).find("input").after(`of ${params.lastpage}`);
+	$(`#${grid.getGridParam().id}_rowList`).change(function (event) {
+		setPerPage(grid, $(this).val());
+	});
 }
 
-function toNextPage(grid, currentPage) {
+function toNextPage(grid) {
+	let currentPage = grid.getGridParam().page;
 	let lastPage = grid.getGridParam("lastpage");
 	let nextPage = parseInt(currentPage) + 1;
 
@@ -110,7 +114,9 @@ function toLastPage(grid) {
 	}
 }
 
-function toPreviousPage(grid, currentPage) {
+function toPreviousPage(grid) {
+	let currentPage = grid.getGridParam().page;
+
 	if (currentPage > 1) {
 		grid.trigger("reloadGrid", [
 			{
@@ -121,8 +127,8 @@ function toPreviousPage(grid, currentPage) {
 }
 
 function toFirstPage(grid) {
-	let currentPage = grid.getGridParam('page')
-	
+	let currentPage = grid.getGridParam("page");
+
 	if (currentPage > 1) {
 		grid.trigger("reloadGrid", [
 			{
@@ -149,6 +155,16 @@ function setPerPage(grid, perPage) {
 		.trigger("reloadGrid");
 }
 
+function loadPagerHandlerInfo(element, grid) {
+	let page = grid.getGridParam().page;
+	let totalPage = grid.getGridParam().lastpage;
+
+	$(element).find(`#${grid.getGridParam().id}_pagerInput`).val(page);
+	$(element)
+		.find(`#${grid.getGridParam().id}_totalPage`)
+		.text(`of ${totalPage}`);
+}
+
 function loadPagerInfo(element, grid) {
 	let params = grid.getGridParam();
 	let recordCount = params.reccount;
@@ -158,5 +174,61 @@ function loadPagerInfo(element, grid) {
 	let firstRow = (page - 1) * perPage + 1;
 	let lastRow = firstRow + recordCount - 1;
 
-	$(element).html(`View ${firstRow} - ${lastRow} of ${totalRecords}`);
+	$(element).html(`
+		<div class="text-md-right">
+			View  ${firstRow} - ${lastRow} of ${totalRecords}
+		</div>
+	`);
 }
+
+$.fn.customPager = function (option = {}) {
+	let grid = $(this);
+	let pagerHandlerId = `${grid.getGridParam().id}PagerHandler`;
+	let pagerInfoId = `${grid.getGridParam().id}InfoHandler`;
+
+	$(`#gbox_${$(this).getGridParam().id}`).after(`
+		<div class="col-12 bg-white grid-pager overflow-x-hidden">
+			<div class="row d-flex align-items-center text-center text-md-left">
+				<div class="col-12 col-md-6">
+					${
+						typeof option.buttons !== "undefined"
+						 ? option.buttons
+							.map((button, index) => {
+								let buttonElement = document.createElement("button");
+	
+								buttonElement.id =
+									typeof button.id !== "undefined"
+										? button.id
+										: `customButton_${index}`;
+								buttonElement.className = button.class;
+								buttonElement.innerHTML = button.innerHTML;
+	
+								if (button.onClick) {
+									$(document).on("click", `#${buttonElement.id}`, function () {
+										button.onClick();
+									});
+								}
+	
+								return buttonElement.outerHTML;
+							})
+							.join("")
+						: ''
+					}
+				</div>
+				<div id="${pagerHandlerId}" class="col-12 col-md-4 d-flex align-items-center justify-content-center">
+				</div>
+				<div id="${pagerInfoId}" class="col-12 col-md-2">
+				</div>
+			</div>
+		</div>
+	`);
+
+	loadPagerHandler(`#${pagerHandlerId}`, grid);
+
+	grid.bind("jqGridLoadComplete.jqGrid", function (event, data) {
+		loadPagerHandlerInfo(`#${pagerHandlerId}`, grid);
+		loadPagerInfo(`#${pagerInfoId}`, grid);
+	});
+
+	return this;
+};

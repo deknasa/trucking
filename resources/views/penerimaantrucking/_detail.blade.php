@@ -51,10 +51,10 @@
             label: 'SUPIR',
             name: 'supir_id',
           },
-          {
-            label: 'NO BUKTI PENGELUARAN',
-            name: 'pengeluarantruckingheader_nobukti',
-          },
+          // {
+          //   label: 'NO BUKTI PENGELUARAN',
+          //   name: 'pengeluarantruckingheader_nobukti',
+          // },
          
         ],
         autowidth: true,
