@@ -54,7 +54,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <label>PENGELUARAN TRUCKING</label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="pengeluarantrucking_id[]" style="width:100%" class="form-control select2bs4">
+                <select name="pengeluarantrucking_id" style="width:100%" class="form-control select2bs4">
                     <option value="" >PENGELUARAN TRUCKING</option>
                     <?php foreach ($combo['pengeluarantrucking'] as $key => $item) {
                         $selected = @$pengeluarantruckingheader['pengeluarantrucking_id'] == $item['id'] ? "selected" : ""
@@ -69,7 +69,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <label>BANK</label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="bank_id[]" style="width:100%" class="form-control select2bs4">
+                <select name="bank_id" style="width:100%" class="form-control select2bs4">
                     <option value="" >BANK</option>
                     <?php foreach ($combo['bank'] as $key => $item) {
                         $selected = @$pengeluarantruckingheader['bank_id'] == $item['id'] ? "selected" : ""
@@ -84,7 +84,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <label>COA</label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="coa[]" style="width:100%" class="form-control select2bs4">
+                <select name="coa" style="width:100%" class="form-control select2bs4">
                     <option value="" >COA</option>
                     <?php foreach ($combo['coa'] as $key => $item) {
                         $selected = @$pengeluarantruckingheader['coa'] == $item['coa'] ? "selected" : ""
@@ -99,7 +99,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <label>NO BUKTI PENGELUARAN</label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="pengeluaran_nobukti[]" style="width:100%" class="form-control select2bs4">
+                <select name="pengeluaran_nobukti" style="width:100%" class="form-control select2bs4">
                     <option value="" >NO BUKTI PENGELUARAN</option>
                     <?php foreach ($combo['pengeluaranheader'] as $key => $item) {
                         $selected = @$pengeluarantruckingheader['pengeluaran_nobukti'] == $item['nobukti'] ? "selected" : ""
@@ -191,7 +191,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td colspan="5"></td>
+                        <td colspan="4"></td>
                         <td>
                           <button type="button" class="btn btn-primary btn-sm my-2" id="addrow">Tambah</button>
                         </td>
@@ -282,7 +282,7 @@ $indexRow = $_GET['indexRow'] ?? '';
       </td>
     </tr>`;
 
-  $("#addrow").click(function() {
+    $("#addrow").click(function() {
     let rowCount = $('#row').length;
     if (rowCount > 0) {
       let clone = $('#row').clone();

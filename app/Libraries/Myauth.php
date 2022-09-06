@@ -86,6 +86,7 @@ class Myauth
             'pengeluaran',
             'pengeluarantrucking',
             'jurnalumumheader',
+            'pengeluarantruckingheader',
         ],
         'method' => [
             'gridtab',
