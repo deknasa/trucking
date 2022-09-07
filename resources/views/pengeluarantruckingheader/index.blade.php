@@ -6,7 +6,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
+        <h5 class="modal-title" id="rangeModalLabel">Pilih bariss</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -409,7 +409,7 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
-
+ 
 </script>
 @endpush()
 @endsection
