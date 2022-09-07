@@ -24,7 +24,7 @@ $(document).ready(function () {
 
 function setFormats() {
 	$.ajax({
-		url: `${appUrl}/formats/global.json`,
+		url: `${window.location.origin}/formats/global.json`,
 		method: "GET",
 		dataType: "JSON",
 		async: false,
