@@ -155,6 +155,10 @@
           $('#jqGrid').trigger('reloadGrid', {
             page: response.data.page
           })
+
+          if (response.data.grp == 'FORMAT') {
+            updateFormat(response.data)
+          }
         },
         error: error => {
           if (error.status === 422) {
@@ -283,6 +287,24 @@
         }
       })
     }
+  }
+
+  function updateFormat(parameter) {
+    $.ajax({
+      url: `${appUrl}/format`,
+      method: 'PATCH',
+      dataType: 'JSON',
+      data: {
+        key: parameter.subgrp,
+        value: parameter.text
+      },
+      success: response => {
+        // 
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
   }
 </script>
 @endpush()

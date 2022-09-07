@@ -26,6 +26,7 @@ use App\Http\Controllers\SupirController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\AlatBayarController;
 use App\Http\Controllers\BankPelangganController;
+use App\Http\Controllers\FormatController;
 use App\Http\Controllers\JenisEmklController;
 use App\Http\Controllers\JenisOrderController;
 use App\Http\Controllers\JenisTradoController;
@@ -496,14 +497,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('penerimaantrucking', PenerimaanTruckingHeaderController::class);
 
     Route::resource('penerimaantruckingdetail', PenerimaanTruckingDetailController::class);
-    
+
     Route::get('jurnalumumheader/index', [JurnalUmumHeaderController::class, 'index']);
     Route::get('jurnalumumheader/{id}/delete', [JurnalUmumHeaderController::class, 'delete'])->name('jurnalumumheader.delete');
     Route::get('jurnalumumheader/get', [JurnalUmumHeaderController::class, 'get'])->name('jurnalumumheader.get');
     Route::get('jurnalumumheader/export', [JurnalUmumHeaderController::class, 'export'])->name('jurnalumumheader.export');
     Route::get('jurnalumumheader/report', [JurnalUmumHeaderController::class, 'report'])->name('jurnalumumheader.report');
     Route::resource('jurnalumumheader', JurnalUmumHeaderController::class);
-    
+
     Route::resource('jurnalumumdetail', JurnalUmumDetailController::class);
 
     Route::get('pengeluarantruckingheader/index', [PengeluaranTruckingHeaderController::class, 'index']);
@@ -512,7 +513,8 @@ Route::middleware('auth')->group(function () {
     Route::get('pengeluarantruckingheader/export', [PengeluaranTruckingHeaderController::class, 'export'])->name('pengeluarantruckingheader.export');
     Route::get('pengeluarantruckingheader/report', [PengeluaranTruckingHeaderController::class, 'report'])->name('pengeluarantruckingheader.report');
     Route::resource('pengeluarantruckingheader', PengeluaranTruckingHeaderController::class);
-    
-    Route::resource('pengeluarantruckingdetail', PengeluaranTruckingDetailController::class);
 
+    Route::resource('pengeluarantruckingdetail', PengeluaranTruckingDetailController::class);
 });
+
+Route::patch('format', [FormatController::class, 'update']);
