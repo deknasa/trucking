@@ -506,13 +506,6 @@ Route::middleware('auth')->group(function () {
     
     Route::resource('jurnalumumdetail', JurnalUmumDetailController::class);
 
-    Route::get('pengeluarantruckingheader/index', [PengeluaranTruckingHeaderController::class, 'index']);
-    Route::get('pengeluarantruckingheader/{id}/delete', [PengeluaranTruckingHeaderController::class, 'delete'])->name('pengeluarantruckingheader.delete');
-    Route::get('pengeluarantruckingheader/get', [PengeluaranTruckingHeaderController::class, 'get'])->name('pengeluarantruckingheader.get');
-    Route::get('pengeluarantruckingheader/export', [PengeluaranTruckingHeaderController::class, 'export'])->name('pengeluarantruckingheader.export');
-    Route::get('pengeluarantruckingheader/report', [PengeluaranTruckingHeaderController::class, 'report'])->name('pengeluarantruckingheader.report');
-    Route::resource('pengeluarantruckingheader', PengeluaranTruckingHeaderController::class);
     
-    Route::resource('pengeluarantruckingdetail', PengeluaranTruckingDetailController::class);
 
 });

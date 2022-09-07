@@ -179,7 +179,7 @@
           },
           {
             label: 'TANGGAL PENGELUARAN',
-            name: 'pengeluaran_tglbukti',
+            name: 'pengeluaran_tgl',
             align: 'left',
             formatter: "date",
             formatoptions: {

@@ -59,7 +59,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                     <?php foreach ($combo['pengeluarantrucking'] as $key => $item) {
                         $selected = @$pengeluarantruckingheader['pengeluarantrucking_id'] == $item['id'] ? "selected" : ""
                     ?>
-                        <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['formatbukti'] }}</option>
+                        <option value="{{ $item['id'] }}" {{ $selected }}>{{ $item['kodepengeluaran'] }}</option>
                     <?php } ?>
                 </select>  
               </div>
