@@ -74,8 +74,8 @@ use App\Http\Controllers\PengeluaranTruckingHeaderController;
 use App\Http\Controllers\PengeluaranTruckingDetailController;
 use App\Http\Controllers\JurnalUmumHeaderController;
 use App\Http\Controllers\JurnalUmumDetailController;
-
-
+use App\Http\Controllers\PiutangDetailController;
+use App\Http\Controllers\PiutangHeaderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -515,6 +515,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('pengeluarantruckingheader', PengeluaranTruckingHeaderController::class);
 
     Route::resource('pengeluarantruckingdetail', PengeluaranTruckingDetailController::class);
+
+    Route::get('piutangheader/index', [PiutangHeaderController::class, 'index']);
+    Route::get('piutangheader/{id}/delete', [PiutangHeaderController::class, 'delete'])->name('piutangheader.delete');
+    Route::get('piutangheader/get', [PiutangHeaderController::class, 'get'])->name('piutangheader.get');
+    Route::get('piutangheader/export', [PiutangHeaderController::class, 'export'])->name('piutangheader.export');
+    Route::get('piutangheader/report', [PiutangHeaderController::class, 'report'])->name('piutangheader.report');
+    Route::resource('piutangheader', PiutangHeaderController::class);
+
+    Route::resource('piutangdetail', PiutangDetailController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

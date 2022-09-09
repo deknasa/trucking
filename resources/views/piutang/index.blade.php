@@ -72,8 +72,8 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('piutang.index') }}"
-  let getUrl = "{{ route('piutang.get') }}"
+  let indexUrl = "{{ route('piutangheader.index') }}"
+  let getUrl = "{{ route('piutangheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -121,7 +121,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'piutang' }}`,
+        url: `{{ config('app.api_url') . 'piutangheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -320,7 +320,7 @@
      $('#add').click(function() {
       let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
 
-      window.location.href = `{{ route('piutang.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      window.location.href = `{{ route('piutangheader.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
     })
 
     /* Handle button edit on click */
@@ -371,9 +371,9 @@
       let actionUrl = ``
 
       if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('piutang.export') }}`
+        actionUrl = `{{ route('piutangheader.export') }}`
       } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('piutang.report') }}`
+        actionUrl = `{{ route('piutangheader.report') }}`
       }
 
       /* Clear validation messages */

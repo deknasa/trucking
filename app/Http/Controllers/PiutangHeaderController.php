@@ -10,7 +10,7 @@ class PiutangHeaderController extends MyController
 {
     public $title = 'Piutang';
 
-    public function index(){
+    public function index(Request $request){
         $title = $this->title;
         return view('piutang.index', compact('title'));
     }
@@ -24,13 +24,7 @@ class PiutangHeaderController extends MyController
     public function store(Request $request)
     {
         try {
-             /* Unformat nominal */
-            $request->nominal = array_map(function ($nominal) {
-                $nominal = str_replace('.', '', $nominal);
-                $nominal = str_replace(',', '', $nominal);
-
-                return $nominal;
-            }, $request->nominal);
+           
 
             $request->nominal_detail = array_map(function ($nominal_detail) {
                 $nominal_detail = str_replace('.', '', $nominal_detail);
@@ -49,7 +43,7 @@ class PiutangHeaderController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'piutang', $request->all());
+                ->post(config('app.api_url') . 'piutangheader', $request->all());
 
 
             return response($response, $response->status());
@@ -72,7 +66,7 @@ class PiutangHeaderController extends MyController
         $response = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'piutang', $params);
+            ->get(config('app.api_url') . 'piutangheader', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -91,7 +85,7 @@ class PiutangHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "piutang/$id");
+            ->get(config('app.api_url') . "piutangheader/$id");
             // dd($response->getBody()->getContents());
 
         $piutang = $response['data'];
@@ -103,13 +97,7 @@ class PiutangHeaderController extends MyController
 
     public function update(Request $request, $id)
     {
-        /* Unformat nominal */
-        $request->nominal = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
-
-            return $nominal;
-        }, $request->nominal);
+       
 
         /* Unformat nominal detail*/
         $request->nominal_detail = array_map(function ($nominal_detail) {
@@ -129,7 +117,7 @@ class PiutangHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "piutang/$id", $request->all());
+            ->patch(config('app.api_url') . "piutangheader/$id", $request->all());
 
         return response($response);
     }
@@ -142,7 +130,7 @@ class PiutangHeaderController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "piutang/$id");
+                ->get(config('app.api_url') . "piutangheader/$id");
 
             $piutang = $response['data'];
             
@@ -159,7 +147,7 @@ class PiutangHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "piutang/$id");
+            ->delete(config('app.api_url') . "piutangheader/$id");
 
             
         return response($response);

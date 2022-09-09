@@ -81,7 +81,7 @@
       url: detailIndexUrl,
       datatype: "json",
       postData: {
-        jurnalumum_id: id
+        piutang_id: id
       }
     }).trigger('reloadGrid')
   }

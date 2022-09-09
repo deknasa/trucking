@@ -49,14 +49,6 @@ $indexRow = $_GET['indexRow'] ?? '';
                 <input type="text" name="keterangan" class="form-control" value="{{ $piutang['keterangan'] ?? '' }}">
               </div>
             </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>NOMINAL</label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="nominal" style="text-align:right" class="form-control autonumeric" value="{{ number_format($piutang['nominal']??0,0,',' , ',') }}">
-              </div>
-            </div>
 
 
             <div class="row">
@@ -108,7 +100,7 @@ $indexRow = $_GET['indexRow'] ?? '';
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td colspan="5"></td>
+                        <td colspan="3"></td>
                         <td>
                           <button type="button" class="btn btn-primary btn-sm my-2" id="addrow">Tambah</button>
                         </td>
@@ -129,7 +121,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               Simpan
               @endif
             </button>
-            <a href="{{ route('piutang.index') }}" class="btn btn-danger">
+            <a href="{{ route('piutangheader.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
               BATAL
             </a>
@@ -211,9 +203,9 @@ $indexRow = $_GET['indexRow'] ?? '';
     baris = baris - 1;
   });
 
-  let indexUrl = "{{ route('piutang.index') }}"
+  let indexUrl = "{{ route('piutangheader.index') }}"
   let action = "{{ $action }}"
-  let actionUrl = "{{ config('app.api_url') . 'piutang' }}"
+  let actionUrl = "{{ config('app.api_url') . 'piutangheader' }}"
   let method = "POST"
   let csrfToken = "{{ csrf_token() }}"
   let postingUrl = "{{ Config::get('app.api_url').'running_number' }}"
