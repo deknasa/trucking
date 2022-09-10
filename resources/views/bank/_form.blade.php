@@ -78,27 +78,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               </div>
             </div>
 
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  FORMAT BUKTI PENERIMAAN<span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="formatbuktipenerimaan" class="form-control" value="{{ $bank['formatbuktipenerimaan'] ?? '' }}">
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  FORMAT BUKTI PENGELUARAN <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="formatbuktipengeluaran" class="form-control" value="{{ $bank['formatbuktipengeluaran'] ?? '' }}">
-              </div>
-            </div>            
+             
 
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">

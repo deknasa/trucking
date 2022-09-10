@@ -36,7 +36,7 @@ class Myauth
             'error',
             'acl',
             'cabang',
-            'absensisupir',
+            'absensisupirheader',
             'logtrail',
             'agen',
             'akunpusat',
@@ -86,6 +86,8 @@ class Myauth
             'pengeluaran',
             'pengeluarantrucking',
             'jurnalumumheader',
+            'pengeluarantruckingheader',
+            'piutangheader',
         ],
         'method' => [
             'gridtab',

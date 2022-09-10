@@ -10,8 +10,7 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ config('app.api_url') . 'absensisupirheader' }}"
-
+  let detailIndexUrl = "{{ route('piutangdetail.index') }}"
   /**
    * Custom Functions
    */
@@ -27,45 +26,31 @@
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
-        url: `${detailIndexUrl}/1/detail`,
+        url: `{{ config('app.api_url') . 'piutangdetail' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
-        colModel: [{
-            label: 'TRADO',
-            name: 'trado.keterangan',
+        datatype: "local",
+        colModel: [
+          {
+            label: 'NO BUKTI',
+            name: 'nobukti',
           },
           {
-            label: 'SUPIR',
-            name: 'supir.namasupir',
-          },
-          {
-            label: 'STATUS',
-            name: 'absen_trado.keterangan',
+            label: 'NOMINAL',
+            name: 'nominal',
+            formatter: 'number', 
+            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            align: "right",
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
           },
           {
-            label: 'JAM',
-            name: 'jam',
-          },
-          {
-            label: 'UANG JALAN',
-            name: 'uangjalan',
-            align: 'right',
-            formatter: currencyFormat
-          },
-          {
-            label: 'MODIFIEDBY',
-            name: 'modifiedby',
-          },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-          },
+            label: 'NO BUKTI INVOICE',
+            name: 'invoice_nobukti',
+          }
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -78,24 +63,7 @@
         sortable: true,
         pager: pager,
         viewrecords: true,
-        prmNames: {
-          sort: 'sortIndex',
-          order: 'sortOrder',
-          rows: 'limit'
-        },
-        jsonReader: {
-          root: 'data',
-          total: 'attributes.totalPages',
-          records: 'attributes.totalRows',
-        },
-        loadBeforeSend: (jqXHR) => {
-          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-        },
-        onSelectRow: function(id) {
-          activeGrid = $(this)
-        },
         loadComplete: function(data) {
-          initResize($(this))
         }
       })
 
@@ -110,7 +78,11 @@
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: `${detailIndexUrl}/${id}/detail`,
+      url: detailIndexUrl,
+      datatype: "json",
+      postData: {
+        piutang_id: id
+      }
     }).trigger('reloadGrid')
   }
 

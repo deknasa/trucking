@@ -1,32 +1,19 @@
 let sidebarIsOpen = false;
-let thousandSeparator = ",";
-let decimalSeparator = ".";
+let formats;
 
 $(document).ready(function () {
+	setFormats();
 	startTime();
-	setFormBindKeys();
 	setSidebarBindKeys();
 	openMenuParents();
-	setNumberSeparators();
 	initDatepicker();
 	initSelect2();
+	initAutoNumeric();
+	initDisabled();
 
 	/* Remove autocomplete */
 	$("input").attr("autocomplete", "off");
 	$("input, textarea").attr("spellcheck", "false");
-
-	/* Init disable plugin */
-	$(".disabled").each(function () {
-		$(this).disable();
-	});
-
-	$("input").attr("autocomplete", "off");
-	$("input, textarea").attr("spellcheck", "false");
-
-	new AutoNumeric.multiple(".autonumeric", {
-		digitGroupSeparator: ",",
-		decimalCharacter: ".",
-	});
 
 	$(document).on("click", "#sidebar-overlay", () => {
 		$(document).trigger("sidebar:toggle");
@@ -35,18 +22,71 @@ $(document).ready(function () {
 	});
 });
 
-function setHighlight(grid) {
-	let stringFilters
-	let filters
-	let gridId
+function setFormats() {
+	$.ajax({
+		url: `${window.location.origin}/truck/formats/global.json`,
+		method: "GET",
+		dataType: "JSON",
+		async: false,
+		cache: false,
+		success: (response) => {
+			formats = response;
+		},
+		error: (error) => {
+			showDialog(error.statusText);
+		},
+	});
+}
 
-	stringFilters = grid.getGridParam("postData").filters
+function initDisabled() {
+	$(".disabled").each(function () {
+		$(this).disable();
+	});
+}
+
+function initAutoNumeric(elements = null) {
+	let option = {
+		digitGroupSeparator: formats.THOUSANDSEPARATOR,
+		decimalCharacter: formats.DECIMALSEPARATOR,
+	};
+
+	if (elements == null) {
+		new AutoNumeric.multiple(".autonumeric", option);
+	} else {
+		$.each(elements, (index, element) => {
+			new AutoNumeric(element, option);
+		});
+	}
+}
+
+function unformatAutoNumeric(data) {
+	let autoNumericElements = $(".autonumeric");
+
+	$.each(autoNumericElements, (index, autoNumericElement) => {
+		let inputs = data.filter((row) => row.name == autoNumericElement.name);
+
+		inputs.forEach((input, index) => {
+			if (input.value !== "") {
+				input.value = AutoNumeric.getNumber(autoNumericElement);
+			}
+		});
+	});
+
+	return data;
+}
+
+function setHighlight(grid) {
+	let stringFilters;
+	let filters;
+	let gridId;
+
+	stringFilters = grid.getGridParam("postData").filters;
 
 	if (stringFilters) {
-		filters = JSON.parse(stringFilters)
+		filters = JSON.parse(stringFilters);
 	}
 
-	gridId = $(grid).getGridParam().id
+	gridId = $(grid).getGridParam().id;
 
 	if (filters) {
 		filters.rules.forEach((rule) => {
@@ -64,8 +104,8 @@ function currencyFormat(value) {
 	});
 
 	result = result.replace(/\./g, "*");
-	result = result.replace(/,/g, thousandSeparator);
-	result = result.replace(/\*/g, decimalSeparator);
+	result = result.replace(/,/g, formats.THOUSANDSEPARATOR);
+	result = result.replace(/\*/g, formats.DECIMALSEPARATOR);
 
 	return result;
 }
@@ -189,20 +229,31 @@ $.fn.disable = function () {
 	}
 };
 
-function setErrorMessages(errors) {
-	$(`[name=${Object.keys(errors)[0]}]`).focus();
+function setErrorMessages(form, errors) {
+	let errorKeys = Object.keys(errors);
 
 	$.each(errors, (index, error) => {
-		if ($(`[name="${index}"]`).length > 0) {
-			$(`[name=${index}]`).addClass("is-invalid").after(`
-                <div class="invalid-feedback">
-                ${error}
-                </div>
-            `);
+		let indexes = index.split(".");
+		let element;
+
+		if (indexes.length > 1) {
+			element = form.find(`[name="${indexes[0]}[]"]`)[indexes[1]];
+		} else {
+			element = form.find(`[name="${indexes[0]}"]`)[0];
+		}
+
+		if ($(element).length > 0) {
+			$(element).addClass("is-invalid").after(`
+					<div class="invalid-feedback">
+					${error}
+					</div>
+			`);
 		} else {
 			return showDialog(error);
 		}
 	});
+
+	$(".is-invalid").first().focus();
 }
 
 function removeTags(str) {
@@ -219,23 +270,24 @@ function setCustomBindKeys(grid) {
 	setSidebarBindKeys();
 
 	$(document).on("keydown", function (e) {
-		if (!sidebarIsOpen) {
+		if (!sidebarIsOpen && activeGrid) {
 			if (
 				e.keyCode == 33 ||
 				e.keyCode == 34 ||
 				e.keyCode == 35 ||
 				e.keyCode == 36 ||
 				e.keyCode == 38 ||
-				e.keyCode == 40
+				e.keyCode == 40 ||
+				e.keyCode == 13
 			) {
 				e.preventDefault();
 
-				var gridIds = $("#jqGrid").getDataIDs();
-				var selectedRow = $("#jqGrid").getGridParam("selrow");
-				var currentPage = $(grid).getGridParam("page");
-				var lastPage = $(grid).getGridParam("lastpage");
+				var gridIds = $(activeGrid).getDataIDs();
+				var selectedRow = $(activeGrid).getGridParam("selrow");
+				var currentPage = $(activeGrid).getGridParam("page");
+				var lastPage = $(activeGrid).getGridParam("lastpage");
 				var currentIndex = 0;
-				var row = $(grid).jqGrid("getGridParam", "postData").rows;
+				var row = $(activeGrid).jqGrid("getGridParam", "postData").rows;
 
 				for (var i = 0; i < gridIds.length; i++) {
 					if (gridIds[i] == selectedRow) currentIndex = i;
@@ -244,7 +296,7 @@ function setCustomBindKeys(grid) {
 				if (triggerClick == false) {
 					if (33 === e.keyCode) {
 						if (currentPage > 1) {
-							$(grid)
+							$(activeGrid)
 								.jqGrid("setGridParam", {
 									page: parseInt(currentPage) - 1,
 								})
@@ -252,11 +304,11 @@ function setCustomBindKeys(grid) {
 
 							triggerClick = true;
 						}
-						$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+						$(activeGrid).triggerHandler("jqGridKeyUp"), e.preventDefault();
 					}
 					if (34 === e.keyCode) {
 						if (currentPage !== lastPage) {
-							$(grid)
+							$(activeGrid)
 								.jqGrid("setGridParam", {
 									page: parseInt(currentPage) + 1,
 								})
@@ -264,27 +316,27 @@ function setCustomBindKeys(grid) {
 
 							triggerClick = true;
 						}
-						$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+						$(activeGrid).triggerHandler("jqGridKeyUp"), e.preventDefault();
 					}
 					if (35 === e.keyCode) {
 						if (currentPage !== lastPage) {
-							$(grid)
+							$(activeGrid)
 								.jqGrid("setGridParam", {
 									page: lastPage,
 								})
 								.trigger("reloadGrid");
 							if (e.ctrlKey) {
 								if (
-									$(grid).jqGrid("getGridParam", "selrow") !==
+									$(activeGrid).jqGrid("getGridParam", "selrow") !==
 									$("#customer")
 										.find(">tbody>tr.jqgrow")
 										.filter(":last")
 										.attr("id")
 								) {
-									$(grid)
+									$(activeGrid)
 										.jqGrid(
 											"setSelection",
-											$(grid)
+											$(activeGrid)
 												.find(">tbody>tr.jqgrow")
 												.filter(":last")
 												.attr("id")
@@ -297,39 +349,45 @@ function setCustomBindKeys(grid) {
 						}
 						if (e.ctrlKey) {
 							if (
-								$(grid).jqGrid("getGridParam", "selrow") !==
+								$(activeGrid).jqGrid("getGridParam", "selrow") !==
 								$("#customer")
 									.find(">tbody>tr.jqgrow")
 									.filter(":last")
 									.attr("id")
 							) {
-								$(grid)
+								$(activeGrid)
 									.jqGrid(
 										"setSelection",
-										$(grid).find(">tbody>tr.jqgrow").filter(":last").attr("id")
+										$(activeGrid)
+											.find(">tbody>tr.jqgrow")
+											.filter(":last")
+											.attr("id")
 									)
 									.trigger("reloadGrid");
 							}
 						}
-						$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+						$(activeGrid).triggerHandler("jqGridKeyUp"), e.preventDefault();
 					}
 					if (36 === e.keyCode) {
 						if (currentPage > 1) {
 							if (e.ctrlKey) {
 								if (
-									$(grid).jqGrid("getGridParam", "selrow") !==
+									$(activeGrid).jqGrid("getGridParam", "selrow") !==
 									$("#customer")
 										.find(">tbody>tr.jqgrow")
 										.filter(":first")
 										.attr("id")
 								) {
-									$(grid).jqGrid(
+									$(activeGrid).jqGrid(
 										"setSelection",
-										$(grid).find(">tbody>tr.jqgrow").filter(":first").attr("id")
+										$(activeGrid)
+											.find(">tbody>tr.jqgrow")
+											.filter(":first")
+											.attr("id")
 									);
 								}
 							}
-							$(grid)
+							$(activeGrid)
 								.jqGrid("setGridParam", {
 									page: 1,
 								})
@@ -337,20 +395,31 @@ function setCustomBindKeys(grid) {
 
 							triggerClick = true;
 						}
-						$(grid).triggerHandler("jqGridKeyUp"), e.preventDefault();
+						$(activeGrid).triggerHandler("jqGridKeyUp"), e.preventDefault();
 					}
 					if (38 === e.keyCode) {
 						if (currentIndex - 1 >= 0) {
-							$(grid)
+							$(activeGrid)
 								.resetSelection()
 								.setSelection(gridIds[currentIndex - 1]);
 						}
 					}
 					if (40 === e.keyCode) {
 						if (currentIndex + 1 < gridIds.length) {
-							$(grid)
+							$(activeGrid)
 								.resetSelection()
 								.setSelection(gridIds[currentIndex + 1]);
+						}
+					}
+					if (13 === e.keyCode) {
+						let rowId = $(activeGrid).getGridParam("selrow");
+						let ondblClickRowHandler = $(activeGrid).jqGrid(
+							"getGridParam",
+							"ondblClickRow"
+						);
+
+						if (ondblClickRowHandler) {
+							ondblClickRowHandler.call($(activeGrid)[0], rowId);
 						}
 					}
 				}
@@ -528,74 +597,86 @@ function fillSearchMenuInput() {
 /**
  * Move to closest input when using press enter
  */
-function setFormBindKeys() {
-	let inputs = $(
-		"[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit"
-	);
+function setFormBindKeys(form = null) {
 	let element;
 	let position;
+	let inputs;
 
-	inputs.each(function (i, el) {
-		$(el).attr("data-input-index", i);
-	});
+	if (form !== null) {
+		inputs = form.find(
+			"[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit"
+		);
+	} else {
+		inputs = $(document).find(
+			"[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit"
+		);
+	}
 
 	$($(inputs.filter(":not(button)")[0])).focus();
 
-	inputs.focus(function () {
-		$(this).data("input-index");
-	});
+	if (!$("#crudForm").attr("has-binded")) {
+		inputs.each(function (i, el) {
+			$(el).attr("data-input-index", i);
+		});
 
-	inputs.keydown(function (e) {
-		let operator;
-		switch (e.keyCode) {
-			case 38:
-				// if ($(this).parents('table').length > 0) {
-				// 	element = $(this).parents('tr').prev('tr').find('td').eq($(this).parent().index()).find('input')
-				// } else {
-				element = $(inputs[$(this).data("input-index") - 1]);
-				// }
+		inputs.focus(function () {
+			$(this).data("input-index");
+		});
 
-				break;
-			case 13:
-				if (e.shiftKey) {
+		inputs.keydown(function (e) {
+			let operator;
+			switch (e.keyCode) {
+				case 38:
+					// if ($(this).parents('table').length > 0) {
+					// 	element = $(this).parents('tr').prev('tr').find('td').eq($(this).parent().index()).find('input')
+					// } else {
 					element = $(inputs[$(this).data("input-index") - 1]);
-				} else if (e.ctrlKey) {
-					$(this).closest("form").find("button:submit").click();
-				} else {
+					// }
+
+					break;
+				case 13:
+					if (e.shiftKey) {
+						element = $(inputs[$(this).data("input-index") - 1]);
+					} else if (e.ctrlKey) {
+						$(this).closest("form").find("button:submit").click();
+					} else {
+						element = $(inputs[$(this).data("input-index") + 1]);
+
+						if (e.keyCode == 13 && $(this).is("button")) {
+							$(this).click();
+						}
+					}
+
+					break;
+				case 40:
 					element = $(inputs[$(this).data("input-index") + 1]);
 
-					if (e.keyCode == 13 && $(this).is("button")) {
-						$(this).click();
-					}
-				}
-
-				break;
-			case 40:
-				element = $(inputs[$(this).data("input-index") + 1]);
-
-				break;
-			default:
-				return;
-		}
-
-		if (element !== undefined) {
-			if (
-				element.is(":not(select, button)") &&
-				element.attr("type") !== "email" &&
-				element.attr("type") !== "time"
-			) {
-				position = element.val().length;
-				element[0].setSelectionRange(position, position);
+					break;
+				default:
+					return;
 			}
 
-			element.hasClass("hasDatePicker")
-				? $(".ui-datepicker").show()
-				: $(".ui-datepicker").hide();
-			element.focus();
-		}
+			if (element !== undefined) {
+				if (
+					element.is(":not(select, button)") &&
+					element.attr("type") !== "email" &&
+					element.attr("type") !== "time"
+				) {
+					position = element.val().length;
+					element[0].setSelectionRange(position, position);
+				}
 
-		e.preventDefault();
-	});
+				element.hasClass("hasDatePicker")
+					? $(".ui-datepicker").show()
+					: $(".ui-datepicker").hide();
+				element.focus();
+			}
+
+			e.preventDefault();
+		});
+
+		form.attr("has-binded", true);
+	}
 }
 
 function initResize(grid) {
@@ -762,6 +843,39 @@ $(document).on("input", ".numbernoseparate", function () {
 });
 
 /* Select2: Autofocus search input on open */
+// function initSelect2(elements = null) {
+// 	let option = {
+// 		theme: "bootstrap4",
+// 		dropdownParent: $("#crudModal"),
+// 	};
+
+// 	if (elements === null) {
+// 		$(document)
+// 			.find("select")
+// 			.select2(option)
+// 			.on("select2:open", function (e) {
+// 				document.querySelector(".select2-search__field").focus();
+// 			});
+// 	} else {
+// 		$.each(elements, (index, element) => {
+// 			$(element)
+// 				.select2(option)
+// 				.on("select2:open", function (e) {
+// 					document.querySelector(".select2-search__field").focus();
+// 				});
+// 		});
+// 	}
+// }
+
+// function destroySelect2() {
+// 	let select2Elements = $(document).find("select");
+
+// 	$.each(select2Elements, (index, select2Element) => {
+// 		$(select2Element).select2("destroy");
+// 	});
+// }
+
+// select2 lama untuk testing lokal
 function initSelect2() {
 	$(document)
 		.find("select")
@@ -780,6 +894,7 @@ function destroySelect2() {
 		$(select2Element).select2("destroy");
 	});
 }
+
 
 function showDialog(statusText = "", message = "") {
 	$("#dialog-message").find("p").remove();
@@ -942,4 +1057,18 @@ function setPrevFocus(incomingElement) {
 	}, 0);
 
 	incomingElement.focus();
+}
+
+function detectDeviceType() {
+	const ua = navigator.userAgent;
+	if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+		return "tablet";
+	} else if (
+		/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+			ua
+		)
+	) {
+		return "mobile";
+	}
+	return "desktop";
 }

@@ -144,14 +144,7 @@
             label: 'TIPE',
             name: 'tipe',
           },
-          {
-            label: 'FORMAT BUKTI PENERIMAAN',
-            name: 'formatbuktipenerimaan',
-          },
-          {
-            label: 'FORMAT BUKTI PENGELUARAN',
-            name: 'formatbuktipengeluaran',
-          },
+         
           {
             label: 'STATUS AKTIF',
             name: 'statusaktif',

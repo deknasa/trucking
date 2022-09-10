@@ -6,38 +6,36 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
-class PengeluaranTruckingHeaderController extends MyController
+class PiutangHeaderController extends MyController
 {
-    public $title = 'Pengeluaran Trucking';
-    
-    public function index(Request $request)
-    {
+    public $title = 'Piutang';
+
+    public function index(Request $request){
         $title = $this->title;
-        return view('pengeluarantruckingheader.index', compact('title'));
+        return view('piutang.index', compact('title'));
     }
 
-    public function create()
-    {
+    public function create(){
         $title = $this->title;
 
-        $combo = $this->combo();
-
-        return view('pengeluarantruckingheader.add', compact('title','combo'));
+        return view('piutang.add', compact('title'));
     }
 
     public function store(Request $request)
     {
         try {
-             /* Unformat nominal */
-            $request->nominal = array_map(function ($nominal) {
-                $nominal = str_replace('.', '', $nominal);
-                $nominal = str_replace(',', '', $nominal);
+           
 
-                return $nominal;
-            }, $request->nominal);
+            $request->nominal_detail = array_map(function ($nominal_detail) {
+                $nominal_detail = str_replace('.', '', $nominal_detail);
+                $nominal_detail = str_replace(',', '', $nominal_detail);
+
+                return $nominal_detail;
+            }, $request->nominal_detail);
 
             $request->merge([
-                'nominal' => $request->nominal
+                'nominal' => $request->nominal,
+                'nominal_detail' => $request->nominal_detail,
             ]);
 
             $request['modifiedby'] = Auth::user()->name;
@@ -45,7 +43,7 @@ class PengeluaranTruckingHeaderController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'pengeluarantruckingheader', $request->all());
+                ->post(config('app.api_url') . 'piutangheader', $request->all());
 
 
             return response($response, $response->status());
@@ -68,7 +66,7 @@ class PengeluaranTruckingHeaderController extends MyController
         $response = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'pengeluarantruckingheader', $params);
+            ->get(config('app.api_url') . 'piutangheader', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -87,36 +85,31 @@ class PengeluaranTruckingHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "pengeluarantruckingheader/$id");
+            ->get(config('app.api_url') . "piutangheader/$id");
             // dd($response->getBody()->getContents());
 
-        $pengeluarantruckingheader = $response['data'];
-        $kode = $response['kode'];
-
-        if($kode == 'PJT'){
-            $pengeluarantruckingheaderNoBukti = $this->getNoBukti('PINJAMAN SUPIR', 'PINJAMAN SUPIR', 'pengeluarantruckingheader');
-        }else{
-            $pengeluarantruckingheaderNoBukti = $this->getNoBukti('BIAYA LAIN SUPIR', 'BIAYA LAIN SUPIR', 'pengeluarantruckingheader');
-        }
+        $piutang = $response['data'];
+        $piutangNoBukti = $this->getNoBukti('PIUTANG', 'PIUTANG', 'piutangheader');
 
 
-        $combo = $this->combo();
-
-        return view('pengeluarantruckingheader.edit', compact('title', 'pengeluarantruckingheader','combo', 'pengeluarantruckingheaderNoBukti'));
+        return view('piutang.edit', compact('title', 'piutang', 'piutangNoBukti'));
     }
 
     public function update(Request $request, $id)
     {
-        /* Unformat nominal */
-        $request->nominal = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
+       
 
-            return $nominal;
-        }, $request->nominal);
+        /* Unformat nominal detail*/
+        $request->nominal_detail = array_map(function ($nominal_detail) {
+            $nominal_detail = str_replace('.', '', $nominal_detail);
+            $nominal_detail = str_replace(',', '', $nominal_detail);
+
+            return $nominal_detail;
+        }, $request->nominal_detail);
 
         $request->merge([
-            'nominal' => $request->nominal
+            'nominal' => $request->nominal,
+            'nominal_detail' => $request->nominal_detail
         ]);
 
         $request['modifiedby'] = Auth::user()->name;
@@ -124,7 +117,7 @@ class PengeluaranTruckingHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "pengeluarantruckingheader/$id", $request->all());
+            ->patch(config('app.api_url') . "piutangheader/$id", $request->all());
 
         return response($response);
     }
@@ -137,15 +130,14 @@ class PengeluaranTruckingHeaderController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "pengeluarantruckingheader/$id");
+                ->get(config('app.api_url') . "piutangheader/$id");
 
-            $pengeluarantruckingheader = $response['data'];
+            $piutang = $response['data'];
             
-            $combo = $this->combo();
 
-            return view('pengeluarantruckingheader.delete', compact('title','combo', 'pengeluarantruckingheader'));
+            return view('piutang.delete', compact('title', 'piutang'));
         } catch (\Throwable $th) {
-            return redirect()->route('pengeluarantruckingheader.index');
+            return redirect()->route('piutang.index');
         }
     }
 
@@ -155,7 +147,7 @@ class PengeluaranTruckingHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "pengeluarantruckingheader/$id");
+            ->delete(config('app.api_url') . "piutangheader/$id");
 
             
         return response($response);
@@ -179,14 +171,5 @@ class PengeluaranTruckingHeaderController extends MyController
         return $noBukti;
     }
 
-    private function combo()
-    {
-        $response = Http::withHeaders($this->httpHeaders)
-        ->withToken(session('access_token'))
-        ->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'pengeluarantruckingheader/combo');
-
-        return $response['data'];
-    }
-
 }
+   

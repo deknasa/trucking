@@ -2,7 +2,7 @@
 
 @section('content')
 <!-- Form -->
-@include('parameter._form', [
-  'action' => 'add'
+@include('piutang._form', [
+    'action' => 'add'
 ])
 @endsection

@@ -6,7 +6,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="rangeModalLabel">Pilih bariss</h5>
+        <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -68,12 +68,12 @@
   </div>
 </div>
 <!-- Detail -->
-@include('pengeluarantruckingheader._detail')
+@include('piutang._detail')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('pengeluarantruckingheader.index') }}"
-  let getUrl = "{{ route('pengeluarantruckingheader.get') }}"
+  let indexUrl = "{{ route('piutangheader.index') }}"
+  let getUrl = "{{ route('piutangheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -121,7 +121,7 @@
     <?php } ?>
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'pengeluarantruckingheader' }}`,
+        url: `{{ config('app.api_url') . 'piutangheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -148,44 +148,26 @@
             }
           },
           {
-            label: 'PENGELUARAN TRUCKING',
-            name: 'pengeluarantrucking_id',
-            align: 'left'
-          },
-          {
             label: 'KETERANGAN',
             name: 'keterangan',
             align: 'left'
           },
           {
-            label: 'BANK',
-            name: 'bank_id',
+            label: 'POSTING DARI',
+            name: 'postingdari',
             align: 'left'
           },
           {
-            label: 'STATUS POSTING',
-            name: 'statusposting',
-            align: 'left'
+            label: 'NOMINAL',
+            name: 'nominal',
+            formatter: 'number', 
+            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            align: "right",
           },
           {
-            label: 'COA',
-            name: 'coa',
+            label: 'NO BUKTI INVOICE',
+            name: 'invoice_nobukti',
             align: 'left'
-          },
-          {
-            label: 'NO BUKTI PENGELUARAN',
-            name: 'pengeluaran_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'TANGGAL PENGELUARAN',
-            name: 'pengeluaran_tgl',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
           },
           {
             label: 'MODIFIEDBY',
@@ -338,7 +320,7 @@
      $('#add').click(function() {
       let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
 
-      window.location.href = `{{ route('pengeluarantruckingheader.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      window.location.href = `{{ route('piutangheader.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
     })
 
     /* Handle button edit on click */
@@ -389,9 +371,9 @@
       let actionUrl = ``
 
       if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('jurnalumumheader.export') }}`
+        actionUrl = `{{ route('piutangheader.export') }}`
       } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('jurnalumumheader.report') }}`
+        actionUrl = `{{ route('piutangheader.report') }}`
       }
 
       /* Clear validation messages */
@@ -409,7 +391,7 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
- 
+
 </script>
 @endpush()
 @endsection
