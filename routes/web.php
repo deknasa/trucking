@@ -74,6 +74,9 @@ use App\Http\Controllers\PengeluaranTruckingDetailController;
 use App\Http\Controllers\JurnalUmumHeaderController;
 use App\Http\Controllers\JurnalUmumDetailController;
 
+use App\Http\Controllers\HutangHeaderController;
+use App\Http\Controllers\HutangDetailController;
+
 
 
 /*
@@ -514,5 +517,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('pengeluarantruckingheader', PengeluaranTruckingHeaderController::class);
     
     Route::resource('pengeluarantruckingdetail', PengeluaranTruckingDetailController::class);
+
+    Route::get('hutangheader/index', [HutangHeaderController::class, 'index']);
+    Route::get('hutangheader/{id}/delete', [HutangHeaderController::class, 'delete'])->name('hutangheader.delete');
+    Route::get('hutangheader/get', [HutangHeaderController::class, 'get'])->name('hutangheader.get');
+    Route::get('hutangheader/export', [HutangHeaderController::class, 'export'])->name('hutangheader.export');
+    Route::get('hutangheader/report', [HutangHeaderController::class, 'report'])->name('hutangheader.report');
+    Route::resource('hutangheader', HutangHeaderController::class);
+    
+    Route::resource('hutangdetail', HutangDetailController::class);
 
 });
