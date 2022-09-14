@@ -843,48 +843,28 @@ $(document).on("input", ".numbernoseparate", function () {
 });
 
 /* Select2: Autofocus search input on open */
-// function initSelect2(elements = null) {
-// 	let option = {
-// 		theme: "bootstrap4",
-// 		dropdownParent: $("#crudModal"),
-// 	};
+function initSelect2(elements = null) {
+	let option = {
+		theme: "bootstrap4",
+		dropdownParent: $("#crudModal"),
+	};
 
-// 	if (elements === null) {
-// 		$(document)
-// 			.find("select")
-// 			.select2(option)
-// 			.on("select2:open", function (e) {
-// 				document.querySelector(".select2-search__field").focus();
-// 			});
-// 	} else {
-// 		$.each(elements, (index, element) => {
-// 			$(element)
-// 				.select2(option)
-// 				.on("select2:open", function (e) {
-// 					document.querySelector(".select2-search__field").focus();
-// 				});
-// 		});
-// 	}
-// }
-
-// function destroySelect2() {
-// 	let select2Elements = $(document).find("select");
-
-// 	$.each(select2Elements, (index, select2Element) => {
-// 		$(select2Element).select2("destroy");
-// 	});
-// }
-
-// select2 lama untuk testing lokal
-function initSelect2() {
-	$(document)
-		.find("select")
-		.select2({
-			theme: "bootstrap4",
-		})
-		.on("select2:open", function (e) {
-			document.querySelector(".select2-search__field").focus();
+	if (elements === null) {
+		$(document)
+			.find("select")
+			.select2(option)
+			.on("select2:open", function (e) {
+				document.querySelector(".select2-search__field").focus();
+			});
+	} else {
+		$.each(elements, (index, element) => {
+			$(element)
+				.select2(option)
+				.on("select2:open", function (e) {
+					document.querySelector(".select2-search__field").focus();
+				});
 		});
+	}
 }
 
 function destroySelect2() {
@@ -894,6 +874,26 @@ function destroySelect2() {
 		$(select2Element).select2("destroy");
 	});
 }
+
+// select2 lama untuk testing lokal
+// function initSelect2() {
+// 	$(document)
+// 		.find("select")
+// 		.select2({
+// 			theme: "bootstrap4",
+// 		})
+// 		.on("select2:open", function (e) {
+// 			document.querySelector(".select2-search__field").focus();
+// 		});
+// }
+
+// function destroySelect2() {
+// 	let select2Elements = $(document).find("select");
+
+// 	$.each(select2Elements, (index, select2Element) => {
+// 		$(select2Element).select2("destroy");
+// 	});
+// }
 
 
 function showDialog(statusText = "", message = "") {

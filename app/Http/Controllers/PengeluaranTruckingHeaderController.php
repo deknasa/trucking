@@ -91,18 +91,11 @@ class PengeluaranTruckingHeaderController extends MyController
             // dd($response->getBody()->getContents());
 
         $pengeluarantruckingheader = $response['data'];
-        $kode = $response['kode'];
-
-        if($kode == 'PJT'){
-            $pengeluarantruckingheaderNoBukti = $this->getNoBukti('PINJAMAN SUPIR', 'PINJAMAN SUPIR', 'pengeluarantruckingheader');
-        }else{
-            $pengeluarantruckingheaderNoBukti = $this->getNoBukti('BIAYA LAIN SUPIR', 'BIAYA LAIN SUPIR', 'pengeluarantruckingheader');
-        }
-
+        
 
         $combo = $this->combo();
 
-        return view('pengeluarantruckingheader.edit', compact('title', 'pengeluarantruckingheader','combo', 'pengeluarantruckingheaderNoBukti'));
+        return view('pengeluarantruckingheader.edit', compact('title', 'pengeluarantruckingheader','combo'));
     }
 
     public function update(Request $request, $id)
