@@ -30,7 +30,7 @@
 
   $(document).ready(function() {
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'role' }}`,
+        url: `${apiUrl}role`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',

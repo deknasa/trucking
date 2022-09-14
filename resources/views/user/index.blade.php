@@ -14,7 +14,6 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('user.index') }}"
   let indexRow = 0;
   let page = 0;
   let id = "";
