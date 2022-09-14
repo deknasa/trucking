@@ -6,25 +6,17 @@
   <div class="row">
     <div class="col-12">
       <table id="jqGrid"></table>
-      <div id="jqGridPager"></div>
     </div>
   </div>
 </div>
 
+@include('user._modal')
+
 @push('scripts')
 <script>
-  function dbclick(rowid) {
-    var rowData = jQuery('#jqGrid').getRowData(rowid);
-    localStorage.setItem('getUser_id', JSON.stringify(rowData));
-    window.close();
-  }
-
   let indexUrl = "{{ route('user.index') }}"
-  let getUrl = "{{ route('user.get') }}"
   let indexRow = 0;
   let page = 0;
-  let pager = '#jqGridPager'
-  let popup = "";
   let id = "";
   let triggerClick = true;
   let highlightSearch;
@@ -36,36 +28,8 @@
   let autoNumericElements = []
 
   $(document).ready(function() {
-    popup = "<?= @$_GET['popup'] ?>" == "" ? "" : "ada";
-    id = "<?= @$_GET['name'] ?>" == "" ? "undefined" : "<?= @$_GET['name'] ?>";
-
-    /* Set page */
-    <?php if (isset($_GET['page'])) { ?>
-      page = "{{ $_GET['page'] }}"
-    <?php } ?>
-
-    /* Set id */
-    <?php if (isset($_GET['id'])) { ?>
-      id = "{{ $_GET['id'] }}"
-    <?php } ?>
-
-    /* Set indexRow */
-    <?php if (isset($_GET['indexRow'])) { ?>
-      indexRow = "{{ $_GET['indexRow'] }}"
-    <?php } ?>
-
-    /* Set sortname */
-    <?php if (isset($_GET['sortname'])) { ?>
-      sortname = "{{ $_GET['sortname'] }}"
-    <?php } ?>
-
-    /* Set sortorder */
-    <?php if (isset($_GET['sortorder'])) { ?>
-      sortorder = "{{ $_GET['sortorder'] }}"
-    <?php } ?>
-
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'user' }}`,
+        url: `${apiUrl}user`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -80,10 +44,6 @@
             label: 'USER',
             name: 'user',
             align: 'left',
-            searchoptions: {
-              sopt: ['cn'],
-              defaultValue: "<?= @$_GET['user'] ?>"
-            }
           },
           {
             label: 'NAMA USER',
@@ -183,7 +143,6 @@
         sortname: sortname,
         sortorder: sortorder,
         page: page,
-        pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',
@@ -196,35 +155,14 @@
           records: 'attributes.totalRows',
         },
         loadBeforeSend: (jqXHR) => {
-          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
         },
         onSelectRow: function(id) {
-          id = $(this).jqGrid('getCell', id, 'rn') - 1
-          indexRow = id
+          activeGrid = $(this)
+          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
-          let rows = $(this).jqGrid('getGridParam', 'postData').limit
-          if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
-        },
-        ondblClickRow: function(rowid) {
-          if (popup == "ada") {
-            var rowData = jQuery(this).getRowData(rowid);
-            localStorage.setItem('getUser_id', JSON.stringify(rowData));
-            window.close();
-          }
-        },
-        beforeRequest: function() {
-          var $requestGrid = $(this);
-
-          if ($requestGrid.data('areFiltersDefaulted') !== true) {
-            $requestGrid.data('areFiltersDefaulted', true);
-            setTimeout(function() {
-              $requestGrid[0].triggerToolbar();
-            }, 50);
-            return false;
-          }
-
-          // Subsequent runs are always allowed
-          return true;
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
           $(document).unbind('keydown')
@@ -236,18 +174,16 @@
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
-          console.log($(this).jqGrid('getGridParam', 'postData'));
           postData = $(this).jqGrid('getGridParam', 'postData')
-
-          if (popup == "ada") {
-            $('#pilih').show();
-          } else {
-            $('#pilih').hide();
-          }
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
           })
+
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
+          }
 
           if (triggerClick) {
             if (id != '') {
@@ -271,89 +207,57 @@
         }
       })
 
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
+      .customPager({
+        buttons: [{
+            id: 'add',
+            innerHTML: '<i class="fa fa-plus"></i> ADD',
+            class: 'btn btn-primary btn-sm mr-1',
+            onClick: () => {
+              createUser()
+            }
+          },
+          {
+            id: 'edit',
+            innerHTML: '<i class="fa fa-pen"></i> EDIT',
+            class: 'btn btn-success btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+              editUser(selectedId)
+            }
+          },
+          {
+            id: 'delete',
+            innerHTML: '<i class="fa fa-trash"></i> DELETE',
+            class: 'btn btn-danger btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+              deleteUser(selectedId)
+            }
+          },
+          {
+            id: 'export',
+            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'export')
+              $('#rangeModal').find('button:submit').html(`Export`)
+              $('#rangeModal').modal('show')
+            }
+          },
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'report')
+              $('#rangeModal').find('button:submit').html(`Report`)
+              $('#rangeModal').modal('show')
+            }
+          },
+        ]
       })
-
-      .navButtonAdd(pager, {
-        caption: 'Add',
-        title: 'Add',
-        id: 'add',
-        buttonicon: 'fas fa-plus',
-        class: 'btn btn-primary',
-        onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
-
-          window.location.href = `{{ route('user.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Edit',
-        title: 'Edit',
-        id: 'edit',
-        buttonicon: 'fas fa-pen',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-          window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Delete',
-        title: 'Delete',
-        id: 'delete',
-        buttonicon: 'fas fa-trash',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Export',
-        title: 'Export',
-        id: 'export',
-        buttonicon: 'fas fa-file-export',
-        onClickButton: function() {
-          $('#rangeModal').data('action', 'export')
-          $('#rangeModal').find('button:submit').html(`Export`)
-          $('#rangeModal').modal('show')
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Report',
-        title: 'Report',
-        id: 'report',
-        buttonicon: 'fas fa-print',
-        onClickButton: function() {
-          $('#rangeModal').data('action', 'report')
-          $('#rangeModal').find('button:submit').html(`Report`)
-          $('#rangeModal').modal('show')
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Pilih',
-        title: 'Pilih',
-        id: 'pilih',
-        buttonicon: 'fas fa-check',
-        class: 'btn btn-primary',
-        onClickButton: function() {
-          var selRowId = $(this).jqGrid("getGridParam", "selrow");
-          var rowData = $(this).jqGrid("getRowData", selRowId)
-          localStorage.setItem('getUser_id', JSON.stringify(rowData));
-          window.close();
-        }
-      })
-
 
       .jqGrid('filterToolbar', {
         stringResult: true,
@@ -371,8 +275,6 @@
 
     /* Append global search */
     loadGlobalSearch()
-
-
 
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)
@@ -479,7 +381,6 @@
         }
 
         xhr.onerror = (error) => {
-          console.log(error);
           submitButton.removeAttr('disabled')
         }
 
