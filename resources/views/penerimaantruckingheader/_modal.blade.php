@@ -1,6 +1,6 @@
 <div class="modal fade modal-fullscreen" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form action="#" id="crudForm">
+    <form action="#" id="crudForm" >
       <div class="modal-content">
         <div class="modal-header bg-primary">
           <h5 class="modal-title" id="crudModalTitle"></h5>
@@ -9,14 +9,14 @@
           </button>
         </div>
         <form action="" method="post">
-
+        
           <div class="modal-body">
             <input type="hidden" name="id">
 
             <div class="row form-group">
               <div class="col-12 col-sm-2 col-md-2 col-form-label">
                 <label>
-                  NO BUKTI <span class="text-danger">*</span>
+                    NO BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -25,7 +25,7 @@
 
               <div class="col-12 col-sm-2 col-md-2 col-form-label">
                 <label>
-                  TANGGAL BUKTI <span class="text-danger">*</span>
+                TANGGAL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -35,7 +35,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  KETERANGAN <span class="text-danger">*</span></label>
+                KETERANGAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">
@@ -44,21 +44,21 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  PENGELUARAN TRUCKING <span class="text-danger">*</span>
+                PENERIMAAN TRUCKING <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-8 col-md-10">
                 <div class="input-group">
-                  <input type="hidden" name="pengeluarantrucking_id">
-                  <input type="text" name="pengeluarantrucking" class="form-control">
+                  <input type="hidden" name="penerimaantrucking_id">
+                  <input type="text" name="penerimaantrucking" class="form-control">
                   <div class="input-group-append">
-                    <button id="lookupPengeluaranTruckingToggler" class="btn btn-secondary" type="button">...</button>
+                    <button id="lookupPenerimaanTruckingToggler" class="btn btn-secondary" type="button">...</button>
                   </div>
                 </div>
-                <div class="row position-absolute" id="lookupPengeluaranTrucking" style="z-index: 1;">
+                <div class="row position-absolute" id="lookupPenerimaanTrucking" style="z-index: 1;">
                   <div class="col-12">
-                    <div id="lookupPengeluaranTrucking" class="shadow-lg">
-                      @include('partials.lookups.pengeluarantrucking')
+                    <div id="lookupPenerimaanTrucking" class="shadow-lg">
+                      @include('partials.lookups.penerimaantrucking')
                     </div>
                   </div>
                 </div>
@@ -67,7 +67,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  BANK <span class="text-danger">*</span>
+                BANK <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-8 col-md-10">
@@ -87,11 +87,11 @@
                 </div>
               </div>
             </div>
-
+            
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  COA <span class="text-danger">*</span>
+                COA <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-8 col-md-10">
@@ -114,20 +114,20 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  NO BUKTI PENGELUARAN <span class="text-danger">*</span>
+                NO BUKTI PENERIMAAN <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-8 col-md-10">
                 <div class="input-group">
-                  <input type="text" name="pengeluaran_nobukti" class="form-control">
+                  <input type="text" name="penerimaan_nobukti" class="form-control">
                   <div class="input-group-append">
-                    <button id="lookupPengeluaranHeaderToggler" class="btn btn-secondary" type="button">...</button>
+                    <button id="lookupPenerimaanHeaderToggler" class="btn btn-secondary" type="button">...</button>
                   </div>
                 </div>
-                <div class="row position-absolute" id="lookupPengeluaranHeader" style="z-index: 1;">
+                <div class="row position-absolute" id="lookupPenerimaanHeader" style="z-index: 1;">
                   <div class="col-12">
-                    <div id="lookupPengeluaranHeader" class="shadow-lg">
-                      @include('partials.lookups.pengeluaranheader')
+                    <div id="lookupPenerimaanHeader" class="shadow-lg">
+                      @include('partials.lookups.penerimaanheader')
                     </div>
                   </div>
                 </div>
@@ -139,7 +139,7 @@
                 <tr>
                   <th width="50">No</th>
                   <th>Supir</th>
-                  <th>No Bukti Penerimaan Trucking</th>
+                  <th>No Bukti Pengeluaran Trucking</th>
                   <th>Nominal</th>
                   <th>Aksi</th>
                 </tr>
@@ -150,46 +150,46 @@
                     <div class="baris">1</div>
                   </td>
                   <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12" id="supir_id">
-                        <div class="input-group">
-                          <input type="hidden" name="supir_id">
-                          <input type="text" name="supir" class="form-control">
-                          <div class="input-group-append">
-                            <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
-                          </div>
+                  <div class="row form-group" >
+                    <div class="col-12 col-md-12" id="supir_id">
+                      <div class="input-group">
+                        <input type="hidden" name="supir_id">
+                        <input type="text" name="supir"  class="form-control">
+                        <div class="input-group-append">
+                          <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
                         </div>
-                        <div class="row position-absolute" id="lookupSupir" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupSupir" class="shadow-lg">
-                              @include('partials.lookups.supir')
-                            </div>
+                      </div>
+                      <div class="row position-absolute" id="lookupSupir" style="z-index: 1;">
+                        <div class="col-12">
+                          <div id="lookupSupir" class="shadow-lg">
+                            @include('partials.lookups.supir')
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
                   </td>
                   <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <div class="input-group">
-                          <input type="text" name="penerimaantruckingheader_nobukti" class="form-control">
-                          <div class="input-group-append">
-                            <button id="lookupPenerimaanTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
-                          </div>
+                  <div class="row form-group" >
+                    <div class="col-12 col-md-12">
+                      <div class="input-group">
+                        <input type="text" name="pengeluarantruckingheader_nobukti"  class="form-control">
+                        <div class="input-group-append">
+                          <button id="lookupPengeluaranTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
                         </div>
-                        <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupPenerimaanTruckingHeader" class="shadow-lg">
-                              @include('partials.lookups.penerimaantruckingheader')
-                            </div>
+                      </div>
+                      <div class="row position-absolute" id="lookupPengeluaranTruckingHeader" style="z-index: 1;">
+                        <div class="col-12">
+                          <div id="lookupPengeluaranTruckingHeader" class="shadow-lg" >
+                            @include('partials.lookups.pengeluarantruckingheader')
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
                   </td>
                   <td>
-                    <input type="text" name="nominal" style="text-align:right" class="form-control text-right autonumeric">
+                      <input type="text" name="nominal"  style="text-align:right" class="form-control text-right autonumeric" > 
                   </td>
                   <td>
                     <div class='btn btn-danger btn-sm rmv'>Hapus</div>
@@ -223,7 +223,6 @@
     </form>
   </div>
 </div>
-
 @push('scripts')
 <script>
   let hasFormBindKeys = false
@@ -269,19 +268,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}pengeluarantruckingheader`
+          url = `${apiUrl}penerimaantruckingheader`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}pengeluarantruckingheader/${Id}`
+          url = `${apiUrl}penerimaantruckingheader/${Id}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}pengeluarantruckingheader/${Id}`
+          url = `${apiUrl}penerimaantruckingheader/${Id}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}pengeluarantruckingheader`
+          url = `${apiUrl}penerimaantruckingheader`
           break;
       }
 
@@ -297,7 +296,7 @@
         },
         data: data,
         success: response => {
-
+          
 
           id = response.data.id
           console.log(id)
@@ -332,7 +331,7 @@
 
   $("#addrow").click(function() {
     let rowCount = $('#row').length;
-
+      
     if (rowCount > 0) {
       let clone = $('#row').clone();
       clone.find('input').val('');
@@ -346,7 +345,7 @@
       $('#table_body').append(html);
     }
   });
-
+  
   $('table').on('click', '.rmv', function() {
     $(this).closest('tr').remove();
 
@@ -357,7 +356,7 @@
   });
 
 
-  function createPengeluaranTruckingHeader() {
+  function createPenerimaanTruckingHeader() {
     let form = $('#crudForm')
 
     form.trigger('reset')
@@ -366,13 +365,13 @@
     Simpan
   `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Add Pengeluaran Trucking')
+    $('#crudModalTitle').text('Add Penerimaan Trucking')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
   }
 
-  function editPengeluaranTruckingHeader(Id) {
+  function editPenerimaanTruckingHeader(Id) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -381,13 +380,13 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-    $('#crudModalTitle').text('Edit Pengeluaran Trucking Header')
+    $('#crudModalTitle').text('Edit Penerimaan Trucking Header')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     $.ajax({
-      url: `${apiUrl}pengeluarantruckingheader/${Id}`,
+      url: `${apiUrl}penerimaantruckingheader/${Id}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -397,7 +396,7 @@
         $.each(response.data, (index, value) => {
           form.find(`[name="${index}"]`).val(value)
         })
-        <?php $details = "<script> response.detail </script>"; ?>
+        <?php $details = "<script> response.detail </script>"; ?>  
         $.each(response.detail, function() {
           $.each(this, function(name, value) {
             form.find(`[name="${name}"]`).val(value)
@@ -409,7 +408,7 @@
     })
   }
 
-  function deletePengeluaranTruckingHeader(Id) {
+  function deletePenerimaanTruckingHeader(Id) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -418,13 +417,13 @@
     <i class="fa fa-save"></i>
     Hapus
   `)
-    $('#crudModalTitle').text('Delete Pengeluaran Trucking')
+    $('#crudModalTitle').text('Delete Penerimaan Trucking')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     $.ajax({
-      url: `${apiUrl}pengeluarantruckingheader/${Id}`,
+      url: `${apiUrl}penerimaantruckingheader/${Id}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -442,5 +441,6 @@
       }
     })
   }
+
 </script>
 @endpush()

@@ -1,10 +1,10 @@
-<table id="penerimaanTruckingHeaderLookup" style="width: 100%;"></table>
-<div id="penerimaanTruckingHeaderLookupPager"></div>
+<table id="pengeluaranTruckingHeaderLookup" style="width: 100%;"></table>
+<div id="pengeluaranTruckingHeaderLookupPager"></div>
 
 @push('scripts')
 <script>
-  let penerimaanTruckingHeaderLookup = $('#penerimaanTruckingHeaderLookup').jqGrid({
-    url: `{{ config('app.api_url') . 'penerimaantruckingheader' }}`,
+  let pengeluaranTruckingHeaderLookup = $('#pengeluaranTruckingHeaderLookup').jqGrid({
+    url: `{{ config('app.api_url') . 'pengeluarantruckingheader' }}`,
     mtype: "GET",
     styleUI: 'Bootstrap4',
     iconSet: 'fontAwesome',
@@ -41,13 +41,13 @@
         align: 'left'
       },
       {
-        label: 'NO BUKTI PENERIMAAN',
-        name: 'penerimaan_nobukti',
+        label: 'NO BUKTI PENGELUARAN',
+        name: 'pengeluaran_nobukti',
         align: 'left'
       },
       {
-        label: 'TANGGAL BUKTI PENERIMAAN',
-        name: 'penerimaan_tgl',
+        label: 'TANGGAL BUKTI PENGELUARAN',
+        name: 'pengeluaran_tgl',
         align: 'left',
         formatter: "date",
         formatoptions: {
@@ -84,7 +84,7 @@
     sortname: 'id',
     sortorder: 'asc',
     page: 1,
-    pager: $('#penerimaanTruckingHeaderLookupPager'),
+    pager: $('#pengeluaranTruckingHeaderLookupPager'),
     viewrecords: true,
     prmNames: {
       sort: 'sortIndex',
@@ -113,26 +113,26 @@
         setCustomBindKeys($(this))
         initResize($(this))
 
-        if (indexRow - 1 > $('#penerimaanTruckingHeaderLookup').getGridParam().reccount) {
-          indexRow = $('#penerimaanTruckingHeaderLookup').getGridParam().reccount - 1
+        if (indexRow - 1 > $('#pengeluaranTruckingHeaderLookup').getGridParam().reccount) {
+          indexRow = $('#pengeluaranTruckingHeaderLookup').getGridParam().reccount - 1
         }
 
         if (triggerClick) {
           if (id != '') {
             indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-            $(`#penerimaanTruckingHeaderLookup [id="${$('#penerimaanTruckingHeaderLookup').getDataIDs()[indexRow]}"]`).click()
+            $(`#pengeluaranTruckingHeaderLookup [id="${$('#pengeluaranTruckingHeaderLookup').getDataIDs()[indexRow]}"]`).click()
             id = ''
           } else if (indexRow != undefined) {
-            $(`#penerimaanTruckingHeaderLookup [id="${$('#penerimaanTruckingHeaderLookup').getDataIDs()[indexRow]}"]`).click()
+            $(`#pengeluaranTruckingHeaderLookup [id="${$('#pengeluaranTruckingHeaderLookup').getDataIDs()[indexRow]}"]`).click()
           }
 
-          if ($('#penerimaanTruckingHeaderLookup').getDataIDs()[indexRow] == undefined) {
-            $(`#penerimaanTruckingHeaderLookup [id="` + $('#penerimaanTruckingHeaderLookup').getDataIDs()[0] + `"]`).click()
+          if ($('#pengeluaranTruckingHeaderLookup').getDataIDs()[indexRow] == undefined) {
+            $(`#pengeluaranTruckingHeaderLookup [id="` + $('#pengeluaranTruckingHeaderLookup').getDataIDs()[0] + `"]`).click()
           }
 
           triggerClick = false
         } else {
-          $('#penerimaanTruckingHeaderLookup').setSelection($('#penerimaanTruckingHeaderLookup').getDataIDs()[indexRow])
+          $('#pengeluaranTruckingHeaderLookup').setSelection($('#pengeluaranTruckingHeaderLookup').getDataIDs()[indexRow])
         }
       }
 
@@ -147,7 +147,7 @@
         clearColumnSearch()
       })
 
-      $(this).setGridWidth($('#lookupPenerimaanTruckingHeader').prev().width())
+      $(this).setGridWidth($('#lookupPengeluaranTruckingHeader').prev().width())
       setHighlight($(this))
     }
   })

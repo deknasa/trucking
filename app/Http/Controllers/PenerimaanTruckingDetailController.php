@@ -10,19 +10,16 @@ class PenerimaanTruckingDetailController extends Controller
 {
     public $title = 'Penerimaan Trucking Detail';
 
-    /**
-     * Fungsi index
-     * @ClassName index
-     */
     public function index(Request $request)
     {
         $params = [
-            'penerimaantrucking_id' => $request->penerimaantrucking_id,
+            'penerimaantruckingheader_id' => $request->penerimaantruckingheader_id,
             'whereIn' => $request->whereIn
         ];
 
         $response = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') .'penerimaantruckingdetail', $params);
             
         $data = [
@@ -32,3 +29,5 @@ class PenerimaanTruckingDetailController extends Controller
         return response($data);
     }
 }
+
+

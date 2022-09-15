@@ -31,31 +31,26 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        //datatype: "json",
         colModel: [
           {
             label: 'NO BUKTI',
             name: 'nobukti',
-          }, 
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
           },
           {
             label: 'SUPIR',
             name: 'supir_id',
           },
-          // {
-          //   label: 'NO BUKTI PENGELUARAN',
-          //   name: 'pengeluarantruckingheader_nobukti',
-          // },
-         
+          {
+            label: 'NO BUKTI PENGELUARAN TRUCKING',
+            name: 'pengeluarantruckingheader_nobukti',
+          },
+          {
+            label: 'NOMINAL',
+            name: 'nominal',
+            formatter: 'number', 
+            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            align: "right",
+          }
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -86,7 +81,7 @@
       url: detailIndexUrl,
       datatype: "json",
       postData: {
-        penerimaantrucking_id: id
+        penerimaantruckingheader_id: id
       }
     }).trigger('reloadGrid')
   }
