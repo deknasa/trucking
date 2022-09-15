@@ -243,11 +243,12 @@ function setErrorMessages(form, errors) {
 		}
 
 		if ($(element).length > 0) {
-			$(element).addClass("is-invalid").after(`
+			$(element).addClass("is-invalid");
+			$(`
 					<div class="invalid-feedback">
 					${error}
 					</div>
-			`);
+			`).appendTo($(element).parent());
 		} else {
 			return showDialog(error);
 		}
