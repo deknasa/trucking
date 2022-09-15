@@ -1,6 +1,6 @@
 <div class="modal fade modal-fullscreen" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form action="#" id="crudForm" >
+    <form action="#" id="crudForm">
       <div class="modal-content">
         <div class="modal-header bg-primary">
           <h5 class="modal-title" id="crudModalTitle"></h5>
@@ -9,14 +9,14 @@
           </button>
         </div>
         <form action="" method="post">
-        
+
           <div class="modal-body">
             <input type="hidden" name="id">
 
             <div class="row form-group">
               <div class="col-12 col-sm-2 col-md-2 col-form-label">
                 <label>
-                    NO BUKTI <span class="text-danger">*</span>
+                  NO BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -25,17 +25,17 @@
 
               <div class="col-12 col-sm-2 col-md-2 col-form-label">
                 <label>
-                TANGGAL BUKTI <span class="text-danger">*</span>
+                  TANGGAL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-4 col-md-4">
-                <input type="text" name="tglbukti" class="form-control datepicker">
+              <div class="col-12 col-sm-4 col-md-4" id="tglbukti">
+                <input type="text" name="tglbukti" class="form-control datepicker" >
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                KETERANGAN <span class="text-danger">*</span></label>
+                  KETERANGAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">
@@ -52,26 +52,27 @@
                 </tr>
               </thead>
               <tbody id="table_body" class="form-group">
+
                 <tr id="row">
                   <td>
                     <div class="baris">1</div>
                   </td>
                   <td>
-                  <div class="row form-group" >
-                    <div class="col-12 col-md-12">
-                        <input type="text" name="nominal_detail[]"  class="form-control autonumeric">
+                    <div class="row form-group">
+                      <div class="col-12 col-md-12">
+                        <input type="text" name="nominal_detail[]" class="form-control autonumeric">
+                      </div>
                     </div>
-                  </div>
                   </td>
                   <td>
-                  <div class="row form-group" >
-                    <div class="col-12 col-md-12">
-                        <input type="text" name="keterangan_detail[]"  class="form-control">
+                    <div class="row form-group">
+                      <div class="col-12 col-md-12">
+                        <input type="text" name="keterangan_detail[]" class="form-control">
+                      </div>
                     </div>
-                  </div>
                   </td>
                   <td>
-                      <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                   </td>
                 </tr>
 
@@ -108,6 +109,7 @@
   let hasFormBindKeys = false
 
   $(document).ready(function() {
+
     // initLookupSupir()
 
     $('#btnSubmit').click(function(event) {
@@ -176,7 +178,7 @@
         },
         data: data,
         success: response => {
-          
+
 
           id = response.data.id
           console.log(id)
@@ -228,12 +230,12 @@
 
   $("#addrow").click(function() {
     let rowCount = $('#row').length;
-      
+    let barisCount = $('.baris').length;
     if (rowCount > 0) {
       let clone = $('#row').clone();
       clone.find('input').val('');
 
-      baris = parseInt(baris) + 1;
+      baris = parseInt(barisCount) + 1;
       clone.find('.baris').text(baris);
       $('table #table_body').append(clone);
 
@@ -242,7 +244,7 @@
       $('#table_body').append(html);
     }
   });
-  
+
   $('table').on('click', '.rmv', function() {
     $(this).closest('tr').remove();
 
@@ -293,7 +295,30 @@
         $.each(response.data, (index, value) => {
           form.find(`[name="${index}"]`).val(value)
         })
-        
+        // $('#tglbukti').datepicker({
+        //   format: 'dd-mm-yyyy'
+        // });
+
+        $('#table_body').html('')
+        $.each(response.detail, (index, value) => {
+          $('#table_body').append(
+            `<tr id="row">
+                <td>
+                  <div class="baris">${parseInt(index) + 1}</div>
+                </td>
+            
+                <td>
+                  <input type="text" name="nominal_detail[]" value="${value.nominal}" style="text-align:right" class="form-control autonumeric">   
+                </td>
+                <td>
+                  <input type="text" name="keterangan_detail[]" value="${value.keterangan}" class="form-control">
+                </td>
+                <td>
+                  <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                </td>
+              </tr>`
+          )
+        })
       }
     })
   }
@@ -323,14 +348,29 @@
         $.each(response.data, (index, value) => {
           form.find(`[name="${index}"]`).val(value)
         })
-        $.each(response.detail, function() {
-          $.each(this, function(name, value) {
-            form.find(`[name="${name}"]`).val(value)
-          });
-        });
+        $('#table_body').html('')
+        $.each(response.detail, (index, value) => {
+          $('#table_body').append(
+            `<tr id="row">
+                <td>
+                  <div class="baris">${parseInt(index) + 1}</div>
+                </td>
+            
+                <td>
+                  <input type="text" name="nominal_detail[]" value="${value.nominal}" style="text-align:right" class="form-control autonumeric">   
+                </td>
+                <td>
+                  <input type="text" name="keterangan_detail[]" value="${value.keterangan}" class="form-control">
+                </td>
+                <td>
+                  <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                </td>
+              </tr>`
+          )
+        })
+
       }
     })
   }
-
 </script>
 @endpush()

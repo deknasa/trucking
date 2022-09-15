@@ -151,7 +151,7 @@
                   </td>
                   <td>
                   <div class="row form-group" >
-                    <div class="col-12 col-md-12" id="supir_id">
+                    <div class="col-12 col-md-12">
                       <div class="input-group">
                         <input type="hidden" name="supir_id">
                         <input type="text" name="supir"  class="form-control">
@@ -397,14 +397,68 @@
         $.each(response.data, (index, value) => {
           form.find(`[name="${index}"]`).val(value)
         })
-        <?php $details = "<script> response.detail </script>"; ?>  
+
         $.each(response.detail, function() {
           $.each(this, function(name, value) {
             form.find(`[name="${name}"]`).val(value)
           });
         });
-        console.log(response.data)
-        console.log(response.detail)
+
+        $('#table_body').html('')
+        $.each(response.detail, (index, value) => {
+          $('#table_body').append(
+            `<tr id="row">
+              <td>
+                <div class="baris">${parseInt(index) + 1}</div>
+              </td>
+              <td>
+              <div class="row form-group" >
+                <div class="col-12 col-md-12">
+                  <div class="input-group">
+                    <input type="hidden" name="supir_id" value="${value.supir_id}">
+                    <input type="text" name="supir" value="${value.supir}" class="form-control">
+                    <div class="input-group-append">
+                      <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
+                    </div>
+                  </div>
+                  <div class="row position-absolute" id="lookupSupir" style="z-index: 1;">
+                    <div class="col-12">
+                      <div id="lookupSupir" class="shadow-lg">
+                        @include('partials.lookups.supir')
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </td>
+              <td>
+              <div class="row form-group" >
+                <div class="col-12 col-md-12">
+                  <div class="input-group">
+                    <input type="text" name="penerimaantruckingheader_nobukti" value="${value.penerimaantruckingheader_nobukti}" class="form-control">
+                    <div class="input-group-append">
+                      <button id="lookupPenerimaanTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
+                    </div>
+                  </div>
+                  <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 1;">
+                    <div class="col-12">
+                      <div id="lookupPenerimaanTruckingHeader" class="shadow-lg" >
+                        @include('partials.lookups.penerimaantruckingheader')
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </td>
+              <td>
+                  <input type="text" name="nominal" value="${value.nominal}" style="text-align:right" class="form-control text-right autonumeric" > 
+              </td>
+              <td>
+                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+              </td>
+            </tr>`
+          )
+        })
       }
     })
   }
@@ -434,11 +488,61 @@
         $.each(response.data, (index, value) => {
           form.find(`[name="${index}"]`).val(value)
         })
-        $.each(response.detail, function() {
-          $.each(this, function(name, value) {
-            form.find(`[name="${name}"]`).val(value)
-          });
-        });
+        $('#table_body').html('')
+        $.each(response.detail, (index, value) => {
+          $('#table_body').append(
+            `<tr id="row">
+              <td>
+                <div class="baris">${parseInt(index) + 1}</div>
+              </td>
+              <td>
+              <div class="row form-group" >
+                <div class="col-12 col-md-12">
+                  <div class="input-group">
+                    <input type="hidden" name="supir_id" value="${value.supir_id}">
+                    <input type="text" name="supir" value="${value.supir}" class="form-control">
+                    <div class="input-group-append">
+                      <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
+                    </div>
+                  </div>
+                  <div class="row position-absolute" id="lookupSupir" style="z-index: 1;">
+                    <div class="col-12">
+                      <div id="lookupSupir" class="shadow-lg">
+                        @include('partials.lookups.supir')
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </td>
+              <td>
+              <div class="row form-group" >
+                <div class="col-12 col-md-12">
+                  <div class="input-group">
+                    <input type="text" name="penerimaantruckingheader_nobukti" value="${value.penerimaantruckingheader_nobukti}" class="form-control">
+                    <div class="input-group-append">
+                      <button id="lookupPenerimaanTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
+                    </div>
+                  </div>
+                  <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 1;">
+                    <div class="col-12">
+                      <div id="lookupPenerimaanTruckingHeader" class="shadow-lg" >
+                        @include('partials.lookups.penerimaantruckingheader')
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </td>
+              <td>
+                  <input type="text" name="nominal" value="${value.nominal}" style="text-align:right" class="form-control text-right autonumeric" > 
+              </td>
+              <td>
+                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+              </td>
+            </tr>`
+          )
+        })
       }
     })
   }
