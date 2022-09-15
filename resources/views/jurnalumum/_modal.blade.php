@@ -41,106 +41,15 @@
                 <input type="text" name="keterangan" class="form-control">
               </div>
             </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                PENGELUARAN TRUCKING <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="hidden" name="pengeluarantrucking_id">
-                  <input type="text" name="pengeluarantrucking" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupPengeluaranTruckingToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupPengeluaranTrucking" style="z-index: 1;">
-                  <div class="col-12">
-                    <div id="lookupPengeluaranTrucking" class="shadow-lg">
-                      @include('partials.lookups.pengeluarantrucking')
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                BANK <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="hidden" name="bank_id" class="form-control">
-                  <input type="text" name="bank" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupBankToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupBank" style="z-index: 1;">
-                  <div class="col-12">
-                    <div id="lookupBank" class="shadow-lg">
-                      @include('partials.lookups.bank')
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
             
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                COA <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="text" name="akunpusat" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupAkunPusatToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 1;">
-                  <div class="col-12">
-                    <div id="lookupAkunPusat" class="shadow-lg">
-                      @include('partials.lookups.akunpusat')
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                NO BUKTI PENGELUARAN <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="text" name="pengeluaran_nobukti" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupPengeluaranHeaderToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupPengeluaranHeader" style="z-index: 1;">
-                  <div class="col-12">
-                    <div id="lookupPengeluaranHeader" class="shadow-lg">
-                      @include('partials.lookups.pengeluaranheader')
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <table class="table table-bordered table-bindkeys">
               <thead>
                 <tr>
                   <th width="50">No</th>
-                  <th>Supir</th>
-                  <th>No Bukti Penerimaan Trucking</th>
-                  <th>Nominal</th>
+                  <th>COA DEBET</th>
+                  <th>COA KREDIT</th>
+                  <th>NOMINAL</th>
+                  <th>KETERANGAN</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -153,16 +62,15 @@
                   <div class="row form-group" >
                     <div class="col-12 col-md-12">
                       <div class="input-group">
-                        <input type="hidden" name="supir_id">
-                        <input type="text" name="supir"  class="form-control">
+                        <input type="text" name="debet_detail"  class="form-control">
                         <div class="input-group-append">
-                          <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
+                          <button id="lookupAkunPusatToggler" class="btn btn-secondary" type="button">...</button>
                         </div>
                       </div>
-                      <div class="row position-absolute" id="lookupSupir" style="z-index: 1;">
+                      <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 1;">
                         <div class="col-12">
-                          <div id="lookupSupir" class="shadow-lg">
-                            @include('partials.lookups.supir')
+                          <div id="lookupAkunPusat" class="shadow-lg">
+                            @include('partials.lookups.akunpusat')
                           </div>
                         </div>
                       </div>
@@ -173,15 +81,15 @@
                   <div class="row form-group" >
                     <div class="col-12 col-md-12">
                       <div class="input-group">
-                        <input type="text" name="penerimaantruckingheader_nobukti"  class="form-control">
+                        <input type="text" name="kredit_detail"  class="form-control">
                         <div class="input-group-append">
-                          <button id="lookupPenerimaanTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
+                          <button id="lookupAkunPusatToggler" class="btn btn-secondary" type="button">...</button>
                         </div>
                       </div>
-                      <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 1;">
+                      <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 1;">
                         <div class="col-12">
-                          <div id="lookupPenerimaanTruckingHeader" class="shadow-lg" >
-                            @include('partials.lookups.penerimaantruckingheader')
+                          <div id="lookupAkunPusat" class="shadow-lg" >
+                            @include('partials.lookups.akunpusat')
                           </div>
                         </div>
                       </div>
@@ -189,7 +97,9 @@
                   </div>
                   </td>
                   <td>
-                      <input type="text" name="nominal"  style="text-align:right" class="form-control text-right autonumeric" > 
+                      <input type="text" name="nominal_detail"  style="text-align:right" class="form-control text-right autonumeric" > 
+                  </td><td>
+                      <input type="text" name="keterangan_detail" class="form-control" > 
                   </td>
                   <td>
                     <div class='btn btn-danger btn-sm rmv'>Hapus</div>
@@ -199,7 +109,7 @@
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan="4"></td>
+                  <td colspan="5"></td>
                   <td>
                     <button type="button" class="btn btn-primary btn-sm my-2" id="addrow">Tambah</button>
                   </td>
@@ -269,19 +179,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}pengeluarantruckingheader`
+          url = `${apiUrl}jurnalumumheader`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}pengeluarantruckingheader/${Id}`
+          url = `${apiUrl}jurnalumumheader/${Id}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}pengeluarantruckingheader/${Id}`
+          url = `${apiUrl}jurnalumumheader/${Id}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}pengeluarantruckingheader`
+          url = `${apiUrl}jurnalumumheader`
           break;
       }
 
@@ -357,7 +267,7 @@
   });
 
 
-  function createPengeluaranTruckingHeader() {
+  function createJurnalUmumHeader() {
     let form = $('#crudForm')
 
     form.trigger('reset')
@@ -366,13 +276,13 @@
     Simpan
   `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Add Pengeluaran Trucking')
+    $('#crudModalTitle').text('Add Jurnal Umum')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
   }
 
-  function editPengeluaranTruckingHeader(Id) {
+  function editJurnalUmumHeader(Id) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -381,13 +291,13 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-    $('#crudModalTitle').text('Edit Pengeluaran Trucking')
+    $('#crudModalTitle').text('Edit Jurnal Umum')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     $.ajax({
-      url: `${apiUrl}pengeluarantruckingheader/${Id}`,
+      url: `${apiUrl}jurnalumumheader/${Id}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -412,46 +322,48 @@
                 <div class="baris">${parseInt(index) + 1}</div>
               </td>
               <td>
-              <div class="row form-group" >
+                <div class="row form-group" >
                 <div class="col-12 col-md-12">
-                  <div class="input-group">
-                    <input type="hidden" name="supir_id" value="${value.supir_id}">
-                    <input type="text" name="supir" value="${value.supir}" class="form-control">
+                    <div class="input-group">
+                    <input type="text" name="debet_detail" value="${value.coadebet}" class="form-control">
                     <div class="input-group-append">
-                      <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
+                        <button id="lookupAkunPusatToggler" class="btn btn-secondary" type="button">...</button>
                     </div>
-                  </div>
-                  <div class="row position-absolute" id="lookupSupir" style="z-index: 1;">
+                    </div>
+                    <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 1;">
                     <div class="col-12">
-                      <div id="lookupSupir" class="shadow-lg">
-                        @include('partials.lookups.supir')
-                      </div>
+                        <div id="lookupAkunPusat" class="shadow-lg">
+                        @include('partials.lookups.akunpusat')
+                        </div>
                     </div>
-                  </div>
+                    </div>
                 </div>
-              </div>
+                </div>
               </td>
               <td>
-              <div class="row form-group" >
+                <div class="row form-group" >
                 <div class="col-12 col-md-12">
-                  <div class="input-group">
-                    <input type="text" name="penerimaantruckingheader_nobukti" value="${value.penerimaantruckingheader_nobukti}" class="form-control">
+                    <div class="input-group">
+                    <input type="text" name="kredit_detail" value="${value.coakredit}" class="form-control">
                     <div class="input-group-append">
-                      <button id="lookupPenerimaanTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
+                        <button id="lookupAkunPusatToggler" class="btn btn-secondary" type="button">...</button>
                     </div>
-                  </div>
-                  <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 1;">
+                    </div>
+                    <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 1;">
                     <div class="col-12">
-                      <div id="lookupPenerimaanTruckingHeader" class="shadow-lg" >
-                        @include('partials.lookups.penerimaantruckingheader')
-                      </div>
+                        <div id="lookupAkunPusat" class="shadow-lg" >
+                        @include('partials.lookups.akunpusat')
+                        </div>
                     </div>
-                  </div>
+                    </div>
                 </div>
-              </div>
+                </div>
               </td>
               <td>
-                  <input type="text" name="nominal" value="${value.nominal}" style="text-align:right" class="form-control text-right autonumeric" > 
+                    <input type="text" name="nominal_detail" value="${value.nominal}" style="text-align:right" class="form-control text-right autonumeric" > 
+              </td>
+              <td>
+                    <input type="text" name="keterangan_detail" value="${value.keterangan}" class="form-control"> 
               </td>
               <td>
                 <div class='btn btn-danger btn-sm rmv'>Hapus</div>
@@ -463,7 +375,7 @@
     })
   }
 
-  function deletePengeluaranTruckingHeader(Id) {
+  function deleteJurnalUmumHeader(Id) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -472,13 +384,13 @@
     <i class="fa fa-save"></i>
     Hapus
   `)
-    $('#crudModalTitle').text('Delete Pengeluaran Trucking')
+    $('#crudModalTitle').text('Delete Jurnal Umum')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     $.ajax({
-      url: `${apiUrl}pengeluarantruckingheader/${Id}`,
+      url: `${apiUrl}jurnalumumheader/${Id}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -496,46 +408,48 @@
                 <div class="baris">${parseInt(index) + 1}</div>
               </td>
               <td>
-              <div class="row form-group" >
+                <div class="row form-group" >
                 <div class="col-12 col-md-12">
-                  <div class="input-group">
-                    <input type="hidden" name="supir_id" value="${value.supir_id}">
-                    <input type="text" name="supir" value="${value.supir}" class="form-control">
+                    <div class="input-group">
+                    <input type="text" name="debet_detail" value="${value.coadebet}" class="form-control">
                     <div class="input-group-append">
-                      <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
+                        <button id="lookupAkunPusatToggler" class="btn btn-secondary" type="button">...</button>
                     </div>
-                  </div>
-                  <div class="row position-absolute" id="lookupSupir" style="z-index: 1;">
+                    </div>
+                    <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 1;">
                     <div class="col-12">
-                      <div id="lookupSupir" class="shadow-lg">
-                        @include('partials.lookups.supir')
-                      </div>
+                        <div id="lookupAkunPusat" class="shadow-lg">
+                        @include('partials.lookups.akunpusat')
+                        </div>
                     </div>
-                  </div>
+                    </div>
                 </div>
-              </div>
+                </div>
               </td>
               <td>
-              <div class="row form-group" >
+                <div class="row form-group" >
                 <div class="col-12 col-md-12">
-                  <div class="input-group">
-                    <input type="text" name="penerimaantruckingheader_nobukti" value="${value.penerimaantruckingheader_nobukti}" class="form-control">
+                    <div class="input-group">
+                    <input type="text" name="kredit_detail" value="${value.coakredit}" class="form-control">
                     <div class="input-group-append">
-                      <button id="lookupPenerimaanTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
+                        <button id="lookupAkunPusatToggler" class="btn btn-secondary" type="button">...</button>
                     </div>
-                  </div>
-                  <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 1;">
+                    </div>
+                    <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 1;">
                     <div class="col-12">
-                      <div id="lookupPenerimaanTruckingHeader" class="shadow-lg" >
-                        @include('partials.lookups.penerimaantruckingheader')
-                      </div>
+                        <div id="lookupAkunPusat" class="shadow-lg" >
+                        @include('partials.lookups.akunpusat')
+                        </div>
                     </div>
-                  </div>
+                    </div>
                 </div>
-              </div>
+                </div>
               </td>
               <td>
-                  <input type="text" name="nominal" value="${value.nominal}" style="text-align:right" class="form-control text-right autonumeric" > 
+                    <input type="text" name="nominal_detail" value="${value.nominal}" style="text-align:right" class="form-control text-right autonumeric" > 
+              </td>
+              <td>
+                    <input type="text" name="keterangan_detail" value="${value.keterangan}" class="form-control"> 
               </td>
               <td>
                 <div class='btn btn-danger btn-sm rmv'>Hapus</div>
@@ -547,5 +461,54 @@
     })
   }
 
+  function approval(Id) {
+    $('#loader').removeClass('d-none')
+
+      $.ajax({
+        url: `{{ config('app.api_url') }}jurnalumumheader/${Id}/approval`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+        success: response => {
+          $('#jqGrid').trigger('reloadGrid')
+        }
+    }).always(() => {
+        $('#loader').addClass('d-none')
+      })
+  }
+
+  function cekApproval(Id, Aksi) {
+    $.ajax({
+        url: `{{ config('app.api_url') }}jurnalumumheader/${Id}/cekapproval`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+        success: response => {
+          var kodenobukti = response.kodenobukti
+          if(kodenobukti == '1')
+          {
+            var kodestatus = response.kodestatus
+            if(kodestatus == '1')
+            {
+              showDialog(response.message['keterangan'])
+            }else{
+                if(Aksi = 'EDIT') {
+                    editJurnalUmumHeader(Id)
+                }
+                if(Aksi = 'DELETE') {
+                    deleteJurnalUmumHeader(Id)
+                }
+            }
+            
+          }else{
+            showDialog(response.message['keterangan'])
+          }
+        }
+      })
+  }
 </script>
 @endpush()
