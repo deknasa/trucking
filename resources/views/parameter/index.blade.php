@@ -14,7 +14,6 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('parameter.index') }}"
   let indexRow = 0;
   let page = 1;
   let pager = '#jqGridPager'
@@ -32,7 +31,7 @@
 
   $(document).ready(function() {
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'parameter' }}`,
+        url: `${apiUrl}parameter`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',

@@ -165,7 +165,7 @@
           onSelectRow: function(id) {
             let rowData = $(this).getRowData(id)
 
-            $('#crudForm [name=coa]').first().val(rowData.coa)
+            $('#crudForm [name=akunpusat]').first().val(rowData.coa)
             // $('#crudForm [name=user_id]').first().val(id)
             $('#lookupAkunPusat').hide()
           }

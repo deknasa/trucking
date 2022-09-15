@@ -1,75 +1,16 @@
 @extends('layouts.master')
 
 @section('content')
-<!-- Modal for report -->
-<div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form id="formRange" target="_blank">
-        @csrf
-        <div class="modal-body">
-          <input type="hidden" name="sidx">
-          <input type="hidden" name="sord">
-
-          <div class="form-group row">
-            <div class="col-sm-2 col-form-label">
-              <label for="">Dari</label>
-            </div>
-            <div class="col-sm-10">
-              <input type="text" name="dari" class="form-control autonumeric-report" autofocus>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <div class="col-sm-2 col-form-label">
-              <label for="">Sampai</label>
-            </div>
-            <div class="col-sm-10">
-              <input type="text" name="sampai" class="form-control autonumeric-report">
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Report</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
       <table id="jqGrid"></table>
-      <div id="jqGridPager" class="row bg-white">
-        <div id="buttonContainer" class="col-12 col-md-7 text-center text-md-left">
-          <button id="add" class="btn btn-primary btn-sm mb-1">
-            <i class="fa fa-plus"></i> ADD
-          </button>
-          <button id="edit" class="btn btn-success btn-sm mb-1">
-            <i class="fa fa-pen"></i> EDIT
-          </button>
-          <button id="delete" class="btn btn-danger btn-sm mb-1">
-            <i class="fa fa-trash"></i> DELETE
-          </button>
-          <button id="approval" class="btn btn-purple btn-sm mb-1">
-            <i class="fa fa-check"></i> UN/APPROVAL
-          </button>
-        </div>
-        <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
-        <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
-      </div>
     </div>
   </div>
 </div>
+
+@include('jurnalumum._modal')
 <!-- Detail -->
 @include('jurnalumum._detail')
 
@@ -90,38 +31,97 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
-  let rowNum = 10
 
-  $(document).ready(function() { 
-    /* Set page */
-    <?php if (isset($_GET['page'])) { ?>
-      page = "{{ $_GET['page'] }}"
-    <?php } ?>
+  $(document).ready(function() {
 
-    /* Set id */
-    <?php if (isset($_GET['id'])) { ?>
-      id = "{{ $_GET['id'] }}"
-    <?php } ?>
+    $('#lookupAkunPusat').hide()
 
-    /* Set indexRow */
-    <?php if (isset($_GET['indexRow'])) { ?>
-      indexRow = "{{ $_GET['indexRow'] }}"
-    <?php } ?>
+    $('#crudModal').on('shown.bs.modal', function() {
+      akunPusatLookup.setGridWidth($('#lookupAkunPusat').prev().width())
 
-    /* Set sortname */
-    <?php if (isset($_GET['sortname'])) { ?>
-      sortname = "{{ $_GET['sortname'] }}"
-    <?php } ?>
+      if (detectDeviceType() == 'desktop') {
+        
+        akunPusatLookup.setGridParam({
+          ondblClickRow: function(id) {
+            let rowData = $(this).getRowData(id)
 
-    /* Set sortorder */
-    <?php if (isset($_GET['sortorder'])) { ?>
-      sortorder = "{{ $_GET['sortorder'] }}"
-    <?php } ?>
+            $('#crudForm [name=debet_detail]').first().val(rowData.coa)
+            $('#lookupAkunPusat').hide()
+          }
+        })
 
-    /* Set rowNum */
-    <?php if (isset($_GET['limit'])) { ?>
-      rowNum = "{{ $_GET['limit'] }}"
-    <?php } ?>
+    } else if (detectDeviceType() == 'mobile') {
+        
+        akunPusatLookup.setGridParam({
+          onSelectRow: function(id) {
+            let rowData = $(this).getRowData(id)
+
+            $('#crudForm [name=debet_detail]').first().val(rowData.coa)
+            // $('#crudForm [name=user_id]').first().val(id)
+            $('#lookupAkunPusat').hide()
+          }
+        })
+        
+      }
+
+      $('#crudModal').find("[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit").first().focus()
+    })
+
+    $('#crudModal').on('hidden.bs.modal', function() {
+      activeGrid = '#jqGrid'
+    })
+
+    //click toggler
+    $('#lookupAkunPusatToggler').click(function(event) {
+      akunPusatLookup.setGridWidth($('#lookupAkunPusat').prev().width())
+      $('#lookupAkunPusat').toggle()
+
+      if (detectDeviceType() != 'desktop') {
+        akunPusatLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      if (detectDeviceType() == 'desktop') {
+        activeGrid = akunPusatLookup
+      }
+    })
+
+    //untuk auto search dari kolom input
+  
+    $('[name=coa]').on('input', function(event) {
+      $('#lookupAkunPusat').show()
+
+      if (detectDeviceType() != 'desktop') {
+        akunPusatLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      delay(() => {
+        let postData = akunPusatLookup.getGridParam('postData')
+        let colModels = akunPusatLookup.getGridParam('colModel')
+        let rules = []
+
+        colModels = colModels.filter((colModel) => {
+          return colModel.name !== 'rn'
+        })
+
+        colModels.forEach(colModel => {
+          rules.push({
+            field: colModel.name,
+            op: 'cn',
+            data: $(this).val()
+          })
+        });
+
+        postData.filters = JSON.stringify({
+          groupOp: 'OR',
+          rules: rules
+        })
+
+        akunPusatLookup.trigger('reloadGrid', {
+          page: 1
+        })
+      }, 500)
+    })
+
 
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'jurnalumumheader' }}`,
@@ -223,27 +223,19 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
-          loadDetailData(id)
 
-          id = $(this).jqGrid('getCell', id, 'rn') - 1
-          indexRow = id
+          loadDetailData(id)
+          activeGrid = $(this)
+          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
-
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
-          loadPagerHandler('#pagerHandler', $(this))
-          loadPagerInfo('#pagerInfo', $(this))
 
-          $("input").attr("autocomplete", "off");
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-
-          if (data.message !== "" && data.message !== undefined && data.message !== null) {
-            alert(data.message)
-          }
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -251,40 +243,40 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true 
+          triggerClick = true  
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
           })
 
-          if (triggerClick) {
-            if (id != '') {
-              indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-              id = ''
-            } else if (indexRow != undefined) {
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-            }
-
-            if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-            }
-
-            triggerClick = false
-          } else {
-            $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
           }
+
+          setTimeout(function() {
+
+            if (triggerClick) {
+              if (id != '') {
+                indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                id = ''
+              } else if (indexRow != undefined) {
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              }
+
+              if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+                $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              }
+
+              triggerClick = false
+            } else {
+              $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+            }
+          }, 100)
+
 
           setHighlight($(this))
         }
-      })
-
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
       })
 
       .jqGrid('filterToolbar', {
@@ -297,8 +289,49 @@
           clearGlobalSearch()
         },
       })
-    
-      /* Append clear filter button */
+
+      .customPager({
+        buttons: [{
+            id: 'add',
+            innerHTML: '<i class="fa fa-plus"></i> ADD',
+            class: 'btn btn-primary btn-sm mr-1',
+            onClick: function(event) {
+              createJurnalUmumHeader()
+            }
+          },
+          {
+            id: 'edit',
+            innerHTML: '<i class="fa fa-pen"></i> EDIT',
+            class: 'btn btn-success btn-sm mr-1',
+            onClick: function(event) {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+              cekApproval(selectedId, 'EDIT')
+            }
+          },
+          {
+            id: 'delete',
+            innerHTML: '<i class="fa fa-trash"></i> DELETE',
+            class: 'btn btn-danger btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              cekApproval(selectedId, 'DELETE')
+            }
+          },
+          {
+            id: 'approval',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              approval(selectedId)
+            }
+          }
+        ]
+
+      })
+
+    /* Append clear filter button */
     loadClearFilter()
 
     /* Append global search */
@@ -308,126 +341,56 @@
     loadDetailGrid()
 
     $('#add .ui-pg-div')
-    .addClass(`btn-sm btn-primary`)
-    .parent().addClass('px-1')
-
-    $('#edit .ui-pg-div')
-    .addClass('btn-sm btn-success')
-    .parent().addClass('px-1')
-
-    $('#delete .ui-pg-div')
-    .addClass('btn-sm btn-danger')
-    .parent().addClass('px-1')
-
-    $('#report .ui-pg-div')
-    .addClass('btn-sm btn-info')
-    .parent().addClass('px-1')
-
-    $('#export .ui-pg-div')
-    .addClass('btn-sm btn-warning')
-    .parent().addClass('px-1')
-    
-    $('#approval .ui-pg-div')
-      .addClass('btn-sm')
-      .css({
-        'background': '#6619ff',
-        'color': '#fff'
-      })
+      .addClass(`btn btn-sm btn-primary`)
       .parent().addClass('px-1')
 
-     /* Handle button add on click */
-     $('#add').click(function() {
-      let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
+    $('#edit .ui-pg-div')
+      .addClass('btn btn-sm btn-success')
+      .parent().addClass('px-1')
 
-      window.location.href = `{{ route('jurnalumumheader.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-    })
+    $('#delete .ui-pg-div')
+      .addClass('btn btn-sm btn-danger')
+      .parent().addClass('px-1')
 
-    /* Handle button edit on click */
-    $('#edit').click(function() {
-      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-      $('#loader').removeClass('d-none')
-      $.ajax({
-        url: `{{ config('app.api_url') }}jurnalumumheader/${selectedId}/cekapproval`,
-        method: 'POST',
-        dataType: 'JSON',
-        beforeSend: request => {
-          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-        },
-        success: response => {
-          var kodenobukti = response.kodenobukti
-          if(kodenobukti == '1')
-          {
-            var kodestatus = response.kodestatus
-            if(kodestatus == '1')
-            {
-              showDialog(response.message['keterangan'])
-            }else{
-              window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-            }
-            
-          }else{
-            showDialog(response.message['keterangan'])
-          }
-        }
-      }).always(() => {
-        $('#loader').addClass('d-none')
-      })
-      
-    })
+    $('#report .ui-pg-div')
+      .addClass('btn btn-sm btn-info')
+      .parent().addClass('px-1')
 
-    /* Handle button delete on click */
-    $('#delete').click(function() {
-      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-      $('#loader').removeClass('d-none')
-      $.ajax({
-        url: `{{ config('app.api_url') }}jurnalumumheader/${selectedId}/cekapproval`,
-        method: 'POST',
-        dataType: 'JSON',
-        beforeSend: request => {
-          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-        },
-        success: response => {
-          var kodenobukti = response.kodenobukti
-          if(kodenobukti == '1')
-          {
-            var kodestatus = response.kodestatus
-            if(kodestatus == '1')
-            {
-              showDialog(response.message['keterangan'])
-            }else{
-              window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-            }
-            
-          }else{
-            showDialog(response.message['keterangan'])
-          }
-        }
-      }).always(() => {
-        $('#loader').addClass('d-none')
-      })
-    })
+    $('#export .ui-pg-div')
+      .addClass('btn btn-sm btn-warning')
+      .parent().addClass('px-1')
 
-     /* Handle button approval on click */
-     $('#approval').click(function() {
-      let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+    $('#approval .ui-pg-div')
+       .addClass('btn btn-purple btn-sm')
+       .css({
+        'background': '#6619ff',
+        'color': '#fff'
+       })
+       .parent().addClass('px-1')
 
-      $('#loader').removeClass('d-none')
+    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'store') }}`) {
+      $('#add').addClass('ui-disabled')
+    }
 
-      $.ajax({
-        url: `{{ config('app.api_url') }}jurnalumumheader/${id}/approval`,
-        method: 'POST',
-        dataType: 'JSON',
-        beforeSend: request => {
-          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-        },
-        success: response => {
-          $('#jqGrid').trigger('reloadGrid')
-        }
-      }).always(() => {
-        $('#loader').addClass('d-none')
-      })
-    })
+    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'update') }}`) {
+      $('#edit').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'destroy') }}`) {
+      $('#delete').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'export') }}`) {
+      $('#export').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'report') }}`) {
+      $('#report').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) {
+      $('#approval').addClass('ui-disabled')
+    }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -437,6 +400,7 @@
       }
 
       $('#formRange [name]:not(:hidden)').first().focus()
+
       $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
       $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
       $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
@@ -451,21 +415,13 @@
       })
     })
 
-    $('#formRange').submit(event => {
+    $('#formRange').submit(function(event) {
       event.preventDefault()
 
       let params
-      let actionUrl = ``
+      let submitButton = $(this).find('button:submit')
 
-      if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('jurnalumumheader.export') }}`
-      } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('jurnalumumheader.report') }}`
-      }
-
-      /* Clear validation messages */
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
+      submitButton.attr('disabled', 'disabled')
 
       /* Set params value */
       for (var key in postData) {
@@ -475,10 +431,42 @@
         params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+      let formRange = $('#formRange')
+      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+      params += `&offset=${offset}&limit=${limit}`
+
+      if ($('#rangeModal').data('action') == 'export') {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `{{ config('app.api_url') }}jurnalumumheader/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+        xhr.responseType = 'arraybuffer'
+
+        xhr.onload = function(e) {
+          if (this.status === 200) {
+            if (this.response !== undefined) {
+              let blob = new Blob([this.response], {
+                type: "application/vnd.ms-excel"
+              })
+              let link = document.createElement('a')
+
+              link.href = window.URL.createObjectURL(blob)
+              link.download = `laporanjurnalumum${(new Date).getTime()}.xlsx`
+              link.click()
+
+              submitButton.removeAttr('disabled')
+            }
+          }
+        }
+
+        xhr.send()
+      } else if ($('#rangeModal').data('action') == 'report') {
+        window.open(`{{ route('jurnalumumheader.report') }}?${params}`)
+
+        submitButton.removeAttr('disabled')
+      }
     })
   })
-
 </script>
 @endpush()
 @endsection
