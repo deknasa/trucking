@@ -76,6 +76,8 @@ use App\Http\Controllers\JurnalUmumHeaderController;
 use App\Http\Controllers\JurnalUmumDetailController;
 use App\Http\Controllers\HutangHeaderController;
 use App\Http\Controllers\HutangDetailController;
+use App\Http\Controllers\PelunasanPiutangDetailController;
+use App\Http\Controllers\PelunasanPiutangHeaderController;
 use App\Http\Controllers\PiutangDetailController;
 use App\Http\Controllers\PiutangHeaderController;
 
@@ -536,6 +538,16 @@ Route::middleware('auth')->group(function () {
     Route::resource('piutangheader', PiutangHeaderController::class);
 
     Route::resource('piutangdetail', PiutangDetailController::class);
+
+    Route::get('pelunasanpiutangheader/index', [PelunasanPiutangHeaderController::class, 'index']);
+    Route::get('pelunasanpiutangheader/{id}/delete', [PelunasanPiutangHeaderController::class, 'delete'])->name('pelunasanpiutangheader.delete');
+    Route::get('pelunasanpiutangheader/get', [PelunasanPiutangHeaderController::class, 'get'])->name('pelunasanpiutangheader.get');
+    Route::get('pelunasanpiutangheader/export', [PelunasanPiutangHeaderController::class, 'export'])->name('pelunasanpiutangheader.export');
+    Route::get('pelunasanpiutangheader/report', [PelunasanPiutangHeaderController::class, 'report'])->name('pelunasanpiutangheader.report');
+    Route::resource('pelunasanpiutangheader', PelunasanPiutangHeaderController::class);
+
+    Route::resource('pelunasanpiutangdetail', PelunasanPiutangDetailController::class);
+
 });
 
 Route::patch('format', [FormatController::class, 'update']);

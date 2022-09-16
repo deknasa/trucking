@@ -1,6 +1,6 @@
 <div class="modal fade modal-fullscreen" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form action="#" id="crudForm">
+    <form action="#" id="crudForm" >
       <div class="modal-content">
         <div class="modal-header bg-primary">
           <h5 class="modal-title" id="crudModalTitle"></h5>
@@ -9,14 +9,14 @@
           </button>
         </div>
         <form action="" method="post">
-
+        
           <div class="modal-body">
             <input type="hidden" name="id">
 
             <div class="row form-group">
               <div class="col-12 col-sm-2 col-md-2 col-form-label">
                 <label>
-                  NO BUKTI <span class="text-danger">*</span>
+                    NO BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -25,71 +25,124 @@
 
               <div class="col-12 col-sm-2 col-md-2 col-form-label">
                 <label>
-                  TANGGAL BUKTI <span class="text-danger">*</span>
+                TANGGAL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-4 col-md-4" id="tglbukti">
-                
+              <div class="col-12 col-sm-4 col-md-4">
                 @php
                 $tglbukti = date('d-m-Y');
                 @endphp
                 <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
-              </div>
+                 </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  KETERANGAN <span class="text-danger">*</span></label>
+                KETERANGAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">
               </div>
             </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                BANK <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <div class="input-group">
+                  <input type="hidden" name="bank_id" class="form-control">
+                  <input type="text" name="bank" class="form-control">
+                  <div class="input-group-append">
+                    <button id="lookupBankToggler" class="btn btn-secondary" type="button">...</button>
+                  </div>
+                </div>
+                <div class="row position-absolute" id="lookupBank" style="z-index: 3;">
+                  <div class="col-12">
+                    <div id="lookupBank" class="shadow-lg">
+                      @include('partials.lookups.bank')
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                AGEN <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <div class="input-group">
+                  <input type="hidden" name="agen_id" class="form-control">
+                  <input type="text" name="agen" class="form-control">
+                  <div class="input-group-append">
+                    <button id="lookupAgenToggler" class="btn btn-secondary" type="button">...</button>
+                  </div>
+                </div>
+                <div class="row position-absolute" id="lookupAgen" style="z-index: 3;">
+                  <div class="col-12">
+                    <div id="lookupAgen" class="shadow-lg">
+                      @include('partials.lookups.agen')
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            <table class="table table-bordered table-bindkeys">
-              <thead>
-                <tr>
-                  <th width="50">No</th>
-                  <th>Nominal</th>
-                  <th>Keterangan</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="table_body" class="form-group">
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                CABANG <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <div class="input-group">
+                  <input type="hidden" name="cabang_id" class="form-control">
+                  <input type="text" name="cabang" class="form-control">
+                  <div class="input-group-append">
+                    <button id="lookupCabangToggler" class="btn btn-secondary" type="button">...</button>
+                  </div>
+                </div>
+                <div class="row position-absolute" id="lookupCabang" style="z-index: 3;">
+                  <div class="col-12">
+                    <div id="lookupCabang" class="shadow-lg">
+                      @include('partials.lookups.cabang')
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-                <tr id="row">
-                  <td>
-                    <div class="baris">1</div>
-                  </td>
-                  <td>
+            <div class="row mt-5">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-body">
                     <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <input type="text" name="nominal_detail[]" class="form-control autonumeric">
+                      <div class="col-md-2">
+                        <label>
+                          PELANGGAN <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <div class="col-md-4">
+                        <input type="text" name="pelanggan" class="form-control">
+                      </div>
+                      <div class="col-md-1 offset-md-1">
+                        <label>
+                          AGEN <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <div class="col-md-4">
+                        <input type="text" name="agen_detail" class="form-control">
                       </div>
                     </div>
-                  </td>
-                  <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <input type="text" name="keterangan_detail[]" class="form-control">
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                  </td>
-                </tr>
-
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="3"></td>
-                  <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addrow">Tambah</button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
 
           </div>
           <div class="modal-footer justify-content-start">
@@ -113,7 +166,6 @@
   let hasFormBindKeys = false
 
   $(document).ready(function() {
-
     // initLookupSupir()
 
     $('#btnSubmit').click(function(event) {
@@ -154,19 +206,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}piutangheader`
+          url = `${apiUrl}pelunasanpiutangheader`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}piutangheader/${Id}`
+          url = `${apiUrl}pelunasanpiutangheader/${Id}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}piutangheader/${Id}`
+          url = `${apiUrl}pelunasanpiutangheader/${Id}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}piutangheader`
+          url = `${apiUrl}pelunasanpiutangheader`
           break;
       }
 
@@ -182,7 +234,7 @@
         },
         data: data,
         success: response => {
-
+          
 
           id = response.data.id
           console.log(id)
@@ -214,32 +266,15 @@
     })
   })
 
-  var baris = 1;
-
-  let html = `<tr id="row">
-        <td>
-        <div class="baris">1</div>
-      </td>
-     
-      <td>
-        <input type="text" name="nominal_detail[]" style="text-align:right" class="form-control autonumeric">   
-      </td>
-      <td>
-        <input type="text" name="keterangan_detail[]" class="form-control">
-      </td>
-      <td>
-        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-      </td>
-    </tr>`;
 
   $("#addrow").click(function() {
     let rowCount = $('#row').length;
-    let barisCount = $('.baris').length;
+      
     if (rowCount > 0) {
       let clone = $('#row').clone();
       clone.find('input').val('');
 
-      baris = parseInt(barisCount) + 1;
+      baris = parseInt(baris) + 1;
       clone.find('.baris').text(baris);
       $('table #table_body').append(clone);
 
@@ -248,7 +283,7 @@
       $('#table_body').append(html);
     }
   });
-
+  
   $('table').on('click', '.rmv', function() {
     $(this).closest('tr').remove();
 
@@ -259,7 +294,7 @@
   });
 
 
-  function createPiutangHeader() {
+  function createPelunasanPiutangHeader() {
     let form = $('#crudForm')
 
     form.trigger('reset')
@@ -268,13 +303,13 @@
     Simpan
   `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Add Piutang')
+    $('#crudModalTitle').text('Add Pelunasan Piutang')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
   }
 
-  function editPiutangHeader(Id) {
+  function editPelunasanPiutangHeader(Id) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -283,13 +318,13 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-    $('#crudModalTitle').text('Edit Piutang')
+    $('#crudModalTitle').text('Edit Pelunasan Piutang')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     $.ajax({
-      url: `${apiUrl}piutangheader/${Id}`,
+      url: `${apiUrl}pelunasanpiutangheader/${Id}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -301,32 +336,11 @@
         })
         let tglbukti = response.data.tglbukti
         $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
-
-        $('#table_body').html('')
-        $.each(response.detail, (index, value) => {
-          $('#table_body').append(
-            `<tr id="row">
-                <td>
-                  <div class="baris">${parseInt(index) + 1}</div>
-                </td>
-            
-                <td>
-                  <input type="text" name="nominal_detail[]" value="${value.nominal}" style="text-align:right" class="form-control autonumeric">   
-                </td>
-                <td>
-                  <input type="text" name="keterangan_detail[]" value="${value.keterangan}" class="form-control">
-                </td>
-                <td>
-                  <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                </td>
-              </tr>`
-          )
-        })
       }
     })
   }
 
-  function deletePiutangHeader(Id) {
+  function deletePelunasanPiutangHeader(Id) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -335,13 +349,13 @@
     <i class="fa fa-save"></i>
     Hapus
   `)
-    $('#crudModalTitle').text('Delete Piutang')
+    $('#crudModalTitle').text('Delete Pelunasan Piutang')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     $.ajax({
-      url: `${apiUrl}piutangheader/${Id}`,
+      url: `${apiUrl}pelunasanpiutangheader/${Id}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -353,29 +367,9 @@
         })
         let tglbukti = response.data.tglbukti
         $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
-        $('#table_body').html('')
-        $.each(response.detail, (index, value) => {
-          $('#table_body').append(
-            `<tr id="row">
-                <td>
-                  <div class="baris">${parseInt(index) + 1}</div>
-                </td>
-            
-                <td>
-                  <input type="text" name="nominal_detail[]" value="${value.nominal}" style="text-align:right" class="form-control autonumeric">   
-                </td>
-                <td>
-                  <input type="text" name="keterangan_detail[]" value="${value.keterangan}" class="form-control">
-                </td>
-                <td>
-                  <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                </td>
-              </tr>`
-          )
-        })
-
       }
     })
   }
+
 </script>
 @endpush()

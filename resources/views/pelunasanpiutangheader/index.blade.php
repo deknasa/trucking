@@ -10,14 +10,14 @@
   </div>
 </div>
 
-@include('pengeluarantruckingheader._modal')
+@include('pelunasanpiutangheader._modal')
 <!-- Detail -->
-@include('pengeluarantruckingheader._detail')
+@include('pelunasanpiutangheader._detail')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('pengeluarantruckingheader.index') }}"
-  let getUrl = "{{ route('pengeluarantruckingheader.get') }}"
+  let indexUrl = "{{ route('pelunasanpiutangheader.index') }}"
+  let getUrl = "{{ route('pelunasanpiutangheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -34,100 +34,74 @@
 
   $(document).ready(function() {
 
-    $('#lookupPengeluaranTrucking').hide()
     $('#lookupBank').hide()
-    $('#lookupAkunPusat').hide()
-    $('#lookupPengeluaranHeader').hide()
-    $('#lookupSupir').hide()
-    $('#lookupPenerimaanTruckingHeader').hide()
+    $('#lookupAgen').hide()
+    $('#lookupCabang').hide()
+    $('#lookupPelanggan').hide()
+    $('#lookupPiutangHeader').hide()
 
 
 
     $('#crudModal').on('shown.bs.modal', function() {
-      pengeluaranTruckingLookup.setGridWidth($('#lookupPengeluaranTrucking').prev().width())
       bankLookup.setGridWidth($('#lookupBank').prev().width())
-      akunPusatLookup.setGridWidth($('#lookupAkunPusat').prev().width())
-      pengeluaranHeaderLookup.setGridWidth($('#lookupPengeluaranHeader').prev().width())
-      supirLookup.setGridWidth($('#lookupSupir').prev().width())
-      penerimaanTruckingHeaderLookup.setGridWidth($('#lookupPenerimaanTruckingHeader').prev().width())
-
+      agenLookup.setGridWidth($('#lookupAgen').prev().width())
+      cabangLookup.setGridWidth($('#lookupCabang').prev().width())
+      pelangganLookup.setGridWidth($('#lookupPelanggan').prev().width())
+      piutangHeaderLookup.setGridWidth($('#lookupPiutangHeader').prev().width())
 
       if (detectDeviceType() == 'desktop') {
-        pengeluaranTruckingLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-            console.log(rowData)
-
-            $('#crudForm [name=pengeluarantrucking_id]').first().val(rowData.id)
-            $('#crudForm [name=pengeluarantrucking]').first().val(rowData.kodepengeluaran)
-            $('#lookupPengeluaranTrucking').hide()
-
-          }
-        })
-
         bankLookup.setGridParam({
           ondblClickRow: function(id) {
             let rowData = $(this).getRowData(id)
-            console.log(rowData)
 
             $('#crudForm [name=bank_id]').first().val(rowData.id)
             $('#crudForm [name=bank]').first().val(rowData.namabank)
+            // $('#crudForm [name=user_id]').first().val(id)
             $('#lookupBank').hide()
           }
         })
-        akunPusatLookup.setGridParam({
+        agenLookup.setGridParam({
           ondblClickRow: function(id) {
             let rowData = $(this).getRowData(id)
             console.log(rowData.coa)
 
-            $('#crudForm [name=akunpusat]').first().val(rowData.coa)
-            $('#lookupAkunPusat').hide()
+            $('#crudForm [name=agen_id]').first().val(id)
+            $('#crudForm [name=agen]').first().val(rowData.namaagen)
+            $('#lookupAgen').hide()
+
           }
         })
 
-        pengeluaranHeaderLookup.setGridParam({
+        cabangLookup.setGridParam({
           ondblClickRow: function(id) {
             let rowData = $(this).getRowData(id)
-            console.log(rowData)
 
-            $('#crudForm [name=pengeluaran_nobukti]').first().val(rowData.nobukti)
-            $('#lookupPengeluaranHeader').hide()
-
+            $('#crudForm [name=cabang_id]').first().val(id)
+            $('#crudForm [name=cabang]').first().val(rowData.namacabang)
+            $('#lookupCabang').hide()
           }
         })
 
-        supirLookup.setGridParam({
+        pelangganLookup.setGridParam({
           ondblClickRow: function(id) {
             let rowData = $(this).getRowData(id)
-            console.log(rowData)
 
-            $('#crudForm [name=supir_id]').first().val(rowData.id)
-            $('#crudForm [name=supir]').first().val(rowData.namasupir)
-            $('#lookupSupir').hide()
-
+            $('#crudForm [name=pelanggan_id]').first().val(rowData.id)
+            $('#crudForm [name=pelanggan]').first().val(rowData.namapelanggan)
+            $('#lookupPelanggan').hide()
           }
         })
-        penerimaanTruckingHeaderLookup.setGridParam({
+        piutangHeaderLookup.setGridParam({
           ondblClickRow: function(id) {
             let rowData = $(this).getRowData(id)
-            console.log(rowData)
 
-            $('#crudForm [name=penerimaantruckingheader_nobukti]').first().val(rowData.nobukti)
-            $('#lookupPenerimaanTruckingHeader').hide()
+            $('#crudForm [name=piutang]').first().val(rowData.nobukti)
+            $('#lookupPiutangHeader').hide()
           }
         })
-
 
       } else if (detectDeviceType() == 'mobile') {
-        pengeluaranTruckingLookup.setGridParam({
-          onSelectRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=pengeluarantrucking_id]').first().val(id)
-            $('#crudForm [name=pengeluarantrucking]').first().val(rowData.kodepengeluaran)
-            $('#lookupPengeluaranTrucking').hide()
-          }
-        })
+       
         bankLookup.setGridParam({
           onSelectRow: function(id) {
             let rowData = $(this).getRowData(id)
@@ -137,38 +111,39 @@
             $('#lookupBank').hide()
           }
         })
-        akunPusatLookup.setGridParam({
+        agenLookup.setGridParam({
           onSelectRow: function(id) {
             let rowData = $(this).getRowData(id)
 
-            $('#crudForm [name=akunpusat]').first().val(rowData.coa)
+            $('#crudForm [name=agen_id]').first().val(id)
+            $('#crudForm [name=agen]').first().val(namaagen)
             $('#lookupAkunPusat').hide()
           }
         })
-        pengeluaranHeaderLookup.setGridParam({
+        cabangLookup.setGridParam({
           onSelectRow: function(id) {
             let rowData = $(this).getRowData(id)
 
-            $('#crudForm [name=pengeluaran_nobukti]').first().val(rowData.nobukti)
-            $('#lookupPengeluaranHeader').hide()
+            $('#crudForm [name=cabang_id]').first().val(id)
+            $('#crudForm [name=cabang]').first().val(rowData.namacabang)
+            $('#lookupCabang').hide()
           }
         })
-        supirLookup.setGridParam({
+        pelangganLookup.setGridParam({
           onSelectRow: function(id) {
             let rowData = $(this).getRowData(id)
 
-            $('#crudForm [name=supir_id]').first().val(id)
-            $('#crudForm [name=supir]').first().val(rowData.namasupir)
-            $('#lookupSupir').hide()
+            $('#crudForm [name=pelanggan_id]').first().val(id)
+            $('#crudForm [name=pelanggan]').first().val(rowData.namapelanggan)
+            $('#lookupPelanggan').hide()
           }
         })
-        penerimaanTruckingHeaderLookup.setGridParam({
+        piutangHeaderLookup.setGridParam({
           onSelectRow: function(id) {
             let rowData = $(this).getRowData(id)
 
-            $('#crudForm [name=penerimaantruckingheader_nobukti]').first().val(rowData.nobukti)
-            // $('#crudForm [name=user_id]').first().val(id)
-            $('#lookupPenerimaanTruckingHeader').hide()
+            $('#crudForm [name=piutang]').first().val(rowData.nobukti)
+            $('#lookupPiutangHeader').hide()
           }
         })
 
@@ -183,37 +158,15 @@
 
 
     //tampil lookup ketika klik toggler
-    $('#lookupPengeluaranTruckingToggler').click(function(event) {
-      pengeluaranTruckingLookup.setGridWidth($('#lookupPengeluaranTrucking').prev().width())
-      $('#lookupPengeluaranTrucking').toggle()
-
-      $('#lookupBank').hide()
-      $('#lookupAkunPusat').hide()
-      $('#lookupPengeluaranHeader').hide()
-      $('#lookupPenerimaanTruckingHeader').hide()
-      $('#lookupSupir').hide()
-
-
-      if (detectDeviceType() != 'desktop') {
-        pengeluaranTruckingLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      if (detectDeviceType() == 'desktop') {
-        activeGrid = pengeluaranTruckingLookup
-      }
-
-    })
-
+    
     $('#lookupBankToggler').click(function(event) {
       bankLookup.setGridWidth($('#lookupBank').prev().width())
       $('#lookupBank').toggle()
 
-      $('#lookupPengeluaranTrucking').hide()
-      $('#lookupAkunPusat').hide()
-      $('#lookupPengeluaranHeader').hide()
-      $('#lookupPenerimaanTruckingHeader').hide()
-      $('#lookupSupir').hide()
-
+      $('#lookupAgen').hide()
+      $('#lookupCabang').hide()
+      $('#lookupPelanggan').hide()
+      $('#lookupPiutangHeader').hide()
       if (detectDeviceType() != 'desktop') {
         bankLookup.setGridHeight(window.innerHeight / 1.5)
       }
@@ -223,120 +176,78 @@
       }
     })
 
-    $('#lookupAkunPusatToggler').click(function(event) {
-      akunPusatLookup.setGridWidth($('#lookupAkunPusat').prev().width())
-      $('#lookupAkunPusat').toggle()
+    $('#lookupAgenToggler').click(function(event) {
+      agenLookup.setGridWidth($('#lookupAgen').prev().width())
+      $('#lookupAgen').toggle()
 
-      $('#lookupPengeluaranTrucking').hide()
+      
       $('#lookupBank').hide()
-      $('#lookupPengeluaranHeader').hide()
-      $('#lookupPenerimaanTruckingHeader').hide()
-      $('#lookupSupir').hide()
-
+      $('#lookupCabang').hide()
+      $('#lookupPelanggan').hide()
+      $('#lookupPiutangHeader').hide()
       if (detectDeviceType() != 'desktop') {
-        akunPusatLookup.setGridHeight(window.innerHeight / 1.5)
+        agenLookup.setGridHeight(window.innerHeight / 1.5)
       }
 
       if (detectDeviceType() == 'desktop') {
-        activeGrid = akunPusatLookup
+        activeGrid = agenLookup
       }
     })
 
-    $('#lookupPengeluaranHeaderToggler').click(function(event) {
-      pengeluaranHeaderLookup.setGridWidth($('#lookupPengeluaranHeader').prev().width())
-      $('#lookupPengeluaranHeader').toggle()
+    $('#lookupCabangToggler').click(function(event) {
+      cabangLookup.setGridWidth($('#lookupCabang').prev().width())
+      $('#lookupCabang').toggle()
 
-      $('#lookupPengeluaranTrucking').hide()
-      $('#lookupAkunPusat').hide()
       $('#lookupBank').hide()
-      $('#lookupPenerimaanTruckingHeader').hide()
-      $('#lookupSupir').hide()
-
+      $('#lookupAgen').hide()
+      $('#lookupPelanggan').hide()
+      $('#lookupPiutangHeader').hide()
       if (detectDeviceType() != 'dekstop') {
-        pengeluaranHeaderLookup.setGridHeight(window.innerHeight / 1.5)
+        cabangLookup.setGridHeight(window.innerHeight / 1.5)
       }
 
       if (detectDeviceType() == 'dekstop') {
-        activeGrid = pengeluaranHeaderLookup
+        activeGrid = cabangLookup
       }
     })
 
-    $('#lookupSupirToggler').click(function(event) {
-      supirLookup.setGridWidth($('#lookupSupir').prev().width())
-      $('#lookupSupir').toggle()
+    $('#lookupPelangganToggler').click(function(event) {
+      pelangganLookup.setGridWidth($('#lookupPelanggan').prev().width())
+      $('#lookupPelanggan').toggle()
 
-      $('#lookupPengeluaranTrucking').hide()
-      $('#lookupAkunPusat').hide()
       $('#lookupBank').hide()
-      $('#lookupPengeluaranHeader').hide()
-      $('#lookupPenerimaanTruckingHeader').hide()
-      
+      $('#lookupAgen').hide()
+      $('#lookupCabang').hide()
+      $('#lookupPiutangHeader').hide()
       if (detectDeviceType() != 'dekstop') {
-        supirLookup.setGridHeight(window.innerHeight / 1.5)
+        pelangganLookup.setGridHeight(window.innerHeight / 1.5)
       }
 
       if (detectDeviceType() == 'dekstop') {
-        activeGrid = supirLookup
+        activeGrid = pelangganLookup
       }
     })
 
-    $('#lookupPenerimaanTruckingHeaderToggler').click(function(event) {
-      penerimaanTruckingHeaderLookup.setGridWidth($('#lookupPenerimaanTruckingHeader').prev().width())
-      $('#lookupPenerimaanTruckingHeader').toggle()
+    $('#lookupPiutangHeaderToggler').click(function(event) {
+      piutangHeaderLookup.setGridWidth($('#lookupPiutangHeader').prev().width())
+      $('#lookupPiutangHeader').toggle()
 
-      $('#lookupPengeluaranTrucking').hide()
-      $('#lookupAkunPusat').hide()
       $('#lookupBank').hide()
-      $('#lookupPengeluaranHeader').hide()
-      $('#lookupSupir').hide()
-
+      $('#lookupAgen').hide()
+      $('#lookupCabang').hide()
+      $('#lookupPelanggan').hide()
       if (detectDeviceType() != 'dekstop') {
-        penerimaanTruckingHeaderLookup.setGridHeight(window.innerHeight / 1.5)
+        piutangHeaderLookup.setGridHeight(window.innerHeight / 1.5)
       }
 
       if (detectDeviceType() == 'dekstop') {
-        activeGrid = penerimaanTruckingHeaderLookup
+        activeGrid = piutangHeaderLookup
       }
     })
 
 
 
     //untuk auto search dari kolom input
-    $('[name=pengeluarantrucking]').on('input', function(event) {
-      $('#lookupPengeluaranTrucking').show()
-
-      if (detectDeviceType() != 'desktop') {
-        pengeluaranTruckingLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      delay(() => {
-        let postData = pengeluaranTruckingLookup.getGridParam('postData')
-        let colModels = pengeluaranTruckingLookup.getGridParam('colModel')
-        let rules = []
-
-        colModels = colModels.filter((colModel) => {
-          return colModel.name !== 'rn'
-        })
-
-        colModels.forEach(colModel => {
-          rules.push({
-            field: colModel.name,
-            op: 'cn',
-            data: $(this).val()
-          })
-        });
-
-        postData.filters = JSON.stringify({
-          groupOp: 'OR',
-          rules: rules
-        })
-
-        pengeluaranTruckingLookup.trigger('reloadGrid', {
-          page: 1
-        })
-      }, 500)
-    })
-
     $('[name=bank]').on('input', function(event) {
       $('#lookupBank').show()
 
@@ -372,16 +283,16 @@
       }, 500)
     })
 
-    $('[name=coa]').on('input', function(event) {
-      $('#lookupAkunPusat').show()
+    $('[name=agen]').on('input', function(event) {
+      $('#lookupAgen').show()
 
       if (detectDeviceType() != 'desktop') {
-        akunPusatLookup.setGridHeight(window.innerHeight / 1.5)
+        agenLookup.setGridHeight(window.innerHeight / 1.5)
       }
 
       delay(() => {
-        let postData = akunPusatLookup.getGridParam('postData')
-        let colModels = akunPusatLookup.getGridParam('colModel')
+        let postData = agenLookup.getGridParam('postData')
+        let colModels = agenLookup.getGridParam('colModel')
         let rules = []
 
         colModels = colModels.filter((colModel) => {
@@ -401,22 +312,22 @@
           rules: rules
         })
 
-        akunPusatLookup.trigger('reloadGrid', {
+        agenLookup.trigger('reloadGrid', {
           page: 1
         })
       }, 500)
     })
 
-    $('[name=pengeluaran_nobukti]').on('input', function(event) {
-      $('#lookupPengeluaranHeader').show()
+    $('[name=cabang]').on('input', function(event) {
+      $('#lookupCabang').show()
 
       if (detectDeviceType() != 'desktop') {
-        pengeluaranHeaderLookup.setGridHeight(window.innerHeight / 1.5)
+        cabangLookup.setGridHeight(window.innerHeight / 1.5)
       }
 
       delay(() => {
-        let postData = pengeluaranHeaderLookup.getGridParam('postData')
-        let colModels = pengeluaranHeaderLookup.getGridParam('colModel')
+        let postData = cabangLookup.getGridParam('postData')
+        let colModels = cabangLookup.getGridParam('colModel')
         let rules = []
 
         colModels = colModels.filter((colModel) => {
@@ -436,22 +347,22 @@
           rules: rules
         })
 
-        pengeluaranHeaderLookup.trigger('reloadGrid', {
+        cabangLookup.trigger('reloadGrid', {
           page: 1
         })
       }, 500)
     })
 
-    $('[name=supir_id]').on('input', function(event) {
-      $('#lookupSupir').show()
+    $('[name=pelanggan]').on('input', function(event) {
+      $('#lookupPelanggan').show()
 
       if (detectDeviceType() != 'desktop') {
-        supirLookup.setGridHeight(window.innerHeight / 1.5)
+        pelangganLookup.setGridHeight(window.innerHeight / 1.5)
       }
 
       delay(() => {
-        let postData = supirLookup.getGridParam('postData')
-        let colModels = supirLookup.getGridParam('colModel')
+        let postData = pelangganLookup.getGridParam('postData')
+        let colModels = pelangganLookup.getGridParam('colModel')
         let rules = []
 
         colModels = colModels.filter((colModel) => {
@@ -471,22 +382,22 @@
           rules: rules
         })
 
-        supirLookup.trigger('reloadGrid', {
+        pelangganLookup.trigger('reloadGrid', {
           page: 1
         })
       }, 500)
     })
 
-    $('[name=penerimaantruckingheader_nobukti]').on('input', function(event) {
-      $('#lookupPenerimaanTruckingHeader').show()
+    $('[name=piutang]').on('input', function(event) {
+      $('#lookupPiutangHeader').show()
 
       if (detectDeviceType() != 'desktop') {
-        penerimaanTruckingHeaderLookup.setGridHeight(window.innerHeight / 1.5)
+        piutangHeaderLookup.setGridHeight(window.innerHeight / 1.5)
       }
 
       delay(() => {
-        let postData = penerimaanTruckingHeaderLookup.getGridParam('postData')
-        let colModels = penerimaanTruckingHeaderLookup.getGridParam('colModel')
+        let postData = piutangHeaderLookup.getGridParam('postData')
+        let colModels = piutangHeaderLookup.getGridParam('colModel')
         let rules = []
 
         colModels = colModels.filter((colModel) => {
@@ -506,15 +417,14 @@
           rules: rules
         })
 
-        penerimaanTruckingHeaderLookup.trigger('reloadGrid', {
+        piutangHeaderLookup.trigger('reloadGrid', {
           page: 1
         })
       }, 500)
     })
-
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'pengeluarantruckingheader' }}`,
+        url: `{{ config('app.api_url') . 'pelunasanpiutangheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -541,11 +451,6 @@
             }
           },
           {
-            label: 'PENGELUARAN TRUCKING',
-            name: 'pengeluarantrucking_id',
-            align: 'left'
-          },
-          {
             label: 'KETERANGAN',
             name: 'keterangan',
             align: 'left'
@@ -556,33 +461,13 @@
             align: 'left'
           },
           {
-            label: 'STATUS POSTING',
-            name: 'statusposting',
+            label: 'AGEN',
+            name: 'agen_id',
             align: 'left'
           },
           {
-            label: 'COA',
-            name: 'coa',
-            align: 'left'
-          },
-          {
-            label: 'NO BUKTI PENGELUARAN',
-            name: 'pengeluaran_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'TANGGAL PENGELUARAN',
-            name: 'pengeluaran_tgl',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'PROSES NO BUKTI',
-            name: 'proses_nobukti',
+            label: 'CABANG',
+            name: 'cabang_id',
             align: 'left'
           },
           {
@@ -701,7 +586,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
-              createPengeluaranTruckingHeader()
+              createPelunasanPiutangHeader()
             }
           },
           {
@@ -710,7 +595,11 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              editPengeluaranTruckingHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              }else {
+                editPelunasanPiutangHeader(selectedId)
+              }
             }
           },
           {
@@ -719,7 +608,7 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              deletePengeluaranTruckingHeader(selectedId)
+              deletePelunasanPiutangHeader(selectedId)
             }
           },
         ]
@@ -755,23 +644,23 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'export') }}`) {
       $('#export').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'report') }}`) {
       $('#report').addClass('ui-disabled')
     }
 
@@ -821,7 +710,7 @@
 
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}pengeluarantruckingheader/export?${params}`, true)
+        xhr.open('GET', `{{ config('app.api_url') }}pelunasanpiutangheader/export?${params}`, true)
         xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
         xhr.responseType = 'arraybuffer'
 
@@ -834,7 +723,7 @@
               let link = document.createElement('a')
 
               link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanpengeluarantrucking${(new Date).getTime()}.xlsx`
+              link.download = `laporanpelunasanpiutang${(new Date).getTime()}.xlsx`
               link.click()
 
               submitButton.removeAttr('disabled')
@@ -844,7 +733,7 @@
 
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('pengeluarantruckingheader.report') }}?${params}`)
+        window.open(`{{ route('pelunasanpiutangheader.report') }}?${params}`)
 
         submitButton.removeAttr('disabled')
       }
