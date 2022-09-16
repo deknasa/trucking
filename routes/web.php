@@ -310,11 +310,11 @@ Route::middleware('auth')->group(function () {
     Route::get('gudang/index', [GudangController::class, 'index']);
     Route::resource('gudang', GudangController::class);
 
-    Route::get('sub_kelompok/report', [SubKelompokController::class, 'report'])->name('sub_kelompok.report');
-    Route::get('sub_kelompok/{id}/delete', [SubKelompokController::class, 'delete'])->name('sub_kelompok.delete');
-    Route::get('sub_kelompok/get', [SubKelompokController::class, 'get'])->name('sub_kelompok.get');
-    Route::get('sub_kelompok/index', [SubKelompokController::class, 'index']);
-    Route::resource('sub_kelompok', SubKelompokController::class);
+    Route::get('subkelompok/report', [SubKelompokController::class, 'report'])->name('subkelompok.report');
+    Route::get('subkelompok/{id}/delete', [SubKelompokController::class, 'delete'])->name('subkelompok.delete');
+    Route::get('subkelompok/get', [SubKelompokController::class, 'get'])->name('subkelompok.get');
+    Route::get('subkelompok/index', [SubKelompokController::class, 'index']);
+    Route::resource('subkelompok', SubKelompokController::class);
 
     Route::get('supplier/report', [SupplierController::class, 'report'])->name('supplier.report');
     Route::get('supplier/{id}/delete', [SupplierController::class, 'delete'])->name('supplier.delete');
