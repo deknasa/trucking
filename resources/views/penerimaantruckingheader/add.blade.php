@@ -2,7 +2,7 @@
 
 @section('content')
 <!-- Form -->
-@include('penerimaantrucking._form', [
+@include('penerimaantruckingheader._form', [
   'action' => 'add'
 ])
 @endsection

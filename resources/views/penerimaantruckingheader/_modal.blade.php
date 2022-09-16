@@ -1,6 +1,6 @@
 <div class="modal fade modal-fullscreen" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form action="#" id="crudForm">
+    <form action="#" id="crudForm" >
       <div class="modal-content">
         <div class="modal-header bg-primary">
           <h5 class="modal-title" id="crudModalTitle"></h5>
@@ -9,14 +9,14 @@
           </button>
         </div>
         <form action="" method="post">
-
+        
           <div class="modal-body">
             <input type="hidden" name="id">
 
             <div class="row form-group">
               <div class="col-12 col-sm-2 col-md-2 col-form-label">
                 <label>
-                  NO BUKTI <span class="text-danger">*</span>
+                    NO BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -25,21 +25,17 @@
 
               <div class="col-12 col-sm-2 col-md-2 col-form-label">
                 <label>
-                  TANGGAL BUKTI <span class="text-danger">*</span>
+                TANGGAL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
-                
-                @php
-                $tglbukti = date('d-m-Y');
-                @endphp
-                <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
+                <input type="text" name="tglbukti" class="form-control datepicker">
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  KETERANGAN <span class="text-danger">*</span></label>
+                KETERANGAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">
@@ -48,21 +44,21 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  PENGELUARAN TRUCKING <span class="text-danger">*</span>
+                PENERIMAAN TRUCKING <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-8 col-md-10">
                 <div class="input-group">
-                  <input type="hidden" name="pengeluarantrucking_id">
-                  <input type="text" name="pengeluarantrucking" class="form-control">
+                  <input type="hidden" name="penerimaantrucking_id">
+                  <input type="text" name="penerimaantrucking" class="form-control">
                   <div class="input-group-append">
-                    <button id="lookupPengeluaranTruckingToggler" class="btn btn-secondary" type="button">...</button>
+                    <button id="lookupPenerimaanTruckingToggler" class="btn btn-secondary" type="button">...</button>
                   </div>
                 </div>
-                <div class="row position-absolute" id="lookupPengeluaranTrucking" style="z-index: 3;">
+                <div class="row position-absolute" id="lookupPenerimaanTrucking" style="z-index: 1;">
                   <div class="col-12">
-                    <div id="lookupPengeluaranTrucking" class="shadow-lg">
-                      @include('partials.lookups.pengeluarantrucking')
+                    <div id="lookupPenerimaanTrucking" class="shadow-lg">
+                      @include('partials.lookups.penerimaantrucking')
                     </div>
                   </div>
                 </div>
@@ -71,7 +67,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  BANK <span class="text-danger">*</span>
+                BANK <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-8 col-md-10">
@@ -82,7 +78,7 @@
                     <button id="lookupBankToggler" class="btn btn-secondary" type="button">...</button>
                   </div>
                 </div>
-                <div class="row position-absolute" id="lookupBank" style="z-index: 3;">
+                <div class="row position-absolute" id="lookupBank" style="z-index: 1;">
                   <div class="col-12">
                     <div id="lookupBank" class="shadow-lg">
                       @include('partials.lookups.bank')
@@ -91,11 +87,11 @@
                 </div>
               </div>
             </div>
-
+            
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  COA <span class="text-danger">*</span>
+                COA <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-8 col-md-10">
@@ -105,7 +101,7 @@
                     <button id="lookupAkunPusatToggler" class="btn btn-secondary" type="button">...</button>
                   </div>
                 </div>
-                <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 3;">
+                <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 1;">
                   <div class="col-12">
                     <div id="lookupAkunPusat" class="shadow-lg">
                       @include('partials.lookups.akunpusat')
@@ -118,20 +114,20 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  NO BUKTI PENGELUARAN <span class="text-danger">*</span>
+                NO BUKTI PENERIMAAN <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-8 col-md-10">
                 <div class="input-group">
-                  <input type="text" name="pengeluaran_nobukti" class="form-control">
+                  <input type="text" name="penerimaan_nobukti" class="form-control">
                   <div class="input-group-append">
-                    <button id="lookupPengeluaranHeaderToggler" class="btn btn-secondary" type="button">...</button>
+                    <button id="lookupPenerimaanHeaderToggler" class="btn btn-secondary" type="button">...</button>
                   </div>
                 </div>
-                <div class="row position-absolute" id="lookupPengeluaranHeader" style="z-index: 3;">
+                <div class="row position-absolute" id="lookupPenerimaanHeader" style="z-index: 1;">
                   <div class="col-12">
-                    <div id="lookupPengeluaranHeader" class="shadow-lg">
-                      @include('partials.lookups.pengeluaranheader')
+                    <div id="lookupPenerimaanHeader" class="shadow-lg">
+                      @include('partials.lookups.penerimaanheader')
                     </div>
                   </div>
                 </div>
@@ -143,7 +139,7 @@
                 <tr>
                   <th width="50">No</th>
                   <th>Supir</th>
-                  <th>No Bukti Penerimaan Trucking</th>
+                  <th>No Bukti Pengeluaran Trucking</th>
                   <th>Nominal</th>
                   <th>Aksi</th>
                 </tr>
@@ -155,60 +151,45 @@
                   </td>
                   <td>
                   <div class="row form-group" >
-                    <div class="col-12 col-md-12">
+                    <div class="col-12 col-md-12" id="supir_id">
                       <div class="input-group">
                         <input type="hidden" name="supir_id">
                         <input type="text" name="supir"  class="form-control">
                         <div class="input-group-append">
                           <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
                         </div>
-<<<<<<< HEAD
                       </div>
-                      <div class="row position-absolute" id="lookupSupir" style="z-index: 3;">
+                      <div class="row position-absolute" id="lookupSupir" style="z-index: 1;">
                         <div class="col-12">
                           <div id="lookupSupir" class="shadow-lg">
                             @include('partials.lookups.supir')
-=======
-                        <div class="row position-absolute" id="lookupSupir" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupSupir" class="shadow-lg">
-                              @include('partials.lookups.supir')
-                            </div>
->>>>>>> a70951ad4d57b012fe39236fc69651f632466a97
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
                   </td>
                   <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <div class="input-group">
-                          <input type="text" name="penerimaantruckingheader_nobukti" class="form-control">
-                          <div class="input-group-append">
-                            <button id="lookupPenerimaanTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
-                          </div>
+                  <div class="row form-group" >
+                    <div class="col-12 col-md-12">
+                      <div class="input-group">
+                        <input type="text" name="pengeluarantruckingheader_nobukti"  class="form-control">
+                        <div class="input-group-append">
+                          <button id="lookupPengeluaranTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
                         </div>
-<<<<<<< HEAD
                       </div>
-                      <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 3;">
+                      <div class="row position-absolute" id="lookupPengeluaranTruckingHeader" style="z-index: 1;">
                         <div class="col-12">
-                          <div id="lookupPenerimaanTruckingHeader" class="shadow-lg" >
-                            @include('partials.lookups.penerimaantruckingheader')
-=======
-                        <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupPenerimaanTruckingHeader" class="shadow-lg">
-                              @include('partials.lookups.penerimaantruckingheader')
-                            </div>
->>>>>>> a70951ad4d57b012fe39236fc69651f632466a97
+                          <div id="lookupPengeluaranTruckingHeader" class="shadow-lg" >
+                            @include('partials.lookups.pengeluarantruckingheader')
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
                   </td>
                   <td>
-                    <input type="text" name="nominal" style="text-align:right" class="form-control text-right autonumeric">
+                      <input type="text" name="nominal"  style="text-align:right" class="form-control text-right autonumeric" > 
                   </td>
                   <td>
                     <div class='btn btn-danger btn-sm rmv'>Hapus</div>
@@ -242,7 +223,6 @@
     </form>
   </div>
 </div>
-
 @push('scripts')
 <script>
   let hasFormBindKeys = false
@@ -288,19 +268,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}pengeluarantruckingheader`
+          url = `${apiUrl}penerimaantruckingheader`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}pengeluarantruckingheader/${Id}`
+          url = `${apiUrl}penerimaantruckingheader/${Id}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}pengeluarantruckingheader/${Id}`
+          url = `${apiUrl}penerimaantruckingheader/${Id}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}pengeluarantruckingheader`
+          url = `${apiUrl}penerimaantruckingheader`
           break;
       }
 
@@ -316,7 +296,7 @@
         },
         data: data,
         success: response => {
-
+          
 
           id = response.data.id
           console.log(id)
@@ -351,7 +331,7 @@
 
   $("#addrow").click(function() {
     let rowCount = $('#row').length;
-
+      
     if (rowCount > 0) {
       let clone = $('#row').clone();
       clone.find('input').val('');
@@ -365,7 +345,7 @@
       $('#table_body').append(html);
     }
   });
-
+  
   $('table').on('click', '.rmv', function() {
     $(this).closest('tr').remove();
 
@@ -376,7 +356,7 @@
   });
 
 
-  function createPengeluaranTruckingHeader() {
+  function createPenerimaanTruckingHeader() {
     let form = $('#crudForm')
 
     form.trigger('reset')
@@ -385,13 +365,13 @@
     Simpan
   `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Add Pengeluaran Trucking')
+    $('#crudModalTitle').text('Add Penerimaan Trucking')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
   }
 
-  function editPengeluaranTruckingHeader(Id) {
+  function editPenerimaanTruckingHeader(Id) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -400,13 +380,13 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-    $('#crudModalTitle').text('Edit Pengeluaran Trucking')
+    $('#crudModalTitle').text('Edit Penerimaan Trucking Header')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     $.ajax({
-      url: `${apiUrl}pengeluarantruckingheader/${Id}`,
+      url: `${apiUrl}penerimaantruckingheader/${Id}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -416,82 +396,19 @@
         $.each(response.data, (index, value) => {
           form.find(`[name="${index}"]`).val(value)
         })
-<<<<<<< HEAD
-        let tglbukti = response.data.tglbukti
-        $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
-=======
-<<<<<<< HEAD
-        <?php $details = "<script> response.detail </script>"; ?>
-=======
-
->>>>>>> f5fed30bbe0f15b072f3149a9778b53e7535084e
+        <?php $details = "<script> response.detail </script>"; ?>  
         $.each(response.detail, function() {
           $.each(this, function(name, value) {
             form.find(`[name="${name}"]`).val(value)
           });
         });
->>>>>>> a70951ad4d57b012fe39236fc69651f632466a97
-
-        $('#table_body').html('')
-        $.each(response.detail, (index, value) => {
-          $('#table_body').append(
-            `<tr id="row">
-              <td>
-                <div class="baris">${parseInt(index) + 1}</div>
-              </td>
-              <td>
-              <div class="row form-group" >
-                <div class="col-12 col-md-12">
-                  <div class="input-group">
-                    <input type="hidden" name="supir_id" value="${value.supir_id}">
-                    <input type="text" name="supir" value="${value.supir}" class="form-control">
-                    <div class="input-group-append">
-                      <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
-                    </div>
-                  </div>
-                  <div class="row position-absolute" id="lookupSupir" style="z-index: 3;">
-                    <div class="col-12">
-                      <div id="lookupSupir" class="shadow-lg">
-                        @include('partials.lookups.supir')
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              </td>
-              <td>
-              <div class="row form-group" >
-                <div class="col-12 col-md-12">
-                  <div class="input-group">
-                    <input type="text" name="penerimaantruckingheader_nobukti" value="${value.penerimaantruckingheader_nobukti}" class="form-control">
-                    <div class="input-group-append">
-                      <button id="lookupPenerimaanTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
-                    </div>
-                  </div>
-                  <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 3;">
-                    <div class="col-12">
-                      <div id="lookupPenerimaanTruckingHeader" class="shadow-lg" >
-                        @include('partials.lookups.penerimaantruckingheader')
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              </td>
-              <td>
-                  <input type="text" name="nominal" value="${value.nominal}" style="text-align:right" class="form-control text-right autonumeric" > 
-              </td>
-              <td>
-                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-              </td>
-            </tr>`
-          )
-        })
+        console.log(response.data)
+        console.log(response.detail)
       }
     })
   }
 
-  function deletePengeluaranTruckingHeader(Id) {
+  function deletePenerimaanTruckingHeader(Id) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -500,13 +417,13 @@
     <i class="fa fa-save"></i>
     Hapus
   `)
-    $('#crudModalTitle').text('Delete Pengeluaran Trucking')
+    $('#crudModalTitle').text('Delete Penerimaan Trucking')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     $.ajax({
-      url: `${apiUrl}pengeluarantruckingheader/${Id}`,
+      url: `${apiUrl}penerimaantruckingheader/${Id}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -516,66 +433,14 @@
         $.each(response.data, (index, value) => {
           form.find(`[name="${index}"]`).val(value)
         })
-        let tglbukti = response.data.tglbukti
-        $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
-        
-        $('#table_body').html('')
-        $.each(response.detail, (index, value) => {
-          $('#table_body').append(
-            `<tr id="row">
-              <td>
-                <div class="baris">${parseInt(index) + 1}</div>
-              </td>
-              <td>
-              <div class="row form-group" >
-                <div class="col-12 col-md-12">
-                  <div class="input-group">
-                    <input type="hidden" name="supir_id" value="${value.supir_id}">
-                    <input type="text" name="supir" value="${value.supir}" class="form-control">
-                    <div class="input-group-append">
-                      <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
-                    </div>
-                  </div>
-                  <div class="row position-absolute" id="lookupSupir" style="z-index: 3;">
-                    <div class="col-12">
-                      <div id="lookupSupir" class="shadow-lg">
-                        @include('partials.lookups.supir')
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              </td>
-              <td>
-              <div class="row form-group" >
-                <div class="col-12 col-md-12">
-                  <div class="input-group">
-                    <input type="text" name="penerimaantruckingheader_nobukti" value="${value.penerimaantruckingheader_nobukti}" class="form-control">
-                    <div class="input-group-append">
-                      <button id="lookupPenerimaanTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
-                    </div>
-                  </div>
-                  <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 3;">
-                    <div class="col-12">
-                      <div id="lookupPenerimaanTruckingHeader" class="shadow-lg" >
-                        @include('partials.lookups.penerimaantruckingheader')
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              </td>
-              <td>
-                  <input type="text" name="nominal" value="${value.nominal}" style="text-align:right" class="form-control text-right autonumeric" > 
-              </td>
-              <td>
-                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-              </td>
-            </tr>`
-          )
-        })
+        $.each(response.detail, function() {
+          $.each(this, function(name, value) {
+            form.find(`[name="${name}"]`).val(value)
+          });
+        });
       }
     })
   }
+
 </script>
 @endpush()

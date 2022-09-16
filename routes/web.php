@@ -50,6 +50,8 @@ use App\Http\Controllers\ZonaController;
 use App\Http\Controllers\TarifController;
 
 use App\Http\Controllers\PengeluaranTruckingController;
+use App\Http\Controllers\penerimaanTruckingController;
+
 use App\Http\Controllers\OrderanTruckingController;
 use App\Http\Controllers\ProsesAbsensiSupirController;
 use App\Http\Controllers\MekanikController;
@@ -374,11 +376,11 @@ Route::middleware('auth')->group(function () {
     Route::get('merk/index', [MerkController::class, 'index']);
     Route::resource('merk', MerkController::class);
 
-    // Route::get('penerimaan_trucking/report', [PenerimaanTruckingController::class, 'report'])->name('penerimaan_trucking.report');
-    // Route::get('penerimaan_trucking/{id}/delete', [PenerimaanTruckingController::class, 'delete'])->name('penerimaan_trucking.delete');
-    // Route::get('penerimaan_trucking/get', [PenerimaanTruckingController::class, 'get'])->name('merk.get');
-    // Route::get('penerimaan_trucking/index', [PenerimaanTruckingController::class, 'index']);
-    // Route::resource('penerimaan_trucking', PenerimaanTruckingController::class);
+    Route::get('penerimaantrucking/report', [PenerimaanTruckingController::class, 'report'])->name('penerimaantrucking.report');
+    Route::get('penerimaantrucking/{id}/delete', [PenerimaanTruckingController::class, 'delete'])->name('penerimaantrucking.delete');
+    Route::get('penerimaantrucking/get', [PenerimaanTruckingController::class, 'get'])->name('penerimaantrucking.get');
+    Route::get('penerimaantrucking/index', [PenerimaanTruckingController::class, 'index']);
+    Route::resource('penerimaantrucking', PenerimaanTruckingController::class);
 
     Route::get('pengeluaran_trucking/report', [PengeluaranTruckingController::class, 'report'])->name('pengeluaran_trucking.report');
     Route::get('pengeluaran_trucking/{id}/delete', [PengeluaranTruckingController::class, 'delete'])->name('pengeluaran_trucking.delete');
@@ -494,12 +496,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('pengeluarandetail', PengeluaranDetailController::class);
 
     //penerimaan trucking
-    Route::get('penerimaantrucking/{id}/delete', [PenerimaanTruckingHeaderController::class, 'delete'])->name('penerimaantrucking.delete');
-    Route::get('penerimaantrucking/index', [PenerimaanTruckingHeaderController::class, 'index']);
-    Route::get('penerimaantrucking/get', [PenerimaanTruckingHeaderController::class, 'get'])->name('penerimaantrucking.get');
-    Route::get('penerimaantrucking/export', [PenerimaanTruckingHeaderController::class, 'export'])->name('penerimaantrucking.export');
-    Route::get('penerimaantrucking/report', [PenerimaanTruckingHeaderController::class, 'report'])->name('penerimaantrucking.report');
-    Route::resource('penerimaantrucking', PenerimaanTruckingHeaderController::class);
+    Route::get('penerimaantruckingheader/{id}/delete', [PenerimaanTruckingHeaderController::class, 'delete'])->name('penerimaantruckingheader.delete');
+    Route::get('penerimaantruckingheader/index', [PenerimaanTruckingHeaderController::class, 'index']);
+    Route::get('penerimaantruckingheader/get', [PenerimaanTruckingHeaderController::class, 'get'])->name('penerimaantruckingheader.get');
+    Route::get('penerimaantruckingheader/export', [PenerimaanTruckingHeaderController::class, 'export'])->name('penerimaantruckingheader.export');
+    Route::get('penerimaantruckingheader/report', [PenerimaanTruckingHeaderController::class, 'report'])->name('penerimaantruckingheader.report');
+    Route::resource('penerimaantruckingheader', PenerimaanTruckingHeaderController::class);
 
     Route::resource('penerimaantruckingdetail', PenerimaanTruckingDetailController::class);
 

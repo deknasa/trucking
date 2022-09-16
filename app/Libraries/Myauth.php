@@ -86,6 +86,7 @@ class Myauth
             'pengeluaran',
             'pengeluarantrucking',
             'jurnalumumheader',
+            'penerimaantruckingheader',
             'pengeluarantruckingheader',
             'piutangheader',
             'pelunasanpiutangheader',
