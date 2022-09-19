@@ -80,6 +80,7 @@ use App\Http\Controllers\HutangHeaderController;
 use App\Http\Controllers\HutangDetailController;
 use App\Http\Controllers\PelunasanPiutangDetailController;
 use App\Http\Controllers\PelunasanPiutangHeaderController;
+use App\Http\Controllers\PenerimaController;
 use App\Http\Controllers\PiutangDetailController;
 use App\Http\Controllers\PiutangHeaderController;
 
