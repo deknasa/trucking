@@ -382,11 +382,11 @@ Route::middleware('auth')->group(function () {
     Route::get('penerimaantrucking/index', [PenerimaanTruckingController::class, 'index']);
     Route::resource('penerimaantrucking', PenerimaanTruckingController::class);
 
-    Route::get('pengeluaran_trucking/report', [PengeluaranTruckingController::class, 'report'])->name('pengeluaran_trucking.report');
-    Route::get('pengeluaran_trucking/{id}/delete', [PengeluaranTruckingController::class, 'delete'])->name('pengeluaran_trucking.delete');
-    Route::get('pengeluaran_trucking/get', [PengeluaranTruckingController::class, 'get'])->name('pengeluaran_trucking.get');
-    Route::get('pengeluaran_trucking/index', [PengeluaranTruckingController::class, 'index']);
-    Route::resource('pengeluaran_trucking', PengeluaranTruckingController::class);
+    Route::get('pengeluarantrucking/report', [PengeluaranTruckingController::class, 'report'])->name('pengeluarantrucking.report');
+    Route::get('pengeluarantrucking/{id}/delete', [PengeluaranTruckingController::class, 'delete'])->name('pengeluarantrucking.delete');
+    Route::get('pengeluarantrucking/get', [PengeluaranTruckingController::class, 'get'])->name('pengeluarantrucking.get');
+    Route::get('pengeluarantrucking/index', [PengeluaranTruckingController::class, 'index']);
+    Route::resource('pengeluarantrucking', PengeluaranTruckingController::class);
 
     Route::get('satuan/field_length', [SatuanController::class, 'fieldLength'])->name('satuan.field_length');
     Route::get('satuan/{id}/delete', [SatuanController::class, 'delete'])->name('satuan.delete');
