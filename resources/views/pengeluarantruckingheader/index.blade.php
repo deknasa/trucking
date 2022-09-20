@@ -60,14 +60,8 @@
 
             $('#crudForm [name=pengeluarantrucking_id]').first().val(rowData.id)
             $('#crudForm [name=pengeluarantrucking]').first().val(rowData.kodepengeluaran)
-            // $('#crudForm [name=user_id]').first().val(id)
             $('#lookupPengeluaranTrucking').hide()
 
-            $('#lookupBankToggler').show()
-            $('#lookupAkunPusatToggler').show()
-            $('#lookupPengeluaranHeaderToggler').show()
-            $('#lookupSupirToggler').show()
-            $('#lookupPenerimaanTruckingHeaderToggler').show()
           }
         })
 
@@ -78,13 +72,7 @@
 
             $('#crudForm [name=bank_id]').first().val(rowData.id)
             $('#crudForm [name=bank]').first().val(rowData.namabank)
-            // $('#crudForm [name=user_id]').first().val(id)
             $('#lookupBank').hide()
-
-            $('#lookupAkunPusatToggler').show()
-            $('#lookupPengeluaranHeaderToggler').show()
-            $('#lookupSupirToggler').show()
-            $('#lookupPenerimaanTruckingHeaderToggler').show()
           }
         })
         akunPusatLookup.setGridParam({
@@ -93,13 +81,7 @@
             console.log(rowData.coa)
 
             $('#crudForm [name=akunpusat]').first().val(rowData.coa)
-            // $('#crudForm [name=user_id]').first().val(id)
             $('#lookupAkunPusat').hide()
-
-            $('#lookupPengeluaranHeaderToggler').show()
-            $('#lookupPenerimaanTruckingHeaderToggler').show()
-            $('#lookupSupirToggler').show()
-
           }
         })
 
@@ -109,11 +91,8 @@
             console.log(rowData)
 
             $('#crudForm [name=pengeluaran_nobukti]').first().val(rowData.nobukti)
-            // $('#crudForm [name=user_id]').first().val(id)
             $('#lookupPengeluaranHeader').hide()
 
-            $('#lookupSupirToggler').show()
-            $('#lookupPenerimaanTruckingHeaderToggler').show()
           }
         })
 
@@ -124,9 +103,7 @@
 
             $('#crudForm [name=supir_id]').first().val(rowData.id)
             $('#crudForm [name=supir]').first().val(rowData.namasupir)
-            // $('#crudForm [name=user_id]').first().val(id)
             $('#lookupSupir').hide()
-            $('#lookupPenerimaanTruckingHeaderToggler').show()
 
           }
         })
@@ -136,7 +113,6 @@
             console.log(rowData)
 
             $('#crudForm [name=penerimaantruckingheader_nobukti]').first().val(rowData.nobukti)
-            // $('#crudForm [name=user_id]').first().val(id)
             $('#lookupPenerimaanTruckingHeader').hide()
           }
         })
@@ -147,8 +123,8 @@
           onSelectRow: function(id) {
             let rowData = $(this).getRowData(id)
 
-            $('#crudForm [name=pengeluarantrucking_id]').first().val(rowData.kodepengeluaran)
-            // $('#crudForm [name=user_id]').first().val(id)
+            $('#crudForm [name=pengeluarantrucking_id]').first().val(id)
+            $('#crudForm [name=pengeluarantrucking]').first().val(rowData.kodepengeluaran)
             $('#lookupPengeluaranTrucking').hide()
           }
         })
@@ -156,8 +132,8 @@
           onSelectRow: function(id) {
             let rowData = $(this).getRowData(id)
 
-            $('#crudForm [name=bank_id]').first().val(rowData.namabank)
-            // $('#crudForm [name=user_id]').first().val(id)
+            $('#crudForm [name=bank_id]').first().val(id)
+            $('#crudForm [name=bank]').first().val(rowData.namabank)
             $('#lookupBank').hide()
           }
         })
@@ -166,7 +142,6 @@
             let rowData = $(this).getRowData(id)
 
             $('#crudForm [name=akunpusat]').first().val(rowData.coa)
-            // $('#crudForm [name=user_id]').first().val(id)
             $('#lookupAkunPusat').hide()
           }
         })
@@ -175,7 +150,6 @@
             let rowData = $(this).getRowData(id)
 
             $('#crudForm [name=pengeluaran_nobukti]').first().val(rowData.nobukti)
-            // $('#crudForm [name=user_id]').first().val(id)
             $('#lookupPengeluaranHeader').hide()
           }
         })
@@ -183,8 +157,8 @@
           onSelectRow: function(id) {
             let rowData = $(this).getRowData(id)
 
-            $('#crudForm [name=supir_id]').first().val(rowData.namasupir)
-            // $('#crudForm [name=user_id]').first().val(id)
+            $('#crudForm [name=supir_id]').first().val(id)
+            $('#crudForm [name=supir]').first().val(rowData.namasupir)
             $('#lookupSupir').hide()
           }
         })
@@ -219,12 +193,6 @@
       $('#lookupPenerimaanTruckingHeader').hide()
       $('#lookupSupir').hide()
 
-      $('#lookupBankToggler').hide()
-      $('#lookupAkunPusatToggler').hide()
-      $('#lookupPengeluaranHeaderToggler').hide()
-      $('#lookupPenerimaanTruckingHeaderToggler').hide()
-      $('#lookupSupirToggler').hide()
-
 
       if (detectDeviceType() != 'desktop') {
         pengeluaranTruckingLookup.setGridHeight(window.innerHeight / 1.5)
@@ -246,11 +214,6 @@
       $('#lookupPenerimaanTruckingHeader').hide()
       $('#lookupSupir').hide()
 
-      $('#lookupAkunPusatToggler').hide()
-      $('#lookupPengeluaranHeaderToggler').hide()
-      $('#lookupPenerimaanTruckingHeaderToggler').hide()
-      $('#lookupSupirToggler').hide()
-
       if (detectDeviceType() != 'desktop') {
         bankLookup.setGridHeight(window.innerHeight / 1.5)
       }
@@ -269,10 +232,6 @@
       $('#lookupPengeluaranHeader').hide()
       $('#lookupPenerimaanTruckingHeader').hide()
       $('#lookupSupir').hide()
-
-      $('#lookupPengeluaranHeaderToggler').hide()
-      $('#lookupSupirToggler').hide()
-      $('#lookupPenerimaanTruckingHeaderToggler').hide()
 
       if (detectDeviceType() != 'desktop') {
         akunPusatLookup.setGridHeight(window.innerHeight / 1.5)
@@ -293,9 +252,6 @@
       $('#lookupPenerimaanTruckingHeader').hide()
       $('#lookupSupir').hide()
 
-
-      $('#lookupSupirToggler').hide()
-      $('#lookupPenerimaanTruckingHeaderToggler').hide()
       if (detectDeviceType() != 'dekstop') {
         pengeluaranHeaderLookup.setGridHeight(window.innerHeight / 1.5)
       }
@@ -314,8 +270,7 @@
       $('#lookupBank').hide()
       $('#lookupPengeluaranHeader').hide()
       $('#lookupPenerimaanTruckingHeader').hide()
-
-
+      
       if (detectDeviceType() != 'dekstop') {
         supirLookup.setGridHeight(window.innerHeight / 1.5)
       }

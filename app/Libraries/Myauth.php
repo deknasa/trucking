@@ -90,6 +90,7 @@ class Myauth
             'pengeluarantruckingheader',
             'piutangheader',
             'hutangheader',
+            'pelunasanpiutangheader',
         ],
         'method' => [
             'gridtab',

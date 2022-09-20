@@ -29,7 +29,11 @@
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
-                <input type="text" name="tglbukti" class="form-control datepicker">
+                
+                @php
+                $tglbukti = date('d-m-Y');
+                @endphp
+                <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
               </div>
             </div>
             <div class="row form-group">
@@ -55,7 +59,7 @@
                     <button id="lookupPengeluaranTruckingToggler" class="btn btn-secondary" type="button">...</button>
                   </div>
                 </div>
-                <div class="row position-absolute" id="lookupPengeluaranTrucking" style="z-index: 1;">
+                <div class="row position-absolute" id="lookupPengeluaranTrucking" style="z-index: 3;">
                   <div class="col-12">
                     <div id="lookupPengeluaranTrucking" class="shadow-lg">
                       @include('partials.lookups.pengeluarantrucking')
@@ -78,7 +82,7 @@
                     <button id="lookupBankToggler" class="btn btn-secondary" type="button">...</button>
                   </div>
                 </div>
-                <div class="row position-absolute" id="lookupBank" style="z-index: 1;">
+                <div class="row position-absolute" id="lookupBank" style="z-index: 3;">
                   <div class="col-12">
                     <div id="lookupBank" class="shadow-lg">
                       @include('partials.lookups.bank')
@@ -101,7 +105,7 @@
                     <button id="lookupAkunPusatToggler" class="btn btn-secondary" type="button">...</button>
                   </div>
                 </div>
-                <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 1;">
+                <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 3;">
                   <div class="col-12">
                     <div id="lookupAkunPusat" class="shadow-lg">
                       @include('partials.lookups.akunpusat')
@@ -124,7 +128,7 @@
                     <button id="lookupPengeluaranHeaderToggler" class="btn btn-secondary" type="button">...</button>
                   </div>
                 </div>
-                <div class="row position-absolute" id="lookupPengeluaranHeader" style="z-index: 1;">
+                <div class="row position-absolute" id="lookupPengeluaranHeader" style="z-index: 3;">
                   <div class="col-12">
                     <div id="lookupPengeluaranHeader" class="shadow-lg">
                       @include('partials.lookups.pengeluaranheader')
@@ -158,11 +162,11 @@
                         <div class="input-group-append">
                           <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
                         </div>
-                        <div class="row position-absolute" id="lookupSupir" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupSupir" class="shadow-lg">
-                              @include('partials.lookups.supir')
-                            </div>
+                      </div>
+                      <div class="row position-absolute" id="lookupSupir" style="z-index: 3;">
+                        <div class="col-12">
+                          <div id="lookupSupir" class="shadow-lg">
+                            @include('partials.lookups.supir')
                           </div>
                         </div>
                       </div>
@@ -177,11 +181,11 @@
                             <button id="lookupPenerimaanTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
                           </div>
                         </div>
-                        <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupPenerimaanTruckingHeader" class="shadow-lg">
-                              @include('partials.lookups.penerimaantruckingheader')
-                            </div>
+                      </div>
+                      <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 3;">
+                        <div class="col-12">
+                          <div id="lookupPenerimaanTruckingHeader" class="shadow-lg" >
+                            @include('partials.lookups.penerimaantruckingheader')
                           </div>
                         </div>
                       </div>
@@ -396,11 +400,16 @@
         $.each(response.data, (index, value) => {
           form.find(`[name="${index}"]`).val(value)
         })
-        // $.each(response.detail, function() {
-        //   $.each(this, function(name, value) {
-        //     form.find(`[name="${name}"]`).val(value)
-        //   });
-        // });
+
+        let tglbukti = response.data.tglbukti
+        $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
+
+        $.each(response.detail, function() {
+          $.each(this, function(name, value) {
+            form.find(`[name="${name}"]`).val(value)
+          });
+        });
+
 
         $('#table_body').html('')
         $.each(response.detail, (index, value) => {
@@ -419,7 +428,7 @@
                       <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
                     </div>
                   </div>
-                  <div class="row position-absolute" id="lookupSupir" style="z-index: 1;">
+                  <div class="row position-absolute" id="lookupSupir" style="z-index: 3;">
                     <div class="col-12">
                       <div id="lookupSupir" class="shadow-lg">
                         @include('partials.lookups.supir')
@@ -438,7 +447,7 @@
                       <button id="lookupPenerimaanTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
                     </div>
                   </div>
-                  <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 1;">
+                  <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 3;">
                     <div class="col-12">
                       <div id="lookupPenerimaanTruckingHeader" class="shadow-lg" >
                         @include('partials.lookups.penerimaantruckingheader')
@@ -486,6 +495,9 @@
         $.each(response.data, (index, value) => {
           form.find(`[name="${index}"]`).val(value)
         })
+        let tglbukti = response.data.tglbukti
+        $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
+        
         $('#table_body').html('')
         $.each(response.detail, (index, value) => {
           $('#table_body').append(
@@ -503,7 +515,7 @@
                       <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
                     </div>
                   </div>
-                  <div class="row position-absolute" id="lookupSupir" style="z-index: 1;">
+                  <div class="row position-absolute" id="lookupSupir" style="z-index: 3;">
                     <div class="col-12">
                       <div id="lookupSupir" class="shadow-lg">
                         @include('partials.lookups.supir')
@@ -522,7 +534,7 @@
                       <button id="lookupPenerimaanTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
                     </div>
                   </div>
-                  <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 1;">
+                  <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 3;">
                     <div class="col-12">
                       <div id="lookupPenerimaanTruckingHeader" class="shadow-lg" >
                         @include('partials.lookups.penerimaantruckingheader')

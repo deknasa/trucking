@@ -6,29 +6,15 @@
   <div class="row">
     <div class="col-12">
       <table id="jqGrid"></table>
-      <div id="jqGridPager" class="row bg-white">
-        <div id="buttonContainer" class="col-12 col-md-7 text-center text-md-left">
-          <button id="add" class="btn btn-primary btn-sm mb-1">
-            <i class="fa fa-plus"></i> ADD
-          </button>
-          <button id="edit" class="btn btn-success btn-sm mb-1">
-            <i class="fa fa-pen"></i> EDIT
-          </button>
-          <button id="delete" class="btn btn-danger btn-sm mb-1">
-            <i class="fa fa-trash"></i> DELETE
-          </button>
-        </div>
-        <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
-        <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
-      </div>
-
     </div>
   </div>
 </div>
 
+@include('zona._modal')
+
+
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('zona.index') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -45,38 +31,8 @@
   let rowNum = 10
 
   $(document).ready(function() {
-    /* Set page */
-    <?php if (isset($_GET['page'])) { ?>
-      page = "{{ $_GET['page'] }}"
-    <?php } ?>
-
-    /* Set id */
-    <?php if (isset($_GET['id'])) { ?>
-      id = "{{ $_GET['id'] }}"
-    <?php } ?>
-
-    /* Set indexRow */
-    <?php if (isset($_GET['indexRow'])) { ?>
-      indexRow = "{{ $_GET['indexRow'] }}"
-    <?php } ?>
-
-    /* Set sortname */
-    <?php if (isset($_GET['sortname'])) { ?>
-      sortname = "{{ $_GET['sortname'] }}"
-    <?php } ?>
-
-    /* Set sortorder */
-    <?php if (isset($_GET['sortorder'])) { ?>
-      sortorder = "{{ $_GET['sortorder'] }}"
-    <?php } ?>
-
-    /* Set rowNum */
-    <?php if (isset($_GET['limit'])) { ?>
-      rowNum = "{{ $_GET['limit'] }}"
-    <?php } ?>
-
     $("#jqGrid").jqGrid({
-      url: `{{ config('app.api_url') . 'zona' }}`,
+        url: `${apiUrl}zona`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -128,7 +84,10 @@
             label: 'UPDATEDAT',
             name: 'updated_at',
             formatter: "date",
-            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y H:i:s" }
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
         ],
         autowidth: true,
@@ -155,19 +114,16 @@
           records: 'attributes.totalRows',
         },
         loadBeforeSend: (jqXHR) => {
-          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
         },
         onSelectRow: function(id) {
-          id = $(this).jqGrid('getCell', id, 'rn') - 1
-          indexRow = id
+          activeGrid = $(this)
+          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
-          loadPagerHandler('#pagerHandler', $(this))
-          loadPagerInfo('#pagerInfo', $(this))
-          
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -210,55 +166,6 @@
         },
       })
 
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
-
-      // .navButtonAdd(pager, {
-      //   caption: 'Add',
-      //   title: 'Add',
-      //   id: 'add',
-      //   buttonicon: 'fas fa-plus',
-      //   class: 'btn btn-primary',
-      //   onClickButton: function() {
-      //     let limit = $(this).jqGrid('getGridParam', 'postData').limit
-
-      //     window.location.href = `{{ route('zona.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-      //   }
-      // })
-
-      // .navButtonAdd(pager, {
-      //   caption: 'Edit',
-      //   title: 'Edit',
-      //   id: 'edit',
-      //   buttonicon: 'fas fa-pen',
-      //   onClickButton: function() {
-      //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
-      //       alert('please select a row')
-      //     } else {
-      //       window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-      //     }
-      //   }
-      // })
-
-      // .navButtonAdd(pager, {
-      //   caption: 'Delete',
-      //   title: 'Delete',
-      //   id: 'delete',
-      //   buttonicon: 'fas fa-trash',
-      //   onClickButton: function() {
-      //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      //     window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-      //   }
-      // })
-
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
@@ -268,6 +175,38 @@
         beforeSearch: function() {
           clearGlobalSearch()
         },
+      })
+
+      .customPager({
+        buttons: [{
+            id: 'add',
+            innerHTML: '<i class="fa fa-plus"></i> ADD',
+            class: 'btn btn-primary btn-sm mr-1',
+            onClick: () => {
+              createZona()
+            }
+          },
+          {
+            id: 'edit',
+            innerHTML: '<i class="fa fa-pen"></i> EDIT',
+            class: 'btn btn-success btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+              editZona(selectedId)
+            }
+          },
+          {
+            id: 'delete',
+            innerHTML: '<i class="fa fa-trash"></i> DELETE',
+            class: 'btn btn-danger btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+              deleteZona(selectedId)
+            }
+          },
+        ]
       })
 
     /* Append clear filter button */
@@ -307,31 +246,6 @@
     if (!`{{ $myAuth->hasPermission('zona', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
-
-    /* Handle button add on click */
-    $('#add').click(function() {
-      let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
-
-      window.location.href = `{{ route('zona.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-    })
-
-    /* Handle button edit on click */
-    $('#edit').click(function() {
-      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      if (selectedId == null || selectedId == '' || selectedId == undefined) {
-        alert('please select a row')
-      } else {
-        window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-      }
-    })
-
-    /* Handle button delete on click */
-    $('#delete').click(function() {
-      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-    })
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {

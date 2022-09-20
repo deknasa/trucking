@@ -29,7 +29,11 @@
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
-                <input type="text" name="tglbukti" class="form-control datepicker">
+                
+              @php
+                $tglbukti = date('d-m-Y');
+                @endphp
+                <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
               </div>
             </div>
             <div class="row form-group">
@@ -307,6 +311,8 @@
         $.each(response.data, (index, value) => {
           form.find(`[name="${index}"]`).val(value)
         })
+        let tglbukti = response.data.tglbukti
+        $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
 
         $.each(response.detail, function() {
           $.each(this, function(name, value) {
@@ -400,6 +406,8 @@
         $.each(response.data, (index, value) => {
           form.find(`[name="${index}"]`).val(value)
         })
+        let tglbukti = response.data.tglbukti
+        $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
         $('#table_body').html('')
         $.each(response.detail, (index, value) => {
           $('#table_body').append(
