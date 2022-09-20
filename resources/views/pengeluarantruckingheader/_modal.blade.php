@@ -396,16 +396,11 @@
         $.each(response.data, (index, value) => {
           form.find(`[name="${index}"]`).val(value)
         })
-<<<<<<< HEAD
-        <?php $details = "<script> response.detail </script>"; ?>
-=======
-
->>>>>>> f5fed30bbe0f15b072f3149a9778b53e7535084e
-        $.each(response.detail, function() {
-          $.each(this, function(name, value) {
-            form.find(`[name="${name}"]`).val(value)
-          });
-        });
+        // $.each(response.detail, function() {
+        //   $.each(this, function(name, value) {
+        //     form.find(`[name="${name}"]`).val(value)
+        //   });
+        // });
 
         $('#table_body').html('')
         $.each(response.detail, (index, value) => {
