@@ -6,14 +6,14 @@
   <div class="row">
     <div class="col-12">
       <table id="jqGrid"></table>
-      <div id="jqGridPager"></div>
     </div>
   </div>
 </div>
 
+@include('pengeluarantrucking._modal')
+
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('pengeluaran_trucking.index') }}"
   let indexRow = 0;
   let page = 1;
   let pager = '#jqGridPager'
@@ -30,38 +30,8 @@
   let rowNum = 10
 
   $(document).ready(function() {
-    /* Set page */
-    <?php if (isset($_GET['page'])) { ?>
-      page = "{{ $_GET['page'] }}"
-    <?php } ?>
-
-    /* Set id */
-    <?php if (isset($_GET['id'])) { ?>
-      id = "{{ $_GET['id'] }}"
-    <?php } ?>
-
-    /* Set indexRow */
-    <?php if (isset($_GET['indexRow'])) { ?>
-      indexRow = "{{ $_GET['indexRow'] }}"
-    <?php } ?>
-
-    /* Set sortname */
-    <?php if (isset($_GET['sortname'])) { ?>
-      sortname = "{{ $_GET['sortname'] }}"
-    <?php } ?>
-
-    /* Set sortorder */
-    <?php if (isset($_GET['sortorder'])) { ?>
-      sortorder = "{{ $_GET['sortorder'] }}"
-    <?php } ?>
-
-    /* Set rowNum */
-    <?php if (isset($_GET['limit'])) { ?>
-      rowNum = "{{ $_GET['limit'] }}"
-    <?php } ?>
-
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'pengeluaran_trucking' }}`,
+        url: `${apiUrl}pengeluarantrucking`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -121,11 +91,11 @@
           records: 'attributes.totalRows',
         },
         loadBeforeSend: (jqXHR) => {
-          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
         },
         onSelectRow: function(id) {
-          id = $(this).jqGrid('getCell', id, 'rn') - 1
-          indexRow = id
+          activeGrid = $(this)
+          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
@@ -173,79 +143,6 @@
         },
       })
 
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Add',
-        title: 'Add',
-        id: 'add',
-        buttonicon: 'fas fa-plus',
-        class: 'btn btn-primary',
-        onClickButton: function() {
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
-
-          window.location.href = `{{ route('pengeluaran_trucking.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Edit',
-        title: 'Edit',
-        id: 'edit',
-        buttonicon: 'fas fa-pen',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-          if (selectedId == null || selectedId == '' || selectedId == undefined) {
-            alert('please select a row')
-          } else {
-            window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-          }
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Delete',
-        title: 'Delete',
-        id: 'delete',
-        buttonicon: 'fas fa-trash',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-          window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-        }
-      })
-
-      // .navButtonAdd(pager, {
-      //   caption: 'Export',
-      //   title: 'Export',
-      //   id: 'export',
-      //   buttonicon: 'fas fa-file-export',
-      //   onClickButton: function() {
-      //     $('#rangeModal').data('action', 'export')
-      //     $('#rangeModal').find('button:submit').html(`Export`)
-      //     $('#rangeModal').modal('show')
-      //   }
-      // })
-
-      // .navButtonAdd(pager, {
-      //   caption: 'Report',
-      //   title: 'Report',
-      //   id: 'report',
-      //   buttonicon: 'fas fa-print',
-      //   onClickButton: function() {
-      //     $('#rangeModal').data('action', 'report')
-      //     $('#rangeModal').find('button:submit').html(`Report`)
-      //     $('#rangeModal').modal('show')
-      //   }
-      // })
-
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
@@ -255,6 +152,38 @@
         beforeSearch: function() {
           clearGlobalSearch()
         },
+      })
+
+      .customPager({
+        buttons: [{
+            id: 'add',
+            innerHTML: '<i class="fa fa-plus"></i> ADD',
+            class: 'btn btn-primary btn-sm mr-1',
+            onClick: () => {
+              createPengeluaranTrucking()
+            }
+          },
+          {
+            id: 'edit',
+            innerHTML: '<i class="fa fa-pen"></i> EDIT',
+            class: 'btn btn-success btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+              editPengeluaranTrucking(selectedId)
+            }
+          },
+          {
+            id: 'delete',
+            innerHTML: '<i class="fa fa-trash"></i> DELETE',
+            class: 'btn btn-danger btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+              deletePengeluaranTrucking(selectedId)
+            }
+          },
+        ]
       })
 
     /* Append clear filter button */
@@ -283,23 +212,23 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('pengeluaran_trucking', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengeluarantrucking', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaran_trucking', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengeluarantrucking', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaran_trucking', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengeluarantrucking', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaran_trucking', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengeluarantrucking', 'export') }}`) {
       $('#export').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaran_trucking', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengeluarantrucking', 'report') }}`) {
       $('#report').addClass('ui-disabled')
     }
 
@@ -349,7 +278,7 @@
 
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}pengeluaran_trucking/export?${params}`, true)
+        xhr.open('GET', `{{ config('app.api_url') }}pengeluarantrucking/export?${params}`, true)
         xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
         xhr.responseType = 'arraybuffer'
 
@@ -372,7 +301,7 @@
 
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('pengeluaran_trucking.report') }}?${params}`)
+        window.open(`{{ route('pengeluarantrucking.report') }}?${params}`)
 
         submitButton.removeAttr('disabled')
       }

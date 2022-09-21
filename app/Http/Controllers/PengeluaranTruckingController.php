@@ -16,7 +16,7 @@ class PengeluaranTruckingController extends MyController
     {
         $title = $this->title;
 
-        return view('pengeluaran_trucking.index', compact('title'));
+        return view('pengeluarantrucking.index', compact('title'));
     }
     
     /**
@@ -26,7 +26,7 @@ class PengeluaranTruckingController extends MyController
     {
         $title = $this->title;
 
-        return view('pengeluaran_trucking.add', compact('title'));
+        return view('pengeluarantrucking.add', compact('title'));
     }
 
     /**
@@ -39,11 +39,11 @@ class PengeluaranTruckingController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "pengeluaran_trucking/$id");
+            ->get(config('app.api_url') . "pengeluarantrucking/$id");
 
         $pengeluaranTrucking = $response['data'];
 
-        return view('pengeluaran_trucking.edit', compact('title', 'pengeluaranTrucking'));
+        return view('pengeluarantrucking.edit', compact('title', 'pengeluaranTrucking'));
     }
 
     /**
@@ -57,13 +57,13 @@ class PengeluaranTruckingController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "pengeluaran_trucking/$id");
+                ->get(config('app.api_url') . "pengeluarantrucking/$id");
 
             $pengeluaranTrucking = $response['data'];
 
-            return view('pengeluaran_trucking.delete', compact('title', 'pengeluaranTrucking'));
+            return view('pengeluarantrucking.delete', compact('title', 'pengeluaranTrucking'));
         } catch (\Throwable $th) {
-            return redirect()->route('pengeluaran_trucking.index');
+            return redirect()->route('pengeluarantrucking.index');
         }
     }
     
@@ -75,10 +75,10 @@ class PengeluaranTruckingController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'pengeluaran_trucking', $request->all());
+            ->get(config('app.api_url') . 'pengeluarantrucking', $request->all());
 
         $pengeluaranTruckings = $response['data'];
 
-        return view('reports.pengeluaran_trucking', compact('pengeluaranTr$pengeluaranTruckings'));
+        return view('reports.pengeluarantrucking', compact('pengeluaranTr$pengeluaranTruckings'));
     }
 }

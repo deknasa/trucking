@@ -24,7 +24,7 @@ $(document).ready(function () {
 
 function setFormats() {
 	$.ajax({
-		url: `${window.location.origin}/truck/formats/global.json`,
+		url: `${appUrl}/formats/global.json`,
 		method: "GET",
 		dataType: "JSON",
 		async: false,
