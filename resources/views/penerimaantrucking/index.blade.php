@@ -10,12 +10,12 @@
   </div>
 </div>
 
-@include('orderantrucking._modal')
+@include('penerimaantrucking._modal')
 
 @push('scripts')
 <script>
   let indexRow = 0;
-  let page = 0;
+  let page = 1;
   let pager = '#jqGridPager'
   let popup = "";
   let id = "";
@@ -24,14 +24,14 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'nobukti'
+  let sortname = 'kodepenerimaan'
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
 
   $(document).ready(function() {
     $("#jqGrid").jqGrid({
-        url: `${apiUrl}orderantrucking`,
+        url: `${apiUrl}penerimaantrucking`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -42,74 +42,20 @@
             width: '50px'
           },
           {
-            label: 'NO BUKTI',
-            name: 'nobukti',
+            label: 'kode penerimaan',
+            name: 'kodepenerimaan',
           },
           {
-            label: 'TGL BUKTI',
-            name: 'tglbukti',
+            label: 'keterangan',
+            name: 'keterangan',
           },
           {
-            label: 'CONTAINER',
-            name: 'container_id',
+            label: 'coa',
+            name: 'coa',
           },
           {
-            label: 'AGEN',
-            name: 'agen_id',
-          },
-          {
-            label: 'JENIS ORDER',
-            name: 'jenisorder_id',
-          },
-          {
-            label: 'PELANGGAN',
-            name: 'pelanggan_id',
-          },
-          {
-            label: 'TUJUAN',
-            name: 'tarif_id',
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
-          },
-          {
-            label: 'NO JOBEMKL',
-            name: 'nojobemkl',
-          },
-          {
-            label: 'NO CONT',
-            name: 'nocont',
-          },
-          {
-            label: 'NO SEAL',
-            name: 'noseal',
-          },
-          {
-            label: 'NO JOBEMKL',
-            name: 'nojobemkl2',
-          },
-          {
-            label: 'NO CONT',
-            name: 'nocont2',
-          },
-          {
-            label: 'NO SEAL',
-            name: 'noseal2',
-          },
-          {
-            label: 'STATUS LANGSIR',
-            name: 'statuslangsir',
-          },
-          {
-            label: 'STATUS PERALIHAN',
-            name: 'statusperalihan',
+            label: 'formatbukti',
+            name: 'formatbukti',
           },
           {
             label: 'MODIFIEDBY',
@@ -132,7 +78,6 @@
         sortname: sortname,
         sortorder: sortorder,
         page: page,
-        pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',
@@ -178,14 +123,14 @@
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
@@ -214,7 +159,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: () => {
-              createOrderanTrucking()
+              createPenerimaanTrucking()
             }
           },
           {
@@ -224,7 +169,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-              editOrderanTrucking(selectedId)
+              editPenerimaanTrucking(selectedId)
             }
           },
           {
@@ -234,7 +179,27 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-              deleteOrderanTrucking(selectedId)
+              deletePenerimaanTrucking(selectedId)
+            }
+          },
+          {
+            id: 'export',
+            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'export')
+              $('#rangeModal').find('button:submit').html(`Export`)
+              $('#rangeModal').modal('show')
+            }
+          },
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'report')
+              $('#rangeModal').find('button:submit').html(`Report`)
+              $('#rangeModal').modal('show')
             }
           },
         ]
@@ -266,16 +231,24 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('orderantrucking', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('orderantrucking', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('orderantrucking', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'export') }}`) {
+      $('#export').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaantrucking', 'report') }}`) {
+      $('#report').addClass('ui-disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -297,19 +270,17 @@
         decimalCharacter: ',',
         allowDecimalPadding: false,
         minimumValue: 1,
-        maximumValue: totalRecord
+        maximumValue: totalRecord,
       })
     })
 
-    $('#formRange').submit(event => {
+    $('#formRange').submit(function(event) {
       event.preventDefault()
 
       let params
-      let actionUrl = ``
+      let submitButton = $(this).find('button:submit')
 
-      /* Clear validation messages */
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
+      submitButton.attr('disabled', 'disabled')
 
       /* Set params value */
       for (var key in postData) {
@@ -319,7 +290,40 @@
         params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+      let formRange = $('#formRange')
+      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+      params += `&offset=${offset}&limit=${limit}`
+
+      if ($('#rangeModal').data('action') == 'export') {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `{{ config('app.api_url') }}penerimaantrucking/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+        xhr.responseType = 'arraybuffer'
+
+        xhr.onload = function(e) {
+          if (this.status === 200) {
+            if (this.response !== undefined) {
+              let blob = new Blob([this.response], {
+                type: "application/vnd.ms-excel"
+              })
+              let link = document.createElement('a')
+
+              link.href = window.URL.createObjectURL(blob)
+              link.download = `laporanPenerimaanTrucking${(new Date).getTime()}.xlsx`
+              link.click()
+
+              submitButton.removeAttr('disabled')
+            }
+          }
+        }
+
+        xhr.send()
+      } else if ($('#rangeModal').data('action') == 'report') {
+        window.open(`{{ route('penerimaantrucking.report') }}?${params}`)
+
+        submitButton.removeAttr('disabled')
+      }
     })
   })
 </script>

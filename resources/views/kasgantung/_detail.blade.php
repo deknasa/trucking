@@ -32,8 +32,7 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        colModel: [
-          {
+        colModel: [{
             label: 'KETERANGAN',
             name: 'keterangan',
           },
@@ -61,20 +60,16 @@
         rowList: [10, 20, 50],
         toolbar: [true, "top"],
         sortable: true,
-        pager: pager,
         viewrecords: true,
+        onSelectRow: function(id) {
+          activeGrid = $(this)
+        },
         loadComplete: function(data) {
-          
+          initResize($(this))
         }
       })
 
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
+      .customPager()
   }
 
   function loadDetailData(id) {
@@ -86,7 +81,7 @@
       }
     }).trigger('reloadGrid')
   }
-    
+
   function clearColumnSearch() {
     $('input[id*="gs_"]').val("");
     $("#resetFilterOptions span#resetFilterOptions").removeClass('aktif');
