@@ -91,6 +91,8 @@ class Myauth
             'piutangheader',
             'hutangheader',
             'pelunasanpiutangheader',
+            'hutangbayarheader',
+
         ],
         'method' => [
             'gridtab',

@@ -473,7 +473,7 @@
     })
   }
 
-  function deletePiutangHeader(Id) {
+  function deleteHutangHeader(Id) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')

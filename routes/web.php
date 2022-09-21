@@ -82,6 +82,8 @@ use App\Http\Controllers\PelunasanPiutangDetailController;
 use App\Http\Controllers\PelunasanPiutangHeaderController;
 use App\Http\Controllers\PiutangDetailController;
 use App\Http\Controllers\PiutangHeaderController;
+use App\Http\Controllers\HutangBayarDetailController;
+use App\Http\Controllers\HutangBayarHeaderController;
 
 
 /*
@@ -549,6 +551,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('pelunasanpiutangheader', PelunasanPiutangHeaderController::class);
 
     Route::resource('pelunasanpiutangdetail', PelunasanPiutangDetailController::class);
+
+    Route::get('hutangbayarheader/index', [HutangBayarHeaderController::class, 'index']);
+    Route::get('hutangbayarheader/{id}/delete', [HutangBayarHeaderController::class, 'delete'])->name('hutangbayarheader.delete');
+    Route::get('hutangbayarheader/get', [HutangBayarHeaderController::class, 'get'])->name('hutangbayarheader.get');
+    Route::get('hutangbayarheader/export', [HutangBayarHeaderController::class, 'export'])->name('hutangbayarheader.export');
+    Route::get('hutangbayarheader/report', [HutangBayarHeaderController::class, 'report'])->name('hutangbayarheader.report');
+    Route::resource('hutangbayarheader', HutangBayarHeaderController::class);
+
+    Route::resource('hutangbayardetail', HutangBayarDetailController::class);
 
 });
 

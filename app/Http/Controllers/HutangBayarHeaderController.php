@@ -3,68 +3,41 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\View\View;
 
-class HutangHeaderController extends MyController
+class HutangBayarHeaderController extends Controller
 {
+    public $title = 'Pembayaran Hutang';
 
-    public $title = 'Hutang';
-
-    /**
-     * @ClassName index
-     */
     public function index(Request $request)
     {
         $title = $this->title;
-        return view('hutang.index', compact('title'));
+        return view('hutangbayarheader.index', compact('title'));
     }
 
-    /**
-     * @ClassName create
-     */
     public function create()
     {
         $title = $this->title;
 
-        return view('hutang.add', compact('title'));
+        $combo = $this->combo();
+
+        return view('hutangbayarheader.add', compact('title','combo'));
     }
 
-    /**
-     * @ClassName store
-     */
     public function store(Request $request)
     {
         try {
+             /* Unformat nominal */
+            $request->nominal = array_map(function ($nominal) {
+                $nominal = str_replace('.', '', $nominal);
+                $nominal = str_replace(',', '', $nominal);
 
-
-            $request->total = array_map(function ($total) {
-                $total = str_replace('.', '', $total);
-
-                return $total;
-            }, $request->total);
-
-            $request->cicilan = array_map(function ($cicilan) {
-                $cicilan = str_replace('.', '', $cicilan);
-
-                return $cicilan;
-            }, $request->cicilan);
-
-            $request->totalbayar = array_map(function ($totalbayar) {
-                $totalbayar = str_replace('.', '', $totalbayar);
-
-                return $totalbayar;
-            }, $request->totalbayar);
-            
+                return $nominal;
+            }, $request->nominal);
 
             $request->merge([
-               // 'nominal' => $request->nominal,
-                'total' => $request->total,
-                'cicilan' => $request->cicilan,
-                'totalbayar' => $request->totalbayar,
-
+                'nominal' => $request->nominal
             ]);
 
             $request['modifiedby'] = Auth::user()->name;
@@ -72,7 +45,7 @@ class HutangHeaderController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'hutangheader', $request->all());
+                ->post(config('app.api_url') . 'hutangbayarheader', $request->all());
 
 
             return response($response, $response->status());
@@ -81,10 +54,6 @@ class HutangHeaderController extends MyController
         }
     }
 
-    // /**
-    //  * Fungsi get
-    //  * @ClassName get
-    //  */
     public function get($params = [])
     {
         $params = [
@@ -99,7 +68,7 @@ class HutangHeaderController extends MyController
         $response = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'hutangheader', $params);
+            ->get(config('app.api_url') . 'hutangbayarheader', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -111,11 +80,6 @@ class HutangHeaderController extends MyController
         return $data;
     }
 
-
-    /**
-     * Fungsi edit
-     * @ClassName edit
-     */
     public function edit($id)
     {
         $title = $this->title;
@@ -123,48 +87,37 @@ class HutangHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "hutangheader/$id");
+            ->get(config('app.api_url') . "hutangbayarheader/$id");
             // dd($response->getBody()->getContents());
 
-        $hutang = $response['data'];
-        $hutangNoBukti = $this->getNoBukti('HUTANG', 'HUTANG', 'hutangheader');
+        $hutangbayarheader = $response['data'];
+        $kode = $response['kode'];
+
+        // if($kode == 'PJT'){
+        //     $pengeluarantruckingheaderNoBukti = $this->getNoBukti('PINJAMAN SUPIR', 'PINJAMAN SUPIR', 'pengeluarantruckingheader');
+        // }else{
+        //     $pengeluarantruckingheaderNoBukti = $this->getNoBukti('BIAYA LAIN SUPIR', 'BIAYA LAIN SUPIR', 'pengeluarantruckingheader');
+        // }
+        // return view('hutangbayarheader.edit', compact('title', 'hutangbayarheader','combo', 'hutangbayarheaderNoBukti'));
 
 
-        return view('hutang.edit', compact('title', 'hutang', 'hutangNoBukti'));
+        $combo = $this->combo();
+
+        return view('hutangbayarheader.edit', compact('title', 'hutangbayarheader','combo'));
     }
 
-   // /**
-    //  * Fungsi update
-    //  * @ClassName update
-    //  */
     public function update(Request $request, $id)
     {
+        /* Unformat nominal */
+        $request->nominal = array_map(function ($nominal) {
+            $nominal = str_replace('.', '', $nominal);
+            $nominal = str_replace(',', '', $nominal);
 
-        $request->total = array_map(function ($total) {
-            $total = str_replace('.', '', $total);
-
-            return $total;
-        }, $request->total);
-
-        $request->cicilan = array_map(function ($cicilan) {
-            $cicilan = str_replace('.', '', $cicilan);
-
-            return $cicilan;
-        }, $request->cicilan);
-
-        $request->totalbayar = array_map(function ($totalbayar) {
-            $totalbayar = str_replace('.', '', $totalbayar);
-
-            return $totalbayar;
-        }, $request->totalbayar);
-        
+            return $nominal;
+        }, $request->nominal);
 
         $request->merge([
-           // 'nominal' => $request->nominal,
-            'total' => $request->total,
-            'cicilan' => $request->cicilan,
-            'totalbayar' => $request->totalbayar,
-
+            'nominal' => $request->nominal
         ]);
 
         $request['modifiedby'] = Auth::user()->name;
@@ -172,15 +125,11 @@ class HutangHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "hutangheader/$id", $request->all());
+            ->patch(config('app.api_url') . "hutangbayarheader/$id", $request->all());
 
         return response($response);
     }
 
-    // /**
-    //  * Fungsi delete
-    //  * @ClassName delete
-    //  */
     public function delete($id)
     {
         try {
@@ -189,39 +138,30 @@ class HutangHeaderController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "hutangheader/$id");
+                ->get(config('app.api_url') . "hutangbayarheader/$id");
 
-            $hutangheader = $response['data'];
+            $hutangbayarheader = $response['data'];
             
             $combo = $this->combo();
 
-            return view('hutangheader.delete', compact('title','combo', 'hutangheader'));
+            return view('hutangbayarheader.delete', compact('title','combo', 'hutangbayarheader'));
         } catch (\Throwable $th) {
-            return redirect()->route('hutangheader.index');
+            return redirect()->route('hutangbayarheader.index');
         }
     }
 
-
-       // /**
-    //  * Fungsi destroy
-    //  * @ClassName destroy
-    //  */
     public function destroy($id)
     {
         $request['modifiedby'] = Auth::user()->name;
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "hutangheader/$id");
+            ->delete(config('app.api_url') . "hutangbayarheader/$id");
 
             
         return response($response);
     }
 
-    // /**
-    //  * Fungsi getNoBukti
-    //  * @ClassName getNoBukti
-    //  */
     public function getNoBukti($group, $subgroup, $table)
     {
         $params = [
@@ -240,4 +180,15 @@ class HutangHeaderController extends MyController
         return $noBukti;
     }
 
+    private function combo()
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withToken(session('access_token'))
+        ->withOptions(['verify' => false])
+            ->get(config('app.api_url') . 'hutangbayarheader/combo');
+
+        return $response['data'];
+    }
+
+    
 }
