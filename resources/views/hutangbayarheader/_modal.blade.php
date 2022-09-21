@@ -107,7 +107,7 @@
                 <div class="row position-absolute" id="lookupPengeluaran" style="z-index: 1;">
                   <div class="col-12">
                     <div id="lookupPengeluaran" class="shadow-lg">
-                      @include('partials.lookups.pengeluaran')
+                      @include('partials.lookups.pengeluaranheader')
                     </div>
                   </div>
                 </div>
@@ -167,9 +167,9 @@
 
                   <td>
                     <div class="row form-group">
-                      <div class="col-12 col-md-12" id="hutang_id">
+                      <div class="col-12 col-md-12" id="hutang_nobukti">
                         <div class="input-group">
-                          <input type="hidden" name="hutang_id">
+                          <input type="hidden" name="hutang_nobukti">
                           <input type="text" name="hutang" class="form-control">
                           <div class="input-group-append">
                             <button id="lookupHutangToggler" class="btn btn-secondary" type="button">...</button>
@@ -178,7 +178,7 @@
                         <div class="row position-absolute" id="lookupHutang" style="z-index: 1;">
                           <div class="col-12">
                             <div id="lookupHutang" class="shadow-lg">
-                              @include('partials.lookups.hutang')
+                              @include('partials.lookups.hutangheader')
                             </div>
                           </div>
                         </div>
@@ -189,7 +189,7 @@
                   <td>
                     <div class="row form-group">
                       <div class="col-12 col-md-12">
-                        <input type="text" name="cicilan" class="form-control">
+                        <input type="text" name="cicilan_detail" class="form-control text-right autonumeric">
                       </div>
                     </div>
                   </td>
@@ -226,7 +226,7 @@
                   <td>
                     <div class="row form-group">
                       <div class="col-12 col-md-12">
-                        <input type="text" name="potongan" class="form-control">
+                        <input type="text" name="potongan_detail" class="form-control text-right autonumeric">
                       </div>
                     </div>
                   </td>
@@ -459,7 +459,7 @@
                     <div class="row form-group">
                       <div class="col-12 col-md-12">
                         <div class="input-group">
-                          <input type="hidden" name="hutang_id" value="${value.hutang_id}">
+                          <input type="hidden" name="hutang_nobukti" value="${value.hutang_nobukti}">
                           <input type="text" name="hutang" value="${value.hutang}" class="form-control">
                           <div class="input-group-append">
                             <button id="lookupHutangToggler" class="btn btn-secondary" type="button">...</button>
@@ -468,7 +468,7 @@
                         <div class="row position-absolute" id="lookupHutang" style="z-index: 1;">
                           <div class="col-12">
                             <div id="lookupHutang" class="shadow-lg">
-                              @include('partials.lookups.hutang')
+                              @include('partials.lookups.hutangheader')
                             </div>
                           </div>
                         </div>
@@ -565,7 +565,7 @@
                     <div class="row form-group">
                       <div class="col-12 col-md-12">
                         <div class="input-group">
-                          <input type="hidden" name="hutang_id" value="${value.hutang_id}">
+                          <input type="hidden" name="hutang_nobukti" value="${value.hutang_nobukti}">
                           <input type="text" name="hutang" value="${value.hutang}" class="form-control">
                           <div class="input-group-append">
                             <button id="lookupHutangToggler" class="btn btn-secondary" type="button">...</button>
@@ -574,7 +574,7 @@
                         <div class="row position-absolute" id="lookupHutang" style="z-index: 1;">
                           <div class="col-12">
                             <div id="lookupHutang" class="shadow-lg">
-                              @include('partials.lookups.hutang')
+                              @include('partials.lookups.hutangheader')
                             </div>
                           </div>
                         </div>
@@ -618,7 +618,7 @@
               <td>
                   <input type="text" name="keterangan" value="${value.keterangan}" class="form-control" > 
               </td>
-              
+
               <td>
                 <div class='btn btn-danger btn-sm rmv'>Hapus</div>
               </td>
