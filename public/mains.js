@@ -846,6 +846,7 @@ $(document).on("input", ".numbernoseparate", function () {
 /* Select2: Autofocus search input on open */
 function initSelect2(elements = null) {
 	let option = {
+		width: '100%',
 		theme: "bootstrap4",
 		dropdownParent: $("#crudModal"),
 	};
