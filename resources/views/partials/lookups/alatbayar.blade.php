@@ -1,9 +1,9 @@
-<table id="alatbayarLookup" style="width: 100%;"></table>
-<div id="alatbayarLookupPager"></div>
+<table id="alatBayarLookup" style="width: 100%;"></table>
+<div id="alatBayarLookupPager"></div>
 
 @push('scripts')
 <script>
-  let alatbayarLookup = $('#alatbayarLookup').jqGrid({
+  let alatBayarLookup = $('#alatBayarLookup').jqGrid({
       url: `{{ config('app.api_url') . 'alatbayar' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',

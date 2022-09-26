@@ -50,7 +50,7 @@
               </div>
               <div class="col-8 col-md-10">
                 <div class="input-group">
-                  <input type="hidden" name="bank_id" class="form-control">
+                  <input type="hidden" name="bank_id">
                   <input type="text" name="bank" class="form-control">
                   <div class="input-group-append">
                     <button id="lookupBankToggler" class="btn btn-secondary" type="button">...</button>
@@ -90,16 +90,16 @@
               </div>
             </div>
 
-            <div class="row form-group">
+            <!-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  NO BUKTI PENGELUARAN <span class="text-danger">*</span>
+                  NOBUKTI PENGELUARAN <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-8 col-md-10">
                 <div class="input-group">
-                  <input type="hidden" name="pengeluaran_nobukti">
-                  <input type="text" name="pengeluaran_nobukti" class="form-control">
+                  <input type="hidden" name="pengeluaran_id">
+                  <input type="text" name="pengeluaran" class="form-control">
                   <div class="input-group-append">
                     <button id="lookupPengeluaranToggler" class="btn btn-secondary" type="button">...</button>
                   </div>
@@ -112,7 +112,31 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
+
+            <!-- <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  NO BUKTI PENGELUARAN <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <div class="input-group">
+                  <input type="hidden" name="pengeluaran_id">
+                  <input type="text" name="pengeluaran" class="form-control">
+                  <div class="input-group-append">
+                    <button id="lookupPengeluaranToggler" class="btn btn-secondary" type="button">...</button>
+                  </div>
+                </div>
+                <div class="row position-absolute" id="lookupPengeluaran" style="z-index: 1;">
+                  <div class="col-12">
+                    <div id="lookupPengeluaran" class="shadow-lg">
+                      @include('partials.lookups.pengeluaranheader')
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -158,19 +182,15 @@
                   </td>
 
                   <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <input type="text" name="nominal_detail" class="form-control text-right autonumeric">
-                      </div>
-                    </div>
+                    <input type="text" name="nominal" style="text-align:right" class="form-control text-right autonumeric">
                   </td>
 
                   <td>
                     <div class="row form-group">
                       <div class="col-12 col-md-12" id="hutang_nobukti">
                         <div class="input-group">
-                          <input type="hidden" name="hutang_nobukti">
-                          <input type="text" name="hutang" class="form-control">
+                          <!-- <input type="hidden" name="hutang_nobukti"> -->
+                          <input type="text" name="hutang_nobukti" class="form-control">
                           <div class="input-group-append">
                             <button id="lookupHutangToggler" class="btn btn-secondary" type="button">...</button>
                           </div>
@@ -187,13 +207,8 @@
                   </td>
 
                   <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <input type="text" name="cicilan_detail" class="form-control text-right autonumeric">
-                      </div>
-                    </div>
+                    <input type="text" name="cicilan" style="text-align:right" class="form-control text-right autonumeric">
                   </td>
-
                   <td>
                     <div class="row form-group">
                       <div class="col-12 col-md-12" id="alatbayar_id">
@@ -224,17 +239,13 @@
                   </td>
 
                   <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <input type="text" name="potongan_detail" class="form-control text-right autonumeric">
-                      </div>
-                    </div>
+                    <input type="text" name="potongan" style="text-align:right" class="form-control text-right autonumeric">
                   </td>
 
                   <td>
                     <div class="row form-group">
                       <div class="col-12 col-md-12">
-                        <input type="text" name="keterangan" class="form-control">
+                        <input type="text" name="keterangan_detail" class="form-control">
                       </div>
                     </div>
                   </td>
@@ -271,6 +282,7 @@
     </form>
   </div>
 </div>
+
 @push('scripts')
 <script>
   let hasFormBindKeys = false
@@ -412,7 +424,7 @@
     Simpan
   `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Add Hutang Bayar Trucking')
+    $('#crudModalTitle').text('Add Hutang Bayar')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -459,8 +471,8 @@
                     <div class="row form-group">
                       <div class="col-12 col-md-12">
                         <div class="input-group">
-                          <input type="hidden" name="hutang_nobukti" value="${value.hutang_nobukti}">
-                          <input type="text" name="hutang" value="${value.hutang}" class="form-control">
+                          <input type="text" name="hutang_nobukti" value="${value.hutang_nobukti}" class="form-control">
+                      
                           <div class="input-group-append">
                             <button id="lookupHutangToggler" class="btn btn-secondary" type="button">...</button>
                           </div>
@@ -476,7 +488,7 @@
                     </div>
                   </td>
 
-                <td>
+                  <td>
                   <input type="text" name="cicilan" value="${value.cicilan}" style="text-align:right" class="form-control text-right autonumeric" > 
               </td>
 
@@ -502,7 +514,7 @@
                   </td>
 
                 <td>
-                  <input type="text" name="tglcair" value="${value.tglcair}" class="form-control datepicker" > 
+                  <input type="text" name="tglcair"  class="form-control datepicker" value="${value.tglcair}" > 
               </td>
 
               <td>
@@ -510,10 +522,9 @@
               </td>
 
               <td>
-                  <input type="text" name="keterangan" value="${value.keterangan}" class="form-control" > 
+              <input type="text" name="keterangan_detail" value="${value.keterangan}" class="form-control">
               </td>
 
-                           
               <td>
                 <div class='btn btn-danger btn-sm rmv'>Hapus</div>
               </td>
@@ -524,7 +535,7 @@
     })
   }
 
-  function deletePenerimaanTruckingHeader(Id) {
+  function deleteHutangBayarHeader(Id) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -533,13 +544,13 @@
     <i class="fa fa-save"></i>
     Hapus
   `)
-    $('#crudModalTitle').text('Delete Penerimaan Trucking')
+    $('#crudModalTitle').text('Delete Pembayaran Hutang')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     $.ajax({
-      url: `${apiUrl}penerimaantruckingheader/${Id}`,
+      url: `${apiUrl}hutangbayarheader/${Id}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -608,7 +619,7 @@
                   </td>
 
                 <td>
-                  <input type="text" name="tglcair" value="${value.tglcair}" class="form-control datepicker" > 
+                  <input type="text" name="tglcair"  class="form-control datepicker" value="${value.tglcair}"> 
               </td>
 
               <td>
@@ -616,8 +627,8 @@
               </td>
 
               <td>
-                  <input type="text" name="keterangan" value="${value.keterangan}" class="form-control" > 
-              </td>
+                  <input type="text" name="keterangan_detail" value="${value.keterangan}" class="form-control">
+                </td>
 
               <td>
                 <div class='btn btn-danger btn-sm rmv'>Hapus</div>
