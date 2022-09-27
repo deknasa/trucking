@@ -33,6 +33,96 @@
   let autoNumericElements = []
 
   $(document).ready(function() {
+
+    $('#lookupAgen').hide()
+    
+    $('#crudModal').on('shown.bs.modal', function() {
+      agenLookup.setGridWidth($('#lookupAgen').prev().width())
+
+      if (detectDeviceType() == 'desktop') {
+        
+        agenLookup.setGridParam({
+          ondblClickRow: function(id) {
+            let rowData = $(this).getRowData(id)
+            console.log(id)
+
+            $('#crudForm [name=agen_id]').first().val(id)
+            $('#crudForm [name=agen]').first().val(rowData.namaagen)
+            $('#lookupAgen').hide()
+
+          }
+        })
+
+      } else if (detectDeviceType() == 'mobile') {
+       
+        agenLookup.setGridParam({
+          onSelectRow: function(id) {
+            let rowData = $(this).getRowData(id)
+
+            $('#crudForm [name=agen_id]').first().val(id)
+            $('#crudForm [name=agen]').first().val(namaagen)
+            $('#lookupAgen').hide()
+          }
+        })
+
+      }
+
+      $('#crudModal').find("[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit").first().focus()
+    })
+
+    $('#crudModal').on('hidden.bs.modal', function() {
+      activeGrid = '#jqGrid'
+    })
+
+    $('#lookupAgenToggler').click(function(event) {
+      agenLookup.setGridWidth($('#lookupAgen').prev().width())
+      $('#lookupAgen').toggle()
+
+      if (detectDeviceType() != 'desktop') {
+        agenLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      if (detectDeviceType() == 'desktop') {
+        activeGrid = agenLookup
+      }
+    })
+
+    $('[name=agen]').on('input', function(event) {
+      $('#lookupAgen').show()
+
+      if (detectDeviceType() != 'desktop') {
+        agenLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      delay(() => {
+        let postData = agenLookup.getGridParam('postData')
+        let colModels = agenLookup.getGridParam('colModel')
+        let rules = []
+
+        colModels = colModels.filter((colModel) => {
+          return colModel.name !== 'rn'
+        })
+
+        colModels.forEach(colModel => {
+          rules.push({
+            field: colModel.name,
+            op: 'cn',
+            data: $(this).val()
+          })
+        });
+
+        postData.filters = JSON.stringify({
+          groupOp: 'OR',
+          rules: rules
+        })
+
+        agenLookup.trigger('reloadGrid', {
+          page: 1
+        })
+      }, 500)
+    })
+
+
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'piutangheader' }}`,
         mtype: "GET",
@@ -80,6 +170,11 @@
           {
             label: 'NO BUKTI INVOICE',
             name: 'invoice_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'AGEN',
+            name: 'agen_id',
             align: 'left'
           },
           {
@@ -207,7 +302,11 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              editPiutangHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                editPiutangHeader(selectedId)
+              }
             }
           },
           {
@@ -216,7 +315,11 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              deletePiutangHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                deletePiutangHeader(selectedId)
+              }
             }
           },
         ]

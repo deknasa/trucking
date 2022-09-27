@@ -305,8 +305,11 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              cekApproval(selectedId, 'EDIT')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                cekApproval(selectedId, 'EDIT')
+              }
             }
           },
           {
@@ -315,7 +318,11 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              cekApproval(selectedId, 'DELETE')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                cekApproval(selectedId, 'DELETE')
+              }
             }
           },
           {
@@ -324,7 +331,11 @@
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              approval(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                approval(selectedId)
+              }
             }
           }
         ]

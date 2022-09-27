@@ -543,6 +543,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('pelunasanpiutangheader/index', [PelunasanPiutangHeaderController::class, 'index']);
     Route::get('pelunasanpiutangheader/{id}/delete', [PelunasanPiutangHeaderController::class, 'delete'])->name('pelunasanpiutangheader.delete');
+    Route::get('pelunasanpiutangheader/{id}/getpiutang', [PelunasanPiutangHeaderController::class, 'getpiutang'])->name('pelunasanpiutangheader.getpiutang');
     Route::get('pelunasanpiutangheader/get', [PelunasanPiutangHeaderController::class, 'get'])->name('pelunasanpiutangheader.get');
     Route::get('pelunasanpiutangheader/export', [PelunasanPiutangHeaderController::class, 'export'])->name('pelunasanpiutangheader.export');
     Route::get('pelunasanpiutangheader/report', [PelunasanPiutangHeaderController::class, 'report'])->name('pelunasanpiutangheader.report');

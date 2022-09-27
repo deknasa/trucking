@@ -29,7 +29,6 @@
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4" id="tglbukti">
-                
                 @php
                 $tglbukti = date('d-m-Y');
                 @endphp
@@ -43,6 +42,30 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                AGEN <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <div class="input-group">
+                  <input type="hidden" name="agen_id" class="form-control">
+                  <input type="text" name="agen" class="form-control">
+                  <div class="input-group-append">
+                    <button id="lookupAgenToggler" class="btn btn-secondary" type="button">...</button>
+                  </div>
+                </div>
+                <div class="row position-absolute" id="lookupAgen" style="z-index: 3;">
+                  <div class="col-12">
+                    <div id="lookupAgen" class="shadow-lg">
+                      @include('partials.lookups.agen')
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

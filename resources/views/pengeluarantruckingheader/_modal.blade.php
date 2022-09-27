@@ -162,19 +162,11 @@
                         <div class="input-group-append">
                           <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
                         </div>
-<<<<<<< HEAD
                       </div>
                       <div class="row position-absolute" id="lookupSupir" style="z-index: 3;">
                         <div class="col-12">
                           <div id="lookupSupir" class="shadow-lg">
                             @include('partials.lookups.supir')
-=======
-                        <div class="row position-absolute" id="lookupSupir" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupSupir" class="shadow-lg">
-                              @include('partials.lookups.supir')
-                            </div>
->>>>>>> a70951ad4d57b012fe39236fc69651f632466a97
                           </div>
                         </div>
                       </div>
@@ -189,19 +181,11 @@
                             <button id="lookupPenerimaanTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
                           </div>
                         </div>
-<<<<<<< HEAD
                       </div>
                       <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 3;">
                         <div class="col-12">
                           <div id="lookupPenerimaanTruckingHeader" class="shadow-lg" >
                             @include('partials.lookups.penerimaantruckingheader')
-=======
-                        <div class="row position-absolute" id="lookupPenerimaanTruckingHeader" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupPenerimaanTruckingHeader" class="shadow-lg">
-                              @include('partials.lookups.penerimaantruckingheader')
-                            </div>
->>>>>>> a70951ad4d57b012fe39236fc69651f632466a97
                           </div>
                         </div>
                       </div>
@@ -416,21 +400,9 @@
         $.each(response.data, (index, value) => {
           form.find(`[name="${index}"]`).val(value)
         })
-<<<<<<< HEAD
         let tglbukti = response.data.tglbukti
         $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
-=======
-<<<<<<< HEAD
-        <?php $details = "<script> response.detail </script>"; ?>
-=======
 
->>>>>>> f5fed30bbe0f15b072f3149a9778b53e7535084e
-        $.each(response.detail, function() {
-          $.each(this, function(name, value) {
-            form.find(`[name="${name}"]`).val(value)
-          });
-        });
->>>>>>> a70951ad4d57b012fe39236fc69651f632466a97
 
         $('#table_body').html('')
         $.each(response.detail, (index, value) => {
