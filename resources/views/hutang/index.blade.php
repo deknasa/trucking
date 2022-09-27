@@ -1,85 +1,23 @@
 @extends('layouts.master')
 
 @section('content')
-
-<!-- Modal for report -->
-<div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form id="formRange" target="_blank">
-        @csrf
-        <div class="modal-body">
-          <input type="hidden" name="sidx">
-          <input type="hidden" name="sord">
-
-          <div class="form-group row">
-            <div class="col-sm-2 col-form-label">
-              <label for="">Dari</label>
-            </div>
-            <div class="col-sm-10">
-              <input type="text" name="dari" class="form-control autonumeric-report" autofocus>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <div class="col-sm-2 col-form-label">
-              <label for="">Sampai</label>
-            </div>
-            <div class="col-sm-10">
-              <input type="text" name="sampai" class="form-control autonumeric-report">
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Report</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
       <table id="jqGrid"></table>
-      <div id="jqGridPager" class="row bg-white">
-        <div id="buttonContainer" class="col-12 col-md-7 text-center text-md-left">
-          <button id="add" class="btn btn-primary btn-sm mb-1">
-            <i class="fa fa-plus"></i> ADD
-          </button>
-          <button id="edit" class="btn btn-success btn-sm mb-1">
-            <i class="fa fa-pen"></i> EDIT
-          </button>
-          <button id="delete" class="btn btn-danger btn-sm mb-1">
-            <i class="fa fa-trash"></i> DELETE
-          </button>
-          <button id="approval" class="btn btn-purple btn-sm mb-1">
-            <i class="fa fa-check"></i> UN/APPROVAL
-          </button>
-        </div>
-        <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
-        <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
-      </div>
-
     </div>
   </div>
 </div>
 
+@include('hutang._modal')
 <!-- Detail -->
 @include('hutang._detail')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('hutang.index') }}"
-  let getUrl = "{{ route('hutang.get') }}"
+  let indexUrl = "{{ route('hutangheader.index') }}"
+  let getUrl = "{{ route('hutangheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -95,39 +33,259 @@
   let autoNumericElements = []
 
   $(document).ready(function() {
-    /* Set page */
-    <?php if (isset($_GET['page'])) { ?>
-      page = "{{ $_GET['page'] }}"
-    <?php } ?>
+    $('#lookupAkunPusat').hide()
+    $('#lookupSupplier').hide()
+    $('#lookupPelanggan').hide()
 
-    /* Set id */
-    <?php if (isset($_GET['id'])) { ?>
-      id = "{{ $_GET['id'] }}"
-    <?php } ?>
 
-    /* Set indexRow */
-    <?php if (isset($_GET['indexRow'])) { ?>
-      indexRow = "{{ $_GET['indexRow'] }}"
-    <?php } ?>
+    $('#crudModal').on('shown.bs.modal', function() {
+      akunPusatLookup.setGridWidth($('#lookupAkunPusat').prev().width())
+      supplierLookup.setGridWidth($('#lookupSupplier').prev().width())
+      pelangganLookup.setGridWidth($('#lookupPelanggan').prev().width())
 
-    /* Set sortname */
-    <?php if (isset($_GET['sortname'])) { ?>
-      sortname = "{{ $_GET['sortname'] }}"
-    <?php } ?>
 
-    /* Set sortorder */
-    <?php if (isset($_GET['sortorder'])) { ?>
-      sortorder = "{{ $_GET['sortorder'] }}"
-    <?php } ?>
+      if (detectDeviceType() == 'desktop') {
 
-    /* Set rowNum */
-    <?php if (isset($_GET['limit'])) { ?>
-      rowNum = "{{ $_GET['limit'] }}"
-    <?php } ?>
+        akunPusatLookup.setGridParam({
+          ondblClickRow: function(id) {
+            let rowData = $(this).getRowData(id)
+            console.log(rowData.coa)
 
+            $('#crudForm [name=akunpusat]').first().val(rowData.coa)
+            $('#lookupAkunPusat').hide()
+
+            $('#lookupSupplierToggler').show()
+            $('#lookupPelangganToggler').show()
+
+          }
+        })
+
+        pelangganLookup.setGridParam({
+          ondblClickRow: function(id) {
+            let rowData = $(this).getRowData(id)
+            console.log(rowData)
+
+            $('#crudForm [name=pelanggan_id]').first().val(rowData.id)
+            $('#crudForm [name=pelanggan]').first().val(rowData.kodepelanggan)
+            $('#lookupPelanggan').hide()
+
+            //$('#lookupAkunPusatToggler').show()
+            $('#lookupSupplierToggler').show()
+          }
+        })
+
+        supplierLookup.setGridParam({
+          ondblClickRow: function(id) {
+            let rowData = $(this).getRowData(id)
+            console.log(rowData)
+
+            $('#crudForm [name=supplier_id]').first().val(rowData.id)
+            $('#crudForm [name=supplier]').first().val(rowData.namasupplier)
+            $('#lookupSupplier').hide()
+            console.log( $('#crudForm [name=supplier_id]').first().val())
+          }
+        })
+
+      } else if (detectDeviceType() == 'mobile') {
+
+        akunPusatLookup.setGridParam({
+          onSelectRow: function(id) {
+            let rowData = $(this).getRowData(id)
+
+            $('#crudForm [name=akunpusat]').first().val(rowData.coa)
+            $('#lookupAkunPusat').hide()
+          }
+        })
+
+        pelangganLookup.setGridParam({
+          onSelectRow: function(id) {
+            let rowData = $(this).getRowData(id)
+
+            $('#crudForm [name=pelanggan]').first().val(rowData.namapelanggan)
+            // $('#crudForm [name=user_id]').first().val(id)
+            $('#lookupPelanggan').hide()
+          }
+        })
+
+        supplierLookup.setGridParam({
+          onSelectRow: function(id) {
+            let rowData = $(this).getRowData(id)
+
+            $('#crudForm [name=supplier_id]').first().val(rowData.namasupplier)
+            // $('#crudForm [name=user_id]').first().val(id)
+            $('#lookupSupplier').hide()
+          }
+        })
+      }
+
+      $('#crudModal').find("[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit").first().focus()
+
+    })
+
+    $('#crudModal').on('hidden.bs.modal', function() {
+      activeGrid = '#jqGrid'
+    })
+
+    //tampil lookup ketika klik toggler
+    $('#lookupAkunPusatToggler').click(function(event) {
+      akunPusatLookup.setGridWidth($('#lookupAkunPusat').prev().width())
+      $('#lookupAkunPusat').toggle()
+      $('#lookupSupplier').hide()
+      $('#lookupSupplierToggler').hide()
+
+      if (detectDeviceType() != 'desktop') {
+        akunPusatLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      if (detectDeviceType() == 'desktop') {
+        activeGrid = akunPusatLookup
+      }
+    })
+
+    $('#lookupPelangganToggler').click(function(event) {
+      pelangganLookup.setGridWidth($('#lookupPelanggan').prev().width())
+      $('#lookupPelanggan').toggle()
+
+      $('#lookupAkunPusat').hide()
+      $('#lookupSupplier').hide()
+
+      $('#lookupAkunPusatToggler').hide()
+      $('#lookupSupplierToggler').hide()
+
+      if (detectDeviceType() != 'desktop') {
+        pelangganLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      if (detectDeviceType() == 'desktop') {
+        activeGrid = pelangganLookup
+      }
+    })
+
+    $('#lookupSupplierToggler').click(function(event) {
+      supplierLookup.setGridWidth($('#lookupSupplier').prev().width())
+      $('#lookupSupplier').toggle()
+      $('#lookupAkunPusat').hide()
+
+      if (detectDeviceType() != 'desktop') {
+        supplierLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      if (detectDeviceType() == 'desktop') {
+        activeGrid = supplierLookup
+      }
+    })
+
+   
+
+    //untuk auto search dari kolom input
+    $('[name=coa]').on('input', function(event) {
+      $('#lookupAkunPusat').show()
+
+      if (detectDeviceType() != 'desktop') {
+        akunPusatLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      delay(() => {
+        let postData = akunPusatLookup.getGridParam('postData')
+        let colModels = akunPusatLookup.getGridParam('colModel')
+        let rules = []
+
+        colModels = colModels.filter((colModel) => {
+          return colModel.name !== 'rn'
+        })
+
+        colModels.forEach(colModel => {
+          rules.push({
+            field: colModel.name,
+            op: 'cn',
+            data: $(this).val()
+          })
+        });
+
+        postData.filters = JSON.stringify({
+          groupOp: 'OR',
+          rules: rules
+        })
+
+        akunPusatLookup.trigger('reloadGrid', {
+          page: 1
+        })
+      }, 500)
+    })
+
+    $('[name=pelanggan]').on('input', function(event) {
+      $('#lookupPelanggan').show()
+
+      if (detectDeviceType() != 'desktop') {
+        pelangganLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      delay(() => {
+        let postData = pelangganLookup.getGridParam('postData')
+        let colModels = pelangganLookup.getGridParam('colModel')
+        let rules = []
+
+        colModels = colModels.filter((colModel) => {
+          return colModel.name !== 'rn'
+        })
+
+        colModels.forEach(colModel => {
+          rules.push({
+            field: colModel.name,
+            op: 'cn',
+            data: $(this).val()
+          })
+        });
+
+        postData.filters = JSON.stringify({
+          groupOp: 'OR',
+          rules: rules
+        })
+
+        pelangganLookup.trigger('reloadGrid', {
+          page: 1
+        })
+      }, 500)
+    })
+
+
+    $('[name=supplier_id]').on('input', function(event) {
+      $('#lookupSupplier').show()
+
+      if (detectDeviceType() != 'desktop') {
+        supplierLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      delay(() => {
+        let postData = supplierLookup.getGridParam('postData')
+        let colModels = supplierLookup.getGridParam('colModel')
+        let rules = []
+
+        colModels = colModels.filter((colModel) => {
+          return colModel.name !== 'rn'
+        })
+
+        colModels.forEach(colModel => {
+          rules.push({
+            field: colModel.name,
+            op: 'cn',
+            data: $(this).val()
+          })
+        });
+
+        postData.filters = JSON.stringify({
+          groupOp: 'OR',
+          rules: rules
+        })
+
+        supplierLookup.trigger('reloadGrid', {
+          page: 1
+        })
+      }, 500)
+    })
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'hutang' }}`,
+        url: `{{ config('app.api_url') . 'hutangheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -154,90 +312,24 @@
             }
           },
           {
-            label: 'PELANGGAN ',
-            name: 'pelanggan_id',
-            align: 'left'
-          },
-          {
             label: 'KETERANGAN',
             name: 'keterangan',
             align: 'left'
           },
           {
-            label: 'BANK',
-            name: 'bank_id',
+            label: 'COA',
+            name: 'coa',
+            align: 'left'
+          },
+          {
+            label: 'PELANGGAN',
+            name: 'pelanggan_id',
             align: 'left'
           },
           // {
-          //   label: 'DITERIMA DARI',
-          //   name: 'diterimadari',
+          //   label: 'TOTAL',
+          //   name: 'total',
           //   align: 'left'
-          // },
-          {
-            label: 'TGL LUNAS',
-            name: 'tgllunas',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'CABANG',
-            name: 'cabang_id',
-            align: 'left'
-          },
-          {
-            label: 'STATUS KAS',
-            name: 'statuskas',
-            align: 'left'
-          },
-          {
-            label: 'NO RESI',
-            name: 'noresi',
-            align: 'left'
-          },
-          {
-            label: 'STATUS APPROVAL',
-            name: 'statusapproval',
-            align: 'left'
-          },
-          // {
-          //   label: 'USER APPROVAL',
-          //   name: 'userapproval',
-          //   align: 'left'
-          // },
-          // {
-          //   label: 'TGL APPROVAL',
-          //   name: 'tglapproval',
-          //   align: 'left',
-          //   formatter: "date",
-          //   formatoptions: {
-          //     srcformat: "ISO8601Long",
-          //     newformat: "d-m-Y"
-          //   }
-          // },
-         
-          // {
-          //   label: 'STATUS BERKAS',
-          //   name: 'statusberkas',
-          //   align: 'left'
-          // },
-          // {
-          //   label: 'USER BERKAS',
-          //   name: 'userberkas',
-          //   align: 'left'
-          // },
-          // {
-          //   label: 'TGL BERKAS',
-          //   name: 'tglberkas',
-          //   align: 'left',
-          //   formatter: "date",
-          //   formatoptions: {
-          //     srcformat: "ISO8601Long",
-          //     newformat: "d-m-Y"
-          //   }
           // },
           {
             label: 'MODIFIEDBY',
@@ -282,27 +374,19 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
-          loadDetailData(id)
 
-          id = $(this).jqGrid('getCell', id, 'rn') - 1
-          indexRow = id
+          loadDetailData(id)
+          activeGrid = $(this)
+          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
-
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
-          loadPagerHandler('#pagerHandler', $(this))
-          loadPagerInfo('#pagerInfo', $(this))
 
-          $("input").attr("autocomplete", "off");
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-
-          if (data.message !== "" && data.message !== undefined && data.message !== null) {
-            alert(data.message)
-          }
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -316,34 +400,34 @@
             clearColumnSearch()
           })
 
-          if (triggerClick) {
-            if (id != '') {
-              indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-              id = ''
-            } else if (indexRow != undefined) {
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-            }
-
-            if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-            }
-
-            triggerClick = false
-          } else {
-            $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
           }
+
+          setTimeout(function() {
+
+            if (triggerClick) {
+              if (id != '') {
+                indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                id = ''
+              } else if (indexRow != undefined) {
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              }
+
+              if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+                $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              }
+
+              triggerClick = false
+            } else {
+              $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+            }
+          }, 100)
+
 
           setHighlight($(this))
         }
-      })
-
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
       })
 
       .jqGrid('filterToolbar', {
@@ -356,7 +440,36 @@
           clearGlobalSearch()
         },
       })
+      .customPager({
+        buttons: [{
+            id: 'add',
+            innerHTML: '<i class="fa fa-plus"></i> ADD',
+            class: 'btn btn-primary btn-sm mr-1',
+            onClick: function(event) {
+              createHutangHeader()
+            }
+          },
+          {
+            id: 'edit',
+            innerHTML: '<i class="fa fa-pen"></i> EDIT',
+            class: 'btn btn-success btn-sm mr-1',
+            onClick: function(event) {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              editHutangHeader(selectedId)
+            }
+          },
+          {
+            id: 'delete',
+            innerHTML: '<i class="fa fa-trash"></i> DELETE',
+            class: 'btn btn-danger btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              deleteHutangHeader(selectedId)
+            }
+          },
+        ]
 
+      })
     /* Append clear filter button */
     loadClearFilter()
 
@@ -367,80 +480,44 @@
     loadDetailGrid()
 
     $('#add .ui-pg-div')
-      .addClass(`btn-sm btn-primary`)
+      .addClass(`btn btn-sm btn-primary`)
       .parent().addClass('px-1')
 
     $('#edit .ui-pg-div')
-      .addClass('btn-sm btn-success')
+      .addClass('btn btn-sm btn-success')
       .parent().addClass('px-1')
 
     $('#delete .ui-pg-div')
-      .addClass('btn-sm btn-danger')
+      .addClass('btn btn-sm btn-danger')
       .parent().addClass('px-1')
 
     $('#report .ui-pg-div')
-      .addClass('btn-sm btn-info')
+      .addClass('btn btn-sm btn-info')
       .parent().addClass('px-1')
 
     $('#export .ui-pg-div')
-      .addClass('btn-sm btn-warning')
+      .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    $('#approval .ui-pg-div')
-      .addClass('btn-sm')
-      .css({
-        'background': '#6619ff',
-        'color': '#fff'
-      })
-      .parent().addClass('px-1')
+    if (!`{{ $myAuth->hasPermission('hutangheader', 'store') }}`) {
+      $('#add').addClass('ui-disabled')
+    }
 
+    if (!`{{ $myAuth->hasPermission('hutangheader', 'update') }}`) {
+      $('#edit').addClass('ui-disabled')
+    }
 
-    /* Handle button add on click */
-    $('#add').click(function() {
-      let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
+    if (!`{{ $myAuth->hasPermission('hutangheader', 'destroy') }}`) {
+      $('#delete').addClass('ui-disabled')
+    }
 
-      window.location.href = `{{ route('hutang.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-    })
+    if (!`{{ $myAuth->hasPermission('hutangheader', 'export') }}`) {
+      $('#export').addClass('ui-disabled')
+    }
 
-    /* Handle button edit on click */
-    $('#edit').click(function() {
-      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      if (selectedId == null || selectedId == '' || selectedId == undefined) {
-        alert('please select a row')
-      } else {
-        window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-      }
-    })
-
-
-    /* Handle button delete on click */
-    $('#delete').click(function() {
-      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-    })
-
-    /* Handle button approval on click */
-    $('#approval').click(function() {
-      let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-
-      $('#loader').removeClass('d-none')
-
-      $.ajax({
-        url: `{{ config('app.api_url') }}hutang/${id}/approval`,
-        method: 'POST',
-        dataType: 'JSON',
-        beforeSend: request => {
-          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-        },
-        success: response => {
-          $('#jqGrid').trigger('reloadGrid')
-        }
-      }).always(() => {
-        $('#loader').addClass('d-none')
-      })
-    })
+    if (!`{{ $myAuth->hasPermission('hutangheader', 'report') }}`) {
+      $('#report').addClass('ui-disabled')
+    }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -465,21 +542,13 @@
       })
     })
 
-    $('#formRange').submit(event => {
+    $('#formRange').submit(function(event) {
       event.preventDefault()
 
       let params
-      let actionUrl = ``
+      let submitButton = $(this).find('button:submit')
 
-      if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('hutang.export') }}`
-      } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('hutang.report') }}`
-      }
-
-      /* Clear validation messages */
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
+      submitButton.attr('disabled', 'disabled')
 
       /* Set params value */
       for (var key in postData) {
@@ -489,7 +558,40 @@
         params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+      let formRange = $('#formRange')
+      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+      params += `&offset=${offset}&limit=${limit}`
+
+      if ($('#rangeModal').data('action') == 'export') {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `{{ config('app.api_url') }}hutangheader/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+        xhr.responseType = 'arraybuffer'
+
+        xhr.onload = function(e) {
+          if (this.status === 200) {
+            if (this.response !== undefined) {
+              let blob = new Blob([this.response], {
+                type: "application/vnd.ms-excel"
+              })
+              let link = document.createElement('a')
+
+              link.href = window.URL.createObjectURL(blob)
+              link.download = `laporanhutang${(new Date).getTime()}.xlsx`
+              link.click()
+
+              submitButton.removeAttr('disabled')
+            }
+          }
+        }
+
+        xhr.send()
+      } else if ($('#rangeModal').data('action') == 'report') {
+        window.open(`{{ route('hutangheader.report') }}?${params}`)
+
+        submitButton.removeAttr('disabled')
+      }
     })
   })
 </script>

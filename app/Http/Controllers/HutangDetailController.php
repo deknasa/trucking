@@ -9,10 +9,6 @@ class HutangDetailController extends Controller
 {
     public $title = 'Hutang Detail';
 
-    /**
-     * Fungsi index
-     * @ClassName index
-     */
     public function index(Request $request)
     {
         $params = [
@@ -22,8 +18,9 @@ class HutangDetailController extends Controller
 
         $response = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'hutangdetail', $params);
-
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') .'hutangdetail', $params);
+            
         $data = [
             'rows' => $response['data'] ?? []
         ];

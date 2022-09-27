@@ -403,7 +403,6 @@
         let tglbukti = response.data.tglbukti
         $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
 
-
         $('#table_body').html('')
         $.each(response.detail, (index, value) => {
           $('#table_body').append(

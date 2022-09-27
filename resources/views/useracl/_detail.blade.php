@@ -10,13 +10,9 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ config('app.api_url') . 'useracl/detail' }}"
-
-  function loadDetailGrid() {
-    let pager = '#detailPager'
-
+  function loadDetailGrid(userId) {
     $("#detail").jqGrid({
-        url: detailIndexUrl,
+        url: `${apiUrl}useracl/detail?user_id=${userId}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -59,7 +55,6 @@
         rowList: [10, 20, 50],
         toolbar: [true, "top"],
         sortable: true,
-        pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',
@@ -72,25 +67,25 @@
           records: 'attributes.totalRows',
         },
         loadBeforeSend: (jqXHR) => {
-          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
         },
-        loadComplete: function(data) {}
+        onSelectRow: function(id) {
+          activeGrid = $(this)
+        },
+        loadComplete: function(data) {
+          initResize($(this))
+        }
       })
 
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
+      .customPager()
   }
 
-  function loadDetailData(id) {
+  function loadDetailData(userId) {
     $('#detail').setGridParam({
-      url: detailIndexUrl + '?user_id=' + id,
+      url: `${apiUrl}useracl/detail?user_id=${userId}`,
+      page: 1,
       postData: {
-        id: id
+        id: userId
       }
     }).trigger('reloadGrid')
   }

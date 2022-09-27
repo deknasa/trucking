@@ -80,8 +80,11 @@ use App\Http\Controllers\HutangHeaderController;
 use App\Http\Controllers\HutangDetailController;
 use App\Http\Controllers\PelunasanPiutangDetailController;
 use App\Http\Controllers\PelunasanPiutangHeaderController;
+use App\Http\Controllers\PenerimaController;
 use App\Http\Controllers\PiutangDetailController;
 use App\Http\Controllers\PiutangHeaderController;
+use App\Http\Controllers\HutangBayarDetailController;
+use App\Http\Controllers\HutangBayarHeaderController;
 
 
 /*
@@ -310,11 +313,11 @@ Route::middleware('auth')->group(function () {
     Route::get('gudang/index', [GudangController::class, 'index']);
     Route::resource('gudang', GudangController::class);
 
-    Route::get('sub_kelompok/report', [SubKelompokController::class, 'report'])->name('sub_kelompok.report');
-    Route::get('sub_kelompok/{id}/delete', [SubKelompokController::class, 'delete'])->name('sub_kelompok.delete');
-    Route::get('sub_kelompok/get', [SubKelompokController::class, 'get'])->name('sub_kelompok.get');
-    Route::get('sub_kelompok/index', [SubKelompokController::class, 'index']);
-    Route::resource('sub_kelompok', SubKelompokController::class);
+    Route::get('subkelompok/report', [SubKelompokController::class, 'report'])->name('subkelompok.report');
+    Route::get('subkelompok/{id}/delete', [SubKelompokController::class, 'delete'])->name('subkelompok.delete');
+    Route::get('subkelompok/get', [SubKelompokController::class, 'get'])->name('subkelompok.get');
+    Route::get('subkelompok/index', [SubKelompokController::class, 'index']);
+    Route::resource('subkelompok', SubKelompokController::class);
 
     Route::get('supplier/report', [SupplierController::class, 'report'])->name('supplier.report');
     Route::get('supplier/{id}/delete', [SupplierController::class, 'delete'])->name('supplier.delete');
@@ -382,11 +385,11 @@ Route::middleware('auth')->group(function () {
     Route::get('penerimaantrucking/index', [PenerimaanTruckingController::class, 'index']);
     Route::resource('penerimaantrucking', PenerimaanTruckingController::class);
 
-    Route::get('pengeluaran_trucking/report', [PengeluaranTruckingController::class, 'report'])->name('pengeluaran_trucking.report');
-    Route::get('pengeluaran_trucking/{id}/delete', [PengeluaranTruckingController::class, 'delete'])->name('pengeluaran_trucking.delete');
-    Route::get('pengeluaran_trucking/get', [PengeluaranTruckingController::class, 'get'])->name('pengeluaran_trucking.get');
-    Route::get('pengeluaran_trucking/index', [PengeluaranTruckingController::class, 'index']);
-    Route::resource('pengeluaran_trucking', PengeluaranTruckingController::class);
+    Route::get('pengeluarantrucking/report', [PengeluaranTruckingController::class, 'report'])->name('pengeluarantrucking.report');
+    Route::get('pengeluarantrucking/{id}/delete', [PengeluaranTruckingController::class, 'delete'])->name('pengeluarantrucking.delete');
+    Route::get('pengeluarantrucking/get', [PengeluaranTruckingController::class, 'get'])->name('pengeluarantrucking.get');
+    Route::get('pengeluarantrucking/index', [PengeluaranTruckingController::class, 'index']);
+    Route::resource('pengeluarantrucking', PengeluaranTruckingController::class);
 
     Route::get('satuan/field_length', [SatuanController::class, 'fieldLength'])->name('satuan.field_length');
     Route::get('satuan/{id}/delete', [SatuanController::class, 'delete'])->name('satuan.delete');
@@ -550,6 +553,24 @@ Route::middleware('auth')->group(function () {
     Route::resource('pelunasanpiutangheader', PelunasanPiutangHeaderController::class);
 
     Route::resource('pelunasanpiutangdetail', PelunasanPiutangDetailController::class);
+
+    Route::get('hutangbayarheader/index', [HutangBayarHeaderController::class, 'index']);
+    Route::get('hutangbayarheader/{id}/delete', [HutangBayarHeaderController::class, 'delete'])->name('hutangbayarheader.delete');
+    Route::get('hutangbayarheader/get', [HutangBayarHeaderController::class, 'get'])->name('hutangbayarheader.get');
+    Route::get('hutangbayarheader/export', [HutangBayarHeaderController::class, 'export'])->name('hutangbayarheader.export');
+    Route::get('hutangbayarheader/report', [HutangBayarHeaderController::class, 'report'])->name('hutangbayarheader.report');
+    Route::resource('hutangbayarheader', HutangBayarHeaderController::class);
+
+    Route::resource('hutangbayardetail', HutangBayarDetailController::class);
+
+    Route::get('servicein/index', [ServiceInHeaderController::class, 'index']);
+    Route::get('servicein/{id}/delete', [ServiceInHeaderController::class, 'delete'])->name('servicein.delete');
+    Route::get('servicein/get', [ServiceInHeaderController::class, 'get'])->name('servicein.get');
+    Route::get('servicein/export', [ServiceInHeaderController::class, 'export'])->name('servicein.export');
+    Route::get('servicein/report', [ServiceInHeaderController::class, 'report'])->name('servicein.report');
+    Route::resource('servicein', ServiceInHeaderController::class);
+
+    Route::resource('serviceindetail', ServiceInDetailController::class);
 
 });
 

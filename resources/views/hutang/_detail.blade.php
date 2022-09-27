@@ -31,20 +31,20 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        //datatype: "json",
         colModel: [
           // {
           //   label: 'HUTANG',
           //   name: 'hutang_id',
           // },
-          // {
-          //   label: 'NO BUKTI',
-          //   name: 'nobukti',
-          // }, 
           {
-            label: 'NO WARKAT',
-            name: 'nowarkat',
+            label: 'NO BUKTI',
+            name: 'nobukti',
           }, 
+          {
+            label: 'SUPPLIER',
+            name: 'supplier_id',
+          },
+        
           {
             label: 'TGL JATUH TEMPO',
             name: 'tgljatuhtempo',
@@ -55,76 +55,41 @@
             }
           }, 
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
+            label: 'TOTAL',
+            name: 'total',
             align: 'right',
             formatter: 'currency',
             formatoptions: {
               decimalSeparator: ',',
-                thousandsSeparator: '.'
+              thousandsSeparator: '.'
             }
           },
           {
-            label: 'COA DEBET',
-            name: 'coadebet',
+            label: 'CICILAN',
+            name: 'cicilan',
+            align: 'right',
+            formatter: 'currency',
+            formatoptions: {
+              decimalSeparator: ',',
+              thousandsSeparator: '.'
+            }
           },
           {
-            label: 'COA KREDIT',
-            name: 'coakredit',
+            label: 'TOTAL BAYAR',
+            name: 'totalbayar',
+            align: 'right',
+            formatter: 'currency',
+            formatoptions: {
+              decimalSeparator: ',',
+              thousandsSeparator: '.'
+            }
+          },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
           },
          
-          {
-            label: 'BANK',
-            name: 'bank_id',
-          },
-          // {
-          //   label: 'PELANGGAN',
-          //   name: 'pelanggan_id',
-          // },
-          // {
-          //   label: 'INVOICE NO BUKTI',
-          //   name: 'invoice_nobukti',
-          // },
-          // {
-          //   label: 'PELANGGAN',
-          //   name: 'pelanggan_id',
-          // },
-          // {
-          //   label: 'INVOICE NO BUKTI',
-          //   name: 'invoice_nobukti',
-          // },
-          {
-            label: 'BANK PELANGGAN',
-            name: 'bankpelanggan_id',
-          },
-          {
-            label: 'JENIS BIAYA',
-            name: 'jenisbiaya',
-          },
-          {
-            label: 'PELANGGAN',
-            name: 'pelanggan_id',
-          },
-          // {
-          //   label: 'PENERIMAAN PIUTANG NO BUKTI',
-          //   name: 'penerimaanpiutang_nobukti',
-          // },
-          // {
-          //   label: 'BULAN BEBAN',
-          //   name: 'bulanbeban',
-          // }
-          // {
-          //   label: 'PENERIMAAN PIUTANG NO BUKTI',
-          //   name: 'penerimaanpiutang_nobukti',
-          // },
-          // {
-          //   label: 'BULAN BEBAN',
-          //   name: 'bulanbeban',
-          // }
+        
         ],
         autowidth: true,
         shrinkToFit: false,

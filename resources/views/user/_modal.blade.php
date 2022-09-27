@@ -240,6 +240,10 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+
+    setCabangOptions(form)
+    setStatusKaryawanOptions(form)
+    setStatusAktifOptions(form)
   }
 
   function editUser(userId) {
