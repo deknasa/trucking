@@ -23,8 +23,9 @@ class ServiceInDetailController extends Controller
 
         $response = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
-            ->get(config('app.api_url') .'serviceindetail', $params);
-            
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'serviceindetail', $params);
+
         $data = [
             'rows' => $response['data'] ?? []
         ];
@@ -32,5 +33,3 @@ class ServiceInDetailController extends Controller
         return response($data);
     }
 }
-
-

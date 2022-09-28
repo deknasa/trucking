@@ -61,12 +61,13 @@ class ServiceInHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'servicein', $params);
 
-        $data = [
-            'total' => $response['attributes']['totalPages'] ?? [],
-            'records' => $response['attributes']['totalRows'] ?? [],
-            'rows' => $response['data'] ?? [],
-            'params' => $response['params'] ?? [],
-        ];
+            $data = [
+                'total' => $response['attributes']['totalPages'] ?? [],
+                'records' => $response['attributes']['totalRows'] ?? [],
+                'rows' => $response['data'] ?? [],
+                'params' => $response['params'] ?? [],
+            ];
+    
 
         return $data;
     }
@@ -98,6 +99,7 @@ class ServiceInHeaderController extends MyController
             ->get(config('app.api_url') . "servicein/$id");
 
         $servicein = $response['data'];
+        $kode = $response['kode'];
         $serviceNoBukti = $this->getNoBukti('SERVICEIN', 'SERVICEIN', 'serviceheader');
 
         $combo = $this->combo();
@@ -111,17 +113,17 @@ class ServiceInHeaderController extends MyController
     //  */
     public function update(Request $request, $id)
     {
-        /* Unformat nominal */
-        $request->nominal = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
+        // /* Unformat nominal */
+        // $request->nominal = array_map(function ($nominal) {
+        //     $nominal = str_replace('.', '', $nominal);
+        //     $nominal = str_replace(',', '', $nominal);
 
-            return $nominal;
-        }, $request->nominal);
+        //     return $nominal;
+        // }, $request->nominal);
 
-        $request->merge([
-            'nominal' => $request->nominal
-        ]);
+        // $request->merge([
+        //     'nominal' => $request->nominal
+        // ]);
 
         $request['modifiedby'] = Auth::user()->name;
 
