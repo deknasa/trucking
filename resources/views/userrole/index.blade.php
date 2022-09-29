@@ -785,7 +785,7 @@
   const getUserLookup = function(fileName) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `http://truck.test/lookup/${fileName}`,
+        url: `${appUrl}/lookup/${fileName}`,
         method: 'GET',
         dataType: 'html',
         success: function(response) {
