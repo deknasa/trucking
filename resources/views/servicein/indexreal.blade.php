@@ -1,6 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
+
 <!-- Modal for report -->
 <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -64,16 +65,18 @@
         <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
         <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
       </div>
+
     </div>
   </div>
 </div>
+
 <!-- Detail -->
-@include('piutang._detail')
+@include('servicein._detail')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('piutangheader.index') }}"
-  let getUrl = "{{ route('piutangheader.get') }}"
+  let indexUrl = "{{ route('servicein.index') }}"
+  let getUrl = "{{ route('servicein.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -87,9 +90,8 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
-  let rowNum = 10
 
-  $(document).ready(function() { 
+  $(document).ready(function() {
     /* Set page */
     <?php if (isset($_GET['page'])) { ?>
       page = "{{ $_GET['page'] }}"
@@ -120,8 +122,9 @@
       rowNum = "{{ $_GET['limit'] }}"
     <?php } ?>
 
+
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'piutangheader' }}`,
+        url: `{{ config('app.api_url') . 'servicein' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -148,25 +151,23 @@
             }
           },
           {
+            label: 'TRADO ID',
+            name: 'trado_id',
+            align: 'left'
+          },
+          {
+            label: 'TGL MASUK',
+            name: 'tglmasuk',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
             label: 'KETERANGAN',
             name: 'keterangan',
-            align: 'left'
-          },
-          {
-            label: 'POSTING DARI',
-            name: 'postingdari',
-            align: 'left'
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            formatter: 'number', 
-            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
-            align: "right",
-          },
-          {
-            label: 'NO BUKTI INVOICE',
-            name: 'invoice_nobukti',
             align: 'left'
           },
           {
@@ -240,7 +241,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true 
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -286,8 +287,8 @@
           clearGlobalSearch()
         },
       })
-    
-      /* Append clear filter button */
+
+    /* Append clear filter button */
     loadClearFilter()
 
     /* Append global search */
@@ -297,50 +298,51 @@
     loadDetailGrid()
 
     $('#add .ui-pg-div')
-    .addClass(`btn-sm btn-primary`)
-    .parent().addClass('px-1')
+      .addClass(`btn-sm btn-primary`)
+      .parent().addClass('px-1')
 
     $('#edit .ui-pg-div')
-    .addClass('btn-sm btn-success')
-    .parent().addClass('px-1')
+      .addClass('btn-sm btn-success')
+      .parent().addClass('px-1')
 
     $('#delete .ui-pg-div')
-    .addClass('btn-sm btn-danger')
-    .parent().addClass('px-1')
+      .addClass('btn-sm btn-danger')
+      .parent().addClass('px-1')
 
     $('#report .ui-pg-div')
-    .addClass('btn-sm btn-info')
-    .parent().addClass('px-1')
+      .addClass('btn-sm btn-info')
+      .parent().addClass('px-1')
 
     $('#export .ui-pg-div')
-    .addClass('btn-sm btn-warning')
-    .parent().addClass('px-1')
-   
-     /* Handle button add on click */
-     $('#add').click(function() {
+      .addClass('btn-sm btn-warning')
+      .parent().addClass('px-1')
+
+
+    /* Handle button add on click */
+    $('#add').click(function() {
       let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
 
-      window.location.href = `{{ route('piutangheader.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
+      window.location.href = `{{ route('servicein.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
     })
 
     /* Handle button edit on click */
     $('#edit').click(function() {
       selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
       if (selectedId == null || selectedId == '' || selectedId == undefined) {
         alert('please select a row')
       } else {
         window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
       }
-      
     })
+
 
     /* Handle button delete on click */
     $('#delete').click(function() {
       selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-           
-    })
 
+      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
+    })
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -371,9 +373,9 @@
       let actionUrl = ``
 
       if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('piutangheader.export') }}`
+        actionUrl = `{{ route('servicein.export') }}`
       } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('piutangheader.report') }}`
+        actionUrl = `{{ route('servicein.report') }}`
       }
 
       /* Clear validation messages */
@@ -391,7 +393,6 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
-
 </script>
 @endpush()
 @endsection

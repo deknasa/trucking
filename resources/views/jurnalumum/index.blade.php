@@ -35,9 +35,11 @@
   $(document).ready(function() {
 
     $('#lookupAkunPusat').hide()
+    $('#lookupAkunPusatDetail').hide()
 
     $('#crudModal').on('shown.bs.modal', function() {
       akunPusatLookup.setGridWidth($('#lookupAkunPusat').prev().width())
+      akunPusatDetailLookup.setGridWidth($('#lookupAkunPusatDetail').prev().width())
 
       if (detectDeviceType() == 'desktop') {
         
@@ -45,8 +47,16 @@
           ondblClickRow: function(id) {
             let rowData = $(this).getRowData(id)
 
-            $('#crudForm [name=debet_detail]').first().val(rowData.coa)
+            $('#crudForm [name=coadebet_detail]').first().val(rowData.coa)
             $('#lookupAkunPusat').hide()
+          }
+        })
+        akunPusatDetailLookup.setGridParam({
+          ondblClickRow: function(id) {
+            let rowData = $(this).getRowData(id)
+
+            $('#crudForm [name=coakredit_detail]').first().val(rowData.coa)
+            $('#lookupAkunPusatDetail').hide()
           }
         })
 
@@ -56,9 +66,16 @@
           onSelectRow: function(id) {
             let rowData = $(this).getRowData(id)
 
-            $('#crudForm [name=debet_detail]').first().val(rowData.coa)
-            // $('#crudForm [name=user_id]').first().val(id)
+            $('#crudForm [name=coadebet_detail]').first().val(rowData.coa)
             $('#lookupAkunPusat').hide()
+          }
+        })
+        akunPusatDetailLookup.setGridParam({
+          onSelectRow: function(id) {
+            let rowData = $(this).getRowData(id)
+
+            $('#crudForm [name=coakredit_detail]').first().val(rowData.coa)
+            $('#lookupAkunPusatDetail').hide()
           }
         })
         
@@ -76,12 +93,26 @@
       akunPusatLookup.setGridWidth($('#lookupAkunPusat').prev().width())
       $('#lookupAkunPusat').toggle()
 
+      $('#lookupAkunPusatDetail').hide()
       if (detectDeviceType() != 'desktop') {
         akunPusatLookup.setGridHeight(window.innerHeight / 1.5)
       }
 
       if (detectDeviceType() == 'desktop') {
         activeGrid = akunPusatLookup
+      }
+    })
+
+    $('#lookupAkunPusatDetailToggler').click(function(event) {
+      akunPusatDetailLookup.setGridWidth($('#lookupAkunPusatDetail').prev().width())
+      $('#lookupAkunPusatDetail').toggle()
+      $('#lookupAkunPusat').hide()
+      if (detectDeviceType() != 'desktop') {
+        akunPusatDetailLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      if (detectDeviceType() == 'desktop') {
+        activeGrid = akunPusatDetailLookup
       }
     })
 
@@ -97,6 +128,41 @@
       delay(() => {
         let postData = akunPusatLookup.getGridParam('postData')
         let colModels = akunPusatLookup.getGridParam('colModel')
+        let rules = []
+
+        colModels = colModels.filter((colModel) => {
+          return colModel.name !== 'rn'
+        })
+
+        colModels.forEach(colModel => {
+          rules.push({
+            field: colModel.name,
+            op: 'cn',
+            data: $(this).val()
+          })
+        });
+
+        postData.filters = JSON.stringify({
+          groupOp: 'OR',
+          rules: rules
+        })
+
+        akunPusatLookup.trigger('reloadGrid', {
+          page: 1
+        })
+      }, 500)
+    })
+
+    $('[name=coa]').on('input', function(event) {
+      $('#lookupAkunPusatDetail').show()
+
+      if (detectDeviceType() != 'desktop') {
+        akunPusatDetailLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      delay(() => {
+        let postData = akunPusatDetailLookup.getGridParam('postData')
+        let colModels = akunPusatDetailLookup.getGridParam('colModel')
         let rules = []
 
         colModels = colModels.filter((colModel) => {
@@ -305,8 +371,11 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              cekApproval(selectedId, 'EDIT')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                cekApproval(selectedId, 'EDIT')
+              }
             }
           },
           {
@@ -315,7 +384,11 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              cekApproval(selectedId, 'DELETE')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                cekApproval(selectedId, 'DELETE')
+              }
             }
           },
           {
@@ -324,7 +397,11 @@
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              approval(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                approval(selectedId)
+              }
             }
           }
         ]

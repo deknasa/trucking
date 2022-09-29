@@ -400,16 +400,8 @@
         $.each(response.data, (index, value) => {
           form.find(`[name="${index}"]`).val(value)
         })
-
         let tglbukti = response.data.tglbukti
         $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
-
-        $.each(response.detail, function() {
-          $.each(this, function(name, value) {
-            form.find(`[name="${name}"]`).val(value)
-          });
-        });
-
 
         $('#table_body').html('')
         $.each(response.detail, (index, value) => {

@@ -1,10 +1,10 @@
-<table id="bankLookup" style="width: 100%;"></table>
-<div id="bankLookupPager"></div>
+<table id="mekanikLookup" style="width: 100%;"></table>
+<div id="mekanikLookupPager"></div>
 
 @push('scripts')
 <script>
-  let bankLookup = $('#bankLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'bank' }}`,
+  let mekanikLookup = $('#mekanikLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'mekanik' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -16,23 +16,13 @@
           width: '70px'
         },
         {
-          label: 'KODE BANK',
-          name: 'kodebank',
-          align: 'left',
-        },
-        {
-          label: 'NAMA BANK',
-          name: 'namabank',
+          label: 'NAMA MEKANIK',
+          name: 'namamekanik',
           align: 'left'
         },
         {
-          label: 'COA',
-          name: 'coa',
-          align: 'left'
-        },
-        {
-          label: 'TIPE',
-          name: 'tipe',
+          label: 'KETERANGAN',
+          name: 'keterangan',
           align: 'left'
         },
         {
@@ -41,37 +31,6 @@
             align: 'left',
             width: 100,
             stype: 'select',
-            // searchoptions: {
-            //     value: `<?php
-            //             $i = 1;
-
-            //             foreach ($data['combo'] as $status) :
-            //             echo "$status[param]:$status[parameter]";
-            //             if ($i !== count($data['combo'])) {
-            //                 echo ";";
-            //             }
-            //             $i++;
-            //             endforeach
-
-            //             ?>
-            // `,
-            //     dataInit: function(element) {
-            //     $(element).select2({
-            //         width: 'resolve',
-            //         theme: "bootstrap4"
-            //     });
-            //     }
-            // },
-        },
-        {
-            label: 'STATUS PENERIMAAN',
-            name: 'statusformatpenerimaan',
-            align: 'left'
-        },
-        {
-            label: 'STATUS PENGELUARAN',
-            name: 'statusformatpengeluaran',
-            align: 'left'
         },
         {
           label: 'MODIFIEDBY',
@@ -100,7 +59,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#bankLookupPager'),
+      pager: $('#mekanikLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -129,26 +88,26 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#bankLookup').getGridParam().reccount) {
-            indexRow = $('#bankLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#mekanikLookup').getGridParam().reccount) {
+            indexRow = $('#mekanikLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#bankLookup [id="${$('#bankLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#mekanikLookup [id="${$('#mekanikLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#bankLookup [id="${$('#bankLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#mekanikLookup [id="${$('#mekanikLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#bankLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#bankLookup [id="` + $('#bankLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#mekanikLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#mekanikLookup [id="` + $('#mekanikLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#bankLookup').setSelection($('#bankLookup').getDataIDs()[indexRow])
+            $('#mekanikLookup').setSelection($('#mekanikLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -163,7 +122,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupBank').prev().width())
+        $(this).setGridWidth($('#lookupMekanik').prev().width())
         setHighlight($(this))
       }
     })

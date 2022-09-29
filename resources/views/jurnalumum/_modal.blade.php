@@ -66,12 +66,12 @@
                   <div class="row form-group" >
                     <div class="col-12 col-md-12">
                       <div class="input-group">
-                        <input type="text" name="debet_detail"  class="form-control">
+                        <input type="text" name="coadebet_detail"  class="form-control">
                         <div class="input-group-append">
                           <button id="lookupAkunPusatToggler" class="btn btn-secondary" type="button">...</button>
                         </div>
                       </div>
-                      <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 1;">
+                      <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 3;">
                         <div class="col-12">
                           <div id="lookupAkunPusat" class="shadow-lg">
                             @include('partials.lookups.akunpusat')
@@ -85,15 +85,15 @@
                   <div class="row form-group" >
                     <div class="col-12 col-md-12">
                       <div class="input-group">
-                        <input type="text" name="kredit_detail"  class="form-control">
+                        <input type="text" name="coakredit_detail"  class="form-control">
                         <div class="input-group-append">
-                          <button id="lookupAkunPusatToggler" class="btn btn-secondary" type="button">...</button>
+                          <button id="lookupAkunPusatDetailToggler" class="btn btn-secondary" type="button">...</button>
                         </div>
                       </div>
-                      <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 1;">
+                      <div class="row position-absolute" id="lookupAkunPusatDetail" style="z-index: 3;">
                         <div class="col-12">
-                          <div id="lookupAkunPusat" class="shadow-lg" >
-                            @include('partials.lookups.akunpusat')
+                          <div id="lookupAkunPusatDetail" class="shadow-lg" >
+                            @include('partials.lookups.akunpusatdetail')
                           </div>
                         </div>
                       </div>

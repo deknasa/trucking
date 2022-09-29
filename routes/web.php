@@ -546,6 +546,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('pelunasanpiutangheader/index', [PelunasanPiutangHeaderController::class, 'index']);
     Route::get('pelunasanpiutangheader/{id}/delete', [PelunasanPiutangHeaderController::class, 'delete'])->name('pelunasanpiutangheader.delete');
+    Route::get('pelunasanpiutangheader/{id}/getpiutang', [PelunasanPiutangHeaderController::class, 'getpiutang'])->name('pelunasanpiutangheader.getpiutang');
     Route::get('pelunasanpiutangheader/get', [PelunasanPiutangHeaderController::class, 'get'])->name('pelunasanpiutangheader.get');
     Route::get('pelunasanpiutangheader/export', [PelunasanPiutangHeaderController::class, 'export'])->name('pelunasanpiutangheader.export');
     Route::get('pelunasanpiutangheader/report', [PelunasanPiutangHeaderController::class, 'report'])->name('pelunasanpiutangheader.report');
@@ -561,6 +562,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('hutangbayarheader', HutangBayarHeaderController::class);
 
     Route::resource('hutangbayardetail', HutangBayarDetailController::class);
+
+    Route::get('servicein/index', [ServiceInHeaderController::class, 'index']);
+    Route::get('servicein/{id}/delete', [ServiceInHeaderController::class, 'delete'])->name('servicein.delete');
+    Route::get('servicein/get', [ServiceInHeaderController::class, 'get'])->name('servicein.get');
+    Route::get('servicein/export', [ServiceInHeaderController::class, 'export'])->name('servicein.export');
+    Route::get('servicein/report', [ServiceInHeaderController::class, 'report'])->name('servicein.report');
+    Route::resource('servicein', ServiceInHeaderController::class);
+
+    Route::resource('serviceindetail', ServiceInDetailController::class);
 
 });
 

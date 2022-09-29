@@ -410,7 +410,6 @@
           form.find(`[name="${index}"]`).val(value)
         })
 
-
         $('#table_body').html('')
         //   $.each(response.data.hutangdetail, (index, value) => {
         $.each(response.detail, (index, value) => {

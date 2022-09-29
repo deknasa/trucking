@@ -1,10 +1,10 @@
-<table id="bankLookup" style="width: 100%;"></table>
-<div id="bankLookupPager"></div>
+<table id="agenDetailLookup" style="width: 100%;"></table>
+<div id="agenDetailLookupPager"></div>
 
 @push('scripts')
 <script>
-  let bankLookup = $('#bankLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'bank' }}`,
+  let agenDetailLookup = $('#agenDetailLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'agen' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -16,62 +16,82 @@
           width: '70px'
         },
         {
-          label: 'KODE BANK',
-          name: 'kodebank',
+          label: 'KODE AGEN',
+          name: 'kodeagen',
           align: 'left',
         },
         {
-          label: 'NAMA BANK',
-          name: 'namabank',
+          label: 'NAMA AGEN',
+          name: 'namaagen',
           align: 'left'
         },
         {
-          label: 'COA',
-          name: 'coa',
+          label: 'KETERANGAN',
+          name: 'keterangan',
           align: 'left'
         },
         {
-          label: 'TIPE',
-          name: 'tipe',
+          label: 'Status',
+          name: 'statusaktif',
+          align: 'left'
+        },
+        
+        {
+          label: 'NAMA PERUSAHAAN',
+          name: 'namaperusahaan',
           align: 'left'
         },
         {
-            label: 'STATUS AKTIF',
-            name: 'statusaktif',
-            align: 'left',
-            width: 100,
-            stype: 'select',
-            // searchoptions: {
-            //     value: `<?php
-            //             $i = 1;
-
-            //             foreach ($data['combo'] as $status) :
-            //             echo "$status[param]:$status[parameter]";
-            //             if ($i !== count($data['combo'])) {
-            //                 echo ";";
-            //             }
-            //             $i++;
-            //             endforeach
-
-            //             ?>
-            // `,
-            //     dataInit: function(element) {
-            //     $(element).select2({
-            //         width: 'resolve',
-            //         theme: "bootstrap4"
-            //     });
-            //     }
-            // },
+          label: 'ALAMAT',
+          name: 'alamat',
+          align: 'left'
         },
         {
-            label: 'STATUS PENERIMAAN',
-            name: 'statusformatpenerimaan',
-            align: 'left'
+          label: 'NO TELP',
+          name: 'notelp',
+          align: 'left'
         },
         {
-            label: 'STATUS PENGELUARAN',
-            name: 'statusformatpengeluaran',
-            align: 'left'
+          label: 'NO HP',
+          name: 'nohp',
+          align: 'left'
+        },
+        {
+          label: 'CONTACT PERSON',
+          name: 'contactperson',
+          align: 'left'
+        },
+        {
+          label: 'TOP',
+          name: 'top',
+          align: 'right',
+          formatter: currencyFormat
+        },
+        {
+          label: 'STATUS APPROVAL',
+          name: 'statusapproval',
+          align: 'left'
+        },
+        {
+          label: 'USER APPROVAL',
+          name: 'userapproval',
+          align: 'left'
+        },
+        {
+          label: 'TGL APPROVAL',
+          name: 'tglapproval',
+          align: 'left'
+        },
+        {
+          label: 'STATUS TAS',
+          name: 'statustas',
+          align: 'left'
+        },
+        
+        {
+          label: 'JENIS EMKL',
+          name: 'jenisemkl',
+          align: 'left'
         },
         {
           label: 'MODIFIEDBY',
@@ -100,7 +120,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#bankLookupPager'),
+      pager: $('#agenDetailLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -114,6 +134,7 @@
       },
       onSelectRow: function(id) {
         activeGrid = $(this)
+        loadDetailPiutang(id)
         id = $(this).jqGrid('getCell', id, 'rn') - 1
         indexRow = id
         page = $(this).jqGrid('getGridParam', 'page')
@@ -129,26 +150,26 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#bankLookup').getGridParam().reccount) {
-            indexRow = $('#bankLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#agenDetailLookup').getGridParam().reccount) {
+            indexRow = $('#agenDetailLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#bankLookup [id="${$('#bankLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#agenDetailLookup [id="${$('#agenDetailLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#bankLookup [id="${$('#bankLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#agenDetailLookup [id="${$('#agenDetailLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#bankLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#bankLookup [id="` + $('#bankLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#agenDetailLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#agenDetailLookup [id="` + $('#agenDetailLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#bankLookup').setSelection($('#bankLookup').getDataIDs()[indexRow])
+            $('#agenDetailLookup').setSelection($('#agenDetailLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -163,11 +184,11 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupBank').prev().width())
+        $(this).setGridWidth($('#lookupAgenDetail').prev().width())
         setHighlight($(this))
       }
     })
-
+    
     // .jqGrid('filterToolbar', {
     //   stringResult: true,
     //   searchOnEnter: false,

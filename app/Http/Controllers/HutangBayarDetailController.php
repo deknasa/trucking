@@ -17,10 +17,10 @@ class HutangBayarDetailController extends Controller
         ];
 
         $response = Http::withHeaders($request->header())
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'hutangbayardetail', $params);
-            
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') .'hutangbayardetail', $params);
+
         $data = [
             'rows' => $response['data'] ?? []
         ];

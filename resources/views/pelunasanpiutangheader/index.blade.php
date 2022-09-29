@@ -38,7 +38,7 @@
     $('#lookupAgen').hide()
     $('#lookupCabang').hide()
     $('#lookupPelanggan').hide()
-    $('#lookupPiutangHeader').hide()
+    $('#lookupAgenDetail').hide()
 
 
 
@@ -47,7 +47,7 @@
       agenLookup.setGridWidth($('#lookupAgen').prev().width())
       cabangLookup.setGridWidth($('#lookupCabang').prev().width())
       pelangganLookup.setGridWidth($('#lookupPelanggan').prev().width())
-      piutangHeaderLookup.setGridWidth($('#lookupPiutangHeader').prev().width())
+      agenDetailLookup.setGridWidth($('#lookupAgenDetail').prev().width())
 
       if (detectDeviceType() == 'desktop') {
         bankLookup.setGridParam({
@@ -63,7 +63,6 @@
         agenLookup.setGridParam({
           ondblClickRow: function(id) {
             let rowData = $(this).getRowData(id)
-            console.log(rowData.coa)
 
             $('#crudForm [name=agen_id]').first().val(id)
             $('#crudForm [name=agen]').first().val(rowData.namaagen)
@@ -91,12 +90,15 @@
             $('#lookupPelanggan').hide()
           }
         })
-        piutangHeaderLookup.setGridParam({
+        agenDetailLookup.setGridParam({
           ondblClickRow: function(id) {
             let rowData = $(this).getRowData(id)
 
-            $('#crudForm [name=piutang]').first().val(rowData.nobukti)
-            $('#lookupPiutangHeader').hide()
+            $('#crudForm [name=agendetail_id]').first().val(id)
+            $('#crudForm [name=agendetail]').first().val(rowData.namaagen)
+            $('#lookupAgenDetail').hide()
+            console.log(id)
+            getPiutang(id)
           }
         })
 
@@ -117,7 +119,7 @@
 
             $('#crudForm [name=agen_id]').first().val(id)
             $('#crudForm [name=agen]').first().val(namaagen)
-            $('#lookupAkunPusat').hide()
+            $('#lookupAgen').hide()
           }
         })
         cabangLookup.setGridParam({
@@ -138,12 +140,13 @@
             $('#lookupPelanggan').hide()
           }
         })
-        piutangHeaderLookup.setGridParam({
+        agenDetailLookup.setGridParam({
           onSelectRow: function(id) {
             let rowData = $(this).getRowData(id)
 
             $('#crudForm [name=piutang]').first().val(rowData.nobukti)
-            $('#lookupPiutangHeader').hide()
+            $('#lookupAgenDetail').hide()
+            getPiutang(id)
           }
         })
 
@@ -166,7 +169,7 @@
       $('#lookupAgen').hide()
       $('#lookupCabang').hide()
       $('#lookupPelanggan').hide()
-      $('#lookupPiutangHeader').hide()
+      $('#lookupAgenDetail').hide()
       if (detectDeviceType() != 'desktop') {
         bankLookup.setGridHeight(window.innerHeight / 1.5)
       }
@@ -184,7 +187,7 @@
       $('#lookupBank').hide()
       $('#lookupCabang').hide()
       $('#lookupPelanggan').hide()
-      $('#lookupPiutangHeader').hide()
+      $('#lookupAgenDetail').hide()
       if (detectDeviceType() != 'desktop') {
         agenLookup.setGridHeight(window.innerHeight / 1.5)
       }
@@ -201,7 +204,7 @@
       $('#lookupBank').hide()
       $('#lookupAgen').hide()
       $('#lookupPelanggan').hide()
-      $('#lookupPiutangHeader').hide()
+      $('#lookupAgenDetail').hide()
       if (detectDeviceType() != 'dekstop') {
         cabangLookup.setGridHeight(window.innerHeight / 1.5)
       }
@@ -218,7 +221,7 @@
       $('#lookupBank').hide()
       $('#lookupAgen').hide()
       $('#lookupCabang').hide()
-      $('#lookupPiutangHeader').hide()
+      $('#lookupAgenDetail').hide()
       if (detectDeviceType() != 'dekstop') {
         pelangganLookup.setGridHeight(window.innerHeight / 1.5)
       }
@@ -228,20 +231,20 @@
       }
     })
 
-    $('#lookupPiutangHeaderToggler').click(function(event) {
-      piutangHeaderLookup.setGridWidth($('#lookupPiutangHeader').prev().width())
-      $('#lookupPiutangHeader').toggle()
+    $('#lookupAgenDetailToggler').click(function(event) {
+      agenDetailLookup.setGridWidth($('#lookupAgenDetail').prev().width())
+      $('#lookupAgenDetail').toggle()
 
       $('#lookupBank').hide()
       $('#lookupAgen').hide()
       $('#lookupCabang').hide()
       $('#lookupPelanggan').hide()
       if (detectDeviceType() != 'dekstop') {
-        piutangHeaderLookup.setGridHeight(window.innerHeight / 1.5)
+        agenDetailLookup.setGridHeight(window.innerHeight / 1.5)
       }
 
       if (detectDeviceType() == 'dekstop') {
-        activeGrid = piutangHeaderLookup
+        activeGrid = agenDetailLookup
       }
     })
 
@@ -389,15 +392,15 @@
     })
 
     $('[name=piutang]').on('input', function(event) {
-      $('#lookupPiutangHeader').show()
+      $('#lookupAgenDetail').show()
 
       if (detectDeviceType() != 'desktop') {
-        piutangHeaderLookup.setGridHeight(window.innerHeight / 1.5)
+        agenDetailLookup.setGridHeight(window.innerHeight / 1.5)
       }
 
       delay(() => {
-        let postData = piutangHeaderLookup.getGridParam('postData')
-        let colModels = piutangHeaderLookup.getGridParam('colModel')
+        let postData = agenDetailLookup.getGridParam('postData')
+        let colModels = agenDetailLookup.getGridParam('colModel')
         let rules = []
 
         colModels = colModels.filter((colModel) => {
@@ -417,7 +420,7 @@
           rules: rules
         })
 
-        piutangHeaderLookup.trigger('reloadGrid', {
+        agenDetailLookup.trigger('reloadGrid', {
           page: 1
         })
       }, 500)
@@ -608,7 +611,11 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              deletePelunasanPiutangHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                deletePelunasanPiutangHeader(selectedId)
+              }
             }
           },
         ]

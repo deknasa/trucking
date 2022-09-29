@@ -59,10 +59,6 @@
             label: 'TGL CAIR',
             name: 'tglcair',
           },
-          // {
-          //   label: 'USER',
-          //   name: 'userid',
-          // },
           {
             label: 'POTONGAN',
             name: 'potongan',
@@ -70,10 +66,6 @@
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-          },
-          {
-            label: 'COA',
-            name: 'coa',
           },
         ],
         autowidth: true,
