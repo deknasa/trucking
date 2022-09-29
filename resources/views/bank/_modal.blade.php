@@ -78,7 +78,7 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="kodepenerimaan" class="form-select select2bs4" style="width: 100%;">
+                <select name="statusformatpenerimaan" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH KODE PENERIMAAN --</option>
                 </select>
               </div>
@@ -90,7 +90,7 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="kodepengeluaran" class="form-select select2bs4" style="width: 100%;">
+                <select name="statusformatpengeluaran" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH KODE PENGELUARAN --</option>
                 </select>
               </div>
@@ -243,8 +243,8 @@
     $('.invalid-feedback').remove()
 
     setCoaOptions(form)
-    setKodePenerimaanOptions(form)
-    setKodePengeluaranOptions(form)
+    setStatusFormatPenerimaanOptions(form)
+    setStatusFormatPengeluaranOptions(form)
     setStatusAktifOptions(form)
   }
 
@@ -266,8 +266,8 @@
     Promise
       .all([
         setCoaOptions(form),
-        setKodePenerimaanOptions(form),
-        setKodePengeluaranOptions(form),
+        setStatusFormatPenerimaanOptions(form),
+        setStatusFormatPengeluaranOptions(form),
         setStatusAktifOptions(form)
       ])
       .then(() => {
@@ -293,8 +293,8 @@
     Promise
       .all([
         setCoaOptions(form),
-        setKodePenerimaanOptions(form),
-        setKodePengeluaranOptions(form),
+        setStatusFormatPenerimaanOptions(form),
+        setStatusFormatPengeluaranOptions(form),
         setStatusAktifOptions(form)
       ])
       .then(() => {
@@ -354,11 +354,11 @@
     })
   }
 
-  const setKodePenerimaanOptions = function(relatedForm) {
+  const setStatusFormatPenerimaanOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=kodepenerimaan]').empty()
-      relatedForm.find('[name=kodepenerimaan]').append(
-        new Option('-- PILIH KODE PENERIMAAN --', '', false, true)
+      relatedForm.find('[name=statusformatpenerimaan]').empty()
+      relatedForm.find('[name=statusformatpenerimaan]').append(
+        new Option('-- PILIH STATUS PENERIMAAN --', '', false, true)
       ).trigger('change')
 
       $.ajax({
@@ -372,7 +372,7 @@
           response.data.forEach(penerimaanTrucking => {
             let option = new Option(penerimaanTrucking.kodepenerimaan, penerimaanTrucking.id)
 
-            relatedForm.find('[name=kodepenerimaan]').append(option).trigger('change')
+            relatedForm.find('[name=statusformatpenerimaan]').append(option).trigger('change')
           });
 
           resolve()
@@ -381,10 +381,10 @@
     })
   }
 
-  const setKodePengeluaranOptions = function(relatedForm) {
+  const setStatusFormatPengeluaranOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=kodepengeluaran]').empty()
-      relatedForm.find('[name=kodepengeluaran]').append(
+      relatedForm.find('[name=statusformatpengeluaran]').empty()
+      relatedForm.find('[name=statusformatpengeluaran]').append(
         new Option('-- PILIH KODE PENERIMAAN --', '', false, true)
       ).trigger('change')
 
@@ -399,7 +399,7 @@
           response.data.forEach(pengeluaranTrucking => {
             let option = new Option(pengeluaranTrucking.kodepengeluaran, pengeluaranTrucking.id)
 
-            relatedForm.find('[name=kodepengeluaran]').append(option).trigger('change')
+            relatedForm.find('[name=statusformatpengeluaran]').append(option).trigger('change')
           });
 
           resolve()

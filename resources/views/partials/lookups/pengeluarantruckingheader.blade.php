@@ -46,16 +46,6 @@
         align: 'left'
       },
       {
-        label: 'TANGGAL BUKTI PENGELUARAN',
-        name: 'pengeluaran_tgl',
-        align: 'left',
-        formatter: "date",
-        formatoptions: {
-          srcformat: "ISO8601Long",
-          newformat: "d-m-Y"
-        }
-      },
-      {
         label: 'MODIFIEDBY',
         name: 'modifiedby',
         align: 'left'

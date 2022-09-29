@@ -26,6 +26,22 @@
               <input type="hidden" name="user_id">
 
               <div class="row form-group">
+                <div class="col-12">
+                  <input type="text" class="form-control user-lookup">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12">
+                  <input type="text" class="form-control agen-lookup">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-12">
+                  <input type="text" class="form-control user-lookup">
+                </div>
+              </div>
+
+              <div class="row form-group">
                 <div class="col-12 col-md-1">
                   <label>USER</label>
                 </div>
@@ -34,13 +50,6 @@
                     <input type="text" name="user" class="form-control">
                     <div class="input-group-append">
                       <button id="lookupToggler" class="btn btn-secondary" type="button">...</button>
-                    </div>
-                  </div>
-                  <div class="row position-absolute" id="lookup" style="z-index: 1;">
-                    <div class="col-12">
-                      <div id="lookup" class="shadow-lg">
-                        @include('partials.lookups.user')
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -95,35 +104,51 @@
   $(document).ready(function() {
     $('#lookup').hide()
 
-    $('#crudModal').on('shown.bs.modal', function() {
-      userLookup.setGridWidth($('#lookup').prev().width())
-
-      if (detectDeviceType() == 'desktop') {
-        userLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=user]').first().val(rowData.user.replaceAll('<span class="highlight">', '').replaceAll('</span>', ''))
-            $('#crudForm [name=user_id]').first().val(id)
-            $('#lookup').hide()
-          }
-        })
-      } else if (detectDeviceType() == 'mobile') {
-        userLookup.setGridParam({
-          onSelectRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=user]').first().val(rowData.user.replaceAll('<span class="highlight">', '').replaceAll('</span>', ''))
-            $('#crudForm [name=user_id]').first().val(id)
-            $('#lookup').hide()
-          }
-        })
+    $('.user-lookup').lookup({
+      title: 'User Lookup',
+      fileName: 'user',
+      onSelectRow: (user, element) => {
+        element.val(user.name)
       }
-
-      $('#crudModal').find("[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit").first().focus()
     })
 
-    $('#crudModal').on('hidden.bs.modal', function() {
+    $('.agen-lookup').lookup({
+      title: 'Agen Lookup',
+      fileName: 'agen',
+      onSelectRow: (agen, element) => {
+        element.val(agen.namaagen)
+      }
+    })
+
+    // $('#userLookupModal').on('shown.bs.modal', function() {
+    //   userLookup.setGridWidth($('#lookup').prev().width())
+
+    //   if (detectDeviceType() == 'desktop') {
+    //     userLookup.setGridParam({
+    //       ondblClickRow: function(id) {
+    //         let rowData = $(this).getRowData(id)
+
+    //         $('#crudForm [name=user]').first().val(rowData.user.replaceAll('<span class="highlight">', '').replaceAll('</span>', ''))
+    //         $('#crudForm [name=user_id]').first().val(id)
+    //         $('#lookup').hide()
+    //       }
+    //     })
+    //   } else if (detectDeviceType() == 'mobile') {
+    //     userLookup.setGridParam({
+    //       onSelectRow: function(id) {
+    //         let rowData = $(this).getRowData(id)
+
+    //         $('#crudForm [name=user]').first().val(rowData.user.replaceAll('<span class="highlight">', '').replaceAll('</span>', ''))
+    //         $('#crudForm [name=user_id]').first().val(id)
+    //         $('#lookup').hide()
+    //       }
+    //     })
+    //   }
+
+    //   $('#userLookupModal').find("[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit").first().focus()
+    // })
+
+    $('#userLookupModal').on('hidden.bs.modal', function() {
       activeGrid = '#jqGrid'
     })
 
@@ -180,54 +205,6 @@
         $('#loader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-    })
-
-    $('#lookupToggler').click(function(event) {
-      userLookup.setGridWidth($('#lookup').prev().width())
-      $('#lookup').toggle()
-
-      if (detectDeviceType() != 'desktop') {
-        userLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      if (detectDeviceType() == 'desktop') {
-        activeGrid = userLookup
-      }
-    })
-
-    $('[name=user]').on('input', function(event) {
-      $('#lookup').show()
-
-      if (detectDeviceType() != 'desktop') {
-        userLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      delay(() => {
-        let postData = userLookup.getGridParam('postData')
-        let colModels = userLookup.getGridParam('colModel')
-        let rules = []
-
-        colModels = colModels.filter((colModel) => {
-          return colModel.name !== 'rn'
-        })
-
-        colModels.forEach(colModel => {
-          rules.push({
-            field: colModel.name,
-            op: 'cn',
-            data: $(this).val()
-          })
-        });
-
-        postData.filters = JSON.stringify({
-          groupOp: 'OR',
-          rules: rules
-        })
-
-        userLookup.trigger('reloadGrid', {
-          page: 1
-        })
-      }, 500)
     })
 
     $("#jqGrid").jqGrid({
@@ -365,8 +342,7 @@
       })
 
       .customPager({
-        buttons: [
-          {
+        buttons: [{
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
@@ -657,7 +633,7 @@
                 .on("select2:open", function(e) {
                   document.querySelector(".select2-search__field").focus();
                 });
-              }
+            }
           },
           {
             innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
@@ -805,6 +781,108 @@
       }
     })
   })
+
+  const getUserLookup = function(fileName) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${appUrl}/lookup/${fileName}`,
+        method: 'GET',
+        dataType: 'html',
+        success: function(response) {
+          resolve(response)
+        }
+      })
+    })
+  }
+
+  $.fn.lookup = function(options = null) {
+    this.each(function() {
+      let element = $(this)
+
+      element
+        .wrap('<div class="input-group"></div>')
+        .after(`
+          <div class="input-group-append">
+            <button class="btn btn-primary lookup-toggler" type="button">...</button>
+          </div>
+        `)
+
+      element.siblings('.input-group-append').find('.lookup-toggler').click(function() {
+        activateLookup(element)
+      })
+    })
+
+    function activateLookup(element) {
+      let lookupModal = $(`
+        <div class="modal fade modal-fullscreen" id="lookupModal" tabindex="-1" aria-labelledby="lookupModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <form action="#" id="crudForm">
+              <div class="modal-content">
+                <div class="modal-header bg-primary">
+                  <h5 class="modal-title" id="lookupModalLabel">${options.title}</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      `)
+
+      $('body').append(lookupModal)
+
+      lookupModal.modal('show')
+
+      getUserLookup(options.fileName)
+        .then(response => {
+          lookupModal.find('.modal-body').html(response)
+
+          grid = lookupModal.find('.lookup-grid')
+
+          if (detectDeviceType() == 'desktop') {
+            grid.jqGrid('setGridParam', {
+              ondblClickRow: function(id) {
+                handleSelectedRow(id, lookupModal, element)
+              }
+            })
+          } else if (detectDeviceType() == 'mobile') {
+            grid.jqGrid('setGridParam', {
+              onSelectRow: function(id) {
+                handleSelectedRow(id, lookupModal, element)
+              }
+            })
+          }
+        })
+
+      lookupModal.on('hidden.bs.modal', function() {
+        lookupModal.remove()
+      })
+    }
+
+    function handleSelectedRow(id, lookupModal, element) {
+      if (id !== null) {
+        lookupModal.modal('hide')
+
+        options.onSelectRow(sanitize(grid.getRowData(id)), element)
+      } else {
+        alert('Please select a row')
+      }
+
+    }
+
+    function sanitize(rowData) {
+      Object.keys(rowData).forEach(key => {
+        rowData[key] = rowData[key].replaceAll('<span class="highlight">', '').replaceAll('</span>', '')
+      })
+
+      return rowData
+    }
+
+    return this
+  }
 </script>
 @endpush()
 @endsection

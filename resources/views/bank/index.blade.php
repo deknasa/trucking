@@ -86,12 +86,12 @@
             },
           },
           {
-            label: 'KODE PENERIMAAN',
-            name: 'kodepenerimaan',
+            label: 'STATUS PENERIMAAN',
+            name: 'statusformatpenerimaan',
           },
           {
-            label: 'KODE PENGELUARAN',
-            name: 'kodepengeluaran',
+            label: 'STATUS PENGELUARAN',
+            name: 'statusformatpengeluaran',
           },
           {
             label: 'MODIFIEDBY',

@@ -37,10 +37,6 @@
             name: 'nobukti',
           },
           {
-            label: 'TGL BUKTI',
-            name: 'tgl',
-          },
-          {
             label: 'PELANGGAN',
             name: 'pelanggan_id',
           },

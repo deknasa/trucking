@@ -1,9 +1,9 @@
-<table id="agenLookup" style="width: 100%;"></table>
+<table id="agenLookup" class="lookup-grid"></table>
 <div id="agenLookupPager"></div>
 
 @push('scripts')
 <script>
-  let agenLookup = $('#agenLookup').jqGrid({
+  $('#agenLookup').jqGrid({
       url: `{{ config('app.api_url') . 'agen' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -147,7 +147,6 @@
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
-          initResize($(this))
 
           if (indexRow - 1 > $('#agenLookup').getGridParam().reccount) {
             indexRow = $('#agenLookup').getGridParam().reccount - 1
@@ -199,4 +198,3 @@
     //   },
     // })
 </script>
-@endpush

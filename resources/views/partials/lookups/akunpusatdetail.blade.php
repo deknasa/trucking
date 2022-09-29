@@ -1,10 +1,10 @@
-<table id="bankLookup" style="width: 100%;"></table>
-<div id="bankLookupPager"></div>
+<table id="akunPusatDetailLookup" style="width: 100%;"></table>
+<div id="akunPusatDetailLookupPager"></div>
 
 @push('scripts')
 <script>
-  let bankLookup = $('#bankLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'bank' }}`,
+  let akunPusatDetailLookup = $('#akunPusatDetailLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'akunpusat' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -16,61 +16,59 @@
           width: '70px'
         },
         {
-          label: 'KODE BANK',
-          name: 'kodebank',
+          label: 'COA',
+          name: 'coa',
           align: 'left',
         },
         {
-          label: 'NAMA BANK',
-          name: 'namabank',
+          label: 'KETERANGAN COA',
+          name: 'keterangancoa',
           align: 'left'
         },
         {
-          label: 'COA',
-          name: 'coa',
+          label: 'TYPE',
+          name: 'type',
           align: 'left'
         },
         {
-          label: 'TIPE',
-          name: 'tipe',
+          label: 'LEVEL',
+          name: 'level',
           align: 'left'
         },
         {
             label: 'STATUS AKTIF',
             name: 'statusaktif',
-            align: 'left',
-            width: 100,
             stype: 'select',
-            // searchoptions: {
-            //     value: `<?php
-            //             $i = 1;
-
-            //             foreach ($data['combo'] as $status) :
-            //             echo "$status[param]:$status[parameter]";
-            //             if ($i !== count($data['combo'])) {
-            //                 echo ";";
-            //             }
-            //             $i++;
-            //             endforeach
-
-            //             ?>
-            // `,
-            //     dataInit: function(element) {
-            //     $(element).select2({
-            //         width: 'resolve',
-            //         theme: "bootstrap4"
-            //     });
-            //     }
-            // },
-        },
-        {
-            label: 'STATUS PENERIMAAN',
-            name: 'statusformatpenerimaan',
             align: 'left'
         },
         {
-            label: 'STATUS PENGELUARAN',
-            name: 'statusformatpengeluaran',
+            label: 'PARENT',
+            name: 'parent',
+            align: 'left'
+        },
+        {
+            label: 'STATUS COA',
+            name: 'statuscoa',
+            align: 'left'
+        },
+        {
+            label: 'STATUS ACCOUNT PAYABLE',
+            name: 'statusaccountpayable',
+            align: 'left'
+        },
+        {
+            label: 'STATUS NERACA',
+            name: 'statusneraca',
+            align: 'left'
+        },
+        {
+            label: 'STATUS LABA RUGI',
+            name: 'statuslabarugi',
+            align: 'left'
+        },
+        {
+            label: 'COAMAIN',
+            name: 'coamain',
             align: 'left'
         },
         {
@@ -100,7 +98,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#bankLookupPager'),
+      pager: $('#akunPusatDetailLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -129,26 +127,26 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#bankLookup').getGridParam().reccount) {
-            indexRow = $('#bankLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#akunPusatDetailLookup').getGridParam().reccount) {
+            indexRow = $('#akunPusatDetailLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#bankLookup [id="${$('#bankLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#akunPusatDetailLookup [id="${$('#akunPusatDetailLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#bankLookup [id="${$('#bankLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#akunPusatDetailLookup [id="${$('#akunPusatDetailLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#bankLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#bankLookup [id="` + $('#bankLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#akunPusatDetailLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#akunPusatDetailLookup [id="` + $('#akunPusatDetailLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#bankLookup').setSelection($('#bankLookup').getDataIDs()[indexRow])
+            $('#akunPusatDetailLookup').setSelection($('#akunPusatDetailLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -163,7 +161,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupBank').prev().width())
+        $(this).setGridWidth($('#lookupAkunPusatDetail').prev().width())
         setHighlight($(this))
       }
     })

@@ -246,7 +246,7 @@
               var penyesuaian = jQuery('#' + selectedIDs[i] + '_' + 'penyesuaian').val();
               var keteranganpenyesuaian = jQuery('#' + selectedIDs[i] + '_' + 'keteranganpenyesuaian').val();
               var nominallebihbayar = jQuery('#' + selectedIDs[i] + '_' + 'nominallebihbayar').val();
-
+              
               $('#piutangrow').append("<input type='hidden' name='piutang_id[]' value='" + selectedIDs[i] + "'>");
               $('#piutangrow').append("<input type='hidden' name='bayarppd[]' value='" + bayar + "'>");
               $('#piutangrow').append("<input type='hidden' name='keterangandetailppd[]' value='" + keterangandetail + "'>");
@@ -365,6 +365,8 @@
           $('#gridPiutang').jqGrid('clearGridData')
           $('#gridEditPiutang').jqGrid('clearGridData')
 
+          $('#piutang').hide()
+
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
           }
@@ -437,7 +439,7 @@
         let agenId = response.detail.agendetail_id
         $('#editpiutang').show()
 
-        getEditPiutang(Id, agenId)
+        getEditPiutang(Id, agenId, 'edit')
         let tglbukti = response.data.tglbukti
         $('#tglbukti').val($.datepicker.formatDate("dd-mm-yy", new Date(tglbukti)));
       }
@@ -474,8 +476,10 @@
         })
         let agenId = response.detail.agendetail_id
 
-        $('#gridEditPiutang').trigger('reloadGrid')
-        getEditPiutang(Id, agenId)
+        // $('#gridEditPiutang').trigger('reloadGrid')
+        getEditPiutang(Id, agenId, 'delete')
+        
+
         let tglbukti = response.data.tglbukti
         $('#tglbukti').val($.datepicker.formatDate("dd-mm-yy", new Date(tglbukti)));
       }
@@ -491,6 +495,7 @@
   function getPiutang(id) {
     console.log('getpiutang');
     $('#piutang').show()
+    $('#editpiutang').hide()
     let lastsel
     $('#gridPiutang').jqGrid({
       url: `${apiUrl}pelunasanpiutangheader/${id}/getpiutang`,
@@ -731,7 +736,16 @@
   }
 
 
-  function getEditPiutang(Id, agenId) {
+  function getEditPiutang(Id, agenId, aksi) {
+    
+    
+    if(aksi = "edit") {
+      var url = `${apiUrl}pelunasanpiutangheader/${Id}/${agenId}/getpelunasanpiutang`
+    } else {
+      
+      var url = `${apiUrl}pelunasanpiutangheader/${Id}/getDeletePelunasanPiutang`
+    }
+
     $('#gridEditPiutangWrapper').html(`
       <table id="gridEditPiutang"></table>
       <div id="gridEditPiutangPager"></div>
@@ -739,9 +753,8 @@
     
     // $('#editpiutang').show()
     let lastsel
-
     $('#gridEditPiutang').jqGrid({
-      url: `${apiUrl}pelunasanpiutangheader/${Id}/${agenId}/getpelunasanpiutang`,
+      url: url,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -789,17 +802,6 @@
             decimalPlaces: 0
           },
           align: "right",
-        },
-
-        {
-          label: 'TANGGAL BAYAR',
-          name: 'tglbayar',
-          align: 'left',
-          formatter: "date",
-          formatoptions: {
-            srcformat: "ISO8601Long",
-            newformat: "d-m-Y"
-          }
         },
         {
           label: 'BAYAR',
