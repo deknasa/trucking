@@ -1,9 +1,8 @@
-<table id="userLookup" style="width: 100%;"></table>
+<table id="userLookup" class="lookup-grid"></table>
 <div id="userLookupPager"></div>
 
-@push('scripts')
 <script>
-  let userLookup = $('#userLookup').jqGrid({
+  $('#userLookup').jqGrid({
       url: `{{ config('app.api_url') . 'user' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -72,7 +71,6 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#userLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -86,8 +84,7 @@
       },
       onSelectRow: function(id) {
         activeGrid = $(this)
-        id = $(this).jqGrid('getCell', id, 'rn') - 1
-        indexRow = id
+        indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
         page = $(this).jqGrid('getGridParam', 'page')
         let rows = $(this).jqGrid('getGridParam', 'postData').limit
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
@@ -99,7 +96,8 @@
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
-          initResize($(this))
+
+          triggerClick = true
 
           if (indexRow - 1 > $('#userLookup').getGridParam().reccount) {
             indexRow = $('#userLookup').getGridParam().reccount - 1
@@ -151,4 +149,3 @@
       },
     })
 </script>
-@endpush

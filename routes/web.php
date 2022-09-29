@@ -85,7 +85,7 @@ use App\Http\Controllers\PiutangDetailController;
 use App\Http\Controllers\PiutangHeaderController;
 use App\Http\Controllers\HutangBayarDetailController;
 use App\Http\Controllers\HutangBayarHeaderController;
-
+use App\Http\Controllers\LookupController;
 
 /*
 |--------------------------------------------------------------------------
@@ -565,3 +565,4 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::patch('format', [FormatController::class, 'update']);
+Route::get('lookup/{fileName}', [LookupController::class, 'show']);
