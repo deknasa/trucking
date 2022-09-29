@@ -48,7 +48,7 @@
             console.log(rowData)
 
             $('#crudForm [name=trado_id]').first().val(rowData.id)
-            $('#crudForm [name=trado]').first().val(rowData.namatrado)
+            $('#crudForm [name=trado]').first().val(rowData.keterangan)
             $('#lookupTrado').hide()
           }
         })

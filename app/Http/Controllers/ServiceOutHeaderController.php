@@ -62,12 +62,13 @@ class ServiceOutHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'serviceout', $params);
 
-        $data = [
-            'total' => $response['attributes']['totalPages'] ?? [],
-            'records' => $response['attributes']['totalRows'] ?? [],
-            'rows' => $response['data'] ?? [],
-            'params' => $response['params'] ?? [],
-        ];
+            $data = [
+                'total' => $response['attributes']['totalPages'] ?? [],
+                'records' => $response['attributes']['totalRows'] ?? [],
+                'rows' => $response['data'] ?? [],
+                'params' => $response['params'] ?? [],
+            ];
+    
 
         return $data;
     }
@@ -97,10 +98,12 @@ class ServiceOutHeaderController extends MyController
             ->get(config('app.api_url') . "serviceout/$id");
 
         $serviceout = $response['data'];
+        $kode = $response['kode'];
+        $serviceNoBukti = $this->getNoBukti('SERVICEOUT', 'SERVICEOUT', 'serviceoutheader');
 
         $combo = $this->combo();
 
-        return view('serviceout.edit', compact('title', 'serviceout', 'combo'));
+        return view('serviceout.edit', compact('title', 'serviceout', 'combo', 'serviceNoBukti'));
     }
 
      /**

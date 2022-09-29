@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
+
 
 class StatusContainerController extends MyController
 {
@@ -34,27 +36,27 @@ class StatusContainerController extends MyController
 
         return view('statuscontainer.add', compact('title', 'combo'));
     }
-    
+
     /**
      * @ClassName
      */
     public function edit($id)
     {
         $title = $this->title;
+        $combo = $this->combo();
 
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        ])->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "statuscontainer/$id");
 
-        $statusContainer = $response['data'];
-        $combo = [
-            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
-        ];
+        $statuscontainer = $response['data'];
 
-        return view('statuscontainer.edit', compact('title', 'statusContainer', 'combo'));
+        return view('statuscontainer.edit', compact('title', 'statuscontainer', 'combo'));
     }
-    
+
     /**
      * @ClassName
      */
@@ -62,23 +64,37 @@ class StatusContainerController extends MyController
     {
         try {
             $title = $this->title;
+            $combo = $this->combo();
 
-            $response = Http::withHeaders($this->httpHeaders)
-                ->withOptions(['verify' => false])
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json'
+            ])->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "statuscontainer/$id");
 
-            $statusContainer = $response['data'];
-            $combo = [
-                'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
-            ];
+            $statuscontainer = $response['data'];
 
-            return view('statuscontainer.delete', compact('title', 'statusContainer', 'combo'));
+            return view('statuscontainer.delete', compact('title', 'statuscontainer','combo'));
         } catch (\Throwable $th) {
-            throw $th;
+            return redirect()->route('statuscontainer.index');
         }
     }
-    
+
+    public function destroy($id, Request $request)
+    {
+        $request['modifiedby'] = Auth::user()->name;
+
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        ])->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->delete(config('app.api_url') . "statuscontainer/$id", $request->all());
+
+        return response($response);
+    }
+
     /**
      * @ClassName
      */

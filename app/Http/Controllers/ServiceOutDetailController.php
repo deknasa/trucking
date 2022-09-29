@@ -19,6 +19,7 @@ class ServiceOutDetailController extends Controller
 
         $response = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') .'serviceoutdetail', $params);
             
         $data = [
