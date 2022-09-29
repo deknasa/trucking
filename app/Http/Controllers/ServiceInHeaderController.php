@@ -100,7 +100,7 @@ class ServiceInHeaderController extends MyController
 
         $servicein = $response['data'];
         $kode = $response['kode'];
-        $serviceNoBukti = $this->getNoBukti('SERVICEIN', 'SERVICEIN', 'serviceheader');
+        $serviceNoBukti = $this->getNoBukti('SERVICEIN', 'SERVICEIN', 'serviceinheader');
 
         $combo = $this->combo();
 

@@ -1,75 +1,16 @@
 @extends('layouts.master')
 
 @section('content')
-
-<!-- Modal for report -->
-<div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form id="formRange" target="_blank">
-        @csrf
-        <div class="modal-body">
-          <input type="hidden" name="sidx">
-          <input type="hidden" name="sord">
-
-          <div class="form-group row">
-            <div class="col-sm-2 col-form-label">
-              <label for="">Dari</label>
-            </div>
-            <div class="col-sm-10">
-              <input type="text" name="dari" class="form-control autonumeric-report" autofocus>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <div class="col-sm-2 col-form-label">
-              <label for="">Sampai</label>
-            </div>
-            <div class="col-sm-10">
-              <input type="text" name="sampai" class="form-control autonumeric-report">
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Report</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
       <table id="jqGrid"></table>
-      <div id="jqGridPager" class="row bg-white">
-        <div id="buttonContainer" class="col-12 col-md-7 text-center text-md-left">
-          <button id="add" class="btn btn-primary btn-sm mb-1">
-            <i class="fa fa-plus"></i> ADD
-          </button>
-          <button id="edit" class="btn btn-success btn-sm mb-1">
-            <i class="fa fa-pen"></i> EDIT
-          </button>
-          <button id="delete" class="btn btn-danger btn-sm mb-1">
-            <i class="fa fa-trash"></i> DELETE
-          </button>
-        </div>
-        <div id="pagerHandler" class="col-12 col-md-4 d-flex justify-content-center align-items-center"></div>
-        <div id="pagerInfo" class="col-12 col-md-1 d-flex justify-content-end align-items-center"></div>
-      </div>
-
     </div>
   </div>
 </div>
 
+@include('serviceout._modal')
 <!-- Detail -->
 @include('serviceout._detail')
 
@@ -91,102 +32,239 @@
   let sortorder = 'asc'
   let autoNumericElements = []
 
-  // console.log(getUrl);
   $(document).ready(function() {
-    /* Set page */
-    <?php if (isset($_GET['page'])) { ?>
-      page = "{{ $_GET['page'] }}"
-    <?php } ?>
+    $('#lookupTrado').hide()
+    $('#lookupServicein').hide()
+ 
+    $('#crudModal').on('shown.bs.modal', function() {
+      tradoLookup.setGridWidth($('#lookupTrado').prev().width())
+      serviceinLookup.setGridWidth($('#lookupServicein').prev().width())
 
-    /* Set id */
-    <?php if (isset($_GET['id'])) { ?>
-      id = "{{ $_GET['id'] }}"
-    <?php } ?>
+      if (detectDeviceType() == 'desktop') {
 
-    /* Set indexRow */
-    <?php if (isset($_GET['indexRow'])) { ?>
-      indexRow = "{{ $_GET['indexRow'] }}"
-    <?php } ?>
+        tradoLookup.setGridParam({
+          ondblClickRow: function(id) {
+            let rowData = $(this).getRowData(id)
 
-    /* Set sortname */
-    <?php if (isset($_GET['sortname'])) { ?>
-      sortname = "{{ $_GET['sortname'] }}"
-    <?php } ?>
+            $('#crudForm [name=trado_id]').first().val(rowData.id)
+            $('#crudForm [name=trado]').first().val(rowData.keterangan)
+            $('#lookupTrado').hide()
+          }
+        })
 
-    /* Set sortorder */
-    <?php if (isset($_GET['sortorder'])) { ?>
-      sortorder = "{{ $_GET['sortorder'] }}"
-    <?php } ?>
+        serviceinLookup.setGridParam({
+          ondblClickRow: function(id) {
+            let rowData = $(this).getRowData(id)
 
-    /* Set rowNum */
-    <?php if (isset($_GET['limit'])) { ?>
-      rowNum = "{{ $_GET['limit'] }}"
-    <?php } ?>
+            $('#crudForm [name=servicein_nobukti]').first().val(rowData.nobukti)
+            $('#lookupServicein').hide()
 
-    $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'serviceout' }}`,
-        // url: getUrl,
-        mtype: "GET",
-        styleUI: 'Bootstrap4',
-        iconSet: 'fontAwesome',
-        datatype: "json",
-        colModel: [{
-            label: 'ID',
-            name: 'id',
-            align: 'right',
-            width: '50px'
-          },
-          {
-            label: 'NO BUKTI',
-            name: 'nobukti',
-            align: 'left'
-          },
-          {
-            label: 'TANGGAL BUKTI',
-            name: 'tglbukti',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'TRADO ID',
-            name: 'trado_id',
-            align: 'left'
-          },
-          {
-            label: 'TGL KELUAR',
-            name: 'tglkeluar',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
-          },
-          {
-            label: 'MODIFIEDBY',
-            name: 'modifiedby',
-            align: 'left'
-          },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-        ],
+          }
+        })
+
+
+        //mobile
+      } else if (detectDeviceType() == 'mobile') {
+        tradoLookup.setGridParam({
+          onSelectRow: function(id) {
+            let rowData = $(this).getRowData(id)
+
+            $('#crudForm [name=trado_id]').first().val(rowData.id)
+            $('#crudForm [name=trado]').first().val(rowData.namatrado)
+
+            $('#lookupTrado').hide()
+          }
+        })
+
+        serviceinLookup.setGridParam({
+          ondblClickRow: function(id) {
+            let rowData = $(this).getRowData(id)
+
+            $('#crudForm [name=servicein_nobukti]').first().val(rowData.nobukti)
+            $('#lookupServicein').hide()
+          }
+        })
+
+      }
+
+      $('#crudModal').find("[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit").first().focus()
+    })
+
+    $('#crudModal').on('hidden.bs.modal', function() {
+      activeGrid = '#jqGrid'
+    })
+
+
+    //tampil lookup ketika klik toggler
+    $('#lookupTradoToggler').click(function(event) {
+      tradoLookup.setGridWidth($('#lookupTrado').prev().width())
+      $('#lookupTrado').toggle()
+
+      $('#lookupServicein').hide()
+
+      if (detectDeviceType() != 'desktop') {
+        tradoLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      if (detectDeviceType() == 'desktop') {
+        activeGrid = tradoLookup
+      }
+    })
+
+    $('#lookupServiceinToggler').click(function(event) {
+      serviceinLookup.setGridWidth($('#lookupServicein').prev().width())
+      $('#lookupServicein').toggle()
+
+      $('#lookupTrado').hide()
+
+      if (detectDeviceType() != 'desktop') {
+        serviceinLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      if (detectDeviceType() == 'desktop') {
+        activeGrid = serviceinLookup
+      }
+    })
+
+    //untuk auto search dari kolom input
+    $('[name=trado]').on('input', function(event) {
+      $('#lookupTrado').show()
+
+      if (detectDeviceType() != 'desktop') {
+        tradoLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      delay(() => {
+        let postData = tradoLookup.getGridParam('postData')
+        let colModels = tradoLookup.getGridParam('colModel')
+        let rules = []
+
+        colModels = colModels.filter((colModel) => {
+          return colModel.name !== 'rn'
+        })
+
+        colModels.forEach(colModel => {
+          rules.push({
+            field: colModel.name,
+            op: 'cn',
+            data: $(this).val()
+          })
+        });
+
+        postData.filters = JSON.stringify({
+          groupOp: 'OR',
+          rules: rules
+        })
+
+        tradoLookup.trigger('reloadGrid', {
+          page: 1
+        })
+      }, 500)
+    })
+
+    $('[name=servicein_nobukti]').on('input', function(event) {
+      $('#lookupServicein').show()
+
+      if (detectDeviceType() != 'desktop') {
+        serviceinLookup.setGridHeight(window.innerHeight / 1.5)
+      }
+
+      delay(() => {
+        let postData = serviceinLookup.getGridParam('postData')
+        let colModels = serviceinLookup.getGridParam('colModel')
+        let rules = []
+
+        colModels = colModels.filter((colModel) => {
+          return colModel.name !== 'rn'
+        })
+
+        colModels.forEach(colModel => {
+          rules.push({
+            field: colModel.name,
+            op: 'cn',
+            data: $(this).val()
+          })
+        });
+
+        postData.filters = JSON.stringify({
+          groupOp: 'OR',
+          rules: rules
+        })
+
+        serviceinLookup.trigger('reloadGrid', {
+          page: 1
+        })
+      }, 500)
+    })
+
+   
+  })
+
+
+  $("#jqGrid").jqGrid({
+      url: `{{ config('app.api_url') . 'serviceout' }}`,
+      mtype: "GET",
+      styleUI: 'Bootstrap4',
+      iconSet: 'fontAwesome',
+      datatype: "json",
+      colModel: [{
+          label: 'ID',
+          name: 'id',
+          align: 'right',
+          width: '50px'
+        },
+        {
+          label: 'NO BUKTI',
+          name: 'nobukti',
+          align: 'left'
+        },
+        {
+          label: 'TANGGAL BUKTI',
+          name: 'tglbukti',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'TRADO',
+          name: 'trado_id',
+          align: 'left'
+        },
+        {
+          label: 'TANGGAL KELUAR',
+          name: 'tglkeluar',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'KETERANGAN',
+          name: 'keterangan',
+          align: 'left'
+        },
+       
+        {
+          label: 'MODIFIEDBY',
+          name: 'modifiedby',
+          align: 'left'
+        },
+        {
+          label: 'UPDATEDAT',
+          name: 'updated_at',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+      ],
         autowidth: true,
         shrinkToFit: false,
         height: 350,
@@ -214,27 +292,19 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
-          loadDetailData(id)
 
-          id = $(this).jqGrid('getCell', id, 'rn') - 1
-          indexRow = id
+          loadDetailData(id)
+          activeGrid = $(this)
+          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
-
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
-          loadPagerHandler('#pagerHandler', $(this))
-          loadPagerInfo('#pagerInfo', $(this))
 
-          $("input").attr("autocomplete", "off");
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-
-          if (data.message !== "" && data.message !== undefined && data.message !== null) {
-            alert(data.message)
-          }
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -248,34 +318,34 @@
             clearColumnSearch()
           })
 
-          if (triggerClick) {
-            if (id != '') {
-              indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-              id = ''
-            } else if (indexRow != undefined) {
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-            }
-
-            if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-            }
-
-            triggerClick = false
-          } else {
-            $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
           }
+
+          setTimeout(function() {
+
+            if (triggerClick) {
+              if (id != '') {
+                indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                id = ''
+              } else if (indexRow != undefined) {
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              }
+
+              if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+                $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              }
+
+              triggerClick = false
+            } else {
+              $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+            }
+          }, 100)
+
 
           setHighlight($(this))
         }
-      })
-
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
       })
 
       .jqGrid('filterToolbar', {
@@ -289,6 +359,36 @@
         },
       })
 
+      .customPager({
+      buttons: [{
+          id: 'add',
+          innerHTML: '<i class="fa fa-plus"></i> ADD',
+          class: 'btn btn-primary btn-sm mr-1',
+          onClick: function(event) {
+            createServiceOut()
+          }
+        },
+        {
+          id: 'edit',
+          innerHTML: '<i class="fa fa-pen"></i> EDIT',
+          class: 'btn btn-success btn-sm mr-1',
+          onClick: function(event) {
+            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+            editServiceOut(selectedId)
+          }
+        },
+        {
+          id: 'delete',
+          innerHTML: '<i class="fa fa-trash"></i> DELETE',
+          class: 'btn btn-danger btn-sm mr-1',
+          onClick: () => {
+            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+            deleteServiceOut(selectedId)
+          }
+        },
+      ]
+
+    })
 
     /* Append clear filter button */
     loadClearFilter()
@@ -296,110 +396,122 @@
     /* Append global search */
     loadGlobalSearch()
 
-    /* Load detial grid */
+    /* Load detail grid */
     loadDetailGrid()
 
     $('#add .ui-pg-div')
-      .addClass(`btn-sm btn-primary`)
+      .addClass(`btn btn-sm btn-primary`)
       .parent().addClass('px-1')
 
     $('#edit .ui-pg-div')
-      .addClass('btn-sm btn-success')
+      .addClass('btn btn-sm btn-success')
       .parent().addClass('px-1')
 
     $('#delete .ui-pg-div')
-      .addClass('btn-sm btn-danger')
+      .addClass('btn btn-sm btn-danger')
       .parent().addClass('px-1')
 
     $('#report .ui-pg-div')
-      .addClass('btn-sm btn-info')
+      .addClass('btn btn-sm btn-info')
       .parent().addClass('px-1')
 
     $('#export .ui-pg-div')
-      .addClass('btn-sm btn-warning')
+      .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    /* Handle button add on click */
-    $('#add').click(function() {
-      let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
+      if (!`{{ $myAuth->hasPermission('serviceout', 'store') }}`) {
+    $('#add').addClass('ui-disabled')
+  }
 
-      window.location.href = `{{ route('serviceout.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-    })
+  if (!`{{ $myAuth->hasPermission('serviceout', 'update') }}`) {
+    $('#edit').addClass('ui-disabled')
+  }
 
-    /* Handle button edit on click */
-    $('#edit').click(function() {
-      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+  if (!`{{ $myAuth->hasPermission('serviceout', 'destroy') }}`) {
+    $('#delete').addClass('ui-disabled')
+  }
 
-      if (selectedId == null || selectedId == '' || selectedId == undefined) {
-        alert('please select a row')
-      } else {
-        window.location.href = `${indexUrl}/${selectedId}/edit?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-      }
-    })
+  if (!`{{ $myAuth->hasPermission('serviceout', 'export') }}`) {
+    $('#export').addClass('ui-disabled')
+  }
 
-    /* Handle button add on click */
-    $('#add').click(function() {
-      let limit = $('#jqGrid').jqGrid('getGridParam', 'postData').limit
+  if (!`{{ $myAuth->hasPermission('serviceout', 'report') }}`) {
+    $('#report').addClass('ui-disabled')
+  }
 
-      window.location.href = `{{ route('serviceout.create') }}?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}`
-    })
-
-    /* Handle button delete on click */
-    $('#delete').click(function() {
-      selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-      window.location.href = `${indexUrl}/${selectedId}/delete?sortname=${sortname}&sortorder=${sortorder}&limit=${limit}&page=${page}&indexRow=${indexRow}`
-    })
-
-    $('#rangeModal').on('shown.bs.modal', function() {
-      if (autoNumericElements.length > 0) {
-        $.each(autoNumericElements, (index, autoNumericElement) => {
-          autoNumericElement.remove()
-        })
-      }
-
-      $('#formRange [name]:not(:hidden)').first().focus()
-
-      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
-      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-      $('#formRange [name=sampai]').val(totalRecord)
-
-      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
-        allowDecimalPadding: false,
-        minimumValue: 1,
-        maximumValue: totalRecord
+  $('#rangeModal').on('shown.bs.modal', function() {
+    if (autoNumericElements.length > 0) {
+      $.each(autoNumericElements, (index, autoNumericElement) => {
+        autoNumericElement.remove()
       })
+    }
+
+    $('#formRange [name]:not(:hidden)').first().focus()
+
+    $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
+    $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
+    $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+    $('#formRange [name=sampai]').val(totalRecord)
+
+    autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
+      digitGroupSeparator: '.',
+      decimalCharacter: ',',
+      allowDecimalPadding: false,
+      minimumValue: 1,
+      maximumValue: totalRecord
     })
+  })
 
-    $('#formRange').submit(event => {
-      event.preventDefault()
+  $('#formRange').submit(function(event) {
+    event.preventDefault()
 
-      let params
-      let actionUrl = ``
+    let params
+    let submitButton = $(this).find('button:submit')
 
-      if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('serviceout.export') }}`
-      } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('serviceout.report') }}`
+    submitButton.attr('disabled', 'disabled')
+
+    /* Set params value */
+    for (var key in postData) {
+      if (params != "") {
+        params += "&";
       }
+      params += key + "=" + encodeURIComponent(postData[key]);
+    }
 
-      /* Clear validation messages */
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
+    let formRange = $('#formRange')
+    let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+    let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+    params += `&offset=${offset}&limit=${limit}`
 
-      /* Set params value */
-      for (var key in postData) {
-        if (params != "") {
-          params += "&";
+    if ($('#rangeModal').data('action') == 'export') {
+      let xhr = new XMLHttpRequest()
+      xhr.open('GET', `{{ config('app.api_url') }}serviceout/export?${params}`, true)
+      xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+      xhr.responseType = 'arraybuffer'
+
+      xhr.onload = function(e) {
+        if (this.status === 200) {
+          if (this.response !== undefined) {
+            let blob = new Blob([this.response], {
+              type: "application/vnd.ms-excel"
+            })
+            let link = document.createElement('a')
+
+            link.href = window.URL.createObjectURL(blob)
+            link.download = `laporanserviceout${(new Date).getTime()}.xlsx`
+            link.click()
+
+            submitButton.removeAttr('disabled')
+          }
         }
-        params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
-    })
+      xhr.send()
+    } else if ($('#rangeModal').data('action') == 'report') {
+      window.open(`{{ route('serviceout.report') }}?${params}`)
+
+      submitButton.removeAttr('disabled')
+    }
   })
 </script>
 @endpush()

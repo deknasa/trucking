@@ -140,24 +140,42 @@ class ZonaController extends MyController
      */
     public function delete($id)
     {
-        try {
+        // try {
            
-            $title = $this->title;
+        //     $title = $this->title;
 
-            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
+        //     $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+        //     ->withOptions(['verify' => false])
+        //     ->withToken(session('access_token'))
+        //         ->get(config('app.api_url') . "zona/$id");
+
+        //     $zona = $response['data'];
+
+
+
+        //     $combo = [
+        //         'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        //     ];
+            
+        //     return view('zona.delete', compact('title', 'zona', 'combo'));
+        // } catch (\Throwable $th) {
+        //     return redirect()->route('zona.index');
+        // }
+
+        try {
+            $title = $this->title;
+            // $combo = $this->combo();
+
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json'
+            ])->withOptions(['verify' => false])
+                ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "zona/$id");
 
             $zona = $response['data'];
 
-
-
-            $combo = [
-                'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
-            ];
-            
-            return view('zona.delete', compact('title', 'zona', 'combo'));
+            return view('zona.delete', compact('title', 'zona','combo'));
         } catch (\Throwable $th) {
             return redirect()->route('zona.index');
         }
