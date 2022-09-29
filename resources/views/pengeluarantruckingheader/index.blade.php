@@ -571,21 +571,6 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL PENGELUARAN',
-            name: 'pengeluaran_tgl',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'PROSES NO BUKTI',
-            name: 'proses_nobukti',
-            align: 'left'
-          },
-          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'

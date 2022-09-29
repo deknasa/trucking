@@ -63,7 +63,6 @@
         agenLookup.setGridParam({
           ondblClickRow: function(id) {
             let rowData = $(this).getRowData(id)
-            console.log(rowData.coa)
 
             $('#crudForm [name=agen_id]').first().val(id)
             $('#crudForm [name=agen]').first().val(rowData.namaagen)

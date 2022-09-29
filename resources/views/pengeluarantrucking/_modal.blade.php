@@ -49,13 +49,15 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+              <div class="col-12 col-md-2 col-form-label">
                 <label>
-                  format bukti <span class="text-danger">*</span>
+                  FORMAT<span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="formatbukti" class="form-control">
+              <div class="col-12 col-md-10">
+                <select name="statusformat" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH FORMAT --</option>
+                </select>
               </div>
             </div>
           </div>
@@ -283,9 +285,9 @@
 
   const setStatusAktifOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusaktif]').empty()
-      relatedForm.find('[name=statusaktif]').append(
-        new Option('-- PILIH STATUS AKTIF --', '', false, true)
+      relatedForm.find('[name=statusformat]').empty()
+      relatedForm.find('[name=statusformat]').append(
+        new Option('-- PILIH FORMAT --', '', false, true)
       ).trigger('change')
 
       $.ajax({
@@ -301,15 +303,15 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS AKTIF"
+              "data": "PENGELUARAN TRUCKING"
             }]
           })
         },
         success: response => {
-          response.data.forEach(statusAktif => {
-            let option = new Option(statusAktif.text, statusAktif.id)
+          response.data.forEach(statusFormat => {
+            let option = new Option(statusFormat.subgrp, statusFormat.id)
 
-            relatedForm.find('[name=statusaktif]').append(option).trigger('change')
+            relatedForm.find('[name=statusformat]').append(option).trigger('change')
           });
 
           resolve()

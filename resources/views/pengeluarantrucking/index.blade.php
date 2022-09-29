@@ -42,20 +42,20 @@
             width: '50px'
           },
           {
-            label: 'kode Pengeluaran',
+            label: 'KODE PENGELUARAN',
             name: 'kodepengeluaran',
           },
           {
-            label: 'keterangan',
+            label: 'KETERANGAN',
             name: 'keterangan',
           },
           {
-            label: 'coa',
+            label: 'COA',
             name: 'coa',
           },
           {
-            label: 'formatbukti',
-            name: 'formatbukti',
+            label: 'STATUS FORMAT',
+            name: 'statusformat',
           },
           {
             label: 'MODIFIEDBY',
