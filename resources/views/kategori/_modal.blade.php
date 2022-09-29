@@ -44,9 +44,8 @@
                   SUB KELOMPOK <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="subkelompok_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH SUB KELOMPOK --</option>
-                </select>
+                <input type="hidden" name="subkelompok_id">
+                <input type="text" class="form-control subkelompok-lookup">
               </div>
             </div>
             <div class="row form-group">

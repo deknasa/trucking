@@ -52,20 +52,8 @@
                 </label>
               </div>
               <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="hidden" name="agen_id" class="form-control">
-                  <input type="text" name="agen" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupAgenToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupAgen" style="z-index: 3;">
-                  <div class="col-12">
-                    <div id="lookupAgen" class="shadow-lg">
-                      @include('partials.lookups.agen')
-                    </div>
-                  </div>
-                </div>
+                <input type="hidden" name="agen_id">
+                <input type="text" class="form-control agen-lookup">
               </div>
             </div>
 
@@ -290,6 +278,7 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
+  
     form.data('action', 'add')
     $('#crudModalTitle').text('Add Piutang')
     $('#crudModal').modal('show')
