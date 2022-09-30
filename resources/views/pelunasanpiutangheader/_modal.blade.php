@@ -75,20 +75,9 @@
                 </label>
               </div>
               <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="hidden" name="agen_id" class="form-control">
-                  <input type="text" name="agen" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupAgenToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupAgen" style="z-index: 3;">
-                  <div class="col-12">
-                    <div id="lookupAgen" class="shadow-lg">
-                      @include('partials.lookups.agen')
-                    </div>
-                  </div>
-                </div>
+                
+                <input type="hidden" name="agen_id">
+                <input type="text" name="agen" class="form-control agen-lookup">
               </div>
             </div>
 
@@ -359,9 +348,7 @@
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
           $('#piutangrow').html('')
-          $('#jqGrid').trigger('reloadGrid', {
-            page: response.data.page
-          })
+          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
           $('#gridPiutang').jqGrid('clearGridData')
           $('#gridEditPiutang').jqGrid('clearGridData')
 

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-<!-- Grid -->
+<!-- Grid Master-->
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
@@ -10,6 +10,7 @@
   </div>
 </div>
 
+<!-- Modal -->
 @include('pelunasanpiutangheader._modal')
 <!-- Detail -->
 @include('pelunasanpiutangheader._detail')
@@ -35,16 +36,24 @@
   $(document).ready(function() {
 
     $('#lookupBank').hide()
-    $('#lookupAgen').hide()
     $('#lookupCabang').hide()
     $('#lookupPelanggan').hide()
     $('#lookupAgenDetail').hide()
 
 
+    $('#lookup').hide()
+
+    $('.agen-lookup').lookup({
+      title: 'Agen Lookup',
+      fileName: 'agen',
+      onSelectRow: (agen, element) => {
+        
+        element.val(agen.namaagen)
+      }
+    })
 
     $('#crudModal').on('shown.bs.modal', function() {
       bankLookup.setGridWidth($('#lookupBank').prev().width())
-      agenLookup.setGridWidth($('#lookupAgen').prev().width())
       cabangLookup.setGridWidth($('#lookupCabang').prev().width())
       pelangganLookup.setGridWidth($('#lookupPelanggan').prev().width())
       agenDetailLookup.setGridWidth($('#lookupAgenDetail').prev().width())
@@ -58,16 +67,6 @@
             $('#crudForm [name=bank]').first().val(rowData.namabank)
             // $('#crudForm [name=user_id]').first().val(id)
             $('#lookupBank').hide()
-          }
-        })
-        agenLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=agen_id]').first().val(id)
-            $('#crudForm [name=agen]').first().val(rowData.namaagen)
-            $('#lookupAgen').hide()
-
           }
         })
 
@@ -111,15 +110,6 @@
             $('#crudForm [name=bank_id]').first().val(id)
             $('#crudForm [name=bank]').first().val(rowData.namabank)
             $('#lookupBank').hide()
-          }
-        })
-        agenLookup.setGridParam({
-          onSelectRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=agen_id]').first().val(id)
-            $('#crudForm [name=agen]').first().val(namaagen)
-            $('#lookupAgen').hide()
           }
         })
         cabangLookup.setGridParam({
@@ -179,23 +169,6 @@
       }
     })
 
-    $('#lookupAgenToggler').click(function(event) {
-      agenLookup.setGridWidth($('#lookupAgen').prev().width())
-      $('#lookupAgen').toggle()
-
-      
-      $('#lookupBank').hide()
-      $('#lookupCabang').hide()
-      $('#lookupPelanggan').hide()
-      $('#lookupAgenDetail').hide()
-      if (detectDeviceType() != 'desktop') {
-        agenLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      if (detectDeviceType() == 'desktop') {
-        activeGrid = agenLookup
-      }
-    })
 
     $('#lookupCabangToggler').click(function(event) {
       cabangLookup.setGridWidth($('#lookupCabang').prev().width())
@@ -286,40 +259,6 @@
       }, 500)
     })
 
-    $('[name=agen]').on('input', function(event) {
-      $('#lookupAgen').show()
-
-      if (detectDeviceType() != 'desktop') {
-        agenLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      delay(() => {
-        let postData = agenLookup.getGridParam('postData')
-        let colModels = agenLookup.getGridParam('colModel')
-        let rules = []
-
-        colModels = colModels.filter((colModel) => {
-          return colModel.name !== 'rn'
-        })
-
-        colModels.forEach(colModel => {
-          rules.push({
-            field: colModel.name,
-            op: 'cn',
-            data: $(this).val()
-          })
-        });
-
-        postData.filters = JSON.stringify({
-          groupOp: 'OR',
-          rules: rules
-        })
-
-        agenLookup.trigger('reloadGrid', {
-          page: 1
-        })
-      }, 500)
-    })
 
     $('[name=cabang]').on('input', function(event) {
       $('#lookupCabang').show()
@@ -745,7 +684,115 @@
         submitButton.removeAttr('disabled')
       }
     })
+
+    
   })
+  const getPiutangLookup = function(fileName) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${appUrl}/lookup/${fileName}`,
+        method: 'GET',
+        dataType: 'html',
+        success: function(response) {
+          resolve(response)
+        }
+      })
+    })
+  }
+
+  $.fn.lookup = function(options = null) {
+    this.each(function() {
+      let element = $(this)
+
+      element
+        .wrap('<div class="input-group"></div>')
+        .after(`
+          <div class="input-group-append">
+            <button class="btn btn-primary lookup-toggler" type="button">...</button>
+          </div>
+        `)
+
+      element.siblings('.input-group-append').find('.lookup-toggler').click(function() {
+        activateLookup(element)
+      })
+    })
+
+    function activateLookup(element) {
+      let lookupModal = $(`
+        <div class="modal fade modal-fullscreen" id="lookupModal" tabindex="-1" aria-labelledby="lookupModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <form action="#" id="crudForm">
+              <div class="modal-content">
+                <div class="modal-header bg-primary">
+                  <h5 class="modal-title" id="lookupModalLabel">${options.title}</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      `)
+
+      $('body').append(lookupModal)
+
+      lookupModal.modal('show')
+
+      getPiutangLookup(options.fileName)
+        .then(response => {
+          lookupModal.find('.modal-body').html(response)
+
+          grid = lookupModal.find('.lookup-grid')
+
+          if (detectDeviceType() == 'desktop') {
+            grid.jqGrid('setGridParam', {
+              ondblClickRow: function(id) {
+                let rowData = $(this).getRowData(id)
+                $('#crudForm [name=agen_id]').first().val(id)
+                handleSelectedRow(id, lookupModal, element)
+              }
+            })
+          } else if (detectDeviceType() == 'mobile') {
+            grid.jqGrid('setGridParam', {
+              onSelectRow: function(id) {
+                handleSelectedRow(id, lookupModal, element)
+              }
+            })
+          }
+        })
+
+      lookupModal.on('hidden.bs.modal', function() {
+        lookupModal.remove()
+      })
+    }
+
+    function handleSelectedRow(id, lookupModal, element) {
+      if (id !== null) {
+        lookupModal.modal('hide')
+
+        options.onSelectRow(sanitize(grid.getRowData(id)), element)
+      } else {
+        alert('Please select a row')
+      }
+
+    }
+
+    
+    function sanitize(rowData) {
+      Object.keys(rowData).forEach(key => {
+        rowData[key] = rowData[key].replaceAll('<span class="highlight">', '').replaceAll('</span>', '')
+      })
+
+      return rowData
+    }
+
+    return this
+
+  }
+  
 </script>
 @endpush()
 @endsection

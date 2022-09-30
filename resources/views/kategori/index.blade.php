@@ -15,7 +15,7 @@
 @push('scripts')
 <script>
   let indexRow = 0;
-  let page = 0;
+  let page = 1;
   let pager = '#jqGridPager'
   let popup = "";
   let id = "";
@@ -29,6 +29,7 @@
   let autoNumericElements = []
   let rowNum = 10
 
+  
   $(document).ready(function() {
 
     $('#lookup').hide()
@@ -138,6 +139,7 @@
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
+
         loadComplete: function(data) {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -154,7 +156,7 @@
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
           })
-
+          
           if (indexRow > $(this).getDataIDs().length - 1) {
             indexRow = $(this).getDataIDs().length - 1;
           }
@@ -162,14 +164,14 @@
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false

@@ -215,9 +215,7 @@
 
           id = response.data.id
 
-          $('#jqGrid').trigger('reloadGrid', {
-            page: response.data.page
-          })
+          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
