@@ -61,8 +61,8 @@
               <thead>
                 <tr>
                   <th width="50">No</th>
-                  <th>Nominal</th>
                   <th>Keterangan</th>
+                  <th>Nominal</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -75,14 +75,14 @@
                   <td>
                     <div class="row form-group">
                       <div class="col-12 col-md-12">
-                        <input type="text" name="nominal_detail[]" class="form-control autonumeric">
+                        <input type="text" name="keterangan_detail[]" class="form-control">
                       </div>
                     </div>
                   </td>
                   <td>
                     <div class="row form-group">
                       <div class="col-12 col-md-12">
-                        <input type="text" name="keterangan_detail[]" class="form-control">
+                        <input type="text" name="nominal_detail[]" class="form-control autonumeric">
                       </div>
                     </div>
                   </td>
@@ -136,6 +136,8 @@
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+
+      unformatAutoNumeric(data)
 
       data.push({
         name: 'sortIndex',
@@ -231,10 +233,10 @@
       </td>
      
       <td>
-        <input type="text" name="nominal_detail[]" style="text-align:right" class="form-control autonumeric">   
+        <input type="text" name="keterangan_detail[]" class="form-control">
       </td>
       <td>
-        <input type="text" name="keterangan_detail[]" class="form-control">
+        <input type="text" name="nominal_detail[]" style="text-align:right" class="form-control autonumeric">   
       </td>
       <td>
         <div class='btn btn-danger btn-sm rmv'>Hapus</div>
@@ -321,10 +323,10 @@
                 </td>
             
                 <td>
-                  <input type="text" name="nominal_detail[]" value="${value.nominal}" style="text-align:right" class="form-control autonumeric">   
+                  <input type="text" name="keterangan_detail[]" value="${value.keterangan}" class="form-control">
                 </td>
                 <td>
-                  <input type="text" name="keterangan_detail[]" value="${value.keterangan}" class="form-control">
+                  <input type="text" name="nominal_detail[]" value="${value.nominal}" style="text-align:right" class="form-control autonumeric">   
                 </td>
                 <td>
                   <div class='btn btn-danger btn-sm rmv'>Hapus</div>
@@ -332,6 +334,8 @@
               </tr>`
           )
         })
+        initAutoNumeric($('#crudForm').find('.autonumeric'))
+
       }
     })
   }
@@ -372,10 +376,10 @@
                 </td>
             
                 <td>
-                  <input type="text" name="nominal_detail[]" value="${value.nominal}" style="text-align:right" class="form-control autonumeric">   
+                  <input type="text" name="keterangan_detail[]" value="${value.keterangan}" class="form-control">
                 </td>
                 <td>
-                  <input type="text" name="keterangan_detail[]" value="${value.keterangan}" class="form-control">
+                  <input type="text" name="nominal_detail[]" value="${value.nominal}" style="text-align:right" class="form-control autonumeric">   
                 </td>
                 <td>
                   <div class='btn btn-danger btn-sm rmv'>Hapus</div>

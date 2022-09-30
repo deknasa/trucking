@@ -37,15 +37,15 @@
             name: 'nobukti',
           },
           {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+          },
+          {
             label: 'NOMINAL',
             name: 'nominal',
             formatter: 'number', 
             formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
             align: "right",
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
           },
           {
             label: 'NO BUKTI INVOICE',
