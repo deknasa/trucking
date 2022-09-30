@@ -53,7 +53,7 @@
               </div>
               <div class="col-8 col-md-10">
                 <input type="hidden" name="agen_id">
-                <input type="text" class="form-control agen-lookup">
+                <input type="text" name="agen" class="form-control agen-lookup">
               </div>
             </div>
 
