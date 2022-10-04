@@ -28,8 +28,11 @@
                                     TANGGAL BUKTI <span class="text-danger">*</span>
                                 </label>
                             </div>
-                            <div class="col-12 col-sm-4 col-md-4">
-                                <input type="text" name="tglbukti" class="form-control datepicker">
+                            <div class="col-12 col-sm-4 col-md-4" id="tglbukti">
+                                @php
+                                $tglbukti = date('d-m-Y');
+                                @endphp
+                                <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
                             </div>
                         </div>
 
@@ -40,32 +43,25 @@
                                 </label>
                             </div>
                             <div class="col-8 col-md-10">
-                                <div class="input-group">
-                                    <input type="hidden" name="trado_id">
-                                    <input type="text" name="trado" class="form-control">
-                                    <div class="input-group-append">
-                                        <button id="lookupTradoToggler" class="btn btn-secondary" type="button">...</button>
-                                    </div>
-                                </div>
-                                <div class="row position-absolute" id="lookupTrado" style="z-index: 1;">
-                                    <div class="col-12">
-                                        <div id="lookupTrado" class="shadow-lg">
-                                            @include('partials.lookups.trado')
-                                        </div>
-                                    </div>
-                                </div>
+                                <input type="hidden" name="trado_id">
+                                <input type="text" name="trado" class="form-control trado-lookup">
                             </div>
                         </div>
 
                         <div class="row form-group">
-                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                            <div class="col-12 col-sm-2 col-md-2 col-form-label">
                                 <label>
-                                    TGL MASUK <span class="text-danger">*</span></label>
+                                    TANGGAL MASUK <span class="text-danger">*</span>
+                                </label>
                             </div>
-                            <div class="col-12 col-sm-9 col-md-10">
-                                <input type="text" name="tglmasuk" class="form-control datepicker">
+                            <div class="col-12 col-sm-4 col-md-4" id="tglmasuk">
+                                @php
+                                $tglmasuk = date('d-m-Y');
+                                @endphp
+                                <input type="text" name="tglmasuk" value="{{$tglmasuk}}" id="tglmasuk" class="form-control datepicker">
                             </div>
                         </div>
+
 
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -94,21 +90,14 @@
 
                                     <td>
                                         <div class="row form-group">
-                                            <div class="col-12 col-md-12" id="mekanik_id">
-                                                <div class="input-group">
-                                                    <input type="hidden" name="mekanik_id">
-                                                    <input type="text" name="mekanik" class="form-control">
-                                                    <div class="input-group-append">
-                                                        <button id="lookupMekanikToggler" class="btn btn-secondary" type="button">...</button>
-                                                    </div>
-                                                </div>
-                                                <div class="row position-absolute" id="lookupMekanik" style="z-index: 1;">
-                                                    <div class="col-12">
-                                                        <div id="lookupMekanik" class="shadow-lg">
-                                                            @include('partials.lookups.mekanik')
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                                                <label>
+                                                    MEKANIK <span class="text-danger">*</span>
+                                                </label>
+                                            </div>
+                                            <div class="col-8 col-md-10">
+                                                <input type="hidden" name="mekanik_id">
+                                                <input type="text" name="mekanik" class="form-control mekanik-lookup">
                                             </div>
                                         </div>
                                     </td>
@@ -118,7 +107,6 @@
                                             <div class="col-12 col-md-12">
                                                 <input type="text" name="keterangan_detail" class="form-control">
                                             </div>
-                                        </div>
                                     </td>
 
                                     <td>
@@ -169,6 +157,8 @@
             let Id = form.find('[name=id]').val()
             let action = form.data('action')
             let data = $('#crudForm').serializeArray()
+
+            unformatAutoNumeric(data)
 
             data.push({
                 name: 'sortIndex',
@@ -233,9 +223,9 @@
                     $('#crudModal').modal('hide')
                     $('#crudModal').find('#crudForm').trigger('reset')
 
-                    $('#jqGrid').trigger('reloadGrid', {
+                    $('#jqGrid').jqGrid('setGridParam', {
                         page: response.data.page
-                    })
+                    }).trigger('reloadGrid');
 
                     if (response.data.grp == 'FORMAT') {
                         updateFormat(response.data)
@@ -258,15 +248,45 @@
         })
     })
 
+    var baris = 1;
+
+    let html = `<tr id="row">
+        <td>
+        <div class="baris">1</div>
+      </td>
+
+      <td>
+
+        <div class="row form-group">
+            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                    MEKANIK <span class="text-danger">*</span>
+                </label>
+            </div>
+                <div class="col-8 col-md-10">
+                    <input type="hidden" name="mekanik_id">
+                    <input type="text" name="mekanik" class="form-control mekanik-lookup">
+                </div>
+        </div>
+      </td>
+     
+      <td>
+        <input type="text" name="keterangan_detail" class="form-control">
+      </td>
+     
+      <td>
+        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+      </td>
+    </tr>`;
 
     $("#addrow").click(function() {
         let rowCount = $('#row').length;
-
+        let barisCount = $('.baris').length;
         if (rowCount > 0) {
             let clone = $('#row').clone();
             clone.find('input').val('');
 
-            baris = parseInt(baris) + 1;
+            baris = parseInt(barisCount) + 1;
             clone.find('.baris').text(baris);
             $('table #table_body').append(clone);
 
@@ -286,7 +306,7 @@
     });
 
 
-    function createServiceIn() {
+    function createServicein() {
         let form = $('#crudForm')
 
         form.trigger('reset')
@@ -294,6 +314,7 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
+
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Service In')
         $('#crudModal').modal('show')
@@ -301,7 +322,7 @@
         $('.invalid-feedback').remove()
     }
 
-    function editServiceIn(Id) {
+    function editServicein(Id) {
         let form = $('#crudForm')
 
         form.data('action', 'edit')
@@ -310,7 +331,7 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-        $('#crudModalTitle').text('Edit Service In Header')
+        $('#crudModalTitle').text('Edit Service In')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
@@ -326,50 +347,52 @@
                 $.each(response.data, (index, value) => {
                     form.find(`[name="${index}"]`).val(value)
                 })
-                $('#table_body').html('')
+                
+                let tglbukti = response.data.tglbukti
+
                 $.each(response.detail, (index, value) => {
-                    $('#table_body').append(
-                        `<tr id="row">
-              <td>
-                <div class="baris">${parseInt(index) + 1}</div>
-              </td>
-              
-              <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <div class="input-group">
-                          <input type="hidden" name="mekanik_id" value="${value.mekanik_id}">
-                          <input type="text" name="mekanik" value="${value.mekanik}" class="form-control">
-                          <div class="input-group-append">
-                            <button id="lookupMekanikToggler" class="btn btn-secondary" type="button">...</button>
-                          </div>
-                        </div>
-                        <div class="row position-absolute" id="lookupMekanik" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupMekanik" class="shadow-lg">
-                              @include('partials.lookups.mekanik')
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
+                    form.find(`[name="${index}"]`).val(value)
+                    })
+                    
+                $('#tglbukti').val($.datepicker.formatDate("dd-mm-yy", new Date(tglbukti)));
 
-              <td>
-              <input type="text" name="keterangan_detail" value="${value.keterangan}" class="form-control">
-              </td>
+                // $('#table_body').html('')
+            //     $.each(response.detail, (index, value) => {
+            //         $('#table_body').append(
+            //             `<tr id="row">
+            //     <td>
+            //       <div class="baris">${parseInt(index) + 1}</div>
+            //     </td>
+            //     <td>
+            //         <div class="row form-group">
+            //             <div class="col-12 col-sm-3 col-md-2 col-form-label">
+            //                 <label>
+            //                     MEKANIK <span class="text-danger">*</span>
+            //                 </label>
+            //             </div>
+            //             <div class="col-8 col-md-10">
+            //                 <input type="hidden" name="mekanik_id" value="${value.mekanik_id}>
+            //                 <input type="text" name="mekanik" value="${value.mekanik}" class="form-control mekanik-lookup>
+            //             </div>
+            //         </div>
+            //     </td>
 
-              <td>
-                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-              </td>
-            </tr>`
-                    )
-                })
+            //     <td>
+            //       <input type="text" name="keterangan_detail" value="${value.keterangan_detail}" class="form-control">
+            //     </td>
+                
+            //     <td>
+            //       <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+            //     </td>
+            //   </tr>`
+            //         )
+            //     })
+            //     initAutoNumeric($('#crudForm').find('.autonumeric'))
             }
         })
     }
 
-    function deleteServiceIn(Id) {
+    function deleteServicein(Id) {
         let form = $('#crudForm')
 
         form.data('action', 'delete')
@@ -378,7 +401,7 @@
     <i class="fa fa-save"></i>
     Hapus
   `)
-        $('#crudModalTitle').text('Delete Service in')
+        $('#crudModalTitle').text('Delete Servicein')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
@@ -394,45 +417,40 @@
                 $.each(response.data, (index, value) => {
                     form.find(`[name="${index}"]`).val(value)
                 })
+                let tglbukti = response.data.tglbukti
+                $('#tglbukti').val($.datepicker.formatDate("dd-mm-yy", new Date(tglbukti)));
                 $('#table_body').html('')
                 $.each(response.detail, (index, value) => {
                     $('#table_body').append(
                         `<tr id="row">
-              <td>
-                <div class="baris">${parseInt(index) + 1}</div>
-              </td>
-              
-              <td>
+                <td>
+                  <div class="baris">${parseInt(index) + 1}</div>
+                </td>
+                <td>
                     <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <div class="input-group">
-                          <input type="hidden" name="mekanik_id" value="${value.mekanik_id}">
-                          <input type="text" name="mekanik" value="${value.mekanik}" class="form-control">
-                          <div class="input-group-append">
-                            <button id="lookupMekanikToggler" class="btn btn-secondary" type="button">...</button>
-                          </div>
+                        <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                        <label>
+                            MEKANIK <span class="text-danger">*</span>
+                        </label>
                         </div>
-                        <div class="row position-absolute" id="lookupMekanik" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupMekanik" class="shadow-lg">
-                              @include('partials.lookups.mekanik')
-                            </div>
-                          </div>
+                        <div class="col-8 col-md-10">
+                            <input type="hidden" name="mekanik_id">
+                            <input type="text" name="mekanik" value="${value.mekanik}" class="form-control mekanik-lookup>
                         </div>
-                      </div>
                     </div>
-                  </td>
-
-              <td>
-                  <input type="text" name="keterangan_detail" value="${value.keterangan}" class="form-control">
                 </td>
 
-              <td>
-                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-              </td>
-            </tr>`
+                <td>
+                  <input type="text" name="keterangan_detail" value="${value.keterangan}" class="form-control">
+                </td>
+               
+                <td>
+                  <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                </td>
+              </tr>`
                     )
                 })
+
             }
         })
     }

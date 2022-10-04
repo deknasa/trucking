@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 <table id="akunPusatLookup" class="lookup-grid" style="width: 100%;"></table>
+=======
+<table id="akunPusatLookup" class="lookup-grid"></table>
+>>>>>>> 7a89ae6170603ba456673fc1a586418dcb592aeb
 <div id="akunPusatLookupPager"></div>
 
 <script>
   $('#akunPusatLookup').jqGrid({
+<<<<<<< HEAD
       url: `{{ config('app.api_url') . 'akunpusat' }}`,
+=======
+      url: `{{ config('app.api_url') . 'akunPusat' }}`,
+>>>>>>> 7a89ae6170603ba456673fc1a586418dcb592aeb
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -164,6 +172,7 @@
       }
     })
 
+<<<<<<< HEAD
     .jqGrid('filterToolbar', {
       stringResult: true,
       searchOnEnter: false,
@@ -175,3 +184,7 @@
       },
     })
 </script>
+=======
+</script>
+@endpush
+>>>>>>> 7a89ae6170603ba456673fc1a586418dcb592aeb

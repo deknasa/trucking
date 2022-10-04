@@ -1,9 +1,9 @@
-<table id="supplierLookup" style="width: 100%;"></table>
+<table id="supplierLookup" class="lookup-grid"></table>
 <div id="supplierLookupPager"></div>
 
 @push('scripts')
 <script>
-  let supplierLookup = $('#supplierLookup').jqGrid({
+  $('#supplierLookup').jqGrid({
       url: `{{ config('app.api_url') . 'supplier' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',

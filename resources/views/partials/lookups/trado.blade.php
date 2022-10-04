@@ -1,9 +1,9 @@
-<table id="tradoLookup" style="width: 100%;"></table>
+<table id="tradoLookup" class="lookup-grid"></table>
 <div id="tradoLookupPager"></div>
 
 @push('scripts')
 <script>
-  let tradoLookup = $('#tradoLookup').jqGrid({
+   $('#tradoLookup').jqGrid({
       url: `{{ config('app.api_url') . 'trado' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -97,7 +97,6 @@
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
-          initResize($(this))
 
           if (indexRow - 1 > $('#tradoLookup').getGridParam().reccount) {
             indexRow = $('#tradoLookup').getGridParam().reccount - 1
@@ -139,4 +138,3 @@
     })
 
 </script>
-@endpush

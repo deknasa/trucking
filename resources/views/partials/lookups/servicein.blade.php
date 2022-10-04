@@ -1,9 +1,9 @@
-<table id="serviceinLookup" style="width: 100%;"></table>
+<table id="serviceinLookup" class="lookup-grid"></table>
 <div id="serviceinLookupPager"></div>
 
 @push('scripts')
 <script>
-  let serviceinLookup = $('#serviceinLookup').jqGrid({
+   $('#serviceinLookup').jqGrid({
       url: `{{ config('app.api_url') . 'servicein' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -16,7 +16,7 @@
           width: '70px'
         },
         {
-          label: 'NO BUKTI',
+          label: 'NOBUKTI',
           name: 'nobukti',
           align: 'left',
         },
@@ -28,18 +28,19 @@
         {
           label: 'TRADO',
           name: 'trado_id',
-          align: 'left'
+          align: 'left',
         },
         {
           label: 'TGL MASUK',
           name: 'tglmasuk',
-          align: 'left'
+          align: 'left',
         },
         {
           label: 'KETERANGAN',
           name: 'keterangan',
-          align: 'left'
+          align: 'left',
         },
+       
         {
           label: 'MODIFIEDBY',
           name: 'modifiedby',
@@ -94,7 +95,6 @@
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
-          initResize($(this))
 
           if (indexRow - 1 > $('#serviceinLookup').getGridParam().reccount) {
             indexRow = $('#serviceinLookup').getGridParam().reccount - 1
@@ -136,4 +136,3 @@
     })
 
 </script>
-@endpush
