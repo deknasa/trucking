@@ -531,6 +531,8 @@ Route::middleware('auth')->group(function () {
     Route::get('penerimaanstokheader/report', [PenerimaanTruckingHeaderController::class, 'report'])->name('penerimaanstokheader.report');
     Route::resource('penerimaanstokheader', PenerimaanStokHeaderController::class);
     
+    Route::resource('penerimaantruckingdetail', PenerimaanTruckingDetailController::class);
+
     Route::get('jurnalumumheader/index', [JurnalUmumHeaderController::class, 'index']);
     Route::get('jurnalumumheader/{id}/delete', [JurnalUmumHeaderController::class, 'delete'])->name('jurnalumumheader.delete');
     Route::get('jurnalumumheader/get', [JurnalUmumHeaderController::class, 'get'])->name('jurnalumumheader.get');
