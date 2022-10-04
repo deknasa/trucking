@@ -72,6 +72,12 @@ use App\Http\Controllers\PengeluaranDetailController;
 
 use App\Http\Controllers\PenerimaanTruckingHeaderController;
 use App\Http\Controllers\PenerimaanTruckingDetailController;
+
+use App\Http\Controllers\PenerimaanStokController;
+use App\Http\Controllers\PenerimaanStokHeaderController;
+
+use App\Http\Controllers\PengeluaranStokController;
+
 use App\Http\Controllers\PengeluaranTruckingHeaderController;
 use App\Http\Controllers\PengeluaranTruckingDetailController;
 use App\Http\Controllers\JurnalUmumHeaderController;
@@ -385,6 +391,18 @@ Route::middleware('auth')->group(function () {
     Route::get('penerimaantrucking/index', [PenerimaanTruckingController::class, 'index']);
     Route::resource('penerimaantrucking', PenerimaanTruckingController::class);
 
+    Route::get('penerimaanstok/report', [PenerimaanStokController::class, 'report'])->name('penerimaanstok.report');
+    Route::get('penerimaanstok/{id}/delete', [PenerimaanStokController::class, 'delete'])->name('penerimaanstok.delete');
+    Route::get('penerimaanstok/get', [PenerimaanStokController::class, 'get'])->name('penerimaanstok.get');
+    Route::get('penerimaanstok/index', [PenerimaanStokController::class, 'index']);
+    Route::resource('penerimaanstok', PenerimaanStokController::class);
+    
+    Route::get('pengeluaranstok/report', [PengeluaranStokController::class, 'report'])->name('pengeluaranstok.report');
+    Route::get('pengeluaranstok/{id}/delete', [PengeluaranStokController::class, 'delete'])->name('pengeluaranstok.delete');
+    Route::get('pengeluaranstok/get', [PengeluaranStokController::class, 'get'])->name('pengeluaranstok.get');
+    Route::get('pengeluaranstok/index', [PengeluaranStokController::class, 'index']);
+    Route::resource('pengeluaranstok', PengeluaranStokController::class);
+
     Route::get('pengeluarantrucking/report', [PengeluaranTruckingController::class, 'report'])->name('pengeluarantrucking.report');
     Route::get('pengeluarantrucking/{id}/delete', [PengeluaranTruckingController::class, 'delete'])->name('pengeluarantrucking.delete');
     Route::get('pengeluarantrucking/get', [PengeluaranTruckingController::class, 'get'])->name('pengeluarantrucking.get');
@@ -508,6 +526,11 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('penerimaantruckingdetail', PenerimaanTruckingDetailController::class);
 
+    Route::get('penerimaanstokheader/get', [PenerimaanTruckingHeaderController::class, 'get'])->name('penerimaanstokheader.get');
+    Route::get('penerimaanstokheader/export', [PenerimaanTruckingHeaderController::class, 'export'])->name('penerimaanstokheader.export');
+    Route::get('penerimaanstokheader/report', [PenerimaanTruckingHeaderController::class, 'report'])->name('penerimaanstokheader.report');
+    Route::resource('penerimaanstokheader', PenerimaanStokHeaderController::class);
+    
     Route::get('jurnalumumheader/index', [JurnalUmumHeaderController::class, 'index']);
     Route::get('jurnalumumheader/{id}/delete', [JurnalUmumHeaderController::class, 'delete'])->name('jurnalumumheader.delete');
     Route::get('jurnalumumheader/get', [JurnalUmumHeaderController::class, 'get'])->name('jurnalumumheader.get');

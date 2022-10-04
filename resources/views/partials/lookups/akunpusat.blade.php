@@ -1,9 +1,8 @@
-<table id="akunPusatLookup" style="width: 100%;"></table>
+<table id="akunPusatLookup" class="lookup-grid" style="width: 100%;"></table>
 <div id="akunPusatLookupPager"></div>
 
-@push('scripts')
 <script>
-  let akunPusatLookup = $('#akunPusatLookup').jqGrid({
+  $('#akunPusatLookup').jqGrid({
       url: `{{ config('app.api_url') . 'akunpusat' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -98,7 +97,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#akunPusatLookupPager'),
+      // pager: $('#akunPusatLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -112,8 +111,7 @@
       },
       onSelectRow: function(id) {
         activeGrid = $(this)
-        id = $(this).jqGrid('getCell', id, 'rn') - 1
-        indexRow = id
+        indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
         page = $(this).jqGrid('getGridParam', 'page')
         let rows = $(this).jqGrid('getGridParam', 'postData').limit
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
@@ -161,20 +159,19 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupAkunPusat').prev().width())
+        $(this).setGridWidth($('#lookup').prev().width())
         setHighlight($(this))
       }
     })
 
-    // .jqGrid('filterToolbar', {
-    //   stringResult: true,
-    //   searchOnEnter: false,
-    //   defaultSearch: 'cn',
-    //   groupOp: 'AND',
-    //   disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
-    //   beforeSearch: function() {
+    .jqGrid('filterToolbar', {
+      stringResult: true,
+      searchOnEnter: false,
+      defaultSearch: 'cn',
+      groupOp: 'AND',
+      disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
+      beforeSearch: function() {
 
-    //   },
-    // })
+      },
+    })
 </script>
-@endpush
