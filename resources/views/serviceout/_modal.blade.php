@@ -28,8 +28,11 @@
                                     TANGGAL BUKTI <span class="text-danger">*</span>
                                 </label>
                             </div>
-                            <div class="col-12 col-sm-4 col-md-4">
-                                <input type="text" name="tglbukti" class="form-control datepicker">
+                            <div class="col-12 col-sm-4 col-md-4" id="tglbukti">
+                                @php
+                                $tglbukti = date('d-m-Y');
+                                @endphp
+                                <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
                             </div>
                         </div>
 
@@ -40,30 +43,22 @@
                                 </label>
                             </div>
                             <div class="col-8 col-md-10">
-                                <div class="input-group">
-                                    <input type="hidden" name="trado_id">
-                                    <input type="text" name="trado" class="form-control">
-                                    <div class="input-group-append">
-                                        <button id="lookupTradoToggler" class="btn btn-secondary" type="button">...</button>
-                                    </div>
-                                </div>
-                                <div class="row position-absolute" id="lookupTrado" style="z-index: 1;">
-                                    <div class="col-12">
-                                        <div id="lookupTrado" class="shadow-lg">
-                                            @include('partials.lookups.trado')
-                                        </div>
-                                    </div>
-                                </div>
+                                <input type="hidden" name="trado_id">
+                                <input type="text" name="trado" class="form-control trado-lookup">
                             </div>
                         </div>
 
                         <div class="row form-group">
-                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                            <div class="col-12 col-sm-2 col-md-2 col-form-label">
                                 <label>
-                                    TGL KELUAR <span class="text-danger">*</span></label>
+                                    TANGGAL KELUAR <span class="text-danger">*</span>
+                                </label>
                             </div>
-                            <div class="col-12 col-sm-9 col-md-10">
-                                <input type="text" name="tglkeluar" class="form-control datepicker">
+                            <div class="col-12 col-sm-4 col-md-4" id="tglkeluar">
+                                @php
+                                $tglkeluar = date('d-m-Y');
+                                @endphp
+                                <input type="text" name="tglkeluar" value="{{$tglkeluar}}" id="tglkeluar" class="form-control datepicker">
                             </div>
                         </div>
 
@@ -95,22 +90,25 @@
                                     <td>
                                         <div class="row form-group">
                                             <div class="col-12 col-md-12" id="servicein_nobukti">
-                                                <div class="input-group">
-                                                    <!-- <input type="hidden" name="Servicein_nobukti"> -->
-                                                    <input type="text" name="servicein_nobukti" class="form-control">
-                                                    <div class="input-group-append">
-                                                        <button id="lookupServiceinToggler" class="btn btn-secondary" type="button">...</button>
-                                                    </div>
-                                                </div>
-                                                <div class="row position-absolute" id="lookupServicein" style="z-index: 1;">
-                                                    <div class="col-12">
-                                                        <div id="lookupServicein" class="shadow-lg">
-                                                            @include('partials.lookups.servicein')
-                                                        </div>
-                                                    </div>
+                                                <div class="col-8 col-md-10">
+                                                    <input type="text" name="servicein_nobukti" class="form-control servicein-lookup">
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <!-- <div class="row form-group">
+                                            <div class="col-12 col-md-12" id="servicein_nobukti">
+                                                <div class="input-group">
+                                                    <label>
+                                                        TRADO <span class="text-danger">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-8 col-md-10">
+                                                    <input type="hidden" name="trado_id">
+                                                    <input type="text" name="trado" class="form-control trado-lookup">
+                                                </div>
+                                            </div>
+                                        </div> -->
                                     </td>
 
 
@@ -171,7 +169,9 @@
             let action = form.data('action')
             let data = $('#crudForm').serializeArray()
 
-            data.push({
+            unformatAutoNumeric(data)
+
+             data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
             })
@@ -234,9 +234,9 @@
                     $('#crudModal').modal('hide')
                     $('#crudModal').find('#crudForm').trigger('reset')
 
-                    $('#jqGrid').trigger('reloadGrid', {
+                    $('#jqGrid').jqGrid('setGridParam', {
                         page: response.data.page
-                    })
+                    }).trigger('reloadGrid');
 
                     if (response.data.grp == 'FORMAT') {
                         updateFormat(response.data)
@@ -262,12 +262,12 @@
 
     $("#addrow").click(function() {
         let rowCount = $('#row').length;
-
+        let barisCount = $('.baris').length;
         if (rowCount > 0) {
             let clone = $('#row').clone();
             clone.find('input').val('');
 
-            baris = parseInt(baris) + 1;
+            baris = parseInt(barisCount) + 1;
             clone.find('.baris').text(baris);
             $('table #table_body').append(clone);
 
@@ -296,7 +296,7 @@
     Simpan
   `)
         form.data('action', 'add')
-        $('#crudModalTitle').text('Add Service In')
+        $('#crudModalTitle').text('Add Service Out')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
@@ -337,21 +337,13 @@
               
               <td>
                     <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <div class="input-group">
-                          <input type="text" name="servicein_nobukti" value="${value.servicein_nobukti}" class="form-control">
-                          <div class="input-group-append">
-                            <button id="lookupServiceinToggler" class="btn btn-secondary" type="button">...</button>
-                          </div>
-                        </div>
-                        <div class="row position-absolute" id="lookupServicein" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupServicein" class="shadow-lg">
-                              @include('partials.lookups.servicein')
+                        <div class="col-12 col-md-12" id="servicein_nobukti">
+                          
+
+                            <div class="col-8 col-md-10">
+                                <input type="text" name="servicein_nobukti" value="${value.servicein_nobukti}" class="form-control servicein-lookup">
                             </div>
-                          </div>
                         </div>
-                      </div>
                     </div>
                   </td>
 
@@ -404,21 +396,17 @@
               
               <td>
                     <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <div class="input-group">
-                          <input type="text" name="servicein_nobukti" value="${value.servicein_nobukti}" class="form-control">
-                          <div class="input-group-append">
-                            <button id="lookupServiceinToggler" class="btn btn-secondary" type="button">...</button>
-                          </div>
-                        </div>
-                        <div class="row position-absolute" id="lookupServicein" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupServicein" class="shadow-lg">
-                              @include('partials.lookups.servicein')
+                        <div class="col-12 col-md-12" id="servicein_nobukti">
+                            <div class="input-group">
+                                <label>
+                                    NOBUKTI SERVICEIN <span class="text-danger">*</span>
+                                </label>
                             </div>
-                          </div>
+
+                            <div class="col-8 col-md-10">
+                                <input type="text" name="servicein_nobukti" value="${value.servicein_nobukti} class="form-control servicein-lookup">
+                            </div>
                         </div>
-                      </div>
                     </div>
                   </td>
 

@@ -1,10 +1,10 @@
-<table id="akunPusatLookup" style="width: 100%;"></table>
+<table id="akunPusatLookup" class="lookup-grid"></table>
 <div id="akunPusatLookupPager"></div>
 
 @push('scripts')
 <script>
-  let akunPusatLookup = $('#akunPusatLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'akunpusat' }}`,
+  $('#akunPusatLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'akunPusat' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -166,15 +166,5 @@
       }
     })
 
-    // .jqGrid('filterToolbar', {
-    //   stringResult: true,
-    //   searchOnEnter: false,
-    //   defaultSearch: 'cn',
-    //   groupOp: 'AND',
-    //   disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
-    //   beforeSearch: function() {
-
-    //   },
-    // })
 </script>
 @endpush
