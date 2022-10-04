@@ -71,6 +71,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
+      pager: $('#userLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
