@@ -35,40 +35,40 @@
           align: 'left'
         },
         {
-            label: 'STATUS AKTIF',
-            name: 'statusaktif',
-            stype: 'select',
-            align: 'left'
+          label: 'STATUS AKTIF',
+          name: 'statusaktif',
+          stype: 'select',
+          align: 'left'
         },
         {
-            label: 'PARENT',
-            name: 'parent',
-            align: 'left'
+          label: 'PARENT',
+          name: 'parent',
+          align: 'left'
         },
         {
-            label: 'STATUS COA',
-            name: 'statuscoa',
-            align: 'left'
+          label: 'STATUS COA',
+          name: 'statuscoa',
+          align: 'left'
         },
         {
-            label: 'STATUS ACCOUNT PAYABLE',
-            name: 'statusaccountpayable',
-            align: 'left'
+          label: 'STATUS ACCOUNT PAYABLE',
+          name: 'statusaccountpayable',
+          align: 'left'
         },
         {
-            label: 'STATUS NERACA',
-            name: 'statusneraca',
-            align: 'left'
+          label: 'STATUS NERACA',
+          name: 'statusneraca',
+          align: 'left'
         },
         {
-            label: 'STATUS LABA RUGI',
-            name: 'statuslabarugi',
-            align: 'left'
+          label: 'STATUS LABA RUGI',
+          name: 'statuslabarugi',
+          align: 'left'
         },
         {
-            label: 'COAMAIN',
-            name: 'coamain',
-            align: 'left'
+          label: 'COAMAIN',
+          name: 'coamain',
+          align: 'left'
         },
         {
           label: 'MODIFIEDBY',
@@ -97,7 +97,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      // pager: $('#akunPusatLookupPager'),
+      pager: $('#akunpusatLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -111,7 +111,8 @@
       },
       onSelectRow: function(id) {
         activeGrid = $(this)
-        indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
+        id = $(this).jqGrid('getCell', id, 'rn') - 1
+        indexRow = id
         page = $(this).jqGrid('getGridParam', 'page')
         let rows = $(this).jqGrid('getGridParam', 'postData').limit
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
@@ -119,32 +120,38 @@
       loadBeforeSend: (jqXHR) => {
         jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      onSelectRow: function(id) {
+        activeGrid = $(this)
+        indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
+        page = $(this).jqGrid('getGridParam', 'page')
+        let rows = $(this).jqGrid('getGridParam', 'postData').limit
+        if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
+      },
       loadComplete: function(data) {
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
-          initResize($(this))
 
-          if (indexRow - 1 > $('#akunPusatLookup').getGridParam().reccount) {
-            indexRow = $('#akunPusatLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#akunpusatLookup').getGridParam().reccount) {
+            indexRow = $('#akunpusatLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#akunPusatLookup [id="${$('#akunPusatLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#akunpusatLookup [id="${$('#akunpusatLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#akunPusatLookup [id="${$('#akunPusatLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#akunpusatLookup [id="${$('#akunpusatLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#akunPusatLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#akunPusatLookup [id="` + $('#akunPusatLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#akunpusatLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#akunpusatLookup [id="` + $('#akunpusatLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#akunPusatLookup').setSelection($('#akunPusatLookup').getDataIDs()[indexRow])
+            $('#akunpusatLookup').setSelection($('#akunpusatLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -154,10 +161,6 @@
         totalRecord = $(this).getGridParam("records")
         limit = $(this).jqGrid('getGridParam', 'postData').limit
         postData = $(this).jqGrid('getGridParam', 'postData')
-
-        $('.clearsearchclass').click(function() {
-          clearColumnSearch()
-        })
 
         $(this).setGridWidth($('#lookup').prev().width())
         setHighlight($(this))

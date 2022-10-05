@@ -3,7 +3,7 @@
 
 @push('scripts')
 <script>
-  $('#pelangganLookup').jqGrid({
+   $('#pelangganLookup').jqGrid({
       url: `{{ config('app.api_url') . 'pelanggan' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -110,7 +110,6 @@
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
-          initResize($(this))
 
           if (indexRow - 1 > $('#pelangganLookup').getGridParam().reccount) {
             indexRow = $('#pelangganLookup').getGridParam().reccount - 1
