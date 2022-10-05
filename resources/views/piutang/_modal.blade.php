@@ -35,6 +35,7 @@
                 <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
               </div>
             </div>
+            
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
@@ -61,12 +62,39 @@
               <thead>
                 <tr>
                   <th width="50">No</th>
-                  <th>Keterangan</th>
                   <th>Nominal</th>
+                  <th>Keterangan</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
+<<<<<<< HEAD
               <tbody>
+=======
+              <tbody id="table_body" class="form-group">
+
+                <tr id="row">
+                  <td>
+                    <div class="baris">1</div>
+                  </td>
+                  <td>
+                    <div class="row form-group">
+                      <div class="col-12 col-md-12">
+                        <input type="text" name="nominal_detail[]" class="form-control autonumeric">
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="row form-group">
+                      <div class="col-12 col-md-12">
+                        <input type="text" name="keterangan_detail[]" class="form-control">
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                  </td>
+                </tr>
+>>>>>>> c9b5d77a471ec14bc9b3612954751208a6b3a36d
 
               </tbody>
               <tfoot>

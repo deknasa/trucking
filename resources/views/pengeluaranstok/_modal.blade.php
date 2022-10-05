@@ -10,7 +10,6 @@
         </div>
         <form action="" method="post">
           <div class="modal-body">
-            <input type="hidden" name="id">
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -23,42 +22,78 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  GROUP <span class="text-danger">*</span>
+                  kodepengeluaran <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="grp" class="form-control">
+                <input type="text" name="kodepengeluaran" class="form-control">
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  SUBGROUP <span class="text-danger">*</span>
+                  keterangan <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="subgrp" class="form-control">
+                <input type="text" name="keterangan" class="form-control">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  COA <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <div class="input-group">
+                  <input type="text" name="coa" class="form-control akunpusat-lookup">
+                </div>
+              </div>
+              {{-- <div class="col-8 col-md-10">
+                <div class="input-group">
+                  <input type="text" name="coa" class="form-control">
+                  <div class="input-group-append">
+                    <button id="lookupAkunPusatToggler" class="btn btn-secondary" type="button">...</button>
+                  </div>
+                </div>
+                <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 1;">
+                  <div class="col-12">
+                    <div id="lookupAkunPusat" class="shadow-lg">
+                      @include('partials.lookups.akunpusat')
+                    </div>
+                  </div>
+                </div>
+              </div> --}}
+            </div>
+
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  status format <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="statusformat" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS FORMAT --</option>
+                </select>
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  NAMA PARAMETER <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="text" class="form-control">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  MEMO <span class="text-danger">*</span>
+                  status hitung stok <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="memo" class="form-control">
+                <select name="statushitungstok" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS FORMAT --</option>
+                </select>
               </div>
             </div>
+           
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -79,7 +114,6 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
-  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -88,7 +122,7 @@
       let method
       let url
       let form = $('#crudForm')
-      let parameterId = form.find('[name=id]').val()
+      let pengeluaranstokId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
@@ -120,19 +154,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}parameter`
+          url = `${apiUrl}pengeluaranstok`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}parameter/${parameterId}`
+          url = `${apiUrl}pengeluaranstok/${pengeluaranstokId}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}parameter/${parameterId}`
+          url = `${apiUrl}pengeluaranstok/${pengeluaranstokId}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}parameter`
+          url = `${apiUrl}pengeluaranstok`
           break;
       }
 
@@ -153,7 +187,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').trigger('reloadGrid', {
+            page: response.data.page
+          })
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -174,6 +210,15 @@
         $(this).removeAttr('disabled')
       })
     })
+
+    $('.numeric').inputmask('integer', {
+			alias: 'numeric',
+			groupSeparator: '',
+			autoGroup: true,
+			digitsOptional: false,
+			allowMinus: false,
+			placeholder: '',
+		}).css('text-align', 'right');
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -188,11 +233,9 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    
-    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
-  function createParameter() {
+  function createPengeluaranStok() {
     let form = $('#crudForm')
 
     form.trigger('reset')
@@ -201,13 +244,16 @@
     Simpan
   `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Create Parameter')
+    form.find(`.sometimes`).show()
+    $('#crudModalTitle').text('Create Pengeluaran Stok')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    setStatusFormatListOptions(form)
+    setStatusHitungListOptions(form)
   }
 
-  function editParameter(parameterId) {
+  function editPengeluaranStok(pengeluaranstokId) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -216,27 +262,24 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-    $('#crudModalTitle').text('Edit Parameter')
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('Edit Pengeluaran Stok')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    $.ajax({
-      url: `${apiUrl}parameter/${parameterId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          form.find(`[name="${index}"]`).val(value)
-        })
-      }
-    })
+    Promise
+      .all([
+        setStatusFormatListOptions(form),
+        setStatusHitungListOptions(form)
+      ])
+      .then(() => {
+        showPengeluaranStok(form, pengeluaranstokId)
+      })
+    
   }
 
-  function deleteParameter(parameterId) {
+  function deletePengeluaranStok(pengeluaranstokId) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -245,33 +288,102 @@
     <i class="fa fa-save"></i>
     Hapus
   `)
-    form.find('[name]').addClass('disabled')
-    $('#crudModalTitle').text('Delete Parameter')
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('Delete Pengeluaran Stok')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    Promise
+      .all([
+        setStatusFormatListOptions(form),
+        setStatusHitungListOptions(form)
+      ])
+      .then(() => {
+        showPengeluaranStok(form, pengeluaranstokId)
+      })
+  }
 
-    initDisabled()
+  const setStatusFormatListOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusformat]').empty()
+      relatedForm.find('[name=statusformat]').append(
+        new Option('-- PILIH STATUS FORMAT --', '', false, true)
+      ).trigger('change')
 
-    $.ajax({
-      url: `${apiUrl}parameter/${parameterId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          form.find(`[name="${index}"]`).val(value)
-        })
-      }
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          limit: 0,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "PENGELUARAN STOK"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusFormatList => {
+            console.log(statusFormatList);
+            let option = new Option(statusFormatList.text, statusFormatList.id)
+
+            relatedForm.find('[name=statusformat]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+  const setStatusHitungListOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statushitungstok]').empty()
+      relatedForm.find('[name=statushitungstok]').append(
+        new Option('-- PILIH STATUS HITUNG --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          limit: 0,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS HITUNG STOK"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusHitungList => {
+            console.log(statusHitungList);
+            let option = new Option(statusHitungList.text, statusHitungList.id)
+
+            relatedForm.find('[name=statushitungstok]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
     })
   }
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
-        url: `${apiUrl}parameter/field_length`,
+        url: `${apiUrl}pengeluaranstok/field_length`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -293,20 +405,24 @@
     }
   }
 
-  function updateFormat(parameter) {
+  function showPengeluaranStok(form, pengeluaranstokId) {
     $.ajax({
-      url: `${appUrl}/format`,
-      method: 'PATCH',
+      url: `${apiUrl}pengeluaranstok/${pengeluaranstokId}`,
+      method: 'GET',
       dataType: 'JSON',
-      data: {
-        key: parameter.subgrp,
-        value: parameter.text
+      headers: {
+        Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-        // 
-      },
-      error: error => {
-        showDialog(error.statusText)
+        $.each(response.data, (index, value) => {
+          let element = form.find(`[name="${index}"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } else {
+            element.val(value)
+          }
+        })
       }
     })
   }
