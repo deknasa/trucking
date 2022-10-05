@@ -10,9 +10,10 @@
   </div>
 </div>
 
-@include('servicein._modal')
 <!-- Detail -->
 @include('servicein._detail')
+
+@include('servicein._modal')
 
 @push('scripts')
 <script>
@@ -33,244 +34,97 @@
   let autoNumericElements = []
 
   $(document).ready(function() {
-    $('#lookupTrado').hide()
-    $('#lookupMekanik').hide()
- 
-    $('#crudModal').on('shown.bs.modal', function() {
-      tradoLookup.setGridWidth($('#lookupTrado').prev().width())
-      mekanikLookup.setGridWidth($('#lookupMekanik').prev().width())
 
-      if (detectDeviceType() == 'desktop') {
+     $('#lookup').hide()
 
-        tradoLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-            console.log(rowData)
-
-            $('#crudForm [name=trado_id]').first().val(rowData.id)
-            $('#crudForm [name=trado]').first().val(rowData.keterangan)
-            $('#lookupTrado').hide()
-          }
-        })
-
-        mekanikLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-            console.log(rowData)
-
-            $('#crudForm [name=mekanik_id]').first().val(rowData.id)
-            $('#crudForm [name=mekanik]').first().val(rowData.namamekanik)
-            $('#lookupMekanik').hide()
+        $('.trado-lookup').lookup({
+          title: 'trado Lookup',
+          fileName: 'trado',
+          onSelectRow: (trado, element) => {
+            $('#crudForm [name=trado_id]').first().val(trado.id)
+            element.val(trado.keterangan)
 
           }
         })
 
-
-        //mobile
-      } else if (detectDeviceType() == 'mobile') {
-        tradoLookup.setGridParam({
-          onSelectRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=trado_id]').first().val(rowData.id)
-            $('#crudForm [name=trado]').first().val(rowData.namatrado)
-
-            $('#lookupTrado').hide()
+        $('.mekanik-lookup').lookup({
+          title: 'mekanik Lookup',
+          fileName: 'mekanik',
+          onSelectRow: (mekanik, element) => {
+            $('#crudForm [name=mekanik_id]').first().val(mekanik.id)
+            element.val(mekanik.namamekanik)
           }
         })
 
-        mekanikLookup.setGridParam({
-          onSelectRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=mekanik_id]').first().val(rowData.id)
-            $('#crudForm [name=mekanik]').first().val(rowData.namamekanik)
-
-            $('#lookupMekanik').hide()
-          }
+        $('#crudModal').on('shown.bs.modal', function() {
+          activeGrid = '#jqGrid'
         })
 
-      }
+        $("#jqGrid").jqGrid({
+            url: `{{ config('app.api_url') . 'servicein' }}`,
+            mtype: "GET",
+            styleUI: 'Bootstrap4',
+            iconSet: 'fontAwesome',
+            datatype: "json",
+            colModel: [{
+                label: 'ID',
+                name: 'id',
+                align: 'right',
+                width: '50px'
+              },
+              {
+                label: 'NO BUKTI',
+                name: 'nobukti',
+                align: 'left'
+              },
+              {
+                label: 'TANGGAL BUKTI',
+                name: 'tglbukti',
+                align: 'left',
+                formatter: "date",
+                formatoptions: {
+                  srcformat: "ISO8601Long",
+                  newformat: "d-m-Y"
+                }
+              },
+              {
+                label: 'TRADO',
+                name: 'trado_id',
+                align: 'left'
+              },
+              {
+                label: 'TANGGAL MASUK',
+                name: 'tglmasuk',
+                align: 'left',
+                formatter: "date",
+                formatoptions: {
+                  srcformat: "ISO8601Long",
+                  newformat: "d-m-Y"
+                }
+              },
+              {
+                label: 'KETERANGAN',
+                name: 'keterangan',
+                align: 'left'
+              },
 
-      $('#crudModal').find("[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit").first().focus()
-    })
-
-    $('#crudModal').on('hidden.bs.modal', function() {
-      activeGrid = '#jqGrid'
-    })
-
-
-    //tampil lookup ketika klik toggler
-    $('#lookupTradoToggler').click(function(event) {
-      tradoLookup.setGridWidth($('#lookupTrado').prev().width())
-      $('#lookupTrado').toggle()
-
-      $('#lookupMekanik').hide()
-
-      if (detectDeviceType() != 'desktop') {
-        tradoLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      if (detectDeviceType() == 'desktop') {
-        activeGrid = tradoLookup
-      }
-    })
-
-    $('#lookupMekanikToggler').click(function(event) {
-      mekanikLookup.setGridWidth($('#lookupMekanik').prev().width())
-      $('#lookupMekanik').toggle()
-
-      $('#lookupTrado').hide()
-
-      if (detectDeviceType() != 'desktop') {
-        mekanikLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      if (detectDeviceType() == 'desktop') {
-        activeGrid = mekanikLookup
-      }
-    })
-
-    //untuk auto search dari kolom input
-    $('[name=trado]').on('input', function(event) {
-      $('#lookupTrado').show()
-
-      if (detectDeviceType() != 'desktop') {
-        tradoLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      delay(() => {
-        let postData = tradoLookup.getGridParam('postData')
-        let colModels = tradoLookup.getGridParam('colModel')
-        let rules = []
-
-        colModels = colModels.filter((colModel) => {
-          return colModel.name !== 'rn'
-        })
-
-        colModels.forEach(colModel => {
-          rules.push({
-            field: colModel.name,
-            op: 'cn',
-            data: $(this).val()
-          })
-        });
-
-        postData.filters = JSON.stringify({
-          groupOp: 'OR',
-          rules: rules
-        })
-
-        tradoLookup.trigger('reloadGrid', {
-          page: 1
-        })
-      }, 500)
-    })
-
-    $('[name=mekanik]').on('input', function(event) {
-      $('#lookupMekanik').show()
-
-      if (detectDeviceType() != 'desktop') {
-        mekanikLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      delay(() => {
-        let postData = mekanikLookup.getGridParam('postData')
-        let colModels = mekanikLookup.getGridParam('colModel')
-        let rules = []
-
-        colModels = colModels.filter((colModel) => {
-          return colModel.name !== 'rn'
-        })
-
-        colModels.forEach(colModel => {
-          rules.push({
-            field: colModel.name,
-            op: 'cn',
-            data: $(this).val()
-          })
-        });
-
-        postData.filters = JSON.stringify({
-          groupOp: 'OR',
-          rules: rules
-        })
-
-        mekanikLookup.trigger('reloadGrid', {
-          page: 1
-        })
-      }, 500)
-    })
-
-   
-  })
-
-
-  $("#jqGrid").jqGrid({
-      url: `{{ config('app.api_url') . 'servicein' }}`,
-      mtype: "GET",
-      styleUI: 'Bootstrap4',
-      iconSet: 'fontAwesome',
-      datatype: "json",
-      colModel: [{
-          label: 'ID',
-          name: 'id',
-          align: 'right',
-          width: '50px'
-        },
-        {
-          label: 'NO BUKTI',
-          name: 'nobukti',
-          align: 'left'
-        },
-        {
-          label: 'TANGGAL BUKTI',
-          name: 'tglbukti',
-          align: 'left',
-          formatter: "date",
-          formatoptions: {
-            srcformat: "ISO8601Long",
-            newformat: "d-m-Y"
-          }
-        },
-        {
-          label: 'TRADO',
-          name: 'trado_id',
-          align: 'left'
-        },
-        {
-          label: 'TANGGAL MASUK',
-          name: 'tglmasuk',
-          align: 'left',
-          formatter: "date",
-          formatoptions: {
-            srcformat: "ISO8601Long",
-            newformat: "d-m-Y"
-          }
-        },
-        {
-          label: 'KETERANGAN',
-          name: 'keterangan',
-          align: 'left'
-        },
-       
-        {
-          label: 'MODIFIEDBY',
-          name: 'modifiedby',
-          align: 'left'
-        },
-        {
-          label: 'UPDATEDAT',
-          name: 'updated_at',
-          align: 'left',
-          formatter: "date",
-          formatoptions: {
-            srcformat: "ISO8601Long",
-            newformat: "d-m-Y H:i:s"
-          }
-        },
-      ],
-        autowidth: true,
+              {
+                label: 'MODIFIEDBY',
+                name: 'modifiedby',
+                align: 'left'
+              },
+              {
+                label: 'UPDATEDAT',
+                name: 'updated_at',
+                align: 'left',
+                formatter: "date",
+                formatoptions: {
+                  srcformat: "ISO8601Long",
+                  newformat: "d-m-Y H:i:s"
+                }
+              },
+            ],
+            autowidth: true,
         shrinkToFit: false,
         height: 350,
         rowNum: 10,
@@ -317,7 +171,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          triggerClick = true  
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -365,35 +219,43 @@
       })
 
       .customPager({
-      buttons: [{
-          id: 'add',
-          innerHTML: '<i class="fa fa-plus"></i> ADD',
-          class: 'btn btn-primary btn-sm mr-1',
-          onClick: function(event) {
-            createServiceIn()
-          }
-        },
-        {
-          id: 'edit',
-          innerHTML: '<i class="fa fa-pen"></i> EDIT',
-          class: 'btn btn-success btn-sm mr-1',
-          onClick: function(event) {
-            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-            editServiceIn(selectedId)
-          }
-        },
-        {
-          id: 'delete',
-          innerHTML: '<i class="fa fa-trash"></i> DELETE',
-          class: 'btn btn-danger btn-sm mr-1',
-          onClick: () => {
-            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-            deleteServiceIn(selectedId)
-          }
-        },
-      ]
+        buttons: [{
+            id: 'add',
+            innerHTML: '<i class="fa fa-plus"></i> ADD',
+            class: 'btn btn-primary btn-sm mr-1',
+            onClick: function(event) {
+              createServicein()
+            }
+          },
+          {
+            id: 'edit',
+            innerHTML: '<i class="fa fa-pen"></i> EDIT',
+            class: 'btn btn-success btn-sm mr-1',
+            onClick: function(event) {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                editServicein(selectedId)
+              }
+            }
+          },
+          {
+            id: 'delete',
+            innerHTML: '<i class="fa fa-trash"></i> DELETE',
+            class: 'btn btn-danger btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                deleteServicein(selectedId)
+              }
+            }
+          },
+        ]
 
-    })
+      })
 
     /* Append clear filter button */
     loadClearFilter()
@@ -424,100 +286,206 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      if (!`{{ $myAuth->hasPermission('servicein', 'store') }}`) {
-    $('#add').addClass('ui-disabled')
-  }
-
-  if (!`{{ $myAuth->hasPermission('servicein', 'update') }}`) {
-    $('#edit').addClass('ui-disabled')
-  }
-
-  if (!`{{ $myAuth->hasPermission('servicein', 'destroy') }}`) {
-    $('#delete').addClass('ui-disabled')
-  }
-
-  if (!`{{ $myAuth->hasPermission('servicein', 'export') }}`) {
-    $('#export').addClass('ui-disabled')
-  }
-
-  if (!`{{ $myAuth->hasPermission('servicein', 'report') }}`) {
-    $('#report').addClass('ui-disabled')
-  }
-
-  $('#rangeModal').on('shown.bs.modal', function() {
-    if (autoNumericElements.length > 0) {
-      $.each(autoNumericElements, (index, autoNumericElement) => {
-        autoNumericElement.remove()
-      })
+    if (!`{{ $myAuth->hasPermission('servicein', 'store') }}`) {
+      $('#add').addClass('ui-disabled')
     }
 
-    $('#formRange [name]:not(:hidden)').first().focus()
+    if (!`{{ $myAuth->hasPermission('servicein', 'update') }}`) {
+      $('#edit').addClass('ui-disabled')
+    }
 
-    $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
-    $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-    $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-    $('#formRange [name=sampai]').val(totalRecord)
+    if (!`{{ $myAuth->hasPermission('servicein', 'destroy') }}`) {
+      $('#delete').addClass('ui-disabled')
+    }
 
-    autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-      digitGroupSeparator: '.',
-      decimalCharacter: ',',
-      allowDecimalPadding: false,
-      minimumValue: 1,
-      maximumValue: totalRecord
+    if (!`{{ $myAuth->hasPermission('servicein', 'export') }}`) {
+      $('#export').addClass('ui-disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('servicein', 'report') }}`) {
+      $('#report').addClass('ui-disabled')
+    }
+
+    $('#rangeModal').on('shown.bs.modal', function() {
+      if (autoNumericElements.length > 0) {
+        $.each(autoNumericElements, (index, autoNumericElement) => {
+          autoNumericElement.remove()
+        })
+      }
+
+      $('#formRange [name]:not(:hidden)').first().focus()
+
+      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
+      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
+      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+      $('#formRange [name=sampai]').val(totalRecord)
+
+      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
+        digitGroupSeparator: '.',
+        decimalCharacter: ',',
+        allowDecimalPadding: false,
+        minimumValue: 1,
+        maximumValue: totalRecord
+      })
+    })
+
+    $('#formRange').submit(function(event) {
+      event.preventDefault()
+
+      let params
+      let submitButton = $(this).find('button:submit')
+
+      submitButton.attr('disabled', 'disabled')
+
+      /* Set params value */
+      for (var key in postData) {
+        if (params != "") {
+          params += "&";
+        }
+        params += key + "=" + encodeURIComponent(postData[key]);
+      }
+
+      let formRange = $('#formRange')
+      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+      params += `&offset=${offset}&limit=${limit}`
+
+      if ($('#rangeModal').data('action') == 'export') {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `{{ config('app.api_url') }}servicein/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+        xhr.responseType = 'arraybuffer'
+
+        xhr.onload = function(e) {
+          if (this.status === 200) {
+            if (this.response !== undefined) {
+              let blob = new Blob([this.response], {
+                type: "application/vnd.ms-excel"
+              })
+              let link = document.createElement('a')
+
+              link.href = window.URL.createObjectURL(blob)
+              link.download = `laporanservicein${(new Date).getTime()}.xlsx`
+              link.click()
+
+              submitButton.removeAttr('disabled')
+            }
+          }
+        }
+
+        xhr.send()
+      } else if ($('#rangeModal').data('action') == 'report') {
+        window.open(`{{ route('servicein.report') }}?${params}`)
+
+        submitButton.removeAttr('disabled')
+      }
     })
   })
 
-  $('#formRange').submit(function(event) {
-    event.preventDefault()
-
-    let params
-    let submitButton = $(this).find('button:submit')
-
-    submitButton.attr('disabled', 'disabled')
-
-    /* Set params value */
-    for (var key in postData) {
-      if (params != "") {
-        params += "&";
-      }
-      params += key + "=" + encodeURIComponent(postData[key]);
-    }
-
-    let formRange = $('#formRange')
-    let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-    let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
-    params += `&offset=${offset}&limit=${limit}`
-
-    if ($('#rangeModal').data('action') == 'export') {
-      let xhr = new XMLHttpRequest()
-      xhr.open('GET', `{{ config('app.api_url') }}servicein/export?${params}`, true)
-      xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
-      xhr.responseType = 'arraybuffer'
-
-      xhr.onload = function(e) {
-        if (this.status === 200) {
-          if (this.response !== undefined) {
-            let blob = new Blob([this.response], {
-              type: "application/vnd.ms-excel"
-            })
-            let link = document.createElement('a')
-
-            link.href = window.URL.createObjectURL(blob)
-            link.download = `laporanservicein${(new Date).getTime()}.xlsx`
-            link.click()
-
-            submitButton.removeAttr('disabled')
-          }
+  const getServiceinLookup = function(fileName) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${appUrl}/lookup/${fileName}`,
+        method: 'GET',
+        dataType: 'html',
+        success: function(response) {
+          resolve(response)
         }
+      })
+    })
+  }
+
+  $.fn.lookup = function(options = null) {
+    this.each(function() {
+      let element = $(this)
+
+      element
+        .wrap('<div class="input-group"></div>')
+        .after(`
+          <div class="input-group-append">
+            <button class="btn btn-primary lookup-toggler" type="button">...</button>
+          </div>
+        `)
+
+      element.siblings('.input-group-append').find('.lookup-toggler').click(function() {
+        activateLookup(element)
+      })
+    })
+
+    function activateLookup(element) {
+      let lookupModal = $(`
+        <div class="modal fade modal-fullscreen" id="lookupModal" tabindex="-1" aria-labelledby="lookupModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <form action="#" id="crudForm">
+              <div class="modal-content">
+                <div class="modal-header bg-primary">
+                  <h5 class="modal-title" id="lookupModalLabel">${options.title}</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      `)
+
+      $('body').append(lookupModal)
+
+      lookupModal.modal('show')
+
+      getServiceinLookup(options.fileName)
+        .then(response => {
+          lookupModal.find('.modal-body').html(response)
+
+          grid = lookupModal.find('.lookup-grid')
+
+          if (detectDeviceType() == 'desktop') {
+            grid.jqGrid('setGridParam', {
+              ondblClickRow: function(id) {
+                let rowData = $(this).getRowData(id)
+                handleSelectedRow(id, lookupModal, element)
+              }
+            })
+          } else if (detectDeviceType() == 'mobile') {
+            grid.jqGrid('setGridParam', {
+              onSelectRow: function(id) {
+                handleSelectedRow(id, lookupModal, element)
+              }
+            })
+          }
+        })
+
+      lookupModal.on('hidden.bs.modal', function() {
+        lookupModal.remove()
+      })
+    }
+
+    function handleSelectedRow(id, lookupModal, element) {
+      if (id !== null) {
+        lookupModal.modal('hide')
+
+        options.onSelectRow(sanitize(grid.getRowData(id)), element)
+      } else {
+        alert('Please select a row')
       }
 
-      xhr.send()
-    } else if ($('#rangeModal').data('action') == 'report') {
-      window.open(`{{ route('servicein.report') }}?${params}`)
-
-      submitButton.removeAttr('disabled')
     }
-  })
+
+    
+    function sanitize(rowData) {
+      Object.keys(rowData).forEach(key => {
+        rowData[key] = rowData[key].replaceAll('<span class="highlight">', '').replaceAll('</span>', '')
+      })
+
+      return rowData
+    }
+
+    return this
+
+  }
 </script>
 @endpush()
 @endsection

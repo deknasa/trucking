@@ -167,6 +167,7 @@
 
   <!-- Custom global script -->
   <script src="{{ asset('js/pager.js') }}"></script>
+  <script src="{{ asset('js/lookup.js') }}"></script>
 
   <script src="{{ asset('mains.js') }}"></script>
 

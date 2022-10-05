@@ -1,9 +1,9 @@
-<table id="mekanikLookup" style="width: 100%;"></table>
+<table id="mekanikLookup" class="lookup-grid"></table>
 <div id="mekanikLookupPager"></div>
 
 @push('scripts')
 <script>
-  let mekanikLookup = $('#mekanikLookup').jqGrid({
+   $('#mekanikLookup').jqGrid({
       url: `{{ config('app.api_url') . 'mekanik' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -127,15 +127,4 @@
       }
     })
 
-    // .jqGrid('filterToolbar', {
-    //   stringResult: true,
-    //   searchOnEnter: false,
-    //   defaultSearch: 'cn',
-    //   groupOp: 'AND',
-    //   disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
-    //   beforeSearch: function() {
-
-    //   },
-    // })
 </script>
-@endpush
