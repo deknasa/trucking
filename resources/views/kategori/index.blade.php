@@ -38,7 +38,7 @@
       title: 'Subkelompok Lookup',
       fileName: 'subkelompok',
       onSelectRow: (subkelompok, element) => {
-        
+        $('#crudForm [name=subkelompok_id]').first().val(subkelompok.id)
         element.val(subkelompok.keterangan)
       }
     })
@@ -373,7 +373,7 @@
             grid.jqGrid('setGridParam', {
               ondblClickRow: function(id) {
                 let rowData = $(this).getRowData(id)
-                $('#crudForm [name=subkelompok_id]').first().val(id)
+                
                 handleSelectedRow(id, lookupModal, element)
               }
             })

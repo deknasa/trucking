@@ -1,10 +1,10 @@
-<table id="bankLookup" class="lookup-grid"></table>
-<div id="bankLookupPager"></div>
+<table id="kotaLookup" class="lookup-grid"></table>
+<div id="kotaLookupPager"></div>
 
 @push('scripts')
 <script>
-  $('#bankLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'bank' }}`,
+ $('#kotaLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'kota' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -16,62 +16,40 @@
           width: '70px'
         },
         {
-          label: 'KODE BANK',
-          name: 'kodebank',
+          label: 'KODE KOTA',
+          name: 'kode kota',
           align: 'left',
         },
         {
-          label: 'NAMA BANK',
-          name: 'namabank',
-          align: 'left'
-        },
-        {
-          label: 'COA',
-          name: 'coa',
-          align: 'left'
-        },
-        {
-          label: 'TIPE',
-          name: 'tipe',
+          label: 'KETERANGAN',
+          name: 'keterangan',
           align: 'left'
         },
         {
             label: 'STATUS AKTIF',
             name: 'statusaktif',
-            align: 'left',
-            width: 100,
-            stype: 'select',
+            // stype: 'select',
             // searchoptions: {
-            //     value: `<?php
-            //             $i = 1;
+            //   value: `<?php
+            //           $i = 1;
 
-            //             foreach ($data['combo'] as $status) :
+            //           foreach ($data['combo'] as $status) :
             //             echo "$status[param]:$status[parameter]";
             //             if ($i !== count($data['combo'])) {
-            //                 echo ";";
+            //               echo ";";
             //             }
             //             $i++;
-            //             endforeach
+            //           endforeach
 
-            //             ?>
+            //           ?>
             // `,
-            //     dataInit: function(element) {
+            //   dataInit: function(element) {
             //     $(element).select2({
-            //         width: 'resolve',
-            //         theme: "bootstrap4"
+            //       width: 'resolve',
+            //       theme: "bootstrap4"
             //     });
-            //     }
+            //   }
             // },
-        },
-        {
-            label: 'STATUS PENERIMAAN',
-            name: 'statusformatpenerimaan',
-            align: 'left'
-        },
-        {
-            label: 'STATUS PENGELUARAN',
-            name: 'statusformatpengeluaran',
-            align: 'left'
         },
         {
           label: 'MODIFIEDBY',
@@ -91,7 +69,7 @@
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
-      height: 450,
+      height: 350,
       rowNum: 10,
       rownumbers: true,
       rownumWidth: 45,
@@ -100,7 +78,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#bankLookupPager'),
+      pager: $('#kotaLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -127,27 +105,28 @@
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
+          initResize($(this))
 
-          if (indexRow - 1 > $('#bankLookup').getGridParam().reccount) {
-            indexRow = $('#bankLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#kotaLookup').getGridParam().reccount) {
+            indexRow = $('#kotaLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#bankLookup [id="${$('#bankLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#kotaLookup [id="${$('#kotaLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#bankLookup [id="${$('#bankLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#kotaLookup [id="${$('#kotaLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#bankLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#bankLookup [id="` + $('#bankLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#kotaLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#kotaLookup [id="` + $('#kotaLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#bankLookup').setSelection($('#bankLookup').getDataIDs()[indexRow])
+            $('#kotaLookup').setSelection($('#kotaLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -162,7 +141,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupBank').prev().width())
+        $(this).setGridWidth($('#lookupkota').prev().width())
         setHighlight($(this))
       }
     })

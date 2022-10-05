@@ -1,9 +1,9 @@
-<table id="cabangLookup" style="width: 100%;"></table>
+<table id="cabangLookup" class="lookup-grid"></table>
 <div id="cabangLookupPager"></div>
 
 @push('scripts')
 <script>
-  let cabangLookup = $('#cabangLookup').jqGrid({
+ $('#cabangLookup').jqGrid({
       url: `{{ config('app.api_url') . 'cabang' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -126,15 +126,14 @@
       }
     })
 
-    // .jqGrid('filterToolbar', {
-    //   stringResult: true,
-    //   searchOnEnter: false,
-    //   defaultSearch: 'cn',
-    //   groupOp: 'AND',
-    //   disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
-    //   beforeSearch: function() {
+    .jqGrid('filterToolbar', {
+      stringResult: true,
+      searchOnEnter: false,
+      defaultSearch: 'cn',
+      groupOp: 'AND',
+      disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
+      beforeSearch: function() {
 
-    //   },
-    // })
+      },
+    })
 </script>
-@endpush

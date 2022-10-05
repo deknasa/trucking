@@ -55,9 +55,7 @@
                   SURAT PENGANTAR <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="suratpengantar_nobukti" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH SURAT PENGANTAR --</option>
-                </select>
+                <input type="text" name="suratpengantar_nobukti" class="form-control suratpengantar-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -66,9 +64,8 @@
                   DARI <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="dari_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH DARI --</option>
-                </select>
+                <input type="hidden" name="dari_id">
+                <input type="text" name="dari" class="form-control dari-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -77,9 +74,8 @@
                   SAMPAI <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="sampai_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH SAMPAI --</option>
-                </select>
+                <input type="hidden" name="sampai_id">
+                <input type="text" name="sampai" class="form-control sampai-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -88,9 +84,8 @@
                   TRADO <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="trado_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH TRADO --</option>
-                </select>
+                <input type="hidden" name="trado_id">
+                <input type="text" name="trado" class="form-control trado-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -99,9 +94,8 @@
                   SUPIR <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="supir_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH SUPIR --</option>
-                </select>
+                <input type="hidden" name="supir_id">
+                <input type="text" name="supir" class="form-control supir-lookup">
               </div>
             </div>
           </div>
@@ -273,11 +267,7 @@
 
     Promise
       .all([
-        setStatusRitasiOptions(form),
-        setSuratPengantarOptions(form),
-        setKotaOptions(form),
-        setTradoOptions(form),
-        setSupirOptions(form)
+        setStatusRitasiOptions(form)
       ])
       .then(() => {
         showRitasi(form, ritasiId)
@@ -301,11 +291,7 @@
 
     Promise
       .all([
-        setStatusRitasiOptions(form),
-        setSuratPengantarOptions(form),
-        setKotaOptions(form),
-        setTradoOptions(form),
-        setSupirOptions(form)
+        setStatusRitasiOptions(form)
       ])
       .then(() => {
         showRitasi(form, ritasiId)
@@ -367,129 +353,6 @@
             let option = new Option(statusRitasi.text, statusRitasi.id)
 
             relatedForm.find('[name=statusritasi]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setSuratPengantarOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=suratpengantar_nobukti]').empty()
-      relatedForm.find('[name=suratpengantar_nobukti]').append(
-        new Option('-- PILIH SURAT PENGANTAR --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}suratpengantar`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(suratPengantar => {
-            let option = new Option(suratPengantar.nobukti, suratPengantar.nobukti)
-
-            relatedForm.find('[name=suratpengantar_nobukti]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setKotaOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=dari_id], [name=sampai_id]').empty()
-      relatedForm.find('[name=dari_id]').append(
-        new Option('-- PILIH DARI --', '', false, true)
-      ).trigger('change')
-      relatedForm.find('[name=sampai_id]').append(
-        new Option('-- PILIH SAMPAI --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}kota`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(kota => {
-            let option = new Option(kota.keterangan, kota.id)
-
-            relatedForm.find('[name=dari_id], [name=sampai_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setTradoOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=trado_id]').empty()
-      relatedForm.find('[name=trado_id]').append(
-        new Option('-- PILIH TRADO --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}trado`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(trado => {
-            let option = new Option(trado.keterangan, trado.id)
-
-            relatedForm.find('[name=trado_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setSupirOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=supir_id]').empty()
-      relatedForm.find('[name=supir_id]').append(
-        new Option('-- PILIH SUPIR --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}supir`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(supir => {
-            let option = new Option(supir.namasupir, supir.id)
-
-            relatedForm.find('[name=supir_id]').append(option).trigger('change')
           });
 
           resolve()

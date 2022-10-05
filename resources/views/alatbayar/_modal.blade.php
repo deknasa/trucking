@@ -77,9 +77,8 @@
                   BANK <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="bank_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH BANK --</option>
-                </select>
+                <input type="hidden" name="bank_id">
+                <input type="text" name="bank" class="form-control bank-lookup">
               </div>
             </div>
           </div>
@@ -229,7 +228,7 @@
 
     setLangsungCairOptions(form)
     setDefaultOptions(form)
-    setBankOptions(form)
+    
   }
 
   function editAlatBayar(alatBayarId) {
@@ -251,7 +250,7 @@
       .all([
         setLangsungCairOptions(form),
         setDefaultOptions(form),
-        setBankOptions(form)
+        
       ])
       .then(() => {
         showAlatBayar(form, alatBayarId)
@@ -277,7 +276,7 @@
       .all([
         setLangsungCairOptions(form),
         setDefaultOptions(form),
-        setBankOptions(form)
+        
       ])
       .then(() => {
         showAlatBayar(form, alatBayarId)
@@ -309,32 +308,7 @@
     }
   }
 
-  const setBankOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=bank_id]').empty()
-      relatedForm.find('[name=bank_id]').append(
-        new Option('-- PILIH BANK --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}bank`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          response.data.forEach(bank => {
-            let option = new Option(bank.namabank, bank.id)
-
-            relatedForm.find('[name=bank_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
+ 
 
   const setDefaultOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
@@ -403,7 +377,7 @@
 
             relatedForm.find('[name=statuslangsungcair]').append(option).trigger('change')
           });
-
+          console.log(response.data)
           resolve()
         }
       })

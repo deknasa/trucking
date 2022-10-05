@@ -1,10 +1,10 @@
-<table id="bankLookup" class="lookup-grid"></table>
-<div id="bankLookupPager"></div>
+<table id="tarifLookup" class="lookup-grid"></table>
+<div id="tarifLookupPager"></div>
 
 @push('scripts')
 <script>
-  $('#bankLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'bank' }}`,
+ $('#tarifLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'tarif' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -13,65 +13,87 @@
           label: 'ID',
           name: 'id',
           align: 'right',
-          width: '70px'
+          width: '50px'
         },
         {
-          label: 'KODE BANK',
-          name: 'kodebank',
-          align: 'left',
+          label: 'TUJUAN',
+          name: 'tujuan',
         },
         {
-          label: 'NAMA BANK',
-          name: 'namabank',
-          align: 'left'
+          label: 'CONTAINER',
+          name: 'container_id',
         },
         {
-          label: 'COA',
-          name: 'coa',
-          align: 'left'
+          label: 'NOMINAL',
+          name: 'nominal',
+          align: 'right',
+          formatter: 'currency',
+          formatoptions: {
+              decimalSeparator: ',',
+              thousandsSeparator: '.'
+          }
         },
         {
-          label: 'TIPE',
-          name: 'tipe',
-          align: 'left'
-        },
-        {
-            label: 'STATUS AKTIF',
-            name: 'statusaktif',
-            align: 'left',
-            width: 100,
-            stype: 'select',
+          label: 'STATUS AKTIF',
+          name: 'statusaktif',
+            // stype: 'select',
             // searchoptions: {
-            //     value: `<?php
-            //             $i = 1;
+            //   value: `<?php
+            //           $i = 1;
 
-            //             foreach ($data['combo'] as $status) :
+            //           foreach ($data['combo'] as $status) :
             //             echo "$status[param]:$status[parameter]";
             //             if ($i !== count($data['combo'])) {
-            //                 echo ";";
+            //               echo ";";
             //             }
             //             $i++;
-            //             endforeach
+            //           endforeach
 
-            //             ?>
+            //           ?>
             // `,
-            //     dataInit: function(element) {
+            //   dataInit: function(element) {
             //     $(element).select2({
-            //         width: 'resolve',
-            //         theme: "bootstrap4"
+            //       width: 'resolve',
+            //       theme: "bootstrap4"
             //     });
-            //     }
+            //   }
             // },
         },
         {
-            label: 'STATUS PENERIMAAN',
-            name: 'statusformatpenerimaan',
-            align: 'left'
+          label: 'TUJUAN ASAL',
+          name: 'tujuanasal',
         },
         {
-            label: 'STATUS PENGELUARAN',
-            name: 'statusformatpengeluaran',
-            align: 'left'
+          label: 'SISTEM TON',
+          name: 'sistemton',
+        },
+        {
+          label: 'KOTA',
+          name: 'kota_id',
+        },
+        {
+          label: 'ZONA',
+          name: 'zona_id',
+        },
+        {
+          label: 'NOMINAL TON',
+          name: 'nominalton',
+          align: 'right',
+          formatter: 'currency',
+          formatoptions: {
+              decimalSeparator: ',',
+              thousandsSeparator: '.'
+          }
+        },
+        {
+          label: 'TGL BERLAKU',
+          name: 'tglberlaku',
+          formatter: "date",
+          formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y" }
+        },
+        {
+          label: 'STATUS PENYESUAIAN HARGA',
+          name: 'statuspenyesuaianharga',
         },
         {
           label: 'MODIFIEDBY',
@@ -82,16 +104,12 @@
           label: 'UPDATEDAT',
           name: 'updated_at',
           align: 'right'
-        }, {
-          label: 'CREATEDAT',
-          name: 'created_at',
-          align: 'right'
         },
       ],
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
-      height: 450,
+      height: 350,
       rowNum: 10,
       rownumbers: true,
       rownumWidth: 45,
@@ -100,7 +118,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#bankLookupPager'),
+      pager: $('#tarifLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -127,27 +145,28 @@
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
+          initResize($(this))
 
-          if (indexRow - 1 > $('#bankLookup').getGridParam().reccount) {
-            indexRow = $('#bankLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#tarifLookup').getGridParam().reccount) {
+            indexRow = $('#tarifLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#bankLookup [id="${$('#bankLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#tarifLookup [id="${$('#tarifLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#bankLookup [id="${$('#bankLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#tarifLookup [id="${$('#tarifLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#bankLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#bankLookup [id="` + $('#bankLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#tarifLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#tarifLookup [id="` + $('#tarifLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#bankLookup').setSelection($('#bankLookup').getDataIDs()[indexRow])
+            $('#tarifLookup').setSelection($('#tarifLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -162,7 +181,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupBank').prev().width())
+        $(this).setGridWidth($('#lookuptarif').prev().width())
         setHighlight($(this))
       }
     })

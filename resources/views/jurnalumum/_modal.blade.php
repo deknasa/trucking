@@ -154,6 +154,7 @@
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+      unformatAutoNumeric(data)
 
       data.push({
         name: 'sortIndex',
@@ -375,6 +376,8 @@
             </tr>`
           )
         })
+
+        initAutoNumeric($('#crudForm').find('.autonumeric'))
       }
     })
   }
@@ -463,6 +466,8 @@
             </tr>`
           )
         })
+
+        initAutoNumeric($('#crudForm').find('.autonumeric'))
       }
     })
   }

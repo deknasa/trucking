@@ -1,9 +1,9 @@
-<table id="tradoLookup" style="width: 100%;"></table>
+<table id="tradoLookup"  class="lookup-grid"></table>
 <div id="tradoLookupPager"></div>
 
 @push('scripts')
 <script>
-  let tradoLookup = $('#tradoLookup').jqGrid({
+  $('#tradoLookup').jqGrid({
       url: `{{ config('app.api_url') . 'trado' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -139,4 +139,3 @@
     })
 
 </script>
-@endpush

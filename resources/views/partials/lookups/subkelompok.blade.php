@@ -29,6 +29,28 @@
           {
             label: 'Status Aktif',
             name: 'statusaktif',
+            // stype: 'select',
+            // searchoptions: {
+            //   value: `<?php
+            //           $i = 1;
+
+            //           foreach ($data['combo'] as $status) :
+            //             echo "$status[param]:$status[parameter]";
+            //             if ($i !== count($data['combo'])) {
+            //               echo ";";
+            //             }
+            //             $i++;
+            //           endforeach
+
+            //           ?>
+            // `,
+            //   dataInit: function(element) {
+            //     $(element).select2({
+            //       width: 'resolve',
+            //       theme: "bootstrap4"
+            //     });
+            //   }
+            // },
           },
           {
             label: 'Modifiedby',
@@ -122,14 +144,14 @@
       }
     })
     
-    // .jqGrid('filterToolbar', {
-    //   stringResult: true,
-    //   searchOnEnter: false,
-    //   defaultSearch: 'cn',
-    //   groupOp: 'AND',
-    //   disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
-    //   beforeSearch: function() {
+    .jqGrid('filterToolbar', {
+      stringResult: true,
+      searchOnEnter: false,
+      defaultSearch: 'cn',
+      groupOp: 'AND',
+      disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
+      beforeSearch: function() {
 
-    //   },
-    // })
+      },
+    })
 </script>

@@ -1,10 +1,9 @@
-<table id="bankLookup" class="lookup-grid"></table>
-<div id="bankLookupPager"></div>
+<table id="zonaLookup" class="lookup-grid"></table>
+<div id="zonaLookupPager"></div>
 
-@push('scripts')
 <script>
-  $('#bankLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'bank' }}`,
+  $('#zonaLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'zona' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -16,62 +15,38 @@
           width: '70px'
         },
         {
-          label: 'KODE BANK',
-          name: 'kodebank',
-          align: 'left',
+          label: 'ZONA',
+          name: 'zona',
         },
         {
-          label: 'NAMA BANK',
-          name: 'namabank',
-          align: 'left'
+          label: 'KETERANGAN',
+          name: 'keterangan',
         },
         {
-          label: 'COA',
-          name: 'coa',
-          align: 'left'
-        },
-        {
-          label: 'TIPE',
-          name: 'tipe',
-          align: 'left'
-        },
-        {
-            label: 'STATUS AKTIF',
-            name: 'statusaktif',
-            align: 'left',
-            width: 100,
-            stype: 'select',
-            // searchoptions: {
-            //     value: `<?php
-            //             $i = 1;
+          label: 'STATUS',
+          name: 'statusaktif',
+        //   stype: 'select',
+        //   searchoptions: {
+        //     value: `<?php
+        //             $i = 1;
 
-            //             foreach ($data['combo'] as $status) :
-            //             echo "$status[param]:$status[parameter]";
-            //             if ($i !== count($data['combo'])) {
-            //                 echo ";";
-            //             }
-            //             $i++;
-            //             endforeach
+        //             foreach ($data['statusaktif'] as $status) :
+        //             echo "$status[param]:$status[parameter]";
+        //             if ($i !== count($data['statusaktif'])) {
+        //                 echo ";";
+        //             }
+        //             $i++;
+        //             endforeach
 
-            //             ?>
-            // `,
-            //     dataInit: function(element) {
-            //     $(element).select2({
-            //         width: 'resolve',
-            //         theme: "bootstrap4"
-            //     });
-            //     }
-            // },
-        },
-        {
-            label: 'STATUS PENERIMAAN',
-            name: 'statusformatpenerimaan',
-            align: 'left'
-        },
-        {
-            label: 'STATUS PENGELUARAN',
-            name: 'statusformatpengeluaran',
-            align: 'left'
+        //             ?>
+        //         `,
+        //   dataInit: function(element) {
+        //     $(element).select2({
+        //         width: 'resolve',
+        //         theme: "bootstrap4"
+        //     });
+        //     }
+        //   },
         },
         {
           label: 'MODIFIEDBY',
@@ -100,7 +75,6 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#bankLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -114,8 +88,7 @@
       },
       onSelectRow: function(id) {
         activeGrid = $(this)
-        id = $(this).jqGrid('getCell', id, 'rn') - 1
-        indexRow = id
+        indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
         page = $(this).jqGrid('getGridParam', 'page')
         let rows = $(this).jqGrid('getGridParam', 'postData').limit
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
@@ -128,26 +101,28 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
 
-          if (indexRow - 1 > $('#bankLookup').getGridParam().reccount) {
-            indexRow = $('#bankLookup').getGridParam().reccount - 1
+          triggerClick = true
+
+          if (indexRow - 1 > $('#zonaLookup').getGridParam().reccount) {
+            indexRow = $('#zonaLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#bankLookup [id="${$('#bankLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#zonaLookup [id="${$('#zonaLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#bankLookup [id="${$('#bankLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#zonaLookup [id="${$('#zonaLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#bankLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#bankLookup [id="` + $('#bankLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#zonaLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#zonaLookup [id="` + $('#zonaLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#bankLookup').setSelection($('#bankLookup').getDataIDs()[indexRow])
+            $('#zonaLookup').setSelection($('#zonaLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -162,7 +137,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupBank').prev().width())
+        $(this).setGridWidth($('#lookupZona').prev().width())
         setHighlight($(this))
       }
     })

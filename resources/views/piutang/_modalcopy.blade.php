@@ -57,7 +57,7 @@
               </div>
             </div>
 
-            <table class="table table-bordered table-bindkeys" id="detailList">
+            <table class="table table-bordered table-bindkeys">
               <thead>
                 <tr>
                   <th width="50">No</th>
@@ -66,18 +66,42 @@
                   <th>Aksi</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="table_body" class="form-group">
+
+                <tr id="row">
+                  <td>
+                    <div class="baris">1</div>
+                  </td>
+                  <td>
+                    <div class="row form-group">
+                      <div class="col-12 col-md-12">
+                        <input type="text" name="keterangan_detail[]" class="keterangan_detail form-control">
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="row form-group">
+                      <div class="col-12 col-md-12">
+                        <input type="text" name="nominal_detail[]" class="form-control autonumeric">
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                  </td>
+                </tr>
 
               </tbody>
               <tfoot>
                 <tr>
                   <td colspan="3"></td>
                   <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    <button type="button" class="btn btn-primary btn-sm my-2" id="addrow">Tambah</button>
                   </td>
                 </tr>
               </tfoot>
             </table>
+
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -98,16 +122,11 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+
   $(document).ready(function() {
-    addRow()
 
-    $("#addRow").click(function() {
-      addRow()
-    });
+    // initLookupSupir()
 
-    $(document).on('click', '.delete-row', function(event) {
-      deleteRow($(this).parents('tr'))
-    })
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -118,7 +137,6 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
-      
       unformatAutoNumeric(data)
 
       data.push({
@@ -206,39 +224,52 @@
     })
   })
 
-  $('#crudModal').on('shown.bs.modal', () => {
-    let form = $('#crudForm')
+  var baris = 1;
 
-    setFormBindKeys(form)
+  let html = `<tr id="row">
+        <td>
+        <div class="baris">1</div>
+      </td>
+     
+      <td>
+        <input type="text" name="keterangan_detail[]" class="keterangan_detail form-control">
+      </td>
+      <td>
+        <input type="text" name="nominal_detail[]" style="text-align:right" class="form-control autonumeric">   
+      </td>
+      <td>
+        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+      </td>
+    </tr>`;
 
-    activeGrid = null
 
-    // getMaxLength(form)
-  })
+  $('table').on('click', '.rmv', function() {
+    $(this).closest('tr').remove();
 
-  $('#crudModal').on('hidden.bs.modal', () => {
-    activeGrid = '#jqGrid'
-  })
+    $('.baris').each(function(i, obj) {
+      $(obj).text(i + 1);
+    });
+    baris = baris - 1;
+  });
 
 
   function createPiutangHeader() {
     let form = $('#crudForm')
 
-    form.trigger('reset')
+    form.trigger("reset")
     form.find('#btnSubmit').html(`
-      <i class="fa fa-save"></i>
-      Simpan
-    `)
+    <i class="fa fa-save"></i>
+    Simpan
+  `)
+  
     form.data('action', 'add')
-    form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Piutang Header')
+    $('#crudModalTitle').text('Add Piutang')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
   }
 
-  function editPiutangHeader(userId) {
+  function editPiutangHeader(Id) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -247,17 +278,53 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-    form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Piutang Header')
+    $('#crudModalTitle').text('Edit Piutang')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    
-    showPiutangHeader(form, userId)
-   
+    $.ajax({
+      url: `${apiUrl}piutangheader/${Id}`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          form.find(`[name="${index}"]`).val(value)
+        })
+        let tglbukti = response.data.tglbukti
+        $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
+
+        $('#table_body').html('')
+        $.each(response.detail, (index, value) => {
+          
+            let detailRow = $(`<tr id="row">
+                <td>
+                  <div class="baris">${parseInt(index) + 1}</div>
+                </td>
+            
+                <td>
+                  <input type="text" name="keterangan_detail[]" value="${value.keterangan}" class="keterangan_detail form-control">
+                </td>
+                <td>
+                  <input type="text" name="nominal_detail[]" value="${value.nominal}" style="text-align:right" class="form-control autonumeric">   
+                </td>
+                <td>
+                  <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                </td>
+              </tr>`)
+
+            initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+            $('#table_body').append(detailRow)
+
+        })
+      }
+    })
   }
-  function deletePiutangHeader(userId) {
+
+  function deletePiutangHeader(Id) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -266,21 +333,13 @@
     <i class="fa fa-save"></i>
     Hapus
   `)
-    form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Piutang Header')
+    $('#crudModalTitle').text('Delete Piutang')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    
-    showPiutangHeader(form, userId)
-  }
-  
-  function showPiutangHeader(form, userId) {
-    $('#detailList tbody').html('')
-
     $.ajax({
-      url: `${apiUrl}piutangheader/${userId}`,
+      url: `${apiUrl}piutangheader/${Id}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -288,44 +347,52 @@
       },
       success: response => {
         $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
+          form.find(`[name="${index}"]`).val(value).attr("disabled", true) 
         })
-
-        $.each(response.detail, (index, detail) => {
-          let detailRow = $(`
-            <tr>
-              <td></td>
-              <td>
-                <input type="text" name="keterangan_detail[]" class="form-control">
-              </td>
-              <td>
-                <input type="text" name="nominal_detail[]" class="form-control autonumeric">
-              </td>
-              <td>
-                <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-              </td>
-            </tr>
-          `)
-
-          detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-          detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
-
-          initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
-          $('#detailList tbody').append(detailRow)
+        let tglbukti = response.data.tglbukti
+        $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
+        $('#table_body').html('')
+        $.each(response.detail, (index, value) => {
+          $('#table_body').append(
+            `<tr id="row">
+                <td>
+                  <div class="baris">${parseInt(index) + 1}</div>
+                </td>
+            
+                <td>
+                  <input type="text" name="keterangan_detail[]" value="${value.keterangan}" class="form-control">
+                </td>
+                <td>
+                  <input type="text" name="nominal_detail[]" value="${value.nominal}" style="text-align:right" class="form-control autonumeric">   
+                </td>
+                <td>
+                  <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                </td>
+              </tr>`
+          )
         })
-
-        setRowNumbers()
+        initAutoNumeric($('#crudForm').find('.autonumeric'))
       }
     })
   }
 
-  function addRow() {
+  
+  $("#addrow").click(function() {
+    // let rowCount = $('#row').length;
+    // let barisCount = $('.baris').length;
+    // if (rowCount > 0) {
+    //   let clone = $('#row').clone();
+    //   clone.find('input').val('');
+
+    //   baris = parseInt(barisCount) + 1;
+    //   clone.find('.baris').text(baris);
+    //   $('table #table_body').append(clone);
+
+    // } else {
+    //   baris = 1;
+    //   $('#table_body').append(html);
+    // }
+
     let detailRow = $(`
       <tr>
         <td></td>
@@ -341,20 +408,14 @@
       </tr>
     `)
 
-    $('#detailList tbody').append(detailRow)
+    $('#table_body').append(detailRow)
 
     initAutoNumeric(detailRow.find('.autonumeric'))
     setRowNumbers()
-  }
-
-  function deleteRow(row) {
-    row.remove()
-
-    setRowNumbers()
-  }
+  });
 
   function setRowNumbers() {
-    let elements = $('#detailList tbody tr td:nth-child(1)')
+    let elements = $('#table_body tr td:nth-child(1)')
 
     elements.each((index, element) => {
       $(element).text(index + 1)

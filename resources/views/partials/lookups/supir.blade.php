@@ -1,9 +1,9 @@
-<table id="supirLookup" style="width: 100%;"></table>
+<table id="supirLookup" class="lookup-grid"></table>
 <div id="supirLookupPager"></div>
 
 @push('scripts')
 <script>
-  let supirLookup = $('#supirLookup').jqGrid({
+ $('#supirLookup').jqGrid({
       url: `{{ config('app.api_url') . 'supir' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -247,15 +247,14 @@
       }
     })
 
-    // .jqGrid('filterToolbar', {
-    //   stringResult: true,
-    //   searchOnEnter: false,
-    //   defaultSearch: 'cn',
-    //   groupOp: 'AND',
-    //   disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
-    //   beforeSearch: function() {
+    .jqGrid('filterToolbar', {
+      stringResult: true,
+      searchOnEnter: false,
+      defaultSearch: 'cn',
+      groupOp: 'AND',
+      disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
+      beforeSearch: function() {
 
-    //   },
-    // })
+      },
+    })
 </script>
-@endpush

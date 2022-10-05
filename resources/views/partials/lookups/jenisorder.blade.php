@@ -1,10 +1,10 @@
-<table id="bankLookup" class="lookup-grid"></table>
-<div id="bankLookupPager"></div>
+<table id="jenisorderLookup" class="lookup-grid"></table>
+<div id="jenisorderLookupPager"></div>
 
 @push('scripts')
 <script>
-  $('#bankLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'bank' }}`,
+  $('#jenisorderLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'jenisorder' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -16,62 +16,38 @@
           width: '70px'
         },
         {
-          label: 'KODE BANK',
-          name: 'kodebank',
-          align: 'left',
+          label: 'KODE JNS EMKL',
+          name: 'kodejenisorder',
         },
         {
-          label: 'NAMA BANK',
-          name: 'namabank',
-          align: 'left'
+          label: 'KETERANGAN',
+          name: 'keterangan',
         },
         {
-          label: 'COA',
-          name: 'coa',
-          align: 'left'
-        },
-        {
-          label: 'TIPE',
-          name: 'tipe',
-          align: 'left'
-        },
-        {
-            label: 'STATUS AKTIF',
-            name: 'statusaktif',
-            align: 'left',
-            width: 100,
-            stype: 'select',
-            // searchoptions: {
-            //     value: `<?php
-            //             $i = 1;
+          label: 'STATUS AKTIF',
+          name: 'statusaktif',
+        //   stype: 'select',
+        //   searchoptions: {
+        //       value: `<?php
+        //               $i = 1;
 
-            //             foreach ($data['combo'] as $status) :
-            //             echo "$status[param]:$status[parameter]";
-            //             if ($i !== count($data['combo'])) {
-            //                 echo ";";
-            //             }
-            //             $i++;
-            //             endforeach
+        //               foreach ($data['combo'] as $status) :
+        //                 echo "$status[param]:$status[parameter]";
+        //                 if ($i !== count($data['combo'])) {
+        //                   echo ";";
+        //                 }
+        //                 $i++;
+        //               endforeach
 
-            //             ?>
-            // `,
-            //     dataInit: function(element) {
-            //     $(element).select2({
-            //         width: 'resolve',
-            //         theme: "bootstrap4"
-            //     });
-            //     }
-            // },
-        },
-        {
-            label: 'STATUS PENERIMAAN',
-            name: 'statusformatpenerimaan',
-            align: 'left'
-        },
-        {
-            label: 'STATUS PENGELUARAN',
-            name: 'statusformatpengeluaran',
-            align: 'left'
+        //               ?>
+        //     `,
+        //       dataInit: function(element) {
+        //      $(element).select2({
+        //         width: 'resolve',
+        //         theme: "bootstrap4"
+        //       });
+        //     }
+        //   },
         },
         {
           label: 'MODIFIEDBY',
@@ -81,11 +57,11 @@
         {
           label: 'UPDATEDAT',
           name: 'updated_at',
-          align: 'right'
-        }, {
-          label: 'CREATEDAT',
-          name: 'created_at',
-          align: 'right'
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
         },
       ],
       autowidth: true,
@@ -100,7 +76,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#bankLookupPager'),
+      pager: $('#jenisorderLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -128,26 +104,26 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
 
-          if (indexRow - 1 > $('#bankLookup').getGridParam().reccount) {
-            indexRow = $('#bankLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#jenisorderLookup').getGridParam().reccount) {
+            indexRow = $('#jenisorderLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#bankLookup [id="${$('#bankLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#jenisorderLookup [id="${$('#jenisorderLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#bankLookup [id="${$('#bankLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#jenisorderLookup [id="${$('#jenisorderLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#bankLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#bankLookup [id="` + $('#bankLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#jenisorderLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#jenisorderLookup [id="` + $('#jenisorderLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#bankLookup').setSelection($('#bankLookup').getDataIDs()[indexRow])
+            $('#jenisorderLookup').setSelection($('#jenisorderLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -162,11 +138,11 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupBank').prev().width())
+        $(this).setGridWidth($('#lookupjenisorder').prev().width())
         setHighlight($(this))
       }
     })
-
+    
     .jqGrid('filterToolbar', {
       stringResult: true,
       searchOnEnter: false,

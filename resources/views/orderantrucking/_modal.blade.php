@@ -25,7 +25,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="nobukti" class="form-control">
+                <input type="text" name="nobukti" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -44,9 +44,8 @@
                   CONTAINER <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="container_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH CONTAINER --</option>
-                </select>
+                <input type="hidden" name="container_id">
+                <input type="text" name="container" class="form-control container-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -55,9 +54,8 @@
                   AGEN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="agen_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH AGEN --</option>
-                </select>
+                <input type="hidden" name="agen_id">
+                <input type="text" name="agen" class="form-control agen-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -66,9 +64,8 @@
                   JENIS ORDER <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="jenisorder_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH JENIS ORDER --</option>
-                </select>
+                <input type="hidden" name="jenisorder_id">
+                <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -77,9 +74,8 @@
                   PELANGGAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="pelanggan_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH PELANGGAN --</option>
-                </select>
+                <input type="hidden" name="pelanggan_id">
+                <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -88,9 +84,8 @@
                   TARIF <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="tarif_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH TARIF --</option>
-                </select>
+                <input type="hidden" name="tarif_id">
+                <input type="text" name="tarif" class="form-control tarif-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -318,11 +313,6 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setContainerOptions(form)
-    setAgenOptions(form)
-    setJenisOrderOptions(form)
-    setPelangganOptions(form)
-    setTarifOptions(form)
     setStatusLangsirOptions(form)
     setStatusPeralihanOptions(form)
   }
@@ -344,11 +334,6 @@
 
     Promise
       .all([
-        setContainerOptions(form),
-        setAgenOptions(form),
-        setJenisOrderOptions(form),
-        setPelangganOptions(form),
-        setTarifOptions(form),
         setStatusLangsirOptions(form),
         setStatusPeralihanOptions(form)
       ])
@@ -374,11 +359,6 @@
 
     Promise
       .all([
-        setContainerOptions(form),
-        setAgenOptions(form),
-        setJenisOrderOptions(form),
-        setPelangganOptions(form),
-        setTarifOptions(form),
         setStatusLangsirOptions(form),
         setStatusPeralihanOptions(form)
       ])
@@ -410,156 +390,6 @@
         }
       })
     }
-  }
-
-  const setContainerOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=container_id]').empty()
-      relatedForm.find('[name=container_id]').append(
-        new Option('-- PILIH CONTAINER --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}container`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(container => {
-            let option = new Option(container.keterangan, container.id)
-
-            relatedForm.find('[name=container_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setAgenOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=agen_id]').empty()
-      relatedForm.find('[name=agen_id]').append(
-        new Option('-- PILIH AGEN --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}agen`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(agen => {
-            let option = new Option(agen.namaagen, agen.id)
-
-            relatedForm.find('[name=agen_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setJenisOrderOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=jenisorder_id]').empty()
-      relatedForm.find('[name=jenisorder_id]').append(
-        new Option('-- PILIH JENIS ORDER --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}jenisorder`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(jenisOrder => {
-            let option = new Option(jenisOrder.keterangan, jenisOrder.id)
-
-            relatedForm.find('[name=jenisorder_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setPelangganOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=pelanggan_id]').empty()
-      relatedForm.find('[name=pelanggan_id]').append(
-        new Option('-- PILIH PELANGGAN --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}pelanggan`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(pelanggan => {
-            let option = new Option(pelanggan.namapelanggan, pelanggan.id)
-
-            relatedForm.find('[name=pelanggan_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setTarifOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=tarif_id]').empty()
-      relatedForm.find('[name=tarif_id]').append(
-        new Option('-- PILIH TARIF --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}tarif`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(tarif => {
-            let option = new Option(tarif.tujuan, tarif.id)
-
-            relatedForm.find('[name=tarif_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
   }
 
   const setStatusLangsirOptions = function(relatedForm) {

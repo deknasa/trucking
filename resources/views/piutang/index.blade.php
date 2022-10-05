@@ -45,43 +45,9 @@
       }
     })
     
-    // $('#crudModal').on('shown.bs.modal', function() {
-    //   agenLookup.setGridWidth($('#lookupAgen').prev().width())
-
-    //   if (detectDeviceType() == 'desktop') {
-        
-    //     agenLookup.setGridParam({
-    //       ondblClickRow: function(id) {
-    //         let rowData = $(this).getRowData(id)
-    //         console.log(id)
-
-    //         $('#crudForm [name=agen_id]').first().val(id)
-    //         $('#crudForm [name=agen]').first().val(rowData.namaagen)
-    //         $('#lookupAgen').hide()
-
-    //       }
-    //     })
-
-    //   } else if (detectDeviceType() == 'mobile') {
-       
-    //     agenLookup.setGridParam({
-    //       onSelectRow: function(id) {
-    //         let rowData = $(this).getRowData(id)
-
-    //         $('#crudForm [name=agen_id]').first().val(id)
-    //         $('#crudForm [name=agen]').first().val(namaagen)
-    //         $('#lookupAgen').hide()
-    //       }
-    //     })
-
-    //   }
-
-    //   $('#crudModal').find("[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit").first().focus()
+    // $('#crudModal').on('hidden.bs.modal', function() {
+    //   activeGrid = '#jqGrid'
     // })
-
-    $('#crudModal').on('hidden.bs.modal', function() {
-      activeGrid = '#jqGrid'
-    })
 
 
     $("#jqGrid").jqGrid({

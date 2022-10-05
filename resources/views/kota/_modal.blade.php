@@ -45,9 +45,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="zona_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH ZONA --</option>
-                </select>
+                <input type="hidden" name="zona_id">
+                <input type="text" name="zona" class="form-control zona-lookup">
               </div>
             </div>
             <div class="row form-group">

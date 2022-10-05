@@ -244,6 +244,8 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
+      unformatAutoNumeric(data)
+
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -458,6 +460,8 @@
             </tr>`
           )
         })
+
+        initAutoNumeric($('#crudForm').find('.autonumeric'))
       }
     })
   }
@@ -545,6 +549,8 @@
             </tr>`
           )
         })
+
+        initAutoNumeric($('#crudForm').find('.autonumeric'))
       }
     })
   }
