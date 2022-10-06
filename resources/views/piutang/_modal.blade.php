@@ -195,8 +195,9 @@
 
 
           id = response.data.id
-          $('#crudModal').modal('hide')
+          
           $('#crudModal').find('#crudForm').trigger('reset')
+          $('#crudModal').modal('hide')
 
           $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
 
