@@ -161,63 +161,63 @@
         value: limit
       })
 
-      // switch (action) {
-      //   case 'add':
-      //     method = 'POST'
-      //     url = `${apiUrl}piutangheader`
-      //     break;
-      //   case 'edit':
-      //     method = 'PATCH'
-      //     url = `${apiUrl}piutangheader/${Id}`
-      //     break;
-      //   case 'delete':
-      //     method = 'DELETE'
-      //     url = `${apiUrl}piutangheader/${Id}`
-      //     break;
-      //   default:
-      //     method = 'POST'
-      //     url = `${apiUrl}piutangheader`
-      //     break;
-      // }
+      switch (action) {
+        case 'add':
+          method = 'POST'
+          url = `${apiUrl}piutangheader`
+          break;
+        case 'edit':
+          method = 'PATCH'
+          url = `${apiUrl}piutangheader/${Id}`
+          break;
+        case 'delete':
+          method = 'DELETE'
+          url = `${apiUrl}piutangheader/${Id}`
+          break;
+        default:
+          method = 'POST'
+          url = `${apiUrl}piutangheader`
+          break;
+      }
 
-      // $(this).attr('disabled', '')
-      // $('#loader').removeClass('d-none')
+      $(this).attr('disabled', '')
+      $('#loader').removeClass('d-none')
 
-      // $.ajax({
-      //   url: url,
-      //   method: method,
-      //   dataType: 'JSON',
-      //   headers: {
-      //     Authorization: `Bearer ${accessToken}`
-      //   },
-      //   data: data,
-      //   success: response => {
+      $.ajax({
+        url: url,
+        method: method,
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
 
 
-      //     id = response.data.id
-      //     $('#crudModal').modal('hide')
-      //     $('#crudModal').find('#crudForm').trigger('reset')
+          id = response.data.id
+          $('#crudModal').modal('hide')
+          $('#crudModal').find('#crudForm').trigger('reset')
 
-      //     $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
 
-      //     if (response.data.grp == 'FORMAT') {
-      //       updateFormat(response.data)
-      //     }
-      //   },
-      //   error: error => {
-      //     if (error.status === 422) {
-      //       $('.is-invalid').removeClass('is-invalid')
-      //       $('.invalid-feedback').remove()
+          if (response.data.grp == 'FORMAT') {
+            updateFormat(response.data)
+          }
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
 
-      //       setErrorMessages(form, error.responseJSON.errors);
-      //     } else {
-      //       showDialog(error.statusText)
-      //     }
-      //   },
-      // }).always(() => {
-      //   $('#loader').addClass('d-none')
-      //   $(this).removeAttr('disabled')
-      // })
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.statusText)
+          }
+        },
+      }).always(() => {
+        $('#loader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
     })
   })
 
