@@ -1,4 +1,4 @@
-<table id="pengeluaranTruckingLookup" style="width: 100%;"></table>
+<table id="pengeluaranTruckingLookup" class="lookup-grid"></table>
 <div id="pengeluaranTruckingLookupPager"></div>
 
 @push('scripts')
@@ -32,8 +32,9 @@
         },
         {
           label: 'FORMAT BUKTI',
-          name: 'formatbukti',
-          align: 'left'
+          name: 'statusformat',
+          align: 'left',
+          hidden: true
         },
         {
           label: 'MODIFIEDBY',
@@ -130,15 +131,14 @@
       }
     })
 
-    // .jqGrid('filterToolbar', {
-    //   stringResult: true,
-    //   searchOnEnter: false,
-    //   defaultSearch: 'cn',
-    //   groupOp: 'AND',
-    //   disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
-    //   beforeSearch: function() {
+    .jqGrid('filterToolbar', {
+      stringResult: true,
+      searchOnEnter: false,
+      defaultSearch: 'cn',
+      groupOp: 'AND',
+      disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
+      beforeSearch: function() {
 
-    //   },
-    // })
+      },
+    })
 </script>
-@endpush

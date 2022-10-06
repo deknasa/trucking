@@ -30,6 +30,36 @@
   let rowNum = 10
 
   $(document).ready(function() {
+
+    $('#lookup').hide()
+
+    $('.coa-lookup').lookup({
+      title: 'COA Lookup',
+      fileName: 'akunpusat',
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.coa)
+      }
+    })
+
+    $('.penerimaantrucking-lookup').lookup({
+      title: 'Penerimaan Trucking Lookup',
+      fileName: 'penerimaantrucking',
+      onSelectRow: (penerimaantrucking, element) => {
+        $('#crudForm [name=statusformatpenerimaan]').first().val(penerimaantrucking.statusformat)
+        
+        element.val(penerimaantrucking.kodepenerimaan)
+      }
+    })
+
+    $('.pengeluarantrucking-lookup').lookup({
+      title: 'Pengeluaran Trucking Lookup',
+      fileName: 'pengeluarantrucking',
+      onSelectRow: (pengeluarantrucking, element) => {
+        $('#crudForm [name=statusformatpengeluaran]').first().val(pengeluarantrucking.statusformat)
+        element.val(pengeluarantrucking.kodepengeluaran)
+      }
+    })
+
     $("#jqGrid").jqGrid({
         url: `${apiUrl}bank`,
         mtype: "GET",
@@ -189,7 +219,7 @@
         defaultSearch: 'cn',
         groupOp: 'AND',
         beforeSearch: function() {
-          clearGlobalSearch()
+          clearGlobalSearch($('#jqGrid'))
         }
       })
 
@@ -208,7 +238,7 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
+              console.log(selectedId)
               editBank(selectedId)
             }
           },
@@ -226,10 +256,10 @@
       })
 
     /* Append clear filter button */
-    loadClearFilter()
+    loadClearFilter($('#jqGrid'))
 
     /* Append global search */
-    loadGlobalSearch()
+    loadGlobalSearch($('#jqGrid'))
 
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)
@@ -307,6 +337,111 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
+
+  const getBankLookup = function(fileName) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${appUrl}/lookup/${fileName}`,
+        method: 'GET',
+        dataType: 'html',
+        success: function(response) {
+          resolve(response)
+        }
+      })
+    })
+  }
+
+  $.fn.lookup = function(options = null) {
+    this.each(function() {
+      let element = $(this)
+
+      element
+        .wrap('<div class="input-group"></div>')
+        .after(`
+          <div class="input-group-append">
+            <button class="btn btn-primary lookup-toggler" type="button">...</button>
+          </div>
+        `)
+
+      element.siblings('.input-group-append').find('.lookup-toggler').click(function() {
+        activateLookup(element)
+      })
+    })
+
+    function activateLookup(element) {
+      let lookupModal = $(`
+        <div class="modal fade modal-fullscreen" id="lookupModal" tabindex="-1" aria-labelledby="lookupModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <form action="#" id="crudForm">
+              <div class="modal-content">
+                <div class="modal-header bg-primary">
+                  <h5 class="modal-title" id="lookupModalLabel">${options.title}</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      `)
+
+      $('body').append(lookupModal)
+
+      lookupModal.modal('show')
+
+      getBankLookup(options.fileName)
+        .then(response => {
+          lookupModal.find('.modal-body').html(response)
+
+          grid = lookupModal.find('.lookup-grid')
+
+          if (detectDeviceType() == 'desktop') {
+            grid.jqGrid('setGridParam', {
+              ondblClickRow: function(id) {
+                let rowData = $(this).getRowData(id)
+                handleSelectedRow(id, lookupModal, element)
+              }
+            })
+          } else if (detectDeviceType() == 'mobile') {
+            grid.jqGrid('setGridParam', {
+              onSelectRow: function(id) {
+                handleSelectedRow(id, lookupModal, element)
+              }
+            })
+          }
+        })
+
+      lookupModal.on('hidden.bs.modal', function() {
+        lookupModal.remove()
+      })
+    }
+
+    function handleSelectedRow(id, lookupModal, element) {
+      if (id !== null) {
+        lookupModal.modal('hide')
+
+        options.onSelectRow(sanitize(grid.getRowData(id)), element)
+      } else {
+        alert('Please select a row')
+      }
+
+    }
+
+    
+    function sanitize(rowData) {
+      Object.keys(rowData).forEach(key => {
+        rowData[key] = rowData[key].replaceAll('<span class="highlight">', '').replaceAll('</span>', '')
+      })
+
+      return rowData
+    }
+
+    return this
+
+  }
 </script>
 @endpush()
 @endsection

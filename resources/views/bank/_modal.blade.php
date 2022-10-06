@@ -44,9 +44,7 @@
                   COA <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="coa" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH COA --</option>
-                </select>
+                <input type="text" name="coa" class="form-control coa-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -78,9 +76,8 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statusformatpenerimaan" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH KODE PENERIMAAN --</option>
-                </select>
+                <input type="hidden" name="statusformatpenerimaan">
+                <input type="text" name="kodepenerimaan" class="form-control penerimaantrucking-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -90,9 +87,8 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statusformatpengeluaran" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH KODE PENGELUARAN --</option>
-                </select>
+                <input type="hidden" name="statusformatpengeluaran">
+                <input type="text" name="kodepengeluaran" class="form-control pengeluarantrucking-lookup">
               </div>
             </div>
           </div>
@@ -240,9 +236,6 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setCoaOptions(form)
-    setStatusFormatPenerimaanOptions(form)
-    setStatusFormatPengeluaranOptions(form)
     setStatusAktifOptions(form)
   }
 
@@ -263,9 +256,6 @@
 
     Promise
       .all([
-        setCoaOptions(form),
-        setStatusFormatPenerimaanOptions(form),
-        setStatusFormatPengeluaranOptions(form),
         setStatusAktifOptions(form)
       ])
       .then(() => {
@@ -290,9 +280,6 @@
 
     Promise
       .all([
-        setCoaOptions(form),
-        setStatusFormatPenerimaanOptions(form),
-        setStatusFormatPengeluaranOptions(form),
         setStatusAktifOptions(form)
       ])
       .then(() => {
@@ -323,87 +310,6 @@
         }
       })
     }
-  }
-
-  const setCoaOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=coa]').empty()
-      relatedForm.find('[name=coa]').append(
-        new Option('-- PILIH COA --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}bank`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          response.data.forEach(bank => {
-            let option = new Option(bank.coa, bank.id)
-
-            relatedForm.find('[name=coa]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setStatusFormatPenerimaanOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusformatpenerimaan]').empty()
-      relatedForm.find('[name=statusformatpenerimaan]').append(
-        new Option('-- PILIH STATUS PENERIMAAN --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}penerimaantrucking`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          response.data.forEach(penerimaanTrucking => {
-            let option = new Option(penerimaanTrucking.kodepenerimaan, penerimaanTrucking.id)
-
-            relatedForm.find('[name=statusformatpenerimaan]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setStatusFormatPengeluaranOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusformatpengeluaran]').empty()
-      relatedForm.find('[name=statusformatpengeluaran]').append(
-        new Option('-- PILIH KODE PENERIMAAN --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}pengeluarantrucking`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          response.data.forEach(pengeluaranTrucking => {
-            let option = new Option(pengeluaranTrucking.kodepengeluaran, pengeluaranTrucking.id)
-
-            relatedForm.find('[name=statusformatpengeluaran]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
   }
 
   const setStatusAktifOptions = function(relatedForm) {

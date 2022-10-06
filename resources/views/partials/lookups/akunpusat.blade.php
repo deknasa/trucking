@@ -97,7 +97,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#akunpusatLookupPager'),
+      pager: $('#akunPusatLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -132,26 +132,26 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
 
-          if (indexRow - 1 > $('#akunpusatLookup').getGridParam().reccount) {
-            indexRow = $('#akunpusatLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#akunPusatLookup').getGridParam().reccount) {
+            indexRow = $('#akunPusatLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#akunpusatLookup [id="${$('#akunpusatLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#akunPusatLookup [id="${$('#akunPusatLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#akunpusatLookup [id="${$('#akunpusatLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#akunPusatLookup [id="${$('#akunPusatLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#akunpusatLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#akunpusatLookup [id="` + $('#akunpusatLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#akunPusatLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#akunPusatLookup [id="` + $('#akunPusatLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#akunpusatLookup').setSelection($('#akunpusatLookup').getDataIDs()[indexRow])
+            $('#akunPusatLookup').setSelection($('#akunPusatLookup').getDataIDs()[indexRow])
           }
         }
 

@@ -11,6 +11,7 @@
         <form action="" method="post">
 
           <div class="modal-body">
+            <div class="master">
             <input type="hidden" name="id">
 
             <div class="row form-group">
@@ -35,7 +36,7 @@
                 <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
               </div>
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
@@ -57,16 +58,19 @@
                 <input type="text" name="agen" class="form-control agen-lookup">
               </div>
             </div>
+            </div>
+            
 
             <table class="table table-bordered table-bindkeys" id="detailList">
               <thead>
                 <tr>
                   <th width="50">No</th>
-                  <th>Nominal</th>
                   <th>Keterangan</th>
+                  <th>Nominal</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
+<<<<<<< HEAD
 
 
               <tbody id="table_body" class="form-group">
@@ -93,6 +97,9 @@
                     <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                   </td>
                 </tr>
+=======
+              <tbody>
+>>>>>>> e3568921d216bda85edbffbbdfbff577c524c7a3
 
               </tbody>
               <tfoot>
@@ -144,9 +151,20 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
-      
-      unformatAutoNumeric(data)
+      // console.log('before', data)
 
+      $('#crudForm').find(`[name="nominal_detail[]"]`).each((index, element) => {
+        console.log(element);
+        data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
+      })
+      
+      console.log('after', data);
+      // let autoNum = $('.autonumeric')
+
+      // $.each(autoNum, (index, value) => {
+      //   console.log(value)
+      //   console.log(AutoNumeric.getNumber(value))
+      // })
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -171,7 +189,7 @@
         name: 'limit',
         value: limit
       })
-      console.log(data)
+
       switch (action) {
         case 'add':
           method = 'POST'
@@ -206,8 +224,9 @@
 
 
           id = response.data.id
-          $('#crudModal').modal('hide')
+          
           $('#crudModal').find('#crudForm').trigger('reset')
+          $('#crudModal').modal('hide')
 
           $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
 
@@ -370,6 +389,7 @@
     $('#detailList tbody').append(detailRow)
 
     initAutoNumeric(detailRow.find('.autonumeric'))
+    
     setRowNumbers()
   }
 

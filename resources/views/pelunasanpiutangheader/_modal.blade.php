@@ -106,7 +106,7 @@
                       </div>
                     </div>
 
-                    <table class="table table-borderd mt-3" id="detailList">
+                    <table class="table table-responsive table-borderd mt-3" id="detailList">
                       <thead class="table-secondary">
                         <tr>
                           <th><input type="checkbox" id="checkAll"> </th>
@@ -410,10 +410,10 @@
       },
       success: response => {
         $.each(response.data, (index, value) => {
-          form.find(`[name="${index}"]`).val(value)
+          form.find(`[name="${index}"]`).val(value).attr('disabled', false)
         })
         $.each(response.detail, (index, value) => {
-          form.find(`[name="${index}"]`).val(value)
+          form.find(`[name="${index}"]`).val(value).attr('disabled', false)
         })
         let agenId = response.detail.agendetail_id
         $('#editpiutang').show()
@@ -448,10 +448,10 @@
       },
       success: response => {
         $.each(response.data, (index, value) => {
-          form.find(`[name="${index}"]`).val(value)
+          form.find(`[name="${index}"]`).val(value).attr('disabled', true)
         })
         $.each(response.detail, (index, value) => {
-          form.find(`[name="${index}"]`).val(value)
+          form.find(`[name="${index}"]`).val(value).attr('disabled', true)
         })
         let agenId = response.detail.agendetail_id
 
@@ -491,15 +491,18 @@
         $.each(response.data, (index, detail) => {
           let no = 1;
           let id = detail.id
+          let nominal = new Intl.NumberFormat('en-US').format(detail.nominal);
+          let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
+
           let detailRow = $(`
             <tr>
               <td><input name='piutang_id[]' type="checkbox" id="checkItem" value="${id}"></td>
               <td></td>
-              <td>${detail.nobukti}</td>
-              <td>${detail.tglbukti}</td>
-              <td>${detail.invoice_nobukti}</td>
-              <td id="nominal"${no}>${detail.nominal}</p></td>
-              <td>${detail.sisa}</td>
+              <td width="10%">${detail.nobukti}</td>
+              <td width="10%">${detail.tglbukti}</td>
+              <td width="10%">${detail.invoice_nobukti}</td>
+              <td width="10%">${nominal}</p></td>
+              <td width="10%">${sisa}</td>
               <td>
                 <input type="text" name="keterangandetailppd[]" class="form-control">
               </td>
@@ -524,6 +527,8 @@
           initAutoNumeric(detailRow.find(`[name="bayarppd[]"]`))
           initAutoNumeric(detailRow.find(`[name="penyesuaianppd[]"]`))
           initAutoNumeric(detailRow.find(`[name="nominallebihbayarppd[]"]`))
+          //untuk unformat
+          // input.value = AutoNumeric.getNumber(autoNumericElement);
           $('#detailList tbody').append(detailRow)
           no++
         })
@@ -539,18 +544,23 @@
   function getPelunasan(id, agenId, aksi) {
     $('#detailList tbody').html('')
     let url
+    let attribut
     if(aksi == 'edit'){
-      alert('edit')
-      url = `${apiUrl}pelunasanpiutangheader/${id}/${agenId}/getpelunasanpiutang`
+      
+      url = `${apiUrl}pelunasanpiutangheader/${id}/${agenId}/getPelunasanPiutang`
     }
     if(aksi == 'delete'){ 
-      alert('delete')
+      
       url = `${apiUrl}pelunasanpiutangheader/${id}/${agenId}/getDeletePelunasanPiutang`
+      attribut = 'disabled'
     }
     $.ajax({
       url: url,
       method: 'GET',
       dataType: 'JSON',
+      data: {
+        limit: 0
+      },
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
@@ -560,29 +570,39 @@
         $.each(response.data, (index, detail) => {
           
           let id = detail.id
+          let pelunasanPiutangId = detail.pelunasanpiutang_id
+          let checked
+          
+          let nominal = new Intl.NumberFormat('en-US').format(detail.nominalpiutang);
+          let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
+         
+          if(pelunasanPiutangId != null) {
+            checked = 'checked'
+          }
+
           let detailRow = $(`
             <tr>
-              <td><input name='piutang_id[]' type="checkbox" class="checkItem" value="${id}"></td>
+              <td><input name='piutang_id[]' type="checkbox" class="checkItem" value="${id}" ${checked} ${attribut}></td>
               <td></td>
-              <td>${detail.piutang_nobukti}</td>
-              <td>${detail.tglbukti}</td>
-              <td>${detail.invoice_nobukti}</td>
-              <td>${detail.nominalpiutang}</p></td>
-              <td>${detail.sisa}</td>
+              <td width="10%">${detail.piutang_nobukti}</td>
+              <td width="10%">${detail.tglbukti}</td>
+              <td width="10%">${detail.invoice_nobukti}</td>
+              <td width="10%">${nominal}</p></td>
+              <td width="10%">${sisa}</td>
               <td>
-                <input type="text" name="keterangandetailppd[]" class="form-control" value="${detail.keterangan || ''}">
+                <input type="text" name="keterangandetailppd[]" class="form-control" value="${detail.keterangan || ''}" ${attribut}>
               </td>
               <td>
-                <input type="text" name="bayarppd[]" class="form-control" value="${detail.nominal || ''}">
+                <input type="text" name="bayarppd[]" class="form-control" value="${detail.nominal || ''}" ${attribut}>
               </td>
               <td>
-                <input type="text" name="keteranganpenyesuaianppd[]" class="form-control" value="${detail.keteranganpenyesuaian || ''}">
+                <input type="text" name="keteranganpenyesuaianppd[]" class="form-control" value="${detail.keteranganpenyesuaian || ''}" ${attribut}>
               </td>
               <td>
-                <input type="text" name="penyesuaianppd[]" class="form-control " value="${detail.penyesuaian || ''}">
+                <input type="text" name="penyesuaianppd[]" class="form-control " value="${detail.penyesuaian || ''}" ${attribut}>
               </td>
               <td>
-                <input type="text" name="nominallebihbayarppd[]" class="form-control " value="${detail.nominallebihbayar || ''}">
+                <input type="text" name="nominallebihbayarppd[]" class="form-control " value="${detail.nominallebihbayar || ''}" ${attribut}>
               </td>
             </tr>
           `)

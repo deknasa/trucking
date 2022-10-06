@@ -342,7 +342,7 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
-          clearGlobalSearch()
+          clearGlobalSearch($('#jqGrid'))
         },
       })
 
@@ -379,10 +379,10 @@
       })
 
     /* Append clear filter button */
-    loadClearFilter()
+    loadClearFilter($('#jqGrid'))
 
     /* Append global search */
-    loadGlobalSearch()
+    loadGlobalSearch($('#jqGrid'))
   })
 </script>
 @endpush()

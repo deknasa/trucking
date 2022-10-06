@@ -700,87 +700,99 @@ var delay = (function () {
 	};
 })();
 
-function loadGlobalSearch() {
+function loadGlobalSearch(grid) {
 	/* Append global search textfield */
-	$("#t_" + $.jgrid.jqID($("#jqGrid")[0].id)).html(
+	$("#t_" + $.jgrid.jqID(grid[0].id)).html(
 		$(
-			'<form class="form-inline"><div class="form-group" id="titlesearch"><label for="searchText" style="font-weight: normal !important;">Search : </label><input type="text" class="form-control" id="searchText" placeholder="Search" autocomplete="off"></div></form>'
+			`<form class="form-inline"><div class="form-group" id="titlesearch"><label for="searchText" style="font-weight: normal !important;">Search : </label><input type="text" class="form-control global-search" id="${$.jgrid.jqID(
+				grid[0].id
+			)}_searchText" placeholder="Search" autocomplete="off"></div></form>`
 		)
 	);
 
 	/* Handle textfield on input */
-	$(document).on("input", "#searchText", function () {
-		delay(function () {
-			clearColumnSearch();
+	$(document).on(
+		"input",
+		`#${$.jgrid.jqID(grid[0].id)}_searchText`,
+		function () {
+			delay(function () {
+				clearColumnSearch(grid);
 
-			var postData = $("#jqGrid").jqGrid("getGridParam", "postData"),
-				colModel = $("#jqGrid").jqGrid("getGridParam", "colModel"),
-				rules = [],
-				searchText = $("#searchText").val(),
-				l = colModel.length,
-				i,
-				cm;
-			for (i = 0; i < l; i++) {
-				cm = colModel[i];
-				if (
-					cm.search !== false &&
-					(cm.stype === undefined ||
-						cm.stype === "text" ||
-						cm.stype === "select")
-				) {
-					rules.push({
-						field: cm.name,
-						op: "cn",
-						data: searchText.toUpperCase(),
-					});
+				var postData = grid.jqGrid("getGridParam", "postData"),
+					colModel = grid.jqGrid("getGridParam", "colModel"),
+					rules = [],
+					searchText = $(`#${$.jgrid.jqID(grid[0].id)}_searchText`).val(),
+					l = colModel.length,
+					i,
+					cm;
+				for (i = 0; i < l; i++) {
+					cm = colModel[i];
+					if (
+						cm.search !== false &&
+						(cm.stype === undefined ||
+							cm.stype === "text" ||
+							cm.stype === "select")
+					) {
+						rules.push({
+							field: cm.name,
+							op: "cn",
+							data: searchText.toUpperCase(),
+						});
+					}
 				}
-			}
-			postData.filters = JSON.stringify({
-				groupOp: "OR",
-				rules: rules,
-			});
+				postData.filters = JSON.stringify({
+					groupOp: "OR",
+					rules: rules,
+				});
 
-			$("#jqGrid").jqGrid("setGridParam", {
-				search: true,
-			});
-			$("#jqGrid").trigger("reloadGrid", [
-				{
-					page: 1,
-					current: true,
-				},
-			]);
-			return false;
-		}, 500);
-	});
+				grid.jqGrid("setGridParam", {
+					search: true,
+				});
+				grid.trigger("reloadGrid", [
+					{
+						page: 1,
+						current: true,
+					},
+				]);
+				return false;
+			}, 500);
+		}
+	);
 }
 
-function clearColumnSearch() {
-	$('input[id*="gs_"]').val("");
-	$("#resetFilterOptions span#resetFilterOptions").removeClass("aktif");
-	$('select[id*="gs_"]').val("").trigger("change.select2");
-	$("#resetdatafilter").removeClass("active");
+function clearColumnSearch(grid) {
+	$(`#gview_${grid.getGridParam("id")}`)
+		.find('input[id*="gs_"]')
+		.val("");
+	$(`#gview_${grid.getGridParam("id")}`)
+		.find('select[id*="gs_"]')
+		.val("")
+		.trigger("change.select2");
+	$(`#resetdatafilter_${grid.getGridParam("id")}`).removeClass("active");
 }
 
-function clearGlobalSearch() {
-	$("#searchText").val("");
+function clearGlobalSearch(grid) {
+	$(`#${grid.getGridParam("id")}_searchText`).val("");
 }
 
-function loadClearFilter() {
+function loadClearFilter(grid) {
 	/* Append Button */
-	$("#gsh_" + $.jgrid.jqID($("#jqGrid")[0].id) + "_rn").html(
+	$("#gsh_" + $.jgrid.jqID(grid[0].id) + "_rn").html(
 		$(
-			"<div id='resetfilter' class='reset'><span id='resetdatafilter' class='btn btn-default'> X </span></div>"
+			`<div id='resetfilter' class='reset'><span id="resetdatafilter_${grid.getGridParam(
+				"id"
+			)}" class='btn btn-default'> X </span></div>`
 		)
 	);
 
 	/* Handle button on click */
-	$("#resetdatafilter").click(function () {
+	$(`#resetdatafilter_${grid.getGridParam("id")}`).click(function () {
 		highlightSearch = "";
 
-		clearColumnSearch();
-		clearGlobalSearch();
+		clearColumnSearch(grid);
+		clearGlobalSearch(grid);
 
-		$("#jqGrid")
+		grid
 			.jqGrid("setGridParam", {
 				search: false,
 				postData: {
@@ -846,7 +858,7 @@ $(document).on("input", ".numbernoseparate", function () {
 /* Select2: Autofocus search input on open */
 function initSelect2(elements = null) {
 	let option = {
-		width: '100%',
+		width: "100%",
 		theme: "bootstrap4",
 		dropdownParent: $("#crudModal"),
 	};
@@ -896,7 +908,6 @@ function destroySelect2() {
 // 		$(select2Element).select2("destroy");
 // 	});
 // }
-
 
 function showDialog(statusText = "", message = "") {
 	$("#dialog-message").find("p").remove();
