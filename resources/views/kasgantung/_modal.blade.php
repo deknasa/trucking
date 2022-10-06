@@ -37,9 +37,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="penerima_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH PENERIMA --</option>
-                </select>
+                <input type="hidden" name="penerima_id">
+                <input type="text" name="penerima" class="form-control penerima-lookup">
               </div>
             </div>
             <div class="row">
@@ -61,9 +60,8 @@
                     POST <span class="text-danger">*</span></label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <select name="bank_id" class="form-select select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH BANK --</option>
-                  </select>
+                  <input type="hidden" name="bank_id">
+                  <input type="text" name="bank" class="form-control bank-lookup">
                 </div>
                 <div class="col-12 col-md-2 col-form-label">
                   <label>TANGGAL POST</label>
@@ -259,8 +257,6 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setBankOptions(form)
-    setPenerimaOptions(form)
   }
 
   function editKasGantung(userId) {
@@ -278,14 +274,8 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    Promise
-      .all([
-        setBankOptions(form),
-        setPenerimaOptions(form)
-      ])
-      .then(() => {
-        showKasGantung(form, userId)
-      })
+    showKasGantung(form, userId)
+    
   }
 
   function deleteKasGantung(userId) {
@@ -303,14 +293,9 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    Promise
-      .all([
-        setBankOptions(form),
-        setPenerimaOptions(form)
-      ])
-      .then(() => {
-        showKasGantung(form, userId)
-      })
+   
+    showKasGantung(form, userId)
+   
   }
 
   function getMaxLength(form) {
@@ -338,65 +323,6 @@
     }
   }
 
-  const setBankOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=bank_id]').empty()
-      relatedForm.find('[name=bank_id]').append(
-        new Option('-- PILIH BANK --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}bank`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0
-        },
-        success: response => {
-          response.data.forEach(bank => {
-            let option = new Option(bank.namabank, bank.id)
-
-            relatedForm.find('[name=bank_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setPenerimaOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=penerima_id]').empty()
-      relatedForm.find('[name=penerima_id]').append(
-        new Option('-- PILIH PENERIMA --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}penerima`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0
-        },
-        success: response => {
-          response.data.forEach(penerima => {
-            let option = new Option(penerima.namapenerima, penerima.id)
-
-            relatedForm.find('[name=penerima_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
 
   function showKasGantung(form, userId) {
     $('#detailList tbody').html('')
@@ -419,7 +345,7 @@
           }
         })
 
-        $.each(response.data.kasgantung_detail, (index, detail) => {
+        $.each(response.detail, (index, detail) => {
           let detailRow = $(`
             <tr>
               <td></td>

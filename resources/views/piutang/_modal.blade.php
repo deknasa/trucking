@@ -11,6 +11,7 @@
         <form action="" method="post">
 
           <div class="modal-body">
+            <div class="master">
             <input type="hidden" name="id">
 
             <div class="row form-group">
@@ -35,7 +36,7 @@
                 <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
               </div>
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
@@ -57,44 +58,19 @@
                 <input type="text" name="agen" class="form-control agen-lookup">
               </div>
             </div>
+            </div>
+            
 
             <table class="table table-bordered table-bindkeys" id="detailList">
               <thead>
                 <tr>
                   <th width="50">No</th>
-                  <th>Nominal</th>
                   <th>Keterangan</th>
+                  <th>Nominal</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
-<<<<<<< HEAD
               <tbody>
-=======
-              <tbody id="table_body" class="form-group">
-
-                <tr id="row">
-                  <td>
-                    <div class="baris">1</div>
-                  </td>
-                  <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <input type="text" name="nominal_detail[]" class="form-control autonumeric">
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <input type="text" name="keterangan_detail[]" class="form-control">
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                  </td>
-                </tr>
->>>>>>> c9b5d77a471ec14bc9b3612954751208a6b3a36d
 
               </tbody>
               <tfoot>
@@ -146,9 +122,20 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
-      
-      unformatAutoNumeric(data)
+      // console.log('before', data)
 
+      $('#crudForm').find(`[name="nominal_detail[]"]`).each((index, element) => {
+        console.log(element);
+        data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
+      })
+      
+      console.log('after', data);
+      // let autoNum = $('.autonumeric')
+
+      // $.each(autoNum, (index, value) => {
+      //   console.log(value)
+      //   console.log(AutoNumeric.getNumber(value))
+      // })
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -173,64 +160,64 @@
         name: 'limit',
         value: limit
       })
-      console.log(data)
-      switch (action) {
-        case 'add':
-          method = 'POST'
-          url = `${apiUrl}piutangheader`
-          break;
-        case 'edit':
-          method = 'PATCH'
-          url = `${apiUrl}piutangheader/${Id}`
-          break;
-        case 'delete':
-          method = 'DELETE'
-          url = `${apiUrl}piutangheader/${Id}`
-          break;
-        default:
-          method = 'POST'
-          url = `${apiUrl}piutangheader`
-          break;
-      }
 
-      $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      // switch (action) {
+      //   case 'add':
+      //     method = 'POST'
+      //     url = `${apiUrl}piutangheader`
+      //     break;
+      //   case 'edit':
+      //     method = 'PATCH'
+      //     url = `${apiUrl}piutangheader/${Id}`
+      //     break;
+      //   case 'delete':
+      //     method = 'DELETE'
+      //     url = `${apiUrl}piutangheader/${Id}`
+      //     break;
+      //   default:
+      //     method = 'POST'
+      //     url = `${apiUrl}piutangheader`
+      //     break;
+      // }
 
-      $.ajax({
-        url: url,
-        method: method,
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: data,
-        success: response => {
+      // $(this).attr('disabled', '')
+      // $('#loader').removeClass('d-none')
+
+      // $.ajax({
+      //   url: url,
+      //   method: method,
+      //   dataType: 'JSON',
+      //   headers: {
+      //     Authorization: `Bearer ${accessToken}`
+      //   },
+      //   data: data,
+      //   success: response => {
 
 
-          id = response.data.id
-          $('#crudModal').modal('hide')
-          $('#crudModal').find('#crudForm').trigger('reset')
+      //     id = response.data.id
+      //     $('#crudModal').modal('hide')
+      //     $('#crudModal').find('#crudForm').trigger('reset')
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+      //     $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
 
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
-          }
-        },
-        error: error => {
-          if (error.status === 422) {
-            $('.is-invalid').removeClass('is-invalid')
-            $('.invalid-feedback').remove()
+      //     if (response.data.grp == 'FORMAT') {
+      //       updateFormat(response.data)
+      //     }
+      //   },
+      //   error: error => {
+      //     if (error.status === 422) {
+      //       $('.is-invalid').removeClass('is-invalid')
+      //       $('.invalid-feedback').remove()
 
-            setErrorMessages(form, error.responseJSON.errors);
-          } else {
-            showDialog(error.statusText)
-          }
-        },
-      }).always(() => {
-        $('#loader').addClass('d-none')
-        $(this).removeAttr('disabled')
-      })
+      //       setErrorMessages(form, error.responseJSON.errors);
+      //     } else {
+      //       showDialog(error.statusText)
+      //     }
+      //   },
+      // }).always(() => {
+      //   $('#loader').addClass('d-none')
+      //   $(this).removeAttr('disabled')
+      // })
     })
   })
 
@@ -372,6 +359,7 @@
     $('#detailList tbody').append(detailRow)
 
     initAutoNumeric(detailRow.find('.autonumeric'))
+    
     setRowNumbers()
   }
 
