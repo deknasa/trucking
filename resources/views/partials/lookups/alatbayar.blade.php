@@ -1,9 +1,8 @@
 <table id="alatBayarLookup" style="width: 100%;"></table>
 <div id="alatBayarLookupPager"></div>
 
-@push('scripts')
 <script>
-  let alatBayarLookup = $('#alatBayarLookup').jqGrid({
+  $('#alatBayarLookup').jqGrid({
       url: `{{ config('app.api_url') . 'alatbayar' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -95,6 +94,13 @@
       loadBeforeSend: (jqXHR) => {
         jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      onSelectRow: function(id) {
+        activeGrid = $(this)
+        indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
+        page = $(this).jqGrid('getGridParam', 'page')
+        let rows = $(this).jqGrid('getGridParam', 'postData').limit
+        if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
+      },
       loadComplete: function(data) {
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
@@ -131,14 +137,19 @@
         limit = $(this).jqGrid('getGridParam', 'postData').limit
         postData = $(this).jqGrid('getGridParam', 'postData')
 
-        $('.clearsearchclass').click(function() {
-          clearColumnSearch()
-        })
-
-        $(this).setGridWidth($('#lookupAlatBayar').prev().width())
+        $(this).setGridWidth($('#lookup').prev().width())
         setHighlight($(this))
       }
     })
 
+    .jqGrid('filterToolbar', {
+      stringResult: true,
+      searchOnEnter: false,
+      defaultSearch: 'cn',
+      groupOp: 'AND',
+      disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
+      beforeSearch: function() {
+
+      },
+    })
 </script>
-@endpush

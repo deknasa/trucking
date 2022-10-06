@@ -1,9 +1,8 @@
 <table id="supplierLookup" class="lookup-grid"></table>
 <div id="supplierLookupPager"></div>
 
-@push('scripts')
 <script>
-  $('#supplierLookup').jqGrid({
+   $('#supplierLookup').jqGrid({
       url: `{{ config('app.api_url') . 'supplier' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -110,12 +109,11 @@
             name: 'kategoriusaha',
             align: 'left',
         },
-       
       ],
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
-      height: 350,
+      height: 450,
       rowNum: 10,
       rownumbers: true,
       rownumWidth: 45,
@@ -151,7 +149,6 @@
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
-          initResize($(this))
 
           if (indexRow - 1 > $('#supplierLookup').getGridParam().reccount) {
             indexRow = $('#supplierLookup').getGridParam().reccount - 1
@@ -192,15 +189,5 @@
       }
     })
 
-    // .jqGrid('filterToolbar', {
-    //   stringResult: true,
-    //   searchOnEnter: false,
-    //   defaultSearch: 'cn',
-    //   groupOp: 'AND',
-    //   disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
-    //   beforeSearch: function() {
-
-    //   },
-    // })
 </script>
-@endpush
+

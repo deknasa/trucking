@@ -67,9 +67,8 @@
                   <th>Aksi</th>
                 </tr>
               </thead>
-<<<<<<< HEAD
-              <tbody>
-=======
+
+
               <tbody id="table_body" class="form-group">
 
                 <tr id="row">
@@ -94,7 +93,6 @@
                     <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                   </td>
                 </tr>
->>>>>>> c9b5d77a471ec14bc9b3612954751208a6b3a36d
 
               </tbody>
               <tfoot>

@@ -28,11 +28,8 @@
                                     TANGGAL BUKTI <span class="text-danger">*</span>
                                 </label>
                             </div>
-                            <div class="col-12 col-sm-4 col-md-4" id="tglbukti">
-                                @php
-                                $tglbukti = date('d-m-Y');
-                                @endphp
-                                <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
+                            <div class="col-12 col-sm-4 col-md-4" >
+                                <input type="text" name="tglbukti" class="form-control datepicker">
                             </div>
                         </div>
 
@@ -73,7 +70,7 @@
                             </div>
                         </div>
 
-                        <table class="table table-bordered table-bindkeys">
+                        <table class="table table-bordered table-bindkeys" id="detailList">
                             <thead>
                                 <tr>
                                     <th width="50">No</th>
@@ -82,35 +79,20 @@
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="table_body" class="form-group">
-                                <tr id="row">
+                            <tbody>
+                                <tr>
+                                    <td></td>
                                     <td>
-                                        <div class="baris">1</div>
+                                        <input type="hidden" name="mekanik_id" class="form-control">
+                                        <input type="text" name="mekanik" class="form-control mekanik-lookup">
                                     </td>
 
                                     <td>
-                                        <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
-                                                    MEKANIK <span class="text-danger">*</span>
-                                                </label>
-                                            </div>
-                                            <div class="col-8 col-md-10">
-                                                <input type="hidden" name="mekanik_id">
-                                                <input type="text" name="mekanik" class="form-control mekanik-lookup">
-                                            </div>
-                                        </div>
+                                        <input type="text" name="keterangan_detail" class="form-control">
                                     </td>
 
                                     <td>
-                                        <div class="row form-group">
-                                            <div class="col-12 col-md-12">
-                                                <input type="text" name="keterangan_detail" class="form-control">
-                                            </div>
-                                    </td>
-
-                                    <td>
-                                        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                                        <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
                                     </td>
                                 </tr>
 
@@ -119,7 +101,7 @@
                                 <tr>
                                     <td colspan="3"></td>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-sm my-2" id="addrow">Tambah</button>
+                                        <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                                     </td>
                                 </tr>
                             </tfoot>
@@ -141,12 +123,19 @@
         </form>
     </div>
 </div>
-
 @push('scripts')
 <script>
     let hasFormBindKeys = false
 
     $(document).ready(function() {
+
+        $("#addRow").click(function() {
+            addRow()
+        })
+
+        $(document).on('click', '.delete-row', function(event) {
+            deleteRow($(this).parents('tr'))
+        })
 
         $('#btnSubmit').click(function(event) {
             event.preventDefault()
@@ -157,8 +146,7 @@
             let Id = form.find('[name=id]').val()
             let action = form.data('action')
             let data = $('#crudForm').serializeArray()
-
-            unformatAutoNumeric(data)
+            // unformatAutoNumeric(data)
 
             data.push({
                 name: 'sortIndex',
@@ -217,7 +205,6 @@
                 data: data,
                 success: response => {
 
-
                     id = response.data.id
                     console.log(id)
                     $('#crudModal').modal('hide')
@@ -248,64 +235,6 @@
         })
     })
 
-    var baris = 1;
-
-    let html = `<tr id="row">
-        <td>
-        <div class="baris">1</div>
-      </td>
-
-      <td>
-
-        <div class="row form-group">
-            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                    MEKANIK <span class="text-danger">*</span>
-                </label>
-            </div>
-                <div class="col-8 col-md-10">
-                    <input type="hidden" name="mekanik_id">
-                    <input type="text" name="mekanik" class="form-control mekanik-lookup">
-                </div>
-        </div>
-      </td>
-     
-      <td>
-        <input type="text" name="keterangan_detail" class="form-control">
-      </td>
-     
-      <td>
-        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-      </td>
-    </tr>`;
-
-    $("#addrow").click(function() {
-        let rowCount = $('#row').length;
-        let barisCount = $('.baris').length;
-        if (rowCount > 0) {
-            let clone = $('#row').clone();
-            clone.find('input').val('');
-
-            baris = parseInt(barisCount) + 1;
-            clone.find('.baris').text(baris);
-            $('table #table_body').append(clone);
-
-        } else {
-            baris = 1;
-            $('#table_body').append(html);
-        }
-    });
-
-    $('table').on('click', '.rmv', function() {
-        $(this).closest('tr').remove();
-
-        $('.baris').each(function(i, obj) {
-            $(obj).text(i + 1);
-        });
-        baris = baris - 1;
-    });
-
-
     function createServicein() {
         let form = $('#crudForm')
 
@@ -314,15 +243,14 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-
         form.data('action', 'add')
-        $('#crudModalTitle').text('Add Service In')
+        $('#crudModalTitle').text('Add Service in')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
     }
 
-    function editServicein(Id) {
+    function editServicein(id) {
         let form = $('#crudForm')
 
         form.data('action', 'edit')
@@ -331,68 +259,14 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-        $('#crudModalTitle').text('Edit Service In')
+        $('#crudModalTitle').text('Edit Service In ')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-
-        $.ajax({
-            url: `${apiUrl}servicein/${Id}`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-                $.each(response.data, (index, value) => {
-                    form.find(`[name="${index}"]`).val(value)
-                })
-                
-                let tglbukti = response.data.tglbukti
-
-                $.each(response.detail, (index, value) => {
-                    form.find(`[name="${index}"]`).val(value)
-                    })
-                    
-                $('#tglbukti').val($.datepicker.formatDate("dd-mm-yy", new Date(tglbukti)));
-
-                // $('#table_body').html('')
-            //     $.each(response.detail, (index, value) => {
-            //         $('#table_body').append(
-            //             `<tr id="row">
-            //     <td>
-            //       <div class="baris">${parseInt(index) + 1}</div>
-            //     </td>
-            //     <td>
-            //         <div class="row form-group">
-            //             <div class="col-12 col-sm-3 col-md-2 col-form-label">
-            //                 <label>
-            //                     MEKANIK <span class="text-danger">*</span>
-            //                 </label>
-            //             </div>
-            //             <div class="col-8 col-md-10">
-            //                 <input type="hidden" name="mekanik_id" value="${value.mekanik_id}>
-            //                 <input type="text" name="mekanik" value="${value.mekanik}" class="form-control mekanik-lookup>
-            //             </div>
-            //         </div>
-            //     </td>
-
-            //     <td>
-            //       <input type="text" name="keterangan_detail" value="${value.keterangan_detail}" class="form-control">
-            //     </td>
-                
-            //     <td>
-            //       <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-            //     </td>
-            //   </tr>`
-            //         )
-            //     })
-            //     initAutoNumeric($('#crudForm').find('.autonumeric'))
-            }
-        })
+        showServicein(form, id)
     }
 
-    function deleteServicein(Id) {
+    function deleteServicein(id) {
         let form = $('#crudForm')
 
         form.data('action', 'delete')
@@ -401,13 +275,18 @@
     <i class="fa fa-save"></i>
     Hapus
   `)
-        $('#crudModalTitle').text('Delete Servicein')
+        $('#crudModalTitle').text('Delete Service in')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
+        showServicein(form, id)
+    }
+
+    function showServicein(form, id) {
+        $('#detailList tbody').html('')
 
         $.ajax({
-            url: `${apiUrl}servicein/${Id}`,
+            url: `${apiUrl}servicein/${id}`,
             method: 'GET',
             dataType: 'JSON',
             headers: {
@@ -415,43 +294,99 @@
             },
             success: response => {
                 $.each(response.data, (index, value) => {
-                    form.find(`[name="${index}"]`).val(value)
-                })
-                let tglbukti = response.data.tglbukti
-                $('#tglbukti').val($.datepicker.formatDate("dd-mm-yy", new Date(tglbukti)));
-                $('#table_body').html('')
-                $.each(response.detail, (index, value) => {
-                    $('#table_body').append(
-                        `<tr id="row">
-                <td>
-                  <div class="baris">${parseInt(index) + 1}</div>
-                </td>
-                <td>
-                    <div class="row form-group">
-                        <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                        <label>
-                            MEKANIK <span class="text-danger">*</span>
-                        </label>
-                        </div>
-                        <div class="col-8 col-md-10">
-                            <input type="hidden" name="mekanik_id">
-                            <input type="text" name="mekanik" value="${value.mekanik}" class="form-control mekanik-lookup>
-                        </div>
-                    </div>
-                </td>
+                    let element = form.find(`[name="${index}"]`)
 
-                <td>
-                  <input type="text" name="keterangan_detail" value="${value.keterangan}" class="form-control">
-                </td>
-               
-                <td>
-                  <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                </td>
-              </tr>`
-                    )
+                    element.val(value)
+                    let tglbukti = response.data.tglbukti
+                    // let tglmasuk = response.data.tglmasuk
+
+                    $('#tglbukti').val(dateFormat(new Date(tglbukti)));
+                    // $('#tglmasuk').val(dateFormat( new Date(tglmasuk)));
+
                 })
 
+                $.each(response.detail, (index, detail) => {
+                    let detailRow = $(`
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="hidden" name="mekanik_id"  class="form-control">
+                            <input type="text" name="mekanik" class="form-control mekanik-lookup">
+                        </td>
+                        <td>
+                            <input type="text" name="keterangan_detail" class="form-control">
+                        </td>
+                        <td>
+                            <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                        </td>
+                    </tr>`)
+
+                    detailRow.find(`[name="mekanik"]`).val(detail.mekanik)
+                    detailRow.find(`[name="mekanik_id"]`).val(detail.mekanik_id)
+
+                    detailRow.find(`[name="keterangan_detail"]`).val(detail.keterangan)
+
+                    //autonumeric
+                    //     initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+
+                    $('#detailList tbody').append(detailRow)
+
+                    $('#lookup').hide()
+
+                    $('.mekanik-lookup').lookup({
+                        title: 'mekanik Lookup',
+                        fileName: 'mekanik',
+                        onSelectRow: (mekanik, element) => {
+                            $('#crudForm [name=mekanik_id]').first().val(mekanik.id)
+                            element.val(mekanik.namamekanik)
+                        }
+                    })
+
+                })
+                setRowNumbers()
             }
+        })
+    }
+
+    function addRow() {
+        let detailRow = (`
+        <tr>
+            <td></td>
+            <td>
+                <input type="hidden" name="mekanik_id"  class="form-control">
+                <input type="text" name="mekanik" class="form-control mekanik-lookup">
+            </td>
+            <td>
+                <input type="text" name="keterangan_detail" class="form-control">
+            </td>
+            <td>
+                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+            </td>
+        </tr>`)
+
+        $('#detailList tbody').append(detailRow)
+
+        $('.mekanik-lookup').last().lookup({
+            title: 'mekanik Lookup',
+            fileName: 'mekanik',
+            onSelectRow: (mekanik, element) => {
+                element.val(mekanik.namamekanik)
+            }
+        })
+        setRowNumbers()
+    }
+
+    function deleteRow(row) {
+        row.remove()
+
+        setRowNumbers()
+    }
+
+    function setRowNumbers() {
+        let elements = $('#detailList tbody tr td:nth-child(1)')
+
+        elements.each((index, element) => {
+            $(element).text(index + 1)
         })
     }
 </script>

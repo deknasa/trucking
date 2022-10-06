@@ -171,7 +171,7 @@
 
             unformatAutoNumeric(data)
 
-             data.push({
+            data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
             })
@@ -227,7 +227,6 @@
                 },
                 data: data,
                 success: response => {
-
 
                     id = response.data.id
                     console.log(id)
@@ -311,7 +310,7 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-        $('#crudModalTitle').text('Edit Service In Header')
+        $('#crudModalTitle').text('Edit Service out Header')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
@@ -338,8 +337,6 @@
               <td>
                     <div class="row form-group">
                         <div class="col-12 col-md-12" id="servicein_nobukti">
-                          
-
                             <div class="col-8 col-md-10">
                                 <input type="text" name="servicein_nobukti" value="${value.servicein_nobukti}" class="form-control servicein-lookup">
                             </div>
@@ -356,6 +353,15 @@
               </td>
             </tr>`
                     )
+                })
+
+                $('.servicein-lookup').last().lookup({
+                    title: 'servicein Lookup',
+                    fileName: 'servicein',
+                    onSelectRow: (servicein, element) => {
+                        $('#crudForm [name=servicein_id]').first().val(servicein.id)
+                        element.val(servicein.nobukti)
+                    }
                 })
             }
         })
@@ -397,14 +403,8 @@
               <td>
                     <div class="row form-group">
                         <div class="col-12 col-md-12" id="servicein_nobukti">
-                            <div class="input-group">
-                                <label>
-                                    NOBUKTI SERVICEIN <span class="text-danger">*</span>
-                                </label>
-                            </div>
-
                             <div class="col-8 col-md-10">
-                                <input type="text" name="servicein_nobukti" value="${value.servicein_nobukti} class="form-control servicein-lookup">
+                                <input type="text" name="servicein_nobukti" value="${value.servicein_nobukti}" class="form-control servicein-lookup">
                             </div>
                         </div>
                     </div>
