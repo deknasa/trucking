@@ -303,7 +303,7 @@
         defaultSearch: 'cn',
         groupOp: 'AND',
         beforeSearch: function() {
-          clearGlobalSearch()
+          clearGlobalSearch($('#jqGrid'))
         }
       })
 
@@ -340,10 +340,10 @@
       })
 
     /* Append clear filter button */
-    loadClearFilter()
+    loadClearFilter($('#jqGrid'))
 
     /* Append global search */
-    loadGlobalSearch()
+    loadGlobalSearch($('#jqGrid'))
 
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)

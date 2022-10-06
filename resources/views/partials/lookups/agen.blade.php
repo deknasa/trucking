@@ -35,7 +35,7 @@
           name: 'statusaktif',
           align: 'left'
         },
-        
+
         {
           label: 'NAMA PERUSAHAAN',
           name: 'namaperusahaan',
@@ -87,7 +87,7 @@
           name: 'statustas',
           align: 'left'
         },
-        
+
         {
           label: 'JENIS EMKL',
           name: 'jenisemkl',
@@ -116,6 +116,7 @@
       rownumbers: true,
       rownumWidth: 45,
       rowList: [10, 20, 50],
+      toolbar: [true, "top"],
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
@@ -186,7 +187,7 @@
         setHighlight($(this))
       }
     })
-    
+
     .jqGrid('filterToolbar', {
       stringResult: true,
       searchOnEnter: false,
@@ -194,7 +195,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-
+        clearGlobalSearch($('#agenLookup'))
       },
     })
+
+  loadGlobalSearch($('#agenLookup'))
+  loadClearFilter($('#agenLookup'))
 </script>
