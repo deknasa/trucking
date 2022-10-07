@@ -3,7 +3,7 @@
 
 @push('scripts')
 <script>
-  let penerimaanTruckingLookup = $('#penerimaanTruckingLookup').jqGrid({
+  $('#penerimaanTruckingLookup').jqGrid({
       url: `{{ config('app.api_url') . 'penerimaantrucking' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -60,6 +60,7 @@
       rownumWidth: 45,
       rowList: [10, 20, 50],
       sortable: true,
+      toolbar: [true, "top"],
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
@@ -138,7 +139,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-
+          clearGlobalSearch($('#penerimaanTruckingLookup'))
       },
     })
+
+    loadGlobalSearch($('#penerimaanTruckingLookup'))
+  loadClearFilter($('#penerimaanTruckingLookup'))
 </script>

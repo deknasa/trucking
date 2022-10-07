@@ -365,7 +365,7 @@
           initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
           $('#detailList tbody').append(detailRow)
 
-          $('#lookup').hide()
+          // $('#lookup').hide()
           $('.coadebet-lookup').lookup({
             title: 'Coa Debet Lookup',
             fileName: 'akunpusat',

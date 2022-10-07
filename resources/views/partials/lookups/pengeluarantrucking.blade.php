@@ -59,6 +59,7 @@
       rownumbers: true,
       rownumWidth: 45,
       rowList: [10, 20, 50],
+      toolbar: [true, "top"],
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
@@ -138,7 +139,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-
+          clearGlobalSearch($('#pengeluaranTruckingLookup'))
       },
     })
+
+    loadGlobalSearch($('#pengeluaranTruckingLookup'))
+    loadClearFilter($('#pengeluaranTruckingLookup'))
 </script>

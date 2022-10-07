@@ -29,11 +29,8 @@
                   TANGGAL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-4 col-md-4" id="tglbukti">
-                @php
-                $tglbukti = date('d-m-Y');
-                @endphp
-                <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
+              <div class="col-12 col-sm-4 col-md-4">
+                <input type="text" name="tglbukti" class="form-control datepicker">
               </div>
             </div>
 

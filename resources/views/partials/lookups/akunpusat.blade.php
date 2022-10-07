@@ -96,6 +96,7 @@
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
+      toolbar: [true, "top"],
       page: 1,
       pager: $('#akunPusatLookupPager'),
       viewrecords: true,
@@ -174,7 +175,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-
+        clearGlobalSearch($('#akunPusatLookup'))
       },
     })
+    
+  loadGlobalSearch($('#akunPusatLookup'))
+  loadClearFilter($('#akunPusatLookup'))
 </script>

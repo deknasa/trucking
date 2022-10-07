@@ -36,42 +36,60 @@
           align: 'left'
         },
         {
-            label: 'STATUS AKTIF',
-            name: 'statusaktif',
-            align: 'left',
-            width: 100,
-            stype: 'select',
-            // searchoptions: {
-            //     value: `<?php
-            //             $i = 1;
-
-            //             foreach ($data['combo'] as $status) :
-            //             echo "$status[param]:$status[parameter]";
-            //             if ($i !== count($data['combo'])) {
-            //                 echo ";";
-            //             }
-            //             $i++;
-            //             endforeach
-
-            //             ?>
-            // `,
-            //     dataInit: function(element) {
-            //     $(element).select2({
-            //         width: 'resolve',
-            //         theme: "bootstrap4"
-            //     });
-            //     }
-            // },
+          label: 'STATUS AKTIF',
+          name: 'statusaktif',
+          align: 'left',
+          width: 100,
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}bank/combo`,
+                  method: "get",
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: function () {
+                    return{
+                        search: 'status'
+                    }
+                  },
+                  processResults: function (data) {
+                    let datas = []
+                    $.map(data, function (item) {
+                      $.map(item, function (index,value) {
+                            $.each(index, (row, detail) => {
+                              datas.push({
+                                    id: detail.text,
+                                    text: detail.text
+                                })
+                            })
+                              
+                          })
+                        })
+                        console.log(datas)
+                    return {
+                        results: datas
+                    };
+                  }             
+                }
+              });
+            }
+          },
         },
         {
-            label: 'STATUS PENERIMAAN',
-            name: 'statusformatpenerimaan',
-            align: 'left'
+          label: 'STATUS PENERIMAAN',
+          name: 'statusformatpenerimaan',
+          align: 'left'
         },
         {
-            label: 'STATUS PENGELUARAN',
-            name: 'statusformatpengeluaran',
-            align: 'left'
+          label: 'STATUS PENGELUARAN',
+          name: 'statusformatpengeluaran',
+          align: 'left'
         },
         {
           label: 'MODIFIEDBY',
@@ -100,6 +118,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
+      toolbar: [true, "top"],
       pager: $('#bankLookupPager'),
       viewrecords: true,
       prmNames: {
@@ -174,7 +193,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-
+        clearGlobalSearch($('#bankLookup'))
       },
     })
+
+  loadGlobalSearch($('#bankLookup'))
+  loadClearFilter($('#bankLookup'))
 </script>

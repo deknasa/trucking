@@ -29,10 +29,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
-                @php
-                $tglbukti = date('d-m-Y');
-                @endphp
-                <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
+                <input type="text" name="tglbukti" class="form-control datepicker">
               </div>
             </div>
             <div class="row form-group">
@@ -253,7 +250,7 @@
           })
           data.push({
             name: 'bayarppd[]',
-            value: $(this).find(`[name="bayarppd[]"]`).val()
+            value: AutoNumeric.getNumber($(`#crudForm [name="bayarppd[]"]`)[row])
           })
           data.push({
             name: 'keteranganpenyesuaianppd[]',
@@ -261,11 +258,11 @@
           })
           data.push({
             name: 'penyesuaianppd[]',
-            value: $(this).find(`[name="penyesuaianppd[]"]`).val()
+            value: AutoNumeric.getNumber($(`#crudForm [name="penyesuaianppd[]"]`)[row])
           })
           data.push({
             name: 'nominallebihbayarppd[]',
-            value: $(this).find(`[name="nominallebihbayarppd[]"]`).val()
+            value: AutoNumeric.getNumber($(`#crudForm [name="nominallebihbayarppd[]"]`)[row])
           })
           data.push({
             name: 'piutang_id[]',
@@ -355,7 +352,8 @@
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
 
-            setErrorMessages(form, error.responseJSON.errors);
+
+            // setErrorMessages(form, error.responseJSON.errors);
           } else {
             showDialog(error.statusText)
           }
@@ -409,18 +407,19 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+
         $.each(response.data, (index, value) => {
           form.find(`[name="${index}"]`).val(value).attr('disabled', false)
         })
+
         $.each(response.detail, (index, value) => {
           form.find(`[name="${index}"]`).val(value).attr('disabled', false)
         })
+
         let agenId = response.detail.agendetail_id
         $('#editpiutang').show()
 
         getPelunasan(Id, agenId, 'edit')
-        let tglbukti = response.data.tglbukti
-        $('#tglbukti').val($.datepicker.formatDate("dd-mm-yy", new Date(tglbukti)));
       }
     })
   }
@@ -458,9 +457,6 @@
         // $('#gridEditPiutang').trigger('reloadGrid')
         getPelunasan(Id, agenId, 'delete')
         
-
-        let tglbukti = response.data.tglbukti
-        $('#tglbukti').val($.datepicker.formatDate("dd-mm-yy", new Date(tglbukti)));
       }
     })
   }
@@ -494,8 +490,9 @@
           let nominal = new Intl.NumberFormat('en-US').format(detail.nominal);
           let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
 
+         
           let detailRow = $(`
-            <tr>
+            <tr onclick="select(this)">
               <td><input name='piutang_id[]' type="checkbox" id="checkItem" value="${id}"></td>
               <td></td>
               <td width="10%">${detail.nobukti}</td>
@@ -503,20 +500,20 @@
               <td width="10%">${detail.invoice_nobukti}</td>
               <td width="10%">${nominal}</p></td>
               <td width="10%">${sisa}</td>
-              <td>
+              <td width="10%">
                 <input type="text" name="keterangandetailppd[]" class="form-control">
               </td>
-              <td>
-                <input type="text" name="bayarppd[]" class="form-control ">
+              <td width="10%">
+                <input type="text" name="bayarppd[]" class="form-control autonumeric">
               </td>
-              <td>
+              <td width="10%">
                 <input type="text" name="keteranganpenyesuaianppd[]" class="form-control">
               </td>
-              <td>
-                <input type="text" name="penyesuaianppd[]" class="form-control ">
+              <td width="10%">
+                <input type="text" name="penyesuaianppd[]" class="form-control autonumeric">
               </td>
-              <td>
-                <input type="text" name="nominallebihbayarppd[]" class="form-control ">
+              <td width="10%">
+                <input type="text" name="nominallebihbayarppd[]" class="form-control autonumeric">
               </td>
             </tr>
           `)
@@ -524,9 +521,9 @@
           // detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
           // detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
 
-          initAutoNumeric(detailRow.find(`[name="bayarppd[]"]`))
-          initAutoNumeric(detailRow.find(`[name="penyesuaianppd[]"]`))
-          initAutoNumeric(detailRow.find(`[name="nominallebihbayarppd[]"]`))
+          initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
+          initAutoNumericNoMinus(detailRow.find(`[name="penyesuaianppd[]"]`))
+          initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
           //untuk unformat
           // input.value = AutoNumeric.getNumber(autoNumericElement);
           $('#detailList tbody').append(detailRow)
@@ -581,7 +578,7 @@
           }
 
           let detailRow = $(`
-            <tr>
+            <tr onclick="select(this)">
               <td><input name='piutang_id[]' type="checkbox" class="checkItem" value="${id}" ${checked} ${attribut}></td>
               <td></td>
               <td width="10%">${detail.piutang_nobukti}</td>
@@ -593,23 +590,23 @@
                 <input type="text" name="keterangandetailppd[]" class="form-control" value="${detail.keterangan || ''}" ${attribut}>
               </td>
               <td>
-                <input type="text" name="bayarppd[]" class="form-control" value="${detail.nominal || ''}" ${attribut}>
+                <input type="text" name="bayarppd[]" class="form-control autonumeric" value="${detail.nominal || ''}" ${attribut}>
               </td>
               <td>
                 <input type="text" name="keteranganpenyesuaianppd[]" class="form-control" value="${detail.keteranganpenyesuaian || ''}" ${attribut}>
               </td>
               <td>
-                <input type="text" name="penyesuaianppd[]" class="form-control " value="${detail.penyesuaian || ''}" ${attribut}>
+                <input type="text" name="penyesuaianppd[]" class="form-control autonumeric" value="${detail.penyesuaian || ''}" ${attribut}>
               </td>
               <td>
-                <input type="text" name="nominallebihbayarppd[]" class="form-control " value="${detail.nominallebihbayar || ''}" ${attribut}>
+                <input type="text" name="nominallebihbayarppd[]" class="form-control autonumeric" value="${detail.nominallebihbayar || ''}" ${attribut}>
               </td>
             </tr>
           `)
 
-          initAutoNumeric(detailRow.find(`[name="bayarppd[]"]`))
-          initAutoNumeric(detailRow.find(`[name="penyesuaianppd[]"]`))
-          initAutoNumeric(detailRow.find(`[name="nominallebihbayarppd[]"]`))
+          initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
+          initAutoNumericNoMinus(detailRow.find(`[name="penyesuaianppd[]"]`))
+          initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
           $('#detailList tbody').append(detailRow)          
         })
 
@@ -620,7 +617,10 @@
     
   }
 
-   
+  function select(element) {
+      $(element).find(`[name="piutang_id[]"]`).attr('checked', true)
+      // $(element).style.backgroundColor = "green"
+  }
   
   function setRowNumbers() {
     let elements = $('#detailList tbody tr td:nth-child(2)')
@@ -628,6 +628,23 @@
     elements.each((index, element) => {
       $(element).text(index + 1)
     })
+  }
+
+  function initAutoNumericNoMinus(elements = null) {
+    let option = {
+      digitGroupSeparator: formats.THOUSANDSEPARATOR,
+      decimalCharacter: formats.DECIMALSEPARATOR,
+      minimumValue: 0
+
+    };
+
+    if (elements == null) {
+      new AutoNumeric.multiple(".autonumeric", option);
+    } else {
+      $.each(elements, (index, element) => {
+        new AutoNumeric(element, option);
+      });
+    }
   }
 </script>
 @endpush()
