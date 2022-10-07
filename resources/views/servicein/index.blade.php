@@ -51,8 +51,8 @@
       title: 'mekanik Lookup',
       fileName: 'mekanik',
       onSelectRow: (mekanik, element) => {
-        $('#crudForm [name=mekanik_id]').first().val(mekanik.id)
-        element.val(mekanik.namamekanik)
+        $('#crudForm [name=mekanik]').first().val(mekanik.namamekanik)
+        element.val(mekanik.id)
 
       }
     })

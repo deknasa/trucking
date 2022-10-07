@@ -28,7 +28,7 @@
                                     TANGGAL BUKTI <span class="text-danger">*</span>
                                 </label>
                             </div>
-                            <div class="col-12 col-sm-4 col-md-4" >
+                            <div class="col-12 col-sm-4 col-md-4">
                                 <input type="text" name="tglbukti" class="form-control datepicker">
                             </div>
                         </div>
@@ -51,11 +51,9 @@
                                     TANGGAL MASUK <span class="text-danger">*</span>
                                 </label>
                             </div>
-                            <div class="col-12 col-sm-4 col-md-4" id="tglmasuk">
-                                @php
-                                $tglmasuk = date('d-m-Y');
-                                @endphp
-                                <input type="text" name="tglmasuk" value="{{$tglmasuk}}" id="tglmasuk" class="form-control datepicker">
+                            <div class="col-12 col-sm-4 col-md-4">
+
+                                <input type="text" name="tglmasuk" class="form-control datepicker">
                             </div>
                         </div>
 
@@ -83,16 +81,16 @@
                                 <tr>
                                     <td></td>
                                     <td>
-                                        <input type="hidden" name="mekanik_id" class="form-control">
-                                        <input type="text" name="mekanik" class="form-control mekanik-lookup">
+                                        <input type="hidden" name="mekanik_id[]" class="form-control">
+                                        <input type="text" name="mekanik[]" class="form-control mekanik-lookup">
                                     </td>
 
                                     <td>
-                                        <input type="text" name="keterangan_detail" class="form-control">
+                                        <input type="text" name="keterangan_detail[]" class="form-control">
                                     </td>
 
                                     <td>
-                                        <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                                        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                                     </td>
                                 </tr>
 
@@ -123,10 +121,10 @@
         </form>
     </div>
 </div>
+
 @push('scripts')
 <script>
     let hasFormBindKeys = false
-
     $(document).ready(function() {
 
         $("#addRow").click(function() {
@@ -172,7 +170,7 @@
                 name: 'limit',
                 value: limit
             })
-            console.log(data)
+
             switch (action) {
                 case 'add':
                     method = 'POST'
@@ -191,7 +189,6 @@
                     url = `${apiUrl}servicein`
                     break;
             }
-
             $(this).attr('disabled', '')
             $('#loader').removeClass('d-none')
 
@@ -206,7 +203,6 @@
                 success: response => {
 
                     id = response.data.id
-                    console.log(id)
                     $('#crudModal').modal('hide')
                     $('#crudModal').find('#crudForm').trigger('reset')
 
@@ -275,6 +271,7 @@
     <i class="fa fa-save"></i>
     Hapus
   `)
+        form.find(`.sometimes`).hide()
         $('#crudModalTitle').text('Delete Service in')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
@@ -296,35 +293,41 @@
                 $.each(response.data, (index, value) => {
                     let element = form.find(`[name="${index}"]`)
 
-                    element.val(value)
-                    let tglbukti = response.data.tglbukti
-                    // let tglmasuk = response.data.tglmasuk
-
-                    $('#tglbukti').val(dateFormat(new Date(tglbukti)));
-                    // $('#tglmasuk').val(dateFormat( new Date(tglmasuk)));
-
+                    if (element.is('select')) {
+                        element.val(value).trigger('change')
+                    } else {
+                        element.val(value)
+                    }
                 })
+                //     element.val(value)
+                //     let tglbukti = response.data.tglbukti
+                //     // let tglmasuk = response.data.tglmasuk
+
+                //     $('#tglbukti').val(dateFormat(new Date(tglbukti)));
+                //     // $('#tglmasuk').val(dateFormat( new Date(tglmasuk)));
+
+                // })
 
                 $.each(response.detail, (index, detail) => {
                     let detailRow = $(`
                     <tr>
                         <td></td>
                         <td>
-                            <input type="hidden" name="mekanik_id"  class="form-control">
-                            <input type="text" name="mekanik" class="form-control mekanik-lookup">
+                            <input type="hidden" name="mekanik_id[]"  class="form-control">
+                            <input type="text" name="mekanik[]" class="form-control mekanik-lookup">
                         </td>
                         <td>
-                            <input type="text" name="keterangan_detail" class="form-control">
+                            <input type="text" name="keterangan_detail[]" class="form-control">
                         </td>
                         <td>
-                            <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                        </td>
+                        <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
+                      </td>
                     </tr>`)
 
-                    detailRow.find(`[name="mekanik"]`).val(detail.mekanik)
-                    detailRow.find(`[name="mekanik_id"]`).val(detail.mekanik_id)
+                    detailRow.find(`[name="mekanik[]"]`).val(detail.mekanik)
+                    detailRow.find(`[name="mekanik_id[]"]`).val(detail.mekanik_id)
 
-                    detailRow.find(`[name="keterangan_detail"]`).val(detail.keterangan)
+                    detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
 
                     //autonumeric
                     //     initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
@@ -333,12 +336,12 @@
 
                     $('#lookup').hide()
 
-                    $('.mekanik-lookup').lookup({
+                    $('.mekanik-lookup').last().lookup({
                         title: 'mekanik Lookup',
                         fileName: 'mekanik',
                         onSelectRow: (mekanik, element) => {
-                            $('#crudForm [name=mekanik_id]').first().val(mekanik.id)
-                            element.val(mekanik.namamekanik)
+                            $('#crudForm [name=mekanik]').first().val(mekanik.namamekanik)
+                            element.val(mekanik.id)
                         }
                     })
 
@@ -353,15 +356,15 @@
         <tr>
             <td></td>
             <td>
-                <input type="hidden" name="mekanik_id"  class="form-control">
-                <input type="text" name="mekanik" class="form-control mekanik-lookup">
+                <input type="hidden" name="mekanik_id[]"  class="form-control">
+                <input type="text" name="mekanik[]" class="form-control mekanik-lookup">
             </td>
             <td>
-                <input type="text" name="keterangan_detail" class="form-control">
+                <input type="text" name="keterangan_detail[]" class="form-control">
             </td>
             <td>
-                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-            </td>
+            <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+          </td>
         </tr>`)
 
         $('#detailList tbody').append(detailRow)
@@ -370,9 +373,11 @@
             title: 'mekanik Lookup',
             fileName: 'mekanik',
             onSelectRow: (mekanik, element) => {
-                element.val(mekanik.namamekanik)
+                $('#crudForm [name=mekanik]').first().val(mekanik.namamekanik)
+                element.val(mekanik.id)
             }
         })
+
         setRowNumbers()
     }
 

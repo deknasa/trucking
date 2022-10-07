@@ -29,11 +29,8 @@
                   TANGGAL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-4 col-md-4" id="tglbukti">
-                @php
-                $tglbukti = date('d-m-Y');
-                @endphp
-                <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
+              <div class="col-12 col-sm-4 col-md-4" >
+                <input type="text" name="tglbukti" class="form-control datepicker">
               </div>
             </div>
 
@@ -70,14 +67,12 @@
                   <th>Aksi</th>
                 </tr>
               </thead>
-<<<<<<< HEAD
 
 
               <tbody id="table_body" class="form-group">
 
-                <tr id="row">
+              <tr>
                   <td>
-                    <div class="baris">1</div>
                   </td>
                   <td>
                     <div class="row form-group">
@@ -97,9 +92,6 @@
                     <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                   </td>
                 </tr>
-=======
-              <tbody>
->>>>>>> e3568921d216bda85edbffbbdfbff577c524c7a3
 
               </tbody>
               <tfoot>

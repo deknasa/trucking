@@ -79,24 +79,17 @@
                   <th>Aksi</th>
                 </tr>
               </thead>
-              <tbody id="table_body" class="form-group">
-                <tr id="row">
+              <tbody>
+                <tr>
                   <td>
-                    <div class="baris">1</div>
                   </td>
                   <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12" id="supplier">
-                        <div class="col-8 col-md-10">
-                          <input type="hidden" name="supplier_id">
-                          <input type="text" name="supplier" class="form-control supplier-lookup">
-                        </div>
-                      </div>
-                    </div>
+                    <input type="hidden" name="supplier_id[]" class="form-control">
+                    <input type="text" name="supplier[]" class="form-control supplier-lookup">
                   </td>
 
                   <td>
-                    <input type="text" name="tgljatuhtempo" class="form-control datepicker">
+                    <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">
                   </td>
 
                   <td>
@@ -153,7 +146,6 @@
 <script>
   let hasFormBindKeys = false
   $(document).ready(function() {
-    // addRow()
 
     $("#addRow").click(function() {
       addRow()
@@ -209,18 +201,78 @@
         name: 'limit',
         value: limit
       })
+
+      switch (action) {
+        case 'add':
+          method = 'POST'
+          url = `${apiUrl}hutangheader`
+          break;
+        case 'edit':
+          method = 'PATCH'
+          url = `${apiUrl}hutangheader/${Id}`
+          break;
+        case 'delete':
+          method = 'DELETE'
+          url = `${apiUrl}hutangheader/${Id}`
+          break;
+        default:
+          method = 'POST'
+          url = `${apiUrl}hutangheader`
+          break;
+      }
+      $(this).attr('disabled', '')
+      $('#loader').removeClass('d-none')
+
+      $.ajax({
+        url: url,
+        method: method,
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+
+
+          id = response.data.id
+          $('#crudModal').find('#crudForm').trigger('reset')
+          $('#crudModal').modal('hide')
+
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
+
+          if (response.data.grp == 'FORMAT') {
+            updateFormat(response.data)
+          }
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.statusText)
+          }
+        },
+      }).always(() => {
+        $('#loader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+
     })
   })
 
-  $('#crudModal').on('shown.bs.modal', () => {
-    let form = $('#crudForm')
-    setFormBindKeys(form)
-    activeGrid = null
-  })
+  // $('#crudModal').on('shown.bs.modal', () => {
+  //   let form = $('#crudForm')
+  //   setFormBindKeys(form)
+  //   activeGrid = null
+  // })
 
-  $('#crudModal').on('hidden.bs.modal', () => {
-    activeGrid = '#jqGrid'
-  })
+  // $('#crudModal').on('hidden.bs.modal', () => {
+  //   activeGrid = '#jqGrid'
+  // })
 
   function createHutangHeader() {
     let form = $('#crudForm')
@@ -231,14 +283,14 @@
                   Simpan
                 `)
     form.data('action', 'add')
-    form.find(`.sometimes`).show()
+    // form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Hutang Header')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
   }
 
-  function editHutangHeader(userId) {
+  function editHutangHeader(id) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -252,11 +304,11 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    showHutangHeader(form, userId)
+    showHutangHeader(form, id)
 
   }
 
-  function deleteHutangHeader(userId) {
+  function deleteHutangHeader(id) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -270,7 +322,7 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    showHutangHeader(form, userId)
+    showHutangHeader(form, id)
   }
 
   function showHutangHeader(form, userId) {
@@ -299,8 +351,8 @@
                       <tr>
                       <td> </td>
                       <td>
-                          <input type="hidden" name="supplier_id[]">
-                          <input type="text" name="supplier" class="form-control supplier-lookup">
+                      <input type="hidden" name="supplier_id[]" class="form-control">
+                          <input type="text" name="supplier[]" class="form-control supplier-lookup">
                       </td>
                       <td>
                       <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">
@@ -318,11 +370,12 @@
                         <input type="text" name="keterangan_detail[]"  class="form-control">
                       </td>
                       <td>
-                        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                        <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
                       </td>
                       </tr>`)
 
           detailRow.find(`[name="supplier_id[]"]`).val(detail.supplier_id)
+          detailRow.find(`[name="supplier[]"]`).val(detail.supplier)
           detailRow.find(`[name="tgljatuhtempo[]"]`).val(detail.tgljatuhtempo)
           detailRow.find(`[name="total_detail[]"]`).val(detail.total)
           detailRow.find(`[name="cicilan_detail[]"]`).val(detail.cicilan)
@@ -337,14 +390,15 @@
 
           $('#lookup').hide()
 
-          // $('.supplier-lookup').lookup({
-          //   title: 'supplier Lookup',
-          //   fileName: 'supplier',
-          //   onSelectRow: (supplier, element) => {
-          //     $('#crudForm [name=supplier_id]').first().val(supplier.id)
-          //     element.val(supplier.namasupplier)
-          //   }
-          // })
+          $('.supplier-lookup').last().lookup({
+            title: 'supplier Lookup',
+            fileName: 'supplier',
+            onSelectRow: (supplier, element) => {
+              $('#crudForm [name=supplier]').first().val(supplier.namasupplier)
+              element.val(supplier.id)
+
+            }
+          })
         })
 
         setRowNumbers()
@@ -354,43 +408,46 @@
 
   function addRow() {
     let detailRow = $(`
-                      <tr>
-                      <td> </td>
-                      <td>
-                          <input type="hidden" name="supplier_id[]">
-                          <input type="text" name="supplier" class="form-control supplier-lookup">
-                      </td>
-                      <td>
-                      <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">
-                      </td>
-                      <td>
-                          <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right autonumeric" > 
-                      </td>
-                      <td>
-                          <input type="text" name="cicilan_detail[]"  style="text-align:right" class="form-control text-right autonumeric" > 
-                      </td>
-                      <td>
-                          <input type="text" name="totalbayar_detail[]"  style="text-align:right" class="form-control text-right autonumeric" > 
-                      </td>
-                      <td>
-                        <input type="text" name="keterangan_detail[]"  class="form-control">
-                      </td>
-                      <td>
-                        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                      </td>
-              </tr>`)
+          <tr>
+          <td> </td>
+          <td>
+          <input type="hidden" name="supplier_id[]" class="form-control">
+              <input type="text" name="supplier[]" class="form-control supplier-lookup">
+          </td>
+          <td>
+          <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">
+          </td>
+          <td>
+              <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right autonumeric" > 
+          </td>
+          <td>
+              <input type="text" name="cicilan_detail[]"  style="text-align:right" class="form-control text-right autonumeric" > 
+          </td>
+          <td>
+              <input type="text" name="totalbayar_detail[]"  style="text-align:right" class="form-control text-right autonumeric" > 
+          </td>
+          <td>
+            <input type="text" name="keterangan_detail[]"  class="form-control">
+          </td>
+          <td>
+            <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+          </td>
+  </tr>`)
 
     $('#detailList tbody').append(detailRow)
-
-    initAutoNumeric(detailRow.find('.autonumeric'))
 
     $('.supplier-lookup').last().lookup({
       title: 'supplier Lookup',
       fileName: 'supplier',
       onSelectRow: (supplier, element) => {
-        element.val(supplier.namasupplier)
+        $('#crudForm [name=supplier]').first().val(supplier.namasupplier)
+        element.val(supplier.id)
+
       }
     })
+
+    initAutoNumeric(detailRow.find('.autonumeric'))
+    initDatepicker(detailRow.find('.datepicker'))
     setRowNumbers()
   }
 

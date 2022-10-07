@@ -56,17 +56,16 @@
       }
     })
 
-    
     $('.supplier-lookup').lookup({
       title: 'supplier Lookup',
       fileName: 'supplier',
       onSelectRow: (supplier, element) => {
-        $('#crudForm [name=supplier_id]').first().val(supplier.id)
-        element.val(supplier.namasupplier)
+        $('#crudForm [name=supplier]').first().val(supplier.namasupplier)
+        element.val(supplier.id)
 
       }
     })
-   
+
     $('#crudModal').on('shown.bs.modal', function() {
       activeGrid = '#jqGrid'
     })
@@ -193,7 +192,7 @@
 
           setTimeout(function() {
 
-           if (triggerClick) {
+            if (triggerClick) {
               if (id != '') {
                 indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
                 $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
@@ -481,7 +480,7 @@
 
     }
 
-    
+
     function sanitize(rowData) {
       Object.keys(rowData).forEach(key => {
         rowData[key] = rowData[key].replaceAll('<span class="highlight">', '').replaceAll('</span>', '')
