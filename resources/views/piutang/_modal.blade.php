@@ -72,9 +72,7 @@
               <tbody id="table_body" class="form-group">
 
               <tr>
-                  <td>
-                  </td>
-                  
+                  <td> 1</td>
                   <td>
                     <div class="row form-group">
                       <div class="col-12 col-md-12">
@@ -85,7 +83,7 @@
                   <td>
                     <div class="row form-group">
                       <div class="col-12 col-md-12">
-                        <input type="text" name="nominal_detail[]" class="form-control autonumeric">
+                        <input type="text" name="nominal_detail[]" class="form-control nominal autonumeric">
                       </div>
                     </div>
                   </td>
@@ -97,7 +95,8 @@
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan="3"></td>
+                  <td colspan="2"><h4 class="text-right">TOTAL :</h4></td>
+                  <td><h4 id="total"></h4></td>
                   <td>
                     <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                   </td>
@@ -347,7 +346,7 @@
                 <input type="text" name="keterangan_detail[]" class="form-control">
               </td>
               <td>
-                <input type="text" name="nominal_detail[]" class="form-control autonumeric">
+                <input type="text" name="nominal_detail[]" class="form-control nominal autonumeric">
               </td>
               <td>
                 <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
@@ -375,7 +374,7 @@
           <input type="text" name="keterangan_detail[]" class="form-control">
         </td>
         <td>
-          <input type="text" name="nominal_detail[]" class="form-control autonumeric">
+          <input type="text" name="nominal_detail[]" class="form-control nominal autonumeric">
         </td>
         <td>
           <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
@@ -403,5 +402,6 @@
       $(element).text(index + 1)
     })
   }
+
 </script>
 @endpush()
