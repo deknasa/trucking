@@ -74,17 +74,18 @@
               <tr>
                   <td>
                   </td>
+                  
                   <td>
                     <div class="row form-group">
                       <div class="col-12 col-md-12">
-                        <input type="text" name="nominal_detail[]" class="form-control autonumeric">
+                        <input type="text" name="keterangan_detail[]" class="form-control">
                       </div>
                     </div>
                   </td>
                   <td>
                     <div class="row form-group">
                       <div class="col-12 col-md-12">
-                        <input type="text" name="keterangan_detail[]" class="form-control">
+                        <input type="text" name="nominal_detail[]" class="form-control autonumeric">
                       </div>
                     </div>
                   </td>
@@ -124,7 +125,7 @@
 <script>
   let hasFormBindKeys = false
   $(document).ready(function() {
-    addRow()
+    
 
     $("#addRow").click(function() {
       addRow()
