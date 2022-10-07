@@ -408,9 +408,13 @@
       },
       success: response => {
 
+        let tgl = response.data.tglbukti
         $.each(response.data, (index, value) => {
           form.find(`[name="${index}"]`).val(value).attr('disabled', false)
         })
+        
+        let ft = dateFormat(tgl)
+        form.find(`[name="tglbukti"]`).val(ft)
 
         $.each(response.detail, (index, value) => {
           form.find(`[name="${index}"]`).val(value).attr('disabled', false)

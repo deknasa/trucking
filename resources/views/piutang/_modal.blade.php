@@ -262,13 +262,13 @@
   function createPiutangHeader() {
     let form = $('#crudForm')
 
-    form.trigger('reset')
+    $('#crudModal').find('#crudForm').trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
       Simpan
     `)
     form.data('action', 'add')
-    form.find(`.sometimes`).show()
+    // form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Piutang Header')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
@@ -325,9 +325,10 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        let tgl = response.data.tglbukti
+
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
-
           if (element.is('select')) {
             element.val(value).trigger('change')
           } else {
@@ -335,6 +336,9 @@
           }
         })
 
+        let ft = dateFormat(tgl)
+        form.find(`[name="tglbukti"]`).val(ft)
+        
         $.each(response.detail, (index, detail) => {
           let detailRow = $(`
             <tr>

@@ -328,6 +328,7 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        let tgl = response.data.tglbukti
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
 
@@ -335,7 +336,9 @@
             let tglbukti = response.data.tglbukti
             $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
         })
-
+        let ft = dateFormat(tgl)
+        form.find(`[name="tglbukti"]`).val(ft)
+        
         $.each(response.detail, (index, detail) => {
           let detailRow = $(`
             <tr>
