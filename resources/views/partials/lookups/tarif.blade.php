@@ -193,7 +193,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-
+        clearGlobalSearch($('#tarifLookup'))
       },
     })
+
+  loadGlobalSearch($('#tarifLookup'))
+  loadClearFilter($('#tarifLookup'))
 </script>
