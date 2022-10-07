@@ -16,7 +16,6 @@ class ServiceInHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-
         return view('servicein.index', compact('title'));
     }
 
@@ -67,7 +66,6 @@ class ServiceInHeaderController extends MyController
                 'rows' => $response['data'] ?? [],
                 'params' => $response['params'] ?? [],
             ];
-    
 
         return $data;
     }

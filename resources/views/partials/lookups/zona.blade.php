@@ -25,28 +25,29 @@
         {
           label: 'STATUS',
           name: 'statusaktif',
-        //   stype: 'select',
-        //   searchoptions: {
-        //     value: `<?php
-        //             $i = 1;
+          //   stype: 'select',
+          //   searchoptions: {
+          //     value: `<?php
+                          //             $i = 1;
 
-        //             foreach ($data['statusaktif'] as $status) :
-        //             echo "$status[param]:$status[parameter]";
-        //             if ($i !== count($data['statusaktif'])) {
-        //                 echo ";";
-        //             }
-        //             $i++;
-        //             endforeach
+                          //             foreach ($data['statusaktif'] as $status) :
+                          //             echo "$status[param]:$status[parameter]";
+                          //             if ($i !== count($data['statusaktif'])) {
+                          //                 echo ";";
+                          //             }
+                          //             $i++;
+                          //             endforeach
 
-        //             ?>
-        //         `,
-        //   dataInit: function(element) {
-        //     $(element).select2({
-        //         width: 'resolve',
-        //         theme: "bootstrap4"
-        //     });
-        //     }
-        //   },
+                          //             
+                          ?>
+          //         `,
+          //   dataInit: function(element) {
+          //     $(element).select2({
+          //         width: 'resolve',
+          //         theme: "bootstrap4"
+          //     });
+          //     }
+          //   },
         },
         {
           label: 'MODIFIEDBY',

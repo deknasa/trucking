@@ -67,7 +67,31 @@
                   <th>Aksi</th>
                 </tr>
               </thead>
-              <tbody>
+
+
+              <tbody id="table_body" class="form-group">
+
+              <tr>
+                  <td>
+                  </td>
+                  <td>
+                    <div class="row form-group">
+                      <div class="col-12 col-md-12">
+                        <input type="text" name="nominal_detail[]" class="form-control autonumeric">
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="row form-group">
+                      <div class="col-12 col-md-12">
+                        <input type="text" name="keterangan_detail[]" class="form-control">
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                  </td>
+                </tr>
 
               </tbody>
               <tfoot>

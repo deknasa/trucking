@@ -178,7 +178,6 @@
         clearGlobalSearch($('#akunPusatLookup'))
       },
     })
-    
   loadGlobalSearch($('#akunPusatLookup'))
   loadClearFilter($('#akunPusatLookup'))
 </script>

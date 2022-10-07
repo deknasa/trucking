@@ -1,7 +1,6 @@
 <table id="supplierLookup" class="lookup-grid"></table>
 <div id="supplierLookupPager"></div>
 
-@push('scripts')
 <script>
   $('#supplierLookup').jqGrid({
       url: `{{ config('app.api_url') . 'supplier' }}`,
@@ -51,71 +50,70 @@
           align: 'left'
         },
         {
-            label: 'EMAIL',
-            name: 'email',
-            align: 'left',
+          label: 'EMAIL',
+          name: 'email',
+          align: 'left',
         },
         {
-            label: 'STATUS AKTIF',
-            name: 'statusaktif',
-            align: 'left',
+          label: 'STATUS AKTIF',
+          name: 'statusaktif',
+          align: 'left',
         },
         {
-            label: 'WEB',
-            name: 'web',
-            align: 'left',
+          label: 'WEB',
+          name: 'web',
+          align: 'left',
         },
         {
-            label: 'NAMA PEMILIK',
-            name: 'namapemilik',
-            align: 'left',
+          label: 'NAMA PEMILIK',
+          name: 'namapemilik',
+          align: 'left',
         },
         {
-            label: 'JENIS USAHA',
-            name: 'jenisusaha',
-            align: 'left',
+          label: 'JENIS USAHA',
+          name: 'jenisusaha',
+          align: 'left',
         },
         {
-            label: 'TOP',
-            name: 'top',
-            align: 'left',
+          label: 'TOP',
+          name: 'top',
+          align: 'left',
         },
         {
-            label: 'BANK',
-            name: 'bank',
-            align: 'left',
+          label: 'BANK',
+          name: 'bank',
+          align: 'left',
         },
         {
-            label: 'REKENING BANK',
-            name: 'rekeningbank',
-            align: 'left',
+          label: 'REKENING BANK',
+          name: 'rekeningbank',
+          align: 'left',
         },
         {
-            label: 'NAMA REKENING',
-            name: 'namarekening',
-            align: 'left',
+          label: 'NAMA REKENING',
+          name: 'namarekening',
+          align: 'left',
         },
         {
-            label: 'JABATAN',
-            name: 'jabatan',
-            align: 'left',
+          label: 'JABATAN',
+          name: 'jabatan',
+          align: 'left',
         },
         {
-            label: 'STATUS DAFTAR HARGA',
-            name: 'statusdaftarharga',
-            align: 'left',
+          label: 'STATUS DAFTAR HARGA',
+          name: 'statusdaftarharga',
+          align: 'left',
         },
         {
-            label: 'KATEGORI USAHA',
-            name: 'kategoriusaha',
-            align: 'left',
+          label: 'KATEGORI USAHA',
+          name: 'kategoriusaha',
+          align: 'left',
         },
-       
       ],
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
-      height: 350,
+      height: 450,
       rowNum: 10,
       rownumbers: true,
       rownumWidth: 45,
@@ -151,7 +149,6 @@
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
-          initResize($(this))
 
           if (indexRow - 1 > $('#supplierLookup').getGridParam().reccount) {
             indexRow = $('#supplierLookup').getGridParam().reccount - 1
@@ -192,15 +189,17 @@
       }
     })
 
-    // .jqGrid('filterToolbar', {
-    //   stringResult: true,
-    //   searchOnEnter: false,
-    //   defaultSearch: 'cn',
-    //   groupOp: 'AND',
-    //   disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
-    //   beforeSearch: function() {
+    .jqGrid('filterToolbar', {
+      stringResult: true,
+      searchOnEnter: false,
+      defaultSearch: 'cn',
+      groupOp: 'AND',
+      disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
+      beforeSearch: function() {
+        clearGlobalSearch($('#supplierLookup'))
+      },
+    })
 
-    //   },
-    // })
+  loadGlobalSearch($('#supplierLookup'))
+  loadClearFilter($('#supplierLookup'))
 </script>
-@endpush

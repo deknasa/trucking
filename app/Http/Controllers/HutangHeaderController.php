@@ -191,21 +191,18 @@ class HutangHeaderController extends MyController
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "hutangheader/$id");
 
-            $hutangheader = $response['data'];
-            
+            $hutangHeader = $response['data'];
             $combo = $this->combo();
 
-            return view('hutangheader.delete', compact('title','combo', 'hutangheader'));
+            return view('hutangheader.delete', compact('title', 'combo', 'hutangheader'));
         } catch (\Throwable $th) {
             return redirect()->route('hutangheader.index');
         }
     }
 
-
-       // /**
-    //  * Fungsi destroy
-    //  * @ClassName destroy
-    //  */
+     /**
+     * @ClassName
+     */
     public function destroy($id)
     {
         $request['modifiedby'] = Auth::user()->name;
@@ -214,10 +211,8 @@ class HutangHeaderController extends MyController
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "hutangheader/$id");
 
-            
         return response($response);
     }
-
     // /**
     //  * Fungsi getNoBukti
     //  * @ClassName getNoBukti

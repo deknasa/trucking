@@ -3,7 +3,7 @@
 
 @push('scripts')
 <script>
-   $('#serviceinLookup').jqGrid({
+  $('#serviceinLookup').jqGrid({
       url: `{{ config('app.api_url') . 'servicein' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -40,7 +40,7 @@
           name: 'keterangan',
           align: 'left',
         },
-       
+
         {
           label: 'MODIFIEDBY',
           name: 'modifiedby',
@@ -135,4 +135,17 @@
       }
     })
 
+    .jqGrid('filterToolbar', {
+      stringResult: true,
+      searchOnEnter: false,
+      defaultSearch: 'cn',
+      groupOp: 'AND',
+      disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
+      beforeSearch: function() {
+        clearGlobalSearch($('#serviceinLookup'))
+      },
+    })
+
+  loadGlobalSearch($('#serviceinLookup'))
+  loadClearFilter($('#serviceinLookup'))
 </script>

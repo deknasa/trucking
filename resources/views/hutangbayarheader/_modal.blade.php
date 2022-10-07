@@ -28,10 +28,14 @@
                   TANGGAL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-4 col-md-4">
-                <input type="text" name="tglbukti" class="form-control datepicker">
+              <div class="col-12 col-sm-4 col-md-4" id="tglbukti">
+                @php
+                $tglbukti = date('d-m-Y');
+                @endphp
+                <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
               </div>
             </div>
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
@@ -49,20 +53,8 @@
                 </label>
               </div>
               <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="hidden" name="bank_id">
-                  <input type="text" name="bank" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupBankToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupBank" style="z-index: 1;">
-                  <div class="col-12">
-                    <div id="lookupBank" class="shadow-lg">
-                      @include('partials.lookups.bank')
-                    </div>
-                  </div>
-                </div>
+                <input type="hidden" name="bank_id">
+                <input type="text" name="bank" class="form-control bank-lookup">
               </div>
             </div>
 
@@ -73,70 +65,10 @@
                 </label>
               </div>
               <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="hidden" name="supplier_id">
-                  <input type="text" name="supplier" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupSupplierToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupSupplier" style="z-index: 1;">
-                  <div class="col-12">
-                    <div id="lookupSupplier" class="shadow-lg">
-                      @include('partials.lookups.supplier')
-                    </div>
-                  </div>
-                </div>
+                <input type="hidden" name="supplier_id">
+                <input type="text" name="supplier" class="form-control supplier-lookup">
               </div>
             </div>
-
-            <!-- <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  NOBUKTI PENGELUARAN <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="hidden" name="pengeluaran_id">
-                  <input type="text" name="pengeluaran" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupPengeluaranToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupPengeluaran" style="z-index: 1;">
-                  <div class="col-12">
-                    <div id="lookupPengeluaran" class="shadow-lg">
-                      @include('partials.lookups.pengeluaranheader')
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-
-            <!-- <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  NO BUKTI PENGELUARAN <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="hidden" name="pengeluaran_id">
-                  <input type="text" name="pengeluaran" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupPengeluaranToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupPengeluaran" style="z-index: 1;">
-                  <div class="col-12">
-                    <div id="lookupPengeluaran" class="shadow-lg">
-                      @include('partials.lookups.pengeluaranheader')
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -145,19 +77,7 @@
                 </label>
               </div>
               <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="text" name="akunpusat" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupAkunPusatToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 1;">
-                  <div class="col-12">
-                    <div id="lookupAkunPusat" class="shadow-lg">
-                      @include('partials.lookups.akunpusat')
-                    </div>
-                  </div>
-                </div>
+                <input type="text" name="akunpusat" class="form-control akunPusat-lookup">
               </div>
             </div>
 
@@ -187,21 +107,8 @@
 
                   <td>
                     <div class="row form-group">
-                      <div class="col-12 col-md-12" id="hutang_nobukti">
-                        <div class="input-group">
-                          <!-- <input type="hidden" name="hutang_nobukti"> -->
-                          <input type="text" name="hutang_nobukti" class="form-control">
-                          <div class="input-group-append">
-                            <button id="lookupHutangToggler" class="btn btn-secondary" type="button">...</button>
-                          </div>
-                        </div>
-                        <div class="row position-absolute" id="lookupHutang" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupHutang" class="shadow-lg">
-                              @include('partials.lookups.hutangheader')
-                            </div>
-                          </div>
-                        </div>
+                      <div class="col-8 col-md-10">
+                        <input type="text" name="hutang_nobukti" class="form-control hutangHeader-lookup">
                       </div>
                     </div>
                   </td>
@@ -209,23 +116,12 @@
                   <td>
                     <input type="text" name="cicilan" style="text-align:right" class="form-control text-right autonumeric">
                   </td>
+
                   <td>
                     <div class="row form-group">
-                      <div class="col-12 col-md-12" id="alatbayar_id">
-                        <div class="input-group">
-                          <input type="hidden" name="alatbayar_id">
-                          <input type="text" name="alatbayar" class="form-control">
-                          <div class="input-group-append">
-                            <button id="lookupAlatBayarToggler" class="btn btn-secondary" type="button">...</button>
-                          </div>
-                        </div>
-                        <div class="row position-absolute" id="lookupAlatBayar" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupAlatBayar" class="shadow-lg">
-                              @include('partials.lookups.alatbayar')
-                            </div>
-                          </div>
-                        </div>
+                      <div class="col-8 col-md-10">
+                        <input type="hidden" name="alatbayar_id">
+                        <input type="text" name="alatbayar" class="form-control alatBayar-lookup">
                       </div>
                     </div>
                   </td>
@@ -289,6 +185,7 @@
 
   $(document).ready(function() {
 
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -298,6 +195,8 @@
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+
+      unformatAutoNumeric(data)
 
       data.push({
         name: 'sortIndex',
@@ -356,15 +255,14 @@
         data: data,
         success: response => {
 
-
           id = response.data.id
           console.log(id)
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
 
-          $('#jqGrid').trigger('reloadGrid', {
+          $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
-          })
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -390,12 +288,12 @@
 
   $("#addrow").click(function() {
     let rowCount = $('#row').length;
-
+    let barisCount = $('.baris').length;
     if (rowCount > 0) {
       let clone = $('#row').clone();
       clone.find('input').val('');
 
-      baris = parseInt(baris) + 1;
+      baris = parseInt(barisCount) + 1;
       clone.find('.baris').text(baris);
       $('table #table_body').append(clone);
 
@@ -439,7 +337,7 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-    $('#crudModalTitle').text('Edit Hutang Bayar Header')
+    $('#crudModalTitle').text('Edit Hutang Bayar')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -468,50 +366,25 @@
               </td>
               
               <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <div class="input-group">
-                          <input type="text" name="hutang_nobukti" value="${value.hutang_nobukti}" class="form-control">
-                      
-                          <div class="input-group-append">
-                            <button id="lookupHutangToggler" class="btn btn-secondary" type="button">...</button>
-                          </div>
-                        </div>
-                        <div class="row position-absolute" id="lookupHutang" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupHutang" class="shadow-lg">
-                              @include('partials.lookups.hutangheader')
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                <div class="row form-group">
+                    <div class="col-8 col-md-10">
+                        <input type="text" name="hutang_nobukti" value="${value.hutang_nobukti}" class="form-control hutangHeader-lookup">
                     </div>
-                  </td>
+                </div>
+              </td>
 
-                  <td>
+              <td>
                   <input type="text" name="cicilan" value="${value.cicilan}" style="text-align:right" class="form-control text-right autonumeric" > 
               </td>
 
               <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <div class="input-group">
-                          <input type="hidden" name="alatbayar_id" value="${value.alatbayar_id}">
-                          <input type="text" name="alatbayar" value="${value.alatbayar}" class="form-control">
-                          <div class="input-group-append">
-                            <button id="lookupAlatBayarToggler" class="btn btn-secondary" type="button">...</button>
-                          </div>
-                        </div>
-                        <div class="row position-absolute" id="lookupAlatBayar" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupAlatBayar" class="shadow-lg">
-                              @include('partials.lookups.alatbayar')
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                <div class="row form-group">
+                    <div class="col-8 col-md-10">
+                      <input type="hidden" name="alatbayar_id">
+                      <input type="text" name="alatbayar" value="${value.alatbayar}"class="form-control alatBayar-lookup">
                     </div>
-                  </td>
+                </div>
+              </td>
 
                 <td>
                   <input type="text" name="tglcair"  class="form-control datepicker" value="${value.tglcair}" > 
@@ -531,6 +404,15 @@
             </tr>`
           )
         })
+        initSelect2($('#crudForm').find('select'))
+        initAutoNumeric($('#crudForm').find('.autonumeric'))
+        Inputmask("datetime", {
+          inputFormat: "HH:MM",
+          max: 24
+        }).mask(".inputmask-time");
+      },
+      error: error => {
+        showDialog(error.statusText)
       }
     })
   }
@@ -544,7 +426,7 @@
     <i class="fa fa-save"></i>
     Hapus
   `)
-    $('#crudModalTitle').text('Delete Pembayaran Hutang')
+    $('#crudModalTitle').text('Delete Service in')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -573,50 +455,25 @@
               </td>
               
               <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <div class="input-group">
-                          <input type="hidden" name="hutang_nobukti" value="${value.hutang_nobukti}">
-                          <input type="text" name="hutang" value="${value.hutang}" class="form-control">
-                          <div class="input-group-append">
-                            <button id="lookupHutangToggler" class="btn btn-secondary" type="button">...</button>
-                          </div>
-                        </div>
-                        <div class="row position-absolute" id="lookupHutang" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupHutang" class="shadow-lg">
-                              @include('partials.lookups.hutangheader')
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                <div class="row form-group">
+                    <div class="col-8 col-md-10">
+                        <input type="text" name="hutang_nobukti" value="${value.hutang_nobukti}" class="form-control hutangHeader-lookup">
                     </div>
-                  </td>
+                </div>
+              </td>
 
                 <td>
                   <input type="text" name="cicilan" value="${value.cicilan}" style="text-align:right" class="form-control text-right autonumeric" > 
               </td>
 
               <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <div class="input-group">
-                          <input type="hidden" name="alatbayar_id" value="${value.alatbayar_id}">
-                          <input type="text" name="alatbayar" value="${value.alatbayar}" class="form-control">
-                          <div class="input-group-append">
-                            <button id="lookupAlatBayarToggler" class="btn btn-secondary" type="button">...</button>
-                          </div>
-                        </div>
-                        <div class="row position-absolute" id="lookupAlatBayar" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupAlatBayar" class="shadow-lg">
-                              @include('partials.lookups.alatbayar')
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                <div class="row form-group">
+                    <div class="col-8 col-md-10">
+                      <input type="hidden" name="alatbayar_id">
+                      <input type="text" name="alatbayar" value="${value.alatbayar}"class="form-control alatBayar-lookup">
                     </div>
-                  </td>
+                </div>
+              </td>
 
                 <td>
                   <input type="text" name="tglcair"  class="form-control datepicker" value="${value.tglcair}"> 

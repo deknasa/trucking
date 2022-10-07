@@ -588,15 +588,6 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('hutangbayardetail', HutangBayarDetailController::class);
 
-    Route::get('servicein/index', [ServiceInHeaderController::class, 'index']);
-    Route::get('servicein/{id}/delete', [ServiceInHeaderController::class, 'delete'])->name('servicein.delete');
-    Route::get('servicein/get', [ServiceInHeaderController::class, 'get'])->name('servicein.get');
-    Route::get('servicein/export', [ServiceInHeaderController::class, 'export'])->name('servicein.export');
-    Route::get('servicein/report', [ServiceInHeaderController::class, 'report'])->name('servicein.report');
-    Route::resource('servicein', ServiceInHeaderController::class);
-
-    Route::resource('serviceindetail', ServiceInDetailController::class);
-
 });
 
 Route::patch('format', [FormatController::class, 'update']);

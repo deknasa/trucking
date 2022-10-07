@@ -10,9 +10,10 @@
   </div>
 </div>
 
-@include('hutangbayarheader._modal')
 <!-- Detail -->
 @include('hutangbayarheader._detail')
+
+@include('hutangbayarheader._modal')
 
 @push('scripts')
 <script>
@@ -33,413 +34,52 @@
   let autoNumericElements = []
 
   $(document).ready(function() {
-    $('#lookupBank').hide()
-    $('#lookupSupplier').hide()
-    $('#lookupAkunPusat').hide()
-    $('#lookupHutang').hide()
-    $('#lookupAlatBayar').hide()
+   
+    $('#lookup').hide()
 
+    $('.bank-lookup').lookup({
+      title: 'bank Lookup',
+      fileName: 'bank',
+      onSelectRow: (bank, element) => {
+        $('#crudForm [name=bank_id]').first().val(bank.id)
+        element.val(bank.namabank)
 
-
-    $('#crudModal').on('shown.bs.modal', function() {
-      bankLookup.setGridWidth($('#lookupBank').prev().width())
-      supplierLookup.setGridWidth($('#lookupSupplier').prev().width())
-      akunPusatLookup.setGridWidth($('#lookupAkunPusat').prev().width())
-      hutangHeaderLookup.setGridWidth($('#lookupHutang').prev().width())
-      alatBayarLookup.setGridWidth($('#lookupAlatBayar').prev().width())
-
-
-      if (detectDeviceType() == 'desktop') {
-
-        bankLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-            console.log(rowData)
-
-            $('#crudForm [name=bank_id]').first().val(rowData.id)
-            $('#crudForm [name=bank]').first().val(rowData.namabank)
-            $('#lookupBank').hide()
-          }
-        })
-
-        supplierLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-            console.log(rowData)
-
-            $('#crudForm [name=supplier_id]').first().val(rowData.id)
-            $('#crudForm [name=supplier]').first().val(rowData.namasupplier)
-            $('#lookupSupplier').hide()
-
-          }
-        })
-
-        akunPusatLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-            console.log(rowData.coa)
-
-            $('#crudForm [name=akunpusat]').first().val(rowData.coa)
-            $('#lookupAkunPusat').hide()
-          }
-        })
-
-        hutangHeaderLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-            console.log(rowData)
-
-            $('#crudForm [name=hutang_nobukti]').first().val(rowData.nobukti)
-            $('#lookupHutang').hide()
-
-          }
-        })
-
-
-        alatBayarLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-            console.log(rowData)
-
-            $('#crudForm [name=alatbayar_id]').first().val(rowData.id)
-            $('#crudForm [name=alatbayar]').first().val(rowData.namaalatbayar)
-            $('#lookupAlatBayar').hide()
-
-          }
-        })
-
-        //mobile
-      } else if (detectDeviceType() == 'mobile') {
-        bankLookup.setGridParam({
-          onSelectRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=bank_id]').first().val(rowData.id)
-            $('#crudForm [name=bank]').first().val(rowData.namabank)
-
-            $('#lookupBank').hide()
-          }
-        })
-        supplierLookup.setGridParam({
-          onSelectRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=supplier_id]').first().val(rowData.id)
-            $('#crudForm [name=supplier]').first().val(rowData.namasupplier)
-
-            $('#lookupSupplier').hide()
-          }
-        })
-
-        akunPusatLookup.setGridParam({
-          onSelectRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=akunpusat]').first().val(rowData.coa)
-            $('#lookupAkunPusat').hide()
-          }
-        })
-
-        hutangHeaderLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=hutang_nobukti]').first().val(rowData.nobukti)
-            $('#lookupHutang').hide()
-
-          }
-        })
-
-        alatBayarLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=alatbayar_id]').first().val(rowData.id)
-            $('#crudForm [name=alatbayar]').first().val(rowData.namaalatbayar)
-            $('#lookupAlatBayar').hide()
-
-          }
-        })
-
-      }
-
-      $('#crudModal').find("[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit").first().focus()
-    })
-
-    $('#crudModal').on('hidden.bs.modal', function() {
-      activeGrid = '#jqGrid'
-    })
-
-
-    //tampil lookup ketika klik toggler
-    $('#lookupBankToggler').click(function(event) {
-      bankLookup.setGridWidth($('#lookupBank').prev().width())
-      $('#lookupBank').toggle()
-
-      $('#lookupSupplier').hide()
-      $('#lookupAkunPusat').hide()
-      $('#lookupHutang').hide()
-      $('#lookupAlatBayar').hide()
-
-      if (detectDeviceType() != 'desktop') {
-        bankLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      if (detectDeviceType() == 'desktop') {
-        activeGrid = bankLookup
       }
     })
 
-    $('#lookupSupplierToggler').click(function(event) {
-      supplierLookup.setGridWidth($('#lookupSupplier').prev().width())
-      $('#lookupSupplier').toggle()
-
-      $('#lookupBank').hide()
-      $('#lookupAkunPusat').hide()
-      $('#lookupHutang').hide()
-      $('#lookupAlatBayar').hide()
-
-      if (detectDeviceType() != 'desktop') {
-        bankLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      if (detectDeviceType() == 'desktop') {
-        activeGrid = bankLookup
+    $('.supplier-lookup').lookup({
+      title: 'supplier Lookup',
+      fileName: 'supplier',
+      onSelectRow: (supplier, element) => {
+        $('#crudForm [name=supplier_id]').first().val(supplier.id)
+        element.val(supplier.namasupplier)
       }
     })
 
-    $('#lookupAkunPusatToggler').click(function(event) {
-      akunPusatLookup.setGridWidth($('#lookupAkunPusat').prev().width())
-      $('#lookupAkunPusat').toggle()
-
-      $('#lookupBank').hide()
-      $('#lookupSupplier').hide()
-      $('#lookupHutang').hide()
-      $('#lookupAlatBayar').hide()
-
-      if (detectDeviceType() != 'desktop') {
-        akunPusatLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      if (detectDeviceType() == 'desktop') {
-        activeGrid = akunPusatLookup
+    $('.hutangheader-lookup').lookup({
+      title: 'hutang Lookup',
+      fileName: 'hutangheader',
+      onSelectRow: (hutang, element) => {
+        element.val(hutang.nobukti)
       }
     })
 
-    $('#lookupHutangToggler').click(function(event) {
-      hutangHeaderLookup.setGridWidth($('#lookupHutang').prev().width())
-      $('#lookupHutang').toggle()
-
-      $('#lookupBank').hide()
-      $('#lookupSupplier').hide()
-      $('#lookupAkunPusat').hide()
-      $('#lookupAlatBayar').hide()
-
-      if (detectDeviceType() != 'dekstop') {
-        hutangHeaderLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      if (detectDeviceType() == 'dekstop') {
-        activeGrid = hutangHeaderLookup
+      $('.akunPusat-lookup').lookup({
+      title: ' akunpusat Lookup',
+      fileName: 'akunpusat',
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.coa)
       }
     })
 
-    
-    $('#lookupAlatBayarToggler').click(function(event) {
-      alatBayarLookup.setGridWidth($('#lookupAlatBayar').prev().width())
-      $('#lookupAlatBayar').toggle()
-
-      $('#lookupBank').hide()
-      $('#lookupSupplier').hide()
-      $('#lookupAkunPusat').hide()
-      $('#lookupHutang').hide()
-
-      if (detectDeviceType() != 'dekstop') {
-        hutangHeaderLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      if (detectDeviceType() == 'dekstop') {
-        activeGrid = hutangHeaderLookup
+    $('.alatbayar-lookup').lookup({
+      title: 'alatbayar Lookup',
+      fileName: 'alatbayar',
+      onSelectRow: (alatbayar, element) => {
+        $('#crudForm [name=alatbayar_id]').first().val(alatbayar.id)
+        element.val(alatbayar.namaalatbayar)
       }
     })
-
-
-    //untuk auto search dari kolom input
-    $('[name=bank]').on('input', function(event) {
-      $('#lookupBank').show()
-
-      if (detectDeviceType() != 'desktop') {
-        bankLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      delay(() => {
-        let postData = bankLookup.getGridParam('postData')
-        let colModels = bankLookup.getGridParam('colModel')
-        let rules = []
-
-        colModels = colModels.filter((colModel) => {
-          return colModel.name !== 'rn'
-        })
-
-        colModels.forEach(colModel => {
-          rules.push({
-            field: colModel.name,
-            op: 'cn',
-            data: $(this).val()
-          })
-        });
-
-        postData.filters = JSON.stringify({
-          groupOp: 'OR',
-          rules: rules
-        })
-
-        bankLookup.trigger('reloadGrid', {
-          page: 1
-        })
-      }, 500)
-    })
-
-    $('[name=supplier]').on('input', function(event) {
-      $('#lookupSupplier').show()
-
-      if (detectDeviceType() != 'desktop') {
-        supplierLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      delay(() => {
-        let postData = supplierLookup.getGridParam('postData')
-        let colModels = supplierLookup.getGridParam('colModel')
-        let rules = []
-
-        colModels = colModels.filter((colModel) => {
-          return colModel.name !== 'rn'
-        })
-
-        colModels.forEach(colModel => {
-          rules.push({
-            field: colModel.name,
-            op: 'cn',
-            data: $(this).val()
-          })
-        });
-
-        postData.filters = JSON.stringify({
-          groupOp: 'OR',
-          rules: rules
-        })
-
-        supplierLookup.trigger('reloadGrid', {
-          page: 1
-        })
-      }, 500)
-    })
-
-    $('[name=coa]').on('input', function(event) {
-      $('#lookupAkunPusat').show()
-
-      if (detectDeviceType() != 'desktop') {
-        akunPusatLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      delay(() => {
-        let postData = akunPusatLookup.getGridParam('postData')
-        let colModels = akunPusatLookup.getGridParam('colModel')
-        let rules = []
-
-        colModels = colModels.filter((colModel) => {
-          return colModel.name !== 'rn'
-        })
-
-        colModels.forEach(colModel => {
-          rules.push({
-            field: colModel.name,
-            op: 'cn',
-            data: $(this).val()
-          })
-        });
-
-        postData.filters = JSON.stringify({
-          groupOp: 'OR',
-          rules: rules
-        })
-
-        akunPusatLookup.trigger('reloadGrid', {
-          page: 1
-        })
-      }, 500)
-    })
-
-    $('[name=hutang]').on('input', function(event) {
-      $('#lookupHutang').show()
-
-      if (detectDeviceType() != 'desktop') {
-        hutangHeaderLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      delay(() => {
-        let postData = hutangHeaderLookup.getGridParam('postData')
-        let colModels = hutangHeaderLookup.getGridParam('colModel')
-        let rules = []
-
-        colModels = colModels.filter((colModel) => {
-          return colModel.name !== 'rn'
-        })
-
-        colModels.forEach(colModel => {
-          rules.push({
-            field: colModel.name,
-            op: 'cn',
-            data: $(this).val()
-          })
-        });
-
-        postData.filters = JSON.stringify({
-          groupOp: 'OR',
-          rules: rules
-        })
-
-        hutangHeaderLookup.trigger('reloadGrid', {
-          page: 1
-        })
-      }, 500)
-    })
-
-    $('[name=alatbayar]').on('input', function(event) {
-      $('#lookupAlatBayar').show()
-
-      if (detectDeviceType() != 'desktop') {
-        alatBayarLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      delay(() => {
-        let postData = alatBayarLookup.getGridParam('postData')
-        let colModels = alatBayarLookup.getGridParam('colModel')
-        let rules = []
-
-        colModels = colModels.filter((colModel) => {
-          return colModel.name !== 'rn'
-        })
-
-        colModels.forEach(colModel => {
-          rules.push({
-            field: colModel.name,
-            op: 'cn',
-            data: $(this).val()
-          })
-        });
-
-        postData.filters = JSON.stringify({
-          groupOp: 'OR',
-          rules: rules
-        })
-
-        alatBayarLookup.trigger('reloadGrid', {
-          page: 1
-        })
-      }, 500)
-    })
-  })
 
 
   $("#jqGrid").jqGrid({
@@ -758,6 +398,111 @@
       submitButton.removeAttr('disabled')
     }
   })
+})
+const getHutangHeaderLookup = function(fileName) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${appUrl}/lookup/${fileName}`,
+        method: 'GET',
+        dataType: 'html',
+        success: function(response) {
+          resolve(response)
+        }
+      })
+    })
+  }
+
+  $.fn.lookup = function(options = null) {
+    this.each(function() {
+      let element = $(this)
+
+      element
+        .wrap('<div class="input-group"></div>')
+        .after(`
+          <div class="input-group-append">
+            <button class="btn btn-primary lookup-toggler" type="button">...</button>
+          </div>
+        `)
+
+      element.siblings('.input-group-append').find('.lookup-toggler').click(function() {
+        activateLookup(element)
+      })
+    })
+
+    function activateLookup(element) {
+      let lookupModal = $(`
+        <div class="modal fade modal-fullscreen" id="lookupModal" tabindex="-1" aria-labelledby="lookupModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <form action="#" id="crudForm">
+              <div class="modal-content">
+                <div class="modal-header bg-primary">
+                  <h5 class="modal-title" id="lookupModalLabel">${options.title}</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      `)
+
+      $('body').append(lookupModal)
+
+      lookupModal.modal('show')
+
+      getHutangHeaderLookup(options.fileName)
+        .then(response => {
+          lookupModal.find('.modal-body').html(response)
+
+          grid = lookupModal.find('.lookup-grid')
+
+          if (detectDeviceType() == 'desktop') {
+            grid.jqGrid('setGridParam', {
+              ondblClickRow: function(id) {
+                let rowData = $(this).getRowData(id)
+                handleSelectedRow(id, lookupModal, element)
+              }
+            })
+          } else if (detectDeviceType() == 'mobile') {
+            grid.jqGrid('setGridParam', {
+              onSelectRow: function(id) {
+                handleSelectedRow(id, lookupModal, element)
+              }
+            })
+          }
+        })
+
+      lookupModal.on('hidden.bs.modal', function() {
+        lookupModal.remove()
+      })
+    }
+
+    function handleSelectedRow(id, lookupModal, element) {
+      if (id !== null) {
+        lookupModal.modal('hide')
+
+        options.onSelectRow(sanitize(grid.getRowData(id)), element)
+      } else {
+        alert('Please select a row')
+      }
+
+    }
+
+    
+    function sanitize(rowData) {
+      Object.keys(rowData).forEach(key => {
+        rowData[key] = rowData[key].replaceAll('<span class="highlight">', '').replaceAll('</span>', '')
+      })
+
+      return rowData
+    }
+
+    return this
+
+  }
 </script>
 @endpush()
 @endsection
