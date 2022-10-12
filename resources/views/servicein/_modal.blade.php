@@ -295,6 +295,9 @@
 
                     if (element.is('select')) {
                         element.val(value).trigger('change')
+                    } else if (element.hasClass('datepicker')) {
+                        console.log(value);
+                        element.val(dateFormat(value))
                     } else {
                         element.val(value)
                     }
