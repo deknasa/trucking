@@ -447,7 +447,10 @@
           </td>
   </tr>`)
 
-    $('#detailList tbody').append(detailRow)
+  
+  $('#detailList tbody').append(detailRow)
+  initAutoNumeric(detailRow.find('.autonumeric'))
+  initDatepicker(detailRow.find('.datepicker'))
 
     $('.supplier-lookup').last().lookup({
       title: 'supplier Lookup',
@@ -459,18 +462,7 @@
       }
     })
 
-    // $('.supplier-lookup').last().lookup({
-    //   title: 'supplier Lookup',
-    //   fileName: 'supplier',
-    //   onSelectRow: (supplier, element) => {
-    //     $('#crudForm [name=supplier]').first().val(supplier.namasupplier)
-    //     element.val(supplier.id)
 
-    //   }
-    // })
-
-    initAutoNumeric(detailRow.find('.autonumeric'))
-    initDatepicker(detailRow.find('.datepicker'))
     setRowNumbers()
   }
 
