@@ -69,6 +69,7 @@
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
+      toolbar: [true, "top"],
       page: 1,
       pager: $('#tradoLookupPager'),
       viewrecords: true,

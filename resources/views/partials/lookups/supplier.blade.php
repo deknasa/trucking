@@ -122,6 +122,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
+      toolbar: [true, "top"],
       pager: $('#supplierLookupPager'),
       viewrecords: true,
       prmNames: {

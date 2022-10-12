@@ -67,8 +67,6 @@
                   <th>Aksi</th>
                 </tr>
               </thead>
-
-
               <tbody id="table_body" class="form-group">
 
               <tr>

@@ -75,6 +75,7 @@ use App\Http\Controllers\PenerimaanTruckingDetailController;
 
 use App\Http\Controllers\PenerimaanStokController;
 use App\Http\Controllers\PenerimaanStokHeaderController;
+use App\Http\Controllers\PenerimaanStokDetailController;
 
 use App\Http\Controllers\PengeluaranStokController;
 
@@ -531,7 +532,7 @@ Route::middleware('auth')->group(function () {
     Route::get('penerimaanstokheader/report', [PenerimaanTruckingHeaderController::class, 'report'])->name('penerimaanstokheader.report');
     Route::resource('penerimaanstokheader', PenerimaanStokHeaderController::class);
     
-    Route::resource('penerimaantruckingdetail', PenerimaanTruckingDetailController::class);
+    Route::resource('penerimaanstokdetail', PenerimaanStokDetailController::class);
 
     Route::get('jurnalumumheader/index', [JurnalUmumHeaderController::class, 'index']);
     Route::get('jurnalumumheader/{id}/delete', [JurnalUmumHeaderController::class, 'delete'])->name('jurnalumumheader.delete');

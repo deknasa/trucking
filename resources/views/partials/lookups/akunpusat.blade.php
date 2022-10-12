@@ -121,17 +121,11 @@
       loadBeforeSend: (jqXHR) => {
         jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
-      onSelectRow: function(id) {
-        activeGrid = $(this)
-        indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-        page = $(this).jqGrid('getGridParam', 'page')
-        let rows = $(this).jqGrid('getGridParam', 'postData').limit
-        if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
-      },
       loadComplete: function(data) {
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
+          initResize($(this))
 
           if (indexRow - 1 > $('#akunPusatLookup').getGridParam().reccount) {
             indexRow = $('#akunPusatLookup').getGridParam().reccount - 1
@@ -163,7 +157,11 @@
         limit = $(this).jqGrid('getGridParam', 'postData').limit
         postData = $(this).jqGrid('getGridParam', 'postData')
 
-        $(this).setGridWidth($('#lookup').prev().width())
+        $('.clearsearchclass').click(function() {
+          clearColumnSearch()
+        })
+
+        $(this).setGridWidth($('#lookupCabang').prev().width())
         setHighlight($(this))
       }
     })

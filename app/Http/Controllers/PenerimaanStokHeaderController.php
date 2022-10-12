@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
-// class PenerimaanStokHeaderController extends Controller
 class PenerimaanStokHeaderController extends MyController
 {
     public $title = 'Penerimaan Stok Header';
@@ -30,18 +29,6 @@ class PenerimaanStokHeaderController extends MyController
     public function store(Request $request)
     {
         try {
-             /* Unformat nominal */
-            $request->nominal = array_map(function ($nominal) {
-                $nominal = str_replace('.', '', $nominal);
-                $nominal = str_replace(',', '', $nominal);
-
-                return $nominal;
-            }, $request->nominal);
-
-            $request->merge([
-                'nominal' => $request->nominal
-            ]);
-
             $request['modifiedby'] = Auth::user()->name;
 
             $response = Http::withHeaders($this->httpHeaders)

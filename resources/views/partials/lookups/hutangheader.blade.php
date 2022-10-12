@@ -1,4 +1,4 @@
-<table id="hutangHeaderLookup" style="width: 100%;"></table>
+<table id="hutangHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
 <div id="hutangHeaderLookupPager"></div>
 
 <script>
@@ -70,6 +70,7 @@
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
+      toolbar: [true, "top"],
       page: 1,
       pager: $('#hutangHeaderLookupPager'),
       viewrecords: true,
