@@ -375,7 +375,7 @@
 
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('servicein.report') }}?${params}`)
+        window.open(`{{ route('serviceoutheader.report') }}?${params}`)
 
         submitButton.removeAttr('disabled')
       }
