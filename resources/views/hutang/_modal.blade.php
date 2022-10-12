@@ -396,9 +396,9 @@
           initAutoNumeric(detailRow.find(`[name="cicilan_detail[]"]`))
           initAutoNumeric(detailRow.find(`[name="totalbayar_detail[]"]`))
 
-          initDatepicker(detailRow.find('.datepicker'))
-
+          
           $('#detailList tbody').append(detailRow)
+          initDatepicker(detailRow.find('.datepicker'))
 
           $('#lookup').hide()
 
