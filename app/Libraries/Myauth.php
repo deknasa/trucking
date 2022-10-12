@@ -81,7 +81,7 @@ class Myauth
             'upahsupir',
             'zona',
             'serviceinheader',
-            'serviceout',
+            'serviceoutheader',
             'penerimaan',
             'pengeluaran',
             'pengeluarantrucking',

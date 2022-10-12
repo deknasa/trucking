@@ -489,12 +489,12 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('serviceindetail', ServiceInDetailController::class);
 
-    Route::get('serviceout/{id}/delete', [ServiceOutHeaderController::class, 'delete'])->name('serviceout.delete');
-    Route::get('serviceout/index', [ServiceOutHeaderController::class, 'index']);
-    Route::get('serviceout/get', [ServiceOutHeaderController::class, 'get'])->name('serviceout.get');
-    Route::get('serviceout/export', [ServiceOutHeaderController::class, 'export'])->name('serviceout.export');
-    Route::get('serviceout/report', [ServiceOutHeaderController::class, 'report'])->name('serviceout.report');
-    Route::resource('serviceout', ServiceOutHeaderController::class);
+    Route::get('serviceoutheader/{id}/delete', [ServiceOutHeaderController::class, 'delete'])->name('serviceoutheader.delete');
+    Route::get('serviceoutheader/index', [ServiceOutHeaderController::class, 'index']);
+    Route::get('serviceoutheader/get', [ServiceOutHeaderController::class, 'get'])->name('serviceoutheader.get');
+    Route::get('serviceoutheader/export', [ServiceOutHeaderController::class, 'export'])->name('serviceoutheader.export');
+    Route::get('serviceoutheader/report', [ServiceOutHeaderController::class, 'report'])->name('serviceoutheader.report');
+    Route::resource('serviceoutheader', ServiceOutHeaderController::class);
 
     Route::resource('serviceoutdetail', ServiceOutDetailController::class);
 

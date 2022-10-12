@@ -170,19 +170,19 @@
             switch (action) {
                 case 'add':
                     method = 'POST'
-                    url = `${apiUrl}serviceout`
+                    url = `${apiUrl}serviceoutheader`
                     break;
                 case 'edit':
                     method = 'PATCH'
-                    url = `${apiUrl}serviceout/${Id}`
+                    url = `${apiUrl}serviceoutheader/${Id}`
                     break;
                 case 'delete':
                     method = 'DELETE'
-                    url = `${apiUrl}serviceout/${Id}`
+                    url = `${apiUrl}serviceoutheader/${Id}`
                     break;
                 default:
                     method = 'POST'
-                    url = `${apiUrl}serviceout`
+                    url = `${apiUrl}serviceoutheader`
                     break;
             }
             $(this).attr('disabled', '')
@@ -280,7 +280,7 @@
         $('#detailList tbody').html('')
 
         $.ajax({
-            url: `${apiUrl}serviceout/${id}`,
+            url: `${apiUrl}serviceoutheader/${id}`,
             method: 'GET',
             dataType: 'JSON',
             headers: {

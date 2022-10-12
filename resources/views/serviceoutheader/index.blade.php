@@ -11,14 +11,14 @@
 </div>
 
 <!-- Detail -->
-@include('serviceout._detail')
+@include('serviceoutheader._detail')
 
-@include('serviceout._modal')
+@include('serviceoutheader._modal')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('serviceout.index') }}"
-  let getUrl = "{{ route('serviceout.get') }}"
+  let indexUrl = "{{ route('serviceoutheader.index') }}"
+  let getUrl = "{{ route('serviceoutheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -61,7 +61,7 @@
     })
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'serviceout' }}`,
+        url: `{{ config('app.api_url') . 'serviceoutheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -286,23 +286,23 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('serviceout', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('serviceoutheader', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('serviceout', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('serviceoutheader', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('serviceout', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('serviceoutheader', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('serviceout', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('serviceoutheader', 'export') }}`) {
       $('#export').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('serviceout', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('serviceoutheader', 'report') }}`) {
       $('#report').addClass('ui-disabled')
     }
 
@@ -352,7 +352,7 @@
 
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}serviceout/export?${params}`, true)
+        xhr.open('GET', `{{ config('app.api_url') }}serviceoutheader/export?${params}`, true)
         xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
         xhr.responseType = 'arraybuffer'
 
@@ -365,7 +365,7 @@
               let link = document.createElement('a')
 
               link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanserviceout${(new Date).getTime()}.xlsx`
+              link.download = `laporanserviceoutheader${(new Date).getTime()}.xlsx`
               link.click()
 
               submitButton.removeAttr('disabled')
