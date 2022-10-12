@@ -79,7 +79,7 @@
                                 <tr>
                                     <td></td>
                                     <td>
-                                        <input type="text" name="servicein_nobukti[]" class="form-control servicein-lookup">
+                                        <input type="text" name="servicein_nobukti[]" class="form-control serviceinheader-lookup">
                                     </td>
 
                                     <td>
@@ -312,7 +312,7 @@
                     <tr>
                         <td></td>
                         <td>
-                            <input type="text" name="servicein_nobukti[]" class="form-control servicein-lookup">
+                            <input type="text" name="servicein_nobukti[]" class="form-control serviceinheader-lookup">
                         </td>
                         <td>
                             <input type="text" name="keterangan_detail[]" class="form-control">
@@ -330,9 +330,9 @@
 
                     $('#lookup').hide()
 
-                    $('.servicein-lookup').last().lookup({
+                    $('.serviceinheader-lookup').last().lookup({
                         title: 'servicein Lookup',
-                        fileName: 'servicein',
+                        fileName: 'serviceinheader',
                         onSelectRow: (servicein, element) => {
                             element.val(servicein.nobukti)
                         }
@@ -349,7 +349,7 @@
         <tr>
         <td></td>
         <td>
-            <input type="text" name="servicein_nobukti[]" class="form-control servicein-lookup">
+            <input type="text" name="servicein_nobukti[]" class="form-control serviceinheader-lookup">
         </td>
         <td>
             <input type="text" name="keterangan_detail[]" class="form-control">
@@ -361,9 +361,9 @@
 
         $('#detailList tbody').append(detailRow)
 
-        $('.servicein-lookup').last().lookup({
+        $('.serviceinheader-lookup').last().lookup({
             title: 'servicein Lookup',
-            fileName: 'servicein',
+            fileName: 'serviceinheader',
             onSelectRow: (servicein, element) => {
                 element.val(servicein.nobukti)
             }

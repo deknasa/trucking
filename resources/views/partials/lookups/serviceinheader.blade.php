@@ -4,7 +4,7 @@
 @push('scripts')
 <script>
   $('#serviceinLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'servicein' }}`,
+      url: `{{ config('app.api_url') . 'serviceinheader' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',

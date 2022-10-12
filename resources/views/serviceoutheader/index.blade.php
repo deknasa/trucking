@@ -47,9 +47,9 @@
       }
     })
 
-    $('.servicein-lookup').lookup({
+    $('.serviceinheader-lookup').lookup({
       title: 'servicein Lookup',
-      fileName: 'servicein',
+      fileName: 'serviceinheader',
       onSelectRow: (servicein, element) => {
         // $('#crudForm [name=servicein_id]').first().val(servicein.id)
         element.val(servicein.nobukti)
