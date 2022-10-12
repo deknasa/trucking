@@ -76,8 +76,8 @@
       title: 'alatbayar Lookup',
       fileName: 'alatbayar',
       onSelectRow: (alatbayar, element) => {
-        $('#crudForm [name=alatbayar]').first().val(alatbayar.namaalatbayar)
-        element.val(alatbayar.id)
+        $(`#crudForm [name="alatbayar_id[]"]`).first().val(alatbayar.id)
+        element.val(alatbayar.namaalatbayar)
 
       }
     })

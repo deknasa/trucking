@@ -395,9 +395,9 @@
           initAutoNumeric(detailRow.find(`[name="cicilan_detail[]"]`))
           initAutoNumeric(detailRow.find(`[name="potongan_detail[]"]`))
 
-          initDatepicker(detailRow.find('.datepicker'))
-
+          
           $('#detailList tbody').append(detailRow)
+          initDatepicker(detailRow.find('.datepicker'))
 
           $('#lookup').hide()
 
@@ -413,8 +413,9 @@
             title: 'alatbayar Lookup',
             fileName: 'alatbayar',
             onSelectRow: (alatbayar, element) => {
-              $('#crudForm [name=alatbayar]').first().val(alatbayar.namaalatbayar)
-              element.val(alatbayar.id)
+              $(`#crudForm [name="alatbayar_id[]"]`).first().val(alatbayar.id)
+              element.val(alatbayar.namaalatbayar)
+
             }
           })
 
@@ -472,8 +473,9 @@
       title: 'alatbayar Lookup',
       fileName: 'alatbayar',
       onSelectRow: (alatbayar, element) => {
-        $('#crudForm [name=alatbayar]').first().val(alatbayar.namaalatbayar)
-        element.val(alatbayar.id)
+        element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
+        element.val(alatbayar.namaalatbayar)
+
       }
     })
 
