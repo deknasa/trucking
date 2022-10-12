@@ -300,7 +300,7 @@
                         element.val(value)
                     }
 
-                  
+
                 })
                 //     element.val(value)
                 //     let tglbukti = response.data.tglbukti
@@ -314,18 +314,20 @@
                 $.each(response.detail, (index, detail) => {
                     let detailRow = $(`
                     <tr>
-                        <td></td>
-                        <td>
-                            <input type="hidden" name="mekanik_id[]"  class="form-control">
-                            <input type="text" name="mekanik[]" class="form-control mekanik-lookup">
-                        </td>
-                        <td>
-                            <input type="text" name="keterangan_detail[]" class="form-control">
-                        </td>
-                        <td>
-                        <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
-                      </td>
-                    </tr>`)
+                                    <td></td>
+                                    <td>
+                                        <input type="hidden" name="mekanik_id[]" class="form-control">
+                                        <input type="text" name="mekanik[]" class="form-control mekanik-lookup">
+                                    </td>
+
+                                    <td>
+                                        <input type="text" name="keterangan_detail[]" class="form-control">
+                                    </td>
+
+                                    <td>
+                                        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                                    </td>
+                                </tr>`)
 
                     detailRow.find(`[name="mekanik[]"]`).val(detail.mekanik)
                     detailRow.find(`[name="mekanik_id[]"]`).val(detail.mekanik_id)
@@ -343,8 +345,9 @@
                         title: 'mekanik Lookup',
                         fileName: 'mekanik',
                         onSelectRow: (mekanik, element) => {
-                            $('#crudForm [name=mekanik]').first().val(mekanik.namamekanik)
-                            element.val(mekanik.id)
+                            $(`#crudForm [name="mekanik_id[]"]`).first().val(mekanik.id)
+                            element.val(mekanik.namamekanik)
+
                         }
                     })
 
@@ -359,15 +362,17 @@
         <tr>
             <td></td>
             <td>
-                <input type="hidden" name="mekanik_id[]"  class="form-control">
+                <input type="hidden" name="mekanik_id[]" class="form-control">
                 <input type="text" name="mekanik[]" class="form-control mekanik-lookup">
             </td>
+
             <td>
                 <input type="text" name="keterangan_detail[]" class="form-control">
             </td>
+
             <td>
-            <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
-          </td>
+                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+            </td>
         </tr>`)
 
         $('#detailList tbody').append(detailRow)
@@ -376,8 +381,9 @@
             title: 'mekanik Lookup',
             fileName: 'mekanik',
             onSelectRow: (mekanik, element) => {
-                $('#crudForm [name=mekanik]').first().val(mekanik.namamekanik)
-                element.val(mekanik.id)
+                element.parents('td').find(`[name="mekanik_id[]"]`).val(mekanik.id)
+                element.val(mekanik.namamekanik)
+
             }
         })
 

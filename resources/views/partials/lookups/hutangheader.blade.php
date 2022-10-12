@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-<table id="hutangHeaderLookup" class="lookup-grid"></table>
-=======
 <table id="hutangHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
->>>>>>> dc4906e6d15994d31d99cf424837e42619f3726e
 <div id="hutangHeaderLookupPager"></div>
 
 @push('scripts')
