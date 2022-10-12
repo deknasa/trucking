@@ -60,8 +60,8 @@
       title: 'supplier Lookup',
       fileName: 'supplier',
       onSelectRow: (supplier, element) => {
-        $('#crudForm [name=supplier]').first().val(supplier.namasupplier)
-        element.val(supplier.id)
+        $(`#crudForm [name="supplier_id[]"]`).first().val(supplier.id)
+        element.val(supplier.namasupplier)
 
       }
     })

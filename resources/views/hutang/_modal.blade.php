@@ -384,8 +384,8 @@
                       </td>
                       </tr>`)
 
-          detailRow.find(`[name="supplier_id[]"]`).val(detail.supplier_id)
           detailRow.find(`[name="supplier[]"]`).val(detail.supplier)
+          detailRow.find(`[name="supplier_id[]"]`).val(detail.supplier_id)
           detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
           detailRow.find(`[name="total_detail[]"]`).val(detail.total)
           detailRow.find(`[name="cicilan_detail[]"]`).val(detail.cicilan)
@@ -396,6 +396,8 @@
           initAutoNumeric(detailRow.find(`[name="cicilan_detail[]"]`))
           initAutoNumeric(detailRow.find(`[name="totalbayar_detail[]"]`))
 
+          initDatepicker(detailRow.find('.datepicker'))
+
           $('#detailList tbody').append(detailRow)
 
           $('#lookup').hide()
@@ -404,11 +406,12 @@
             title: 'supplier Lookup',
             fileName: 'supplier',
             onSelectRow: (supplier, element) => {
-              $('#crudForm [name=supplier]').first().val(supplier.namasupplier)
-              element.val(supplier.id)
+              $(`#crudForm [name="supplier_id[]"]`).first().val(supplier.id)
+              element.val(supplier.namasupplier)
 
             }
           })
+
         })
 
         setRowNumbers()
@@ -450,11 +453,21 @@
       title: 'supplier Lookup',
       fileName: 'supplier',
       onSelectRow: (supplier, element) => {
-        $('#crudForm [name=supplier]').first().val(supplier.namasupplier)
-        element.val(supplier.id)
+        element.parents('td').find(`[name="supplier_id[]"]`).val(supplier.id)
+        element.val(supplier.namasupplier)
 
       }
     })
+
+    // $('.supplier-lookup').last().lookup({
+    //   title: 'supplier Lookup',
+    //   fileName: 'supplier',
+    //   onSelectRow: (supplier, element) => {
+    //     $('#crudForm [name=supplier]').first().val(supplier.namasupplier)
+    //     element.val(supplier.id)
+
+    //   }
+    // })
 
     initAutoNumeric(detailRow.find('.autonumeric'))
     initDatepicker(detailRow.find('.datepicker'))
