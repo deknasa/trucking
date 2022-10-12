@@ -112,6 +112,8 @@ $.fn.lookup = function (options = null) {
 
 		lookupModal.on("hidden.bs.modal", function () {
 			lookupModal.remove();
+
+			element.val(element.data('currentValue'))			
 			element.focus();
 		});
 	}
@@ -121,6 +123,10 @@ $.fn.lookup = function (options = null) {
 			lookupModal.modal("hide");
 
 			options.onSelectRow(sanitize(grid.getRowData(id)), element);
+
+			setTimeout(() => {
+				element.data('currentValue', element.val())
+			}, 500);
 		} else {
 			alert("Please select a row");
 		}

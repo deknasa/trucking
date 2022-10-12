@@ -16,8 +16,6 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('piutangheader.index') }}"
-  let getUrl = "{{ route('piutangheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -31,27 +29,12 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let rowNum = 10
+  let hasDetail = false
 
   $(document).ready(function() {
-
-    $('#lookup').hide()
-
-    $('.agen-lookup').lookup({
-      title: 'Agen Lookup',
-      fileName: 'agen',
-      onSelectRow: (agen, element) => {
-        $('#crudForm [name=agen_id]').first().val(agen.id)
-        element.val(agen.namaagen)
-      }
-    })
-    
-    // $('#crudModal').on('hidden.bs.modal', function() {
-    //   activeGrid = '#jqGrid'
-    // })
-
-
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'piutangheader' }}`,
+        url: `${apiUrl}piutangheader`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -90,9 +73,8 @@
           {
             label: 'NOMINAL',
             name: 'nominal',
-            formatter: 'number', 
-            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
-            align: "right",
+            align: 'right',
+            formatter: currencyFormat,
           },
           {
             label: 'NO BUKTI INVOICE',
@@ -147,13 +129,18 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
-
-          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+          
+          if (!hasDetail) {
+            loadDetailGrid(id)
+            hasDetail = true
+          }
+
+          loadDetailData(id)
         },
         loadComplete: function(data) {
 
@@ -258,9 +245,6 @@
 
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
-
-    /* Load detail grid */
-    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn btn-sm btn-primary`)
