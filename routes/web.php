@@ -480,12 +480,12 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('ritasi', RitasiController::class);
 
-    Route::get('servicein/{id}/delete', [ServiceInHeaderController::class, 'delete'])->name('servicein.delete');
-    Route::get('servicein/index', [ServiceInHeaderController::class, 'index']);
-    Route::get('servicein/get', [ServiceInHeaderController::class, 'get'])->name('servicein.get');
-    Route::get('servicein/export', [ServiceInHeaderController::class, 'export'])->name('servicein.export');
-    Route::get('servicein/report', [ServiceInHeaderController::class, 'report'])->name('servicein.report');
-    Route::resource('servicein', ServiceInHeaderController::class);
+    Route::get('serviceinheader/{id}/delete', [ServiceInHeaderController::class, 'delete'])->name('serviceinheader.delete');
+    Route::get('serviceinheader/index', [ServiceInHeaderController::class, 'index']);
+    Route::get('serviceinheader/get', [ServiceInHeaderController::class, 'get'])->name('serviceinheader.get');
+    Route::get('serviceinheader/export', [ServiceInHeaderController::class, 'export'])->name('serviceinheader.export');
+    Route::get('serviceinheader/report', [ServiceInHeaderController::class, 'report'])->name('serviceinheader.report');
+    Route::resource('serviceinheader', ServiceInHeaderController::class);
 
     Route::resource('serviceindetail', ServiceInDetailController::class);
 

@@ -16,7 +16,7 @@ class ServiceInHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        return view('servicein.index', compact('title'));
+        return view('serviceinheader.index', compact('title'));
     }
 
     // /**
@@ -31,7 +31,7 @@ class ServiceInHeaderController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'servicein', $request->all());
+                ->post(config('app.api_url') . 'serviceinheader', $request->all());
 
 
             return response($response, $response->status());
@@ -58,7 +58,7 @@ class ServiceInHeaderController extends MyController
         $response = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'servicein', $params);
+            ->get(config('app.api_url') . 'serviceinheader', $params);
 
             $data = [
                 'total' => $response['attributes']['totalPages'] ?? [],
@@ -80,7 +80,7 @@ class ServiceInHeaderController extends MyController
 
         $combo = $this->combo();
 
-        return view('servicein.add', compact('title', 'combo'));
+        return view('serviceinheader.add', compact('title', 'combo'));
     }
 
     // /**
@@ -94,7 +94,7 @@ class ServiceInHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "servicein/$id");
+            ->get(config('app.api_url') . "serviceinheader/$id");
 
         $servicein = $response['data'];
         $kode = $response['kode'];
@@ -102,7 +102,7 @@ class ServiceInHeaderController extends MyController
 
         $combo = $this->combo();
 
-        return view('servicein.edit', compact('title', 'servicein', 'combo', 'serviceNoBukti'));
+        return view('serviceinheader.edit', compact('title', 'serviceinheader', 'combo', 'serviceNoBukti'));
     }
 
     // /**
@@ -128,7 +128,7 @@ class ServiceInHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "servicein/$id", $request->all());
+            ->patch(config('app.api_url') . "serviceinheader/$id", $request->all());
 
         return response($response);
     }
@@ -145,14 +145,14 @@ class ServiceInHeaderController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "servicein/$id");
+                ->get(config('app.api_url') . "serviceinheader/$id");
 
             $servicein = $response['data'];
             $combo = $this->combo();
 
-            return view('servicein.delete', compact('title', 'combo', 'servicein'));
+            return view('serviceinheader.delete', compact('title', 'combo', 'serviceinheader'));
         } catch (\Throwable $th) {
-            return redirect()->route('servicein.index');
+            return redirect()->route('serviceinheader.index');
         }
     }
 
@@ -166,7 +166,7 @@ class ServiceInHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "servicein/$id");
+            ->delete(config('app.api_url') . "serviceinheader/$id");
 
         return response($response);
     }
@@ -202,7 +202,7 @@ class ServiceInHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'servicein/combo');
+            ->get(config('app.api_url') . 'serviceinheader/combo');
 
         return $response['data'];
     }
