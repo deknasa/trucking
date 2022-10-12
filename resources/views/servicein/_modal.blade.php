@@ -52,7 +52,6 @@
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
-
                                 <input type="text" name="tglmasuk" class="form-control datepicker">
                             </div>
                         </div>
@@ -144,7 +143,6 @@
             let Id = form.find('[name=id]').val()
             let action = form.data('action')
             let data = $('#crudForm').serializeArray()
-            // unformatAutoNumeric(data)
 
             data.push({
                 name: 'sortIndex',
@@ -295,9 +293,14 @@
 
                     if (element.is('select')) {
                         element.val(value).trigger('change')
+                    } else if (element.hasClass('datepicker')) {
+                        console.log(value);
+                        element.val(dateFormat(value))
                     } else {
                         element.val(value)
                     }
+
+                  
                 })
                 //     element.val(value)
                 //     let tglbukti = response.data.tglbukti

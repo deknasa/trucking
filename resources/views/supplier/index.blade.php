@@ -87,10 +87,10 @@
             label: 'jenisusaha',
             name: 'jenisusaha',
           },
-          {
-            label: 'top',
-            name: 'top',
-          },
+          // {
+          //   label: 'top',
+          //   name: 'top',
+          // },
           {
             label: 'bank',
             name: 'bank',

@@ -35,19 +35,19 @@
 
   $(document).ready(function() {
 
-     $('#lookup').hide()
+    $('#lookup').hide()
 
-        $('.trado-lookup').lookup({
-          title: 'trado Lookup',
-          fileName: 'trado',
-          onSelectRow: (trado, element) => {
-            $('#crudForm [name=trado_id]').first().val(trado.id)
-            element.val(trado.keterangan)
+    $('.trado-lookup').lookup({
+      title: 'trado Lookup',
+      fileName: 'trado',
+      onSelectRow: (trado, element) => {
+        $('#crudForm [name=trado_id]').first().val(trado.id)
+        element.val(trado.keterangan)
 
-          }
-        })
+      }
+    })
 
-        $('.mekanik-lookup').lookup({
+    $('.mekanik-lookup').lookup({
       title: 'mekanik Lookup',
       fileName: 'mekanik',
       onSelectRow: (mekanik, element) => {
@@ -57,75 +57,75 @@
       }
     })
 
-        $('#crudModal').on('shown.bs.modal', function() {
-          activeGrid = '#jqGrid'
-        })
+    $('#crudModal').on('shown.bs.modal', function() {
+      activeGrid = '#jqGrid'
+    })
 
-        $("#jqGrid").jqGrid({
-            url: `{{ config('app.api_url') . 'servicein' }}`,
-            mtype: "GET",
-            styleUI: 'Bootstrap4',
-            iconSet: 'fontAwesome',
-            datatype: "json",
-            colModel: [{
-                label: 'ID',
-                name: 'id',
-                align: 'right',
-                width: '50px'
-              },
-              {
-                label: 'NO BUKTI',
-                name: 'nobukti',
-                align: 'left'
-              },
-              {
-                label: 'TANGGAL BUKTI',
-                name: 'tglbukti',
-                align: 'left',
-                formatter: "date",
-                formatoptions: {
-                  srcformat: "ISO8601Long",
-                  newformat: "d-m-Y"
-                }
-              },
-              {
-                label: 'TRADO',
-                name: 'trado_id',
-                align: 'left'
-              },
-              {
-                label: 'TANGGAL MASUK',
-                name: 'tglmasuk',
-                align: 'left',
-                formatter: "date",
-                formatoptions: {
-                  srcformat: "ISO8601Long",
-                  newformat: "d-m-Y"
-                }
-              },
-              {
-                label: 'KETERANGAN',
-                name: 'keterangan',
-                align: 'left'
-              },
+    $("#jqGrid").jqGrid({
+        url: `{{ config('app.api_url') . 'servicein' }}`,
+        mtype: "GET",
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        datatype: "json",
+        colModel: [{
+            label: 'ID',
+            name: 'id',
+            align: 'right',
+            width: '50px'
+          },
+          {
+            label: 'NO BUKTI',
+            name: 'nobukti',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL BUKTI',
+            name: 'tglbukti',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'TRADO',
+            name: 'trado_id',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL MASUK',
+            name: 'tglmasuk',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            align: 'left'
+          },
 
-              {
-                label: 'MODIFIEDBY',
-                name: 'modifiedby',
-                align: 'left'
-              },
-              {
-                label: 'UPDATEDAT',
-                name: 'updated_at',
-                align: 'left',
-                formatter: "date",
-                formatoptions: {
-                  srcformat: "ISO8601Long",
-                  newformat: "d-m-Y H:i:s"
-                }
-              },
-            ],
-            autowidth: true,
+          {
+            label: 'MODIFIEDBY',
+            name: 'modifiedby',
+            align: 'left'
+          },
+          {
+            label: 'UPDATEDAT',
+            name: 'updated_at',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+        ],
+        autowidth: true,
         shrinkToFit: false,
         height: 350,
         rowNum: 10,
@@ -172,7 +172,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -382,8 +382,6 @@
       }
     })
   })
-
- 
 </script>
 @endpush()
 @endsection

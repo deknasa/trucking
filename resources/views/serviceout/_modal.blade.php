@@ -28,11 +28,8 @@
                                     TANGGAL BUKTI <span class="text-danger">*</span>
                                 </label>
                             </div>
-                            <div class="col-12 col-sm-4 col-md-4" id="tglbukti">
-                                @php
-                                $tglbukti = date('d-m-Y');
-                                @endphp
-                                <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
+                            <div class="col-12 col-sm-4 col-md-4">
+                                <input type="text" name="tglbukti" class="form-control datepicker">
                             </div>
                         </div>
 
@@ -54,11 +51,8 @@
                                     TANGGAL KELUAR <span class="text-danger">*</span>
                                 </label>
                             </div>
-                            <div class="col-12 col-sm-4 col-md-4" id="tglkeluar">
-                                @php
-                                $tglkeluar = date('d-m-Y');
-                                @endphp
-                                <input type="text" name="tglkeluar" value="{{$tglkeluar}}" id="tglkeluar" class="form-control datepicker">
+                            <div class="col-12 col-sm-4 col-md-4">
+                                <input type="text" name="tglkeluar" class="form-control datepicker">
                             </div>
                         </div>
 
@@ -72,7 +66,7 @@
                             </div>
                         </div>
 
-                        <table class="table table-bordered table-bindkeys">
+                        <table class="table table-bordered table-bindkeys" id="detailList">
                             <thead>
                                 <tr>
                                     <th width="50">No</th>
@@ -81,43 +75,16 @@
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="table_body" class="form-group">
-                                <tr id="row">
+                            <tbody>
+                                <tr>
+                                    <td></td>
                                     <td>
-                                        <div class="baris">1</div>
+                                        <input type="text" name="servicein_nobukti[]" class="form-control servicein-lookup">
                                     </td>
 
                                     <td>
-                                        <div class="row form-group">
-                                            <div class="col-12 col-md-12" id="servicein_nobukti">
-                                                <div class="col-8 col-md-10">
-                                                    <input type="text" name="servicein_nobukti" class="form-control servicein-lookup">
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <input type="text" name="keterangan_detail[]" class="form-control">
 
-                                        <!-- <div class="row form-group">
-                                            <div class="col-12 col-md-12" id="servicein_nobukti">
-                                                <div class="input-group">
-                                                    <label>
-                                                        TRADO <span class="text-danger">*</span>
-                                                    </label>
-                                                </div>
-                                                <div class="col-8 col-md-10">
-                                                    <input type="hidden" name="trado_id">
-                                                    <input type="text" name="trado" class="form-control trado-lookup">
-                                                </div>
-                                            </div>
-                                        </div> -->
-                                    </td>
-
-
-                                    <td>
-                                        <div class="row form-group">
-                                            <div class="col-12 col-md-12">
-                                                <input type="text" name="keterangan_detail" class="form-control">
-                                            </div>
-                                        </div>
                                     </td>
 
                                     <td>
@@ -130,12 +97,11 @@
                                 <tr>
                                     <td colspan="3"></td>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-sm my-2" id="addrow">Tambah</button>
+                                        <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                                     </td>
                                 </tr>
                             </tfoot>
                         </table>
-
                     </div>
                     <div class="modal-footer justify-content-start">
                         <button id="btnSubmit" class="btn btn-primary">
@@ -156,8 +122,15 @@
 @push('scripts')
 <script>
     let hasFormBindKeys = false
-
     $(document).ready(function() {
+
+        $("#addRow").click(function() {
+            addRow()
+        })
+
+        $(document).on('click', '.delete-row', function(event) {
+            deleteRow($(this).parents('tr'))
+        })
 
         $('#btnSubmit').click(function(event) {
             event.preventDefault()
@@ -168,8 +141,6 @@
             let Id = form.find('[name=id]').val()
             let action = form.data('action')
             let data = $('#crudForm').serializeArray()
-
-            unformatAutoNumeric(data)
 
             data.push({
                 name: 'sortIndex',
@@ -195,7 +166,7 @@
                 name: 'limit',
                 value: limit
             })
-            console.log(data)
+
             switch (action) {
                 case 'add':
                     method = 'POST'
@@ -214,7 +185,6 @@
                     url = `${apiUrl}serviceout`
                     break;
             }
-
             $(this).attr('disabled', '')
             $('#loader').removeClass('d-none')
 
@@ -258,34 +228,6 @@
         })
     })
 
-
-    $("#addrow").click(function() {
-        let rowCount = $('#row').length;
-        let barisCount = $('.baris').length;
-        if (rowCount > 0) {
-            let clone = $('#row').clone();
-            clone.find('input').val('');
-
-            baris = parseInt(barisCount) + 1;
-            clone.find('.baris').text(baris);
-            $('table #table_body').append(clone);
-
-        } else {
-            baris = 1;
-            $('#table_body').append(html);
-        }
-    });
-
-    $('table').on('click', '.rmv', function() {
-        $(this).closest('tr').remove();
-
-        $('.baris').each(function(i, obj) {
-            $(obj).text(i + 1);
-        });
-        baris = baris - 1;
-    });
-
-
     function createServiceOut() {
         let form = $('#crudForm')
 
@@ -301,7 +243,7 @@
         $('.invalid-feedback').remove()
     }
 
-    function editServiceOut(Id) {
+    function editServiceOut(id) {
         let form = $('#crudForm')
 
         form.data('action', 'edit')
@@ -310,64 +252,14 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-        $('#crudModalTitle').text('Edit Service out Header')
+        $('#crudModalTitle').text('Edit Service Out ')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-
-        $.ajax({
-            url: `${apiUrl}serviceout/${Id}`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-                $.each(response.data, (index, value) => {
-                    form.find(`[name="${index}"]`).val(value)
-                })
-                $('#table_body').html('')
-                $.each(response.detail, (index, value) => {
-                    $('#table_body').append(
-                        `<tr id="row">
-              <td>
-                <div class="baris">${parseInt(index) + 1}</div>
-              </td>
-              
-              <td>
-                    <div class="row form-group">
-                        <div class="col-12 col-md-12" id="servicein_nobukti">
-                            <div class="col-8 col-md-10">
-                                <input type="text" name="servicein_nobukti" value="${value.servicein_nobukti}" class="form-control servicein-lookup">
-                            </div>
-                        </div>
-                    </div>
-                  </td>
-
-              <td>
-              <input type="text" name="keterangan_detail" value="${value.keterangan}" class="form-control">
-              </td>
-
-              <td>
-                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-              </td>
-            </tr>`
-                    )
-                })
-
-                $('.servicein-lookup').last().lookup({
-                    title: 'servicein Lookup',
-                    fileName: 'servicein',
-                    onSelectRow: (servicein, element) => {
-                        $('#crudForm [name=servicein_id]').first().val(servicein.id)
-                        element.val(servicein.nobukti)
-                    }
-                })
-            }
-        })
+        showServiceOut(form, id)
     }
 
-    function deleteServiceOut(Id) {
+    function deleteServiceOut(id) {
         let form = $('#crudForm')
 
         form.data('action', 'delete')
@@ -376,13 +268,19 @@
     <i class="fa fa-save"></i>
     Hapus
   `)
-        $('#crudModalTitle').text('Delete Service in')
+        form.find(`.sometimes`).hide()
+        $('#crudModalTitle').text('Delete Service Out')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
+        showServiceOut(form, id)
+    }
+
+    function showServiceOut(form, id) {
+        $('#detailList tbody').html('')
 
         $.ajax({
-            url: `${apiUrl}serviceout/${Id}`,
+            url: `${apiUrl}serviceout/${id}`,
             method: 'GET',
             dataType: 'JSON',
             headers: {
@@ -390,38 +288,101 @@
             },
             success: response => {
                 $.each(response.data, (index, value) => {
-                    form.find(`[name="${index}"]`).val(value)
+                    let element = form.find(`[name="${index}"]`)
+
+                    if (element.is('select')) {
+                        element.val(value).trigger('change')
+                    } else if (element.hasClass('datepicker')) {
+                        element.val(dateFormat(value))
+                    } else {
+                        element.val(value)
+                    }
                 })
-                $('#table_body').html('')
-                $.each(response.detail, (index, value) => {
-                    $('#table_body').append(
-                        `<tr id="row">
-              <td>
-                <div class="baris">${parseInt(index) + 1}</div>
-              </td>
-              
-              <td>
-                    <div class="row form-group">
-                        <div class="col-12 col-md-12" id="servicein_nobukti">
-                            <div class="col-8 col-md-10">
-                                <input type="text" name="servicein_nobukti" value="${value.servicein_nobukti}" class="form-control servicein-lookup">
-                            </div>
-                        </div>
-                    </div>
-                  </td>
+                //     element.val(value)
+                //     let tglbukti = response.data.tglbukti
+                //     // let tglmasuk = response.data.tglmasuk
 
+                //     $('#tglbukti').val(dateFormat(new Date(tglbukti)));
+                //     // $('#tglmasuk').val(dateFormat( new Date(tglmasuk)));
 
-              <td>
-                  <input type="text" name="keterangan_detail" value="${value.keterangan}" class="form-control">
-                </td>
+                // })
 
-              <td>
-                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-              </td>
-            </tr>`
-                    )
+                $.each(response.detail, (index, detail) => {
+                    let detailRow = $(`
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="text" name="servicein_nobukti[]" class="form-control servicein-lookup">
+                        </td>
+                        <td>
+                            <input type="text" name="keterangan_detail[]" class="form-control">
+                        </td>
+                        <td>
+                        <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
+                      </td>
+                    </tr>`)
+
+                    detailRow.find(`[name="servicein_nobukti[]"]`).val(detail.servicein_nobukti)
+
+                    detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+
+                    $('#detailList tbody').append(detailRow)
+
+                    $('#lookup').hide()
+
+                    $('.servicein-lookup').last().lookup({
+                        title: 'servicein Lookup',
+                        fileName: 'servicein',
+                        onSelectRow: (servicein, element) => {
+                            element.val(servicein.nobukti)
+                        }
+                    })
+
                 })
+                setRowNumbers()
             }
+        })
+    }
+
+    function addRow() {
+        let detailRow = (`
+        <tr>
+        <td></td>
+        <td>
+            <input type="text" name="servicein_nobukti[]" class="form-control servicein-lookup">
+        </td>
+        <td>
+            <input type="text" name="keterangan_detail[]" class="form-control">
+        </td>
+        <td>
+        <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
+        </td>
+    </tr>`)
+
+        $('#detailList tbody').append(detailRow)
+
+        $('.servicein-lookup').last().lookup({
+            title: 'servicein Lookup',
+            fileName: 'servicein',
+            onSelectRow: (servicein, element) => {
+                element.val(servicein.nobukti)
+            }
+        })
+
+        setRowNumbers()
+    }
+
+    function deleteRow(row) {
+        row.remove()
+
+        setRowNumbers()
+    }
+
+    function setRowNumbers() {
+        let elements = $('#detailList tbody tr td:nth-child(1)')
+
+        elements.each((index, element) => {
+            $(element).text(index + 1)
         })
     }
 </script>

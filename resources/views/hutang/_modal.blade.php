@@ -101,7 +101,7 @@
                   </td>
 
                   <td>
-                    <input type="text" name="totalbayar_detail[]" style="text-align:right" class="form-control text-right autonumeric">
+                    <input type="text" name="totalbayar_detail[]" style="text-align:right" class="form-control text-right autonumeric totalbayar">
                   </td>
 
 
@@ -117,7 +117,12 @@
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan="7"></td>
+                  <td colspan="6">
+                    <h5 class="text-right font-weight-bold">TOTAL:</h5>
+                  </td>
+                  <td>
+                    <h5 id="total" class="text-right font-weight-bold"></h5>
+                  </td>
                   <td>
                     <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                   </td>
@@ -150,6 +155,10 @@
     $("#addRow").click(function() {
       addRow()
     });
+
+    $(document).on('keyup', '.totalbayar', function(e) {
+      calculateSum()
+    })
 
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
@@ -232,7 +241,6 @@
         },
         data: data,
         success: response => {
-
 
           id = response.data.id
           $('#crudModal').find('#crudForm').trigger('reset')
@@ -341,6 +349,8 @@
 
           if (element.is('select')) {
             element.val(value).trigger('change')
+          } else if (element.hasClass('datepicker')) {
+            element.val(dateFormat(value))
           } else {
             element.val(value)
           }
@@ -364,7 +374,7 @@
                           <input type="text" name="cicilan_detail[]"  style="text-align:right" class="form-control text-right autonumeric" > 
                       </td>
                       <td>
-                          <input type="text" name="totalbayar_detail[]"  style="text-align:right" class="form-control text-right autonumeric" > 
+                          <input type="text" name="totalbayar_detail[]"  style="text-align:right" class="form-control text-right autonumeric totalbayar" > 
                       </td>
                       <td>
                         <input type="text" name="keterangan_detail[]"  class="form-control">
@@ -376,7 +386,7 @@
 
           detailRow.find(`[name="supplier_id[]"]`).val(detail.supplier_id)
           detailRow.find(`[name="supplier[]"]`).val(detail.supplier)
-          detailRow.find(`[name="tgljatuhtempo[]"]`).val(detail.tgljatuhtempo)
+          detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
           detailRow.find(`[name="total_detail[]"]`).val(detail.total)
           detailRow.find(`[name="cicilan_detail[]"]`).val(detail.cicilan)
           detailRow.find(`[name="totalbayar_detail[]"]`).val(detail.totalbayar)
@@ -424,7 +434,7 @@
               <input type="text" name="cicilan_detail[]"  style="text-align:right" class="form-control text-right autonumeric" > 
           </td>
           <td>
-              <input type="text" name="totalbayar_detail[]"  style="text-align:right" class="form-control text-right autonumeric" > 
+              <input type="text" name="totalbayar_detail[]"  style="text-align:right" class="form-control text-right autonumeric totalbayar" > 
           </td>
           <td>
             <input type="text" name="keterangan_detail[]"  class="form-control">
@@ -463,6 +473,25 @@
 
     elements.each((index, element) => {
       $(element).text(index + 1)
+    })
+  }
+
+  function calculateSum() {
+    var sum = 0;
+    //iterate through each textboxes and add the values
+    $(".totalbayar").each(function() {
+      let number = this.value
+      let hrg = parseFloat(number.replaceAll(',', ''));
+      console.log(hrg)
+      if (!isNaN(hrg) && hrg.length != 0) {
+        sum += parseFloat(hrg);
+      }
+    });
+    sum = new Intl.NumberFormat('en-US').format(sum);
+
+    $("#total").html(`${sum}`);
+    new AutoNumeric('#total', {
+      decimalPlaces: '2'
     })
   }
 </script>

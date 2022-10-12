@@ -9,129 +9,168 @@
           </button>
         </div>
         <form action="" method="post">
-          <div class="modal-body">
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  DARI <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <select name="kotadari_id" class="form-control select2bs4">
-                  <option value="">-- PILIH DARI --</option>
-                </select>
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  TUJUAN <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <select name="kotasampai_id" class="form-control select2bs4">
-                  <option value="">-- PILIH TUJUAN --</option>
-                </select>
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  ZONA <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <select name="zona_id" class="form-control select2bs4">
-                  <option value="">-- PILIH ZONA --</option>
-                </select>
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  JARAK <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="jarak" class="form-control autonumeric">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  STATUS AKTIF <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <select name="statusaktif" class="form-control select2bs4">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  TGL MULAI BERLAKU <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="tglmulaiberlaku" class="form-control datepicker">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  STATUS LUAR KOTA <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <select name="statusluarkota" class="form-control select2bs4">
-                  <option value="">-- PILIH STATUS LUAR KOTA --</option>
-                </select>
-              </div>
-            </div>
+          <input type="hidden" name="id">
 
-            <table class="table table-borderd mt-3" id="detailList">
-              <thead class="table-secondary">
-                <tr>
-                  <th>NO</th>
-                  <th>CONTAINER</th>
-                  <th>STATUS CONTAINER</th>
-                  <th>NOMINAL SUPIR</th>
-                  <th>NOMINAL KENEK</th>
-                  <th>NOMINAL KOMISI</th>
-                  <th>NOMINAL TOL</th>
-                  <th>LITER</th>
-                  <th>AKSI</th>
-                </tr>
-              </thead>
-              <tbody>
+          <div class="row form-group">
+            <div class="col-12 col-sm-2 col-md-2 col-form-label">
+              <label>
+                DARI <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div class="col-12 col-md-10">
+              <select name="kotadari_id" class="form-control select2bs4">
+                <option value="">-- PILIH DARI --</option>
+              </select>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-12 col-md-2 col-form-label">
+              <label>
+                TUJUAN <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div class="col-12 col-md-10">
+              <select name="kotasampai_id" class="form-control select2bs4">
+                <option value="">-- PILIH TUJUAN --</option>
+              </select>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-12 col-md-2 col-form-label">
+              <label>
+                ZONA <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div class="col-12 col-md-10">
+              <select name="zona_id" class="form-control select2bs4">
+                <option value="">-- PILIH ZONA --</option>
+              </select>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-12 col-md-2 col-form-label">
+              <label>
+                JARAK <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div class="col-12 col-md-10">
+              <input type="text" name="jarak" class="form-control autonumeric">
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-12 col-md-2 col-form-label">
+              <label>
+                STATUS AKTIF <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div class="col-12 col-md-10">
+              <select name="statusaktif" class="form-control select2bs4">
+                <option value="">-- PILIH STATUS AKTIF --</option>
+              </select>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-12 col-md-2 col-form-label">
+              <label>
+                TGL MULAI BERLAKU <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div class="col-12 col-md-10">
+              <input type="text" name="tglmulaiberlaku" class="form-control datepicker">
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-12 col-md-2 col-form-label">
+              <label>
+                TGL AKHIR BERLAKU <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div class="col-12 col-md-10">
+              <input type="text" name="tglakhirberlaku" class="form-control datepicker">
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-12 col-md-2 col-form-label">
+              <label>
+                STATUS LUAR KOTA <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div class="col-12 col-md-10">
+              <select name="statusluarkota" class="form-control select2bs4">
+                <option value="">-- PILIH STATUS LUAR KOTA --</option>
+              </select>
+            </div>
+          </div>
 
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="8"></td>
-                  <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-          <div class="modal-footer justify-content-start">
-            <button id="btnSubmit" class="btn btn-primary">
-              <i class="fa fa-save"></i>
-              Simpan
-            </button>
-            <button class="btn btn-secondary" data-dismiss="modal">
-              <i class="fa fa-times"></i>
-              Batal
-            </button>
-          </div>
-        </form>
+          <table class="table table-borderd table-bindkeys" id="detailList">
+            <thead>
+              <tr>
+                <th width="50">No</th>
+                <th>CONTAINER</th>
+                <th>STATUS CONTAINER</th>
+                <th>NOMINAL SUPIR</th>
+                <th>NOMINAL KENEK</th>
+                <th>NOMINAL KOMISI</th>
+                <th>NOMINAL TOL</th>
+                <th>LITER</th>
+                <th>AKSI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td>
+                <td>
+                  <select type="text" name="container_id[]" class="form-control"></select>
+                </td>
+                <td>
+                  <select type="text" name="statuscontainer_id[]" class="form-control"></select>
+                </td>
+                <td>
+                  <input type="text" name="nominalsupir[]" class="form-control autonumeric">
+                </td>
+                <td>
+                  <input type="text" name="nominalkenek[]" class="form-control autonumeric">
+                </td>
+                <td>
+                  <input type="text" name="nominalkomisi[]" class="form-control autonumeric">
+                </td>
+                <td>
+                  <input type="text" name="nominaltol[]" class="form-control autonumeric">
+                </td>
+                <td>
+                  <input type="text" name="liter[]" class="form-control autonumeric">
+                </td>
+                <td>
+                  <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                </td>
+              </tr>
+
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="8"></td>
+                <td>
+                  <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+
+      </div>
+      <div class="modal-footer justify-content-start">
+        <button id="btnSubmit" class="btn btn-primary">
+          <i class="fa fa-save"></i>
+          Simpan
+        </button>
+        <button class="btn btn-secondary" data-dismiss="modal">
+          <i class="fa fa-times"></i>
+          Batal
+        </button>
       </div>
     </form>
   </div>
+  </form>
+</div>
 </div>
 
 @push('scripts')
@@ -161,6 +200,31 @@
       let upahSupirId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+
+
+      $('#crudForm').find(`[name="nominalsupir[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominalsupir[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalsupir[]"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="nominalkenek[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominalkenek[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalkenek[]"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="nominalkomisi[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominalkomisi[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalkomisi[]"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="nominaltol[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominaltol[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaltol[]"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="liter[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'liter[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="liter[]"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="jarak"]`).each((index, element) => {
+        data.filter((row) => row.name === 'jarak')[index].value = AutoNumeric.getNumber($(`#crudForm [name="jarak"]`)[index])
+      })
 
       data.push({
         name: 'sortIndex',
@@ -194,11 +258,11 @@
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}upahsupir/${upahSupirId}`
+          url = `${apiUrl}upahsupir/${Id}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}upahsupir/${upahSupirId}`
+          url = `${apiUrl}upahsupir/${Id}`
           break;
         default:
           method = 'POST'
@@ -218,19 +282,31 @@
         },
         data: data,
         success: response => {
-          $('#crudForm').trigger('reset')
+          id = response.data.id
+          $('#crudModal').find('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
 
-          id = response.data.id
-
-          $('#jqGrid').trigger('reloadGrid', {
+          $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
-          })
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
           }
         },
+        //   $('#crudForm').trigger('reset')
+        //   $('#crudModal').modal('hide')
+
+        //   id = response.data.id
+
+        //   $('#jqGrid').trigger('reloadGrid', {
+        //     page: response.data.page
+        //   })
+
+        //   if (response.data.grp == 'FORMAT') {
+        //     updateFormat(response.data)
+        //   }
+        // },
         error: error => {
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
@@ -248,19 +324,19 @@
     })
   })
 
-  $('#crudModal').on('shown.bs.modal', () => {
-    let form = $('#crudForm')
+  // $('#crudModal').on('shown.bs.modal', () => {
+  //   let form = $('#crudForm')
 
-    setFormBindKeys(form)
+  //   setFormBindKeys(form)
 
-    activeGrid = null
+  //   activeGrid = null
 
-    getMaxLength(form)
-  })
+  //   getMaxLength(form)
+  // })
 
-  $('#crudModal').on('hidden.bs.modal', () => {
-    activeGrid = '#jqGrid'
-  })
+  // $('#crudModal').on('hidden.bs.modal', () => {
+  //   activeGrid = '#jqGrid'
+  // })
 
   function createUpahSupir() {
     let form = $('#crudForm')
@@ -271,7 +347,7 @@
     Simpan
   `)
     form.data('action', 'add')
-    form.find(`.sometimes`).show()
+    // form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Upah Supir')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
@@ -285,7 +361,7 @@
     addRow()
   }
 
-  function editUpahSupir(upahSupirId) {
+  function editUpahSupir(id) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -308,11 +384,11 @@
         setStatusLuarKotaOptions(form)
       ])
       .then(() => {
-        showUpahSupir(form, upahSupirId)
+        showUpahSupir(form, id)
       })
   }
 
-  function deleteUpahSupir(upahSupirId) {
+  function deleteUpahSupir(id) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -326,6 +402,7 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    showUpahSupir(form, id)
 
     Promise
       .all([
@@ -335,34 +412,34 @@
         setStatusLuarKotaOptions(form)
       ])
       .then(() => {
-        showUpahSupir(form, upahSupirId)
+        showUpahSupir(form, id)
       })
   }
 
-  function getMaxLength(form) {
-    if (!form.attr('has-maxlength')) {
-      $.ajax({
-        url: `${apiUrl}upahsupir/field_length`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
-            }
-          })
+  // function getMaxLength(form) {
+  //   if (!form.attr('has-maxlength')) {
+  //     $.ajax({
+  //       url: `${apiUrl}upahsupir/field_length`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         'Authorization': `Bearer ${accessToken}`
+  //       },
+  //       success: response => {
+  //         $.each(response.data, (index, value) => {
+  //           if (value !== null && value !== 0 && value !== undefined) {
+  //             form.find(`[name=${index}]`).attr('maxlength', value)
+  //           }
+  //         })
 
-          form.attr('has-maxlength', true)
-        },
-        error: error => {
-          showDialog(error.statusText)
-        }
-      })
-    }
-  }
+  //         form.attr('has-maxlength', true)
+  //       },
+  //       error: error => {
+  //         showDialog(error.statusText)
+  //       }
+  //     })
+  //   }
+  // }
 
   const getStatusContainerOptions = function() {
     return new Promise((resolve, reject) => {
@@ -545,11 +622,11 @@
     })
   }
 
-  function showUpahSupir(form, upahSupirId) {
+  function showUpahSupir(form, userId) {
     $('#detailList tbody').html('')
-    
+
     $.ajax({
-      url: `${apiUrl}upahsupir/${upahSupirId}`,
+      url: `${apiUrl}upahsupir/${userId}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -561,12 +638,15 @@
 
           if (element.is('select')) {
             element.val(value).trigger('change')
+          } else if (element.hasClass('datepicker')) {
+            element.val(dateFormat(value))
           } else {
             element.val(value)
           }
         })
 
-        $.each(response.data.upahsupir_rincian, (index, detail) => {
+        $.each(response.detail, (index, detail) => {
+          // $.each(response.data.upahsupir_rincian, (index, detail) => {
           let detailRow = $(`
             <tr>
               <td></td>
@@ -596,6 +676,20 @@
               </td>
             </tr>
           `)
+          detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+          detailRow.find(`[name="statuscontainer_id[]"]`).val(detail.statuscontainer_id)
+          detailRow.find(`[name="nominalsupir[]"]`).val(dateFormat(detail.nominalsupir))
+          detailRow.find(`[name="nominalkenek[]"]`).val(detail.nominalkenek)
+          detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
+          detailRow.find(`[name="nominaltol[]"]`).val(detail.nominaltol)
+          detailRow.find(`[name="liter[]"]`).val(detail.liter)
+
+          initAutoNumeric(detailRow.find(`[name="nominalsupir[]"]`))
+          initAutoNumeric(detailRow.find(`[name="nominalkenek[]"]`))
+          initAutoNumeric(detailRow.find(`[name="nominalkomisi[]"]`))
+          initAutoNumeric(detailRow.find(`[name="nominaltol[]"]`))
+          initAutoNumeric(detailRow.find(`[name="liter[]"]`))
+
 
           containers.forEach(container => {
             detailRow.find(`[name="container_id[]"]`).append(
@@ -614,12 +708,6 @@
               dropdownParent: $("#crudModal")
             })
           });
-
-          detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
-          detailRow.find(`[name="nominalkenek[]"]`).val(detail.nominalkenek)
-          detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
-          detailRow.find(`[name="nominaltol[]"]`).val(detail.nominaltol)
-          detailRow.find(`[name="liter[]"]`).val(detail.liter)
 
           $('#detailList tbody').append(detailRow)
 

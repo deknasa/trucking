@@ -26,7 +26,7 @@ class UpahSupirController extends MyController
             'combo' => $this->comboStatusAktif('list'),
         ];
 
-        return view('upahsupir.index', compact('title','data'));
+        return view('upahsupir.index', compact('title', 'data'));
     }
 
     public function get($params = [])
@@ -41,9 +41,9 @@ class UpahSupirController extends MyController
         ];
 
         $response = Http::withHeaders(request()->header())
-        ->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'upahsupir', $params);
+            ->get(config('app.api_url') . 'upahsupir', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -62,7 +62,7 @@ class UpahSupirController extends MyController
     public function create()
     {
         $title = $this->title;
-        
+
         $combo = $this->combo();
 
         return view('upahsupir.add', compact('title', 'combo'));
@@ -70,58 +70,63 @@ class UpahSupirController extends MyController
 
     public function store(Request $request)
     {
-        /* Unformat nominal */
-        $request->nominalsupir = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
 
-            return $nominal;
-        }, $request->nominalsupir);
+        try {
+            /* Unformat nominal */
+            $request->nominalsupir = array_map(function ($nominal) {
+                $nominal = str_replace('.', '', $nominal);
+                $nominal = str_replace(',', '', $nominal);
 
-        $request->nominalkenek = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
+                return $nominal;
+            }, $request->nominalsupir);
 
-            return $nominal;
-        }, $request->nominalkenek);
+            $request->nominalkenek = array_map(function ($nominal) {
+                $nominal = str_replace('.', '', $nominal);
+                $nominal = str_replace(',', '', $nominal);
 
-        $request->nominalkomisi = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
+                return $nominal;
+            }, $request->nominalkenek);
 
-            return $nominal;
-        }, $request->nominalkomisi);
+            $request->nominalkomisi = array_map(function ($nominal) {
+                $nominal = str_replace('.', '', $nominal);
+                $nominal = str_replace(',', '', $nominal);
 
-        $request->nominaltol = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
+                return $nominal;
+            }, $request->nominalkomisi);
 
-            return $nominal;
-        }, $request->nominaltol);
+            $request->nominaltol = array_map(function ($nominal) {
+                $nominal = str_replace('.', '', $nominal);
+                $nominal = str_replace(',', '', $nominal);
 
-        $request->liter = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
+                return $nominal;
+            }, $request->nominaltol);
 
-            return $nominal;
-        }, $request->liter);
+            $request->liter = array_map(function ($nominal) {
+                $nominal = str_replace('.', '', $nominal);
+                $nominal = str_replace(',', '', $nominal);
 
-        $request->merge([
-            'nominalsupir' => $request->nominalsupir,
-            'nominalkenek' => $request->nominalkenek,
-            'nominalkomisi' => $request->nominalkomisi,
-            'nominaltol' => $request->nominaltol,
-            'liter' => $request->liter,
-        ]);
+                return $nominal;
+            }, $request->liter);
 
-        $request['modifiedby'] = Auth::user()->name;
+            $request->merge([
+                'nominalsupir' => $request->nominalsupir,
+                'nominalkenek' => $request->nominalkenek,
+                'nominalkomisi' => $request->nominalkomisi,
+                'nominaltol' => $request->nominaltol,
+                'liter' => $request->liter,
+            ]);
 
-        $response = Http::withHeaders($this->httpHeaders)
-        ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->post(config('app.api_url') . 'upahsupir', $request->all());
+            $request['modifiedby'] = Auth::user()->name;
 
-        return response($response, $response->status());
+            $response = Http::withHeaders($this->httpHeaders)
+                ->withOptions(['verify' => false])
+                ->withToken(session('access_token'))
+                ->post(config('app.api_url') . 'upahsupir', $request->all());
+
+            return response($response, $response->status());
+        } catch (\Throwable $th) {
+            throw $th->getMessage();
+        }
     }
 
     /**
@@ -133,10 +138,10 @@ class UpahSupirController extends MyController
         $title = $this->title;
 
         $response = Http::withHeaders($this->httpHeaders)
-        ->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "upahsupir/$id");
-        
+
         $upahsupir = $response['data'];
 
         $combo = $this->combo();
@@ -193,7 +198,7 @@ class UpahSupirController extends MyController
         $request['modifiedby'] = Auth::user()->name;
 
         $response = Http::withHeaders($this->httpHeaders)
-        ->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->patch(config('app.api_url') . "upahsupir/$id", $request->all());
 
@@ -210,7 +215,7 @@ class UpahSupirController extends MyController
             $title = $this->title;
 
             $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
+                ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . "upahsupir/$id");
 
@@ -416,9 +421,9 @@ class UpahSupirController extends MyController
     private function combo()
     {
         $response = Http::withHeaders($this->httpHeaders)
-        ->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
             ->get(config('app.api_url') . 'upahsupir/combo');
-        
+
         return $response['data'];
     }
 
