@@ -110,6 +110,12 @@ function currencyFormat(value) {
 	return result;
 }
 
+function currencyUnformat(value) {
+	let result = parseFloat(value.replaceAll(formats.THOUSANDSEPARATOR, ''))
+
+	return result
+}
+
 function dateFormat(value) {
 	let date = new Date(value);
 
@@ -179,7 +185,7 @@ $(document).on("sidebar:toggle", () => {
 });
 
 $(document).ajaxError((event, jqXHR, ajaxSettings, thrownError) => {
-	if (jqXHR.status !== 422) {
+	if (jqXHR.status === 401) {
 		showDialog(thrownError, jqXHR.responseJSON.message);
 	}
 });
@@ -214,7 +220,11 @@ $.fn.disable = function () {
 	});
 
 	this.on("keydown", (e) => {
-		if (!e.altKey && !e.ctrlKey) {
+		if (
+			!e.altKey &&
+			!e.ctrlKey &&
+			e.which !== 27
+		) {
 			e.preventDefault();
 			return false;
 		}

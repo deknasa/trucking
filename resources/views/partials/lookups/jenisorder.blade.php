@@ -1,9 +1,9 @@
-<table id="jenisorderLookup" class="lookup-grid"></table>
-<div id="jenisorderLookupPager"></div>
+<table id="jenisOrderLookup" class="lookup-grid"></table>
+<div id="jenisOrderLookupPager"></div>
 
 @push('scripts')
 <script>
-  $('#jenisorderLookup').jqGrid({
+  $('#jenisOrderLookup').jqGrid({
       url: `{{ config('app.api_url') . 'jenisorder' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -69,6 +69,7 @@
       shrinkToFit: false,
       height: 450,
       rowNum: 10,
+      toolbar: [true, "top"],
       rownumbers: true,
       rownumWidth: 45,
       rowList: [10, 20, 50],
@@ -76,7 +77,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#jenisorderLookupPager'),
+      pager: $('#jenisOrderLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -104,26 +105,26 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
 
-          if (indexRow - 1 > $('#jenisorderLookup').getGridParam().reccount) {
-            indexRow = $('#jenisorderLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#jenisOrderLookup').getGridParam().reccount) {
+            indexRow = $('#jenisOrderLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#jenisorderLookup [id="${$('#jenisorderLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#jenisOrderLookup [id="${$('#jenisOrderLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#jenisorderLookup [id="${$('#jenisorderLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#jenisOrderLookup [id="${$('#jenisOrderLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#jenisorderLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#jenisorderLookup [id="` + $('#jenisorderLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#jenisOrderLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#jenisOrderLookup [id="` + $('#jenisOrderLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#jenisorderLookup').setSelection($('#jenisorderLookup').getDataIDs()[indexRow])
+            $('#jenisOrderLookup').setSelection($('#jenisOrderLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -150,7 +151,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-
+          clearGlobalSearch($('#jenisOrderLookup'))
       },
     })
+
+    loadGlobalSearch($('#jenisOrderLookup'))
+    loadClearFilter($('#jenisOrderLookup'))
 </script>

@@ -3,7 +3,7 @@
 
 @push('scripts')
 <script>
-   $('#tradoLookup').jqGrid({
+  $('#tradoLookup').jqGrid({
       url: `{{ config('app.api_url') . 'trado' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -21,11 +21,11 @@
           align: 'left',
         },
         {
-            label: 'STATUS AKTIF',
-            name: 'statusaktif',
-            align: 'left',
-            width: 100,
-            stype: 'select',
+          label: 'STATUS AKTIF',
+          name: 'statusaktif',
+          align: 'left',
+          width: 100,
+          stype: 'select',
         },
         {
           label: 'KM AWAL',
@@ -42,7 +42,7 @@
           name: 'tglakhirgantioli',
           align: 'left'
         },
-       
+
         {
           label: 'MODIFIEDBY',
           name: 'modifiedby',
@@ -69,6 +69,7 @@
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
+      toolbar: [true, "top"],
       page: 1,
       pager: $('#tradoLookupPager'),
       viewrecords: true,
@@ -137,4 +138,17 @@
       }
     })
 
+    .jqGrid('filterToolbar', {
+      stringResult: true,
+      searchOnEnter: false,
+      defaultSearch: 'cn',
+      groupOp: 'AND',
+      disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
+      beforeSearch: function() {
+        clearGlobalSearch($('#tradoLookup'))
+      },
+    })
+
+  loadGlobalSearch($('#tradoLookup'))
+  loadClearFilter($('#tradoLookup'))
 </script>

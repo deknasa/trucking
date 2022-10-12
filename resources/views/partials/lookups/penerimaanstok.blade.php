@@ -1,10 +1,9 @@
-<table id="kotaLookup" class="lookup-grid"></table>
-<div id="kotaLookupPager"></div>
+<table id="penerimaanStokLookup" class="lookup-grid" style="width: 100%;"></table>
+<div id="penerimaanStokLookupPager"></div>
 
-@push('scripts')
 <script>
- $('#kotaLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'kota' }}`,
+  $('#penerimaanStokLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'penerimaanstok' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -16,8 +15,8 @@
           width: '70px'
         },
         {
-          label: 'KODE KOTA',
-          name: 'kode kota',
+          label: 'KODE PENERIMAAN',
+          name: 'kodepenerimaan',
           align: 'left',
         },
         {
@@ -26,30 +25,19 @@
           align: 'left'
         },
         {
-            label: 'STATUS AKTIF',
-            name: 'statusaktif',
-            // stype: 'select',
-            // searchoptions: {
-            //   value: `<?php
-            //           $i = 1;
-
-            //           foreach ($data['combo'] as $status) :
-            //             echo "$status[param]:$status[parameter]";
-            //             if ($i !== count($data['combo'])) {
-            //               echo ";";
-            //             }
-            //             $i++;
-            //           endforeach
-
-            //           ?>
-            // `,
-            //   dataInit: function(element) {
-            //     $(element).select2({
-            //       width: 'resolve',
-            //       theme: "bootstrap4"
-            //     });
-            //   }
-            // },
+          label: 'COA',
+          name: 'coa',
+          align: 'left'
+        },
+        {
+          label: 'status format',
+          name: 'statusformat',
+          align: 'left'
+        },
+        {
+          label: 'status hitung stok',
+          name: 'statushitungstok',
+          align: 'left'
         },
         {
           label: 'MODIFIEDBY',
@@ -69,7 +57,7 @@
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
-      height: 350,
+      height: 450,
       rowNum: 10,
       rownumbers: true,
       rownumWidth: 45,
@@ -77,8 +65,9 @@
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
+      toolbar: [true, "top"],
       page: 1,
-      pager: $('#kotaLookupPager'),
+      pager: $('#penerimaanStokLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -107,26 +96,26 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#kotaLookup').getGridParam().reccount) {
-            indexRow = $('#kotaLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#penerimaanStokLookup').getGridParam().reccount) {
+            indexRow = $('#penerimaanStokLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#kotaLookup [id="${$('#kotaLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#penerimaanStokLookup [id="${$('#penerimaanStokLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#kotaLookup [id="${$('#kotaLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#penerimaanStokLookup [id="${$('#penerimaanStokLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#kotaLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#kotaLookup [id="` + $('#kotaLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#penerimaanStokLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#penerimaanStokLookup [id="` + $('#penerimaanStokLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#kotaLookup').setSelection($('#kotaLookup').getDataIDs()[indexRow])
+            $('#penerimaanStokLookup').setSelection($('#penerimaanStokLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -141,7 +130,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupkota').prev().width())
+        $(this).setGridWidth($('#lookupCabang').prev().width())
         setHighlight($(this))
       }
     })
@@ -153,10 +142,9 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#kotaLookup'))
+        clearGlobalSearch($('#penerimaanStokLookup'))
       },
     })
-
-  loadGlobalSearch($('#kotaLookup'))
-  loadClearFilter($('#kotaLookup'))
+  loadGlobalSearch($('#penerimaanStokLookup'))
+  loadClearFilter($('#penerimaanStokLookup'))
 </script>

@@ -1,75 +1,88 @@
-<table id="kotaLookup" class="lookup-grid"></table>
-<div id="kotaLookupPager"></div>
+<table id="stokLookup" class="lookup-grid" style="width: 100%;"></table>
+<div id="stokLookupPager"></div>
 
-@push('scripts')
 <script>
- $('#kotaLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'kota' }}`,
+$('#stokLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'stok' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
       colModel: [{
-          label: 'ID',
-          name: 'id',
-          align: 'right',
-          width: '70px'
-        },
-        {
-          label: 'KODE KOTA',
-          name: 'kode kota',
+        label: 'ID',
+        name: 'id',
+        align: 'right',
+        width: '70px'
+        
+      },
+      {
+        label: 'NAMA',
+        name: 'namastok',
+        align: 'left',
+      },
+      {
+          label: 'STATUS AKTIF',
+          name: 'statusaktif',
           align: 'left',
-        },
-        {
-          label: 'KETERANGAN',
+      },
+      {
+          label: 'keterangan',
           name: 'keterangan',
-          align: 'left'
-        },
-        {
-            label: 'STATUS AKTIF',
-            name: 'statusaktif',
-            // stype: 'select',
-            // searchoptions: {
-            //   value: `<?php
-            //           $i = 1;
-
-            //           foreach ($data['combo'] as $status) :
-            //             echo "$status[param]:$status[parameter]";
-            //             if ($i !== count($data['combo'])) {
-            //               echo ";";
-            //             }
-            //             $i++;
-            //           endforeach
-
-            //           ?>
-            // `,
-            //   dataInit: function(element) {
-            //     $(element).select2({
-            //       width: 'resolve',
-            //       theme: "bootstrap4"
-            //     });
-            //   }
-            // },
-        },
-        {
-          label: 'MODIFIEDBY',
+          align: 'left',
+      },
+      {
+          label: 'namaterpusat',
+          name: 'namaterpusat',
+          align: 'left',
+      },
+      {
+        label: 'kelompok',
+        name: 'kelompok',
+        align: 'left'
+      },
+      {
+        label: 'jenistrado',
+        name: 'jenistrado',
+        align: 'left'
+      },
+      {
+        label: 'subkelompok',
+        name: 'subkelompok',
+        align: 'left'
+      },
+      {
+        label: 'kategori',
+        name: 'kategori',
+        align: 'left'
+      },
+      {
+        label: 'merk',
+        name: 'merk',
+        align: 'left'
+      },
+      
+      {
+          label: 'qty min',
+          name: 'qtymin',
+          align: 'left',
+      },
+      {
+          label: 'qty max',
+          name: 'qtymax',
+          align: 'left',
+      },
+      
+      {
+          label: 'modifiedby',
           name: 'modifiedby',
-          align: 'left'
-        },
-        {
-          label: 'UPDATEDAT',
-          name: 'updated_at',
-          align: 'right'
-        }, {
-          label: 'CREATEDAT',
-          name: 'created_at',
-          align: 'right'
-        },
-      ],
-      autowidth: true,
+          align: 'left',
+      },
+     
+    ],
+        autowidth: true,
       responsive: true,
       shrinkToFit: false,
-      height: 350,
+      height: 450,
       rowNum: 10,
       rownumbers: true,
       rownumWidth: 45,
@@ -78,7 +91,8 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#kotaLookupPager'),
+      toolbar: [true, "top"],
+      pager: $('#stokLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -107,26 +121,26 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#kotaLookup').getGridParam().reccount) {
-            indexRow = $('#kotaLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#stokLookup').getGridParam().reccount) {
+            indexRow = $('#stokLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#kotaLookup [id="${$('#kotaLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#stokLookup [id="${$('#stokLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#kotaLookup [id="${$('#kotaLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#stokLookup [id="${$('#stokLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#kotaLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#kotaLookup [id="` + $('#kotaLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#stokLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#stokLookup [id="` + $('#stokLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#kotaLookup').setSelection($('#kotaLookup').getDataIDs()[indexRow])
+            $('#stokLookup').setSelection($('#stokLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -141,7 +155,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupkota').prev().width())
+        $(this).setGridWidth($('#lookupCabang').prev().width())
         setHighlight($(this))
       }
     })
@@ -153,10 +167,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#kotaLookup'))
+        clearGlobalSearch($('#stokLookup'))
       },
     })
 
-  loadGlobalSearch($('#kotaLookup'))
-  loadClearFilter($('#kotaLookup'))
+  loadGlobalSearch($('#stokLookup'))
+  loadClearFilter($('#stokLookup'))
 </script>

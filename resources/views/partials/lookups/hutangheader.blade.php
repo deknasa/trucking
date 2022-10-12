@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <table id="hutangHeaderLookup" class="lookup-grid"></table>
+=======
+<table id="hutangHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
+>>>>>>> dc4906e6d15994d31d99cf424837e42619f3726e
 <div id="hutangHeaderLookupPager"></div>
 
 @push('scripts')
@@ -71,6 +75,7 @@
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
+      toolbar: [true, "top"],
       page: 1,
       pager: $('#hutangHeaderLookupPager'),
       viewrecords: true,
@@ -149,7 +154,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-
+        clearGlobalSearch($('#hutangHeaderLookup'))
       },
     })
+
+  loadGlobalSearch($('#hutangHeaderLookup'))
+  loadClearFilter($('#hutangHeaderLookup'))
 </script>

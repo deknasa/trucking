@@ -30,10 +30,7 @@
               </div>
               <div class="col-12 col-sm-4 col-md-4">
                 
-              @php
-                $tglbukti = date('d-m-Y');
-                @endphp
-                <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
+                <input type="text" name="tglbukti" class="form-control datepicker">
               </div>
             </div>
             <div class="row form-group">
@@ -59,7 +56,7 @@
               </thead>
               <tbody>
               <tr>
-              <td></td>
+              <td>1</td>
               <td>
                 <input type="text" name="coadebet_detail[]"  class="form-control coadebet-lookup">
               </td>
@@ -109,7 +106,7 @@
   let hasFormBindKeys = false
 
   $(document).ready(function() {
-    // addRow()
+    
     $("#addRow").click(function() {
       addRow()
     })
@@ -127,7 +124,10 @@
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
-      // unformatAutoNumeric(data)
+      
+      $('#crudForm').find(`[name="nominal_detail[]"`).each((index,element) => {
+        data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
+      })
 
       data.push({
         name: 'sortIndex',
@@ -219,7 +219,7 @@
   function createJurnalUmumHeader() {
     let form = $('#crudForm')
 
-    form.trigger('reset')
+    $('#crudModal').find('#crudForm').trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
       Simpan
@@ -328,6 +328,7 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        let tgl = response.data.tglbukti
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
 
@@ -335,6 +336,8 @@
             let tglbukti = response.data.tglbukti
             $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
         })
+        let ft = dateFormat(tgl)
+        form.find(`[name="tglbukti"]`).val(ft)
 
         $.each(response.detail, (index, detail) => {
           let detailRow = $(`
@@ -365,7 +368,7 @@
           initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
           $('#detailList tbody').append(detailRow)
 
-          $('#lookup').hide()
+          // $('#lookup').hide()
           $('.coadebet-lookup').lookup({
             title: 'Coa Debet Lookup',
             fileName: 'akunpusat',
@@ -389,7 +392,7 @@
   }
 
   function addRow(){
-    let detailRow = (`
+    let detailRow = $(`
       <tr>
         <td></td>
         <td>
@@ -410,8 +413,10 @@
     `)
     
     
+    
     $('#detailList tbody').append(detailRow)
-    // initAutoNumeric(detailRow.find('.autonumeric'))
+
+
     // $('#lookup').hide()
     $('.coadebet-lookup').last().lookup({
       title: 'Coa Debet Lookup',
@@ -428,6 +433,7 @@
         element.val(akunpusat.keterangancoa)
       }
     })
+    initAutoNumeric(detailRow.find('.autonumeric'))
     setRowNumbers()
   }
 

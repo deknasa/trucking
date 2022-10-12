@@ -9,6 +9,7 @@
           </button>
         </div>
         <form action="" method="post">
+        <input type="hidden" name="id">
           <div class="modal-body">
             <div class="row">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -141,6 +142,7 @@
       let url
       let form = $('#crudForm')
       let userId = form.find('[name=user_id]').val()
+      let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
@@ -176,11 +178,11 @@
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}kasgantung/${userId}`
+          url = `${apiUrl}kasgantung/${Id}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}kasgantung/${userId}`
+          url = `${apiUrl}kasgantung/${Id}`
           break;
         default:
           method = 'POST'

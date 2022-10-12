@@ -51,21 +51,6 @@
                   <input type="text" name="coa" class="form-control akunpusat-lookup">
                 </div>
               </div>
-              {{-- <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="text" name="coa" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupAkunPusatToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 1;">
-                  <div class="col-12">
-                    <div id="lookupAkunPusat" class="shadow-lg">
-                      @include('partials.lookups.akunpusat')
-                    </div>
-                  </div>
-                </div>
-              </div> --}}
             </div>
             
             <div class="row form-group">
@@ -321,7 +306,6 @@
         },
         success: response => {
           response.data.forEach(statusFormatList => {
-            console.log(statusFormatList);
             let option = new Option(statusFormatList.text, statusFormatList.id)
 
             relatedForm.find('[name=statusformat]').append(option).trigger('change')
@@ -359,7 +343,6 @@
         },
         success: response => {
           response.data.forEach(statusHitungList => {
-            console.log(statusHitungList);
             let option = new Option(statusHitungList.text, statusHitungList.id)
 
             relatedForm.find('[name=statushitungstok]').append(option).trigger('change')
@@ -407,7 +390,6 @@
       success: response => {
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
-
           if (element.is('select')) {
             element.val(value).trigger('change')
           } else {

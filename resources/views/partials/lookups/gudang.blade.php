@@ -1,52 +1,41 @@
-<table id="mekanikLookup" class="lookup-grid"></table>
-<div id="mekanikLookupPager"></div>
+<table id="gudangLookup" class="lookup-grid" style="width: 100%;"></table>
+<div id="gudangLookupPager"></div>
 
-@push('scripts')
 <script>
-   $('#mekanikLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'mekanik' }}`,
+$('#gudangLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'gudang' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
       colModel: [{
-          label: 'ID',
-          name: 'id',
-          align: 'right',
-          width: '70px'
-        },
-        {
-          label: 'NAMA MEKANIK',
-          name: 'namamekanik',
-          align: 'left'
-        },
-        {
-          label: 'KETERANGAN',
-          name: 'keterangan',
-          align: 'left'
-        },
-        {
-            label: 'STATUS AKTIF',
+            label: 'ID',
+            name: 'id',
+            width: '50px'
+          },
+          {
+            label: 'GUDANG',
+            name: 'gudang',
+          },
+          {
+            label: 'STATUS',
             name: 'statusaktif',
-            align: 'left',
-            width: 100,
-            stype: 'select',
-        },
-        {
-          label: 'MODIFIEDBY',
-          name: 'modifiedby',
-          align: 'left'
-        },
-        {
-          label: 'UPDATEDAT',
-          name: 'updated_at',
-          align: 'right'
-        }, {
-          label: 'CREATEDAT',
-          name: 'created_at',
-          align: 'right'
-        },
-      ],
+          },
+
+          {
+            label: 'MODIFIEDBY',
+            name: 'modifiedby',
+          },
+          {
+            label: 'UPDATEDAT',
+            name: 'updated_at',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+        ],
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
@@ -58,8 +47,9 @@
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
+      toolbar: [true, "top"],
       page: 1,
-      pager: $('#mekanikLookupPager'),
+      pager: $('#gudangLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -88,26 +78,26 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#mekanikLookup').getGridParam().reccount) {
-            indexRow = $('#mekanikLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#gudangLookup').getGridParam().reccount) {
+            indexRow = $('#gudangLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#mekanikLookup [id="${$('#mekanikLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#gudangLookup [id="${$('#gudangLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#mekanikLookup [id="${$('#mekanikLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#gudangLookup [id="${$('#gudangLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#mekanikLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#mekanikLookup [id="` + $('#mekanikLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#gudangLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#gudangLookup [id="` + $('#gudangLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#mekanikLookup').setSelection($('#mekanikLookup').getDataIDs()[indexRow])
+            $('#gudangLookup').setSelection($('#gudangLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -122,7 +112,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupMekanik').prev().width())
+        $(this).setGridWidth($('#lookupCabang').prev().width())
         setHighlight($(this))
       }
     })
@@ -134,10 +124,9 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#mekanikLookup'))
+        clearGlobalSearch($('#gudangLookup'))
       },
     })
-
-  loadGlobalSearch($('#mekanikLookup'))
-  loadClearFilter($('#mekanikLookup'))
+  loadGlobalSearch($('#gudangLookup'))
+  loadClearFilter($('#gudangLookup'))
 </script>

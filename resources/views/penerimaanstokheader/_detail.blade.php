@@ -32,61 +32,82 @@
         iconSet: 'fontAwesome',
         datatype: "local",
         colModel: [
-          // {
-          //   label: 'HUTANG',
-          //   name: 'hutang_id',
-          // },
           {
             label: 'NO BUKTI',
             name: 'nobukti',
           }, 
           {
-            label: 'SUPPLIER',
-            name: 'supplier_id',
-          },
-        
+            label: 'stok',
+            name: 'stok',
+          },         
+          
           {
-            label: 'TGL JATUH TEMPO',
-            name: 'tgljatuhtempo',
-            formatter: "date",
+            label: 'qty',
+            name: 'qty',
+            align: 'right',
+            formatter: 'currency',
             formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
+              decimalSeparator: '.',
+              thousandsSeparator: ',',
+              decimalPlaces:0              
             }
-          }, 
+          },
+          {
+            label: 'harga',
+            name: 'harga',
+            align: 'right',
+            formatter: 'currency',
+            formatoptions: {
+              decimalSeparator: '.',
+              thousandsSeparator: ',',
+              decimalPlaces:0              
+            }
+          },
+          
+          {
+            label: 'persentasediscount',
+            name: 'persentasediscount',
+            align: 'right',
+            formatter: 'currency',
+            formatoptions: {
+              decimalSeparator: '.',
+              thousandsSeparator: ',',
+              decimalPlaces:0              
+            }
+          },
+          {
+            label: 'nominaldiscount',
+            name: 'nominaldiscount',
+            align: 'right',
+            formatter: 'currency',
+            formatoptions: {
+              decimalSeparator: '.',
+              thousandsSeparator: ',',
+              decimalPlaces:0              
+            }
+          },
+          {
+            label: 'vulkanisirke',
+            name: 'vulkanisirke',
+          },
           {
             label: 'TOTAL',
             name: 'total',
             align: 'right',
             formatter: 'currency',
             formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
-          },
-          {
-            label: 'CICILAN',
-            name: 'cicilan',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
-          },
-          {
-            label: 'TOTAL BAYAR',
-            name: 'totalbayar',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
+              decimalSeparator: '.',
+              thousandsSeparator: ',',
+              decimalPlaces:0              
             }
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+          },
+          {
+            label: 'modifiedby',
+            name: 'modifiedby',
           },
          
         
@@ -96,6 +117,8 @@
         height: 350,
         rowNum: 0,
         rownumbers: true,
+        footerrow: true,
+		    userDataOnFooter: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
         toolbar: [true, "top"],
@@ -103,9 +126,17 @@
         pager: pager,
         viewrecords: true,
         loadComplete: function(data) {
+          detailsPostData = $(this).jqGrid('getGridParam', 'postData')
+          
+          sum = $('#detail').jqGrid("getCol", "total", false, "sum")
+    
+          $(this).jqGrid('footerData', 'set', {
+            vulkanisirke:"Total",
+            total: sum,
+          }, true)
+          
         }
       })
-
       .jqGrid("navGrid", pager, {
         search: false,
         refresh: false,
@@ -120,7 +151,7 @@
       url: detailIndexUrl,
       datatype: "json",
       postData: {
-        hutang_id: id
+        penerimaanstokheader_id: id
       }
     }).trigger('reloadGrid')
   }

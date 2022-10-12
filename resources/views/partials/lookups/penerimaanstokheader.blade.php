@@ -1,20 +1,19 @@
-<table id="piutangHeaderLookup" style="width: 100%;"></table>
-<div id="piutangHeaderLookupPager"></div>
+<table id="penerimaanStokHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
+<div id="penerimaanStokHeaderLookupPager"></div>
 
-@push('scripts')
 <script>
-  let piutangHeaderLookup = $('#piutangHeaderLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'piutangheader' }}`,
+  $('#penerimaanStokHeaderLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'penerimaanstokheader' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
       colModel: [{
-          label: 'ID',
-          name: 'id',
-          align: 'right',
-          width: '70px'
-        },
+            label: 'ID',
+            name: 'id',
+            align: 'right',
+            width: '50px'
+          },
           {
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -31,43 +30,82 @@
             }
           },
           {
+            label: 'PENERIMAAN Stok',
+            name: 'penerimaanstok',
+            align: 'left'
+          },
+          {
             label: 'KETERANGAN',
             name: 'keterangan',
             align: 'left'
           },
           {
-            label: 'POSTING DARI',
-            name: 'postingdari',
+            label: 'Penerimaan nobukti',
+            name: 'penerimaanstok_nobukti',
             align: 'left'
           },
           {
-            label: 'NOMINAL',
-            name: 'nominal',
-            formatter: 'number', 
-            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
-            align: "right",
-          },
-          {
-            label: 'NO BUKTI INVOICE',
-            name: 'invoice_nobukti',
+            label: 'Pengeluaran nobukti',
+            name: 'pengeluaranstok_nobukti',
             align: 'left'
           },
-        
-        {
-          label: 'MODIFIEDBY',
-          name: 'modifiedby',
-          align: 'left'
-        },
-        {
-          label: 'UPDATEDAT',
-          name: 'updated_at',
-          align: 'right'
-        }, {
-          label: 'CREATEDAT',
-          name: 'created_at',
-          align: 'right'
-        },
-      ],
+          {
+            label: 'Gudang',
+            name: 'gudangs',
+            align: 'left'
+          },
+          {
+            label: 'Trado',
+            name: 'trado',
+            align: 'left'
+          },
+          {
+            label: 'supplier',
+            name: 'supplier',
+            align: 'left'
+          },
+          {
+            label: 'nobon',
+            name: 'nobon',
+            align: 'left'
+          },
+          {
+            label: 'no bukti Hutang',
+            name: 'hutang_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'Status format',
+            name: 'statusformat',
+            align: 'left'
+          },
+          {
+            label: 'gudang dari',
+            name: 'gudangdari',
+            align: 'left'
+          },
+          {
+            label: 'gudang ke',
+            name: 'gudangke',
+            align: 'left'
+          },
+          {
+            label: 'COA',
+            name: 'coa',
+            align: 'left'
+          },
+          {
+            label: 'keterangan',
+            name: 'keterangan',
+            align: 'left'
+          },
+          
+          {
+            label: 'MODIFIEDBY',
+            name: 'modifiedby',
+            align: 'left'
+          },
+        ],
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
@@ -79,8 +117,9 @@
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
+      toolbar: [true, "top"],
       page: 1,
-      pager: $('#piutangHeaderLookupPager'),
+      pager: $('#penerimaanStokHeaderLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -109,26 +148,26 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#piutangHeaderLookup').getGridParam().reccount) {
-            indexRow = $('#piutangHeaderLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#penerimaanStokHeaderLookup').getGridParam().reccount) {
+            indexRow = $('#penerimaanStokHeaderLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#piutangHeaderLookup [id="${$('#piutangHeaderLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#penerimaanStokHeaderLookup [id="${$('#penerimaanStokHeaderLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#piutangHeaderLookup [id="${$('#piutangHeaderLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#penerimaanStokHeaderLookup [id="${$('#penerimaanStokHeaderLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#piutangHeaderLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#piutangHeaderLookup [id="` + $('#piutangHeaderLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#penerimaanStokHeaderLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#penerimaanStokHeaderLookup [id="` + $('#penerimaanStokHeaderLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#piutangHeaderLookup').setSelection($('#piutangHeaderLookup').getDataIDs()[indexRow])
+            $('#penerimaanStokHeaderLookup').setSelection($('#penerimaanStokHeaderLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -143,7 +182,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupPiutangHeader').prev().width())
+        $(this).setGridWidth($('#lookupCabang').prev().width())
         setHighlight($(this))
       }
     })
@@ -155,11 +194,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#piutangHeaderLookup'))
+        clearGlobalSearch($('#penerimaanStokHeaderLookup'))
       },
     })
-
-  loadGlobalSearch($('#piutangHeaderLookup'))
-  loadClearFilter($('#piutangHeaderLookup'))
+  loadGlobalSearch($('#penerimaanStokHeaderLookup'))
+  loadClearFilter($('#penerimaanStokHeaderLookup'))
 </script>
-@endpush
+

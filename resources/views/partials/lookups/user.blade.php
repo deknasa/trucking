@@ -151,8 +151,6 @@
       },
     })
 
-    .customPager()
-
   loadGlobalSearch(userLookup)
   loadClearFilter(userLookup)
 </script>

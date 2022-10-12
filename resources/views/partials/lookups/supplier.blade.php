@@ -2,7 +2,7 @@
 <div id="supplierLookupPager"></div>
 
 <script>
-   $('#supplierLookup').jqGrid({
+  $('#supplierLookup').jqGrid({
       url: `{{ config('app.api_url') . 'supplier' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -50,64 +50,64 @@
           align: 'left'
         },
         {
-            label: 'EMAIL',
-            name: 'email',
-            align: 'left',
+          label: 'EMAIL',
+          name: 'email',
+          align: 'left',
         },
         {
-            label: 'STATUS AKTIF',
-            name: 'statusaktif',
-            align: 'left',
+          label: 'STATUS AKTIF',
+          name: 'statusaktif',
+          align: 'left',
         },
         {
-            label: 'WEB',
-            name: 'web',
-            align: 'left',
+          label: 'WEB',
+          name: 'web',
+          align: 'left',
         },
         {
-            label: 'NAMA PEMILIK',
-            name: 'namapemilik',
-            align: 'left',
+          label: 'NAMA PEMILIK',
+          name: 'namapemilik',
+          align: 'left',
         },
         {
-            label: 'JENIS USAHA',
-            name: 'jenisusaha',
-            align: 'left',
+          label: 'JENIS USAHA',
+          name: 'jenisusaha',
+          align: 'left',
         },
         {
-            label: 'TOP',
-            name: 'top',
-            align: 'left',
+          label: 'TOP',
+          name: 'top',
+          align: 'left',
         },
         {
-            label: 'BANK',
-            name: 'bank',
-            align: 'left',
+          label: 'BANK',
+          name: 'bank',
+          align: 'left',
         },
         {
-            label: 'REKENING BANK',
-            name: 'rekeningbank',
-            align: 'left',
+          label: 'REKENING BANK',
+          name: 'rekeningbank',
+          align: 'left',
         },
         {
-            label: 'NAMA REKENING',
-            name: 'namarekening',
-            align: 'left',
+          label: 'NAMA REKENING',
+          name: 'namarekening',
+          align: 'left',
         },
         {
-            label: 'JABATAN',
-            name: 'jabatan',
-            align: 'left',
+          label: 'JABATAN',
+          name: 'jabatan',
+          align: 'left',
         },
         {
-            label: 'STATUS DAFTAR HARGA',
-            name: 'statusdaftarharga',
-            align: 'left',
+          label: 'STATUS DAFTAR HARGA',
+          name: 'statusdaftarharga',
+          align: 'left',
         },
         {
-            label: 'KATEGORI USAHA',
-            name: 'kategoriusaha',
-            align: 'left',
+          label: 'KATEGORI USAHA',
+          name: 'kategoriusaha',
+          align: 'left',
         },
       ],
       autowidth: true,
@@ -122,6 +122,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
+      toolbar: [true, "top"],
       pager: $('#supplierLookupPager'),
       viewrecords: true,
       prmNames: {
@@ -189,5 +190,17 @@
       }
     })
 
-</script>
+    .jqGrid('filterToolbar', {
+      stringResult: true,
+      searchOnEnter: false,
+      defaultSearch: 'cn',
+      groupOp: 'AND',
+      disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
+      beforeSearch: function() {
+        clearGlobalSearch($('#supplierLookup'))
+      },
+    })
 
+  loadGlobalSearch($('#supplierLookup'))
+  loadClearFilter($('#supplierLookup'))
+</script>

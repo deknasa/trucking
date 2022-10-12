@@ -29,25 +29,23 @@ $.fn.lookup = function (options = null) {
 			});
 
 		element.on("input", function (event) {
-			delay(function() {
+			delay(function () {
 				activateLookup(element, element.val());
-				
-				element.val("");
-			}, 500)
+			}, 500);
 		});
 
 		element.on("keydown", function (event) {
 			if (event.keyCode === 115) {
-				activateLookup(element, $(this).val());
+				activateLookup(element, element.val());
 			}
 		});
 	});
 
 	function activateLookup(element, searchValue = null) {
 		if (options.onShowLookup) {
-			options.onShowLookup()
+			options.onShowLookup();
 		}
-		
+
 		let lookupModal = $(`
       <div class="modal modal-fullscreen" id="lookupModal" tabindex="-1" aria-labelledby="lookupModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -86,10 +84,14 @@ $.fn.lookup = function (options = null) {
 			/* Insert searchValue to global search input */
 			if (searchValue) {
 				setTimeout(() => {
-					lookupModal.find('.global-search').val(searchValue).trigger('input').focus()
+					lookupModal
+						.find(".global-search")
+						.val(searchValue)
+						.trigger("input")
+						.focus();
 				}, 500);
 			} else {
-				lookupModal.find('.global-search').focus()
+				lookupModal.find(".global-search").focus();
 			}
 
 			/* Determine user selection listener */
@@ -110,6 +112,8 @@ $.fn.lookup = function (options = null) {
 
 		lookupModal.on("hidden.bs.modal", function () {
 			lookupModal.remove();
+
+			element.val(element.data('currentValue'))			
 			element.focus();
 		});
 	}
@@ -119,6 +123,10 @@ $.fn.lookup = function (options = null) {
 			lookupModal.modal("hide");
 
 			options.onSelectRow(sanitize(grid.getRowData(id)), element);
+
+			setTimeout(() => {
+				element.data('currentValue', element.val())
+			}, 500);
 		} else {
 			alert("Please select a row");
 		}
