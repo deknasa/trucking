@@ -34,6 +34,41 @@
   let hasDetail = false
 
   $(document).ready(function() {
+
+
+    // $('#lookup').hide()
+
+    // $('.kotadari-lookup').lookup({
+    //   title: 'kota Lookup',
+    //   fileName: 'kota',
+    //   onSelectRow: (kota, element) => {
+    //     $('#crudForm [name=kotadari_id]').first().val(kota.id)
+    //     element.val(kota.keterangan)
+
+    //   }
+    // })
+
+    // $('.kotasampai-lookup').lookup({
+    //   title: 'kota Lookup',
+    //   fileName: 'kota',
+    //   onSelectRow: (kota, element) => {
+    //     $('#crudForm [name=kotasampai_id]').first().val(kota.id)
+    //     element.val(kota.keterangan)
+
+    //   }
+    // })
+
+    // $('.zona-lookup').lookup({
+    //   title: 'zona Lookup',
+    //   fileName: 'zona',
+    //   onSelectRow: (zona, element) => {
+    //     $('#crudForm [name=zona_id]').first().val(zona.id)
+    //     element.val(zona.zona)
+
+    //   }
+    // })
+
+
     $("#jqGrid").jqGrid({
         url: `${apiUrl}upahritasi`,
         mtype: "GET",
@@ -103,6 +138,15 @@
             }
           },
           {
+            label: 'TGL AKHIR BERLAKU',
+            name: 'tglakhirberlaku',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
             label: 'STATUS LUAR KOTA',
             name: 'statusluarkota',
           },
@@ -145,7 +189,10 @@
           records: 'attributes.totalRows',
         },
         loadBeforeSend: (jqXHR) => {
-          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
+        ajaxRowOptions: {
+          async: false,
         },
         onSelectRow: function(id) {
           activeGrid = $(this)
@@ -253,9 +300,6 @@
 
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
-
-    /* Load detial grid */
-    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)
