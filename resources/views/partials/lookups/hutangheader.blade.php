@@ -1,6 +1,7 @@
 <table id="hutangHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
 <div id="hutangHeaderLookupPager"></div>
 
+@push('scripts')
 <script>
   $('#hutangHeaderLookup').jqGrid({
       url: `{{ config('app.api_url') . 'hutangheader' }}`,
@@ -95,13 +96,6 @@
       loadBeforeSend: (jqXHR) => {
         jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
-      onSelectRow: function(id) {
-        activeGrid = $(this)
-        indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-        page = $(this).jqGrid('getGridParam', 'page')
-        let rows = $(this).jqGrid('getGridParam', 'postData').limit
-        if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
-      },
       loadComplete: function(data) {
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
@@ -138,7 +132,12 @@
         limit = $(this).jqGrid('getGridParam', 'postData').limit
         postData = $(this).jqGrid('getGridParam', 'postData')
 
-        $(this).setGridWidth($('#lookup').prev().width())
+
+        $('.clearsearchclass').click(function() {
+          clearColumnSearch()
+        })
+
+        $(this).setGridWidth($('#lookupBank').prev().width())
         setHighlight($(this))
       }
     })

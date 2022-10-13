@@ -31,16 +31,18 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        colModel: [
-          {
+        colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
           },
           {
             label: 'NOMINAL',
             name: 'nominal',
-            formatter: 'number', 
-            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            formatter: 'number',
+            formatoptions: {
+              thousandsSeparator: ",",
+              decimalPlaces: 0
+            },
             align: "right",
           },
           {
@@ -50,6 +52,12 @@
           {
             label: 'CICILAN',
             name: 'cicilan',
+            formatter: 'number',
+            formatoptions: {
+              thousandsSeparator: ",",
+              decimalPlaces: 0
+            },
+            align: "right",
           },
           {
             label: 'ALATBAYAR',
@@ -58,10 +66,22 @@
           {
             label: 'TGL CAIR',
             name: 'tglcair',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'POTONGAN',
             name: 'potongan',
+            formatter: 'number',
+            formatoptions: {
+              thousandsSeparator: ",",
+              decimalPlaces: 0
+            },
+            align: "right",
           },
           {
             label: 'KETERANGAN',
@@ -79,8 +99,7 @@
         sortable: true,
         pager: pager,
         viewrecords: true,
-        loadComplete: function(data) {
-        }
+        loadComplete: function(data) {}
       })
 
       .jqGrid("navGrid", pager, {

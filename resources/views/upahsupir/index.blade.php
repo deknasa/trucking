@@ -103,6 +103,15 @@
             }
           },
           {
+            label: 'TGL AKHIR BERLAKU',
+            name: 'tglakhirberlaku',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
             label: 'STATUS LUAR KOTA',
             name: 'statusluarkota',
           },

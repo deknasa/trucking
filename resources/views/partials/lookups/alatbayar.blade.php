@@ -1,6 +1,7 @@
-<table id="alatBayarLookup" style="width: 100%;"></table>
+<table id="alatBayarLookup" class="lookup-grid"></table>
 <div id="alatBayarLookupPager"></div>
 
+@push('scripts')
 <script>
   $('#alatBayarLookup').jqGrid({
       url: `{{ config('app.api_url') . 'alatbayar' }}`,
@@ -130,7 +131,11 @@
         limit = $(this).jqGrid('getGridParam', 'postData').limit
         postData = $(this).jqGrid('getGridParam', 'postData')
 
-        $(this).setGridWidth($('#lookup').prev().width())
+        $('.clearsearchclass').click(function() {
+          clearColumnSearch()
+        })
+
+        $(this).setGridWidth($('#lookupBank').prev().width())
         setHighlight($(this))
       }
     })

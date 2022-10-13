@@ -216,7 +216,7 @@
                 </div>
                 <div class="dropzone" id="my-dropzone" data-field="supir">
                   <div class="fallback">
-                    <input name="file" type="file" />
+                    <!-- <input name="file" type="file" /> -->
                   </div>
                 </div>
               </div>
@@ -335,6 +335,20 @@
       let supirId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+
+
+      $('#crudForm').find(`[name="nominaldepositsa"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominaldepositsa')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaldepositsa"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="depositke"]`).each((index, element) => {
+        data.filter((row) => row.name === 'depositke')[index].value = AutoNumeric.getNumber($(`#crudForm [name="depositke"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="nominalpinjamansaldoawal"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominalpinjamansaldoawal')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalpinjamansaldoawal"]`)[index])
+      })
+      console.log(data);
 
       data.push({
         name: 'sortIndex',

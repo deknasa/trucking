@@ -11,14 +11,14 @@
 </div>
 
 <!-- Detail -->
-@include('servicein._detail')
+@include('serviceinheader._detail')
 
-@include('servicein._modal')
+@include('serviceinheader._modal')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('servicein.index') }}"
-  let getUrl = "{{ route('servicein.get') }}"
+  let indexUrl = "{{ route('serviceinheader.index') }}"
+  let getUrl = "{{ route('serviceinheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -35,97 +35,97 @@
 
   $(document).ready(function() {
 
-     $('#lookup').hide()
+    $('#lookup').hide()
 
-        $('.trado-lookup').lookup({
-          title: 'trado Lookup',
-          fileName: 'trado',
-          onSelectRow: (trado, element) => {
-            $('#crudForm [name=trado_id]').first().val(trado.id)
-            element.val(trado.keterangan)
-
-          }
-        })
-
-        $('.mekanik-lookup').lookup({
-      title: 'mekanik Lookup',
-      fileName: 'mekanik',
-      onSelectRow: (mekanik, element) => {
-        $('#crudForm [name=mekanik]').first().val(mekanik.namamekanik)
-        element.val(mekanik.id)
+    $('.trado-lookup').lookup({
+      title: 'trado Lookup',
+      fileName: 'trado',
+      onSelectRow: (trado, element) => {
+        $('#crudForm [name=trado_id]').first().val(trado.id)
+        element.val(trado.keterangan)
 
       }
     })
 
-        $('#crudModal').on('shown.bs.modal', function() {
-          activeGrid = '#jqGrid'
-        })
+    $('.mekanik-lookup').lookup({
+      title: 'mekanik Lookup',
+      fileName: 'mekanik',
+      onSelectRow: (mekanik, element) => {
+        $(`#crudForm [name="mekanik_id[]"]`).first().val(mekanik.id)
+        element.val(mekanik.namamekanik)
 
-        $("#jqGrid").jqGrid({
-            url: `{{ config('app.api_url') . 'servicein' }}`,
-            mtype: "GET",
-            styleUI: 'Bootstrap4',
-            iconSet: 'fontAwesome',
-            datatype: "json",
-            colModel: [{
-                label: 'ID',
-                name: 'id',
-                align: 'right',
-                width: '50px'
-              },
-              {
-                label: 'NO BUKTI',
-                name: 'nobukti',
-                align: 'left'
-              },
-              {
-                label: 'TANGGAL BUKTI',
-                name: 'tglbukti',
-                align: 'left',
-                formatter: "date",
-                formatoptions: {
-                  srcformat: "ISO8601Long",
-                  newformat: "d-m-Y"
-                }
-              },
-              {
-                label: 'TRADO',
-                name: 'trado_id',
-                align: 'left'
-              },
-              {
-                label: 'TANGGAL MASUK',
-                name: 'tglmasuk',
-                align: 'left',
-                formatter: "date",
-                formatoptions: {
-                  srcformat: "ISO8601Long",
-                  newformat: "d-m-Y"
-                }
-              },
-              {
-                label: 'KETERANGAN',
-                name: 'keterangan',
-                align: 'left'
-              },
+      }
+    })
 
-              {
-                label: 'MODIFIEDBY',
-                name: 'modifiedby',
-                align: 'left'
-              },
-              {
-                label: 'UPDATEDAT',
-                name: 'updated_at',
-                align: 'left',
-                formatter: "date",
-                formatoptions: {
-                  srcformat: "ISO8601Long",
-                  newformat: "d-m-Y H:i:s"
-                }
-              },
-            ],
-            autowidth: true,
+    $('#crudModal').on('shown.bs.modal', function() {
+      activeGrid = '#jqGrid'
+    })
+
+    $("#jqGrid").jqGrid({
+        url: `{{ config('app.api_url') . 'serviceinheader' }}`,
+        mtype: "GET",
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        datatype: "json",
+        colModel: [{
+            label: 'ID',
+            name: 'id',
+            align: 'right',
+            width: '50px'
+          },
+          {
+            label: 'NO BUKTI',
+            name: 'nobukti',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL BUKTI',
+            name: 'tglbukti',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'TRADO',
+            name: 'trado_id',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL MASUK',
+            name: 'tglmasuk',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            align: 'left'
+          },
+
+          {
+            label: 'MODIFIEDBY',
+            name: 'modifiedby',
+            align: 'left'
+          },
+          {
+            label: 'UPDATEDAT',
+            name: 'updated_at',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+        ],
+        autowidth: true,
         shrinkToFit: false,
         height: 350,
         rowNum: 10,
@@ -172,7 +172,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -287,23 +287,23 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('servicein', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('serviceinheader', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('servicein', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('serviceinheader', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('servicein', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('serviceinheader', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('servicein', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('serviceinheader', 'export') }}`) {
       $('#export').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('servicein', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('serviceinheader', 'report') }}`) {
       $('#report').addClass('ui-disabled')
     }
 
@@ -353,7 +353,7 @@
 
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}servicein/export?${params}`, true)
+        xhr.open('GET', `{{ config('app.api_url') }}serviceinheader/export?${params}`, true)
         xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
         xhr.responseType = 'arraybuffer'
 
@@ -366,7 +366,7 @@
               let link = document.createElement('a')
 
               link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanservicein${(new Date).getTime()}.xlsx`
+              link.download = `laporanserviceinheader${(new Date).getTime()}.xlsx`
               link.click()
 
               submitButton.removeAttr('disabled')
@@ -376,14 +376,12 @@
 
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('servicein.report') }}?${params}`)
+        window.open(`{{ route('serviceinheader.report') }}?${params}`)
 
         submitButton.removeAttr('disabled')
       }
     })
   })
-
- 
 </script>
 @endpush()
 @endsection

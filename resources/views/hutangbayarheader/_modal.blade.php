@@ -28,11 +28,8 @@
                   TANGGAL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-4 col-md-4" id="tglbukti">
-                @php
-                $tglbukti = date('d-m-Y');
-                @endphp
-                <input type="text" name="tglbukti" value="{{$tglbukti}}" id="tglbukti" class="form-control datepicker">
+              <div class="col-12 col-sm-4 col-md-4">
+                <input type="text" name="tglbukti" class="form-control datepicker">
               </div>
             </div>
 
@@ -81,12 +78,12 @@
               </div>
             </div>
 
-            <table class="table table-bordered table-bindkeys">
+            <table class="table table-bordered table-bindkeys" id="detailList">
               <thead>
                 <tr>
                   <th width="50">No</th>
-                  <th>Nominal</th>
                   <th>No Bukti Hutang</th>
+                  <th>Nominal</th>
                   <th>Cicilan</th>
                   <th>Alat Bayar</th>
                   <th>Tgl Cair</th>
@@ -95,57 +92,31 @@
                   <th>Aksi</th>
                 </tr>
               </thead>
-              <tbody id="table_body" class="form-group">
-                <tr id="row">
+              <tbody>
+                <tr>
+                  <td></td>
                   <td>
-                    <div class="baris">1</div>
+                    <input type="text" name="hutang_nobukti[]" class="form-control hutangHeader-lookup">
                   </td>
-
                   <td>
-                    <input type="text" name="nominal" style="text-align:right" class="form-control text-right autonumeric">
+                    <input type="text" name="nominal_detail[]" style="text-align:right" class="form-control text-right autonumeric nominal">
                   </td>
-
                   <td>
-                    <div class="row form-group">
-                      <div class="col-8 col-md-10">
-                        <input type="text" name="hutang_nobukti" class="form-control hutangHeader-lookup">
-                      </div>
-                    </div>
+                    <input type="text" name="cicilan_detail[]" style="text-align:right" class="form-control text-right autonumeric">
                   </td>
-
                   <td>
-                    <input type="text" name="cicilan" style="text-align:right" class="form-control text-right autonumeric">
+                    <input type="hidden" name="alatbayar_id[]">
+                    <input type="text" name="alatbayar[]" class="form-control alatBayar-lookup">
                   </td>
-
                   <td>
-                    <div class="row form-group">
-                      <div class="col-8 col-md-10">
-                        <input type="hidden" name="alatbayar_id">
-                        <input type="text" name="alatbayar" class="form-control alatBayar-lookup">
-                      </div>
-                    </div>
+                    <input type="text" name="tglcair[]" class="form-control datepicker">
                   </td>
-
                   <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <input type="text" name="tglcair" class="form-control datepicker">
-                      </div>
-                    </div>
+                    <input type="text" name="potongan_detail[]" style="text-align:right" class="form-control text-right autonumeric">
                   </td>
-
                   <td>
-                    <input type="text" name="potongan" style="text-align:right" class="form-control text-right autonumeric">
+                    <input type="text" name="keterangan_detail[]" class="form-control">
                   </td>
-
-                  <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <input type="text" name="keterangan_detail" class="form-control">
-                      </div>
-                    </div>
-                  </td>
-
                   <td>
                     <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                   </td>
@@ -153,10 +124,15 @@
 
               </tbody>
               <tfoot>
-                <tr>
-                  <td colspan="8"></td>
+              <tr>
+                  <td colspan="7">
+                    <h5 class="text-right font-weight-bold">TOTAL:</h5>
+                  </td>
                   <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addrow">Tambah</button>
+                    <h5 id="total" class="text-right font-weight-bold"></h5>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                   </td>
                 </tr>
               </tfoot>
@@ -182,10 +158,20 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
-
   $(document).ready(function() {
 
+    $("#addRow").click(function() {
+      addRow()
+    });
 
+    $(document).on('keyup', '.nominal', function(e) {
+      calculateSum()
+    })
+
+    $(document).on('click', '.delete-row', function(event) {
+      deleteRow($(this).parents('tr'))
+      deleteSum()
+    })
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -196,7 +182,17 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
-      unformatAutoNumeric(data)
+      $('#crudForm').find(`[name="nominal_detail[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="cicilan_detail[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'cicilan_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="cicilan_detail[]"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="potongan_detail[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'potongan_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="potongan_detail[]"]`)[index])
+      })
 
       data.push({
         name: 'sortIndex',
@@ -222,7 +218,7 @@
         name: 'limit',
         value: limit
       })
-      console.log(data)
+
       switch (action) {
         case 'add':
           method = 'POST'
@@ -256,7 +252,6 @@
         success: response => {
 
           id = response.data.id
-          console.log(id)
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
 
@@ -285,34 +280,6 @@
     })
   })
 
-
-  $("#addrow").click(function() {
-    let rowCount = $('#row').length;
-    let barisCount = $('.baris').length;
-    if (rowCount > 0) {
-      let clone = $('#row').clone();
-      clone.find('input').val('');
-
-      baris = parseInt(barisCount) + 1;
-      clone.find('.baris').text(baris);
-      $('table #table_body').append(clone);
-
-    } else {
-      baris = 1;
-      $('#table_body').append(html);
-    }
-  });
-
-  $('table').on('click', '.rmv', function() {
-    $(this).closest('tr').remove();
-
-    $('.baris').each(function(i, obj) {
-      $(obj).text(i + 1);
-    });
-    baris = baris - 1;
-  });
-
-
   function createHutangBayarHeader() {
     let form = $('#crudForm')
 
@@ -328,7 +295,7 @@
     $('.invalid-feedback').remove()
   }
 
-  function editHutangBayarHeader(Id) {
+  function editHutangBayarHeader(id) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -341,83 +308,11 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
-    $.ajax({
-      url: `${apiUrl}hutangbayarheader/${Id}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          form.find(`[name="${index}"]`).val(value)
-        })
-        $('#table_body').html('')
-        $.each(response.detail, (index, value) => {
-          $('#table_body').append(
-            `<tr id="row">
-              <td>
-                <div class="baris">${parseInt(index) + 1}</div>
-              </td>
-
-              <td>
-                  <input type="text" name="nominal" value="${value.nominal}" style="text-align:right" class="form-control text-right autonumeric" > 
-              </td>
-              
-              <td>
-                <div class="row form-group">
-                    <div class="col-8 col-md-10">
-                        <input type="text" name="hutang_nobukti" value="${value.hutang_nobukti}" class="form-control hutangHeader-lookup">
-                    </div>
-                </div>
-              </td>
-
-              <td>
-                  <input type="text" name="cicilan" value="${value.cicilan}" style="text-align:right" class="form-control text-right autonumeric" > 
-              </td>
-
-              <td>
-                <div class="row form-group">
-                    <div class="col-8 col-md-10">
-                      <input type="hidden" name="alatbayar_id">
-                      <input type="text" name="alatbayar" value="${value.alatbayar}"class="form-control alatBayar-lookup">
-                    </div>
-                </div>
-              </td>
-
-                <td>
-                  <input type="text" name="tglcair"  class="form-control datepicker" value="${value.tglcair}" > 
-              </td>
-
-              <td>
-                  <input type="text" name="potongan" value="${value.potongan}" style="text-align:right" class="form-control text-right autonumeric" > 
-              </td>
-
-              <td>
-              <input type="text" name="keterangan_detail" value="${value.keterangan}" class="form-control">
-              </td>
-
-              <td>
-                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-              </td>
-            </tr>`
-          )
-        })
-        initSelect2($('#crudForm').find('select'))
-        initAutoNumeric($('#crudForm').find('.autonumeric'))
-        Inputmask("datetime", {
-          inputFormat: "HH:MM",
-          max: 24
-        }).mask(".inputmask-time");
-      },
-      error: error => {
-        showDialog(error.statusText)
-      }
-    })
+    showHutangBayarHeader(form, id)
   }
 
-  function deleteHutangBayarHeader(Id) {
+
+  function deleteHutangBayarHeader(id) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -426,13 +321,18 @@
     <i class="fa fa-save"></i>
     Hapus
   `)
-    $('#crudModalTitle').text('Delete Service in')
+    $('#crudModalTitle').text('Delete Hutang Bayar')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    showHutangBayarHeader(form, id)
+  }
+
+  function showHutangBayarHeader(form, id) {
+    $('#detailList tbody').html('')
 
     $.ajax({
-      url: `${apiUrl}hutangbayarheader/${Id}`,
+      url: `${apiUrl}hutangbayarheader/${id}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -440,60 +340,199 @@
       },
       success: response => {
         $.each(response.data, (index, value) => {
-          form.find(`[name="${index}"]`).val(value)
+          let element = form.find(`[name="${index}"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } else if (element.hasClass('datepicker')) {
+            element.val(dateFormat(value))
+          } else {
+            element.val(value)
+          }
         })
-        $('#table_body').html('')
-        $.each(response.detail, (index, value) => {
-          $('#table_body').append(
-            `<tr id="row">
-              <td>
-                <div class="baris">${parseInt(index) + 1}</div>
-              </td>
-              
-              <td>
-                  <input type="text" name="nominal" value="${value.nominal}" style="text-align:right" class="form-control text-right autonumeric" > 
-              </td>
-              
-              <td>
-                <div class="row form-group">
-                    <div class="col-8 col-md-10">
-                        <input type="text" name="hutang_nobukti" value="${value.hutang_nobukti}" class="form-control hutangHeader-lookup">
-                    </div>
-                </div>
-              </td>
 
-                <td>
-                  <input type="text" name="cicilan" value="${value.cicilan}" style="text-align:right" class="form-control text-right autonumeric" > 
-              </td>
+        $.each(response.detail, (index, detail) => {
+          let detailRow = $(`
+                <tr>
+                  <td></td>
+                  <td>
+                    <input type="text" name="hutang_nobukti[]" class="form-control hutangHeader-lookup">
+                  </td>
+                  <td>
+                    <input type="text" name="nominal_detail[]" style="text-align:right" class="form-control text-right autonumeric nominal">
+                  </td>
+                  <td>
+                    <input type="text" name="cicilan_detail[]" style="text-align:right" class="form-control text-right autonumeric">
+                  </td>
+                  <td>
+                    <input type="hidden" name="alatbayar_id[]">
+                    <input type="text" name="alatbayar[]" class="form-control alatBayar-lookup">
+                  </td>
+                  <td>
+                    <input type="text" name="tglcair[]" class="form-control datepicker">
+                  </td>
+                  <td>
+                    <input type="text" name="potongan_detail[]" style="text-align:right" class="form-control text-right autonumeric">
+                  </td>
+                  <td>
+                    <input type="text" name="keterangan_detail[]" class="form-control">
+                  </td>
+                  <td>
+                        <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
+                      </td>
+                </tr>`)
 
-              <td>
-                <div class="row form-group">
-                    <div class="col-8 col-md-10">
-                      <input type="hidden" name="alatbayar_id">
-                      <input type="text" name="alatbayar" value="${value.alatbayar}"class="form-control alatBayar-lookup">
-                    </div>
-                </div>
-              </td>
+          detailRow.find(`[name="hutang_nobukti[]"]`).val(detail.hutang_nobukti)
+          detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
+          detailRow.find(`[name="cicilan_detail[]"]`).val(detail.cicilan)
+          detailRow.find(`[name="alatbayar_id[]"]`).val(detail.alatbayar_id)
+          detailRow.find(`[name="alatbayar[]"]`).val(detail.alatbayar)
+          detailRow.find(`[name="tglcair[]"]`).val(dateFormat(detail.tglcair))
+          detailRow.find(`[name="potongan_detail[]"]`).val(detail.potongan)
+          detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
 
-                <td>
-                  <input type="text" name="tglcair"  class="form-control datepicker" value="${value.tglcair}"> 
-              </td>
+          initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+          initAutoNumeric(detailRow.find(`[name="cicilan_detail[]"]`))
+          initAutoNumeric(detailRow.find(`[name="potongan_detail[]"]`))
 
-              <td>
-                  <input type="text" name="potongan" value="${value.potongan}" style="text-align:right" class="form-control text-right autonumeric" > 
-              </td>
+          
+          $('#detailList tbody').append(detailRow)
+          initDatepicker(detailRow.find('.datepicker'))
 
-              <td>
-                  <input type="text" name="keterangan_detail" value="${value.keterangan}" class="form-control">
-                </td>
+          $('#lookup').hide()
 
-              <td>
-                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-              </td>
-            </tr>`
-          )
+          $('.hutangHeader-lookup').last().lookup({
+            title: 'hutangheader Lookup',
+            fileName: 'hutangheader',
+            onSelectRow: (hutangheader, element) => {
+              element.val(hutangheader.nobukti)
+            }
+          })
+
+          $('.alatBayar-lookup').last().lookup({
+            title: 'alatbayar Lookup',
+            fileName: 'alatbayar',
+            onSelectRow: (alatbayar, element) => {
+              $(`#crudForm [name="alatbayar_id[]"]`).first().val(alatbayar.id)
+              element.val(alatbayar.namaalatbayar)
+
+            }
+          })
+
         })
+
+        setRowNumbers()
       }
+    })
+  }
+
+  function addRow() {
+    let detailRow = $(`
+    <tr>
+                  <td></td>
+                  <td>
+                    <input type="text" name="hutang_nobukti[]" class="form-control hutangHeader-lookup">
+                  </td>
+                  <td>
+                    <input type="text" name="nominal_detail[]" style="text-align:right" class="form-control text-right autonumeric nominal">
+                  </td>
+                  <td>
+                    <input type="text" name="cicilan_detail[]" style="text-align:right" class="form-control text-right autonumeric">
+                  </td>
+                  <td>
+                    <input type="hidden" name="alatbayar_id[]">
+                    <input type="text" name="alatbayar[]" class="form-control alatBayar-lookup">
+                  </td>
+                  <td>
+                    <input type="text" name="tglcair[]" class="form-control datepicker">
+                  </td>
+                  <td>
+                    <input type="text" name="potongan_detail[]" style="text-align:right" class="form-control text-right autonumeric">
+                  </td>
+                  <td>
+                    <input type="text" name="keterangan_detail[]" class="form-control">
+                  </td>
+                  <td>
+            <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+          </td>
+                </tr>`)
+
+    $('#detailList tbody').append(detailRow)
+    initDatepicker(detailRow.find('.datepicker'))
+    initAutoNumeric(detailRow.find('.autonumeric'))
+
+    $('.hutangHeader-lookup').last().lookup({
+      title: 'hutangheader Lookup',
+      fileName: 'hutangheader',
+      onSelectRow: (hutangheader, element) => {
+        element.val(hutangheader.nobukti)
+      }
+    })
+
+    $('.alatBayar-lookup').last().lookup({
+      title: 'alatbayar Lookup',
+      fileName: 'alatbayar',
+      onSelectRow: (alatbayar, element) => {
+        element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
+        element.val(alatbayar.namaalatbayar)
+
+      }
+    })
+
+
+    setRowNumbers()
+  }
+
+
+  function deleteRow(row) {
+    row.remove()
+
+    setRowNumbers()
+  }
+
+  function setRowNumbers() {
+    let elements = $('#detailList tbody tr td:nth-child(1)')
+
+    elements.each((index, element) => {
+      $(element).text(index + 1)
+    })
+  }
+
+  function calculateSum() {
+    var sum = 0;
+    //iterate through each textboxes and add the values
+    $(".nominal").each(function() {
+      let number = this.value
+      let hrg = parseFloat(number.replaceAll(',', ''));
+      console.log(hrg)
+      if (!isNaN(hrg) && hrg.length != 0) {
+        sum += parseFloat(hrg);
+      }
+    });
+    sum = new Intl.NumberFormat('en-US').format(sum);
+
+    $("#total").html(`${sum}`);
+    new AutoNumeric('#total', {
+      decimalPlaces: '2'
+    })
+  }
+
+  function deleteSum() {
+    var sum = 0;
+    //iterate through each textboxes and add the values
+    $(".nominal").each(function() {
+      let number = this.value
+      let hrg = parseFloat(number.replaceAll(',', ''));
+      if (!isNaN(hrg) && hrg.length != 0) {
+        sum -= parseFloat(hrg);
+      }
+    });
+    sum = new Intl.NumberFormat('en-US').format(sum);
+    console.log(sum)
+
+    $("#total").html(`${sum}`);
+    new AutoNumeric('#total', {
+      decimalPlaces: '2'
     })
   }
 </script>

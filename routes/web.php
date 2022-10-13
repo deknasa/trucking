@@ -480,21 +480,21 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('ritasi', RitasiController::class);
 
-    Route::get('servicein/{id}/delete', [ServiceInHeaderController::class, 'delete'])->name('servicein.delete');
-    Route::get('servicein/index', [ServiceInHeaderController::class, 'index']);
-    Route::get('servicein/get', [ServiceInHeaderController::class, 'get'])->name('servicein.get');
-    Route::get('servicein/export', [ServiceInHeaderController::class, 'export'])->name('servicein.export');
-    Route::get('servicein/report', [ServiceInHeaderController::class, 'report'])->name('servicein.report');
-    Route::resource('servicein', ServiceInHeaderController::class);
+    Route::get('serviceinheader/{id}/delete', [ServiceInHeaderController::class, 'delete'])->name('serviceinheader.delete');
+    Route::get('serviceinheader/index', [ServiceInHeaderController::class, 'index']);
+    Route::get('serviceinheader/get', [ServiceInHeaderController::class, 'get'])->name('serviceinheader.get');
+    Route::get('serviceinheader/export', [ServiceInHeaderController::class, 'export'])->name('serviceinheader.export');
+    Route::get('serviceinheader/report', [ServiceInHeaderController::class, 'report'])->name('serviceinheader.report');
+    Route::resource('serviceinheader', ServiceInHeaderController::class);
 
     Route::resource('serviceindetail', ServiceInDetailController::class);
 
-    Route::get('serviceout/{id}/delete', [ServiceOutHeaderController::class, 'delete'])->name('serviceout.delete');
-    Route::get('serviceout/index', [ServiceOutHeaderController::class, 'index']);
-    Route::get('serviceout/get', [ServiceOutHeaderController::class, 'get'])->name('serviceout.get');
-    Route::get('serviceout/export', [ServiceOutHeaderController::class, 'export'])->name('serviceout.export');
-    Route::get('serviceout/report', [ServiceOutHeaderController::class, 'report'])->name('serviceout.report');
-    Route::resource('serviceout', ServiceOutHeaderController::class);
+    Route::get('serviceoutheader/{id}/delete', [ServiceOutHeaderController::class, 'delete'])->name('serviceoutheader.delete');
+    Route::get('serviceoutheader/index', [ServiceOutHeaderController::class, 'index']);
+    Route::get('serviceoutheader/get', [ServiceOutHeaderController::class, 'get'])->name('serviceoutheader.get');
+    Route::get('serviceoutheader/export', [ServiceOutHeaderController::class, 'export'])->name('serviceoutheader.export');
+    Route::get('serviceoutheader/report', [ServiceOutHeaderController::class, 'report'])->name('serviceoutheader.report');
+    Route::resource('serviceoutheader', ServiceOutHeaderController::class);
 
     Route::resource('serviceoutdetail', ServiceOutDetailController::class);
 

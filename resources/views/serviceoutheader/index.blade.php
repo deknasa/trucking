@@ -11,14 +11,14 @@
 </div>
 
 <!-- Detail -->
-@include('serviceout._detail')
+@include('serviceoutheader._detail')
 
-@include('serviceout._modal')
+@include('serviceoutheader._modal')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('serviceout.index') }}"
-  let getUrl = "{{ route('serviceout.get') }}"
+  let indexUrl = "{{ route('serviceoutheader.index') }}"
+  let getUrl = "{{ route('serviceoutheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -47,11 +47,11 @@
       }
     })
 
-    $('.servicein-lookup').lookup({
+    $('.serviceinheader-lookup').lookup({
       title: 'servicein Lookup',
-      fileName: 'servicein',
+      fileName: 'serviceinheader',
       onSelectRow: (servicein, element) => {
-        $('#crudForm [name=servicein_id]').first().val(servicein.id)
+        // $('#crudForm [name=servicein_id]').first().val(servicein.id)
         element.val(servicein.nobukti)
       }
     })
@@ -61,7 +61,7 @@
     })
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'serviceout' }}`,
+        url: `{{ config('app.api_url') . 'serviceoutheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -286,23 +286,23 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('serviceout', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('serviceoutheader', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('serviceout', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('serviceoutheader', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('serviceout', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('serviceoutheader', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('serviceout', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('serviceoutheader', 'export') }}`) {
       $('#export').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('serviceout', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('serviceoutheader', 'report') }}`) {
       $('#report').addClass('ui-disabled')
     }
 
@@ -352,7 +352,7 @@
 
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}serviceout/export?${params}`, true)
+        xhr.open('GET', `{{ config('app.api_url') }}serviceoutheader/export?${params}`, true)
         xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
         xhr.responseType = 'arraybuffer'
 
@@ -365,7 +365,7 @@
               let link = document.createElement('a')
 
               link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanserviceout${(new Date).getTime()}.xlsx`
+              link.download = `laporanserviceoutheader${(new Date).getTime()}.xlsx`
               link.click()
 
               submitButton.removeAttr('disabled')
@@ -375,117 +375,13 @@
 
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('servicein.report') }}?${params}`)
+        window.open(`{{ route('serviceoutheader.report') }}?${params}`)
 
         submitButton.removeAttr('disabled')
       }
     })
   })
 
-  const getServiceOutLookup = function(fileName) {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: `${appUrl}/lookup/${fileName}`,
-        method: 'GET',
-        dataType: 'html',
-        success: function(response) {
-          resolve(response)
-        }
-      })
-    })
-  }
-
-  $.fn.lookup = function(options = null) {
-    this.each(function() {
-      let element = $(this)
-
-      element
-        .wrap('<div class="input-group"></div>')
-        .after(`
-          <div class="input-group-append">
-            <button class="btn btn-primary lookup-toggler" type="button">...</button>
-          </div>
-        `)
-
-      element.siblings('.input-group-append').find('.lookup-toggler').click(function() {
-        activateLookup(element)
-      })
-    })
-
-    function activateLookup(element) {
-      let lookupModal = $(`
-        <div class="modal fade modal-fullscreen" id="lookupModal" tabindex="-1" aria-labelledby="lookupModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <form action="#" id="crudForm">
-              <div class="modal-content">
-                <div class="modal-header bg-primary">
-                  <h5 class="modal-title" id="lookupModalLabel">${options.title}</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      `)
-
-      $('body').append(lookupModal)
-
-      lookupModal.modal('show')
-
-      getServiceOutLookup(options.fileName)
-        .then(response => {
-          lookupModal.find('.modal-body').html(response)
-
-          grid = lookupModal.find('.lookup-grid')
-
-          if (detectDeviceType() == 'desktop') {
-            grid.jqGrid('setGridParam', {
-              ondblClickRow: function(id) {
-                let rowData = $(this).getRowData(id)
-                handleSelectedRow(id, lookupModal, element)
-              }
-            })
-          } else if (detectDeviceType() == 'mobile') {
-            grid.jqGrid('setGridParam', {
-              onSelectRow: function(id) {
-                handleSelectedRow(id, lookupModal, element)
-              }
-            })
-          }
-        })
-
-      lookupModal.on('hidden.bs.modal', function() {
-        lookupModal.remove()
-      })
-    }
-
-    function handleSelectedRow(id, lookupModal, element) {
-      if (id !== null) {
-        lookupModal.modal('hide')
-
-        options.onSelectRow(sanitize(grid.getRowData(id)), element)
-      } else {
-        alert('Please select a row')
-      }
-
-    }
-
-    
-    function sanitize(rowData) {
-      Object.keys(rowData).forEach(key => {
-        rowData[key] = rowData[key].replaceAll('<span class="highlight">', '').replaceAll('</span>', '')
-      })
-
-      return rowData
-    }
-
-    return this
-
-  }
 </script>
 @endpush()
 @endsection

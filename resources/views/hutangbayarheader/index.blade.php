@@ -56,7 +56,7 @@
       }
     })
 
-    $('.hutangheader-lookup').lookup({
+    $('.hutangHeader-lookup').lookup({
       title: 'hutang Lookup',
       fileName: 'hutangheader',
       onSelectRow: (hutang, element) => {
@@ -65,19 +65,20 @@
     })
 
       $('.akunPusat-lookup').lookup({
-      title: ' akunpusat Lookup',
+      title: 'akunpusat Lookup',
       fileName: 'akunpusat',
       onSelectRow: (akunpusat, element) => {
         element.val(akunpusat.coa)
       }
     })
 
-    $('.alatbayar-lookup').lookup({
+    $('.alatBayar-lookup').lookup({
       title: 'alatbayar Lookup',
       fileName: 'alatbayar',
       onSelectRow: (alatbayar, element) => {
-        $('#crudForm [name=alatbayar_id]').first().val(alatbayar.id)
+        $(`#crudForm [name="alatbayar_id[]"]`).first().val(alatbayar.id)
         element.val(alatbayar.namaalatbayar)
+
       }
     })
 

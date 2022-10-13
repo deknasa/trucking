@@ -18,7 +18,7 @@ class ServiceOutHeaderController extends MyController
     {
         $title = $this->title;
         
-        return view('serviceout.index', compact('title'));
+        return view('serviceoutheader.index', compact('title'));
     }
 
      /**
@@ -32,7 +32,7 @@ class ServiceOutHeaderController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'serviceout', $request->all());
+                ->post(config('app.api_url') . 'serviceoutheader', $request->all());
 
 
             return response($response, $response->status());
@@ -60,7 +60,7 @@ class ServiceOutHeaderController extends MyController
         $response = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'serviceout', $params);
+            ->get(config('app.api_url') . 'serviceoutheader', $params);
 
             $data = [
                 'total' => $response['attributes']['totalPages'] ?? [],
@@ -82,7 +82,7 @@ class ServiceOutHeaderController extends MyController
 
         $combo = $this->combo();
 
-        return view('serviceout.add', compact('title' , 'combo'));
+        return view('serviceoutheader.add', compact('title' , 'combo'));
     }
 
      /**
@@ -95,7 +95,7 @@ class ServiceOutHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "serviceout/$id");
+            ->get(config('app.api_url') . "serviceoutheader/$id");
 
         $serviceout = $response['data'];
         $kode = $response['kode'];
@@ -103,7 +103,7 @@ class ServiceOutHeaderController extends MyController
 
         $combo = $this->combo();
 
-        return view('serviceout.edit', compact('title', 'serviceout', 'combo', 'serviceNoBukti'));
+        return view('serviceoutheader.edit', compact('title', 'serviceoutheader', 'combo', 'serviceNoBukti'));
     }
 
      /**
@@ -116,7 +116,7 @@ class ServiceOutHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "serviceout/$id", $request->all());
+            ->patch(config('app.api_url') . "serviceoutheader/$id", $request->all());
 
         return response($response);
     }
@@ -132,14 +132,14 @@ class ServiceOutHeaderController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "serviceout/$id");
+                ->get(config('app.api_url') . "serviceoutheader/$id");
 
             $serviceout = $response['data'];
             $combo = $this->combo();
 
-            return view('serviceout.delete', compact('title', 'combo', 'serviceout'));
+            return view('serviceoutheader.delete', compact('title', 'combo', 'serviceoutheader'));
         } catch (\Throwable $th) {
-            return redirect()->route('serviceout.index');
+            return redirect()->route('serviceoutheader.index');
         }
     }
 
@@ -152,7 +152,7 @@ class ServiceOutHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "serviceout/$id");
+            ->delete(config('app.api_url') . "serviceoutheader/$id");
 
         return response($response);
     }
@@ -181,7 +181,7 @@ class ServiceOutHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
         ->withToken(session('access_token'))
         ->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'serviceout/combo');
+            ->get(config('app.api_url') . 'serviceoutheader/combo');
 
         return $response['data'];
     }
