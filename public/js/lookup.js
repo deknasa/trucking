@@ -53,7 +53,7 @@ $.fn.lookup = function (options = null) {
             <div class="modal-content">
               <div class="modal-header bg-primary">
                 <h5 class="modal-title" id="lookupModalLabel">${options.title}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close close-button" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
@@ -61,7 +61,7 @@ $.fn.lookup = function (options = null) {
               </div>
               <div class="modal-footer">
                 <div class="mr-auto">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                  <button type="button" class="btn btn-secondary close-button" data-dismiss="modal" aria-label="Close">
                   BATAL
                   </button>
                 </div>
@@ -113,22 +113,40 @@ $.fn.lookup = function (options = null) {
 		lookupModal.on("hidden.bs.modal", function () {
 			lookupModal.remove();
 
-			element.val(element.data('currentValue'))			
 			element.focus();
 		});
+
+		$(document)
+			.find(lookupModal)
+			.find(".close-button")
+			.on("click", function () {
+				handleOnCancel(element);
+			});
+
+		$(document)
+			.find(lookupModal)
+			.on("keydown", function (event) {
+				if (event.which === 27) {
+					handleOnCancel(element);
+				}
+			});
 	}
 
 	function handleSelectedRow(id, lookupModal, element) {
 		if (id !== null) {
 			lookupModal.modal("hide");
 
-			options.onSelectRow(sanitize(grid.getRowData(id)), element);
-
-			setTimeout(() => {
-				element.data('currentValue', element.val())
-			}, 500);
+			if (options.onSelectRow) {
+				options.onSelectRow(sanitize(grid.getRowData(id)), element);
+			}
 		} else {
 			alert("Please select a row");
+		}
+	}
+
+	function handleOnCancel(element) {
+		if (options.onCancel) {
+			options.onCancel(element);
 		}
 	}
 

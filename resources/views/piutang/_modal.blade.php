@@ -452,10 +452,12 @@
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
   }
-
-  
 </script>
 @endpush()
