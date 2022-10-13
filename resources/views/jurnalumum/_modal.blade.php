@@ -54,21 +54,21 @@
                   <th>Aksi</th>
                 </tr>
               </thead>
-              <tbody>
-              <tr>
-              <td>1</td>
-              <td>
-                <input type="text" name="coadebet_detail[]"  class="form-control coadebet-lookup">
-              </td>
-              <td>
-                <input type="text" name="coakredit_detail[]"  class="form-control coakredit-lookup">
-              </td>
-              <td>
-                <input type="text" name="keterangan_detail[]" class="form-control">   
-              </td><td>
-                <input type="text" name="nominal_detail[]" class="form-control autonumeric"> 
-              </td>
-              <td>
+              <tbody id="table_body" class="form-group">
+                <tr>
+                  <td>1</td>
+                  <td>
+                    <input type="text" name="coadebet_detail[]"  class="form-control coadebet-lookup">
+                  </td>
+                  <td>
+                    <input type="text" name="coakredit_detail[]"  class="form-control coakredit-lookup">
+                  </td>
+                  <td>
+                    <input type="text" name="keterangan_detail[]" class="form-control">   
+                  </td><td>
+                    <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
+                  </td>
+                  <td>
                   <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
               </td>
             </tr>
@@ -76,7 +76,12 @@
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan="5"></td>
+                  <td colspan="4">
+                    <p class="text-right font-weight-bold">TOTAL :</p>
+                  </td>
+                  <td>
+                    <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                  </td>
                   <td>
                     <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                   </td>
@@ -104,15 +109,20 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     
-    $("#addRow").click(function() {
+    $(document).on('click', "#addRow", function() {
       addRow()
+    });
+    
+    $(document).on('click', '.delete-row', function(event) {
+      deleteRow($(this).parents('tr'))
     })
 
-    $(document).on('click', '.delete-row', function (event) {
-      deleteRow($(this).parents('tr'))
+    $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {
+      setTotal()
     })
 
     $('#btnSubmit').click(function(event) {
@@ -215,6 +225,34 @@
     })
   })
 
+  $('#crudModal').on('shown.bs.modal', () => {
+    let form = $('#crudForm')
+
+    setFormBindKeys(form)
+
+    activeGrid = null
+
+    getMaxLength(form)
+    initLookup()
+    initDatepicker()
+  })
+
+  $('#crudModal').on('hidden.bs.modal', () => {
+    activeGrid = '#jqGrid'
+    
+    $('#crudModal').find('.modal-body').html(modalBody)
+  })
+
+  function setTotal() {
+    let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
+    let total = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#total').set(total)
+  }
 
   function createJurnalUmumHeader() {
     let form = $('#crudForm')
@@ -332,12 +370,12 @@
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
 
+         if(element.hasClass('datepicker')){
+            element.val(dateFormat(value))
+          } else {
             element.val(value)
-            let tglbukti = response.data.tglbukti
-            $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
+          }
         })
-        let ft = dateFormat(tgl)
-        form.find(`[name="tglbukti"]`).val(ft)
 
         $.each(response.detail, (index, detail) => {
           let detailRow = $(`
@@ -352,7 +390,7 @@
             <td>
               <input type="text" name="keterangan_detail[]" class="form-control">   
             </td><td>
-              <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric" > 
+              <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric nominal" > 
             </td>
             <td>
                 <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
@@ -367,8 +405,8 @@
 
           initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
           $('#detailList tbody').append(detailRow)
-
-          // $('#lookup').hide()
+          setTotal();
+          
           $('.coadebet-lookup').lookup({
             title: 'Coa Debet Lookup',
             fileName: 'akunpusat',
@@ -387,6 +425,10 @@
         })
 
         setRowNumbers()
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
       }
     })
   }
@@ -404,7 +446,7 @@
         <td>
           <input type="text" name="keterangan_detail[]" class="form-control">   
         </td><td>
-          <input type="text" name="nominal_detail[]" class="form-control autonumeric"> 
+          <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
         </td>
         <td>
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
@@ -412,10 +454,7 @@
       </tr>
     `)
     
-    
-    
     $('#detailList tbody').append(detailRow)
-
 
     // $('#lookup').hide()
     $('.coadebet-lookup').last().lookup({
@@ -441,6 +480,7 @@
     row.remove()
 
     setRowNumbers()
+    setTotal()
   }
 
   function setRowNumbers() {
@@ -448,6 +488,49 @@
 
     elements.each((index, element) => {
       $(element).text(index+1)
+    })
+  }
+
+  function getMaxLength(form) {
+    if (!form.attr('has-maxlength')) {
+      $.ajax({
+        url: `${apiUrl}jurnalumumheader/field_length`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            if (value !== null && value !== 0 && value !== undefined) {
+              form.find(`[name=${index}]`).attr('maxlength', value)
+            }
+          })
+
+          form.attr('has-maxlength', true)
+        },
+        error: error => {
+          showDialog(error.statusText)
+        }
+      })
+    }
+  }
+
+  function initLookup() {
+    $('.coadebet-lookup').lookup({
+      title: 'Coa Debet Lookup',
+      fileName: 'akunpusat',
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.keterangancoa)
+      }
+    })
+
+    $('.coakredit-lookup').lookup({
+      title: 'Coa Kredit Lookup',
+      fileName: 'akunpusat',
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.keterangancoa)
+      }
     })
   }
 </script>

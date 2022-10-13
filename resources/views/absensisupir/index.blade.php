@@ -34,6 +34,38 @@
   let autoNumericElements = []
 
   $(document).ready(function() {
+
+    $('.supir-lookup').lookup({
+      title: 'Supir Lookup',
+      fileName: 'supir',
+      onSelectRow: (supir,element) => {
+        $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
+        element.val(supir.namasupir)
+      }
+    })
+
+    $('.trado-lookup').lookup({
+      title: 'Trado Lookup',
+      fileName: 'trado',
+      onSelectRow: (trado,element) => {
+        $(`#crudForm [name="trado_id[]"]`).first().val(trado.id)
+        element.val(trado.keterangan)
+      }
+    })
+    
+    $('.absentrado-lookup').lookup({
+      title: 'Absen Trado Lookup',
+      fileName: 'absentrado',
+      onSelectRow: (absentrado,element) => {
+        $(`#crudForm [name="absen_id[]"]`).first().val(absentrado.id)
+        element.val(absentrado.keterangan)
+      }
+    })
+
+    $('#crudModal').on('hidden.bs.modal', function() {
+      activeGrid = '#jqGrid'
+    })
+    
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'absensisupirheader' }}`,
         mtype: "GET",

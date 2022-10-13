@@ -1,10 +1,10 @@
-<table id="kotaLookup" class="lookup-grid"></table>
-<div id="kotaLookupPager"></div>
+<table id="roleLookup" class="lookup-grid"></table>
+<div id="roleLookupPager"></div>
 
 @push('scripts')
 <script>
- $('#kotaLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'kota' }}`,
+  $('#roleLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'role' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -16,40 +16,9 @@
           width: '70px'
         },
         {
-          label: 'KODE KOTA',
-          name: 'kode kota',
+          label: 'ROLE NAME',
+          name: 'rolename',
           align: 'left',
-        },
-        {
-          label: 'KETERANGAN',
-          name: 'keterangan',
-          align: 'left'
-        },
-        {
-            label: 'STATUS AKTIF',
-            name: 'statusaktif',
-            // stype: 'select',
-            // searchoptions: {
-            //   value: `<?php
-            //           $i = 1;
-
-            //           foreach ($data['combo'] as $status) :
-            //             echo "$status[param]:$status[parameter]";
-            //             if ($i !== count($data['combo'])) {
-            //               echo ";";
-            //             }
-            //             $i++;
-            //           endforeach
-
-            //           ?>
-            // `,
-            //   dataInit: function(element) {
-            //     $(element).select2({
-            //       width: 'resolve',
-            //       theme: "bootstrap4"
-            //     });
-            //   }
-            // },
         },
         {
           label: 'MODIFIEDBY',
@@ -69,17 +38,17 @@
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
-      height: 350,
+      height: 450,
       rowNum: 10,
       rownumbers: true,
-      toolbar: [true, "top"],
       rownumWidth: 45,
       rowList: [10, 20, 50],
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#kotaLookupPager'),
+      toolbar: [true, "top"],
+      pager: $('#roleLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -106,28 +75,27 @@
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
-          initResize($(this))
 
-          if (indexRow - 1 > $('#kotaLookup').getGridParam().reccount) {
-            indexRow = $('#kotaLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#roleLookup').getGridParam().reccount) {
+            indexRow = $('#roleLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#kotaLookup [id="${$('#kotaLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#roleLookup [id="${$('#roleLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#kotaLookup [id="${$('#kotaLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#roleLookup [id="${$('#roleLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#kotaLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#kotaLookup [id="` + $('#kotaLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#roleLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#roleLookup [id="` + $('#roleLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#kotaLookup').setSelection($('#kotaLookup').getDataIDs()[indexRow])
+            $('#roleLookup').setSelection($('#roleLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -142,7 +110,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupkota').prev().width())
+        $(this).setGridWidth($('#lookup').prev().width())
         setHighlight($(this))
       }
     })
@@ -154,10 +122,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#kotaLookup'))
+        clearGlobalSearch($('#roleLookup'))
       },
     })
 
-  loadGlobalSearch($('#kotaLookup'))
-  loadClearFilter($('#kotaLookup'))
+  loadGlobalSearch($('#roleLookup'))
+  loadClearFilter($('#roleLookup'))
 </script>

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 class KasGantungDetailController extends Controller
 {
-    public $title = 'Kas Gantung';
+    public $title = 'Kas Gantung Detail';
 
     /**
      * Fungsi index
@@ -22,6 +22,7 @@ class KasGantungDetailController extends Controller
 
         $response = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
             ->get(config('app.api_url') .'kasgantung_detail', $params);
             
         $data = [

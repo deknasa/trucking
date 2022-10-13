@@ -55,7 +55,7 @@
                   STATUS LANGSUNG CAIR <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statuslangsungcair" class="form-select select2bs4" style="width: 100%;">
+                <select name="statuslangsunggcair" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS LANGSUNG CAIR --</option>
                 </select>
               </div>
@@ -101,6 +101,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -205,10 +206,13 @@
     activeGrid = null
 
     getMaxLength(form)
+    initLookup()
+    initSelect2()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createAlatBayar() {
@@ -349,8 +353,8 @@
 
   const setLangsungCairOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statuslangsungcair]').empty()
-      relatedForm.find('[name=statuslangsungcair]').append(
+      relatedForm.find('[name=statuslangsunggcair]').empty()
+      relatedForm.find('[name=statuslangsunggcair]').append(
         new Option('-- PILIH STATUS LANGSUNG CAIR --', '', false, true)
       ).trigger('change')
 
@@ -372,12 +376,11 @@
           })
         },
         success: response => {
-          response.data.forEach(statusLangsungCair => {
-            let option = new Option(statusLangsungCair.text, statusLangsungCair.id)
+          response.data.forEach(statusLangsunggCair => {
+            let option = new Option(statusLangsunggCair.text, statusLangsunggCair.id)
 
-            relatedForm.find('[name=statuslangsungcair]').append(option).trigger('change')
+            relatedForm.find('[name=statuslangsunggcair]').append(option).trigger('change')
           });
-          console.log(response.data)
           resolve()
         }
       })
@@ -402,6 +405,22 @@
             element.val(value)
           }
         })
+
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
+      }
+    })
+  }
+
+  function initLookup() {
+    $('.bank-lookup').lookup({
+      title: 'Bank Lookup',
+      fileName: 'bank',
+      onSelectRow: (bank, element) => {
+        $('#crudForm [name=bank_id]').first().val(bank.id)
+        element.val(bank.namabank)
       }
     })
   }

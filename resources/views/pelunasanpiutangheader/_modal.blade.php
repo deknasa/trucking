@@ -120,15 +120,17 @@
                           <th>NOMINAL LEBIH BAYAR</th>
                         </tr>
                       </thead>
-                        <tbody id="bodyList">
+                        <tbody id="table_body">
 
                         </tbody>
                       <tfoot>
                         <tr>
+                          <td colspan="5"></td>
+                          <td><p id="nominalPiutang" class="text-right font-weight-bold"></p></td>
+                          <td><p id="sisaPiutang" class="text-right font-weight-bold"></p></td>
+                          <td></td>
+                          <td><p id="bayarPiutang" class="text-right font-weight-bold"></p></td>
                           <td colspan="3"></td>
-                          <td>
-                            <!-- <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button> -->
-                          </td>
                         </tr>
                       </tfoot>
                     </table>
@@ -157,13 +159,12 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
 
-    $('#btnBatal').click(function(event) {
-      $('#detailList tbody').html('')
-
-
+    $(document).on('input', `#table_body [name="bayarppd[]"]`, function(event) {
+      setTotal()
     })
 
     $('#btnSubmit').click(function(event) {
@@ -239,7 +240,7 @@
       })
 
 
-      $('#bodyList tr').each(function(row, tr){ 
+      $('#table_body tr').each(function(row, tr){ 
         // console.log(row);
         
         if($(this).find(`[name="piutang_id[]"]`).is(':checked')) {
@@ -335,13 +336,14 @@
         success: response => {
 
           id = response.data.id
-          $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
+          $('#crudModal').modal('hide')
           $('#piutangrow').html('')
           $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
          
           $('#detailList tbody').html('')
-
+          $('#nominalPiutang').html('')
+          $('#sisaPiutang').html('')
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -366,6 +368,34 @@
     })
   })
 
+  $('#crudModal').on('shown.bs.modal', () => {
+    let form = $('#crudForm')
+
+    setFormBindKeys(form)
+
+    activeGrid = null
+
+    getMaxLength(form)
+    initLookup()
+    initDatepicker()
+  })
+
+  $('#crudModal').on('hidden.bs.modal', () => {
+    activeGrid = '#jqGrid'
+    
+    $('#crudModal').find('.modal-body').html(modalBody)
+  })
+
+  function setTotal() {
+    let nominalDetails = $(`#table_body [name="bayarppd[]"]`)
+    let total = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#bayarPiutang').set(total)
+  }
   function createPelunasanPiutangHeader() {
     let form = $('#crudForm')
 
@@ -383,6 +413,8 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+
+    setTotal()
   }
 
   function editPelunasanPiutangHeader(Id) {
@@ -410,11 +442,15 @@
 
         let tgl = response.data.tglbukti
         $.each(response.data, (index, value) => {
+          let element = form.find(`[name="${index}"]`)
+
           form.find(`[name="${index}"]`).val(value).attr('disabled', false)
+
+           if(element.hasClass('datepicker')){
+              element.val(dateFormat(value))
+          }
         })
         
-        let ft = dateFormat(tgl)
-        form.find(`[name="tglbukti"]`).val(ft)
 
         $.each(response.detail, (index, value) => {
           form.find(`[name="${index}"]`).val(value).attr('disabled', false)
@@ -451,13 +487,21 @@
       },
       success: response => {
         $.each(response.data, (index, value) => {
-          form.find(`[name="${index}"]`).val(value).attr('disabled', true)
+          let element = form.find(`[name="${index}"]`)
+
+          form.find(`[name="${index}"]`).val(value)
+          
+           if(element.hasClass('datepicker')){
+              element.val(dateFormat(value))
+          }
         })
         $.each(response.detail, (index, value) => {
-          form.find(`[name="${index}"]`).val(value).attr('disabled', true)
+          form.find(`[name="${index}"]`).val(value)
         })
         let agenId = response.detail.agendetail_id
 
+        form.find('[name]').addClass('disabled')
+        initDisabled()
         // $('#gridEditPiutang').trigger('reloadGrid')
         getPelunasan(Id, agenId, 'delete')
         
@@ -487,37 +531,39 @@
       },
       success: response => {
        
-
+        let totalNominal = 0
+        let totalSisa = 0
         $.each(response.data, (index, detail) => {
-          let no = 1;
+         
           let id = detail.id
+          totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
+          totalSisa = totalSisa + parseFloat(detail.sisa);
           let nominal = new Intl.NumberFormat('en-US').format(detail.nominal);
           let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
 
-         
           let detailRow = $(`
-            <tr onclick="select(this)">
-              <td><input name='piutang_id[]' type="checkbox" id="checkItem" value="${id}"></td>
+            <tr >
+              <td onclick="select(this)"><input name='piutang_id[]' type="checkbox" id="checkItem" value="${id}"></td>
               <td></td>
               <td width="10%">${detail.nobukti}</td>
               <td width="10%">${detail.tglbukti}</td>
               <td width="10%">${detail.invoice_nobukti}</td>
-              <td width="10%">${nominal}</p></td>
-              <td width="10%">${sisa}</td>
+              <td width="10%"><p class="text-right">${nominal}</p></td>
+              <td width="10%"><p class="text-right">${sisa}</p></td>
               <td width="10%">
-                <input type="text" name="keterangandetailppd[]" class="form-control">
+                <input type="text" name="keterangandetailppd[]" disabled class="form-control">
               </td>
               <td width="10%">
-                <input type="text" name="bayarppd[]" class="form-control autonumeric">
+                <input type="text" name="bayarppd[]" disabled class="form-control bayar autonumeric">
               </td>
               <td width="10%">
-                <input type="text" name="keteranganpenyesuaianppd[]" class="form-control">
+                <input type="text" name="keteranganpenyesuaianppd[]" disabled class="form-control">
               </td>
               <td width="10%">
-                <input type="text" name="penyesuaianppd[]" class="form-control autonumeric">
+                <input type="text" name="penyesuaianppd[]" disabled class="form-control autonumeric">
               </td>
               <td width="10%">
-                <input type="text" name="nominallebihbayarppd[]" class="form-control autonumeric">
+                <input type="text" name="nominallebihbayarppd[]" disabled class="form-control autonumeric">
               </td>
             </tr>
           `)
@@ -528,13 +574,18 @@
           initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
           initAutoNumericNoMinus(detailRow.find(`[name="penyesuaianppd[]"]`))
           initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
-          //untuk unformat
-          // input.value = AutoNumeric.getNumber(autoNumericElement);
+
           $('#detailList tbody').append(detailRow)
-          no++
+          setTotal()
+          
         })
+        totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
+        totalSisa = new Intl.NumberFormat('en-US').format(totalSisa);
+        $('#nominalPiutang').append(`${totalNominal}`)
+        $('#sisaPiutang').append(`${totalSisa}`)
 
         setRowNumbers()
+        
       }
     }) 
 
@@ -546,14 +597,14 @@
     $('#detailList tbody').html('')
     let url
     let attribut
+    let forCheckbox
     if(aksi == 'edit'){
-      
       url = `${apiUrl}pelunasanpiutangheader/${id}/${agenId}/getPelunasanPiutang`
     }
     if(aksi == 'delete'){ 
-      
       url = `${apiUrl}pelunasanpiutangheader/${id}/${agenId}/getDeletePelunasanPiutang`
       attribut = 'disabled'
+      forCheckbox = 'disabled'
     }
     $.ajax({
       url: url,
@@ -567,34 +618,42 @@
       },
       success: response => {
        
-
+        let totalNominalPiutang = 0
+        let totalSisa = 0
+        let totalNominal = 0
         $.each(response.data, (index, detail) => {
           
           let id = detail.id
           let pelunasanPiutangId = detail.pelunasanpiutang_id
           let checked
           
+          totalNominalPiutang = parseFloat(totalNominalPiutang) + parseFloat(detail.nominalpiutang)
+          totalSisa = totalSisa + parseFloat(detail.sisa);
           let nominal = new Intl.NumberFormat('en-US').format(detail.nominalpiutang);
           let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
          
           if(pelunasanPiutangId != null) {
             checked = 'checked'
+            totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
+            console.log(totalNominal)
+          }else{
+            attribut = 'disabled'
           }
 
           let detailRow = $(`
-            <tr onclick="select(this)">
-              <td><input name='piutang_id[]' type="checkbox" class="checkItem" value="${id}" ${checked} ${attribut}></td>
+            <tr>
+              <td onclick="select(this)"><input name='piutang_id[]' type="checkbox" class="checkItem" value="${id}" ${checked} ${forCheckbox}></td>
               <td></td>
               <td width="10%">${detail.piutang_nobukti}</td>
               <td width="10%">${detail.tglbukti}</td>
               <td width="10%">${detail.invoice_nobukti}</td>
-              <td width="10%">${nominal}</p></td>
-              <td width="10%">${sisa}</td>
+              <td width="10%"><p class="text-right">${nominal}</p></td>
+              <td width="10%"><p class="text-right">${sisa}</p></td>
               <td>
                 <input type="text" name="keterangandetailppd[]" class="form-control" value="${detail.keterangan || ''}" ${attribut}>
               </td>
               <td>
-                <input type="text" name="bayarppd[]" class="form-control autonumeric" value="${detail.nominal || ''}" ${attribut}>
+                <input type="text" name="bayarppd[]" class="form-control bayar autonumeric" value="${detail.nominal || ''}" ${attribut}>
               </td>
               <td>
                 <input type="text" name="keteranganpenyesuaianppd[]" class="form-control" value="${detail.keteranganpenyesuaian || ''}" ${attribut}>
@@ -611,10 +670,16 @@
           initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
           initAutoNumericNoMinus(detailRow.find(`[name="penyesuaianppd[]"]`))
           initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
-          $('#detailList tbody').append(detailRow)          
-        })
+          $('#detailList tbody').append(detailRow)      
+          setTotal()
 
+        })
+        totalNominalPiutang = new Intl.NumberFormat('en-US').format(totalNominalPiutang);
+        totalSisa = new Intl.NumberFormat('en-US').format(totalSisa);
+        $('#nominalPiutang').append(`${totalNominalPiutang}`)
+        $('#sisaPiutang').append(`${totalSisa}`)
         setRowNumbers()
+
         
       }
     }) 
@@ -622,8 +687,57 @@
   }
 
   function select(element) {
-      $(element).find(`[name="piutang_id[]"]`).attr('checked', true)
-      // $(element).style.backgroundColor = "green"
+      var is_checked = $(element).find(`[name="piutang_id[]"]`).is(":checked");
+
+      if(!is_checked) {
+        $(element).siblings('td').find(`[name="keterangandetailppd[]"]`).prop('disabled', true)
+        $(element).siblings('td').find(`[name="nominallebihbayarppd[]"]`).prop('disabled', true)
+        $(element).siblings('td').find(`[name="bayarppd[]"]`).prop('disabled', true)
+        $(element).siblings('td').find(`[name="keteranganpenyesuaianppd[]"]`).prop('disabled', true)
+        $(element).siblings('td').find(`[name="penyesuaianppd[]"]`).prop('disabled', true)
+        $(element).siblings('td').find(`[name="nominallebihbayarppd[]"]`).prop('disabled', true)
+        let bayar = $(element).siblings('td').find(`[name="bayarppd[]"]`).val()
+
+        console.log(bayar)
+        if(bayar != '') {
+          let byr =  parseFloat(bayar.replaceAll(',',''));
+
+          let piutang = $('#bayarPiutang').text()
+          let ttlPiutang = parseFloat(piutang.replaceAll(',',''));
+
+          let finalPiutang = ttlPiutang - byr;
+          $("#bayarPiutang").html(`${finalPiutang}`);
+            new AutoNumeric('#bayarPiutang',{
+            decimalPlaces			: '2'
+          })
+        }
+        console.log('ok')
+      }else{
+        $(element).siblings('td').find(`[name="keterangandetailppd[]"]`).prop('disabled', false)
+        $(element).siblings('td').find(`[name="nominallebihbayarppd[]"]`).prop('disabled', false)
+        $(element).siblings('td').find(`[name="bayarppd[]"]`).prop('disabled', false)
+        $(element).siblings('td').find(`[name="keteranganpenyesuaianppd[]"]`).prop('disabled', false)
+        $(element).siblings('td').find(`[name="penyesuaianppd[]"]`).prop('disabled', false)
+        $(element).siblings('td').find(`[name="nominallebihbayarppd[]"]`).prop('disabled', false)
+
+        let bayar = $(element).siblings('td').find(`[name="bayarppd[]"]`).val()
+        console.log(bayar)
+        if(bayar != '') {
+          let byr =  parseFloat(bayar.replaceAll(',',''));
+
+          let piutang = $('#bayarPiutang').text()
+          let ttlPiutang = parseFloat(piutang.replaceAll(',',''));
+
+          let finalPiutang = ttlPiutang + byr;
+          $("#bayarPiutang").html(`${finalPiutang}`);
+            new AutoNumeric('#bayarPiutang',{
+            decimalPlaces			: '2'
+          })
+        }
+        
+        console.log('sip')
+      }
+      console.log(is_checked)
   }
   
   function setRowNumbers() {
@@ -633,6 +747,32 @@
       $(element).text(index + 1)
     })
   }
+
+  function getMaxLength(form) {
+    if (!form.attr('has-maxlength')) {
+      $.ajax({
+        url: `${apiUrl}pelunasanpiutangheader/field_length`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            if (value !== null && value !== 0 && value !== undefined) {
+              form.find(`[name=${index}]`).attr('maxlength', value)
+            }
+          })
+
+          form.attr('has-maxlength', true)
+        },
+        error: error => {
+          showDialog(error.statusText)
+        }
+      })
+    }
+  }
+
 
   function initAutoNumericNoMinus(elements = null) {
     let option = {
@@ -649,6 +789,54 @@
         new AutoNumeric(element, option);
       });
     }
+  }
+
+  function initLookup() {
+    $('.agen-lookup').lookup({
+      title: 'Agen Lookup',
+      fileName: 'agen',
+      onSelectRow: (agen, element) => {
+        $('#crudForm [name=agen_id]').first().val(agen.id)
+        element.val(agen.namaagen)
+        console.log($('#crudForm [name=agen_id]').first().val());
+
+      }
+    })
+    $('.bank-lookup').lookup({
+      title: 'Bank Lookup',
+      fileName: 'bank',
+      onSelectRow: (bank, element) => {
+        $('#crudForm [name=bank_id]').first().val(bank.id)
+        element.val(bank.namabank)
+        console.log($('#crudForm [name=bank_id]').first().val());
+
+      }
+    })
+    $('.cabang-lookup').lookup({
+      title: 'Cabang Lookup',
+      fileName: 'cabang',
+      onSelectRow: (cabang, element) => {
+        $('#crudForm [name=cabang_id]').first().val(cabang.id)
+        element.val(cabang.namacabang)
+      }
+    })
+    $('.pelanggan-lookup').lookup({
+      title: 'Pelanggan Lookup',
+      fileName: 'pelanggan',
+      onSelectRow: (pelanggan, element) => {
+        $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
+        element.val(pelanggan.namapelanggan)
+      }
+    })
+    $('.agendetail-lookup').lookup({
+      title: 'Agen Detail Lookup',
+      fileName: 'agen',
+      onSelectRow: (agen, element) => {
+        $('#crudForm [name=agendetail_id]').first().val(agen.id)
+        element.val(agen.namaagen)
+        getPiutang(agen.id)
+      }
+    })
   }
 </script>
 @endpush()

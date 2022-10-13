@@ -25,15 +25,15 @@
             name: 'keterangan',
           },
           {
+            label: 'NO BUKTI INVOICE',
+            name: 'invoice_nobukti',
+          },
+          {
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
             formatter: currencyFormat,
           },
-          {
-            label: 'NO BUKTI INVOICE',
-            name: 'invoice_nobukti',
-          }
         ],
         autowidth: true,
         shrinkToFit: false,

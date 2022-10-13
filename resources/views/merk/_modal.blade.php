@@ -174,6 +174,7 @@
     activeGrid = null
 
     getMaxLength(form)
+    initSelect2()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -326,6 +327,10 @@
             element.val(value)
           }
         })
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
       }
     })
   }

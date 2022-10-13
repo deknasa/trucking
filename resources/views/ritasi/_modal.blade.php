@@ -35,7 +35,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="tglbukti" class="form-control formatdate">
+                <input type="text" name="tglbukti" class="form-control datepicker">
               </div>
             </div>
             <div class="row form-group">
@@ -118,6 +118,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -222,10 +223,13 @@
     activeGrid = null
 
     getMaxLength(form)
+    initLookup()
+    initSelect2()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createRitasi() {
@@ -244,10 +248,6 @@
     $('.invalid-feedback').remove()
 
     setStatusRitasiOptions(form)
-    setSuratPengantarOptions(form)
-    setKotaOptions(form)
-    setTradoOptions(form)
-    setSupirOptions(form)
   }
 
   function editRitasi(ritasiId) {
@@ -375,12 +375,64 @@
 
           if (element.is('select')) {
             element.val(value).trigger('change')
+          } else if(element.hasClass('datepicker')){
+              element.val(dateFormat(value))
           } else {
             element.val(value)
           }
         })
+
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
       }
     })
   }
+
+  function initLookup() {
+    $('.suratpengantar-lookup').lookup({
+      title: 'Surat Pengantar Lookup',
+      fileName: 'suratpengantar',
+      onSelectRow: (suratpengantar, element) => {
+        
+        element.val(suratpengantar.nobukti)
+      }
+    })
+    $('.dari-lookup').lookup({
+      title: 'Dari Lookup',
+      fileName: 'kota',
+      onSelectRow: (kota, element) => {
+        $('#crudForm [name=dari_id]').first().val(kota.id)
+        element.val(kota.keterangan)
+      }
+    })
+    $('.sampai-lookup').lookup({
+      title: 'Sampai Lookup',
+      fileName: 'kota',
+      onSelectRow: (kota, element) => {
+        $('#crudForm [name=sampai_id]').first().val(kota.id)
+        element.val(kota.keterangan)
+      }
+    })
+    $('.trado-lookup').lookup({
+      title: 'Trado Lookup',
+      fileName: 'trado',
+      onSelectRow: (trado, element) => {
+        $('#crudForm [name=trado_id]').first().val(trado.id)
+        element.val(trado.keterangan)
+      }
+    })
+    $('.supir-lookup').lookup({
+      title: 'Supir Lookup',
+      fileName: 'supir',
+      onSelectRow: (supir, element) => {
+        $('#crudForm [name=supir_id]').first().val(supir.id)
+        element.val(supir.namasupir)
+      }
+    })
+
+  }
+
 </script>
 @endpush()

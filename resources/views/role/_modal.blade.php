@@ -250,6 +250,11 @@
             element.val(value)
           }
         })
+        
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
       }
     })
   }

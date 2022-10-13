@@ -10,14 +10,14 @@
   </div>
 </div>
 
-@include('jurnalumum._modal')
+@include('pengeluaranstokheader._modal')
 <!-- Detail -->
-@include('jurnalumum._detail')
+@include('pengeluaranstokheader._detail')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('jurnalumumheader.index') }}"
-  let getUrl = "{{ route('jurnalumumheader.get') }}"
+  let indexUrl = "{{ route('pengeluaranstokheader.index') }}"
+  let getUrl = "{{ route('pengeluaranstokheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -31,13 +31,96 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
-  let rowNum = 10
-  let hasDetail = false
 
   $(document).ready(function() {
 
+    $('#lookup').hide()
+    
+    $('.akunpusat-lookup').lookup({
+      title: 'akun pusat Lookup',
+      fileName: 'akunpusat',
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.coa)
+        $(`#${element[0]['name']}Id`).val(akunpusat.coa)
+      }
+    })
+    $('.pengeluaranstok-lookup').lookup({
+      title: 'pengeluaran stok Lookup',
+      fileName: 'pengeluaranstok',
+      onSelectRow: (pengeluaranstok, element) => {
+        element.val(pengeluaranstok.kodepengeluaran)
+        $(`#${element[0]['name']}Id`).val(pengeluaranstok.id)
+      }
+    })
+    
+    $('.supplier-lookup').lookup({
+      title: 'supplier Lookup',
+      fileName: 'supplier',
+      onSelectRow: (supplier, element) => {
+        element.val(supplier.namasupplier)
+        $(`#${element[0]['name']}Id`).val(supplier.id)
+      }
+    })
+    $('.supir-lookup').lookup({
+      title: 'supir Lookup',
+      fileName: 'supir',
+      onSelectRow: (supir, element) => {
+        element.val(supir.namasupir)
+        $(`#${element[0]['name']}Id`).val(supir.id)
+      }
+    })
+    $('.kerusakan-lookup').lookup({
+      title: 'Trado Lookup',
+      fileName: 'kerusakan',
+      onSelectRow: (kerusakan, element) => {
+        element.val(kerusakan.keterangan)
+        $(`#${element[0]['name']}Id`).val(kerusakan.id)
+      }
+    })
+    $('.trado-lookup').lookup({
+      title: 'Trado Lookup',
+      fileName: 'trado',
+      onSelectRow: (trado, element) => {
+        element.val(trado.keterangan)
+        $(`#${element[0]['name']}Id`).val(trado.id)
+      }
+    })
+    $('.gudang-lookup').lookup({
+      title: 'Gudang Lookup',
+      fileName: 'gudang',
+      onSelectRow: (gudang, element) => {
+        element.val(gudang.gudang)
+        $(`#${element[0]['name']}Id`).val(gudang.id)
+      }
+    })
+    $('.pengeluaranstokheader-lookup').lookup({
+      title: 'pengeluaran stok header Lookup',
+      fileName: 'pengeluaranstokheader',
+      onSelectRow: (pengeluaran, element) => {
+        element.val(pengeluaran.nobukti)
+      }
+    })
+    $('.penerimaanstokheader-lookup').lookup({
+      title: 'penerimaan stok header Lookup',
+      fileName: 'penerimaanstokheader',
+      onSelectRow: (penerimaan, element) => {
+        element.val(penerimaan.nobukti)
+      }
+    })
+    $('.hutang-lookup').lookup({
+      title: 'hutang header Lookup',
+      fileName: 'hutangheader',
+      onSelectRow: (hutang, element) => {
+        element.val(hutang.nobukti)
+      }
+    })
+
+    $('#crudModal').on('hidden.bs.modal', function() {
+       activeGrid = '#jqGrid'
+     })
+
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'jurnalumumheader' }}`,
+        url: `{{ config('app.api_url') . 'pengeluaranstokheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -69,46 +152,65 @@
             align: 'left'
           },
           {
-            label: 'POSTING DARI',
-            name: 'postingdari',
+            label: 'Gudang',
+            name: 'gudang',
             align: 'left'
           },
           {
-            label: 'STATUS APPROVAL',
-            name: 'statusapproval',
+            label: 'Trado',
+            name: 'trado',
             align: 'left'
           },
           {
-            label: 'USER APPROVAL',
-            name: 'userapproval',
+            label: 'supplier',
+            name: 'supplier',
             align: 'left'
           },
           {
-            label: 'TANGGAL APPROVAL',
-            name: 'tglapproval',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
+            label: 'supir',
+            name: 'supir',
+            align: 'left'
+          },
+          {
+            label: 'PENgeluaran Stok',
+            name: 'pengeluaranstok',
+            align: 'left'
+          },
+          
+          {
+            label: 'servicein nobukti',
+            name: 'servicein_nobukti',
+            align: 'left'
+          },
+         
+          
+          {
+            label: 'PENerimaan nobukti',
+            name: 'penerimaanstok_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'Pengeluaran nobukti',
+            name: 'pengeluaranstok_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'kerusakan',
+            name: 'kerusakan',
+            align: 'left'
+          },
+          {
+            label: 'Status format',
+            name: 'statusformat',
+            align: 'left'
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
           },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
         ],
+
         autowidth: true,
         shrinkToFit: false,
         height: 350,
@@ -137,19 +239,12 @@
         },
         onSelectRow: function(id) {
 
+          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-
-          if (!hasDetail) {
-            loadDetailGrid(id)
-            hasDetail = true
-          }
-
-          loadDetailData(id)
-
         },
         loadComplete: function(data) {
 
@@ -216,7 +311,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
-              createJurnalUmumHeader()
+              createPengeluaranstokHeader()
             }
           },
           {
@@ -225,11 +320,7 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                cekApproval(selectedId, 'EDIT')
-              }
+              editPengeluaranstokHeader(selectedId)
             }
           },
           {
@@ -238,26 +329,9 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                cekApproval(selectedId, 'DELETE')
-              }
+              deletePengeluaranstokHeader(selectedId)
             }
           },
-          {
-            id: 'approval',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                approval(selectedId)
-              }
-            }
-          }
         ]
 
       })
@@ -268,6 +342,8 @@
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
 
+    /* Load detail grid */
+    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn btn-sm btn-primary`)
@@ -289,36 +365,24 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    $('#approval .ui-pg-div')
-       .addClass('btn btn-purple btn-sm')
-       .css({
-        'background': '#6619ff',
-        'color': '#fff'
-       })
-       .parent().addClass('px-1')
-
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'export') }}`) {
       $('#export').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'report') }}`) {
       $('#report').addClass('ui-disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) {
-      $('#approval').addClass('ui-disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -367,7 +431,7 @@
 
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}jurnalumumheader/export?${params}`, true)
+        xhr.open('GET', `{{ config('app.api_url') }}pengeluaranstokheader/export?${params}`, true)
         xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
         xhr.responseType = 'arraybuffer'
 
@@ -380,7 +444,7 @@
               let link = document.createElement('a')
 
               link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanjurnalumum${(new Date).getTime()}.xlsx`
+              link.download = `laporanpengeluaranStok${(new Date).getTime()}.xlsx`
               link.click()
 
               submitButton.removeAttr('disabled')
@@ -390,14 +454,15 @@
 
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('jurnalumumheader.report') }}?${params}`)
+        window.open(`{{ route('pengeluaranstokheader.report') }}?${params}`)
 
         submitButton.removeAttr('disabled')
       }
     })
-  })
 
-  
+
+
+  })
 </script>
 @endpush()
 @endsection

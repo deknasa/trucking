@@ -30,17 +30,7 @@
   let rowNum = 10
 
   $(document).ready(function() {
-
-    $('#lookup').hide()
-
-    $('.zona-lookup').lookup({
-      title: 'Zona Lookup',
-      fileName: 'zona',
-      onSelectRow: (zona, element) => {
-        $('#crudForm [name=zona_id]').first().val(zona.id)
-        element.val(zona.zona)
-      }
-    })
+    
 
     $("#jqGrid").jqGrid({
         url: `${apiUrl}kota`,

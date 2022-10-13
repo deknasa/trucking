@@ -111,6 +111,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -215,10 +216,13 @@
     activeGrid = null
 
     getMaxLength(form)
+    initLookup()
+    initSelect2()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createBank() {
@@ -367,6 +371,39 @@
             element.val(value)
           }
         })
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
+      }
+    })
+  }
+
+  function initLookup() {
+    $('.coa-lookup').lookup({
+      title: 'COA Lookup',
+      fileName: 'akunpusat',
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.coa)
+      }
+    })
+
+    $('.penerimaantrucking-lookup').lookup({
+      title: 'Penerimaan Trucking Lookup',
+      fileName: 'penerimaantrucking',
+      onSelectRow: (penerimaantrucking, element) => {
+        $('#crudForm [name=statusformatpenerimaan]').first().val(penerimaantrucking.statusformat)
+        
+        element.val(penerimaantrucking.kodepenerimaan)
+      }
+    })
+
+    $('.pengeluarantrucking-lookup').lookup({
+      title: 'Pengeluaran Trucking Lookup',
+      fileName: 'pengeluarantrucking',
+      onSelectRow: (pengeluarantrucking, element) => {
+        $('#crudForm [name=statusformatpengeluaran]').first().val(pengeluarantrucking.statusformat)
+        element.val(pengeluarantrucking.kodepengeluaran)
       }
     })
   }

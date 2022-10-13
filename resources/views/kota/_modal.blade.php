@@ -81,6 +81,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -185,10 +186,14 @@
     activeGrid = null
 
     getMaxLength(form)
+    initLookup()
+    initDatepicker()
+    initSelect2()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createKota() {
@@ -206,7 +211,6 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setZonaOptions(form)
     setStatusAktifOptions(form)
   }
 
@@ -227,7 +231,6 @@
 
     Promise
       .all([
-        setZonaOptions(form),
         setStatusAktifOptions(form)
       ])
       .then(() => {
@@ -252,7 +255,6 @@
 
     Promise
       .all([
-        setZonaOptions(form),
         setStatusAktifOptions(form)
       ])
       .then(() => {
@@ -285,33 +287,7 @@
     }
   }
 
-  const setZonaOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=zona_id]').empty()
-      relatedForm.find('[name=zona_id]').append(
-        new Option('-- PILIH ZONA --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}zona`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          response.data.forEach(zona => {
-            let option = new Option(zona.zona, zona.id)
-
-            relatedForm.find('[name=zona_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
+  
   const setStatusAktifOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusaktif]').empty()
@@ -367,6 +343,22 @@
             element.val(value)
           }
         })
+
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
+      }
+    })
+  }
+
+  function initLookup() {
+    $('.zona-lookup').lookup({
+      title: 'Zona Lookup',
+      fileName: 'zona',
+      onSelectRow: (zona, element) => {
+        $('#crudForm [name=zona_id]').first().val(zona.id)
+        element.val(zona.zona)
       }
     })
   }

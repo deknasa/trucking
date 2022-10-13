@@ -11,18 +11,18 @@
 @push('scripts')
 <script>
   let detailIndexUrl = "{{ route('pelunasanpiutangdetail.index') }}"
-  /**
-   * Custom Functions
-   */
-  var delay = (function() {
-    var timer = 0;
-    return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })()
+  // /**
+  //  * Custom Functions
+  //  */
+  // var delay = (function() {
+  //   var timer = 0;
+  //   return function(callback, ms) {
+  //     clearTimeout(timer);
+  //     timer = setTimeout(callback, ms);
+  //   };
+  // })()
 
-  function loadDetailGrid() {
+  function loadDetailGrid(id) {
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
@@ -45,19 +45,20 @@
             name: 'agen_id',
           },
           {
-            label: 'NOMINAL',
-            name: 'nominal',
-            formatter: 'number', 
-            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
-            align: "right",
-          },
-          {
             label: 'NO BUKTI PIUTANG',
             name: 'piutang_nobukti',
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+          },
+          {
+            label: 'NOMINAL',
+            name: 'nominal',
+            formatter: 'number', 
+            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            align: "right",
+            summaryType:'sum'
           },
         ],
         autowidth: true,
@@ -71,7 +72,23 @@
         sortable: true,
         pager: pager,
         viewrecords: true,
-        loadComplete: function(data) {
+        
+        footerrow:true,
+         userDataOnFooter: true,
+        loadComplete: function() {
+          initResize($(this))
+
+          let nominals = $(this).jqGrid("getCol", "nominal")
+          let totalNominal = 0
+
+          if (nominals.length > 0) {
+            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          }
+
+          $(this).jqGrid('footerData', 'set', {
+            nobukti: 'Total:',
+            nominal: totalNominal,
+          }, true)
         }
       })
 
@@ -93,5 +110,12 @@
       }
     }).trigger('reloadGrid')
   }
+
+  var $footRow = $("#detail").closest(".ui-jqgrid-bdiv")
+                         .next(".ui-jqgrid-sdiv")
+                         .find(".footrow");
+
+  $footRow.find('>td[aria-describedby="detail_nobukti"]')
+    .css("border-right-color", "transparent");
 </script>
 @endpush()

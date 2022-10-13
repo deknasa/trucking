@@ -55,16 +55,9 @@
           {
             label: 'UANG JALAN',
             name: 'uangjalan',
-            align: 'right',
-            formatter: currencyFormat
-          },
-          {
-            label: 'MODIFIEDBY',
-            name: 'modifiedby',
-          },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
+            formatter: 'number', 
+            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            align: "right",
           },
         ],
         autowidth: true,
@@ -78,6 +71,8 @@
         sortable: true,
         pager: pager,
         viewrecords: true,
+        footerrow:true,
+        userDataOnFooter: true,
         prmNames: {
           sort: 'sortIndex',
           order: 'sortOrder',
@@ -96,6 +91,24 @@
         },
         loadComplete: function(data) {
           initResize($(this))
+          var $grid = $("#detail");
+          var colSum = $grid.jqGrid('getCol','uangjalan');
+          // var colSum = $grid.jqGrid('getCol','nominal',false,'sum');
+         function untuknominal(colSum) {
+                  var nominalSum = 0;
+
+                   for(i=0; i<colSum.length; i++){
+                      var ambil = parseFloat(colSum[i])
+                      nominalSum += ambil
+                   }
+
+                   return nominalSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                  // return nominalSum.toLocaleString('en-US', {maximumFractionDigits:2})
+                  // return new Intl.NumberFormat('en-US').format(nominalSum);
+              }
+
+          $grid.jqGrid('footerData','set',{jam: "TOTAL:", uangjalan : untuknominal(colSum)}, false);
+        
         }
       })
 

@@ -17,9 +17,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="role_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH ROLE --</option>
-                </select>
+                <input type="hidden" name="role_id">
+                <input type="text" name="rolename" class="form-control role-lookup">
               </div>
             </div>
 
@@ -60,6 +59,15 @@
   let statusAktif
 
   $(document).ready(function() {
+
+    
+    $(`#crudForm [name="role_id"]`).on('change', function(event) {
+      let roleId = $(this).val()
+      if (roleId !== '') {
+        getAccessList(roleId)
+      }
+    })
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -129,13 +137,14 @@
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
 
-          id = response.data.id
+          id = response.data.position
 
           $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
           }
+
         },
         error: error => {
           if (error.status === 422) {
@@ -159,13 +168,6 @@
 
       })
 
-    $('#crudForm [name=role_id]').on('change', function(event) {
-      let roleId = $(this).val()
-
-      if (roleId !== '') {
-        getAccessList(roleId)
-      }
-    })
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -197,7 +199,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setRoleOptions(form)
+    // setRoleOptions(form)
   }
 
   function editAcl(roleId) {
@@ -214,14 +216,13 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
-    Promise
-      .all([
-        setRoleOptions(form)
-      ])
-      .then(() => {
+    // Promise
+    //   .all([
+    //     setRoleOptions(form)
+    //   ])
+    //   .then(() => {
         showAcl(form, roleId)
-      })
+      // })
   }
 
   function deleteAcl(roleId) {
@@ -239,13 +240,13 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    Promise
-      .all([
-        setRoleOptions(form)
-      ])
-      .then(() => {
+    // Promise
+    //   .all([
+    //     setRoleOptions(form)
+    //   ])
+      // .then(() => {
         showAcl(form, roleId)
-      })
+      // })
   }
 
   function getMaxLength(form) {
@@ -273,35 +274,35 @@
     }
   }
 
-  const setRoleOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=role_id]').empty()
-      relatedForm.find('[name=role_id]').append(
-        new Option('-- PILIH ROLE --', '', false, true)
-      ).trigger('change')
+  // const setRoleOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=role_id]').empty()
+  //     relatedForm.find('[name=role_id]').append(
+  //       new Option('-- PILIH ROLE --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}role`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0
-        },
-        success: response => {
-          response.data.forEach(role => {
-            let option = new Option(role.rolename, role.id)
+  //     $.ajax({
+  //       url: `${apiUrl}role`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         limit: 0
+  //       },
+  //       success: response => {
+  //         response.data.forEach(role => {
+  //           let option = new Option(role.rolename, role.id)
 
-            relatedForm.find('[name=role_id]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=role_id]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       }
+  //     })
+  //   })
+  // }
 
   function showAcl(form, roleId) {
     $.ajax({
@@ -321,6 +322,8 @@
             element.val(value)
           }
         })
+        $(`#crudForm [name="role_id"]`).first().trigger('change')
+
       }
     })
   }

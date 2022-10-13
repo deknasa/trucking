@@ -72,7 +72,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#alatbayarLookupPager'),
+      pager: $('#alatBayarLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -101,26 +101,26 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#alatbayarLookup').getGridParam().reccount) {
-            indexRow = $('#alatbayarLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#alatBayarLookup').getGridParam().reccount) {
+            indexRow = $('#alatBayarLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#alatbayarLookup [id="${$('#alatbayarLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#alatBayarLookup [id="${$('#alatBayarLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#alatbayarLookup [id="${$('#alatbayarLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#alatBayarLookup [id="${$('#alatBayarLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#alatbayarLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#alatbayarLookup [id="` + $('#alatbayarLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#alatBayarLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#alatBayarLookup [id="` + $('#alatBayarLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#alatbayarLookup').setSelection($('#alatbayarLookup').getDataIDs()[indexRow])
+            $('#alatBayarLookup').setSelection($('#alatBayarLookup').getDataIDs()[indexRow])
           }
         }
 
