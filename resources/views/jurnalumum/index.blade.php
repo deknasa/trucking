@@ -36,6 +36,7 @@
 
   $(document).ready(function() {
 
+   
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'jurnalumumheader' }}`,
         mtype: "GET",

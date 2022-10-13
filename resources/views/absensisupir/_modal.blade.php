@@ -364,7 +364,7 @@
               max: 24
             }).mask(".inputmask-time");
           
-          $('.supir-lookup').lookup({
+          $('.supir-lookup').last().lookup({
             title: 'Supir Lookup',
             fileName: 'supir',
             onSelectRow: (supir,element) => {
@@ -373,7 +373,7 @@
             }
           })
 
-          $('.trado-lookup').lookup({
+          $('.trado-lookup').last().lookup({
             title: 'Trado Lookup',
             fileName: 'trado',
             onSelectRow: (trado,element) => {
@@ -382,7 +382,7 @@
             }
           })
           
-          $('.absentrado-lookup').lookup({
+          $('.absentrado-lookup').last().lookup({
             title: 'Absen Trado Lookup',
             fileName: 'absentrado',
             onSelectRow: (absentrado,element) => {

@@ -407,7 +407,7 @@
           $('#detailList tbody').append(detailRow)
           setTotal();
           
-          $('.coadebet-lookup').lookup({
+          $('.coadebet-lookup').last().lookup({
             title: 'Coa Debet Lookup',
             fileName: 'akunpusat',
             onSelectRow: (akunpusat, element) => {
@@ -415,7 +415,7 @@
             }
           })
 
-          $('.coakredit-lookup').lookup({
+          $('.coakredit-lookup').last().lookup({
             title: 'Coa Kredit Lookup',
             fileName: 'akunpusat',
             onSelectRow: (akunpusat, element) => {
