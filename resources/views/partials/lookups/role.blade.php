@@ -1,9 +1,10 @@
-<table id="alatBayarLookup" style="width: 100%;"></table>
-<div id="alatBayarLookupPager"></div>
+<table id="roleLookup" class="lookup-grid"></table>
+<div id="roleLookupPager"></div>
 
+@push('scripts')
 <script>
-  $('#alatBayarLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'alatbayar' }}`,
+  $('#roleLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'role' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -15,34 +16,9 @@
           width: '70px'
         },
         {
-          label: 'KODE ALAT BAYAR',
-          name: 'kodealatbayar',
+          label: 'ROLE NAME',
+          name: 'rolename',
           align: 'left',
-        },
-        {
-          label: 'NAMA ALAT BAYAR',
-          name: 'namaalatbayar',
-          align: 'left',
-        },
-        {
-          label: 'BANK',
-          name: 'bank_id',
-          align: 'left'
-        },
-        {
-          label: 'KETERANGAN',
-          name: 'keterangan',
-          align: 'left'
-        },
-        {
-          label: 'STATUS LANGSUNG CAIR',
-          name: 'statuslangsungcair',
-          align: 'left'
-        },
-        {
-          label: 'STATUS DEFAULT',
-          name: 'statusdefault',
-          align: 'left'
         },
         {
           label: 'MODIFIEDBY',
@@ -71,7 +47,8 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#alatBayarLookupPager'),
+      toolbar: [true, "top"],
+      pager: $('#roleLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -98,28 +75,27 @@
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
-          initResize($(this))
 
-          if (indexRow - 1 > $('#alatBayarLookup').getGridParam().reccount) {
-            indexRow = $('#alatBayarLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#roleLookup').getGridParam().reccount) {
+            indexRow = $('#roleLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#alatBayarLookup [id="${$('#alatBayarLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#roleLookup [id="${$('#roleLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#alatBayarLookup [id="${$('#alatBayarLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#roleLookup [id="${$('#roleLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#alatBayarLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#alatBayarLookup [id="` + $('#alatBayarLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#roleLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#roleLookup [id="` + $('#roleLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#alatBayarLookup').setSelection($('#alatBayarLookup').getDataIDs()[indexRow])
+            $('#roleLookup').setSelection($('#roleLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -129,6 +105,10 @@
         totalRecord = $(this).getGridParam("records")
         limit = $(this).jqGrid('getGridParam', 'postData').limit
         postData = $(this).jqGrid('getGridParam', 'postData')
+
+        $('.clearsearchclass').click(function() {
+          clearColumnSearch()
+        })
 
         $(this).setGridWidth($('#lookup').prev().width())
         setHighlight($(this))
@@ -142,10 +122,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#alatBayarLookup'))
+        clearGlobalSearch($('#roleLookup'))
       },
     })
 
-  loadGlobalSearch($('#alatBayarLookup'))
-  loadClearFilter($('#alatBayarLookup'))
+  loadGlobalSearch($('#roleLookup'))
+  loadClearFilter($('#roleLookup'))
 </script>

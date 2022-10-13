@@ -11,8 +11,9 @@
 @push('scripts')
 <script>
   function loadDetailGrid(roleId) {
+    console.log(roleId)
     $("#detail").jqGrid({
-        url: `${apiUrl}acl/detail?role_id=${roleId}`,
+        url: `${apiUrl}acl/detail/${roleId}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -81,9 +82,9 @@
       .customPager()
   }
 
-  function loadDetailData(id) {
+  function loadDetailData(role_id) {
     $('#detail').setGridParam({
-      url: `${apiUrl}acl/detail?role_id=${roleId}`,
+      url: `${apiUrl}acl/detail/${roleId}`,
     }).trigger('reloadGrid')
   }
 </script>

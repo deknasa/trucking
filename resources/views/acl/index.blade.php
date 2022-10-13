@@ -34,6 +34,17 @@
   let hasDetail = false
 
   $(document).ready(function() {
+
+    $('.role-lookup').lookup({
+      title: 'Role Lookup',
+      fileName: 'role',
+      onSelectRow: (role,element) => {
+        $(`#crudForm [name="role_id"]`).first().val(role.id).trigger('change')
+
+        element.val(role.rolename)
+      }
+    })
+
     $("#jqGrid").jqGrid({
         url: `${apiUrl}acl`,
         mtype: "GET",
@@ -48,7 +59,7 @@
           },
           {
             label: 'ID',
-            name: 'id',
+            name: 'id_',
             align: 'left',
             hidden: true
           },
@@ -97,13 +108,17 @@
         onSelectRow: function(id) {
           activeGrid = $(this)
 
+          Id = $(this).jqGrid('getCell', id, 'id_')
           roleId = $(this).jqGrid('getCell', id, 'role_id');
 
+          console.log(roleId)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let rows = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
 
+
+          // console.log(roleId)
           if (!hasDetail) {
             loadDetailGrid(roleId)
             hasDetail = true
@@ -112,6 +127,7 @@
           loadDetailData(roleId)
         },
         loadComplete: function(data) {
+          
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -122,7 +138,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          triggerClick = true  
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -133,8 +149,8 @@
           }
 
           setTimeout(function() {
-            if (triggerClick) {
 
+            if (triggerClick) {
               if (id != '') {
                 indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
                 $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
@@ -151,8 +167,8 @@
             } else {
               $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
             }
-
           }, 100)
+
 
           setHighlight($(this))
         }
@@ -184,8 +200,8 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              editAcl(selectedId)
+              roleId = $("#jqGrid").jqGrid('getCell', selectedId, 'role_id');
+              editAcl(roleId)
             }
           },
           {
@@ -194,8 +210,8 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              deleteAcl(selectedId)
+              roleId = $(this).jqGrid('getCell', selectedId, 'role_id');
+              deleteAcl(roleId)
             }
           },
           {

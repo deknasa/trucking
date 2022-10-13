@@ -31,34 +31,7 @@
 
   $(document).ready(function() {
 
-    $('#lookup').hide()
-
-    $('.coa-lookup').lookup({
-      title: 'COA Lookup',
-      fileName: 'akunpusat',
-      onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
-      }
-    })
-
-    $('.penerimaantrucking-lookup').lookup({
-      title: 'Penerimaan Trucking Lookup',
-      fileName: 'penerimaantrucking',
-      onSelectRow: (penerimaantrucking, element) => {
-        $('#crudForm [name=statusformatpenerimaan]').first().val(penerimaantrucking.statusformat)
-        
-        element.val(penerimaantrucking.kodepenerimaan)
-      }
-    })
-
-    $('.pengeluarantrucking-lookup').lookup({
-      title: 'Pengeluaran Trucking Lookup',
-      fileName: 'pengeluarantrucking',
-      onSelectRow: (pengeluarantrucking, element) => {
-        $('#crudForm [name=statusformatpengeluaran]').first().val(pengeluarantrucking.statusformat)
-        element.val(pengeluarantrucking.kodepengeluaran)
-      }
-    })
+    
 
     $("#jqGrid").jqGrid({
         url: `${apiUrl}bank`,

@@ -32,66 +32,11 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let rowNum = 10
+  let hasDetail = false
 
   $(document).ready(function() {
 
-    
-
-
-    $('#lookup').hide()
-
-    $('.agen-lookup').lookup({
-      title: 'Agen Lookup',
-      fileName: 'agen',
-      onSelectRow: (agen, element) => {
-        $('#crudForm [name=agen_id]').first().val(agen.id)
-        element.val(agen.namaagen)
-        console.log($('#crudForm [name=agen_id]').first().val());
-
-      }
-    })
-    $('.bank-lookup').lookup({
-      title: 'Bank Lookup',
-      fileName: 'bank',
-      onSelectRow: (bank, element) => {
-        $('#crudForm [name=bank_id]').first().val(bank.id)
-        element.val(bank.namabank)
-        console.log($('#crudForm [name=bank_id]').first().val());
-
-      }
-    })
-    $('.cabang-lookup').lookup({
-      title: 'Cabang Lookup',
-      fileName: 'cabang',
-      onSelectRow: (cabang, element) => {
-        $('#crudForm [name=cabang_id]').first().val(cabang.id)
-        element.val(cabang.namacabang)
-      }
-    })
-    $('.pelanggan-lookup').lookup({
-      title: 'Pelanggan Lookup',
-      fileName: 'pelanggan',
-      onSelectRow: (pelanggan, element) => {
-        $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
-        element.val(pelanggan.namapelanggan)
-      }
-    })
-    $('.agendetail-lookup').lookup({
-      title: 'Agen Detail Lookup',
-      fileName: 'agen',
-      onSelectRow: (agen, element) => {
-        $('#crudForm [name=agendetail_id]').first().val(agen.id)
-        element.val(agen.namaagen)
-        getPiutang(agen.id)
-      }
-    })
-
-    $('#crudModal').on('hidden.bs.modal', function() {
-      activeGrid = '#jqGrid'
-    })
-
-
- 
 
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'pelunasanpiutangheader' }}`,
@@ -183,13 +128,18 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
-
-          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+          
+          if (!hasDetail) {
+            loadDetailGrid(id)
+            hasDetail = true
+          }
+
+          loadDetailData(id)
         },
         loadComplete: function(data) {
 
@@ -295,8 +245,6 @@
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
 
-    /* Load detail grid */
-    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn btn-sm btn-primary`)

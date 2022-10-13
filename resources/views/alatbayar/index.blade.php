@@ -30,18 +30,7 @@
   let rowNum = 10
 
   $(document).ready(function() {
-
-    $('#lookup').hide()
-
-    $('.bank-lookup').lookup({
-      title: 'Bank Lookup',
-      fileName: 'bank',
-      onSelectRow: (bank, element) => {
-        $('#crudForm [name=bank_id]').first().val(bank.id)
-        element.val(bank.namabank)
-      }
-    })
-
+    
     $("#jqGrid").jqGrid({
         url: `${apiUrl}alatbayar`,
         mtype: "GET",

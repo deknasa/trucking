@@ -64,6 +64,7 @@
       height: 450,
       rowNum: 10,
       rownumbers: true,
+      toolbar: [true, "top"],
       rownumWidth: 45,
       rowList: [10, 20, 50],
       sortable: true,

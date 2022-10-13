@@ -46,7 +46,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="telp" class="form-control autonumeric">
+                <input type="text" name="telp" class="form-control">
               </div>
             </div>
             <div class="row form-group">
@@ -324,6 +324,10 @@
             element.val(value)
           }
         })
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
       }
     })
   }

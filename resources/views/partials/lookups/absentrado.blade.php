@@ -1,9 +1,10 @@
-<table id="alatBayarLookup" style="width: 100%;"></table>
-<div id="alatBayarLookupPager"></div>
+<table id="absenTradoLookup" class="lookup-grid"></table>
+<div id="absenTradoLookupPager"></div>
 
+@push('scripts')
 <script>
-  $('#alatBayarLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'alatbayar' }}`,
+  $('#absenTradoLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'absentrado' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -15,19 +16,9 @@
           width: '70px'
         },
         {
-          label: 'KODE ALAT BAYAR',
-          name: 'kodealatbayar',
+          label: 'KODE ABSEN',
+          name: 'kodeabsen',
           align: 'left',
-        },
-        {
-          label: 'NAMA ALAT BAYAR',
-          name: 'namaalatbayar',
-          align: 'left',
-        },
-        {
-          label: 'BANK',
-          name: 'bank_id',
-          align: 'left'
         },
         {
           label: 'KETERANGAN',
@@ -35,14 +26,50 @@
           align: 'left'
         },
         {
-          label: 'STATUS LANGSUNG CAIR',
-          name: 'statuslangsungcair',
-          align: 'left'
-        },
-        {
-          label: 'STATUS DEFAULT',
-          name: 'statusdefault',
-          align: 'left'
+          label: 'STATUS AKTIF',
+          name: 'statusaktif',
+          align: 'left',
+          width: 100,
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}absenTrado/combo`,
+                  method: "get",
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: function () {
+                    return{
+                        search: 'status'
+                    }
+                  },
+                  processResults: function (data) {
+                    let datas = []
+                    $.map(data, function (item) {
+                      $.map(item, function (index,value) {
+                            $.each(index, (row, detail) => {
+                              datas.push({
+                                    id: detail.text,
+                                    text: detail.text
+                                })
+                            })
+                              
+                          })
+                        })
+                        console.log(datas)
+                    return {
+                        results: datas
+                    };
+                  }             
+                }
+              });
+            }
+          },
         },
         {
           label: 'MODIFIEDBY',
@@ -71,7 +98,8 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#alatBayarLookupPager'),
+      toolbar: [true, "top"],
+      pager: $('#absenTradoLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -98,28 +126,27 @@
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
-          initResize($(this))
 
-          if (indexRow - 1 > $('#alatBayarLookup').getGridParam().reccount) {
-            indexRow = $('#alatBayarLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#absenTradoLookup').getGridParam().reccount) {
+            indexRow = $('#absenTradoLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#alatBayarLookup [id="${$('#alatBayarLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#absenTradoLookup [id="${$('#absenTradoLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#alatBayarLookup [id="${$('#alatBayarLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#absenTradoLookup [id="${$('#absenTradoLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#alatBayarLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#alatBayarLookup [id="` + $('#alatBayarLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#absenTradoLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#absenTradoLookup [id="` + $('#absenTradoLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#alatBayarLookup').setSelection($('#alatBayarLookup').getDataIDs()[indexRow])
+            $('#absenTradoLookup').setSelection($('#absenTradoLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -130,7 +157,11 @@
         limit = $(this).jqGrid('getGridParam', 'postData').limit
         postData = $(this).jqGrid('getGridParam', 'postData')
 
-        $(this).setGridWidth($('#lookup').prev().width())
+        $('.clearsearchclass').click(function() {
+          clearColumnSearch()
+        })
+
+        $(this).setGridWidth($('#lookupBank').prev().width())
         setHighlight($(this))
       }
     })
@@ -142,10 +173,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#alatBayarLookup'))
+        clearGlobalSearch($('#absenTradoLookup'))
       },
     })
 
-  loadGlobalSearch($('#alatBayarLookup'))
-  loadClearFilter($('#alatBayarLookup'))
+  loadGlobalSearch($('#absenTradoLookup'))
+  loadClearFilter($('#absenTradoLookup'))
 </script>

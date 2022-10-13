@@ -128,7 +128,7 @@
     $(document).on('click', "#addRow", function() {
       addRow()
     });
-
+    
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
     })
@@ -455,5 +455,7 @@
       }
     })
   }
+
+  
 </script>
 @endpush()

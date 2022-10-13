@@ -31,32 +31,10 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let rowNum = 10
+  let hasDetail = false
 
   $(document).ready(function() {
-
-    // $('#lookup').hide()
-    
-    $('.coadebet-lookup').lookup({
-      title: 'Coa Debet Lookup',
-      fileName: 'akunpusat',
-      onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.keterangancoa)
-      }
-    })
-
-    $('.coakredit-lookup').lookup({
-      title: 'Coa Kredit Lookup',
-      fileName: 'akunpusat',
-      onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.keterangancoa)
-      }
-    })
-
-    $('#crudModal').on('hidden.bs.modal', function() {
-      activeGrid = '#jqGrid'
-    })
-
-
 
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'jurnalumumheader' }}`,
@@ -159,12 +137,19 @@
         },
         onSelectRow: function(id) {
 
-          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+
+          if (!hasDetail) {
+            loadDetailGrid(id)
+            hasDetail = true
+          }
+
+          loadDetailData(id)
+
         },
         loadComplete: function(data) {
 
@@ -283,8 +268,6 @@
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
 
-    /* Load detail grid */
-    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn btn-sm btn-primary`)

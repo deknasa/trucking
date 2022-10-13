@@ -184,6 +184,7 @@
     activeGrid = null
 
     getMaxLength(form)
+    iniSelect2()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -221,19 +222,8 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    $.ajax({
-      url: `${apiUrl}parameter/${parameterId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          form.find(`[name="${index}"]`).val(value)
-        })
-      }
-    })
+    showParameter(form,parameterId)
+    
   }
 
   function deleteParameter(parameterId) {
@@ -251,8 +241,10 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    initDisabled()
-
+    showParameter(form, parameterId)
+  }
+  
+  function showParameter(form, parameterId) {
     $.ajax({
       url: `${apiUrl}parameter/${parameterId}`,
       method: 'GET',
@@ -262,8 +254,18 @@
       },
       success: response => {
         $.each(response.data, (index, value) => {
-          form.find(`[name="${index}"]`).val(value)
+          let element = form.find(`[name="${index}"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } else {
+            element.val(value)
+          }
         })
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
       }
     })
   }

@@ -175,6 +175,7 @@
       rownumbers: true,
       rownumWidth: 45,
       rowList: [10, 20, 50],
+      toolbar: [true, "top"],
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',

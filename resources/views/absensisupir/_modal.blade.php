@@ -47,19 +47,58 @@
 
             <hr>
 
-            <table class="table table-bordered">
+            <table class="table table-bordered" id="detailList">
               <thead>
                 <tr>
+                  <th width="50">No</th>
                   <th>Trado</th>
                   <th>Supir</th>
-                  <th>Uang Jalan</th>
+                  <th>Keterangan</th>
                   <th>Status</th>
                   <th>Jam</th>
-                  <th>Keterangan</th>
+                  <th>Uang Jalan</th>
+                  <th>Aksi</th>
                 </tr>
               </thead>
-              <tbody id="table_body" class="form-group">
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>
+                    <input type="hidden" name="trado_id[]">
+                    <input type="text" name="trado" class="form-control trado-lookup">
+                  </td>
+                  <td>
+                    <input type="hidden" name="supir_id[]">
+                    <input type="text" name="supir" class="form-control supir-lookup">
+                  </td>
+                  <td>
+                    <input type="text" name="keterangan_detail[]" class="form-control">
+                  </td>
+                  <td>
+                    <input type="hidden" name="absen_id[]">
+                    <input type="text" name="absen" class="form-control absentrado-lookup">
+                  </td>
+                  <td>
+                    <input type="text" class="form-control inputmask-time" name="jam[]"></input>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]">
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                  </td>
+
+                </tr>
               </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="6"><h5 class="text-right font-weight-bold">TOTAL:</h5></td>
+                  <td><h5 id="total" class="text-right font-weight-bold"></h5></td>
+                  <td>
+                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                  </td>
+                </tr>
+              </tfoot>
             </table>
           </div>
           <div class="modal-footer justify-content-start">
@@ -84,6 +123,23 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
+
+    Inputmask("datetime", {
+          inputFormat: "HH:MM",
+          max: 24
+        }).mask(".inputmask-time");
+
+    $("#addRow").click(function() {
+      addRow()
+    })
+    $(document).on('keyup', '.uangjalan', function(e) {
+      calculateSum()
+	  })
+
+    $(document).on('click', '.delete-row', function(event) {
+      deleteRow($(this).parents('tr'))
+    })
+
     $(document).on('click', '#btnSubmit', function(event) {
       event.preventDefault()
 
@@ -93,6 +149,10 @@
       let id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+
+      $('#crudForm').find(`[name="uangjalan[]"`).each((index,element) => {
+        data.filter((row) => row.name === 'uangjalan[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="uangjalan[]"]`)[index])
+      })
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -206,246 +266,26 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    let supirs
-    let statuses
-
-    $.ajax({
-      url: `${apiUrl}trado`,
-      method: 'GET',
-      dataType: 'JSON',
-      async: false,
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $(document).find('#crudForm #table_body').html('')
-
-        $.each(response.data, (index, trado) => {
-          $(document).find('#crudForm #table_body').append(`
-            <tr>
-              <input type="hidden" name="trado_id[]" value="${trado.id}">
-              <td>${trado.keterangan}</td>
-              <td>
-                <select class="form-control w-100" name="supir_id[]">
-                  <option hidden selected value="">-- PILIH SUPIR --</option>
-                </select>
-              </td>
-              <td>
-                  <input type="text" class="form-control autonumeric" name="uangjalan[]"></input>
-              </td>
-              <td>
-                <select class="form-control w-100" name="absen_id[]">
-                  <option hidden selected value="">-- PILIH STATUS --</option>
-                </select>
-              </td>
-              <td>
-                  <input type="text" class="form-control inputmask-time" name="jam[]"></input>
-              </td>
-              <td>
-                  <input type="text" class="form-control" name="keterangan_detail[]"></input>
-              </td>
-            <tr>
-          `)
-        })
-
-        initSelect2($('#crudForm').find('select'))
-        initAutoNumeric($('#crudForm').find('.autonumeric'))
-        Inputmask("datetime", {
-          inputFormat: "HH:MM",
-          max: 24
-        }).mask(".inputmask-time");
-      },
-      error: error => {
-        showDialog(error.statusText)
-      }
-    })
-
-    $.ajax({
-      url: `${apiUrl}supir`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        let supirElements = $(`#crudForm [name="supir_id[]"]`)
-
-        supirElements.map((index, supirElement) => {
-          response.data.map((supir, index) => {
-            supirElement.append(
-              new Option(supir.namasupir, supir.id)
-            )
-          }).join('')
-        })
-      },
-      error: error => {
-        showDialog(error.statusText)
-      }
-    })
-
-    $.ajax({
-      url: `${apiUrl}absentrado`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        let statusElements = $(`#crudForm [name="absen_id[]"]`)
-
-        statusElements.map((index, statusElement) => {
-          response.data.map((status, index) => {
-            statusElement.append(
-              new Option(status.keterangan, status.id)
-            )
-          }).join('')
-        })
-      },
-      error: error => {
-        showDialog(error.statusText)
-      }
-    })
+  
   }
 
   function editAbsensiSupir(id) {
-    $('#crudForm').data('action', 'edit')
-    $('#crudForm').trigger('reset')
-    $('#crudForm').find('#btnSubmit').html(`
-      <i class="fa fa-save"></i>
-      Simpan
-    `)
+    let form = $('#crudForm')
+
+    form.data('action', 'edit')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+    <i class="fa fa-save"></i>
+    Simpan
+  `)
+    form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Absensi Supir')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    let supirs
-    let statuses
-    let absensiSupir
+    showAbsensiSupir(form, id)
 
-    $.ajax({
-      url: `${apiUrl}trado`,
-      method: 'GET',
-      dataType: 'JSON',
-      async: false,
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $(document).find('#crudForm #table_body').html('')
-
-        $.each(response.data, (index, trado) => {
-          $(document).find('#crudForm #table_body').append(`
-            <tr>
-              <input type="hidden" name="trado_id[]" value="${trado.id}">
-              <td>${trado.keterangan}</td>
-              <td>
-                <select class="form-control w-100" name="supir_id[]"></select>
-              </td>
-              <td>
-                  <input type="text" class="form-control autonumeric" name="uangjalan[]"></input>
-              </td>
-              <td>
-                <select class="form-control w-100" name="absen_id[]"></select>
-              </td>
-              <td>
-                  <input type="text" class="form-control inputmask-time" name="jam[]"></input>
-              </td>
-              <td>
-                  <input type="text" class="form-control" name="keterangan_detail[]"></input>
-              </td>
-            <tr>
-          `)
-        })
-
-        initSelect2($('#crudForm').find('select'))
-        Inputmask("datetime", {
-          inputFormat: "HH:MM",
-          max: 24
-        }).mask(".inputmask-time");
-      },
-      error: error => {
-        showDialog(error.statusText)
-      }
-    })
-
-    $.ajax({
-      url: `${apiUrl}supir`,
-      method: 'GET',
-      dataType: 'JSON',
-      async: false,
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        let supirElements = $(`#crudForm [name="supir_id[]"]`)
-
-        supirElements.map((index, supirElement) => {
-          response.data.map((supir, index) => {
-            supirElement.append(
-              new Option(supir.namasupir, supir.id)
-            )
-          }).join('')
-        })
-      },
-      error: error => {
-        showDialog(error.statusText)
-      }
-    })
-
-    $.ajax({
-      url: `${apiUrl}absentrado`,
-      method: 'GET',
-      dataType: 'JSON',
-      async: false,
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        let statusElements = $(`#crudForm [name="absen_id[]"]`)
-
-        statusElements.map((index, statusElement) => {
-          response.data.map((status, index) => {
-            statusElement.append(
-              new Option(status.keterangan, status.id)
-            )
-          }).join('')
-        })
-      },
-      error: error => {
-        showDialog(error.statusText)
-      }
-    })
-
-    $.ajax({
-      url: `${apiUrl}absensisupirheader/${id}`,
-      method: 'GET',
-      dataType: 'JSON',
-      async: false,
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $('#crudForm').find(`[name="id"]`).val(response.data.id)
-        $('#crudForm').find(`[name="nobukti"]`).val(response.data.nobukti)
-        $('#crudForm').find(`[name="kasgantung_nobukti"]`).val(response.data.kasgantung_nobukti)
-        $('#crudForm').find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))
-        $('#crudForm').find(`[name="keterangan"]`).val(response.data.keterangan)
-
-        $.each(response.data.absensi_supir_detail, (index, detail) => {
-          $($('#crudForm').find(`[name="supir_id[]"]`)[index]).val(detail.supir_id)
-          $($('#crudForm').find(`[name="absen_id[]"]`)[index]).val(detail.absen_id)
-          $($('#crudForm').find(`[name="jam[]"]`)[index]).val(detail.jam)
-          $($('#crudForm').find(`[name="keterangan_detail[]"]`)[index]).val(detail.keterangan)
-
-          new AutoNumeric($('#crudForm').find(`[name="uangjalan[]"]`)[index]).set(detail.uangjalan)
-        })
-
-      },
-      error: error => {
-        showDialog(error.statusText)
-      }
-    })
   }
 
   function deleteAbsensiSupir(id) {
@@ -461,133 +301,203 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    showAbsensiSupir(form,id)
+  }
 
-    let supirs
-    let statuses
-    let absensiSupir
-
-    $.ajax({
-      url: `${apiUrl}trado`,
-      method: 'GET',
-      dataType: 'JSON',
-      async: false,
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $(document).find('#crudForm #table_body').html('')
-
-        $.each(response.data, (index, trado) => {
-          $(document).find('#crudForm #table_body').append(`
-            <tr>
-              <input type="hidden" name="trado_id[]" value="${trado.id}">
-              <td>${trado.keterangan}</td>
-              <td>
-                <select class="form-control w-100" name="supir_id[]"></select>
-              </td>
-              <td>
-                  <input type="text" class="form-control autonumeric" name="uangjalan[]"></input>
-              </td>
-              <td>
-                <select class="form-control w-100" name="absen_id[]"></select>
-              </td>
-              <td>
-                  <input type="time" class="form-control" name="jam[]"></input>
-              </td>
-              <td>
-                  <input type="text" class="form-control" name="keterangan_detail[]"></input>
-              </td>
-            <tr>
-          `)
-        })
-
-        form.find('[name]').addClass('disabled')
-
-        initDisabled()
-        initSelect2($('#crudForm').find('select'))
-      },
-      error: error => {
-        showDialog(error.statusText)
-      }
-    })
-
-    $.ajax({
-      url: `${apiUrl}supir`,
-      method: 'GET',
-      dataType: 'JSON',
-      async: false,
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        let supirElements = $(`#crudForm [name="supir_id[]"]`)
-
-        supirElements.map((index, supirElement) => {
-          response.data.map((supir, index) => {
-            supirElement.append(
-              new Option(supir.namasupir, supir.id)
-            )
-          }).join('')
-        })
-      },
-      error: error => {
-        showDialog(error.statusText)
-      }
-    })
-
-    $.ajax({
-      url: `${apiUrl}absentrado`,
-      method: 'GET',
-      dataType: 'JSON',
-      async: false,
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        let statusElements = $(`#crudForm [name="absen_id[]"]`)
-
-        statusElements.map((index, statusElement) => {
-          response.data.map((status, index) => {
-            statusElement.append(
-              new Option(status.keterangan, status.id)
-            )
-          }).join('')
-        })
-      },
-      error: error => {
-        showDialog(error.statusText)
-      }
-    })
-
+  function showAbsensiSupir(form, id){
+    $('#detailList tbody').html('')
     $.ajax({
       url: `${apiUrl}absensisupirheader/${id}`,
       method: 'GET',
       dataType: 'JSON',
-      async: false,
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-        $('#crudForm').find(`[name="id"]`).val(response.data.id)
-        $('#crudForm').find(`[name="nobukti"]`).val(response.data.nobukti)
-        $('#crudForm').find(`[name="kasgantung_nobukti"]`).val(response.data.kasgantung_nobukti)
-        $('#crudForm').find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))
-        $('#crudForm').find(`[name="keterangan"]`).val(response.data.keterangan)
+        let tgl = response.data.tglbukti
+        $.each(response.data, (index, value) => {
+          let element = form.find(`[name="${index}"]`)
 
-        $.each(response.data.absensi_supir_detail, (index, detail) => {
-          $($('#crudForm').find(`[name="supir_id[]"]`)[index]).val(detail.supir_id)
-          $($('#crudForm').find(`[name="absen_id[]"]`)[index]).val(detail.absen_id)
-          $($('#crudForm').find(`[name="jam[]"]`)[index]).val(detail.jam)
-          $($('#crudForm').find(`[name="keterangan_detail[]"]`)[index]).val(detail.keterangan)
+            element.val(value)
+            let tglbukti = response.data.tglbukti
+            $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
+        })
+        let ft = dateFormat(tgl)
+        form.find(`[name="tglbukti"]`).val(ft)
 
-          new AutoNumeric($('#crudForm').find(`[name="uangjalan[]"]`)[index]).set(detail.uangjalan)
+        $.each(response.detail, (index, detail) => {
+          let detailRow = $(`
+          <tr>
+            <td></td>
+            <td>
+              <input type="hidden" name="trado_id[]" value="${detail.trado_id}">
+              <input type="text" name="trado" class="form-control trado-lookup" value="${detail.trado}">
+            </td>
+            <td>
+              <input type="hidden" name="supir_id[]" value="${detail.supir_id}">
+              <input type="text" name="supir" class="form-control supir-lookup" value="${detail.supir}">
+            </td>
+            <td>
+              <input type="text" name="keterangan_detail[]" class="form-control" value="${detail.keterangan}">
+            </td>
+            <td>
+              <input type="hidden" name="absen_id[]" value="${detail.absen_id}">
+              <input type="text" name="absen" class="form-control absentrado-lookup" value="${detail.absen}">
+            </td>
+            <td>
+              <input type="text" class="form-control inputmask-time" name="jam[]" value="${detail.jam}"></input>
+            </td>
+            <td>
+              <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}">
+            </td>
+            <td>
+              <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+            </td>
+
+          </tr>
+          `)
+
+          initAutoNumeric(detailRow.find(`[name="uangjalan[]"]`))
+          $('#detailList tbody').append(detailRow)
+          Inputmask("datetime", {
+              inputFormat: "HH:MM",
+              max: 24
+            }).mask(".inputmask-time");
+          
+          $('.supir-lookup').lookup({
+            title: 'Supir Lookup',
+            fileName: 'supir',
+            onSelectRow: (supir,element) => {
+              $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
+              element.val(supir.namasupir)
+            }
+          })
+
+          $('.trado-lookup').lookup({
+            title: 'Trado Lookup',
+            fileName: 'trado',
+            onSelectRow: (trado,element) => {
+              $(`#crudForm [name="trado_id[]"]`).first().val(trado.id)
+              element.val(trado.keterangan)
+            }
+          })
+          
+          $('.absentrado-lookup').lookup({
+            title: 'Absen Trado Lookup',
+            fileName: 'absentrado',
+            onSelectRow: (absentrado,element) => {
+              $(`#crudForm [name="absen_id[]"]`).first().val(absentrado.id)
+              element.val(absentrado.keterangan)
+            }
+          })
         })
 
-      },
-      error: error => {
-        showDialog(error.statusText)
+        setRowNumbers()
       }
     })
+  }
+
+  function addRow() {
+    let detailRow = $(`
+      <tr>
+        <td></td>
+        <td>
+          <input type="hidden" name="trado_id[]">
+          <input type="text" name="trado" class="form-control trado-lookup">
+        </td>
+        <td>
+          <input type="hidden" name="supir_id[]">
+          <input type="text" name="supir" class="form-control supir-lookup">
+        </td>
+        <td>
+          <input type="text" name="keterangan_detail[]" class="form-control">
+        </td>
+        <td>
+          <input type="hidden" name="absen_id[]">
+          <input type="text" name="absen" class="form-control absentrado-lookup">
+        </td>
+        <td>
+          <input type="text" class="form-control inputmask-time" name="jam[]"></input>
+        </td>
+        <td>
+          <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]">
+        </td>
+        <td>
+          <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+        </td>
+
+      </tr>
+    `)
+
+    $('#detailList tbody').append(detailRow)
+
+    Inputmask("datetime", {
+      inputFormat: "HH:MM",
+      max: 24
+    }).mask(".inputmask-time");
+
+    $('.supir-lookup').last().lookup({
+      title: 'Supir Lookup',
+      fileName: 'supir',
+      onSelectRow: (supir,element) => {
+        $(`#crudForm [name="supir_id[]"]`).last().val(supir.id)
+        element.val(supir.namasupir)
+      }
+    })
+
+    $('.trado-lookup').last().lookup({
+      title: 'Trado Lookup',
+      fileName: 'trado',
+      onSelectRow: (trado,element) => {
+        $(`#crudForm [name="trado_id[]"]`).last().val(trado.id)
+        element.val(trado.keterangan)
+      }
+    })
+    
+    $('.absentrado-lookup').last().lookup({
+      title: 'Absen Trado Lookup',
+      fileName: 'absentrado',
+      onSelectRow: (absentrado,element) => {
+        $(`#crudForm [name="absen_id[]"]`).last().val(absentrado.id)
+        element.val(absentrado.keterangan)
+      }
+    })
+
+    initAutoNumeric(detailRow.find('.autonumeric'))
+    setRowNumbers()
+  }
+
+  function deleteRow(row) {
+    row.remove()
+
+    setRowNumbers()
+  }
+
+  function setRowNumbers() {
+    let elements = $('#detailList tbody tr td:nth-child(1)')
+
+    elements.each((index, element) => {
+      $(element).text(index+1)
+    })
+  }
+
+  function calculateSum() {
+    var sum = 0;
+    //iterate through each textboxes and add the values
+    $(".uangjalan").each(function() {
+        let number = this.value
+        let hrg =  parseFloat(number.replaceAll(',',''));
+        console.log(hrg)
+        if (!isNaN(hrg) && hrg.length != 0) {
+            sum += parseFloat(hrg);
+        }
+    });
+    sum = new Intl.NumberFormat('en-US').format(sum);
+    
+    $("#total").html(`${sum}`);
+    new AutoNumeric('#total',{
+			decimalPlaces			: '2'
+		})
   }
 </script>
 @endpush
