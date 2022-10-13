@@ -78,6 +78,8 @@ use App\Http\Controllers\PenerimaanStokHeaderController;
 use App\Http\Controllers\PenerimaanStokDetailController;
 
 use App\Http\Controllers\PengeluaranStokController;
+use App\Http\Controllers\PengeluaranStokHeaderController;
+use App\Http\Controllers\PengeluaranStokDetailController;
 
 use App\Http\Controllers\PengeluaranTruckingHeaderController;
 use App\Http\Controllers\PengeluaranTruckingDetailController;
@@ -527,12 +529,19 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('penerimaantruckingdetail', PenerimaanTruckingDetailController::class);
 
-    Route::get('penerimaanstokheader/get', [PenerimaanTruckingHeaderController::class, 'get'])->name('penerimaanstokheader.get');
-    Route::get('penerimaanstokheader/export', [PenerimaanTruckingHeaderController::class, 'export'])->name('penerimaanstokheader.export');
-    Route::get('penerimaanstokheader/report', [PenerimaanTruckingHeaderController::class, 'report'])->name('penerimaanstokheader.report');
+    Route::get('penerimaanstokheader/get', [PenerimaanStokHeaderController::class, 'get'])->name('penerimaanstokheader.get');
+    Route::get('penerimaanstokheader/export', [PenerimaanStokHeaderController::class, 'export'])->name('penerimaanstokheader.export');
+    Route::get('penerimaanstokheader/report', [PenerimaanStokHeaderController::class, 'report'])->name('penerimaanstokheader.report');
     Route::resource('penerimaanstokheader', PenerimaanStokHeaderController::class);
     
     Route::resource('penerimaanstokdetail', PenerimaanStokDetailController::class);
+    
+    Route::get('pengeluaranstokheader/get', [PengeluaranStokHeaderController::class, 'get'])->name('pengeluaranstokheader.get');
+    Route::get('pengeluaranstokheader/export', [PengeluaranStokHeaderController::class, 'export'])->name('pengeluaranstokheader.export');
+    Route::get('pengeluaranstokheader/report', [PengeluaranStokHeaderController::class, 'report'])->name('pengeluaranstokheader.report');
+    Route::resource('pengeluaranstokheader', PengeluaranStokHeaderController::class);
+    
+    Route::resource('pengeluaranstokdetail', PengeluaranStokDetailController::class);
 
     Route::get('jurnalumumheader/index', [JurnalUmumHeaderController::class, 'index']);
     Route::get('jurnalumumheader/{id}/delete', [JurnalUmumHeaderController::class, 'delete'])->name('jurnalumumheader.delete');

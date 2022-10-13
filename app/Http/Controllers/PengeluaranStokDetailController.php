@@ -5,30 +5,23 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class PenerimaanStokDetailController extends Controller
+class PengeluaranStokDetailController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $params = [
-            'penerimaanstokheader_id' => $request->penerimaanstokheader_id,
+            'pengeluaranstokheader_id' => $request->pengeluaranstokheader_id,
             'whereIn' => $request->whereIn
         ];
 
         $response = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'penerimaanstokdetail', $params);
+            ->get(config('app.api_url') .'pengeluaranstokdetail', $params);
             
         $data = [
             'rows' => $response['data'] ?? []
         ];
-
         return response($data);
     }
-
 }
