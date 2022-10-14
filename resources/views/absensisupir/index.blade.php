@@ -32,47 +32,12 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let rowNum = 10
+  let hasDetail = false
 
   $(document).ready(function() {
   
-    $('.supir-lookup').lookup({
-      title: 'Supir Lookup',
-      fileName: 'supir',
-      onSelectRow: (supir,element) => {
-        $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
-        element.val(supir.namasupir)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
-
-    $('.trado-lookup').lookup({
-      title: 'Trado Lookup',
-      fileName: 'trado',
-      onSelectRow: (trado,element) => {
-        $(`#crudForm [name="trado_id[]"]`).first().val(trado.id)
-        element.val(trado.keterangan)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
     
-    $('.absentrado-lookup').lookup({
-      title: 'Absen Trado Lookup',
-      fileName: 'absentrado',
-      onSelectRow: (absentrado,element) => {
-        $(`#crudForm [name="absen_id[]"]`).first().val(absentrado.id)
-        element.val(absentrado.keterangan)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
     
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'absensisupirheader' }}`,
@@ -139,7 +104,6 @@
         sortname: sortname,
         sortorder: sortorder,
         page: page,
-        pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',
@@ -155,123 +119,66 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
-          delay(() => {
-            loadDetailData(id)
-          }, 500);
-
+          
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
-          let rows = $(this).jqGrid('getGridParam', 'postData').rows
-          if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+
+          if (!hasDetail) {
+            loadDetailGrid(id)
+            hasDetail = true
+          }
+
+          loadDetailData(id)
         },
         loadComplete: function(data) {
           $("input").attr("autocomplete", "off");
+          
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-
-          if (data.message !== "" && data.message !== undefined && data.message !== null) {
-            alert(data.message)
-          }
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').rows
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          triggerClick = true  
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
           })
 
-          if (triggerClick) {
-            if (id != '') {
-              indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-              id = ''
-            } else if (indexRow != undefined) {
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-            }
-
-            if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-            }
-
-            triggerClick = false
-          } else {
-            $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
           }
 
+          setTimeout(function() {
+
+            if (triggerClick) {
+              if (id != '') {
+                indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                id = ''
+              } else if (indexRow != undefined) {
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              }
+
+              if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+                $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              }
+
+              triggerClick = false
+            } else {
+              $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+            }
+          }, 100)
+
+
           setHighlight($(this))
-        }
-      })
-
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Add',
-        title: 'Add',
-        id: 'add',
-        buttonicon: 'fas fa-plus',
-        onClickButton: function() {
-          createAbsensiSupir()
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Edit',
-        title: 'Edit',
-        id: 'edit',
-        buttonicon: 'fas fa-pen',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-          editAbsensiSupir(selectedId)
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Delete',
-        title: 'Delete',
-        id: 'delete',
-        buttonicon: 'fas fa-trash',
-        onClickButton: function() {
-          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-          deleteAbsensiSupir(selectedId)
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Export',
-        title: 'Export',
-        id: 'export',
-        buttonicon: 'fas fa-file-export',
-        onClickButton: function() {
-          $('#rangeModal').data('action', 'export')
-          $('#rangeModal').find('button:submit').html(`Export`)
-          $('#rangeModal').modal('show')
-        }
-      })
-
-      .navButtonAdd(pager, {
-        caption: 'Report',
-        title: 'Report',
-        id: 'report',
-        buttonicon: 'fas fa-print',
-        onClickButton: function() {
-          $('#rangeModal').data('action', 'report')
-          $('#rangeModal').find('button:submit').html(`Report`)
-          $('#rangeModal').modal('show')
         }
       })
 
@@ -280,10 +187,75 @@
         searchOnEnter: false,
         defaultSearch: 'cn',
         groupOp: 'AND',
-        disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           clearGlobalSearch($('#jqGrid'))
         },
+      })
+
+      
+      .customPager({
+        buttons: [{
+            id: 'add',
+            innerHTML: '<i class="fa fa-plus"></i> ADD',
+            class: 'btn btn-primary btn-sm mr-1',
+            onClick: function(event) {
+              createAbsensiSupir()
+            }
+          },
+          {
+            id: 'edit',
+            innerHTML: '<i class="fa fa-pen"></i> EDIT',
+            class: 'btn btn-success btn-sm mr-1',
+            onClick: function(event) {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                editAbsensiSupir(selectedId)
+              }
+            }
+          },
+          {
+            id: 'delete',
+            innerHTML: '<i class="fa fa-trash"></i> DELETE',
+            class: 'btn btn-danger btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                deleteAbsensiSupir(selectedId)
+              }
+            }
+          },
+          {
+            id: 'export',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'export')
+              $('#rangeModal').find('button:submit').html(`Export`)
+              $('#rangeModal').modal('show')
+            }
+          },
+          
+          {
+            id: 'report',
+            title: 'Report',
+            caption: 'Report',
+            innerHTML: '<i class="fas fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'report')
+              $('#rangeModal').find('button:submit').html(`Report`)
+              $('#rangeModal').modal('show')
+            }
+          }
+        ]
+
       })
 
     /* Append clear filter button */
@@ -292,8 +264,6 @@
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
 
-    /* Load detial grid */
-    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn-sm btn-primary`)

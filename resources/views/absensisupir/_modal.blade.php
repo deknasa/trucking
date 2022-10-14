@@ -262,6 +262,7 @@
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
+
   
   function setTotal() {
     let nominalDetails = $(`#table_body [name="uangjalan[]"]`)
@@ -556,8 +557,46 @@
     }
   }
 
+  
   function initLookup() {
+    $('.supir-lookup').lookup({
+      title: 'Supir Lookup',
+      fileName: 'supir',
+      onSelectRow: (supir,element) => {
+        $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
+        element.val(supir.namasupir)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+
+    $('.trado-lookup').lookup({
+      title: 'Trado Lookup',
+      fileName: 'trado',
+      onSelectRow: (trado,element) => {
+        $(`#crudForm [name="trado_id[]"]`).first().val(trado.id)
+        element.val(trado.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
     
+    $('.absentrado-lookup').lookup({
+      title: 'Absen Trado Lookup',
+      fileName: 'absentrado',
+      onSelectRow: (absentrado,element) => {
+        $(`#crudForm [name="absen_id[]"]`).first().val(absentrado.id)
+        element.val(absentrado.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
   }
 </script>
 @endpush
