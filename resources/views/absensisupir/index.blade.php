@@ -34,13 +34,17 @@
   let autoNumericElements = []
 
   $(document).ready(function() {
-
+  
     $('.supir-lookup').lookup({
       title: 'Supir Lookup',
       fileName: 'supir',
       onSelectRow: (supir,element) => {
         $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
         element.val(supir.namasupir)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
 
@@ -50,6 +54,10 @@
       onSelectRow: (trado,element) => {
         $(`#crudForm [name="trado_id[]"]`).first().val(trado.id)
         element.val(trado.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     
@@ -59,11 +67,11 @@
       onSelectRow: (absentrado,element) => {
         $(`#crudForm [name="absen_id[]"]`).first().val(absentrado.id)
         element.val(absentrado.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
-    })
-
-    $('#crudModal').on('hidden.bs.modal', function() {
-      activeGrid = '#jqGrid'
     })
     
     $("#jqGrid").jqGrid({

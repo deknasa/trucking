@@ -12,7 +12,7 @@
  
   function loadDetailGrid(id) {
     $("#detail").jqGrid({
-        url: `${apiUrl}kasgantung_detail`,
+        url: `${apiUrl}kasgantungdetail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -98,7 +98,7 @@
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: `${apiUrl}kasgantung_detail`,
+      url: `${apiUrl}kasgantungdetail`,
       datatype: "json",
       postData: {
         kasgantung_id: id

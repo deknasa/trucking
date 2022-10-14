@@ -205,19 +205,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}kasgantung`
+          url = `${apiUrl}kasgantungheader`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}kasgantung/${Id}`
+          url = `${apiUrl}kasgantungheader/${Id}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}kasgantung/${Id}`
+          url = `${apiUrl}kasgantungheader/${Id}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}kasgantung`
+          url = `${apiUrl}kasgantungheader`
           break;
       }
 
@@ -349,7 +349,7 @@
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
-        url: `${apiUrl}kasgantung/field_length`,
+        url: `${apiUrl}kasgantungheader/field_length`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -376,7 +376,7 @@
     $('#detailList tbody').html('')
 
     $.ajax({
-      url: `${apiUrl}kasgantung/${userId}`,
+      url: `${apiUrl}kasgantungheader/${userId}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -392,6 +392,13 @@
             element.val(dateFormat(value))
           } else {
             element.val(value)
+          }
+
+          if(index == 'penerima') {
+            element.data('current-value', value)
+          }
+          if(index == 'bank') {
+            element.data('current-value', value)
           }
         })
 
@@ -465,30 +472,7 @@
     })
   }
 
-  function getMaxLength(form) {
-    if (!form.attr('has-maxlength')) {
-      $.ajax({
-        url: `${apiUrl}kasgantung/field_length`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
-            }
-          })
-
-          form.attr('has-maxlength', true)
-        },
-        error: error => {
-          showDialog(error.statusText)
-        }
-      })
-    }
-  }
+  
 
   function initLookup() {
     $('.penerima-lookup').lookup({
@@ -497,7 +481,11 @@
       onSelectRow: (penerima, element) => {
         $('#crudForm [name=penerima_id]').first().val(penerima.id)
         element.val(penerima.namapenerima)
-      }
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      } 
     })
 
     $('.bank-lookup').lookup({
@@ -506,7 +494,11 @@
       onSelectRow: (bank,element) => {
         $('#crudForm [name=bank_id]').first().val(bank.id)
         element.val(bank.namabank)
-      }
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      } 
     })
   }
   

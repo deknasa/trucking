@@ -342,6 +342,10 @@
           } else {
             element.val(value)
           }
+
+          if(index == 'zona') {
+            element.data('current-value', value)
+          }
         })
 
         if (form.data('action') === 'delete') {
@@ -359,7 +363,11 @@
       onSelectRow: (zona, element) => {
         $('#crudForm [name=zona_id]').first().val(zona.id)
         element.val(zona.zona)
-      }
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      } 
     })
   }
 </script>

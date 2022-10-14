@@ -382,10 +382,10 @@
             <tr>
             <td></td>
             <td>
-              <input type="text" name="coadebet_detail[]"  class="form-control coadebet-lookup">
+              <input type="text" name="coadebet_detail[]" data-current-value="${detail.coadebet}" class="form-control coadebet-lookup">
             </td>
             <td>
-              <input type="text" name="coakredit_detail[]"  class="form-control coakredit-lookup">
+              <input type="text" name="coakredit_detail[]" data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
             </td>
             <td>
               <input type="text" name="keterangan_detail[]" class="form-control">   
@@ -411,15 +411,23 @@
             title: 'Coa Debet Lookup',
             fileName: 'akunpusat',
             onSelectRow: (akunpusat, element) => {
-              element.val(akunpusat.keterangancoa)
-            }
+              element.val(akunpusat.coa)
+              element.data('currentValue', element.val())
+           },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            } 
           })
 
           $('.coakredit-lookup').last().lookup({
             title: 'Coa Kredit Lookup',
             fileName: 'akunpusat',
             onSelectRow: (akunpusat, element) => {
-              element.val(akunpusat.keterangancoa)
+              element.val(akunpusat.coa)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
             }
           })
         })
@@ -461,7 +469,11 @@
       title: 'Coa Debet Lookup',
       fileName: 'akunpusat',
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.keterangancoa)
+        element.val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
 
@@ -469,7 +481,11 @@
       title: 'Coa Kredit Lookup',
       fileName: 'akunpusat',
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.keterangancoa)
+        element.val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     initAutoNumeric(detailRow.find('.autonumeric'))
@@ -521,7 +537,11 @@
       title: 'Coa Debet Lookup',
       fileName: 'akunpusat',
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.keterangancoa)
+        element.val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
 
@@ -529,7 +549,11 @@
       title: 'Coa Kredit Lookup',
       fileName: 'akunpusat',
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.keterangancoa)
+        element.val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
   }

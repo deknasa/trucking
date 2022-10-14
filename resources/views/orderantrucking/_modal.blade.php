@@ -487,6 +487,22 @@
           } else {
             element.val(value)
           }
+
+          if(index == 'container') {
+            element.data('current-value', value)
+          }
+          if(index == 'agen') {
+            element.data('current-value', value)
+          }
+          if(index == 'jenisorder') {
+            element.data('current-value', value)
+          }
+          if(index == 'pelanggan') {
+            element.data('current-value', value)
+          }
+          if(index == 'tarif') {
+            element.data('current-value', value)
+          }
         })
 
         if (form.data('action') === 'delete') {
@@ -505,7 +521,11 @@
       onSelectRow: (container, element) => {
         $('#crudForm [name=container_id]').first().val(container.id)
         element.val(container.keterangan)
-      }
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      } 
     })
 
     $('.agen-lookup').lookup({
@@ -514,7 +534,11 @@
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)
-      }
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      } 
     })
     $('.jenisorder-lookup').lookup({
       title: 'Jenis Order Lookup',
@@ -522,7 +546,11 @@
       onSelectRow: (jenisorder, element) => {
         $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
         element.val(jenisorder.keterangan)
-      }
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      } 
     })
     $('.pelanggan-lookup').lookup({
       title: 'Pelanggan Lookup',
@@ -530,7 +558,11 @@
       onSelectRow: (pelanggan, element) => {
         $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
         element.val(pelanggan.namapelanggan)
-      }
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      } 
     })
     $('.tarif-lookup').lookup({
       title: 'Tarif Lookup',
@@ -538,7 +570,11 @@
       onSelectRow: (tarif, element) => {
         $('#crudForm [name=tarif_id]').first().val(tarif.id)
         element.val(tarif.tujuan)
-      }
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      } 
     })
   }
 </script>

@@ -42,6 +42,10 @@
         $(`#crudForm [name="role_id"]`).first().val(role.id).trigger('change')
 
         element.val(role.rolename)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
 
@@ -210,7 +214,7 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              roleId = $(this).jqGrid('getCell', selectedId, 'role_id');
+              roleId = $("#jqGrid").jqGrid('getCell', selectedId, 'role_id');
               deleteAcl(roleId)
             }
           },
