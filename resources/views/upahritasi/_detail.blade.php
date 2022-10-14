@@ -12,15 +12,27 @@
 <script>
   let detailIndexUrl = "{{ route('upahritasirincian.index') }}"
 
+  /**
+   * Custom Functions
+   */
+  var delay = (function() {
+    var timer = 0;
+    return function(callback, ms) {
+      clearTimeout(timer);
+      timer = setTimeout(callback, ms);
+    };
+  })()
+
   function loadDetailGrid() {
+    let pager = '#detailPager'
+
     $("#detail").jqGrid({
         url: `{{ config('app.api_url') . 'upahritasirincian' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        colModel: [
-          {
+        colModel: [{
             label: 'CONTAINER',
             name: 'container_id',
           },
@@ -68,13 +80,18 @@
         rowList: [10, 20, 50],
         toolbar: [true, "top"],
         sortable: true,
+        pager: pager,
         viewrecords: true,
-        onSelectRow: function() {
-          activeGrid = $(this)
-        },
         loadComplete: function(data) {
-          initResize($(this))
+
         }
+      })
+      .jqGrid("navGrid", pager, {
+        search: false,
+        refresh: false,
+        add: false,
+        edit: false,
+        del: false,
       })
   }
 
