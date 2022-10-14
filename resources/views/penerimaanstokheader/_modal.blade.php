@@ -506,6 +506,10 @@
         element.val(stok.namastok)
         parent = element.closest('td');
         parent.children('.detailstokId').val(stok.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     initAutoNumeric($(`.number${index}`))
@@ -634,6 +638,10 @@
               element.val(stok.namastok)
               parent = element.closest('td');
               parent.children('.detailstokId').val(stok.id)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
             }
           })
           id++;
