@@ -252,7 +252,6 @@
     activeGrid = null
 
     getMaxLength(form)
-    initLookup()
     initDatepicker()
   })
 
@@ -290,6 +289,9 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
+    $('#table_body').html('')
+    addRow()
+    setTotal()
   }
 
   function editAbsensiSupir(id) {
@@ -515,6 +517,8 @@
     })
 
     initAutoNumeric(detailRow.find('.autonumeric'))
+    initDatepicker()
+
     setRowNumbers()
   }
 

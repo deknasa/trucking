@@ -233,7 +233,6 @@
     activeGrid = null
 
     getMaxLength(form)
-    initLookup()
     initDatepicker()
   })
 
@@ -268,6 +267,11 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+
+    
+    $('#table_body').html('')
+    addRow()
+    setTotal()
   }
 
   function editJurnalUmumHeader(id) {
@@ -489,6 +493,7 @@
       }
     })
     initAutoNumeric(detailRow.find('.autonumeric'))
+    initDatepicker()
     setRowNumbers()
   }
 

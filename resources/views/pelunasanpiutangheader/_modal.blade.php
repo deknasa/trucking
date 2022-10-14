@@ -450,6 +450,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
+    initDatepicker()
     setTotal()
     setPenyesuaian()
     setNominalLebih()

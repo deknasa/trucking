@@ -238,7 +238,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', { 
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -279,6 +281,7 @@
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
+
   function setTotal() {
     let nominalDetails = $(`#table_body [name="nominal[]"]`)
     let total = 0
@@ -305,6 +308,9 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
+    $('#table_body').html('')
+    addRow()
+    setTotal()
   }
 
   function editKasGantung(userId) {
@@ -455,6 +461,8 @@
     $('#detailList tbody').append(detailRow)
 
     initAutoNumeric(detailRow.find('.autonumeric'))
+    initDatepicker()
+
     setRowNumbers()
   }
 
