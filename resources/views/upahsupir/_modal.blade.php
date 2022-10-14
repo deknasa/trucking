@@ -10,7 +10,7 @@
         </div>
         <form action="" method="post">
           <div class="modal-body">
-          <input type="hidden" name="id">
+            <input type="hidden" name="id">
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -123,13 +123,13 @@
               <tfoot>
                 <tr>
                   <td colspan="7">
-                    <h5 class="text-right font-weight-bold">TOTAL:</h5>
+                    <p class="text-right font-weight-bold">TOTAL :</p>
                   </td>
                   <td>
-                    <h5 id="total" class="text-right font-weight-bold"></h5>
+                    <p class="text-right font-weight-bold autonumeric" id="total"></p>
                   </td>
                   <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
                   </td>
                 </tr>
               </tfoot>
@@ -165,8 +165,8 @@
       addRow()
     });
 
-    $(document).on('keyup', '.nominalkomisi', function(e) {
-      calculateSum()
+    $(document).on('input', `#detailList [name="nominalkomisi[]"]`, function(event) {
+      setTotal()
     })
 
     $(document).on('click', '.delete-row', function(event) {
@@ -293,19 +293,35 @@
     })
   })
 
-  // $('#crudModal').on('shown.bs.modal', () => {
-  //   let form = $('#crudForm')
+  //update sore
+  $('#crudModal').on('shown.bs.modal', () => {
+    let form = $('#crudForm')
 
-  //   setFormBindKeys(form)
+    setFormBindKeys(form)
 
-  //   activeGrid = null
+    activeGrid = null
 
-  //   getMaxLength(form)
-  // })
+    getMaxLength(form)
+    initLookup()
+    initDatepicker()
+  })
 
-  // $('#crudModal').on('hidden.bs.modal', () => {
-  //   activeGrid = '#jqGrid'
-  // })
+  $('#crudModal').on('hidden.bs.modal', () => {
+    activeGrid = '#jqGrid'
+
+    $('#crudModal').find('.modal-body').html(modalBody)
+  })
+
+  function setTotal() {
+    let nominalDetails = $(`#detailList [name="nominalkomisi[]"]`)
+    let total = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#total').set(total)
+  }
 
   function createUpahSupir() {
     let form = $('#crudForm')
@@ -315,7 +331,7 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-  form.data('action', 'add')
+    form.data('action', 'add')
     // form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Hutang Header')
     $('#crudModal').modal('show')
@@ -326,6 +342,8 @@
     setStatusLuarKotaOptions(form)
 
     addRow()
+    setTotal()
+
   }
 
   function editUpahSupir(id) {
@@ -539,6 +557,10 @@
             element.val(value).trigger('change')
           } else if (element.hasClass('datepicker')) {
             element.val(dateFormat(value))
+          } else if (element.hasClass('autonumeric')) {
+            let autoNumericInput = AutoNumeric.getAutoNumericElement(element[0])
+
+            autoNumericInput.set(value);
           } else {
             element.val(value)
           }
@@ -562,7 +584,7 @@
                 <input type="text" name="nominalkenek[]" class="form-control autonumeric">
               </td>
               <td>
-                <input type="text" name="nominalkomisi[]" class="form-control autonumeric nominalkomisi">
+                <input type="text" name="nominalkomisi[]" class="form-control autonumeric">
               </td>
               <td>
                 <input type="text" name="nominaltol[]" class="form-control autonumeric">
@@ -602,18 +624,19 @@
           detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
           detailRow.find(`[name="nominaltol[]"]`).val(detail.nominaltol)
           detailRow.find(`[name="liter[]"]`).val(detail.liter);
-          // initAutoNumeric(detailRow.find(`[name="nominalsupir[]"]`))
-          // initAutoNumeric(detailRow.find(`[name="nominalkenek[]"]`))
-          // initAutoNumeric(detailRow.find(`[name="nominalkomisi[]"]`))
-          // initAutoNumeric(detailRow.find(`[name="nominaltol[]"]`))
-          // initAutoNumeric(detailRow.find(`[name="liter[]"]`))
-
 
           $('#detailList tbody').append(detailRow)
 
           initAutoNumeric(detailRow.find('.autonumeric'))
-          setRowNumbers()
+          setTotal()
+
         })
+        setRowNumbers()
+
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
       }
     })
   }
@@ -635,7 +658,7 @@
           <input type="text" name="nominalkenek[]" class="form-control autonumeric">
         </td>
         <td>
-          <input type="text" name="nominalkomisi[]" class="form-control autonumeric nominalkomisi">
+          <input type="text" name="nominalkomisi[]" class="form-control autonumeric ">
         </td>
         <td>
           <input type="text" name="nominaltol[]" class="form-control autonumeric">
@@ -677,6 +700,8 @@
     row.remove()
 
     setRowNumbers()
+    setTotal()
+
   }
 
   function setRowNumbers() {
@@ -687,22 +712,44 @@
     })
   }
 
-  function calculateSum() {
-    var sum = 0;
-    //iterate through each textboxes and add the values
-    $(".nominalkomisi").each(function() {
-      let number = this.value
-      let hrg = parseFloat(number.replaceAll(',', ''));
-      console.log(hrg)
-      if (!isNaN(hrg) && hrg.length != 0) {
-        sum += parseFloat(hrg);
+  function initLookup() {
+  $('.kotadari-lookup').lookup({
+      title: 'kota Lookup',
+      fileName: 'kota',
+      onSelectRow: (kota, element) => {
+        $('#crudForm [name=kotadari_id]').first().val(kota.id)
+        element.val(kota.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
-    });
-    sum = new Intl.NumberFormat('en-US').format(sum);
+    })
 
-    $("#total").html(`${sum}`);
-    new AutoNumeric('#total', {
-      decimalPlaces: '2'
+    $('.kotasampai-lookup').lookup({
+      title: 'kota Lookup',
+      fileName: 'kota',
+      onSelectRow: (kota, element) => {
+        $('#crudForm [name=kotasampai_id]').first().val(kota.id)
+        element.val(kota.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+
+    $('.zona-lookup').lookup({
+      title: 'zona Lookup',
+      fileName: 'zona',
+      onSelectRow: (zona, element) => {
+        $('#crudForm [name=zona_id]').first().val(zona.id)
+        element.val(zona.zona)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
     })
   }
 </script>

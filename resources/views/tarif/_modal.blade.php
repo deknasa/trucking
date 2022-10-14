@@ -78,7 +78,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="sistemton" class="form-select select2bs4" style="width: 100%;">
+                <select name="statussistemton" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH SISTEM TON --</option>
                 </select>
               </div>
@@ -116,13 +116,23 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+              <div class="col-12 col-md-2 col-form-label">
                 <label>
-                  TGL BERLAKU<span class="text-danger">*</span>
+                  TGL MULAI BERLAKU <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="tglberlaku" class="form-control datepicker">
+              <div class="col-12 col-md-10">
+                <input type="text" name="tglmulaiberlaku" class="form-control datepicker">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>
+                  TGL AKHIR BERLAKU <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="tglakhirberlaku" class="form-control datepicker">
               </div>
             </div>
             <div class="row form-group">
@@ -263,6 +273,8 @@
     activeGrid = null
 
     getMaxLength(form)
+    initDatepicker()
+
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -287,7 +299,7 @@
     setStatusPenyesuaianHargaOptions(form)
     setZonaOptions(form)
     setKotaOptions(form)
-    setSistemTonOptions(form)
+    setStatusSistemTonOptions(form)
     setContainerOptions(form)
     setStatusAktifOptions(form)
   }
@@ -312,7 +324,7 @@
         setStatusPenyesuaianHargaOptions(form),
         setZonaOptions(form),
         setKotaOptions(form),
-        setSistemTonOptions(form),
+        setStatusSistemTonOptions(form),
         setContainerOptions(form),
         setStatusAktifOptions(form)
       ])
@@ -341,7 +353,7 @@
         setStatusPenyesuaianHargaOptions(form),
         setZonaOptions(form),
         setKotaOptions(form),
-        setSistemTonOptions(form),
+        setStatusSistemTonOptions(form),
         setContainerOptions(form),
         setStatusAktifOptions(form)
       ])
@@ -466,10 +478,10 @@
     })
   }
 
-  const setSistemTonOptions = function(relatedForm) {
+  const setStatusSistemTonOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=sistemton]').empty()
-      relatedForm.find('[name=sistemton]').append(
+      relatedForm.find('[name=statussistemton]').empty()
+      relatedForm.find('[name=statussistemton]').append(
         new Option('-- PILIH SISTEM TON --', '', false, true)
       ).trigger('change')
 
@@ -491,10 +503,10 @@
           })
         },
         success: response => {
-          response.data.forEach(sistemTon => {
-            let option = new Option(sistemTon.text, sistemTon.id)
+          response.data.forEach(statussistemTon => {
+            let option = new Option(statussistemTon.text, statussistemTon.id)
 
-            relatedForm.find('[name=sistemton]').append(option).trigger('change')
+            relatedForm.find('[name=statussistemton]').append(option).trigger('change')
           });
 
           resolve()
@@ -579,16 +591,14 @@
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
 
-          
-          
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } else if (element.hasClass('autonumeric')) {
-            let autoNumericInput = AutoNumeric.getAutoNumericElement(element[0])
-            
-            autoNumericInput.set(value)
           } else if (element.hasClass('datepicker')) {
             element.val(dateFormat(value))
+          } else if (element.hasClass('autonumeric')) {
+            let autoNumericInput = AutoNumeric.getAutoNumericElement(element[0])
+
+            autoNumericInput.set(value);
           } else {
             element.val(value)
           }

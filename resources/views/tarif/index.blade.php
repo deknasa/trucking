@@ -55,8 +55,8 @@
             align: 'right',
             formatter: 'currency',
             formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
+              decimalSeparator: ',',
+              thousandsSeparator: '.'
             }
           },
           {
@@ -91,7 +91,7 @@
           },
           {
             label: 'SISTEM TON',
-            name: 'sistemton',
+            name: 'statussistemton',
           },
           {
             label: 'KOTA',
@@ -107,15 +107,27 @@
             align: 'right',
             formatter: 'currency',
             formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
+              decimalSeparator: ',',
+              thousandsSeparator: '.'
             }
           },
           {
-            label: 'TGL BERLAKU',
-            name: 'tglberlaku',
+            label: 'TGL MULAI BERLAKU',
+            name: 'tglmulaiberlaku',
             formatter: "date",
-            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y" }
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'TGL AKHIR BERLAKU',
+            name: 'tglakhirberlaku',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'STATUS PENYESUAIAN HARGA',
@@ -129,7 +141,10 @@
             label: 'UPDATEDAT',
             name: 'updated_at',
             formatter: "date",
-            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y H:i:s" }
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
         ],
         autowidth: true,
@@ -219,37 +234,37 @@
         },
       })
 
-.customPager({
-  buttons: [{
-      id: 'add',
-      innerHTML: '<i class="fa fa-plus"></i> ADD',
-      class: 'btn btn-primary btn-sm mr-1',
-      onClick: () => {
-        createTarif()
-      }
-    },
-    {
-      id: 'edit',
-      innerHTML: '<i class="fa fa-pen"></i> EDIT',
-      class: 'btn btn-success btn-sm mr-1',
-      onClick: () => {
-        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+      .customPager({
+        buttons: [{
+            id: 'add',
+            innerHTML: '<i class="fa fa-plus"></i> ADD',
+            class: 'btn btn-primary btn-sm mr-1',
+            onClick: () => {
+              createTarif()
+            }
+          },
+          {
+            id: 'edit',
+            innerHTML: '<i class="fa fa-pen"></i> EDIT',
+            class: 'btn btn-success btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-        editTarif(selectedId)
-      }
-    },
-    {
-      id: 'delete',
-      innerHTML: '<i class="fa fa-trash"></i> DELETE',
-      class: 'btn btn-danger btn-sm mr-1',
-      onClick: () => {
-        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              editTarif(selectedId)
+            }
+          },
+          {
+            id: 'delete',
+            innerHTML: '<i class="fa fa-trash"></i> DELETE',
+            class: 'btn btn-danger btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-        deleteTarif(selectedId)
-      }
-    },
-  ]
-})
+              deleteTarif(selectedId)
+            }
+          },
+        ]
+      })
 
     /* Append clear filter button */
     loadClearFilter($('#jqGrid'))

@@ -10,42 +10,44 @@
         </div>
         <form action="" method="post">
           <div class="modal-body">
+            <input type="hidden" name="id">
+
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   DARI <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-md-10">
-                <select name="kotadari_id" class="form-control select2bs4">
-                  <option value="">-- PILIH DARI --</option>
-                </select>
+              <div class="col-8 col-md-10">
+                <input type="hidden" name="kotadari_id">
+                <input type="text" name="kotadari" class="form-control kotadari-lookup">
               </div>
             </div>
+
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   TUJUAN <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-md-10">
-                <select name="kotasampai_id" class="form-control select2bs4">
-                  <option value="">-- PILIH TUJUAN --</option>
-                </select>
+              <div class="col-8 col-md-10">
+                <input type="hidden" name="kotasampai_id">
+                <input type="text" name="kotasampai" class="form-control kotasampai-lookup">
               </div>
             </div>
+
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   ZONA <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-md-10">
-                <select name="zona_id" class="form-control select2bs4">
-                  <option value="">-- PILIH ZONA --</option>
-                </select>
+              <div class="col-8 col-md-10">
+                <input type="hidden" name="zona_id">
+                <input type="text" name="zona" class="form-control zona-lookup">
               </div>
             </div>
+
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>
@@ -81,6 +83,16 @@
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>
+                  TGL AKHIR BERLAKU <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="tglakhirberlaku" class="form-control datepicker">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>
                   STATUS LUAR KOTA <span class="text-danger">*</span>
                 </label>
               </div>
@@ -110,9 +122,14 @@
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan="8"></td>
+                  <td colspan="7">
+                    <p class="text-right font-weight-bold">TOTAL :</p>
+                  </td>
                   <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
                   </td>
                 </tr>
               </tfoot>
@@ -148,6 +165,10 @@
       addRow()
     });
 
+    $(document).on('input', `#detailList [name="nominalkomisi[]"]`, function(event) {
+      setTotal()
+    })
+
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
     })
@@ -158,9 +179,34 @@
       let method
       let url
       let form = $('#crudForm')
-      let upahRitasiId = form.find('[name=id]').val()
+      let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+
+      $('#crudForm').find(`[name="nominalsupir[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominalsupir[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalsupir[]"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="nominalkenek[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominalkenek[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalkenek[]"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="nominalkomisi[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominalkomisi[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalkomisi[]"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="nominaltol[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominaltol[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaltol[]"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="liter[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'liter[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="liter[]"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="jarak`).each((index, element) => {
+        data.filter((row) => row.name === 'jarak')[index].value = AutoNumeric.getNumber($(`#crudForm [name="jarak`)[index])
+      })
+
 
       data.push({
         name: 'sortIndex',
@@ -194,11 +240,11 @@
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}upahritasi/${upahRitasiId}`
+          url = `${apiUrl}upahritasi/${Id}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}upahritasi/${upahRitasiId}`
+          url = `${apiUrl}upahritasi/${Id}`
           break;
         default:
           method = 'POST'
@@ -218,14 +264,13 @@
         },
         data: data,
         success: response => {
+          id = response.data.id
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
 
-          id = response.data.id
-
           $('#jqGrid').trigger('reloadGrid', {
             page: response.data.page
-          })
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -256,11 +301,26 @@
     activeGrid = null
 
     getMaxLength(form)
+    initLookup()
+    initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
+
+  function setTotal() {
+    let nominalDetails = $(`#detailList [name="nominalkomisi[]"]`)
+    let total = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#total').set(total)
+  }
 
   function createUpahRitasi() {
     let form = $('#crudForm')
@@ -271,21 +331,21 @@
     Simpan
   `)
     form.data('action', 'add')
-    form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Upah Ritasi')
+    // form.find(`.sometimes`).show()
+    $('#crudModalTitle').text('Create Hutang Header')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setKotaOptions(form)
-    setZonaOptions(form)
     setStatusAktifOptions(form)
     setStatusLuarKotaOptions(form)
 
     addRow()
+    setTotal()
+
   }
 
-  function editUpahRitasi(upahRitasiId) {
+  function editUpahRitasi(id) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -295,24 +355,22 @@
     Simpan
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Upah Ritasi')
+    $('#crudModalTitle').text('Edit Upah Supir')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        setKotaOptions(form),
-        setZonaOptions(form),
         setStatusAktifOptions(form),
         setStatusLuarKotaOptions(form)
       ])
       .then(() => {
-        showUpahRitasi(form, upahRitasiId)
+        showUpahRitasi(form, id)
       })
   }
 
-  function deleteUpahRitasi(upahRitasiId) {
+  function deleteUpahRitasi(id) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -322,20 +380,18 @@
     Hapus
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Upah Ritasi')
+    $('#crudModalTitle').text('Delete Upah Supir')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        setKotaOptions(form),
-        setZonaOptions(form),
         setStatusAktifOptions(form),
         setStatusLuarKotaOptions(form)
       ])
       .then(() => {
-        showUpahRitasi(form, upahRitasiId)
+        showUpahRitasi(form, id)
       })
   }
 
@@ -399,69 +455,6 @@
         },
         success: response => {
           containers = response.data
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setKotaOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=kotadari_id], [name=kotasampai_id]').empty()
-      relatedForm.find('[name=kotadari_id]').append(
-        new Option('-- PILIH DARI --', '', false, true)
-      ).trigger('change')
-      relatedForm.find('[name=kotasampai_id]').append(
-        new Option('-- PILIH SAMPAI --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}kota`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(kota => {
-            let option = new Option(kota.keterangan, kota.id)
-
-            relatedForm.find('[name=kotadari_id], [name=kotasampai_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setZonaOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=zona_id]').empty()
-      relatedForm.find('[name=zona_id]').append(
-        new Option('-- PILIH ZONA --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}zona`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(zona => {
-            let option = new Option(zona.zona, zona.id)
-
-            relatedForm.find('[name=zona_id]').append(option).trigger('change')
-          });
 
           resolve()
         }
@@ -545,11 +538,11 @@
     })
   }
 
-  function showUpahRitasi(form, upahRitasiId) {
+  function showUpahRitasi(form, userId) {
     $('#detailList tbody').html('')
-    
+
     $.ajax({
-      url: `${apiUrl}upahritasi/${upahRitasiId}`,
+      url: `${apiUrl}upahritasi/${userId}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -561,12 +554,19 @@
 
           if (element.is('select')) {
             element.val(value).trigger('change')
+          } else if (element.hasClass('datepicker')) {
+            element.val(dateFormat(value))
+          } else if (element.hasClass('autonumeric')) {
+            let autoNumericInput = AutoNumeric.getAutoNumericElement(element[0])
+
+            autoNumericInput.set(value);
           } else {
             element.val(value)
           }
         })
 
-        $.each(response.data.upahritasi_rincian, (index, detail) => {
+        $.each(response.detail, (index, detail) => {
+          // $.each(response.data.upahritasi_rincian, (index, detail) => {
           let detailRow = $(`
             <tr>
               <td></td>
@@ -614,18 +614,26 @@
               dropdownParent: $("#crudModal")
             })
           });
-
+          detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+          detailRow.find(`[name="statuscontainer_id[]"]`).val(detail.statuscontainer_id)
           detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
           detailRow.find(`[name="nominalkenek[]"]`).val(detail.nominalkenek)
           detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
           detailRow.find(`[name="nominaltol[]"]`).val(detail.nominaltol)
-          detailRow.find(`[name="liter[]"]`).val(detail.liter)
+          detailRow.find(`[name="liter[]"]`).val(detail.liter);
 
           $('#detailList tbody').append(detailRow)
 
           initAutoNumeric(detailRow.find('.autonumeric'))
-          setRowNumbers()
+          setTotal()
+
         })
+        setRowNumbers()
+
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
       }
     })
   }
@@ -647,7 +655,7 @@
           <input type="text" name="nominalkenek[]" class="form-control autonumeric">
         </td>
         <td>
-          <input type="text" name="nominalkomisi[]" class="form-control autonumeric">
+          <input type="text" name="nominalkomisi[]" class="form-control autonumeric ">
         </td>
         <td>
           <input type="text" name="nominaltol[]" class="form-control autonumeric">
@@ -689,6 +697,8 @@
     row.remove()
 
     setRowNumbers()
+    setTotal()
+
   }
 
   function setRowNumbers() {
@@ -696,6 +706,47 @@
 
     elements.each((index, element) => {
       $(element).text(index + 1)
+    })
+  }
+
+  function initLookup() {
+    $('.kotadari-lookup').lookup({
+      title: 'kota Lookup',
+      fileName: 'kota',
+      onSelectRow: (kota, element) => {
+        $('#crudForm [name=kotadari_id]').first().val(kota.id)
+        element.val(kota.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+
+    $('.kotasampai-lookup').lookup({
+      title: 'kota Lookup',
+      fileName: 'kota',
+      onSelectRow: (kota, element) => {
+        $('#crudForm [name=kotasampai_id]').first().val(kota.id)
+        element.val(kota.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+
+    $('.zona-lookup').lookup({
+      title: 'zona Lookup',
+      fileName: 'zona',
+      onSelectRow: (zona, element) => {
+        $('#crudForm [name=zona_id]').first().val(zona.id)
+        element.val(zona.zona)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
     })
   }
 </script>
