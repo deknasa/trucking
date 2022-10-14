@@ -21,19 +21,19 @@
         datatype: "json",
         colModel: [{
             label: 'TRADO',
-            name: 'trado.keterangan',
+            name: 'trado'
           },
           {
             label: 'SUPIR',
-            name: 'supir.namasupir',
+            name: 'supir',
           },
           {
             label: 'STATUS',
-            name: 'absen_trado.keterangan',
+            name: 'status',
           },
           {
             label: 'KETERANGAN',
-            name: 'keterangan',
+            name: 'keterangan_detail',
           },
           {
             label: 'JAM',
@@ -90,8 +90,8 @@
           }
 
           $(this).jqGrid('footerData', 'set', {
-            nobukti: 'Total:',
-            nominal: totalNominal,
+            trado: 'Total:',
+            uangjalan: totalNominal,
           }, true)
         }
       })
