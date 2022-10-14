@@ -42,6 +42,10 @@
       onSelectRow: (akunpusat, element) => {
         element.val(akunpusat.coa)
         $(`#${element[0]['name']}Id`).val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.pengeluaranstok-lookup').lookup({
@@ -50,15 +54,10 @@
       onSelectRow: (pengeluaranstok, element) => {
         element.val(pengeluaranstok.kodepengeluaran)
         $(`#${element[0]['name']}Id`).val(pengeluaranstok.id)
-      }
-    })
-    
-    $('.supplier-lookup').lookup({
-      title: 'supplier Lookup',
-      fileName: 'supplier',
-      onSelectRow: (supplier, element) => {
-        element.val(supplier.namasupplier)
-        $(`#${element[0]['name']}Id`).val(supplier.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.supir-lookup').lookup({
@@ -67,14 +66,35 @@
       onSelectRow: (supir, element) => {
         element.val(supir.namasupir)
         $(`#${element[0]['name']}Id`).val(supir.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
+    
     $('.kerusakan-lookup').lookup({
-      title: 'Trado Lookup',
+      title: 'kerusakan Lookup',
       fileName: 'kerusakan',
       onSelectRow: (kerusakan, element) => {
         element.val(kerusakan.keterangan)
         $(`#${element[0]['name']}Id`).val(kerusakan.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    $('.supplier-lookup').lookup({
+      title: 'supplier Lookup',
+      fileName: 'supplier',
+      onSelectRow: (supplier, element) => {
+        element.val(supplier.namasupplier)
+        $(`#${element[0]['name']}Id`).val(supplier.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.trado-lookup').lookup({
@@ -83,6 +103,10 @@
       onSelectRow: (trado, element) => {
         element.val(trado.keterangan)
         $(`#${element[0]['name']}Id`).val(trado.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.gudang-lookup').lookup({
@@ -91,6 +115,10 @@
       onSelectRow: (gudang, element) => {
         element.val(gudang.gudang)
         $(`#${element[0]['name']}Id`).val(gudang.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.pengeluaranstokheader-lookup').lookup({
@@ -98,6 +126,10 @@
       fileName: 'pengeluaranstokheader',
       onSelectRow: (pengeluaran, element) => {
         element.val(pengeluaran.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.penerimaanstokheader-lookup').lookup({
@@ -105,6 +137,10 @@
       fileName: 'penerimaanstokheader',
       onSelectRow: (penerimaan, element) => {
         element.val(penerimaan.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.hutang-lookup').lookup({
@@ -112,6 +148,10 @@
       fileName: 'hutangheader',
       onSelectRow: (hutang, element) => {
         element.val(hutang.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
 

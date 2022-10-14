@@ -346,7 +346,8 @@
         })
 
         form.find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))
-        form.find(`[name="agen"]`).val(response.data.agen.namaagen).data('current-value', response.data.agen.namaagen)
+        form.find(`[name="agen"]`).val(response.data.agen.namaagen)
+        form.find(`[name="agen"]`).data('currentValue', response.data.agen.namaagen)
 
         $.each(response.data.piutang_details, (index, detail) => {
           let detailRow = $(`

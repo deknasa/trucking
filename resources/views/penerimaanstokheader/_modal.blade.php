@@ -141,6 +141,23 @@
                 <input type="text" name="keterangan" class="form-control">
               </div>
             </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>coa <span class="text-danger">*</span> </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-4">
+                <input type="text" name="coa" class="form-control akunpusat-lookup">
+              </div>
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>STATUS FORMAT <span class="text-danger">*</span> </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-4">
+                <select name="statusformat" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS FORMAT --</option>
+                </select>
+              </div>
+            </div>
             
             <table class="table table-bordered table-bindkeys">
               <thead>
@@ -506,6 +523,10 @@
         element.val(stok.namastok)
         parent = element.closest('td');
         parent.children('.detailstokId').val(stok.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     initAutoNumeric($(`.number${index}`))
@@ -634,6 +655,10 @@
               element.val(stok.namastok)
               parent = element.closest('td');
               parent.children('.detailstokId').val(stok.id)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
             }
           })
           id++;

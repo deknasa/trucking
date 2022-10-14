@@ -1,7 +1,6 @@
 <table id="hutangHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
 <div id="hutangHeaderLookupPager"></div>
 
-@push('scripts')
 <script>
   $('#hutangHeaderLookup').jqGrid({
       url: `{{ config('app.api_url') . 'hutangheader' }}`,

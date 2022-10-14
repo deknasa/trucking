@@ -36,37 +36,9 @@
   $(document).ready(function() {
 
 
-    $('#lookup').hide()
+    // $('#lookup').hide()
 
-    $('.kotadari-lookup').lookup({
-      title: 'kota Lookup',
-      fileName: 'kota',
-      onSelectRow: (kota, element) => {
-        $('#crudForm [name=kotadari_id]').first().val(kota.id)
-        element.val(kota.keterangan)
-
-      }
-    })
-
-    $('.kotasampai-lookup').lookup({
-      title: 'kota Lookup',
-      fileName: 'kota',
-      onSelectRow: (kota, element) => {
-        $('#crudForm [name=kotasampai_id]').first().val(kota.id)
-        element.val(kota.keterangan)
-
-      }
-    })
-
-    $('.zona-lookup').lookup({
-      title: 'zona Lookup',
-      fileName: 'zona',
-      onSelectRow: (zona, element) => {
-        $('#crudForm [name=zona_id]').first().val(zona.id)
-        element.val(zona.zona)
-
-      }
-    })
+   
 
 
     $("#jqGrid").jqGrid({

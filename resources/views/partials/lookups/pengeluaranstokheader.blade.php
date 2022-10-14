@@ -42,7 +42,7 @@
             }
           },
           {
-            label: 'PENgeluaran Stok',
+            label: 'Pengeluaran Stok',
             name: 'pengeluaranstok',
             align: 'left'
           },
@@ -63,7 +63,11 @@
           },
           {
             label: 'Gudang',
+<<<<<<< Updated upstream
             name: 'gudang',
+=======
+            name: 'gudangs',
+>>>>>>> Stashed changes
             align: 'left'
           },
           {
@@ -77,6 +81,14 @@
             align: 'left'
           },
           {
+<<<<<<< Updated upstream
+=======
+            label: 'no bukti Hutang',
+            name: 'hutang_nobukti',
+            align: 'left'
+          },
+          {
+>>>>>>> Stashed changes
             label: 'Status format',
             name: 'statusformat',
             align: 'left'
@@ -98,7 +110,10 @@
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
+<<<<<<< Updated upstream
       toolbar: [true, "top"],
+=======
+>>>>>>> Stashed changes
       page: 1,
       pager: $('#pengeluaranStokHeaderLookupPager'),
       viewrecords: true,
@@ -168,6 +183,7 @@
       }
     })
 
+<<<<<<< Updated upstream
     .jqGrid('filterToolbar', {
       stringResult: true,
       searchOnEnter: false,
@@ -181,4 +197,16 @@
 
   loadGlobalSearch($('#pengeluaranStokHeaderLookup'))
   loadClearFilter($('#pengeluaranStokHeaderLookup'))
+=======
+    // .jqGrid('filterToolbar', {
+    //   stringResult: true,
+    //   searchOnEnter: false,
+    //   defaultSearch: 'cn',
+    //   groupOp: 'AND',
+    //   disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
+    //   beforeSearch: function() {
+
+    //   },
+    // })
+>>>>>>> Stashed changes
 </script>
