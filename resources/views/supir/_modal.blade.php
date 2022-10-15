@@ -148,176 +148,179 @@
                 </div>
               </div>
 
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">STATUS ZONA TERTENTU <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="statuszonatertentu" class="form-select select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH STATUS ZONA TERTENTU --</option>
-                  </select>
+              <<div class="form-group col-sm-6 row">
+                <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                  <label>
+                    ZONA <span class="text-danger">*</span>
+                  </label>
                 </div>
-              </div>
+                <div class="col-8 col-md-10">
+                  <input type="hidden" name="zona_id">
+                  <input type="text" name="zona" class="form-control zona-lookup">
+                </div>
+            </div>
 
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">ZONA <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="zona_id" class="form-select select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH ZONA --</option>
-                  </select>
-                </div>
+            <!-- <div class="form-group col-sm-6 row">
+              <label for="staticEmail" class="col-sm-4 col-form-label">ZONA <span class="text-danger">*</span></label>
+              <div class="col-sm-8">
+                <select name="zona_id" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH ZONA --</option>
+                </select>
               </div>
+            </div> -->
 
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Angsuran Pinjaman <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" name="angsuranpinjaman" class="form-control">
-                </div>
-              </div>
-
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Plafon Deposito <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" name="plafondeposito" class="form-control">
-                </div>
-              </div>
-
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Berhenti Supir <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control datepicker" name="tglberhentisupir">
-                </div>
-              </div>
-
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Keterangan Resign <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" name="keteranganresign" class="form-control">
-                </div>
-              </div>
-
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">STATUS BLACKLIST <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="statusblacklist" class="form-select select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH STATUS BLACKLIST --</option>
-                  </select>
-                </div>
+            <div class="form-group col-sm-6 row">
+              <label for="staticEmail" class="col-sm-4 col-form-label ">Angsuran Pinjaman <span class="text-danger">*</span></label>
+              <div class="col-sm-8">
+                <input type="text" name="angsuranpinjaman" class="form-control autonumeric">
               </div>
             </div>
 
-            <div class="row p-2">
-              <div class="col-md-4">
-                <div class="row mb-2">
-                  <div class="col">
-                    <label class="col-form-label">Upload Foto Supir</label>
-                  </div>
-                  <div class="col text-right">
-                    <button class="btn btn-info btn-sm" id="uploadsupir" type="button">Upload Supir</button>
-                  </div>
-                </div>
-                <div class="dropzone" id="my-dropzone" data-field="supir">
-                  <div class="fallback">
-                    <!-- <input name="file" type="file" /> -->
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="row mb-2">
-                  <div class="col">
-                    <label class="col-form-label">Upload Foto KTP</label>
-                  </div>
-                  <div class="col text-right">
-                    <button class="btn btn-info btn-sm" type="button" id="uploadBpkb">Upload KTP</button>
-                  </div>
-                </div>
-                <div class="dropzone" id="my-dropzoness" data-field="ktp">
-                  <div class="fallback">
-                    <input name="file" type="file" />
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="row mb-2">
-                  <div class="col">
-                    <label class="col-form-label">Upload Foto SIM</label>
-                  </div>
-                  <div class="col text-right">
-                    <button class="btn btn-info btn-sm" type="button">Upload SIM</button>
-                  </div>
-                </div>
-                <div class="dropzone" id="dropzonestnk" data-field="sim">
-                  <div class="fallback">
-                    <input name="file" type="file" />
-                  </div>
-                </div>
+            <div class="form-group col-sm-6 row">
+              <label for="staticEmail" class="col-sm-4 col-form-label ">Plafon Deposito <span class="text-danger">*</span></label>
+              <div class="col-sm-8">
+                <input type="text" name="plafondeposito" class="form-control autonumeric">
               </div>
             </div>
 
-            <div class="row p-2">
-              <div class="col-md-4">
-                <div class="row mb-2">
-                  <div class="col">
-                    <label class="col-form-label">Upload Foto KK</label>
-                  </div>
-                  <div class="col text-right">
-                    <button class="btn btn-info btn-sm" id="uploadsupir" type="button">Upload KK</button>
-                  </div>
-                </div>
-                <div class="dropzone" id="my-dropzone" data-field="kk">
-                  <div class="fallback">
-                    <input name="file" type="file" />
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="row mb-2">
-                  <div class="col">
-                    <label class="col-form-label">Upload Foto SKCK</label>
-                  </div>
-                  <div class="col text-right">
-                    <button class="btn btn-info btn-sm" type="button" id="uploadBpkb">Upload SKCK</button>
-                  </div>
-                </div>
-                <div class="dropzone" id="my-dropzoness" data-field="skck">
-                  <div class="fallback">
-                    <input name="file" type="file" />
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="row mb-2">
-                  <div class="col">
-                    <label class="col-form-label">Upload Foto Domisili</label>
-                  </div>
-                  <div class="col text-right">
-                    <button class="btn btn-info btn-sm" type="button">Upload Domisili</button>
-                  </div>
-                </div>
-                <div class="dropzone" id="dropzonestnk" data-field="domisili">
-                  <div class="fallback">
-                    <input name="file" type="file" />
-                  </div>
-                </div>
+            <div class="form-group col-sm-6 row">
+              <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Berhenti Supir <span class="text-danger">*</span></label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control datepicker" name="tglberhentisupir">
               </div>
             </div>
-            <div class="modal-footer justify-content-start">
-              <button id="btnSubmit" class="btn btn-primary">
-                <i class="fa fa-save"></i>
-                Simpan
-              </button>
-              <button class="btn btn-secondary" data-dismiss="modal">
-                <i class="fa fa-times"></i>
-                Batal
-              </button>
+
+            <div class="form-group col-sm-6 row">
+              <label for="staticEmail" class="col-sm-4 col-form-label">Keterangan Resign <span class="text-danger">*</span></label>
+              <div class="col-sm-8">
+                <input type="text" name="keteranganresign" class="form-control">
+              </div>
+            </div>
+
+            <div class="form-group col-sm-6 row">
+              <label for="staticEmail" class="col-sm-4 col-form-label">STATUS BLACKLIST <span class="text-danger">*</span></label>
+              <div class="col-sm-8">
+                <select name="statusblacklist" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS BLACKLIST --</option>
+                </select>
+              </div>
             </div>
           </div>
-        </form>
+
+          <div class="row p-2">
+            <div class="col-md-4">
+              <div class="row mb-2">
+                <div class="col">
+                  <label class="col-form-label">Upload Foto Supir</label>
+                </div>
+                <div class="col text-right">
+                  <button class="btn btn-info btn-sm" id="photosupir" type="button">Upload Supir</button>
+                </div>
+              </div>
+              <div class="dropzone" id="my-dropzone" data-field="supir">
+                <div class="fallback">
+                  <!-- <input name="file" type="file" /> -->
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="row mb-2">
+                <div class="col">
+                  <label class="col-form-label">Upload Foto KTP</label>
+                </div>
+                <div class="col text-right">
+                  <button class="btn btn-info btn-sm" type="button" id="uploadBpkb">Upload KTP</button>
+                </div>
+              </div>
+              <div class="dropzone" id="my-dropzoness" data-field="ktp">
+                <div class="fallback">
+                  <input name="file" type="file" />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="row mb-2">
+                <div class="col">
+                  <label class="col-form-label">Upload Foto SIM</label>
+                </div>
+                <div class="col text-right">
+                  <button class="btn btn-info btn-sm" type="button">Upload SIM</button>
+                </div>
+              </div>
+              <div class="dropzone" id="dropzonestnk" data-field="sim">
+                <div class="fallback">
+                  <input name="file" type="file" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row p-2">
+            <div class="col-md-4">
+              <div class="row mb-2">
+                <div class="col">
+                  <label class="col-form-label">Upload Foto KK</label>
+                </div>
+                <div class="col text-right">
+                  <button class="btn btn-info btn-sm" id="uploadsupir" type="button">Upload KK</button>
+                </div>
+              </div>
+              <div class="dropzone" id="my-dropzone" data-field="kk">
+                <div class="fallback">
+                  <input name="file" type="file" />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="row mb-2">
+                <div class="col">
+                  <label class="col-form-label">Upload Foto SKCK</label>
+                </div>
+                <div class="col text-right">
+                  <button class="btn btn-info btn-sm" type="button" id="uploadBpkb">Upload SKCK</button>
+                </div>
+              </div>
+              <div class="dropzone" id="my-dropzoness" data-field="skck">
+                <div class="fallback">
+                  <input name="file" type="file" />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="row mb-2">
+                <div class="col">
+                  <label class="col-form-label">Upload Foto Domisili</label>
+                </div>
+                <div class="col text-right">
+                  <button class="btn btn-info btn-sm" type="button">Upload Domisili</button>
+                </div>
+              </div>
+              <div class="dropzone" id="dropzonestnk" data-field="domisili">
+                <div class="fallback">
+                  <input name="file" type="file" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-start">
+            <button id="btnSubmit" class="btn btn-primary">
+              <i class="fa fa-save"></i>
+              Simpan
+            </button>
+            <button class="btn btn-secondary" data-dismiss="modal">
+              <i class="fa fa-times"></i>
+              Batal
+            </button>
+          </div>
       </div>
     </form>
   </div>
+  </form>
+</div>
 </div>
 
 @push('scripts')
@@ -337,6 +340,18 @@
       let data = $('#crudForm').serializeArray()
 
 
+      $('#crudForm').find(`[name="angsuranpinjaman"]`).each((index, element) => {
+        data.filter((row) => row.name === 'angsuranpinjaman')[index].value = AutoNumeric.getNumber($(`#crudForm [name="angsuranpinjaman"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="plafondeposito"]`).each((index, element) => {
+        data.filter((row) => row.name === 'plafondeposito')[index].value = AutoNumeric.getNumber($(`#crudForm [name="plafondeposito"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="nominalpinjamansaldoawal"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominalpinjamansaldoawal')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalpinjamansaldoawal"]`)[index])
+      })
+
       $('#crudForm').find(`[name="nominaldepositsa"]`).each((index, element) => {
         data.filter((row) => row.name === 'nominaldepositsa')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaldepositsa"]`)[index])
       })
@@ -345,9 +360,6 @@
         data.filter((row) => row.name === 'depositke')[index].value = AutoNumeric.getNumber($(`#crudForm [name="depositke"]`)[index])
       })
 
-      $('#crudForm').find(`[name="nominalpinjamansaldoawal"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominalpinjamansaldoawal')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalpinjamansaldoawal"]`)[index])
-      })
       console.log(data);
 
       data.push({
@@ -444,6 +456,7 @@
     activeGrid = null
 
     getMaxLength(form)
+    initLookup()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -472,7 +485,7 @@
     setStatusAdaUpdateGambarOptions(form)
     setStatusLuarKotaOptions(form)
     setStatusZonaTertentuOptions(form)
-    setZonaOptions(form)
+    // setZonaOptions(form)
     setStatusBlackListOptions(form)
   }
 
@@ -498,7 +511,7 @@
         setStatusAdaUpdateGambarOptions(form),
         setStatusLuarKotaOptions(form),
         setStatusZonaTertentuOptions(form),
-        setZonaOptions(form),
+        // setZonaOptions(form),
         setStatusBlackListOptions(form)
       ])
       .then(() => {
@@ -528,7 +541,7 @@
         setStatusAdaUpdateGambarOptions(form),
         setStatusLuarKotaOptions(form),
         setStatusZonaTertentuOptions(form),
-        setZonaOptions(form),
+        // setZonaOptions(form),
         setStatusBlackListOptions(form)
       ])
       .then(() => {
@@ -591,35 +604,35 @@
     })
   }
 
-  const setZonaOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=zona_id]').empty()
-      relatedForm.find('[name=zona_id]').append(
-        new Option('-- PILIH ZONA --', '', false, true)
-      ).trigger('change')
+  // const setZonaOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=zona_id]').empty()
+  //     relatedForm.find('[name=zona_id]').append(
+  //       new Option('-- PILIH ZONA --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}zona`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(zona => {
-            let option = new Option(zona.keterangan, zona.id)
+  //     $.ajax({
+  //       url: `${apiUrl}zona`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         limit: 0,
+  //       },
+  //       success: response => {
+  //         response.data.forEach(zona => {
+  //           let option = new Option(zona.keterangan, zona.id)
 
-            relatedForm.find('[name=zona_id]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=zona_id]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       }
+  //     })
+  //   })
+  // }
 
   const setStatusBlackListOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
@@ -1040,6 +1053,21 @@
       })
       dropzones.push(myDropzone)
     })
+
+    function initLookup() {
+      $('.zona-lookup').lookup({
+        title: 'zona Lookup',
+        fileName: 'zona',
+        onSelectRow: (zona, element) => {
+          $('#crudForm [name=zona_id]').first().val(zona.id)
+          element.val(zona.zona)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        }
+      })
+    }
   }
 </script>
 @endpush()
