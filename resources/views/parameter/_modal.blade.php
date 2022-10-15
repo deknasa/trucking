@@ -184,7 +184,7 @@
     activeGrid = null
 
     getMaxLength(form)
-    iniSelect2()
+    initSelect2()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
