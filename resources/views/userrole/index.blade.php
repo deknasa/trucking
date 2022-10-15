@@ -23,8 +23,8 @@
         <div class="modal-body">
           <div class="card">
             <div class="card-body">
-              <input type="hidden" name="user_id">
-
+              <!-- <input type="hidden" name="user_id"> -->
+              <!-- 
               <div class="row form-group">
                 <div class="col-12">
                   <input type="text" class="form-control user-lookup">
@@ -34,26 +34,40 @@
                 <div class="col-12">
                   <input type="text" class="form-control agen-lookup">
                 </div>
-              </div>
-              <div class="row form-group">
+              </div> -->
+              <!-- <div class="row form-group">
                 <div class="col-12">
                   <input type="text" class="form-control user-lookup">
                 </div>
-              </div>
+              </div> -->
 
               <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                  <label>
+                    USER <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div class="col-8 col-md-10">
+                  <input type="hidden" name="user_id">
+                  <input type="text" name="user" class="form-control user-lookup">
+                </div>
+              </div>
+
+
+              <!-- <div class="row form-group">
                 <div class="col-12 col-md-1">
                   <label>USER</label>
                 </div>
                 <div class="col-12 col-md-11">
                   <div class="input-group">
-                    <input type="text" name="user" class="form-control">
-                    <div class="input-group-append">
+                  <input type="hidden" name="user_id">
+                    <input type="text" name="user"  class="form-control user-lookup"> -->
+              <!-- <div class="input-group-append">
                       <button id="lookupToggler" class="btn btn-secondary" type="button">...</button>
-                    </div>
-                  </div>
+                    </div> -->
+              <!-- </div>
                 </div>
-              </div>
+              </div> -->
 
               <table class="table table-borderd" id="roleList">
                 <thead class="table-secondary">
@@ -104,11 +118,21 @@
   $(document).ready(function() {
     $('#lookup').hide()
 
+    // $('.user-lookup').lookup({
+    //   title: 'User Lookup',
+  //   fileName: 'user',  
+    //   onSelectRow: (user, element) => {
+    //     element.val(user.name)
+    //   }
+    // })
+
     $('.user-lookup').lookup({
-      title: 'User Lookup',
+      title: 'user Lookup',
       fileName: 'user',
       onSelectRow: (user, element) => {
+        $('#crudForm [name=user_id]').first().val(user.id)
         element.val(user.name)
+
       }
     })
 
@@ -659,23 +683,23 @@
       .parent().addClass('px-1')
 
     if (!`{{ $myAuth->hasPermission('userrole', 'store') }}`) {
-      $('#add').addClass('ui-disabled')
+      $('#add').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('userrole', 'update') }}`) {
-      $('#edit').addClass('ui-disabled')
+      $('#edit').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('userrole', 'destroy') }}`) {
-      $('#delete').addClass('ui-disabled')
+      $('#delete').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('userrole', 'export') }}`) {
-      $('#export').addClass('ui-disabled')
+      $('#export').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('userrole', 'report') }}`) {
-      $('#report').addClass('ui-disabled')
+      $('#report').attr('disabled', 'disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {

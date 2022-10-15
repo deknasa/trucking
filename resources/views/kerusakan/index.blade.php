@@ -227,15 +227,15 @@
       .parent().addClass('px-1')
 
     if (!`{{ $myAuth->hasPermission('kerusakan', 'store') }}`) {
-      $('#add').addClass('ui-disabled')
+      $('#add').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('kerusakan', 'update') }}`) {
-      $('#edit').addClass('ui-disabled')
+      $('#edit').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('kerusakan', 'destroy') }}`) {
-      $('#delete').addClass('ui-disabled')
+      $('#delete').attr('disabled', 'disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {

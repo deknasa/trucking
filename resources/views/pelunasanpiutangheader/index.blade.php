@@ -267,23 +267,23 @@
       .parent().addClass('px-1')
 
     if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'store') }}`) {
-      $('#add').addClass('ui-disabled')
+      $('#add').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'update') }}`) {
-      $('#edit').addClass('ui-disabled')
+      $('#edit').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'destroy') }}`) {
-      $('#delete').addClass('ui-disabled')
+      $('#delete').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'export') }}`) {
-      $('#export').addClass('ui-disabled')
+      $('#export').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'report') }}`) {
-      $('#report').addClass('ui-disabled')
+      $('#report').attr('disabled', 'disabled')
     }
 
 

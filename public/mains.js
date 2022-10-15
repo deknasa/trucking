@@ -111,9 +111,9 @@ function currencyFormat(value) {
 }
 
 function currencyUnformat(value) {
-	let result = parseFloat(value.replaceAll(formats.THOUSANDSEPARATOR, ''))
+	let result = parseFloat(value.replaceAll(formats.THOUSANDSEPARATOR, ""));
 
-	return result
+	return result;
 }
 
 function dateFormat(value) {
@@ -220,11 +220,7 @@ $.fn.disable = function () {
 	});
 
 	this.on("keydown", (e) => {
-		if (
-			!e.altKey &&
-			!e.ctrlKey &&
-			e.which !== 27
-		) {
+		if (!e.altKey && !e.ctrlKey && e.which !== 27) {
 			e.preventDefault();
 			return false;
 		}
@@ -240,8 +236,6 @@ $.fn.disable = function () {
 };
 
 function setErrorMessages(form, errors) {
-	let errorKeys = Object.keys(errors);
-
 	$.each(errors, (index, error) => {
 		let indexes = index.split(".");
 		let element;
@@ -252,7 +246,7 @@ function setErrorMessages(form, errors) {
 			element = form.find(`[name="${indexes[0]}"]`)[0];
 		}
 
-		if ($(element).length > 0) {
+		if ($(element).length > 0 && !$(element).is(":hidden")) {
 			$(element).addClass("is-invalid");
 			$(`
 					<div class="invalid-feedback">

@@ -235,15 +235,15 @@
       .parent().addClass('px-1')
 
     if (!`{{ $myAuth->hasPermission('jenisorder', 'store') }}`) {
-      $('#add').addClass('ui-disabled')
+      $('#add').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('jenisorder', 'update') }}`) {
-      $('#edit').addClass('ui-disabled')
+      $('#edit').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('jenisorder', 'destroy') }}`) {
-      $('#delete').addClass('ui-disabled')
+      $('#delete').attr('disabled', 'disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {

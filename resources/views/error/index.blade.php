@@ -230,23 +230,23 @@
 
 
     if (!`{{ $myAuth->hasPermission('error', 'store') }}`) {
-      $('#add').addClass('ui-disabled')
+      $('#add').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('error', 'update') }}`) {
-      $('#edit').addClass('ui-disabled')
+      $('#edit').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('error', 'destroy') }}`) {
-      $('#delete').addClass('ui-disabled')
+      $('#delete').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('error', 'export') }}`) {
-      $('#export').addClass('ui-disabled')
+      $('#export').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('error', 'report') }}`) {
-      $('#report').addClass('ui-disabled')
+      $('#report').attr('disabled', 'disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {

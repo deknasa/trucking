@@ -52,9 +52,10 @@ class Menu
     $string = $hasParent ? '<ul class="ml-4 nav nav-treeview">' : '';
 
     foreach ($menus as $index => $menu) {
-      $string .= '
+      if (count($menu['child']) > 0 || $menu['link'] != '' || $menu['aco_id'] != 0) {
+        $string .= '
       <li class="nav-item">
-        <a id="' . ($menu['menuparent'] == 0 ? $index : $menu['menukode']) . '" href="' . (count($menu['child']) > 0 ? 'javascript:void(0)' : strtolower(url($menu['menuexe']))) . '" class="nav-link ' . (@$currentMenu->id == $menu['menuid'] ? 'active hover' : '') . '">
+        <a id="' . ($menu['menuparent'] == 0 ? $index : $menu['menukode']) . '" href="' . (count($menu['child']) > 0 ? 'javascript:void(0)' : ($menu['link'] != '' ? strtolower($menu['link']) : strtolower(url($menu['menuexe'])))) . '" class="nav-link ' . (@$currentMenu->id == $menu['menuid'] ? 'active hover' : '') . '">
           <i class="nav-icon ' . (strtolower($menu['menuicon']) ?? 'far fa-circle') . '"></i>
           <p>
             ' . ($menu['menuparent'] == 0 ? $index : substr($menu['menukode'], -1)) . '. ' . $menu['menuname'] . '
@@ -64,6 +65,7 @@ class Menu
         ' . (count($menu['child']) > 0 ? Menu::printRecursiveMenu($menu['child'], true) : '') . '
       </li>
       ';
+      }
     }
 
     $string .= $hasParent ? '</ul>' : '';

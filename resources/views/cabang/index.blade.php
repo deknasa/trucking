@@ -271,23 +271,23 @@
 
 
     if (!`{{ $myAuth->hasPermission('cabang', 'store') }}`) {
-      $('#add').addClass('ui-disabled')
+      $('#add').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('cabang', 'update') }}`) {
-      $('#edit').addClass('ui-disabled')
+      $('#edit').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('cabang', 'destroy') }}`) {
-      $('#delete').addClass('ui-disabled')
+      $('#delete').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('cabang', 'export') }}`) {
-      $('#export').addClass('ui-disabled')
+      $('#export').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('cabang', 'report') }}`) {
-      $('#report').addClass('ui-disabled')
+      $('#report').attr('disabled', 'disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {

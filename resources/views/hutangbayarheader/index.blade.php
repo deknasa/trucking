@@ -306,23 +306,23 @@
       .parent().addClass('px-1')
 
       if (!`{{ $myAuth->hasPermission('hutangbayarheader', 'store') }}`) {
-    $('#add').addClass('ui-disabled')
+    $('#add').attr('disabled', 'disabled')
   }
 
   if (!`{{ $myAuth->hasPermission('hutangbayarheader', 'update') }}`) {
-    $('#edit').addClass('ui-disabled')
+    $('#edit').attr('disabled', 'disabled')
   }
 
   if (!`{{ $myAuth->hasPermission('hutangbayarheader', 'destroy') }}`) {
-    $('#delete').addClass('ui-disabled')
+    $('#delete').attr('disabled', 'disabled')
   }
 
   if (!`{{ $myAuth->hasPermission('hutangbayarheader', 'export') }}`) {
-    $('#export').addClass('ui-disabled')
+    $('#export').attr('disabled', 'disabled')
   }
 
   if (!`{{ $myAuth->hasPermission('hutangbayarheader', 'report') }}`) {
-    $('#report').addClass('ui-disabled')
+    $('#report').attr('disabled', 'disabled')
   }
 
   $('#rangeModal').on('shown.bs.modal', function() {

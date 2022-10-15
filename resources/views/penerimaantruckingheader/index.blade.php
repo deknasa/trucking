@@ -797,23 +797,23 @@
       .parent().addClass('px-1')
 
     if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'store') }}`) {
-      $('#add').addClass('ui-disabled')
+      $('#add').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'update') }}`) {
-      $('#edit').addClass('ui-disabled')
+      $('#edit').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'destroy') }}`) {
-      $('#delete').addClass('ui-disabled')
+      $('#delete').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'export') }}`) {
-      $('#export').addClass('ui-disabled')
+      $('#export').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'report') }}`) {
-      $('#report').addClass('ui-disabled')
+      $('#report').attr('disabled', 'disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
