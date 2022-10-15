@@ -171,7 +171,7 @@ class Myauth
             ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('acl', 'acos.id', '=', 'acl.aco_id')
             ->where('acos.class', 'like', "%$class%")
-            ->where('acl.role_id', $userRole[0]->user_id);
+            ->where('acl.role_id', $userRole[0]->user_id ?? null);
 
         $data = DB::table('acos')
             ->select(['acos.id', 'acos.class', 'acos.method'])
