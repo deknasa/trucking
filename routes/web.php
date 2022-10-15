@@ -307,14 +307,14 @@ Route::middleware('auth')->group(function () {
     Route::get('jenistrado/index', [JenisTradoController::class, 'index']);
     Route::resource('jenistrado', JenisTradoController::class);
 
-    Route::get('kasgantung/{id}/delete', [KasGantungHeaderController::class, 'delete'])->name('kasgantung.delete');
-    Route::get('kasgantung/index', [KasGantungHeaderController::class, 'index']);
-    Route::get('kasgantung/get', [KasGantungHeaderController::class, 'get'])->name('kasgantung.get');
-    Route::get('kasgantung/export', [KasGantungHeaderController::class, 'export'])->name('kasgantung.export');
-    Route::get('kasgantung/report', [KasGantungHeaderController::class, 'report'])->name('kasgantung.report');
-    Route::resource('kasgantung', KasGantungHeaderController::class);
+    Route::get('kasgantungheader/{id}/delete', [KasGantungHeaderController::class, 'delete'])->name('kasgantungheader.delete');
+    Route::get('kasgantungheader/index', [KasGantungHeaderController::class, 'index']);
+    Route::get('kasgantungheader/get', [KasGantungHeaderController::class, 'get'])->name('kasgantungheader.get');
+    Route::get('kasgantungheader/export', [KasGantungHeaderController::class, 'export'])->name('kasgantungheader.export');
+    Route::get('kasgantungheader/report', [KasGantungHeaderController::class, 'report'])->name('kasgantungheader.report');
+    Route::resource('kasgantungheader', KasGantungHeaderController::class);
 
-    Route::resource('kasgantung_detail', KasGantungDetailController::class);
+    Route::resource('kasgantungdetail', KasGantungDetailController::class);
 
     Route::get('gudang/field_length', [GudangController::class, 'fieldLength'])->name('gudang.field_length');
     Route::get('gudang/{id}/delete', [GudangController::class, 'delete'])->name('gudang.delete');

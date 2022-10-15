@@ -324,6 +324,11 @@
         })
         $(`#crudForm [name="role_id"]`).first().trigger('change')
 
+        
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
       }
     })
   }
@@ -397,6 +402,11 @@
         `)
 
         initSelect2($(`#crudForm select:not('.select2-hidden-accessible')`))
+        let form = $('#crudForm')
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
       }
     })
   }

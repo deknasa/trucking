@@ -374,6 +374,9 @@
             element.val(value)
           }
 
+          if(index == 'subkelompok') {
+            element.data('current-value', value)
+          }
         })
 
         if (form.data('action') === 'delete') {
@@ -392,7 +395,11 @@
       onSelectRow: (subkelompok, element) => {
         $('#crudForm [name=subkelompok_id]').first().val(subkelompok.id)
         element.val(subkelompok.keterangan)
-      }
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      } 
     })
   }
 </script>

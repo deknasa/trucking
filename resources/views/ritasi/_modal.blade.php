@@ -380,6 +380,22 @@
           } else {
             element.val(value)
           }
+
+          if(index == 'suratpengantar_nobukti') {
+            element.data('current-value', value)
+          }
+          if(index == 'dari') {
+            element.data('current-value', value)
+          }
+          if(index == 'sampai') {
+            element.data('current-value', value)
+          }
+          if(index == 'trado') {
+            element.data('current-value', value)
+          }
+          if(index == 'supir') {
+            element.data('current-value', value)
+          }
         })
 
         if (form.data('action') === 'delete') {
@@ -397,6 +413,10 @@
       onSelectRow: (suratpengantar, element) => {
         
         element.val(suratpengantar.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.dari-lookup').lookup({
@@ -405,6 +425,10 @@
       onSelectRow: (kota, element) => {
         $('#crudForm [name=dari_id]').first().val(kota.id)
         element.val(kota.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.sampai-lookup').lookup({
@@ -413,6 +437,10 @@
       onSelectRow: (kota, element) => {
         $('#crudForm [name=sampai_id]').first().val(kota.id)
         element.val(kota.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.trado-lookup').lookup({
@@ -421,6 +449,10 @@
       onSelectRow: (trado, element) => {
         $('#crudForm [name=trado_id]').first().val(trado.id)
         element.val(trado.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.supir-lookup').lookup({
@@ -429,6 +461,10 @@
       onSelectRow: (supir, element) => {
         $('#crudForm [name=supir_id]').first().val(supir.id)
         element.val(supir.namasupir)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
 

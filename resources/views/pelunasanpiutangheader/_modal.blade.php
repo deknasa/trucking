@@ -103,37 +103,42 @@
                       </div>
                     </div>
 
-                    <table class="table table-responsive table-borderd mt-3" id="detailList">
-                      <thead class="table-secondary">
-                        <tr>
-                          <th><input type="checkbox" id="checkAll"> </th>
-                          <th>NO</th>
-                          <th>NO BUKTI</th>
-                          <th>TGL BUKTI</th>
-                          <th>NO BUKTI INVOICE</th>
-                          <th>NOMINAL PIUTANG</th>
-                          <th>SISA</th>
-                          <th>KETERANGAN</th>
-                          <th>BAYAR</th>
-                          <th>KETERANGAN PENYESUAIAN</th>
-                          <th>PENYESUAIAN</th>
-                          <th>NOMINAL LEBIH BAYAR</th>
-                        </tr>
-                      </thead>
-                        <tbody id="table_body">
+                    <div class="col-md-12" style="overflow-x:scroll">
+                      <table class="table table-borderd mt-3" id="detailList" style="table-layout:auto">
+                        <thead class="table-secondary">
+                          <tr>
+                            <th><input type="checkbox" id="checkAll"> </th>
+                            <th>NO</th>
+                            <th>NO BUKTI</th>
+                            <th>TGL BUKTI</th>
+                            <th>NO BUKTI INVOICE</th>
+                            <th>NOMINAL PIUTANG</th>
+                            <th>SISA</th>
+                            <th>KETERANGAN</th>
+                            <th>BAYAR</th>
+                            <th>KETERANGAN PENYESUAIAN</th>
+                            <th>PENYESUAIAN</th>
+                            <th>NOMINAL LEBIH BAYAR</th>
+                          </tr>
+                        </thead>
+                          <tbody id="table_body">
 
-                        </tbody>
-                      <tfoot>
-                        <tr>
-                          <td colspan="5"></td>
-                          <td><p id="nominalPiutang" class="text-right font-weight-bold"></p></td>
-                          <td><p id="sisaPiutang" class="text-right font-weight-bold"></p></td>
-                          <td></td>
-                          <td><p id="bayarPiutang" class="text-right font-weight-bold"></p></td>
-                          <td colspan="3"></td>
-                        </tr>
-                      </tfoot>
-                    </table>
+                          </tbody>
+                        <tfoot>
+                          <tr>
+                            <td colspan="5"></td>
+                            <td><p id="nominalPiutang" class="text-right font-weight-bold"></p></td>
+                            <td><p id="sisaPiutang" class="text-right font-weight-bold"></p></td>
+                            <td></td>
+                            <td><p id="bayarPiutang" class="text-right font-weight-bold"></p></td>
+                            <td></td>
+                            <td><p id="bayarPenyesuaian" class="text-right font-weight-bold"></p></td>
+                            <td><p id="bayarNominalLebih" class="text-right font-weight-bold"></p></td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                    
                   </div>
                 </div>
               </div>
@@ -165,6 +170,12 @@
 
     $(document).on('input', `#table_body [name="bayarppd[]"]`, function(event) {
       setTotal()
+    })
+    $(document).on('input', `#table_body [name="penyesuaianppd[]"]`, function(event) {
+      setPenyesuaian()
+    })
+    $(document).on('input', `#table_body [name="nominallebihbayarppd[]"]`, function(event) {
+      setNominalLebih()
     })
 
     $('#btnSubmit').click(function(event) {
@@ -396,6 +407,31 @@
 
     new AutoNumeric('#bayarPiutang').set(total)
   }
+
+  function setPenyesuaian() {
+    let penyesuaian = $(`#table_body [name="penyesuaianppd[]"]`)
+    let totalPenyesuaian = 0
+
+    $.each(penyesuaian, (index, penyesuaian) => {
+      totalPenyesuaian += AutoNumeric.getNumber(penyesuaian)
+    });
+
+    new AutoNumeric('#bayarPenyesuaian').set(totalPenyesuaian)
+  }
+
+  function setNominalLebih() {
+    let nominalLebih = $(`#table_body [name="nominallebihbayarppd[]"]`)
+    let totalNominalLebih = 0
+
+    $.each(nominalLebih, (index, nominalLebih) => {
+      totalNominalLebih += AutoNumeric.getNumber(nominalLebih)
+    });
+
+    new AutoNumeric('#bayarNominalLebih').set(totalNominalLebih)
+  }
+
+
+
   function createPelunasanPiutangHeader() {
     let form = $('#crudForm')
 
@@ -414,7 +450,10 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
+    initDatepicker()
     setTotal()
+    setPenyesuaian()
+    setNominalLebih()
   }
 
   function editPelunasanPiutangHeader(Id) {
@@ -449,11 +488,29 @@
            if(element.hasClass('datepicker')){
               element.val(dateFormat(value))
           }
+
+          
+          if(index == 'bank') {
+            element.data('current-value', value)
+          }
+          if(index == 'agen') {
+            element.data('current-value', value)
+          }
+          if(index == 'cabang') {
+            element.data('current-value', value)
+          }
         })
         
 
         $.each(response.detail, (index, value) => {
           form.find(`[name="${index}"]`).val(value).attr('disabled', false)
+          
+          if(index == 'pelanggan') {
+            form.find(`[name="${index}"]`).data('current-value', value)
+          }
+          if(index == 'agendetail') {
+            form.find(`[name="${index}"]`).data('current-value', value)
+          }
         })
 
         let agenId = response.detail.agendetail_id
@@ -494,6 +551,7 @@
            if(element.hasClass('datepicker')){
               element.val(dateFormat(value))
           }
+
         })
         $.each(response.detail, (index, value) => {
           form.find(`[name="${index}"]`).val(value)
@@ -551,13 +609,13 @@
               <td width="10%"><p class="text-right">${nominal}</p></td>
               <td width="10%"><p class="text-right">${sisa}</p></td>
               <td width="10%">
-                <input type="text" name="keterangandetailppd[]" disabled class="form-control">
+                <textarea name="keterangandetailppd[]" rows="1" disabled class="form-control"></textarea>
               </td>
               <td width="10%">
                 <input type="text" name="bayarppd[]" disabled class="form-control bayar autonumeric">
               </td>
               <td width="10%">
-                <input type="text" name="keteranganpenyesuaianppd[]" disabled class="form-control">
+                <textarea name="keteranganpenyesuaianppd[]" rows="1" disabled class="form-control"></textarea>
               </td>
               <td width="10%">
                 <input type="text" name="penyesuaianppd[]" disabled class="form-control autonumeric">
@@ -577,6 +635,8 @@
 
           $('#detailList tbody').append(detailRow)
           setTotal()
+          setPenyesuaian()
+          setNominalLebih()
           
         })
         totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
@@ -649,19 +709,19 @@
               <td width="10%">${detail.invoice_nobukti}</td>
               <td width="10%"><p class="text-right">${nominal}</p></td>
               <td width="10%"><p class="text-right">${sisa}</p></td>
-              <td>
-                <input type="text" name="keterangandetailppd[]" class="form-control" value="${detail.keterangan || ''}" ${attribut}>
+              <td width="10%">
+                <textarea name="keterangandetailppd[]" rows="1" class="form-control" ${attribut}>${detail.keterangan || ''}</textarea>
               </td>
-              <td>
+              <td width="10%">
                 <input type="text" name="bayarppd[]" class="form-control bayar autonumeric" value="${detail.nominal || ''}" ${attribut}>
               </td>
-              <td>
-                <input type="text" name="keteranganpenyesuaianppd[]" class="form-control" value="${detail.keteranganpenyesuaian || ''}" ${attribut}>
+              <td width="10%">
+                <textarea name="keteranganpenyesuaianppd[]" rows="1" class="form-control" ${attribut}>${detail.keteranganpenyesuaian || ''}</textarea>
               </td>
-              <td>
+              <td width="10%">
                 <input type="text" name="penyesuaianppd[]" class="form-control autonumeric" value="${detail.penyesuaian || ''}" ${attribut}>
               </td>
-              <td>
+              <td width="10%">
                 <input type="text" name="nominallebihbayarppd[]" class="form-control autonumeric" value="${detail.nominallebihbayar || ''}" ${attribut}>
               </td>
             </tr>
@@ -672,7 +732,8 @@
           initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
           $('#detailList tbody').append(detailRow)      
           setTotal()
-
+          setPenyesuaian()
+          setNominalLebih()
         })
         totalNominalPiutang = new Intl.NumberFormat('en-US').format(totalNominalPiutang);
         totalSisa = new Intl.NumberFormat('en-US').format(totalSisa);
@@ -696,9 +757,10 @@
         $(element).siblings('td').find(`[name="keteranganpenyesuaianppd[]"]`).prop('disabled', true)
         $(element).siblings('td').find(`[name="penyesuaianppd[]"]`).prop('disabled', true)
         $(element).siblings('td').find(`[name="nominallebihbayarppd[]"]`).prop('disabled', true)
+
+        //bayarppd
         let bayar = $(element).siblings('td').find(`[name="bayarppd[]"]`).val()
 
-        console.log(bayar)
         if(bayar != '') {
           let byr =  parseFloat(bayar.replaceAll(',',''));
 
@@ -711,7 +773,38 @@
             decimalPlaces			: '2'
           })
         }
-        console.log('ok')
+
+        //penyesuaianppd
+        let penyesuaianppd = $(element).siblings('td').find(`[name="penyesuaianppd[]"]`).val()
+
+        if(penyesuaianppd != '') {
+          let pys =  parseFloat(penyesuaianppd.replaceAll(',',''));
+
+          let penyesuaian = $('#bayarPenyesuaian').text()
+          let ttlPenyesuaian = parseFloat(penyesuaian.replaceAll(',',''));
+
+          let finalPenyesuaian = ttlPenyesuaian - pys;
+          $("#bayarPenyesuaian").html(`${finalPenyesuaian}`);
+            new AutoNumeric('#bayarPenyesuaian',{
+            decimalPlaces			: '2'
+          })
+        }
+
+        //nominalLebih
+        let nominalLebih = $(element).siblings('td').find(`[name="nominallebihbayarppd[]"]`).val()
+
+        if(nominalLebih != '') {
+          let nlb =  parseFloat(nominalLebih.replaceAll(',',''));
+
+          let nominalLbh = $('#bayarNominalLebih').text()
+          let ttlNominalLebih = parseFloat(nominalLbh.replaceAll(',',''));
+
+          let finalNominalLbh = ttlNominalLebih - nlb;
+          $("#bayarNominalLebih").html(`${finalNominalLbh}`);
+            new AutoNumeric('#bayarNominalLebih',{
+            decimalPlaces			: '2'
+          })
+        }
       }else{
         $(element).siblings('td').find(`[name="keterangandetailppd[]"]`).prop('disabled', false)
         $(element).siblings('td').find(`[name="nominallebihbayarppd[]"]`).prop('disabled', false)
@@ -720,8 +813,8 @@
         $(element).siblings('td').find(`[name="penyesuaianppd[]"]`).prop('disabled', false)
         $(element).siblings('td').find(`[name="nominallebihbayarppd[]"]`).prop('disabled', false)
 
+        //bayar
         let bayar = $(element).siblings('td').find(`[name="bayarppd[]"]`).val()
-        console.log(bayar)
         if(bayar != '') {
           let byr =  parseFloat(bayar.replaceAll(',',''));
 
@@ -734,8 +827,38 @@
             decimalPlaces			: '2'
           })
         }
+
+        //penyesuaian
+        let penyesuaianppd = $(element).siblings('td').find(`[name="penyesuaianppd[]"]`).val()
+        if(penyesuaianppd != '') {
+          let pys =  parseFloat(penyesuaianppd.replaceAll(',',''));
+
+          let penyesuaian = $('#bayarPenyesuaian').text()
+          let ttlPenyesuaian = parseFloat(penyesuaian.replaceAll(',',''));
+
+          let finalPenyesuaian = ttlPenyesuaian + pys;
+          $("#bayarPenyesuaian").html(`${finalPenyesuaian}`);
+            new AutoNumeric('#bayarPenyesuaian',{
+            decimalPlaces			: '2'
+          })
+        }
         
-        console.log('sip')
+        //nominalLebih
+        let nominalLebih = $(element).siblings('td').find(`[name="nominallebihbayarppd[]"]`).val()
+
+        if(nominalLebih != '') {
+          let nlb =  parseFloat(nominalLebih.replaceAll(',',''));
+
+          let nominalLbh = $('#bayarNominalLebih').text()
+          let ttlNominalLebih = parseFloat(nominalLbh.replaceAll(',',''));
+
+          let finalNominalLbh = ttlNominalLebih + nlb;
+          $("#bayarNominalLebih").html(`${finalNominalLbh}`);
+            new AutoNumeric('#bayarNominalLebih',{
+            decimalPlaces			: '2'
+          })
+        }
+        
       }
       console.log(is_checked)
   }
@@ -798,8 +921,10 @@
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)
-        console.log($('#crudForm [name=agen_id]').first().val());
-
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.bank-lookup').lookup({
@@ -808,8 +933,10 @@
       onSelectRow: (bank, element) => {
         $('#crudForm [name=bank_id]').first().val(bank.id)
         element.val(bank.namabank)
-        console.log($('#crudForm [name=bank_id]').first().val());
-
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.cabang-lookup').lookup({
@@ -817,7 +944,11 @@
       fileName: 'cabang',
       onSelectRow: (cabang, element) => {
         $('#crudForm [name=cabang_id]').first().val(cabang.id)
-        element.val(cabang.namacabang)
+        element.val(cabang.namacabang) 
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.pelanggan-lookup').lookup({
@@ -826,6 +957,10 @@
       onSelectRow: (pelanggan, element) => {
         $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
         element.val(pelanggan.namapelanggan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.agendetail-lookup').lookup({
@@ -835,6 +970,10 @@
         $('#crudForm [name=agendetail_id]').first().val(agen.id)
         element.val(agen.namaagen)
         getPiutang(agen.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
   }

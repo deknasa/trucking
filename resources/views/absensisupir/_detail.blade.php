@@ -10,43 +10,30 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ config('app.api_url') . 'absensisupirheader' }}"
-
-  /**
-   * Custom Functions
-   */
-  var delay = (function() {
-    var timer = 0;
-    return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })()
-
-  function loadDetailGrid() {
+  function loadDetailGrid(id) {
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
-        url: `${detailIndexUrl}/1/detail`,
+        url: `${apiUrl}absensisupirdetail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
             label: 'TRADO',
-            name: 'trado.keterangan',
+            name: 'trado'
           },
           {
             label: 'SUPIR',
-            name: 'supir.namasupir',
+            name: 'supir',
           },
           {
             label: 'STATUS',
-            name: 'absen_trado.keterangan',
+            name: 'status',
           },
           {
             label: 'KETERANGAN',
-            name: 'keterangan',
+            name: 'keterangan_detail',
           },
           {
             label: 'JAM',
@@ -73,6 +60,9 @@
         viewrecords: true,
         footerrow:true,
         userDataOnFooter: true,
+        postData: {
+          absensi_id: id
+        },
         prmNames: {
           sort: 'sortIndex',
           order: 'sortOrder',
@@ -91,24 +81,18 @@
         },
         loadComplete: function(data) {
           initResize($(this))
-          var $grid = $("#detail");
-          var colSum = $grid.jqGrid('getCol','uangjalan');
-          // var colSum = $grid.jqGrid('getCol','nominal',false,'sum');
-         function untuknominal(colSum) {
-                  var nominalSum = 0;
+          
+          let nominals = $(this).jqGrid("getCol", "uangjalan")
+          let totalNominal = 0
 
-                   for(i=0; i<colSum.length; i++){
-                      var ambil = parseFloat(colSum[i])
-                      nominalSum += ambil
-                   }
+          if (nominals.length > 0) {
+            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          }
 
-                   return nominalSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                  // return nominalSum.toLocaleString('en-US', {maximumFractionDigits:2})
-                  // return new Intl.NumberFormat('en-US').format(nominalSum);
-              }
-
-          $grid.jqGrid('footerData','set',{jam: "TOTAL:", uangjalan : untuknominal(colSum)}, false);
-        
+          $(this).jqGrid('footerData', 'set', {
+            trado: 'Total:',
+            uangjalan: totalNominal,
+          }, true)
         }
       })
 
@@ -123,7 +107,11 @@
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: `${detailIndexUrl}/${id}/detail`,
+      url: `${apiUrl}absensisupirdetail`,
+      datatype: "json",
+      postData: {
+        absensi_id: id
+      }
     }).trigger('reloadGrid')
   }
 </script>
