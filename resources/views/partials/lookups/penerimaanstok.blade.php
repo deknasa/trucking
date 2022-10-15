@@ -130,7 +130,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupCabang').prev().width())
+        $(this).setGridWidth($('#lookupPenerimaanStok').prev().width())
         setHighlight($(this))
       }
     })

@@ -60,7 +60,7 @@
                   <th>Aksi</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="table_body" class="form-group">
                 <tr>
                   <td>1</td>
                   <td>
@@ -129,15 +129,16 @@
           max: 24
         }).mask(".inputmask-time");
 
-    $("#addRow").click(function() {
+    $(document).on('click', "#addRow", function() {
       addRow()
-    })
-    $(document).on('keyup', '.uangjalan', function(e) {
-      calculateSum()
-	  })
-
+    });
+    
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
+    })
+
+    $(document).on('input', `#table_body [name="uangjalan[]"]`, function(event) {
+      setTotal()
     })
 
     $(document).on('click', '#btnSubmit', function(event) {
@@ -244,29 +245,53 @@
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
-    setFormBindKeys($('#crudForm'))
+    let form = $('#crudForm')
+
+    setFormBindKeys(form)
+
     activeGrid = null
+
+    getMaxLength(form)
+    initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-
+    
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
+
+  
+  function setTotal() {
+    let nominalDetails = $(`#table_body [name="uangjalan[]"]`)
+    let total = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#total').set(total)
+  }
+
   function createAbsensiSupir() {
-    $('#crudForm').trigger('reset')
-    $('#crudForm').find('#btnSubmit').html(`
+    let form = $('#crudForm')
+
+    $('#crudModal').find('#crudForm').trigger('reset')
+    form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
       Simpan
     `)
-    $('#crudModalTitle').text('Create Absensi Supir')
+    form.data('action', 'add')
+
+    $('#crudModalTitle').text('Add Absensi Supir')
     $('#crudModal').modal('show')
-    $('#crudForm').data('action', 'add')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-  
+    $('#table_body').html('')
+    addRow()
+    setTotal()
   }
 
   function editAbsensiSupir(id) {
@@ -314,16 +339,15 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-        let tgl = response.data.tglbukti
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
 
-            element.val(value)
-            let tglbukti = response.data.tglbukti
-            $('#tglbukti').val($.datepicker.formatDate( "dd-mm-yy", new Date(tglbukti)));
+            if(element.hasClass('datepicker')){
+              element.val(dateFormat(value))
+            } else {
+              element.val(value)
+            }
         })
-        let ft = dateFormat(tgl)
-        form.find(`[name="tglbukti"]`).val(ft)
 
         $.each(response.detail, (index, detail) => {
           let detailRow = $(`
@@ -331,18 +355,18 @@
             <td></td>
             <td>
               <input type="hidden" name="trado_id[]" value="${detail.trado_id}">
-              <input type="text" name="trado" class="form-control trado-lookup" value="${detail.trado}">
+              <input type="text" name="trado" data-current-value="${detail.trado}" class="form-control trado-lookup" value="${detail.trado}">
             </td>
             <td>
               <input type="hidden" name="supir_id[]" value="${detail.supir_id}">
-              <input type="text" name="supir" class="form-control supir-lookup" value="${detail.supir}">
+              <input type="text" name="supir" data-current-value="${detail.supir}" class="form-control supir-lookup" value="${detail.supir}">
             </td>
             <td>
               <input type="text" name="keterangan_detail[]" class="form-control" value="${detail.keterangan}">
             </td>
             <td>
               <input type="hidden" name="absen_id[]" value="${detail.absen_id}">
-              <input type="text" name="absen" class="form-control absentrado-lookup" value="${detail.absen}">
+              <input type="text" name="absen"  data-current-value="${detail.absen}" class="form-control absentrado-lookup" value="${detail.absen}">
             </td>
             <td>
               <input type="text" class="form-control inputmask-time" name="jam[]" value="${detail.jam}"></input>
@@ -370,6 +394,10 @@
             onSelectRow: (supir,element) => {
               $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
               element.val(supir.namasupir)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
             }
           })
 
@@ -379,6 +407,10 @@
             onSelectRow: (trado,element) => {
               $(`#crudForm [name="trado_id[]"]`).first().val(trado.id)
               element.val(trado.keterangan)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
             }
           })
           
@@ -387,12 +419,21 @@
             fileName: 'absentrado',
             onSelectRow: (absentrado,element) => {
               $(`#crudForm [name="absen_id[]"]`).first().val(absentrado.id)
-              element.val(absentrado.keterangan)
+              element.val(absentrado.keterangan) 
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
             }
           })
         })
 
         setRowNumbers()
+        
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
       }
     })
   }
@@ -442,6 +483,10 @@
       onSelectRow: (supir,element) => {
         $(`#crudForm [name="supir_id[]"]`).last().val(supir.id)
         element.val(supir.namasupir)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
 
@@ -451,6 +496,10 @@
       onSelectRow: (trado,element) => {
         $(`#crudForm [name="trado_id[]"]`).last().val(trado.id)
         element.val(trado.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     
@@ -460,10 +509,16 @@
       onSelectRow: (absentrado,element) => {
         $(`#crudForm [name="absen_id[]"]`).last().val(absentrado.id)
         element.val(absentrado.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
 
     initAutoNumeric(detailRow.find('.autonumeric'))
+    initDatepicker()
+
     setRowNumbers()
   }
 
@@ -481,23 +536,71 @@
     })
   }
 
-  function calculateSum() {
-    var sum = 0;
-    //iterate through each textboxes and add the values
-    $(".uangjalan").each(function() {
-        let number = this.value
-        let hrg =  parseFloat(number.replaceAll(',',''));
-        console.log(hrg)
-        if (!isNaN(hrg) && hrg.length != 0) {
-            sum += parseFloat(hrg);
+  function getMaxLength(form) {
+    if (!form.attr('has-maxlength')) {
+      $.ajax({
+        url: `${apiUrl}absensisupirheader/field_length`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            if (value !== null && value !== 0 && value !== undefined) {
+              form.find(`[name=${index}]`).attr('maxlength', value)
+            }
+          })
+
+          form.attr('has-maxlength', true)
+        },
+        error: error => {
+          showDialog(error.statusText)
         }
-    });
-    sum = new Intl.NumberFormat('en-US').format(sum);
+      })
+    }
+  }
+
+  
+  function initLookup() {
+    $('.supir-lookup').lookup({
+      title: 'Supir Lookup',
+      fileName: 'supir',
+      onSelectRow: (supir,element) => {
+        $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
+        element.val(supir.namasupir)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+
+    $('.trado-lookup').lookup({
+      title: 'Trado Lookup',
+      fileName: 'trado',
+      onSelectRow: (trado,element) => {
+        $(`#crudForm [name="trado_id[]"]`).first().val(trado.id)
+        element.val(trado.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
     
-    $("#total").html(`${sum}`);
-    new AutoNumeric('#total',{
-			decimalPlaces			: '2'
-		})
+    $('.absentrado-lookup').lookup({
+      title: 'Absen Trado Lookup',
+      fileName: 'absentrado',
+      onSelectRow: (absentrado,element) => {
+        $(`#crudForm [name="absen_id[]"]`).first().val(absentrado.id)
+        element.val(absentrado.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
   }
 </script>
 @endpush

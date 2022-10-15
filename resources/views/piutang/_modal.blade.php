@@ -342,6 +342,7 @@
           } else {
             element.val(value)
           }
+
         })
 
         form.find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))

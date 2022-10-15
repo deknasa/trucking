@@ -36,7 +36,7 @@
   $(document).ready(function() {
 
     $("#jqGrid").jqGrid({
-        url: `${apiUrl}kasgantung`,
+        url: `${apiUrl}kasgantungheader`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -295,9 +295,9 @@
       let actionUrl = ``
 
       if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('kasgantung.export') }}`
+        actionUrl = `{{ route('kasgantungheader.export') }}`
       } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('kasgantung.report') }}`
+        actionUrl = `{{ route('kasgantungheader.report') }}`
       }
 
       /* Clear validation messages */
@@ -315,110 +315,6 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
-  const getKasGantungLookup = function(fileName) {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: `${appUrl}/lookup/${fileName}`,
-        method: 'GET',
-        dataType: 'html',
-        success: function(response) {
-          resolve(response)
-        }
-      })
-    })
-  }
-
-  $.fn.lookup = function(options = null) {
-    this.each(function() {
-      let element = $(this)
-
-      element
-        .wrap('<div class="input-group"></div>')
-        .after(`
-          <div class="input-group-append">
-            <button class="btn btn-primary lookup-toggler" type="button">...</button>
-          </div>
-        `)
-
-      element.siblings('.input-group-append').find('.lookup-toggler').click(function() {
-        activateLookup(element)
-      })
-    })
-
-    function activateLookup(element) {
-      let lookupModal = $(`
-        <div class="modal fade modal-fullscreen" id="lookupModal" tabindex="-1" aria-labelledby="lookupModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <form action="#" id="crudForm">
-              <div class="modal-content">
-                <div class="modal-header bg-primary">
-                  <h5 class="modal-title" id="lookupModalLabel">${options.title}</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      `)
-
-      $('body').append(lookupModal)
-
-      lookupModal.modal('show')
-
-      getKasGantungLookup(options.fileName)
-        .then(response => {
-          lookupModal.find('.modal-body').html(response)
-
-          grid = lookupModal.find('.lookup-grid')
-
-          if (detectDeviceType() == 'desktop') {
-            grid.jqGrid('setGridParam', {
-              ondblClickRow: function(id) {
-                let rowData = $(this).getRowData(id)
-                handleSelectedRow(id, lookupModal, element)
-              }
-            })
-          } else if (detectDeviceType() == 'mobile') {
-            grid.jqGrid('setGridParam', {
-              onSelectRow: function(id) {
-                handleSelectedRow(id, lookupModal, element)
-              }
-            })
-          }
-        })
-
-      lookupModal.on('hidden.bs.modal', function() {
-        lookupModal.remove()
-      })
-    }
-
-    function handleSelectedRow(id, lookupModal, element) {
-      if (id !== null) {
-        lookupModal.modal('hide')
-
-        options.onSelectRow(sanitize(grid.getRowData(id)), element)
-      } else {
-        alert('Please select a row')
-      }
-
-    }
-
-    
-    function sanitize(rowData) {
-      Object.keys(rowData).forEach(key => {
-        rowData[key] = rowData[key].replaceAll('<span class="highlight">', '').replaceAll('</span>', '')
-      })
-
-      return rowData
-    }
-
-    return this
-
-  }
 </script>
 @endpush()
 @endsection

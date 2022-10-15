@@ -370,6 +370,17 @@
           } else {
             element.val(value)
           }
+
+          if(index == 'coa') {
+            element.data('current-value', value)
+          }
+          if(index == 'kodepenerimaan') {
+            element.data('current-value', value)
+          }
+          if(index == 'kodepengeluaran') {
+            element.data('current-value', value)
+          }
+          
         })
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
@@ -385,6 +396,10 @@
       fileName: 'akunpusat',
       onSelectRow: (akunpusat, element) => {
         element.val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
 
@@ -395,6 +410,10 @@
         $('#crudForm [name=statusformatpenerimaan]').first().val(penerimaantrucking.statusformat)
         
         element.val(penerimaantrucking.kodepenerimaan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
 
@@ -404,6 +423,10 @@
       onSelectRow: (pengeluarantrucking, element) => {
         $('#crudForm [name=statusformatpengeluaran]').first().val(pengeluarantrucking.statusformat)
         element.val(pengeluarantrucking.kodepengeluaran)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
   }

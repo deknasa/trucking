@@ -97,6 +97,7 @@
       rownumWidth: 45,
       rowList: [10, 20, 50],
       sortable: true,
+      toolbar: [true, "top"],
       sortname: 'id',
       sortorder: 'asc',
       page: 1,

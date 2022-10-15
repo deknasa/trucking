@@ -42,6 +42,10 @@
       onSelectRow: (akunpusat, element) => {
         element.val(akunpusat.coa)
         $(`#${element[0]['name']}Id`).val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.penerimaanstok-lookup').lookup({
@@ -50,6 +54,10 @@
       onSelectRow: (penerimaanstok, element) => {
         element.val(penerimaanstok.kodepenerimaan)
         $(`#${element[0]['name']}Id`).val(penerimaanstok.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     
@@ -59,6 +67,10 @@
       onSelectRow: (supplier, element) => {
         element.val(supplier.namasupplier)
         $(`#${element[0]['name']}Id`).val(supplier.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.trado-lookup').lookup({
@@ -67,6 +79,10 @@
       onSelectRow: (trado, element) => {
         element.val(trado.keterangan)
         $(`#${element[0]['name']}Id`).val(trado.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.gudang-lookup').lookup({
@@ -75,6 +91,10 @@
       onSelectRow: (gudang, element) => {
         element.val(gudang.gudang)
         $(`#${element[0]['name']}Id`).val(gudang.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.penerimaanstokheader-lookup').lookup({
@@ -89,6 +109,10 @@
       fileName: 'pengeluaranstokheader',
       onSelectRow: (pengeluaran, element) => {
         element.val(pengeluaran.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
     $('.hutang-lookup').lookup({
@@ -96,6 +120,10 @@
       fileName: 'hutangheader',
       onSelectRow: (hutang, element) => {
         element.val(hutang.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
 

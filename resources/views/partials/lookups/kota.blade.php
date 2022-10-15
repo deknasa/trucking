@@ -17,7 +17,7 @@
         },
         {
           label: 'KODE KOTA',
-          name: 'kode kota',
+          name: 'kodekota',
           align: 'left',
         },
         {
