@@ -107,7 +107,7 @@
                       <table class="table table-borderd mt-3" id="detailList" style="table-layout:auto">
                         <thead class="table-secondary">
                           <tr>
-                            <th><input type="checkbox" id="checkAll"> </th>
+                            <th></th>
                             <th>NO</th>
                             <th>NO BUKTI</th>
                             <th>TGL BUKTI</th>
@@ -747,6 +747,10 @@
     
   }
 
+  $("#checkAll").click(function () {
+        $('input:checkbox').not(this).prop('checked', this.checked);
+    });
+    
   function select(element) {
       var is_checked = $(element).find(`[name="piutang_id[]"]`).is(":checked");
 

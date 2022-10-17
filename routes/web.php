@@ -81,6 +81,10 @@ use App\Http\Controllers\PengeluaranStokController;
 use App\Http\Controllers\PengeluaranStokHeaderController;
 use App\Http\Controllers\PengeluaranStokDetailController;
 
+use App\Http\Controllers\GajiSupirHeaderController;
+use App\Http\Controllers\GajiSupirDetailController;
+
+
 use App\Http\Controllers\PengeluaranTruckingHeaderController;
 use App\Http\Controllers\PengeluaranTruckingDetailController;
 use App\Http\Controllers\JurnalUmumHeaderController;
@@ -597,6 +601,17 @@ Route::middleware('auth')->group(function () {
     Route::resource('hutangbayarheader', HutangBayarHeaderController::class);
 
     Route::resource('hutangbayardetail', HutangBayarDetailController::class);
+
+    
+    Route::get('gajisupirheader/index', [GajiSupirHeaderController::class, 'index']);
+    Route::get('gajisupirheader/{id}/delete', [GajiSupirHeaderController::class, 'delete'])->name('gajisupirheader.delete');
+    Route::get('gajisupirheader/get', [GajiSupirHeaderController::class, 'get'])->name('gajisupirheader.get');
+    Route::get('gajisupirheader/export', [GajiSupirHeaderController::class, 'export'])->name('gajisupirheader.export');
+    Route::get('gajisupirheader/report', [GajiSupirHeaderController::class, 'report'])->name('gajisupirheader.report');
+    Route::resource('gajisupirheader', GajiSupirHeaderController::class);
+
+    Route::resource('gajisupirdetail', GajiSupirDetailController::class);
+
 
 });
 

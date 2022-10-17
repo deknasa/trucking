@@ -96,6 +96,7 @@ class Myauth
             'penerimaanstokheader',
             'pengeluaranstok',
             'pengeluaranstokheader',
+            'gajisupirheader',
         ],
         'method' => [
             'gridtab',
