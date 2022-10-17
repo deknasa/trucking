@@ -42,16 +42,16 @@ class MyController extends Controller
 
             $this->setClass();
             $this->setMethod();
-            
+
             $this->setBreadcrumb($this->class);
-            
+
             $this->setMyAuthConfig();
             $this->initMyauth();
-            
+
             $this->myAuth->auth($this->class, $this->method);
-            
+
             $this->loadMenu();
-            
+
             return $next($request);
         });
     }
@@ -87,7 +87,7 @@ class MyController extends Controller
     public function loadMenu(): void
     {
         $menu = $this->getMenu();
-        
+
         View::share('sqlmenu', $menu);
     }
 
@@ -105,7 +105,7 @@ class MyController extends Controller
         $menu = ModelsMenu::leftJoin('acos', 'menu.aco_id', '=', 'acos.id')
             ->where('menu.menuparent', $induk)
             ->orderby(DB::raw('right(menukode,1)'), 'ASC')
-            ->get(['menu.id', 'menu.aco_id', 'menu.menuseq', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode']);
+            ->get(['menu.id', 'menu.aco_id', 'menu.menuseq', 'menu.menuname', 'menu.menuicon', 'acos.class', 'acos.method', 'menu.link', 'menu.menukode', 'menu.menuparent']);
 
         foreach ($menu as $index => $row) {
             $hasPermission = $this->myAuth->hasPermission($row->class, $row->method);
@@ -133,7 +133,7 @@ class MyController extends Controller
         // $results = [];
 
         // $role = UserRole::where('user_id', Auth::id())->first();
-        
+
         // $menus = DB::select("
         //     SELECT DISTINCT menu.id, menu.aco_id, menu.menuexe, menu.menuseq, menu.menuname, menu.menuicon, acos.class, acos.method, menu.link, menu.menukode, menu.menuparent FROM menu
         //     LEFT JOIN useracl ON menu.aco_id = useracl.aco_id
@@ -152,7 +152,7 @@ class MyController extends Controller
         //     )
         //     ORDER BY menu.menukode ASC
         // ");
-        
+
         // foreach (collect($menus) as $menu) {
         //     $results[] = [
         //         'menuid' => $menu->id,
@@ -208,12 +208,12 @@ class MyController extends Controller
             'grp' => $group,
             'subgrp' => $subgroup
         ];
-        
+
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'parameter/combo', $params);
-        
+
         return $response['data'] ?? [];
     }
 

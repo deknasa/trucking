@@ -1,8 +1,9 @@
 <table id="userLookup" class="lookup-grid"></table>
 <div id="userLookupPager"></div>
 
+@push('scripts')
 <script>
-  userLookup = $('#userLookup').jqGrid({
+  $('#userLookup').jqGrid({
       url: `{{ config('app.api_url') . 'user' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -99,8 +100,6 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
 
-          triggerClick = true
-
           if (indexRow - 1 > $('#userLookup').getGridParam().reccount) {
             indexRow = $('#userLookup').getGridParam().reccount - 1
           }
@@ -135,7 +134,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookup').prev().width())
+        $(this).setGridWidth($('#lookupuser').prev().width())
         setHighlight($(this))
       }
     })
@@ -147,10 +146,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch(userLookup)
+        clearGlobalSearch($('#userLookup'))
       },
     })
 
-  loadGlobalSearch(userLookup)
-  loadClearFilter(userLookup)
+  loadGlobalSearch($('#userLookup'))
+  loadClearFilter($('#userLookup'))
 </script>

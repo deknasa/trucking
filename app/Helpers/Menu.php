@@ -52,23 +52,53 @@ class Menu
     $string = $hasParent ? '<ul class="ml-4 nav nav-treeview">' : '';
 
     foreach ($menus as $index => $menu) {
-      $string .= '
-      <li class="nav-item">
-        <a id="' . ($menu['menuparent'] == 0 ? $index : $menu['menukode']) . '" href="' . (count($menu['child']) > 0 ? 'javascript:void(0)' : strtolower(url($menu['menuexe']))) . '" class="nav-link ' . (@$currentMenu->id == $menu['menuid'] ? 'active hover' : '') . '">
-          <i class="nav-icon ' . (strtolower($menu['menuicon']) ?? 'far fa-circle') . '"></i>
-          <p>
-            ' . ($menu['menuparent'] == 0 ? $index : substr($menu['menukode'], -1)) . '. ' . $menu['menuname'] . '
-            ' . (count($menu['child']) > 0 ? '<i class="right fas fa-angle-left"></i>' : '') . '
-          </p>
-        </a>
-        ' . (count($menu['child']) > 0 ? Menu::printRecursiveMenu($menu['child'], true) : '') . '
-      </li>
-      ';
+      if ((count($menu['child']) > 0 || $menu['link'] != '' || $menu['aco_id'] != 0) && (new Menu())->hasClickableChild($menu)) {
+        $string .= '
+          <li class="nav-item">
+            <a id="' . ($menu['menuparent'] == 0 ? $index : $menu['menukode']) . '" href="' . (count($menu['child']) > 0 ? 'javascript:void(0)' : ($menu['link'] != '' ? strtolower(url($menu['link'])) : strtolower(url($menu['menuexe'])))) . '" class="nav-link ' . (@$currentMenu->id == $menu['menuid'] ? 'active hover' : '') . '">
+              <i class="nav-icon ' . (strtolower($menu['menuicon']) ?? 'far fa-circle') . '"></i>
+              <p>
+                ' . ($menu['menuparent'] == 0 ? $index : substr($menu['menukode'], -1)) . '. ' . $menu['menuname'] . '
+                ' . (count($menu['child']) > 0 ? '<i class="right fas fa-angle-left"></i>' : '') . '
+              </p>
+            </a>
+            ' . (count($menu['child']) > 0 ? Menu::printRecursiveMenu($menu['child'], true) : '') . '
+          </li>
+        ';
+      }
     }
 
     $string .= $hasParent ? '</ul>' : '';
 
     return $string;
+  }
+
+  public function hasClickableChild(array $menu): bool
+  {
+    $result = false;
+
+    if (count($menu['child']) > 0) {
+      foreach ($menu['child'] as $menuChild) {
+        $clickable = (new Menu())->hasClickableChild($menuChild);
+
+        if ($clickable) {
+          return true;
+        }
+      }
+    } else {
+      return (new Menu())->isClickableChild($menu);
+    }
+
+    return $result;
+  }
+
+  public function isClickableChild(array $menu): bool
+  {
+    if ($menu['menuparent'] == 0) {
+      return true;
+    } else {
+      return $menu['aco_id'] != 0 && $menu['menuexe'] != '/';
+    }
   }
 
   public function print_recursive_list($data)
