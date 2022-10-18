@@ -99,6 +99,8 @@ use App\Http\Controllers\PiutangHeaderController;
 use App\Http\Controllers\HutangBayarDetailController;
 use App\Http\Controllers\HutangBayarHeaderController;
 use App\Http\Controllers\LookupController;
+use App\Http\Controllers\ProsesGajiSupirDetailController;
+use App\Http\Controllers\ProsesGajiSupirHeaderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -611,6 +613,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('gajisupirheader', GajiSupirHeaderController::class);
 
     Route::resource('gajisupirdetail', GajiSupirDetailController::class);
+    
+    Route::get('prosesgajisupirheader/index', [ProsesGajiSupirHeaderController::class, 'index']);
+    Route::get('prosesgajisupirheader/{id}/delete', [ProsesGajiSupirHeaderController::class, 'delete'])->name('prosesgajisupirheader.delete');
+    Route::get('prosesgajisupirheader/get', [ProsesGajiSupirHeaderController::class, 'get'])->name('prosesgajisupirheader.get');
+    Route::get('prosesgajisupirheader/export', [ProsesGajiSupirHeaderController::class, 'export'])->name('prosesgajisupirheader.export');
+    Route::get('prosesgajisupirheader/report', [ProsesGajiSupirHeaderController::class, 'report'])->name('prosesgajisupirheader.report');
+    Route::resource('prosesgajisupirheader', ProsesGajiSupirHeaderController::class);
+
+    Route::resource('prosesgajisupirdetail', ProsesGajiSupirDetailController::class);
 
 
 });

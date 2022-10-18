@@ -10,9 +10,9 @@
   </div>
 </div>
 
-@include('piutang._modal')
+@include('prosesgajisupirheader._modal')
 <!-- Detail -->
-@include('piutang._detail')
+@include('prosesgajisupirheader._detail')
 
 @push('scripts')
 <script>
@@ -34,7 +34,7 @@
 
   $(document).ready(function() {
     $("#jqGrid").jqGrid({
-        url: `${apiUrl}piutangheader`,
+        url: `${apiUrl}prosesgajisupirheader`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -65,31 +65,72 @@
             name: 'keterangan',
             align: 'left'
           },
+          
           {
-            label: 'POSTING DARI',
-            name: 'postingdari',
+            label: 'TANGGAL DARI',
+            name: 'tgldari',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'TANGGAL SAMPAI',
+            name: 'tglsampai',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
             align: 'left'
           },
           {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
-            label: 'NO BUKTI INVOICE',
-            name: 'invoice_nobukti',
+            label: 'USER APPROVAL',
+            name: 'userapproval',
             align: 'left'
           },
+          
           {
-            label: 'AGEN',
-            name: 'agen_id',
-            align: 'left'
+            label: 'TANGGAL APPROVAL',
+            name: 'tglapproval',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'PERIODE',
+            name: 'periode',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
+          },
+          {
+            label: 'CREATEDAT',
+            name: 'created_at',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
           {
             label: 'UPDATEDAT',
@@ -207,7 +248,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
-              createPiutangHeader()
+              createProsesGajiSupirHeader()
             }
           },
           {
@@ -219,7 +260,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                editPiutangHeader(selectedId)
+                editProsesGajiSupirHeader(selectedId)
               }
             }
           },
@@ -232,7 +273,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                deletePiutangHeader(selectedId)
+                deleteProsesGajiSupirHeader(selectedId)
               }
             }
           },
@@ -266,23 +307,23 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('piutangheader', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('piutangheader', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'update') }}`) {
       $('#edit').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('piutangheader', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'destroy') }}`) {
       $('#delete').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('piutangheader', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'export') }}`) {
       $('#export').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('piutangheader', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
     }
 
@@ -332,7 +373,7 @@
 
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}piutangheader/export?${params}`, true)
+        xhr.open('GET', `{{ config('app.api_url') }}prosesgajisupirheader/export?${params}`, true)
         xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
         xhr.responseType = 'arraybuffer'
 
@@ -355,7 +396,7 @@
 
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('piutangheader.report') }}?${params}`)
+        window.open(`{{ route('prosesgajisupirheader.report') }}?${params}`)
 
         submitButton.removeAttr('disabled')
       }

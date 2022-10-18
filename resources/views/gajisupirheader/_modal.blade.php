@@ -47,7 +47,7 @@
                                             SUPIR <span class="text-danger">*</span>
                                         </label>
                                         <input type="hidden" name="supir_id">
-                                        <input type="text" name="supir" class="form-control supir-lookup">
+                                        <input type="text" name="supir" autocomplete="off" class="form-control supir-lookup">
                                     </div>
                                 </div>
                                 
@@ -71,7 +71,7 @@
                                 
                                 <div class="row form-group">
                                     <div class="col-12 col-md-12">
-                                       <button class="btn btn-secondary" id="btnTampil">TAMPIL</button>
+                                       <button class="btn btn-secondary" type="button" id="btnTampil">TAMPIL</button>
                                     </div>
                                 </div>
                             </div>
@@ -255,6 +255,77 @@
             new AutoNumeric(`#crudForm [name="total"]`)
         })
 
+        $(document).on('click', '#btnTampil', function(event) {
+            event.preventDefault()
+            let form = $('#crudForm')
+
+            let supirId = form.find(`[name="supir_id"]`).val()
+            let dari = form.find(`[name="tgldari"]`).val()
+            let sampai = form.find(`[name="tglsampai"]`).val()
+            $('#tripList tbody').html('')
+            $('#gajiSupir').html('')
+            $('#gajiKenek').html('')
+
+            $.ajax({
+                url: `${apiUrl}gajisupirheader/getTrip/${supirId}/${dari}/${sampai}`,
+                method: 'GET',
+                dataType: 'JSON',
+                // data: data,
+                data: {
+                    limit: 0
+                },
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+
+                    if(response.errors == true) {
+                        showDialog(response.message)
+                    }else{
+                        let gajiSupir = 0
+                        let gajiKenek = 0
+                        $.each(response.data, (index, detail) => {
+                        
+                            gajiSupir = parseFloat(gajiSupir) + parseFloat(detail.gajisupir)
+                            gajiKenek = parseFloat(gajiKenek) + parseFloat(detail.gajikenek)
+                            let detailRow = $(`
+                                <tr >
+                                    <td width="10px" onclick="select(this)"><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
+                                    <td width="13%">${detail.nobukti}</td>
+                                    <td width="10%">${detail.tglbukti}</td>
+                                    <td width="10%">${detail.trado}</td>
+                                    <td width="10%">${detail.dari}</td>
+                                    <td width="10%">${detail.sampai}</td>
+                                    <td width="10%">${detail.nocont}</td>
+                                    <td width="10%">${detail.nosp}</td>
+                                    <td width="10%" class="gajiSupir text-right">${detail.gajisupir}</td>
+                                    <td width="10%" class="gajiKenek text-right">${detail.gajikenek}</td>
+                                </tr>
+                            `)
+
+                            $('#tripList tbody').append(detailRow)
+                            initAutoNumeric(detailRow.find('.gajiSupir'))
+                            initAutoNumeric(detailRow.find('.gajiKenek'))
+                        })
+                        
+                        $('#gajiSupir').append(`${gajiSupir}`)
+                        $('#gajiKenek').append(`${gajiKenek}`)
+
+                        let subTotal = gajiSupir+gajiKenek
+                        form.find(`[name="subtotal"]`).val(subTotal)
+                        initAutoNumeric(form.find(`[name="subtotal"]`))
+                        
+                        form.find(`[name="total"]`).val(subTotal)
+                        initAutoNumeric(form.find(`[name="total"]`))
+
+                        initAutoNumeric($('#tripList tfoot').find('#gajiSupir'))
+                        initAutoNumeric($('#tripList tfoot').find('#gajiKenek'))
+
+                    }
+                }
+            })
+        })
+
         $('#btnSubmit').click(function(event) {
 
             let method
@@ -269,6 +340,7 @@
             let data = $('#crudForm').serializeArray()
             // unformatAutoNumeric(data)
 
+            
             $('#crudForm').find(`[name="uangmakanharian"`).each((index,element) => {
                 data.filter((row) => row.name === 'uangmakanharian')[index].value = AutoNumeric.getNumber($(`#crudForm [name="uangmakanharian"]`)[index])
             })
@@ -411,6 +483,7 @@
         getMaxLength(form)
         initLookup()
         initDatepicker()
+        initAutoNumeric()
     })
 
     $('#crudModal').on('hidden.bs.modal', () => {
@@ -428,9 +501,9 @@
 
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Simpan
-  `)
+            <i class="fa fa-save"></i>
+            Simpan
+        `)
 
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Rincian Gaji Supir')
@@ -515,84 +588,7 @@
             }
         })
     }
-    $('#btnTampil').click(function(event) { 
-        event.preventDefault()
-        let form = $('#crudForm')
-        let data = []
-        
-        data.push({
-            name: 'supir_id',
-            value: form.find(`[name="supir_id"]`).val()
-        })
-        data.push({
-            name: 'tgldari',
-            value: form.find(`[name="tgldari"]`).val()
-        })
-        data.push({
-            name: 'tglsampai',
-            value: form.find(`[name="tglsampai"]`).val()
-        })
-        $('#tripList tbody').html('')
-        $('#gajiSupir').html('')
-        $('#gajiKenek').html('')
-
-        $.ajax({
-            url: `${apiUrl}gajisupirheader/getTrip`,
-            method: 'GET',
-            dataType: 'JSON',
-            data: data,
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-
-                if(response.errors == true) {
-                    showDialog(response.message)
-                }else{
-                    let gajiSupir = 0
-                    let gajiKenek = 0
-                    $.each(response.data, (index, detail) => {
-                    
-                        gajiSupir = parseFloat(gajiSupir) + parseFloat(detail.gajisupir)
-                        gajiKenek = parseFloat(gajiKenek) + parseFloat(detail.gajikenek)
-                        let detailRow = $(`
-                            <tr >
-                                <td width="10px" onclick="select(this)"><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
-                                <td width="13%">${detail.nobukti}</td>
-                                <td width="10%">${detail.tglbukti}</td>
-                                <td width="10%">${detail.trado}</td>
-                                <td width="10%">${detail.dari}</td>
-                                <td width="10%">${detail.sampai}</td>
-                                <td width="10%">${detail.nocont}</td>
-                                <td width="10%">${detail.nosp}</td>
-                                <td width="10%" class="gajiSupir">${detail.gajisupir}</td>
-                                <td width="10%" class="gajiKenek">${detail.gajikenek}</td>
-                            </tr>
-                        `)
-
-                        $('#tripList tbody').append(detailRow)
-                        initAutoNumeric(detailRow.find('.gajiSupir'))
-                        initAutoNumeric(detailRow.find('.gajiKenek'))
-                    })
-                    
-                    $('#gajiSupir').append(`${gajiSupir}`)
-                    $('#gajiKenek').append(`${gajiKenek}`)
-
-                    let subTotal = gajiSupir+gajiKenek
-                    form.find(`[name="subtotal"]`).val(subTotal)
-                    initAutoNumeric(form.find(`[name="subtotal"]`))
-                    
-                    form.find(`[name="total"]`).val(subTotal)
-                    initAutoNumeric(form.find(`[name="total"]`))
-
-                    initAutoNumeric($('#tripList tfoot').find('#gajiSupir'))
-                    initAutoNumeric($('#tripList tfoot').find('#gajiKenek'))
-
-                }
-            }
-        })
-
-    })
+    
 
    
     function getEditTrip(gajiId, aksi) {
@@ -626,8 +622,8 @@
                             <td width="10%">${detail.sampai}</td>
                             <td width="10%">${detail.nocont}</td>
                             <td width="10%">${detail.nosp}</td>
-                            <td width="10%" class="gajiSupir">${detail.gajisupir}</td>
-                            <td width="10%" class="gajiKenek">${detail.gajikenek}</td>
+                            <td width="10%" class="gajiSupir text-right">${detail.gajisupir}</td>
+                            <td width="10%" class="gajiKenek text-right">${detail.gajikenek}</td>
                         </tr>
                     `)
 

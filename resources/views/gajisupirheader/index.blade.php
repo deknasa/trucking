@@ -68,12 +68,12 @@
           {
             label: 'SUPIR',
             name: 'supir_id',
-            align: 'left'
+            align: 'left',
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-            align: 'left'
+            align: 'left',
           },
           {
             label: 'NOMINAL',
@@ -169,12 +169,15 @@
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
           
-          if (!hasDetail) {
-            loadDetailGrid(id)
-            hasDetail = true
-          }
+          if(id != '') {
+            if (!hasDetail) {
+              loadDetailGrid(id)
+              hasDetail = true
+            }
 
-          loadDetailData(id)
+            loadDetailData(id)
+          }
+          
         },
         loadComplete: function(data) {
 

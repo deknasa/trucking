@@ -57,6 +57,15 @@
             label: 'MEMO',
             name: 'memo',
           },
+          
+          {
+            label: 'KELOMPOK',
+            name: 'kelompok',
+          },
+          {
+            label: 'TYPE',
+            name: 'type',
+          },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
