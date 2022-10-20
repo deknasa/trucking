@@ -144,21 +144,21 @@
                 </tr>
               </thead>
               <tbody id="table_body" class="form-group">
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="6"></td>
+                  
+                  <td class="font-weight-bold"> Total : </td>
+                  <td id="sumary" class="text-right font-weight-bold">  </td>
+                  <td>
+                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
                 
 
-            </tbody>
-            <tfoot>
-              <tr>
-                <td colspan="6"></td>
-                
-                <td class="font-weight-bold"> Total : </td>
-                <td id="sumary" class="text-right font-weight-bold">  </td>
-                <td>
-                  <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
 
           </div>
           <div class="modal-footer justify-content-start">
@@ -428,7 +428,7 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS AKTIF"
+              "data": "PENGELUARAN STOK"
             }]
           })
         },

@@ -458,7 +458,7 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS AKTIF"
+              "data": "PENERIMAAN STOK"
             }]
           })
         },
