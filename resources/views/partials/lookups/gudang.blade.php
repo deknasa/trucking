@@ -47,10 +47,7 @@ $('#gudangLookup').jqGrid({
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
-<<<<<<< Updated upstream
       toolbar: [true, "top"],
-=======
->>>>>>> Stashed changes
       page: 1,
       pager: $('#gudangLookupPager'),
       viewrecords: true,
