@@ -6,7 +6,7 @@ $(document).ready(function () {
 	startTime();
 	setSidebarBindKeys();
 	openMenuParents();
-	initDatepicker();
+	// initDatepicker();
 	initSelect2();
 	initAutoNumeric();
 	initDisabled();
@@ -821,30 +821,72 @@ function startTime() {
 }
 
 function initDatepicker() {
-	$(document)
-		.find(".datepicker")
-		.datepicker({
-			dateFormat: "dd-mm-yy",
-			assumeNearbyYear: true,
-		})
-		.inputmask({
-			inputFormat: "dd-mm-yyyy",
-			alias: "datetime",
-		})
-		.focusout(function (e) {
-			let val = $(this).val();
-			if (val.match("[a-zA-Z]") == null) {
-				if (val.length == 8) {
-					$(this)
-						.inputmask({
-							inputFormat: "dd-mm-yyyy",
-						})
-						.val([val.slice(0, 6), "20", val.slice(6)].join(""));
+	let element = $(document).find(".datepicker");
+
+	if (detectDeviceType() === "desktop") {
+		element
+			.datepicker({
+				dateFormat: "dd-mm-yy",
+				assumeNearbyYear: true,
+				showOn: "button",
+				beforeShow: function(element) {
+					$(element).css({
+						position: 'relative',
+						zIndex: 9999
+					})
 				}
-			} else {
-				$(this).focus();
-			}
-		});
+			})
+			.inputmask({
+				inputFormat: "dd-mm-yyyy",
+				alias: "datetime",
+			})
+			.focusout(function (e) {
+				let val = $(this).val();
+				if (val.match("[a-zA-Z]") == null) {
+					if (val.length == 8) {
+						$(this)
+							.inputmask({
+								inputFormat: "dd-mm-yyyy",
+							})
+							.val([val.slice(0, 6), "20", val.slice(6)].join(""));
+					}
+				} else {
+					$(this).focus();
+				}
+			});
+
+		element
+		.siblings(".ui-datepicker-trigger")
+		.wrap(`
+			<div class="input-group-append">
+			</div>
+		`)
+		.addClass("btn btn-primary");
+	} else if (detectDeviceType() === "mobile") {
+		element
+			.datepicker({
+				dateFormat: "dd-mm-yy",
+				assumeNearbyYear: true,
+			})
+			.inputmask({
+				inputFormat: "dd-mm-yyyy",
+				alias: "datetime",
+			})
+			.focusout(function (e) {
+				let val = $(this).val();
+				if (val.match("[a-zA-Z]") == null) {
+					if (val.length == 8) {
+						$(this)
+							.inputmask({
+								inputFormat: "dd-mm-yyyy",
+							})
+							.val([val.slice(0, 6), "20", val.slice(6)].join(""));
+					}
+				} else {
+					$(this).focus();
+				}
+			});
+	}
 }
 
 function destroyDatepicker() {

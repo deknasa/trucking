@@ -266,23 +266,23 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('piutangheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('piutangheader', 'update') }}`) {
       $('#edit').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('piutangheader', 'destroy') }}`) {
       $('#delete').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('piutangheader', 'export') }}`) {
       $('#export').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('piutangheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
     }
 
