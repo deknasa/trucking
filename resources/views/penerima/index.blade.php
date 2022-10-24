@@ -15,7 +15,7 @@
 @push('scripts')
 <script>
   let indexRow = 0;
-  let page = 1;
+  let page = 0;
   let pager = '#jqGridPager'
   let popup = "";
   let id = "";
@@ -56,54 +56,32 @@
           {
             label: 'status aktif',
             name: 'statusaktif',
-            // stype: 'select',
-            // searchoptions: {
-            //   value: `<?php
-            //           $i = 1;
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
 
-            //           foreach ($data['combo'] as $status) :
-            //           echo "$status[param]:$status[parameter]";
-            //           if ($i !== count($data['combo'])) {
-            //               echo ";";
-            //           }
-            //           $i++;
-            //           endforeach
+                      foreach ($data['combo'] as $status) :
+                      echo "$status[param]:$status[parameter]";
+                      if ($i !== count($data['combo'])) {
+                          echo ";";
+                      }
+                      $i++;
+                      endforeach
 
-            //           ?>
-            //       `,
-            // dataInit: function(element) {
-            //   $(element).select2({
-            //       width: 'resolve',
-            //       theme: "bootstrap4"
-            //   });
-            //   }
-            // },
+                      ?>
+                  `,
+            dataInit: function(element) {
+              $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+              });
+              }
+            },
           },
           {
             label: 'status karyawan',
             name: 'statuskaryawan',
-            // stype: 'select',
-            // searchoptions: {
-            //   value: `<?php
-            //           $i = 1;
-
-            //           foreach ($data['combo'] as $status) :
-            //           echo "$status[param]:$status[parameter]";
-            //           if ($i !== count($data['combo'])) {
-            //               echo ";";
-            //           }
-            //           $i++;
-            //           endforeach
-
-            //           ?>
-            //       `,
-            // dataInit: function(element) {
-            //   $(element).select2({
-            //       width: 'resolve',
-            //       theme: "bootstrap4"
-            //   });
-            //   }
-            // },
           },
           {
             label: 'MODIFIEDBY',
@@ -161,7 +139,7 @@
           triggerClick = true
 
           $('.clearsearchclass').click(function() {
-            clearColumnSearch()
+            highlightSearch = ''
           })
 
           if (indexRow > $(this).getDataIDs().length - 1) {
@@ -185,6 +163,8 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
+
+          setHighlight($(this))
         },
       })
 

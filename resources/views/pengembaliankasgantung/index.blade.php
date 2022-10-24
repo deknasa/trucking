@@ -10,12 +10,16 @@
   </div>
 </div>
 
-@include('parameter._modal')
+@include('pengembaliankasgantung._modal')
+<!-- Detail -->
+@include('pengembaliankasgantung._detail')
 
 @push('scripts')
 <script>
+  let indexUrl = "{{ route('pengembaliankasgantungheader.index') }}"
+  let getUrl = "{{ route('pengembaliankasgantungheader.get') }}"
   let indexRow = 0;
-  let page = 1;
+  let page = 0;
   let pager = '#jqGridPager'
   let popup = "";
   let id = "";
@@ -24,14 +28,22 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'grp'
+  let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
-  let rowNum = 10
 
   $(document).ready(function() {
+
+    $('#lookup').hide()
+    
+
+
+    $('#crudModal').on('hidden.bs.modal', function() {
+       activeGrid = '#jqGrid'
+     })
+
     $("#jqGrid").jqGrid({
-        url: `${apiUrl}parameter`,
+        url: `{{ config('app.api_url') . 'pengembaliankasgantungheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -39,46 +51,96 @@
         colModel: [{
             label: 'ID',
             name: 'id',
+            align: 'right',
             width: '50px'
           },
           {
-            label: 'GROUP',
-            name: 'grp',
+            label: 'NO BUKTI',
+            name: 'nobukti',
+            align: 'left'
           },
           {
-            label: 'SUBGROUP',
-            name: 'subgrp',
+            label: 'TANGGAL BUKTI',
+            name: 'tglbukti',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
-            label: 'NAMA PARAMETER',
-            name: 'text',
+            label: 'keterangan',
+            name: 'keterangan',
+            align: 'left'
           },
           {
-            label: 'MEMO',
-            name: 'memo',
+            label: 'tgldari',
+            name: 'tgldari',
+            align: 'left',
+             formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'tglsampai',
+            name: 'tglsampai',
+            align: 'left',
+             formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           
           {
-            label: 'KELOMPOK',
-            name: 'kelompok',
+            label: 'postingdari',
+            name: 'postingdari',
+            align: 'left'
           },
           {
-            label: 'TYPE',
-            name: 'type',
+            label: 'tglkasmasuk',
+            name: 'tglkasmasuk',
+            align: 'left',
+             formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
-            label: 'MODIFIEDBY',
-            name: 'modifiedby',
+            label: 'statusformat',
+            name: 'statusformat',
+            align: 'left'
           },
           {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
+            label: 'pelanggan',
+            name: 'pelanggan',
+            align: 'left'
+          },
+          {
+            label: 'bank',
+            name: 'bank',
+            align: 'left'
+          },
+          {
+            label: 'penerimaan_nobukti',
+            name: 'penerimaan_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'coa',
+            name: 'coa',
+            align: 'left'
           },
         ],
+
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: rowNum,
+        rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
@@ -99,9 +161,11 @@
           records: 'attributes.totalRows',
         },
         loadBeforeSend: (jqXHR) => {
-          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+
+          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
@@ -109,6 +173,7 @@
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -119,7 +184,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          triggerClick = true  
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -129,26 +194,30 @@
             indexRow = $(this).getDataIDs().length - 1;
           }
 
-          if (triggerClick) {
-            if (id != '') {
-              indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-              id = ''
-            } else if (indexRow != undefined) {
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-            }
+          setTimeout(function() {
 
-            if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-            }
+            if (triggerClick) {
+              if (id != '') {
+                indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                id = ''
+              } else if (indexRow != undefined) {
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              }
 
-            triggerClick = false
-          } else {
-            $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
-          }
+              if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+                $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              }
+
+              triggerClick = false
+            } else {
+              $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+            }
+          }, 100)
+
 
           setHighlight($(this))
-        },
+        }
       })
 
       .jqGrid('filterToolbar', {
@@ -167,18 +236,17 @@
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
-            onClick: () => {
-              createParameter()
+            onClick: function(event) {
+              createPengembalianKasGantung()
             }
           },
           {
             id: 'edit',
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
             class: 'btn btn-success btn-sm mr-1',
-            onClick: () => {
+            onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              editParameter(selectedId)
+              editPengembalianKasGantung(selectedId)
             }
           },
           {
@@ -187,31 +255,11 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              deleteParameter(selectedId)
-            }
-          },
-          {
-            id: 'export',
-            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
-            onClick: () => {
-              $('#rangeModal').data('action', 'export')
-              $('#rangeModal').find('button:submit').html(`Export`)
-              $('#rangeModal').modal('show')
-            }
-          },
-          {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              $('#rangeModal').data('action', 'report')
-              $('#rangeModal').find('button:submit').html(`Report`)
-              $('#rangeModal').modal('show')
+              deletePengembalianKasGantung(selectedId)
             }
           },
         ]
+
       })
 
     /* Append clear filter button */
@@ -220,44 +268,47 @@
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
 
+    /* Load detail grid */
+    loadDetailGrid()
+
     $('#add .ui-pg-div')
-      .addClass(`btn-sm btn-primary`)
+      .addClass(`btn btn-sm btn-primary`)
       .parent().addClass('px-1')
 
     $('#edit .ui-pg-div')
-      .addClass('btn-sm btn-success')
+      .addClass('btn btn-sm btn-success')
       .parent().addClass('px-1')
 
     $('#delete .ui-pg-div')
-      .addClass('btn-sm btn-danger')
+      .addClass('btn btn-sm btn-danger')
       .parent().addClass('px-1')
 
     $('#report .ui-pg-div')
-      .addClass('btn-sm btn-info')
+      .addClass('btn btn-sm btn-info')
       .parent().addClass('px-1')
 
     $('#export .ui-pg-div')
-      .addClass('btn-sm btn-warning')
+      .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
+    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'store') }}`) {
+      $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
+    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'update') }}`) {
+      $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
+    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'destroy') }}`) {
+      $('#delete').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
+    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'export') }}`) {
+      $('#export').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
+    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'report') }}`) {
+      $('#report').addClass('ui-disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -279,7 +330,7 @@
         decimalCharacter: ',',
         allowDecimalPadding: false,
         minimumValue: 1,
-        maximumValue: totalRecord,
+        maximumValue: totalRecord
       })
     })
 
@@ -306,8 +357,8 @@
 
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}parameter/export?${params}`, true)
-        xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`)
+        xhr.open('GET', `{{ config('app.api_url') }}pengembaliankasgantung/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
         xhr.responseType = 'arraybuffer'
 
         xhr.onload = function(e) {
@@ -319,7 +370,7 @@
               let link = document.createElement('a')
 
               link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanParameter${(new Date).getTime()}.xlsx`
+              link.download = `laporanpengeluaranStok${(new Date).getTime()}.xlsx`
               link.click()
 
               submitButton.removeAttr('disabled')
@@ -327,17 +378,16 @@
           }
         }
 
-        xhr.onerror = () => {
-          submitButton.removeAttr('disabled')
-        }
-
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('parameter.report') }}?${params}`)
+        window.open(`{{ route('pengembaliankasgantungheader.report') }}?${params}`)
 
         submitButton.removeAttr('disabled')
       }
     })
+
+
+
   })
 </script>
 @endpush()

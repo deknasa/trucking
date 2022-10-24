@@ -1,84 +1,49 @@
-<table id="stokLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="stokLookupPager"></div>
+<table id="parameterLookup" class="lookup-grid" style="width: 100%;"></table>
+<div id="parameterLookupPager"></div>
 
 <script>
-$('#stokLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'stok' }}`,
-      mtype: "GET",
-      styleUI: 'Bootstrap4',
-      iconSet: 'fontAwesome',
-      datatype: "json",
-      colModel: [{
-        label: 'ID',
-        name: 'id',
-        align: 'right',
-        width: '70px'
-        
-      },
-      {
-        label: 'NAMA',
-        name: 'namastok',
-        align: 'left',
-      },
-      {
-          label: 'STATUS AKTIF',
-          name: 'statusaktif',
-          align: 'left',
-      },
-      {
-          label: 'keterangan',
-          name: 'keterangan',
-          align: 'left',
-      },
-      {
-          label: 'namaterpusat',
-          name: 'namaterpusat',
-          align: 'left',
-      },
-      {
-        label: 'kelompok',
-        name: 'kelompok',
-        align: 'left'
-      },
-      {
-        label: 'jenistrado',
-        name: 'jenistrado',
-        align: 'left'
-      },
-      {
-        label: 'subkelompok',
-        name: 'subkelompok',
-        align: 'left'
-      },
-      {
-        label: 'kategori',
-        name: 'kategori',
-        align: 'left'
-      },
-      {
-        label: 'merk',
-        name: 'merk',
-        align: 'left'
-      },
-      
-      {
-          label: 'qty min',
-          name: 'qtymin',
-          align: 'left',
-      },
-      {
-          label: 'qty max',
-          name: 'qtymax',
-          align: 'left',
-      },
-      
-      {
-          label: 'modifiedby',
-          name: 'modifiedby',
-          align: 'left',
-      },
-     
-    ],
+$('#parameterLookup').jqGrid({
+  url: `{{ config('app.api_url') . 'parameter' }}`,
+        mtype: "GET",
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        datatype: "json",
+        colModel: [{
+            label: 'ID',
+            name: 'id',
+            width: '50px'
+          },
+          {
+            label: 'GROUP',
+            name: 'grp',
+          },
+          {
+            label: 'SUB GROUP',
+            name: 'subgrp',
+          },
+          {
+            label: 'KELOMPOK',
+            name: 'kelompok',
+          },
+          {
+            label: 'TEXT',
+            name: 'text',
+          },
+          {
+            label: 'MEMO',
+            name: 'memo',
+          },
+          {
+            label: 'MODIFIEDBY',
+            name: 'modifiedby',
+          },
+          {
+            label: 'UPDATEDAT',
+            name: 'updated_at',
+            formatter: "date",
+            formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y H:i:s" }
+          },
+        ],
         autowidth: true,
       responsive: true,
       shrinkToFit: false,
@@ -92,7 +57,7 @@ $('#stokLookup').jqGrid({
       sortorder: 'asc',
       page: 1,
       toolbar: [true, "top"],
-      pager: $('#stokLookupPager'),
+      pager: $('#parameterLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -121,26 +86,26 @@ $('#stokLookup').jqGrid({
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#stokLookup').getGridParam().reccount) {
-            indexRow = $('#stokLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#parameterLookup').getGridParam().reccount) {
+            indexRow = $('#parameterLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#stokLookup [id="${$('#stokLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#parameterLookup [id="${$('#parameterLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#stokLookup [id="${$('#stokLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#parameterLookup [id="${$('#parameterLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#stokLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#stokLookup [id="` + $('#stokLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#parameterLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#parameterLookup [id="` + $('#parameterLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#stokLookup').setSelection($('#stokLookup').getDataIDs()[indexRow])
+            $('#parameterLookup').setSelection($('#parameterLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -167,10 +132,10 @@ $('#stokLookup').jqGrid({
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#stokLookup'))
+        clearGlobalSearch($('#parameterLookup'))
       },
     })
 
-  loadGlobalSearch($('#stokLookup'))
-  loadClearFilter($('#stokLookup'))
+  loadGlobalSearch($('#parameterLookup'))
+  loadClearFilter($('#parameterLookup'))
 </script>

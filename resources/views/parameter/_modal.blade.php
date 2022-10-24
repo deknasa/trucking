@@ -59,6 +59,27 @@
                 <input type="text" name="memo" class="form-control">
               </div>
             </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  KELOMPOK 
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="kelompok" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  TYPE 
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="type">
+                <input type="text" name="grup" class="form-control parameter-lookup">
+              </div>
+            </div>
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -185,6 +206,7 @@
 
     getMaxLength(form)
     initSelect2()
+    initLookup()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -206,6 +228,8 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+
+    
   }
 
   function editParameter(parameterId) {
@@ -309,6 +333,21 @@
       },
       error: error => {
         showDialog(error.statusText)
+      }
+    })
+  }
+
+  function initLookup() {
+    $('.parameter-lookup').lookup({
+      title: 'Parameter Lookup',
+      fileName: 'parameter',
+      onSelectRow: (parameter, element) => {
+        $(`#crudForm [name="type"]`).first().val(parameter.id)
+        element.val(parameter.grp)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
   }

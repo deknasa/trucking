@@ -76,8 +76,9 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="hidden" name="statusformatpenerimaan">
-                <input type="text" name="kodepenerimaan" class="form-control penerimaantrucking-lookup">
+                <select name="statusformatpenerimaan" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH KODE PENERIMAAN --</option>
+                </select>
               </div>
             </div>
             <div class="row form-group">
@@ -87,8 +88,9 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="hidden" name="statusformatpengeluaran">
-                <input type="text" name="kodepengeluaran" class="form-control pengeluarantrucking-lookup">
+                <select name="statusformatpengeluaran" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH KODE PENGELUARAN --</option>
+                </select>
               </div>
             </div>
           </div>
@@ -240,6 +242,8 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
+    setStatusFormatPenerimaanOptions(form)
+    setStatusFormatPengeluaranOptions(form)
     setStatusAktifOptions(form)
   }
 
@@ -260,6 +264,8 @@
 
     Promise
       .all([
+        setStatusFormatPenerimaanOptions(form),
+        setStatusFormatPengeluaranOptions(form),
         setStatusAktifOptions(form)
       ])
       .then(() => {
@@ -284,6 +290,8 @@
 
     Promise
       .all([
+        setStatusFormatPenerimaanOptions(form),
+        setStatusFormatPengeluaranOptions(form),
         setStatusAktifOptions(form)
       ])
       .then(() => {
@@ -353,6 +361,80 @@
     })
   }
 
+  const setStatusFormatPenerimaanOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusformatpenerimaan]').empty()
+      relatedForm.find('[name=statusformatpenerimaan]').append(
+        new Option('-- PILIH STATUS PENERIMAAN --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "kelompok",
+              "op": "cn",
+              "data": "PENERIMAAN BANK"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(penerimaanBank => {
+            let option = new Option(penerimaanBank.text, penerimaanBank.id)
+
+            relatedForm.find('[name=statusformatpenerimaan]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+
+  const setStatusFormatPengeluaranOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusformatpengeluaran]').empty()
+      relatedForm.find('[name=statusformatpengeluaran]').append(
+        new Option('-- PILIH KODE PENERIMAAN --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "kelompok",
+              "op": "cn",
+              "data": "PENGELUARAN BANK"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(pengeluaranBank => {
+            let option = new Option(pengeluaranBank.text, pengeluaranBank.id)
+
+            relatedForm.find('[name=statusformatpengeluaran]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+
   function showBank(form, bankId) {
     $.ajax({
       url: `${apiUrl}bank/${bankId}`,
@@ -372,12 +454,6 @@
           }
 
           if(index == 'coa') {
-            element.data('current-value', value)
-          }
-          if(index == 'kodepenerimaan') {
-            element.data('current-value', value)
-          }
-          if(index == 'kodepengeluaran') {
             element.data('current-value', value)
           }
           
@@ -403,32 +479,6 @@
       }
     })
 
-    $('.penerimaantrucking-lookup').lookup({
-      title: 'Penerimaan Trucking Lookup',
-      fileName: 'penerimaantrucking',
-      onSelectRow: (penerimaantrucking, element) => {
-        $('#crudForm [name=statusformatpenerimaan]').first().val(penerimaantrucking.statusformat)
-        
-        element.val(penerimaantrucking.kodepenerimaan)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
-
-    $('.pengeluarantrucking-lookup').lookup({
-      title: 'Pengeluaran Trucking Lookup',
-      fileName: 'pengeluarantrucking',
-      onSelectRow: (pengeluarantrucking, element) => {
-        $('#crudForm [name=statusformatpengeluaran]').first().val(pengeluarantrucking.statusformat)
-        element.val(pengeluarantrucking.kodepengeluaran)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
   }
 </script>
 @endpush()

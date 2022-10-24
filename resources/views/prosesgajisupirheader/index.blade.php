@@ -10,12 +10,14 @@
   </div>
 </div>
 
-@include('parameter._modal')
+@include('prosesgajisupirheader._modal')
+<!-- Detail -->
+@include('prosesgajisupirheader._detail')
 
 @push('scripts')
 <script>
   let indexRow = 0;
-  let page = 1;
+  let page = 0;
   let pager = '#jqGridPager'
   let popup = "";
   let id = "";
@@ -24,14 +26,15 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'grp'
+  let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
+  let hasDetail = false
 
   $(document).ready(function() {
     $("#jqGrid").jqGrid({
-        url: `${apiUrl}parameter`,
+        url: `${apiUrl}prosesgajisupirheader`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -39,46 +42,111 @@
         colModel: [{
             label: 'ID',
             name: 'id',
+            align: 'right',
             width: '50px'
           },
           {
-            label: 'GROUP',
-            name: 'grp',
+            label: 'NO BUKTI',
+            name: 'nobukti',
+            align: 'left'
           },
           {
-            label: 'SUBGROUP',
-            name: 'subgrp',
+            label: 'TANGGAL BUKTI',
+            name: 'tglbukti',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
-            label: 'NAMA PARAMETER',
-            name: 'text',
-          },
-          {
-            label: 'MEMO',
-            name: 'memo',
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            align: 'left'
           },
           
           {
-            label: 'KELOMPOK',
-            name: 'kelompok',
+            label: 'TANGGAL DARI',
+            name: 'tgldari',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
-            label: 'TYPE',
-            name: 'type',
+            label: 'TANGGAL SAMPAI',
+            name: 'tglsampai',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            align: 'left'
+          },
+          {
+            label: 'USER APPROVAL',
+            name: 'userapproval',
+            align: 'left'
+          },
+          
+          {
+            label: 'TANGGAL APPROVAL',
+            name: 'tglapproval',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'PERIODE',
+            name: 'periode',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
+            align: 'left'
+          },
+          {
+            label: 'CREATEDAT',
+            name: 'created_at',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
         ],
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: rowNum,
+        rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
@@ -99,7 +167,7 @@
           records: 'attributes.totalRows',
         },
         loadBeforeSend: (jqXHR) => {
-          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
           activeGrid = $(this)
@@ -107,8 +175,16 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+          
+          if (!hasDetail) {
+            loadDetailGrid(id)
+            hasDetail = true
+          }
+
+          loadDetailData(id)
         },
         loadComplete: function(data) {
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -119,7 +195,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          triggerClick = true  
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -129,26 +205,30 @@
             indexRow = $(this).getDataIDs().length - 1;
           }
 
-          if (triggerClick) {
-            if (id != '') {
-              indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-              id = ''
-            } else if (indexRow != undefined) {
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-            }
+          setTimeout(function() {
 
-            if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-            }
+            if (triggerClick) {
+              if (id != '') {
+                indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                id = ''
+              } else if (indexRow != undefined) {
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              }
 
-            triggerClick = false
-          } else {
-            $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
-          }
+              if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+                $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              }
+
+              triggerClick = false
+            } else {
+              $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+            }
+          }, 100)
+
 
           setHighlight($(this))
-        },
+        }
       })
 
       .jqGrid('filterToolbar', {
@@ -167,18 +247,21 @@
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
-            onClick: () => {
-              createParameter()
+            onClick: function(event) {
+              createProsesGajiSupirHeader()
             }
           },
           {
             id: 'edit',
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
             class: 'btn btn-success btn-sm mr-1',
-            onClick: () => {
+            onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              editParameter(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                editProsesGajiSupirHeader(selectedId)
+              }
             }
           },
           {
@@ -187,31 +270,15 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              deleteParameter(selectedId)
-            }
-          },
-          {
-            id: 'export',
-            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
-            onClick: () => {
-              $('#rangeModal').data('action', 'export')
-              $('#rangeModal').find('button:submit').html(`Export`)
-              $('#rangeModal').modal('show')
-            }
-          },
-          {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              $('#rangeModal').data('action', 'report')
-              $('#rangeModal').find('button:submit').html(`Report`)
-              $('#rangeModal').modal('show')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                deleteProsesGajiSupirHeader(selectedId)
+              }
             }
           },
         ]
+
       })
 
     /* Append clear filter button */
@@ -221,42 +288,42 @@
     loadGlobalSearch($('#jqGrid'))
 
     $('#add .ui-pg-div')
-      .addClass(`btn-sm btn-primary`)
+      .addClass(`btn btn-sm btn-primary`)
       .parent().addClass('px-1')
 
     $('#edit .ui-pg-div')
-      .addClass('btn-sm btn-success')
+      .addClass('btn btn-sm btn-success')
       .parent().addClass('px-1')
 
     $('#delete .ui-pg-div')
-      .addClass('btn-sm btn-danger')
+      .addClass('btn btn-sm btn-danger')
       .parent().addClass('px-1')
 
     $('#report .ui-pg-div')
-      .addClass('btn-sm btn-info')
+      .addClass('btn btn-sm btn-info')
       .parent().addClass('px-1')
 
     $('#export .ui-pg-div')
-      .addClass('btn-sm btn-warning')
+      .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'update') }}`) {
       $('#edit').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'destroy') }}`) {
       $('#delete').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'export') }}`) {
       $('#export').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
     }
 
@@ -279,7 +346,7 @@
         decimalCharacter: ',',
         allowDecimalPadding: false,
         minimumValue: 1,
-        maximumValue: totalRecord,
+        maximumValue: totalRecord
       })
     })
 
@@ -306,8 +373,8 @@
 
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}parameter/export?${params}`, true)
-        xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`)
+        xhr.open('GET', `{{ config('app.api_url') }}prosesgajisupirheader/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
         xhr.responseType = 'arraybuffer'
 
         xhr.onload = function(e) {
@@ -319,7 +386,7 @@
               let link = document.createElement('a')
 
               link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanParameter${(new Date).getTime()}.xlsx`
+              link.download = `laporanpengeluarantrucking${(new Date).getTime()}.xlsx`
               link.click()
 
               submitButton.removeAttr('disabled')
@@ -327,18 +394,15 @@
           }
         }
 
-        xhr.onerror = () => {
-          submitButton.removeAttr('disabled')
-        }
-
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('parameter.report') }}?${params}`)
+        window.open(`{{ route('prosesgajisupirheader.report') }}?${params}`)
 
         submitButton.removeAttr('disabled')
       }
     })
   })
+
 </script>
 @endpush()
 @endsection
