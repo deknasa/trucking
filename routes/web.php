@@ -35,6 +35,7 @@ use App\Http\Controllers\KasGantungHeaderController;
 
 use App\Http\Controllers\PengembalianKasGantungDetailController;
 use App\Http\Controllers\PengembalianKasGantungHeaderController;
+use App\Http\Controllers\NotaKreditHeaderController;
 
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\SubKelompokController;
@@ -331,6 +332,10 @@ Route::middleware('auth')->group(function () {
     Route::get('pengembaliankasgantungheader/report', [PengembalianKasGantungHeaderController::class, 'report'])->name('pengembaliankasgantungheader.report');
     Route::get('pengembaliankasgantungheader/index', [PengembalianKasGantungHeaderController::class, 'index']);
     Route::resource('pengembaliankasgantungheader', PengembalianKasGantungHeaderController::class);
+    
+    Route::get('notakreditheader/get', [NotaKreditheaderController::class, 'get'])->name('notakreditheader.get');
+    Route::get('notakreditheader/index', [NotaKreditheaderController::class, 'index']);
+    Route::resource('notakreditheader', NotaKreditheaderController::class);
 
     Route::get('gudang/field_length', [GudangController::class, 'fieldLength'])->name('gudang.field_length');
     Route::get('gudang/{id}/delete', [GudangController::class, 'delete'])->name('gudang.delete');
