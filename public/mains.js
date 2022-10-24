@@ -827,6 +827,8 @@ function initDatepicker() {
 		element
 			.datepicker({
 				dateFormat: "dd-mm-yy",
+				changeYear: true,
+				changeMonth: true,
 				assumeNearbyYear: true,
 				showOn: "button",
 				beforeShow: function(element) {
@@ -866,6 +868,8 @@ function initDatepicker() {
 		element
 			.datepicker({
 				dateFormat: "dd-mm-yy",
+				changeYear: true,
+				changeMonth: true,
 				assumeNearbyYear: true,
 			})
 			.inputmask({
