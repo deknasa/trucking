@@ -35,6 +35,7 @@ use App\Http\Controllers\KasGantungHeaderController;
 
 use App\Http\Controllers\PengembalianKasGantungDetailController;
 use App\Http\Controllers\PengembalianKasGantungHeaderController;
+use App\Http\Controllers\NotaKreditHeaderController;
 
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\SubKelompokController;
@@ -103,8 +104,8 @@ use App\Http\Controllers\PiutangHeaderController;
 use App\Http\Controllers\HutangBayarDetailController;
 use App\Http\Controllers\HutangBayarHeaderController;
 use App\Http\Controllers\LookupController;
-use App\Http\Controllers\ProsesGajiSupirDetailController;
 use App\Http\Controllers\ProsesGajiSupirHeaderController;
+use App\Http\Controllers\ProsesGajiSupirDetailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -331,6 +332,10 @@ Route::middleware('auth')->group(function () {
     Route::get('pengembaliankasgantungheader/report', [PengembalianKasGantungHeaderController::class, 'report'])->name('pengembaliankasgantungheader.report');
     Route::get('pengembaliankasgantungheader/index', [PengembalianKasGantungHeaderController::class, 'index']);
     Route::resource('pengembaliankasgantungheader', PengembalianKasGantungHeaderController::class);
+    
+    Route::get('notakreditheader/get', [NotaKreditheaderController::class, 'get'])->name('notakreditheader.get');
+    Route::get('notakreditheader/index', [NotaKreditheaderController::class, 'index']);
+    Route::resource('notakreditheader', NotaKreditheaderController::class);
 
     Route::get('gudang/field_length', [GudangController::class, 'fieldLength'])->name('gudang.field_length');
     Route::get('gudang/{id}/delete', [GudangController::class, 'delete'])->name('gudang.delete');
@@ -633,8 +638,8 @@ Route::middleware('auth')->group(function () {
     Route::get('prosesgajisupirheader/export', [ProsesGajiSupirHeaderController::class, 'export'])->name('prosesgajisupirheader.export');
     Route::get('prosesgajisupirheader/report', [ProsesGajiSupirHeaderController::class, 'report'])->name('prosesgajisupirheader.report');
     Route::resource('prosesgajisupirheader', ProsesGajiSupirHeaderController::class);
-
     Route::resource('prosesgajisupirdetail', ProsesGajiSupirDetailController::class);
+
 
 
 });
