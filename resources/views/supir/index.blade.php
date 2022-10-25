@@ -312,7 +312,7 @@
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
-            onClick: () => {
+            onClick: function(event) {
               createSupir()
             }
           },
@@ -320,10 +320,13 @@
             id: 'edit',
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
             class: 'btn btn-success btn-sm mr-1',
-            onClick: () => {
+            onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              editSupir(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                editSupir(selectedId)
+              }
             }
           },
           {
@@ -332,11 +335,15 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              deleteSupir(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                deleteSupir(selectedId)
+              }
             }
           },
         ]
+
       })
 
     /* Append clear filter button */
@@ -364,6 +371,26 @@
     $('#export .ui-pg-div')
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
+
+    if (!`{{ $myAuth->hasPermission('supir', 'store') }}`) {
+      $('#add').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('supir', 'update') }}`) {
+      $('#edit').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('supir', 'destroy') }}`) {
+      $('#delete').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('supir', 'export') }}`) {
+      $('#export').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('supir', 'report') }}`) {
+      $('#report').attr('disabled', 'disabled')
+    }
   })
 </script>
 @endpush()

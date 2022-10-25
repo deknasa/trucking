@@ -148,17 +148,15 @@ class SuratPengantarController extends MyController
         try {
             $title = $this->title;
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
-                ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "suratpengantar/$id");
+            $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "suratpengantar/$id");
 
             $suratpengantar = $response['data'];
+
             $combo = $this->combo();
 
-            return view('suratpengantar.delete', compact('title', 'suratpengantar','combo'));
+            return view('suratpengantar.delete', compact('title', 'suratpengantar', 'combo'));
         } catch (\Throwable $th) {
             return redirect()->route('suratpengantar.index');
         }
@@ -166,17 +164,47 @@ class SuratPengantarController extends MyController
 
     public function destroy($id, Request $request)
     {
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "suratpengantar/$id", $request->all());
+        ->delete(config('app.api_url') . "suratpengantar/$id", $request->all());
 
         return response($response);
     }
+
+    // public function delete($id)
+    // {
+    //     try {
+    //         $title = $this->title;
+
+    //         $response = Http::withHeaders([
+    //             'Accept' => 'application/json',
+    //             'Content-Type' => 'application/json'
+    //         ])
+    //             ->withToken(session('access_token'))
+    //             ->get(config('app.api_url') . "suratpengantar/$id");
+
+    //         $suratpengantar = $response['data'];
+    //         $combo = $this->combo();
+
+    //         return view('suratpengantar.delete', compact('title', 'suratpengantar','combo'));
+    //     } catch (\Throwable $th) {
+    //         return redirect()->route('suratpengantar.index');
+    //     }
+    // }
+
+    // public function destroy($id, Request $request)
+    // {
+    //     $request['modifiedby'] = Auth::user()->name;
+
+    //     $response = Http::withHeaders([
+    //         'Accept' => 'application/json',
+    //         'Content-Type' => 'application/json'
+    //     ])
+    //         ->withToken(session('access_token'))
+    //         ->delete(config('app.api_url') . "suratpengantar/$id", $request->all());
+
+    //     return response($response);
+    // }
 
     public function fieldLength(): Response
     {
