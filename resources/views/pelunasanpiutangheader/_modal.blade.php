@@ -170,7 +170,36 @@
 
     $(document).on('input', `#table_body [name="bayarppd[]"]`, function(event) {
       setTotal()
+      let sisa = $(this).closest("tr").find(`[name="sisa[]"]`).val()
+      sisa = parseFloat(sisa.replaceAll(',',''));
+
+      let bayar = $(this).val()
+      bayar = parseFloat(bayar.replaceAll(',',''));
+      bayar =  Number.isNaN(bayar) ? 0 : bayar
+      if(sisa == 0) {
+        let nominal = $(this).closest("tr").find(`[name="nominal[]"]`).val()
+        nominal = parseFloat(nominal.replaceAll(',',''));
+        let totalSisa = nominal-bayar
+        console.log(totalSisa)
+        $(this).closest("tr").find(".sisa").html(totalSisa)
+      } else {
+        let totalSisa = sisa-bayar
+        $(this).closest("tr").find(".sisa").html(totalSisa)
+      }
+      
+      
+      initAutoNumeric($(this).closest("tr").find(".sisa"))
+
+      let Sisa = $(`#table_body .sisa`)
+      let total = 0
+
+      $.each(Sisa, (index, SISA) => {
+        total += AutoNumeric.getNumber(SISA)
+      });
+
+      new AutoNumeric('#sisaPiutang').set(total)
     })
+
     $(document).on('input', `#table_body [name="penyesuaianppd[]"]`, function(event) {
       setPenyesuaian()
     })
@@ -364,9 +393,7 @@
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-
-
-            // setErrorMessages(form, error.responseJSON.errors);
+            setErrorMessages(form, error.responseJSON.errors);
           } else {
             showDialog(error.statusText)
           }
@@ -576,6 +603,8 @@
   function getPiutang(id) {
     
     $('#detailList tbody').html('')
+    $('#detailList tfoot #nominalPiutang').html('')
+    $('#detailList tfoot #sisaPiutang').html('')
 
     $.ajax({
       url: `${apiUrl}pelunasanpiutangheader/${id}/getpiutang`,
@@ -606,8 +635,11 @@
               <td width="10%">${detail.nobukti}</td>
               <td width="10%">${detail.tglbukti}</td>
               <td width="10%">${detail.invoice_nobukti}</td>
-              <td width="10%"><p class="text-right">${nominal}</p></td>
-              <td width="10%"><p class="text-right">${sisa}</p></td>
+              <td width="10%"><p class="text-right nominal autonumeric">${nominal}</p></td>
+              <td width="10%">
+                <p class="text-right sisa autonumeric">${sisa}</p>
+                <input type="hidden" name="sisa[]" class="autonumeric" value="${sisa}">
+              </td>
               <td width="10%">
                 <textarea name="keterangandetailppd[]" rows="1" disabled class="form-control"></textarea>
               </td>
@@ -632,6 +664,9 @@
           initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
           initAutoNumericNoMinus(detailRow.find(`[name="penyesuaianppd[]"]`))
           initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
+          initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
+          initAutoNumeric(detailRow.find('.sisa'))
+          initAutoNumeric(detailRow.find('.nominal'))
 
           $('#detailList tbody').append(detailRow)
           setTotal()
@@ -639,11 +674,13 @@
           setNominalLebih()
           
         })
-        totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
-        totalSisa = new Intl.NumberFormat('en-US').format(totalSisa);
+        // totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
+        // totalSisa = new Intl.NumberFormat('en-US').format(totalSisa);
         $('#nominalPiutang').append(`${totalNominal}`)
         $('#sisaPiutang').append(`${totalSisa}`)
 
+        initAutoNumeric($('#detailList tfoot').find('#nominalPiutang'))
+        initAutoNumeric($('#detailList tfoot').find('#sisaPiutang'))
         setRowNumbers()
         
       }
@@ -690,8 +727,9 @@
           totalNominalPiutang = parseFloat(totalNominalPiutang) + parseFloat(detail.nominalpiutang)
           totalSisa = totalSisa + parseFloat(detail.sisa);
           let nominal = new Intl.NumberFormat('en-US').format(detail.nominalpiutang);
+          let sisaHidden = parseFloat(detail.sisa) + parseFloat(detail.nominal)
           let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
-         
+
           if(pelunasanPiutangId != null) {
             checked = 'checked'
             totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
@@ -707,8 +745,14 @@
               <td width="10%">${detail.piutang_nobukti}</td>
               <td width="10%">${detail.tglbukti}</td>
               <td width="10%">${detail.invoice_nobukti}</td>
-              <td width="10%"><p class="text-right">${nominal}</p></td>
-              <td width="10%"><p class="text-right">${sisa}</p></td>
+              <td width="10%">
+                <p class="text-right">${nominal}</p>
+                <input type="hidden" name="nominal[]" class="autonumeric" value="${nominal}">
+              </td>
+              <td width="10%">
+                <p class="sisa text-right">${sisa}</p>
+                <input type="hidden" name="sisa[]" class="autonumeric" value="${sisaHidden}">
+              </td>
               <td width="10%">
                 <textarea name="keterangandetailppd[]" rows="1" class="form-control" ${attribut}>${detail.keterangan || ''}</textarea>
               </td>
@@ -730,15 +774,20 @@
           initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
           initAutoNumericNoMinus(detailRow.find(`[name="penyesuaianppd[]"]`))
           initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
+          initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
+          initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
+          initAutoNumeric(detailRow.find('.sisa'))
+          initAutoNumeric(detailRow.find('.nominal'))
+
           $('#detailList tbody').append(detailRow)      
           setTotal()
           setPenyesuaian()
           setNominalLebih()
         })
-        totalNominalPiutang = new Intl.NumberFormat('en-US').format(totalNominalPiutang);
-        totalSisa = new Intl.NumberFormat('en-US').format(totalSisa);
         $('#nominalPiutang').append(`${totalNominalPiutang}`)
         $('#sisaPiutang').append(`${totalSisa}`)
+        initAutoNumeric($('#detailList tfoot').find('#nominalPiutang'))
+        initAutoNumeric($('#detailList tfoot').find('#sisaPiutang'))
         setRowNumbers()
 
         

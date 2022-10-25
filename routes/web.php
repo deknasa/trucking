@@ -99,8 +99,8 @@ use App\Http\Controllers\PiutangHeaderController;
 use App\Http\Controllers\HutangBayarDetailController;
 use App\Http\Controllers\HutangBayarHeaderController;
 use App\Http\Controllers\LookupController;
-use App\Http\Controllers\ProsesGajiSupirDetailController;
 use App\Http\Controllers\ProsesGajiSupirHeaderController;
+use App\Http\Controllers\ProsesGajiSupirDetailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -620,8 +620,8 @@ Route::middleware('auth')->group(function () {
     Route::get('prosesgajisupirheader/export', [ProsesGajiSupirHeaderController::class, 'export'])->name('prosesgajisupirheader.export');
     Route::get('prosesgajisupirheader/report', [ProsesGajiSupirHeaderController::class, 'report'])->name('prosesgajisupirheader.report');
     Route::resource('prosesgajisupirheader', ProsesGajiSupirHeaderController::class);
-
     Route::resource('prosesgajisupirdetail', ProsesGajiSupirDetailController::class);
+
 
 
 });
