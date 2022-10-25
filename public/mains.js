@@ -6,7 +6,7 @@ $(document).ready(function () {
 	startTime();
 	setSidebarBindKeys();
 	openMenuParents();
-	initDatepicker();
+	// initDatepicker();
 	initSelect2();
 	initAutoNumeric();
 	initDisabled();
@@ -821,11 +821,21 @@ function startTime() {
 }
 
 function initDatepicker() {
-	$(document)
-		.find(".datepicker")
+	let element = $(document).find(".datepicker");
+
+	element
 		.datepicker({
 			dateFormat: "dd-mm-yy",
+			changeYear: true,
+			changeMonth: true,
 			assumeNearbyYear: true,
+			showOn: "button",
+			beforeShow: function (element) {
+				$(element).css({
+					position: "relative",
+					zIndex: 9999,
+				});
+			},
 		})
 		.inputmask({
 			inputFormat: "dd-mm-yyyy",
@@ -845,6 +855,24 @@ function initDatepicker() {
 				$(this).focus();
 			}
 		});
+
+	element
+		.siblings(".ui-datepicker-trigger")
+		.wrap(
+			`
+			<div class="input-group-append">
+			</div>
+		`
+		)
+		.addClass("btn btn-primary");
+
+	element.on("keydown", function (event) {
+		if (event.keyCode === 115) {
+			if (element.datepicker("widget").not(":visible")) {
+				element.datepicker("show");
+			}
+		}
+	});
 }
 
 function destroyDatepicker() {

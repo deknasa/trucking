@@ -1,11 +1,9 @@
-<table id="pengeluaranStokHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="pengeluaranStokHeaderLookupPager"></div>
-
-
+<table id="pelunasanPiutangHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
+<div id="pelunasanPiutangHeaderLookupPager"></div>
 
 <script>
-  $('#pengeluaranStokHeaderLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'pengeluaranstokheader' }}`,
+  $('#pelunasanPiutangHeaderLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'pelunasanpiutangheader' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -37,62 +35,34 @@
             align: 'left'
           },
           {
-            label: 'Gudang',
-            name: 'gudang',
+            label: 'BANK',
+            name: 'bank_id',
             align: 'left'
           },
           {
-            label: 'Trado',
-            name: 'trado',
+            label: 'AGEN',
+            name: 'agen_id',
             align: 'left'
           },
           {
-            label: 'supplier',
-            name: 'supplier',
-            align: 'left'
-          },
-          {
-            label: 'supir',
-            name: 'supir',
-            align: 'left'
-          },
-          {
-            label: 'PENgeluaran Stok',
-            name: 'pengeluaranstok',
-            align: 'left'
-          },
-          
-          {
-            label: 'servicein nobukti',
-            name: 'servicein_nobukti',
-            align: 'left'
-          },
-         
-          
-          {
-            label: 'PENerimaan nobukti',
-            name: 'penerimaanstok_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'Pengeluaran nobukti',
-            name: 'pengeluaranstok_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'kerusakan',
-            name: 'kerusakan',
-            align: 'left'
-          },
-          {
-            label: 'Status format',
-            name: 'statusformat',
+            label: 'CABANG',
+            name: 'cabang_id',
             align: 'left'
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
+          },
+          {
+            label: 'UPDATEDAT',
+            name: 'updated_at',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
         ],
       autowidth: true,
@@ -108,7 +78,7 @@
       sortorder: 'asc',
       toolbar: [true, "top"],
       page: 1,
-      pager: $('#pengeluaranStokHeaderLookupPager'),
+      pager: $('#pelunasanPiutangHeaderLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -137,26 +107,26 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#pengeluaranStokHeaderLookup').getGridParam().reccount) {
-            indexRow = $('#pengeluaranStokHeaderLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#pelunasanPiutangHeaderLookup').getGridParam().reccount) {
+            indexRow = $('#pelunasanPiutangHeaderLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#pengeluaranStokHeaderLookup [id="${$('#pengeluaranStokHeaderLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#pelunasanPiutangHeaderLookup [id="${$('#pelunasanPiutangHeaderLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#pengeluaranStokHeaderLookup [id="${$('#pengeluaranStokHeaderLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#pelunasanPiutangHeaderLookup [id="${$('#pelunasanPiutangHeaderLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#pengeluaranStokHeaderLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#pengeluaranStokHeaderLookup [id="` + $('#pengeluaranStokHeaderLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#pelunasanPiutangHeaderLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#pelunasanPiutangHeaderLookup [id="` + $('#pelunasanPiutangHeaderLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#pengeluaranStokHeaderLookup').setSelection($('#pengeluaranStokHeaderLookup').getDataIDs()[indexRow])
+            $('#pelunasanPiutangHeaderLookup').setSelection($('#pelunasanPiutangHeaderLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -171,7 +141,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupPenerimaanStok').prev().width())
+        $(this).setGridWidth($('#lookup').prev().width())
         setHighlight($(this))
       }
     })
@@ -183,10 +153,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#pengeluaranStokHeaderLookup'))
+        clearGlobalSearch($('#pelunasanPiutangHeaderLookup'))
       },
     })
 
-  loadGlobalSearch($('#pengeluaranStokHeaderLookup'))
-  loadClearFilter($('#pengeluaranStokHeaderLookup'))
+  loadGlobalSearch($('#pelunasanPiutangHeaderLookup'))
+  loadClearFilter($('#pelunasanPiutangHeaderLookup'))
 </script>

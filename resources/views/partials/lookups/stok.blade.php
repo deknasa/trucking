@@ -36,21 +36,13 @@ $('#stokLookup').jqGrid({
           align: 'left',
       },
       {
-<<<<<<< Updated upstream
         label: 'kelompok',
-=======
-        label: 'kelompok_id',
->>>>>>> Stashed changes
         name: 'kelompok',
         align: 'left'
       },
       {
         label: 'jenistrado',
-<<<<<<< Updated upstream
         name: 'jenistrado',
-=======
-        name: 'jenistrado_id',
->>>>>>> Stashed changes
         align: 'left'
       },
       {
@@ -99,10 +91,7 @@ $('#stokLookup').jqGrid({
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-<<<<<<< Updated upstream
       toolbar: [true, "top"],
-=======
->>>>>>> Stashed changes
       pager: $('#stokLookupPager'),
       viewrecords: true,
       prmNames: {
@@ -171,7 +160,6 @@ $('#stokLookup').jqGrid({
       }
     })
 
-<<<<<<< Updated upstream
     .jqGrid('filterToolbar', {
       stringResult: true,
       searchOnEnter: false,
@@ -185,16 +173,4 @@ $('#stokLookup').jqGrid({
 
   loadGlobalSearch($('#stokLookup'))
   loadClearFilter($('#stokLookup'))
-=======
-    // .jqGrid('filterToolbar', {
-    //   stringResult: true,
-    //   searchOnEnter: false,
-    //   defaultSearch: 'cn',
-    //   groupOp: 'AND',
-    //   disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
-    //   beforeSearch: function() {
-
-    //   },
-    // })
->>>>>>> Stashed changes
 </script>

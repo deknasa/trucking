@@ -30,7 +30,9 @@
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <input type="text" name="tglbukti" class="form-control datepicker">
+                  <div class="input-group">
+                    <input type="text" name="tglbukti" class="form-control datepicker">
+                  </div>
                 </div>
               </div>
 
@@ -128,7 +130,7 @@
     $(document).on('click', "#addRow", function() {
       addRow()
     });
-    
+
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
     })
@@ -251,7 +253,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    
+
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 

@@ -1,11 +1,10 @@
-<table id="pengeluaranStokHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="pengeluaranStokHeaderLookupPager"></div>
+<table id="penerimaanLookup" class="lookup-grid"></table>
+<div id="penerimaanLookupPager"></div>
 
-
-
+@push('scripts')
 <script>
-  $('#pengeluaranStokHeaderLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'pengeluaranstokheader' }}`,
+  $('#penerimaanLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'penerimaan' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -32,67 +31,105 @@
             }
           },
           {
+            label: 'PELANGGAN ',
+            name: 'pelanggan_id',
+            align: 'left'
+          },
+          {
             label: 'KETERANGAN',
             name: 'keterangan',
             align: 'left'
           },
           {
-            label: 'Gudang',
-            name: 'gudang',
+            label: 'BANK',
+            name: 'bank_id',
+            align: 'left'
+          },
+          // {
+          //   label: 'DITERIMA DARI',
+          //   name: 'diterimadari',
+          //   align: 'left'
+          // },
+          {
+            label: 'TGL LUNAS',
+            name: 'tgllunas',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'CABANG',
+            name: 'cabang_id',
             align: 'left'
           },
           {
-            label: 'Trado',
-            name: 'trado',
+            label: 'STATUS KAS',
+            name: 'statuskas',
             align: 'left'
           },
           {
-            label: 'supplier',
-            name: 'supplier',
+            label: 'NO RESI',
+            name: 'noresi',
             align: 'left'
           },
           {
-            label: 'supir',
-            name: 'supir',
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
             align: 'left'
           },
-          {
-            label: 'PENgeluaran Stok',
-            name: 'pengeluaranstok',
-            align: 'left'
-          },
-          
-          {
-            label: 'servicein nobukti',
-            name: 'servicein_nobukti',
-            align: 'left'
-          },
+          // {
+          //   label: 'USER APPROVAL',
+          //   name: 'userapproval',
+          //   align: 'left'
+          // },
+          // {
+          //   label: 'TGL APPROVAL',
+          //   name: 'tglapproval',
+          //   align: 'left',
+          //   formatter: "date",
+          //   formatoptions: {
+          //     srcformat: "ISO8601Long",
+          //     newformat: "d-m-Y"
+          //   }
+          // },
          
-          
-          {
-            label: 'PENerimaan nobukti',
-            name: 'penerimaanstok_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'Pengeluaran nobukti',
-            name: 'pengeluaranstok_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'kerusakan',
-            name: 'kerusakan',
-            align: 'left'
-          },
-          {
-            label: 'Status format',
-            name: 'statusformat',
-            align: 'left'
-          },
+          // {
+          //   label: 'STATUS BERKAS',
+          //   name: 'statusberkas',
+          //   align: 'left'
+          // },
+          // {
+          //   label: 'USER BERKAS',
+          //   name: 'userberkas',
+          //   align: 'left'
+          // },
+          // {
+          //   label: 'TGL BERKAS',
+          //   name: 'tglberkas',
+          //   align: 'left',
+          //   formatter: "date",
+          //   formatoptions: {
+          //     srcformat: "ISO8601Long",
+          //     newformat: "d-m-Y"
+          //   }
+          // },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
+          },
+          {
+            label: 'UPDATEDAT',
+            name: 'updated_at',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
         ],
       autowidth: true,
@@ -106,9 +143,9 @@
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
-      toolbar: [true, "top"],
       page: 1,
-      pager: $('#pengeluaranStokHeaderLookupPager'),
+      toolbar: [true, "top"],
+      pager: $('#penerimaanLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -135,28 +172,27 @@
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
-          initResize($(this))
 
-          if (indexRow - 1 > $('#pengeluaranStokHeaderLookup').getGridParam().reccount) {
-            indexRow = $('#pengeluaranStokHeaderLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#penerimaanLookup').getGridParam().reccount) {
+            indexRow = $('#penerimaanLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#pengeluaranStokHeaderLookup [id="${$('#pengeluaranStokHeaderLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#penerimaanLookup [id="${$('#penerimaanLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#pengeluaranStokHeaderLookup [id="${$('#pengeluaranStokHeaderLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#penerimaanLookup [id="${$('#penerimaanLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#pengeluaranStokHeaderLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#pengeluaranStokHeaderLookup [id="` + $('#pengeluaranStokHeaderLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#penerimaanLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#penerimaanLookup [id="` + $('#penerimaanLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#pengeluaranStokHeaderLookup').setSelection($('#pengeluaranStokHeaderLookup').getDataIDs()[indexRow])
+            $('#penerimaanLookup').setSelection($('#penerimaanLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -171,7 +207,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupPenerimaanStok').prev().width())
+        $(this).setGridWidth($('#lookup').prev().width())
         setHighlight($(this))
       }
     })
@@ -183,10 +219,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#pengeluaranStokHeaderLookup'))
+        clearGlobalSearch($('#penerimaanLookup'))
       },
     })
 
-  loadGlobalSearch($('#pengeluaranStokHeaderLookup'))
-  loadClearFilter($('#pengeluaranStokHeaderLookup'))
+  loadGlobalSearch($('#penerimaanLookup'))
+  loadClearFilter($('#penerimaanLookup'))
 </script>

@@ -32,6 +32,11 @@ use App\Http\Controllers\JenisOrderController;
 use App\Http\Controllers\JenisTradoController;
 use App\Http\Controllers\KasGantungDetailController;
 use App\Http\Controllers\KasGantungHeaderController;
+
+use App\Http\Controllers\PengembalianKasGantungDetailController;
+use App\Http\Controllers\PengembalianKasGantungHeaderController;
+use App\Http\Controllers\NotaKreditHeaderController;
+
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\SubKelompokController;
 use App\Http\Controllers\SupplierController;
@@ -322,6 +327,16 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('kasgantungdetail', KasGantungDetailController::class);
 
+    Route::get('pengembaliankasgantungheader/get', [PengembalianKasGantungHeaderController::class, 'get'])->name('pengembaliankasgantungheader.get');
+    Route::get('pengembaliankasgantungheader/export', [PengembalianKasGantungHeaderController::class, 'export'])->name('pengembaliankasgantungheader.export');
+    Route::get('pengembaliankasgantungheader/report', [PengembalianKasGantungHeaderController::class, 'report'])->name('pengembaliankasgantungheader.report');
+    Route::get('pengembaliankasgantungheader/index', [PengembalianKasGantungHeaderController::class, 'index']);
+    Route::resource('pengembaliankasgantungheader', PengembalianKasGantungHeaderController::class);
+    
+    Route::get('notakreditheader/get', [NotaKreditheaderController::class, 'get'])->name('notakreditheader.get');
+    Route::get('notakreditheader/index', [NotaKreditheaderController::class, 'index']);
+    Route::resource('notakreditheader', NotaKreditheaderController::class);
+
     Route::get('gudang/field_length', [GudangController::class, 'fieldLength'])->name('gudang.field_length');
     Route::get('gudang/{id}/delete', [GudangController::class, 'delete'])->name('gudang.delete');
     Route::get('gudang/get', [GudangController::class, 'get'])->name('gudang.get');
@@ -538,6 +553,7 @@ Route::middleware('auth')->group(function () {
     Route::get('penerimaanstokheader/get', [PenerimaanStokHeaderController::class, 'get'])->name('penerimaanstokheader.get');
     Route::get('penerimaanstokheader/export', [PenerimaanStokHeaderController::class, 'export'])->name('penerimaanstokheader.export');
     Route::get('penerimaanstokheader/report', [PenerimaanStokHeaderController::class, 'report'])->name('penerimaanstokheader.report');
+    Route::get('penerimaanstokheader/index', [PenerimaanStokHeaderController::class, 'index']);
     Route::resource('penerimaanstokheader', PenerimaanStokHeaderController::class);
     
     Route::resource('penerimaanstokdetail', PenerimaanStokDetailController::class);
@@ -545,6 +561,8 @@ Route::middleware('auth')->group(function () {
     Route::get('pengeluaranstokheader/get', [PengeluaranStokHeaderController::class, 'get'])->name('pengeluaranstokheader.get');
     Route::get('pengeluaranstokheader/export', [PengeluaranStokHeaderController::class, 'export'])->name('pengeluaranstokheader.export');
     Route::get('pengeluaranstokheader/report', [PengeluaranStokHeaderController::class, 'report'])->name('pengeluaranstokheader.report');
+    Route::get('pengeluaranstokheader/index', [PengeluaranStokHeaderController::class, 'index']);
+
     Route::resource('pengeluaranstokheader', PengeluaranStokHeaderController::class);
     
     Route::resource('pengeluaranstokdetail', PengeluaranStokDetailController::class);
