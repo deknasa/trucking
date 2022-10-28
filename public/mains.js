@@ -177,10 +177,15 @@ $(document).on("sidebar:toggle", () => {
 		sidebarIsOpen = false;
 
 		$("#search").focusout();
+		$("body").removeClass("no-scroll");
 	} else if ($("body").hasClass("sidebar-open")) {
 		sidebarIsOpen = true;
 
-		$("#search").focus();
+		$("body").addClass("no-scroll");
+
+		if (detectDeviceType() == "desktop") {
+			$("#search").focus();
+		}
 	}
 });
 
