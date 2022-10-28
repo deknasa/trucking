@@ -869,7 +869,10 @@ function initDatepicker() {
 			</div>
 		`
 		)
-		.addClass("btn btn-primary");
+		.addClass("btn btn-primary")
+		.html(`
+			<i class="fa fa-calendar-alt"></i>
+		`);
 
 	element.on("keydown", function (event) {
 		if (event.keyCode === 115) {
