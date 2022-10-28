@@ -30,9 +30,7 @@
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <div class="input-group">
-                    <input type="text" name="tglbukti" class="form-control datepicker">
-                  </div>
+                  <input type="text" name="tglbukti" class="form-control datepicker">
                 </div>
               </div>
 

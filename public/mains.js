@@ -828,6 +828,13 @@ function startTime() {
 function initDatepicker() {
 	let element = $(document).find(".datepicker");
 
+	if (!element.parent().hasClass("input-group")) {
+		element.wrap(`
+				<div class="input-group">
+				</div>
+			`);
+	}
+
 	element
 		.datepicker({
 			dateFormat: "dd-mm-yy",
@@ -869,8 +876,7 @@ function initDatepicker() {
 			</div>
 		`
 		)
-		.addClass("btn btn-primary")
-		.html(`
+		.addClass("btn btn-primary").html(`
 			<i class="fa fa-calendar-alt"></i>
 		`);
 
