@@ -290,7 +290,7 @@
                             gajiKenek = parseFloat(gajiKenek) + parseFloat(detail.gajikenek)
                             let detailRow = $(`
                                 <tr >
-                                    <td width="10px" onclick="select(this)"><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
+                                    <td width="1%" onclick="select(this)"><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
                                     <td width="13%">${detail.nobukti}</td>
                                     <td width="10%">${detail.tglbukti}</td>
                                     <td width="10%">${detail.trado}</td>
@@ -614,7 +614,7 @@
 
                     let detailRow = $(`
                         <tr >
-                            <td width="5%"><input name='sp_id[]' type="checkbox" id="checkItem" value="${detail.id}" checked disabled></td>
+                            <td width="1%"><input name='sp_id[]' type="checkbox" id="checkItem" value="${detail.id}" checked disabled></td>
                             <td width="13%">${detail.nobukti}</td>
                             <td width="10%">${detail.tglbukti}</td>
                             <td width="10%">${detail.trado}</td>

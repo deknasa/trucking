@@ -149,14 +149,7 @@
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="coa" class="form-control akunpusat-lookup">
               </div>
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>STATUS FORMAT <span class="text-danger">*</span> </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <select name="statusformat" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS FORMAT --</option>
-                </select>
-              </div>
+              
             </div>
             
             <table class="table table-bordered table-bindkeys">
@@ -488,7 +481,7 @@
                     <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>                 
                   <td>
-                    <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                    <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                   </td>  
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
@@ -612,7 +605,7 @@
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>
                   <td>
-                    <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                    <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                   </td>  
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    

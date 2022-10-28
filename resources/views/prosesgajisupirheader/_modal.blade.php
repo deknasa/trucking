@@ -29,7 +29,7 @@
                                 </label>
                             </div>
                             <div class="col-12 col-md-4">
-                                <input type="text" name="tglbukti" class="form-control datepicker">
+                                <input type="text" name="tglbukti" autocomplete="off" class="form-control datepicker">
                             </div>
                         </div>
 
@@ -39,7 +39,7 @@
                                 KETERANGAN <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-md-10">
-                            <input type="text" name="keterangan" class="form-control">
+                            <input type="text" name="keterangan" class="form-control" autocomplete="off">
                             </div>
                         </div>
                         <div class="row form-group">
@@ -48,7 +48,7 @@
                                 PERIODE <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-md-10">
-                            <input type="text" name="periode" class="form-control datepicker">
+                            <input type="text" name="periode" class="form-control datepicker" autocomplete="off">
                             </div>
                         </div>
 
@@ -59,7 +59,7 @@
                                 </label>
                             </div>
                             <div class="col-12 col-md-4">
-                                <input type="text" name="tgldari" class="form-control datepicker">
+                                <input type="text" name="tgldari" class="form-control datepicker" autocomplete="off">
                             </div>
 
                             <div class="col-12 col-md-2 col-form-label">
@@ -68,7 +68,7 @@
                                 </label>
                             </div>
                             <div class="col-12 col-md-4">
-                                <input type="text" name="tglsampai" class="form-control datepicker">
+                                <input type="text" name="tglsampai" class="form-control datepicker" autocomplete="off">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -88,15 +88,15 @@
                                     <th>KETERANGAN</th>
                                     <th>TGL DARI</th>
                                     <th>TGL SAMPAI</th>
-                                    <th>TOTAL</th>
+                                    <th>NOMINAL</th>
                                 </thead>
                                 <tbody>
 
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="7"></td>
-                                        <td><p id="total" class="text-right font-weight-bold"></p></td>
+                                        <td colspan="7"><p class="font-weight-bold">TOTAL:</p></td>
+                                        <td><p id="nominal" class="text-right font-weight-bold"></p></td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -168,19 +168,19 @@
             switch (action) {
                 case 'add':
                     method = 'POST'
-                    url = `${apiUrl}gajisupirheader`
+                    url = `${apiUrl}prosesgajisupirheader`
                     break;
                 // case 'edit':
                 //     method = 'PATCH'
-                //     url = `${apiUrl}gajisupirheader/${Id}`
+                //     url = `${apiUrl}prosesgajisupirheader/${Id}`
                 //     break;
                 case 'delete':
                     method = 'DELETE'
-                    url = `${apiUrl}gajisupirheader/${Id}`
+                    url = `${apiUrl}prosesgajisupirheader/${Id}`
                     break;
                 default:
                     method = 'POST'
-                    url = `${apiUrl}gajisupirheader`
+                    url = `${apiUrl}prosesgajisupirheader`
                     break;
             }
 
@@ -189,7 +189,7 @@
 
             if(action == 'edit') {
                 $.ajax({
-                    url: `${apiUrl}gajisupirheader/noEdit`,
+                    url: `${apiUrl}prosesgajisupirheader/noEdit`,
                     method: 'POST',
                     dataType: 'JSON',
                     beforeSend: request => {
@@ -252,8 +252,9 @@
 
         activeGrid = null
 
-        getMaxLength(form)
         initDatepicker()
+        getMaxLength(form)
+        initAutoNumeric()
     })
 
     $('#crudModal').on('hidden.bs.modal', () => {
@@ -282,10 +283,10 @@
         $('.invalid-feedback').remove()
 
         initDatepicker()
-        // form.find(`[name="subtotal"]`).addClass('disabled')
+        // form.find(`[name="subnominal"]`).addClass('disabled')
     }
 
-    function editGajiSupirHeader(Id) {
+    function editProsesGajiSupirHeader(Id) {
         let form = $('#crudForm')
 
         form.data('action', 'edit')
@@ -294,16 +295,16 @@
             <i class="fa fa-save"></i>
             Simpan
         `)
-        $('#crudModalTitle').text('Edit Rincian Gaji Supir')
+        $('#crudModalTitle').text('Edit Proses Gaji Supir')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
-        showGajiSupir(form, Id, 'edit')
+        showProsesGajiSupir(form, Id, 'edit')
         form.find('#btnTampil').prop('disabled', true)
     }
 
-    function deleteGajiSupirHeader(Id) {
+    function deleteProsesGajiSupirHeader(Id) {
         let form = $('#crudForm')
 
         form.data('action', 'delete')
@@ -312,19 +313,20 @@
             <i class="fa fa-save"></i>
             Hapus
         `)
-        $('#crudModalTitle').text('Delete Rincian Gaji Supir')
+        $('#crudModalTitle').text('Delete Proses Gaji Supir')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
-        showGajiSupir(form, Id, 'delete')
+        showProsesGajiSupir(form, Id, 'delete')
         form.find('#btnTampil').prop('disabled', true)
 
     }
 
-    function showGajiSupir(form, gajiId, aksi) {
+    function showProsesGajiSupir(form, gajiId, aksi) {
+        console.log(apiUrl)
         $.ajax({
-            url: `${apiUrl}gajisupirheader/${gajiId}`,
+            url: `${apiUrl}prosesgajisupirheader/${gajiId}`,
             method: 'GET',
             dataType: 'JSON',
             headers: {
@@ -345,16 +347,7 @@
                
                 form.find('[name]').addClass('disabled')
                 initDisabled()
-                initAutoNumeric(form.find(`[name="subtotal"]`))
-                initAutoNumeric(form.find(`[name="uangmakanharian"]`))
-                initAutoNumeric(form.find(`[name="deposito"]`))
-                initAutoNumeric(form.find(`[name="pinjamanpribadi"]`))
-                initAutoNumeric(form.find(`[name="potonganpinjaman"]`))
-                initAutoNumeric(form.find(`[name="potonganpinjamansemua"]`))
-                initAutoNumeric(form.find(`[name="bbm"]`))
-                initAutoNumeric(form.find(`[name="gajiminus"]`))
-                initAutoNumeric(form.find(`[name="total"]`))
-                getEditTrip(gajiId, aksi)
+                getEdit(gajiId, aksi)
             }
         })
     }
@@ -381,10 +374,10 @@
                 if(response.errors == true) {
                     showDialog(response.message)
                 }else{
-                    let total = 0
+                    let nominal = 0
                     $.each(response.data, (index, detail) => {
                     
-                        total = parseFloat(total) + parseFloat(detail.total)
+                        nominal = parseFloat(nominal) + parseFloat(detail.nominal)
 
                         let detailRow = $(`
                             <tr >
@@ -395,17 +388,17 @@
                                 <td width="10%">${detail.keterangan}</td>
                                 <td width="10%">${detail.tgldari}</td>
                                 <td width="10%">${detail.tglsampai}</td>
-                                <td width="10%" class="total text-right">${detail.total}</td>
+                                <td width="10%" class="nominal text-right">${detail.nominal}</td>
                             </tr>
                         `)
 
                         $('#ricList tbody').append(detailRow)
-                        initAutoNumeric(detailRow.find('.total'))
+                        initAutoNumeric(detailRow.find('.nominal'))
                     })
                     
-                    $('#total').append(`${total}`)
+                    $('#nominal').append(`${nominal}`)
 
-                    initAutoNumeric($('#ricList tfoot').find('#total'))
+                    initAutoNumeric($('#ricList tfoot').find('#nominal'))
 
                 }
             }
@@ -414,11 +407,11 @@
     })
 
    
-    function getEditTrip(gajiId, aksi) {
+    function getEdit(gajiId, aksi) {
         $('#gajiSupir').html('')
         $('#gajiKenek').html('')
         $.ajax({
-            url: `${apiUrl}gajisupirheader/${gajiId}/getEditTrip`,
+            url: `${apiUrl}prosesgajisupirheader/${gajiId}/getEdit`,
             method: 'GET',
             dataType: 'JSON',
             data: {
@@ -429,40 +422,30 @@
             },
             success: response => {
             
-                let gajiSupir = 0
-                let gajiKenek = 0
+                let nominal = 0
                 $.each(response.data, (index, detail) => {
-                    gajiSupir = parseFloat(gajiSupir) + parseFloat(detail.gajisupir)
-                    gajiKenek = parseFloat(gajiKenek) + parseFloat(detail.gajikenek)
+                    nominal = parseFloat(nominal) + parseFloat(detail.nominal)
 
                     let detailRow = $(`
                         <tr >
-                            <td width="5%"><input name='sp_id[]' type="checkbox" id="checkItem" value="${detail.id}" checked disabled></td>
-                            <td width="13%">${detail.nobukti}</td>
-                            <td width="10%">${detail.tglbukti}</td>
-                            <td width="10%">${detail.trado}</td>
-                            <td width="10%">${detail.dari}</td>
-                            <td width="10%">${detail.sampai}</td>
-                            <td width="10%">${detail.nocont}</td>
-                            <td width="10%">${detail.nosp}</td>
-                            <td width="10%" class="gajiSupir">${detail.gajisupir}</td>
-                            <td width="10%" class="gajiKenek">${detail.gajikenek}</td>
-                        </tr>
-                    `)
+                                <td width="1%" onclick="select(this)"><input name='ric_id[]' type="checkbox" class="checkItem" value="${detail.id}" disabled checked></td>
+                                <td width="13%">${detail.nobukti}</td>
+                                <td width="10%">${detail.tglbukti}</td>
+                                <td width="10%">${detail.namasupir}</td>
+                                <td width="10%">${detail.keterangan}</td>
+                                <td width="10%">${detail.tgldari}</td>
+                                <td width="10%">${detail.tglsampai}</td>
+                                <td width="10%" class="nominal text-right">${detail.nominal}</td>
+                            </tr>
+                        `)
 
-                    $('#tripList tbody').append(detailRow)
-                    initAutoNumeric(detailRow.find('.gajiSupir'))
-                    initAutoNumeric(detailRow.find('.gajiKenek'))
+                        $('#ricList tbody').append(detailRow)
+                        initAutoNumeric(detailRow.find('.nominal'))
                 })
-                $('#gajiSupir').append(`${gajiSupir}`)
-                $('#gajiKenek').append(`${gajiKenek}`)
+                
+                $('#nominal').append(`${nominal}`)
 
-                let subTotal = gajiSupir+gajiKenek
-                $('#crudForm').find(`[name="subtotal"]`).val(subTotal)
-                initAutoNumeric($('#crudForm').find(`[name="subtotal"]`))
-
-                initAutoNumeric($('#tripList tfoot').find('#gajiSupir'))
-                initAutoNumeric($('#tripList tfoot').find('#gajiKenek'))
+                initAutoNumeric($('#ricList tfoot').find('#nominal'))
 
             }
         })
@@ -470,73 +453,26 @@
 
     function select(element) {
 
-        var is_checked = $(element).find(`[name="sp_id[]"]`).is(":checked");
+        var is_checked = $(element).find(`[name="ric_id[]"]`).is(":checked");
 
-        let gajiSupir = $(element).siblings('td.gajiSupir').text()
-        let gjs =  parseFloat(gajiSupir.replaceAll(',',''));
+        let tdNominal = $(element).siblings('td.nominal').text()
+        tdNominal =  parseFloat(tdNominal.replaceAll(',',''));
 
-        let totalSupir = $('#gajiSupir').text()
-        let ttlSupir = parseFloat(totalSupir.replaceAll(',',''));
-
-        let gajiKenek = $(element).siblings('td.gajiKenek').text()
-        let gjk =  parseFloat(gajiKenek.replaceAll(',',''));
-
-        let totalKenek = $('#gajiKenek').text()
-        let ttlKenek = parseFloat(totalKenek.replaceAll(',',''));
-
-    
-        let total = 0
-        let subTotal = 0
-        let uangMakan = $('#crudForm').find(`[name="uangmakanharian"]`).val()
-        uangMakan = parseFloat(uangMakan.replaceAll(',',''));
-
-        let finalSupir = 0
-        let finalKenek = 0
+        let allNominal = $('#nominal').text()
+        allNominal = parseFloat(allNominal.replaceAll(',',''));
+        let nominal = 0
         if(!is_checked) { 
-
-            finalSupir = ttlSupir - gjs;
-            finalKenek = ttlKenek - gjk;
-
-            $('#gajiSupir').html('')
-            $('#gajiSupir').append(`${finalSupir}`)
-            $('#gajiKenek').html('')
-            $('#gajiKenek').append(`${finalKenek}`)
-
-            subTotal = finalSupir+finalKenek
-            if(uangMakan) {
-                total = subTotal + uangMakan
-            }else{
-                total = subTotal
-            }
+            allNominal = allNominal-tdNominal
             console.log(is_checked)
         }else{
-       
-            finalSupir = ttlSupir + gjs;
-            finalKenek = ttlKenek + gjk;
-            $('#gajiSupir').html('')
-            $('#gajiSupir').append(`${finalSupir}`)
-            $('#gajiKenek').html('')
-            $('#gajiKenek').append(`${finalKenek}`)
-
-        
-            subTotal = finalSupir+finalKenek
-            if(uangMakan) {
-                total = subTotal + uangMakan
-            }else{
-                total = subTotal
-            }
+            allNominal = allNominal+tdNominal       
             console.log(is_checked)
-            // $(element).find(`[name="sp_id[]"]`).prop("checked", false);
         }
-      
-        initAutoNumeric($('#tripList tfoot').find('#gajiSupir'))
-        initAutoNumeric($('#tripList tfoot').find('#gajiKenek'))
 
-        $('#crudForm').find(`[name="subtotal"]`).val(subTotal)
-        initAutoNumeric($('#crudForm').find(`[name="subtotal"]`))
+        $('#nominal').html('')
+        $('#nominal').append(`${allNominal}`)
+        initAutoNumeric($('#ricList tfoot').find('#nominal'))
 
-        $('#crudForm').find(`[name="total"]`).val(total)
-        initAutoNumeric($('#crudForm').find(`[name="total"]`))
     }
 
     function setRowNumbers() {
@@ -554,7 +490,7 @@
     function getMaxLength(form) {
         if (!form.attr('has-maxlength')) {
             $.ajax({
-                url: `${apiUrl}gajisupirheader/field_length`,
+                url: `${apiUrl}prosesgajisupirheader/field_length`,
                 method: 'GET',
                 dataType: 'JSON',
                 headers: {

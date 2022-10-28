@@ -10,16 +10,17 @@
         </div>
         <form action="" method="post">
           <div class="modal-body">
+            <input type="hidden" name="id">
 
             <div class="row">
-              <div class="form-group col-md-4">
+              <!-- <div class="form-group col-md-4">
                 <div class="col-12 col-md-2 col-form-label">
                   <label>ID</label>
                 </div>
                 <div>
                   <input type="text" name="id" class="form-control" readonly>
                 </div>
-              </div>
+              </div> -->
               <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
@@ -67,12 +68,49 @@
                   </label>
                 </div>
                 <div>
-                  <select name="statuslongtrip" class="form-control select2bs4" style="width: 100%;">
+                  <select name="statuslongtrip" class="form-control select2bs4" id="statuslongtrip">
                     <option value="">-- PILIH STATUS LONGTRIP --</option>
                   </select>
                 </div>
               </div>
-              <div class="form-group col-md-6">
+              <!-- <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    STATUS LONGTRIP <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <select name="statuslongtrip" class="form-control select2bs4" style="width: 100%;">
+                    <option value="">-- PILIH STATUS LONGTRIP --</option>
+                  </select>
+                </div>
+              </div> -->
+
+              <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  DARI <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <input type="hidden" name="dari_id">
+                <input type="text" name="dari" class="form-control kotadari-lookup">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  TUJUAN <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <input type="hidden" name="sampai_id">
+                <input type="text" name="sampai" class="form-control kotasampai-lookup">
+              </div>
+            </div>
+
+              <!-- <div class="form-group col-md-6">
                 <div class="col-form-label">
                   <label>
                     DARI <span class="text-danger">*</span>
@@ -93,7 +131,8 @@
                     <option value="">-- PILIH SAMPAI --</option>
                   </select>
                 </div>
-              </div>
+              </div> -->
+
               <div class="col-md-6">
                 <div class="card">
                   <div class="card-header bg-info">
@@ -318,6 +357,16 @@
                     <input type="text" name="komisisupir" id="komisisupir" class="form-control" readonly>
                   </div>
                 </div>
+                <!-- <div class="row form-group">
+                <div class="col-12 col-md-2 col-form-label">
+                    <label>
+                      KOMISI SUPIR <span class="text-danger">*</span>
+                    </label>
+                  </div>
+                  <div class="col-12 col-md-10">
+                    <input type="text" name="komisisupir" id="komisisupir" class="form-control" readonly>
+                  </div>
+                </div> -->
 
                 <h3 class="text-center">Biaya Tambahan</h3>
 
@@ -337,9 +386,14 @@
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td colspan="3"></td>
+                            <td colspan="2">
+                              <p class="text-right font-weight-bold">TOTAL :</p>
+                            </td>
                             <td>
-                              <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                              <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                            </td>
+                            <td>
+                              <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
                             </td>
                           </tr>
                         </tfoot>
@@ -371,11 +425,14 @@
   let hasFormBindKeys = false
 
   $(document).ready(function() {
-    addRow()
 
     $("#addRow").click(function() {
       addRow()
     });
+
+    $(document).on('input', `#detailList [name="nominal[]"]`, function(event) {
+      setTotal()
+    })
 
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
@@ -387,9 +444,13 @@
       let method
       let url
       let form = $('#crudForm')
-      let suratPengantarId = form.find('[name=id]').val()
+      let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+
+      $('#crudForm').find(`[name="nominal[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
+      })
 
       data.push({
         name: 'sortIndex',
@@ -423,11 +484,11 @@
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}suratpengantar/${suratPengantarId}`
+          url = `${apiUrl}suratpengantar/${Id}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}suratpengantar/${suratPengantarId}`
+          url = `${apiUrl}suratpengantar/${Id}`
           break;
         default:
           method = 'POST'
@@ -485,11 +546,26 @@
     activeGrid = null
 
     getMaxLength(form)
+    initLookup()
+    initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
+
+  function setTotal() {
+    let nominalDetails = $(`#detailList [name="nominal[]"]`)
+    let total = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#total').set(total)
+  }
 
   function createSuratPengantar() {
     let form = $('#crudForm')
@@ -509,7 +585,7 @@
     setStatusLongTripOptions(form)
     setStatusContainerOptions(form)
     setStatusPeralihanOptions(form)
-    setKotaOptions(form)
+    // setKotaOptions(form)
     setPelangganOptions(form)
     setContainerOptions(form)
     setTradoOptions(form)
@@ -517,9 +593,12 @@
     setAgenOptions(form)
     setJenisOrderOptions(form)
     setTarifOptions(form)
+
+    addRow()
+    setTotal()
   }
 
-  function editSuratPengantar(suratPengantarId) {
+  function editSuratPengantar(id) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -539,7 +618,7 @@
         setStatusLongTripOptions(form),
         setStatusContainerOptions(form),
         setStatusPeralihanOptions(form),
-        setKotaOptions(form),
+        // setKotaOptions(form),
         setPelangganOptions(form),
         setContainerOptions(form),
         setTradoOptions(form),
@@ -549,11 +628,11 @@
         setTarifOptions(form)
       ])
       .then(() => {
-        showSuratPengantar(form, suratPengantarId)
+        showSuratPengantar(form, id)
       })
   }
 
-  function deleteSuratPengantar(suratPengantarId) {
+  function deleteSuratPengantar(id) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -573,7 +652,7 @@
         setStatusLongTripOptions(form),
         setStatusContainerOptions(form),
         setStatusPeralihanOptions(form),
-        setKotaOptions(form),
+        // setKotaOptions(form),
         setPelangganOptions(form),
         setContainerOptions(form),
         setTradoOptions(form),
@@ -583,7 +662,7 @@
         setTarifOptions(form)
       ])
       .then(() => {
-        showSuratPengantar(form, suratPengantarId)
+        showSuratPengantar(form, id)
       })
   }
 
@@ -653,18 +732,25 @@
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statuslongtrip]').empty()
       relatedForm.find('[name=statuslongtrip]').append(
-        new Option('-- PILIH STATUS LONG TRIP --', '', false, true)
+        new Option('-- PILIH STATUS LONG TRIPS --', '', false, true)
       ).trigger('change')
 
       $.ajax({
-        url: `${apiUrl}statuscontainer`,
+        url: `${apiUrl}parameter`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
         data: {
-          limit: 0,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS LONGTRIP"
+            }]
+          })
         },
         success: response => {
           response.data.forEach(statusLongTrip => {
@@ -678,6 +764,36 @@
       })
     })
   }
+
+  // const setStatusLongTripOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statuslongtrip]').empty()
+  //     relatedForm.find('[name=statuslongtrip]').append(
+  //       new Option('-- PILIH STATUS LONG TRIP --', '', false, true)
+  //     ).trigger('change')
+
+  //     $.ajax({
+  //       url: `${apiUrl}statuscontainer`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         limit: 0,
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statusLongTrip => {
+  //           let option = new Option(statusLongTrip.text, statusLongTrip.id)
+
+  //           relatedForm.find('[name=statuslongtrip]').append(option).trigger('change')
+  //         });
+
+  //         resolve()
+  //       }
+  //     })
+  //   })
+  // }
 
   const setContainerOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
@@ -919,42 +1035,44 @@
     })
   }
 
-  const setKotaOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=dari_id], [name=sampai_id]').empty()
-      relatedForm.find('[name=dari_id]').append(
-        new Option('-- PILIH DARI --', '', false, true)
-      ).trigger('change')
-      relatedForm.find('[name=sampai_id]').append(
-        new Option('-- PILIH SAMPAI --', '', false, true)
-      ).trigger('change')
+  // const setKotaOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=dari_id], [name=sampai_id]').empty()
+  //     relatedForm.find('[name=dari_id]').append(
+  //       new Option('-- PILIH DARI --', '', false, true)
+  //     ).trigger('change')
+  //     relatedForm.find('[name=sampai_id]').append(
+  //       new Option('-- PILIH SAMPAI --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}kota`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(kota => {
-            let option = new Option(kota.keterangan, kota.id)
+  //     $.ajax({
+  //       url: `${apiUrl}kota`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         limit: 0,
+  //       },
+  //       success: response => {
+  //         response.data.forEach(kota => {
+  //           let option = new Option(kota.keterangan, kota.id)
 
-            relatedForm.find('[name=dari_id], [name=sampai_id]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=dari_id], [name=sampai_id]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       }
+  //     })
+  //   })
+  // }
 
-  function showSuratPengantar(form, suratPengantarId) {
+  function showSuratPengantar(form, userId) {
+    $('#detailList tbody').html('')
+
     $.ajax({
-      url: `${apiUrl}suratpengantar/${suratPengantarId}`,
+      url: `${apiUrl}suratpengantar/${userId}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -966,10 +1084,45 @@
 
           if (element.is('select')) {
             element.val(value).trigger('change')
+          } else if (element.hasClass('datepicker')) {
+            element.val(dateFormat(value))
+          } else if (element.hasClass('autonumeric')) {
+            let autoNumericInput = AutoNumeric.getAutoNumericElement(element[0])
+
+            autoNumericInput.set(value);
           } else {
             element.val(value)
           }
         })
+        $.each(response.detail, (index, detail) => {
+          let detailRow = $(`
+                    <tr>
+                      <td></td>
+                      <td>
+                        <input type="text" name="keterangan_detail[]" class="form-control">
+                      </td>
+                      <td>
+                        <input type="text" name="nominal[]" class="form-control autonumeric">
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                      </td>
+                    </tr>
+                  `)
+          detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+          $('#detailList tbody').append(detailRow)
+
+          initAutoNumeric(detailRow.find('.autonumeric'))
+
+          setTotal()
+
+        })
+        setRowNumbers()
+
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
       }
     })
   }
@@ -1007,6 +1160,34 @@
 
     elements.each((index, element) => {
       $(element).text(index + 1)
+    })
+  }
+
+  function initLookup() {
+  $('.kotadari-lookup').lookup({
+      title: 'kota Lookup',
+      fileName: 'kota',
+      onSelectRow: (kota, element) => {
+        $('#crudForm [name=dari_id]').first().val(kota.id)
+        element.val(kota.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+
+    $('.kotasampai-lookup').lookup({
+      title: 'kota Lookup',
+      fileName: 'kota',
+      onSelectRow: (kota, element) => {
+        $('#crudForm [name=sampai_id]').first().val(kota.id)
+        element.val(kota.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
     })
   }
 
