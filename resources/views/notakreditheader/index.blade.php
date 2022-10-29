@@ -243,6 +243,38 @@
               deleteNotaKredit(selectedId)
             }
           },
+          {
+            id: 'approval',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVE',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+              let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+
+              $('#loader').removeClass('d-none')
+
+              handleApproval(id)
+            }
+          },
+          {
+            id: 'export',
+            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'export')
+              $('#rangeModal').find('button:submit').html(`Export`)
+              $('#rangeModal').modal('show')
+            }
+          },
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'report')
+              $('#rangeModal').find('button:submit').html(`Report`)
+              $('#rangeModal').modal('show')
+            }
+          },
         ]
 
       })
@@ -276,23 +308,26 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('notakreditheader', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('notakreditheader', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('notakreditheader', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('notakreditheader', 'export') }}`) {
       $('#export').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('notakreditheader', 'report') }}`) {
+      $('#report').addClass('ui-disabled')
+    }
+    if (!`{{ $myAuth->hasPermission('notakreditheader', 'approval') }}`) {
       $('#report').addClass('ui-disabled')
     }
 
@@ -319,13 +354,21 @@
       })
     })
 
-    $('#formRange').submit(function(event) {
+    $('#formRange').submit(event => {
       event.preventDefault()
 
       let params
-      let submitButton = $(this).find('button:submit')
+      let actionUrl = ``
+      console.log(params);
+      if ($('#rangeModal').data('action') == 'export') {
+        actionUrl = `{{ route('notakreditheader.export') }}`
+      } else if ($('#rangeModal').data('action') == 'report') {
+        actionUrl = `{{ route('notakreditheader.report') }}`
+      }
 
-      submitButton.attr('disabled', 'disabled')
+      /* Clear validation messages */
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
 
       /* Set params value */
       for (var key in postData) {
@@ -335,43 +378,24 @@
         params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-      let formRange = $('#formRange')
-      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
-      params += `&offset=${offset}&limit=${limit}`
-
-      if ($('#rangeModal').data('action') == 'export') {
-        let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}pengembaliankasgantung/export?${params}`, true)
-        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
-        xhr.responseType = 'arraybuffer'
-
-        xhr.onload = function(e) {
-          if (this.status === 200) {
-            if (this.response !== undefined) {
-              let blob = new Blob([this.response], {
-                type: "application/vnd.ms-excel"
-              })
-              let link = document.createElement('a')
-
-              link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanpengeluaranStok${(new Date).getTime()}.xlsx`
-              link.click()
-
-              submitButton.removeAttr('disabled')
-            }
-          }
-        }
-
-        xhr.send()
-      } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('pengembaliankasgantungheader.report') }}?${params}`)
-
-        submitButton.removeAttr('disabled')
-      }
+      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
 
-
+  function handleApproval(id) {
+    $.ajax({
+      url: `${apiUrl}notakreditheader/${id}/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+      },
+      success: response => {
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    }).always(() => {
+      $('#loader').addClass('d-none')
+    })
+  }
 
   })
 </script>

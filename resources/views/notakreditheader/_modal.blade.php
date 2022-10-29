@@ -26,7 +26,9 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="tglbukti" class="form-control datepicker">
+                <div class="input-group">
+                <input type="text" name="tglbukti" class="form-control formatdate datepicker">
+              </div>
               </div>
             </div>
 
@@ -37,7 +39,10 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="tglapproval" class="form-control datepicker">
+                <div class="input-group">
+                  <input type="text" name="tglapproval" class="form-control formatdate datepicker">
+
+                </div>
               </div>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -60,7 +65,9 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="tgllunas" class="form-control datepicker">
+                <div class="input-group">
+                <input type="text" name="tgllunas" class="form-control formatdate datepicker">
+              </div>
               </div>
               
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -91,7 +98,7 @@
           </div>
             <div class="col-md-12" style="overflow-x:scroll">
               <table class="table table-borderd mt-3" id="detailList" style="table-layout:auto">
-                <thead id="table_body" class="table-secondary">
+                <thead id="" class="table-secondary">
                   <tr>
                     <th><input type="checkbox" id="checkAll"> </th>
                     <th>no</th>
@@ -109,8 +116,9 @@
                   </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="6"></td>
+                    <td colspan="5"></td>
                     <td><p id="nominalPiutang" class="text-right font-weight-bold"></p></td>
+                    <th></th>
                     <th></th>
                   
                    
@@ -188,7 +196,57 @@
         name: 'limit',
         value: limit
       })
+      $('#table_body tr').each(function(row, tr){ 
 
+        if($(this).find(`[name="pelunasanpiutangdetail_id[]"]`).is(':checked')) {
+          data.push({
+            name: 'pelunasanpiutangdetail_id[]',
+            value: $(this).find(`[name="pelunasanpiutangdetail_id[]"]`).val()
+          })
+          data.push({
+            name: 'deatail_nobukti_pelunasan[]',
+            value: $(this).find(`[name="deatail_nobukti_pelunasan[]"]`).val()
+          })
+          
+          data.push({
+            name: 'deatail_tglcair_pelunasan[]',
+            value: $(this).find(`[name="deatail_tglcair_pelunasan[]"]`).val()
+          })
+          
+          data.push({
+            name: 'deatail_coapenyesuaian_pelunasan[]',
+            value: $(this).find(`[name="deatail_coapenyesuaian_pelunasan[]"]`).val()
+          })
+          
+          data.push({
+            name: 'deatail_nominal_pelunasan[]',
+            value: $(this).find(`[name="deatail_nominal_pelunasan[]"]`).val()
+          })
+          
+          data.push({
+            name: 'deatail_nominalbayar_pelunasan[]',
+            value: $(this).find(`[name="deatail_nominalbayar_pelunasan[]"]`).val()
+          })
+          
+          data.push({
+            name: 'deatail_penyesuaian_pelunasan[]',
+            value: $(this).find(`[name="deatail_penyesuaian_pelunasan[]"]`).val()
+          })
+          
+          data.push({
+            name: 'deatail_invoice_nobukti_pelunasan[]',
+            value: $(this).find(`[name="deatail_invoice_nobukti_pelunasan[]"]`).val()
+          })
+          
+          data.push({
+            name: 'keterangandetail[]',
+            value: $(this).find(`[name="keterangandetail[]"]`).val()
+          })
+          
+          
+          
+        }
+      })
 
       switch (action) {
         case 'add':
@@ -211,7 +269,7 @@
 
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
-console.log(data);
+      console.log(data);
       $.ajax({
         url: url,
         method: method,
@@ -258,8 +316,8 @@ console.log(data);
 
     getMaxLength(form)
     initLookup()
-    initDatepicker()
     initSelect2()
+    initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -416,47 +474,74 @@ console.log(data);
           totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
           let detailRow = $(`
           <tr>
-            <td ><input name='pelunasanpiutangdetail_id[]' type="checkbox" id="checkItem" value="${detail.detail_id}"></td>
+            <td onclick="select(this)"><input name='pelunasanpiutangdetail_id[]' type="checkbox" id="checkItem" value="${detail.detail_id}"></td>
             <td>${row}</td>
             <td>
               ${detail.nobukti}
-              <input type="hidden" value="${detail.nobukti}" name="deatail_nobukti_pelunasan[]"  readonly>
+              <input type="hidden" value="${detail.nobukti}" disabled name="deatail_nobukti_pelunasan[]"  readonly>
             </td>
             <td>
               ${detail.tglcair}
-              <input type="hidden" value="${detail.tglcair}" name="deatail_tglcair_pelunasan[]"  readonly>
+              <input type="hidden" value="${detail.tglcair}" disabled name="deatail_tglcair_pelunasan[]"  readonly>
             </td>
             <td>
               ${detail.coapenyesuaian}
-              <input type="hidden" value="${detail.coapenyesuaian}" name="deatail_coapenyesuaian_pelunasan[]"  readonly>
+              <input type="hidden" value="${detail.coapenyesuaian}" disabled name="deatail_coapenyesuaian_pelunasan[]"  readonly>
             </td>
             <td>
               ${detail.nominal}
-              <input type="hidden" value="${detail.nominal}" name="deatail_nominal_pelunasan[]"  readonly>
+              <input type="hidden" value="${detail.nominal}" disabled name="deatail_nominal_pelunasan[]"  readonly>
             </td>
             <td>
               ${detail.nominalbayar}
-              <input type="hidden" value="${detail.nominalbayar}" name="deatail_nominalbayar_pelunasan[]"  readonly>
+              <input type="hidden" value="${detail.nominalbayar}" disabled name="deatail_nominalbayar_pelunasan[]"  readonly>
             </td>
             <td>
               ${detail.penyesuaian}
-              <input type="hidden" value="${detail.penyesuaian}" name="deatail_penyesuaian_pelunasan[]"  readonly>
+              <input type="hidden" value="${detail.penyesuaian}" disabled name="deatail_penyesuaian_pelunasan[]"  readonly>
             </td>
             
-              <input type="hidden" value="${detail.invoice_nobukti}" name="deatail_invoice_nobukti_pelunasan[]" readonly>
+              <input type="hidden" value="${detail.invoice_nobukti}" disabled name="deatail_invoice_nobukti_pelunasan[]" readonly>
             
             <td>
-              <td><textarea name="keterangandetail[]" class="form-control" id=""  rows="1"></textarea></td>
+              <td><textarea disabled name="keterangandetail[]" class="form-control" id=""  rows="1"></textarea></td>
             </td>
           </tr>`)
           $('#detailList tbody').append(detailRow)
           })
            totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
-           $('#nominalPiutang').append(`${totalNominal}`)           
+           $('#nominalPiutang').html(`${totalNominal}`)           
       }
     })
   }
+  
+  function select(element) {
+    var is_checked = $(element).find(`[name="pelunasanpiutangdetail_id[]"]`).is(":checked");
+    console.log(is_checked);
+    
+    if(!is_checked) {      
+      $(element).siblings('td').find(`[name="deatail_nobukti_pelunasan[]"]`).prop('disabled', true)
+      $(element).siblings('td').find(`[name="deatail_tglcair_pelunasan[]"]`).prop('disabled', true)
+      $(element).siblings('td').find(`[name="deatail_coapenyesuaian_pelunasan[]"]`).prop('disabled', true)
+      $(element).siblings('td').find(`[name="deatail_nominal_pelunasan[]"]`).prop('disabled', true)
+      $(element).siblings('td').find(`[name="deatail_nominalbayar_pelunasan[]"]`).prop('disabled', true)
+      $(element).siblings('td').find(`[name="deatail_penyesuaian_pelunasan[]"]`).prop('disabled', true)
+      $(element).siblings('td').find(`[name="deatail_invoice_nobukti_pelunasan[]"]`).prop('disabled', true)
+      $(element).siblings('td').find(`[name="keterangandetail[]"]`).prop('disabled', true)
+    }else{
+      
+      $(element).siblings('td').find(`[name="deatail_nobukti_pelunasan[]"]`).prop('disabled', false)
+      $(element).siblings('td').find(`[name="deatail_tglcair_pelunasan[]"]`).prop('disabled', false)
+      $(element).siblings('td').find(`[name="deatail_coapenyesuaian_pelunasan[]"]`).prop('disabled', false)
+      $(element).siblings('td').find(`[name="deatail_nominal_pelunasan[]"]`).prop('disabled', false)
+      $(element).siblings('td').find(`[name="deatail_nominalbayar_pelunasan[]"]`).prop('disabled', false)
+      $(element).siblings('td').find(`[name="deatail_penyesuaian_pelunasan[]"]`).prop('disabled', false)
+      $(element).siblings('td').find(`[name="deatail_invoice_nobukti_pelunasan[]"]`).prop('disabled', false)
+      $(element).siblings('td').find(`[name="keterangandetail[]"]`).prop('disabled', false)
 
+    }
+  }
+    
   function getNotaKredit(id) {
     
     $('#detailList tbody').html('')
@@ -481,7 +566,7 @@ console.log(data);
           totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
           let detailRow = $(`
           <tr>
-            <td ><input name='pelunasanpiutangdetail_id[]' checked type="checkbox" id="checkItem" value="${detail.detail_id}"></td>
+            <td onclick="select(this)"><input name='pelunasanpiutangdetail_id[]' checked type="checkbox" id="checkItem" value="${detail.detail_id}"></td>
             <td>${row}</td>
             <td>
               ${detail.nobukti}
@@ -516,7 +601,7 @@ console.log(data);
           $('#detailList tbody').append(detailRow)
           })
            totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
-           $('#nominalPiutang').append(`${totalNominal}`)           
+           $('#nominalPiutang').html(`${totalNominal}`)           
       }
     })
   }

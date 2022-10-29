@@ -336,6 +336,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('pengembaliankasgantungheader', PengembalianKasGantungHeaderController::class);
     
     Route::get('notakreditheader/get', [NotaKreditheaderController::class, 'get'])->name('notakreditheader.get');
+    Route::get('notakreditheader/export', [NotaKreditheaderController::class, 'export'])->name('notakreditheader.export');
+    Route::get('notakreditheader/report', [NotaKreditheaderController::class, 'report'])->name('notakreditheader.report');
     Route::get('notakreditheader/index', [NotaKreditheaderController::class, 'index']);
     Route::resource('notakreditheader', NotaKreditheaderController::class);
 
