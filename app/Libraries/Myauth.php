@@ -38,7 +38,8 @@ class Myauth
             'report',
             'create',
             'add',
-            'delete'
+            'delete',
+            'approval'
         ],
     ];
 

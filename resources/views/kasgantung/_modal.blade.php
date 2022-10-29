@@ -27,8 +27,10 @@
                   TANGGAL <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="tglbukti" class="form-control datepicker">
+              <div class="col-12 col-sm-9 col-md-10">  
+                <div class="input-group">
+                  <input type="text" name="tglbukti" class="form-control datepicker">
+                </div>
               </div>
             </div>
             <div class="row">
@@ -68,7 +70,9 @@
                   <label>TANGGAL POST</label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <input type="text" name="tglkaskeluar" class="form-control datepicker">
+                  <div class="input-group">
+                    <input type="text" name="tglkaskeluar" class="form-control datepicker">
+                  </div>
                 </div>
               </div>
               <div class="row form-group">

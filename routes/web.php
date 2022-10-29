@@ -103,6 +103,8 @@ use App\Http\Controllers\PiutangDetailController;
 use App\Http\Controllers\PiutangHeaderController;
 use App\Http\Controllers\HutangBayarDetailController;
 use App\Http\Controllers\HutangBayarHeaderController;
+use App\Http\Controllers\InvoiceDetailController;
+use App\Http\Controllers\InvoiceHeaderController;
 use App\Http\Controllers\LookupController;
 use App\Http\Controllers\ProsesGajiSupirHeaderController;
 use App\Http\Controllers\ProsesGajiSupirDetailController;
@@ -639,6 +641,15 @@ Route::middleware('auth')->group(function () {
     Route::get('prosesgajisupirheader/report', [ProsesGajiSupirHeaderController::class, 'report'])->name('prosesgajisupirheader.report');
     Route::resource('prosesgajisupirheader', ProsesGajiSupirHeaderController::class);
     Route::resource('prosesgajisupirdetail', ProsesGajiSupirDetailController::class);
+
+    
+    Route::get('invoiceheader/index', [InvoiceHeaderController::class, 'index']);
+    Route::get('invoiceheader/{id}/delete', [InvoiceHeaderController::class, 'delete'])->name('invoiceheader.delete');
+    Route::get('invoiceheader/get', [InvoiceHeaderController::class, 'get'])->name('invoiceheader.get');
+    Route::get('invoiceheader/export', [InvoiceHeaderController::class, 'export'])->name('invoiceheader.export');
+    Route::get('invoiceheader/report', [InvoiceHeaderController::class, 'report'])->name('invoiceheader.report');
+    Route::resource('invoiceheader', InvoiceHeaderController::class);
+    Route::resource('invoicedetail', InvoiceDetailController::class);
 
 
 

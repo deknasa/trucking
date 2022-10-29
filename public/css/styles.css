@@ -211,3 +211,7 @@
 .ui-datepicker {
 	z-index: 9999 !important;
 }
+
+.no-scroll {
+	overflow: hidden;
+}

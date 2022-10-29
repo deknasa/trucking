@@ -131,7 +131,7 @@ class AbsensiSupirHeaderController extends MyController
         $absensi_details = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/absensi_detail', $detailParams)['data'];
+            ->get('http://localhost/trucking-laravel/public/api/absensisupirdetail', $detailParams)['data'];
 
         foreach ($absensi_details as $absensi_detailsIndex => &$absensi_detail) {
             $absensi_detail['nominal_header'] = number_format((float) $absensi_detail['nominal_header'], '2', ',', '.');
@@ -139,6 +139,31 @@ class AbsensiSupirHeaderController extends MyController
         }
 
         return view('reports.absensi', compact('absensi_details'));
+    }
+    public function get($params = [])
+    {
+        $params = [
+            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
+            'limit' => $params['rows'] ?? request()->rows ?? 0,
+            'sortIndex' => $params['sidx'] ?? request()->sidx,
+            'sortOrder' => $params['sord'] ?? request()->sord,
+            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
+            'withRelations' => $params['withRelations'] ?? request()->withRelations ?? false,
+        ];
+
+        $response = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'absensisupirheader', $params);
+
+        $data = [
+            'total' => $response['attributes']['totalPages'] ?? [],
+            'records' => $response['attributes']['totalRows'] ?? [],
+            'rows' => $response['data'] ?? [],
+            'params' => $response['params'] ?? [],
+        ];
+
+        return $data;
     }
 
     public function export(Request $request): void

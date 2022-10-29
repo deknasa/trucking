@@ -8,41 +8,30 @@ use Illuminate\Support\Facades\Http;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class JurnalUmumHeaderController extends MyController
+class InvoiceHeaderController extends MyController
 {
-    public $title = 'Jurnal Umum';
+    public $title = 'Invoice';
     
     public function index(Request $request)
     {
         $title = $this->title;
-        $combo = [
-            'statusapproval' => $this->getParameter('STATUS APPROVAL', 'STATUS APPROVAL'),
+        $data = [
+            'pagename' => 'Menu Utama Invoice',
+            'comboapproval' => $this->comboapproval('list')
         ];
-        return view('jurnalumum.index', compact('title','combo'));
+
+        return view('invoiceheader.index', compact('title', 'data'));
     }
 
-    
     public function store(Request $request)
     {
         try {
-             /* Unformat nominal */
-            $request->nominal_detail = array_map(function ($nominal) {
-                $nominal = str_replace('.', '', $nominal);
-                $nominal = str_replace(',', '', $nominal);
-
-                return $nominal;
-            }, $request->nominal_detail);
-
-            $request->merge([
-                'nominal' => $request->nominal_detail
-            ]);
-
             $request['modifiedby'] = Auth::user()->name;
 
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'jurnalumumheader', $request->all());
+                ->post(config('app.api_url') . 'invoiceheader', $request->all());
 
 
             return response($response, $response->status());
@@ -51,7 +40,6 @@ class JurnalUmumHeaderController extends MyController
         }
     }
 
-    
     public function get($params = [])
     {
         $params = [
@@ -66,7 +54,7 @@ class JurnalUmumHeaderController extends MyController
         $response = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'jurnalumumheader', $params);
+            ->get(config('app.api_url') . 'invoiceheader', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -77,101 +65,35 @@ class JurnalUmumHeaderController extends MyController
 
         return $data;
     }
-    
-    
-    public function create()
-    {
-        $title = $this->title;
 
-        $combo = $this->combo();
-
-        return view('jurnalumum.add', compact('title','combo'));
-    }
-
-    
-    public function edit($id)
-    {
-        $title = $this->title;
-
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "jurnalumumheader/$id");
-            // dd($response->getBody()->getContents());
-
-        $jurnalumum = $response['data'];
-        $detail = $response['detail'];
-        $jurnalNoBukti = $this->getNoBukti('JURNAL UMUM', 'JURNAL UMUM', 'jurnalumumheader');
-
-        $combo = $this->combo();
-
-        return view('jurnalumum.edit', compact('title', 'jurnalumum','combo','detail', 'jurnalNoBukti'));
-    }
-
-    
     public function update(Request $request, $id)
     {
-        /* Unformat nominal */
-        $request->nominal_detail = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
-
-            return $nominal;
-        }, $request->nominal_detail);
-
-        $request->merge([
-            'nominal' => $request->nominal_detail
-        ]);
+        
 
         $request['modifiedby'] = Auth::user()->name;
 
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "jurnalumumheader/$id", $request->all());
+            ->patch(config('app.api_url') . "invoiceheader/$id", $request->all());
 
         return response($response);
     }
 
     
-    
-    public function delete($id)
-    {
-        try {
-            $title = $this->title;
 
-            $response = Http::withHeaders($this->httpHeaders)
-                ->withOptions(['verify' => false])
-                ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "jurnalumumheader/$id");
-
-            $jurnalumum = $response['data'];
-            $detail = $response['detail'];
-            
-            $combo = $this->combo();
-
-            return view('jurnalumum.delete', compact('title','combo', 'jurnalumum', 'detail'));
-        } catch (\Throwable $th) {
-            return redirect()->route('jurnalumum.index');
-        }
-    }
-
-    
-    
     public function destroy($id)
     {
         $request['modifiedby'] = Auth::user()->name;
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "jurnalumumheader/$id");
+            ->delete(config('app.api_url') . "invoiceheader/$id");
 
             
         return response($response);
     }
-   
-    
-    
+
     public function getNoBukti($group, $subgroup, $table)
     {
         $params = [
@@ -190,12 +112,19 @@ class JurnalUmumHeaderController extends MyController
         return $noBukti;
     }
 
-    private function combo()
+    public function comboapproval($aksi)
     {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS APPROVAL',
+            'subgrp' => 'STATUS APPROVAL',
+        ];
+
         $response = Http::withHeaders($this->httpHeaders)
-        ->withToken(session('access_token'))
-        ->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'jurnalumumheader/combo');
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'invoiceheader/comboapproval', $status);
 
         return $response['data'];
     }
@@ -205,15 +134,15 @@ class JurnalUmumHeaderController extends MyController
         
         $detailParams = [
             'forReport' => true,
-            'jurnalumum_id' => $request->id
+            'invoice_id' => $request->id
         ];
   
-        $jurnal_details = Http::withHeaders(request()->header())
+        $invoice_details = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/jurnalumumdetail', $detailParams)['data'];
+            ->get('http://localhost/trucking-laravel/public/api/invoicedetail', $detailParams)['data'];
 
-        return view('reports.jurnalumum', compact('jurnal_details'));
+        return view('reports.invoice', compact('invoice_details'));
     }
 
     public function export(Request $request): void
@@ -225,7 +154,7 @@ class JurnalUmumHeaderController extends MyController
         $sheet->setCellValue('A1', 'TAS');
         $sheet->getStyle("A1")->getFont()->setSize(20);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:E1');
+        $sheet->mergeCells('A1:G1');
 
         $header_start_row = 2;
         $detail_table_header_row = 5;
@@ -235,7 +164,7 @@ class JurnalUmumHeaderController extends MyController
 
         $header_columns = [
             [
-                'label' => 'No Jurnal',
+                'label' => 'No Invoice',
                 'index' => 'nobukti',
             ],
             [
@@ -243,8 +172,8 @@ class JurnalUmumHeaderController extends MyController
                 'index' => 'tglbukti',
             ],
             [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
+                'label' => 'EMKL',
+                'index' => 'agen',
             ],
         ];
 
@@ -253,46 +182,55 @@ class JurnalUmumHeaderController extends MyController
                 'label' => 'No',
             ],
             [
-                'label' => 'Coa Debet',
-                'index' => 'coadebet',
+                'label' => 'Tanggal',
+                'index' => 'tglsp',
             ],
             [
-                'label' => 'Coa Kredit',
-                'index' => 'coakredit',
+                'label' => 'Shipper',
+                'index' => 'agen_id',
+            ],
+            [
+                'label' => 'Tujuan',
+                'index' => 'tujuan',
+            ],
+            [
+                'label' => 'No Container',
+                'index' => 'nocont',
             ],
             [
                 'label' => 'Keterangan',
-                'index' => 'keterangan',
+                'index' => 'keterangan_detail',
             ],
             [
-                'label' => 'Nominal',
-                'index' => 'nominal',
+                'label' => 'Omzet',
+                'index' => 'omset',
                 'format' => 'currency'
             ]
         ];
 
         
 
-        $jurnals = Http::withHeaders($request->header())
+        $invoices = Http::withHeaders($request->header())
                     ->withOptions(['verify' => false])
                     ->withToken(session('access_token'))
-                    ->get(config('app.api_url') .'jurnalumumheader/'.$request->id)['data'];
+                    ->get(config('app.api_url') .'invoiceheader/'.$request->id)['data'];
 
+            
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('A' . $header_start_row, $header_column['label']);
             $sheet->setCellValue('B' . $header_start_row, ':');
-            $sheet->setCellValue('C' . $header_start_row++, $jurnals[$header_column['index']]);
+            $sheet->setCellValue('C' . $header_start_row++, $invoices[$header_column['index']]);
         }
 
         $detailParams = [
             'forExport' => true,
-            'jurnalumum_id' => $request->id
+            'invoice_id' => $request->id
         ];
 
         $responses = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'jurnalumumdetail', $detailParams)['data'];
+            ->get(config('app.api_url') .'invoicedetail', $detailParams)['data'];
 
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
@@ -304,6 +242,7 @@ class JurnalUmumHeaderController extends MyController
                 ),
             ),
         );
+
         $style_number = [
 			'alignment' => [
 				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, 
@@ -318,7 +257,7 @@ class JurnalUmumHeaderController extends MyController
         ];
 
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $sheet ->getStyle("A$detail_table_header_row:E$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet ->getStyle("A$detail_table_header_row:G$detail_table_header_row")->applyFromArray($styleArray);
 
         $total = 0;
         foreach ($responses as $response_index => $response_detail) {
@@ -326,27 +265,41 @@ class JurnalUmumHeaderController extends MyController
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
-            $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', ',', '.');
+            $response_detail['omsets'] = number_format((float) $response_detail['omset'], '2', ',', '.');
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['coadebet']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['coakredit']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['nominals']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['tglsp']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['agen_id']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['tujuan']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['nocont']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['keterangan_detail']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['omsets']);
 
-            $sheet ->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("E$detail_start_row")->applyFromArray($style_number);
-            $total += $response_detail['nominal'];
+            $sheet ->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
+            $sheet ->getStyle("G$detail_start_row")->applyFromArray($style_number);
+            $total += $response_detail['omset'];
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
-        
-        $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':D'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("E$total_start_row", number_format((float) $total, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->mergeCells('A'.$total_start_row.':F'.$total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':F'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("G$total_start_row", number_format((float) $total, '2', ',', '.'))->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
-        
+        $ttd_start_row = $total_start_row+2;
+        $sheet->setCellValue("A$ttd_start_row", 'Disetujui');
+        $sheet->setCellValue("B$ttd_start_row", 'Diketahui');
+        $sheet->setCellValue("C$ttd_start_row", 'Dibuat');
+        $ttd_end_row = $ttd_start_row+3;
+        $sheet ->getStyle("A$ttd_start_row:C$ttd_start_row")->applyFromArray($styleArray);
+        // $sheet->mergeCells("A$ttd_end_row:C$ttd_end_row");
+        $sheet->mergeCells("A".($ttd_start_row+1).":A".($ttd_start_row+3));      
+        $sheet->mergeCells("B".($ttd_start_row+1).":B".($ttd_start_row+3));      
+        $sheet->mergeCells("C".($ttd_start_row+1).":C".($ttd_start_row+3));      
+        $sheet ->getStyle("A".($ttd_start_row+1).":A".($ttd_start_row+3))->applyFromArray($styleArray);
+        $sheet ->getStyle("B".($ttd_start_row+1).":B".($ttd_start_row+3))->applyFromArray($styleArray);
+        $sheet ->getStyle("C".($ttd_start_row+1).":C".($ttd_start_row+3))->applyFromArray($styleArray);
+
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
@@ -359,13 +312,12 @@ class JurnalUmumHeaderController extends MyController
         
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Jurnal Umum ' . date('dmYHis');
+        $filename = 'Invoice ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
 
         $writer->save('php://output');
     }
-
 
 }
