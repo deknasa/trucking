@@ -191,30 +191,18 @@ class KasGantungHeaderController extends MyController
 
     public function report(Request $request)
     {
-        $params = [
-            'offset' => $request->dari - 1,
-            'rows' => $request->sampai - $request->dari + 1,
-            'forReport' => true,
-        ];
-
-        $kasgantung = $this->get($params)['rows'];
+        
 
         $detailParams = [
-            'forReport' => true
+            'forReport' => true,
+            'kasgantung_id' => $request->id
         ];
-
-        foreach ($kasgantung as $kasgantungIndex => $item) {
-            $detailParams["whereIn[$kasgantungIndex]"] = $item['id'];
-        }
 
         $kasgantung_details = Http::withHeaders(request()->header())
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/kasgantung_detail', $detailParams)['data'];
+            ->get('http://localhost/trucking-laravel/public/api/kasgantungdetail', $detailParams)['data'];
 
-        foreach ($kasgantung_details as $kasgantung_detailsIndex => &$kasgantung_detail) {
-            $kasgantung_detail['nominal_header'] = number_format((float) $kasgantung_detail['nominal_header'], '2', ',', '.');
-            $kasgantung_detail['uangjalan'] = number_format((float) $kasgantung_detail['uangjalan'], '2', ',', '.');
-        }
+        dd($kasgantung_details);
 
         return view('reports.kasgantung', compact('kasgantung_details'));
     }

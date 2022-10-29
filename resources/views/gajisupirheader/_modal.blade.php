@@ -29,7 +29,10 @@
                                         <label>
                                             TANGGAL BUKTI <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" name="tglbukti" class="form-control datepicker" autocomplete="off">
+                                        
+                                        <div class="input-group">
+                                            <input type="text" name="tglbukti" class="form-control datepicker" autocomplete="off">
+                                        </div>
                                     </div>
                                 </div>
 
@@ -56,7 +59,10 @@
                                         <label>
                                             TANGGAL DARI <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" name="tgldari" class="form-control datepicker" autocomplete="off">
+                                        
+                                        <div class="input-group">
+                                            <input type="text" name="tgldari" class="form-control datepicker" autocomplete="off">
+                                        </div>
                                     </div>
                                 </div>
 
@@ -65,7 +71,10 @@
                                         <label>
                                             TANGGAL SAMPAI <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" name="tglsampai" class="form-control datepicker" autocomplete="off">
+                                        
+                                        <div class="input-group">
+                                            <input type="text" name="tglsampai" class="form-control datepicker" autocomplete="off">
+                                        </div>
                                     </div>
                                 </div>
                                 

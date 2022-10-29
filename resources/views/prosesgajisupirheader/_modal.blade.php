@@ -59,7 +59,9 @@
                                 </label>
                             </div>
                             <div class="col-12 col-md-4">
-                                <input type="text" name="tgldari" class="form-control datepicker" autocomplete="off">
+                                <div class="input-group">
+                                    <input type="text" name="tgldari" class="form-control datepicker" autocomplete="off">
+                                </div>
                             </div>
 
                             <div class="col-12 col-md-2 col-form-label">
@@ -68,7 +70,9 @@
                                 </label>
                             </div>
                             <div class="col-12 col-md-4">
-                                <input type="text" name="tglsampai" class="form-control datepicker" autocomplete="off">
+                                <div class="input-group">    
+                                    <input type="text" name="tglsampai" class="form-control datepicker" autocomplete="off">
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
