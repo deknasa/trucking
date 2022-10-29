@@ -21,6 +21,7 @@
                   <input type="text" name="id" class="form-control" readonly>
                 </div>
               </div> -->
+
               <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
@@ -31,16 +32,18 @@
                   <input type="text" name="nobukti" class="form-control" readonly>
                 </div>
               </div>
+
               <div class="form-group col-md-4">
-                <div class="col-form-label">
+                <div class="col-form-label col-form-label">
                   <label>
                     TGL BUKTI <span class="text-danger">*</span>
                   </label>
                 </div>
                 <div>
-                  <input type="text" name="tglbukti" class="form-control formatdate">
+                  <input type="text" name="tglbukti" class="form-control datepicker">
                 </div>
               </div>
+
               <div class="form-group col-md-4">
                 <div class="col-12 col-md-2 col-form-label">
                   <label>
@@ -48,9 +51,10 @@
                   </label>
                 </div>
                 <div>
-                  <input type="text" name="tglsp" class="form-control formatdate">
+                  <input type="text" name="tglsp" class="form-control datepicker">
                 </div>
               </div>
+
               <div class="form-group col-md-4">
                 <div class="col-12 col-md-2 col-form-label">
                   <label>
@@ -86,42 +90,52 @@
                 </div>
               </div> -->
 
-              <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  DARI <span class="text-danger">*</span>
-                </label>
+              <!-- <div class="row form-group col-md-4">
+                <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                  <label>
+                    DARI <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div class="col-8 col-md-10">
+                  <input type="hidden" name="dari_id">
+                  <input type="text" name="dari" class="form-control kotadari-lookup">
+                </div>
               </div>
-              <div class="col-8 col-md-10">
-                <input type="hidden" name="dari_id">
-                <input type="text" name="dari" class="form-control kotadari-lookup">
-              </div>
-            </div>
 
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  TUJUAN <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-8 col-md-10">
-                <input type="hidden" name="sampai_id">
-                <input type="text" name="sampai" class="form-control kotasampai-lookup">
-              </div>
-            </div>
+              <div class="row form-group col-md-4">
+                <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                  <label>
+                    TUJUAN <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div class="col-8 col-md-10">
+                  <input type="hidden" name="sampai_id">
+                  <input type="text" name="sampai" class="form-control kotasampai-lookup">
+                </div>
+              </div> -->
 
-              <!-- <div class="form-group col-md-6">
+              <div class="form-group col-md-6">
                 <div class="col-form-label">
                   <label>
                     DARI <span class="text-danger">*</span>
                   </label>
                 </div>
                 <div>
-                  <select name="dari_id" id="dari_id" class="form-control select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH DARI --</option>
-                  </select>
+                  <input type="hidden" name="dari_id">
+                  <input type="text" name="dari" class="form-control kotadari-lookup">
                 </div>
+
                 <div class="col-form-label">
+                  <label>
+                    TUJUAN <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <input type="hidden" name="sampai_id">
+                  <input type="text" name="sampai" class="form-control kotasampai-lookup">
+                </div>
+
+                <!-- <div class="col-form-label">
                   <label>
                     SAMPAI <span class="text-danger">*</span>
                   </label>
@@ -130,8 +144,8 @@
                   <select name="sampai_id" id="sampai_id" class="form-control select2bs4" style="width: 100%;">
                     <option value="">-- PILIH SAMPAI --</option>
                   </select>
-                </div>
-              </div> -->
+                </div> -->
+              </div>
 
               <div class="col-md-6">
                 <div class="card">
@@ -173,17 +187,18 @@
                   </div>
                 </div>
               </div>
+
               <div class="form-group col-md-6">
                 <div class="col-form-label">
                   <label>
                     PELANGGAN <span class="text-danger">*</span></label>
                 </div>
                 <div>
-                  <select name="pelanggan_id" class="form-control select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH PELANGGAN --</option>
-                  </select>
+                  <input type="hidden" name="pelanggan_id">
+                  <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
                 </div>
               </div>
+
               <div class="form-group col-md-6">
                 <div class="col-form-label">
                   <label>
@@ -423,20 +438,20 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
-
   $(document).ready(function() {
 
     $("#addRow").click(function() {
       addRow()
     });
 
+    $(document).on('click', '.delete-row', function(event) {
+      deleteRow($(this).parents('tr'))
+    })
+
     $(document).on('input', `#detailList [name="nominal[]"]`, function(event) {
       setTotal()
     })
 
-    $(document).on('click', '.delete-row', function(event) {
-      deleteRow($(this).parents('tr'))
-    })
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -508,14 +523,14 @@
         },
         data: data,
         success: response => {
-          $('#crudForm').trigger('reset')
-          $('#crudModal').modal('hide')
 
           id = response.data.id
+          $('#crudModal').modal('hide')
+          $('#crudModal').find('#crudForm').trigger('reset')
 
-          $('#jqGrid').trigger('reloadGrid', {
+          $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
-          })
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -576,7 +591,7 @@
     Simpan
   `)
     form.data('action', 'add')
-    form.find(`.sometimes`).show()
+    // form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Surat Pengantar')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
@@ -586,7 +601,7 @@
     setStatusContainerOptions(form)
     setStatusPeralihanOptions(form)
     // setKotaOptions(form)
-    setPelangganOptions(form)
+    // setPelangganOptions(form)
     setContainerOptions(form)
     setTradoOptions(form)
     setSupirOptions(form)
@@ -619,7 +634,7 @@
         setStatusContainerOptions(form),
         setStatusPeralihanOptions(form),
         // setKotaOptions(form),
-        setPelangganOptions(form),
+        // setPelangganOptions(form),
         setContainerOptions(form),
         setTradoOptions(form),
         setSupirOptions(form),
@@ -653,7 +668,7 @@
         setStatusContainerOptions(form),
         setStatusPeralihanOptions(form),
         // setKotaOptions(form),
-        setPelangganOptions(form),
+        // setPelangganOptions(form),
         setContainerOptions(form),
         setTradoOptions(form),
         setSupirOptions(form),
@@ -1005,35 +1020,35 @@
     })
   }
 
-  const setPelangganOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=pelanggan_id]').empty()
-      relatedForm.find('[name=pelanggan_id]').append(
-        new Option('-- PILIH PELANGGAN --', '', false, true)
-      ).trigger('change')
+  // const setPelangganOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=pelanggan_id]').empty()
+  //     relatedForm.find('[name=pelanggan_id]').append(
+  //       new Option('-- PILIH PELANGGAN --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}pelanggan`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(pelanggan => {
-            let option = new Option(pelanggan.namapelanggan, pelanggan.id)
+  //     $.ajax({
+  //       url: `${apiUrl}pelanggan`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         limit: 0,
+  //       },
+  //       success: response => {
+  //         response.data.forEach(pelanggan => {
+  //           let option = new Option(pelanggan.namapelanggan, pelanggan.id)
 
-            relatedForm.find('[name=pelanggan_id]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=pelanggan_id]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       }
+  //     })
+  //   })
+  // }
 
   // const setKotaOptions = function(relatedForm) {
   //   return new Promise((resolve, reject) => {
@@ -1109,10 +1124,17 @@
                       </td>
                     </tr>
                   `)
+
+          detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+
           detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
           $('#detailList tbody').append(detailRow)
 
           initAutoNumeric(detailRow.find('.autonumeric'))
+
+          $('#detailList tbody').append(detailRow)
+
+          $('#lookup').hide()
 
           setTotal()
 
@@ -1164,8 +1186,8 @@
   }
 
   function initLookup() {
-  $('.kotadari-lookup').lookup({
-      title: 'kota Lookup',
+    $('.kotadari-lookup').lookup({
+      title: 'kota dari Lookup',
       fileName: 'kota',
       onSelectRow: (kota, element) => {
         $('#crudForm [name=dari_id]').first().val(kota.id)
@@ -1178,7 +1200,7 @@
     })
 
     $('.kotasampai-lookup').lookup({
-      title: 'kota Lookup',
+      title: 'kota tujuan Lookup',
       fileName: 'kota',
       onSelectRow: (kota, element) => {
         $('#crudForm [name=sampai_id]').first().val(kota.id)
@@ -1189,25 +1211,38 @@
         element.val(element.data('currentValue'))
       }
     })
+
+    $('.pelanggan-lookup').lookup({
+      title: 'pelanggan Lookup',
+      fileName: 'pelanggan',
+      onSelectRow: (pelanggan, element) => {
+        $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
+        element.val(pelanggan.namapelanggan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
   }
 
-  function setDummyOption() {
-    fetch(`http://dummy.test/server/`)
-      .then(response => {
-        console.log(response);
-      })
+  // function setDummyOption() {
+  //   fetch(`http://dummy.test/server/`)
+  //     .then(response => {
+  //       console.log(response);
+  //     })
 
-    // $.ajax({
-    //   url: `http://dummy.test/server/`,
-    //   method: 'GET',
-    //   dataType: 'JSON',
-    //   headers: {
-    //     Authorization: `Bearer ${accessToken}`
-    //   },
-    //   success: response => {
-    //     console.log(response);
-    //   }
-    // })
-  }
+  // $.ajax({
+  //   url: `http://dummy.test/server/`,
+  //   method: 'GET',
+  //   dataType: 'JSON',
+  //   headers: {
+  //     Authorization: `Bearer ${accessToken}`
+  //   },
+  //   success: response => {
+  //     console.log(response);
+  //   }
+  // })
+  // }
 </script>
 @endpush()
