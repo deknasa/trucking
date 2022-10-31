@@ -314,20 +314,20 @@
                 $.each(response.detail, (index, detail) => {
                     let detailRow = $(`
                     <tr>
-                                    <td></td>
-                                    <td>
-                                        <input type="hidden" name="mekanik_id[]" class="form-control">
-                                        <input type="text" name="mekanik[]" class="form-control mekanik-lookup">
-                                    </td>
+                        <td></td>
+                        <td>
+                            <input type="hidden" name="mekanik_id[]" class="form-control">
+                            <input type="text" name="mekanik[]" class="form-control mekanik-lookup">
+                        </td>
 
-                                    <td>
-                                        <input type="text" name="keterangan_detail[]" class="form-control">
-                                    </td>
+                        <td>
+                            <input type="text" name="keterangan_detail[]" class="form-control">
+                        </td>
 
-                                    <td>
-                                        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                                    </td>
-                                </tr>`)
+                        <td>
+                            <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                        </td>
+                    </tr>`)
 
                     detailRow.find(`[name="mekanik[]"]`).val(detail.mekanik)
                     detailRow.find(`[name="mekanik_id[]"]`).val(detail.mekanik_id)

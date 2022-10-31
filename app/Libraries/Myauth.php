@@ -17,6 +17,7 @@ class Myauth
     private $exceptAuth = [
         'class' => [
             '',
+            'logtrail',
             'dashboard'
         ],
         'method' => [
@@ -38,7 +39,8 @@ class Myauth
             'report',
             'create',
             'add',
-            'delete'
+            'delete',
+            'approval'
         ],
     ];
 
