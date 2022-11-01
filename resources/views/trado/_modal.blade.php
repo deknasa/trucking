@@ -32,10 +32,25 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Kilometer Awal <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control text-right number auto-numeric" name="kmawal">
+                  <input type="text" class="form-control autonumeric" name="kmawal">
                 </div>
               </div>
 
+              <div class="form-group col-sm-6 row">
+                <label for="staticEmail" class="col-sm-4 col-form-label">Kilometer Akhir <span class="text-danger">*</span></label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control autonumeric" name="kmakhirgantioli">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="form-group col-sm-6 row">
+                <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Akhir Ganti oli <span class="text-danger">*</span></label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control autonumeric" name="tglakhirgantioli">
+                </div>
+              </div>
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Tgl STNK Mati <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
@@ -170,6 +185,12 @@
 
             <div class="row">
               <div class="form-group col-sm-6 row">
+                <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Ganti aki terakhir <span class="text-danger">*</span></label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control formatdate" name="tglgantiakiterakhir">
+                </div>
+              </div>
+              <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Status Mutasi <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <select name="statusmutasi" class="form-control select2bs4">
@@ -177,6 +198,9 @@
                   </select>
                 </div>
               </div>
+            </div>
+
+            <div class="row">
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Status Validasi Kendaraan <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
@@ -185,75 +209,76 @@
                   </select>
                 </div>
               </div>
-            </div>
-
-            <div class="row">
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Tipe <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="tipe">
                 </div>
               </div>
+
+            </div>
+
+            <div class="row">
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Jenis <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="jenis">
                 </div>
               </div>
-            </div>
-
-            <div class="row">
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Isi Silinder <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control number" name="isisilinder">
+                  <input type="text" class="form-control autonumeric" name="isisilinder">
                 </div>
               </div>
+            </div>
+
+            <div class="row">
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Warna <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="warna">
                 </div>
               </div>
-            </div>
-
-            <div class="row">
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Bahan Bakar <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="jenisbahanbakar">
                 </div>
               </div>
+            </div>
+
+            <div class="row">
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Jumlah Sumbu <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control number" name="jlhsumbu">
+                  <input type="text" class="form-control autonumeric" name="jlhsumbu">
+                </div>
+              </div>
+              <div class="form-group col-sm-6 row">
+                <label for="staticEmail" class="col-sm-4 col-form-label">Jumlah Roda <span class="text-danger">*</span></label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control autonumeric" name="jlhroda">
                 </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Jumlah Roda <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control number" name="jlhroda">
-                </div>
-              </div>
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Model <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="model">
                 </div>
               </div>
-            </div>
-
-            <div class="row">
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">No BPKB <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="nobpkb">
                 </div>
               </div>
+            </div>
+
+            <div class="row">
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Status Mobil Storing <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
@@ -262,9 +287,6 @@
                   </select>
                 </div>
               </div>
-            </div>
-
-            <div class="row">
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Milik Mandor <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
@@ -273,10 +295,21 @@
                   </select>
                 </div>
               </div>
+            </div>
+
+            <div class="row">
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Jumlah Ban Serap <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control number" name="jlhbanserap">
+                  <input type="text" class="form-control autonumeric" name="jlhbanserap">
+                </div>
+              </div>
+              <div class="form-group col-sm-6 row">
+                <label for="staticEmail" class="col-sm-4 col-form-label">STATUS APPEDIT BAN <span class="text-danger">*</span></label>
+                <div class="col-sm-8">
+                  <select name="statusappeditban" class="form-control select2bs4">
+                    <option value="">-- PILIH STATUS APPEDIT BAN --</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -370,9 +403,21 @@
       let method
       let url
       let form = $('#crudForm')
-      let tradoId = form.find('[name=id]').val()
+      let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+
+      $('#crudForm').find(`[name="isisilinder"]`).each((index, element) => {
+        data.filter((row) => row.name === 'isisilinder')[index].value = AutoNumeric.getNumber($(`#crudForm [name="isisilinder"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="kmawal"]`).each((index, element) => {
+        data.filter((row) => row.name === 'kmawal')[index].value = AutoNumeric.getNumber($(`#crudForm [name="kmawal"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="kmakhirgantioli"]`).each((index, element) => {
+        data.filter((row) => row.name === 'kmakhirgantioli')[index].value = AutoNumeric.getNumber($(`#crudForm [name="kmakhirgantioli"]`)[index])
+      })
 
       data.push({
         name: 'sortIndex',
@@ -406,11 +451,11 @@
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}trado/${tradoId}`
+          url = `${apiUrl}trado/${Id}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}trado/${tradoId}`
+          url = `${apiUrl}trado/${Id}`
           break;
         default:
           method = 'POST'
@@ -498,10 +543,11 @@
     setStatusValidasiKendaraanOptions(form)
     setStatusMobilStoringOptions(form)
     setMandorOptions(form)
+    setAppeditBanOptions(form)
     setStatusLewatValidasiOptions(form)
   }
 
-  function editTrado(tradoId) {
+  function editTrado(id) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -525,14 +571,15 @@
         setStatusValidasiKendaraanOptions(form),
         setStatusMobilStoringOptions(form),
         setMandorOptions(form),
+        setAppeditBanOptions(form),
         setStatusLewatValidasiOptions(form)
       ])
       .then(() => {
-        showTrado(form, tradoId)
+        showTrado(form, id)
       })
   }
 
-  function deleteTrado(tradoId) {
+  function deleteTrado(id) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -556,10 +603,11 @@
         setStatusValidasiKendaraanOptions(form),
         setStatusMobilStoringOptions(form),
         setMandorOptions(form),
+        setAppeditBanOptions(form),
         setStatusLewatValidasiOptions(form)
       ])
       .then(() => {
-        showTrado(form, tradoId)
+        showTrado(form, id)
       })
   }
 
@@ -656,6 +704,45 @@
     })
   }
 
+  const setAppeditBanOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusappeditban]').empty()
+      relatedForm.find('[name=statusappeditban]').append(
+        new Option('-- PILIH STATUS APPEDIT BAN --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          limit: 0,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS APPROVAL EDIT BAN"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusAppeditBan => {
+            let option = new Option(statusAppeditBan.text, statusAppeditBan.id)
+
+            relatedForm.find('[name=statusappeditban]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+  //sini
+ 
   const setStatusMobilStoringOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusmobilstoring]').empty()
@@ -884,9 +971,9 @@
     })
   }
 
-  function showTrado(form, tradoId) {
+  function showTrado(form, id) {
     $.ajax({
-      url: `${apiUrl}trado/${tradoId}`,
+      url: `${apiUrl}trado/${id}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -898,6 +985,10 @@
 
           if (element.is('select')) {
             element.val(value).trigger('change')
+          } else if (element.hasClass('autonumeric')) {
+            let autoNumericInput = AutoNumeric.getAutoNumericElement(element[0])
+
+            autoNumericInput.set(value);
           } else {
             element.val(value)
           }

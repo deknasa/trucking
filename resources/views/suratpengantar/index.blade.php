@@ -10,6 +10,8 @@
   </div>
 </div>
 
+@include('upahsupir._detail')
+
 @include('suratpengantar._modal')
 
 @push('scripts')

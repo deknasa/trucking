@@ -235,6 +235,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('trado/field_length', [TradoController::class, 'fieldLength'])->name('trado.field_length');
     Route::get('trado/{id}/delete', [TradoController::class, 'delete'])->name('trado.delete');
+    Route::get('trado/get', [TradoController::class, 'get'])->name('trado.get');
+    Route::get('trado/index', [TradoController::class, 'index']);
     Route::resource('trado', TradoController::class);
 
     Route::get('logtrail/index', [LogTrailController::class, 'index']);

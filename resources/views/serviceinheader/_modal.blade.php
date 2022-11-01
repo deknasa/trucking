@@ -229,6 +229,23 @@
         })
     })
 
+    $('#crudModal').on('shown.bs.modal', () => {
+        let form = $('#crudForm')
+
+        setFormBindKeys(form)
+
+        activeGrid = null
+
+        getMaxLength(form)
+        initDatepicker()
+    })
+
+    $('#crudModal').on('hidden.bs.modal', () => {
+        activeGrid = '#jqGrid'
+
+        $('#crudModal').find('.modal-body').html(modalBody)
+    })
+
     function createServicein() {
         let form = $('#crudForm')
 
@@ -386,6 +403,7 @@
 
             }
         })
+        initDatepicker()
 
         setRowNumbers()
     }
