@@ -6,7 +6,7 @@
 <head>
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>Report Invoice</title>
+  <title>Report Jurnal Umum</title>
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.viewer.office2013.whiteblue.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.designer.office2013.whiteblue.css') }}">
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.reports.js') }}"></script>
@@ -34,13 +34,14 @@
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
-        'jurnal': <?= json_encode($jurnal_details); ?>
+        'jurnal': <?= json_encode($jurnal_details); ?>,
+        'user': <?= json_encode($user); ?>,
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
-    //   designer.report = report;
-    //   designer.renderHtml('content');
+      // designer.report = report;
+      // designer.renderHtml('content');
       viewer.report = report
     }
   </script>
