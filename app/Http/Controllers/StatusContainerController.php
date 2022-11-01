@@ -75,12 +75,15 @@ class StatusContainerController extends MyController
 
             $statuscontainer = $response['data'];
 
-            return view('statuscontainer.delete', compact('title', 'statuscontainer','combo'));
+            return view('statuscontainer.delete', compact('title', 'statuscontainer', 'combo'));
         } catch (\Throwable $th) {
             return redirect()->route('statuscontainer.index');
         }
     }
 
+    /**
+     * @ClassName
+     */
     public function destroy($id, Request $request)
     {
         $request['modifiedby'] = Auth::user()->name;
@@ -95,9 +98,7 @@ class StatusContainerController extends MyController
         return response($response);
     }
 
-    /**
-     * @ClassName
-     */
+
     public function report(Request $request)
     {
         $response = Http::withHeaders($this->httpHeaders)
