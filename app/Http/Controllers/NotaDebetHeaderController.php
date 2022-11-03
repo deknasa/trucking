@@ -8,13 +8,14 @@ use Illuminate\Support\Facades\Http;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class NotaKreditHeaderController extends MyController
+class NotaDebetHeaderController extends MyController
 {
-    public $title = 'Nota Kredit';
+    public $title = 'Nota Debet';
+    public function index()
+    {
 
-    public function index(Request $request){
         $title = $this->title;
-        return view('notakreditheader.index', compact('title'));
+        return view('notadebetheader.index', compact('title'));
     }
 
     public function get($params = [])
@@ -31,7 +32,7 @@ class NotaKreditHeaderController extends MyController
         $response = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'notakreditheader', $params);
+            ->get(config('app.api_url') . 'notadebetheader', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -57,10 +58,10 @@ class NotaKreditHeaderController extends MyController
         return $response = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'notakreditheader/'.$id);
+            ->get(config('app.api_url') . 'notadebetheader/'.$id);
     }
 
-   /**
+    /**
      * @ClassName
      */
     public function report(Request $request,$id)
@@ -71,21 +72,22 @@ class NotaKreditHeaderController extends MyController
             'withRelations' => true,
 
         ];
-
-        $notakredit = $this->find($params,$id)['data'];
-        $data = $notakredit;
+        $notadebet = $this->find($params,$id)['data'];
+        // return $notadebets['id'];
+        $data = $notadebet;
         $i =0;
         
             $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'notakredit_detail', ['notakredit_id' => $notakredit['id']]);
-
+            ->get(config('app.api_url') . 'notadebet_detail', ['notadebet_id' => $notadebet['id']]);
 
             $data["details"] =$response['data'];
             $data["user"] = Auth::user();
-        $notakreditheaders = $data;
-        return view('reports.notakreditheader', compact('notakreditheaders'));
+            
+
+        $notadebetheaders = $data;
+        return view('reports.notadebetheader', compact('notadebetheaders'));
     }
 
     /**
@@ -100,15 +102,15 @@ class NotaKreditHeaderController extends MyController
 
         ];
 
-        $notakredits = $this->get($params)['rows'];
+        $notadebets = $this->get($params)['rows'];
         $data = [];
         $i =0;
-        foreach ($notakredits as $notakredit) {
-            $data[$i] =$notakredit;
+        foreach ($notadebets as $notadebet) {
+            $data[$i] =$notadebet;
             $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'notakredit_detail', [$request->all()]);
+            ->get(config('app.api_url') . 'notadebet_detail', [$request->all()]);
 
 
             $data[$i]["details"] =$response['data'];
@@ -199,11 +201,11 @@ class NotaKreditHeaderController extends MyController
             ],
             [
                 'label'=>'Penyesuaian',
-                'index'=>'penyesuaian'
+                'index'=>'lebihbayar'
             ],
             [
                 'label'=>'COA Penyesuaian',
-                'index'=>'coaadjust'
+                'index'=>'coalebihbayar'
             ],
             [
                 'label'=>'modifiedby',
@@ -238,8 +240,8 @@ class NotaKreditHeaderController extends MyController
                 $sheet->setCellValue("E$detail_start_row", $detail_data['keterangan']);
                 $sheet->setCellValue("F$detail_start_row", $detail_data['nominal']);
                 $sheet->setCellValue("G$detail_start_row", $detail_data['nominalbayar']);
-                $sheet->setCellValue("H$detail_start_row", $detail_data['penyesuaian']);
-                $sheet->setCellValue("I$detail_start_row", $detail_data['coaadjust']);
+                $sheet->setCellValue("H$detail_start_row", $detail_data['lebihbayar']);
+                $sheet->setCellValue("I$detail_start_row", $detail_data['coalebihbayar']);
                 $sheet->setCellValue("J$detail_start_row", $detail_data['modifiedby']);
 
                 $detail_start_row++;
