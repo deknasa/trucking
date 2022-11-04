@@ -36,6 +36,7 @@ use App\Http\Controllers\KasGantungHeaderController;
 use App\Http\Controllers\PengembalianKasGantungDetailController;
 use App\Http\Controllers\PengembalianKasGantungHeaderController;
 use App\Http\Controllers\NotaKreditHeaderController;
+use App\Http\Controllers\NotaDebetHeaderController;
 
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\SubKelompokController;
@@ -337,11 +338,17 @@ Route::middleware('auth')->group(function () {
     Route::get('pengembaliankasgantungheader/index', [PengembalianKasGantungHeaderController::class, 'index']);
     Route::resource('pengembaliankasgantungheader', PengembalianKasGantungHeaderController::class);
     
-    Route::get('notakreditheader/get', [NotaKreditheaderController::class, 'get'])->name('notakreditheader.get');
-    Route::get('notakreditheader/export', [NotaKreditheaderController::class, 'export'])->name('notakreditheader.export');
-    Route::get('notakreditheader/report', [NotaKreditheaderController::class, 'report'])->name('notakreditheader.report');
-    Route::get('notakreditheader/index', [NotaKreditheaderController::class, 'index']);
-    Route::resource('notakreditheader', NotaKreditheaderController::class);
+    Route::get('notakreditheader/get', [NotaKreditHeaderController::class, 'get'])->name('notakreditheader.get');
+    Route::get('notakreditheader/export', [NotaKreditHeaderController::class, 'export'])->name('notakreditheader.export');
+    Route::get('notakreditheader/report/{id}', [NotaKreditHeaderController::class, 'report'])->name('notakreditheader.report');
+    Route::get('notakreditheader/index', [NotaKreditHeaderController::class, 'index']);
+    Route::resource('notakreditheader', NotaKreditHeaderController::class);
+    
+    Route::get('notadebetheader/get', [NotaDebetHeaderController::class, 'get'])->name('notadebetheader.get');
+    Route::get('notadebetheader/export', [NotaDebetHeaderController::class, 'export'])->name('notadebetheader.export');
+    Route::get('notadebetheader/report/{id}', [NotaDebetHeaderController::class, 'report'])->name('notadebetheader.report');
+    Route::get('notadebetheader/index', [NotaDebetHeaderController::class, 'index']);
+    Route::resource('notadebetheader', NotaDebetHeaderController::class);
 
     Route::get('gudang/field_length', [GudangController::class, 'fieldLength'])->name('gudang.field_length');
     Route::get('gudang/{id}/delete', [GudangController::class, 'delete'])->name('gudang.delete');

@@ -3,6 +3,7 @@
 @section('content')
 <!-- Grid -->
 <div class="container-fluid">
+  {{-- {{ route('notadebetheader.report', ['id' => '1']) }} --}}
   <div class="row">
     <div class="col-12">
       <table id="jqGrid"></table>
@@ -10,12 +11,14 @@
   </div>
 </div>
 
-@include('prosesgajisupirheader._modal')
+@include('notadebetheader._modal')
 <!-- Detail -->
-@include('prosesgajisupirheader._detail')
+@include('notadebetheader._detail')
 
 @push('scripts')
 <script>
+  let indexUrl = "{{ route('notadebetheader.index') }}"
+  let getUrl = "{{ route('notadebetheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -29,12 +32,19 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
-  let rowNum = 10
-  let hasDetail = false
 
   $(document).ready(function() {
+
+    $('#lookup').hide()
+    
+
+
+    $('#crudModal').on('hidden.bs.modal', function() {
+       activeGrid = '#jqGrid'
+     })
+
     $("#jqGrid").jqGrid({
-        url: `${apiUrl}prosesgajisupirheader`,
+        url: `{{ config('app.api_url') . 'notadebetheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -61,88 +71,58 @@
             }
           },
           {
-            label: 'KETERANGAN',
+            label: 'keterangan',
             name: 'keterangan',
             align: 'left'
           },
-          
           {
-            label: 'TANGGAL DARI',
-            name: 'tgldari',
+            label: 'tgllunas',
+            name: 'tgllunas',
             align: 'left',
-            formatter: "date",
+             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
           },
           {
-            label: 'TANGGAL SAMPAI',
-            name: 'tglsampai',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'STATUS APPROVAL',
-            name: 'statusapproval',
+            label: 'pelunasanpiutang_nobukti',
+            name: 'pelunasanpiutang_nobukti',
             align: 'left'
           },
           {
-            label: 'USER APPROVAL',
+            label: 'tglapproval',
+            name: 'tglapproval',
+            align: 'left',
+             formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'status approval',
+            name: 'statusapproval_memo',
+            align: 'left'
+          },
+          {
+            label: 'user approval',
             name: 'userapproval',
             align: 'left'
           },
-          
           {
-            label: 'TANGGAL APPROVAL',
-            name: 'tglapproval',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'PERIODE',
-            name: 'periode',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'MODIFIEDBY',
-            name: 'modifiedby',
+            label: 'postingdari',
+            name: 'postingdari',
             align: 'left'
           },
           {
-            label: 'CREATEDAT',
-            name: 'created_at',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
+            label: 'modifiedby',
+            name: 'modifiedby',
+            align: 'left'
           },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
+          
         ],
+
         autowidth: true,
         shrinkToFit: false,
         height: 350,
@@ -170,18 +150,13 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+
+          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
-          if (!hasDetail) {
-            loadDetailGrid(id)
-            hasDetail = true
-          }
-
-          loadDetailData(id)
         },
         loadComplete: function(data) {
 
@@ -248,7 +223,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
-              createProsesGajiSupirHeader()
+              createNotaDebet()
             }
           },
           {
@@ -257,11 +232,7 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                editProsesGajiSupirHeader(selectedId)
-              }
+              editNotaDebet(selectedId)
             }
           },
           {
@@ -270,39 +241,39 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                deleteProsesGajiSupirHeader(selectedId)
-              }
+              deleteNotaDebet(selectedId)
+            }
+          },
+          {
+            id: 'approval',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVE',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+              let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+
+              $('#loader').removeClass('d-none')
+
+              handleApproval(id)
             }
           },
           {
             id: 'export',
-            title: 'Export',
-            caption: 'Export',
-            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                window.open(`{{ route('prosesgajisupirheader.export') }}?id=${selectedId}`)
-              }
+              $('#rangeModal').data('action', 'export')
+              $('#rangeModal').find('button:submit').html(`Export`)
+              $('#rangeModal').modal('show')
             }
-          },  
+          },
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                window.open(`{{ route('prosesgajisupirheader.report') }}?id=${selectedId}`)
-              }
+              window.open(`{{url('notadebetheader/report/${selectedId}')}}`)
+              // reportNotaDebet(selectedId)
             }
           },
         ]
@@ -314,6 +285,9 @@
 
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
+
+    /* Load detail grid */
+    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn btn-sm btn-primary`)
@@ -335,24 +309,27 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
+    if (!`{{ $myAuth->hasPermission('notadebetheader', 'store') }}`) {
+      $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
+    if (!`{{ $myAuth->hasPermission('notadebetheader', 'update') }}`) {
+      $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
+    if (!`{{ $myAuth->hasPermission('notadebetheader', 'destroy') }}`) {
+      $('#delete').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
+    if (!`{{ $myAuth->hasPermission('notadebetheader', 'export') }}`) {
+      $('#export').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
+    if (!`{{ $myAuth->hasPermission('notadebetheader', 'report') }}`) {
+      $('#report').addClass('ui-disabled')
+    }
+    if (!`{{ $myAuth->hasPermission('notadebetheader', 'approval') }}`) {
+      $('#report').addClass('ui-disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -378,13 +355,19 @@
       })
     })
 
-    $('#formRange').submit(function(event) {
+    $('#formRange').submit(event => {
       event.preventDefault()
 
       let params
-      let submitButton = $(this).find('button:submit')
+      let actionUrl = ``
+      console.log(params);
+      if ($('#rangeModal').data('action') == 'export') {
+        actionUrl = `{{ route('notadebetheader.export') }}`
+      }
 
-      submitButton.attr('disabled', 'disabled')
+      /* Clear validation messages */
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
 
       /* Set params value */
       for (var key in postData) {
@@ -394,43 +377,41 @@
         params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-      let formRange = $('#formRange')
-      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
-      params += `&offset=${offset}&limit=${limit}`
-
-      if ($('#rangeModal').data('action') == 'export') {
-        let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}prosesgajisupirheader/export?${params}`, true)
-        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
-        xhr.responseType = 'arraybuffer'
-
-        xhr.onload = function(e) {
-          if (this.status === 200) {
-            if (this.response !== undefined) {
-              let blob = new Blob([this.response], {
-                type: "application/vnd.ms-excel"
-              })
-              let link = document.createElement('a')
-
-              link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanpengeluarantrucking${(new Date).getTime()}.xlsx`
-              link.click()
-
-              submitButton.removeAttr('disabled')
-            }
-          }
-        }
-
-        xhr.send()
-      } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('prosesgajisupirheader.report') }}?${params}`)
-
-        submitButton.removeAttr('disabled')
-      }
+      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
-  })
 
+  function handleApproval(id) {
+    $.ajax({
+      url: `${apiUrl}notadebetheader/${id}/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+      },
+      success: response => {
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    }).always(() => {
+      $('#loader').addClass('d-none')
+    })
+  }
+  function reportNotaDebet(id) {
+    $.ajax({
+      url: `{{url('notadebetheader/report/${id}')}}`,
+      method: 'get',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+      },
+      success: response => {
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    }).always(() => {
+      $('#loader').addClass('d-none')
+    })
+  }
+
+  })
 </script>
 @endpush()
 @endsection

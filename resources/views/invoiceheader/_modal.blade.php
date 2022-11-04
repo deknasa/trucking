@@ -316,13 +316,13 @@
       Simpan
     `)
     form.data('action', 'add')
-    // form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Invoice')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    $('#table_body').html('')
+    
+    initDatepicker()
   }
 
   function editInvoiceHeader(invId) {
@@ -332,8 +332,8 @@
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
-    Simpan
-  `)
+      Simpan
+    `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Invoice')
     $('#crudModal').modal('show')
@@ -351,9 +351,9 @@
     form.data('action', 'delete')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Hapus
-  `)
+      <i class="fa fa-save"></i>
+      Hapus
+    `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Invoice')
     $('#crudModal').modal('show')
@@ -589,44 +589,6 @@
       }
     }
 
-    function initLookup() {
-      $('.agen-lookup').lookup({
-        title: 'Agen Lookup',
-        fileName: 'agen',
-        onSelectRow: (agen, element) => {
-          $('#crudForm [name=agen_id]').first().val(agen.id)
-          element.val(agen.namaagen)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        }
-      })
-      $('.jenisorder-lookup').lookup({
-        title: 'Jenis Order Lookup',
-        fileName: 'jenisorder',
-        onSelectRow: (jenisorder, element) => {
-          $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
-          element.val(jenisorder.keterangan)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        }
-      })
-      $('.cabang-lookup').lookup({
-        title: 'Cabang Lookup',
-        fileName: 'cabang',
-        onSelectRow: (cabang, element) => {
-          $('#crudForm [name=cabang_id]').first().val(cabang.id)
-          element.val(cabang.namacabang)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        }
-      })
-    }
 
     function approval(Id) {
       $('#loader').removeClass('d-none')
@@ -676,7 +638,48 @@
           }
         }
       })
-  }
+    }
 
+
+    function initLookup() {
+      $('.agen-lookup').lookup({
+        title: 'Agen Lookup',
+        fileName: 'agen',
+        onSelectRow: (agen, element) => {
+          $('#crudForm [name=agen_id]').first().val(agen.id)
+          element.val(agen.namaagen)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          console.log(element.val())
+          element.val(element.data('currentValue'))
+        }
+      })
+
+      $('.jenisorder-lookup').lookup({
+        title: 'Jenis Order Lookup',
+        fileName: 'jenisorder',
+        onSelectRow: (jenisorder, element) => {
+          $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
+          element.val(jenisorder.keterangan)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        }
+      })
+      $('.cabang-lookup').lookup({
+        title: 'Cabang Lookup',
+        fileName: 'cabang',
+        onSelectRow: (cabang, element) => {
+          $('#crudForm [name=cabang_id]').first().val(cabang.id)
+          element.val(cabang.namacabang)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        }
+      })
+    }
 </script>
 @endpush()

@@ -194,7 +194,7 @@
           triggerClick = true
 
           $('.clearsearchclass').click(function() {
-            clearColumnSearch()
+            highlightSearch = ''
           })
 
           if (indexRow > $(this).getDataIDs().length - 1) {
@@ -204,14 +204,14 @@
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
@@ -228,7 +228,7 @@
         searchOnEnter: false,
         defaultSearch: 'cn',
         groupOp: 'AND',
-        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        // disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           clearGlobalSearch($('#jqGrid'))
         },

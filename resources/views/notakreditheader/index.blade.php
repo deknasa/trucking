@@ -270,9 +270,8 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
-              $('#rangeModal').data('action', 'report')
-              $('#rangeModal').find('button:submit').html(`Report`)
-              $('#rangeModal').modal('show')
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              window.open(`{{url('notakreditheader/report/${selectedId}')}}`)
             }
           },
         ]
@@ -362,8 +361,7 @@
       console.log(params);
       if ($('#rangeModal').data('action') == 'export') {
         actionUrl = `{{ route('notakreditheader.export') }}`
-      } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('notakreditheader.report') }}`
+      // } else if ($('#rangeModal').data('action') == 'report') {
       }
 
       /* Clear validation messages */

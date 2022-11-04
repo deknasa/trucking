@@ -229,6 +229,7 @@
               }
             }
           },
+          
           {
             id: 'export',
             title: 'Export',
@@ -236,24 +237,27 @@
             innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-              $('#rangeModal').data('action', 'export')
-              $('#rangeModal').find('button:submit').html(`Export`)
-              $('#rangeModal').modal('show')
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('absensisupirheader.export') }}?id=${selectedId}`)
+              }
             }
-          },
-          
+          },  
           {
             id: 'report',
-            title: 'Report',
-            caption: 'Report',
-            innerHTML: '<i class="fas fa-print"></i> REPORT',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
-              $('#rangeModal').data('action', 'report')
-              $('#rangeModal').find('button:submit').html(`Report`)
-              $('#rangeModal').modal('show')
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('absensisupirheader.report') }}?id=${selectedId}`)
+              }
             }
-          }
+          },
         ]
 
       })

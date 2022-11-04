@@ -34,9 +34,8 @@
                   CONTAINER <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="container_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH CONTAINER --</option>
-                </select>
+                <input type="hidden" name="container_id">
+                <input type="text" name="container" class="form-control container-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -89,9 +88,8 @@
                   KOTA <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="kota_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH KOTA --</option>
-                </select>
+                <input type="hidden" name="kota_id">
+                <input type="text" name="kota" class="form-control kota-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -100,9 +98,8 @@
                   ZONA <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="zona_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH ZONA --</option>
-                </select>
+                <input type="hidden" name="zona_id">
+                <input type="text" name="zona" class="form-control zona-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -122,7 +119,9 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="tglmulaiberlaku" class="form-control datepicker">
+                <div class="input-group">
+                  <input type="text" name="tglmulaiberlaku" class="form-control datepicker">
+                </div>
               </div>
             </div>
             <div class="row form-group">
@@ -132,7 +131,9 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="tglakhirberlaku" class="form-control datepicker">
+                <div class="input-group">
+                  <input type="text" name="tglakhirberlaku" class="form-control datepicker">
+                </div>
               </div>
             </div>
             <div class="row form-group">
@@ -166,6 +167,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -273,12 +275,14 @@
     activeGrid = null
 
     getMaxLength(form)
+    initLookup()
+    initSelect2()
     initDatepicker()
-
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createTarif() {
@@ -297,10 +301,7 @@
     $('.invalid-feedback').remove()
 
     setStatusPenyesuaianHargaOptions(form)
-    setZonaOptions(form)
-    setKotaOptions(form)
     setStatusSistemTonOptions(form)
-    setContainerOptions(form)
     setStatusAktifOptions(form)
   }
 
@@ -322,10 +323,7 @@
     Promise
       .all([
         setStatusPenyesuaianHargaOptions(form),
-        setZonaOptions(form),
-        setKotaOptions(form),
         setStatusSistemTonOptions(form),
-        setContainerOptions(form),
         setStatusAktifOptions(form)
       ])
       .then(() => {
@@ -351,10 +349,7 @@
     Promise
       .all([
         setStatusPenyesuaianHargaOptions(form),
-        setZonaOptions(form),
-        setKotaOptions(form),
         setStatusSistemTonOptions(form),
-        setContainerOptions(form),
         setStatusAktifOptions(form)
       ])
       .then(() => {
@@ -407,7 +402,7 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS PENYESUAIAN HARGA"
+              "data": "PENYESUAIAN HARGA"
             }]
           })
         },
@@ -424,60 +419,7 @@
     })
   }
 
-  const setZonaOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=zona_id]').empty()
-      relatedForm.find('[name=zona_id]').append(
-        new Option('-- PILIH KOTA --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}zona`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          response.data.forEach(zona => {
-            let option = new Option(zona.keterangan, zona.id)
-
-            relatedForm.find('[name=zona_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setKotaOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=kota_id]').empty()
-      relatedForm.find('[name=kota_id]').append(
-        new Option('-- PILIH KOTA --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}kota`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          response.data.forEach(kota => {
-            let option = new Option(kota.keterangan, kota.id)
-
-            relatedForm.find('[name=kota_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
+  
   const setStatusSistemTonOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statussistemton]').empty()
@@ -507,33 +449,6 @@
             let option = new Option(statussistemTon.text, statussistemTon.id)
 
             relatedForm.find('[name=statussistemton]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setContainerOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=container_id]').empty()
-      relatedForm.find('[name=container_id]').append(
-        new Option('-- PILIH CONTAINER --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}container`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          response.data.forEach(container => {
-            let option = new Option(container.keterangan, container.id)
-
-            relatedForm.find('[name=container_id]').append(option).trigger('change')
           });
 
           resolve()
@@ -602,7 +517,63 @@
           } else {
             element.val(value)
           }
+
+          if(index == 'container') {
+            element.data('current-value', value)
+          }
+          if(index == 'kota') {
+            element.data('current-value', value)
+          }
+          if(index == 'zona') {
+            element.data('current-value', value)
+          }
         })
+
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
+      }
+    })
+  }
+
+  function initLookup() {
+    $('.container-lookup').lookup({
+      title: 'Container Lookup',
+      fileName: 'container',
+      onSelectRow: (container, element) => {
+        $('#crudForm [name=container_id]').first().val(container.id)
+        element.val(container.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    
+    $('.kota-lookup').lookup({
+      title: 'Kota Lookup',
+      fileName: 'kota',
+      onSelectRow: (kota, element) => {
+        $('#crudForm [name=kota_id]').first().val(kota.id)
+        element.val(kota.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    
+    $('.zona-lookup').lookup({
+      title: 'Zona Lookup',
+      fileName: 'zona',
+      onSelectRow: (zona, element) => {
+        $('#crudForm [name=zona_id]').first().val(zona.id)
+        element.val(zona.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
   }
