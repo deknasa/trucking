@@ -215,3 +215,7 @@
 .no-scroll {
 	overflow: hidden;
 }
+
+.datepicker-offday a {
+	color: red !important;
+}
