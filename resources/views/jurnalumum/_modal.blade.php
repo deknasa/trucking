@@ -69,9 +69,9 @@
                     <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
                   </td>
                   <td>
-                  <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-              </td>
-            </tr>
+                    <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                  </td>
+                </tr>
 
               </tbody>
               <tfoot>
@@ -118,7 +118,7 @@
     });
     
     $(document).on('click', '.delete-row', function(event) {
-      deleteRow($(this).parents('tr'))
+        deleteRow($(this).parents('tr'))
     })
 
     $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {

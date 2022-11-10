@@ -40,7 +40,9 @@
                   </label>
                 </div>
                 <div>
-                  <input type="text" name="tglbukti" class="form-control datepicker">
+                  <div class="input-group">
+                    <input type="text" name="tglbukti" class="form-control datepicker">
+                  </div>
                 </div>
               </div>
 
@@ -51,7 +53,9 @@
                   </label>
                 </div>
                 <div>
-                  <input type="text" name="tglsp" class="form-control datepicker">
+                  <div class="input-group">
+                    <input type="text" name="tglsp" class="form-control datepicker">
+                  </div>
                 </div>
               </div>
 
@@ -216,9 +220,8 @@
                   </label>
                 </div>
                 <div>
-                  <select name="container_id" id="container_id" class="form-control select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH CONTAINER --</option>
-                  </select>
+                  <input type="hidden" name="container_id">
+                  <input type="text" name="container" class="form-control container-lookup">
                 </div>
               </div>
               <div class="form-group col-md-6">
@@ -248,9 +251,8 @@
                   </label>
                 </div>
                 <div>
-                  <select name="statuscontainer_id" id="statuscontainer_id" class="form-control select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH STATUS CONTAINER --</option>
-                  </select>
+                  <input type="hidden" name="statuscontainer_id">
+                  <input type="text" name="statuscontainer" class="form-control statuscontainer-lookup">
                 </div>
               </div>
 
@@ -261,9 +263,8 @@
                   </label>
                 </div>
                 <div>
-                  <select name="trado_id" class="form-control select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH TRADO --</option>
-                  </select>
+                  <input type="hidden" name="trado_id">
+                  <input type="text" name="trado" class="form-control trado-lookup">
                 </div>
               </div>
               <div class="form-group col-md-6">
@@ -273,9 +274,8 @@
                   </label>
                 </div>
                 <div>
-                  <select name="supir_id" class="form-control select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH SUPIR --</option>
-                  </select>
+                  <input type="hidden" name="supir_id">
+                  <input type="text" name="supir" class="form-control supir-lookup">
                 </div>
               </div>
               <div class="form-group col-md-6">
@@ -285,9 +285,8 @@
                   </label>
                 </div>
                 <div>
-                  <select name="agen_id" class="form-control select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH AGEN --</option>
-                  </select>
+                  <input type="hidden" name="agen_id">
+                  <input type="text" name="agen" class="form-control agen-lookup">
                 </div>
               </div>
               <div class="form-group col-md-6">
@@ -297,9 +296,8 @@
                   </label>
                 </div>
                 <div>
-                  <select name="jenisorder_id" class="form-control select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH JENIS ORDER --</option>
-                  </select>
+                  <input type="hidden" name="jenisorder_id">
+                  <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
                 </div>
               </div>
               <div class="form-group col-md-6">
@@ -330,9 +328,8 @@
                   </label>
                 </div>
                 <div>
-                  <select name="tarif_id" class="form-control select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH TARIF --</option>
-                  </select>
+                  <input type="hidden" name="tarif_id">
+                  <input type="text" name="tarif" class="form-control tarif-lookup">
                 </div>
               </div>
             </div>
@@ -598,16 +595,7 @@
     $('.invalid-feedback').remove()
 
     setStatusLongTripOptions(form)
-    setStatusContainerOptions(form)
     setStatusPeralihanOptions(form)
-    // setKotaOptions(form)
-    // setPelangganOptions(form)
-    setContainerOptions(form)
-    setTradoOptions(form)
-    setSupirOptions(form)
-    setAgenOptions(form)
-    setJenisOrderOptions(form)
-    setTarifOptions(form)
 
     addRow()
     setTotal()
@@ -631,16 +619,7 @@
     Promise
       .all([
         setStatusLongTripOptions(form),
-        setStatusContainerOptions(form),
         setStatusPeralihanOptions(form),
-        // setKotaOptions(form),
-        // setPelangganOptions(form),
-        setContainerOptions(form),
-        setTradoOptions(form),
-        setSupirOptions(form),
-        setAgenOptions(form),
-        setJenisOrderOptions(form),
-        setTarifOptions(form)
       ])
       .then(() => {
         showSuratPengantar(form, id)
@@ -665,16 +644,7 @@
     Promise
       .all([
         setStatusLongTripOptions(form),
-        setStatusContainerOptions(form),
         setStatusPeralihanOptions(form),
-        // setKotaOptions(form),
-        // setPelangganOptions(form),
-        setContainerOptions(form),
-        setTradoOptions(form),
-        setSupirOptions(form),
-        setAgenOptions(form),
-        setJenisOrderOptions(form),
-        setTarifOptions(form)
       ])
       .then(() => {
         showSuratPengantar(form, id)
@@ -780,308 +750,39 @@
     })
   }
 
-  // const setStatusLongTripOptions = function(relatedForm) {
-  //   return new Promise((resolve, reject) => {
-  //     relatedForm.find('[name=statuslongtrip]').empty()
-  //     relatedForm.find('[name=statuslongtrip]').append(
-  //       new Option('-- PILIH STATUS LONG TRIP --', '', false, true)
-  //     ).trigger('change')
+  function getGaji() {
+    let form = $('#crudForm')
+    let data = []
+    data.push({
+      name: 'dari',
+      value: form.find(`[name="dari_id"]`).val()
+    })
+    data.push({
+      name: 'sampai',
+      value: form.find(`[name="sampai_id"]`).val()
+    })
+    data.push({
+      name: 'container',
+      value: form.find(`[name="container_id"]`).val()
+    })
+    data.push({
+      name: 'statuscontainer',
+      value: form.find(`[name="statuscontainer_id"]`).val()
+    })
 
-  //     $.ajax({
-  //       url: `${apiUrl}statuscontainer`,
-  //       method: 'GET',
-  //       dataType: 'JSON',
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`
-  //       },
-  //       data: {
-  //         limit: 0,
-  //       },
-  //       success: response => {
-  //         response.data.forEach(statusLongTrip => {
-  //           let option = new Option(statusLongTrip.text, statusLongTrip.id)
-
-  //           relatedForm.find('[name=statuslongtrip]').append(option).trigger('change')
-  //         });
-
-  //         resolve()
-  //       }
-  //     })
-  //   })
-  // }
-
-  const setContainerOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=container_id]').empty()
-      relatedForm.find('[name=container_id]').append(
-        new Option('-- PILIH CONTAINER --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}container`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(container => {
-            let option = new Option(container.keterangan, container.id)
-
-            relatedForm.find('[name=container_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
+    $.ajax({
+      url: `${apiUrl}suratpengantar/getGaji`,
+      method: 'GET',
+      dataType: 'JSON',
+      data: data,
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        
+      }
     })
   }
-
-  const setStatusContainerOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statuscontainer_id]').empty()
-      relatedForm.find('[name=statuscontainer_id]').append(
-        new Option('-- PILIH TARIF --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}statuscontainer`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(statusContainer => {
-            let option = new Option(statusContainer.keterangan, statusContainer.id)
-
-            relatedForm.find('[name=statuscontainer_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setTarifOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=tarif_id]').empty()
-      relatedForm.find('[name=tarif_id]').append(
-        new Option('-- PILIH TARIF --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}tarif`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(tarif => {
-            let option = new Option(tarif.tujuan, tarif.id)
-
-            relatedForm.find('[name=tarif_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setJenisOrderOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=jenisorder_id]').empty()
-      relatedForm.find('[name=jenisorder_id]').append(
-        new Option('-- PILIH JENIS ORDER --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}jenisorder`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(jenisOrder => {
-            let option = new Option(jenisOrder.keterangan, jenisOrder.id)
-
-            relatedForm.find('[name=jenisorder_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setAgenOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=agen_id]').empty()
-      relatedForm.find('[name=agen_id]').append(
-        new Option('-- PILIH AGEN --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}agen`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(agen => {
-            let option = new Option(agen.namaagen, agen.id)
-
-            relatedForm.find('[name=agen_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setSupirOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=supir_id]').empty()
-      relatedForm.find('[name=supir_id]').append(
-        new Option('-- PILIH SUPIR --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}supir`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(supir => {
-            let option = new Option(supir.namasupir, supir.id)
-
-            relatedForm.find('[name=supir_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setTradoOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=trado_id]').empty()
-      relatedForm.find('[name=trado_id]').append(
-        new Option('-- PILIH TRADO --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}trado`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(trado => {
-            let option = new Option(trado.keterangan, trado.id)
-
-            relatedForm.find('[name=trado_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  // const setPelangganOptions = function(relatedForm) {
-  //   return new Promise((resolve, reject) => {
-  //     relatedForm.find('[name=pelanggan_id]').empty()
-  //     relatedForm.find('[name=pelanggan_id]').append(
-  //       new Option('-- PILIH PELANGGAN --', '', false, true)
-  //     ).trigger('change')
-
-  //     $.ajax({
-  //       url: `${apiUrl}pelanggan`,
-  //       method: 'GET',
-  //       dataType: 'JSON',
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`
-  //       },
-  //       data: {
-  //         limit: 0,
-  //       },
-  //       success: response => {
-  //         response.data.forEach(pelanggan => {
-  //           let option = new Option(pelanggan.namapelanggan, pelanggan.id)
-
-  //           relatedForm.find('[name=pelanggan_id]').append(option).trigger('change')
-  //         });
-
-  //         resolve()
-  //       }
-  //     })
-  //   })
-  // }
-
-  // const setKotaOptions = function(relatedForm) {
-  //   return new Promise((resolve, reject) => {
-  //     relatedForm.find('[name=dari_id], [name=sampai_id]').empty()
-  //     relatedForm.find('[name=dari_id]').append(
-  //       new Option('-- PILIH DARI --', '', false, true)
-  //     ).trigger('change')
-  //     relatedForm.find('[name=sampai_id]').append(
-  //       new Option('-- PILIH SAMPAI --', '', false, true)
-  //     ).trigger('change')
-
-  //     $.ajax({
-  //       url: `${apiUrl}kota`,
-  //       method: 'GET',
-  //       dataType: 'JSON',
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`
-  //       },
-  //       data: {
-  //         limit: 0,
-  //       },
-  //       success: response => {
-  //         response.data.forEach(kota => {
-  //           let option = new Option(kota.keterangan, kota.id)
-
-  //           relatedForm.find('[name=dari_id], [name=sampai_id]').append(option).trigger('change')
-  //         });
-
-  //         resolve()
-  //       }
-  //     })
-  //   })
-  // }
 
   function showSuratPengantar(form, userId) {
     $('#detailList tbody').html('')
@@ -1187,12 +888,13 @@
 
   function initLookup() {
     $('.kotadari-lookup').lookup({
-      title: 'kota dari Lookup',
+      title: 'Kota Dari Lookup',
       fileName: 'kota',
       onSelectRow: (kota, element) => {
         $('#crudForm [name=dari_id]').first().val(kota.id)
         element.val(kota.keterangan)
         element.data('currentValue', element.val())
+        getGaji()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1200,12 +902,13 @@
     })
 
     $('.kotasampai-lookup').lookup({
-      title: 'kota tujuan Lookup',
+      title: 'Kota Tujuan Lookup',
       fileName: 'kota',
       onSelectRow: (kota, element) => {
         $('#crudForm [name=sampai_id]').first().val(kota.id)
         element.val(kota.keterangan)
         element.data('currentValue', element.val())
+        getGaji()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1213,11 +916,103 @@
     })
 
     $('.pelanggan-lookup').lookup({
-      title: 'pelanggan Lookup',
+      title: 'Pelanggan Lookup',
       fileName: 'pelanggan',
       onSelectRow: (pelanggan, element) => {
         $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
         element.val(pelanggan.namapelanggan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    
+    $('.container-lookup').lookup({
+      title: 'Container Lookup',
+      fileName: 'container',
+      onSelectRow: (container, element) => {
+        $('#crudForm [name=container_id]').first().val(container.id)
+        element.val(container.keterangan)
+        element.data('currentValue', element.val())
+        getGaji()
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+
+
+    $('.statuscontainer-lookup').lookup({
+      title: 'Status Container Lookup',
+      fileName: 'statuscontainer',
+      onSelectRow: (statuscontainer, element) => {
+        $('#crudForm [name=statuscontainer_id]').first().val(statuscontainer.id)
+        element.val(statuscontainer.keterangan)
+        element.data('currentValue', element.val())
+        getGaji()
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+
+    $('.trado-lookup').lookup({
+      title: 'Trado Lookup',
+      fileName: 'trado',
+      onSelectRow: (trado, element) => {
+        $('#crudForm [name=trado_id]').first().val(trado.id)
+        element.val(trado.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    $('.supir-lookup').lookup({
+      title: 'Supir Lookup',
+      fileName: 'supir',
+      onSelectRow: (supir, element) => {
+        $('#crudForm [name=supir_id]').first().val(supir.id)
+        element.val(supir.namasupir)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    $('.agen-lookup').lookup({
+      title: 'Agen Lookup',
+      fileName: 'agen',
+      onSelectRow: (agen, element) => {
+        $('#crudForm [name=agen_id]').first().val(agen.id)
+        element.val(agen.namaagen)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+
+    $('.jenisorder-lookup').lookup({
+      title: 'Jenis Order Lookup',
+      fileName: 'jenisorder',
+      onSelectRow: (jenisorder, element) => {
+        $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
+        element.val(jenisorder.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+
+    $('.tarif-lookup').lookup({
+      title: 'Tarif Lookup',
+      fileName: 'tarif',
+      onSelectRow: (tarif, element) => {
+        $('#crudForm [name=tarif_id]').first().val(tarif.id)
+        element.val(tarif.tujuan)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {

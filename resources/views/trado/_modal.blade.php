@@ -11,6 +11,7 @@
         <form action="" method="post">
           <div class="modal-body">
 
+          <input type="hidden" name="id">
             <div class="row">
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Keterangan <span class="text-danger">*</span></label>
@@ -48,13 +49,17 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Akhir Ganti oli <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control autonumeric" name="tglakhirgantioli">
+                  <div class="input-group">
+                    <input type="text" class="form-control datepicker" name="tglakhirgantioli">
+                  </div>
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Tgl STNK Mati <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control formatdate" name="tglstnkmati">
+                  <div class="input-group">
+                    <input type="text" class="form-control datepicker" name="tglstnkmati">
+                  </div>
                 </div>
               </div>
             </div>
@@ -63,7 +68,9 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Asuransi Mati <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control formatdate" name="tglasuransimati">
+                  <div class="input-group">
+                    <input type="text" class="form-control datepicker" name="tglasuransimati">
+                  </div>
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
@@ -129,7 +136,9 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Standarisasi <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control formatdate" name="tglstandarisasi">
+                  <div class="input-group">
+                    <input type="text" class="form-control datepicker" name="tglstandarisasi">
+                  </div>
                 </div>
               </div>
             </div>
@@ -138,13 +147,15 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Service Opname <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control formatdate" name="tglserviceopname">
+                  <div class="input-group">
+                    <input type="text" class="form-control datepicker" name="tglserviceopname">
+                  </div>
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Status Standarisasi <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statusstandarisasi" class="form-control select2bs4">
+                  <select name="statusstandarisasi" class="form-control select2bs4" z-index="3">
                     <option value="">-- PILIH STATUS STANDARISASI --</option>
                   </select>
                 </div>
@@ -172,13 +183,17 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Speksi Mati <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control formatdate" name="tglspeksimati">
+                  <div class="input-group">
+                    <input type="text" class="form-control datepicker" name="tglspeksimati" z-index="3">
+                  </div>
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Pajak STNK <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control formatdate" name="tglpajakstnk">
+                  <div class="input-group">
+                    <input type="text" class="form-control datepicker" name="tglpajakstnk">
+                  </div>
                 </div>
               </div>
             </div>
@@ -187,13 +202,15 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Ganti aki terakhir <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control formatdate" name="tglgantiakiterakhir">
+                  <div class="input-group">
+                    <input type="text" class="form-control datepicker" name="tglgantiakiterakhir">
+                  </div>
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Status Mutasi <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statusmutasi" class="form-control select2bs4">
+                  <select name="statusmutasi" class="form-control select2bs4" z-index="3">
                     <option value="">-- PILIH STATUS MUTASI --</option>
                   </select>
                 </div>
@@ -204,7 +221,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Status Validasi Kendaraan <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statusvalidasikendaraan" class="form-control select2bs4">
+                  <select name="statusvalidasikendaraan" class="form-control select2bs4" z-index="3">
                     <option value="">-- PILIH STATUS VALIDASI KENDARAAN --</option>
                   </select>
                 </div>
@@ -252,13 +269,13 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Jumlah Sumbu <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control autonumeric" name="jlhsumbu">
+                  <input type="text" class="form-control numbernoseparate" name="jlhsumbu">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Jumlah Roda <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control autonumeric" name="jlhroda">
+                  <input type="text" class="form-control numbernoseparate" name="jlhroda">
                 </div>
               </div>
             </div>
@@ -282,7 +299,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Status Mobil Storing <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statusmobilstoring" class="form-control select2bs4">
+                  <select name="statusmobilstoring" class="form-control select2bs4" z-index="3"> 
                     <option value="">-- PILIH STATUS MOBIL STORING --</option>
                   </select>
                 </div>
@@ -290,9 +307,8 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Milik Mandor <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="mandor_id" class="form-control select2bs4">
-                    <option value="">-- PILIH MILIK MANDOR --</option>
-                  </select>
+                  <input type="hidden" name="mandor_id">
+                  <input type="text" name="mandor" class="form-control mandor-lookup">
                 </div>
               </div>
             </div>
@@ -301,13 +317,13 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Jumlah Ban Serap <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control autonumeric" name="jlhbanserap">
+                  <input type="text" class="form-control numbernoseparate" name="jlhbanserap">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">STATUS APPEDIT BAN <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statusappeditban" class="form-control select2bs4">
+                  <select name="statusappeditban" class="form-control select2bs4" z-index="3">
                     <option value="">-- PILIH STATUS APPEDIT BAN --</option>
                   </select>
                 </div>
@@ -318,7 +334,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Lewat Validasi <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statuslewatvalidasi" class="form-control select2bs4">
+                  <select name="statuslewatvalidasi" class="form-control select2bs4" z-index="3">
                     <option value="">-- PILIH LEWAT VALIDASI --</option>
                   </select>
                 </div>
@@ -335,9 +351,9 @@
                     <button class="btn btn-info btn-sm" id="uploadTrado" type="button">Upload Trado</button>
                   </div>
                 </div>
-                <div class="dropzone" id="my-dropzone" data-field="trado">
+                <div class="dropzone" id="dropzone-trado" data-field="trado">
                   <div class="fallback">
-                    <input name="file" type="file" />
+                    <input name="phototrado" type="file" multiple/>
                   </div>
                 </div>
               </div>
@@ -351,9 +367,9 @@
                     <button class="btn btn-info btn-sm" type="button" id="uploadBpkb">Upload BPKB</button>
                   </div>
                 </div>
-                <div class="dropzone" id="my-dropzoness" data-field="bpkb">
+                <div class="dropzone" id="dropzone-bpkb" data-field="bpkb">
                   <div class="fallback">
-                    <input name="file" type="file" />
+                    <input name="photobpkb" type="file" multiple/>
                   </div>
                 </div>
               </div>
@@ -367,9 +383,9 @@
                     <button class="btn btn-info btn-sm" type="button" id="uploadStnk">Upload STNK</button>
                   </div>
                 </div>
-                <div class="dropzone" id="dropzonestnk" data-field="stnk">
+                <div class="dropzone" id="dropzone-stnk" data-field="stnk">
                   <div class="fallback">
-                    <input name="file" type="file" />
+                    <input name="photostnk" type="file" multiple/>
                   </div>
                 </div>
               </div>
@@ -395,7 +411,13 @@
 <script>
   let hasFormBindKeys = false
   Dropzone.autoDiscover = false;
-
+  let modalBody = $('#crudModal').find('.modal-body').html()
+  let myDropzone
+  let dropzoneAttachment = {
+    phototrado: [],
+    photobpkb: [],
+    photostnk: [],
+  }
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -405,44 +427,65 @@
       let form = $('#crudForm')
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
-      let data = $('#crudForm').serializeArray()
+      // let data = $('#crudForm').serializeArray()
+      let formData = new FormData();
 
-      $('#crudForm').find(`[name="isisilinder"]`).each((index, element) => {
-        data.filter((row) => row.name === 'isisilinder')[index].value = AutoNumeric.getNumber($(`#crudForm [name="isisilinder"]`)[index])
-      })
+      formData.append('id', form.find(`[name="id"]`).val())
+      formData.append('keterangan', form.find(`[name="keterangan"]`).val())
+      formData.append('statusaktif', form.find(`[name="statusaktif"]`).val())
+      formData.append('kmawal', AutoNumeric.getNumber($(`#crudForm [name="kmawal"]`)[0]))
+      formData.append('kmakhirgantioli', AutoNumeric.getNumber($(`#crudForm [name="kmakhirgantioli"]`)[0]))
+      formData.append('tglakhirgantioli', form.find(`[name="tglakhirgantioli"]`).val())
+      formData.append('tglstnkmati', form.find(`[name="tglstnkmati"]`).val())
+      formData.append('tglasuransimati', form.find(`[name="tglasuransimati"]`).val())
+      formData.append('tahun', form.find(`[name="tahun"]`).val())
+      formData.append('akhirproduksi', form.find(`[name="akhirproduksi"]`).val())
+      formData.append('merek', form.find(`[name="merek"]`).val())
+      formData.append('norangka', form.find(`[name="norangka"]`).val())
+      formData.append('nomesin', form.find(`[name="nomesin"]`).val())
+      formData.append('nama', form.find(`[name="nama"]`).val())
+      formData.append('nostnk', form.find(`[name="nostnk"]`).val())
+      formData.append('alamatstnk', form.find(`[name="alamatstnk"]`).val())
+      formData.append('tglstandarisasi', form.find(`[name="tglstandarisasi"]`).val())
+      formData.append('tglserviceopname', form.find(`[name="tglserviceopname"]`).val())
+      formData.append('statusstandarisasi', form.find(`[name="statusstandarisasi"]`).val())
+      formData.append('keteranganprogressstandarisasi', form.find(`[name="keteranganprogressstandarisasi"]`).val())
+      formData.append('jenisplat', form.find(`[name="jenisplat"]`).val())
+      formData.append('tglspeksimati', form.find(`[name="tglspeksimati"]`).val())
+      formData.append('tglpajakstnk', form.find(`[name="tglpajakstnk"]`).val())
+      formData.append('tglgantiakiterakhir', form.find(`[name="tglgantiakiterakhir"]`).val())
+      formData.append('statusmutasi', form.find(`[name="statusmutasi"]`).val())
+      formData.append('statusvalidasikendaraan', form.find(`[name="statusvalidasikendaraan"]`).val())
+      formData.append('tipe', form.find(`[name="tipe"]`).val())
+      formData.append('jenis', form.find(`[name="jenis"]`).val())
+      formData.append('isisilinder', AutoNumeric.getNumber($(`#crudForm [name="isisilinder"]`)[0]))
+      formData.append('warna', form.find(`[name="warna"]`).val())
+      formData.append('bahanbakar', form.find(`[name="bahanbakar"]`).val())
+      formData.append('jlhsumbu', form.find(`[name="jlhsumbu"]`).val())
+      formData.append('jlhroda', form.find(`[name="jlhroda"]`).val())
+      formData.append('model', form.find(`[name="model"]`).val())
+      formData.append('nobpkb', form.find(`[name="nobpkb"]`).val())
+      formData.append('statusmobilstoring', form.find(`[name="statusmobilstoring"]`).val())
+      formData.append('mandor_id', form.find(`[name="mandor_id"]`).val())
+      formData.append('jlhbanserap', form.find(`[name="jlhbanserap"]`).val())
+      formData.append('statusappeditban', form.find(`[name="statusappeditban"]`).val())
+      formData.append('statuslewatvalidasi', form.find(`[name="statuslewatvalidasi"]`).val())
 
-      $('#crudForm').find(`[name="kmawal"]`).each((index, element) => {
-        data.filter((row) => row.name === 'kmawal')[index].value = AutoNumeric.getNumber($(`#crudForm [name="kmawal"]`)[index])
+      $.each(dropzoneAttachment.phototrado, function(row) {
+        formData.append('phototrado[]', dropzoneAttachment.phototrado[row])
       })
-
-      $('#crudForm').find(`[name="kmakhirgantioli"]`).each((index, element) => {
-        data.filter((row) => row.name === 'kmakhirgantioli')[index].value = AutoNumeric.getNumber($(`#crudForm [name="kmakhirgantioli"]`)[index])
+      $.each(dropzoneAttachment.photobpkb, function(row, val) {
+        formData.append('photobpkb[]', dropzoneAttachment.photobpkb[row])
       })
-
-      data.push({
-        name: 'sortIndex',
-        value: $('#jqGrid').getGridParam().sortname
+      $.each(dropzoneAttachment.photostnk, function(row, val) {
+        formData.append('photostnk[]', dropzoneAttachment.photostnk[row])
       })
-      data.push({
-        name: 'sortOrder',
-        value: $('#jqGrid').getGridParam().sortorder
-      })
-      data.push({
-        name: 'filters',
-        value: $('#jqGrid').getGridParam('postData').filters
-      })
-      data.push({
-        name: 'indexRow',
-        value: indexRow
-      })
-      data.push({
-        name: 'page',
-        value: page
-      })
-      data.push({
-        name: 'limit',
-        value: limit
-      })
+      formData.append('sortIndex', $('#jqGrid').getGridParam().sortname)
+      formData.append('sortOrder', $('#jqGrid').getGridParam().sortorder)
+      formData.append('filters', $('#jqGrid').getGridParam('postData').filters)
+      formData.append('indexRow', indexRow)
+      formData.append('page', page)
+      formData.append('limit', limit)
 
       switch (action) {
         case 'add':
@@ -470,10 +513,13 @@
         url: url,
         method: method,
         dataType: 'JSON',
+        enctype: 'multipart/form-data',
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
-        data: data,
+        data: formData,
+        processData: false,
+        contentType: false,
         success: response => {
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
@@ -513,6 +559,9 @@
     activeGrid = null
 
     getMaxLength(form)
+    initLookup()
+    initDatepicker()
+    initSelect2()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -542,7 +591,6 @@
     setStatusMutasiOptions(form)
     setStatusValidasiKendaraanOptions(form)
     setStatusMobilStoringOptions(form)
-    setMandorOptions(form)
     setAppeditBanOptions(form)
     setStatusLewatValidasiOptions(form)
   }
@@ -570,7 +618,6 @@
         setStatusMutasiOptions(form),
         setStatusValidasiKendaraanOptions(form),
         setStatusMobilStoringOptions(form),
-        setMandorOptions(form),
         setAppeditBanOptions(form),
         setStatusLewatValidasiOptions(form)
       ])
@@ -602,12 +649,13 @@
         setStatusMutasiOptions(form),
         setStatusValidasiKendaraanOptions(form),
         setStatusMobilStoringOptions(form),
-        setMandorOptions(form),
         setAppeditBanOptions(form),
         setStatusLewatValidasiOptions(form)
       ])
       .then(() => {
         showTrado(form, id)
+        
+        initDropzone(form.data('action'), id)
       })
   }
 
@@ -674,36 +722,7 @@
     })
   }
 
-  const setMandorOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=mandor_id]').empty()
-      relatedForm.find('[name=mandor_id]').append(
-        new Option('-- PILIH MANDOR --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}mandor`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(mandor => {
-            let option = new Option(mandor.namamandor, mandor.id)
-
-            relatedForm.find('[name=mandor_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
+ 
   const setAppeditBanOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusappeditban]').empty()
@@ -997,7 +1016,7 @@
     })
   }
 
-  function initDropzone(action) {
+  function initDropzone(action, id = null) {
     let attachArray = {
       'trado': {},
       'stnk': {},
@@ -1007,6 +1026,7 @@
     const dropzones = []
     $('.dropzone').each(function(i, el) {
       const name = 'g_' + $(el).data('field');
+      console.log(name)
       var myDropzone = new Dropzone(el, {
         url: window.location.pathname,
         autoProcessQueue: false,
@@ -1018,6 +1038,19 @@
         acceptedFiles: "image/*",
         init: function() {
           var wrapperThis = this;
+          
+          this.on('addedfile', function(imageFile) {
+            if (el.id == 'dropzone-trado') {
+              dropzoneAttachment.phototrado.push(imageFile)
+            }
+            if (el.id == 'dropzone-bpkb') {
+              dropzoneAttachment.photobpkb.push(imageFile)
+            }
+            if (el.id == 'dropzone-stnk') {
+              dropzoneAttachment.photostnk.push(imageFile)
+            }
+
+          })
 
           this.on('removedfile', function(file) {
             var key = file.upload.uuid;
@@ -1032,89 +1065,152 @@
             var imgTrado = {}
             var imgBpkb = {}
             var imgStnk = {}
+            if (el.id == 'dropzone-trado') {
+              $.ajax({
+                url: `${apiUrl}trado/getImage/${id}/phototrado`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                  Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                  $.each(response.file, function(index, value) {
+                    console.log(value);
+                    let tes = `${response.base}/${value.name}`
+                    let ext = tes.split('.').pop()
+                    let imageFile = new File([{
+                      name: `${response.base}/${value.name}`,
+                      size: value.size,
+                      type: `images/${ext}`,
+                      status: 'added',
+                      upload: {
+                        uuid: (Math.random() + 1).toString(36).substring(7)
+                      }
+                    }], value.name)
 
-            if (Object.keys(imgTrado).length > 0) {
-              var total = Object.keys(imgTrado).length / 3;
-              var idx = 0;
-              for (var i = 1; i <= total; i++) {
-                if (i > 1) {
-                  idx += 3;
+                    newAdd = false
+                    console.log(imageFile)
+                    wrapperThis.emit("addedfile", imageFile);
+                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/${value.name}`);
+                    wrapperThis.files.push(imageFile);
+                  })
                 }
-                // console.log(idx);
-                var obj = {
-                  name: imgTrado[idx],
-                  size: 12345,
-                  upload: {
-                    uuid: (Math.random() + 1).toString(36).substring(7)
-                  }
-                };
-
-                if (name == 'g_trado') {
-                  wrapperThis.emit("addedfile", obj);
-                  wrapperThis.emit("thumbnail", obj, baseurl + '/uploads/trado/' + imgTrado[idx]);
-                  wrapperThis.emit("complete", obj);
-                  wrapperThis.files.push(obj);
-                  attachArray.trado[obj.upload.uuid] = imgTrado[idx];
-                }
-              }
+              })
             }
 
-            if (Object.keys(imgBpkb).length > 0) {
-              var total = Object.keys(imgBpkb).length / 3;
-              var idx = 0;
-              for (var i = 1; i <= total; i++) {
-                if (i > 1) {
-                  idx += 3;
-                }
+            if (el.id == 'dropzone-bpkb') {
+              $.ajax({
+                url: `${apiUrl}trado/getImage/${id}/photobpkb`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                  Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                  $.each(response.file, function(index, value) {
+                    console.log(value);
+                    let tes = `${response.base}/${value.name}`
+                    let ext = tes.split('.').pop()
+                    let imageFile = new File([{
+                      name: `${response.base}/${value.name}`,
+                      size: value.size,
+                      type: `images/${ext}`,
+                      status: 'added',
+                      upload: {
+                        uuid: (Math.random() + 1).toString(36).substring(7)
+                      }
+                    }], value.name)
 
-                var obj = {
-                  name: imgBpkb[idx],
-                  size: 12345,
-                  upload: {
-                    uuid: (Math.random() + 1).toString(36).substring(7)
-                  }
-                };
-
-                if (name == 'g_bpkb') {
-                  wrapperThis.emit("addedfile", obj);
-                  wrapperThis.emit("thumbnail", obj, baseurl + '/uploads/bpkb/' + imgBpkb[idx]);
-                  wrapperThis.emit("complete", obj);
-                  wrapperThis.files.push(obj);
-                  attachArray.bpkb[obj.upload.uuid] = imgBpkb[idx];
+                    newAdd = false
+                    console.log(imageFile)
+                    wrapperThis.emit("addedfile", imageFile);
+                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/${value.name}`);
+                    wrapperThis.files.push(imageFile);
+                  })
                 }
-              }
+              })
             }
 
-            if (Object.keys(imgStnk).length > 0) {
-              var total = Object.keys(imgStnk).length / 3;
-              var idx = 0;
-              for (var i = 1; i <= total; i++) {
-                if (i > 1) {
-                  idx += 3;
-                }
+            if (el.id == 'dropzone-stnk') {
+              $.ajax({
+                url: `${apiUrl}trado/getImage/${id}/photostnk`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                  Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                  $.each(response.file, function(index, value) {
+                    console.log(value);
+                    let tes = `${response.base}/${value.name}`
+                    let ext = tes.split('.').pop()
+                    let imageFile = new File([{
+                      name: `${response.base}/${value.name}`,
+                      size: value.size,
+                      type: `images/${ext}`,
+                      status: 'added',
+                      upload: {
+                        uuid: (Math.random() + 1).toString(36).substring(7)
+                      }
+                    }], value.name)
 
-                var obj = {
-                  name: imgStnk[idx],
-                  size: 12345,
-                  upload: {
-                    uuid: (Math.random() + 1).toString(36).substring(7)
-                  }
-                };
-
-                if (name == 'g_stnk') {
-                  wrapperThis.emit("addedfile", obj);
-                  wrapperThis.emit("thumbnail", obj, baseurl + '/uploads/stnk/' + imgStnk[idx]);
-                  wrapperThis.emit("complete", obj);
-                  wrapperThis.files.push(obj);
-                  attachArray.stnk[obj.upload.uuid] = imgStnk[idx];
+                    newAdd = false
+                    console.log(imageFile)
+                    wrapperThis.emit("addedfile", imageFile);
+                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/${value.name}`);
+                    wrapperThis.files.push(imageFile);
+                  })
                 }
-              }
+              })
             }
+
+            // if (Object.keys(imgTrado).length > 0) {
+            //   var total = Object.keys(imgTrado).length / 3;
+            //   var idx = 0;
+            //   for (var i = 1; i <= total; i++) {
+            //     if (i > 1) {
+            //       idx += 3;
+            //     }
+            //     // console.log(idx);
+            //     var obj = {
+            //       name: imgTrado[idx],
+            //       size: 12345,
+            //       upload: {
+            //         uuid: (Math.random() + 1).toString(36).substring(7)
+            //       }
+            //     };
+
+            //     if (name == 'g_trado') {
+            //       wrapperThis.emit("addedfile", obj);
+            //       wrapperThis.emit("thumbnail", obj, baseurl + '/uploads/trado/' + imgTrado[idx]);
+            //       wrapperThis.emit("complete", obj);
+            //       wrapperThis.files.push(obj);
+            //       attachArray.trado[obj.upload.uuid] = imgTrado[idx];
+            //     }
+            //   }
+            // }
+
           }
 
         }
       })
       dropzones.push(myDropzone)
+    })
+  }
+
+  function initLookup() {
+
+    $('.mandor-lookup').lookup({
+      title: 'Mandor Lookup',
+      fileName: 'mandor',
+      onSelectRow: (mandor, element) => {
+        $('#crudForm [name=mandor_id]').first().val(mandor.id)
+        element.val(mandor.namamandor)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
     })
   }
 </script>

@@ -24,6 +24,7 @@ class UpahRitasiController extends MyController
         $title = $this->title;
         $data = [
             'combo' => $this->comboStatusAktif('list'),
+            'comboluarkota' => $this->comboLuarKota('list')
         ];
 
         return view('upahritasi.index', compact('title','data'));
@@ -70,50 +71,7 @@ class UpahRitasiController extends MyController
 
     public function store(Request $request)
     {
-        /* Unformat nominal */
-        $request->nominalsupir = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
-
-            return $nominal;
-        }, $request->nominalsupir);
-
-        $request->nominalkenek = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
-
-            return $nominal;
-        }, $request->nominalkenek);
-
-        $request->nominalkomisi = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
-
-            return $nominal;
-        }, $request->nominalkomisi);
-
-        $request->nominaltol = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
-
-            return $nominal;
-        }, $request->nominaltol);
-
-        $request->liter = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
-
-            return $nominal;
-        }, $request->liter);
-
-        $request->merge([
-            'nominalsupir' => $request->nominalsupir,
-            'nominalkenek' => $request->nominalkenek,
-            'nominalkomisi' => $request->nominalkomisi,
-            'nominaltol' => $request->nominaltol,
-            'liter' => $request->liter,
-        ]);
-
+        
         $request['modifiedby'] = Auth::user()->name;
 
         $response = Http::withHeaders($this->httpHeaders)
@@ -146,50 +104,7 @@ class UpahRitasiController extends MyController
 
     public function update(Request $request, $id)
     {
-        /* Unformat nominal */
-        $request->nominalsupir = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
-
-            return $nominal;
-        }, $request->nominalsupir);
-
-        $request->nominalkenek = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
-
-            return $nominal;
-        }, $request->nominalkenek);
-
-        $request->nominalkomisi = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
-
-            return $nominal;
-        }, $request->nominalkomisi);
-
-        $request->nominaltol = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
-
-            return $nominal;
-        }, $request->nominaltol);
-
-        $request->liter = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
-
-            return $nominal;
-        }, $request->liter);
-
-        $request->merge([
-            'nominalsupir' => $request->nominalsupir,
-            'nominalkenek' => $request->nominalkenek,
-            'nominalkomisi' => $request->nominalkomisi,
-            'nominaltol' => $request->nominaltol,
-            'liter' => $request->liter,
-        ]);
-
+       
         $request['modifiedby'] = Auth::user()->name;
 
         $response = Http::withHeaders($this->httpHeaders)
@@ -434,6 +349,22 @@ class UpahRitasiController extends MyController
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/combostatus', $status);
+
+        return $response['data'];
+    }
+    public function comboLuarKota($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS LUAR KOTA',
+            'subgrp' => 'STATUS LUAR KOTA',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'upahritasi/comboluarkota', $status);
 
         return $response['data'];
     }

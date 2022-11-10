@@ -3,30 +3,16 @@
   <div class="row">
     <div class="col-12">
       <table id="detail"></table>
-      <div id="detailPager"></div>
     </div>
   </div>
 </div>
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('serviceindetail.index') }}"
-  /**
-   * Custom Functions
-   */
-  var delay = (function() {
-    var timer = 0;
-    return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })()
-
-  function loadDetailGrid() {
-    let pager = '#detailPager'
-
+  
+  function loadDetailGrid(id) {
     $("#detail").jqGrid({
-        url: `{{ config('app.api_url') . 'serviceindetail' }}`,
+        url: `${apiUrl}serviceindetail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -50,8 +36,26 @@
         rowList: [10, 20, 50],
         toolbar: [true, "top"],
         sortable: true,
-        pager: pager,
         viewrecords: true,
+        postData: {
+          piutang_id: id
+        },
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
+        onSelectRow: function(id) {
+          activeGrid = $(this)
+        },
         loadComplete: function(data) {
         }
       })
@@ -63,11 +67,12 @@
         edit: false,
         del: false,
       })
+      .customPager()
   }
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: detailIndexUrl,
+      url: `${apiUrl}serviceindetail`,
       datatype: "json",
       postData: {
         servicein_id: id

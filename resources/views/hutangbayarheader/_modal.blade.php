@@ -29,10 +29,11 @@
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
-                <input type="text" name="tglbukti" class="form-control datepicker">
+                <div class="input-group">
+                  <input type="text" name="tglbukti" class="form-control datepicker">
+                </div>
               </div>
             </div>
-
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
@@ -42,7 +43,6 @@
                 <input type="text" name="keterangan" class="form-control">
               </div>
             </div>
-
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
@@ -54,11 +54,20 @@
                 <input type="text" name="bank" class="form-control bank-lookup">
               </div>
             </div>
-
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  SUPPLIER <span class="text-danger">*</span>
+                  COA <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <input type="text" name="coa" class="form-control coa-lookup">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  Supplier <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-8 col-md-10">
@@ -67,76 +76,51 @@
               </div>
             </div>
 
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  COA <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-8 col-md-10">
-                <input type="text" name="akunpusat" class="form-control akunPusat-lookup">
+            <div class="row mt-5">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="col-md-12" style="overflow-x:scroll">
+                      <table class="table table-borderd mt-3" id="detailList" style="table-layout:auto">
+                        <thead class="table-secondary">
+                          <tr>
+                            <th></th>
+                            <th>NO</th>
+                            <th>NO BUKTI</th>
+                            <th>TGL BUKTI</th>
+                            <th>NOMINAL HUTANG</th>
+                            <th>SISA</th>
+                            <th>KETERANGAN</th>
+                            <th>BAYAR</th>
+                            <th>POTONGAN</th>
+                            <th>TOTAL</th>
+                            <th>ALAT BAYAR</th>
+                            <th>TGL CAIR</th>
+                          </tr>
+                        </thead>
+                          <tbody id="table_body">
+
+                          </tbody>
+                        <tfoot>
+                          <tr>
+                            <td colspan="4"></td>
+                            <td><p id="nominalHutang" class="text-right font-weight-bold"></p></td>
+                            <td><p id="sisaHutang" class="text-right font-weight-bold"></p></td>
+                            <td></td>
+                            <td><p id="bayarHutang" class="text-right font-weight-bold"></p></td>
+                            <td><p id="potonganHutang" class="text-right font-weight-bold"></p></td>
+                            <td><p id="totalHutang" class="text-right font-weight-bold"></p></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                    
+                  </div>
+                </div>
               </div>
             </div>
-
-            <table class="table table-bordered table-bindkeys" id="detailList">
-              <thead>
-                <tr>
-                  <th width="50">No</th>
-                  <th>No Bukti Hutang</th>
-                  <th>Nominal</th>
-                  <th>Cicilan</th>
-                  <th>Alat Bayar</th>
-                  <th>Tgl Cair</th>
-                  <th>Potongan</th>
-                  <th>Keterangan</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td></td>
-                  <td>
-                    <input type="text" name="hutang_nobukti[]" class="form-control hutangHeader-lookup">
-                  </td>
-                  <td>
-                    <input type="text" name="nominal_detail[]" style="text-align:right" class="form-control text-right autonumeric nominal">
-                  </td>
-                  <td>
-                    <input type="text" name="cicilan_detail[]" style="text-align:right" class="form-control text-right autonumeric">
-                  </td>
-                  <td>
-                    <input type="hidden" name="alatbayar_id[]">
-                    <input type="text" name="alatbayar[]" class="form-control alatBayar-lookup">
-                  </td>
-                  <td>
-                    <input type="text" name="tglcair[]" class="form-control datepicker">
-                  </td>
-                  <td>
-                    <input type="text" name="potongan_detail[]" style="text-align:right" class="form-control text-right autonumeric">
-                  </td>
-                  <td>
-                    <input type="text" name="keterangan_detail[]" class="form-control">
-                  </td>
-                  <td>
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                  </td>
-                </tr>
-
-              </tbody>
-              <tfoot>
-              <tr>
-                  <td colspan="7">
-                    <h5 class="text-right font-weight-bold">TOTAL:</h5>
-                  </td>
-                  <td>
-                    <h5 id="total" class="text-right font-weight-bold"></h5>
-                  </td>
-                  <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
 
           </div>
           <div class="modal-footer justify-content-start">
@@ -144,7 +128,7 @@
               <i class="fa fa-save"></i>
               Simpan
             </button>
-            <button class="btn btn-secondary" data-dismiss="modal">
+            <button id="btnBatal" class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
               Batal
             </button>
@@ -158,41 +142,169 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
+
   $(document).ready(function() {
 
-    $("#addRow").click(function() {
-      addRow()
-    });
+    $(document).on('input', `#table_body [name="bayar[]"]`, function(event) {
+      setBayar()
+      let sisa = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisa[]"]`)[0])
 
-    $(document).on('keyup', '.nominal', function(e) {
-      calculateSum()
+      let bayar = $(this).val()
+      bayar = parseFloat(bayar.replaceAll(',',''));
+      bayar =  Number.isNaN(bayar) ? 0 : bayar
+
+      console.log(sisa)
+      console.log(bayar)
+
+      if(sisa == 0) {
+        let nominal = $(this).closest("tr").find(`[name="nominal[]"]`).val()
+        nominal = parseFloat(nominal.replaceAll(',',''));
+        let totalSisa = nominal-bayar
+        console.log(totalSisa)
+        $(this).closest("tr").find(".sisa").html(totalSisa)
+      } else {
+        let totalSisa = sisa-bayar
+        $(this).closest("tr").find(".sisa").html(totalSisa)
+      }
+      
+      
+      initAutoNumeric($(this).closest("tr").find(".sisa"))
+
+      let Sisa = $(`#table_body .sisa`)
+      let total = 0
+
+      $.each(Sisa, (index, SISA) => {
+        total += AutoNumeric.getNumber(SISA)
+      });
+
+      new AutoNumeric('#sisaHutang').set(total)
+
+      // get potongan for total
+      let potongan = AutoNumeric.getNumber($(this).closest("tr").find(`[name="potongan[]"]`)[0])
+      let totalHutang = bayar-potongan
+      $(this).closest("tr").find(`[name="total[]"]`).val(totalHutang)
+      
+      initAutoNumeric($(this).closest("tr").find(`[name="total[]"]`))
+
+      let Total = $(`#table_body [name="total[]"]`)
+      let gt = 0
+
+      $.each(Total, (index, ttl) => {
+        gt += AutoNumeric.getNumber(ttl)
+      });
+      
+      new AutoNumeric('#totalHutang').set(gt)
     })
 
-    $(document).on('click', '.delete-row', function(event) {
-      deleteRow($(this).parents('tr'))
-      deleteSum()
+    $(document).on('input', `#table_body [name="potongan[]"]`, function(event) {
+      setPotongan()
+      let bayar = AutoNumeric.getNumber($(this).closest("tr").find(`[name="bayar[]"]`)[0])
+      let potongan = $(this).val()
+      potongan =  parseFloat(potongan.replaceAll(',',''));
+      potongan =  Number.isNaN(potongan) ? 0 : potongan
+
+      let total = bayar-potongan
+      $(this).closest("tr").find(`[name="total[]"]`).val(total)
+      
+      initAutoNumeric($(this).closest("tr").find(`[name="total[]"]`))
+
+      let Total = $(`#table_body [name="total[]"]`)
+      let gt = 0
+
+      $.each(Total, (index, ttl) => {
+        gt += AutoNumeric.getNumber(ttl)
+      });
+      
+      new AutoNumeric('#totalHutang').set(gt)
+      console.log(total)
     })
+
     $('#btnSubmit').click(function(event) {
-      event.preventDefault()
 
       let method
       let url
       let form = $('#crudForm')
+
+
+      event.preventDefault()
+
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
-      let data = $('#crudForm').serializeArray()
+      // let tes = $('#crudForm').serializeArray()
+      // unformatAutoNumeric(data)
+     let data = []
 
-      $('#crudForm').find(`[name="nominal_detail[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
+      data.push({
+        name: 'id',
+        value: form.find(`[name="id"]`).val()
+      })
+      data.push({
+        name: 'nobukti',
+        value: form.find(`[name="nobukti"]`).val()
+      })
+      data.push({
+        name: 'tglbukti',
+        value: form.find(`[name="tglbukti"]`).val()
+      })
+      data.push({
+        name: 'keterangan',
+        value: form.find(`[name="keterangan"]`).val()
+      })
+      data.push({
+        name: 'bank_id',
+        value: form.find(`[name="bank_id"]`).val()
+      })
+      data.push({
+        name: 'coa',
+        value: form.find(`[name="coa"]`).val()
+      })
+      data.push({
+        name: 'supplier_id',
+        value: form.find(`[name="supplier_id"]`).val()
       })
 
-      $('#crudForm').find(`[name="cicilan_detail[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'cicilan_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="cicilan_detail[]"]`)[index])
-      })
 
-      $('#crudForm').find(`[name="potongan_detail[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'potongan_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="potongan_detail[]"]`)[index])
+      $('#table_body tr').each(function(row, tr){ 
+        // console.log(row);
+        
+        if($(this).find(`[name="hutang_id[]"]`).is(':checked')) {
+
+          data.push({
+            name: 'keterangandetail[]',
+            value: $(this).find(`[name="keterangandetail[]"]`).val()
+          })
+          data.push({
+            name: 'bayar[]',
+            value: AutoNumeric.getNumber($(`#crudForm [name="bayar[]"]`)[row])
+          })
+          data.push({
+            name: 'potongan[]',
+            value: AutoNumeric.getNumber($(`#crudForm [name="potongan[]"]`)[row])
+          })
+          data.push({
+            name: 'total[]',
+            value: AutoNumeric.getNumber($(`#crudForm [name="total[]"]`)[row])
+          })
+          
+          data.push({
+            name: 'alatbayar_id[]',
+            value: $(this).find(`[name="alatbayar_id[]"]`).val()
+          })
+          data.push({
+            name: 'tglcair[]',
+            value: $(this).find(`[name="tglcair[]"]`).val()
+          })
+          data.push({
+            name: 'hutang_id[]',
+            value: $(this).find(`[name="hutang_id[]"]`).val()
+          })
+          
+        }
       })
+      // console.log(typeof(data))
+
+      // console.log(detailData);
 
       data.push({
         name: 'sortIndex',
@@ -252,12 +364,13 @@
         success: response => {
 
           id = response.data.id
-          $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
-
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
-          }).trigger('reloadGrid');
+          $('#crudModal').modal('hide')
+          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+         
+          $('#detailList tbody').html('')
+          $('#nominalHutang').html('')
+          $('#sisaHutang').html('')
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -267,7 +380,6 @@
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-
             setErrorMessages(form, error.responseJSON.errors);
           } else {
             showDialog(error.statusText)
@@ -277,8 +389,62 @@
         $('#loader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
+
     })
   })
+
+  $('#crudModal').on('shown.bs.modal', () => {
+    let form = $('#crudForm')
+
+    setFormBindKeys(form)
+
+    activeGrid = null
+
+    getMaxLength(form)
+    initLookup()
+    initDatepicker()
+  })
+
+  $('#crudModal').on('hidden.bs.modal', () => {
+    activeGrid = '#jqGrid'
+    
+    $('#crudModal').find('.modal-body').html(modalBody)
+  })
+
+  function setBayar() {
+    let nominalDetails = $(`#table_body [name="bayar[]"]`)
+    let bayar = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+      bayar += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#bayarHutang').set(bayar)
+  }
+
+  function setPotongan() {
+    let potongan = $(`#table_body [name="potongan[]"]`)
+    let totalPotongan = 0
+
+    $.each(potongan, (index, potongan) => {
+      totalPotongan += AutoNumeric.getNumber(potongan)
+    });
+
+    new AutoNumeric('#potonganHutang').set(totalPotongan)
+  }
+
+  function setTotal() {
+    let total = $(`#table_body [name="total[]"]`)
+    let totalHutang = 0
+
+    $.each(total, (index, total) => {
+      totalHutang += AutoNumeric.getNumber(total)
+    });
+
+    new AutoNumeric('#totalHutang').set(totalHutang)
+  }
+
+
 
   function createHutangBayarHeader() {
     let form = $('#crudForm')
@@ -288,14 +454,23 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
+
+    // $('#gridEditPiutang').jqGrid('clearGridData')
+    // $('#editpiutang').hide()
+
     form.data('action', 'add')
-    $('#crudModalTitle').text('Add Hutang Bayar')
+    $('#crudModalTitle').text('Add Pembayaran Hutang')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+
+    initDatepicker()
+    setBayar()
+    setPotongan()
+    setTotal()
   }
 
-  function editHutangBayarHeader(id) {
+  function editHutangBayarHeader(Id) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -304,15 +479,51 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-    $('#crudModalTitle').text('Edit Hutang Bayar')
+    $('#crudModalTitle').text('Edit Pembayaran Hutang')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    showHutangBayarHeader(form, id)
+
+    $.ajax({
+      url: `${apiUrl}hutangbayarheader/${Id}`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+
+        let tgl = response.data.tglbukti
+        $.each(response.data, (index, value) => {
+          let element = form.find(`[name="${index}"]`)
+
+          form.find(`[name="${index}"]`).val(value).attr('disabled', false)
+
+           if(element.hasClass('datepicker')){
+              element.val(dateFormat(value))
+          }
+
+          
+          if(index == 'bank') {
+            element.data('current-value', value)
+          }
+          if(index == 'supplier') {
+            element.data('current-value', value)
+          }
+          if(index == 'coa') {
+            element.data('current-value', value)
+          }
+        })
+        
+
+        let supplierId = response.data.supplier_id
+
+        getPembayaran(Id, supplierId, 'edit')
+      }
+    })
   }
 
-
-  function deleteHutangBayarHeader(id) {
+  function deleteHutangBayarHeader(Id) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -321,18 +532,13 @@
     <i class="fa fa-save"></i>
     Hapus
   `)
-    $('#crudModalTitle').text('Delete Hutang Bayar')
+    $('#crudModalTitle').text('Delete Pembayaran Hutang')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    showHutangBayarHeader(form, id)
-  }
-
-  function showHutangBayarHeader(form, id) {
-    $('#detailList tbody').html('')
 
     $.ajax({
-      url: `${apiUrl}hutangbayarheader/${id}`,
+      url: `${apiUrl}hutangbayarheader/${Id}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -342,197 +548,475 @@
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
-          } else {
-            element.val(value)
-          }
-        })
-
-        $.each(response.detail, (index, detail) => {
-          let detailRow = $(`
-                <tr>
-                  <td></td>
-                  <td>
-                    <input type="text" name="hutang_nobukti[]" class="form-control hutangHeader-lookup">
-                  </td>
-                  <td>
-                    <input type="text" name="nominal_detail[]" style="text-align:right" class="form-control text-right autonumeric nominal">
-                  </td>
-                  <td>
-                    <input type="text" name="cicilan_detail[]" style="text-align:right" class="form-control text-right autonumeric">
-                  </td>
-                  <td>
-                    <input type="hidden" name="alatbayar_id[]">
-                    <input type="text" name="alatbayar[]" class="form-control alatBayar-lookup">
-                  </td>
-                  <td>
-                    <input type="text" name="tglcair[]" class="form-control datepicker">
-                  </td>
-                  <td>
-                    <input type="text" name="potongan_detail[]" style="text-align:right" class="form-control text-right autonumeric">
-                  </td>
-                  <td>
-                    <input type="text" name="keterangan_detail[]" class="form-control">
-                  </td>
-                  <td>
-                        <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
-                      </td>
-                </tr>`)
-
-          detailRow.find(`[name="hutang_nobukti[]"]`).val(detail.hutang_nobukti)
-          detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
-          detailRow.find(`[name="cicilan_detail[]"]`).val(detail.cicilan)
-          detailRow.find(`[name="alatbayar_id[]"]`).val(detail.alatbayar_id)
-          detailRow.find(`[name="alatbayar[]"]`).val(detail.alatbayar)
-          detailRow.find(`[name="tglcair[]"]`).val(dateFormat(detail.tglcair))
-          detailRow.find(`[name="potongan_detail[]"]`).val(detail.potongan)
-          detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-
-          initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
-          initAutoNumeric(detailRow.find(`[name="cicilan_detail[]"]`))
-          initAutoNumeric(detailRow.find(`[name="potongan_detail[]"]`))
-
+          form.find(`[name="${index}"]`).val(value)
           
+           if(element.hasClass('datepicker')){
+              element.val(dateFormat(value))
+          }
+
+        })
+        let supplierId = response.data.supplier_id
+
+        form.find('[name]').addClass('disabled')
+        initDisabled()
+        getPembayaran(Id, supplierId, 'delete')
+        
+      }
+    })
+  }
+
+  // $(window).on("load", function() {
+  //   var $grid = $("#gridPiutang"),
+  //     newWidth = $grid.closest(".ui-jqgrid").parent().width();
+  //   $grid.jqGrid("setGridWidth", newWidth, true);
+  // });
+
+  function getHutang(id) {
+    
+    $('#detailList tbody').html('')
+    $('#detailList tfoot #nominalHutang').html('')
+    $('#detailList tfoot #sisaHutang').html('')
+
+    $.ajax({
+      url: `${apiUrl}hutangbayarheader/${id}/getHutang`,
+      method: 'GET',
+      dataType: 'JSON',
+      data: {
+        limit: 0
+      },
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+       
+        let totalNominal = 0
+        let totalSisa = 0
+        $.each(response.data, (index, detail) => {
+         
+          let id = detail.id
+          totalNominal = parseFloat(totalNominal) + parseFloat(detail.total)
+          totalSisa = totalSisa + parseFloat(detail.sisa);
+          let nominal = new Intl.NumberFormat('en-US').format(detail.total);
+          let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
+
+          let detailRow = $(`
+            <tr >
+              <td onclick="select(this)"><input name='hutang_id[]' type="checkbox" id="checkItem" value="${id}"></td>
+              <td></td>
+              <td width="10%">${detail.nobukti}</td>
+              <td width="10%">${detail.tglbukti}</td>
+              <td width="10%">
+                <p class="text-right">${nominal}</p>
+                <input type="hidden" name="nominal[]" class="autonumeric" value="${nominal}">
+              </td>
+              <td width="10%">
+                <p class="text-right sisa autonumeric">${sisa}</p>
+                <input type="hidden" name="sisa[]" class="autonumeric" value="${sisa}">
+              </td>
+              <td width="10%">
+                <textarea name="keterangandetail[]" rows="1" disabled class="form-control"></textarea>
+              </td>
+              <td width="10%">
+                <input type="text" name="bayar[]" disabled class="form-control bayar autonumeric">
+              </td>
+              <td width="10%">
+                <input type="text" name="potongan[]" disabled class="form-control autonumeric">
+              </td>
+              <td width="10%">
+                <input type="text" name="total[]" disabled class="form-control autonumeric">
+              </td>
+              <td width="10%">
+                <input type="hidden" name="alatbayar_id[]" disabled class="form-control">
+                <input type="text" name="alatbayar[]" disabled class="form-control alatbayar-lookup">
+              </td>
+              <td width="10%">
+                <div class="input-group">
+                  <input type="text" name="tglcair[]" disabled class="form-control datepicker">
+                </div>
+              </td>
+            </tr>
+          `)
+
+          // detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+          // detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+
+          initAutoNumericNoMinus(detailRow.find(`[name="bayar[]"]`))
+          initAutoNumericNoMinus(detailRow.find(`[name="potongan[]"]`))
+          initAutoNumericNoMinus(detailRow.find(`[name="total[]"]`))
+          initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
+          initAutoNumeric(detailRow.find('.sisa'))
+          initAutoNumeric(detailRow.find('.nominal'))
+
           $('#detailList tbody').append(detailRow)
-          initDatepicker(detailRow.find('.datepicker'))
-
-          $('#lookup').hide()
-
-          $('.hutangHeader-lookup').last().lookup({
-            title: 'hutangheader Lookup',
-            fileName: 'hutangheader',
-            onSelectRow: (hutangheader, element) => {
-              element.val(hutangheader.nobukti)
-            }
-          })
-
-          $('.alatBayar-lookup').last().lookup({
-            title: 'alatbayar Lookup',
+          setTotal()
+          initDatepicker()
+          $('.alatbayar-lookup').last().lookup({
+            title: 'Alat Bayar Lookup',
             fileName: 'alatbayar',
             onSelectRow: (alatbayar, element) => {
-              $(`#crudForm [name="alatbayar_id[]"]`).first().val(alatbayar.id)
-              element.val(alatbayar.namaalatbayar)
-
+                element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
+                element.val(alatbayar.namaalatbayar)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
             }
           })
-
+          
         })
+        totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
+        totalSisa = new Intl.NumberFormat('en-US').format(totalSisa);
+        $('#nominalHutang').append(`${totalNominal}`)
+        $('#sisaHutang').append(`${totalSisa}`)
 
+        initAutoNumeric($('#detailList tfoot').find('#nominalHutang'))
+        initAutoNumeric($('#detailList tfoot').find('#sisaHutang'))
         setRowNumbers()
+        
       }
-    })
-  }
+    }) 
 
-  function addRow() {
-    let detailRow = $(`
-    <tr>
-                  <td></td>
-                  <td>
-                    <input type="text" name="hutang_nobukti[]" class="form-control hutangHeader-lookup">
-                  </td>
-                  <td>
-                    <input type="text" name="nominal_detail[]" style="text-align:right" class="form-control text-right autonumeric nominal">
-                  </td>
-                  <td>
-                    <input type="text" name="cicilan_detail[]" style="text-align:right" class="form-control text-right autonumeric">
-                  </td>
-                  <td>
-                    <input type="hidden" name="alatbayar_id[]">
-                    <input type="text" name="alatbayar[]" class="form-control alatBayar-lookup">
-                  </td>
-                  <td>
-                    <input type="text" name="tglcair[]" class="form-control datepicker">
-                  </td>
-                  <td>
-                    <input type="text" name="potongan_detail[]" style="text-align:right" class="form-control text-right autonumeric">
-                  </td>
-                  <td>
-                    <input type="text" name="keterangan_detail[]" class="form-control">
-                  </td>
-                  <td>
-            <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
-          </td>
-                </tr>`)
-
-    $('#detailList tbody').append(detailRow)
-    initDatepicker(detailRow.find('.datepicker'))
-    initAutoNumeric(detailRow.find('.autonumeric'))
-
-    $('.hutangHeader-lookup').last().lookup({
-      title: 'hutangheader Lookup',
-      fileName: 'hutangheader',
-      onSelectRow: (hutangheader, element) => {
-        element.val(hutangheader.nobukti)
-      }
-    })
-
-    $('.alatBayar-lookup').last().lookup({
-      title: 'alatbayar Lookup',
-      fileName: 'alatbayar',
-      onSelectRow: (alatbayar, element) => {
-        element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
-        element.val(alatbayar.namaalatbayar)
-
-      }
-    })
-
-
-    setRowNumbers()
+   
   }
 
 
-  function deleteRow(row) {
-    row.remove()
+  function getPembayaran(id, supplierId, aksi) {
+    $('#detailList tbody').html('')
+    let url
+    let attribut
+    let forCheckbox
+    let forTotal = 'disabled'
+    // if(aksi == 'edit'){
+      url = `${apiUrl}hutangbayarheader/${id}/${supplierId}/getPembayaran`
+    // }
+    if(aksi == 'delete'){ 
+      attribut = 'disabled'
+      forCheckbox = 'disabled'
+    }
+    $.ajax({
+      url: url,
+      method: 'GET',
+      dataType: 'JSON',
+      data: {
+        limit: 0
+      },
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+       
+        let totalNominalHutang = 0
+        let totalSisa = 0
+        let totalNominal = 0
+        let total = 0
+        $.each(response.data, (index, detail) => {
+          
+          let id = detail.id
+          let hutangbayarId = detail.hutangbayar_id
+          let checked
+          
+          totalNominalHutang = parseFloat(totalNominalHutang) + parseFloat(detail.nominalhutang)
+          totalSisa = totalSisa + parseFloat(detail.sisa);
+          total = parseFloat(detail.bayar) + parseFloat(detail.potongan)
+          let nominal = new Intl.NumberFormat('en-US').format(detail.nominalhutang);
+          let sisaHidden = parseFloat(detail.sisa) + parseFloat(detail.bayar)
+          let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
 
-    setRowNumbers()
+          if(hutangbayarId != null) {
+            checked = 'checked'
+          }else{
+            attribut = 'disabled'
+          }
+
+          let detailRow = $(`
+            <tr>
+              <td onclick="select(this)"><input name='hutang_id[]' type="checkbox" class="checkItem" value="${id}" ${checked} ${forCheckbox}></td>
+              <td></td>
+              <td width="10%">${detail.hutang_nobukti}</td>
+              <td width="10%">${detail.tglbukti}</td>
+              
+              <td width="10%">
+                <p class="text-right">${nominal}</p>
+                <input type="hidden" name="nominal[]" class="autonumeric" value="${nominal}">
+              </td>
+              <td width="10%">
+                <p class="sisa text-right autonumeric">${sisa}</p>
+                <input type="hidden" name="sisa[]" class="autonumeric" value="${sisaHidden}">
+              </td>
+              <td width="10%">
+                <textarea name="keterangandetail[]" rows="1" class="form-control" ${attribut}>${detail.keterangan || ''}</textarea>
+              </td>
+              <td width="10%">
+                <input type="text" name="bayar[]" class="form-control bayar autonumeric" value="${detail.bayar || ''}" ${attribut}>
+              </td>
+              <td width="10%">
+                <input type="text" name="potongan[]" class="form-control autonumeric" value="${detail.potongan || ''}" ${attribut}>
+              </td>
+              <td width="10%">
+                <input type="text" name="total[]" class="form-control disabled autonumeric" value="${total || ''}" ${forTotal}>
+              </td>
+              <td width="10%">
+                <input type="hidden" name="alatbayar_id[]" class="form-control" value="${detail.alatbayar_id || ''}" ${attribut}>
+                <input type="text" name="alatbayar[]" class="form-control alatbayar-lookup" value="${detail.alatbayar || ''}" ${attribut}>
+              </td>
+              <td width="10%">
+                <div class="input-group">
+                  <input type="text" name="tglcair[]" class="form-control datepicker" value="${detail.tglcair || ''}" ${attribut}>
+                </div>
+              </td>
+            </tr>
+          `)
+
+          initAutoNumericNoMinus(detailRow.find(`[name="bayar[]"]`))
+          initAutoNumericNoMinus(detailRow.find(`[name="potongan[]"]`))
+          initAutoNumericNoMinus(detailRow.find(`[name="total[]"]`))
+          initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
+          initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
+          initAutoNumeric(detailRow.find('.sisa'))
+          initAutoNumeric(detailRow.find('.nominal'))
+
+          if (detailRow.find(`[name="tglcair[]"]`).val() != '') {
+               detailRow.find(`[name="tglcair[]"]`).val(dateFormat(detail.tglcair))
+          }
+          $('#detailList tbody').append(detailRow)      
+          setBayar()
+          setPotongan()
+          setTotal()
+          initDatepicker()
+          $('.alatbayar-lookup').last().lookup({
+            title: 'Alat Bayar Lookup',
+            fileName: 'alatbayar',
+            onSelectRow: (alatbayar, element) => {
+                element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
+                element.val(alatbayar.namaalatbayar)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            }
+          })
+        })
+        
+    
+        $('#nominalHutang').append(`${totalNominalHutang}`)
+        $('#sisaHutang').append(`${totalSisa}`)
+        initAutoNumeric($('#detailList tfoot').find('#nominalHutang'))
+        initAutoNumeric($('#detailList tfoot').find('#sisaHutang'))
+        setRowNumbers()
+
+        
+      }
+    }) 
+    
   }
 
+  $("#checkAll").click(function () {
+        $('input:checkbox').not(this).prop('checked', this.checked);
+    });
+    
+  function select(element) {
+      var is_checked = $(element).find(`[name="hutang_id[]"]`).is(":checked");
+
+      if(!is_checked) {
+        $(element).siblings('td').find(`[name="keterangandetail[]"]`).prop('disabled', true)
+        $(element).siblings('td').find(`[name="bayar[]"]`).prop('disabled', true)
+        $(element).siblings('td').find(`[name="potongan[]"]`).prop('disabled', true)
+        $(element).siblings('td').find(`[name="alatbayar[]"]`).prop('disabled', true)
+        $(element).siblings('td').find(`[name="tglcair[]"]`).prop('disabled', true)
+
+        //bayar
+        let bayar = $(element).siblings('td').find(`[name="bayar[]"]`).val()
+
+        if(bayar != '') {
+          let byr =  parseFloat(bayar.replaceAll(',',''));
+
+          let hutang = $('#bayarHutang').text()
+          let ttlHutang = parseFloat(hutang.replaceAll(',',''));
+
+          let finalHutang = ttlHutang - byr;
+          $("#bayarHutang").html(`${finalHutang}`);
+            new AutoNumeric('#bayarHutang',{
+            decimalPlaces			: '2'
+          })
+        }
+
+        //potongan
+        let potongan = $(element).siblings('td').find(`[name="potongan[]"]`).val()
+
+        if(potongan != '') {
+          let ptg =  parseFloat(potongan.replaceAll(',',''));
+
+          let pot = $('#potonganHutang').text()
+          let ttlPotongan = parseFloat(pot.replaceAll(',',''));
+
+          let finalPotongan = ttlPotongan - ptg;
+          $("#potonganHutang").html(`${finalPotongan}`);
+            new AutoNumeric('#potonganHutang',{
+            decimalPlaces			: '2'
+          })
+        }
+
+        //total
+        let total = $(element).siblings('td').find(`[name="total[]"]`).val()
+
+        if(total != '') {
+          let ttl =  parseFloat(total.replaceAll(',',''));
+
+          let totals = $('#totalHutang').text()
+          let totalTtl = parseFloat(totals.replaceAll(',',''));
+
+          let finalTtl = totalTtl - ttl;
+          $("#totalHutang").html(`${finalTtl}`);
+            new AutoNumeric('#totalHutang',{
+            decimalPlaces			: '2'
+          })
+        }
+      }else{
+        $(element).siblings('td').find(`[name="keterangandetail[]"]`).prop('disabled', false)
+        $(element).siblings('td').find(`[name="bayar[]"]`).prop('disabled', false)
+        $(element).siblings('td').find(`[name="potongan[]"]`).prop('disabled', false)
+        $(element).siblings('td').find(`[name="alatbayar[]"]`).prop('disabled', false)
+        $(element).siblings('td').find(`[name="tglcair[]"]`).prop('disabled', false)
+
+        //bayar
+        let bayar = $(element).siblings('td').find(`[name="bayar[]"]`).val()
+
+        if(bayar != '') {
+          let byr =  parseFloat(bayar.replaceAll(',',''));
+
+          let hutang = $('#bayarHutang').text()
+          let ttlHutang = parseFloat(hutang.replaceAll(',',''));
+
+          let finalHutang = ttlHutang + byr;
+          $("#bayarHutang").html(`${finalHutang}`);
+            new AutoNumeric('#bayarHutang',{
+            decimalPlaces			: '2'
+          })
+        }
+
+        //potongan
+        let potongan = $(element).siblings('td').find(`[name="potongan[]"]`).val()
+
+        if(potongan != '') {
+          let ptg =  parseFloat(potongan.replaceAll(',',''));
+
+          let pot = $('#potonganHutang').text()
+          let ttlPotongan = parseFloat(pot.replaceAll(',',''));
+
+          let finalPotongan = ttlPotongan + ptg;
+          $("#potonganHutang").html(`${finalPotongan}`);
+            new AutoNumeric('#potonganHutang',{
+            decimalPlaces			: '2'
+          })
+        }
+
+        //total
+        let total = $(element).siblings('td').find(`[name="total[]"]`).val()
+
+        if(total != '') {
+          let ttl =  parseFloat(total.replaceAll(',',''));
+
+          let totals = $('#totalHutang').text()
+          let totalTtl = parseFloat(totals.replaceAll(',',''));
+
+          let finalTtl = totalTtl + ttl;
+          $("#totalHutang").html(`${finalTtl}`);
+            new AutoNumeric('#totalHutang',{
+            decimalPlaces			: '2'
+          })
+        }
+        
+      }
+      console.log(is_checked)
+  }
+  
   function setRowNumbers() {
-    let elements = $('#detailList tbody tr td:nth-child(1)')
+    let elements = $('#detailList tbody tr td:nth-child(2)')
 
     elements.each((index, element) => {
       $(element).text(index + 1)
     })
   }
 
-  function calculateSum() {
-    var sum = 0;
-    //iterate through each textboxes and add the values
-    $(".nominal").each(function() {
-      let number = this.value
-      let hrg = parseFloat(number.replaceAll(',', ''));
-      console.log(hrg)
-      if (!isNaN(hrg) && hrg.length != 0) {
-        sum += parseFloat(hrg);
-      }
-    });
-    sum = new Intl.NumberFormat('en-US').format(sum);
+  function getMaxLength(form) {
+    if (!form.attr('has-maxlength')) {
+      $.ajax({
+        url: `${apiUrl}pelunasanpiutangheader/field_length`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            if (value !== null && value !== 0 && value !== undefined) {
+              form.find(`[name=${index}]`).attr('maxlength', value)
+            }
+          })
 
-    $("#total").html(`${sum}`);
-    new AutoNumeric('#total', {
-      decimalPlaces: '2'
-    })
+          form.attr('has-maxlength', true)
+        },
+        error: error => {
+          showDialog(error.statusText)
+        }
+      })
+    }
   }
 
-  function deleteSum() {
-    var sum = 0;
-    //iterate through each textboxes and add the values
-    $(".nominal").each(function() {
-      let number = this.value
-      let hrg = parseFloat(number.replaceAll(',', ''));
-      if (!isNaN(hrg) && hrg.length != 0) {
-        sum -= parseFloat(hrg);
-      }
-    });
-    sum = new Intl.NumberFormat('en-US').format(sum);
-    console.log(sum)
 
-    $("#total").html(`${sum}`);
-    new AutoNumeric('#total', {
-      decimalPlaces: '2'
+  function initAutoNumericNoMinus(elements = null) {
+    let option = {
+      digitGroupSeparator: formats.THOUSANDSEPARATOR,
+      decimalCharacter: formats.DECIMALSEPARATOR,
+      minimumValue: 0
+
+    };
+
+    if (elements == null) {
+      new AutoNumeric.multiple(".autonumeric", option);
+    } else {
+      $.each(elements, (index, element) => {
+        new AutoNumeric(element, option);
+      });
+    }
+  }
+
+  function initLookup() {
+    $('.coa-lookup').lookup({
+      title: 'COA Lookup',
+      fileName: 'akunpusat',
+      onSelectRow: (coa, element) => {
+        element.val(coa.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    $('.bank-lookup').lookup({
+      title: 'Bank Lookup',
+      fileName: 'bank',
+      onSelectRow: (bank, element) => {
+        $('#crudForm [name=bank_id]').first().val(bank.id)
+        element.val(bank.namabank)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    $('.supplier-lookup').lookup({
+      title: 'Supplier Lookup',
+      fileName: 'supplier',
+      onSelectRow: (supplier, element) => {
+        $('#crudForm [name=supplier_id]').first().val(supplier.id)
+        element.val(supplier.namasupplier) 
+        getHutang(supplier.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
     })
   }
 </script>

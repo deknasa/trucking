@@ -35,41 +35,6 @@
 
   $(document).ready(function() {
 
-    $('#lookup').hide()
-
-    $('.akunpusat-lookup').lookup({
-      title: 'Akun Pusat Lookup',
-      fileName: 'akunpusat',
-      onSelectRow: (akunpusat, element) => {
-        // $('#crudForm [name=akunpusat]').first().val(akunpusat.id)
-        element.val(akunpusat.coa)
-      }
-    })
-
-    $('.pelanggan-lookup').lookup({
-      title: 'pelanggan Lookup',
-      fileName: 'pelanggan',
-      onSelectRow: (pelanggan, element) => {
-        $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
-        element.val(pelanggan.namapelanggan)
-
-      }
-    })
-
-    $('.supplier-lookup').lookup({
-      title: 'supplier Lookup',
-      fileName: 'supplier',
-      onSelectRow: (supplier, element) => {
-        $(`#crudForm [name="supplier_id[]"]`).first().val(supplier.id)
-        element.val(supplier.namasupplier)
-
-      }
-    })
-
-    $('#crudModal').on('shown.bs.modal', function() {
-      activeGrid = '#jqGrid'
-    })
-
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'hutangheader' }}`,
         mtype: "GET",
@@ -104,7 +69,7 @@
           },
           {
             label: 'COA',
-            name: 'akunpusat',
+            name: 'coa',
             align: 'left'
           },
           {
@@ -112,11 +77,12 @@
             name: 'pelanggan_id',
             align: 'left'
           },
-          // {
-          //   label: 'TOTAL',
-          //   name: 'total',
-          //   align: 'left'
-          // },
+          {
+            label: 'TOTAL',
+            name: 'total',
+            align: 'right',
+            formatter: currencyFormat,
+          },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',

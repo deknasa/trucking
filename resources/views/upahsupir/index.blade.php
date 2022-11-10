@@ -121,6 +121,29 @@
           {
             label: 'STATUS LUAR KOTA',
             name: 'statusluarkota',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboluarkota'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboluarkota'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'MODIFIEDBY',

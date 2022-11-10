@@ -45,7 +45,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="nominal" class="form-control text-right autonumeric">
+                <input type="text" name="nominal" class="form-control text-right">
               </div>
             </div>
             <div class="row form-group">
@@ -109,7 +109,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="nominalton" class="form-control text-right autonumeric">
+                <input type="text" name="nominalton" class="form-control text-right">
               </div>
             </div>
             <div class="row form-group">
@@ -142,7 +142,7 @@
                   STATUS PENYESUAIAN HARGA <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statuspenyesuaianharga" class="form-select select2bs4" style="width: 100%;">
+                <select name="statuspenyesuaianharga" class="form-select select2bs4" style="width: 100%;" z-index='3'>
                   <option value="">-- PILIH STATUS PENYESUAIAN HARGA --</option>
                 </select>
               </div>
@@ -168,7 +168,6 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
-
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -179,8 +178,15 @@
       let tarifId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
-
-      unformatAutoNumeric(data)
+      let nominal = $(`#crudForm [name="nominal"]`).val()
+      let nominalton = $(`#crudForm [name="nominalton"]`).val()
+      
+      $('#crudForm').find(`[name="nominal"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominal')[index].value = parseFloat(nominal.replaceAll(',',''))
+      })
+      $('#crudForm').find(`[name="nominalton"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominalton')[index].value = parseFloat(nominalton.replaceAll(',',''))
+      })
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -278,6 +284,7 @@
     initLookup()
     initSelect2()
     initDatepicker()
+    
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -303,6 +310,10 @@
     setStatusPenyesuaianHargaOptions(form)
     setStatusSistemTonOptions(form)
     setStatusAktifOptions(form)
+    initAutoNumeric(form.find('.autonumeric'))
+    
+    initAutoNumeric(form.find(`[name="nominal"]`))
+    initAutoNumeric(form.find(`[name="nominalton"]`))
   }
 
   function editTarif(tarifId) {
@@ -510,13 +521,10 @@
             element.val(value).trigger('change')
           } else if (element.hasClass('datepicker')) {
             element.val(dateFormat(value))
-          } else if (element.hasClass('autonumeric')) {
-            let autoNumericInput = AutoNumeric.getAutoNumericElement(element[0])
-
-            autoNumericInput.set(value);
           } else {
             element.val(value)
           }
+          
 
           if(index == 'container') {
             element.data('current-value', value)
@@ -528,6 +536,9 @@
             element.data('current-value', value)
           }
         })
+        
+        initAutoNumeric(form.find(`[name="nominal"]`))
+        initAutoNumeric(form.find(`[name="nominalton"]`))
 
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')

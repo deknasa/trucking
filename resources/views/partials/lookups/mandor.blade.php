@@ -1,10 +1,10 @@
-<table id="mekanikLookup" class="lookup-grid"></table>
-<div id="mekanikLookupPager"></div>
+<table id="mandorLookup" class="lookup-grid"></table>
+<div id="mandorLookupPager"></div>
 
 @push('scripts')
 <script>
-   $('#mekanikLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'mekanik' }}`,
+   $('#mandorLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'mandor' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -16,8 +16,8 @@
           width: '70px'
         },
         {
-          label: 'NAMA MEKANIK',
-          name: 'namamekanik',
+          label: 'NAMA mandor',
+          name: 'namamandor',
           align: 'left'
         },
         {
@@ -60,7 +60,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#mekanikLookupPager'),
+      pager: $('#mandorLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -89,26 +89,26 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#mekanikLookup').getGridParam().reccount) {
-            indexRow = $('#mekanikLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#mandorLookup').getGridParam().reccount) {
+            indexRow = $('#mandorLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#mekanikLookup [id="${$('#mekanikLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#mandorLookup [id="${$('#mandorLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#mekanikLookup [id="${$('#mekanikLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#mandorLookup [id="${$('#mandorLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#mekanikLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#mekanikLookup [id="` + $('#mekanikLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#mandorLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#mandorLookup [id="` + $('#mandorLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#mekanikLookup').setSelection($('#mekanikLookup').getDataIDs()[indexRow])
+            $('#mandorLookup').setSelection($('#mandorLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -123,7 +123,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupMekanik').prev().width())
+        $(this).setGridWidth($('#lookupMandor').prev().width())
         setHighlight($(this))
       }
     })
@@ -135,10 +135,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#mekanikLookup'))
+        clearGlobalSearch($('#mandorLookup'))
       },
     })
 
-  loadGlobalSearch($('#mekanikLookup'))
-  loadClearFilter($('#mekanikLookup'))
+  loadGlobalSearch($('#mandorLookup'))
+  loadClearFilter($('#mandorLookup'))
 </script>

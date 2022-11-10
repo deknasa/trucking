@@ -77,7 +77,9 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="tglmulaiberlaku" class="form-control datepicker">
+                <div class="input-group">
+                  <input type="text" name="tglmulaiberlaku" class="form-control datepicker">
+                </div>
               </div>
             </div>
             <div class="row form-group">
@@ -87,7 +89,9 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="tglakhirberlaku" class="form-control datepicker">
+                <div class="input-group">
+                  <input type="text" name="tglakhirberlaku" class="form-control datepicker">
+                </div>
               </div>
             </div>
             <div class="row form-group">
@@ -97,14 +101,14 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statusluarkota" class="form-control select2bs4">
+                <select name="statusluarkota" class="form-control select2bs4" z-index="3">
                   <option value="">-- PILIH STATUS LUAR KOTA --</option>
                 </select>
               </div>
             </div>
 
-            <table class="table table-borderd mt-3" id="detailList">
-              <thead class="table-secondary">
+            <table class="table table-bordered mt-3 table-bindkeys" id="detailList">
+              <thead>
                 <tr>
                   <th>NO</th>
                   <th>CONTAINER</th>
@@ -117,17 +121,55 @@
                   <th>AKSI</th>
                 </tr>
               </thead>
-              <tbody>
-
+              <tbody class="form-group">
+                <tr>
+                  <td>1</td>
+                  <td>
+                    <input type="hidden" name="container_id[]">
+                    <input type="text" name="container[]" class="form-control container-lookup">
+                  </td>
+                  <td>
+                    <input type="hidden" name="statuscontainer_id[]" class="form-control">
+                    <input type="text" name="statuscontainer[]" class="form-control statuscontainer-lookup">
+                  </td>
+                  <td>
+                    <input type="text" name="nominalsupir[]" class="form-control autonumeric">
+                  </td>
+                  <td>
+                    <input type="text" name="nominalkenek[]" class="form-control autonumeric">
+                  </td>
+                  <td>
+                    <input type="text" name="nominalkomisi[]" class="form-control autonumeric">
+                  </td>
+                  <td>
+                    <input type="text" name="nominaltol[]" class="form-control autonumeric">
+                  </td>
+                  <td>
+                    <input type="text" name="liter[]" class="form-control autonumeric">
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                  </td>
+                </tr>
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan="7">
+                  <td colspan="3">
                     <p class="text-right font-weight-bold">TOTAL :</p>
                   </td>
                   <td>
-                    <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                    <p class="text-right font-weight-bold autonumeric" id="nominalSupir"></p>
                   </td>
+                  <td>
+                    <p class="text-right font-weight-bold autonumeric" id="nominalKenek"></p>
+                  </td>
+                  <td>
+                    <p class="text-right font-weight-bold autonumeric" id="nominalKomisi"></p>
+                  </td>
+                  <td>
+                    <p class="text-right font-weight-bold autonumeric" id="nominalTol"></p>
+                  </td>
+                  <td></td>
                   <td>
                     <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
                   </td>
@@ -154,19 +196,29 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
-  let containers
-  let statusContainers
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
-    getContainerOptions()
-    getStatusContainerOptions()
+
 
     $("#addRow").click(function() {
       addRow()
     });
 
+    $(document).on('input', `#detailList [name="nominalsupir[]"]`, function(event) {
+      setNominalSupir()
+    })
+    
+    $(document).on('input', `#detailList [name="nominalkenek[]"]`, function(event) {
+      setNominalKenek()
+    })
+    
     $(document).on('input', `#detailList [name="nominalkomisi[]"]`, function(event) {
-      setTotal()
+      setNominalKomisi()
+    })
+    
+    $(document).on('input', `#detailList [name="nominaltol[]"]`, function(event) {
+      setNominalTol()
     })
 
     $(document).on('click', '.delete-row', function(event) {
@@ -311,7 +363,28 @@
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
-  function setTotal() {
+  function setNominalSupir() {
+    let nominalDetails = $(`#detailList [name="nominalsupir[]"]`)
+    let total = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#nominalSupir').set(total)
+  }
+  
+  function setNominalKenek() {
+    let nominalDetails = $(`#detailList [name="nominalkenek[]"]`)
+    let total = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#nominalKenek').set(total)
+  }
+  function setNominalKomisi() {
     let nominalDetails = $(`#detailList [name="nominalkomisi[]"]`)
     let total = 0
 
@@ -319,7 +392,17 @@
       total += AutoNumeric.getNumber(nominalDetail)
     });
 
-    new AutoNumeric('#total').set(total)
+    new AutoNumeric('#nominalKomisi').set(total)
+  }
+  function setNominalTol() {
+    let nominalDetails = $(`#detailList [name="nominaltol[]"]`)
+    let total = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#nominalTol').set(total)
   }
 
   function createUpahRitasi() {
@@ -332,7 +415,7 @@
   `)
     form.data('action', 'add')
     // form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Hutang Header')
+    $('#crudModalTitle').text('Create Upah Ritasi')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -340,8 +423,10 @@
     setStatusAktifOptions(form)
     setStatusLuarKotaOptions(form)
 
-    addRow()
-    setTotal()
+    setNominalSupir()
+    setNominalKenek()
+    setNominalKomisi()
+    setNominalTol()
 
   }
 
@@ -355,7 +440,7 @@
     Simpan
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Upah Supir')
+    $('#crudModalTitle').text('Edit Upah Ritasi')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -380,7 +465,7 @@
     Hapus
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Upah Supir')
+    $('#crudModalTitle').text('Delete Upah Ritasi')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -420,47 +505,6 @@
     }
   }
 
-  const getStatusContainerOptions = function() {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: `${apiUrl}statuscontainer`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          statusContainers = response.data
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const getContainerOptions = function() {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: `${apiUrl}container`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          containers = response.data
-
-          resolve()
-        }
-      })
-    })
-  }
 
   const setStatusLuarKotaOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
@@ -571,10 +615,12 @@
             <tr>
               <td></td>
               <td>
-                <select type="text" name="container_id[]" class="form-control"></select>
+                <input type="hidden" name="container_id[]">
+                <input type="text" name="container[]" class="form-control container-lookup">
               </td>
               <td>
-                <select type="text" name="statuscontainer_id[]" class="form-control"></select>
+                <input type="hidden" name="statuscontainer_id[]" class="form-control">
+                <input type="text" name="statuscontainer[]" class="form-control statuscontainer-lookup">
               </td>
               <td>
                 <input type="text" name="nominalsupir[]" class="form-control autonumeric">
@@ -583,7 +629,7 @@
                 <input type="text" name="nominalkenek[]" class="form-control autonumeric">
               </td>
               <td>
-                <input type="text" name="nominalkomisi[]" class="form-control autonumeric">
+                <input type="text" name="nominalkomisi[]" class="form-control autonumeric ">
               </td>
               <td>
                 <input type="text" name="nominaltol[]" class="form-control autonumeric">
@@ -597,25 +643,11 @@
             </tr>
           `)
 
-          containers.forEach(container => {
-            detailRow.find(`[name="container_id[]"]`).append(
-              new Option(container.kodecontainer, container.id, false, false)
-            ).select2({
-              theme: 'bootstrap4',
-              dropdownParent: $("#crudModal")
-            })
-          });
-
-          statusContainers.forEach(statusContainer => {
-            detailRow.find(`[name="statuscontainer_id[]"]`).append(
-              new Option(statusContainer.kodestatuscontainer, statusContainer.id, false, false)
-            ).select2({
-              theme: 'bootstrap4',
-              dropdownParent: $("#crudModal")
-            })
-          });
+         
           detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+          detailRow.find(`[name="container[]"]`).val(detail.container)
           detailRow.find(`[name="statuscontainer_id[]"]`).val(detail.statuscontainer_id)
+          detailRow.find(`[name="statuscontainer[]"]`).val(detail.statuscontainer)
           detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
           detailRow.find(`[name="nominalkenek[]"]`).val(detail.nominalkenek)
           detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
@@ -625,8 +657,36 @@
           $('#detailList tbody').append(detailRow)
 
           initAutoNumeric(detailRow.find('.autonumeric'))
-          setTotal()
+          setNominalSupir()
+          setNominalKenek()
+          setNominalKomisi()
+          setNominalTol()
 
+          $('.container-lookup').last().lookup({
+            title: 'Container Lookup',
+            fileName: 'container',
+            onSelectRow: (container, element) => {
+              $(`#crudForm [name="container_id[]"]`).last().val(container.id)
+              element.val(container.keterangan)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            }
+          })
+          
+          $('.statuscontainer-lookup').last().lookup({
+            title: 'Status Container Lookup',
+            fileName: 'statuscontainer',
+            onSelectRow: (statuscontainer, element) => {
+              $(`#crudForm [name="statuscontainer_id[]"]`).last().val(statuscontainer.id)
+              element.val(statuscontainer.keterangan)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            }
+          })
         })
         setRowNumbers()
 
@@ -643,10 +703,12 @@
       <tr>
         <td></td>
         <td>
-          <select type="text" name="container_id[]" class="form-control"></select>
+          <input type="hidden" name="container_id[]">
+          <input type="text" name="container[]" class="form-control container-lookup">
         </td>
         <td>
-          <select type="text" name="statuscontainer_id[]" class="form-control"></select>
+          <input type="hidden" name="statuscontainer_id[]" class="form-control">
+          <input type="text" name="statuscontainer[]" class="form-control statuscontainer-lookup">
         </td>
         <td>
           <input type="text" name="nominalsupir[]" class="form-control autonumeric">
@@ -668,26 +730,33 @@
         </td>
       </tr>
     `)
-
-    containers.forEach(container => {
-      detailRow.find(`[name="container_id[]"]`).append(
-        new Option(container.kodecontainer, container.id, false, false)
-      ).select2({
-        theme: 'bootstrap4',
-        dropdownParent: $("#crudModal")
-      })
-    });
-
-    statusContainers.forEach(statusContainer => {
-      detailRow.find(`[name="statuscontainer_id[]"]`).append(
-        new Option(statusContainer.kodestatuscontainer, statusContainer.id, false, false)
-      ).select2({
-        theme: 'bootstrap4',
-        dropdownParent: $("#crudModal")
-      })
-    });
-
+   
     $('#detailList tbody').append(detailRow)
+    $('.container-lookup').last().lookup({
+      title: 'Container Lookup',
+      fileName: 'container',
+      onSelectRow: (container, element) => {
+        $(`#crudForm [name="container_id[]"]`).last().val(container.id)
+        element.val(container.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    
+    $('.statuscontainer-lookup').last().lookup({
+      title: 'Status Container Lookup',
+      fileName: 'statuscontainer',
+      onSelectRow: (statuscontainer, element) => {
+        $(`#crudForm [name="statuscontainer_id[]"]`).last().val(statuscontainer.id)
+        element.val(statuscontainer.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
 
     initAutoNumeric(detailRow.find('.autonumeric'))
     setRowNumbers()
@@ -697,8 +766,10 @@
     row.remove()
 
     setRowNumbers()
-    setTotal()
-
+    setNominalSupir()
+    setNominalKenek()
+    setNominalKomisi()
+    setNominalTol()
   }
 
   function setRowNumbers() {
@@ -711,7 +782,7 @@
 
   function initLookup() {
     $('.kotadari-lookup').lookup({
-      title: 'kota Lookup',
+      title: 'Kota Dari Lookup',
       fileName: 'kota',
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kotadari_id]').first().val(kota.id)
@@ -724,7 +795,7 @@
     })
 
     $('.kotasampai-lookup').lookup({
-      title: 'kota Lookup',
+      title: 'Kota Tujuan Lookup',
       fileName: 'kota',
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kotasampai_id]').first().val(kota.id)
@@ -737,11 +808,38 @@
     })
 
     $('.zona-lookup').lookup({
-      title: 'zona Lookup',
+      title: 'Zona Lookup',
       fileName: 'zona',
       onSelectRow: (zona, element) => {
         $('#crudForm [name=zona_id]').first().val(zona.id)
         element.val(zona.zona)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    
+    $('.container-lookup').lookup({
+      title: 'Container Lookup',
+      fileName: 'container',
+      onSelectRow: (container, element) => {
+        $(`#crudForm [name="container_id[]"]`).first().val(container.id)
+        element.val(container.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    
+    $('.statuscontainer-lookup').lookup({
+      title: 'Status Container Lookup',
+      fileName: 'statuscontainer',
+      onSelectRow: (statuscontainer, element) => {
+        $(`#crudForm [name="statuscontainer_id[]"]`).first().val(statuscontainer.id)
+        console.log(element.parents('td').find(`[name="statuscontainer_id[]"]`).val())
+        element.val(statuscontainer.keterangan)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {

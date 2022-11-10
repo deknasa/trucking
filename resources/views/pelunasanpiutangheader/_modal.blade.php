@@ -170,8 +170,7 @@
 
     $(document).on('input', `#table_body [name="bayarppd[]"]`, function(event) {
       setTotal()
-      let sisa = $(this).closest("tr").find(`[name="sisa[]"]`).val()
-      sisa = parseFloat(sisa.replaceAll(',',''));
+      let sisa = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisa[]"]`)[0])
 
       let bayar = $(this).val()
       bayar = parseFloat(bayar.replaceAll(',',''));
@@ -467,10 +466,6 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-
-    // $('#gridEditPiutang').jqGrid('clearGridData')
-    // $('#editpiutang').hide()
-
     form.data('action', 'add')
     $('#crudModalTitle').text('Add Pelunasan Piutang')
     $('#crudModal').modal('show')
@@ -635,7 +630,9 @@
               <td width="10%">${detail.nobukti}</td>
               <td width="10%">${detail.tglbukti}</td>
               <td width="10%">${detail.invoice_nobukti}</td>
-              <td width="10%"><p class="text-right nominal autonumeric">${nominal}</p></td>
+              <td width="10%">
+                <p class="text-right">${nominal}</p>
+                <input type="hidden" name="nominal[]" class="autonumeric" value="${nominal}"></td>
               <td width="10%">
                 <p class="text-right sisa autonumeric">${sisa}</p>
                 <input type="hidden" name="sisa[]" class="autonumeric" value="${sisa}">
@@ -732,8 +729,6 @@
 
           if(pelunasanPiutangId != null) {
             checked = 'checked'
-            totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
-            console.log(totalNominal)
           }else{
             attribut = 'disabled'
           }

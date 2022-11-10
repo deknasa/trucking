@@ -29,7 +29,9 @@
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
-                                <input type="text" name="tglbukti" class="form-control datepicker">
+                                <div class="input-group">
+                                    <input type="text" name="tglbukti" class="form-control datepicker">
+                                </div>
                             </div>
                         </div>
 
@@ -52,7 +54,9 @@
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
-                                <input type="text" name="tglkeluar" class="form-control datepicker">
+                                <div class="input-group">
+                                    <input type="text" name="tglkeluar" class="form-control datepicker">
+                                </div>
                             </div>
                         </div>
 
@@ -77,7 +81,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td></td>
+                                    <td>1</td>
                                     <td>
                                         <input type="text" name="servicein_nobukti[]" class="form-control serviceinheader-lookup">
                                     </td>
@@ -88,7 +92,7 @@
                                     </td>
 
                                     <td>
-                                        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                                        <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
                                     </td>
                                 </tr>
 
@@ -122,11 +126,13 @@
 @push('scripts')
 <script>
     let hasFormBindKeys = false
+    let modalBody = $('#crudModal').find('.modal-body').html()
+
     $(document).ready(function() {
 
-        $("#addRow").click(function() {
+        $(document).on('click', "#addRow", function() {
             addRow()
-        })
+        });
 
         $(document).on('click', '.delete-row', function(event) {
             deleteRow($(this).parents('tr'))
@@ -228,14 +234,31 @@
         })
     })
 
+    $('#crudModal').on('shown.bs.modal', () => {
+        let form = $('#crudForm')
+
+        setFormBindKeys(form)
+
+        activeGrid = null
+
+        getMaxLength(form)
+        initLookup()
+        initDatepicker()
+    })
+
+    $('#crudModal').on('hidden.bs.modal', () => {
+        activeGrid = '#jqGrid'
+
+        $('#crudModal').find('.modal-body').html(modalBody)
+    })
     function createServiceOut() {
         let form = $('#crudForm')
 
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Simpan
-  `)
+            <i class="fa fa-save"></i>
+            Simpan
+        `)
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Service Out')
         $('#crudModal').modal('show')
@@ -249,9 +272,9 @@
         form.data('action', 'edit')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Simpan
-  `)
+            <i class="fa fa-save"></i>
+            Simpan
+        `)
         $('#crudModalTitle').text('Edit Service Out ')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
@@ -265,9 +288,9 @@
         form.data('action', 'delete')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Hapus
-  `)
+            <i class="fa fa-save"></i>
+            Hapus
+        `)
         form.find(`.sometimes`).hide()
         $('#crudModalTitle').text('Delete Service Out')
         $('#crudModal').modal('show')
@@ -298,14 +321,6 @@
                         element.val(value)
                     }
                 })
-                //     element.val(value)
-                //     let tglbukti = response.data.tglbukti
-                //     // let tglmasuk = response.data.tglmasuk
-
-                //     $('#tglbukti').val(dateFormat(new Date(tglbukti)));
-                //     // $('#tglmasuk').val(dateFormat( new Date(tglmasuk)));
-
-                // })
 
                 $.each(response.detail, (index, detail) => {
                     let detailRow = $(`
@@ -328,18 +343,25 @@
 
                     $('#detailList tbody').append(detailRow)
 
-                    $('#lookup').hide()
 
                     $('.serviceinheader-lookup').last().lookup({
                         title: 'servicein Lookup',
                         fileName: 'serviceinheader',
                         onSelectRow: (servicein, element) => {
-                            element.val(servicein.nobukti)
-                        }
+                            element.val(servicein.nobukti) 
+                            element.data('currentValue', element.val())
+                        },
+                        onCancel: (element) => {
+                            element.val(element.data('currentValue'))
+                        } 
                     })
 
                 })
                 setRowNumbers()
+                if (form.data('action') === 'delete') {
+                    form.find('[name]').addClass('disabled')
+                    initDisabled()
+                }
             }
         })
     }
@@ -366,6 +388,10 @@
             fileName: 'serviceinheader',
             onSelectRow: (servicein, element) => {
                 element.val(servicein.nobukti)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
             }
         })
 
@@ -384,6 +410,55 @@
         elements.each((index, element) => {
             $(element).text(index + 1)
         })
+    }
+
+    function getMaxLength(form) {
+        if (!form.attr('has-maxlength')) {
+        $.ajax({
+            url: `${apiUrl}serviceoutheader/field_length`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+            'Authorization': `Bearer ${accessToken}`
+            },
+            success: response => {
+            $.each(response.data, (index, value) => {
+                if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
+                }
+            })
+
+            form.attr('has-maxlength', true)
+            },
+            error: error => {
+            showDialog(error.statusText)
+            }
+            })
+        }
+    }
+
+    function initLookup() {
+        
+
+        $('.trado-lookup').lookup({
+        title: 'trado Lookup',
+        fileName: 'trado',
+        onSelectRow: (trado, element) => {
+            $('#crudForm [name=trado_id]').first().val(trado.id)
+            element.val(trado.keterangan)
+
+        }
+        })
+
+        $('.serviceinheader-lookup').lookup({
+        title: 'servicein Lookup',
+        fileName: 'serviceinheader',
+        onSelectRow: (servicein, element) => {
+            // $('#crudForm [name=servicein_id]').first().val(servicein.id)
+            element.val(servicein.nobukti)
+        }
+        })
+
     }
 </script>
 @endpush()

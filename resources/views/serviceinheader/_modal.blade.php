@@ -29,7 +29,9 @@
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
-                                <input type="text" name="tglbukti" class="form-control datepicker">
+                                <div class="input-group">
+                                    <input type="text" name="tglbukti" class="form-control datepicker">
+                                </div>
                             </div>
                         </div>
 
@@ -52,7 +54,9 @@
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
-                                <input type="text" name="tglmasuk" class="form-control datepicker">
+                                <div class="input-group">
+                                    <input type="text" name="tglmasuk" class="form-control datepicker">
+                                </div>
                             </div>
                         </div>
 
@@ -78,7 +82,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td></td>
+                                    <td>1</td>
                                     <td>
                                         <input type="hidden" name="mekanik_id[]" class="form-control">
                                         <input type="text" name="mekanik[]" class="form-control mekanik-lookup">
@@ -89,7 +93,7 @@
                                     </td>
 
                                     <td>
-                                        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                                        <button type="button" class="btn btn-danger btn-sm delete-row">HAPUS</button>
                                     </td>
                                 </tr>
 
@@ -124,11 +128,13 @@
 @push('scripts')
 <script>
     let hasFormBindKeys = false
+    let modalBody = $('#crudModal').find('.modal-body').html()
+    
     $(document).ready(function() {
 
-        $("#addRow").click(function() {
+        $(document).on('click', "#addRow", function() {
             addRow()
-        })
+        });
 
         $(document).on('click', '.delete-row', function(event) {
             deleteRow($(this).parents('tr'))
@@ -187,6 +193,7 @@
                     url = `${apiUrl}serviceinheader`
                     break;
             }
+
             $(this).attr('disabled', '')
             $('#loader').removeClass('d-none')
 
@@ -195,32 +202,32 @@
                 method: method,
                 dataType: 'JSON',
                 headers: {
-                    Authorization: `Bearer ${accessToken}`
+                Authorization: `Bearer ${accessToken}`
                 },
                 data: data,
                 success: response => {
+                id = response.data.id
 
-                    id = response.data.id
-                    $('#crudModal').modal('hide')
-                    $('#crudModal').find('#crudForm').trigger('reset')
+                $('#crudModal').find('#crudForm').trigger('reset')
+                $('#crudModal').modal('hide')
 
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page
-                    }).trigger('reloadGrid');
+                $('#jqGrid').jqGrid('setGridParam', {
+                    page: response.data.page
+                }).trigger('reloadGrid');
 
-                    if (response.data.grp == 'FORMAT') {
-                        updateFormat(response.data)
-                    }
+                if (response.data.grp == 'FORMAT') {
+                    updateFormat(response.data)
+                }
                 },
                 error: error => {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid')
-                        $('.invalid-feedback').remove()
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
 
-                        setErrorMessages(form, error.responseJSON.errors);
-                    } else {
-                        showDialog(error.statusText)
-                    }
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.statusText)
+                }
                 },
             }).always(() => {
                 $('#loader').addClass('d-none')
@@ -237,6 +244,7 @@
         activeGrid = null
 
         getMaxLength(form)
+        initLookup()
         initDatepicker()
     })
 
@@ -249,11 +257,11 @@
     function createServicein() {
         let form = $('#crudForm')
 
-        form.trigger('reset')
+        $('#crudModal').find('#crudForm').trigger('reset')
         form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Simpan
-  `)
+        <i class="fa fa-save"></i>
+        Simpan
+        `)
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Service in')
         $('#crudModal').modal('show')
@@ -267,9 +275,9 @@
         form.data('action', 'edit')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Simpan
-  `)
+            <i class="fa fa-save"></i>
+            Simpan
+        `)
         $('#crudModalTitle').text('Edit Service In ')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
@@ -283,9 +291,9 @@
         form.data('action', 'delete')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Hapus
-  `)
+            <i class="fa fa-save"></i>
+            Hapus
+        `)
         form.find(`.sometimes`).hide()
         $('#crudModalTitle').text('Delete Service in')
         $('#crudModal').modal('show')
@@ -311,7 +319,6 @@
                     if (element.is('select')) {
                         element.val(value).trigger('change')
                     } else if (element.hasClass('datepicker')) {
-                        console.log(value);
                         element.val(dateFormat(value))
                     } else {
                         element.val(value)
@@ -319,14 +326,6 @@
 
 
                 })
-                //     element.val(value)
-                //     let tglbukti = response.data.tglbukti
-                //     // let tglmasuk = response.data.tglmasuk
-
-                //     $('#tglbukti').val(dateFormat(new Date(tglbukti)));
-                //     // $('#tglmasuk').val(dateFormat( new Date(tglmasuk)));
-
-                // })
 
                 $.each(response.detail, (index, detail) => {
                     let detailRow = $(`
@@ -342,7 +341,7 @@
                         </td>
 
                         <td>
-                            <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                            <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
                         </td>
                     </tr>`)
 
@@ -351,25 +350,28 @@
 
                     detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
 
-                    //autonumeric
-                    //     initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
-
                     $('#detailList tbody').append(detailRow)
 
-                    $('#lookup').hide()
-
                     $('.mekanik-lookup').last().lookup({
-                        title: 'mekanik Lookup',
+                        title: 'Mekanik Lookup',
                         fileName: 'mekanik',
                         onSelectRow: (mekanik, element) => {
-                            $(`#crudForm [name="mekanik_id[]"]`).first().val(mekanik.id)
+                            $(`#crudForm [name="mekanik_id[]"]`).last().val(mekanik.id)
                             element.val(mekanik.namamekanik)
-
-                        }
+                            element.data('currentValue', element.val())
+                        },
+                        onCancel: (element) => {
+                            element.val(element.data('currentValue'))
+                        } 
                     })
+                    
 
                 })
                 setRowNumbers()
+                if (form.data('action') === 'delete') {
+                    form.find('[name]').addClass('disabled')
+                    initDisabled()
+                }
             }
         })
     }
@@ -388,7 +390,7 @@
             </td>
 
             <td>
-                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
             </td>
         </tr>`)
 
@@ -400,7 +402,10 @@
             onSelectRow: (mekanik, element) => {
                 element.parents('td').find(`[name="mekanik_id[]"]`).val(mekanik.id)
                 element.val(mekanik.namamekanik)
-
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
             }
         })
         initDatepicker()
@@ -421,5 +426,59 @@
             $(element).text(index + 1)
         })
     }
+
+    function getMaxLength(form) {
+        if (!form.attr('has-maxlength')) {
+        $.ajax({
+            url: `${apiUrl}serviceinheader/field_length`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+            'Authorization': `Bearer ${accessToken}`
+            },
+            success: response => {
+            $.each(response.data, (index, value) => {
+                if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
+                }
+            })
+
+            form.attr('has-maxlength', true)
+            },
+            error: error => {
+            showDialog(error.statusText)
+            }
+            })
+        }
+    }
+
+    function initLookup() {
+    
+    $('.trado-lookup').lookup({
+      title: 'trado Lookup',
+      fileName: 'trado',
+      onSelectRow: (trado, element) => {
+        $('#crudForm [name=trado_id]').first().val(trado.id)
+        element.val(trado.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+
+    $('.mekanik-lookup').lookup({
+      title: 'mekanik Lookup',
+      fileName: 'mekanik',
+      onSelectRow: (mekanik, element) => {
+        $(`#crudForm [name="mekanik_id[]"]`).first().val(mekanik.id)
+        element.val(mekanik.namamekanik)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+  }
 </script>
 @endpush()

@@ -55,41 +55,15 @@
             }
           }, 
           {
-            label: 'TOTAL',
-            name: 'total',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
-          },
-          {
-            label: 'CICILAN',
-            name: 'cicilan',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
-          },
-          {
-            label: 'TOTAL BAYAR',
-            name: 'totalbayar',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
-          },
-          {
             label: 'KETERANGAN',
             name: 'keterangan',
           },
-         
-        
+          {
+            label: 'TOTAL',
+            name: 'total',
+            align: 'right',
+            formatter: currencyFormat,
+          },
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -98,11 +72,33 @@
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
+        footerrow: true,
+        userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
         pager: pager,
         viewrecords: true,
+        
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
+        onSelectRow: function(id) {
+          activeGrid = $(this)
+        },
         loadComplete: function(data) {
+          initResize($(this))
+
+          let nominals = $(this).jqGrid("getCol", "total")
+          let totalNominal = 0
+
+          if (nominals.length > 0) {
+            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          }
+
+          $(this).jqGrid('footerData', 'set', {
+            nobukti: 'Total:',
+            total: totalNominal,
+          }, true)
         }
       })
 

@@ -1,10 +1,10 @@
-<table id="mekanikLookup" class="lookup-grid"></table>
-<div id="mekanikLookupPager"></div>
+<table id="containerLookup" class="lookup-grid"></table>
+<div id="containerLookupPager"></div>
 
 @push('scripts')
 <script>
-   $('#mekanikLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'mekanik' }}`,
+  $('#containerLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'statuscontainer' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -13,11 +13,11 @@
           label: 'ID',
           name: 'id',
           align: 'right',
-          width: '70px'
+          width: '50px'
         },
         {
-          label: 'NAMA MEKANIK',
-          name: 'namamekanik',
+          label: 'KODE STATUS CONTAINER',
+          name: 'kodestatuscontainer',
           align: 'left'
         },
         {
@@ -26,11 +26,31 @@
           align: 'left'
         },
         {
-            label: 'STATUS AKTIF',
-            name: 'statusaktif',
-            align: 'left',
-            width: 100,
-            stype: 'select',
+          label: 'Status',
+          name: 'statusaktif',
+          width: 100,
+        //   stype: 'select',
+        //   searchoptions: {
+        //     value: `<?php
+        //             $i = 1;
+
+        //             foreach ($data['combo'] as $status) :
+        //             echo "$status[param]:$status[parameter]";
+        //             if ($i !== count($data['combo'])) {
+        //                 echo ";";
+        //             }
+        //             $i++;
+        //             endforeach
+
+        //             ?>
+        // `,
+        //     dataInit: function(element) {
+        //     $(element).select2({
+        //         width: 'resolve',
+        //         theme: "bootstrap4"
+        //     });
+        //     }
+        //  },
         },
         {
           label: 'MODIFIEDBY',
@@ -55,12 +75,12 @@
       rownumbers: true,
       rownumWidth: 45,
       rowList: [10, 20, 50],
-      toolbar: [true, "top"],
       sortable: true,
+      toolbar: [true, "top"],
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#mekanikLookupPager'),
+      pager: $('#containerLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -87,28 +107,27 @@
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
-          initResize($(this))
 
-          if (indexRow - 1 > $('#mekanikLookup').getGridParam().reccount) {
-            indexRow = $('#mekanikLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#containerLookup').getGridParam().reccount) {
+            indexRow = $('#containerLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#mekanikLookup [id="${$('#mekanikLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#containerLookup [id="${$('#containerLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#mekanikLookup [id="${$('#mekanikLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#containerLookup [id="${$('#containerLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#mekanikLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#mekanikLookup [id="` + $('#mekanikLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#containerLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#containerLookup [id="` + $('#containerLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#mekanikLookup').setSelection($('#mekanikLookup').getDataIDs()[indexRow])
+            $('#containerLookup').setSelection($('#containerLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -123,11 +142,11 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupMekanik').prev().width())
+        $(this).setGridWidth($('#lookupcontainer').prev().width())
         setHighlight($(this))
       }
     })
-
+    
     .jqGrid('filterToolbar', {
       stringResult: true,
       searchOnEnter: false,
@@ -135,10 +154,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#mekanikLookup'))
+        clearGlobalSearch($('#containerLookup'))
       },
     })
 
-  loadGlobalSearch($('#mekanikLookup'))
-  loadClearFilter($('#mekanikLookup'))
+    loadGlobalSearch($('#containerLookup'))
+    loadClearFilter($('#containerLookup'))
 </script>

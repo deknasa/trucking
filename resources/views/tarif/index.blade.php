@@ -30,6 +30,7 @@
   let rowNum = 10
 
   $(document).ready(function() {
+    
     $("#jqGrid").jqGrid({
         url: `${apiUrl}tarif`,
         mtype: "GET",
@@ -228,10 +229,9 @@
         searchOnEnter: false,
         defaultSearch: 'cn',
         groupOp: 'AND',
-        // disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           clearGlobalSearch($('#jqGrid'))
-        },
+        }
       })
 
       .customPager({
@@ -348,6 +348,7 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
+
 </script>
 @endpush()
 @endsection

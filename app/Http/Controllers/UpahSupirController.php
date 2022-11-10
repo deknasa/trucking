@@ -24,6 +24,7 @@ class UpahSupirController extends MyController
         $title = $this->title;
         $data = [
             'combo' => $this->comboStatusAktif('list'),
+            'comboluarkota' => $this->comboLuarKota('list')
         ];
 
         return view('upahsupir.index', compact('title', 'data'));
@@ -439,6 +440,22 @@ class UpahSupirController extends MyController
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/combostatus', $status);
+
+        return $response['data'];
+    }
+    public function comboLuarKota($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS LUAR KOTA',
+            'subgrp' => 'STATUS LUAR KOTA',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'upahritasi/comboluarkota', $status);
 
         return $response['data'];
     }

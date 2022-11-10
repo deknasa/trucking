@@ -29,7 +29,9 @@
                                 </label>
                             </div>
                             <div class="col-12 col-md-4">
-                                <input type="text" name="tglbukti" autocomplete="off" class="form-control datepicker">
+                                <div class="input-group">
+                                    <input type="text" name="tglbukti" autocomplete="off" class="form-control datepicker">
+                                </div>
                             </div>
                         </div>
 
@@ -48,7 +50,10 @@
                                 PERIODE <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-md-10">
-                            <input type="text" name="periode" class="form-control datepicker" autocomplete="off">
+                            
+                                <div class="input-group">
+                                    <input type="text" name="periode" autocomplete="off" class="form-control datepicker">
+                                </div>
                             </div>
                         </div>
 

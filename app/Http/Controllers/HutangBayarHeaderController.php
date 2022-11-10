@@ -13,7 +13,10 @@ class HutangBayarHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        return view('hutangbayarheader.index', compact('title'));
+        $data = [
+            'comboapproval' => $this->comboApproval('list')
+        ];
+        return view('hutangbayarheader.index', compact('title','data'));
     }
 
     public function create()
@@ -190,5 +193,21 @@ class HutangBayarHeaderController extends MyController
         return $response['data'];
     }
 
+    public function comboApproval($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS APPROVAL',
+            'subgrp' => 'STATUS APPROVAL',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'hutangbayarheader/comboapproval', $status);
+
+        return $response['data'];
+    }
     
 }

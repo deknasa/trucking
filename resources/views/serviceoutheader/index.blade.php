@@ -35,31 +35,6 @@
 
   $(document).ready(function() {
 
-    $('#lookup').hide()
-
-    $('.trado-lookup').lookup({
-      title: 'trado Lookup',
-      fileName: 'trado',
-      onSelectRow: (trado, element) => {
-        $('#crudForm [name=trado_id]').first().val(trado.id)
-        element.val(trado.keterangan)
-
-      }
-    })
-
-    $('.serviceinheader-lookup').lookup({
-      title: 'servicein Lookup',
-      fileName: 'serviceinheader',
-      onSelectRow: (servicein, element) => {
-        // $('#crudForm [name=servicein_id]').first().val(servicein.id)
-        element.val(servicein.nobukti)
-      }
-    })
-
-    $('#crudModal').on('shown.bs.modal', function() {
-      activeGrid = '#jqGrid'
-    })
-
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'serviceoutheader' }}`,
         mtype: "GET",

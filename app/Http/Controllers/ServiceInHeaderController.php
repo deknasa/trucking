@@ -70,19 +70,7 @@ class ServiceInHeaderController extends MyController
         return $data;
     }
 
-    // /**
-    //  * Fungsi create
-    //  * @ClassName create
-    //  */
-    public function create()
-    {
-        $title = $this->title;
-
-        $combo = $this->combo();
-
-        return view('serviceinheader.add', compact('title', 'combo'));
-    }
-
+    
     // /**
     //  * Fungsi edit
     //  * @ClassName edit

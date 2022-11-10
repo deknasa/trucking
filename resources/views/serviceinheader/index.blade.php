@@ -17,8 +17,6 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('serviceinheader.index') }}"
-  let getUrl = "{{ route('serviceinheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -32,37 +30,13 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let rowNum = 10
+  let hasDetail = false
 
   $(document).ready(function() {
 
-    $('#lookup').hide()
-
-    $('.trado-lookup').lookup({
-      title: 'trado Lookup',
-      fileName: 'trado',
-      onSelectRow: (trado, element) => {
-        $('#crudForm [name=trado_id]').first().val(trado.id)
-        element.val(trado.keterangan)
-
-      }
-    })
-
-    $('.mekanik-lookup').lookup({
-      title: 'mekanik Lookup',
-      fileName: 'mekanik',
-      onSelectRow: (mekanik, element) => {
-        $(`#crudForm [name="mekanik_id[]"]`).first().val(mekanik.id)
-        element.val(mekanik.namamekanik)
-
-      }
-    })
-
-    $('#crudModal').on('shown.bs.modal', function() {
-      activeGrid = '#jqGrid'
-    })
-
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'serviceinheader' }}`,
+        url: `${apiUrl}serviceinheader`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -152,13 +126,18 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
-
-          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+          
+          if (!hasDetail) {
+            loadDetailGrid(id)
+            hasDetail = true
+          }
+
+          loadDetailData(id)
         },
         loadComplete: function(data) {
 
@@ -172,7 +151,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          triggerClick = true  
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -264,8 +243,6 @@
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
 
-    /* Load detail grid */
-    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn btn-sm btn-primary`)
