@@ -1,5 +1,6 @@
 let sidebarIsOpen = false;
 let formats;
+let offDays;
 
 $(document).ready(function () {
 	setFormats();
@@ -828,6 +829,17 @@ function startTime() {
 function initDatepicker() {
 	let element = $(document).find(".datepicker");
 
+	if (!offDays) {
+		offDays = getOffDays();
+	}
+
+	if (!element.parent().hasClass("input-group")) {
+		element.wrap(`
+				<div class="input-group">
+				</div>
+			`);
+	}
+
 	element
 		.datepicker({
 			dateFormat: "dd-mm-yy",
@@ -840,6 +852,31 @@ function initDatepicker() {
 					position: "relative",
 					zIndex: 9999,
 				});
+			},
+			beforeShowDay: function (date) {
+				let y = date.getFullYear().toString(); // get full year
+				let m = (date.getMonth() + 1).toString(); // get month.
+				let d = date.getDate().toString(); // get Day
+
+				if (m.length == 1) {
+					m = "0" + m;
+				} // append zero(0) if single digit
+				if (d.length == 1) {
+					d = "0" + d;
+				} // append zero(0) if single digit
+				let currDate = y + "-" + m + "-" + d;
+
+				let offDay = offDays.find((offDay) => offDay.date == currDate);
+
+				if (offDay) {
+					return [
+						true,
+						"ui-state-disabled datepicker-offday",
+						offDay.description,
+					];
+				} else {
+					return [true];
+				}
 			},
 		})
 		.inputmask({
@@ -869,7 +906,9 @@ function initDatepicker() {
 			</div>
 		`
 		)
-		.addClass("btn btn-primary");
+		.addClass("btn btn-primary").html(`
+			<i class="fa fa-calendar-alt"></i>
+		`);
 
 	element.on("keydown", function (event) {
 		if (event.keyCode === 115) {
@@ -878,6 +917,35 @@ function initDatepicker() {
 			}
 		}
 	});
+}
+
+function getOffDays() {
+	let offDays = [];
+
+	$.ajax({
+		url: `${apiUrl}harilibur`,
+		method: "GET",
+		dataType: "JSON",
+		data: {
+			limit: 0,
+		},
+		async: false,
+		cache: true,
+		success: (response) => {
+			let convertedResponse = [];
+
+			response.data.forEach((row) => {
+				convertedResponse.push({
+					date: row.tgl,
+					description: row.keterangan,
+				});
+			});
+
+			offDays = convertedResponse;
+		},
+	});
+
+	return offDays;
 }
 
 function destroyDatepicker() {

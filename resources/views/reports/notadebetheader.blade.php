@@ -6,7 +6,7 @@
 <head>
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>Report Nota Kredit</title>
+  <title>Report Nota Debet</title>
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.viewer.office2013.whiteblue.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.designer.office2013.whiteblue.css') }}">
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.reports.js') }}"></script>
@@ -29,12 +29,12 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ asset('public/reports/ReportNotaKredit.mrt') }}`)
+      report.loadFile(`{{ asset('public/reports/ReportNotaDebet.mrt') }}`)
 
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
-        'notakreditheader': <?= json_encode($notakreditheaders); ?>
+        'notadebetheader': <?= json_encode($notadebetheaders); ?>
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)

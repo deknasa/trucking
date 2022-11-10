@@ -3,6 +3,7 @@
 @section('content')
 <!-- Grid -->
 <div class="container-fluid">
+  {{-- {{ route('notadebetheader.report', ['id' => '1']) }} --}}
   <div class="row">
     <div class="col-12">
       <table id="jqGrid"></table>
@@ -10,14 +11,14 @@
   </div>
 </div>
 
-@include('notakreditheader._modal')
+@include('notadebetheader._modal')
 <!-- Detail -->
-@include('notakreditheader._detail')
+@include('notadebetheader._detail')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('notakreditheader.index') }}"
-  let getUrl = "{{ route('notakreditheader.get') }}"
+  let indexUrl = "{{ route('notadebetheader.index') }}"
+  let getUrl = "{{ route('notadebetheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -43,7 +44,7 @@
      })
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'notakreditheader' }}`,
+        url: `{{ config('app.api_url') . 'notadebetheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -222,7 +223,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
-              createNotaKredit()
+              createNotaDebet()
             }
           },
           {
@@ -231,7 +232,7 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              editNotaKredit(selectedId)
+              editNotaDebet(selectedId)
             }
           },
           {
@@ -240,7 +241,7 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              deleteNotaKredit(selectedId)
+              deleteNotaDebet(selectedId)
             }
           },
           {
@@ -271,7 +272,8 @@
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              window.open(`{{url('notakreditheader/report/${selectedId}')}}`)
+              window.open(`{{url('notadebetheader/report/${selectedId}')}}`)
+              // reportNotaDebet(selectedId)
             }
           },
         ]
@@ -307,26 +309,26 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('notadebetheader', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('notadebetheader', 'update') }}`) {
       $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('notadebetheader', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('notadebetheader', 'export') }}`) {
       $('#export').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('notadebetheader', 'report') }}`) {
       $('#report').addClass('ui-disabled')
     }
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'approval') }}`) {
+    if (!`{{ $myAuth->hasPermission('notadebetheader', 'approval') }}`) {
       $('#report').addClass('ui-disabled')
     }
 
@@ -360,8 +362,7 @@
       let actionUrl = ``
       console.log(params);
       if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('notakreditheader.export') }}`
-      // } else if ($('#rangeModal').data('action') == 'report') {
+        actionUrl = `{{ route('notadebetheader.export') }}`
       }
 
       /* Clear validation messages */
@@ -381,8 +382,23 @@
 
   function handleApproval(id) {
     $.ajax({
-      url: `${apiUrl}notakreditheader/${id}/approval`,
+      url: `${apiUrl}notadebetheader/${id}/approval`,
       method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+      },
+      success: response => {
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    }).always(() => {
+      $('#loader').addClass('d-none')
+    })
+  }
+  function reportNotaDebet(id) {
+    $.ajax({
+      url: `{{url('notadebetheader/report/${id}')}}`,
+      method: 'get',
       dataType: 'JSON',
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer ${accessToken}`)

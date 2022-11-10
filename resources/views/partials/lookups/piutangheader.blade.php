@@ -15,44 +15,47 @@
           align: 'right',
           width: '70px'
         },
-          {
-            label: 'NO BUKTI',
-            name: 'nobukti',
-            align: 'left'
+        {
+          label: 'NO BUKTI',
+          name: 'nobukti',
+          align: 'left'
+        },
+        {
+          label: 'TANGGAL BUKTI',
+          name: 'tglbukti',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'KETERANGAN',
+          name: 'keterangan',
+          align: 'left'
+        },
+        {
+          label: 'POSTING DARI',
+          name: 'postingdari',
+          align: 'left'
+        },
+        {
+          label: 'NOMINAL',
+          name: 'nominal',
+          formatter: 'number',
+          formatoptions: {
+            thousandsSeparator: ",",
+            decimalPlaces: 0
           },
-          {
-            label: 'TANGGAL BUKTI',
-            name: 'tglbukti',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
-          },
-          {
-            label: 'POSTING DARI',
-            name: 'postingdari',
-            align: 'left'
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            formatter: 'number', 
-            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
-            align: "right",
-          },
-          {
-            label: 'NO BUKTI INVOICE',
-            name: 'invoice_nobukti',
-            align: 'left'
-          },
-        
+          align: "right",
+        },
+        {
+          label: 'NO BUKTI INVOICE',
+          name: 'invoice_nobukti',
+          align: 'left'
+        },
+
         {
           label: 'MODIFIEDBY',
           name: 'modifiedby',
