@@ -101,7 +101,7 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statusluarkota" class="form-control select2bs4" z-index="3">
+                <select name="statusluarkota" class="form-control select2bs4" z-index="6">
                   <option value="">-- PILIH STATUS LUAR KOTA --</option>
                 </select>
               </div>
