@@ -17,9 +17,11 @@ class Myauth
     private $exceptAuth = [
         'class' => [
             '',
-            'logtrail',
+            'notakreditheader',
             'absensisupirapprovalheader',
             'penerimaanstokheader',
+            'pengeluaranstokheader',
+            'pengembaliankasgantungheader',
             'dashboard'
         ],
         'method' => [

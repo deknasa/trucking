@@ -27,7 +27,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <div class="input-group">
-                <input type="text" name="tglbukti" class="form-control formatdate datepicker">
+                <input type="text" name="tglbukti" class="form-control datepicker">
               </div>
               </div>
             </div>
@@ -40,7 +40,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <div class="input-group">
-                  <input type="text" name="tglapproval" class="form-control formatdate datepicker">
+                  <input type="text" name="tglapproval" class="form-control datepicker">
 
                 </div>
               </div>
@@ -66,7 +66,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <div class="input-group">
-                <input type="text" name="tgllunas" class="form-control formatdate datepicker">
+                <input type="text" name="tgllunas" class="form-control datepicker">
               </div>
               </div>
               
@@ -311,13 +311,14 @@
     let form = $('#crudForm')
 
     setFormBindKeys(form)
-
+    
     activeGrid = null
-
+    
     getMaxLength(form)
     initLookup()
     initSelect2()
     initDatepicker()
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {

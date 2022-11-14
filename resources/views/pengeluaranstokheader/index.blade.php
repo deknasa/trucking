@@ -52,6 +52,7 @@
       title: 'pengeluaran stok Lookup',
       fileName: 'pengeluaranstok',
       onSelectRow: (pengeluaranstok, element) => {
+        kodepengeluaran(pengeluaranstok.statusformat)
         element.val(pengeluaranstok.kodepengeluaran)
         $(`#${element[0]['name']}Id`).val(pengeluaranstok.id)
         element.data('currentValue', element.val())
