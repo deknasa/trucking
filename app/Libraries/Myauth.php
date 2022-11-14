@@ -18,7 +18,8 @@ class Myauth
         'class' => [
             '',
             'logtrail',
-            'invoiceheader',
+            'absensisupirapprovalheader',
+            'penerimaanstokheader',
             'dashboard'
         ],
         'method' => [
