@@ -15,7 +15,7 @@
 @push('scripts')
 <script>
   let indexRow = 0;
-  let page = 0;
+  let page = 1;
   let pager = '#jqGridPager'
   let popup = "";
   let id = "";
@@ -165,30 +165,122 @@
           {
             label: 'PHOTO SUPIR',
             name: 'photosupir',
-            align: 'center'
+            align: 'center',
+            formatter: (value, row) => {
+              let images = []
+              let files = JSON.parse(value)
+
+              files.forEach(file => {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/supir/${file}/small`
+
+                images.push(image.outerHTML)
+              });
+
+              return images.join(' ')
+            }
           },
           {
             label: 'PHOTO KTP',
             name: 'photoktp',
-            align: 'center'
+            align: 'center',
+            formatter: (value, row) => {
+              let images = []
+              let files = JSON.parse(value)
+
+              files.forEach(file => {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/ktp/${file}/small`
+
+                images.push(image.outerHTML)
+              });
+
+              return images.join(' ')
+            }
           },
           {
             label: 'PHOTO SIM',
             name: 'photosim',
-            align: 'center'
+            align: 'center',
+            formatter: (value, row) => {
+              let images = []
+              let files = JSON.parse(value)
+
+              files.forEach(file => {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/sim/${file}/small`
+
+                images.push(image.outerHTML)
+              });
+
+              return images.join(' ')
+            }
           },
           {
             label: 'PHOTO KK',
             name: 'photokk',
-            align: 'center'
+            align: 'center',
+            formatter: (value, row) => {
+              let images = []
+              let files = JSON.parse(value)
+
+              files.forEach(file => {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/kk/${file}/small`
+
+                images.push(image.outerHTML)
+              });
+
+              return images.join(' ')
+            }
           },
           {
             label: 'PHOTO SKCK',
             name: 'photoskck',
+            align: 'center',
+            formatter: (value, row) => {
+              let images = []
+              let files = JSON.parse(value)
+
+              files.forEach(file => {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/skck/${file}/small`
+
+                images.push(image.outerHTML)
+              });
+
+              return images.join(' ')
+            }
           },
           {
             label: 'PHOTO DOMISILI',
             name: 'photodomisili',
+            align: 'center',
+            formatter: (value, row) => {
+              let images = []
+              let files = JSON.parse(value)
+
+              files.forEach(file => {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/domisili/${file}/small`
+
+                images.push(image.outerHTML)
+              });
+
+              return images.join(' ')
+            }
           },
           {
             label: 'TGL BERHENTI SUPIR',

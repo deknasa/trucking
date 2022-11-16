@@ -14,6 +14,11 @@ class SupirController extends MyController
         'Content-Type' => 'application/json'
     ];
 
+    public function image()
+    {
+        return response()->download(public_path('image.jpg'));
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {

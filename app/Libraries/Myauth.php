@@ -19,7 +19,8 @@ class Myauth
             '',
             'logtrail',
             'invoiceheader',
-            'dashboard'
+            'dashboard',
+            'supir'
         ],
         'method' => [
             'gridtab',
