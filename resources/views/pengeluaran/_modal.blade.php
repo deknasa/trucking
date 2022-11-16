@@ -574,7 +574,8 @@
             title: 'Coa Kredit Lookup',
             fileName: 'alatbayar',
             onSelectRow: (alatbayar, element) => {
-             $(`#crudForm [name="alatbayar_id[]"]`).first().val(alatbayar.id)
+             
+             element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
               element.val(alatbayar.coa)
               element.data('currentValue', element.val())
             },
@@ -648,7 +649,7 @@
       title: 'Alat Bayar Lookup',
       fileName: 'alatbayar',
       onSelectRow: (alatbayar, element) => {
-        $(`#crudForm [name="alatbayar_id[]"]`).val(alatbayar.id)
+        element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
         element.val(alatbayar.namaalatbayar)
         element.data('currentValue', element.val())
       },

@@ -271,6 +271,7 @@
 
     activeGrid = null
 
+    initLookup()
     getMaxLength(form)
     initDatepicker()
   })
@@ -444,7 +445,7 @@
             title: 'supplier Lookup',
             fileName: 'supplier',
             onSelectRow: (supplier, element) => {
-              $(`#crudForm [name="supplier_id[]"]`).last().val(supplier.id)
+             element.parents('td').find(`[name="supplier_id[]"]`).val(supplier.id)
               element.val(supplier.namasupplier)
               element.data('currentValue', element.val())
             },
@@ -550,18 +551,6 @@
       }
     })
 
-    $('.supplier-lookup').lookup({
-      title: 'supplier Lookup',
-      fileName: 'supplier',
-      onSelectRow: (supplier, element) => {
-        $(`#crudForm [name="supplier_id[]"]`).first().val(supplier.id)
-        element.val(supplier.namasupplier)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
   }
 </script>
 @endpush()
