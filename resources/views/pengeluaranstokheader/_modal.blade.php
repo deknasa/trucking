@@ -24,7 +24,7 @@
                 <label>tglbukti <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="tglbukti" class="form-control formatdate">
+                <input type="text" name="tglbukti" class="form-control datepicker">
               </div>
             </div>
 
@@ -49,14 +49,14 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>pengeluaran stok nobukti <span class="text-danger">*</span> </label>
+                <label>pengeluaran stok nobukti  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="pengeluaranstok_nobukti" class="form-control pengeluaranstokheader-lookup">
               </div>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>penerimaan stok nobukti <span class="text-danger">*</span> </label>
+                <label>penerimaan stok nobukti  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="penerimaanstok_nobukti" class="form-control penerimaanstokheader-lookup">
@@ -66,14 +66,14 @@
             <div class="row form-group">
              
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>servicein no bukti <span class="text-danger">*</span> </label>
+                <label>servicein no bukti  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="servicein_nobukti" class="form-control servicein-lookup">
               </div>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>kerusakan <span class="text-danger">*</span> </label>
+                <label>kerusakan  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="kerusakan" class="form-control kerusakan-lookup">
@@ -84,14 +84,14 @@
             
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>supir <span class="text-danger">*</span> </label>
+                <label>supir  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="supir" class="form-control supir-lookup">
                 <input type="text" id="supirId" name="supir_id" readonly hidden >
               </div>
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>trado <span class="text-danger">*</span> </label>
+                <label>trado  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="trado" class="form-control trado-lookup">
@@ -102,7 +102,7 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>supplier <span class="text-danger">*</span> </label>
+                <label>supplier  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="supplier" class="form-control supplier-lookup">
@@ -110,7 +110,7 @@
               </div>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>gudang <span class="text-danger">*</span> </label>
+                <label>gudang  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="gudang" class="form-control gudang-lookup">
@@ -298,15 +298,19 @@
       })
     })
   })
+  function kodepengeluaran(kodepengeluaran){
+    $('#crudForm').find('[name=statusformat]').val(kodepengeluaran).trigger('change');
+  }
+    
+    $('#crudModal').on('shown.bs.modal', () => {
+      let form = $('#crudForm')
+      
+      setFormBindKeys(form)
+      
+      activeGrid = null
+      initDatepicker()
 
-  
-  $('#crudModal').on('shown.bs.modal', () => {
-    let form = $('#crudForm')
-
-    setFormBindKeys(form)
-
-    activeGrid = null
-
+      $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
     // getMaxLength(form)
   })
 

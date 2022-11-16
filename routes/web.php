@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\AbsensiSupirDetailController;
 use App\Http\Controllers\AbsensiSupirHeaderController;
+
+use App\Http\Controllers\AbsensiSupirApprovalDetailController;
+use App\Http\Controllers\AbsensiSupirApprovalHeaderController;
+
 use App\Http\Controllers\AbsenTradoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
@@ -205,6 +209,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('absensisupirheader', AbsensiSupirHeaderController::class);
 
     Route::resource('absensisupir_detail', AbsensiSupirDetailController::class);
+    
+    Route::get('absensisupirapprovalheader/{id}/delete', [AbsensiSupirHeaderController::class, 'delete'])->name('absensisupirapprovalheader.delete');
+    Route::get('absensisupirapprovalheader/index', [AbsensiSupirHeaderController::class, 'index']);
+    Route::get('absensisupirapprovalheader/get', [AbsensiSupirHeaderController::class, 'get'])->name('absensisupirapprovalheader.get');
+    Route::get('absensisupirapprovalheader/export', [AbsensiSupirHeaderController::class, 'export'])->name('absensisupirapprovalheader.export');
+    Route::get('absensisupirapprovalheader/report', [AbsensiSupirHeaderController::class, 'report'])->name('absensisupirapprovalheader.report');
+    Route::resource('absensisupirapprovalheader', AbsensiSupirApprovalHeaderController::class);
 
     Route::get('userrole/{id}/delete', [UserRoleController::class, 'delete'])->name('userrole.delete');
     Route::get('userrole/field_length', [UserRoleController::class, 'fieldLength'])->name('userrole.field_length');

@@ -33,7 +33,7 @@
             <div class="row">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  dari TANGGAL <span class="text-danger">*</span>
+                  dari TANGGAL
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
@@ -41,7 +41,7 @@
               </div>
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  sampai TANGGAL <span class="text-danger">*</span>
+                  sampai TANGGAL
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
@@ -52,7 +52,7 @@
             <div class="row">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  TANGGAL Masuk <span class="text-danger">*</span>
+                  TANGGAL Masuk 
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
@@ -76,7 +76,7 @@
               </div>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>coa kas masuk <span class="text-danger">*</span> </label>
+                <label>coa kas masuk </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="coa" class="form-control akunpusat-lookup">
@@ -273,6 +273,8 @@
 
     getMaxLength(form)
     initDatepicker()
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
+
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {

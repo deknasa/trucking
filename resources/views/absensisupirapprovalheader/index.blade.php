@@ -10,14 +10,14 @@
   </div>
 </div>
 
-@include('pengeluaranstokheader._modal')
+@include('absensisupirapprovalheader._modal')
 <!-- Detail -->
-@include('pengeluaranstokheader._detail')
+@include('absensisupirapprovalheader._detail')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('pengeluaranstokheader.index') }}"
-  let getUrl = "{{ route('pengeluaranstokheader.get') }}"
+  let indexUrl = "{{ route('absensisupirapprovalheader.index') }}"
+  let getUrl = "{{ route('absensisupirapprovalheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -36,31 +36,7 @@
 
     $('#lookup').hide()
     
-    $('.akunpusat-lookup').lookup({
-      title: 'akun pusat Lookup',
-      fileName: 'akunpusat',
-      onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
-        $(`#${element[0]['name']}Id`).val(akunpusat.coa)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
-    $('.pengeluaranstok-lookup').lookup({
-      title: 'pengeluaran stok Lookup',
-      fileName: 'pengeluaranstok',
-      onSelectRow: (pengeluaranstok, element) => {
-        kodepengeluaran(pengeluaranstok.statusformat)
-        element.val(pengeluaranstok.kodepengeluaran)
-        $(`#${element[0]['name']}Id`).val(pengeluaranstok.id)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
+    
     $('.supir-lookup').lookup({
       title: 'supir Lookup',
       fileName: 'supir',
@@ -74,94 +50,13 @@
       }
     })
     
-    $('.kerusakan-lookup').lookup({
-      title: 'kerusakan Lookup',
-      fileName: 'kerusakan',
-      onSelectRow: (kerusakan, element) => {
-        element.val(kerusakan.keterangan)
-        $(`#${element[0]['name']}Id`).val(kerusakan.id)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
-    $('.supplier-lookup').lookup({
-      title: 'supplier Lookup',
-      fileName: 'supplier',
-      onSelectRow: (supplier, element) => {
-        element.val(supplier.namasupplier)
-        $(`#${element[0]['name']}Id`).val(supplier.id)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
-    $('.trado-lookup').lookup({
-      title: 'Trado Lookup',
-      fileName: 'trado',
-      onSelectRow: (trado, element) => {
-        element.val(trado.keterangan)
-        $(`#${element[0]['name']}Id`).val(trado.id)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
-    $('.gudang-lookup').lookup({
-      title: 'Gudang Lookup',
-      fileName: 'gudang',
-      onSelectRow: (gudang, element) => {
-        element.val(gudang.gudang)
-        $(`#${element[0]['name']}Id`).val(gudang.id)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
-    $('.pengeluaranstokheader-lookup').lookup({
-      title: 'pengeluaran stok header Lookup',
-      fileName: 'pengeluaranstokheader',
-      onSelectRow: (pengeluaran, element) => {
-        element.val(pengeluaran.nobukti)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
-    $('.penerimaanstokheader-lookup').lookup({
-      title: 'penerimaan stok header Lookup',
-      fileName: 'penerimaanstokheader',
-      onSelectRow: (penerimaan, element) => {
-        element.val(penerimaan.nobukti)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
-    $('.hutang-lookup').lookup({
-      title: 'hutang header Lookup',
-      fileName: 'hutangheader',
-      onSelectRow: (hutang, element) => {
-        element.val(hutang.nobukti)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
 
     $('#crudModal').on('hidden.bs.modal', function() {
        activeGrid = '#jqGrid'
      })
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'pengeluaranstokheader' }}`,
+        url: `{{ config('app.api_url') . 'absensisupirapprovalheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -172,6 +67,7 @@
             align: 'right',
             width: '50px'
           },
+          
           {
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -192,57 +88,55 @@
             name: 'keterangan',
             align: 'left'
           },
-          {
-            label: 'Gudang',
-            name: 'gudang',
-            align: 'left'
-          },
-          {
-            label: 'Trado',
-            name: 'trado',
-            align: 'left'
-          },
-          {
-            label: 'supplier',
-            name: 'supplier',
-            align: 'left'
-          },
-          {
-            label: 'supir',
-            name: 'supir',
-            align: 'left'
-          },
-          {
-            label: 'PENgeluaran Stok',
-            name: 'pengeluaranstok',
-            align: 'left'
-          },
           
           {
-            label: 'servicein nobukti',
-            name: 'servicein_nobukti',
-            align: 'left'
-          },
-         
-          
-          {
-            label: 'PENerimaan nobukti',
-            name: 'penerimaanstok_nobukti',
+            label: 'No bukti Absensi Supir',
+            name: 'absensisupir_nobukti',
             align: 'left'
           },
           {
-            label: 'Pengeluaran nobukti',
-            name: 'pengeluaranstok_nobukti',
+            label: 'status approval',
+            name: 'statusapproval_memo',
             align: 'left'
           },
           {
-            label: 'kerusakan',
-            name: 'kerusakan',
+            label: 'user approval',
+            name: 'userapproval',
             align: 'left'
+          },
+          {
+            label: 'TANGGAL approval',
+            name: 'tglapproval',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'No bukti pengeluaran',
+            name: 'pengeluaran_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'coa kaskeluar',
+            name: 'coakaskeluar',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL kas keluar',
+            name: 'tglkaskeluar',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'Status format',
-            name: 'statusformat',
+            name: 'statusformat_memo',
             align: 'left'
           },
           {
@@ -352,7 +246,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
-              createPengeluaranstokHeader()
+              createAbsensiSupirApprovalHeader()
             }
           },
           {
@@ -361,7 +255,7 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              editPengeluaranstokHeader(selectedId)
+              editAbsensiSupirApprovalHeader(selectedId)
             }
           },
           {
@@ -370,7 +264,19 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              deletePengeluaranstokHeader(selectedId)
+              deleteAbsensiSupirApprovalHeader(selectedId)
+            }
+          },
+          {
+            id: 'approval',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVE',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+              let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+
+              $('#loader').removeClass('d-none')
+
+              handleApproval(id)
             }
           },
         ]
@@ -406,23 +312,23 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'update') }}`) {
       $('#edit').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'destroy') }}`) {
       $('#delete').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'export') }}`) {
       $('#export').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
     }
 
@@ -472,7 +378,7 @@
 
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}pengeluaranstokheader/export?${params}`, true)
+        xhr.open('GET', `{{ config('app.api_url') }}absensisupirapprovalheader/export?${params}`, true)
         xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
         xhr.responseType = 'arraybuffer'
 
@@ -495,11 +401,27 @@
 
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('pengeluaranstokheader.report') }}?${params}`)
+        window.open(`{{ route('absensisupirapprovalheader.report') }}?${params}`)
 
         submitButton.removeAttr('disabled')
       }
     })
+
+    function handleApproval(id) {
+    $.ajax({
+      url: `${apiUrl}absensisupirapprovalheader/${id}/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+      },
+      success: response => {
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    }).always(() => {
+      $('#loader').addClass('d-none')
+    })
+  }
 
 
 
