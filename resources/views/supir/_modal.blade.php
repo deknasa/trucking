@@ -53,12 +53,11 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">STATUS AKTIF <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
+                  <select name="statusaktif" class="form-control select2bs4" style="width: 100%;">
                     <option value="">-- PILIH STATUS AKTIF --</option>
                   </select>
                 </div>
               </div>
-
 
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Nominal Deposit SA</label>
@@ -149,7 +148,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">STATUS UPDATE GBR <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statusadaupdategambar" class="form-select select2bs4" style="width: 100%;">
+                  <select name="statusadaupdategambar" class="form-control select2bs4" style="width: 100%;">
                     <option value="">-- PILIH STATUS UPDATE GBR --</option>
                   </select>
                 </div>
@@ -159,7 +158,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">STATUS ZONA TERTENTU <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statuszonatertentu" class="form-select select2bs4" style="width: 100%;" z-index='3'>
+                  <select name="statuszonatertentu" class="form-control select2bs4" style="width: 100%;" z-index='3'>
                     <option value="">-- PILIH STATUS ZONA TERTENTU --</option>
                   </select>
                 </div>
@@ -168,7 +167,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">STATUS LUAR KOTA <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statusluarkota" class="form-select select2bs4" style="width: 100%;" z-index='3'>
+                  <select name="statusluarkota" class="form-control select2bs4" style="width: 100%;" z-index='3'>
                     <option value="">-- PILIH STATUS LUAR KOTA --</option>
                   </select>
                 </div>
@@ -220,7 +219,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">STATUS BLACKLIST <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statusblacklist" class="form-select select2bs4" style="width: 100%;">
+                  <select name="statusblacklist" class="form-control select2bs4" style="width: 100%;">
                     <option value="">-- PILIH STATUS BLACKLIST --</option>
                   </select>
                 </div>
@@ -233,13 +232,10 @@
                   <div class="col">
                     <label class="col-form-label">Upload Foto Supir</label>
                   </div>
-                  <div class="col text-right">
-                    <button class="btn btn-info btn-sm" id="photosupir" type="button">Upload Supir</button>
-                  </div>
                 </div>
-                <div class="dropzone" id="dropzonesupir" data-field="supir">
+                <div class="dropzone" data-field="photosupir">
                   <div class="fallback">
-                    <input name="photosupir" type="file" multiple />
+                    <input name="photosupir" type="file" />
                   </div>
                 </div>
               </div>
@@ -249,13 +245,10 @@
                   <div class="col">
                     <label class="col-form-label">Upload Foto KTP</label>
                   </div>
-                  <div class="col text-right">
-                    <button class="btn btn-info btn-sm" type="button" id="uploadBpkb">Upload KTP</button>
-                  </div>
                 </div>
-                <div class="dropzone" id="dropzone-ktp" data-field="ktp">
+                <div class="dropzone" data-field="photoktp">
                   <div class="fallback">
-                    <input name="ktp" type="file" multiple />
+                    <input name="photoktp" type="file" />
                   </div>
                 </div>
               </div>
@@ -265,13 +258,10 @@
                   <div class="col">
                     <label class="col-form-label">Upload Foto SIM</label>
                   </div>
-                  <div class="col text-right">
-                    <button class="btn btn-info btn-sm" type="button">Upload SIM</button>
-                  </div>
                 </div>
-                <div class="dropzone" id="dropzone-sim" data-field="sim">
+                <div class="dropzone" data-field="photosim">
                   <div class="fallback">
-                    <input name="sim" type="file" multiple />
+                    <input name="photosim" type="file" />
                   </div>
                 </div>
               </div>
@@ -283,13 +273,10 @@
                   <div class="col">
                     <label class="col-form-label">Upload Foto KK</label>
                   </div>
-                  <div class="col text-right">
-                    <button class="btn btn-info btn-sm" id="uploadsupir" type="button">Upload KK</button>
-                  </div>
                 </div>
-                <div class="dropzone" id="dropzone-kk" data-field="kk">
+                <div class="dropzone" data-field="photokk">
                   <div class="fallback">
-                    <input name="kk" type="file" multiple />
+                    <input name="photokk" type="file" />
                   </div>
                 </div>
               </div>
@@ -299,13 +286,10 @@
                   <div class="col">
                     <label class="col-form-label">Upload Foto SKCK</label>
                   </div>
-                  <div class="col text-right">
-                    <button class="btn btn-info btn-sm" type="button" id="uploadBpkb">Upload SKCK</button>
-                  </div>
                 </div>
-                <div class="dropzone" id="dropzone-skck" data-field="skck">
+                <div class="dropzone" data-field="photoskck">
                   <div class="fallback">
-                    <input name="skck" type="file" multiple />
+                    <input name="photoskck" type="file" />
                   </div>
                 </div>
               </div>
@@ -315,13 +299,10 @@
                   <div class="col">
                     <label class="col-form-label">Upload Foto Domisili</label>
                   </div>
-                  <div class="col text-right">
-                    <button class="btn btn-info btn-sm" type="button">Upload Domisili</button>
-                  </div>
                 </div>
-                <div class="dropzone" id="dropzone-domisili" data-field="domisili">
+                <div class="dropzone" data-field="photodomisili">
                   <div class="fallback">
-                    <input name="domisili" type="file" multiple />
+                    <input name="photodomisili" type="file" />
                   </div>
                 </div>
               </div>
@@ -345,112 +326,30 @@
 
 @push('scripts')
 <script>
+  Dropzone.autoDiscover = false
+
+  let dropzones = []
   let hasFormBindKeys = false
-  Dropzone.autoDiscover = false;
   let modalBody = $('#crudModal').find('.modal-body').html()
-  let myDropzone
-  let dropzoneAttachment = {
-    photosupir: [],
-    photoktp: [],
-    photosim: [],
-    photokk: [],
-    photoskck: [],
-    photodomisili: [],
-  }
+
   $(document).ready(function() {
-
-
-    $("#noktp").inputmask("9999999999999999", {
-      placeholder: "",
-    });
-    $("#nosim").inputmask("999999999999", {
-      placeholder: "",
-    });
-    $("#nokk").inputmask("9999999999999999", {
-      placeholder: "",
-    });
-
-    $('#btnSubmit').click(function(event) {
+    $(document).on('click', '#btnSubmit', function(event) {
       event.preventDefault()
 
-      console.log(dropzoneAttachment)
-
-      let method
-      let url
       let form = $('#crudForm')
-      let Id = form.find('[name=id]').val()
-      let action = form.data('action')
-      // let data = $('#crudForm').serializeArray()
-      let formData = new FormData()
+      let formData = new FormData(form[0])
+      let id = form.find('[name=id]').val()
+      let url
 
+      dropzones.forEach(dropzone => {
+        const {
+          paramName
+        } = dropzone.options
 
-      formData.append('id', form.find(`[name="id"]`).val())
-      formData.append('namasupir', form.find(`[name="namasupir"]`).val())
-      formData.append('tgllahir', form.find(`[name="tgllahir"]`).val())
-      formData.append('alamat', form.find(`[name="alamat"]`).val())
-      formData.append('kota', form.find(`[name="kota"]`).val())
-      formData.append('telp', form.find(`[name="telp"]`).val())
-      formData.append('statusaktif', form.find(`[name="statusaktif"]`).val())
-      formData.append('nominaldepositsa', AutoNumeric.getNumber($(`#crudForm [name="nominaldepositsa"]`)[0]))
-      formData.append('depositke', AutoNumeric.getNumber($(`#crudForm [name="depositke"]`)[0]))
-      formData.append('nominalpinjamansaldoawal', AutoNumeric.getNumber($(`#crudForm [name="nominalpinjamansaldoawal"]`)[0]))
-      formData.append('supirold_id', form.find(`[name="supirold_id"]`).val())
-      formData.append('tglmasuk', form.find(`[name="tglmasuk"]`).val())
-      formData.append('tglterbitsim', form.find(`[name="tglterbitsim"]`).val())
-      formData.append('tglexpsim', form.find(`[name="tglexpsim"]`).val())
-      formData.append('nosim', form.find(`[name="nosim"]`).val())
-      formData.append('keterangan', form.find(`[name="keterangan"]`).val())
-      formData.append('noktp', form.find(`[name="noktp"]`).val())
-      formData.append('nokk', form.find(`[name="nokk"]`).val())
-      formData.append('statusadaupdategambar', form.find(`[name="statusadaupdategambar"]`).val())
-      formData.append('statuszonatertentu', form.find(`[name="statuszonatertentu"]`).val())
-      formData.append('statusluarkota', form.find(`[name="statusluarkota"]`).val())
-      formData.append('zona_id', form.find(`[name="zona_id"]`).val())
-      formData.append('angsuranpinjaman', AutoNumeric.getNumber($(`#crudForm [name="angsuranpinjaman"]`)[0]))
-      formData.append('plafondeposito', AutoNumeric.getNumber($(`#crudForm [name="plafondeposito"]`)[0]))
-      formData.append('tglberhentisupir', form.find(`[name="tglberhentisupir"]`).val())
-      formData.append('keteranganresign', form.find(`[name="keteranganresign"]`).val())
-      formData.append('statusblacklist', form.find(`[name="statusblacklist"]`).val())
-
-      $.each(dropzoneAttachment.photosupir, function(row) {
-        formData.append('photosupir[]', dropzoneAttachment.photosupir[row])
+        dropzone.files.forEach((file, index) => {
+          formData.append(`${paramName}[${index}]`, file)
+        })
       })
-      $.each(dropzoneAttachment.photoktp, function(row, val) {
-        formData.append('ktp[]', dropzoneAttachment.photoktp[row])
-      })
-      $.each(dropzoneAttachment.photosim, function(row, val) {
-        formData.append('sim[]', dropzoneAttachment.photosim[row])
-      })
-      $.each(dropzoneAttachment.photokk, function(row, val) {
-        formData.append('kk[]', dropzoneAttachment.photokk[row])
-      })
-      $.each(dropzoneAttachment.photoskck, function(row, val) {
-        formData.append('skck[]', dropzoneAttachment.photoskck[row])
-      })
-      $.each(dropzoneAttachment.photodomisili, function(row, val) {
-        formData.append('domisili[]', dropzoneAttachment.photodomisili[row])
-      })
-
-      // $('#crudForm').find(`[name="angsuranpinjaman"]`).each((index, element) => {
-      //   data.filter((row) => row.name === 'angsuranpinjaman')[index].value = AutoNumeric.getNumber($(`#crudForm [name="angsuranpinjaman"]`)[index])
-      // })
-
-      // $('#crudForm').find(`[name="plafondeposito"]`).each((index, element) => {
-      //   data.filter((row) => row.name === 'plafondeposito')[index].value = AutoNumeric.getNumber($(`#crudForm [name="plafondeposito"]`)[index])
-      // })
-
-      // $('#crudForm').find(`[name="nominalpinjamansaldoawal"]`).each((index, element) => {
-      //   data.filter((row) => row.name === 'nominalpinjamansaldoawal')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalpinjamansaldoawal"]`)[index])
-      // })
-
-      // $('#crudForm').find(`[name="nominaldepositsa"]`).each((index, element) => {
-      //   data.filter((row) => row.name === 'nominaldepositsa')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaldepositsa"]`)[index])
-      // })
-
-      // $('#crudForm').find(`[name="depositke"]`).each((index, element) => {
-      //   data.filter((row) => row.name === 'depositke')[index].value = AutoNumeric.getNumber($(`#crudForm [name="depositke"]`)[index])
-      // })
-
 
       formData.append('sortIndex', $('#jqGrid').getGridParam().sortname)
       formData.append('sortOrder', $('#jqGrid').getGridParam().sortorder)
@@ -459,53 +358,42 @@
       formData.append('page', page)
       formData.append('limit', limit)
 
-      switch (action) {
-        case 'add':
-          method = 'POST'
-          url = `${apiUrl}supir`
-          break;
-        case 'edit':
-          method = 'POST'
-          formData.append('_method', 'PUT')
-          url = `${apiUrl}supir/${Id}`
-          break;
-        case 'delete':
-          method = 'DELETE'
-          url = `${apiUrl}supir/${Id}`
-          break;
-        default:
-          method = 'POST'
-          url = `${apiUrl}supir`
-          break;
+      if (form.data('action') == 'add') {
+        url = `${apiUrl}supir`
+      } else if (form.data('action') == 'edit') {
+        url = `${apiUrl}supir/${id}`
+        formData.append('_method', 'PATCH')
+      } else if (form.data('action') == 'delete') {
+        url = `${apiUrl}supir/${id}`
+        formData.append('_method', 'DELETE')
       }
-
 
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
 
       $.ajax({
         url: url,
-        method: method,
-        // dataType: 'JSON',
-        // enctype: 'multipart/form-data',
+        method: 'POST',
+        dataType: 'JSON',
+        processData: false,
+        contentType: false,
+        data: formData,
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
-        data: formData,
-        processData: false,
-        contentType: false,
         success: response => {
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
+
           id = response.data.id
 
-          $('#jqGrid').trigger('reloadGrid', {
+          $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
-          })
+          }).trigger('reloadGrid');
 
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
-          }
+          dropzones.forEach(dropzone => {
+            dropzone.removeAllFiles()
+          })
         },
         error: error => {
           if (error.status === 422) {
@@ -513,10 +401,8 @@
             $('.invalid-feedback').remove()
 
             setErrorMessages(form, error.responseJSON.errors);
-          } else {
-            showDialog(error.statusText)
           }
-        },
+        }
       }).always(() => {
         $('#loader').addClass('d-none')
         $(this).removeAttr('disabled')
@@ -524,28 +410,10 @@
     })
   })
 
-  $('#crudModal').on('shown.bs.modal', () => {
-    let form = $('#crudForm')
-
-    setFormBindKeys(form)
-
-    activeGrid = null
-    getMaxLength(form)
-    initLookup()
-    initDatepicker()
-    initSelect2()
-    // initDropzone(form.data('action'))
-  })
-
-  $('#crudModal').on('hidden.bs.modal', () => {
-    activeGrid = '#jqGrid'
-
-    $('#crudModal').find('.modal-body').html(modalBody)
-  })
-
   function createSupir() {
     let form = $('#crudForm')
 
+    form.find('[name]').removeAttr('disabled')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
@@ -564,20 +432,25 @@
     setStatusLuarKotaOptions(form)
     setStatusZonaTertentuOptions(form)
     setStatusBlackListOptions(form)
-    initDropzone(form.data('action'))
 
+    setFormBindKeys(form)
+    initDropzone(form.data('action'))
+    initLookup()
+    initDatepicker()
+    initSelect2()
+    form.find('[name]').removeAttr('disabled')
   }
 
   function editSupir(id) {
     let form = $('#crudForm')
 
+    form.find('[name]').removeAttr('disabled')
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
     Simpan
   `)
-    // form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Supir')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
@@ -594,7 +467,14 @@
       ])
       .then(() => {
         showSupir(form, id)
-        initDropzone(form.data('action'), id)
+          .then(supir => {
+            setFormBindKeys(form)
+            initDropzone(form.data('action'), supir)
+            initLookup()
+            initDatepicker()
+            initSelect2()
+            form.find('[name]').removeAttr('disabled')
+          })
       })
   }
 
@@ -604,10 +484,9 @@
     form.data('action', 'delete')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Hapus
-  `)
-    form.find(`.sometimes`).hide()
+      <i class="fa fa-save"></i>
+      Hapus
+    `)
     $('#crudModalTitle').text('Delete Supir')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
@@ -624,33 +503,126 @@
       ])
       .then(() => {
         showSupir(form, id)
-        initDropzone(form.data('action'), id)
+          .then(supir => {
+            setFormBindKeys(form)
+            initDropzone(form.data('action'), supir)
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
+            })
+
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+          })
       })
   }
 
-  function getMaxLength(form) {
-    if (!form.attr('has-maxlength')) {
+  const showSupir = function(form, id) {
+    return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}supir/field_length`,
+        url: `${apiUrl}supir/${id}`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
-          'Authorization': `Bearer ${accessToken}`
+          Authorization: `Bearer ${accessToken}`
         },
         success: response => {
           $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
+            let element = form.find(`[name="${index}"]`).not(':file')
+
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            } else {
+              element.val(value)
             }
           })
 
-          form.attr('has-maxlength', true)
+          resolve(response.data)
+        }
+      })
+    })
+  }
+
+  function initLookup() {
+    if (!$('.zona-lookup').data('hasLookup')) {
+      $('.zona-lookup').lookup({
+        title: 'Zona Lookup',
+        fileName: 'zona',
+        onSelectRow: (zona, element) => {
+          $('#crudForm [name=zona_id]').first().val(zona.id)
+          element.val(zona.keterangan)
+          element.data('currentValue', element.val())
         },
-        error: error => {
-          showDialog(error.statusText)
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
         }
       })
     }
+
+    if (!$('.supir-lookup').data('hasLookup')) {
+      $('.supir-lookup').lookup({
+        title: 'Supir Lookup',
+        fileName: 'supir',
+        onSelectRow: (supir, element) => {
+          $('#crudForm [name=supir_id]').first().val(supir.id)
+          element.val(supir.namasupir)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        }
+      })
+    }
+  }
+
+  function initDropzone(action, data = null) {
+    $('.dropzone').each((index, element) => {
+      if (!element.dropzone) {
+        let newDropzone = new Dropzone(element, {
+          url: 'test',
+          autoProcessQueue: false,
+          addRemoveLinks: true,
+          acceptedFiles: 'image/*',
+          paramName: $(element).data('field'),
+          init: function() {
+            dropzones.push(this)
+          }
+        })
+      }
+
+      element.dropzone.removeAllFiles()
+
+      if (action == 'edit' || action == 'delete') {
+        assignAttachment(element.dropzone, data)
+      }
+    })
+  }
+
+  function assignAttachment(dropzone, data) {
+    const paramName = dropzone.options.paramName
+    const type = paramName.substring(5)
+
+    let files = JSON.parse(data[paramName])
+
+    files.forEach((file) => {
+      getImgURL(`${apiUrl}supir/image/${type}/${file}/ori`, (fileBlob) => {
+        let imageFile = new File([fileBlob], file, {
+          type: 'image/jpeg',
+          lastModified: new Date().getTime()
+        }, 'utf-8')
+
+        dropzone.options.addedfile.call(dropzone, imageFile);
+        dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}supir/image/${type}/${file}/ori`);
+        dropzone.files.push(imageFile)
+      })
+    })
   }
 
   const setSupirLamaOptions = function(relatedForm) {
@@ -874,316 +846,15 @@
     })
   }
 
-  function showSupir(form, id) {
-    $.ajax({
-      url: `${apiUrl}supir/${id}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
-          } else {
-            element.val(value)
-          }
-
-        })
-
-        // initAutoNumeric(form.find(`[name="nominal"]`))
-        // initAutoNumeric(form.find(`[name="nominalton"]`))
-
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
-        }
-      }
-    })
-  }
-
-  function initLookup() {
-
-    $('.zona-lookup').lookup({
-      title: 'Zona Lookup',
-      fileName: 'zona',
-      onSelectRow: (zona, element) => {
-        $('#crudForm [name=zona_id]').first().val(zona.id)
-        element.val(zona.keterangan)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
-
-    $('.supir-lookup').lookup({
-      title: 'Supir Lookup',
-      fileName: 'supir',
-      onSelectRow: (supir, element) => {
-        $('#crudForm [name=supir_id]').first().val(supir.id)
-        element.val(supir.namasupir)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
-  }
-
-
-  function initDropzone(action, id = null) {
-
-    const dropzones = []
-
-
-    $('.dropzone').each(function(i, el) {
-      const name = 'g_' + $(el).data('field');
-
-      myDropzone = new Dropzone(el, {
-        url: window.location.pathname,
-        autoProcessQueue: false,
-        uploadMultiple: true,
-        parallelUploads: 100,
-        maxFiles: 15,
-        paramName: name,
-        addRemoveLinks: true,
-        acceptedFiles: "image/*",
-        init: function() {
-          let wrapperThis = this;
-
-          // if(action == 'add') {
-            this.on('addedfile', function(imageFile) {
-              console.log(imageFile)
-              if (el.id == 'dropzonesupir') {
-                dropzoneAttachment.photosupir.push(imageFile)
-              }
-              if (el.id == 'dropzone-ktp') {
-                dropzoneAttachment.photoktp.push(imageFile)
-              }
-              if (el.id == 'dropzone-sim') {
-                dropzoneAttachment.photosim.push(imageFile)
-              }
-              if (el.id == 'dropzone-kk') {
-                dropzoneAttachment.photokk.push(imageFile)
-              }
-              if (el.id == 'dropzone-skck') {
-                dropzoneAttachment.photoskck.push(imageFile)
-              }
-              if (el.id == 'dropzone-domisili') {
-                dropzoneAttachment.photodomisili.push(imageFile)
-              }
-
-            })
-          // }
-            
-          
-
-          this.on('removedfile', function(file) {
-            // let key = file.upload.uuid;
-            console.log(file.name)
-            // console.log(dropzoneAttachment.photosupir.hasOwnProperty())
-            // if (dropzoneAttachment.photosupir.hasOwnProperty(key) || dropzoneAttachment.ktp.hasOwnProperty(key) || dropzoneAttachment.sim.hasOwnProperty(key) || dropzoneAttachment.kk.hasOwnProperty(key) || dropzoneAttachment.skck.hasOwnProperty(key) || dropzoneAttachment.domisili.hasOwnProperty(key)) {
-            //   delete dropzoneAttachment.photosupir[key];
-            //   delete dropzoneAttachment.ktp[key];
-            //   delete dropzoneAttachment.sim[key];
-            //   delete dropzoneAttachment.kk[key];
-            //   delete dropzoneAttachment.skck[key];
-            //   delete dropzoneAttachment.domisili[key];
-            // }
-          })
-          console.log(action)
-
-          if (action == 'edit' || action == 'delete') {
-            if (el.id == 'dropzonesupir') {
-              $.ajax({
-                url: `${apiUrl}supir/getImage/${id}/photosupir`,
-                method: 'GET',
-                dataType: 'JSON',
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                },
-                success: response => {
-                  $.each(response.file, function(index, value) {
-
-                    // console.log(value);
-                    let imageFile = new File([{
-                      name: `${response.base}/supir/${value.name}`,
-                      size: value.size,
-                      status: 'added',
-                      upload: {
-                        uuid: (Math.random() + 1).toString(36).substring(7)
-                      }
-                    }], value.name, {type: value.type})
-
-                    newAdd = false
-                    console.log(imageFile)
-                    wrapperThis.emit("addedfile", imageFile);
-                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/supir/${value.name}`);
-                    // wrapperThis.emit("complete", imageFile);
-                    
-                    // wrapperThis.options.addedfile.call(wrapperThis, imageFile);
-                    // wrapperThis.options.thumbnail.call(wrapperThis, imageFile,  `${response.base}/${value.file}`);
-                    // dropzoneAttachment.photosupir.push({
-                    //   imageFile
-                    // })
-                    wrapperThis.files.push(imageFile);
-                  })
-                }
-              })
-            }
-
-            if (el.id == 'dropzone-ktp') {
-              $.ajax({
-                url: `${apiUrl}supir/getImage/${id}/photoktp`,
-                method: 'GET',
-                dataType: 'JSON',
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                },
-                success: response => {
-                  $.each(response.file, function(index, value) {
-                    let imageFile = new File([{
-                      name: `${response.base}/ktp/${value.name}`,
-                      size: 15245,
-                      status: 'added',
-                      upload: {
-                        uuid: (Math.random() + 1).toString(36).substring(7)
-                      }
-                    }], value.name, {type: value.type})
-
-                    wrapperThis.emit("addedfile", imageFile);
-                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/ktp/${value.name}`);
-                    // wrapperThis.emit("complete", imageFile);
-                    // dropzoneAttachment.photo.push({
-                    //   imageFile
-                    // })
-                    wrapperThis.files.push(imageFile);
-                  })
-                }
-              })
-            }
-            if (el.id == 'dropzone-sim') {
-              $.ajax({
-                url: `${apiUrl}supir/getImage/${id}/photosim`,
-                method: 'GET',
-                dataType: 'JSON',
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                },
-                success: response => {
-                  $.each(response.file, function(index, value) {
-                    let imageFile = new File([{
-                      name: `${response.base}/sim/${value.name}`,
-                      size: 15245,
-                      status: 'added',
-                      upload: {
-                        uuid: (Math.random() + 1).toString(36).substring(7)
-                      }
-                    }], value.name, {type: value.type})
-
-                    wrapperThis.emit("addedfile", imageFile);
-                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/sim/${value.name}`);
-                    // wrapperThis.emit("complete", imageFile);
-                    wrapperThis.files.push(imageFile);
-                  })
-                }
-              })
-            }
-            if (el.id == 'dropzone-kk') {
-              $.ajax({
-                url: `${apiUrl}supir/getImage/${id}/photokk`,
-                method: 'GET',
-                dataType: 'JSON',
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                },
-                success: response => {
-                  $.each(response.file, function(index, value) {
-                    let imageFile = new File([{
-                      name: `${response.base}/kk/${value.name}`,
-                      size: 15245,
-                      status: 'added',
-                      upload: {
-                        uuid: (Math.random() + 1).toString(36).substring(7)
-                      }
-                    }], value.name, {type: value.type})
-
-                    wrapperThis.emit("addedfile", imageFile);
-                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/kk/${value.name}`);
-                    // wrapperThis.emit("complete", imageFile);
-                    wrapperThis.files.push(imageFile);
-                  })
-                }
-              })
-            }
-            if (el.id == 'dropzone-skck') {
-              $.ajax({
-                url: `${apiUrl}supir/getImage/${id}/photoskck`,
-                method: 'GET',
-                dataType: 'JSON',
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                },
-                success: response => {
-                  $.each(response.file, function(index, value) {
-                    let imageFile = new File([{
-                      name: `${response.base}/skck/${value.name}`,
-                      size: 15245,
-                      status: 'added',
-                      upload: {
-                        uuid: (Math.random() + 1).toString(36).substring(7)
-                      }
-                    }], value.name, {type: value.type})
-
-                    wrapperThis.emit("addedfile", imageFile);
-                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/skck/${value.name}`);
-                    // wrapperThis.emit("complete", imageFile);
-                    wrapperThis.files.push(imageFile);
-                  })
-                }
-              })
-            }
-            if (el.id == 'dropzone-domisili') {
-              $.ajax({
-                url: `${apiUrl}supir/getImage/${id}/photodomisili`,
-                method: 'GET',
-                dataType: 'JSON',
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                },
-                success: response => {
-                  $.each(response.file, function(index, value) {
-                    let imageFile = new File([{
-                      name: `${response.base}/domisili/${value.name}`,
-                      size: 15245,
-                      status: 'added',
-                      upload: {
-                        uuid: (Math.random() + 1).toString(36).substring(7)
-                      }
-                    }], value.name, {type: value.type})
-
-                    wrapperThis.emit("addedfile", imageFile);
-                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/domisili/${value.name}`);
-                    // wrapperThis.emit("complete", imageFile);
-                    wrapperThis.files.push(imageFile);
-                  })
-                }
-              })
-            }
-
-          }
-        }
-      })
-      dropzones.push(myDropzone)
-    })
-
-
+  function getImgURL(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      console.log(xhr.response);
+      callback(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
   }
 </script>
 @endpush()

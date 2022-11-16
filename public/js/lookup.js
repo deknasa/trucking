@@ -15,6 +15,8 @@ $.fn.lookup = function (options = null) {
 	this.each(function () {
 		let element = $(this);
 
+		element.data('hasLookup', true)
+		
 		element.wrap('<div class="input-group"></div>').after(`
 			<div class="input-group-append">
 				<button class="btn btn-primary lookup-toggler" type="button">...</button>

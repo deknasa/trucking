@@ -22,7 +22,8 @@ class Myauth
             'penerimaanstokheader',
             'pengeluaranstokheader',
             'pengembaliankasgantungheader',
-            'dashboard'
+            'dashboard',
+            'supir'
         ],
         'method' => [
             'gridtab',
