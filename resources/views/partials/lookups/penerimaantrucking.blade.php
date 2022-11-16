@@ -34,7 +34,6 @@
           label: 'FORMAT BUKTI',
           name: 'statusformat',
           align: 'left',
-          hidden: true
         },
         {
           label: 'MODIFIEDBY',

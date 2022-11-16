@@ -55,7 +55,7 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="jarak" class="form-control autonumeric">
+                <input type="text" name="jarak" class="form-control">
               </div>
             </div>
             <div class="row form-group">
@@ -121,7 +121,7 @@
                   <th>AKSI</th>
                 </tr>
               </thead>
-              <tbody class="form-group">
+              <tbody id="table_body" class="form-group">
                 <tr>
                   <td>1</td>
                   <td>
@@ -203,19 +203,19 @@
       addRow()
     });
 
-    $(document).on('input', `#detailList [name="nominalsupir[]"]`, function(event) {
+    $(document).on('input', `#table_body [name="nominalsupir[]"]`, function(event) {
       setNominalSupir()
     })
     
-    $(document).on('input', `#detailList [name="nominalkenek[]"]`, function(event) {
+    $(document).on('input', `#table_body [name="nominalkenek[]"]`, function(event) {
       setNominalKenek()
     })
     
-    $(document).on('input', `#detailList [name="nominalkomisi[]"]`, function(event) {
+    $(document).on('input', `#table_body [name="nominalkomisi[]"]`, function(event) {
       setNominalKomisi()
     })
     
-    $(document).on('input', `#detailList [name="nominaltol[]"]`, function(event) {
+    $(document).on('input', `#table_body [name="nominaltol[]"]`, function(event) {
       setNominalTol()
     })
 
@@ -353,18 +353,18 @@
     activeGrid = null
 
     getMaxLength(form)
-    initLookup()
+    initSelect2()
     initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-
+    
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function setNominalSupir() {
-    let nominalDetails = $(`#detailList [name="nominalsupir[]"]`)
+    let nominalDetails = $(`#table_body [name="nominalsupir[]"]`)
     let total = 0
 
     $.each(nominalDetails, (index, nominalDetail) => {
@@ -375,7 +375,7 @@
   }
   
   function setNominalKenek() {
-    let nominalDetails = $(`#detailList [name="nominalkenek[]"]`)
+    let nominalDetails = $(`#table_body [name="nominalkenek[]"]`)
     let total = 0
 
     $.each(nominalDetails, (index, nominalDetail) => {
@@ -385,7 +385,7 @@
     new AutoNumeric('#nominalKenek').set(total)
   }
   function setNominalKomisi() {
-    let nominalDetails = $(`#detailList [name="nominalkomisi[]"]`)
+    let nominalDetails = $(`#table_body [name="nominalkomisi[]"]`)
     let total = 0
 
     $.each(nominalDetails, (index, nominalDetail) => {
@@ -395,7 +395,7 @@
     new AutoNumeric('#nominalKomisi').set(total)
   }
   function setNominalTol() {
-    let nominalDetails = $(`#detailList [name="nominaltol[]"]`)
+    let nominalDetails = $(`#table_body [name="nominaltol[]"]`)
     let total = 0
 
     $.each(nominalDetails, (index, nominalDetail) => {
@@ -409,17 +409,21 @@
   function createUpahSupir() {
     let form = $('#crudForm')
 
-    form.trigger('reset')
+    $('#crudModal').find('#crudForm').trigger('reset')
     form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Simpan
-  `)
+      <i class="fa fa-save"></i>
+      Simpan
+    `)
     form.data('action', 'add')
-    // form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Upah Supir')
+    
+    $('#crudModalTitle').text('Add Upah Supir')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+
+    
+    $('#table_body').html('')
+    addRow()
 
     setStatusAktifOptions(form)
     setStatusLuarKotaOptions(form)
@@ -429,6 +433,13 @@
     setNominalKomisi()
     setNominalTol()
 
+    
+    // initAutoNumeric(form.find(`[name="nominalsupir[]"]`))
+    // initAutoNumeric(form.find(`[name="nominalkenek[]"]`))
+    // initAutoNumeric(form.find(`[name="komisisupir[]"]`))
+    // initAutoNumeric(form.find(`[name="nominaltol[]"]`))
+    // initAutoNumeric(form.find(`[name="liter[]"]`))
+    initAutoNumeric(form.find(`[name="jarak"]`))
   }
 
   function editUpahSupir(id) {
@@ -601,13 +612,21 @@
             element.val(value).trigger('change')
           } else if (element.hasClass('datepicker')) {
             element.val(dateFormat(value))
-          } else if (element.hasClass('autonumeric')) {
-            let autoNumericInput = AutoNumeric.getAutoNumericElement(element[0])
-
-            autoNumericInput.set(value);
           } else {
             element.val(value)
           }
+
+          if(index == 'kotadari') {
+            element.data('current-value', value)
+          }
+          if(index == 'kotasampai') {
+            element.data('current-value', value)
+          }
+          if(index == 'zona') {
+            element.data('current-value', value)
+          }
+          
+          initAutoNumeric(form.find(`[name="jarak"]`))
         })
 
         $.each(response.detail, (index, detail) => {
@@ -617,11 +636,11 @@
               <td></td>
               <td>
                 <input type="hidden" name="container_id[]">
-                <input type="text" name="container[]" class="form-control container-lookup">
+                <input type="text" name="container[]" data-current-value="${detail.container}" class="form-control container-lookup">
               </td>
               <td>
                 <input type="hidden" name="statuscontainer_id[]" class="form-control">
-                <input type="text" name="statuscontainer[]" class="form-control statuscontainer-lookup">
+                <input type="text" name="statuscontainer[]" data-current-value="${detail.statuscontainer}" class="form-control statuscontainer-lookup">
               </td>
               <td>
                 <input type="text" name="nominalsupir[]" class="form-control autonumeric">
@@ -666,7 +685,7 @@
             title: 'Container Lookup',
             fileName: 'container',
             onSelectRow: (container, element) => {
-              $(`#crudForm [name="container_id[]"]`).last().val(container.id)
+              $(`#crudForm [name="container_id[]"]`).val(container.id)
               element.val(container.keterangan)
               element.data('currentValue', element.val())
             },
@@ -679,7 +698,7 @@
             title: 'Status Container Lookup',
             fileName: 'statuscontainer',
             onSelectRow: (statuscontainer, element) => {
-              $(`#crudForm [name="statuscontainer_id[]"]`).last().val(statuscontainer.id)
+              $(`#crudForm [name="statuscontainer_id[]"]`).val(statuscontainer.id)
               element.val(statuscontainer.keterangan)
               element.data('currentValue', element.val())
             },

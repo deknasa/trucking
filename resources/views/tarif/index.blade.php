@@ -56,8 +56,8 @@
             align: 'right',
             formatter: 'currency',
             formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
+              decimalSeparator: '.',
+              thousandsSeparator: ','
             }
           },
           {

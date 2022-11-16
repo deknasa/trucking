@@ -13,7 +13,10 @@ class PengeluaranTruckingHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        return view('pengeluarantruckingheader.index', compact('title'));
+        $data = [            
+            'combostatusposting' => $this->comboApproval('list','STATUS POSTING','STATUS POSTING'),
+        ];
+        return view('pengeluarantruckingheader.index', compact('title','data'));
     }
 
     public function create()
@@ -154,6 +157,22 @@ class PengeluaranTruckingHeaderController extends MyController
         return response($response);
     }
 
+    public function comboApproval($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'hutangbayarheader/comboapproval', $status);
+
+        return $response['data'];
+    }
     public function getNoBukti($group, $subgroup, $table)
     {
         $params = [

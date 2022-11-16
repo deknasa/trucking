@@ -324,6 +324,9 @@
                         element.val(value)
                     }
 
+                    if(index == 'trado') {
+                        element.data('current-value', value)
+                    }
 
                 })
 
@@ -333,7 +336,7 @@
                         <td></td>
                         <td>
                             <input type="hidden" name="mekanik_id[]" class="form-control">
-                            <input type="text" name="mekanik[]" class="form-control mekanik-lookup">
+                            <input type="text" name="mekanik[]" data-current-value="${detail.mekanik}" class="form-control mekanik-lookup">
                         </td>
 
                         <td>

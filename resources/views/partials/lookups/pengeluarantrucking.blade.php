@@ -3,7 +3,7 @@
 
 @push('scripts')
 <script>
-  let pengeluaranTruckingLookup = $('#pengeluaranTruckingLookup').jqGrid({
+$('#pengeluaranTruckingLookup').jqGrid({
       url: `{{ config('app.api_url') . 'pengeluarantrucking' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -34,7 +34,6 @@
           label: 'FORMAT BUKTI',
           name: 'statusformat',
           align: 'left',
-          hidden: true
         },
         {
           label: 'MODIFIEDBY',

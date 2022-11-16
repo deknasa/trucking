@@ -10,32 +10,15 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('pengeluarandetail.index') }}"
-  /**
-   * Custom Functions
-   */
-  var delay = (function() {
-    var timer = 0;
-    return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })()
-  function loadDetailGrid() {
-    let pager = '#detailPager'
+  function loadDetailGrid(id) {
 
     $("#detail").jqGrid({
-        url: `{{ config('app.api_url') . 'pengeluarandetail' }}`,
+        url: `${apiUrl}pengeluarandetail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        //datatype: "json",
         colModel: [
-          // {
-          //   label: 'PENGELUARAN',
-          //   name: 'pengeluaran_id',
-          // },
           {
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -58,14 +41,14 @@
             }
           }, 
           {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+          }, 
+          {
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
+            formatter: currencyFormat,
           },
           {
             label: 'COA DEBET',
@@ -75,10 +58,6 @@
             label: 'COA KREDIT',
             name: 'coakredit',
           },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-          }, 
           {
             label: 'BULAN BEBAN',
             name: 'bulanbeban',
@@ -96,11 +75,44 @@
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
+        footerrow: true,
+        userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        pager: pager,
         viewrecords: true,
+        postData: {
+          pengeluaran_id: id
+        },
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
+        onSelectRow: function(id) {
+          activeGrid = $(this)
+        },
         loadComplete: function(data) {
+          initResize($(this))
+
+          let nominals = $(this).jqGrid("getCol", "nominal")
+          let totalNominal = 0
+
+          if (nominals.length > 0) {
+            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          }
+
+          $(this).jqGrid('footerData', 'set', {
+            nobukti: 'Total:',
+            nominal: totalNominal,
+          }, true)
         }
       })
 
@@ -111,11 +123,13 @@
         edit: false,
         del: false,
       })
+
+      .customPager()
   }
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: detailIndexUrl,
+      url: `${apiUrl}pengeluarandetail`,
       datatype: "json",
       postData: {
         pengeluaran_id: id

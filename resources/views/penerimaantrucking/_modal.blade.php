@@ -45,17 +45,19 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="coa" class="form-control">
+                <input type="text" name="coa" class="form-control akunpusat-lookup">
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+              <div class="col-12 col-md-2 col-form-label">
                 <label>
-                  format bukti <span class="text-danger">*</span>
+                  FORMAT<span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="formatbukti" class="form-control">
+              <div class="col-12 col-md-10">
+                <select name="statusformat" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH FORMAT --</option>
+                </select>
               </div>
             </div>
           </div>
@@ -78,6 +80,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -182,12 +185,14 @@
     setFormBindKeys(form)
 
     activeGrid = null
-
     getMaxLength(form)
+    initLookup()
+    initSelect2()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createPenerimaanTrucking() {
@@ -205,7 +210,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setStatusAktifOptions(form)
+    setStatusFormatOptions(form)
   }
 
   function editPenerimaanTrucking(penerimaanTruckingId) {
@@ -225,7 +230,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusFormatOptions(form)
       ])
       .then(() => {
         showPenerimaanTrucking(form, penerimaanTruckingId)
@@ -249,7 +254,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusFormatOptions(form)
       ])
       .then(() => {
         showPenerimaanTrucking(form, penerimaanTruckingId)
@@ -281,11 +286,11 @@
     }
   }
 
-  const setStatusAktifOptions = function(relatedForm) {
+  const setStatusFormatOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusaktif]').empty()
-      relatedForm.find('[name=statusaktif]').append(
-        new Option('-- PILIH STATUS AKTIF --', '', false, true)
+      relatedForm.find('[name=statusformat]').empty()
+      relatedForm.find('[name=statusformat]').append(
+        new Option('-- PILIH FORMAT --', '', false, true)
       ).trigger('change')
 
       $.ajax({
@@ -301,15 +306,15 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS AKTIF"
+              "data": "PENERIMAAN TRUCKING"
             }]
           })
         },
         success: response => {
-          response.data.forEach(statusAktif => {
-            let option = new Option(statusAktif.text, statusAktif.id)
+          response.data.forEach(statusFormat => {
+            let option = new Option(statusFormat.text, statusFormat.id)
 
-            relatedForm.find('[name=statusaktif]').append(option).trigger('change')
+            relatedForm.find('[name=statusformat]').append(option).trigger('change')
           });
 
           resolve()
@@ -335,9 +340,35 @@
           } else {
             element.val(value)
           }
+          
+          if (index == 'coa') {
+              element.data('current-value', value)
+          }
+          
         })
+        
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
       }
     })
+  }
+
+  function initLookup()
+  {
+    $('.akunpusat-lookup').lookup({
+        title: 'COA Lookup',
+        fileName: 'akunpusat',
+        onSelectRow: (akunpusat, element) => {
+            element.val(akunpusat.coa)
+            element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+            element.val(element.data('currentValue'))
+        }
+    })
+                    
   }
 </script>
 @endpush()

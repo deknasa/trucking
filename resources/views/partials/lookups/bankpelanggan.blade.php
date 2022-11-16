@@ -1,10 +1,10 @@
-<table id="pengeluaranHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="pengeluaranHeaderLookupPager"></div>
+<table id="bankPelangganLookup" class="lookup-grid"></table>
+<div id="bankPelangganLookupPager"></div>
 
 @push('scripts')
 <script>
-$('#pengeluaranHeaderLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'pengeluaran' }}`,
+  $('#bankPelangganLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'bankpelanggan' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -16,23 +16,13 @@ $('#pengeluaranHeaderLookup').jqGrid({
           width: '70px'
         },
         {
-          label: 'NO BUKTI',
-          name: 'nobukti',
+          label: 'KODE BANK',
+          name: 'kodebank',
           align: 'left',
         },
         {
-          label: 'TGL BUKTI',
-          name: 'tglbukti',
-          align: 'left',
-          formatter: "date",
-          formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-          }
-        },
-        {
-          label: 'PELANGGAN',
-          name: 'pelanggan_id',
+          label: 'NAMA BANK',
+          name: 'namabank',
           align: 'left'
         },
         {
@@ -40,51 +30,51 @@ $('#pengeluaranHeaderLookup').jqGrid({
           name: 'keterangan',
           align: 'left'
         },
-        
         {
-          label: 'STATUS JNS TRANSAKSI',
-          name: 'statusjenistransaksi',
-          align: 'left'
-        },
-        {
-          label: 'POSTING DARI',
-          name: 'postingdari',
-          align: 'left'
-        },
-        {
-          label: 'STATUS APPROVAL',
-          name: 'statusapproval',
-          align: 'left'
-        },
-        {
-          label: 'DIBAYARKAN KE',
-          name: 'dibayarke',
-          align: 'left'
-        },
-        {
-          label: 'CABANG',
-          name: 'cabang_id',
-          align: 'left'
-        },
-        {
-          label: 'BANK',
-          name: 'bank_id',
-          align: 'left'
-        },
-        {
-          label: 'TRANSFER KE NO REK',
-          name: 'transferkeac',
-          align: 'left'
-        }, 
-        {
-          label: 'TRANSFER NAMA REK',
-          name: 'transferkean',
-          align: 'left'
-        },
-        {
-          label: 'TRANSFER NAMA BANK',
-          name: 'transferkebank',
-          align: 'left'
+          label: 'STATUS AKTIF',
+          name: 'statusaktif',
+          align: 'left',
+          width: 100,
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}bank/combo`,
+                  method: "get",
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: function () {
+                    return{
+                        search: 'status'
+                    }
+                  },
+                  processResults: function (data) {
+                    let datas = []
+                    $.map(data, function (item) {
+                      $.map(item, function (index,value) {
+                            $.each(index, (row, detail) => {
+                              datas.push({
+                                    id: detail.text,
+                                    text: detail.text
+                                })
+                            })
+                              
+                          })
+                        })
+                        console.log(datas)
+                    return {
+                        results: datas
+                    };
+                  }             
+                }
+              });
+            }
+          },
         },
         {
           label: 'MODIFIEDBY',
@@ -109,12 +99,12 @@ $('#pengeluaranHeaderLookup').jqGrid({
       rownumbers: true,
       rownumWidth: 45,
       rowList: [10, 20, 50],
-      toolbar: [true, "top"],
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#pengeluaranHeaderLookupPager'),
+      toolbar: [true, "top"],
+      pager: $('#bankPelangganLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -141,28 +131,27 @@ $('#pengeluaranHeaderLookup').jqGrid({
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
-          initResize($(this))
 
-          if (indexRow - 1 > $('#pengeluaranHeaderLookup').getGridParam().reccount) {
-            indexRow = $('#pengeluaranHeaderLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#bankPelangganLookup').getGridParam().reccount) {
+            indexRow = $('#bankPelangganLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#pengeluaranHeaderLookup [id="${$('#pengeluaranHeaderLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#bankPelangganLookup [id="${$('#bankPelangganLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#pengeluaranHeaderLookup [id="${$('#pengeluaranHeaderLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#bankPelangganLookup [id="${$('#bankPelangganLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#pengeluaranHeaderLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#pengeluaranHeaderLookup [id="` + $('#pengeluaranHeaderLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#bankPelangganLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#bankPelangganLookup [id="` + $('#bankPelangganLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#pengeluaranHeaderLookup').setSelection($('#pengeluaranHeaderLookup').getDataIDs()[indexRow])
+            $('#bankPelangganLookup').setSelection($('#bankPelangganLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -177,7 +166,7 @@ $('#pengeluaranHeaderLookup').jqGrid({
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupPengeluaranHeader').prev().width())
+        $(this).setGridWidth($('#lookupBankPelanggan').prev().width())
         setHighlight($(this))
       }
     })
@@ -189,10 +178,10 @@ $('#pengeluaranHeaderLookup').jqGrid({
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#pengeluaranHeaderLookup'))
+        clearGlobalSearch($('#bankPelangganLookup'))
       },
     })
 
-  loadGlobalSearch($('#pengeluaranHeaderLookup'))
-  loadClearFilter($('#pengeluaranHeaderLookup'))
+  loadGlobalSearch($('#bankPelangganLookup'))
+  loadClearFilter($('#bankPelangganLookup'))
 </script>

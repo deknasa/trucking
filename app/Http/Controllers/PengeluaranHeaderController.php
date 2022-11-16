@@ -19,13 +19,12 @@ class PengeluaranHeaderController extends MyController
     {
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
-        $combo = [
-            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
-            'statusapproval' => $this->getParameter('STATUS APPROVAL', 'STATUS APPROVAL'),
-            'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
+        $data = [            
+            'comboapproval' => $this->comboApproval('list','STATUS APPROVAL','STATUS APPROVAL'),
+            'combojenistransaksi' => $this->comboApproval('list','JENIS TRANSAKSI','JENIS TRANSAKSI'),
         ];
 
-        return view('pengeluaran.index', compact('title', 'breadcrumb', 'combo'));
+        return view('pengeluaran.index', compact('title', 'breadcrumb', 'data'));
     }
 
     public function get($params = [])
@@ -40,7 +39,7 @@ class PengeluaranHeaderController extends MyController
 
         $response = Http::withHeaders(request()->header())
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'pengeluaran', $params);
+            ->get(config('app.api_url') . 'pengeluaranheader', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -57,77 +56,14 @@ class PengeluaranHeaderController extends MyController
         return $data;
     }
 
-    /**
-     * Fungsi create
-     * @ClassName create
-     */
-    public function create(): View
-    {
-        $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
-        $combo = $this->combo();
-
-        return view('pengeluaran.add', compact('title', 'breadcrumb', 'combo'));
-    }
-
-    /**
-     * Fungsi edit
-     * @ClassName edit
-     */
-    public function edit($id): View
-    {
-        $title = $this->title;
-
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "pengeluaran/$id");
-        $pengeluaran = $response['data'];
-
-        $combo = $this->combo();
-
-        return view('pengeluaran.edit', compact('title', 'pengeluaran', 'combo'));
-    }
-
+  
     // /**
     //  * Fungsi delete
     //  * @ClassName delete
     //  */
-    public function delete($id)
-    {
-        try {
-            $title = $this->title;
+   
 
-            $response = Http::withHeaders($this->httpHeaders)
-                ->withOptions(['verify' => false])
-                ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "pengeluaran/$id");
-
-            $pengeluaran = $response['data'];
-            $combo = $this->combo();
-
-            return view('pengeluaran.delete', compact('title', 'combo', 'pengeluaran'));
-        } catch (\Throwable $th) {
-            return redirect()->route('pengeluaran.index');
-        }
-    }
-
-
-    // /**
-    //  * Fungsi destroy
-    //  * @ClassName destroy
-    //  */
-    public function destroy($id, Request $request)
-    {
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "agen/$id", $request->all());
-
-        return response($response);
-    }
+   
 
     // /**
     //  * Fungsi getNoBukti
@@ -150,7 +86,22 @@ class PengeluaranHeaderController extends MyController
 
         return $noBukti;
     }
+    public function comboApproval($aksi, $grp, $subgrp)
+    {
 
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'hutangbayarheader/comboapproval', $status);
+
+        return $response['data'];
+    }
 
 
     // /**
@@ -162,7 +113,7 @@ class PengeluaranHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withToken(session('access_token'))
             ->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'pengeluaran/combo');
+            ->get(config('app.api_url') . 'pengeluaranheader/combo');
         return $response['data'];
     }
 }

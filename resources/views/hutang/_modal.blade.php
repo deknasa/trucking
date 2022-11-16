@@ -79,10 +79,9 @@
                   <th>Aksi</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody  id="table_body">
                 <tr>
-                  <td>
-                  </td>
+                  <td>1</td>
                   <td>
                     <input type="hidden" name="supplier_id[]" class="form-control">
                     <input type="text" name="supplier[]" class="form-control supplier-lookup">
@@ -98,10 +97,10 @@
                   </td>
 
                   <td>
-                    <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right autonumeric">
+                    <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right ">
                   </td>
                   <td>
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                    <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
                   </td>
                 </tr>
 
@@ -145,11 +144,11 @@
   
   $(document).ready(function() {
 
-    $("#addRow").click(function() {
+    $(document).on('click', "#addRow", function() {
       addRow()
     });
 
-    $(document).on('input', `#detailList [name="total_detail[]"]`, function(event) {
+    $(document).on('input', `#table_body [name="total_detail[]"]`, function(event) {
       setTotal()
     })
 
@@ -273,13 +272,12 @@
     activeGrid = null
 
     getMaxLength(form)
-    initLookup()
     initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-
+    
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -310,6 +308,7 @@
     $('.invalid-feedback').remove()
 
     $('#table_body').html('')
+    addRow()
     setTotal()
   }
 
@@ -394,6 +393,13 @@
           } else {
             element.val(value)
           }
+
+          if(index == 'akunpusat') {
+            element.data('current-value', value)
+          }
+          if(index == 'pelanggan') {
+            element.data('current-value', value)
+          }
         })
 
         $.each(response.detail, (index, detail) => {
@@ -402,7 +408,7 @@
               <td> </td>
               <td>
                 <input type="hidden" name="supplier_id[]" class="form-control">
-                <input type="text" name="supplier[]" class="form-control supplier-lookup">
+                <input type="text" name="supplier[]" data-current-value="${detail.supplier}" class="form-control supplier-lookup">
               </td>
               <td>
                 <div class="input-group">

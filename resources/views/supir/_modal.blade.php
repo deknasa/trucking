@@ -466,7 +466,7 @@
           break;
         case 'edit':
           method = 'POST'
-          formData.append('_method', 'PATCH')
+          formData.append('_method', 'PUT')
           url = `${apiUrl}supir/${Id}`
           break;
         case 'delete':
@@ -1010,23 +1010,21 @@
                 },
                 success: response => {
                   $.each(response.file, function(index, value) {
-                    console.log(value);
-                    let tes = `${response.base}/${value.name}`
-                    let ext = tes.split('.').pop()
+
+                    // console.log(value);
                     let imageFile = new File([{
-                      name: `${response.base}/${value.name}`,
+                      name: `${response.base}/supir/${value.name}`,
                       size: value.size,
-                      type: `images/${ext}`,
                       status: 'added',
                       upload: {
                         uuid: (Math.random() + 1).toString(36).substring(7)
                       }
-                    }], value.name)
+                    }], value.name, {type: value.type})
 
                     newAdd = false
                     console.log(imageFile)
                     wrapperThis.emit("addedfile", imageFile);
-                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/${value.name}`);
+                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/supir/${value.name}`);
                     // wrapperThis.emit("complete", imageFile);
                     
                     // wrapperThis.options.addedfile.call(wrapperThis, imageFile);
@@ -1051,17 +1049,16 @@
                 success: response => {
                   $.each(response.file, function(index, value) {
                     let imageFile = new File([{
-                      name: value.name,
-                      size: value.size,
-                      type: value.ext,
+                      name: `${response.base}/ktp/${value.name}`,
+                      size: 15245,
                       status: 'added',
                       upload: {
                         uuid: (Math.random() + 1).toString(36).substring(7)
                       }
-                    }], value.name)
+                    }], value.name, {type: value.type})
 
                     wrapperThis.emit("addedfile", imageFile);
-                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/${value.name}`);
+                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/ktp/${value.name}`);
                     // wrapperThis.emit("complete", imageFile);
                     // dropzoneAttachment.photo.push({
                     //   imageFile
@@ -1082,17 +1079,16 @@
                 success: response => {
                   $.each(response.file, function(index, value) {
                     let imageFile = new File([{
-                      name: value.name,
-                      size: value.size,
-                      type: value.ext,
+                      name: `${response.base}/sim/${value.name}`,
+                      size: 15245,
                       status: 'added',
                       upload: {
                         uuid: (Math.random() + 1).toString(36).substring(7)
                       }
-                    }], value.name)
+                    }], value.name, {type: value.type})
 
                     wrapperThis.emit("addedfile", imageFile);
-                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/${value.name}`);
+                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/sim/${value.name}`);
                     // wrapperThis.emit("complete", imageFile);
                     wrapperThis.files.push(imageFile);
                   })
@@ -1110,17 +1106,16 @@
                 success: response => {
                   $.each(response.file, function(index, value) {
                     let imageFile = new File([{
-                      name: value.name,
-                      size: value.size,
-                      type: value.ext,
+                      name: `${response.base}/kk/${value.name}`,
+                      size: 15245,
                       status: 'added',
                       upload: {
                         uuid: (Math.random() + 1).toString(36).substring(7)
                       }
-                    }], value.name)
+                    }], value.name, {type: value.type})
 
                     wrapperThis.emit("addedfile", imageFile);
-                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/${value.name}`);
+                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/kk/${value.name}`);
                     // wrapperThis.emit("complete", imageFile);
                     wrapperThis.files.push(imageFile);
                   })
@@ -1138,17 +1133,16 @@
                 success: response => {
                   $.each(response.file, function(index, value) {
                     let imageFile = new File([{
-                      name: value.name,
-                      size: value.size,
-                      type: value.ext,
+                      name: `${response.base}/skck/${value.name}`,
+                      size: 15245,
                       status: 'added',
                       upload: {
                         uuid: (Math.random() + 1).toString(36).substring(7)
                       }
-                    }], value.name)
+                    }], value.name, {type: value.type})
 
                     wrapperThis.emit("addedfile", imageFile);
-                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/${value.name}`);
+                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/skck/${value.name}`);
                     // wrapperThis.emit("complete", imageFile);
                     wrapperThis.files.push(imageFile);
                   })
@@ -1166,17 +1160,16 @@
                 success: response => {
                   $.each(response.file, function(index, value) {
                     let imageFile = new File([{
-                      name: value.name,
-                      size: value.size,
-                      type: value.ext,
+                      name: `${response.base}/domisili/${value.name}`,
+                      size: 15245,
                       status: 'added',
                       upload: {
                         uuid: (Math.random() + 1).toString(36).substring(7)
                       }
-                    }], value.name)
+                    }], value.name, {type: value.type})
 
                     wrapperThis.emit("addedfile", imageFile);
-                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/${value.name}`);
+                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/domisili/${value.name}`);
                     // wrapperThis.emit("complete", imageFile);
                     wrapperThis.files.push(imageFile);
                   })

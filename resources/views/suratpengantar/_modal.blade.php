@@ -165,7 +165,7 @@
                   </label>
                 </div>
                 <div>
-                  <input type="text" name="omset" class="form-control autonumeric">
+                  <input type="text" name="omset" class="form-control text-right">
                 </div>
               </div>
               <div class="form-group col-md-4">
@@ -175,7 +175,7 @@
                   </label>
                 </div>
                 <div>
-                  <input type="text" name="discount" class="form-control autonumeric">
+                  <input type="text" name="discount" class="form-control text-right">
                 </div>
               </div>
 
@@ -324,7 +324,7 @@
                   </label>
                 </div>
                 <div>
-                  <input type="text" name="nilaitagihlain" class="form-control autonumeric">
+                  <input type="text" name="nilaitagihlain" class="form-control text-right">
                 </div>
               </div>
               <div class="form-group col-md-4">
@@ -357,7 +357,7 @@
                   </label>
                 </div>
                 <div>
-                  <input type="text" name="qtyton" class="form-control autonumeric">
+                  <input type="text" name="qtyton" class="form-control text-right">
                 </div>
               </div>
               
@@ -368,7 +368,7 @@
                   </label>
                 </div>
                 <div>
-                  <input type="text" name="totalton" class="form-control autonumeric">
+                  <input type="text" name="totalton" class="form-control text-right">
                 </div>
               </div>
 
@@ -432,7 +432,7 @@
                   </label>
                 </div>
                 <div>
-                  <input type="text" name="nominalstafle" class="form-control autonumeric">
+                  <input type="text" name="nominalstafle" class="form-control text-right">
                 </div>
               </div>
 
@@ -457,7 +457,7 @@
                   </label>
                 </div>
                 <div>
-                  <input type="text" name="notripasal" class="form-control autonumeric">
+                  <input type="text" name="notripasal" class="form-control text-right">
                 </div>
               </div>
               <div class="form-group col-md-4">
@@ -479,7 +479,7 @@
                   </label>
                 </div>
                 <div>
-                  <input type="text" name="upahbongkardepo" class="form-control autonumeric">
+                  <input type="text" name="upahbongkardepo" class="form-control text-right">
                 </div>
               </div>
               <div class="form-group col-md-4">
@@ -489,7 +489,7 @@
                   </label>
                 </div>
                 <div>
-                  <input type="text" name="upahmuatdepo" class="form-control autonumeric">
+                  <input type="text" name="upahmuatdepo" class="form-control text-right">
                 </div>
               </div>
               <div class="form-group col-md-4">
@@ -890,6 +890,17 @@
     addRow()
     setTotal()
     setTotalTagih()
+    
+    initAutoNumeric(form.find(`[name="nominal"]`))
+    initAutoNumeric(form.find(`[name="nominalTagih"]`))
+    initAutoNumeric(form.find(`[name="nominalstafle"]`))
+    initAutoNumeric(form.find(`[name="omset"]`))
+    initAutoNumeric(form.find(`[name="discount"]`))
+    initAutoNumeric(form.find(`[name="nilaitagihlain"]`))
+    initAutoNumeric(form.find(`[name="qtyton"]`))
+    initAutoNumeric(form.find(`[name="totalton"]`))
+    initAutoNumeric(form.find(`[name="upahbongkardepo"]`))
+    initAutoNumeric(form.find(`[name="upahmuatdepo"]`))
   }
 
   function editSuratPengantar(id) {
@@ -1289,6 +1300,21 @@
           } else {
             element.val(value)
           }
+
+          (index == 'jobtrucking') ? element.data('current-value', value) : '';
+          (index == 'dari') ? element.data('current-value', value) : '';
+          (index == 'sampai') ? element.data('current-value', value) : '';
+          (index == 'pelanggan') ? element.data('current-value', value) : '';
+          (index == 'container') ? element.data('current-value', value) : '';
+          (index == 'statuscontainer') ? element.data('current-value', value) : '';
+          (index == 'trado') ? element.data('current-value', value) : '';
+          (index == 'supir') ? element.data('current-value', value) : '';
+          (index == 'agen') ? element.data('current-value', value) : '';
+          (index == 'jenisorder') ? element.data('current-value', value) : '';
+          (index == 'tarif') ? element.data('current-value', value) : '';
+          (index == 'cabang') ? element.data('current-value', value) : '';
+          
+
         })
         if(response.detail.length === 0){
           addRow()
