@@ -88,7 +88,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  Notelp2 <span class="text-danger">*</span>
+                  Notelp2 
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -110,7 +110,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  Web <span class="text-danger">*</span>
+                  Web 
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">

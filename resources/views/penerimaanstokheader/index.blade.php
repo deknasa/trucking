@@ -52,6 +52,7 @@
       title: 'penerimaan stok Lookup',
       fileName: 'penerimaanstok',
       onSelectRow: (penerimaanstok, element) => {
+        kodepenerimaan(penerimaanstok.statusformat)
         element.val(penerimaanstok.kodepenerimaan)
         $(`#${element[0]['name']}Id`).val(penerimaanstok.id)
         element.data('currentValue', element.val())

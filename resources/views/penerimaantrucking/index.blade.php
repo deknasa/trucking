@@ -42,20 +42,20 @@
             width: '50px'
           },
           {
-            label: 'kode penerimaan',
+            label: 'KODE PENERIMAAN',
             name: 'kodepenerimaan',
           },
           {
-            label: 'keterangan',
+            label: 'KETERANGAN',
             name: 'keterangan',
           },
           {
-            label: 'coa',
+            label: 'COA',
             name: 'coa',
           },
           {
-            label: 'formatbukti',
-            name: 'formatbukti',
+            label: 'STATUS FORMAT',
+            name: 'statusformat',
           },
           {
             label: 'MODIFIEDBY',
@@ -78,6 +78,7 @@
         sortname: sortname,
         sortorder: sortorder,
         page: page,
+        pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',
@@ -182,26 +183,6 @@
               deletePenerimaanTrucking(selectedId)
             }
           },
-          {
-            id: 'export',
-            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
-            onClick: () => {
-              $('#rangeModal').data('action', 'export')
-              $('#rangeModal').find('button:submit').html(`Export`)
-              $('#rangeModal').modal('show')
-            }
-          },
-          {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              $('#rangeModal').data('action', 'report')
-              $('#rangeModal').find('button:submit').html(`Report`)
-              $('#rangeModal').modal('show')
-            }
-          },
         ]
       })
 
@@ -297,7 +278,7 @@
 
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}penerimaantrucking/export?${params}`, true)
+        xhr.open('GET', `{{ config('app.api_url') }}pengeluarantrucking/export?${params}`, true)
         xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
         xhr.responseType = 'arraybuffer'
 
@@ -310,7 +291,7 @@
               let link = document.createElement('a')
 
               link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanPenerimaanTrucking${(new Date).getTime()}.xlsx`
+              link.download = `laporanpengeluaranTrucking${(new Date).getTime()}.xlsx`
               link.click()
 
               submitButton.removeAttr('disabled')
@@ -320,7 +301,7 @@
 
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('penerimaantrucking.report') }}?${params}`)
+        window.open(`{{ route('pengeluarantrucking.report') }}?${params}`)
 
         submitButton.removeAttr('disabled')
       }

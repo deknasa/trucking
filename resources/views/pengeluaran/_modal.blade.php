@@ -1,6 +1,6 @@
 <div class="modal fade modal-fullscreen" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form action="#" id="crudForm">
+    <form action="#" id="crudForm" >
       <div class="modal-content">
         <div class="modal-header bg-primary">
           <h5 class="modal-title" id="crudModalTitle"></h5>
@@ -9,14 +9,14 @@
           </button>
         </div>
         <form action="" method="post">
-
+        
           <div class="modal-body">
             <input type="hidden" name="id">
 
             <div class="row form-group">
               <div class="col-12 col-sm-2 col-md-2 col-form-label">
                 <label>
-                  NO BUKTI <span class="text-danger">*</span>
+                    NO BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -25,100 +25,134 @@
 
               <div class="col-12 col-sm-2 col-md-2 col-form-label">
                 <label>
-                  TANGGAL BUKTI <span class="text-danger">*</span>
+                TANGGAL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
                 <div class="input-group">
-                  <input type="text" name="tglbukti" class="form-control datepicker">
+                    <input type="text" name="tglbukti" class="form-control datepicker">
                 </div>
               </div>
             </div>
-
+            
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  KODE PENGELUARAN <span class="text-danger">*</span></label>
+                PELANGGAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="hidden" name="pengeluarantrucking_id">
-                <input type="text" name="pengeluarantrucking" class="form-control pengeluarantrucking-lookup">
+                <input type="hidden" name="pelanggan_id">
+                <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
               </div>
             </div>
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  KETERANGAN <span class="text-danger">*</span></label>
+                KETERANGAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">
               </div>
             </div>
-
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  BANK <span class="text-danger">*</span></label>
+                CABANG <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="cabang_id">
+                <input type="text" name="cabang" class="form-control cabang-lookup">
+              </div>
+            </div>
+            
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                STATUS JENIS TRANSAKSI <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                 <select name="statusjenistransaksi" class="form-select select2bs4" style="width: 100%;">
+                    <option value="">-- PILIH STATUS JENIS TRANSAKSI --</option>
+                 </select>
+              </div>
+            </div>
+            
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                DIBAYAR KE <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="dibayarke" class="form-control">
+              </div>
+            </div>
+            
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                BANK <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="bank_id">
                 <input type="text" name="bank" class="form-control bank-lookup">
               </div>
             </div>
-
-            <!-- <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  STATUS POSTING <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusposting" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS POSTING --</option>
-                </select>
-              </div>
-            </div> -->
-
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  COA
+                TRANSFER KE ACC 
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="coa" class="form-control akunpusat-lookup">
+                <input type="text" name="transferkeac" class="form-control">
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  NO BUKTI PENGELUARAN
+                TRANSFER KE AN
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="pengeluaran_nobukti" class="form-control pengeluaran-lookup">
+                <input type="text" name="transferkean" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                TRANSFER KE BANK 
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="transferkebank" class="form-control">
               </div>
             </div>
 
             <table class="table table-bordered table-bindkeys" id="detailList">
               <thead>
                 <tr>
-                  <th width="50">No</th>
-                  <th>SUPIR</th>
-                  <th>NO BUKTI PENERIMAAN TRUCKING</th>
-                  <th>Nominal</th>
-                  <th>Aksi</th>
+                    <th width="50">No</th>
+                    <th>Alat Bayar</th>
+                    <th>No warkat</th>
+                    <th>Tgl jatuh tempo</th>
+                    <th>Keterangan</th>
+                    <th>Nominal</th>
+                    <th>Coa Debet</th>
+                    <th>Bulan beban</th>
+                    <th>Aksi</th>
                 </tr>
               </thead>
               <tbody id="table_body" class="form-group">
+                
 
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan="3">
+                  <td colspan="5">
                     <p class="text-right font-weight-bold">TOTAL :</p>
                   </td>
                   <td>
                     <p class="text-right font-weight-bold autonumeric" id="total"></p>
                   </td>
+                  <td colspan="2"></td>
                   <td>
                     <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                   </td>
@@ -149,16 +183,16 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
-
+    
     $(document).on('click', "#addRow", function() {
       addRow()
     });
-
+    
     $(document).on('click', '.delete-row', function(event) {
-      deleteRow($(this).parents('tr'))
+        deleteRow($(this).parents('tr'))
     })
 
-    $(document).on('input', `#table_body [name="nominal[]"]`, function(event) {
+    $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {
       setTotal()
     })
 
@@ -171,9 +205,9 @@
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
-
-      $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
-        data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
+      
+      $('#crudForm').find(`[name="nominal_detail[]"`).each((index,element) => {
+        data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
       })
 
       data.push({
@@ -204,19 +238,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}pengeluarantruckingheader`
+          url = `${apiUrl}pengeluaranheader`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}pengeluarantruckingheader/${Id}`
+          url = `${apiUrl}pengeluaranheader/${Id}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}pengeluarantruckingheader/${Id}`
+          url = `${apiUrl}pengeluaranheader/${Id}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}pengeluarantruckingheader`
+          url = `${apiUrl}pengeluaranheader`
           break;
       }
 
@@ -232,16 +266,14 @@
         },
         data: data,
         success: response => {
-
+          
 
           id = response.data.id
           console.log(id)
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
 
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
-          }).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -279,12 +311,12 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-
+    
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function setTotal() {
-    let nominalDetails = $(`#table_body [name="nominal[]"]`)
+    let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
     let total = 0
 
     $.each(nominalDetails, (index, nominalDetail) => {
@@ -294,7 +326,7 @@
     new AutoNumeric('#total').set(total)
   }
 
-  function createPengeluaranTruckingHeader() {
+  function createPengeluaran() {
     let form = $('#crudForm')
 
     $('#crudModal').find('#crudForm').trigger('reset')
@@ -303,21 +335,21 @@
       Simpan
     `)
     form.data('action', 'add')
-
-    $('#crudModalTitle').text('Add Pengeluaran Trucking')
+    
+    $('#crudModalTitle').text('Add Pengeluaran')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-
+    
     $('#table_body').html('')
-
-    setStatusPostingOptions(form)
+    
+    setStatusJenisTransaksiOptions(form)
     addRow()
     setTotal()
   }
 
-  function editPengeluaranTruckingHeader(id) {
+  function editPengeluaran(id) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -326,22 +358,21 @@
       <i class="fa fa-save"></i>
       Simpan
     `)
-    $('#crudModalTitle').text('Edit Pengeluaran Truck')
+    $('#crudModalTitle').text('Edit Pengeluaran')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    // Promise
-    //   .all([
-    //     setStatusPostingOptions(form)
-    //   ])
-    //   .then(() => {
-    //     showPengeluaranTruckingHeader(form, id)
-    //   })
-      showPengeluaranTruckingHeader(form, id)
+    Promise
+      .all([
+        setStatusJenisTransaksiOptions(form)
+      ])
+      .then(() => {
+        showPengeluaran(form, id)
+      })
 
   }
 
-  function deletePengeluaranTruckingHeader(id) {
+  function deletePengeluaran(id) {
 
     let form = $('#crudForm')
 
@@ -351,26 +382,75 @@
       <i class="fa fa-save"></i>
       Hapus
     `)
-    $('#crudModalTitle').text('Delete Pengeluaran Truck')
+    $('#crudModalTitle').text('Delete Pengeluaran')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    // Promise
-    //   .all([
-    //     setStatusPostingOptions(form)
-    //   ])
-    //   .then(() => {
-    //     showPengeluaranTruckingHeader(form, id)
-    //   })
-      showPengeluaranTruckingHeader(form, id)
+    Promise
+      .all([
+        setStatusJenisTransaksiOptions(form)
+      ])
+      .then(() => {
+        showPengeluaran(form, id)
+      })
 
   }
 
-  const setStatusPostingOptions = function(relatedForm) {
+  function approval(Id) {
+    $('#loader').removeClass('d-none')
+
+      $.ajax({
+        url: `{{ config('app.api_url') }}pengeluaranheader/${Id}/approval`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+        success: response => {
+          $('#jqGrid').trigger('reloadGrid')
+        }
+    }).always(() => {
+        $('#loader').addClass('d-none')
+      })
+  }
+
+  function cekApproval(Id, Aksi) {
+    $.ajax({
+        url: `{{ config('app.api_url') }}jurnalumumheader/${Id}/cekapproval`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+        success: response => {
+          var kodenobukti = response.kodenobukti
+          if(kodenobukti == '1')
+          {
+            var kodestatus = response.kodestatus
+            if(kodestatus == '1')
+            {
+              showDialog(response.message['keterangan'])
+            }else{
+                if(Aksi == 'EDIT') {
+                    editJurnalUmumHeader(Id)
+                }
+                if(Aksi == 'DELETE') {
+                    deleteJurnalUmumHeader(Id)
+                }
+            }
+            
+          }else{
+            showDialog(response.message['keterangan'])
+          }
+        }
+      })
+  }
+
+  const setStatusJenisTransaksiOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusposting]').empty()
-      relatedForm.find('[name=statusposting]').append(
-        new Option('-- PILIH STATUS POSTING --', '', false, true)
+      relatedForm.find('[name=statusjenistransaksi]').empty()
+      relatedForm.find('[name=statusjenistransaksi]').append(
+        new Option('-- PILIH STATUS JENIS TRANSAKSI --', '', false, true)
       ).trigger('change')
 
       $.ajax({
@@ -387,15 +467,15 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS POSTING"
+              "data": "JENIS TRANSAKSI"
             }]
           })
         },
         success: response => {
-          response.data.forEach(statusPosting => {
-            let option = new Option(statusPosting.text, statusPosting.id)
+          response.data.forEach(statusJenisTransaksi => {
+            let option = new Option(statusJenisTransaksi.text, statusJenisTransaksi.id)
 
-            relatedForm.find('[name=statusposting]').append(option).trigger('change')
+            relatedForm.find('[name=statusjenistransaksi]').append(option).trigger('change')
           });
 
           resolve()
@@ -404,11 +484,11 @@
     })
   }
 
-  function showPengeluaranTruckingHeader(form, id) {
+  function showPengeluaran(form, id) {
     $('#detailList tbody').html('')
 
     $.ajax({
-      url: `${apiUrl}pengeluarantruckingheader/${id}`,
+      url: `${apiUrl}pengeluaranheader/${id}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -421,22 +501,19 @@
           let element = form.find(`[name="${index}"]`)
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } else if (element.hasClass('datepicker')) {
+          } else if(element.hasClass('datepicker')){
             element.val(dateFormat(value))
           } else {
             element.val(value)
           }
-
-          if (index == 'pengeluarantrucking') {
+          
+          if(index == 'pelanggan') {
             element.data('current-value', value)
           }
-          if (index == 'bank') {
+          if(index == 'cabang') {
             element.data('current-value', value)
           }
-          if (index == 'coa') {
-            element.data('current-value', value)
-          }
-          if (index == 'pengeluaran_nobukti') {
+          if(index == 'bank') {
             element.data('current-value', value)
           }
         })
@@ -446,54 +523,78 @@
             <tr>
                 <td></td>
                 <td>
-                    <input type="hidden" name="supir_id[]">
-                    <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
+                    <input type="hidden" name="alatbayar_id[]">
+                    <input type="text" name="alatbayar[]" data-current-value="${detail.alatbayar}" class="form-control alatbayar-lookup">
                 </td>
                 <td>
-                    <input type="text" name="penerimaantruckingheader_nobukti[]" data-current-value="${detail.penerimaantruckingheader_nobukti}" class="form-control penerimaantruckingheader-lookup">
+                    <input type="text" name="nowarkat[]"  class="form-control">
                 </td>
                 <td>
-                    <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+                    <div class="input-group">
+                        <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
+                    </div>
+                </td>
+                <td>
+                    <input type="text" name="keterangan_detail[]"  class="form-control">
+                </td>
+                <td>
+                    <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
+                </td>
+                <td>
+                <input type="text" name="coadebet[]" data-current-value="${detail.coadebet}" class="form-control akunpusat-lookup">
+                </td>
+                <td>
+                    <div class="input-group">
+                        <input type="text" name="bulanbeban[]" class="form-control datepicker">   
+                    </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
                 </td>
             </tr>
           `)
 
-          detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
-          detailRow.find(`[name="supir[]"]`).val(detail.supir)
-          detailRow.find(`[name="penerimaantruckingheader_nobukti[]"]`).val(detail.penerimaantruckingheader_nobukti)
-          detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+          detailRow.find(`[name="alatbayar_id[]"]`).val(detail.alatbayar_id)
+          detailRow.find(`[name="alatbayar[]"]`).val(detail.alatbayar)
+          detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
+          detailRow.find(`[name="tgljatuhtempo[]"]`).val(detail.tgljatuhtempo)
+          detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+          detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
+          detailRow.find(`[name="coadebet[]"]`).val(detail.coadebet)
+          detailRow.find(`[name="bulanbeban[]"]`).val(detail.bulanbeban)
 
-          initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
+          initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+          
+          initDatepicker(detailRow.find('.datepicker'))
           $('#detailList tbody').append(detailRow)
-
+          
           setTotal();
-
-          $('.supir-lookup').last().lookup({
-            title: 'Supir Lookup',
-            fileName: 'supir',
-            onSelectRow: (supir, element) => {
-              $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
-              element.val(supir.namasupir)
+          
+          $('.alatbayar-lookup').last().lookup({
+            title: 'Coa Kredit Lookup',
+            fileName: 'alatbayar',
+            onSelectRow: (alatbayar, element) => {
+             $(`#crudForm [name="alatbayar_id[]"]`).first().val(alatbayar.id)
+              element.val(alatbayar.coa)
               element.data('currentValue', element.val())
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
             }
           })
-
-          $('.penerimaantruckingheader-lookup').last().lookup({
-            title: 'Penerimaan Trucking Lookup',
-            fileName: 'penerimaantruckingheader',
-            onSelectRow: (penerimaantruckingheader, element) => {
-              element.val(penerimaantruckingheader.nobukti)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            }
+          $('.akunpusat-lookup').last().lookup({
+              title: 'Kode Perk. Lookup',
+              fileName: 'akunpusat',
+              onSelectRow: (akunpusat, element) => {
+                  element.val(akunpusat.coa)
+                  element.data('currentValue', element.val())
+              },
+              onCancel: (element) => {
+                  element.val(element.data('currentValue'))
+              }
           })
 
-
+          
         })
 
         setRowNumbers()
@@ -505,53 +606,69 @@
     })
   }
 
-  function addRow() {
+  function addRow(){
     let detailRow = $(`
       <tr>
         <td></td>
         <td>
-          <input type="hidden" name="supir_id[]">
-          <input type="text" name="supir[]"  class="form-control supir-lookup">
+          <input type="hidden" name="alatbayar_id[]">
+          <input type="text" name="alatbayar[]"  class="form-control alatbayar-lookup">
         </td>
         <td>
-          <input type="text" name="penerimaantruckingheader_nobukti[]"  class="form-control penerimaantruckingheader-lookup">
+          <input type="text" name="nowarkat[]"  class="form-control">
         </td>
         <td>
-          <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+          <div class="input-group">
+            <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
+          </div>
+        </td>
+        <td>
+          <input type="text" name="keterangan_detail[]"  class="form-control">
+        </td>
+        <td>
+          <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
+        </td>
+        <td>
+            <input type="text" name="coadebet[]"  class="form-control akunpusat-lookup">
+        </td>
+        <td>
+          <div class="input-group">
+            <input type="text" name="bulanbeban[]" class="form-control datepicker">   
+          </div>
         </td>
         <td>
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
         </td>
       </tr>
     `)
-
+    
     $('#detailList tbody').append(detailRow)
 
-    $('.supir-lookup').last().lookup({
-      title: 'Supir Lookup',
-      fileName: 'supir',
-      onSelectRow: (supir, element) => {
-        $(`#crudForm [name="supir_id[]"]`).val(supir.id)
-        element.val(supir.namasupir)
+    $('.alatbayar-lookup').last().lookup({
+      title: 'Alat Bayar Lookup',
+      fileName: 'alatbayar',
+      onSelectRow: (alatbayar, element) => {
+        $(`#crudForm [name="alatbayar_id[]"]`).val(alatbayar.id)
+        element.val(alatbayar.namaalatbayar)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       }
     })
-    $('.penerimaantruckingheader-lookup').last().lookup({
-      title: 'Penerimaan Trucking Lookup',
-      fileName: 'penerimaantruckingheader',
-      onSelectRow: (penerimaantruckingheader, element) => {
-        element.val(penerimaantruckingheader.nobukti)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
+    $('.akunpusat-lookup').last().lookup({
+        title: 'Kode Perkiraan Lookup',
+        fileName: 'akunpusat',
+        onSelectRow: (akunpusat, element) => {
+            element.val(akunpusat.coa)
+            element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+            element.val(element.data('currentValue'))
+        }
     })
-
     initAutoNumeric(detailRow.find('.autonumeric'))
+    initDatepicker()
     setRowNumbers()
   }
 
@@ -566,14 +683,14 @@
     let elements = $('#detailList tbody tr td:nth-child(1)')
 
     elements.each((index, element) => {
-      $(element).text(index + 1)
+      $(element).text(index+1)
     })
   }
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
-        url: `${apiUrl}pengeluarantruckingheader/field_length`,
+        url: `${apiUrl}pengeluaranheader/field_length`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -596,13 +713,25 @@
   }
 
   function initLookup() {
-
-    $('.pengeluarantrucking-lookup').lookup({
-      title: 'Pengeluaran Trucking Lookup',
-      fileName: 'pengeluarantrucking',
-      onSelectRow: (pengeluarantrucking, element) => {
-        $('#crudForm [name=pengeluarantrucking_id]').first().val(pengeluarantrucking.id)
-        element.val(pengeluarantrucking.keterangan)
+  
+    $('.pelanggan-lookup').lookup({
+      title: 'Pelanggan Lookup',
+      fileName: 'pelanggan',
+      onSelectRow: (pelanggan, element) => {
+        $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
+        element.val(pelanggan.namapelanggan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    $('.cabang-lookup').lookup({
+      title: 'Cabang Lookup',
+      fileName: 'cabang',
+      onSelectRow: (cabang, element) => {
+        $('#crudForm [name=cabang_id]').first().val(cabang.id)
+        element.val(cabang.namacabang)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -615,28 +744,6 @@
       onSelectRow: (bank, element) => {
         $('#crudForm [name=bank_id]').first().val(bank.id)
         element.val(bank.namabank)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
-    $('.pengeluaran-lookup').lookup({
-      title: 'Pengeluaran Lookup',
-      fileName: 'pengeluaranheader',
-      onSelectRow: (pengeluaranheader, element) => {
-        element.val(pengeluaranheader.nobukti)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
-    $('.akunpusat-lookup').lookup({
-      title: 'Kode Perk. Lookup',
-      fileName: 'akunpusat',
-      onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {

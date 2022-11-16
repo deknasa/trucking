@@ -1,55 +1,56 @@
-<table id="penerimaanTruckingLookup" class="lookup-grid"></table>
-<div id="penerimaanTruckingLookupPager"></div>
+<table id="absensiSupirLookup" class="lookup-grid"></table>
+<div id="absensiSupirLookupPager"></div>
 
 @push('scripts')
 <script>
-  $('#penerimaanTruckingLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'penerimaantrucking' }}`,
+  $('#absensiSupirLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'absensisupirheader' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
       colModel: [{
-          label: 'ID',
-          name: 'id',
-          align: 'right',
-          width: '70px'
-        },
-        {
-          label: 'KODE PENERIMAAN',
-          name: 'kodepenerimaan',
-          align: 'left',
-        },
-        {
-          label: 'KETERANGAN',
-          name: 'keterangan',
-          align: 'left'
-        },
-        {
-          label: 'COA',
-          name: 'coa',
-          align: 'left'
-        },
-        {
-          label: 'FORMAT BUKTI',
-          name: 'statusformat',
-          align: 'left',
-        },
-        {
-          label: 'MODIFIEDBY',
-          name: 'modifiedby',
-          align: 'left'
-        },
-        {
-          label: 'UPDATEDAT',
-          name: 'updated_at',
-          align: 'right'
-        }, {
-          label: 'CREATEDAT',
-          name: 'created_at',
-          align: 'right'
-        },
-      ],
+            label: 'ID',
+            name: 'id',
+            align: 'right',
+            width: '50px'
+          },
+          {
+            label: 'NO BUKTI',
+            name: 'nobukti',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL',
+            name: 'tglbukti',
+            align: 'left',
+            formatter: 'date',
+            formatoptions: {
+              newformat: 'd-m-Y'
+            }
+          },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            align: 'left'
+          },
+          {
+            label: 'NO BUKTI KGT',
+            name: 'kasgantung_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'NOMINAL',
+            name: 'nominal',
+            align: 'right',
+            formatter: currencyFormat
+          },
+          {
+            label: 'MODIFIEDBY',
+            name: 'modifiedby',
+            align: 'left'
+          },
+        ],
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
@@ -59,11 +60,11 @@
       rownumWidth: 45,
       rowList: [10, 20, 50],
       sortable: true,
-      toolbar: [true, "top"],
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#penerimaanTruckingLookupPager'),
+      toolbar: [true, "top"],
+      pager: $('#absensiSupirLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -90,28 +91,27 @@
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
-          initResize($(this))
 
-          if (indexRow - 1 > $('#penerimaanTruckingLookup').getGridParam().reccount) {
-            indexRow = $('#penerimaanTruckingLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#absensiSupirLookup').getGridParam().reccount) {
+            indexRow = $('#absensiSupirLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#penerimaanTruckingLookup [id="${$('#penerimaanTruckingLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#absensiSupirLookup [id="${$('#absensiSupirLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#penerimaanTruckingLookup [id="${$('#penerimaanTruckingLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#absensiSupirLookup [id="${$('#absensiSupirLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#penerimaanTruckingLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#penerimaanTruckingLookup [id="` + $('#penerimaanTruckingLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#absensiSupirLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#absensiSupirLookup [id="` + $('#absensiSupirLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#penerimaanTruckingLookup').setSelection($('#penerimaanTruckingLookup').getDataIDs()[indexRow])
+            $('#absensiSupirLookup').setSelection($('#absensiSupirLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -126,7 +126,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupPenerimaanTrucking').prev().width())
+        $(this).setGridWidth($('#lookupBank').prev().width())
         setHighlight($(this))
       }
     })
@@ -138,10 +138,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-          clearGlobalSearch($('#penerimaanTruckingLookup'))
+        clearGlobalSearch($('#absensiSupirLookup'))
       },
     })
 
-    loadGlobalSearch($('#penerimaanTruckingLookup'))
-  loadClearFilter($('#penerimaanTruckingLookup'))
+  loadGlobalSearch($('#absensiSupirLookup'))
+  loadClearFilter($('#absensiSupirLookup'))
 </script>

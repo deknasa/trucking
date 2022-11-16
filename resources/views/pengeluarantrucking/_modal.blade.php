@@ -45,7 +45,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="coa" class="form-control">
+                <input type="text" name="coa" class="form-control akunpusat-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -80,6 +80,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -184,12 +185,14 @@
     setFormBindKeys(form)
 
     activeGrid = null
-
     getMaxLength(form)
+    initLookup()
+    initSelect2()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createPengeluaranTrucking() {
@@ -207,7 +210,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setStatusAktifOptions(form)
+    setStatusFormatOptions(form)
   }
 
   function editPengeluaranTrucking(pengeluaranTruckingId) {
@@ -227,7 +230,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusFormatOptions(form)
       ])
       .then(() => {
         showPengeluaranTrucking(form, pengeluaranTruckingId)
@@ -251,7 +254,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusFormatOptions(form)
       ])
       .then(() => {
         showPengeluaranTrucking(form, pengeluaranTruckingId)
@@ -283,7 +286,7 @@
     }
   }
 
-  const setStatusAktifOptions = function(relatedForm) {
+  const setStatusFormatOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusformat]').empty()
       relatedForm.find('[name=statusformat]').append(
@@ -309,7 +312,7 @@
         },
         success: response => {
           response.data.forEach(statusFormat => {
-            let option = new Option(statusFormat.subgrp, statusFormat.id)
+            let option = new Option(statusFormat.text, statusFormat.id)
 
             relatedForm.find('[name=statusformat]').append(option).trigger('change')
           });
@@ -337,9 +340,35 @@
           } else {
             element.val(value)
           }
+          
+          if (index == 'coa') {
+              element.data('current-value', value)
+          }
+          
         })
+        
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
       }
     })
+  }
+
+  function initLookup()
+  {
+    $('.akunpusat-lookup').lookup({
+        title: 'COA Lookup',
+        fileName: 'akunpusat',
+        onSelectRow: (akunpusat, element) => {
+            element.val(akunpusat.coa)
+            element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+            element.val(element.data('currentValue'))
+        }
+    })
+                    
   }
 </script>
 @endpush()

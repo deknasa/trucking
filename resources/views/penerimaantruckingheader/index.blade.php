@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-<!-- Grid -->
+<!-- Grid Master-->
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
@@ -10,6 +10,7 @@
   </div>
 </div>
 
+<!-- Modal -->
 @include('penerimaantruckingheader._modal')
 <!-- Detail -->
 @include('penerimaantruckingheader._detail')
@@ -31,531 +32,10 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let rowNum = 10
+  let hasDetail = false
 
   $(document).ready(function() {
-
-    $('#lookupPenerimaanTrucking').hide()
-    $('#lookupBank').hide()
-    $('#lookupAkunPusat').hide()
-    $('#lookupPenerimaanHeader').hide()
-    $('#lookupSupir').hide()
-    $('#lookupPengeluaranTruckingHeader').hide()
-
-
-
-    $('#crudModal').on('shown.bs.modal', function() {
-      penerimaanTruckingLookup.setGridWidth($('#lookupPenerimaanTrucking').prev().width())
-      bankLookup.setGridWidth($('#lookupBank').prev().width())
-      akunPusatLookup.setGridWidth($('#lookupAkunPusat').prev().width())
-      penerimaanHeaderLookup.setGridWidth($('#lookupPenerimaanHeader').prev().width())
-      supirLookup.setGridWidth($('#lookupSupir').prev().width())
-      pengeluaranTruckingHeaderLookup.setGridWidth($('#lookupPengeluaranTruckingHeader').prev().width())
-
-
-      if (detectDeviceType() == 'desktop') {
-        penerimaanTruckingLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-            console.log(rowData)
-
-            $('#crudForm [name=penerimaantrucking_id]').first().val(rowData.id)
-            $('#crudForm [name=penerimaantrucking]').first().val(rowData.kodepenerimaan)
-            // $('#crudForm [name=user_id]').first().val(id)
-            $('#lookupPenerimaanTrucking').hide()
-
-            $('#lookupBankToggler').show()
-            $('#lookupAkunPusatToggler').show()
-            $('#lookupPenerimaanHeaderToggler').show()
-            $('#lookupSupirToggler').show()
-            $('#lookupPengeluaranTruckingHeaderToggler').show()
-          }
-        })
-
-        bankLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-            console.log(rowData)
-
-            $('#crudForm [name=bank_id]').first().val(rowData.id)
-            $('#crudForm [name=bank]').first().val(rowData.namabank)
-            // $('#crudForm [name=user_id]').first().val(id)
-            $('#lookupBank').hide()
-
-            $('#lookupAkunPusatToggler').show()
-            $('#lookupPenerimaanHeaderToggler').show()
-            $('#lookupSupirToggler').show()
-            $('#lookupPengeluaranTruckingHeaderToggler').show()
-          }
-        })
-        akunPusatLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-            console.log(rowData.coa)
-
-            $('#crudForm [name=akunpusat]').first().val(rowData.coa)
-            // $('#crudForm [name=user_id]').first().val(id)
-            $('#lookupAkunPusat').hide()
-
-            $('#lookupPenerimaanHeaderToggler').show()
-            $('#lookupPengeluaranTruckingHeaderToggler').show()
-            $('#lookupSupirToggler').show()
-
-          }
-        })
-
-        penerimaanHeaderLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-            console.log(rowData)
-
-            $('#crudForm [name=penerimaan_nobukti]').first().val(rowData.nobukti)
-            // $('#crudForm [name=user_id]').first().val(id)
-            $('#lookupPenerimaanHeader').hide()
-
-            $('#lookupSupirToggler').show()
-            $('#lookupPengeluaranTruckingHeaderToggler').show()
-          }
-        })
-
-        supirLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-            console.log(rowData)
-
-            $('#crudForm [name=supir_id]').first().val(rowData.id)
-            $('#crudForm [name=supir]').first().val(rowData.namasupir)
-            // $('#crudForm [name=user_id]').first().val(id)
-            $('#lookupSupir').hide()
-            $('#lookupPengeluaranTruckingHeaderToggler').show()
-
-          }
-        })
-        pengeluaranTruckingHeaderLookup.setGridParam({
-          ondblClickRow: function(id) {
-            let rowData = $(this).getRowData(id)
-            console.log(rowData)
-
-            $('#crudForm [name=pengeluarantruckingheader_nobukti]').first().val(rowData.nobukti)
-            // $('#crudForm [name=user_id]').first().val(id)
-            $('#lookupPengeluaranTruckingHeader').hide()
-          }
-        })
-
-
-      } else if (detectDeviceType() == 'mobile') {
-        penerimaanTruckingLookup.setGridParam({
-          onSelectRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=penerimaantrucking_id]').first().val(rowData.kodepenerimaan)
-            // $('#crudForm [name=user_id]').first().val(id)
-            $('#lookupPenerimaanTrucking').hide()
-          }
-        })
-        bankLookup.setGridParam({
-          onSelectRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=bank_id]').first().val(rowData.namabank)
-            // $('#crudForm [name=user_id]').first().val(id)
-            $('#lookupBank').hide()
-          }
-        })
-        akunPusatLookup.setGridParam({
-          onSelectRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=coa]').first().val(rowData.coa)
-            // $('#crudForm [name=user_id]').first().val(id)
-            $('#lookupAkunPusat').hide()
-          }
-        })
-        penerimaanHeaderLookup.setGridParam({
-          onSelectRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=penerimaan_nobukti]').first().val(rowData.nobukti)
-            // $('#crudForm [name=user_id]').first().val(id)
-            $('#lookupPenerimaanHeader').hide()
-          }
-        })
-        supirLookup.setGridParam({
-          onSelectRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=supir_id]').first().val(rowData.namasupir)
-            // $('#crudForm [name=user_id]').first().val(id)
-            $('#lookupSupir').hide()
-          }
-        })
-        pengeluaranTruckingHeaderLookup.setGridParam({
-          onSelectRow: function(id) {
-            let rowData = $(this).getRowData(id)
-
-            $('#crudForm [name=pengeluarantruckingheader_nobukti]').first().val(rowData.nobukti)
-            // $('#crudForm [name=user_id]').first().val(id)
-            $('#lookupPengeluaranTruckingHeader').hide()
-          }
-        })
-
-      }
-
-      $('#crudModal').find("[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit").first().focus()
-    })
-
-    $('#crudModal').on('hidden.bs.modal', function() {
-      activeGrid = '#jqGrid'
-    })
-
-
-    //tampil lookup ketika klik toggler
-    $('#lookupPenerimaanTruckingToggler').click(function(event) {
-      penerimaanTruckingLookup.setGridWidth($('#lookupPenerimaanTrucking').prev().width())
-      $('#lookupPenerimaanTrucking').toggle()
-
-      $('#lookupBank').hide()
-      $('#lookupAkunPusat').hide()
-      $('#lookupPenerimaanHeader').hide()
-      $('#lookupPengeluaranTruckingHeader').hide()
-      $('#lookupSupir').hide()
-
-      $('#lookupBankToggler').hide()
-      $('#lookupAkunPusatToggler').hide()
-      $('#lookupPenerimaanHeaderToggler').hide()
-      $('#lookupPengeluaranTruckingHeaderToggler').hide()
-      $('#lookupSupirToggler').hide()
-
-
-      if (detectDeviceType() != 'desktop') {
-        penerimaanTruckingLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      if (detectDeviceType() == 'desktop') {
-        activeGrid = penerimaanTruckingLookup
-      }
-
-    })
-
-    $('#lookupBankToggler').click(function(event) {
-      bankLookup.setGridWidth($('#lookupBank').prev().width())
-      $('#lookupBank').toggle()
-
-      $('#lookupPenerimaanTrucking').hide()
-      $('#lookupAkunPusat').hide()
-      $('#lookupPenerimaanHeader').hide()
-      $('#lookupPengeluaranTruckingHeader').hide()
-      $('#lookupSupir').hide()
-
-      $('#lookupAkunPusatToggler').hide()
-      $('#lookupPenerimaanHeaderToggler').hide()
-      $('#lookupPengeluaranTruckingHeaderToggler').hide()
-      $('#lookupSupirToggler').hide()
-
-      if (detectDeviceType() != 'desktop') {
-        bankLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      if (detectDeviceType() == 'desktop') {
-        activeGrid = bankLookup
-      }
-    })
-
-    $('#lookupAkunPusatToggler').click(function(event) {
-      akunPusatLookup.setGridWidth($('#lookupAkunPusat').prev().width())
-      $('#lookupAkunPusat').toggle()
-
-      $('#lookupPenerimaanTrucking').hide()
-      $('#lookupBank').hide()
-      $('#lookupPenerimaanHeader').hide()
-      $('#lookupPengeluaranTruckingHeader').hide()
-      $('#lookupSupir').hide()
-
-      $('#lookupPenerimaanHeaderToggler').hide()
-      $('#lookupSupirToggler').hide()
-      $('#lookupPengeluaranTruckingHeaderToggler').hide()
-
-      if (detectDeviceType() != 'desktop') {
-        akunPusatLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      if (detectDeviceType() == 'desktop') {
-        activeGrid = akunPusatLookup
-      }
-    })
-
-    $('#lookupPenerimaanHeaderToggler').click(function(event) {
-      penerimaanHeaderLookup.setGridWidth($('#lookupPenerimaanHeader').prev().width())
-      $('#lookupPenerimaanHeader').toggle()
-
-      $('#lookupPenerimaanTrucking').hide()
-      $('#lookupAkunPusat').hide()
-      $('#lookupBank').hide()
-      $('#lookupPengeluaranTruckingHeader').hide()
-      $('#lookupSupir').hide()
-
-
-      $('#lookupSupirToggler').hide()
-      $('#lookupPengeluaranTruckingHeaderToggler').hide()
-      if (detectDeviceType() != 'dekstop') {
-        penerimaanHeaderLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      if (detectDeviceType() == 'dekstop') {
-        activeGrid = penerimaanHeaderLookup
-      }
-    })
-
-    $('#lookupSupirToggler').click(function(event) {
-      supirLookup.setGridWidth($('#lookupSupir').prev().width())
-      $('#lookupSupir').toggle()
-
-      $('#lookupPenerimaanTrucking').hide()
-      $('#lookupAkunPusat').hide()
-      $('#lookupBank').hide()
-      $('#lookupPenerimaanHeader').hide()
-      $('#lookupPengeluaranTruckingHeader').hide()
-
-
-      if (detectDeviceType() != 'dekstop') {
-        supirLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      if (detectDeviceType() == 'dekstop') {
-        activeGrid = supirLookup
-      }
-    })
-
-    $('#lookupPengeluaranTruckingHeaderToggler').click(function(event) {
-      pengeluaranTruckingHeaderLookup.setGridWidth($('#lookupPengeluaranTruckingHeader').prev().width())
-      $('#lookupPengeluaranTruckingHeader').toggle()
-
-      $('#lookupPenerimaanTrucking').hide()
-      $('#lookupAkunPusat').hide()
-      $('#lookupBank').hide()
-      $('#lookupPenerimaanHeader').hide()
-      $('#lookupSupir').hide()
-
-      if (detectDeviceType() != 'dekstop') {
-        pengeluaranTruckingHeaderLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      if (detectDeviceType() == 'dekstop') {
-        activeGrid = pengeluaranTruckingHeaderLookup
-      }
-    })
-
-
-
-    //untuk auto search dari kolom input
-    $('[name=penerimaantrucking]').on('input', function(event) {
-      $('#lookuppenerimaanTrucking').show()
-
-      if (detectDeviceType() != 'desktop') {
-        penerimaanTruckingLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      delay(() => {
-        let postData = penerimaanTruckingLookup.getGridParam('postData')
-        let colModels = penerimaanTruckingLookup.getGridParam('colModel')
-        let rules = []
-
-        colModels = colModels.filter((colModel) => {
-          return colModel.name !== 'rn'
-        })
-
-        colModels.forEach(colModel => {
-          rules.push({
-            field: colModel.name,
-            op: 'cn',
-            data: $(this).val()
-          })
-        });
-
-        postData.filters = JSON.stringify({
-          groupOp: 'OR',
-          rules: rules
-        })
-
-        penerimaanTruckingLookup.trigger('reloadGrid', {
-          page: 1
-        })
-      }, 500)
-    })
-
-    $('[name=bank]').on('input', function(event) {
-      $('#lookupBank').show()
-
-      if (detectDeviceType() != 'desktop') {
-        bankLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      delay(() => {
-        let postData = bankLookup.getGridParam('postData')
-        let colModels = bankLookup.getGridParam('colModel')
-        let rules = []
-
-        colModels = colModels.filter((colModel) => {
-          return colModel.name !== 'rn'
-        })
-
-        colModels.forEach(colModel => {
-          rules.push({
-            field: colModel.name,
-            op: 'cn',
-            data: $(this).val()
-          })
-        });
-
-        postData.filters = JSON.stringify({
-          groupOp: 'OR',
-          rules: rules
-        })
-
-        bankLookup.trigger('reloadGrid', {
-          page: 1
-        })
-      }, 500)
-    })
-
-    $('[name=coa]').on('input', function(event) {
-      $('#lookupAkunPusat').show()
-
-      if (detectDeviceType() != 'desktop') {
-        akunPusatLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      delay(() => {
-        let postData = akunPusatLookup.getGridParam('postData')
-        let colModels = akunPusatLookup.getGridParam('colModel')
-        let rules = []
-
-        colModels = colModels.filter((colModel) => {
-          return colModel.name !== 'rn'
-        })
-
-        colModels.forEach(colModel => {
-          rules.push({
-            field: colModel.name,
-            op: 'cn',
-            data: $(this).val()
-          })
-        });
-
-        postData.filters = JSON.stringify({
-          groupOp: 'OR',
-          rules: rules
-        })
-
-        akunPusatLookup.trigger('reloadGrid', {
-          page: 1
-        })
-      }, 500)
-    })
-
-    $('[name=penerimaan_nobukti]').on('input', function(event) {
-      $('#lookupPenerimaanHeader').show()
-
-      if (detectDeviceType() != 'desktop') {
-        penerimaanHeaderLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      delay(() => {
-        let postData = penerimaanHeaderLookup.getGridParam('postData')
-        let colModels = penerimaanHeaderLookup.getGridParam('colModel')
-        let rules = []
-
-        colModels = colModels.filter((colModel) => {
-          return colModel.name !== 'rn'
-        })
-
-        colModels.forEach(colModel => {
-          rules.push({
-            field: colModel.name,
-            op: 'cn',
-            data: $(this).val()
-          })
-        });
-
-        postData.filters = JSON.stringify({
-          groupOp: 'OR',
-          rules: rules
-        })
-
-        penerimaanHeaderLookup.trigger('reloadGrid', {
-          page: 1
-        })
-      }, 500)
-    })
-
-    $('[name=supir_id]').on('input', function(event) {
-      $('#lookupSupir').show()
-
-      if (detectDeviceType() != 'desktop') {
-        supirLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      delay(() => {
-        let postData = supirLookup.getGridParam('postData')
-        let colModels = supirLookup.getGridParam('colModel')
-        let rules = []
-
-        colModels = colModels.filter((colModel) => {
-          return colModel.name !== 'rn'
-        })
-
-        colModels.forEach(colModel => {
-          rules.push({
-            field: colModel.name,
-            op: 'cn',
-            data: $(this).val()
-          })
-        });
-
-        postData.filters = JSON.stringify({
-          groupOp: 'OR',
-          rules: rules
-        })
-
-        supirLookup.trigger('reloadGrid', {
-          page: 1
-        })
-      }, 500)
-    })
-
-    $('[name=pengeluarantruckingheader_nobukti]').on('input', function(event) {
-      $('#lookupPengeluaranTruckingHeader').show()
-
-      if (detectDeviceType() != 'desktop') {
-        pengeluaranTruckingHeaderLookup.setGridHeight(window.innerHeight / 1.5)
-      }
-
-      delay(() => {
-        let postData = pengeluaranTruckingHeaderLookup.getGridParam('postData')
-        let colModels = pengeluaranTruckingHeaderLookup.getGridParam('colModel')
-        let rules = []
-
-        colModels = colModels.filter((colModel) => {
-          return colModel.name !== 'rn'
-        })
-
-        colModels.forEach(colModel => {
-          rules.push({
-            field: colModel.name,
-            op: 'cn',
-            data: $(this).val()
-          })
-        });
-
-        postData.filters = JSON.stringify({
-          groupOp: 'OR',
-          rules: rules
-        })
-
-        pengeluaranTruckingHeaderLookup.trigger('reloadGrid', {
-          page: 1
-        })
-      }, 500)
-    })
 
 
     $("#jqGrid").jqGrid({
@@ -586,7 +66,7 @@
             }
           },
           {
-            label: 'PENERIMAAN TRUCKING',
+            label: 'PENERIMAAN TRUCKING ',
             name: 'penerimaantrucking_id',
             align: 'left'
           },
@@ -600,7 +80,6 @@
             name: 'bank_id',
             align: 'left'
           },
-          
           {
             label: 'COA',
             name: 'coa',
@@ -609,21 +88,6 @@
           {
             label: 'NO BUKTI PENERIMAAN',
             name: 'penerimaan_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'TANGGAL PENERIMAAN',
-            name: 'penerimaan_tgl',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'PROSES NO BUKTI',
-            name: 'proses_nobukti',
             align: 'left'
           },
           {
@@ -669,13 +133,18 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
-
-          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+          
+          if (!hasDetail) {
+            loadDetailGrid(id)
+            hasDetail = true
+          }
+
+          loadDetailData(id)
         },
         loadComplete: function(data) {
 
@@ -751,7 +220,11 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              editPenerimaanTruckingHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              }else {
+                editPenerimaanTruckingHeader(selectedId)
+              }
             }
           },
           {
@@ -760,9 +233,41 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              deletePenerimaanTruckingHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                deletePenerimaanTruckingHeader(selectedId)
+              }
             }
           },
+          {
+            id: 'export',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('penerimaantruckingheader.export') }}?id=${selectedId}`)
+              }
+            }
+          },  
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('penerimaantruckingheader.report') }}?id=${selectedId}`)
+              }
+            }
+          }
         ]
 
       })
@@ -773,8 +278,6 @@
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
 
-    /* Load detail grid */
-    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn btn-sm btn-primary`)
@@ -816,81 +319,11 @@
       $('#report').attr('disabled', 'disabled')
     }
 
-    $('#rangeModal').on('shown.bs.modal', function() {
-      if (autoNumericElements.length > 0) {
-        $.each(autoNumericElements, (index, autoNumericElement) => {
-          autoNumericElement.remove()
-        })
-      }
 
-      $('#formRange [name]:not(:hidden)').first().focus()
-
-      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
-      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-      $('#formRange [name=sampai]').val(totalRecord)
-
-      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
-        allowDecimalPadding: false,
-        minimumValue: 1,
-        maximumValue: totalRecord
-      })
-    })
-
-    $('#formRange').submit(function(event) {
-      event.preventDefault()
-
-      let params
-      let submitButton = $(this).find('button:submit')
-
-      submitButton.attr('disabled', 'disabled')
-
-      /* Set params value */
-      for (var key in postData) {
-        if (params != "") {
-          params += "&";
-        }
-        params += key + "=" + encodeURIComponent(postData[key]);
-      }
-
-      let formRange = $('#formRange')
-      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
-      params += `&offset=${offset}&limit=${limit}`
-
-      if ($('#rangeModal').data('action') == 'export') {
-        let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}penerimaantruckingheader/export?${params}`, true)
-        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
-        xhr.responseType = 'arraybuffer'
-
-        xhr.onload = function(e) {
-          if (this.status === 200) {
-            if (this.response !== undefined) {
-              let blob = new Blob([this.response], {
-                type: "application/vnd.ms-excel"
-              })
-              let link = document.createElement('a')
-
-              link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanpenerimaantrucking${(new Date).getTime()}.xlsx`
-              link.click()
-
-              submitButton.removeAttr('disabled')
-            }
-          }
-        }
-
-        xhr.send()
-      } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('penerimaantruckingheader.report') }}?${params}`)
-
-        submitButton.removeAttr('disabled')
-      }
-    })
+    
   })
+
+  
 </script>
 @endpush()
 @endsection

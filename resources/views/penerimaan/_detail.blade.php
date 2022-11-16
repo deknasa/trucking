@@ -10,23 +10,11 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('penerimaandetail.index') }}"
-  /**
-   * Custom Functions
-   */
-  var delay = (function() {
-    var timer = 0;
-    return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })()
 
-  function loadDetailGrid() {
-    let pager = '#detailPager'
+  function loadDetailGrid(id) {
 
     $("#detail").jqGrid({
-        url: `{{ config('app.api_url') . 'penerimaandetail' }}`,
+        url: `${apiUrl}penerimaandetail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -62,11 +50,7 @@
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
+            formatter: currencyFormat
           },
           {
             label: 'COA DEBET',
@@ -93,10 +77,10 @@
           //   label: 'PELANGGAN',
           //   name: 'pelanggan_id',
           // },
-          // {
-          //   label: 'INVOICE NO BUKTI',
-          //   name: 'invoice_nobukti',
-          // },
+          {
+            label: 'INVOICE NO BUKTI',
+            name: 'invoice_nobukti',
+          },
           {
             label: 'BANK PELANGGAN',
             name: 'bankpelanggan_id',
@@ -109,10 +93,10 @@
             label: 'PELANGGAN',
             name: 'pelanggan_id',
           },
-          // {
-          //   label: 'PENERIMAAN PIUTANG NO BUKTI',
-          //   name: 'penerimaanpiutang_nobukti',
-          // },
+          {
+            label: 'PELUNASAN PIUTANG NO BUKTI',
+            name: 'pelunasanpiutang_nobukti',
+          },
           // {
           //   label: 'BULAN BEBAN',
           //   name: 'bulanbeban',
@@ -133,11 +117,44 @@
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
+        footerrow: true,
+        userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        pager: pager,
         viewrecords: true,
+        postData: {
+          penerimaan_id: id
+        },
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
+        onSelectRow: function(id) {
+          activeGrid = $(this)
+        },
         loadComplete: function(data) {
+          initResize($(this))
+
+          let nominals = $(this).jqGrid("getCol", "nominal")
+          let totalNominal = 0
+
+          if (nominals.length > 0) {
+            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          }
+
+          $(this).jqGrid('footerData', 'set', {
+            nobukti: 'Total:',
+            nominal: totalNominal,
+          }, true)
         }
       })
 
@@ -148,11 +165,13 @@
         edit: false,
         del: false,
       })
+
+      .customPager()
   }
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: detailIndexUrl,
+      url: `${apiUrl}penerimaandetail`,
       datatype: "json",
       postData: {
         penerimaan_id: id

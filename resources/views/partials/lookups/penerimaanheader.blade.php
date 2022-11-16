@@ -1,9 +1,9 @@
-<table id="penerimaanHeaderLookup" style="width: 100%;"></table>
+<table id="penerimaanHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
 <div id="penerimaanHeaderLookupPager"></div>
 
 @push('scripts')
 <script>
-  let penerimaanHeaderLookup = $('#penerimaanHeaderLookup').jqGrid({
+$('#penerimaanHeaderLookup').jqGrid({
       url: `{{ config('app.api_url') . 'penerimaan' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -146,6 +146,7 @@
       rownumbers: true,
       rownumWidth: 45,
       rowList: [10, 20, 50],
+      toolbar: [true, "top"],
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
@@ -232,4 +233,3 @@
   loadGlobalSearch($('#penerimaanHeaderLookup'))
   loadClearFilter($('#penerimaanHeaderLookup'))
 </script>
-@endpush

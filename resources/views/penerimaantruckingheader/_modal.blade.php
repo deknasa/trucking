@@ -29,9 +29,23 @@
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
-                <input type="text" name="tglbukti" class="form-control datepicker">
+                <div class="input-group">
+                  <input type="text" name="tglbukti" class="form-control datepicker">
+                </div>
               </div>
             </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  KODE PENERIMAAN <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="penerimaantrucking_id">
+                <input type="text" name="penerimaantrucking" class="form-control penerimaantrucking-lookup">
+              </div>
+            </div>
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
@@ -41,167 +55,60 @@
                 <input type="text" name="keterangan" class="form-control">
               </div>
             </div>
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  PENERIMAAN TRUCKING <span class="text-danger">*</span>
-                </label>
+                  BANK <span class="text-danger">*</span></label>
               </div>
-              <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="hidden" name="penerimaantrucking_id">
-                  <input type="text" name="penerimaantrucking" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupPenerimaanTruckingToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupPenerimaanTrucking" style="z-index: 1;">
-                  <div class="col-12">
-                    <div id="lookupPenerimaanTrucking" class="shadow-lg">
-                      @include('partials.lookups.penerimaantrucking')
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  BANK <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="hidden" name="bank_id" class="form-control">
-                  <input type="text" name="bank" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupBankToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupBank" style="z-index: 1;">
-                  <div class="col-12">
-                    <div id="lookupBank" class="shadow-lg">
-                      @include('partials.lookups.bank')
-                    </div>
-                  </div>
-                </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="bank_id">
+                <input type="text" name="bank" class="form-control bank-lookup">
               </div>
             </div>
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  COA <span class="text-danger">*</span>
-                </label>
+                  COA
               </div>
-              <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="text" name="akunpusat" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupAkunPusatToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 1;">
-                  <div class="col-12">
-                    <div id="lookupAkunPusat" class="shadow-lg">
-                      @include('partials.lookups.akunpusat')
-                    </div>
-                  </div>
-                </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="coa" class="form-control akunpusat-lookup">
               </div>
             </div>
-
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  NO BUKTI PENERIMAAN <span class="text-danger">*</span>
-                </label>
+                  NO BUKTI PENERIMAAN
               </div>
-              <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="text" name="penerimaan_nobukti" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupPenerimaanHeaderToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupPenerimaanHeader" style="z-index: 1;">
-                  <div class="col-12">
-                    <div id="lookupPenerimaanHeader" class="shadow-lg">
-                      @include('partials.lookups.penerimaanheader')
-                    </div>
-                  </div>
-                </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="penerimaan_nobukti" class="form-control penerimaan-lookup">
               </div>
             </div>
 
-            <table class="table table-bordered table-bindkeys">
+            <table class="table table-bordered table-bindkeys" id="detailList">
               <thead>
                 <tr>
                   <th width="50">No</th>
-                  <th>Supir</th>
-                  <th>No Bukti Pengeluaran Trucking</th>
+                  <th>SUPIR</th>
+                  <th>NO BUKTI PENGELUARAN TRUCKING</th>
                   <th>Nominal</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
               <tbody id="table_body" class="form-group">
-                <tr id="row">
-                  <td>
-                    <div class="baris">1</div>
-                  </td>
-                  <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12" id="supir_id">
-                        <div class="input-group">
-                          <input type="hidden" name="supir_id">
-                          <input type="text" name="supir" class="form-control">
-                          <div class="input-group-append">
-                            <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
-                          </div>
-                        </div>
-                        <div class="row position-absolute" id="lookupSupir" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupSupir" class="shadow-lg">
-                              @include('partials.lookups.supir')
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <div class="input-group">
-                          <input type="text" name="pengeluarantruckingheader_nobukti" class="form-control">
-                          <div class="input-group-append">
-                            <button id="lookupPengeluaranTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
-                          </div>
-                        </div>
-                        <div class="row position-absolute" id="lookupPengeluaranTruckingHeader" style="z-index: 1;">
-                          <div class="col-12">
-                            <div id="lookupPengeluaranTruckingHeader" class="shadow-lg">
-                              @include('partials.lookups.pengeluarantruckingheader')
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <input type="text" name="nominal" style="text-align:right" class="form-control text-right autonumeric">
-                  </td>
-                  <td>
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                  </td>
-                </tr>
 
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan="4"></td>
+                  <td colspan="3">
+                    <p class="text-right font-weight-bold">TOTAL :</p>
+                  </td>
                   <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addrow">Tambah</button>
+                    <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                   </td>
                 </tr>
               </tfoot>
@@ -223,12 +130,25 @@
     </form>
   </div>
 </div>
+
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
-    // initLookupSupir()
+
+    $(document).on('click', "#addRow", function() {
+      addRow()
+    });
+
+    $(document).on('click', '.delete-row', function(event) {
+      deleteRow($(this).parents('tr'))
+    })
+
+    $(document).on('input', `#table_body [name="nominal[]"]`, function(event) {
+      setTotal()
+    })
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -239,6 +159,10 @@
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+
+      $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
+        data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
+      })
 
       data.push({
         name: 'sortIndex',
@@ -303,9 +227,9 @@
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
 
-          $('#jqGrid').trigger('reloadGrid', {
+          $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
-          })
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -328,219 +252,329 @@
     })
   })
 
+  $('#crudModal').on('shown.bs.modal', () => {
+    let form = $('#crudForm')
 
-  $("#addrow").click(function() {
-    let rowCount = $('#row').length;
+    setFormBindKeys(form)
 
-    if (rowCount > 0) {
-      let clone = $('#row').clone();
-      clone.find('input').val('');
+    activeGrid = null
 
-      baris = parseInt(baris) + 1;
-      clone.find('.baris').text(baris);
-      $('table #table_body').append(clone);
+    getMaxLength(form)
+    initLookup()
+    initDatepicker()
+  })
 
-    } else {
-      baris = 1;
-      $('#table_body').append(html);
-    }
-  });
+  $('#crudModal').on('hidden.bs.modal', () => {
+    activeGrid = '#jqGrid'
 
-  $('table').on('click', '.rmv', function() {
-    $(this).closest('tr').remove();
+    $('#crudModal').find('.modal-body').html(modalBody)
+  })
 
-    $('.baris').each(function(i, obj) {
-      $(obj).text(i + 1);
+  function setTotal() {
+    let nominalDetails = $(`#table_body [name="nominal[]"]`)
+    let total = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
     });
-    baris = baris - 1;
-  });
 
+    new AutoNumeric('#total').set(total)
+  }
 
   function createPenerimaanTruckingHeader() {
     let form = $('#crudForm')
 
-    form.trigger('reset')
+    $('#crudModal').find('#crudForm').trigger('reset')
     form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Simpan
-  `)
+      <i class="fa fa-save"></i>
+      Simpan
+    `)
     form.data('action', 'add')
+
     $('#crudModalTitle').text('Add Penerimaan Trucking')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+
+
+    $('#table_body').html('')
+
+    addRow()
+    setTotal()
   }
 
-  function editPenerimaanTruckingHeader(Id) {
+  function editPenerimaanTruckingHeader(id) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Simpan
-  `)
-    $('#crudModalTitle').text('Edit Penerimaan Trucking Header')
+      <i class="fa fa-save"></i>
+      Simpan
+    `)
+    $('#crudModalTitle').text('Edit Penerimaan Truck')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+  
+      showPenerimaanTruckingHeader(form, id)
 
-    $.ajax({
-      url: `${apiUrl}penerimaantruckingheader/${Id}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          form.find(`[name="${index}"]`).val(value)
-        })
-        $('#table_body').html('')
-        $.each(response.detail, (index, value) => {
-          $('#table_body').append(
-            `<tr id="row">
-              <td>
-                <div class="baris">${parseInt(index) + 1}</div>
-              </td>
-              
-              <td>
-              <div class="row form-group" >
-                <div class="col-12 col-md-12">
-                  <div class="input-group">
-                    <input type="hidden" name="supir_id" value="${value.supir_id}">
-                    <input type="text" name="supir" value="${value.supir}" class="form-control">
-                    <div class="input-group-append">
-                      <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
-                    </div>
-                  </div>
-                  <div class="row position-absolute" id="lookupSupir" style="z-index: 1;">
-                    <div class="col-12">
-                      <div id="lookupSupir" class="shadow-lg">
-                        @include('partials.lookups.supir')
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              </td>
-
-              <td>
-              <div class="row form-group" >
-                <div class="col-12 col-md-12">
-                  <div class="input-group">
-                    <input type="text" name="pengeluarantruckingheader_nobukti" value="${value.pengeluarantruckingheader_nobukti}" class="form-control">
-                    <div class="input-group-append">
-                      <button id="lookupPengeluaranTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
-                    </div>
-                  </div>
-                  <div class="row position-absolute" id="lookupPengeluaranTruckingHeader" style="z-index: 1;">
-                    <div class="col-12">
-                      <div id="lookupPengeluaranTruckingHeader" class="shadow-lg" >
-                        @include('partials.lookups.pengeluarantruckingheader')
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              </td>
-
-              <td>
-                  <input type="text" name="nominal" value="${value.nominal}" style="text-align:right" class="form-control text-right autonumeric" > 
-              </td>
-              <td>
-                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-              </td>
-            </tr>`
-          )
-        })
-      }
-    })
   }
 
-  function deletePenerimaanTruckingHeader(Id) {
+  function deletePenerimaanTruckingHeader(id) {
+
     let form = $('#crudForm')
 
     form.data('action', 'delete')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Hapus
-  `)
-    $('#crudModalTitle').text('Delete Penerimaan Trucking')
+      <i class="fa fa-save"></i>
+      Hapus
+    `)
+    $('#crudModalTitle').text('Delete Penerimaan Truck')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+   
+      showPenerimaanTruckingHeader(form, id)
+
+  }
+
+  function showPenerimaanTruckingHeader(form, id) {
+    $('#detailList tbody').html('')
 
     $.ajax({
-      url: `${apiUrl}penerimaantruckingheader/${Id}`,
+      url: `${apiUrl}penerimaantruckingheader/${id}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        let tgl = response.data.tglbukti
+
         $.each(response.data, (index, value) => {
-          form.find(`[name="${index}"]`).val(value)
-        })
-        $('#table_body').html('')
-        $.each(response.detail, (index, value) => {
-          $('#table_body').append(
-            `<tr id="row">
-              <td>
-                <div class="baris">${parseInt(index) + 1}</div>
-              </td>
-              
-              <td>
-              <div class="row form-group" >
-                <div class="col-12 col-md-12">
-                  <div class="input-group">
-                    <input type="hidden" name="supir_id" value="${value.supir_id}">
-                    <input type="text" name="supir" value="${value.supir}" class="form-control">
-                    <div class="input-group-append">
-                      <button id="lookupSupirToggler" class="btn btn-secondary" type="button">...</button>
-                    </div>
-                  </div>
-                  <div class="row position-absolute" id="lookupSupir" style="z-index: 1;">
-                    <div class="col-12">
-                      <div id="lookupSupir" class="shadow-lg">
-                        @include('partials.lookups.supir')
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              </td>
+          let element = form.find(`[name="${index}"]`)
+          if (element.hasClass('datepicker')) {
+            element.val(dateFormat(value))
+          } else {
+            element.val(value)
+          }
 
-              <td>
-              <div class="row form-group" >
-                <div class="col-12 col-md-12">
-                  <div class="input-group">
-                    <input type="text" name="pengeluarantruckingheader_nobukti" value="${value.pengeluarantruckingheader_nobukti}" class="form-control">
-                    <div class="input-group-append">
-                      <button id="lookupPengeluaranTruckingHeaderToggler" class="btn btn-secondary" type="button">...</button>
-                    </div>
-                  </div>
-                  <div class="row position-absolute" id="lookupPengeluaranTruckingHeader" style="z-index: 1;">
-                    <div class="col-12">
-                      <div id="lookupPengeluaranTruckingHeader" class="shadow-lg" >
-                        @include('partials.lookups.pengeluarantruckingheader')
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              </td>
-
-              <td>
-                  <input type="text" name="nominal" value="${value.nominal}" style="text-align:right" class="form-control text-right autonumeric" > 
-              </td>
-              <td>
-                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-              </td>
-            </tr>`
-          )
+          if (index == 'penerimaantrucking') {
+            element.data('current-value', value)
+          }
+          if (index == 'bank') {
+            element.data('current-value', value)
+          }
+          if (index == 'coa') {
+            element.data('current-value', value)
+          }
+          if (index == 'penerimaan_nobukti') {
+            element.data('current-value', value)
+          }
         })
+
+        $.each(response.detail, (index, detail) => {
+          let detailRow = $(`
+            <tr>
+                <td></td>
+                <td>
+                    <input type="hidden" name="supir_id[]">
+                    <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
+                </td>
+                <td>
+                    <input type="text" name="pengeluarantruckingheader_nobukti[]" data-current-value="${detail.pengeluarantruckingheader_nobukti}" class="form-control pengeluarantruckingheader-lookup">
+                </td>
+                <td>
+                    <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+                </td>
+            </tr>
+          `)
+
+          detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
+          detailRow.find(`[name="supir[]"]`).val(detail.supir)
+          detailRow.find(`[name="pengeluarantruckingheader_nobukti[]"]`).val(detail.pengeluarantruckingheader_nobukti)
+          detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+
+          initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
+          $('#detailList tbody').append(detailRow)
+
+          setTotal();
+
+          $('.supir-lookup').last().lookup({
+            title: 'Supir Lookup',
+            fileName: 'supir',
+            onSelectRow: (supir, element) => {
+              $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
+              element.val(supir.namasupir)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            }
+          })
+
+          $('.pengeluarantruckingheader-lookup').last().lookup({
+            title: 'Pengeluaran Trucking Lookup',
+            fileName: 'pengeluarantruckingheader',
+            onSelectRow: (pengeluarantruckingheader, element) => {
+              element.val(pengeluarantruckingheader.nobukti)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            }
+          })
+
+
+        })
+
+        setRowNumbers()
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
+      }
+    })
+  }
+
+  function addRow() {
+    let detailRow = $(`
+      <tr>
+        <td></td>
+        <td>
+          <input type="hidden" name="supir_id[]">
+          <input type="text" name="supir[]"  class="form-control supir-lookup">
+        </td>
+        <td>
+          <input type="text" name="pengeluarantruckingheader_nobukti[]"  class="form-control pengeluarantruckingheader-lookup">
+        </td>
+        <td>
+          <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+        </td>
+        <td>
+            <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+        </td>
+      </tr>
+    `)
+
+    $('#detailList tbody').append(detailRow)
+
+    $('.supir-lookup').last().lookup({
+      title: 'Supir Lookup',
+      fileName: 'supir',
+      onSelectRow: (supir, element) => {
+        $(`#crudForm [name="supir_id[]"]`).val(supir.id)
+        element.val(supir.namasupir)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    $('.pengeluarantruckingheader-lookup').last().lookup({
+      title: 'Pengeluaran Trucking Lookup',
+      fileName: 'pengeluarantruckingheader',
+      onSelectRow: (pengeluarantruckingheader, element) => {
+        element.val(pengeluarantruckingheader.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+
+    initAutoNumeric(detailRow.find('.autonumeric'))
+    setRowNumbers()
+  }
+
+  function deleteRow(row) {
+    row.remove()
+
+    setRowNumbers()
+    setTotal()
+  }
+
+  function setRowNumbers() {
+    let elements = $('#detailList tbody tr td:nth-child(1)')
+
+    elements.each((index, element) => {
+      $(element).text(index + 1)
+    })
+  }
+
+  function getMaxLength(form) {
+    if (!form.attr('has-maxlength')) {
+      $.ajax({
+        url: `${apiUrl}penerimaantruckingheader/field_length`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            if (value !== null && value !== 0 && value !== undefined) {
+              form.find(`[name=${index}]`).attr('maxlength', value)
+            }
+          })
+
+          form.attr('has-maxlength', true)
+        },
+        error: error => {
+          showDialog(error.statusText)
+        }
+      })
+    }
+  }
+
+  function initLookup() {
+
+    $('.penerimaantrucking-lookup').lookup({
+      title: 'Penerimaan Trucking Lookup',
+      fileName: 'penerimaantrucking',
+      onSelectRow: (penerimaantrucking, element) => {
+        $('#crudForm [name=penerimaantrucking_id]').first().val(penerimaantrucking.id)
+        element.val(penerimaantrucking.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    $('.bank-lookup').lookup({
+      title: 'Bank Lookup',
+      fileName: 'bank',
+      onSelectRow: (bank, element) => {
+        $('#crudForm [name=bank_id]').first().val(bank.id)
+        element.val(bank.namabank)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    $('.penerimaan-lookup').lookup({
+      title: 'Penerimaan Lookup',
+      fileName: 'penerimaanheader',
+      onSelectRow: (penerimaanheader, element) => {
+        element.val(penerimaanheader.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    $('.akunpusat-lookup').lookup({
+      title: 'Kode Perk. Lookup',
+      fileName: 'akunpusat',
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
   }

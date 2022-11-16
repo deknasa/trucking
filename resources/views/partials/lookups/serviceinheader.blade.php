@@ -63,6 +63,7 @@
       rowNum: 10,
       rownumbers: true,
       rownumWidth: 45,
+      toolbar: [true, "top"],
       rowList: [10, 20, 50],
       sortable: true,
       sortname: 'id',

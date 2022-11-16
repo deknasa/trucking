@@ -320,6 +320,10 @@
                     } else {
                         element.val(value)
                     }
+                    
+                    if(index == 'trado') {
+                        element.data('current-value', value)
+                    }
                 })
 
                 $.each(response.detail, (index, detail) => {
@@ -327,7 +331,7 @@
                     <tr>
                         <td></td>
                         <td>
-                            <input type="text" name="servicein_nobukti[]" class="form-control serviceinheader-lookup">
+                            <input type="text" name="servicein_nobukti[]" data-current-value="${detail.servicein_nobukti}" class="form-control serviceinheader-lookup">
                         </td>
                         <td>
                             <input type="text" name="keterangan_detail[]" class="form-control">

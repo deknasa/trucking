@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\AbsensiSupirDetailController;
 use App\Http\Controllers\AbsensiSupirHeaderController;
+
+use App\Http\Controllers\AbsensiSupirApprovalDetailController;
+use App\Http\Controllers\AbsensiSupirApprovalHeaderController;
+
 use App\Http\Controllers\AbsenTradoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
@@ -205,6 +209,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('absensisupirheader', AbsensiSupirHeaderController::class);
 
     Route::resource('absensisupir_detail', AbsensiSupirDetailController::class);
+    
+    Route::get('absensisupirapprovalheader/{id}/delete', [AbsensiSupirHeaderController::class, 'delete'])->name('absensisupirapprovalheader.delete');
+    Route::get('absensisupirapprovalheader/index', [AbsensiSupirHeaderController::class, 'index']);
+    Route::get('absensisupirapprovalheader/get', [AbsensiSupirHeaderController::class, 'get'])->name('absensisupirapprovalheader.get');
+    Route::get('absensisupirapprovalheader/export', [AbsensiSupirHeaderController::class, 'export'])->name('absensisupirapprovalheader.export');
+    Route::get('absensisupirapprovalheader/report', [AbsensiSupirHeaderController::class, 'report'])->name('absensisupirapprovalheader.report');
+    Route::resource('absensisupirapprovalheader', AbsensiSupirApprovalHeaderController::class);
 
     Route::get('userrole/{id}/delete', [UserRoleController::class, 'delete'])->name('userrole.delete');
     Route::get('userrole/field_length', [UserRoleController::class, 'fieldLength'])->name('userrole.field_length');
@@ -534,22 +545,22 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('serviceoutdetail', ServiceOutDetailController::class);
 
-    Route::get('penerimaan/{id}/delete', [PenerimaanHeaderController::class, 'delete'])->name('penerimaan.delete');
-    Route::get('penerimaan/index', [PenerimaanHeaderController::class, 'index']);
-    Route::get('penerimaan/get', [PenerimaanHeaderController::class, 'get'])->name('penerimaan.get');
-    Route::get('penerimaan/export', [PenerimaanHeaderController::class, 'export'])->name('penerimaan.export');
-    Route::get('penerimaan/report', [PenerimaanHeaderController::class, 'report'])->name('penerimaan.report');
-    Route::resource('penerimaan', PenerimaanHeaderController::class);
+    Route::get('penerimaanheader/{id}/delete', [PenerimaanHeaderController::class, 'delete'])->name('penerimaanheader.delete');
+    Route::get('penerimaanheader/index', [PenerimaanHeaderController::class, 'index']);
+    Route::get('penerimaanheader/get', [PenerimaanHeaderController::class, 'get'])->name('penerimaanheader.get');
+    Route::get('penerimaanheader/export', [PenerimaanHeaderController::class, 'export'])->name('penerimaanheader.export');
+    Route::get('penerimaanheader/report', [PenerimaanHeaderController::class, 'report'])->name('penerimaanheader.report');
+    Route::resource('penerimaanheader', PenerimaanHeaderController::class);
 
     Route::resource('penerimaandetail', PenerimaanDetailController::class);
 
     //pengeluaran
-    Route::get('pengeluaran/{id}/delete', [PengeluaranHeaderController::class, 'delete'])->name('pengeluaran.delete');
-    Route::get('pengeluaran/index', [PengeluaranHeaderController::class, 'index']);
-    Route::get('pengeluaran/get', [PengeluaranHeaderController::class, 'get'])->name('pengeluaran.get');
-    Route::get('pengeluaran/export', [PengeluaranHeaderController::class, 'export'])->name('pengeluaran.export');
-    Route::get('pengeluaran/report', [PengeluaranHeaderController::class, 'report'])->name('pengeluaran.report');
-    Route::resource('pengeluaran', PengeluaranHeaderController::class);
+    Route::get('pengeluaranheader/{id}/delete', [PengeluaranHeaderController::class, 'delete'])->name('pengeluaranheader.delete');
+    Route::get('pengeluaranheader/index', [PengeluaranHeaderController::class, 'index']);
+    Route::get('pengeluaranheader/get', [PengeluaranHeaderController::class, 'get'])->name('pengeluaranheader.get');
+    Route::get('pengeluaranheader/export', [PengeluaranHeaderController::class, 'export'])->name('pengeluaranheader.export');
+    Route::get('pengeluaranheader/report', [PengeluaranHeaderController::class, 'report'])->name('pengeluaranheader.report');
+    Route::resource('pengeluaranheader', PengeluaranHeaderController::class);
 
     Route::resource('pengeluarandetail', PengeluaranDetailController::class);
 

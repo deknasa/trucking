@@ -11,62 +11,37 @@
 @push('scripts')
 <script>
   function loadDetailGrid(id) {
+    let pager = '#detailPager'
 
     $("#detail").jqGrid({
-        url: `${apiUrl}pengeluarandetail`,
+        url: `${apiUrl}absensisupirapprovaldetail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "local",
+        datatype: "json",
         colModel: [
           {
             label: 'NO BUKTI',
             name: 'nobukti',
-          }, 
-          {
-            label: 'ALAT BAYAR',
-            name: 'alatbayar_id',
-          }, 
-          {
-            label: 'NO WARKAT',
-            name: 'nowarkat',
-          }, 
-          {
-            label: 'TGL JATUH TEMPO',
-            name: 'tgljatuhtempo',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          }, 
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-          }, 
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'right',
-            formatter: currencyFormat,
+            align: 'left'
           },
           {
-            label: 'COA DEBET',
-            name: 'coadebet',
+            label: 'TRADO',
+            name: 'trado'
           },
           {
-            label: 'COA KREDIT',
-            name: 'coakredit',
+            label: 'SUPIR',
+            name: 'supir',
           },
           {
-            label: 'BULAN BEBAN',
-            name: 'bulanbeban',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          }
+            label: 'SUPIR SERAP',
+            name: 'supirserap',
+          },
+          {
+            label: 'MODIFIEDBY',
+            name: 'modifiedby',
+            align: 'left'
+          },
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -75,13 +50,14 @@
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
-        footerrow: true,
-        userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
+        pager: pager,
         viewrecords: true,
+        footerrow:true,
+        userDataOnFooter: true,
         postData: {
-          pengeluaran_id: id
+          absensi_id: id
         },
         prmNames: {
           sort: 'sortIndex',
@@ -94,15 +70,15 @@
           records: 'attributes.totalRows',
         },
         loadBeforeSend: (jqXHR) => {
-          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
           activeGrid = $(this)
         },
         loadComplete: function(data) {
           initResize($(this))
-
-          let nominals = $(this).jqGrid("getCol", "nominal")
+          
+          let nominals = $(this).jqGrid("getCol", "uangjalan")
           let totalNominal = 0
 
           if (nominals.length > 0) {
@@ -110,8 +86,8 @@
           }
 
           $(this).jqGrid('footerData', 'set', {
-            nobukti: 'Total:',
-            nominal: totalNominal,
+            trado: 'Total:',
+            uangjalan: totalNominal,
           }, true)
         }
       })
@@ -123,16 +99,14 @@
         edit: false,
         del: false,
       })
-
-      .customPager()
   }
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: `${apiUrl}pengeluarandetail`,
+      url: `${apiUrl}absensisupirapprovaldetail`,
       datatype: "json",
       postData: {
-        pengeluaran_id: id
+        absensisupirapproval_id: id
       }
     }).trigger('reloadGrid')
   }

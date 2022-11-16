@@ -24,7 +24,7 @@
                 <label>tglbukti <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="tglbukti" class="form-control formatdate">
+                <input type="text" name="tglbukti" class="form-control datepicker">
               </div>
             </div>
 
@@ -49,14 +49,14 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>penerimaan stok nobukti <span class="text-danger">*</span> </label>
+                <label>penerimaan stok nobukti  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="penerimaanstok_nobukti" class="form-control penerimaanstokheader-lookup">
               </div>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>pengeluaran stok nobukti <span class="text-danger">*</span> </label>
+                <label>pengeluaran stok nobukti  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="pengeluaranstok_nobukti" class="form-control pengeluaranstokheader-lookup">
@@ -65,14 +65,14 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>nobon <span class="text-danger">*</span> </label>
+                <label>nobon  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="nobon" class="form-control">
               </div>
             
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>hutang no bukti <span class="text-danger">*</span> </label>
+                <label>hutang no bukti  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="hutang_nobukti" class="form-control hutang-lookup">
@@ -82,7 +82,7 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>trado <span class="text-danger">*</span> </label>
+                <label>trado  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="trado" class="form-control trado-lookup">
@@ -90,7 +90,7 @@
               </div>
               
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>supplier <span class="text-danger">*</span> </label>
+                <label>supplier  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="supplier" class="form-control supplier-lookup">
@@ -100,7 +100,7 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>gudang <span class="text-danger">*</span> </label>
+                <label>gudang  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="gudang" class="form-control gudang-lookup">
@@ -108,7 +108,7 @@
               </div>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>coa <span class="text-danger">*</span> </label>
+                <label>coa  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="coa" class="form-control akunpusat-lookup">
@@ -118,7 +118,7 @@
             
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>gudangdari <span class="text-danger">*</span> </label>
+                <label>gudangdari  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="gudangdari" class="form-control gudang-lookup">
@@ -126,7 +126,7 @@
               </div>
               
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>gudangke <span class="text-danger">*</span> </label>
+                <label>gudangke  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="gudangke" class="form-control gudang-lookup">
@@ -144,7 +144,7 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>coa <span class="text-danger">*</span> </label>
+                <label>coa  </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="coa" class="form-control akunpusat-lookup">
@@ -321,7 +321,9 @@
       })
     })
   })
-
+  function kodepenerimaan(kodepenerimaan){
+    $('#crudForm').find('[name=statusformat]').val(kodepenerimaan).trigger('change');
+  }
   
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
@@ -329,6 +331,8 @@
     setFormBindKeys(form)
 
     activeGrid = null
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
+    initDatepicker()
 
     // getMaxLength(form)
   })

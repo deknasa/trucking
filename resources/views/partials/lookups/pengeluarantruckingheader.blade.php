@@ -1,4 +1,4 @@
-<table id="pengeluaranTruckingHeaderLookup" style="width: 100%;"></table>
+<table id="pengeluaranTruckingHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
 <div id="pengeluaranTruckingHeaderLookupPager"></div>
 
 @push('scripts')
@@ -70,6 +70,7 @@
     rownumbers: true,
     rownumWidth: 45,
     rowList: [10, 20, 50],
+    toolbar: [true,"top"],
     sortable: true,
     sortname: 'id',
     sortorder: 'asc',
@@ -156,4 +157,3 @@
   loadGlobalSearch($('#pengeluaranTruckingHeaderLookup'))
   loadClearFilter($('#pengeluaranTruckingHeaderLookup'))
 </script>
-@endpush

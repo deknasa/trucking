@@ -14,7 +14,7 @@
 
             <div class="row">
               <!-- <div class="form-group col-md-4">
-                <div class="col-12 col-md-2 col-form-label">
+                <div class="col-form-label">
                   <label>ID</label>
                 </div>
                 <div>
@@ -47,7 +47,7 @@
               </div>
 
               <div class="form-group col-md-4">
-                <div class="col-12 col-md-2 col-form-label">
+                <div class="col-form-label">
                   <label>
                     TGL SP <span class="text-danger">*</span>
                   </label>
@@ -59,8 +59,20 @@
                 </div>
               </div>
 
+              
               <div class="form-group col-md-4">
-                <div class="col-12 col-md-2 col-form-label">
+                <div class="col-12 col-md-6 col-form-label">
+                  <label>
+                    JOB TRUCKING <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <input type="text" name="jobtrucking" class="form-control orderantrucking-lookup">
+                </div>
+              </div>
+
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
                   <label>
                     NO SP <span class="text-danger">*</span>
                   </label>
@@ -81,42 +93,6 @@
                   </select>
                 </div>
               </div>
-              <!-- <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    STATUS LONGTRIP <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <select name="statuslongtrip" class="form-control select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH STATUS LONGTRIP --</option>
-                  </select>
-                </div>
-              </div> -->
-
-              <!-- <div class="row form-group col-md-4">
-                <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                  <label>
-                    DARI <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div class="col-8 col-md-10">
-                  <input type="hidden" name="dari_id">
-                  <input type="text" name="dari" class="form-control kotadari-lookup">
-                </div>
-              </div>
-
-              <div class="row form-group col-md-4">
-                <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                  <label>
-                    TUJUAN <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div class="col-8 col-md-10">
-                  <input type="hidden" name="sampai_id">
-                  <input type="text" name="sampai" class="form-control kotasampai-lookup">
-                </div>
-              </div> -->
 
               <div class="form-group col-md-6">
                 <div class="col-form-label">
@@ -139,16 +115,6 @@
                   <input type="text" name="sampai" class="form-control kotasampai-lookup">
                 </div>
 
-                <!-- <div class="col-form-label">
-                  <label>
-                    SAMPAI <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <select name="sampai_id" id="sampai_id" class="form-control select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH SAMPAI --</option>
-                  </select>
-                </div> -->
               </div>
 
               <div class="col-md-6">
@@ -169,7 +135,7 @@
                         </select>
                       </div>
                     </div>
-                    <div id="peralihan" hidden>
+                    <div id="peralihan">
                       <div class="row">
                         <div class="col-md-3">
                           <div class="form-group">
@@ -191,8 +157,29 @@
                   </div>
                 </div>
               </div>
+              
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    OMSET <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <input type="text" name="omset" class="form-control text-right">
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    DISCOUNT <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <input type="text" name="discount" class="form-control text-right">
+                </div>
+              </div>
 
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
                     PELANGGAN <span class="text-danger">*</span></label>
@@ -203,7 +190,7 @@
                 </div>
               </div>
 
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
                     KETERANGAN <span class="text-danger">*</span>
@@ -213,7 +200,7 @@
                   <input type="text" name="keterangan" class="form-control">
                 </div>
               </div>
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
                     CONTAINER <span class="text-danger">*</span>
@@ -224,7 +211,7 @@
                   <input type="text" name="container" class="form-control container-lookup">
                 </div>
               </div>
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
                     NO CONT <span class="text-danger">*</span>
@@ -234,17 +221,17 @@
                   <input type="text" name="nocont" class="form-control">
                 </div>
               </div>
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
-                    NO CONT 2 <span class="text-danger">*</span>
+                    NO CONT 2 
                   </label>
                 </div>
                 <div>
                   <input type="text" name="nocont2" class="form-control">
                 </div>
               </div>
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
                     STATUS CONTAINER <span class="text-danger">*</span>
@@ -256,8 +243,8 @@
                 </div>
               </div>
 
-              <div class="form-group col-md-6">
-                <div class="col-12 col-md-2 col-form-label">
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
                   <label>
                     TRADO <span class="text-danger">*</span>
                   </label>
@@ -267,7 +254,7 @@
                   <input type="text" name="trado" class="form-control trado-lookup">
                 </div>
               </div>
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
                     SUPIR <span class="text-danger">*</span>
@@ -278,8 +265,8 @@
                   <input type="text" name="supir" class="form-control supir-lookup">
                 </div>
               </div>
-              <div class="form-group col-md-6">
-                <div class="col-12 col-md-2 col-form-label">
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
                   <label>
                     AGEN <span class="text-danger">*</span>
                   </label>
@@ -289,7 +276,7 @@
                   <input type="text" name="agen" class="form-control agen-lookup">
                 </div>
               </div>
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
                     JENIS ORDER <span class="text-danger">*</span>
@@ -300,7 +287,7 @@
                   <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
                 </div>
               </div>
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
                     NO JOB <span class="text-danger">*</span>
@@ -310,18 +297,48 @@
                   <input type="text" name="nojob" class="form-control">
                 </div>
               </div>
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
-                    NO JOB 2 <span class="text-danger">*</span>
+                    NO JOB 2 
                   </label>
                 </div>
                 <div>
                   <input type="text" name="nojob2" class="form-control">
                 </div>
               </div>
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    NO SP TAGIH LAIN 
+                  </label>
+                </div>
+                <div>
+                  <input type="text" name="nosptagihlain" class="form-control">
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                   NILAI TAGIH LAIN 
+                  </label>
+                </div>
+                <div>
+                  <input type="text" name="nilaitagihlain" class="form-control text-right">
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    TUJUAN TAGIH 
+                  </label>
+                </div>
+                <div>
+                  <input type="text" name="tujuantagih" class="form-control">
+                </div>
+              </div>
 
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
                     TARIF <span class="text-danger">*</span>
@@ -332,6 +349,174 @@
                   <input type="text" name="tarif" class="form-control tarif-lookup">
                 </div>
               </div>
+              
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    QTY TON <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <input type="text" name="qtyton" class="form-control text-right">
+                </div>
+              </div>
+              
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    TOTAL TON <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <input type="text" name="totalton" class="form-control text-right">
+                </div>
+              </div>
+
+              
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    STATUS RITASI OMSET <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <select name="statusritasiomset" class="form-control select2bs4" id="statusritasiomset">
+                    <option value="">-- PILIH STATUS RITASI OMSET --</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    STATUS NOTIF <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <select name="statusnotif" class="form-control select2bs4" id="statusnotif">
+                    <option value="">-- PILIH STATUS NOTIF --</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    STATUS ONE WAY <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <select name="statusoneway" class="form-control select2bs4" id="statusoneway">
+                    <option value="">-- PILIH STATUS ONE WAY --</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    STATUS EDIT TUJUAN<span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <select name="statusedittujuan" class="form-control select2bs4" id="statusedittujuan">
+                    <option value="">-- PILIH STATUS EDIT TUJUAN--</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    NOMINAL STAFLE <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <input type="text" name="nominalstafle" class="form-control text-right">
+                </div>
+              </div>
+
+              
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    STATUS TRIP<span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <select name="statustrip" class="form-control select2bs4" id="statustrip">
+                    <option value="">-- PILIH STATUS TRIP--</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    NO TRIP ASAL <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <input type="text" name="notripasal" class="form-control text-right">
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    TGL DOOR <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <div class="input-group">
+                    <input type="text" name="tgldoor" class="form-control datepicker">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    UPAH BONGKAR DEPO <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <input type="text" name="upahbongkardepo" class="form-control text-right">
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    UPAH MUAT DEPO <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <input type="text" name="upahmuatdepo" class="form-control text-right">
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <div class="col-form-label">
+                  <label>
+                    STATUS DISC 
+                  </label>
+                </div>
+                <div>
+                  <select name="statusdisc" class="form-control select2bs4" id="statusdisc">
+                    <option value="">-- PILIH STATUS DISC--</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="form-group col-md-4">
+                <div class=" col-form-label">
+                  <label>
+                    CABANG <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div>
+                  <input type="hidden" name="cabang_id">
+                  <input type="text" name="cabang" class="form-control cabang-lookup">
+                </div>
+              </div>
+
             </div>
 
             <div class="card">
@@ -340,45 +525,35 @@
               </div>
               <div class="card-body">
                 <div class="row form-group">
-                  <div class="col-12 col-md-2 col-form-label">
+                  <div class="col-form-label">
                     <label>
                       GAJI SUPIR <span class="text-danger">*</span>
                     </label>
                   </div>
                   <div class="col-12 col-md-10">
-                    <input type="text" name="gajisupir" id="gajisupir" class="form-control" readonly>
+                    <input type="text" name="gajisupir" id="gajisupir" class="form-control autonumeric" readonly>
                   </div>
                 </div>
                 <div class="row form-group">
-                  <div class="col-12 col-md-2 col-form-label">
+                  <div class="col-form-label">
                     <label>
                       GAJI KENEK <span class="text-danger">*</span>
                     </label>
                   </div>
                   <div class="col-12 col-md-10">
-                    <input type="text" name="gajikenek" id="gajikenek" class="form-control" readonly>
+                    <input type="text" name="gajikenek" id="gajikenek" class="form-control autonumeric" readonly>
                   </div>
                 </div>
                 <div class="row form-group">
-                  <div class="col-12 col-md-2 col-form-label">
+                  <div class="col-form-label">
                     <label>
                       KOMISI SUPIR <span class="text-danger">*</span>
                     </label>
                   </div>
                   <div class="col-12 col-md-10">
-                    <input type="text" name="komisisupir" id="komisisupir" class="form-control" readonly>
+                    <input type="text" name="komisisupir" id="komisisupir" class="form-control autonumeric" readonly>
                   </div>
                 </div>
-                <!-- <div class="row form-group">
-                <div class="col-12 col-md-2 col-form-label">
-                    <label>
-                      KOMISI SUPIR <span class="text-danger">*</span>
-                    </label>
-                  </div>
-                  <div class="col-12 col-md-10">
-                    <input type="text" name="komisisupir" id="komisisupir" class="form-control" readonly>
-                  </div>
-                </div> -->
 
                 <h3 class="text-center">Biaya Tambahan</h3>
 
@@ -391,6 +566,7 @@
                             <th width="50">No</th>
                             <th>Keterangan</th>
                             <th>Nominal</th>
+                            <th>Nominal Tagih</th>
                             <th>Aksi</th>
                           </tr>
                         </thead>
@@ -403,6 +579,9 @@
                             </td>
                             <td>
                               <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                            </td>
+                            <td>
+                              <p class="text-right font-weight-bold autonumeric" id="totalTagih"></p>
                             </td>
                             <td>
                               <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
@@ -435,6 +614,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
   $(document).ready(function() {
 
     $("#addRow").click(function() {
@@ -447,6 +627,10 @@
 
     $(document).on('input', `#detailList [name="nominal[]"]`, function(event) {
       setTotal()
+    })
+
+    $(document).on('input', `#detailList [name="nominalTagih[]"]`, function(event) {
+      setTotalTagih()
     })
 
 
@@ -462,6 +646,37 @@
 
       $('#crudForm').find(`[name="nominal[]"]`).each((index, element) => {
         data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
+      })
+      $('#crudForm').find(`[name="nominalTagih[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominalTagih[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalTagih[]"]`)[index])
+      })
+      $('#crudForm').find(`[name="nominalstafle"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominalstafle')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalstafle"]`)[index])
+      })
+      $('#crudForm').find(`[name="omset"]`).each((index, element) => {
+        data.filter((row) => row.name === 'omset')[index].value = AutoNumeric.getNumber($(`#crudForm [name="omset"]`)[index])
+      })
+      $('#crudForm').find(`[name="discount"]`).each((index, element) => {
+        data.filter((row) => row.name === 'discount')[index].value = AutoNumeric.getNumber($(`#crudForm [name="discount"]`)[index])
+      })
+      $('#crudForm').find(`[name="nilaitagihlain"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nilaitagihlain')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nilaitagihlain"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="qtyton"]`).each((index, element) => {
+        data.filter((row) => row.name === 'qtyton')[index].value = AutoNumeric.getNumber($(`#crudForm [name="qtyton"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="totalton"]`).each((index, element) => {
+        data.filter((row) => row.name === 'totalton')[index].value = AutoNumeric.getNumber($(`#crudForm [name="totalton"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="upahbongkardepo"]`).each((index, element) => {
+        data.filter((row) => row.name === 'upahbongkardepo')[index].value = AutoNumeric.getNumber($(`#crudForm [name="upahbongkardepo"]`)[index])
+      })
+
+      $('#crudForm').find(`[name="upahmuatdepo"]`).each((index, element) => {
+        data.filter((row) => row.name === 'upahmuatdepo')[index].value = AutoNumeric.getNumber($(`#crudForm [name="upahmuatdepo"]`)[index])
       })
 
       data.push({
@@ -511,42 +726,101 @@
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
 
-      $.ajax({
-        url: url,
-        method: method,
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: data,
-        success: response => {
+      if(action == 'add' || action == 'edit') {
+        $.ajax({
+          url: `{{ config('app.api_url') }}suratpengantar/cekUpahSupir`,
+          method: 'POST',
+          dataType: 'JSON',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: data,
+          success: response => {
+            if(response.kodestatus == '0')
+            {
+              showDialog(response.message['keterangan'])
+            }else{
+              $.ajax({
+                url: url,
+                method: method,
+                dataType: 'JSON',
+                headers: {
+                  Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
 
-          id = response.data.id
-          $('#crudModal').modal('hide')
-          $('#crudModal').find('#crudForm').trigger('reset')
+                  id = response.data.id
+                  $('#crudModal').modal('hide')
+                  $('#crudModal').find('#crudForm').trigger('reset')
 
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
-          }).trigger('reloadGrid');
+                  $('#jqGrid').jqGrid('setGridParam', {
+                    page: response.data.page
+                  }).trigger('reloadGrid');
 
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
-          }
-        },
-        error: error => {
-          if (error.status === 422) {
-            $('.is-invalid').removeClass('is-invalid')
-            $('.invalid-feedback').remove()
+                  if (response.data.grp == 'FORMAT') {
+                    updateFormat(response.data)
+                  }
+                },
+                error: error => {
+                  if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
 
-            setErrorMessages(form, error.responseJSON.errors);
-          } else {
-            showDialog(error.statusText)
-          }
-        },
-      }).always(() => {
-        $('#loader').addClass('d-none')
-        $(this).removeAttr('disabled')
-      })
+                    setErrorMessages(form, error.responseJSON.errors);
+                  } else {
+                    showDialog(error.statusText)
+                  }
+                },
+              }).always(() => {
+                $('#loader').addClass('d-none')
+                $(this).removeAttr('disabled')
+              })
+            }
+          },
+        }).always(() => {
+            $('#loader').addClass('d-none')
+            $(this).removeAttr('disabled')
+          })
+      }else{
+        $.ajax({
+          url: url,
+          method: method,
+          dataType: 'JSON',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: data,
+          success: response => {
+
+            id = response.data.id
+            $('#crudModal').modal('hide')
+            $('#crudModal').find('#crudForm').trigger('reset')
+
+            $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page
+            }).trigger('reloadGrid');
+
+            if (response.data.grp == 'FORMAT') {
+              updateFormat(response.data)
+            }
+          },
+          error: error => {
+            if (error.status === 422) {
+              $('.is-invalid').removeClass('is-invalid')
+              $('.invalid-feedback').remove()
+
+              setErrorMessages(form, error.responseJSON.errors);
+            } else {
+              showDialog(error.statusText)
+            }
+          },
+        }).always(() => {
+          $('#loader').addClass('d-none')
+          $(this).removeAttr('disabled')
+        })
+      }
+      
     })
   })
 
@@ -560,6 +834,7 @@
     getMaxLength(form)
     initLookup()
     initDatepicker()
+    initSelect2()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -579,6 +854,17 @@
     new AutoNumeric('#total').set(total)
   }
 
+  function setTotalTagih() {
+    let nominalDetails = $(`#detailList [name="nominalTagih[]"]`)
+    let total = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#totalTagih').set(total)
+  }
+
   function createSuratPengantar() {
     let form = $('#crudForm')
 
@@ -596,9 +882,25 @@
 
     setStatusLongTripOptions(form)
     setStatusPeralihanOptions(form)
-
+    setStatusRitasiOmsetOptions(form)
+    setStatusNotifOptions(form)
+    setStatusOnewayOptions(form)
+    setStatusEditTujuanOptions(form)
+    setStatusTripOptions(form)
     addRow()
     setTotal()
+    setTotalTagih()
+    
+    initAutoNumeric(form.find(`[name="nominal"]`))
+    initAutoNumeric(form.find(`[name="nominalTagih"]`))
+    initAutoNumeric(form.find(`[name="nominalstafle"]`))
+    initAutoNumeric(form.find(`[name="omset"]`))
+    initAutoNumeric(form.find(`[name="discount"]`))
+    initAutoNumeric(form.find(`[name="nilaitagihlain"]`))
+    initAutoNumeric(form.find(`[name="qtyton"]`))
+    initAutoNumeric(form.find(`[name="totalton"]`))
+    initAutoNumeric(form.find(`[name="upahbongkardepo"]`))
+    initAutoNumeric(form.find(`[name="upahmuatdepo"]`))
   }
 
   function editSuratPengantar(id) {
@@ -620,6 +922,11 @@
       .all([
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
+        setStatusRitasiOmsetOptions(form),
+        setStatusNotifOptions(form),
+        setStatusOnewayOptions(form),
+        setStatusEditTujuanOptions(form),
+        setStatusTripOptions(form)
       ])
       .then(() => {
         showSuratPengantar(form, id)
@@ -645,6 +952,11 @@
       .all([
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
+        setStatusRitasiOmsetOptions(form),
+        setStatusNotifOptions(form),
+        setStatusOnewayOptions(form),
+        setStatusEditTujuanOptions(form),
+        setStatusTripOptions(form)
       ])
       .then(() => {
         showSuratPengantar(form, id)
@@ -750,28 +1062,200 @@
     })
   }
 
+  
+  const setStatusRitasiOmsetOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusritasiomset]').empty()
+      relatedForm.find('[name=statusritasiomset]').append(
+        new Option('-- PILIH STATUS RITASI OMSET --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS RITASI OMSET"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusRitasiOmset => {
+            let option = new Option(statusRitasiOmset.text, statusRitasiOmset.id)
+
+            relatedForm.find('[name=statusritasiomset]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+  const setStatusNotifOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusnotif]').empty()
+      relatedForm.find('[name=statusnotif]').append(
+        new Option('-- PILIH STATUS NOTIF --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS NOTIF"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusNotif => {
+            let option = new Option(statusNotif.text, statusNotif.id)
+
+            relatedForm.find('[name=statusnotif]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+  const setStatusOnewayOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusoneway]').empty()
+      relatedForm.find('[name=statusoneway]').append(
+        new Option('-- PILIH STATUS ONE WAY --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS ONE WAY"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusOneWay => {
+            let option = new Option(statusOneWay.text, statusOneWay.id)
+
+            relatedForm.find('[name=statusoneway]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+  const setStatusEditTujuanOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusedittujuan]').empty()
+      relatedForm.find('[name=statusedittujuan]').append(
+        new Option('-- PILIH STATUS EDIT TUJUAN --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS EDIT TUJUAN"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusEditTujuan => {
+            let option = new Option(statusEditTujuan.text, statusEditTujuan.id)
+
+            relatedForm.find('[name=statusedittujuan]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+  const setStatusTripOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statustrip]').empty()
+      relatedForm.find('[name=statustrip]').append(
+        new Option('-- PILIH STATUS TRIP --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS TRIP"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusTrip => {
+            let option = new Option(statusTrip.text, statusTrip.id)
+
+            relatedForm.find('[name=statustrip]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+
   function getGaji() {
     let form = $('#crudForm')
     let data = []
-    data.push({
-      name: 'dari',
-      value: form.find(`[name="dari_id"]`).val()
-    })
-    data.push({
-      name: 'sampai',
-      value: form.find(`[name="sampai_id"]`).val()
-    })
-    data.push({
-      name: 'container',
-      value: form.find(`[name="container_id"]`).val()
-    })
-    data.push({
-      name: 'statuscontainer',
-      value: form.find(`[name="statuscontainer_id"]`).val()
-    })
+    
+      let dari = form.find(`[name="dari_id"]`).val()  
+      let sampai = form.find(`[name="sampai_id"]`).val()
+      let container = form.find(`[name="container_id"]`).val()
+      let statuscontainer = form.find(`[name="statuscontainer_id"]`).val()
+   
 
     $.ajax({
-      url: `${apiUrl}suratpengantar/getGaji`,
+      url: `${apiUrl}suratpengantar/getGaji/${dari}/${sampai}/${container}/${statuscontainer}`,
       method: 'GET',
       dataType: 'JSON',
       data: data,
@@ -779,7 +1263,14 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        console.log(response.data)
+        form.find(`[name="gajisupir"]`).val(response.data.nominalsupir)  
+        form.find(`[name="gajikenek"]`).val(response.data.nominalkenek)  
+        form.find(`[name="komisisupir"]`).val(response.data.nominalkomisi)  
         
+        initAutoNumeric($(form).find('[name="gajisupir"]'))
+        initAutoNumeric($(form).find('[name="gajikenek"]'))
+        initAutoNumeric($(form).find('[name="komisisupir"]'))
       }
     })
   }
@@ -809,37 +1300,60 @@
           } else {
             element.val(value)
           }
-        })
-        $.each(response.detail, (index, detail) => {
-          let detailRow = $(`
-                    <tr>
-                      <td></td>
-                      <td>
-                        <input type="text" name="keterangan_detail[]" class="form-control">
-                      </td>
-                      <td>
-                        <input type="text" name="nominal[]" class="form-control autonumeric">
-                      </td>
-                      <td>
-                        <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                      </td>
-                    </tr>
-                  `)
 
-          detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-
-          detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
-          $('#detailList tbody').append(detailRow)
-
-          initAutoNumeric(detailRow.find('.autonumeric'))
-
-          $('#detailList tbody').append(detailRow)
-
-          $('#lookup').hide()
-
-          setTotal()
+          (index == 'jobtrucking') ? element.data('current-value', value) : '';
+          (index == 'dari') ? element.data('current-value', value) : '';
+          (index == 'sampai') ? element.data('current-value', value) : '';
+          (index == 'pelanggan') ? element.data('current-value', value) : '';
+          (index == 'container') ? element.data('current-value', value) : '';
+          (index == 'statuscontainer') ? element.data('current-value', value) : '';
+          (index == 'trado') ? element.data('current-value', value) : '';
+          (index == 'supir') ? element.data('current-value', value) : '';
+          (index == 'agen') ? element.data('current-value', value) : '';
+          (index == 'jenisorder') ? element.data('current-value', value) : '';
+          (index == 'tarif') ? element.data('current-value', value) : '';
+          (index == 'cabang') ? element.data('current-value', value) : '';
+          
 
         })
+        if(response.detail.length === 0){
+          addRow()
+        }else{
+          
+          $.each(response.detail, (index, detail) => {
+            let detailRow = $(`
+                      <tr>
+                        <td></td>
+                        <td>
+                          <input type="text" name="keterangan_detail[]" class="form-control">
+                        </td>
+                        <td>
+                          <input type="text" name="nominal[]" class="form-control autonumeric">
+                        </td>
+                        <td>
+                          <input type="text" name="nominalTagih[]" class="form-control autonumeric">
+                        </td>
+                        <td>
+                          <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                        </td>
+                      </tr>
+                    `)
+
+            detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keteranganbiaya)
+
+            detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+            detailRow.find(`[name="nominalTagih[]"]`).val(detail.nominaltagih)
+            $('#detailList tbody').append(detailRow)
+
+            initAutoNumeric(detailRow.find('.autonumeric'))
+
+            $('#detailList tbody').append(detailRow)
+
+            setTotal()
+            setTotalTagih()
+
+          })
+        }
         setRowNumbers()
 
         if (form.data('action') === 'delete') {
@@ -859,6 +1373,9 @@
         </td>
         <td>
           <input type="text" name="nominal[]" class="form-control autonumeric">
+        </td>
+        <td>
+          <input type="text" name="nominalTagih[]" class="form-control autonumeric">
         </td>
         <td>
           <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
@@ -1013,6 +1530,30 @@
       onSelectRow: (tarif, element) => {
         $('#crudForm [name=tarif_id]').first().val(tarif.id)
         element.val(tarif.tujuan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    $('.orderantrucking-lookup').lookup({
+      title: 'Job Trucking Lookup',
+      fileName: 'orderantrucking',
+      onSelectRow: (orderantrucking, element) => {
+        element.val(orderantrucking.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    
+    $('.cabang-lookup').lookup({
+      title: 'Cabang Lookup',
+      fileName: 'cabang',
+      onSelectRow: (cabang, element) => {
+        $('#crudForm [name=cabang_id]').first().val(cabang.id)
+        element.val(cabang.namacabang)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
