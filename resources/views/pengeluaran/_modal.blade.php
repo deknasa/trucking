@@ -565,7 +565,7 @@
 
           initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
           
-          initDatepicker(detailRow.find('.datepicker'))
+          detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
           $('#detailList tbody').append(detailRow)
           
           setTotal();
@@ -599,6 +599,7 @@
         })
 
         setRowNumbers()
+        initDatepicker()
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
           initDisabled()
