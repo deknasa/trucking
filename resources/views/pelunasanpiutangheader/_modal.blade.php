@@ -103,22 +103,22 @@
                       </div>
                     </div>
 
-                    <div class="col-md-12" style="overflow-x:scroll">
-                      <table class="table table-borderd mt-3" id="detailList" style="table-layout:auto">
+                    <div class="table-responsive">
+                      <table class="table table-bordered mt-3" id="detailList" style="width:2000px;">
                         <thead class="table-secondary">
                           <tr>
-                            <th>pilih</th>
-                            <th>NO</th>
-                            <th>NO BUKTI</th>
-                            <th>TGL BUKTI</th>
-                            <th>NO BUKTI INVOICE</th>
-                            <th>NOMINAL PIUTANG</th>
-                            <th>SISA</th>
-                            <th>KETERANGAN</th>
-                            <th>BAYAR</th>
-                            <th>KETERANGAN PENYESUAIAN</th>
-                            <th>PENYESUAIAN</th>
-                            <th>NOMINAL LEBIH BAYAR</th>
+                            <th width="1%">pilih</th>
+                            <th width="1%">NO</th>
+                            <th width="5%">NO BUKTI</th>
+                            <th width="4%">TGL BUKTI</th>
+                            <th width="5%">NO BUKTI INVOICE</th>
+                            <th width="5%">NOMINAL PIUTANG</th>
+                            <th width="5%">SISA</th>
+                            <th width="5%">KETERANGAN</th>
+                            <th width="6%">BAYAR</th>
+                            <th width="5%">KETERANGAN PENYESUAIAN</th>
+                            <th width="6%">PENYESUAIAN</th>
+                            <th width="6%">NOMINAL LEBIH BAYAR</th>
                           </tr>
                         </thead>
                         <tbody id="table_body">
@@ -668,29 +668,29 @@
             <tr >
               <td><input name='piutang_id[]' type="checkbox" id="checkItem" value="${id}"></td>
               <td></td>
-              <td width="10%">${detail.nobukti}</td>
-              <td width="10%">${detail.tglbukti}</td>
-              <td width="10%">${detail.invoice_nobukti}</td>
-              <td width="10%">
+              <td>${detail.nobukti}</td>
+              <td>${detail.tglbukti}</td>
+              <td>${detail.invoice_nobukti}</td>
+              <td>
                 <p class="text-right">${nominal}</p>
                 <input type="hidden" name="nominal[]" class="autonumeric" value="${nominal}"></td>
-              <td width="10%">
+              <td>
                 <p class="text-right sisa autonumeric">${sisa}</p>
                 <input type="hidden" name="sisa[]" class="autonumeric" value="${sisa}">
               </td>
-              <td width="10%">
+              <td>
                 <textarea name="keterangandetailppd[]" rows="1" disabled class="form-control"></textarea>
               </td>
-              <td width="10%">
+              <td>
                 <input type="text" name="bayarppd[]" disabled class="form-control bayar autonumeric">
               </td>
-              <td width="10%">
+              <td>
                 <textarea name="keteranganpenyesuaianppd[]" rows="1" disabled class="form-control"></textarea>
               </td>
-              <td width="10%">
+              <td>
                 <input type="text" name="penyesuaianppd[]" disabled class="form-control autonumeric">
               </td>
-              <td width="10%">
+              <td>
                 <input type="text" name="nominallebihbayarppd[]" disabled class="form-control autonumeric">
               </td>
             </tr>
@@ -778,30 +778,30 @@
             <tr>
               <td><input name='piutang_id[]' type="checkbox" class="checkItem" value="${id}" ${checked} ${forCheckbox}></td>
               <td></td>
-              <td width="10%">${detail.piutang_nobukti}</td>
-              <td width="10%">${detail.tglbukti}</td>
-              <td width="10%">${detail.invoice_nobukti}</td>
-              <td width="10%">
+              <td>${detail.piutang_nobukti}</td>
+              <td>${detail.tglbukti}</td>
+              <td>${detail.invoice_nobukti}</td>
+              <td>
                 <p class="text-right">${nominal}</p>
                 <input type="hidden" name="nominal[]" class="autonumeric" value="${nominal}">
               </td>
-              <td width="10%">
+              <td>
                 <p class="sisa text-right">${sisa}</p>
                 <input type="hidden" name="sisa[]" class="autonumeric" value="${sisaHidden}">
               </td>
-              <td width="10%">
+              <td>
                 <textarea name="keterangandetailppd[]" rows="1" class="form-control" ${attribut}>${detail.keterangan || ''}</textarea>
               </td>
-              <td width="10%">
+              <td>
                 <input type="text" name="bayarppd[]" class="form-control bayar autonumeric" value="${detail.nominal || ''}" ${attribut}>
               </td>
-              <td width="10%">
+              <td>
                 <textarea name="keteranganpenyesuaianppd[]" rows="1" class="form-control" ${attribut}>${detail.keteranganpenyesuaian || ''}</textarea>
               </td>
-              <td width="10%">
+              <td>
                 <input type="text" name="penyesuaianppd[]" class="form-control autonumeric" value="${detail.penyesuaian || ''}" ${attribut}>
               </td>
-              <td width="10%">
+              <td>
                 <input type="text" name="nominallebihbayarppd[]" class="form-control autonumeric" value="${detail.nominallebihbayar || ''}" ${attribut}>
               </td>
             </tr>

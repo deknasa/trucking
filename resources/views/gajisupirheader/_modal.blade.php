@@ -85,19 +85,19 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-9" style="overflow-x:scroll">
-                                <table class="table table-bindkeys" id="tripList">
+                            <div class="col-md-9 table-responsive">
+                                <table class="table table-bindkeys" id="tripList" style="width:1800px;">
                                     <thead class="table-secondary">
-                                        <th></th>
-                                        <th>NO TRIP</th>
-                                        <th>TGL BON</th>
-                                        <th>NO GANDENGAN</th>
-                                        <th>GUDANG</th>
-                                        <th>TUJUAN</th>
-                                        <th>NO CONT.</th>
-                                        <th>NO SP</th>
-                                        <th>GAJI SUPIR</th>
-                                        <th>GAJI KENEK</th>
+                                        <th width="1%"></th>
+                                        <th width="5%">NO TRIP</th>
+                                        <th width="4%">TGL BON</th>
+                                        <th width="4%">NO GANDENGAN</th>
+                                        <th width="4%">GUDANG</th>
+                                        <th width="4%">TUJUAN</th>
+                                        <th width="4%">NO CONT.</th>
+                                        <th width="4%">NO SP</th>
+                                        <th width="5%">GAJI SUPIR</th>
+                                        <th width="5%">GAJI KENEK</th>
                                     </thead>
                                     <tbody>
 
@@ -305,16 +305,16 @@
                             gajiKenek = parseFloat(gajiKenek) + parseFloat(detail.gajikenek)
                             let detailRow = $(`
                                 <tr >
-                                    <td width="1%" ><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
-                                    <td width="13%">${detail.nobukti}</td>
-                                    <td width="10%">${detail.tglbukti}</td>
-                                    <td width="10%">${detail.trado}</td>
-                                    <td width="10%">${detail.dari}</td>
-                                    <td width="10%">${detail.sampai}</td>
-                                    <td width="10%">${detail.nocont}</td>
-                                    <td width="10%">${detail.nosp}</td>
-                                    <td width="10%" class="gajiSupir text-right">${detail.gajisupir}</td>
-                                    <td width="10%" class="gajiKenek text-right">${detail.gajikenek}</td>
+                                    <td><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
+                                    <td>${detail.nobukti}</td>
+                                    <td>${detail.tglbukti}</td>
+                                    <td>${detail.trado}</td>
+                                    <td>${detail.dari}</td>
+                                    <td>${detail.sampai}</td>
+                                    <td>${detail.nocont}</td>
+                                    <td>${detail.nosp}</td>
+                                    <td class="gajiSupir text-right">${detail.gajisupir}</td>
+                                    <td class="gajiKenek text-right">${detail.gajikenek}</td>
                                 </tr>
                             `)
 
@@ -628,16 +628,16 @@
 
                     let detailRow = $(`
                         <tr >
-                            <td width="1%"><input name='sp_id[]' type="checkbox" id="checkItem" value="${detail.id}" checked disabled></td>
-                            <td width="13%">${detail.nobukti}</td>
-                            <td width="10%">${detail.tglbukti}</td>
-                            <td width="10%">${detail.trado}</td>
-                            <td width="10%">${detail.dari}</td>
-                            <td width="10%">${detail.sampai}</td>
-                            <td width="10%">${detail.nocont}</td>
-                            <td width="10%">${detail.nosp}</td>
-                            <td width="10%" class="gajiSupir text-right">${detail.gajisupir}</td>
-                            <td width="10%" class="gajiKenek text-right">${detail.gajikenek}</td>
+                            <td><input name='sp_id[]' type="checkbox" id="checkItem" value="${detail.id}" checked disabled></td>
+                            <td>${detail.nobukti}</td>
+                            <td>${detail.tglbukti}</td>
+                            <td>${detail.trado}</td>
+                            <td>${detail.dari}</td>
+                            <td>${detail.sampai}</td>
+                            <td>${detail.nocont}</td>
+                            <td>${detail.nosp}</td>
+                            <td class="gajiSupir text-right">${detail.gajisupir}</td>
+                            <td class="gajiKenek text-right">${detail.gajikenek}</td>
                         </tr>
                     `)
 

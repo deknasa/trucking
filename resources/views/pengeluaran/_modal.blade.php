@@ -126,39 +126,41 @@
               </div>
             </div>
 
-            <table class="table table-bordered table-bindkeys" id="detailList">
-              <thead>
-                <tr>
-                    <th width="50">No</th>
-                    <th>Alat Bayar</th>
-                    <th>No warkat</th>
-                    <th>Tgl jatuh tempo</th>
-                    <th>Keterangan</th>
-                    <th>Nominal</th>
-                    <th>Coa Debet</th>
-                    <th>Bulan beban</th>
-                    <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="table_body" class="form-group">
-                
+            <div class="table-responsive">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 2000px ;">
+                <thead>
+                  <tr>
+                      <th width="1%">No</th>
+                      <th width="5%">Alat Bayar</th>
+                      <th width="4%">No warkat</th>
+                      <th width="4%">Tgl jatuh tempo</th>
+                      <th width="6%">Keterangan</th>
+                      <th width="6%">Nominal</th>
+                      <th width="5%">Coa Debet</th>
+                      <th width="4%">Bulan beban</th>
+                      <th width="1%">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body" class="form-group">
+                  
 
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="5">
-                    <p class="text-right font-weight-bold">TOTAL :</p>
-                  </td>
-                  <td>
-                    <p class="text-right font-weight-bold autonumeric" id="total"></p>
-                  </td>
-                  <td colspan="2"></td>
-                  <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="5">
+                      <p class="text-right font-weight-bold">TOTAL :</p>
+                    </td>
+                    <td>
+                      <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                    </td>
+                    <td colspan="2"></td>
+                    <td>
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
 
           </div>
           <div class="modal-footer justify-content-start">

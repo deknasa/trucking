@@ -126,21 +126,23 @@
 
             </div>
 
-            <div class="col-12 col-md-12 mt-5" style="overflow-x:scroll">
-                <table class="table table-bindkeys" id="spList">
+            <div class="table-responsive">
+                <table class="table table-bindkeys" id="spList" style="width:1800px">
                     <thead class="table-secondary">
-                        <th></th>
-                        <th>JOB TRUCKING</th>
-                        <th>SP</th>
-                        <th>NO CONT</th>
-                        <th>TGL OTOBON</th>
-                        <th>TUJUAN</th>
-                        <th>BAGIAN</th>
-                        <th>EMKL</th>
-                        <th>LONG TRIP</th>
-                        <th>PERALIHAN</th>
-                        <th>KETERANGAN</th>
-                        <th>OMSET</th>
+                        <tr>
+                          <th width="1%"></th>
+                          <th width="4%">JOB TRUCKING</th>
+                          <th width="4%">SP</th>
+                          <th width="4%">NO CONT</th>
+                          <th width="4%">TGL OTOBON</th>
+                          <th width="4%">TUJUAN</th>
+                          <th width="4%">BAGIAN</th>
+                          <th width="4%">EMKL</th>
+                          <th width="4%">LONG TRIP</th>
+                          <th width="4%">PERALIHAN</th>
+                          <th width="5%">KETERANGAN</th>
+                          <th width="6%">OMSET</th>
+                        </tr>
                     </thead>
                     <tbody>
 
@@ -416,18 +418,18 @@
                           let cekPeralihan = detail.statusperalihan == 67 ? "checked" : "";
                           let detailRow = $(`
                               <tr >
-                                  <td width="1%" onclick="select(this)"><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
-                                  <td width="13%">${detail.jobtrucking}</td>
-                                  <td width="10%">${detail.nosp}</td>
-                                  <td width="10%">${detail.nocont}</td>
-                                  <td width="10%">${detail.tglsp}</td>
-                                  <td width="10%">${detail.sampai}</td>
-                                  <td width="10%">${detail.jenisorder_id}</td>
-                                  <td width="10%">${detail.agen_id}</td>
-                                  <td width="1%"><input name='statuslongtrip[]' type="checkbox" value="${detail.statuslongtrip}" ${cekLongtrip} disabled></td>
-                                  <td width="10%"><input name='statusperalihan[]' type="checkbox" value="${detail.statusperalihan}" ${cekPeralihan} disabled></td>
-                                  <td width="10%">${detail.keterangan}</td>
-                                  <td width="10%" class="omset text-right">${detail.omset}</td>
+                                  <td onclick="select(this)"><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
+                                  <td>${detail.jobtrucking}</td>
+                                  <td>${detail.nosp}</td>
+                                  <td>${detail.nocont}</td>
+                                  <td>${detail.tglsp}</td>
+                                  <td>${detail.sampai}</td>
+                                  <td>${detail.jenisorder_id}</td>
+                                  <td>${detail.agen_id}</td>
+                                  <td><input name='statuslongtrip[]' type="checkbox" value="${detail.statuslongtrip}" ${cekLongtrip} disabled></td>
+                                  <td><input name='statusperalihan[]' type="checkbox" value="${detail.statusperalihan}" ${cekPeralihan} disabled></td>
+                                  <td>${detail.keterangan}</td>
+                                  <td class="omset text-right">${detail.omset}</td>
                               </tr>
                           `)
 
@@ -503,18 +505,18 @@
               let cekPeralihan = detail.statusperalihan == 67 ? "checked" : "";
               let detailRow = $(`
                   <tr >
-                      <td width="1%" onclick="select(this)"><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" ${disabled} checked></td>
-                      <td width="13%">${detail.jobtrucking}</td>
-                      <td width="10%">${detail.nosp}</td>
-                      <td width="10%">${detail.nocont}</td>
-                      <td width="10%">${detail.tglsp}</td>
-                      <td width="10%">${detail.sampai}</td>
-                      <td width="10%">${detail.jenisorder_id}</td>
-                      <td width="10%">${detail.agen_id}</td>
-                      <td width="1%"><input name='statuslongtrip[]' type="checkbox" value="${detail.statuslongtrip}" ${cekLongtrip} disabled></td>
-                      <td width="10%"><input name='statusperalihan[]' type="checkbox" value="${detail.statusperalihan}" ${cekPeralihan} disabled></td>
-                      <td width="10%">${detail.keterangan}</td>
-                      <td width="10%" class="omset text-right">${detail.omset}</td>
+                      <td onclick="select(this)"><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" ${disabled} checked></td>
+                      <td>${detail.jobtrucking}</td>
+                      <td>${detail.nosp}</td>
+                      <td>${detail.nocont}</td>
+                      <td>${detail.tglsp}</td>
+                      <td>${detail.sampai}</td>
+                      <td>${detail.jenisorder_id}</td>
+                      <td>${detail.agen_id}</td>
+                      <td><input name='statuslongtrip[]' type="checkbox" value="${detail.statuslongtrip}" ${cekLongtrip} disabled></td>
+                      <td><input name='statusperalihan[]' type="checkbox" value="${detail.statusperalihan}" ${cekPeralihan} disabled></td>
+                      <td>${detail.keterangan}</td>
+                      <td class="omset text-right">${detail.omset}</td>
                   </tr>
               `)
 

@@ -9,7 +9,7 @@
           </button>
         </div>
         <form action="" method="post">
-        <input type="hidden" name="id">
+          <input type="hidden" name="id">
           <div class="modal-body">
             <div class="row">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -27,7 +27,7 @@
                   TANGGAL <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">  
+              <div class="col-12 col-sm-9 col-md-10">
                 <div class="input-group">
                   <input type="text" name="tglbukti" class="form-control datepicker">
                 </div>
@@ -86,51 +86,54 @@
               </div>
             </div>
 
-            <table class="table table-bordered mt-3" id="detailList">
-              <thead class="table-secondary">
-                <tr>
-                  <th>NO</th>
-                  <th>KETERANGAN</th>
-                  <th>NOMINAL</th>
-                  <th>AKSI</th>
-                </tr>
-              </thead>
-              <tbody id="table_body" class="form-group">
-                <tr>
-                  <td>1</td>
-                  <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <input type="text" name="keterangan_detail[]" class="form-control">
+
+            <div class="table-responsive">
+              <table class="table table-bordered mt-3" id="detailList" style="width:1350px">
+                <thead class="table-secondary">
+                  <tr>
+                    <th width="1%">NO</th>
+                    <th width="5%">KETERANGAN</th>
+                    <th width="5%">NOMINAL</th>
+                    <th width="1%">AKSI</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body" class="form-group">
+                  <tr>
+                    <td>1</td>
+                    <td>
+                      <div class="row form-group">
+                        <div class="col-12 col-md-12">
+                          <input type="text" name="keterangan_detail[]" class="form-control">
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <input type="text" name="nominal[]" class="form-control autonumeric nominal">
+                    </td>
+                    <td>
+                      <div class="row form-group">
+                        <div class="col-12 col-md-12">
+                          <input type="text" name="nominal[]" class="form-control autonumeric nominal">
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="btn btn-danger btn-sm delete-row">HAPUS</div>
-                  </td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="2">
-                    <p class="text-right font-weight-bold">TOTAL :</p>
-                  </td>
-                  <td>
-                    <p class="text-right font-weight-bold autonumeric" id="total"></p>
-                  </td>
-                  <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+                    </td>
+                    <td>
+                      <div class="btn btn-danger btn-sm delete-row">HAPUS</div>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="2">
+                      <p class="text-right font-weight-bold">TOTAL :</p>
+                    </td>
+                    <td>
+                      <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -158,7 +161,7 @@
     $(document).on('click', "#addRow", function() {
       addRow()
     });
-    
+
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
     })
@@ -242,7 +245,7 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { 
+          $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
 
@@ -281,7 +284,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    
+
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -333,7 +336,7 @@
     $('.invalid-feedback').remove()
 
     showKasGantung(form, userId)
-    
+
   }
 
   function deleteKasGantung(userId) {
@@ -351,9 +354,9 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-   
+
     showKasGantung(form, userId)
-   
+
   }
 
   function getMaxLength(form) {
@@ -398,16 +401,16 @@
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } else if(element.hasClass('datepicker')){
+          } else if (element.hasClass('datepicker')) {
             element.val(dateFormat(value))
           } else {
             element.val(value)
           }
 
-          if(index == 'penerima') {
+          if (index == 'penerima') {
             element.data('current-value', value)
           }
-          if(index == 'bank') {
+          if (index == 'bank') {
             element.data('current-value', value)
           }
         })
@@ -427,7 +430,7 @@
               </td>
             </tr>
           `)
-          
+
           detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
           detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
 
@@ -484,7 +487,7 @@
     })
   }
 
-  
+
 
   function initLookup() {
     $('.penerima-lookup').lookup({
@@ -497,22 +500,21 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
-      } 
+      }
     })
 
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',
-      onSelectRow: (bank,element) => {
+      onSelectRow: (bank, element) => {
         $('#crudForm [name=bank_id]').first().val(bank.id)
         element.val(bank.namabank)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
-      } 
+      }
     })
   }
-  
 </script>
 @endpush()

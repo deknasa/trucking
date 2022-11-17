@@ -68,57 +68,59 @@
               </div>
             </div>
 
-            <table class="table table-bordered table-bindkeys" id="detailList">
-              <thead>
-                <tr>
-                  <th width="50">No</th>
-                  <th>Supplier</th>
-                  <th>Tgl Jatuh Tempo</th>
-                  <th>Keterangan</th>
-                  <th>Total</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody  id="table_body">
-                <tr>
-                  <td>1</td>
-                  <td>
-                    <input type="hidden" name="supplier_id[]" class="form-control">
-                    <input type="text" name="supplier[]" class="form-control supplier-lookup">
-                  </td>
+            <div class="table-responsive">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
+                <thead>
+                  <tr>
+                    <th width="1%">No</th>
+                    <th width="5%">Supplier</th>
+                    <th width="3%">Tgl Jatuh Tempo</th>
+                    <th width="5%">Keterangan</th>
+                    <th width="6%">Total</th>
+                    <th width="1%">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body">
+                  <tr>
+                    <td>1</td>
+                    <td>
+                      <input type="hidden" name="supplier_id[]" class="form-control">
+                      <input type="text" name="supplier[]" class="form-control supplier-lookup">
+                    </td>
 
-                  <td>
-                    <div class="input-group">
-                      <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">
-                    </div>
-                  </td>
-                  <td>
-                    <input type="text" name="keterangan_detail[]" class="form-control ">
-                  </td>
+                    <td>
+                      <div class="input-group">
+                        <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">
+                      </div>
+                    </td>
+                    <td>
+                      <input type="text" name="keterangan_detail[]" class="form-control ">
+                    </td>
 
-                  <td>
-                    <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right ">
-                  </td>
-                  <td>
-                    <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
-                  </td>
-                </tr>
+                    <td>
+                      <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right ">
+                    </td>
+                    <td>
+                      <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+                    </td>
+                  </tr>
 
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="4">
-                    <h5 class="text-right font-weight-bold">TOTAL:</h5>
-                  </td>
-                  <td>
-                    <h5 id="total" class="text-right font-weight-bold"></h5>
-                  </td>
-                  <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="4">
+                      <h5 class="text-right font-weight-bold">TOTAL:</h5>
+                    </td>
+                    <td>
+                      <h5 id="total" class="text-right font-weight-bold"></h5>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
 
           </div>
           <div class="modal-footer justify-content-start">
@@ -141,7 +143,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
-  
+
   $(document).ready(function() {
 
     $(document).on('click', "#addRow", function() {
@@ -278,7 +280,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    
+
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -395,10 +397,10 @@
             element.val(value)
           }
 
-          if(index == 'akunpusat') {
+          if (index == 'akunpusat') {
             element.data('current-value', value)
           }
-          if(index == 'pelanggan') {
+          if (index == 'pelanggan') {
             element.data('current-value', value)
           }
         })
@@ -435,8 +437,8 @@
           detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
 
           initAutoNumeric(detailRow.find(`[name="total_detail[]"]`))
-          
-          
+
+
           $('#detailList tbody').append(detailRow)
           initDatepicker(detailRow.find('.datepicker'))
           setTotal()
@@ -445,7 +447,7 @@
             title: 'supplier Lookup',
             fileName: 'supplier',
             onSelectRow: (supplier, element) => {
-             element.parents('td').find(`[name="supplier_id[]"]`).val(supplier.id)
+              element.parents('td').find(`[name="supplier_id[]"]`).val(supplier.id)
               element.val(supplier.namasupplier)
               element.data('currentValue', element.val())
             },
@@ -489,7 +491,7 @@
           </td>
       </tr>`)
 
-  
+
     $('#detailList tbody').append(detailRow)
     initDatepicker(detailRow.find('.datepicker'))
 
@@ -525,7 +527,7 @@
     })
   }
 
-  function initLookup() { 
+  function initLookup() {
     $('.akunpusat-lookup').lookup({
       title: 'Akun Pusat Lookup',
       fileName: 'akunpusat',

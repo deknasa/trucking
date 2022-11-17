@@ -9,7 +9,6 @@
 
 @push('scripts')
 <script>
-  
   function loadDetailGrid(id) {
     $("#detail").jqGrid({
         url: `${apiUrl}serviceindetail`,
@@ -18,15 +17,15 @@
         iconSet: 'fontAwesome',
         datatype: "local",
         colModel: [
-          {
-            label: 'MEKANIK',
-            name: 'mekanik_id',
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-          }
-        ],
+            {
+              label: 'MEKANIK',
+              name: 'mekanik_id',
+            },
+            {
+              label: 'KETERANGAN',
+              name: 'keterangan',
+            }
+          ],
         autowidth: true,
         shrinkToFit: false,
         height: 350,
@@ -34,11 +33,13 @@
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
+        footerrow: true,
+        userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
         viewrecords: true,
         postData: {
-          piutang_id: id
+          servicein_id: id
         },
         prmNames: {
           sort: 'sortIndex',
@@ -57,6 +58,8 @@
           activeGrid = $(this)
         },
         loadComplete: function(data) {
+          initResize($(this))
+
         }
       })
 
@@ -67,6 +70,7 @@
         edit: false,
         del: false,
       })
+
       .customPager()
   }
 

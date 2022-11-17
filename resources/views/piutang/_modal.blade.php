@@ -57,51 +57,53 @@
               </div>
             </div>
 
-            <table class="table table-bordered table-bindkeys" id="detailList">
-              <thead>
-                <tr>
-                  <th width="5%">No</th>
-                  <th width="40%">Keterangan</th>
-                  <th width="40%">Nominal</th>
-                  <th width="15%">Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="table_body" class="form-group">
-                <tr>
-                  <td> 1</td>
-                  <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <input type="text" name="keterangan_detail[]" class="form-control">
+            <div class="table-responsive">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width:1450px;">
+                <thead>
+                  <tr>
+                    <th width="5%">No</th>
+                    <th width="40%">Keterangan</th>
+                    <th width="40%">Nominal</th>
+                    <th width="15%">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body" class="form-group">
+                  <tr>
+                    <td> 1</td>
+                    <td>
+                      <div class="row form-group">
+                        <div class="col-12 col-md-12">
+                          <input type="text" name="keterangan_detail[]" class="form-control">
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="row form-group">
-                      <div class="col-12 col-md-12">
-                        <input type="text" name="nominal_detail[]" class="form-control nominal autonumeric">
+                    </td>
+                    <td>
+                      <div class="row form-group">
+                        <div class="col-12 col-md-12">
+                          <input type="text" name="nominal_detail[]" class="form-control nominal autonumeric">
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="btn btn-danger btn-sm delete-row">HAPUS</div>
-                  </td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="2">
-                    <p class="text-right font-weight-bold">TOTAL :</p>
-                  </td>
-                  <td>
-                    <p class="text-right font-weight-bold autonumeric" id="total"></p>
-                  </td>
-                  <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+                    </td>
+                    <td>
+                      <div class="btn btn-danger btn-sm delete-row">HAPUS</div>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="2">
+                      <p class="text-right font-weight-bold">TOTAL :</p>
+                    </td>
+                    <td>
+                      <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">

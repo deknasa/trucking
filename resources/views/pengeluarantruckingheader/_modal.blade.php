@@ -98,33 +98,35 @@
               </div>
             </div>
 
-            <table class="table table-bordered table-bindkeys" id="detailList">
-              <thead>
-                <tr>
-                  <th width="50">No</th>
-                  <th>SUPIR</th>
-                  <th>NO BUKTI PENERIMAAN TRUCKING</th>
-                  <th>Nominal</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="table_body" class="form-group">
+            <div class="table-responsive">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1350px;">
+                <thead>
+                  <tr>
+                    <th width="1%">No</th>
+                    <th width="5%">SUPIR</th>
+                    <th width="5%">NO BUKTI PENERIMAAN TRUCKING</th>
+                    <th width="6%">Nominal</th>
+                    <th width="1%">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body" class="form-group">
 
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="3">
-                    <p class="text-right font-weight-bold">TOTAL :</p>
-                  </td>
-                  <td>
-                    <p class="text-right font-weight-bold autonumeric" id="total"></p>
-                  </td>
-                  <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="3">
+                      <p class="text-right font-weight-bold">TOTAL :</p>
+                    </td>
+                    <td>
+                      <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
 
           </div>
           <div class="modal-footer justify-content-start">
@@ -454,6 +456,9 @@
                 </td>
                 <td>
                     <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
                 </td>
             </tr>
           `)

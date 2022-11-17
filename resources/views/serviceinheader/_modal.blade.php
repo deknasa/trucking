@@ -71,42 +71,44 @@
                             </div>
                         </div>
 
-                        <table class="table table-bordered table-bindkeys" id="detailList">
-                            <thead>
-                                <tr>
-                                    <th width="50">No</th>
-                                    <th>Mekanik</th>
-                                    <th>Keterangan</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        <input type="hidden" name="mekanik_id[]" class="form-control">
-                                        <input type="text" name="mekanik[]" class="form-control mekanik-lookup">
-                                    </td>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1350px;">
+                                <thead>
+                                    <tr>
+                                        <th width="1%">No</th>
+                                        <th width="5%">Mekanik</th>
+                                        <th width="5%">Keterangan</th>
+                                        <th width="1%">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>
+                                            <input type="hidden" name="mekanik_id[]" class="form-control">
+                                            <input type="text" name="mekanik[]" class="form-control mekanik-lookup">
+                                        </td>
 
-                                    <td>
-                                        <input type="text" name="keterangan_detail[]" class="form-control">
-                                    </td>
+                                        <td>
+                                            <input type="text" name="keterangan_detail[]" class="form-control">
+                                        </td>
 
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm delete-row">HAPUS</button>
-                                    </td>
-                                </tr>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm delete-row">HAPUS</button>
+                                        </td>
+                                    </tr>
 
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="3"></td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3"></td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
 
                     </div>
                     <div class="modal-footer justify-content-start">
@@ -129,7 +131,7 @@
 <script>
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
-    
+
     $(document).ready(function() {
 
         $(document).on('click', "#addRow", function() {
@@ -202,32 +204,32 @@
                 method: method,
                 dataType: 'JSON',
                 headers: {
-                Authorization: `Bearer ${accessToken}`
+                    Authorization: `Bearer ${accessToken}`
                 },
                 data: data,
                 success: response => {
-                id = response.data.id
+                    id = response.data.id
 
-                $('#crudModal').find('#crudForm').trigger('reset')
-                $('#crudModal').modal('hide')
+                    $('#crudModal').find('#crudForm').trigger('reset')
+                    $('#crudModal').modal('hide')
 
-                $('#jqGrid').jqGrid('setGridParam', {
-                    page: response.data.page
-                }).trigger('reloadGrid');
+                    $('#jqGrid').jqGrid('setGridParam', {
+                        page: response.data.page
+                    }).trigger('reloadGrid');
 
-                if (response.data.grp == 'FORMAT') {
-                    updateFormat(response.data)
-                }
+                    if (response.data.grp == 'FORMAT') {
+                        updateFormat(response.data)
+                    }
                 },
                 error: error => {
-                if (error.status === 422) {
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
 
-                    setErrorMessages(form, error.responseJSON.errors);
-                } else {
-                    showDialog(error.statusText)
-                }
+                        setErrorMessages(form, error.responseJSON.errors);
+                    } else {
+                        showDialog(error.statusText)
+                    }
                 },
             }).always(() => {
                 $('#loader').addClass('d-none')
@@ -324,7 +326,7 @@
                         element.val(value)
                     }
 
-                    if(index == 'trado') {
+                    if (index == 'trado') {
                         element.data('current-value', value)
                     }
 
@@ -365,9 +367,9 @@
                         },
                         onCancel: (element) => {
                             element.val(element.data('currentValue'))
-                        } 
+                        }
                     })
-                    
+
 
                 })
                 setRowNumbers()
@@ -432,56 +434,56 @@
 
     function getMaxLength(form) {
         if (!form.attr('has-maxlength')) {
-        $.ajax({
-            url: `${apiUrl}serviceinheader/field_length`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-            'Authorization': `Bearer ${accessToken}`
-            },
-            success: response => {
-            $.each(response.data, (index, value) => {
-                if (value !== null && value !== 0 && value !== undefined) {
-                form.find(`[name=${index}]`).attr('maxlength', value)
-                }
-            })
+            $.ajax({
+                url: `${apiUrl}serviceinheader/field_length`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                success: response => {
+                    $.each(response.data, (index, value) => {
+                        if (value !== null && value !== 0 && value !== undefined) {
+                            form.find(`[name=${index}]`).attr('maxlength', value)
+                        }
+                    })
 
-            form.attr('has-maxlength', true)
-            },
-            error: error => {
-            showDialog(error.statusText)
-            }
+                    form.attr('has-maxlength', true)
+                },
+                error: error => {
+                    showDialog(error.statusText)
+                }
             })
         }
     }
 
     function initLookup() {
-    
-    $('.trado-lookup').lookup({
-      title: 'trado Lookup',
-      fileName: 'trado',
-      onSelectRow: (trado, element) => {
-        $('#crudForm [name=trado_id]').first().val(trado.id)
-        element.val(trado.keterangan)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
 
-    $('.mekanik-lookup').lookup({
-      title: 'mekanik Lookup',
-      fileName: 'mekanik',
-      onSelectRow: (mekanik, element) => {
-        $(`#crudForm [name="mekanik_id[]"]`).first().val(mekanik.id)
-        element.val(mekanik.namamekanik)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
-  }
+        $('.trado-lookup').lookup({
+            title: 'trado Lookup',
+            fileName: 'trado',
+            onSelectRow: (trado, element) => {
+                $('#crudForm [name=trado_id]').first().val(trado.id)
+                element.val(trado.keterangan)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            }
+        })
+
+        $('.mekanik-lookup').lookup({
+            title: 'mekanik Lookup',
+            fileName: 'mekanik',
+            onSelectRow: (mekanik, element) => {
+                $(`#crudForm [name="mekanik_id[]"]`).first().val(mekanik.id)
+                element.val(mekanik.namamekanik)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            }
+        })
+    }
 </script>
 @endpush()

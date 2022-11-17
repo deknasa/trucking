@@ -123,54 +123,60 @@
                             </div>
                         </div> -->
 
-                        <table class="table table-bordered table-bindkeys"  id="tablePelunasan">
-                            <thead>
-                                <th>PILIH</th>
-                                <th>NO BUKTI</th>
-                                <th>TGL</th>
-                                <th>NOMINAL</th>
-                                <th>AGEN</th>
-                                <th>CABANG</th>
-                            </thead>
-                            <tbody>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-bindkeys" id="tablePelunasan" style="width:800px;">
+                                <thead>
+                                    <tr>
+                                        <th width="1%">PILIH</th>
+                                        <th width="2%">NO BUKTI</th>
+                                        <th width="1%">TGL</th>
+                                        <th width="1%">NOMINAL</th>
+                                        <th width="3%">AGEN</th>
+                                        <th width="1%">CABANG</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
 
-                        <table class="table table-bordered table-bindkeys" id="detailList">
-                            <thead>
-                                <tr>
-                                    <th width="50">No</th>
-                                    <th>Kode Perk</th>
-                                    <th>Tgl jatuh tempo</th>
-                                    <th>No warkat</th>
-                                    <th>Bank Pelanggan</th>
-                                    <th>Keterangan</th>
-                                    <th>Nominal</th>
-                                    <th>No Invoice</th>
-                                    <th>Jenis Biaya</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table_body" class="form-group">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-bindkeys" id="detailList" style="width:2000px;">
+                                <thead>
+                                    <tr>
+                                        <th width="1%">No</th>
+                                        <th width="5%">Kode Perk</th>
+                                        <th width="4%">Tgl jatuh tempo</th>
+                                        <th width="4%">No warkat</th>
+                                        <th width="4%">Bank Pelanggan</th>
+                                        <th width="6%">Keterangan</th>
+                                        <th width="6%">Nominal</th>
+                                        <th width="5%">No Invoice</th>
+                                        <th width="4%">Jenis Biaya</th>
+                                        <th width="1%">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table_body" class="form-group">
 
 
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="6">
-                                        <p class="text-right font-weight-bold">TOTAL :</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-right font-weight-bold autonumeric" id="total"></p>
-                                    </td>
-                                    <td colspan="2"></td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6">
+                                            <p class="text-right font-weight-bold">TOTAL :</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                                        </td>
+                                        <td colspan="2"></td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
 
                     </div>
                     <div class="modal-footer justify-content-start">
@@ -209,7 +215,7 @@
         })
 
         $(document).on('click', `#tablePelunasan tbody [name="pelunasan_id[]"]`, function() {
-            if($(this).prop("checked") == true){
+            if ($(this).prop("checked") == true) {
                 // $("#detailList tbody tr:first-child").remove()
                 id = $(this).val()
                 console.log(id)
@@ -221,8 +227,8 @@
                         Authorization: `Bearer ${accessToken}`
                     },
                     success: response => {
-                        $.each(response.data, (index, data) => { 
-                                
+                        $.each(response.data, (index, data) => {
+
                             let detailRow = $(`
                                 <tr class="${data.nobukti}">
                                     <td></td>
@@ -248,7 +254,7 @@
                                     <input type="text" name="nominal_detail[]" value="${data.nominal}" class="form-control autonumeric nominal"> 
                                     </td>
                                     <td>
-                                        <input type="text" name="noinvoice[]" value="${data.invoice_nobukti}" class="form-control">
+                                        <input type="text" name="invoice_nobukti[]" value="${data.invoice_nobukti}" class="form-control">
                                     </td>
                                     <td>
                                     <div class="input-group">
@@ -261,8 +267,8 @@
                                 </tr>
                                 `)
 
-                                initDatepicker(detailRow.find('.datepicker'))
-                                initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+                            initDatepicker(detailRow.find('.datepicker'))
+                            initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
                             $('#detailList tbody').append(detailRow)
                             $('.akunpusat-lookup').last().lookup({
                                 title: 'Kode Perkiraan Lookup',
@@ -289,13 +295,12 @@
                                 }
                             })
                         })
-                        
+
                         setRowNumbers()
                     }
                 })
 
-            }
-            else if($(this).prop("checked") == false){
+            } else if ($(this).prop("checked") == false) {
                 id = $(this).val()
                 nobukti = $(this).parent().find(`[name="pelunasan_nobukti[]"]`).val()
                 $(`#detailList tbody tr[class="${nobukti}"]`).remove()
@@ -423,10 +428,10 @@
         $('#crudModal').find('.modal-body').html(modalBody)
     })
 
-    
-    function tarikPelunasan(aksi,id=null) {
+
+    function tarikPelunasan(aksi, id = null) {
         let checked
-        (aksi == 'edit') ? checked = 'checked' : ''
+        (aksi == 'edit' || aksi == 'delete') ? checked = 'checked' : '' ;
         $.ajax({
             url: `${apiUrl}penerimaanheader/${id}/tarikPelunasan`,
             method: 'GET',
@@ -476,7 +481,8 @@
 
         new AutoNumeric('#total').set(total)
     }
-    function select(element){
+
+    function select(element) {
         alert(element)
     }
 
@@ -522,7 +528,7 @@
                 setStatusKasOptions(form)
             ])
             .then(() => {
-                tarikPelunasan('edit',id)
+                tarikPelunasan('edit', id)
                 showPenerimaan(form, id)
             })
 
@@ -547,6 +553,8 @@
                 setStatusKasOptions(form)
             ])
             .then(() => {
+                
+                tarikPelunasan('delete', id)
                 showPenerimaan(form, id)
             })
 
@@ -698,7 +706,7 @@
                             <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
                         </td>
                         <td>
-                            <input type="text" name="noinvoice[]"  class="form-control">
+                            <input type="text" name="invoice_nobukti[]"  class="form-control">
                         </td>
                         <td>
                             <input type="text" name="jenisbiaya[]" class="form-control">   
@@ -716,12 +724,12 @@
                     detailRow.find(`[name="bankpelanggan[]"]`).val(detail.bankpelanggan)
                     detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
                     detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
-                    detailRow.find(`[name="noinvoice[]"]`).val(detail.noinvoice)
+                    detailRow.find(`[name="invoice_nobukti[]"]`).val(detail.invoice_nobukti)
                     detailRow.find(`[name="jenisbiaya[]"]`).val(detail.jenisbiaya)
 
                     initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
                     detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
-                    
+
                     $('#detailList tbody').append(detailRow)
 
                     setTotal();
@@ -737,7 +745,7 @@
                             element.val(element.data('currentValue'))
                         }
                     })
-                    
+
                     $('.bankpelanggan-lookup').last().lookup({
                         title: 'Bank Pelanggan Lookup',
                         fileName: 'bankpelanggan',
@@ -789,7 +797,7 @@
           <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
         </td>
         <td>
-            <input type="text" name="noinvoice[]"  class="form-control">
+            <input type="text" name="invoice_nobukti[]"  class="form-control">
         </td>
         <td>
             <input type="text" name="jenisbiaya[]" class="form-control">   
