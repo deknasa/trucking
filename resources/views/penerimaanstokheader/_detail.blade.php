@@ -126,6 +126,8 @@
         pager: pager,
         viewrecords: true,
         loadComplete: function(data) {
+          initResize($(this))
+          
           detailsPostData = $(this).jqGrid('getGridParam', 'postData')
           
           sum = $('#detail').jqGrid("getCol", "total", false, "sum")
