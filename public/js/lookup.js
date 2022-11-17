@@ -15,9 +15,10 @@ $.fn.lookup = function (options = null) {
 	this.each(function () {
 		let element = $(this);
 
-		element.data('hasLookup', true)
-		
+		element.data("hasLookup", true);
+
 		element.wrap('<div class="input-group"></div>').after(`
+			${options.onClear ? `<button type="button" class="btn btn-transparent position-absolute button-clear" style="right: 30px; z-index: 99;">clear</button>` : ``}
 			<div class="input-group-append">
 				<button class="btn btn-primary lookup-toggler" type="button">...</button>
 			</div>
@@ -29,6 +30,12 @@ $.fn.lookup = function (options = null) {
 			.click(function () {
 				activateLookup(element, element.val());
 			});
+
+		element
+			.siblings('.button-clear')
+			.click(function() {
+				handleOnClear(element)
+			})
 
 		element.on("input", function (event) {
 			delay(function () {
@@ -149,6 +156,12 @@ $.fn.lookup = function (options = null) {
 	function handleOnCancel(element) {
 		if (options.onCancel) {
 			options.onCancel(element);
+		}
+	}
+
+	function handleOnClear(element) {
+		if(options.onClear) {
+			options.onClear(element)
 		}
 	}
 
