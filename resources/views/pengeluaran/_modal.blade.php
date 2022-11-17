@@ -565,7 +565,7 @@
 
           initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
           
-          initDatepicker(detailRow.find('.datepicker'))
+          detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
           $('#detailList tbody').append(detailRow)
           
           setTotal();
@@ -574,7 +574,8 @@
             title: 'Coa Kredit Lookup',
             fileName: 'alatbayar',
             onSelectRow: (alatbayar, element) => {
-             $(`#crudForm [name="alatbayar_id[]"]`).first().val(alatbayar.id)
+             
+             element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
               element.val(alatbayar.coa)
               element.data('currentValue', element.val())
             },
@@ -598,6 +599,7 @@
         })
 
         setRowNumbers()
+        initDatepicker()
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
           initDisabled()
@@ -648,7 +650,7 @@
       title: 'Alat Bayar Lookup',
       fileName: 'alatbayar',
       onSelectRow: (alatbayar, element) => {
-        $(`#crudForm [name="alatbayar_id[]"]`).val(alatbayar.id)
+        element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
         element.val(alatbayar.namaalatbayar)
         element.data('currentValue', element.val())
       },
