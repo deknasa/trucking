@@ -218,14 +218,14 @@
         },
         data: data,
         success: response => {
+          id = response.data.id
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
 
-          indexRow = response.data.position - 1
-
-          $('#jqGrid').trigger('reloadGrid', {
+          // indexRow = response.data.position - 1
+          $('#jqGrid').jqGrid('setGridParam', { 
             page: response.data.page
-          })
+          }).trigger('reloadGrid');
         },
         error: error => {
           if (error.status === 422) {

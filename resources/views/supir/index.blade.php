@@ -24,7 +24,7 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'keterangan'
+  let sortname = 'namasupir'
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
@@ -74,16 +74,16 @@
               value: `<?php
                       $i = 1;
 
-                      foreach ($data['combo'] as $status) :
+                      foreach ($data['statusaktif'] as $status) :
                         echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combo'])) {
+                        if ($i !== count($data['statusaktif'])) {
                           echo ";";
                         }
                         $i++;
                       endforeach
 
                       ?>
-            `,
+          `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -93,12 +93,16 @@
             },
           },
           {
-            label: 'NOMINAL DEPOSIT',
+            label: 'NOM DEPOSIT SALDO AWAL',
             name: 'nominaldepositsa',
+            align: 'right',
+            formatter: currencyFormat,
           },
           {
             label: 'NOM PINJ SALDO AWAL',
             name: 'nominalpinjamansaldoawal',
+            align: 'right',
+            formatter: currencyFormat,
           },
           {
             label: 'SUPIR LAMA',
@@ -141,14 +145,80 @@
           {
             label: 'STATUS ADA UPDATE GBR',
             name: 'statusadaupdategambar',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['statusadaupdategambar'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['statusadaupdategambar'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+          `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'STATUS LUAR KOTA',
             name: 'statusluarkota',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['statusluarkota'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['statusluarkota'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+          `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'ZONA TERTENTU',
             name: 'statuszonatertentu',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['statuszonatertentu'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['statuszonatertentu'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+          `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'ZONA',
@@ -165,6 +235,7 @@
           {
             label: 'PHOTO SUPIR',
             name: 'photosupir',
+            search: false,
             align: 'center',
             formatter: (value, row) => {
               let images = []
@@ -186,6 +257,7 @@
             label: 'PHOTO KTP',
             name: 'photoktp',
             align: 'center',
+            search: false,
             formatter: (value, row) => {
               let images = []
               let files = JSON.parse(value)
@@ -206,6 +278,7 @@
             label: 'PHOTO SIM',
             name: 'photosim',
             align: 'center',
+            search: false,
             formatter: (value, row) => {
               let images = []
               let files = JSON.parse(value)
@@ -226,6 +299,7 @@
             label: 'PHOTO KK',
             name: 'photokk',
             align: 'center',
+            search: false,
             formatter: (value, row) => {
               let images = []
               let files = JSON.parse(value)
@@ -245,6 +319,7 @@
           {
             label: 'PHOTO SKCK',
             name: 'photoskck',
+            search: false,
             align: 'center',
             formatter: (value, row) => {
               let images = []
@@ -265,6 +340,7 @@
           {
             label: 'PHOTO DOMISILI',
             name: 'photodomisili',
+            search: false,
             align: 'center',
             formatter: (value, row) => {
               let images = []
@@ -298,6 +374,28 @@
           {
             label: 'STATUS BLACKLIST',
             name: 'statusblacklist',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['statusblacklist'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['statusblacklist'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+          `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'MODIFIEDBY',

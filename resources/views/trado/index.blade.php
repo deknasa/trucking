@@ -15,7 +15,7 @@
 @push('scripts')
 <script>
   let indexRow = 0;
-  let page = 0;
+  let page = 1;
   let pager = '#jqGridPager'
   let popup = "";
   let id = "";
@@ -53,16 +53,16 @@
               value: `<?php
                       $i = 1;
 
-                      foreach ($data['combo'] as $status) :
+                      foreach ($data['statusaktif'] as $status) :
                         echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combo'])) {
+                        if ($i !== count($data['statusaktif'])) {
                           echo ";";
                         }
                         $i++;
                       endforeach
 
                       ?>
-            `,
+          `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -149,6 +149,28 @@
           {
             label: 'STATUS STANDARISASI',
             name: 'statusstandarisasi',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['statusstandarisasi'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['statusstandarisasi'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+          `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'KET PROGRESS STANDARISASI',
@@ -156,7 +178,29 @@
           },
           {
             label: 'JENIS PLAT',
-            name: 'jenisplat',
+            name: 'statusjenisplat',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['statusjenisplat'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['statusjenisplat'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+          `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'TGL PAJAK STNK',
@@ -179,10 +223,54 @@
           {
             label: 'STATUS MUTASI',
             name: 'statusmutasi',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['statusmutasi'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['statusmutasi'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+          `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'STATUS VALIDASI KEND',
             name: 'statusvalidasikendaraan',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['statusvalidasikendaraan'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['statusvalidasikendaraan'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+          `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'TIPE',
@@ -206,11 +294,11 @@
           },
           {
             label: 'JLH SUMBU',
-            name: 'jlhsumbu',
+            name: 'jumlahsumbu',
           },
           {
             label: 'JLH RODA',
-            name: 'jlhroda',
+            name: 'jumlahroda',
           },
           {
             label: 'MODEL',
@@ -223,6 +311,28 @@
           {
             label: 'STATUS MOBIL STORING',
             name: 'statusmobilstoring',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['statusmobilstoring'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['statusmobilstoring'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+          `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'MANDOR',
@@ -230,33 +340,137 @@
           },
           {
             label: 'JLH BAN SERAP',
-            name: 'jlhbanserap',
+            name: 'jumlahbanserap',
           },
           {
             label: 'STATUS BAN EDIT',
             name: 'statusappeditban',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['statusappeditban'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['statusappeditban'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+          `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'STATUS LEWAT VALIDASI',
             name: 'statuslewatvalidasi',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['statuslewatvalidasi'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['statuslewatvalidasi'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+          `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'PHOTO STNK',
             name: 'photostnk',
             align: 'center',
-            search: false
+            search: false,
+            formatter: (value, row) => {
+              let images = []
+
+              if (value) {
+                let files = JSON.parse(value)
+
+                files.forEach(file => {
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}trado/image/stnk/${file}/small`
+
+                  images.push(image.outerHTML)
+                });
+
+                return images.join(' ')
+              }
+
+              return 'NO PHOTOS'
+            }
           },
           {
             label: 'PHOTO BPKB',
             name: 'photobpkb',
             align: 'center',
-            search: false
+            search: false,
+            formatter: (value, row) => {
+              let images = []
+
+              if (value) {
+                let files = JSON.parse(value)
+
+                files.forEach(file => {
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}trado/image/bpkb/${file}/small`
+
+                  images.push(image.outerHTML)
+                });
+
+                return images.join(' ')
+              }
+
+              return 'NO PHOTOS'
+            }
           },
           {
             label: 'PHOTO TRADO',
             name: 'phototrado',
             align: 'center',
-            search: false
+            search: false,
+            formatter: (value, row) => {
+              let images = []
+
+              if (value) {
+                let files = JSON.parse(value)
+
+                files.forEach(file => {
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}trado/image/trado/${file}/small`
+
+                  images.push(image.outerHTML)
+                });
+
+                return images.join(' ')
+              }
+
+              return 'NO PHOTOS'
+            }
           },
         ],
         autowidth: true,
@@ -340,10 +554,9 @@
         searchOnEnter: false,
         defaultSearch: 'cn',
         groupOp: 'AND',
-        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           clearGlobalSearch($('#jqGrid'))
-        },
+        }
       })
 
       .customPager({
@@ -351,7 +564,7 @@
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
-            onClick: () => {
+            onClick: function(event) {
               createTrado()
             }
           },
@@ -359,10 +572,13 @@
             id: 'edit',
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
             class: 'btn btn-success btn-sm mr-1',
-            onClick: () => {
+            onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              editTrado(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                editTrado(selectedId)
+              }
             }
           },
           {
@@ -371,11 +587,15 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              deleteTrado(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                deleteTrado(selectedId)
+              }
             }
           },
         ]
+
       })
 
     /* Append clear filter button */
@@ -383,6 +603,46 @@
 
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
+
+    $('#add .ui-pg-div')
+      .addClass(`btn-sm btn-primary`)
+      .parent().addClass('px-1')
+
+    $('#edit .ui-pg-div')
+      .addClass('btn-sm btn-success')
+      .parent().addClass('px-1')
+
+    $('#delete .ui-pg-div')
+      .addClass('btn-sm btn-danger')
+      .parent().addClass('px-1')
+
+    $('#report .ui-pg-div')
+      .addClass('btn-sm btn-info')
+      .parent().addClass('px-1')
+
+    $('#export .ui-pg-div')
+      .addClass('btn-sm btn-warning')
+      .parent().addClass('px-1')
+
+    if (!`{{ $myAuth->hasPermission('trado', 'store') }}`) {
+      $('#add').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('trado', 'update') }}`) {
+      $('#edit').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('trado', 'destroy') }}`) {
+      $('#delete').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('trado', 'export') }}`) {
+      $('#export').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('trado', 'report') }}`) {
+      $('#report').attr('disabled', 'disabled')
+    }
   })
 </script>
 @endpush()

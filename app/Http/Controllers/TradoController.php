@@ -14,6 +14,11 @@ class TradoController extends MyController
         'Content-Type' => 'application/json'
     ];
 
+    public function image()
+    {
+        return response()->download(public_path('image.jpg'));
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -25,7 +30,7 @@ class TradoController extends MyController
                 'search' => json_decode($request->filters, 1) ?? [],
             ];
             
-            $response = Http::withHeaders($request->header())
+            $response = Http::withHeaders($request->header())->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
                 ->get(config('app.api_url') . 'trado', $params);
 
@@ -47,7 +52,7 @@ class TradoController extends MyController
                                 $idx+=3;
                             }
 
-                            $imgtrado .= "<img src='".config('app.api_url').'uploads/trado/'.$arrtrado[$idx]."' class='mr-2'>";
+                            $imgtrado .= "<img src='".config('app.api_url').'../uploads/trado/'.$arrtrado[$idx]."' class='mr-2'>";
                         }
                     }
                 }
@@ -63,7 +68,7 @@ class TradoController extends MyController
                                 $idx+=3;
                             }
 
-                            $imgbpkb .= "<img src='".config('app.api_url').'uploads/bpkb/'.$arrbpkb[$idx]."' class='mr-2'>";
+                            $imgbpkb .= "<img src='".config('app.api_url').'../uploads/bpkb/'.$arrbpkb[$idx]."' class='mr-2'>";
                         }
                     }
                 }
@@ -79,7 +84,7 @@ class TradoController extends MyController
                                 $idx+=3;
                             }
 
-                            $imgstnk .= "<img src='".config('app.api_url').'uploads/stnk/'.$arrstnk[$idx]."' class='mr-2'>";
+                            $imgstnk .= "<img src='".config('app.api_url').'../uploads/stnk/'.$arrstnk[$idx]."' class='mr-2'>";
                         }
                     }
                 }
@@ -100,7 +105,14 @@ class TradoController extends MyController
 
         $title = $this->title;
         $data = [
-            'combo' => $this->comboStatusAktif('list'),
+            'statusaktif' => $this->comboStatusAktif('list','STATUS AKTIF','STATUS AKTIF'),
+            'statusstandarisasi' => $this->comboStatusAktif('list','STATUS STANDARISASI','STATUS STANDARISASI'),
+            'statusjenisplat' => $this->comboStatusAktif('list','JENIS PLAT','JENIS PLAT'),
+            'statusmutasi' => $this->comboStatusAktif('list','STATUS MUTASI','STATUS MUTASI'),
+            'statusvalidasikendaraan' => $this->comboStatusAktif('list','STATUS VALIDASI KENDARAAN','STATUS VALIDASI KENDARAAN'),
+            'statusmobilstoring' => $this->comboStatusAktif('list','STATUS MOBIL STORING','STATUS MOBIL STORING'),
+            'statusappeditban' => $this->comboStatusAktif('list','STATUS APPROVAL EDIT BAN','STATUS APPROVAL EDIT BAN'),
+            'statuslewatvalidasi' => $this->comboStatusAktif('list','STATUS LEWAT VALIDASI','STATUS LEWAT VALIDASI'),
         ];
 
         return view('trado.index', compact('title','data'));
@@ -117,12 +129,11 @@ class TradoController extends MyController
 
     public function store(Request $request)
     {
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false]);
+        // $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false]);
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])->withOptions(['verify' => false])->withToken(session('access_token'))->post(config('app.api_url') . 'api/trado', $request->all());
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+        ->post(config('app.api_url') . 'trado', $request->all());
 
         if ($response->ok()) {
             $id = $response['data']['id'];
@@ -232,13 +243,13 @@ class TradoController extends MyController
         return $response['data'];
     }
 
-    public function comboStatusAktif($aksi)
+    public function comboStatusAktif($aksi,$grp,$subgrp)
     {
 
         $status = [
             'status' => $aksi,
-            'grp' => 'STATUS AKTIF',
-            'subgrp' => 'STATUS AKTIF',
+            'grp' => $grp,
+            'subgrp' => $subgrp,
         ];
 
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])

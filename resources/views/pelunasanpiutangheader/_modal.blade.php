@@ -88,8 +88,8 @@
                         </label>
                       </div>
                       <div class="col-md-4">
-                          <input type="hidden" name="pelanggan_id" class="form-control">
-                          <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
+                        <input type="hidden" name="pelanggan_id" class="form-control">
+                        <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
                       </div>
 
                       <div class="col-md-1 offset-md-1">
@@ -98,8 +98,8 @@
                         </label>
                       </div>
                       <div class="col-md-4">
-                          <input type="hidden" name="agendetail_id" class="form-control">
-                          <input type="text" name="agendetail" class="form-control agendetail-lookup">
+                        <input type="hidden" name="agendetail_id" class="form-control">
+                        <input type="text" name="agendetail" class="form-control agendetail-lookup">
                       </div>
                     </div>
 
@@ -107,7 +107,7 @@
                       <table class="table table-borderd mt-3" id="detailList" style="table-layout:auto">
                         <thead class="table-secondary">
                           <tr>
-                            <th></th>
+                            <th>pilih</th>
                             <th>NO</th>
                             <th>NO BUKTI</th>
                             <th>TGL BUKTI</th>
@@ -121,24 +121,34 @@
                             <th>NOMINAL LEBIH BAYAR</th>
                           </tr>
                         </thead>
-                          <tbody id="table_body">
+                        <tbody id="table_body">
 
-                          </tbody>
+                        </tbody>
                         <tfoot>
                           <tr>
                             <td colspan="5"></td>
-                            <td><p id="nominalPiutang" class="text-right font-weight-bold"></p></td>
-                            <td><p id="sisaPiutang" class="text-right font-weight-bold"></p></td>
+                            <td>
+                              <p id="nominalPiutang" class="text-right font-weight-bold"></p>
+                            </td>
+                            <td>
+                              <p id="sisaPiutang" class="text-right font-weight-bold"></p>
+                            </td>
                             <td></td>
-                            <td><p id="bayarPiutang" class="text-right font-weight-bold"></p></td>
+                            <td>
+                              <p id="bayarPiutang" class="text-right font-weight-bold"></p>
+                            </td>
                             <td></td>
-                            <td><p id="bayarPenyesuaian" class="text-right font-weight-bold"></p></td>
-                            <td><p id="bayarNominalLebih" class="text-right font-weight-bold"></p></td>
+                            <td>
+                              <p id="bayarPenyesuaian" class="text-right font-weight-bold"></p>
+                            </td>
+                            <td>
+                              <p id="bayarNominalLebih" class="text-right font-weight-bold"></p>
+                            </td>
                           </tr>
                         </tfoot>
                       </table>
                     </div>
-                    
+
                   </div>
                 </div>
               </div>
@@ -173,20 +183,20 @@
       let sisa = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisa[]"]`)[0])
 
       let bayar = $(this).val()
-      bayar = parseFloat(bayar.replaceAll(',',''));
-      bayar =  Number.isNaN(bayar) ? 0 : bayar
-      if(sisa == 0) {
+      bayar = parseFloat(bayar.replaceAll(',', ''));
+      bayar = Number.isNaN(bayar) ? 0 : bayar
+      if (sisa == 0) {
         let nominal = $(this).closest("tr").find(`[name="nominal[]"]`).val()
-        nominal = parseFloat(nominal.replaceAll(',',''));
-        let totalSisa = nominal-bayar
+        nominal = parseFloat(nominal.replaceAll(',', ''));
+        let totalSisa = nominal - bayar
         console.log(totalSisa)
         $(this).closest("tr").find(".sisa").html(totalSisa)
       } else {
-        let totalSisa = sisa-bayar
+        let totalSisa = sisa - bayar
         $(this).closest("tr").find(".sisa").html(totalSisa)
       }
-      
-      
+
+
       initAutoNumeric($(this).closest("tr").find(".sisa"))
 
       let Sisa = $(`#table_body .sisa`)
@@ -219,7 +229,7 @@
       let action = form.data('action')
       // let tes = $('#crudForm').serializeArray()
       // unformatAutoNumeric(data)
-     let data = []
+      let data = []
 
       data.push({
         name: 'id',
@@ -279,10 +289,10 @@
       })
 
 
-      $('#table_body tr').each(function(row, tr){ 
+      $('#table_body tr').each(function(row, tr) {
         // console.log(row);
-        
-        if($(this).find(`[name="piutang_id[]"]`).is(':checked')) {
+
+        if ($(this).find(`[name="piutang_id[]"]`).is(':checked')) {
 
           data.push({
             name: 'keterangandetailppd[]',
@@ -308,7 +318,7 @@
             name: 'piutang_id[]',
             value: $(this).find(`[name="piutang_id[]"]`).val()
           })
-          
+
         }
       })
       // console.log(typeof(data))
@@ -341,7 +351,7 @@
       })
 
       console.log(data);
-      
+
       switch (action) {
         case 'add':
           method = 'POST'
@@ -378,8 +388,10 @@
           $('#crudModal').find('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
           $('#piutangrow').html('')
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
-         
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
+
           $('#detailList tbody').html('')
           $('#nominalPiutang').html('')
           $('#sisaPiutang').html('')
@@ -419,12 +431,12 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    
+
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function setTotal() {
-    let nominalDetails = $(`#table_body [name="bayarppd[]"]`)
+    let nominalDetails = $(`#table_body [name="bayarppd[]"]:not([disabled])`)
     let total = 0
 
     $.each(nominalDetails, (index, nominalDetail) => {
@@ -435,7 +447,7 @@
   }
 
   function setPenyesuaian() {
-    let penyesuaian = $(`#table_body [name="penyesuaianppd[]"]`)
+    let penyesuaian = $(`#table_body [name="penyesuaianppd[]"]:not([disabled])`)
     let totalPenyesuaian = 0
 
     $.each(penyesuaian, (index, penyesuaian) => {
@@ -446,7 +458,7 @@
   }
 
   function setNominalLebih() {
-    let nominalLebih = $(`#table_body [name="nominallebihbayarppd[]"]`)
+    let nominalLebih = $(`#table_body [name="nominallebihbayarppd[]"]:not([disabled])`)
     let totalNominalLebih = 0
 
     $.each(nominalLebih, (index, nominalLebih) => {
@@ -457,6 +469,35 @@
   }
 
 
+  $(document).on('click', `#detailList tbody [name="piutang_id[]"]`, function() {
+
+    if ($(this).prop("checked") == true) {
+
+      id = $(this).val()
+      $(this).closest('tr').find(`td [name="keterangandetailppd[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="bayarppd[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="keteranganpenyesuaianppd[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="penyesuaianppd[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', false)
+
+      setTotal()
+      setPenyesuaian()
+      setNominalLebih()
+      
+    } else {
+      $(this).closest('tr').find(`td [name="keterangandetailppd[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="bayarppd[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="keteranganpenyesuaianppd[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="penyesuaianppd[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', true)
+
+      setTotal()
+      setPenyesuaian()
+      setNominalLebih()
+    }
+  })
 
   function createPelunasanPiutangHeader() {
     let form = $('#crudForm')
@@ -507,30 +548,30 @@
 
           form.find(`[name="${index}"]`).val(value).attr('disabled', false)
 
-           if(element.hasClass('datepicker')){
-              element.val(dateFormat(value))
+          if (element.hasClass('datepicker')) {
+            element.val(dateFormat(value))
           }
 
-          
-          if(index == 'bank') {
+
+          if (index == 'bank') {
             element.data('current-value', value)
           }
-          if(index == 'agen') {
+          if (index == 'agen') {
             element.data('current-value', value)
           }
-          if(index == 'cabang') {
+          if (index == 'cabang') {
             element.data('current-value', value)
           }
         })
-        
+
 
         $.each(response.detail, (index, value) => {
           form.find(`[name="${index}"]`).val(value).attr('disabled', false)
-          
-          if(index == 'pelanggan') {
+
+          if (index == 'pelanggan') {
             form.find(`[name="${index}"]`).data('current-value', value)
           }
-          if(index == 'agendetail') {
+          if (index == 'agendetail') {
             form.find(`[name="${index}"]`).data('current-value', value)
           }
         })
@@ -569,9 +610,9 @@
           let element = form.find(`[name="${index}"]`)
 
           form.find(`[name="${index}"]`).val(value)
-          
-           if(element.hasClass('datepicker')){
-              element.val(dateFormat(value))
+
+          if (element.hasClass('datepicker')) {
+            element.val(dateFormat(value))
           }
 
         })
@@ -584,7 +625,7 @@
         initDisabled()
         // $('#gridEditPiutang').trigger('reloadGrid')
         getPelunasan(Id, agenId, 'delete')
-        
+
       }
     })
   }
@@ -596,7 +637,7 @@
   // });
 
   function getPiutang(id) {
-    
+
     $('#detailList tbody').html('')
     $('#detailList tfoot #nominalPiutang').html('')
     $('#detailList tfoot #sisaPiutang').html('')
@@ -612,11 +653,11 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-       
+
         let totalNominal = 0
         let totalSisa = 0
         $.each(response.data, (index, detail) => {
-         
+
           let id = detail.id
           totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
           totalSisa = totalSisa + parseFloat(detail.sisa);
@@ -625,7 +666,7 @@
 
           let detailRow = $(`
             <tr >
-              <td onclick="select(this)"><input name='piutang_id[]' type="checkbox" id="checkItem" value="${id}"></td>
+              <td><input name='piutang_id[]' type="checkbox" id="checkItem" value="${id}"></td>
               <td></td>
               <td width="10%">${detail.nobukti}</td>
               <td width="10%">${detail.tglbukti}</td>
@@ -669,7 +710,7 @@
           setTotal()
           setPenyesuaian()
           setNominalLebih()
-          
+
         })
         // totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
         // totalSisa = new Intl.NumberFormat('en-US').format(totalSisa);
@@ -679,11 +720,11 @@
         initAutoNumeric($('#detailList tfoot').find('#nominalPiutang'))
         initAutoNumeric($('#detailList tfoot').find('#sisaPiutang'))
         setRowNumbers()
-        
-      }
-    }) 
 
-   
+      }
+    })
+
+
   }
 
 
@@ -692,10 +733,10 @@
     let url
     let attribut
     let forCheckbox
-    if(aksi == 'edit'){
+    if (aksi == 'edit') {
       url = `${apiUrl}pelunasanpiutangheader/${id}/${agenId}/getPelunasanPiutang`
     }
-    if(aksi == 'delete'){ 
+    if (aksi == 'delete') {
       url = `${apiUrl}pelunasanpiutangheader/${id}/${agenId}/getDeletePelunasanPiutang`
       attribut = 'disabled'
       forCheckbox = 'disabled'
@@ -711,31 +752,31 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-       
+
         let totalNominalPiutang = 0
         let totalSisa = 0
         let totalNominal = 0
         $.each(response.data, (index, detail) => {
-          
+
           let id = detail.id
           let pelunasanPiutangId = detail.pelunasanpiutang_id
           let checked
-          
+
           totalNominalPiutang = parseFloat(totalNominalPiutang) + parseFloat(detail.nominalpiutang)
           totalSisa = totalSisa + parseFloat(detail.sisa);
           let nominal = new Intl.NumberFormat('en-US').format(detail.nominalpiutang);
           let sisaHidden = parseFloat(detail.sisa) + parseFloat(detail.nominal)
           let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
 
-          if(pelunasanPiutangId != null) {
+          if (pelunasanPiutangId != null) {
             checked = 'checked'
-          }else{
+          } else {
             attribut = 'disabled'
           }
 
           let detailRow = $(`
             <tr>
-              <td onclick="select(this)"><input name='piutang_id[]' type="checkbox" class="checkItem" value="${id}" ${checked} ${forCheckbox}></td>
+              <td><input name='piutang_id[]' type="checkbox" class="checkItem" value="${id}" ${checked} ${forCheckbox}></td>
               <td></td>
               <td width="10%">${detail.piutang_nobukti}</td>
               <td width="10%">${detail.tglbukti}</td>
@@ -774,7 +815,7 @@
           initAutoNumeric(detailRow.find('.sisa'))
           initAutoNumeric(detailRow.find('.nominal'))
 
-          $('#detailList tbody').append(detailRow)      
+          $('#detailList tbody').append(detailRow)
           setTotal()
           setPenyesuaian()
           setNominalLebih()
@@ -785,132 +826,17 @@
         initAutoNumeric($('#detailList tfoot').find('#sisaPiutang'))
         setRowNumbers()
 
-        
+
       }
-    }) 
-    
+    })
+
   }
 
-  $("#checkAll").click(function () {
-        $('input:checkbox').not(this).prop('checked', this.checked);
-    });
-    
-  function select(element) {
-      var is_checked = $(element).find(`[name="piutang_id[]"]`).is(":checked");
+  $("#checkAll").click(function() {
+    $('input:checkbox').not(this).prop('checked', this.checked);
+  });
 
-      if(!is_checked) {
-        $(element).siblings('td').find(`[name="keterangandetailppd[]"]`).prop('disabled', true)
-        $(element).siblings('td').find(`[name="nominallebihbayarppd[]"]`).prop('disabled', true)
-        $(element).siblings('td').find(`[name="bayarppd[]"]`).prop('disabled', true)
-        $(element).siblings('td').find(`[name="keteranganpenyesuaianppd[]"]`).prop('disabled', true)
-        $(element).siblings('td').find(`[name="penyesuaianppd[]"]`).prop('disabled', true)
-        $(element).siblings('td').find(`[name="nominallebihbayarppd[]"]`).prop('disabled', true)
 
-        //bayarppd
-        let bayar = $(element).siblings('td').find(`[name="bayarppd[]"]`).val()
-
-        if(bayar != '') {
-          let byr =  parseFloat(bayar.replaceAll(',',''));
-
-          let piutang = $('#bayarPiutang').text()
-          let ttlPiutang = parseFloat(piutang.replaceAll(',',''));
-
-          let finalPiutang = ttlPiutang - byr;
-          $("#bayarPiutang").html(`${finalPiutang}`);
-            new AutoNumeric('#bayarPiutang',{
-            decimalPlaces			: '2'
-          })
-        }
-
-        //penyesuaianppd
-        let penyesuaianppd = $(element).siblings('td').find(`[name="penyesuaianppd[]"]`).val()
-
-        if(penyesuaianppd != '') {
-          let pys =  parseFloat(penyesuaianppd.replaceAll(',',''));
-
-          let penyesuaian = $('#bayarPenyesuaian').text()
-          let ttlPenyesuaian = parseFloat(penyesuaian.replaceAll(',',''));
-
-          let finalPenyesuaian = ttlPenyesuaian - pys;
-          $("#bayarPenyesuaian").html(`${finalPenyesuaian}`);
-            new AutoNumeric('#bayarPenyesuaian',{
-            decimalPlaces			: '2'
-          })
-        }
-
-        //nominalLebih
-        let nominalLebih = $(element).siblings('td').find(`[name="nominallebihbayarppd[]"]`).val()
-
-        if(nominalLebih != '') {
-          let nlb =  parseFloat(nominalLebih.replaceAll(',',''));
-
-          let nominalLbh = $('#bayarNominalLebih').text()
-          let ttlNominalLebih = parseFloat(nominalLbh.replaceAll(',',''));
-
-          let finalNominalLbh = ttlNominalLebih - nlb;
-          $("#bayarNominalLebih").html(`${finalNominalLbh}`);
-            new AutoNumeric('#bayarNominalLebih',{
-            decimalPlaces			: '2'
-          })
-        }
-      }else{
-        $(element).siblings('td').find(`[name="keterangandetailppd[]"]`).prop('disabled', false)
-        $(element).siblings('td').find(`[name="nominallebihbayarppd[]"]`).prop('disabled', false)
-        $(element).siblings('td').find(`[name="bayarppd[]"]`).prop('disabled', false)
-        $(element).siblings('td').find(`[name="keteranganpenyesuaianppd[]"]`).prop('disabled', false)
-        $(element).siblings('td').find(`[name="penyesuaianppd[]"]`).prop('disabled', false)
-        $(element).siblings('td').find(`[name="nominallebihbayarppd[]"]`).prop('disabled', false)
-
-        //bayar
-        let bayar = $(element).siblings('td').find(`[name="bayarppd[]"]`).val()
-        if(bayar != '') {
-          let byr =  parseFloat(bayar.replaceAll(',',''));
-
-          let piutang = $('#bayarPiutang').text()
-          let ttlPiutang = parseFloat(piutang.replaceAll(',',''));
-
-          let finalPiutang = ttlPiutang + byr;
-          $("#bayarPiutang").html(`${finalPiutang}`);
-            new AutoNumeric('#bayarPiutang',{
-            decimalPlaces			: '2'
-          })
-        }
-
-        //penyesuaian
-        let penyesuaianppd = $(element).siblings('td').find(`[name="penyesuaianppd[]"]`).val()
-        if(penyesuaianppd != '') {
-          let pys =  parseFloat(penyesuaianppd.replaceAll(',',''));
-
-          let penyesuaian = $('#bayarPenyesuaian').text()
-          let ttlPenyesuaian = parseFloat(penyesuaian.replaceAll(',',''));
-
-          let finalPenyesuaian = ttlPenyesuaian + pys;
-          $("#bayarPenyesuaian").html(`${finalPenyesuaian}`);
-            new AutoNumeric('#bayarPenyesuaian',{
-            decimalPlaces			: '2'
-          })
-        }
-        
-        //nominalLebih
-        let nominalLebih = $(element).siblings('td').find(`[name="nominallebihbayarppd[]"]`).val()
-
-        if(nominalLebih != '') {
-          let nlb =  parseFloat(nominalLebih.replaceAll(',',''));
-
-          let nominalLbh = $('#bayarNominalLebih').text()
-          let ttlNominalLebih = parseFloat(nominalLbh.replaceAll(',',''));
-
-          let finalNominalLbh = ttlNominalLebih + nlb;
-          $("#bayarNominalLebih").html(`${finalNominalLbh}`);
-            new AutoNumeric('#bayarNominalLebih',{
-            decimalPlaces			: '2'
-          })
-        }
-        
-      }
-      console.log(is_checked)
-  }
-  
   function setRowNumbers() {
     let elements = $('#detailList tbody tr td:nth-child(2)')
 
@@ -992,7 +918,7 @@
       fileName: 'cabang',
       onSelectRow: (cabang, element) => {
         $('#crudForm [name=cabang_id]').first().val(cabang.id)
-        element.val(cabang.namacabang) 
+        element.val(cabang.namacabang)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {

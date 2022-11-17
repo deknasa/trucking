@@ -1,6 +1,6 @@
 <div class="modal fade modal-fullscreen" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form action="#" id="crudForm">
+    <form action="#" id="crudForm" enctype="multipart/form-data">
       <div class="modal-content">
         <div class="modal-header bg-primary">
           <h5 class="modal-title" id="crudModalTitle"></h5>
@@ -11,7 +11,7 @@
         <form action="" method="post">
           <div class="modal-body">
 
-          <input type="hidden" name="id">
+            <input type="hidden" name="id">
             <div class="row">
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Keterangan <span class="text-danger">*</span></label>
@@ -172,7 +172,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Jenis Plat <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="jenisplat" class="form-control select2bs4">
+                  <select name="statusjenisplat" class="form-control select2bs4">
                     <option value="">-- PILIH JENIS PLAT --</option>
                   </select>
                 </div>
@@ -245,7 +245,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Isi Silinder <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control autonumeric" name="isisilinder">
+                  <input type="text" class="form-control numbernoseparate" name="isisilinder">
                 </div>
               </div>
             </div>
@@ -269,13 +269,13 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Jumlah Sumbu <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control numbernoseparate" name="jlhsumbu">
+                  <input type="text" class="form-control numbernoseparate" name="jumlahsumbu">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Jumlah Roda <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control numbernoseparate" name="jlhroda">
+                  <input type="text" class="form-control numbernoseparate" name="jumlahroda">
                 </div>
               </div>
             </div>
@@ -299,7 +299,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Status Mobil Storing <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statusmobilstoring" class="form-control select2bs4" z-index="3"> 
+                  <select name="statusmobilstoring" class="form-control select2bs4" z-index="3">
                     <option value="">-- PILIH STATUS MOBIL STORING --</option>
                   </select>
                 </div>
@@ -317,7 +317,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Jumlah Ban Serap <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control numbernoseparate" name="jlhbanserap">
+                  <input type="text" class="form-control numbernoseparate" name="jumlahbanserap">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
@@ -347,13 +347,10 @@
                   <div class="col">
                     <label class="col-form-label">Upload Foto Trado</label>
                   </div>
-                  <div class="col text-right">
-                    <button class="btn btn-info btn-sm" id="uploadTrado" type="button">Upload Trado</button>
-                  </div>
                 </div>
-                <div class="dropzone" id="dropzone-trado" data-field="trado">
+                <div class="dropzone" data-field="phototrado">
                   <div class="fallback">
-                    <input name="phototrado" type="file" multiple/>
+                    <input name="phototrado" type="file" />
                   </div>
                 </div>
               </div>
@@ -363,13 +360,10 @@
                   <div class="col">
                     <label class="col-form-label">Upload Foto BPKB</label>
                   </div>
-                  <div class="col text-right">
-                    <button class="btn btn-info btn-sm" type="button" id="uploadBpkb">Upload BPKB</button>
-                  </div>
                 </div>
-                <div class="dropzone" id="dropzone-bpkb" data-field="bpkb">
+                <div class="dropzone" data-field="photobpkb">
                   <div class="fallback">
-                    <input name="photobpkb" type="file" multiple/>
+                    <input name="photobpkb" type="file" />
                   </div>
                 </div>
               </div>
@@ -379,13 +373,10 @@
                   <div class="col">
                     <label class="col-form-label">Upload Foto STNK</label>
                   </div>
-                  <div class="col text-right">
-                    <button class="btn btn-info btn-sm" type="button" id="uploadStnk">Upload STNK</button>
-                  </div>
                 </div>
-                <div class="dropzone" id="dropzone-stnk" data-field="stnk">
+                <div class="dropzone" data-field="photostnk">
                   <div class="fallback">
-                    <input name="photostnk" type="file" multiple/>
+                    <input name="photostnk" type="file" />
                   </div>
                 </div>
               </div>
@@ -409,77 +400,31 @@
 
 @push('scripts')
 <script>
-  let hasFormBindKeys = false
   Dropzone.autoDiscover = false;
+
+  let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
-  let myDropzone
-  let dropzoneAttachment = {
-    phototrado: [],
-    photobpkb: [],
-    photostnk: [],
-  }
+  let dropzones = []
+
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
-      let method
       let url
       let form = $('#crudForm')
+      let formData = new FormData(form[0])
       let Id = form.find('[name=id]').val()
-      let action = form.data('action')
-      // let data = $('#crudForm').serializeArray()
-      let formData = new FormData();
 
-      formData.append('id', form.find(`[name="id"]`).val())
-      formData.append('keterangan', form.find(`[name="keterangan"]`).val())
-      formData.append('statusaktif', form.find(`[name="statusaktif"]`).val())
-      formData.append('kmawal', AutoNumeric.getNumber($(`#crudForm [name="kmawal"]`)[0]))
-      formData.append('kmakhirgantioli', AutoNumeric.getNumber($(`#crudForm [name="kmakhirgantioli"]`)[0]))
-      formData.append('tglakhirgantioli', form.find(`[name="tglakhirgantioli"]`).val())
-      formData.append('tglstnkmati', form.find(`[name="tglstnkmati"]`).val())
-      formData.append('tglasuransimati', form.find(`[name="tglasuransimati"]`).val())
-      formData.append('tahun', form.find(`[name="tahun"]`).val())
-      formData.append('akhirproduksi', form.find(`[name="akhirproduksi"]`).val())
-      formData.append('merek', form.find(`[name="merek"]`).val())
-      formData.append('norangka', form.find(`[name="norangka"]`).val())
-      formData.append('nomesin', form.find(`[name="nomesin"]`).val())
-      formData.append('nama', form.find(`[name="nama"]`).val())
-      formData.append('nostnk', form.find(`[name="nostnk"]`).val())
-      formData.append('alamatstnk', form.find(`[name="alamatstnk"]`).val())
-      formData.append('tglstandarisasi', form.find(`[name="tglstandarisasi"]`).val())
-      formData.append('tglserviceopname', form.find(`[name="tglserviceopname"]`).val())
-      formData.append('statusstandarisasi', form.find(`[name="statusstandarisasi"]`).val())
-      formData.append('keteranganprogressstandarisasi', form.find(`[name="keteranganprogressstandarisasi"]`).val())
-      formData.append('jenisplat', form.find(`[name="jenisplat"]`).val())
-      formData.append('tglspeksimati', form.find(`[name="tglspeksimati"]`).val())
-      formData.append('tglpajakstnk', form.find(`[name="tglpajakstnk"]`).val())
-      formData.append('tglgantiakiterakhir', form.find(`[name="tglgantiakiterakhir"]`).val())
-      formData.append('statusmutasi', form.find(`[name="statusmutasi"]`).val())
-      formData.append('statusvalidasikendaraan', form.find(`[name="statusvalidasikendaraan"]`).val())
-      formData.append('tipe', form.find(`[name="tipe"]`).val())
-      formData.append('jenis', form.find(`[name="jenis"]`).val())
-      formData.append('isisilinder', AutoNumeric.getNumber($(`#crudForm [name="isisilinder"]`)[0]))
-      formData.append('warna', form.find(`[name="warna"]`).val())
-      formData.append('bahanbakar', form.find(`[name="bahanbakar"]`).val())
-      formData.append('jlhsumbu', form.find(`[name="jlhsumbu"]`).val())
-      formData.append('jlhroda', form.find(`[name="jlhroda"]`).val())
-      formData.append('model', form.find(`[name="model"]`).val())
-      formData.append('nobpkb', form.find(`[name="nobpkb"]`).val())
-      formData.append('statusmobilstoring', form.find(`[name="statusmobilstoring"]`).val())
-      formData.append('mandor_id', form.find(`[name="mandor_id"]`).val())
-      formData.append('jlhbanserap', form.find(`[name="jlhbanserap"]`).val())
-      formData.append('statusappeditban', form.find(`[name="statusappeditban"]`).val())
-      formData.append('statuslewatvalidasi', form.find(`[name="statuslewatvalidasi"]`).val())
+      dropzones.forEach(dropzone => {
+        const {
+          paramName
+        } = dropzone.options
 
-      $.each(dropzoneAttachment.phototrado, function(row) {
-        formData.append('phototrado[]', dropzoneAttachment.phototrado[row])
+        dropzone.files.forEach((file, index) => {
+          formData.append(`${paramName}[${index}]`, file)
+        })
       })
-      $.each(dropzoneAttachment.photobpkb, function(row, val) {
-        formData.append('photobpkb[]', dropzoneAttachment.photobpkb[row])
-      })
-      $.each(dropzoneAttachment.photostnk, function(row, val) {
-        formData.append('photostnk[]', dropzoneAttachment.photostnk[row])
-      })
+
       formData.append('sortIndex', $('#jqGrid').getGridParam().sortname)
       formData.append('sortOrder', $('#jqGrid').getGridParam().sortorder)
       formData.append('filters', $('#jqGrid').getGridParam('postData').filters)
@@ -487,23 +432,14 @@
       formData.append('page', page)
       formData.append('limit', limit)
 
-      switch (action) {
-        case 'add':
-          method = 'POST'
-          url = `${apiUrl}trado`
-          break;
-        case 'edit':
-          method = 'PATCH'
-          url = `${apiUrl}trado/${Id}`
-          break;
-        case 'delete':
-          method = 'DELETE'
-          url = `${apiUrl}trado/${Id}`
-          break;
-        default:
-          method = 'POST'
-          url = `${apiUrl}trado`
-          break;
+      if (form.data('action') == 'add') {
+        url = `${apiUrl}trado`
+      } else if (form.data('action') == 'edit') {
+        url = `${apiUrl}trado/${Id}`
+        formData.append('_method', 'PATCH')
+      } else if (form.data('action') == 'delete') {
+        url = `${apiUrl}trado/${Id}`
+        formData.append('_method', 'DELETE')
       }
 
       $(this).attr('disabled', '')
@@ -511,28 +447,27 @@
 
       $.ajax({
         url: url,
-        method: method,
+        method: 'POST',
         dataType: 'JSON',
-        enctype: 'multipart/form-data',
+        processData: false,
+        contentType: false,
+        data: formData,
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
-        data: formData,
-        processData: false,
-        contentType: false,
         success: response => {
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
 
           id = response.data.id
 
-          $('#jqGrid').trigger('reloadGrid', {
+          $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
-          })
+          }).trigger('reloadGrid');
 
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
-          }
+          dropzones.forEach(dropzone => {
+            dropzone.removeAllFiles()
+          })
         },
         error: error => {
           if (error.status === 422) {
@@ -540,8 +475,6 @@
             $('.invalid-feedback').remove()
 
             setErrorMessages(form, error.responseJSON.errors);
-          } else {
-            showDialog(error.statusText)
           }
         },
       }).always(() => {
@@ -551,26 +484,10 @@
     })
   })
 
-  $('#crudModal').on('shown.bs.modal', () => {
-    let form = $('#crudForm')
-
-    setFormBindKeys(form)
-
-    activeGrid = null
-
-    getMaxLength(form)
-    initLookup()
-    initDatepicker()
-    initSelect2()
-  })
-
-  $('#crudModal').on('hidden.bs.modal', () => {
-    activeGrid = '#jqGrid'
-  })
-
   function createTrado() {
     let form = $('#crudForm')
 
+    form.find('[name]').removeAttr('disabled')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
@@ -583,28 +500,33 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    initDropzone(form.data('action'))
-
     setStatusAktifOptions(form)
     setStatusStandarisasiOptions(form)
-    setJenisPlatOptions(form)
+    setStatusJenisPlatOptions(form)
     setStatusMutasiOptions(form)
     setStatusValidasiKendaraanOptions(form)
     setStatusMobilStoringOptions(form)
     setAppeditBanOptions(form)
     setStatusLewatValidasiOptions(form)
+
+    setFormBindKeys(form)
+    initDropzone(form.data('action'))
+    initLookup()
+    initDatepicker()
+    initSelect2()
+    form.find('[name]').removeAttr('disabled')
   }
 
   function editTrado(id) {
     let form = $('#crudForm')
 
+    form.find('[name]').removeAttr('disabled')
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
     Simpan
   `)
-    form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Trado')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
@@ -614,7 +536,7 @@
       .all([
         setStatusAktifOptions(form),
         setStatusStandarisasiOptions(form),
-        setJenisPlatOptions(form),
+        setStatusJenisPlatOptions(form),
         setStatusMutasiOptions(form),
         setStatusValidasiKendaraanOptions(form),
         setStatusMobilStoringOptions(form),
@@ -623,6 +545,14 @@
       ])
       .then(() => {
         showTrado(form, id)
+          .then(trado => {
+            setFormBindKeys(form)
+            initDropzone(form.data('action'), trado)
+            initLookup()
+            initDatepicker()
+            initSelect2()
+            form.find('[name]').removeAttr('disabled')
+          })
       })
   }
 
@@ -635,7 +565,6 @@
     <i class="fa fa-save"></i>
     Hapus
   `)
-    form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Trado')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
@@ -645,7 +574,7 @@
       .all([
         setStatusAktifOptions(form),
         setStatusStandarisasiOptions(form),
-        setJenisPlatOptions(form),
+        setStatusJenisPlatOptions(form),
         setStatusMutasiOptions(form),
         setStatusValidasiKendaraanOptions(form),
         setStatusMobilStoringOptions(form),
@@ -654,34 +583,117 @@
       ])
       .then(() => {
         showTrado(form, id)
-        
-        initDropzone(form.data('action'), id)
+          .then(trado => {
+            setFormBindKeys(form)
+            initDropzone(form.data('action'), trado)
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
+            })
+
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+          })
       })
   }
 
-  function getMaxLength(form) {
-    if (!form.attr('has-maxlength')) {
+
+  function showTrado(form, id) {
+    return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}trado/field_length`,
+        url: `${apiUrl}trado/${id}`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
-          'Authorization': `Bearer ${accessToken}`
+          Authorization: `Bearer ${accessToken}`
         },
         success: response => {
           $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
+            let element = form.find(`[name="${index}"]`).not(':file')
+
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            } else if (element.hasClass('autonumeric')) {
+              let autoNumericInput = AutoNumeric.getAutoNumericElement(element[0])
+              autoNumericInput.set(value)
+            } else {
+              element.val(value)
             }
           })
 
-          form.attr('has-maxlength', true)
+          resolve(response.data)
+        }
+      })
+    })
+  }
+
+
+  function initLookup() {
+    if (!$('.mandor-lookup').data('hasLookup')) {
+      $('.mandor-lookup').lookup({
+        title: 'Mandor Lookup',
+        fileName: 'mandor',
+        onSelectRow: (mandor, element) => {
+          $('#crudForm [name=mandor_id]').first().val(mandor.id)
+          element.val(mandor.namamandor)
+          element.data('currentValue', element.val())
         },
-        error: error => {
-          showDialog(error.statusText)
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
         }
       })
     }
+  }
+
+  function initDropzone(action, data = null) {
+    $('.dropzone').each((index, element) => {
+      if (!element.dropzone) {
+        let newDropzone = new Dropzone(element, {
+          url: 'test',
+          autoProcessQueue: false,
+          addRemoveLinks: true,
+          acceptedFiles: 'image/*',
+          paramName: $(element).data('field'),
+          init: function() {
+            dropzones.push(this)
+          }
+        })
+      }
+
+      element.dropzone.removeAllFiles()
+
+      if (action == 'edit' || action == 'delete') {
+        assignAttachment(element.dropzone, data)
+      }
+    })
+  }
+
+
+  function assignAttachment(dropzone, data) {
+    const paramName = dropzone.options.paramName
+    const type = paramName.substring(5)
+
+    let files = JSON.parse(data[paramName])
+
+    files.forEach((file) => {
+      getImgURL(`${apiUrl}trado/image/${type}/${file}/ori`, (fileBlob) => {
+        let imageFile = new File([fileBlob], file, {
+          type: 'image/jpeg',
+          lastModified: new Date().getTime()
+        }, 'utf-8')
+
+        dropzone.options.addedfile.call(dropzone, imageFile);
+        dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}trado/image/${type}/${file}/ori`);
+        dropzone.files.push(imageFile)
+      })
+    })
   }
 
   const setStatusLewatValidasiOptions = function(relatedForm) {
@@ -722,7 +734,7 @@
     })
   }
 
- 
+
   const setAppeditBanOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusappeditban]').empty()
@@ -761,7 +773,7 @@
     })
   }
   //sini
- 
+
   const setStatusMobilStoringOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusmobilstoring]').empty()
@@ -876,10 +888,10 @@
     })
   }
 
-  const setJenisPlatOptions = function(relatedForm) {
+  const setStatusJenisPlatOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=jenisplat]').empty()
-      relatedForm.find('[name=jenisplat]').append(
+      relatedForm.find('[name=statusjenisplat]').empty()
+      relatedForm.find('[name=statusjenisplat]').append(
         new Option('-- PILIH JENIS PLAT --', '', false, true)
       ).trigger('change')
 
@@ -905,7 +917,7 @@
           response.data.forEach(jenisPlat => {
             let option = new Option(jenisPlat.text, jenisPlat.id)
 
-            relatedForm.find('[name=jenisplat]').append(option).trigger('change')
+            relatedForm.find('[name=statusjenisplat]').append(option).trigger('change')
           });
 
           resolve()
@@ -990,228 +1002,15 @@
     })
   }
 
-  function showTrado(form, id) {
-    $.ajax({
-      url: `${apiUrl}trado/${id}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else if (element.hasClass('autonumeric')) {
-            let autoNumericInput = AutoNumeric.getAutoNumericElement(element[0])
-
-            autoNumericInput.set(value);
-          } else {
-            element.val(value)
-          }
-        })
-      }
-    })
-  }
-
-  function initDropzone(action, id = null) {
-    let attachArray = {
-      'trado': {},
-      'stnk': {},
-      'bpkb': {}
+  function getImgURL(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      console.log(xhr.response);
+      callback(xhr.response);
     };
-
-    const dropzones = []
-    $('.dropzone').each(function(i, el) {
-      const name = 'g_' + $(el).data('field');
-      console.log(name)
-      var myDropzone = new Dropzone(el, {
-        url: window.location.pathname,
-        autoProcessQueue: false,
-        uploadMultiple: true,
-        parallelUploads: 100,
-        maxFiles: 100,
-        paramName: name,
-        addRemoveLinks: true,
-        acceptedFiles: "image/*",
-        init: function() {
-          var wrapperThis = this;
-          
-          this.on('addedfile', function(imageFile) {
-            if (el.id == 'dropzone-trado') {
-              dropzoneAttachment.phototrado.push(imageFile)
-            }
-            if (el.id == 'dropzone-bpkb') {
-              dropzoneAttachment.photobpkb.push(imageFile)
-            }
-            if (el.id == 'dropzone-stnk') {
-              dropzoneAttachment.photostnk.push(imageFile)
-            }
-
-          })
-
-          this.on('removedfile', function(file) {
-            var key = file.upload.uuid;
-            if (attachArray.trado.hasOwnProperty(key) || attachArray.stnk.hasOwnProperty(key) || attachArray.bpkb.hasOwnProperty(key)) {
-              delete attachArray.trado[key];
-              delete attachArray.stnk[key];
-              delete attachArray.bpkb[key];
-            }
-          })
-
-          if (action == 'edit' || action == 'delete') {
-            var imgTrado = {}
-            var imgBpkb = {}
-            var imgStnk = {}
-            if (el.id == 'dropzone-trado') {
-              $.ajax({
-                url: `${apiUrl}trado/getImage/${id}/phototrado`,
-                method: 'GET',
-                dataType: 'JSON',
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                },
-                success: response => {
-                  $.each(response.file, function(index, value) {
-                    console.log(value);
-                    let tes = `${response.base}/${value.name}`
-                    let ext = tes.split('.').pop()
-                    let imageFile = new File([{
-                      name: `${response.base}/${value.name}`,
-                      size: value.size,
-                      type: `images/${ext}`,
-                      status: 'added',
-                      upload: {
-                        uuid: (Math.random() + 1).toString(36).substring(7)
-                      }
-                    }], value.name)
-
-                    newAdd = false
-                    console.log(imageFile)
-                    wrapperThis.emit("addedfile", imageFile);
-                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/${value.name}`);
-                    wrapperThis.files.push(imageFile);
-                  })
-                }
-              })
-            }
-
-            if (el.id == 'dropzone-bpkb') {
-              $.ajax({
-                url: `${apiUrl}trado/getImage/${id}/photobpkb`,
-                method: 'GET',
-                dataType: 'JSON',
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                },
-                success: response => {
-                  $.each(response.file, function(index, value) {
-                    console.log(value);
-                    let tes = `${response.base}/${value.name}`
-                    let ext = tes.split('.').pop()
-                    let imageFile = new File([{
-                      name: `${response.base}/${value.name}`,
-                      size: value.size,
-                      type: `images/${ext}`,
-                      status: 'added',
-                      upload: {
-                        uuid: (Math.random() + 1).toString(36).substring(7)
-                      }
-                    }], value.name)
-
-                    newAdd = false
-                    console.log(imageFile)
-                    wrapperThis.emit("addedfile", imageFile);
-                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/${value.name}`);
-                    wrapperThis.files.push(imageFile);
-                  })
-                }
-              })
-            }
-
-            if (el.id == 'dropzone-stnk') {
-              $.ajax({
-                url: `${apiUrl}trado/getImage/${id}/photostnk`,
-                method: 'GET',
-                dataType: 'JSON',
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                },
-                success: response => {
-                  $.each(response.file, function(index, value) {
-                    console.log(value);
-                    let tes = `${response.base}/${value.name}`
-                    let ext = tes.split('.').pop()
-                    let imageFile = new File([{
-                      name: `${response.base}/${value.name}`,
-                      size: value.size,
-                      type: `images/${ext}`,
-                      status: 'added',
-                      upload: {
-                        uuid: (Math.random() + 1).toString(36).substring(7)
-                      }
-                    }], value.name)
-
-                    newAdd = false
-                    console.log(imageFile)
-                    wrapperThis.emit("addedfile", imageFile);
-                    wrapperThis.emit("thumbnail", imageFile, `${response.base}/${value.name}`);
-                    wrapperThis.files.push(imageFile);
-                  })
-                }
-              })
-            }
-
-            // if (Object.keys(imgTrado).length > 0) {
-            //   var total = Object.keys(imgTrado).length / 3;
-            //   var idx = 0;
-            //   for (var i = 1; i <= total; i++) {
-            //     if (i > 1) {
-            //       idx += 3;
-            //     }
-            //     // console.log(idx);
-            //     var obj = {
-            //       name: imgTrado[idx],
-            //       size: 12345,
-            //       upload: {
-            //         uuid: (Math.random() + 1).toString(36).substring(7)
-            //       }
-            //     };
-
-            //     if (name == 'g_trado') {
-            //       wrapperThis.emit("addedfile", obj);
-            //       wrapperThis.emit("thumbnail", obj, baseurl + '/uploads/trado/' + imgTrado[idx]);
-            //       wrapperThis.emit("complete", obj);
-            //       wrapperThis.files.push(obj);
-            //       attachArray.trado[obj.upload.uuid] = imgTrado[idx];
-            //     }
-            //   }
-            // }
-
-          }
-
-        }
-      })
-      dropzones.push(myDropzone)
-    })
-  }
-
-  function initLookup() {
-
-    $('.mandor-lookup').lookup({
-      title: 'Mandor Lookup',
-      fileName: 'mandor',
-      onSelectRow: (mandor, element) => {
-        $('#crudForm [name=mandor_id]').first().val(mandor.id)
-        element.val(mandor.namamandor)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
   }
 </script>
 @endpush()

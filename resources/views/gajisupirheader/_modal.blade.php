@@ -29,7 +29,7 @@
                                         <label>
                                             TANGGAL BUKTI <span class="text-danger">*</span>
                                         </label>
-                                        
+
                                         <div class="input-group">
                                             <input type="text" name="tglbukti" class="form-control datepicker" autocomplete="off">
                                         </div>
@@ -53,13 +53,13 @@
                                         <input type="text" name="supir" autocomplete="off" class="form-control supir-lookup">
                                     </div>
                                 </div>
-                                
+
                                 <div class="row form-group">
                                     <div class="col-12 col-md-12">
                                         <label>
                                             TANGGAL DARI <span class="text-danger">*</span>
                                         </label>
-                                        
+
                                         <div class="input-group">
                                             <input type="text" name="tgldari" class="form-control datepicker" autocomplete="off">
                                         </div>
@@ -71,16 +71,16 @@
                                         <label>
                                             TANGGAL SAMPAI <span class="text-danger">*</span>
                                         </label>
-                                        
+
                                         <div class="input-group">
                                             <input type="text" name="tglsampai" class="form-control datepicker" autocomplete="off">
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row form-group">
                                     <div class="col-12 col-md-12">
-                                       <button class="btn btn-secondary" type="button" id="btnTampil">TAMPIL</button>
+                                        <button class="btn btn-secondary" type="button" id="btnTampil">TAMPIL</button>
                                     </div>
                                 </div>
                             </div>
@@ -103,11 +103,17 @@
 
                                     </tbody>
                                     <tfoot>
-                                    <tr>
-                                        <td colspan="8"><p class="text-right font-weight-bold">TOTAL:</p></td>
-                                        <td><p id="gajiSupir" class="text-right font-weight-bold"></p></td>
-                                        <td><p id="gajiKenek" class="text-right font-weight-bold"></p></td>
-                                    </tr>
+                                        <tr>
+                                            <td colspan="8">
+                                                <p class="text-right font-weight-bold">TOTAL:</p>
+                                            </td>
+                                            <td>
+                                                <p id="gajiSupir" class="text-right font-weight-bold"></p>
+                                            </td>
+                                            <td>
+                                                <p id="gajiKenek" class="text-right font-weight-bold"></p>
+                                            </td>
+                                        </tr>
                                     </tfoot>
                                 </table>
                             </div>
@@ -126,7 +132,7 @@
                                         <label>
                                             U. Makan Harian <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" name="uangmakanharian" class="form-control autonumeric" >
+                                        <input type="text" name="uangmakanharian" class="form-control autonumeric">
                                     </div>
                                     <div class="col-3 col-md-3">
                                         <label>
@@ -146,7 +152,7 @@
                                         <label>
                                             Deposito<span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" name="deposito" class="form-control autonumeric" >
+                                        <input type="text" name="deposito" class="form-control autonumeric">
                                     </div>
                                     <div class="col-3 col-md-3">
                                         <label>
@@ -154,72 +160,72 @@
                                         </label>
                                         <input type="text" name="uangjalan" class="form-control autonumeric" readonly>
                                     </div>
-                                    
+
                                     <div class="col-3 col-md-3">
                                         <label>
-                                           Pinj. Pribadi<span class="text-danger">*</span>
+                                            Pinj. Pribadi<span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" name="pinjamanpribadi" class="form-control autonumeric" >
+                                        <input type="text" name="pinjamanpribadi" class="form-control autonumeric">
                                     </div>
-                                    
+
                                     <div class="col-3 col-md-3">
                                         <label>
-                                           Pot. Pinjaman<span class="text-danger">*</span>
+                                            Pot. Pinjaman<span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" name="potonganpinjaman" class="form-control autonumeric" >
+                                        <input type="text" name="potonganpinjaman" class="form-control autonumeric">
                                     </div>
                                 </div>
 
                                 <div class="row form-group">
                                     <div class="col-3 col-md-3">
                                         <label>
-                                           Pot. Pinjaman (Semua)<span class="text-danger">*</span>
+                                            Pot. Pinjaman (Semua)<span class="text-danger">*</span>
                                         </label>
                                         <input type="text" name="potonganpinjamansemua" class="form-control autonumeric" readonly>
                                     </div>
                                     <div class="col-3 col-md-3">
                                         <label>
-                                           Sisa<span class="text-danger">*</span>
+                                            Sisa<span class="text-danger">*</span>
                                         </label>
                                         <input type="text" name="sisa" class="form-control autonumeric" readonly>
                                     </div>
                                     <div class="col-3 col-md-3">
                                         <label>
-                                           U. BBM<span class="text-danger">*</span>
+                                            U. BBM<span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" name="bbm" class="form-control autonumeric" >
+                                        <input type="text" name="bbm" class="form-control autonumeric">
                                     </div>
                                     <div class="col-3 col-md-3">
                                         <label>
-                                           Gaji Minus<span class="text-danger">*</span>
+                                            Gaji Minus<span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" name="gajiminus" class="form-control autonumeric" >
+                                        <input type="text" name="gajiminus" class="form-control autonumeric">
                                     </div>
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-3 col-md-3">
                                         <label>
-                                           Sisa Pinjaman<span class="text-danger">*</span>
+                                            Sisa Pinjaman<span class="text-danger">*</span>
                                         </label>
                                         <input type="text" name="sisapinjaman" class="form-control autonumeric" readonly>
                                     </div>
                                     <div class="col-3 col-md-3">
                                         <label>
-                                           Sisa Pinjaman (Semua)<span class="text-danger">*</span>
+                                            Sisa Pinjaman (Semua)<span class="text-danger">*</span>
                                         </label>
                                         <input type="text" name="sisapinjamansemua" class="form-control autonumeric" readonly>
                                     </div>
                                     <div class="col-3 col-md-3">
                                         <label>
-                                           U. Jalan Tidak Terhitung<span class="text-danger">*</span>
+                                            U. Jalan Tidak Terhitung<span class="text-danger">*</span>
                                         </label>
                                         <input type="text" name="uangjalantidakterhitung" class="form-control autonumeric" readonly>
                                     </div>
                                     <div class="col-3 col-md-3">
                                         <label>
-                                           Total (Sub Total + uang Makan)<span class="text-danger">*</span>
+                                            Total (Sub Total + uang Makan)<span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" name="total" class="form-control autonumeric" readonly >
+                                        <input type="text" name="total" class="form-control autonumeric" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -251,13 +257,13 @@
 
         $(document).on('input', `#crudForm [name="uangmakanharian"]`, function(event) {
             let uangMakan = $(this).val()
-            uangMakan = parseFloat(uangMakan.replaceAll(',',''));
+            uangMakan = parseFloat(uangMakan.replaceAll(',', ''));
 
             let subTotal = $(`#crudForm [name="subtotal"]`).val()
-            subTotal = parseFloat(subTotal.replaceAll(',',''));
+            subTotal = parseFloat(subTotal.replaceAll(',', ''));
 
             let total = subTotal + uangMakan
-            
+
             console.log(total)
             $(`#crudForm [name="total"]`).val(total)
 
@@ -288,18 +294,18 @@
                 },
                 success: response => {
 
-                    if(response.errors == true) {
+                    if (response.errors == true) {
                         showDialog(response.message)
-                    }else{
+                    } else {
                         let gajiSupir = 0
                         let gajiKenek = 0
                         $.each(response.data, (index, detail) => {
-                        
+
                             gajiSupir = parseFloat(gajiSupir) + parseFloat(detail.gajisupir)
                             gajiKenek = parseFloat(gajiKenek) + parseFloat(detail.gajikenek)
                             let detailRow = $(`
                                 <tr >
-                                    <td width="1%" onclick="select(this)"><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
+                                    <td width="1%" ><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
                                     <td width="13%">${detail.nobukti}</td>
                                     <td width="10%">${detail.tglbukti}</td>
                                     <td width="10%">${detail.trado}</td>
@@ -316,14 +322,14 @@
                             initAutoNumeric(detailRow.find('.gajiSupir'))
                             initAutoNumeric(detailRow.find('.gajiKenek'))
                         })
-                        
+
                         $('#gajiSupir').append(`${gajiSupir}`)
                         $('#gajiKenek').append(`${gajiKenek}`)
 
-                        let subTotal = gajiSupir+gajiKenek
+                        let subTotal = gajiSupir + gajiKenek
                         form.find(`[name="subtotal"]`).val(subTotal)
                         initAutoNumeric(form.find(`[name="subtotal"]`))
-                        
+
                         form.find(`[name="total"]`).val(subTotal)
                         initAutoNumeric(form.find(`[name="total"]`))
 
@@ -349,28 +355,28 @@
             let data = $('#crudForm').serializeArray()
             // unformatAutoNumeric(data)
 
-            
-            $('#crudForm').find(`[name="uangmakanharian"`).each((index,element) => {
+
+            $('#crudForm').find(`[name="uangmakanharian"`).each((index, element) => {
                 data.filter((row) => row.name === 'uangmakanharian')[index].value = AutoNumeric.getNumber($(`#crudForm [name="uangmakanharian"]`)[index])
             })
-            $('#crudForm').find(`[name="deposito"`).each((index,element) => {
+            $('#crudForm').find(`[name="deposito"`).each((index, element) => {
                 data.filter((row) => row.name === 'deposito')[index].value = AutoNumeric.getNumber($(`#crudForm [name="deposito"]`)[index])
             })
-            $('#crudForm').find(`[name="pinjamanpribadi"`).each((index,element) => {
+            $('#crudForm').find(`[name="pinjamanpribadi"`).each((index, element) => {
                 data.filter((row) => row.name === 'pinjamanpribadi')[index].value = AutoNumeric.getNumber($(`#crudForm [name="pinjamanpribadi"]`)[index])
             })
-            $('#crudForm').find(`[name="potonganpinjaman"`).each((index,element) => {
+            $('#crudForm').find(`[name="potonganpinjaman"`).each((index, element) => {
                 data.filter((row) => row.name === 'potonganpinjaman')[index].value = AutoNumeric.getNumber($(`#crudForm [name="potonganpinjaman"]`)[index])
             })
 
-            $('#crudForm').find(`[name="bbm"`).each((index,element) => {
+            $('#crudForm').find(`[name="bbm"`).each((index, element) => {
                 data.filter((row) => row.name === 'bbm')[index].value = AutoNumeric.getNumber($(`#crudForm [name="bbm"]`)[index])
             })
 
-            $('#crudForm').find(`[name="gajiminus"`).each((index,element) => {
+            $('#crudForm').find(`[name="gajiminus"`).each((index, element) => {
                 data.filter((row) => row.name === 'gajiminus')[index].value = AutoNumeric.getNumber($(`#crudForm [name="gajiminus"]`)[index])
             })
-            $('#crudForm').find(`[name="total"`).each((index,element) => {
+            $('#crudForm').find(`[name="total"`).each((index, element) => {
                 data.filter((row) => row.name === 'total')[index].value = AutoNumeric.getNumber($(`#crudForm [name="total"]`)[index])
             })
 
@@ -407,10 +413,10 @@
                     method = 'POST'
                     url = `${apiUrl}gajisupirheader`
                     break;
-                // case 'edit':
-                //     method = 'PATCH'
-                //     url = `${apiUrl}gajisupirheader/${Id}`
-                //     break;
+                    // case 'edit':
+                    //     method = 'PATCH'
+                    //     url = `${apiUrl}gajisupirheader/${Id}`
+                    //     break;
                 case 'delete':
                     method = 'DELETE'
                     url = `${apiUrl}gajisupirheader/${Id}`
@@ -424,61 +430,61 @@
             $(this).attr('disabled', '')
             $('#loader').removeClass('d-none')
 
-            if(action == 'edit') {
+            if (action == 'edit') {
                 $.ajax({
                     url: `${apiUrl}gajisupirheader/noEdit`,
                     method: 'POST',
                     dataType: 'JSON',
                     beforeSend: request => {
-                    request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+                        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
                     },
                     success: response => {
-                    
+
                         showDialog(response.message)
                     }
                 }).always(() => {
                     $('#loader').addClass('d-none')
                     $(this).removeAttr('disabled')
                 })
-  
-            }else{
+
+            } else {
                 $.ajax({
-                url: url,
-                method: method,
-                dataType: 'JSON',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: data,
-                success: response => {
+                    url: url,
+                    method: method,
+                    dataType: 'JSON',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    data: data,
+                    success: response => {
 
-                    id = response.data.id
-                    $('#crudModal').find('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page
-                    }).trigger('reloadGrid');
+                        id = response.data.id
+                        $('#crudModal').find('#crudForm').trigger('reset')
+                        $('#crudModal').modal('hide')
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page
+                        }).trigger('reloadGrid');
 
-                    if (response.data.grp == 'FORMAT') {
-                        updateFormat(response.data)
-                    }
-                },
-                error: error => {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid')
-                        $('.invalid-feedback').remove()
-                        setErrorMessages(form, error.responseJSON.errors);
-                    } else {
-                        showDialog(error.statusText)
-                    }
-                },
+                        if (response.data.grp == 'FORMAT') {
+                            updateFormat(response.data)
+                        }
+                    },
+                    error: error => {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid')
+                            $('.invalid-feedback').remove()
+                            setErrorMessages(form, error.responseJSON.errors);
+                        } else {
+                            showDialog(error.statusText)
+                        }
+                    },
                 }).always(() => {
                     $('#loader').addClass('d-none')
                     $(this).removeAttr('disabled')
                 })
 
             }
-            
+
         })
     })
 
@@ -492,7 +498,6 @@
         getMaxLength(form)
         initLookup()
         initDatepicker()
-        initAutoNumeric()
     })
 
     $('#crudModal').on('hidden.bs.modal', () => {
@@ -501,7 +506,7 @@
         $('#crudModal').find('.modal-body').html(modalBody)
     })
 
-   
+
 
 
 
@@ -581,7 +586,7 @@
 
                 })
 
-               
+
                 form.find('[name]').addClass('disabled')
                 initDisabled()
                 initAutoNumeric(form.find(`[name="subtotal"]`))
@@ -597,9 +602,9 @@
             }
         })
     }
-    
 
-   
+
+
     function getEditTrip(gajiId, aksi) {
         $('#gajiSupir').html('')
         $('#gajiKenek').html('')
@@ -614,7 +619,7 @@
                 Authorization: `Bearer ${accessToken}`
             },
             success: response => {
-            
+
                 let gajiSupir = 0
                 let gajiKenek = 0
                 $.each(response.data, (index, detail) => {
@@ -643,7 +648,7 @@
                 $('#gajiSupir').append(`${gajiSupir}`)
                 $('#gajiKenek').append(`${gajiKenek}`)
 
-                let subTotal = gajiSupir+gajiKenek
+                let subTotal = gajiSupir + gajiKenek
                 $('#crudForm').find(`[name="subtotal"]`).val(subTotal)
                 initAutoNumeric($('#crudForm').find(`[name="subtotal"]`))
 
@@ -654,67 +659,60 @@
         })
     }
 
-    function select(element) {
-
-        var is_checked = $(element).find(`[name="sp_id[]"]`).is(":checked");
-
-        let gajiSupir = $(element).siblings('td.gajiSupir').text()
-        let gjs =  parseFloat(gajiSupir.replaceAll(',',''));
-
+    $(document).on('click', `#tripList tbody [name="sp_id[]"]`, function() {
+        let gajiSupir = $(this).closest('tr').find('td.gajiSupir').text()
+        gajiSupir = parseFloat(gajiSupir.replaceAll(',', ''));
+        
         let totalSupir = $('#gajiSupir').text()
-        let ttlSupir = parseFloat(totalSupir.replaceAll(',',''));
+        totalSupir = parseFloat(totalSupir.replaceAll(',', ''));
 
-        let gajiKenek = $(element).siblings('td.gajiKenek').text()
-        let gjk =  parseFloat(gajiKenek.replaceAll(',',''));
+        let gajiKenek =$(this).closest('tr').find('td.gajiKenek').text()
+        gajiKenek = parseFloat(gajiKenek.replaceAll(',', ''));
 
         let totalKenek = $('#gajiKenek').text()
-        let ttlKenek = parseFloat(totalKenek.replaceAll(',',''));
+        totalKenek = parseFloat(totalKenek.replaceAll(',', ''));
 
-    
         let total = 0
         let subTotal = 0
         let uangMakan = $('#crudForm').find(`[name="uangmakanharian"]`).val()
-        uangMakan = parseFloat(uangMakan.replaceAll(',',''));
+        uangMakan = parseFloat(uangMakan.replaceAll(',', ''));
 
         let finalSupir = 0
         let finalKenek = 0
-        if(!is_checked) { 
 
-            finalSupir = ttlSupir - gjs;
-            finalKenek = ttlKenek - gjk;
+        if ($(this).prop("checked") == true) {
+            finalSupir = totalSupir + gajiSupir;
+            finalKenek = totalKenek + gajiKenek;
+            $('#gajiSupir').html('')
+            $('#gajiSupir').append(`${finalSupir}`)
+            $('#gajiKenek').html('')
+            $('#gajiKenek').append(`${finalKenek}`)
+
+
+            subTotal = finalSupir + finalKenek
+            if (uangMakan) {
+                total = subTotal + uangMakan
+            } else {
+                total = subTotal
+            }
+        } else {
+            finalSupir = totalSupir - gajiSupir;
+            finalKenek = totalKenek - gajiKenek;
 
             $('#gajiSupir').html('')
             $('#gajiSupir').append(`${finalSupir}`)
             $('#gajiKenek').html('')
             $('#gajiKenek').append(`${finalKenek}`)
 
-            subTotal = finalSupir+finalKenek
-            if(uangMakan) {
+            subTotal = finalSupir + finalKenek
+            if (uangMakan) {
                 total = subTotal + uangMakan
-            }else{
+            } else {
                 total = subTotal
             }
-            console.log(is_checked)
-        }else{
-       
-            finalSupir = ttlSupir + gjs;
-            finalKenek = ttlKenek + gjk;
-            $('#gajiSupir').html('')
-            $('#gajiSupir').append(`${finalSupir}`)
-            $('#gajiKenek').html('')
-            $('#gajiKenek').append(`${finalKenek}`)
 
-        
-            subTotal = finalSupir+finalKenek
-            if(uangMakan) {
-                total = subTotal + uangMakan
-            }else{
-                total = subTotal
-            }
-            console.log(is_checked)
-            // $(element).find(`[name="sp_id[]"]`).prop("checked", false);
         }
-      
+        
         initAutoNumeric($('#tripList tfoot').find('#gajiSupir'))
         initAutoNumeric($('#tripList tfoot').find('#gajiKenek'))
 
@@ -723,7 +721,9 @@
 
         $('#crudForm').find(`[name="total"]`).val(total)
         initAutoNumeric($('#crudForm').find(`[name="total"]`))
-    }
+    })
+
+  
 
     function setRowNumbers() {
         let elements = $('#detailList tbody tr td:nth-child(2)')
@@ -733,10 +733,11 @@
         })
     }
 
-    $("#checkAll").click(function () {
+    $("#checkAll").click(function() {
         $('input:checkbox').not(this).prop('checked', this.checked);
         console.log($('#crudForm input:checkbox').find(`[name="sp_id[]"]`).val())
     });
+
     function getMaxLength(form) {
         if (!form.attr('has-maxlength')) {
             $.ajax({

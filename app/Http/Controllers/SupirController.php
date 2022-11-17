@@ -161,7 +161,11 @@ class SupirController extends MyController
         $title = $this->title;
 
         $data = [
-            'combo' => $this->comboStatusAktif('list'),
+            'statusaktif' => $this->comboStatusAktif('list','STATUS AKTIF','STATUS AKTIF'),
+            'statusadaupdategambar' => $this->comboStatusAktif('list','STATUS ADA UPDATE GAMBAR','STATUS ADA UPDATE GAMBAR'),
+            'statusluarkota' => $this->comboStatusAktif('list','STATUS LUAR KOTA','STATUS LUAR KOTA'),
+            'statuszonatertentu' => $this->comboStatusAktif('list','ZONA TERTENTU','ZONA TERTENTU'),
+            'statusblacklist' => $this->comboStatusAktif('list','BLACKLIST SUPIR','BLACKLIST SUPIR'),
         ];
 
         return view('supir.index', compact('title','data'));
@@ -295,12 +299,12 @@ class SupirController extends MyController
         return $response['data'];
     }
 
-    public function comboStatusAktif($aksi)
+    public function comboStatusAktif($aksi, $grp, $subgrp)
     {
         $status = [
             'status' => $aksi,
-            'grp' => 'STATUS AKTIF',
-            'subgrp' => 'STATUS AKTIF',
+            'grp' => $grp,
+            'subgrp' => $subgrp,
         ];
 
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])

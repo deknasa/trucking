@@ -390,7 +390,7 @@
 
                         let detailRow = $(`
                             <tr >
-                                <td width="1%" onclick="select(this)"><input name='ric_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
+                                <td width="1%"><input name='ric_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
                                 <td width="13%">${detail.nobukti}</td>
                                 <td width="10%">${detail.tglbukti}</td>
                                 <td width="10%">${detail.namasupir}</td>
@@ -437,7 +437,7 @@
 
                     let detailRow = $(`
                         <tr >
-                                <td width="1%" onclick="select(this)"><input name='ric_id[]' type="checkbox" class="checkItem" value="${detail.id}" disabled checked></td>
+                                <td width="1%"><input name='ric_id[]' type="checkbox" class="checkItem" value="${detail.id}" disabled checked></td>
                                 <td width="13%">${detail.nobukti}</td>
                                 <td width="10%">${detail.tglbukti}</td>
                                 <td width="10%">${detail.namasupir}</td>
@@ -460,29 +460,26 @@
         })
     }
 
-    function select(element) {
-
-        var is_checked = $(element).find(`[name="ric_id[]"]`).is(":checked");
-
-        let tdNominal = $(element).siblings('td.nominal').text()
+    $(document).on('click', `#ricList tbody [name="ric_id[]"]`, function() {
+        let tdNominal = $(this).closest('tr').find('td.nominal').text()
         tdNominal =  parseFloat(tdNominal.replaceAll(',',''));
 
+        console.log(tdNominal)
         let allNominal = $('#nominal').text()
         allNominal = parseFloat(allNominal.replaceAll(',',''));
         let nominal = 0
-        if(!is_checked) { 
+       
+        if ($(this).prop("checked") == true) {
+            allNominal = allNominal+tdNominal   
+        } else {
             allNominal = allNominal-tdNominal
-            console.log(is_checked)
-        }else{
-            allNominal = allNominal+tdNominal       
-            console.log(is_checked)
         }
-
         $('#nominal').html('')
         $('#nominal').append(`${allNominal}`)
         initAutoNumeric($('#ricList tfoot').find('#nominal'))
-
     }
+    
+    )
 
     function setRowNumbers() {
         let elements = $('#detailList tbody tr td:nth-child(2)')
