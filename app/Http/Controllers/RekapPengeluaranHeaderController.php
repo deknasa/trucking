@@ -8,15 +8,14 @@ use Illuminate\Support\Facades\Http;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class AbsensiSupirApprovalHeaderController extends MyController
+class RekapPengeluaranHeaderController extends MyController
 {
-
-    public $title = 'Absesi Supir Aproval';
-
+    public $title = 'rekappengeluaran';
+    
     public function index(Request $request)
     {
         $title = $this->title;
-        return view('absensisupirapprovalheader.index', compact('title'));
+        return view('rekappengeluaranheader.index', compact('title'));
     }
 
     public function get($params = [])
@@ -33,7 +32,7 @@ class AbsensiSupirApprovalHeaderController extends MyController
         $response = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'absensisupirapprovalheader', $params);
+            ->get(config('app.api_url') . 'rekappengeluaranheader', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -55,14 +54,13 @@ class AbsensiSupirApprovalHeaderController extends MyController
             'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
             'withRelations' => $params['withRelations'] ?? request()->withRelations ?? false,
         ];
-
         return $response = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'absensisupirapprovalheader/'.$id);
+            ->get(config('app.api_url') . 'rekappengeluaranheader/'.$id);
     }
 
-     /**
+    /**
      * @ClassName
      */
     public function report(Request $request,$id)
@@ -73,27 +71,24 @@ class AbsensiSupirApprovalHeaderController extends MyController
             'withRelations' => true,
 
         ];
-        $notadebet = $this->find($params,$id)['data'];
-        // return $notadebets['id'];
-        $data = $notadebet;
+        $rekappengeluaran = $this->find($params,$id)['data'];
+
+        $data = $rekappengeluaran;
         $i =0;
         
-            $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'absensisupirapprovaldetail', ['notadebet_id' => $notadebet['id']]);
+        $response = Http::withHeaders($this->httpHeaders)
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') . 'rekappengeluarandetail', ['rekappengeluaran_id' => $rekappengeluaran['id']]);
 
-            $data["details"] =$response['data'];
-            $data["user"] = Auth::user();
-            
-
-        $absensisupirapprovalheaders = $data;
-        return view('reports.absensisupirapprovalheader', compact('absensisupirapprovalheaders'));
+        $data["details"] =$response['data'];
+        $data["user"] = Auth::user();
+     
+        
+        $rekappengeluaranheaders = $data;
+        return view('reports.rekappengeluaranheader', compact('rekappengeluaranheaders'));
     }
 
-    /**
-     * @ClassName
-     */
     public function export(Request $request)
     {
         $params = [
@@ -111,12 +106,13 @@ class AbsensiSupirApprovalHeaderController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'absensisupirapprovaldetail', [$request->all()]);
+            ->get(config('app.api_url') . 'rekappengeluarandetail', [$request->all()]);
 
 
             $data[$i]["details"] =$response['data'];
             $i++;
         }
+        // dd($data);
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', 'Laporan Absensi Supir Approval');
@@ -125,7 +121,7 @@ class AbsensiSupirApprovalHeaderController extends MyController
         $sheet->mergeCells('A1:E1');
 
         $header_start_row = 2;
-        $detail_table_header_row = 12;
+        $detail_table_header_row = 5;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
@@ -134,50 +130,26 @@ class AbsensiSupirApprovalHeaderController extends MyController
                 'label'=>'No Bukti',
                 'index'=>'nobukti'
             ],
-            [
-                'label'=>'No Bukti absensi supir',
-                'index'=>'absensisupir_nobukti'
-            ],
+            
             [
                 'label'=>'Tgl Bukti',
                 'index'=>'tglbukti'
             ],
+            
             [
-                'label'=>'Keterangan',
-                'index'=>'keterangan'
+                'label'=>'Bank',
+                'index'=>'bank'
             ],
             [
                 'label'=>'Approval Status ',
                 'index'=>'statusapproval_memo'
             ],
+            
             [
-                'label'=>'pengeluaran nobukti',
-                'index'=>'pengeluaran_nobukti'
+                'label'=>'Keterangan',
+                'index'=>'keterangan'
             ],
-            [
-                'label'=>'coa kas keluar',
-                'index'=>'coakaskeluar'
-            ],
-            [
-                'label'=>'tgl kas keluar',
-                'index'=>'tglkaskeluar'
-            ],
-            [
-                'label'=>'Approval User',
-                'index'=>'userapproval'
-            ],
-            [
-                'label'=>'Tgl Approval',
-                'index'=>'tglapproval'
-            ],
-            [
-                'label'=>'Status Format',
-                'index'=>'statusformat_memo'
-            ],
-            [
-                'label'=>'modifiedby',
-                'index'=>'modifiedby'
-            ],
+           
             
         ];
         $detail_columns = [
@@ -186,19 +158,19 @@ class AbsensiSupirApprovalHeaderController extends MyController
             ],
             [
                 'label'=>'No Bukti',
-                'index'=>'nobukti'
+                'index'=>'pengeluaran_nobukti'
             ],
             [
-                'label'=>'trado',
-                'index'=>'trado'
+                'label'=>'tgl transaksi',
+                'index'=>'tgltransaksi'
             ],
             [
-                'label'=>'supir',
-                'index'=>'supir'
+                'label'=>'Keterangan',
+                'index'=>'keterangan'
             ],
             [
-                'label'=>'modifiedby',
-                'index'=>'modifiedby'
+                'label'=>'nominal',
+                'index'=>'nominal'
             ],
             
         ];
@@ -210,7 +182,7 @@ class AbsensiSupirApprovalHeaderController extends MyController
                 $sheet->setCellValue('C' . $header_start_row++, $data[$i][$header_column['index']]);
             }
 
-            $header_start_row += count($data[$i]['details']) + 2;
+            $header_start_row += count($data[$i]['details']) + 1;
 
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
@@ -223,15 +195,15 @@ class AbsensiSupirApprovalHeaderController extends MyController
                     $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $detail_data[$detail_column['index']] : $detail_index + 1);
                 }
                 $sheet->setCellValue("A$detail_start_row", $detail_index + 1);
-                $sheet->setCellValue("B$detail_start_row", $detail_data['nobukti']);
-                $sheet->setCellValue("C$detail_start_row", $detail_data['trado']);
-                $sheet->setCellValue("D$detail_start_row", $detail_data['supir']);
-                $sheet->setCellValue("E$detail_start_row", $detail_data['modifiedby']);
+                $sheet->setCellValue("B$detail_start_row", $detail_data['pengeluaran_nobukti']);
+                $sheet->setCellValue("C$detail_start_row", $detail_data['tgltransaksi']);
+                $sheet->setCellValue("D$detail_start_row", $detail_data['keterangan']);
+                $sheet->setCellValue("E$detail_start_row", $detail_data['nominal']);
 
                 $detail_start_row++;
             }
 
-            $detail_table_header_row += (10 + count($data[$i]['details']) + 2);
+            $detail_table_header_row += (5 + count($data[$i]['details']) );
             $detail_start_row = $detail_table_header_row + 1;
         }
 
@@ -240,12 +212,6 @@ class AbsensiSupirApprovalHeaderController extends MyController
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
-        // $sheet->getColumnDimension('F')->setAutoSize(true);
-        // $sheet->getColumnDimension('G')->setAutoSize(true);
-        // $sheet->getColumnDimension('H')->setAutoSize(true);
-        // $sheet->getColumnDimension('I')->setAutoSize(true);
-        // $sheet->getColumnDimension('J')->setAutoSize(true);
-        // $sheet->getColumnDimension('K')->setAutoSize(true);
 
         $styleArray = array(
             'borders' => array(
