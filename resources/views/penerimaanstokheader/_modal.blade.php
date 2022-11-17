@@ -11,7 +11,7 @@
         <form action="" method="post">
           <div class="modal-body">
             <div class="row form-group">
-                <input type="hidden" name="id" hidden class="form-control" readonly>
+              <input type="hidden" name="id" hidden class="form-control" readonly>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>nobukti <span class="text-danger">*</span> </label>
@@ -35,7 +35,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="penerimaanstok" class="form-control penerimaanstok-lookup">
-                <input type="text" id="penerimaanstokId" name="penerimaanstok_id" hidden readonly >
+                <input type="text" id="penerimaanstokId" name="penerimaanstok_id" hidden readonly>
               </div>
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>STATUS FORMAT <span class="text-danger">*</span> </label>
@@ -49,14 +49,14 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>penerimaan stok nobukti  </label>
+                <label>penerimaan stok nobukti </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="penerimaanstok_nobukti" class="form-control penerimaanstokheader-lookup">
               </div>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>pengeluaran stok nobukti  </label>
+                <label>pengeluaran stok nobukti </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="pengeluaranstok_nobukti" class="form-control pengeluaranstokheader-lookup">
@@ -65,14 +65,14 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>nobon  </label>
+                <label>nobon </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="nobon" class="form-control">
               </div>
-            
+
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>hutang no bukti  </label>
+                <label>hutang no bukti </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="hutang_nobukti" class="form-control hutang-lookup">
@@ -82,55 +82,55 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>trado  </label>
+                <label>trado </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="trado" class="form-control trado-lookup">
-                <input type="text" id="tradoId" name="trado_id" hidden readonly >
+                <input type="text" id="tradoId" name="trado_id" hidden readonly>
               </div>
-              
+
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>supplier  </label>
+                <label>supplier </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="supplier" class="form-control supplier-lookup">
-                <input type="text" id="supplierId" name="supplier_id" hidden readonly >
+                <input type="text" id="supplierId" name="supplier_id" hidden readonly>
               </div>
             </div>
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>gudang  </label>
+                <label>gudang </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="gudang" class="form-control gudang-lookup">
-                <input type="text" id="gudangId" name="gudang_id" hidden readonly >
+                <input type="text" id="gudangId" name="gudang_id" hidden readonly>
               </div>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>coa  </label>
+                <label>coa </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="coa" class="form-control akunpusat-lookup">
               </div>
             </div>
-            
-            
+
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>gudangdari  </label>
+                <label>gudangdari </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="gudangdari" class="form-control gudang-lookup">
-                <input type="text" id="gudangdariId" name="gudangdari_id" hidden readonly >
+                <input type="text" id="gudangdariId" name="gudangdari_id" hidden readonly>
               </div>
-              
+
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>gudangke  </label>
+                <label>gudangke </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="gudangke" class="form-control gudang-lookup">
-                <input type="text" id="gudangkeId" name="gudangke_id" hidden readonly >
+                <input type="text" id="gudangkeId" name="gudangke_id" hidden readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -144,44 +144,45 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>coa  </label>
+                <label>coa </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="coa" class="form-control akunpusat-lookup">
               </div>
-              
-            </div>
-            
-            <table class="table table-bordered table-bindkeys">
-              <thead>
-                <tr>
-                  <th width="50">No</th>
-                  <th width="200">stok</th>
-                  <th width="100">vulkanisirke</th>
-                  <th width="250">keterangan</th>
-                  <th width="150">qty</th>
-                  <th width="150">harga</th>
-                  <th width="50">persentase discount</th>
-                  <th width="150">Total</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="table_body" class="form-group">
-                
 
-            </tbody>
-            <tfoot>
-              <tr>
-                <td colspan="6"></td>
-                
-                <td class="font-weight-bold"> Total : </td>
-                <td id="sumary" class="text-right font-weight-bold">  </td>
-                <td>
-                  <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-bordered table-bindkeys" style="width: 2000px;">
+                <thead>
+                  <tr>
+                    <th width="5%">No</th>
+                    <th width="20%">stok</th>
+                    <th width="5%">vulkanisirke</th>
+                    <th width="10%">keterangan</th>
+                    <th width="10%">qty</th>
+                    <th width="20%">harga</th>
+                    <th width="5%">persentase discount</th>
+                    <th width="20%">Total</th>
+                    <th width="5%">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body" class="form-group">
+
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="6"></td>
+
+                    <td class="font-weight-bold"> Total : </td>
+                    <td id="sumary" class="text-right font-weight-bold"> </td>
+                    <td>
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
 
           </div>
           <div class="modal-footer justify-content-start">
@@ -205,15 +206,15 @@
   let hasFormBindKeys = false
 
   $(document).ready(function() {
-    
+
     $("#addRow").click(function() {
       addRow()
     });
-    
+
     $(document).on('click', '.rmv', function(event) {
       deleteRow($(this).parents('tr'))
     })
-    
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -321,17 +322,18 @@
       })
     })
   })
-  function kodepenerimaan(kodepenerimaan){
+
+  function kodepenerimaan(kodepenerimaan) {
     $('#crudForm').find('[name=statusformat]').val(kodepenerimaan).trigger('change');
   }
-  
+
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
 
     setFormBindKeys(form)
 
     activeGrid = null
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     initDatepicker()
 
     // getMaxLength(form)
@@ -472,6 +474,7 @@
     })
   }
   index = 0;
+
   function addRow() {
 
     let detailRow = $(`
@@ -510,7 +513,7 @@
                   </td>
               </tr>
     `)
-    
+
     $('table #table_body').append(detailRow)
     var row = index;
     $(`.detail_stok_${row}`).lookup({
@@ -527,11 +530,11 @@
       }
     })
     initAutoNumeric($(`.number${index}`))
-    
+
     setRowNumbers()
     index++;
   }
-  
+
   function deleteRow(row) {
     row.remove()
     sumary()
@@ -558,22 +561,22 @@
     qty = AutoNumeric.getNumber(qty);
     harga = AutoNumeric.getNumber(harga);
     discount = AutoNumeric.getNumber(discount);
-    
+
     total = qty * harga;
-    nominaldiscount = total * (discount/100);
+    nominaldiscount = total * (discount / 100);
     total -= nominaldiscount;
     new AutoNumeric($(`#totalItem${id}`)[0]).set(total)
     sumary();
   }
 
-  function sumary(){
-		let sumary =0;
-		$('.totalItem').each(function(){
-			var totalItem = AutoNumeric.getNumber($(this)[0]);
-			sumary +=totalItem;
-		})
+  function sumary() {
+    let sumary = 0;
+    $('.totalItem').each(function() {
+      var totalItem = AutoNumeric.getNumber($(this)[0]);
+      sumary += totalItem;
+    })
     new AutoNumeric($('#sumary')[0]).set(sumary);
-	}
+  }
 
   function showPenerimaanstokHeader(form, penerimaanStokHeaderId) {
     resetRow()
@@ -585,14 +588,14 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-        sum =0;
+        sum = 0;
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
           if (element.is('select')) {
             element.val(value).trigger('change')
-          }else if(element.attr("name") == 'tglbukti'){
+          } else if (element.attr("name") == 'tglbukti') {
             var result = value.split('-');
-            element.val(result[2]+'-'+result[1]+'-'+result[0]);
+            element.val(result[2] + '-' + result[1] + '-' + result[0]);
           } else {
             element.val(value)
           }
