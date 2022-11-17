@@ -352,6 +352,7 @@
       onClear: (element) => {
         element.val('')
         $(`#crudForm [name="type"]`).first().val('')
+        element.data('currentValue', element.val())
       }
     })
   }
