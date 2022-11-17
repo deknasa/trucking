@@ -80,6 +80,9 @@ use App\Http\Controllers\PenerimaanDetailController;
 use App\Http\Controllers\PengeluaranHeaderController;
 use App\Http\Controllers\PengeluaranDetailController;
 
+use App\Http\Controllers\RekapPengeluaranHeaderController;
+use App\Http\Controllers\RekapPengeluaranDetailController;
+
 use App\Http\Controllers\PenerimaanTruckingHeaderController;
 use App\Http\Controllers\PenerimaanTruckingDetailController;
 
@@ -210,11 +213,11 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('absensisupir_detail', AbsensiSupirDetailController::class);
     
-    Route::get('absensisupirapprovalheader/{id}/delete', [AbsensiSupirHeaderController::class, 'delete'])->name('absensisupirapprovalheader.delete');
-    Route::get('absensisupirapprovalheader/index', [AbsensiSupirHeaderController::class, 'index']);
-    Route::get('absensisupirapprovalheader/get', [AbsensiSupirHeaderController::class, 'get'])->name('absensisupirapprovalheader.get');
-    Route::get('absensisupirapprovalheader/export', [AbsensiSupirHeaderController::class, 'export'])->name('absensisupirapprovalheader.export');
-    Route::get('absensisupirapprovalheader/report', [AbsensiSupirHeaderController::class, 'report'])->name('absensisupirapprovalheader.report');
+    Route::get('absensisupirapprovalheader/{id}/delete', [AbsensiSupirApprovalHeaderController::class, 'delete'])->name('absensisupirapprovalheader.delete');
+    Route::get('absensisupirapprovalheader/index', [AbsensiSupirApprovalHeaderController::class, 'index']);
+    Route::get('absensisupirapprovalheader/get', [AbsensiSupirApprovalHeaderController::class, 'get'])->name('absensisupirapprovalheader.get');
+    Route::get('absensisupirapprovalheader/export', [AbsensiSupirApprovalHeaderController::class, 'export'])->name('absensisupirapprovalheader.export');
+    Route::get('absensisupirapprovalheader/report/{id}', [AbsensiSupirApprovalHeaderController::class, 'report'])->name('absensisupirapprovalheader.report');
     Route::resource('absensisupirapprovalheader', AbsensiSupirApprovalHeaderController::class);
 
     Route::get('userrole/{id}/delete', [UserRoleController::class, 'delete'])->name('userrole.delete');
@@ -563,6 +566,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('pengeluaranheader', PengeluaranHeaderController::class);
 
     Route::resource('pengeluarandetail', PengeluaranDetailController::class);
+    
+    Route::get('rekappengeluaranheader/{id}/delete', [RekapPengeluaranHeaderController::class, 'delete'])->name('rekappengeluaranheader.delete');
+    Route::get('rekappengeluaranheader/index', [RekapPengeluaranHeaderController::class, 'index']);
+    Route::get('rekappengeluaranheader/get', [RekapPengeluaranHeaderController::class, 'get'])->name('rekappengeluaranheader.get');
+    Route::get('rekappengeluaranheader/export', [RekapPengeluaranHeaderController::class, 'export'])->name('rekappengeluaranheader.export');
+    Route::get('rekappengeluaranheader/report/{id}', [RekapPengeluaranHeaderController::class, 'report'])->name('rekappengeluaranheader.report');
+    Route::resource('rekappengeluaranheader', RekapPengeluaranHeaderController::class);
+
+    Route::resource('rekappengeluarandetail', RekapPengeluaranDetailController::class);
 
     //penerimaan trucking
     Route::get('penerimaantruckingheader/{id}/delete', [PenerimaanTruckingHeaderController::class, 'delete'])->name('penerimaantruckingheader.delete');

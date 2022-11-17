@@ -10,14 +10,14 @@
   </div>
 </div>
 
-@include('absensisupirapprovalheader._modal')
+@include('rekappengeluaranheader._modal')
 <!-- Detail -->
-@include('absensisupirapprovalheader._detail')
+@include('rekappengeluaranheader._detail')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('absensisupirapprovalheader.index') }}"
-  let getUrl = "{{ route('absensisupirapprovalheader.get') }}"
+  let indexUrl = "{{ route('rekappengeluaranheader.index') }}"
+  let getUrl = "{{ route('rekappengeluaranheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -36,27 +36,14 @@
 
     $('#lookup').hide()
     
-    
-    $('.supir-lookup').lookup({
-      title: 'supir Lookup',
-      fileName: 'supir',
-      onSelectRow: (supir, element) => {
-        element.val(supir.namasupir)
-        $(`#${element[0]['name']}Id`).val(supir.id)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
-    
+
 
     $('#crudModal').on('hidden.bs.modal', function() {
        activeGrid = '#jqGrid'
      })
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'absensisupirapprovalheader' }}`,
+        url: `{{ config('app.api_url') . 'rekappengeluaranheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -67,10 +54,14 @@
             align: 'right',
             width: '50px'
           },
-          
           {
             label: 'NO BUKTI',
             name: 'nobukti',
+            align: 'left'
+          },
+          {
+            label: 'bank',
+            name: 'bank',
             align: 'left'
           },
           {
@@ -84,15 +75,29 @@
             }
           },
           {
-            label: 'KETERANGAN',
+            label: 'TANGGAL Transaksi',
+            name: 'tgltransaksi',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'keterangan',
             name: 'keterangan',
             align: 'left'
-          },
-          
+          },          
           {
-            label: 'No bukti Absensi Supir',
-            name: 'absensisupir_nobukti',
-            align: 'left'
+            label: 'tglapproval',
+            name: 'tglapproval',
+            align: 'left',
+             formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'status approval',
@@ -105,45 +110,11 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL approval',
-            name: 'tglapproval',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'No bukti pengeluaran',
-            name: 'pengeluaran_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'coa kaskeluar',
-            name: 'coakaskeluar',
-            align: 'left'
-          },
-          {
-            label: 'TANGGAL kas keluar',
-            name: 'tglkaskeluar',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'Status format',
-            name: 'statusformat_memo',
-            align: 'left'
-          },
-          {
-            label: 'MODIFIEDBY',
+            label: 'modifiedby',
             name: 'modifiedby',
             align: 'left'
           },
+          
         ],
 
         autowidth: true,
@@ -246,7 +217,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
-              createAbsensiSupirApprovalHeader()
+              createRekapPengeluaranHeader()
             }
           },
           {
@@ -255,7 +226,7 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              editAbsensiSupirApprovalHeader(selectedId)
+              editRekapPengeluaranHeader(selectedId)
             }
           },
           {
@@ -264,7 +235,7 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              deleteAbsensiSupirApprovalHeader(selectedId)
+              deleteRekapPengeluaranHeader(selectedId)
             }
           },
           {
@@ -295,7 +266,7 @@
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              window.open(`{{url('absensisupirapprovalheader/report/${selectedId}')}}`)
+              window.open(`{{url('rekappengeluaranheader/report/${selectedId}')}}`)
             }
           },
         ]
@@ -331,24 +302,31 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
+    $('#approval .ui-pg-div')
+      .addClass('btn btn-sm btn-warning')
+      .parent().addClass('px-1')
+
+    if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'store') }}`) {
+      $('#add').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
+    if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'update') }}`) {
+      $('#edit').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
+    if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'destroy') }}`) {
+      $('#delete').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
+    if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'export') }}`) {
+      $('#export').addClass('ui-disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
+    if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'report') }}`) {
+      $('#report').addClass('ui-disabled')
+    }
+    if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approval') }}`) {
+      $('#approval').addClass('ui-disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -374,14 +352,14 @@
       })
     })
 
-    $('#formRange').submit(function(event) {
+    $('#formRange').submit(event => {
       event.preventDefault()
 
       let params
-      let submitButton = $(this).find('button:submit')
-
+      let actionUrl = ``
       if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('absensisupirapprovalheader.export') }}`
+        actionUrl = `{{ route('rekappengeluaranheader.export') }}`
+      // } else if ($('#rangeModal').data('action') == 'report') {
       }
 
       /* Clear validation messages */
@@ -399,9 +377,9 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
 
-    function handleApproval(id) {
+  function handleApproval(id) {
     $.ajax({
-      url: `${apiUrl}absensisupirapprovalheader/${id}/approval`,
+      url: `${apiUrl}rekappengeluaranheader/${id}/approval`,
       method: 'POST',
       dataType: 'JSON',
       beforeSend: request => {
@@ -414,8 +392,6 @@
       $('#loader').addClass('d-none')
     })
   }
-
-
 
   })
 </script>
