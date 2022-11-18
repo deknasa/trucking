@@ -1,6 +1,6 @@
 <div class="modal fade modal-fullscreen" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form action="#" id="crudForm" >
+    <form action="#" id="crudForm">
       <div class="modal-content">
         <div class="modal-header bg-primary">
           <h5 class="modal-title" id="crudModalTitle"></h5>
@@ -9,14 +9,14 @@
           </button>
         </div>
         <form action="" method="post">
-        
+
           <div class="modal-body">
             <input type="hidden" name="id">
 
             <div class="row form-group">
               <div class="col-12 col-sm-2 col-md-2 col-form-label">
                 <label>
-                    NO BUKTI <span class="text-danger">*</span>
+                  NO BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -25,69 +25,72 @@
 
               <div class="col-12 col-sm-2 col-md-2 col-form-label">
                 <label>
-                TANGGAL BUKTI <span class="text-danger">*</span>
+                  TANGGAL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
-                
+
                 <input type="text" name="tglbukti" class="form-control datepicker">
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                KETERANGAN <span class="text-danger">*</span></label>
+                  KETERANGAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">
               </div>
             </div>
-            
-            <table class="table table-bordered table-bindkeys" id="detailList">
-              <thead>
-                <tr>
-                  <th width="50">No</th>
-                  <th>COA DEBET</th>
-                  <th>COA KREDIT</th>
-                  <th>KETERANGAN</th>
-                  <th>NOMINAL</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="table_body" class="form-group">
-                <tr>
-                  <td>1</td>
-                  <td>
-                    <input type="text" name="coadebet_detail[]"  class="form-control coadebet-lookup">
-                  </td>
-                  <td>
-                    <input type="text" name="coakredit_detail[]"  class="form-control coakredit-lookup">
-                  </td>
-                  <td>
-                    <input type="text" name="keterangan_detail[]" class="form-control">   
-                  </td><td>
-                    <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
-                  </td>
-                  <td>
-                    <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                  </td>
-                </tr>
 
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="4">
-                    <p class="text-right font-weight-bold">TOTAL :</p>
-                  </td>
-                  <td>
-                    <p class="text-right font-weight-bold autonumeric" id="total"></p>
-                  </td>
-                  <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+            <div class="table-responsive">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
+                <thead>
+                  <tr>
+                    <th width="1%">No</th>
+                    <th width="5%">COA DEBET</th>
+                    <th width="5%">COA KREDIT</th>
+                    <th width="5%">KETERANGAN</th>
+                    <th width="6%">NOMINAL</th>
+                    <th width="2%">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body" class="form-group">
+                  <tr>
+                    <td>1</td>
+                    <td>
+                      <input type="text" name="coadebet_detail[]" class="form-control coadebet-lookup">
+                    </td>
+                    <td>
+                      <input type="text" name="coakredit_detail[]" class="form-control coakredit-lookup">
+                    </td>
+                    <td>
+                      <input type="text" name="keterangan_detail[]" class="form-control">
+                    </td>
+                    <td>
+                      <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal">
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                    </td>
+                  </tr>
+
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="4">
+                      <p class="text-right font-weight-bold">TOTAL :</p>
+                    </td>
+                    <td>
+                      <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
 
           </div>
           <div class="modal-footer justify-content-start">
@@ -112,13 +115,13 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
-    
+
     $(document).on('click', "#addRow", function() {
       addRow()
     });
-    
+
     $(document).on('click', '.delete-row', function(event) {
-        deleteRow($(this).parents('tr'))
+      deleteRow($(this).parents('tr'))
     })
 
     $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {
@@ -134,8 +137,8 @@
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
-      
-      $('#crudForm').find(`[name="nominal_detail[]"`).each((index,element) => {
+
+      $('#crudForm').find(`[name="nominal_detail[]"`).each((index, element) => {
         data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
       })
 
@@ -195,14 +198,16 @@
         },
         data: data,
         success: response => {
-          
+
 
           id = response.data.id
           console.log(id)
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -238,7 +243,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    
+
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -262,13 +267,13 @@
       Simpan
     `)
     form.data('action', 'add')
-    
+
     $('#crudModalTitle').text('Add Jurnal Umum')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    
+
     $('#table_body').html('')
     addRow()
     setTotal()
@@ -312,51 +317,49 @@
   function approval(Id) {
     $('#loader').removeClass('d-none')
 
-      $.ajax({
-        url: `{{ config('app.api_url') }}jurnalumumheader/${Id}/approval`,
-        method: 'POST',
-        dataType: 'JSON',
-        beforeSend: request => {
-          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-        },
-        success: response => {
-          $('#jqGrid').trigger('reloadGrid')
-        }
+    $.ajax({
+      url: `{{ config('app.api_url') }}jurnalumumheader/${Id}/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        $('#jqGrid').trigger('reloadGrid')
+      }
     }).always(() => {
-        $('#loader').addClass('d-none')
-      })
+      $('#loader').addClass('d-none')
+    })
   }
 
   function cekApproval(Id, Aksi) {
     $.ajax({
-        url: `{{ config('app.api_url') }}jurnalumumheader/${Id}/cekapproval`,
-        method: 'POST',
-        dataType: 'JSON',
-        beforeSend: request => {
-          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-        },
-        success: response => {
-          var kodenobukti = response.kodenobukti
-          if(kodenobukti == '1')
-          {
-            var kodestatus = response.kodestatus
-            if(kodestatus == '1')
-            {
-              showDialog(response.message['keterangan'])
-            }else{
-                if(Aksi == 'EDIT') {
-                    editJurnalUmumHeader(Id)
-                }
-                if(Aksi == 'DELETE') {
-                    deleteJurnalUmumHeader(Id)
-                }
-            }
-            
-          }else{
+      url: `{{ config('app.api_url') }}jurnalumumheader/${Id}/cekapproval`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kodenobukti = response.kodenobukti
+        if (kodenobukti == '1') {
+          var kodestatus = response.kodestatus
+          if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
+          } else {
+            if (Aksi == 'EDIT') {
+              editJurnalUmumHeader(Id)
+            }
+            if (Aksi == 'DELETE') {
+              deleteJurnalUmumHeader(Id)
+            }
           }
+
+        } else {
+          showDialog(response.message['keterangan'])
         }
-      })
+      }
+    })
   }
 
   function showJurnalUmum(form, id) {
@@ -374,7 +377,7 @@
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
 
-         if(element.hasClass('datepicker')){
+          if (element.hasClass('datepicker')) {
             element.val(dateFormat(value))
           } else {
             element.val(value)
@@ -410,17 +413,17 @@
           initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
           $('#detailList tbody').append(detailRow)
           setTotal();
-          
+
           $('.coadebet-lookup').last().lookup({
             title: 'Coa Debet Lookup',
             fileName: 'akunpusat',
             onSelectRow: (akunpusat, element) => {
               element.val(akunpusat.coa)
               element.data('currentValue', element.val())
-           },
+            },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
-            } 
+            }
           })
 
           $('.coakredit-lookup').last().lookup({
@@ -445,7 +448,7 @@
     })
   }
 
-  function addRow(){
+  function addRow() {
     let detailRow = $(`
       <tr>
         <td></td>
@@ -465,7 +468,7 @@
         </td>
       </tr>
     `)
-    
+
     $('#detailList tbody').append(detailRow)
 
     // $('#lookup').hide()
@@ -508,7 +511,7 @@
     let elements = $('#detailList tbody tr td:nth-child(1)')
 
     elements.each((index, element) => {
-      $(element).text(index+1)
+      $(element).text(index + 1)
     })
   }
 

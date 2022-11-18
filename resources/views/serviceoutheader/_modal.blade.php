@@ -70,42 +70,44 @@
                             </div>
                         </div>
 
-                        <table class="table table-bordered table-bindkeys" id="detailList">
-                            <thead>
-                                <tr>
-                                    <th width="50">No</th>
-                                    <th>Nobukti Servicein</th>
-                                    <th>Keterangan</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        <input type="text" name="servicein_nobukti[]" class="form-control serviceinheader-lookup">
-                                    </td>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-bindkeys" id="detailList" style="width:1350px">
+                                <thead>
+                                    <tr>
+                                        <th width="1%">No</th>
+                                        <th width="5%">Nobukti Servicein</th>
+                                        <th width="5%">Keterangan</th>
+                                        <th width="1%">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>
+                                            <input type="text" name="servicein_nobukti[]" class="form-control serviceinheader-lookup">
+                                        </td>
 
-                                    <td>
-                                        <input type="text" name="keterangan_detail[]" class="form-control">
+                                        <td>
+                                            <input type="text" name="keterangan_detail[]" class="form-control">
 
-                                    </td>
+                                        </td>
 
-                                    <td>
-                                        <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
-                                    </td>
-                                </tr>
+                                        <td>
+                                            <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+                                        </td>
+                                    </tr>
 
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="3"></td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3"></td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                     <div class="modal-footer justify-content-start">
                         <button id="btnSubmit" class="btn btn-primary">
@@ -251,6 +253,7 @@
 
         $('#crudModal').find('.modal-body').html(modalBody)
     })
+
     function createServiceOut() {
         let form = $('#crudForm')
 
@@ -320,8 +323,8 @@
                     } else {
                         element.val(value)
                     }
-                    
-                    if(index == 'trado') {
+
+                    if (index == 'trado') {
                         element.data('current-value', value)
                     }
                 })
@@ -352,12 +355,12 @@
                         title: 'servicein Lookup',
                         fileName: 'serviceinheader',
                         onSelectRow: (servicein, element) => {
-                            element.val(servicein.nobukti) 
+                            element.val(servicein.nobukti)
                             element.data('currentValue', element.val())
                         },
                         onCancel: (element) => {
                             element.val(element.data('currentValue'))
-                        } 
+                        }
                     })
 
                 })
@@ -418,49 +421,49 @@
 
     function getMaxLength(form) {
         if (!form.attr('has-maxlength')) {
-        $.ajax({
-            url: `${apiUrl}serviceoutheader/field_length`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-            'Authorization': `Bearer ${accessToken}`
-            },
-            success: response => {
-            $.each(response.data, (index, value) => {
-                if (value !== null && value !== 0 && value !== undefined) {
-                form.find(`[name=${index}]`).attr('maxlength', value)
-                }
-            })
+            $.ajax({
+                url: `${apiUrl}serviceoutheader/field_length`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                success: response => {
+                    $.each(response.data, (index, value) => {
+                        if (value !== null && value !== 0 && value !== undefined) {
+                            form.find(`[name=${index}]`).attr('maxlength', value)
+                        }
+                    })
 
-            form.attr('has-maxlength', true)
-            },
-            error: error => {
-            showDialog(error.statusText)
-            }
+                    form.attr('has-maxlength', true)
+                },
+                error: error => {
+                    showDialog(error.statusText)
+                }
             })
         }
     }
 
     function initLookup() {
-        
+
 
         $('.trado-lookup').lookup({
-        title: 'trado Lookup',
-        fileName: 'trado',
-        onSelectRow: (trado, element) => {
-            $('#crudForm [name=trado_id]').first().val(trado.id)
-            element.val(trado.keterangan)
+            title: 'trado Lookup',
+            fileName: 'trado',
+            onSelectRow: (trado, element) => {
+                $('#crudForm [name=trado_id]').first().val(trado.id)
+                element.val(trado.keterangan)
 
-        }
+            }
         })
 
         $('.serviceinheader-lookup').lookup({
-        title: 'servicein Lookup',
-        fileName: 'serviceinheader',
-        onSelectRow: (servicein, element) => {
-            // $('#crudForm [name=servicein_id]').first().val(servicein.id)
-            element.val(servicein.nobukti)
-        }
+            title: 'servicein Lookup',
+            fileName: 'serviceinheader',
+            onSelectRow: (servicein, element) => {
+                // $('#crudForm [name=servicein_id]').first().val(servicein.id)
+                element.val(servicein.nobukti)
+            }
         })
 
     }

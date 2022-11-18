@@ -16,7 +16,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-md-2 col-form-label">
                                 <label>
-                                NO BUKTI <span class="text-danger">*</span>
+                                    NO BUKTI <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-md-4">
@@ -25,7 +25,7 @@
 
                             <div class="col-12 col-md-2 col-form-label">
                                 <label>
-                                TANGGAL BUKTI <span class="text-danger">*</span>
+                                    TANGGAL BUKTI <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-md-4">
@@ -37,20 +37,20 @@
 
                         <div class="row form-group">
                             <div class="col-12 col-md-2 col-form-label">
-                            <label>
-                                KETERANGAN <span class="text-danger">*</span></label>
+                                <label>
+                                    KETERANGAN <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-md-10">
-                            <input type="text" name="keterangan" class="form-control" autocomplete="off">
+                                <input type="text" name="keterangan" class="form-control" autocomplete="off">
                             </div>
                         </div>
                         <div class="row form-group">
                             <div class="col-12 col-md-2 col-form-label">
-                            <label>
-                                PERIODE <span class="text-danger">*</span></label>
+                                <label>
+                                    PERIODE <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-md-10">
-                            
+
                                 <div class="input-group">
                                     <input type="text" name="periode" autocomplete="off" class="form-control datepicker">
                                 </div>
@@ -60,7 +60,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-md-2 col-form-label">
                                 <label>
-                                TGL DARI <span class="text-danger">*</span>
+                                    TGL DARI <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-md-4">
@@ -71,11 +71,11 @@
 
                             <div class="col-12 col-md-2 col-form-label">
                                 <label>
-                                TANGGAL SAMPAI <span class="text-danger">*</span>
+                                    TANGGAL SAMPAI <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-md-4">
-                                <div class="input-group">    
+                                <div class="input-group">
                                     <input type="text" name="tglsampai" class="form-control datepicker" autocomplete="off">
                                 </div>
                             </div>
@@ -85,27 +85,33 @@
                                 <button class="btn btn-secondary" id="btnTampil">TAMPIL</button>
                             </div>
                         </div>
-                        
 
-                        <div class="col-12 col-md-12 mt-5" style="overflow-x:scroll">
-                            <table class="table table-bindkeys" id="ricList">
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-bindkeys" id="ricList" style="width: 1400px;">
                                 <thead class="table-secondary">
-                                    <th></th>
-                                    <th>RIC</th>
-                                    <th>TGL BUKTI</th>
-                                    <th>SUPIR</th>
-                                    <th>KETERANGAN</th>
-                                    <th>TGL DARI</th>
-                                    <th>TGL SAMPAI</th>
-                                    <th>NOMINAL</th>
+                                    <tr>
+                                        <th width="1%"></th>
+                                        <th width="4%">RIC</th>
+                                        <th width="2%">TGL BUKTI</th>
+                                        <th width="4%">SUPIR</th>
+                                        <th width="5%">KETERANGAN</th>
+                                        <th width="2%">TGL DARI</th>
+                                        <th width="2%">TGL SAMPAI</th>
+                                        <th width="4%">NOMINAL</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
 
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="7"><p class="font-weight-bold">TOTAL:</p></td>
-                                        <td><p id="nominal" class="text-right font-weight-bold"></p></td>
+                                        <td colspan="7">
+                                            <p class="text-right font-weight-bold">TOTAL:</p>
+                                        </td>
+                                        <td>
+                                            <p id="nominal" class="text-right font-weight-bold"></p>
+                                        </td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -179,10 +185,10 @@
                     method = 'POST'
                     url = `${apiUrl}prosesgajisupirheader`
                     break;
-                // case 'edit':
-                //     method = 'PATCH'
-                //     url = `${apiUrl}prosesgajisupirheader/${Id}`
-                //     break;
+                    // case 'edit':
+                    //     method = 'PATCH'
+                    //     url = `${apiUrl}prosesgajisupirheader/${Id}`
+                    //     break;
                 case 'delete':
                     method = 'DELETE'
                     url = `${apiUrl}prosesgajisupirheader/${Id}`
@@ -196,61 +202,61 @@
             $(this).attr('disabled', '')
             $('#loader').removeClass('d-none')
 
-            if(action == 'edit') {
+            if (action == 'edit') {
                 $.ajax({
                     url: `${apiUrl}prosesgajisupirheader/noEdit`,
                     method: 'POST',
                     dataType: 'JSON',
                     beforeSend: request => {
-                    request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+                        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
                     },
                     success: response => {
-                    
+
                         showDialog(response.message)
                     }
                 }).always(() => {
                     $('#loader').addClass('d-none')
                     $(this).removeAttr('disabled')
                 })
-  
-            }else{
+
+            } else {
                 $.ajax({
-                url: url,
-                method: method,
-                dataType: 'JSON',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: data,
-                success: response => {
+                    url: url,
+                    method: method,
+                    dataType: 'JSON',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    data: data,
+                    success: response => {
 
-                    id = response.data.id
-                    $('#crudModal').find('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page
-                    }).trigger('reloadGrid');
+                        id = response.data.id
+                        $('#crudModal').find('#crudForm').trigger('reset')
+                        $('#crudModal').modal('hide')
+                        $('#jqGrid').jqGrid('setGridParam', {
+                            page: response.data.page
+                        }).trigger('reloadGrid');
 
-                    if (response.data.grp == 'FORMAT') {
-                        updateFormat(response.data)
-                    }
-                },
-                error: error => {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid')
-                        $('.invalid-feedback').remove()
-                        setErrorMessages(form, error.responseJSON.errors);
-                    } else {
-                        showDialog(error.statusText)
-                    }
-                },
+                        if (response.data.grp == 'FORMAT') {
+                            updateFormat(response.data)
+                        }
+                    },
+                    error: error => {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid')
+                            $('.invalid-feedback').remove()
+                            setErrorMessages(form, error.responseJSON.errors);
+                        } else {
+                            showDialog(error.statusText)
+                        }
+                    },
                 }).always(() => {
                     $('#loader').addClass('d-none')
                     $(this).removeAttr('disabled')
                 })
 
             }
-            
+
         })
     })
 
@@ -272,7 +278,7 @@
         $('#crudModal').find('.modal-body').html(modalBody)
     })
 
-   
+
 
 
 
@@ -353,7 +359,7 @@
 
                 })
 
-               
+
                 form.find('[name]').addClass('disabled')
                 initDisabled()
                 getEdit(gajiId, aksi)
@@ -367,7 +373,7 @@
         let data = []
         let tglDari = form.find(`[name="tgldari"]`).val()
         let tglSampai = form.find(`[name="tglsampai"]`).val()
-      
+
         $('#ricList tbody').html('')
 
         $.ajax({
@@ -380,31 +386,31 @@
             },
             success: response => {
 
-                if(response.errors == true) {
+                if (response.errors == true) {
                     showDialog(response.message)
-                }else{
+                } else {
                     let nominal = 0
                     $.each(response.data, (index, detail) => {
-                    
+
                         nominal = parseFloat(nominal) + parseFloat(detail.nominal)
 
                         let detailRow = $(`
                             <tr >
-                                <td width="1%"><input name='ric_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
-                                <td width="13%">${detail.nobukti}</td>
-                                <td width="10%">${detail.tglbukti}</td>
-                                <td width="10%">${detail.namasupir}</td>
-                                <td width="10%">${detail.keterangan}</td>
-                                <td width="10%">${detail.tgldari}</td>
-                                <td width="10%">${detail.tglsampai}</td>
-                                <td width="10%" class="nominal text-right">${detail.nominal}</td>
+                                <td><input name='ric_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
+                                <td>${detail.nobukti}</td>
+                                <td>${detail.tglbukti}</td>
+                                <td>${detail.namasupir}</td>
+                                <td>${detail.keterangan}</td>
+                                <td>${detail.tgldari}</td>
+                                <td>${detail.tglsampai}</td>
+                                <td class="nominal text-right">${detail.nominal}</td>
                             </tr>
                         `)
 
                         $('#ricList tbody').append(detailRow)
                         initAutoNumeric(detailRow.find('.nominal'))
                     })
-                    
+
                     $('#nominal').append(`${nominal}`)
 
                     initAutoNumeric($('#ricList tfoot').find('#nominal'))
@@ -415,7 +421,7 @@
 
     })
 
-   
+
     function getEdit(gajiId, aksi) {
         $('#gajiSupir').html('')
         $('#gajiKenek').html('')
@@ -430,28 +436,28 @@
                 Authorization: `Bearer ${accessToken}`
             },
             success: response => {
-            
+
                 let nominal = 0
                 $.each(response.data, (index, detail) => {
                     nominal = parseFloat(nominal) + parseFloat(detail.nominal)
 
                     let detailRow = $(`
                         <tr >
-                                <td width="1%"><input name='ric_id[]' type="checkbox" class="checkItem" value="${detail.id}" disabled checked></td>
-                                <td width="13%">${detail.nobukti}</td>
-                                <td width="10%">${detail.tglbukti}</td>
-                                <td width="10%">${detail.namasupir}</td>
-                                <td width="10%">${detail.keterangan}</td>
-                                <td width="10%">${detail.tgldari}</td>
-                                <td width="10%">${detail.tglsampai}</td>
-                                <td width="10%" class="nominal text-right">${detail.nominal}</td>
+                                <td><input name='ric_id[]' type="checkbox" class="checkItem" value="${detail.id}" disabled checked></td>
+                                <td>${detail.nobukti}</td>
+                                <td>${detail.tglbukti}</td>
+                                <td>${detail.namasupir}</td>
+                                <td>${detail.keterangan}</td>
+                                <td>${detail.tgldari}</td>
+                                <td>${detail.tglsampai}</td>
+                                <td class="nominal text-right">${detail.nominal}</td>
                             </tr>
                         `)
 
-                        $('#ricList tbody').append(detailRow)
-                        initAutoNumeric(detailRow.find('.nominal'))
+                    $('#ricList tbody').append(detailRow)
+                    initAutoNumeric(detailRow.find('.nominal'))
                 })
-                
+
                 $('#nominal').append(`${nominal}`)
 
                 initAutoNumeric($('#ricList tfoot').find('#nominal'))
@@ -461,24 +467,24 @@
     }
 
     $(document).on('click', `#ricList tbody [name="ric_id[]"]`, function() {
-        let tdNominal = $(this).closest('tr').find('td.nominal').text()
-        tdNominal =  parseFloat(tdNominal.replaceAll(',',''));
+            let tdNominal = $(this).closest('tr').find('td.nominal').text()
+            tdNominal = parseFloat(tdNominal.replaceAll(',', ''));
 
-        console.log(tdNominal)
-        let allNominal = $('#nominal').text()
-        allNominal = parseFloat(allNominal.replaceAll(',',''));
-        let nominal = 0
-       
-        if ($(this).prop("checked") == true) {
-            allNominal = allNominal+tdNominal   
-        } else {
-            allNominal = allNominal-tdNominal
+            console.log(tdNominal)
+            let allNominal = $('#nominal').text()
+            allNominal = parseFloat(allNominal.replaceAll(',', ''));
+            let nominal = 0
+
+            if ($(this).prop("checked") == true) {
+                allNominal = allNominal + tdNominal
+            } else {
+                allNominal = allNominal - tdNominal
+            }
+            $('#nominal').html('')
+            $('#nominal').append(`${allNominal}`)
+            initAutoNumeric($('#ricList tfoot').find('#nominal'))
         }
-        $('#nominal').html('')
-        $('#nominal').append(`${allNominal}`)
-        initAutoNumeric($('#ricList tfoot').find('#nominal'))
-    }
-    
+
     )
 
     function setRowNumbers() {
@@ -489,10 +495,11 @@
         })
     }
 
-    $("#checkAll").click(function () {
+    $("#checkAll").click(function() {
         $('input:checkbox').not(this).prop('checked', this.checked);
         console.log($('#crudForm input:checkbox').find(`[name="sp_id[]"]`).val())
     });
+
     function getMaxLength(form) {
         if (!form.attr('has-maxlength')) {
             $.ajax({
@@ -517,7 +524,5 @@
             })
         }
     }
-
-
 </script>
 @endpush()

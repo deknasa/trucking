@@ -80,22 +80,22 @@
               <div class="col-md-12">
                 <div class="card">
                   <div class="card-body">
-                    <div class="col-md-12" style="overflow-x:scroll">
-                      <table class="table table-borderd mt-3" id="detailList" style="table-layout:auto">
+                    <div class="table-responsive">
+                      <table class="table table-bordered mt-3" id="detailList" style="width:2000px;">
                         <thead class="table-secondary">
                           <tr>
-                            <th></th>
-                            <th>NO</th>
-                            <th>NO BUKTI</th>
-                            <th>TGL BUKTI</th>
-                            <th>NOMINAL HUTANG</th>
-                            <th>SISA</th>
-                            <th>KETERANGAN</th>
-                            <th>BAYAR</th>
-                            <th>POTONGAN</th>
-                            <th>TOTAL</th>
-                            <th>ALAT BAYAR</th>
-                            <th>TGL CAIR</th>
+                            <th width="1%"></th>
+                            <th width="1%">NO</th>
+                            <th width="5%">NO BUKTI</th>
+                            <th width="3%">TGL BUKTI</th>
+                            <th width="3%">NOMINAL HUTANG</th>
+                            <th width="3%">SISA</th>
+                            <th width="7%">KETERANGAN</th>
+                            <th width="6%">BAYAR</th>
+                            <th width="6%">POTONGAN</th>
+                            <th width="7%">TOTAL</th>
+                            <th width="4%">ALAT BAYAR</th>
+                            <th width="4%">TGL CAIR</th>
                           </tr>
                         </thead>
                           <tbody id="table_body">
@@ -412,7 +412,7 @@
   })
 
   function setBayar() {
-    let nominalDetails = $(`#table_body [name="bayar[]"]`)
+    let nominalDetails = $(`#table_body [name="bayar[]"]:not([disabled])`)
     let bayar = 0
 
     $.each(nominalDetails, (index, nominalDetail) => {
@@ -423,7 +423,7 @@
   }
 
   function setPotongan() {
-    let potongan = $(`#table_body [name="potongan[]"]`)
+    let potongan = $(`#table_body [name="potongan[]"]:not([disabled])`)
     let totalPotongan = 0
 
     $.each(potongan, (index, potongan) => {
@@ -434,7 +434,7 @@
   }
 
   function setTotal() {
-    let total = $(`#table_body [name="total[]"]`)
+    let total = $(`#table_body [name="total[]"]:not([disabled])`)
     let totalHutang = 0
 
     $.each(total, (index, total) => {
@@ -601,35 +601,35 @@
 
           let detailRow = $(`
             <tr >
-              <td onclick="select(this)"><input name='hutang_id[]' type="checkbox" id="checkItem" value="${id}"></td>
+              <td><input name='hutang_id[]' type="checkbox" id="checkItem" value="${id}"></td>
               <td></td>
-              <td width="10%">${detail.nobukti}</td>
-              <td width="10%">${detail.tglbukti}</td>
-              <td width="10%">
+              <td>${detail.nobukti}</td>
+              <td>${detail.tglbukti}</td>
+              <td>
                 <p class="text-right">${nominal}</p>
                 <input type="hidden" name="nominal[]" class="autonumeric" value="${nominal}">
               </td>
-              <td width="10%">
+              <td>
                 <p class="text-right sisa autonumeric">${sisa}</p>
                 <input type="hidden" name="sisa[]" class="autonumeric" value="${sisa}">
               </td>
-              <td width="10%">
+              <td>
                 <textarea name="keterangandetail[]" rows="1" disabled class="form-control"></textarea>
               </td>
-              <td width="10%">
+              <td>
                 <input type="text" name="bayar[]" disabled class="form-control bayar autonumeric">
               </td>
-              <td width="10%">
+              <td>
                 <input type="text" name="potongan[]" disabled class="form-control autonumeric">
               </td>
-              <td width="10%">
+              <td>
                 <input type="text" name="total[]" disabled class="form-control autonumeric">
               </td>
-              <td width="10%">
+              <td>
                 <input type="hidden" name="alatbayar_id[]" disabled class="form-control">
                 <input type="text" name="alatbayar[]" disabled class="form-control alatbayar-lookup">
               </td>
-              <td width="10%">
+              <td>
                 <div class="input-group">
                   <input type="text" name="tglcair[]" disabled class="form-control datepicker">
                 </div>
@@ -730,36 +730,36 @@
 
           let detailRow = $(`
             <tr>
-              <td onclick="select(this)"><input name='hutang_id[]' type="checkbox" class="checkItem" value="${id}" ${checked} ${forCheckbox}></td>
+              <td><input name='hutang_id[]' type="checkbox" class="checkItem" value="${id}" ${checked} ${forCheckbox}></td>
               <td></td>
-              <td width="10%">${detail.hutang_nobukti}</td>
-              <td width="10%">${detail.tglbukti}</td>
+              <td>${detail.hutang_nobukti}</td>
+              <td>${detail.tglbukti}</td>
               
-              <td width="10%">
+              <td>
                 <p class="text-right">${nominal}</p>
                 <input type="hidden" name="nominal[]" class="autonumeric" value="${nominal}">
               </td>
-              <td width="10%">
+              <td>
                 <p class="sisa text-right autonumeric">${sisa}</p>
                 <input type="hidden" name="sisa[]" class="autonumeric" value="${sisaHidden}">
               </td>
-              <td width="10%">
+              <td>
                 <textarea name="keterangandetail[]" rows="1" class="form-control" ${attribut}>${detail.keterangan || ''}</textarea>
               </td>
-              <td width="10%">
+              <td>
                 <input type="text" name="bayar[]" class="form-control bayar autonumeric" value="${detail.bayar || ''}" ${attribut}>
               </td>
-              <td width="10%">
+              <td>
                 <input type="text" name="potongan[]" class="form-control autonumeric" value="${detail.potongan || ''}" ${attribut}>
               </td>
-              <td width="10%">
+              <td>
                 <input type="text" name="total[]" class="form-control disabled autonumeric" value="${total || ''}" ${forTotal}>
               </td>
-              <td width="10%">
+              <td>
                 <input type="hidden" name="alatbayar_id[]" class="form-control" value="${detail.alatbayar_id || ''}" ${attribut}>
                 <input type="text" name="alatbayar[]" class="form-control alatbayar-lookup" value="${detail.alatbayar || ''}" ${attribut}>
               </td>
-              <td width="10%">
+              <td>
                 <div class="input-group">
                   <input type="text" name="tglcair[]" class="form-control datepicker" value="${detail.tglcair || ''}" ${attribut}>
                 </div>
@@ -810,125 +810,33 @@
     
   }
 
-  $("#checkAll").click(function () {
-        $('input:checkbox').not(this).prop('checked', this.checked);
-    });
-    
-  function select(element) {
-      var is_checked = $(element).find(`[name="hutang_id[]"]`).is(":checked");
 
-      if(!is_checked) {
-        $(element).siblings('td').find(`[name="keterangandetail[]"]`).prop('disabled', true)
-        $(element).siblings('td').find(`[name="bayar[]"]`).prop('disabled', true)
-        $(element).siblings('td').find(`[name="potongan[]"]`).prop('disabled', true)
-        $(element).siblings('td').find(`[name="alatbayar[]"]`).prop('disabled', true)
-        $(element).siblings('td').find(`[name="tglcair[]"]`).prop('disabled', true)
+    $(document).on('click', `#detailList tbody [name="hutang_id[]"]`, function() {
 
-        //bayar
-        let bayar = $(element).siblings('td').find(`[name="bayar[]"]`).val()
+      if ($(this).prop("checked") == true) {
 
-        if(bayar != '') {
-          let byr =  parseFloat(bayar.replaceAll(',',''));
-
-          let hutang = $('#bayarHutang').text()
-          let ttlHutang = parseFloat(hutang.replaceAll(',',''));
-
-          let finalHutang = ttlHutang - byr;
-          $("#bayarHutang").html(`${finalHutang}`);
-            new AutoNumeric('#bayarHutang',{
-            decimalPlaces			: '2'
-          })
-        }
-
-        //potongan
-        let potongan = $(element).siblings('td').find(`[name="potongan[]"]`).val()
-
-        if(potongan != '') {
-          let ptg =  parseFloat(potongan.replaceAll(',',''));
-
-          let pot = $('#potonganHutang').text()
-          let ttlPotongan = parseFloat(pot.replaceAll(',',''));
-
-          let finalPotongan = ttlPotongan - ptg;
-          $("#potonganHutang").html(`${finalPotongan}`);
-            new AutoNumeric('#potonganHutang',{
-            decimalPlaces			: '2'
-          })
-        }
-
-        //total
-        let total = $(element).siblings('td').find(`[name="total[]"]`).val()
-
-        if(total != '') {
-          let ttl =  parseFloat(total.replaceAll(',',''));
-
-          let totals = $('#totalHutang').text()
-          let totalTtl = parseFloat(totals.replaceAll(',',''));
-
-          let finalTtl = totalTtl - ttl;
-          $("#totalHutang").html(`${finalTtl}`);
-            new AutoNumeric('#totalHutang',{
-            decimalPlaces			: '2'
-          })
-        }
+         $(this).closest('tr').find(`td [name="keterangandetail[]"]`).prop('disabled', false)
+         $(this).closest('tr').find(`td [name="bayar[]"]`).prop('disabled', false)
+         $(this).closest('tr').find(`td [name="potongan[]"]`).prop('disabled', false)
+         $(this).closest('tr').find(`td [name="alatbayar[]"]`).prop('disabled', false)
+         $(this).closest('tr').find(`td [name="tglcair[]"]`).prop('disabled', false)
+        setBayar()
+        setPotongan()
+        setTotal()
       }else{
-        $(element).siblings('td').find(`[name="keterangandetail[]"]`).prop('disabled', false)
-        $(element).siblings('td').find(`[name="bayar[]"]`).prop('disabled', false)
-        $(element).siblings('td').find(`[name="potongan[]"]`).prop('disabled', false)
-        $(element).siblings('td').find(`[name="alatbayar[]"]`).prop('disabled', false)
-        $(element).siblings('td').find(`[name="tglcair[]"]`).prop('disabled', false)
 
-        //bayar
-        let bayar = $(element).siblings('td').find(`[name="bayar[]"]`).val()
-
-        if(bayar != '') {
-          let byr =  parseFloat(bayar.replaceAll(',',''));
-
-          let hutang = $('#bayarHutang').text()
-          let ttlHutang = parseFloat(hutang.replaceAll(',',''));
-
-          let finalHutang = ttlHutang + byr;
-          $("#bayarHutang").html(`${finalHutang}`);
-            new AutoNumeric('#bayarHutang',{
-            decimalPlaces			: '2'
-          })
-        }
-
-        //potongan
-        let potongan = $(element).siblings('td').find(`[name="potongan[]"]`).val()
-
-        if(potongan != '') {
-          let ptg =  parseFloat(potongan.replaceAll(',',''));
-
-          let pot = $('#potonganHutang').text()
-          let ttlPotongan = parseFloat(pot.replaceAll(',',''));
-
-          let finalPotongan = ttlPotongan + ptg;
-          $("#potonganHutang").html(`${finalPotongan}`);
-            new AutoNumeric('#potonganHutang',{
-            decimalPlaces			: '2'
-          })
-        }
-
-        //total
-        let total = $(element).siblings('td').find(`[name="total[]"]`).val()
-
-        if(total != '') {
-          let ttl =  parseFloat(total.replaceAll(',',''));
-
-          let totals = $('#totalHutang').text()
-          let totalTtl = parseFloat(totals.replaceAll(',',''));
-
-          let finalTtl = totalTtl + ttl;
-          $("#totalHutang").html(`${finalTtl}`);
-            new AutoNumeric('#totalHutang',{
-            decimalPlaces			: '2'
-          })
-        }
-        
+         $(this).closest('tr').find(`td [name="keterangandetail[]"]`).prop('disabled', true)
+         $(this).closest('tr').find(`td [name="bayar[]"]`).prop('disabled', true)
+         $(this).closest('tr').find(`td [name="potongan[]"]`).prop('disabled', true)
+         $(this).closest('tr').find(`td [name="alatbayar[]"]`).prop('disabled', true)
+         $(this).closest('tr').find(`td [name="tglcair[]"]`).prop('disabled', true)
+        setBayar()
+        setPotongan()
+        setTotal()
       }
-      console.log(is_checked)
-  }
+    })
+    
+ 
   
   function setRowNumbers() {
     let elements = $('#detailList tbody tr td:nth-child(2)')

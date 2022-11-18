@@ -307,6 +307,10 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
+    $('#approval .ui-pg-div')
+      .addClass('btn btn-sm btn-warning')
+      .parent().addClass('px-1')
+
     if (!`{{ $myAuth->hasPermission('notakreditheader', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
@@ -327,7 +331,7 @@
       $('#report').addClass('ui-disabled')
     }
     if (!`{{ $myAuth->hasPermission('notakreditheader', 'approval') }}`) {
-      $('#report').addClass('ui-disabled')
+      $('#approval').addClass('ui-disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -358,7 +362,6 @@
 
       let params
       let actionUrl = ``
-      console.log(params);
       if ($('#rangeModal').data('action') == 'export') {
         actionUrl = `{{ route('notakreditheader.export') }}`
       // } else if ($('#rangeModal').data('action') == 'report') {

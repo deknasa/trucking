@@ -3,31 +3,15 @@
   <div class="row">
     <div class="col-12">
       <table id="detail"></table>
-      <div id="detailPager"></div>
     </div>
   </div>
 </div>
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('upahsupirrincian.index') }}"
-
-  /**
-   * Custom Functions
-   */
-  var delay = (function() {
-    var timer = 0;
-    return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })()
-
-  function loadDetailGrid() {
-    let pager = '#detailPager'
-
+  function loadDetailGrid(id) {
     $("#detail").jqGrid({
-        url: `{{ config('app.api_url') . 'upahsupirrincian' }}`,
+        url: `${apiUrl}upahsupirrincian`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -79,12 +63,33 @@
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
+        footerrow: true,
+        userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        pager: pager,
         viewrecords: true,
+        postData: {
+          upahsupir_id: id
+        },
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
+        onSelectRow: function(id) {
+          activeGrid = $(this)
+        },
         loadComplete: function(data) {
-          
+          initResize($(this))
+
         }
       })
 
@@ -95,16 +100,18 @@
         edit: false,
         del: false,
       })
+
+      .customPager()
   }
 
   function loadDetailData(id) {
-      $('#detail').setGridParam({
-        url: detailIndexUrl,
-        datatype: 'json',
-        postData: {
-          upahsupir_id: id
-        }
-      }).trigger('reloadGrid')
+    $('#detail').setGridParam({
+      url: `${apiUrl}upahsupirrincian`,
+      datatype: "json",
+      postData: {
+        upahsupir_id: id
+      }
+    }).trigger('reloadGrid')
   }
 </script>
 @endpush()

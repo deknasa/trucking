@@ -46,60 +46,65 @@
             </div>
 
             <hr>
+            <div class="table-responsive">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 2000px;">
+                <thead>
+                  <tr>
+                    <th width="1%">No</th>
+                    <th width="5%">Trado</th>
+                    <th width="5%">Supir</th>
+                    <th width="5%">Keterangan</th>
+                    <th width="5%">Status</th>
+                    <th width="3%">Jam</th>
+                    <th width="7%">Uang Jalan</th>
+                    <th width="2%">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body" class="form-group">
+                  <tr>
+                    <td>1</td>
+                    <td>
+                      <input type="hidden" name="trado_id[]">
+                      <input type="text" name="trado" class="form-control trado-lookup">
+                    </td>
+                    <td>
+                      <input type="hidden" name="supir_id[]">
+                      <input type="text" name="supir" class="form-control supir-lookup">
+                    </td>
+                    <td>
+                      <input type="text" name="keterangan_detail[]" class="form-control">
+                    </td>
+                    <td>
+                      <input type="hidden" name="absen_id[]">
+                      <input type="text" name="absen" class="form-control absentrado-lookup">
+                    </td>
+                    <td>
+                      <input type="text" class="form-control inputmask-time" name="jam[]"></input>
+                    </td>
+                    <td>
+                      <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]">
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                    </td>
 
-            <table class="table table-bordered" id="detailList">
-              <thead>
-                <tr>
-                  <th width="50">No</th>
-                  <th>Trado</th>
-                  <th>Supir</th>
-                  <th>Keterangan</th>
-                  <th>Status</th>
-                  <th>Jam</th>
-                  <th>Uang Jalan</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="table_body" class="form-group">
-                <tr>
-                  <td>1</td>
-                  <td>
-                    <input type="hidden" name="trado_id[]">
-                    <input type="text" name="trado" class="form-control trado-lookup">
-                  </td>
-                  <td>
-                    <input type="hidden" name="supir_id[]">
-                    <input type="text" name="supir" class="form-control supir-lookup">
-                  </td>
-                  <td>
-                    <input type="text" name="keterangan_detail[]" class="form-control">
-                  </td>
-                  <td>
-                    <input type="hidden" name="absen_id[]">
-                    <input type="text" name="absen" class="form-control absentrado-lookup">
-                  </td>
-                  <td>
-                    <input type="text" class="form-control inputmask-time" name="jam[]"></input>
-                  </td>
-                  <td>
-                    <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]">
-                  </td>
-                  <td>
-                    <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                  </td>
-
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="6"><h5 class="text-right font-weight-bold">TOTAL:</h5></td>
-                  <td><h5 id="total" class="text-right font-weight-bold"></h5></td>
-                  <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="6">
+                      <h5 class="text-right font-weight-bold">TOTAL:</h5>
+                    </td>
+                    <td>
+                      <h5 id="total" class="text-right font-weight-bold"></h5>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -125,14 +130,14 @@
   $(document).ready(function() {
 
     Inputmask("datetime", {
-          inputFormat: "HH:MM",
-          max: 24
-        }).mask(".inputmask-time");
+      inputFormat: "HH:MM",
+      max: 24
+    }).mask(".inputmask-time");
 
     $(document).on('click', "#addRow", function() {
       addRow()
     });
-    
+
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
     })
@@ -151,7 +156,7 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
-      $('#crudForm').find(`[name="uangjalan[]"`).each((index,element) => {
+      $('#crudForm').find(`[name="uangjalan[]"`).each((index, element) => {
         data.filter((row) => row.name === 'uangjalan[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="uangjalan[]"]`)[index])
       })
       data.push({
@@ -223,7 +228,7 @@
           $('#crudModal').modal('hide')
 
           // indexRow = response.data.position - 1
-          $('#jqGrid').jqGrid('setGridParam', { 
+          $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
         },
@@ -257,12 +262,12 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    
+
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
 
-  
+
   function setTotal() {
     let nominalDetails = $(`#table_body [name="uangjalan[]"]`)
     let total = 0
@@ -326,10 +331,10 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    showAbsensiSupir(form,id)
+    showAbsensiSupir(form, id)
   }
 
-  function showAbsensiSupir(form, id){
+  function showAbsensiSupir(form, id) {
     $('#detailList tbody').html('')
     $.ajax({
       url: `${apiUrl}absensisupirheader/${id}`,
@@ -342,11 +347,11 @@
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
 
-            if(element.hasClass('datepicker')){
-              element.val(dateFormat(value))
-            } else {
-              element.val(value)
-            }
+          if (element.hasClass('datepicker')) {
+            element.val(dateFormat(value))
+          } else {
+            element.val(value)
+          }
         })
 
         $.each(response.detail, (index, detail) => {
@@ -384,14 +389,14 @@
           initAutoNumeric(detailRow.find(`[name="uangjalan[]"]`))
           $('#detailList tbody').append(detailRow)
           Inputmask("datetime", {
-              inputFormat: "HH:MM",
-              max: 24
-            }).mask(".inputmask-time");
-          
+            inputFormat: "HH:MM",
+            max: 24
+          }).mask(".inputmask-time");
+
           $('.supir-lookup').last().lookup({
             title: 'Supir Lookup',
             fileName: 'supir',
-            onSelectRow: (supir,element) => {
+            onSelectRow: (supir, element) => {
               $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
               element.val(supir.namasupir)
               element.data('currentValue', element.val())
@@ -404,7 +409,7 @@
           $('.trado-lookup').last().lookup({
             title: 'Trado Lookup',
             fileName: 'trado',
-            onSelectRow: (trado,element) => {
+            onSelectRow: (trado, element) => {
               $(`#crudForm [name="trado_id[]"]`).first().val(trado.id)
               element.val(trado.keterangan)
               element.data('currentValue', element.val())
@@ -413,13 +418,13 @@
               element.val(element.data('currentValue'))
             }
           })
-          
+
           $('.absentrado-lookup').last().lookup({
             title: 'Absen Trado Lookup',
             fileName: 'absentrado',
-            onSelectRow: (absentrado,element) => {
+            onSelectRow: (absentrado, element) => {
               $(`#crudForm [name="absen_id[]"]`).first().val(absentrado.id)
-              element.val(absentrado.keterangan) 
+              element.val(absentrado.keterangan)
               element.data('currentValue', element.val())
             },
             onCancel: (element) => {
@@ -429,7 +434,7 @@
         })
 
         setRowNumbers()
-        
+
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
           initDisabled()
@@ -480,7 +485,7 @@
     $('.supir-lookup').last().lookup({
       title: 'Supir Lookup',
       fileName: 'supir',
-      onSelectRow: (supir,element) => {
+      onSelectRow: (supir, element) => {
         $(`#crudForm [name="supir_id[]"]`).last().val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
@@ -493,7 +498,7 @@
     $('.trado-lookup').last().lookup({
       title: 'Trado Lookup',
       fileName: 'trado',
-      onSelectRow: (trado,element) => {
+      onSelectRow: (trado, element) => {
         $(`#crudForm [name="trado_id[]"]`).last().val(trado.id)
         element.val(trado.keterangan)
         element.data('currentValue', element.val())
@@ -502,11 +507,11 @@
         element.val(element.data('currentValue'))
       }
     })
-    
+
     $('.absentrado-lookup').last().lookup({
       title: 'Absen Trado Lookup',
       fileName: 'absentrado',
-      onSelectRow: (absentrado,element) => {
+      onSelectRow: (absentrado, element) => {
         $(`#crudForm [name="absen_id[]"]`).last().val(absentrado.id)
         element.val(absentrado.keterangan)
         element.data('currentValue', element.val())
@@ -532,7 +537,7 @@
     let elements = $('#detailList tbody tr td:nth-child(1)')
 
     elements.each((index, element) => {
-      $(element).text(index+1)
+      $(element).text(index + 1)
     })
   }
 
@@ -561,12 +566,12 @@
     }
   }
 
-  
+
   function initLookup() {
     $('.supir-lookup').lookup({
       title: 'Supir Lookup',
       fileName: 'supir',
-      onSelectRow: (supir,element) => {
+      onSelectRow: (supir, element) => {
         $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
@@ -579,7 +584,7 @@
     $('.trado-lookup').lookup({
       title: 'Trado Lookup',
       fileName: 'trado',
-      onSelectRow: (trado,element) => {
+      onSelectRow: (trado, element) => {
         $(`#crudForm [name="trado_id[]"]`).first().val(trado.id)
         element.val(trado.keterangan)
         element.data('currentValue', element.val())
@@ -588,11 +593,11 @@
         element.val(element.data('currentValue'))
       }
     })
-    
+
     $('.absentrado-lookup').lookup({
       title: 'Absen Trado Lookup',
       fileName: 'absentrado',
-      onSelectRow: (absentrado,element) => {
+      onSelectRow: (absentrado, element) => {
         $(`#crudForm [name="absen_id[]"]`).first().val(absentrado.id)
         element.val(absentrado.keterangan)
         element.data('currentValue', element.val())

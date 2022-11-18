@@ -18,6 +18,8 @@ class Myauth
         'class' => [
             '',
             'notakreditheader',
+            'rekappengeluaranheader',
+            'notadebetheader',
             'absensisupirapprovalheader',
             'penerimaanstokheader',
             'pengeluaranstokheader',

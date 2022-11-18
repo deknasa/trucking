@@ -9,23 +9,39 @@
 
 @push('scripts')
 <script>
+ 
   function loadDetailGrid(id) {
     $("#detail").jqGrid({
-        url: `${apiUrl}serviceindetail`,
+        url: `${apiUrl}rekappengeluarandetail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
         colModel: [
-            {
-              label: 'MEKANIK',
-              name: 'mekanik_id',
-            },
-            {
-              label: 'KETERANGAN',
-              name: 'keterangan',
-            }
-          ],
+          {
+            label: 'NO BUKTI',
+            name: 'nobukti',
+          },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+          },
+          {
+            label: 'pengeluaran nobukti',
+            name: 'pengeluaran_nobukti',
+          },
+          {
+            label: 'NOMINAL',
+            name: 'nominal',
+            align: 'right',
+            formatter: currencyFormat,
+          },          
+          {
+            label: 'modifiedby',
+            name: 'modifiedby',
+            align: 'left'
+          },
+        ],
         autowidth: true,
         shrinkToFit: false,
         height: 350,
@@ -39,7 +55,7 @@
         sortable: true,
         viewrecords: true,
         postData: {
-          servicein_id: id
+          kasgantung_id: id
         },
         prmNames: {
           sort: 'sortIndex',
@@ -59,7 +75,18 @@
         },
         loadComplete: function(data) {
           initResize($(this))
+          
+          let nominals = $(this).jqGrid("getCol", "nominal")
+          let totalNominal = 0
 
+          if (nominals.length > 0) {
+            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          }
+
+          $(this).jqGrid('footerData', 'set', {
+            nobukti: 'Total:',
+            nominal: totalNominal,
+          }, true)
         }
       })
 
@@ -70,16 +97,16 @@
         edit: false,
         del: false,
       })
-
+      
       .customPager()
   }
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: `${apiUrl}serviceindetail`,
+      url: `${apiUrl}rekappengeluarandetail`,
       datatype: "json",
       postData: {
-        servicein_id: id
+        rekappengeluaran_id: id
       }
     }).trigger('reloadGrid')
   }
