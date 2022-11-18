@@ -35,7 +35,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="row form-group">
                 <div class="col-12 col-md-2 col-form-label">
                   <label>
@@ -82,7 +82,7 @@
                   <input type="hidden" name="agen_id">
                   <input type="text" name="agen" class="form-control agen-lookup">
                 </div>
-              
+
                 <div class="col-12 col-md-2 col-form-label text-right">
                   <label>
                     Jenis Order <span class="text-danger">*</span>
@@ -120,40 +120,44 @@
 
               <div class="row form-group">
                 <div class="col-md-2">
-                    <button class="btn btn-secondary" id="btnTampil">TAMPIL</button>
+                  <button class="btn btn-secondary" id="btnTampil">TAMPIL</button>
                 </div>
               </div>
 
             </div>
 
             <div class="table-responsive">
-                <table class="table table-bindkeys" id="spList" style="width:1800px">
-                    <thead class="table-secondary">
-                        <tr>
-                          <th width="1%"></th>
-                          <th width="4%">JOB TRUCKING</th>
-                          <th width="4%">SP</th>
-                          <th width="4%">NO CONT</th>
-                          <th width="4%">TGL OTOBON</th>
-                          <th width="4%">TUJUAN</th>
-                          <th width="4%">BAGIAN</th>
-                          <th width="4%">EMKL</th>
-                          <th width="4%">LONG TRIP</th>
-                          <th width="4%">PERALIHAN</th>
-                          <th width="5%">KETERANGAN</th>
-                          <th width="6%">OMSET</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+              <table class="table table-bindkeys" id="spList" style="width:1800px">
+                <thead class="table-secondary">
+                  <tr>
+                    <th width="1%"></th>
+                    <th width="4%">JOB TRUCKING</th>
+                    <th width="4%">SP</th>
+                    <th width="4%">NO CONT</th>
+                    <th width="4%">TGL OTOBON</th>
+                    <th width="4%">TUJUAN</th>
+                    <th width="4%">BAGIAN</th>
+                    <th width="4%">EMKL</th>
+                    <th width="4%">LONG TRIP</th>
+                    <th width="4%">PERALIHAN</th>
+                    <th width="5%">KETERANGAN</th>
+                    <th width="6%">OMSET</th>
+                  </tr>
+                </thead>
+                <tbody>
 
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="11"><p class="font-weight-bold">TOTAL:</p></td>
-                            <td><p id="omset" class="text-right font-weight-bold"></p></td>
-                        </tr>
-                    </tfoot>
-                </table>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="11">
+                      <p class="font-weight-bold">TOTAL:</p>
+                    </td>
+                    <td>
+                      <p id="omset" class="text-right font-weight-bold"></p>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
 
           </div>
@@ -179,7 +183,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
-   
+
     $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {
       setTotal()
     })
@@ -323,7 +327,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    
+
     initDatepicker()
   }
 
@@ -362,63 +366,67 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showInvoiceHeader(form, invId,'delete')
+    showInvoiceHeader(form, invId, 'delete')
   }
 
-    $(document).on('click', '#btnTampil', function(event) {
-        event.preventDefault()
-        let form = $('#crudForm')
-        let data = []
-        
-        data.push({
-            name: 'agen_id',
-            value: form.find(`[name="agen_id"]`).val()
-        })
-        data.push({
-            name: 'jenisorder_id',
-            value: form.find(`[name="jenisorder_id"]`).val()
-        })
-        data.push({
-            name: 'tgldari',
-            value: form.find(`[name="tgldari"]`).val()
-        })
-        data.push({
-            name: 'tglsampai',
-            value: form.find(`[name="tglsampai"]`).val()
-        })
-      
-        let tgldari = form.find(`[name="tgldari"]`).val()
-        let tglsampai = form.find(`[name="tglsampai"]`).val()
-        console.log()
-        if(data[0].value != '' && data[1].value != '' && data[2].value != '' && data[3].value !=''){
-          
-          if(tgldari > tglsampai) {
-            showDialog('Tanggal dari tidak boleh melebihi tanggal sampai')
-          }
-          $('#spList tbody').html('')
-          $('#omset').html('')
-          $.ajax({
-              url: `${apiUrl}invoiceheader/getSP`,
-              method: 'GET',
-              dataType: 'JSON',
-              data: data,
-              headers: {
-                  Authorization: `Bearer ${accessToken}`
-              },
-              success: response => {
+  $(document).on('click', '#btnTampil', function(event) {
+    event.preventDefault()
+    let form = $('#crudForm')
+    let data = []
 
-                  if(response.errors == true) {
-                      showDialog(response.message)
-                  }else{
-                      let omset = 0
-                      $.each(response.data, (index, detail) => {
-                      
-                          omset = parseFloat(omset) + parseFloat(detail.omset)
-                          let cekLongtrip = detail.statuslongtrip == 65 ? "checked" : "";
-                          let cekPeralihan = detail.statusperalihan == 67 ? "checked" : "";
-                          let detailRow = $(`
+    data.push({
+      name: 'agen_id',
+      value: form.find(`[name="agen_id"]`).val()
+    })
+    data.push({
+      name: 'jenisorder_id',
+      value: form.find(`[name="jenisorder_id"]`).val()
+    })
+    data.push({
+      name: 'tgldari',
+      value: form.find(`[name="tgldari"]`).val()
+    })
+    data.push({
+      name: 'tglsampai',
+      value: form.find(`[name="tglsampai"]`).val()
+    })
+    data.push({
+      name: 'limit',
+      value: 0
+    })
+
+    let tgldari = form.find(`[name="tgldari"]`).val()
+    let tglsampai = form.find(`[name="tglsampai"]`).val()
+    console.log()
+    if (data[0].value != '' && data[1].value != '' && data[2].value != '' && data[3].value != '') {
+
+      if (tgldari > tglsampai) {
+        showDialog('Tanggal dari tidak boleh melebihi tanggal sampai')
+      }
+      $('#spList tbody').html('')
+      $('#omset').html('')
+      $.ajax({
+        url: `${apiUrl}invoiceheader/getSP`,
+        method: 'GET',
+        dataType: 'JSON',
+        data: data,
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+
+          if (response.errors == true) {
+            showDialog(response.message)
+          } else {
+            let omset = 0
+            $.each(response.data, (index, detail) => {
+
+              omset = parseFloat(omset) + parseFloat(detail.omset)
+              let cekLongtrip = detail.statuslongtrip == 65 ? "checked" : "";
+              let cekPeralihan = detail.statusperalihan == 67 ? "checked" : "";
+              let detailRow = $(`
                               <tr >
-                                  <td onclick="select(this)"><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
+                                  <td><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
                                   <td>${detail.jobtrucking}</td>
                                   <td>${detail.nosp}</td>
                                   <td>${detail.nocont}</td>
@@ -433,79 +441,78 @@
                               </tr>
                           `)
 
-                          $('#spList tbody').append(detailRow)
-                          initAutoNumeric(detailRow.find('.omset'))
-                      })
-                      
-                      $('#omset').append(`${omset}`)
+              $('#spList tbody').append(detailRow)
+              initAutoNumeric(detailRow.find('.omset'))
+            })
 
-                      initAutoNumeric($('#spList tfoot').find('#omset'))
+            $('#omset').append(`${omset}`)
 
-                  }
-              }
-          })
-        }else {
-          showDialog('Harap memilih agen, jenis order, tgl dari serta tgl sampai')
-        }
-    })
+            initAutoNumeric($('#spList tfoot').find('#omset'))
 
-
-    function showInvoiceHeader(form, invId, aksi) {
-      $('#spList tbody').html('')
-
-      $.ajax({
-        url: `${apiUrl}invoiceheader/${invId}`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
-            let element = form.find(`[name="${index}"]`)
-            if (element.is('select')) {
-              element.val(value).trigger('change')
-            } else if (element.hasClass('datepicker')) {
-              element.val(dateFormat(value))
-            }else {
-              element.val(value)
-            }
-
-          })
-
-          if(aksi == 'delete') {
-            form.find('[name]').addClass('disabled')
-            initDisabled()
           }
-          getEdit(invId,aksi)
         }
       })
+    } else {
+      showDialog('Harap memilih agen, jenis order, tgl dari serta tgl sampai')
     }
+  })
 
-    function getEdit(invId,aksi)
-    {
-      $.ajax({
-        url: `${apiUrl}invoiceheader/${invId}/getEdit`,
-        method: 'GET',
-        dataType: 'JSON',
-        data: {
-            limit: 0
-        },
-        headers: {
-            Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
 
-          let omset = 0
-          let disabled = aksi == 'delete' ? "disabled" : "";
-          $.each(response.data, (index, detail) => {
-            omset = parseFloat(omset) + parseFloat(detail.omset)
+  function showInvoiceHeader(form, invId, aksi) {
+    $('#spList tbody').html('')
 
-              let cekLongtrip = detail.statuslongtrip == 65 ? "checked" : "";
-              let cekPeralihan = detail.statusperalihan == 67 ? "checked" : "";
-              let detailRow = $(`
+    $.ajax({
+      url: `${apiUrl}invoiceheader/${invId}`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          let element = form.find(`[name="${index}"]`)
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } else if (element.hasClass('datepicker')) {
+            element.val(dateFormat(value))
+          } else {
+            element.val(value)
+          }
+
+        })
+
+        if (aksi == 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
+        getEdit(invId, aksi)
+      }
+    })
+  }
+
+  function getEdit(invId, aksi) {
+    $.ajax({
+      url: `${apiUrl}invoiceheader/${invId}/getEdit`,
+      method: 'GET',
+      dataType: 'JSON',
+      data: {
+        limit: 0
+      },
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+
+        let omset = 0
+        let disabled = aksi == 'delete' ? "disabled" : "";
+        $.each(response.data, (index, detail) => {
+          omset = parseFloat(omset) + parseFloat(detail.omset)
+
+          let cekLongtrip = detail.statuslongtrip == 65 ? "checked" : "";
+          let cekPeralihan = detail.statusperalihan == 67 ? "checked" : "";
+          let detailRow = $(`
                   <tr >
-                      <td onclick="select(this)"><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" ${disabled} checked></td>
+                      <td><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" ${disabled} checked></td>
                       <td>${detail.jobtrucking}</td>
                       <td>${detail.nosp}</td>
                       <td>${detail.nocont}</td>
@@ -520,168 +527,162 @@
                   </tr>
               `)
 
-              $('#spList tbody').append(detailRow)
-              initAutoNumeric(detailRow.find('.omset'))
-          })
-          
-          $('#omset').append(`${omset}`)
-
-          initAutoNumeric($('#spList tfoot').find('#omset'))
-
-              
-        }
-      })
-    }
-
-
-    function select(element) {
-
-      var is_checked = $(element).find(`[name="sp_id[]"]`).is(":checked");
-
-      let tdOmset = $(element).siblings('td.omset').text()
-      tdOmset =  parseFloat(tdOmset.replaceAll(',',''));
-
-      let allOmset = $('#omset').text()
-      allOmset = parseFloat(allOmset.replaceAll(',',''));
-      let nominal = 0
-      if(!is_checked) { 
-          allOmset = allOmset-tdOmset
-          console.log(is_checked)
-      }else{
-          allOmset = allOmset+tdOmset       
-          console.log(is_checked)
-      }
-
-      $('#omset').html('')
-      $('#omset').append(`${allOmset}`)
-      initAutoNumeric($('#spList tfoot').find('#omset'))
-
-    }
-
-    function setRowNumbers() {
-      let elements = $('#spList tbody tr td:nth-child(1)')
-
-      elements.each((index, element) => {
-        $(element).text(index + 1)
-      })
-    }
-
-    function getMaxLength(form) {
-      if (!form.attr('has-maxlength')) {
-        $.ajax({
-          url: `${apiUrl}invoiceheader/field_length`,
-          method: 'GET',
-          dataType: 'JSON',
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-          },
-          success: response => {
-            $.each(response.data, (index, value) => {
-              if (value !== null && value !== 0 && value !== undefined) {
-                form.find(`[name=${index}]`).attr('maxlength', value)
-              }
-            })
-
-            form.attr('has-maxlength', true)
-          },
-          error: error => {
-            showDialog(error.statusText)
-          }
+          $('#spList tbody').append(detailRow)
+          initAutoNumeric(detailRow.find('.omset'))
         })
+
+        $('#omset').append(`${omset}`)
+
+        initAutoNumeric($('#spList tfoot').find('#omset'))
+
+
       }
+    })
+  }
+
+
+  $(document).on('click', `#spList tbody [name="sp_id[]"]`, function() {
+    let tdOmset = $(this).closest('tr').find('td.omset').text()
+    tdOmset = parseFloat(tdOmset.replaceAll(',', ''));
+
+    let allOmset = $('#omset').text()
+    allOmset = parseFloat(allOmset.replaceAll(',', ''));
+    let nominal = 0
+
+    if ($(this).prop("checked") == true) {
+      allOmset = allOmset + tdOmset
+    } else {
+      allOmset = allOmset - tdOmset
     }
 
+    $('#omset').html('')
+    $('#omset').append(`${allOmset}`)
+    initAutoNumeric($('#spList tfoot').find('#omset'))
+  })
 
-    function approval(Id) {
-      $('#loader').removeClass('d-none')
 
-        $.ajax({
-          url: `{{ config('app.api_url') }}invoiceheader/${Id}/approval`,
-          method: 'POST',
-          dataType: 'JSON',
-          beforeSend: request => {
-            request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-          },
-          success: response => {
-            $('#jqGrid').trigger('reloadGrid')
-          }
-      }).always(() => {
-          $('#loader').addClass('d-none')
-        })
-    }
+  function setRowNumbers() {
+    let elements = $('#spList tbody tr td:nth-child(1)')
 
-    function cekApproval(Id, Aksi) {
+    elements.each((index, element) => {
+      $(element).text(index + 1)
+    })
+  }
+
+  function getMaxLength(form) {
+    if (!form.attr('has-maxlength')) {
       $.ajax({
-        url: `{{ config('app.api_url') }}invoiceheader/${Id}/cekapproval`,
-        method: 'POST',
+        url: `${apiUrl}invoiceheader/field_length`,
+        method: 'GET',
         dataType: 'JSON',
-        beforeSend: request => {
-          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
         },
         success: response => {
-          var kodenobukti = response.kodenobukti
-          if(kodenobukti == '1')
-          {
-            var kodestatus = response.kodestatus
-            if(kodestatus == '1')
-            {
-              showDialog(response.message['keterangan'])
-            }else{
-                if(Aksi == 'EDIT') {
-                    editInvoiceHeader(Id)
-                }
-                if(Aksi == 'DELETE') {
-                    deleteInvoiceHeader(Id)
-                }
+          $.each(response.data, (index, value) => {
+            if (value !== null && value !== 0 && value !== undefined) {
+              form.find(`[name=${index}]`).attr('maxlength', value)
             }
-            
-          }else{
+          })
+
+          form.attr('has-maxlength', true)
+        },
+        error: error => {
+          showDialog(error.statusText)
+        }
+      })
+    }
+  }
+
+
+  function approval(Id) {
+    $('#loader').removeClass('d-none')
+
+    $.ajax({
+      url: `{{ config('app.api_url') }}invoiceheader/${Id}/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    }).always(() => {
+      $('#loader').addClass('d-none')
+    })
+  }
+
+  function cekApproval(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}invoiceheader/${Id}/cekapproval`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kodenobukti = response.kodenobukti
+        if (kodenobukti == '1') {
+          var kodestatus = response.kodestatus
+          if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
+          } else {
+            if (Aksi == 'EDIT') {
+              editInvoiceHeader(Id)
+            }
+            if (Aksi == 'DELETE') {
+              deleteInvoiceHeader(Id)
+            }
           }
+
+        } else {
+          showDialog(response.message['keterangan'])
         }
-      })
-    }
+      }
+    })
+  }
 
 
-    function initLookup() {
-      $('.agen-lookup').lookup({
-        title: 'Agen Lookup',
-        fileName: 'agen',
-        onSelectRow: (agen, element) => {
-          $('#crudForm [name=agen_id]').first().val(agen.id)
-          element.val(agen.namaagen)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          console.log(element.val())
-          element.val(element.data('currentValue'))
-        }
-      })
+  function initLookup() {
+    $('.agen-lookup').lookup({
+      title: 'Agen Lookup',
+      fileName: 'agen',
+      onSelectRow: (agen, element) => {
+        $('#crudForm [name=agen_id]').first().val(agen.id)
+        element.val(agen.namaagen)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        console.log(element.val())
+        element.val(element.data('currentValue'))
+      }
+    })
 
-      $('.jenisorder-lookup').lookup({
-        title: 'Jenis Order Lookup',
-        fileName: 'jenisorder',
-        onSelectRow: (jenisorder, element) => {
-          $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
-          element.val(jenisorder.keterangan)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        }
-      })
-      $('.cabang-lookup').lookup({
-        title: 'Cabang Lookup',
-        fileName: 'cabang',
-        onSelectRow: (cabang, element) => {
-          $('#crudForm [name=cabang_id]').first().val(cabang.id)
-          element.val(cabang.namacabang)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        }
-      })
-    }
+    $('.jenisorder-lookup').lookup({
+      title: 'Jenis Order Lookup',
+      fileName: 'jenisorder',
+      onSelectRow: (jenisorder, element) => {
+        $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
+        element.val(jenisorder.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    $('.cabang-lookup').lookup({
+      title: 'Cabang Lookup',
+      fileName: 'cabang',
+      onSelectRow: (cabang, element) => {
+        $('#crudForm [name=cabang_id]').first().val(cabang.id)
+        element.val(cabang.namacabang)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+  }
 </script>
 @endpush()
