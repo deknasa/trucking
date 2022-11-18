@@ -43,7 +43,7 @@
                 <label>tgl transaksi <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="tgltransaksi" onchange="setPengeluaranTgl();" class="form-control datepicker">
+                <input type="text" name="tgltransaksi" onchange="setPenerimaanTgl();" class="form-control datepicker">
               </div>
 
             </div>
@@ -101,19 +101,18 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
-  let parameterPengeluaran = {};
+  let parameterPenerimaan = {};
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     
-
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
       let method
       let url
       let form = $('#crudForm')
-      let rekapPengeluaranId = form.find('[name=id]').val()
+      let rekapPenerimaanId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
@@ -146,19 +145,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}rekappengeluaranheader`
+          url = `${apiUrl}rekappenerimaanheader`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}rekappengeluaranheader/${rekapPengeluaranId}`
+          url = `${apiUrl}rekappenerimaanheader/${rekapPenerimaanId}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}rekappengeluaranheader/${rekapPengeluaranId}`
+          url = `${apiUrl}rekappenerimaanheader/${rekapPenerimaanId}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}rekappengeluaranheader`
+          url = `${apiUrl}rekappenerimaanheader`
           break;
       }
 
@@ -203,8 +202,8 @@
       })
     })
   })
-  function kodepengeluaran(kodepengeluaran){
-    $('#crudForm').find('[name=statusformat]').val(kodepengeluaran).trigger('change');
+  function kodepenerimaan(kodepenerimaan){
+    $('#crudForm').find('[name=statusformat]').val(kodepenerimaan).trigger('change');
   }
     
     $('#crudModal').on('shown.bs.modal', () => {
@@ -221,12 +220,11 @@
   })
 
   $('#crudForm').find('[name=statusformat]').change()
-  
-  function setPengeluaranTgl() {
-    parameterPengeluaran.tglbukti = $('#crudForm').find('[name=tgltransaksi]').val();
-    getPengeluaran();
-  }
 
+  function setPenerimaanTgl() {
+    parameterPenerimaan.tglbukti = $('#crudForm').find('[name=tgltransaksi]').val();
+    getPenerimaan();
+  }
 
   function initLookup() {
     $('.bank-lookup').lookup({
@@ -234,8 +232,8 @@
       fileName: 'bank',
       onSelectRow: (bank, element) => {
         element.val(bank.kodebank)
-        parameterPengeluaran.bank = bank.id;
-        getPengeluaran();
+        parameterPenerimaan.bank = bank.id;
+        getPenerimaan();
         element.data('currentValue', element.val())
         $(`#${element[0]['name']}Id`).val(bank.id)
 
@@ -249,12 +247,11 @@
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
-    parameterPengeluaran = {};
-
+    parameterPenerimaan = {};
   })
 
 
-  function createRekapPengeluaranHeader() {
+  function createRekapPenerimaanHeader() {
     resetRow()
     let form = $('#crudForm')
 
@@ -265,13 +262,13 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Pengeluaran Stok')
+    $('#crudModalTitle').text('Create Penerimaan Stok')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
   }
 
-  function editRekapPengeluaranHeader(rekapPengeluaranId) {
+  function editRekapPenerimaanHeader(rekapPenerimaanId) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -281,15 +278,15 @@
     Simpan
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Pengeluaran Stok')
+    $('#crudModalTitle').text('Edit Penerimaan Stok')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     
-    showRekapPengeluaran(form, rekapPengeluaranId)
+    showRekapPenerimaan(form, rekapPenerimaanId)
   }
 
-  function deleteRekapPengeluaranHeader(rekapPengeluaranId) {
+  function deleteRekapPenerimaanHeader(rekapPenerimaanId) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -299,19 +296,19 @@
     Hapus
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Pengeluaran Stok')
+    $('#crudModalTitle').text('Delete Penerimaan Stok')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showRekapPengeluaran(form, rekapPengeluaranId)
+    showRekapPenerimaan(form, rekapPenerimaanId)
 
   }
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
-        url: `${apiUrl}rekappengeluaranheader/field_length`,
+        url: `${apiUrl}rekappenerimaanheader/field_length`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -354,10 +351,10 @@
     new AutoNumeric($('#sumary')[0]).set(sumary);
 	}
 
-  function showRekapPengeluaran(form, rekapPengeluaranId) {
+  function showRekapPenerimaan(form, rekapPenerimaanId) {
     resetRow()
     $.ajax({
-      url: `${apiUrl}rekappengeluaranheader/${rekapPengeluaranId}`,
+      url: `${apiUrl}rekappenerimaanheader/${rekapPenerimaanId}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -379,22 +376,22 @@
             element.val(value)
           }
         })
-        getRekapPengeluaran(rekapPengeluaranId)
+        getRekapPenerimaan(rekapPenerimaanId)
 
       }
     })
   }
 
-  function getPengeluaran() {
+  function getPenerimaan() {
     $('#detailList tbody').html('')
     $.ajax({
-      url: `${apiUrl}rekappengeluaranheader/getpengeluaran`,
+      url: `${apiUrl}rekappenerimaanheader/getpenerimaan`,
       method: 'GET',
       dataType: 'JSON',
       data: {
         limit: 0,
-        bank : parameterPengeluaran.bank,
-        tglbukti : parameterPengeluaran.tglbukti,
+        bank : parameterPenerimaan.bank,
+        tglbukti : parameterPenerimaan.tglbukti,
       },
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -411,7 +408,7 @@
               
               <td>
                 ${detail.nobukti}
-                <input type="text" value="${detail.nobukti}" id="pengeluaran_nobukti" readonly hidden name="pengeluaran_nobukti[]"  >
+                <input type="text" value="${detail.nobukti}" id="penerimaan_nobukti" readonly hidden name="penerimaan_nobukti[]"  >
               </td>                 
               <td>
                 ${detail.tglbukti}
@@ -434,10 +431,10 @@
     })
   }
 
-  function getRekapPengeluaran(rekapPengeluaranId) {
+  function getRekapPenerimaan(rekapPenerimaanId) {
     $('#detailList tbody').html('')
     $.ajax({
-      url: `${apiUrl}rekappengeluaranheader/${rekapPengeluaranId}/getrekappengeluaran`,
+      url: `${apiUrl}rekappenerimaanheader/${rekapPenerimaanId}/getrekappenerimaan`,
       method: 'GET',
       dataType: 'JSON',
       data: {
@@ -457,8 +454,8 @@
               <td>${row}</td>
               
               <td>
-                ${detail.nobukti}
-                <input type="text" value="${detail.nobukti}" id="pengeluaran_nobukti" readonly hidden name="pengeluaran_nobukti[]"  >
+                ${detail.penerimaan_nobukti}
+                <input type="text" value="${detail.penerimaan_nobukti}" id="penerimaan_nobukti" readonly hidden name="penerimaan_nobukti[]"  >
               </td>                 
               <td>
                 ${detail.tglbukti}

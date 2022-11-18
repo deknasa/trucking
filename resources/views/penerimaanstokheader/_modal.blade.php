@@ -41,9 +41,11 @@
                 <label>STATUS FORMAT <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
-                <select name="statusformat" class="form-select select2bs4" style="width: 100%;">
+                <select name="statusformat" disabled class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS FORMAT --</option>
                 </select>
+
+                <input type="text" name="statusformat_id" readonly hidden class="form-control">
               </div>
             </div>
 
@@ -325,6 +327,7 @@
 
   function kodepenerimaan(kodepenerimaan) {
     $('#crudForm').find('[name=statusformat]').val(kodepenerimaan).trigger('change');
+    $('#crudForm').find('[name=statusformat_id]').val(kodepenerimaan);
   }
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -591,13 +594,14 @@
         sum = 0;
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else if (element.attr("name") == 'tglbukti') {
+           if (element.attr("name") == 'tglbukti') {
             var result = value.split('-');
             element.val(result[2] + '-' + result[1] + '-' + result[0]);
           } else {
             element.val(value)
+          }
+          if (index == "statusformat") {
+            kodepenerimaan(value)
           }
         })
         $.each(response.detail, (id, detail) => {
