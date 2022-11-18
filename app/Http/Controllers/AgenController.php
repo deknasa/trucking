@@ -26,6 +26,7 @@ class AgenController extends MyController
             'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
             'statusapproval' => $this->getParameter('STATUS APPROVAL', 'STATUS APPROVAL'),
             'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
+            'jenisemkl' => $this->getJenisEmkl(),
         ];
 
         return view('agen.index', compact('title', 'breadcrumb', 'combo'));
@@ -75,6 +76,7 @@ class AgenController extends MyController
         $combo = [
             'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
             'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
+            'jenisemkl' => $this->getJenisEmkl(),
         ];
 
         return view('agen.add', compact('title', 'breadcrumb', 'combo'));
@@ -125,6 +127,7 @@ class AgenController extends MyController
         $combo = [
             'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
             'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
+            'jenisemkl' => $this->getJenisEmkl(),
         ];
 
         return view('agen.edit', compact('title', 'agen', 'combo'));
@@ -169,6 +172,7 @@ class AgenController extends MyController
             $combo = [
                 'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
                 'statustas' => $this->getParameter('STATUS TAS', 'STATUS TAS'),
+                'jenisemkl' => $this->getJenisEmkl(),
             ];
 
             return view('agen.delete', compact('title', 'agen', 'combo'));

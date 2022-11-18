@@ -170,7 +170,7 @@
           },
           {
             label: 'JENIS EMKL',
-            name: 'jenisemkl',
+            name: 'jenisemkl'
           },
           {
             label: 'MODIFIEDBY',
