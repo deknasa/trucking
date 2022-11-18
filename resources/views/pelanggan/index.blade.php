@@ -78,8 +78,24 @@
             name: 'modifiedby',
           },
           {
+            label: 'CREATEDAT',
+            name: 'created_at',
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+          {
             label: 'UPDATEDAT',
             name: 'updated_at',
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
         ],
         autowidth: true,

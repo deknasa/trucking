@@ -36,9 +36,9 @@
   let hasDetail = false
 
   $(document).ready(function() {
-  
-    
-    
+
+
+
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'absensisupirheader' }}`,
         mtype: "GET",
@@ -87,9 +87,24 @@
             align: 'left'
           },
           {
+            label: 'CREATEDAT',
+            name: 'created_at',
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+          {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'left'
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
         ],
         autowidth: true,
@@ -119,7 +134,7 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
-          
+
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
@@ -135,7 +150,7 @@
         },
         loadComplete: function(data) {
           $("input").attr("autocomplete", "off");
-          
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -146,7 +161,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -193,7 +208,7 @@
         },
       })
 
-      
+
       .customPager({
         buttons: [{
             id: 'add',
@@ -229,7 +244,7 @@
               }
             }
           },
-          
+
           {
             id: 'export',
             title: 'Export',
@@ -244,7 +259,7 @@
                 window.open(`{{ route('absensisupirheader.export') }}?id=${selectedId}`)
               }
             }
-          },  
+          },
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
