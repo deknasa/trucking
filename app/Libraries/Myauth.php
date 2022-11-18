@@ -19,6 +19,7 @@ class Myauth
             '',
             'notakreditheader',
             'rekappengeluaranheader',
+            'rekappenerimaanheader',
             'notadebetheader',
             'absensisupirapprovalheader',
             'penerimaanstokheader',

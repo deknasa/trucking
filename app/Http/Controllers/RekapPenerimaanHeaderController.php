@@ -8,14 +8,14 @@ use Illuminate\Support\Facades\Http;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class RekapPengeluaranHeaderController extends MyController
+class RekapPenerimaanHeaderController extends MyController
 {
-    public $title = 'Rekap Pengeluaran';
+    public $title = 'Rekap Penerimaan';
     
     public function index(Request $request)
     {
         $title = $this->title;
-        return view('rekappengeluaranheader.index', compact('title'));
+        return view('rekappenerimaanheader.index', compact('title'));
     }
 
     public function get($params = [])
@@ -32,7 +32,7 @@ class RekapPengeluaranHeaderController extends MyController
         $response = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'rekappengeluaranheader', $params);
+            ->get(config('app.api_url') . 'rekappenerimaanheader', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -57,7 +57,7 @@ class RekapPengeluaranHeaderController extends MyController
         return $response = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'rekappengeluaranheader/'.$id);
+            ->get(config('app.api_url') . 'rekappenerimaanheader/'.$id);
     }
 
     /**
@@ -71,22 +71,22 @@ class RekapPengeluaranHeaderController extends MyController
             'withRelations' => true,
 
         ];
-        $rekappengeluaran = $this->find($params,$id)['data'];
+        $rekappenerimaan = $this->find($params,$id)['data'];
 
-        $data = $rekappengeluaran;
+        $data = $rekappenerimaan;
         $i =0;
         
         $response = Http::withHeaders($this->httpHeaders)
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
-        ->get(config('app.api_url') . 'rekappengeluarandetail', ['rekappengeluaran_id' => $rekappengeluaran['id']]);
+        ->get(config('app.api_url') . 'rekappenerimaandetail', ['rekappenerimaan_id' => $rekappenerimaan['id']]);
 
         $data["details"] =$response['data'];
         $data["user"] = Auth::user();
      
         
-        $rekappengeluaranheaders = $data;
-        return view('reports.rekappengeluaranheader', compact('rekappengeluaranheaders'));
+        $rekappenerimaanheaders = $data;
+        return view('reports.rekappenerimaanheader', compact('rekappenerimaanheaders'));
     }
 
     public function export(Request $request)
@@ -106,7 +106,7 @@ class RekapPengeluaranHeaderController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'rekappengeluarandetail', [$request->all()]);
+            ->get(config('app.api_url') . 'rekappenerimaandetail', [$request->all()]);
 
 
             $data[$i]["details"] =$response['data'];
@@ -115,7 +115,7 @@ class RekapPengeluaranHeaderController extends MyController
         // dd($data);
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Laporan Rekap Pengeluaran');
+        $sheet->setCellValue('A1', 'Laporan Rekap Penerimaan');
         $sheet->getStyle("A1")->getFont()->setSize(20);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
@@ -158,7 +158,7 @@ class RekapPengeluaranHeaderController extends MyController
             ],
             [
                 'label'=>'No Bukti',
-                'index'=>'pengeluaran_nobukti'
+                'index'=>'penerimaan_nobukti'
             ],
             [
                 'label'=>'tgl transaksi',
@@ -195,7 +195,7 @@ class RekapPengeluaranHeaderController extends MyController
                     $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $detail_data[$detail_column['index']] : $detail_index + 1);
                 }
                 $sheet->setCellValue("A$detail_start_row", $detail_index + 1);
-                $sheet->setCellValue("B$detail_start_row", $detail_data['pengeluaran_nobukti']);
+                $sheet->setCellValue("B$detail_start_row", $detail_data['penerimaan_nobukti']);
                 $sheet->setCellValue("C$detail_start_row", $detail_data['tgltransaksi']);
                 $sheet->setCellValue("D$detail_start_row", $detail_data['keterangan']);
                 $sheet->setCellValue("E$detail_start_row", $detail_data['nominal']);
@@ -222,7 +222,7 @@ class RekapPengeluaranHeaderController extends MyController
         );
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LaporanRekapPengeluaran' . date('dmYHis');
+        $filename = 'LaporanRekapPenerimaan' . date('dmYHis');
 
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
