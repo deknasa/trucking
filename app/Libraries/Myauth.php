@@ -17,16 +17,10 @@ class Myauth
     private $exceptAuth = [
         'class' => [
             '',
-            'notakreditheader',
-            'rekappengeluaranheader',
-            'rekappenerimaanheader',
-            'notadebetheader',
-            'absensisupirapprovalheader',
-            'penerimaanstokheader',
-            'pengeluaranstokheader',
-            'pengembaliankasgantungheader',
+            'invoiceextra',
+            'invoiceheader',
+            'logtrail',
             'dashboard',
-            'supir'
         ],
         'method' => [
             'gridtab',
