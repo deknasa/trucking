@@ -2,6 +2,7 @@
 
 @section('content')
 <!-- Grid -->
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
