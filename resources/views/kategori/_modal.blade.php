@@ -399,7 +399,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
-      } 
+      }, 
+      onClear: (element) => {
+        $('#crudForm [name=subkelompok_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())      }
     })
   }
 </script>
