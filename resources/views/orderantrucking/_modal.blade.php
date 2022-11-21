@@ -262,7 +262,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -488,19 +490,19 @@
             element.val(value)
           }
 
-          if(index == 'container') {
+          if (index == 'container') {
             element.data('current-value', value)
           }
-          if(index == 'agen') {
+          if (index == 'agen') {
             element.data('current-value', value)
           }
-          if(index == 'jenisorder') {
+          if (index == 'jenisorder') {
             element.data('current-value', value)
           }
-          if(index == 'pelanggan') {
+          if (index == 'pelanggan') {
             element.data('current-value', value)
           }
-          if(index == 'tarif') {
+          if (index == 'tarif') {
             element.data('current-value', value)
           }
         })
@@ -514,7 +516,7 @@
   }
 
   function initLookup() {
-   
+
     $('.container-lookup').lookup({
       title: 'Container Lookup',
       fileName: 'container',
@@ -525,7 +527,12 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
-      } 
+      },
+      onClear: (element) => {
+        $('#crudForm [name=container_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
     })
 
     $('.agen-lookup').lookup({
@@ -538,7 +545,12 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
-      } 
+      },
+      onClear: (element) => {
+        $('#crudForm [name=agen_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
     })
     $('.jenisorder-lookup').lookup({
       title: 'Jenis Order Lookup',
@@ -550,7 +562,12 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
-      } 
+      },
+      onClear: (element) => {
+        $('#crudForm [name=jenisorder_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
     })
     $('.pelanggan-lookup').lookup({
       title: 'Pelanggan Lookup',
@@ -562,7 +579,12 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
-      } 
+      },
+      onClear: (element) => {
+        $('#crudForm [name=pelanggan_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
     })
     $('.tarif-lookup').lookup({
       title: 'Tarif Lookup',
@@ -574,7 +596,12 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
-      } 
+      },
+      onClear: (element) => {
+        $('#crudForm [name=tarif_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
     })
   }
 </script>

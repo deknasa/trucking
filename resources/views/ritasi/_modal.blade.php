@@ -194,7 +194,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -378,25 +380,25 @@
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } else if(element.hasClass('datepicker')){
-              element.val(dateFormat(value))
+          } else if (element.hasClass('datepicker')) {
+            element.val(dateFormat(value))
           } else {
             element.val(value)
           }
 
-          if(index == 'suratpengantar_nobukti') {
+          if (index == 'suratpengantar_nobukti') {
             element.data('current-value', value)
           }
-          if(index == 'dari') {
+          if (index == 'dari') {
             element.data('current-value', value)
           }
-          if(index == 'sampai') {
+          if (index == 'sampai') {
             element.data('current-value', value)
           }
-          if(index == 'trado') {
+          if (index == 'trado') {
             element.data('current-value', value)
           }
-          if(index == 'supir') {
+          if (index == 'supir') {
             element.data('current-value', value)
           }
         })
@@ -414,12 +416,15 @@
       title: 'Surat Pengantar Lookup',
       fileName: 'suratpengantar',
       onSelectRow: (suratpengantar, element) => {
-        
         element.val(suratpengantar.nobukti)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.dari-lookup').lookup({
@@ -432,6 +437,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=dari_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.sampai-lookup').lookup({
@@ -444,6 +454,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=sampai_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.trado-lookup').lookup({
@@ -456,6 +471,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=trado_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.supir-lookup').lookup({
@@ -468,10 +488,14 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=supir_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 
   }
-
 </script>
 @endpush()

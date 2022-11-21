@@ -154,8 +154,10 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
-          
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
+
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
           }
@@ -177,7 +179,7 @@
     })
   })
 
-  
+
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
 
@@ -193,7 +195,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    
+
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -374,7 +376,7 @@
             element.val(value)
           }
 
-          if(index == 'subkelompok') {
+          if (index == 'subkelompok') {
             element.data('current-value', value)
           }
         })
@@ -388,7 +390,7 @@
   }
 
   function initLookup() {
-   
+
     $('.subkelompok-lookup').lookup({
       title: 'Subkelompok Lookup',
       fileName: 'subkelompok',
@@ -399,11 +401,12 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
-      }, 
+      },
       onClear: (element) => {
         $('#crudForm [name=subkelompok_id]').first().val('')
         element.val('')
-        element.data('currentValue', element.val())      }
+        element.data('currentValue', element.val())
+      }
     })
   }
 </script>

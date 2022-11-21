@@ -469,6 +469,11 @@
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=trado_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
             }
         })
 
@@ -482,6 +487,11 @@
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $(`#crudForm [name="mekanik_id[]"]`).first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
             }
         })
     }
