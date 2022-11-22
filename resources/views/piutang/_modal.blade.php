@@ -404,6 +404,8 @@
     $('#detailList tbody').append(detailRow)
 
     initAutoNumeric(detailRow.find('.autonumeric'))
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
     initDatepicker()
 
     setRowNumbers()
@@ -460,6 +462,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=agen_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
   }

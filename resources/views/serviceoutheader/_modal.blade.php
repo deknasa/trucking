@@ -81,21 +81,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>
-                                            <input type="text" name="servicein_nobukti[]" class="form-control serviceinheader-lookup">
-                                        </td>
-
-                                        <td>
-                                            <input type="text" name="keterangan_detail[]" class="form-control">
-
-                                        </td>
-
-                                        <td>
-                                            <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
-                                        </td>
-                                    </tr>
 
                                 </tbody>
                                 <tfoot>
@@ -267,6 +252,8 @@
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
+        $('#table_body').html('')
+        addRow()
     }
 
     function editServiceOut(id) {
@@ -360,6 +347,10 @@
                         },
                         onCancel: (element) => {
                             element.val(element.data('currentValue'))
+                        },
+                        onClear: (element) => {
+                            element.val('')
+                            element.data('currentValue', element.val())
                         }
                     })
 
@@ -399,8 +390,13 @@
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                element.val('')
+                element.data('currentValue', element.val())
             }
         })
+        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
         setRowNumbers()
     }
@@ -446,23 +442,21 @@
 
     function initLookup() {
 
-
         $('.trado-lookup').lookup({
             title: 'trado Lookup',
             fileName: 'trado',
             onSelectRow: (trado, element) => {
                 $('#crudForm [name=trado_id]').first().val(trado.id)
                 element.val(trado.keterangan)
-
-            }
-        })
-
-        $('.serviceinheader-lookup').lookup({
-            title: 'servicein Lookup',
-            fileName: 'serviceinheader',
-            onSelectRow: (servicein, element) => {
-                // $('#crudForm [name=servicein_id]').first().val(servicein.id)
-                element.val(servicein.nobukti)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                element.val('')
+                $(`#crudForm [name="type"]`).first().val('')
+                element.data('currentValue', element.val())
             }
         })
 

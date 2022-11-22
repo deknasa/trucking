@@ -745,6 +745,10 @@
                         },
                         onCancel: (element) => {
                             element.val(element.data('currentValue'))
+                        },
+                        onClear: (element) => {
+                            element.val('')
+                            element.data('currentValue', element.val())
                         }
                     })
 
@@ -758,6 +762,11 @@
                         },
                         onCancel: (element) => {
                             element.val(element.data('currentValue'))
+                        },
+                        onClear: (element) => {
+                            element.parents('td').find(`[name="bankpelanggan_id[]"]`).val('')
+                            element.val('')
+                            element.data('currentValue', element.val())
                         }
                     })
 
@@ -820,6 +829,10 @@
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                element.val('')
+                element.data('currentValue', element.val())
             }
         })
 
@@ -827,15 +840,22 @@
             title: 'Bank Pelanggan Lookup',
             fileName: 'bankpelanggan',
             onSelectRow: (bankpelanggan, element) => {
-                element.parents('td').find(`[name="bankpelanggan_id[]"]`).val(bankpelanggan.id)
+                $(`#crudForm [name="bankpelanggan_id[]"]`).last().val(bankpelanggan.id)
                 element.val(bankpelanggan.namabank)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $(`#crudForm [name="bankpelanggan_id[]"]`).last().val('')
+                element.val('')
+                element.data('currentValue', element.val())
             }
         })
         initAutoNumeric(detailRow.find('.autonumeric'))
+        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
         initDatepicker()
         setRowNumbers()
     }
@@ -892,8 +912,14 @@
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                element.val('')
+                $(`#crudForm [name="pelanggan_id"]`).first().val('')
+                element.data('currentValue', element.val())
             }
         })
+
         $('.cabang-lookup').lookup({
             title: 'Cabang Lookup',
             fileName: 'cabang',
@@ -904,8 +930,14 @@
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                element.val('')
+                $(`#crudForm [name="cabang_id"]`).first().val('')
+                element.data('currentValue', element.val())
             }
         })
+
         $('.bank-lookup').lookup({
             title: 'Bank Lookup',
             fileName: 'bank',
@@ -916,6 +948,11 @@
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                element.val('')
+                $(`#crudForm [name="bank_id"]`).first().val('')
+                element.data('currentValue', element.val())
             }
         })
     }

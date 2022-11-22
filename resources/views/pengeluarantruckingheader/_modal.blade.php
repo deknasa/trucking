@@ -483,6 +483,11 @@
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.parents('td').find(`[name="supir_id[]"]`).val('')
+              element.val('')
+              element.data('currentValue', element.val())
             }
           })
 
@@ -495,6 +500,10 @@
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.val('')
+              element.data('currentValue', element.val())
             }
           })
 
@@ -536,12 +545,17 @@
       title: 'Supir Lookup',
       fileName: 'supir',
       onSelectRow: (supir, element) => {
-        element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+        $(`#crudForm [name="supir_id[]"]`).last().val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=supir_id]').last().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.penerimaantruckingheader-lookup').last().lookup({
@@ -553,10 +567,16 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 
     initAutoNumeric(detailRow.find('.autonumeric'))
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
     setRowNumbers()
   }
 
@@ -612,6 +632,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=pengeluarantrucking_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.bank-lookup').lookup({
@@ -624,8 +649,14 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=bank_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
+
     $('.pengeluaran-lookup').lookup({
       title: 'Pengeluaran Lookup',
       fileName: 'pengeluaranheader',
@@ -635,8 +666,13 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
+
     $('.akunpusat-lookup').lookup({
       title: 'Kode Perk. Lookup',
       fileName: 'akunpusat',
@@ -646,6 +682,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
   }

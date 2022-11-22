@@ -423,6 +423,10 @@
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.val('')
+              element.data('currentValue', element.val())
             }
           })
 
@@ -435,6 +439,10 @@
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.val('')
+              element.data('currentValue', element.val())
             }
           })
         })
@@ -481,6 +489,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 
@@ -493,9 +505,15 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     initAutoNumeric(detailRow.find('.autonumeric'))
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
     initDatepicker()
     setRowNumbers()
   }
@@ -550,6 +568,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 
@@ -562,6 +584,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
   }

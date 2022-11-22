@@ -512,8 +512,8 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    initDatepicker()
     setTotal()
     setPenyesuaian()
     setNominalLebih()
@@ -899,8 +899,14 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=agen_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
+
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',
@@ -911,8 +917,14 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=bank_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
+
     $('.cabang-lookup').lookup({
       title: 'Cabang Lookup',
       fileName: 'cabang',
@@ -923,8 +935,14 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=cabang_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
+
     $('.pelanggan-lookup').lookup({
       title: 'Pelanggan Lookup',
       fileName: 'pelanggan',
@@ -935,8 +953,14 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=pelanggan_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
+
     $('.agendetail-lookup').lookup({
       title: 'Agen Detail Lookup',
       fileName: 'agen',
@@ -948,6 +972,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=agendetail_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
   }

@@ -142,7 +142,6 @@
               newformat: "d-m-Y H:i:s"
             }
           },
-          },
         ],
         autowidth: true,
         shrinkToFit: false,

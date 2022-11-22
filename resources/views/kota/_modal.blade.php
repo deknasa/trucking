@@ -367,7 +367,12 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
-      } 
+      },
+      onClear: (element) => {
+        $('#crudForm [name=zona_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
     })
   }
 </script>

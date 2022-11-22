@@ -453,6 +453,11 @@
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.parents('td').find(`[name="supplier_id[]"]`).val('')
+              element.val('')
+              element.data('currentValue', element.val())
             }
           })
 
@@ -499,15 +504,22 @@
       title: 'supplier Lookup',
       fileName: 'supplier',
       onSelectRow: (supplier, element) => {
-        element.parents('td').find(`[name="supplier_id[]"]`).val(supplier.id)
+        $(`#crudForm [name="supplier_id[]"]`).last().val(supplier.id)
         element.val(supplier.namasupplier)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#crudForm [name="supplier_id[]"]`).last().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     initAutoNumeric(detailRow.find('.autonumeric'))
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
     setRowNumbers()
   }
 
@@ -537,6 +549,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 
@@ -550,6 +566,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=pelanggan_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 

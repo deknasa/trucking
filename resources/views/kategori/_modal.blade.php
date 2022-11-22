@@ -293,34 +293,6 @@
       })
     }
   }
-
-  // const setSubKelompokOptions = function(relatedForm) {
-  //   return new Promise((resolve, reject) => {
-  //     relatedForm.find('[name=subkelompok_id]').empty()
-  //     relatedForm.find('[name=subkelompok_id]').append(
-  //       new Option('-- PILIH SUB KELOMPOK --', '', false, true)
-  //     ).trigger('change')
-
-  //     $.ajax({
-  //       url: `${apiUrl}subkelompok`,
-  //       method: 'GET',
-  //       dataType: 'JSON',
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`
-  //       },
-  //       success: response => {
-  //         response.data.forEach(subKelompok => {
-  //           let option = new Option(subKelompok.keterangan, subKelompok.id)
-
-  //           relatedForm.find('[name=subkelompok_id]').append(option).trigger('change')
-  //         });
-
-  //         resolve()
-  //       }
-  //     })
-  //   })
-  // }
-
   const setStatusAktifOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusaktif]').empty()

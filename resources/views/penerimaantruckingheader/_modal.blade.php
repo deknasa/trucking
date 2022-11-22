@@ -70,7 +70,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  COA
+                  COA <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="coa" class="form-control akunpusat-lookup">
@@ -79,7 +79,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  NO BUKTI PENERIMAAN
+                  NO BUKTI PENERIMAAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="penerimaan_nobukti" class="form-control penerimaan-lookup">
@@ -417,6 +417,11 @@
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.val('')
+              element.parents('td').find(`[name="supir_id[]"]`).val('')
+              element.data('currentValue', element.val())
             }
           })
 
@@ -429,6 +434,10 @@
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.val('')
+              element.data('currentValue', element.val())
             }
           })
 
@@ -470,12 +479,17 @@
       title: 'Supir Lookup',
       fileName: 'supir',
       onSelectRow: (supir, element) => {
-        element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+        $(`#crudForm [name="supir_id[]"]`).last().val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        $(`#crudForm [name="supir_id[]"]`).last().val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.pengeluarantruckingheader-lookup').last().lookup({
@@ -487,10 +501,16 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 
     initAutoNumeric(detailRow.find('.autonumeric'))
+     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
     setRowNumbers()
   }
 
@@ -546,8 +566,14 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        $(`#crudForm [name="penerimaantrucking_id"]`).first().val('')
+        element.data('currentValue', element.val())
       }
     })
+
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',
@@ -558,8 +584,14 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        $(`#crudForm [name="bank_id"]`).first().val('')
+        element.data('currentValue', element.val())
       }
     })
+
     $('.penerimaan-lookup').lookup({
       title: 'Penerimaan Lookup',
       fileName: 'penerimaanheader',
@@ -569,8 +601,13 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
+
     $('.akunpusat-lookup').lookup({
       title: 'Kode Perk. Lookup',
       fileName: 'akunpusat',
@@ -580,6 +617,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
   }

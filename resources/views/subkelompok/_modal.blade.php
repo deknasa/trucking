@@ -41,9 +41,8 @@
             <div class="form-group row">
               <label for="staticEmail" class="col-sm-3 col-md-2 col-form-label">KELOMPOK<span class="text-danger">*</span></label>
               <div class="col-sm-9 col-md-10">
-                <select name="kelompok_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH KELOMPOK --</option>
-                </select>
+                <input type="hidden" name="kelompok_id">
+                <input type="text" name="kelompok" class="form-control kelompok-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -78,6 +77,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -187,10 +187,13 @@
     activeGrid = null
 
     getMaxLength(form)
+    initLookup()
+    initSelect2()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createSubKelompok() {
@@ -208,7 +211,6 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setKelompokOptions(form)
     setStatusAktifOptions(form)
   }
 
@@ -229,7 +231,7 @@
 
     Promise
       .all([
-        setKelompokOptions(form),
+  
         setStatusAktifOptions(form)
       ])
       .then(() => {
@@ -254,7 +256,7 @@
 
     Promise
       .all([
-        setKelompokOptions(form),
+  
         setStatusAktifOptions(form)
       ])
       .then(() => {
@@ -287,32 +289,7 @@
     }
   }
 
-  const setKelompokOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=kelompok_id]').empty()
-      relatedForm.find('[name=kelompok_id]').append(
-        new Option('-- PILIH KELOMPOK --', '', false, true)
-      ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}kelompok`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          response.data.forEach(kelompok => {
-            let option = new Option(kelompok.keterangan, kelompok.id)
-
-            relatedForm.find('[name=kelompok_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
 
   const setStatusAktifOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
@@ -368,7 +345,37 @@
           } else {
             element.val(value)
           }
+
+          
+          if(index == 'kelompok') {
+            element.data('current-value', value)
+          }
         })
+
+        if (form.data('action') === 'delete') {
+          form.find('[name]').addClass('disabled')
+          initDisabled()
+        }
+      }
+    })
+  }
+
+  function initLookup(){
+    $('.kelompok-lookup').lookup({
+      title: 'Kelompok Lookup',
+      fileName: 'kelompok',
+      onSelectRow: (kelompok, element) => {
+        $('#crudForm [name=kelompok_id]').first().val(kelompok.id)
+        element.val(kelompok.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=kelompok_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
   }

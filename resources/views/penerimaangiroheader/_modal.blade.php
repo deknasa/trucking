@@ -103,8 +103,8 @@
                                         <th width="1%">No</th>
                                         <th width="4%">Tgl jatuh tempo</th>
                                         <th width="4%">No warkat</th>
-                                        <th width="4%">Bank</th>
-                                        <th width="4%">Bank Pelanggan</th>
+                                        <th width="6%">Bank</th>
+                                        <th width="6%">Bank Pelanggan</th>
                                         <th width="6%">Keterangan</th>
                                         <th width="6%">Nominal</th>
                                         <th width="5%">No Invoice</th>
@@ -652,6 +652,11 @@
                         },
                         onCancel: (element) => {
                             element.val(element.data('currentValue'))
+                        },
+                        onClear: (element) => {
+                            element.parents('td').find(`[name="bank_id[]"]`).val('')
+                            element.val('')
+                            element.data('currentValue', element.val())
                         }
                     })
                     $('.bankpelanggan-lookup').last().lookup({
@@ -664,6 +669,11 @@
                         },
                         onCancel: (element) => {
                             element.val(element.data('currentValue'))
+                        },
+                        onClear: (element) => {
+                            element.parents('td').find(`[name="bankpelanggan_id[]"]`).val('')
+                            element.val('')
+                            element.data('currentValue', element.val())
                         }
                     })
 
@@ -727,27 +737,39 @@
             title: 'Bank Lookup',
             fileName: 'bank',
             onSelectRow: (bank, element) => {
-                element.parents('td').find(`[name="bank_id[]"]`).val(bank.id)
+                $(`#crudForm [name="bank_id[]"]`).last().val(bank.id)
                 element.val(bank.namabank)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=bank_id]').last().val('')
+                element.val('')
+                element.data('currentValue', element.val())
             }
         })
         $('.bankpelanggan-lookup').last().lookup({
             title: 'Bank Pelanggan Lookup',
             fileName: 'bankpelanggan',
             onSelectRow: (bankpelanggan, element) => {
-                element.parents('td').find(`[name="bankpelanggan_id[]"]`).val(bankpelanggan.id)
+                $(`#crudForm [name="bankpelanggan_id[]"]`).last().val(bankpelanggan.id)
                 element.val(bankpelanggan.namabank)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=bankpelanggan_id]').last().val('')
+                element.val('')
+                element.data('currentValue', element.val())
             }
         })
         initAutoNumeric(detailRow.find('.autonumeric'))
+        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
         initDatepicker()
         setRowNumbers()
     }
@@ -804,6 +826,11 @@
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=pelanggan_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
             }
         })
     }

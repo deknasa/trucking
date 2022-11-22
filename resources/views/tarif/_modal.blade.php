@@ -181,11 +181,11 @@
       let nominal = $(`#crudForm [name="nominal"]`).val()
       let nominalton = $(`#crudForm [name="nominalton"]`).val()
       
-      $('#crudForm').find(`[name="nominal"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominal')[index].value = parseFloat(nominal.replaceAll(',',''))
+      $('#crudForm').find(`[name="nominal`).each((index, element) => {
+        data.filter((row) => row.name === 'nominal')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal`)[index])
       })
-      $('#crudForm').find(`[name="nominalton"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominalton')[index].value = parseFloat(nominalton.replaceAll(',',''))
+      $('#crudForm').find(`[name="nominalton`).each((index, element) => {
+        data.filter((row) => row.name === 'nominalton')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalton`)[index])
       })
       data.push({
         name: 'sortIndex',
@@ -310,7 +310,6 @@
     setStatusPenyesuaianHargaOptions(form)
     setStatusSistemTonOptions(form)
     setStatusAktifOptions(form)
-    initAutoNumeric(form.find('.autonumeric'))
     
     initAutoNumeric(form.find(`[name="nominal"]`))
     initAutoNumeric(form.find(`[name="nominalton"]`))
@@ -537,8 +536,8 @@
           }
         })
         
-        initAutoNumeric(form.find(`[name="nominal"]`))
-        initAutoNumeric(form.find(`[name="nominalton"]`))
+        initAutoNumeric($('#crudForm').find(`[name="nominal"]`))
+        initAutoNumeric($('#crudForm').find(`[name="nominalton"]`))
 
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
@@ -559,6 +558,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=container_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     
@@ -572,6 +576,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=kota_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     
@@ -585,6 +594,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=zona_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
   }

@@ -620,7 +620,10 @@
           if (index == 'zona') {
             element.data('current-value', value)
           }
+          
         })
+        
+        initAutoNumeric($('#crudForm').find(`[name=jarak]`))
 
         $.each(response.detail, (index, detail) => {
           // $.each(response.data.upahritasi_rincian, (index, detail) => {
@@ -679,12 +682,17 @@
             title: 'Container Lookup',
             fileName: 'container',
             onSelectRow: (container, element) => {
-              $(`#crudForm [name="container_id[]"]`).val(container.id)
+              element.parents('td').find(`[name="container_id[]"]`).val(container.id)
               element.val(container.keterangan)
               element.data('currentValue', element.val())
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.parents('td').find(`[name="container_id[]"]`).val('')
+              element.val('')
+              element.data('currentValue', element.val())
             }
           })
 
@@ -692,12 +700,17 @@
             title: 'Status Container Lookup',
             fileName: 'statuscontainer',
             onSelectRow: (statuscontainer, element) => {
-              $(`#crudForm [name="statuscontainer_id[]"]`).val(statuscontainer.id)
+              element.parents('td').find(`[name="statuscontainer_id[]"]`).val(statuscontainer.id)
               element.val(statuscontainer.keterangan)
               element.data('currentValue', element.val())
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.parents('td').find(`[name="statuscontainer_id[]"]`).val('')
+              element.val('')
+              element.data('currentValue', element.val())
             }
           })
         })
@@ -755,6 +768,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#crudForm [name="container_id[]"]`).last().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 
@@ -768,6 +786,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#crudForm [name="statuscontainer_id[]"]`).last().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 
@@ -804,6 +827,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=kotadari_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 
@@ -817,6 +845,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=kotasampai_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 
@@ -830,6 +863,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=zona_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
   }

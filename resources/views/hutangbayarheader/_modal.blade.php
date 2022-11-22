@@ -94,8 +94,8 @@
                             <th width="6%">BAYAR</th>
                             <th width="6%">POTONGAN</th>
                             <th width="7%">TOTAL</th>
-                            <th width="4%">ALAT BAYAR</th>
-                            <th width="4%">TGL CAIR</th>
+                            <th width="6%">ALAT BAYAR</th>
+                            <th width="5%">TGL CAIR</th>
                           </tr>
                         </thead>
                           <tbody id="table_body">
@@ -256,12 +256,20 @@
         value: form.find(`[name="bank_id"]`).val()
       })
       data.push({
+        name: 'bank',
+        value: form.find(`[name="bank"]`).val()
+      })
+      data.push({
         name: 'coa',
         value: form.find(`[name="coa"]`).val()
       })
       data.push({
         name: 'supplier_id',
         value: form.find(`[name="supplier_id"]`).val()
+      })
+      data.push({
+        name: 'supplier',
+        value: form.find(`[name="supplier"]`).val()
       })
 
 
@@ -290,6 +298,10 @@
           data.push({
             name: 'alatbayar_id[]',
             value: $(this).find(`[name="alatbayar_id[]"]`).val()
+          })
+          data.push({
+            name: 'alatbayar[]',
+            value: $(this).find(`[name="alatbayar[]"]`).val()
           })
           data.push({
             name: 'tglcair[]',
@@ -455,14 +467,12 @@
     Simpan
   `)
 
-    // $('#gridEditPiutang').jqGrid('clearGridData')
-    // $('#editpiutang').hide()
-
     form.data('action', 'add')
     $('#crudModalTitle').text('Add Pembayaran Hutang')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     initDatepicker()
     setBayar()
@@ -660,6 +670,11 @@
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.parents('td').find(`[name="alatbayar_id[]"]`).val('')
+              element.val('')
+              element.data('currentValue', element.val())
             }
           })
           
@@ -793,6 +808,11 @@
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.parents('td').find(`[name="alatbayar_id[]"]`).val('')
+              element.val('')
+              element.data('currentValue', element.val())
             }
           })
         })
@@ -899,8 +919,13 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
+
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',
@@ -911,8 +936,14 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=bank_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
+    
     $('.supplier-lookup').lookup({
       title: 'Supplier Lookup',
       fileName: 'supplier',
@@ -924,6 +955,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=supplier_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
   }

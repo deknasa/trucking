@@ -49,6 +49,11 @@
           {
             label: 'TGL BUKTI',
             name: 'tglbukti',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'CONTAINER',

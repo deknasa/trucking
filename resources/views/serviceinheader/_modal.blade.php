@@ -82,22 +82,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>
-                                            <input type="hidden" name="mekanik_id[]" class="form-control">
-                                            <input type="text" name="mekanik[]" class="form-control mekanik-lookup">
-                                        </td>
-
-                                        <td>
-                                            <input type="text" name="keterangan_detail[]" class="form-control">
-                                        </td>
-
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm delete-row">HAPUS</button>
-                                        </td>
-                                    </tr>
-
+                                    
                                 </tbody>
                                 <tfoot>
                                     <tr>
@@ -269,6 +254,10 @@
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
+        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
+        $('#table_body').html('')
+        addRow()
     }
 
     function editServicein(id) {
@@ -361,12 +350,17 @@
                         title: 'Mekanik Lookup',
                         fileName: 'mekanik',
                         onSelectRow: (mekanik, element) => {
-                            $(`#crudForm [name="mekanik_id[]"]`).last().val(mekanik.id)
+                            element.parents('td').find(`[name="mekanik_id[]"]`).val(mekanik.id)
                             element.val(mekanik.namamekanik)
                             element.data('currentValue', element.val())
                         },
                         onCancel: (element) => {
                             element.val(element.data('currentValue'))
+                        },
+                        onClear: (element) => {
+                        element.parents('td').find(`[name="mekanik_id[]"]`).val('')
+                        element.val('')
+                        element.data('currentValue', element.val())
                         }
                     })
 
@@ -405,12 +399,17 @@
             title: 'mekanik Lookup',
             fileName: 'mekanik',
             onSelectRow: (mekanik, element) => {
-                element.parents('td').find(`[name="mekanik_id[]"]`).val(mekanik.id)
+                $(`#crudForm [name="mekanik_id[]"]`).last().val(mekanik.id)
                 element.val(mekanik.namamekanik)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $(`#crudForm [name="mekanik_id[]"]`).last().val('')
+                element.val('')
+                element.data('currentValue', element.val())
             }
         })
         initDatepicker()
@@ -477,23 +476,6 @@
             }
         })
 
-        $('.mekanik-lookup').lookup({
-            title: 'mekanik Lookup',
-            fileName: 'mekanik',
-            onSelectRow: (mekanik, element) => {
-                $(`#crudForm [name="mekanik_id[]"]`).first().val(mekanik.id)
-                element.val(mekanik.namamekanik)
-                element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-                element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-                $(`#crudForm [name="mekanik_id[]"]`).first().val('')
-                element.val('')
-                element.data('currentValue', element.val())
-            }
-        })
     }
 </script>
 @endpush()

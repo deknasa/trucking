@@ -363,7 +363,7 @@
               <input type="text" name="trado" data-current-value="${detail.trado}" class="form-control trado-lookup" value="${detail.trado}">
             </td>
             <td>
-              <input type="hidden" name="supir_id[]" value="${detail.supir_id}">
+              <input type="hidden" name="supir_id[]">
               <input type="text" name="supir" data-current-value="${detail.supir}" class="form-control supir-lookup" value="${detail.supir}">
             </td>
             <td>
@@ -386,6 +386,7 @@
           </tr>
           `)
 
+          detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
           initAutoNumeric(detailRow.find(`[name="uangjalan[]"]`))
           $('#detailList tbody').append(detailRow)
           Inputmask("datetime", {
@@ -399,7 +400,8 @@
             title: 'Supir Lookup',
             fileName: 'supir',
             onSelectRow: (supir, element) => {
-              $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
+              element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+                                    
               element.val(supir.namasupir)
               element.data('currentValue', element.val())
             },
@@ -407,7 +409,7 @@
               element.val(element.data('currentValue'))
             },
             onClear: (element) => {
-              $(`#crudForm [name="supir_id[]"]`).first().val('')
+              element.parents('td').find(`[name="supir_id[]"]`).val('')
               element.val('')
               element.data('currentValue', element.val())
             }
@@ -417,12 +419,17 @@
             title: 'Trado Lookup',
             fileName: 'trado',
             onSelectRow: (trado, element) => {
-              $(`#crudForm [name="trado_id[]"]`).first().val(trado.id)
+              element.parents('td').find(`[name="trado_id[]"]`).val(trado.id)
               element.val(trado.keterangan)
               element.data('currentValue', element.val())
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.parents('td').find(`[name="trado_id[]"]`).val('')
+              element.val('')
+              element.data('currentValue', element.val())
             }
           })
 
@@ -430,12 +437,17 @@
             title: 'Absen Trado Lookup',
             fileName: 'absentrado',
             onSelectRow: (absentrado, element) => {
-              $(`#crudForm [name="absen_id[]"]`).first().val(absentrado.id)
+              element.parents('td').find(`[name="absen_id[]"]`).val(absentrado.id)
               element.val(absentrado.keterangan)
               element.data('currentValue', element.val())
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.parents('td').find(`[name="absen_id[]"]`).val('')
+              element.val('')
+              element.data('currentValue', element.val())
             }
           })
         })
@@ -606,7 +618,7 @@
       },
       onClear: (element) => {
         element.val('')
-        $(`#crudForm [name="type"]`).first().val('')
+        $(`#crudForm [name="supir_id"]`).first().val('')
         element.data('currentValue', element.val())
       }
     })
@@ -624,7 +636,7 @@
       },
       onClear: (element) => {
         element.val('')
-        $(`#crudForm [name="type"]`).first().val('')
+        $(`#crudForm [name="trado_id"]`).first().val('')
         element.data('currentValue', element.val())
       }
     })
@@ -642,7 +654,7 @@
       },
       onClear: (element) => {
         element.val('')
-        $(`#crudForm [name="type"]`).first().val('')
+        $(`#crudForm [name="absen_id"]`).first().val('')
         element.data('currentValue', element.val())
       }
     })
