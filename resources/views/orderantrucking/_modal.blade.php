@@ -604,7 +604,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=tarif_id]').first(git ).val('')
+        $('#crudForm [name=tarif_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
