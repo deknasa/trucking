@@ -340,13 +340,13 @@
           } else {
             element.val(value)
           }
-          
+
           if (index == 'coa') {
-              element.data('current-value', value)
+            element.data('current-value', value)
           }
-          
+
         })
-        
+
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
           initDisabled()
@@ -355,20 +355,23 @@
     })
   }
 
-  function initLookup()
-  {
+  function initLookup() {
     $('.akunpusat-lookup').lookup({
-        title: 'COA Lookup',
-        fileName: 'akunpusat',
-        onSelectRow: (akunpusat, element) => {
-            element.val(akunpusat.coa)
-            element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-            element.val(element.data('currentValue'))
-        }
+      title: 'COA Lookup',
+      fileName: 'akunpusat',
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
     })
-                    
+
   }
 </script>
 @endpush()

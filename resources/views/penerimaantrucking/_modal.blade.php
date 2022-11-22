@@ -366,7 +366,11 @@
         },
         onCancel: (element) => {
             element.val(element.data('currentValue'))
-        }
+        },
+      onClear: (element) => {
+        element.val('')
+            element.data('currentValue', element.val())
+      }
     })
                     
   }

@@ -662,11 +662,11 @@
     $(document).on('click', `#tripList tbody [name="sp_id[]"]`, function() {
         let gajiSupir = $(this).closest('tr').find('td.gajiSupir').text()
         gajiSupir = parseFloat(gajiSupir.replaceAll(',', ''));
-        
+
         let totalSupir = $('#gajiSupir').text()
         totalSupir = parseFloat(totalSupir.replaceAll(',', ''));
 
-        let gajiKenek =$(this).closest('tr').find('td.gajiKenek').text()
+        let gajiKenek = $(this).closest('tr').find('td.gajiKenek').text()
         gajiKenek = parseFloat(gajiKenek.replaceAll(',', ''));
 
         let totalKenek = $('#gajiKenek').text()
@@ -712,7 +712,7 @@
             }
 
         }
-        
+
         initAutoNumeric($('#tripList tfoot').find('#gajiSupir'))
         initAutoNumeric($('#tripList tfoot').find('#gajiKenek'))
 
@@ -723,7 +723,7 @@
         initAutoNumeric($('#crudForm').find(`[name="total"]`))
     })
 
-  
+
 
     function setRowNumbers() {
         let elements = $('#detailList tbody tr td:nth-child(2)')
@@ -775,6 +775,11 @@
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=supir_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
             }
         })
     }
