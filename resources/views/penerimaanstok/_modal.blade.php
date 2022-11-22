@@ -98,6 +98,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -202,12 +203,14 @@
     setFormBindKeys(form)
 
     activeGrid = null
-
+    initLookup()
+    initSelect2();
     getMaxLength(form)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createPenerimaanStok() {
@@ -396,6 +399,20 @@
             element.val(value)
           }
         })
+      }
+    })
+  }
+
+  function initLookup() {
+    $('.akunpusat-lookup').lookup({
+      title: 'Akun Pusat Lookup',
+      fileName: 'akunpusat',
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
   }

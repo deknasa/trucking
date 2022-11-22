@@ -144,15 +144,7 @@
               </div>
             </div>
 
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>coa </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="coa" class="form-control akunpusat-lookup">
-              </div>
-
-            </div>
+           
 
             <div class="table-responsive">
               <table class="table table-bordered table-bindkeys" style="width: 2000px;">
@@ -336,7 +328,6 @@
     setFormBindKeys(form)
 
     activeGrid = null
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     initDatepicker()
 
     // getMaxLength(form)
@@ -364,6 +355,8 @@
     $('.invalid-feedback').remove()
     addRow()
     sumary()
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
     setStatusFormatOptions(form)
   }
 

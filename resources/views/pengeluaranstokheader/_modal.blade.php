@@ -182,6 +182,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     
@@ -313,11 +314,12 @@
       activeGrid = null
       initDatepicker()
 
-      $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
     // getMaxLength(form)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
+    $('#crudModal').find('.modal-body').html(modalBody)
+
     activeGrid = '#jqGrid'
   })
 
@@ -333,6 +335,8 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
+
     $('#crudModalTitle').text('Create Pengeluaran Stok')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')

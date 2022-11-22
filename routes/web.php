@@ -114,6 +114,9 @@ use App\Http\Controllers\HutangBayarDetailController;
 use App\Http\Controllers\HutangBayarHeaderController;
 use App\Http\Controllers\InvoiceDetailController;
 use App\Http\Controllers\InvoiceHeaderController;
+
+use App\Http\Controllers\InvoiceExtraHeaderController;
+
 use App\Http\Controllers\LookupController;
 use App\Http\Controllers\PenerimaanGiroDetailController;
 use App\Http\Controllers\PenerimaanGiroHeaderController;
@@ -696,6 +699,13 @@ Route::middleware('auth')->group(function () {
     Route::get('invoiceheader/report', [InvoiceHeaderController::class, 'report'])->name('invoiceheader.report');
     Route::resource('invoiceheader', InvoiceHeaderController::class);
     Route::resource('invoicedetail', InvoiceDetailController::class);
+    
+    Route::get('invoiceextraheader/index', [InvoiceExtraHeaderController::class, 'index']);
+    Route::get('invoiceextraheader/get', [InvoiceExtraHeaderController::class, 'get'])->name('invoiceextraheader.get');
+    Route::get('invoiceextraheader/export', [InvoiceExtraHeaderController::class, 'export'])->name('invoiceextraheader.export');
+    Route::get('invoiceextraheader/report/{id}', [InvoiceExtraHeaderController::class, 'report'])->name('invoiceextraheader.report');
+    Route::resource('invoiceextraheader', InvoiceExtraHeaderController::class);
+    Route::resource('invoiceextradetail', InvoiceExtraDetailController::class);
 
     Route::get('penerimaangiroheader/index', [PenerimaanGiroHeaderController::class, 'index']);
     Route::get('penerimaangiroheader/{id}/delete', [PenerimaanGiroHeaderController::class, 'delete'])->name('penerimaangiroheader.delete');

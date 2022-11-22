@@ -42,30 +42,11 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  COA <span class="text-danger">*</span>
-                </label>
+                <label>coa </label>
               </div>
-              <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="text" name="coa" class="form-control akunpusat-lookup">
-                </div>
+              <div class="col-12 col-sm-9 col-md-4">
+                <input type="text" name="coa" class="form-control akunpusat-lookup">
               </div>
-              {{-- <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="text" name="coa" class="form-control">
-                  <div class="input-group-append">
-                    <button id="lookupAkunPusatToggler" class="btn btn-secondary" type="button">...</button>
-                  </div>
-                </div>
-                <div class="row position-absolute" id="lookupAkunPusat" style="z-index: 1;">
-                  <div class="col-12">
-                    <div id="lookupAkunPusat" class="shadow-lg">
-                      @include('partials.lookups.akunpusat')
-                    </div>
-                  </div>
-                </div>
-              </div> --}}
             </div>
 
 
@@ -114,6 +95,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -211,14 +193,7 @@
       })
     })
 
-    $('.numeric').inputmask('integer', {
-			alias: 'numeric',
-			groupSeparator: '',
-			autoGroup: true,
-			digitsOptional: false,
-			allowMinus: false,
-			placeholder: '',
-		}).css('text-align', 'right');
+    
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -227,12 +202,15 @@
     setFormBindKeys(form)
 
     activeGrid = null
-
+    initLookup()
+    initSelect2();
     getMaxLength(form)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
+
   })
 
   function createPengeluaranStok() {
@@ -330,7 +308,6 @@
         },
         success: response => {
           response.data.forEach(statusFormatList => {
-            console.log(statusFormatList);
             let option = new Option(statusFormatList.text, statusFormatList.id)
 
             relatedForm.find('[name=statusformat]').append(option).trigger('change')
@@ -368,7 +345,6 @@
         },
         success: response => {
           response.data.forEach(statusHitungList => {
-            console.log(statusHitungList);
             let option = new Option(statusHitungList.text, statusHitungList.id)
 
             relatedForm.find('[name=statushitungstok]').append(option).trigger('change')
@@ -423,6 +399,31 @@
             element.val(value)
           }
         })
+      }
+    })
+  }
+
+  function initLookup() {
+    $('.akunpusat-lookup').lookup({
+      title: 'akun pusat Lookup',
+      fileName: 'akunpusat',
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    $('.trado-lookup').lookup({
+      title: 'akun pusat Lookup',
+      fileName: 'trado',
+      onSelectRow: (trado, element) => {
+        element.val(trado.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
       }
     })
   }
