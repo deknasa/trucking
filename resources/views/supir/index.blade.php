@@ -246,6 +246,7 @@
             align: 'center',
             formatter: (value, row) => {
               let images = []
+              if(value) {
               let files = JSON.parse(value)
 
               files.forEach(file => {
@@ -259,6 +260,8 @@
 
               return images.join(' ')
             }
+              return 'NO PHOTOS'
+            }
           },
           {
             label: 'PHOTO KTP',
@@ -267,6 +270,7 @@
             search: false,
             formatter: (value, row) => {
               let images = []
+              if(value) {
               let files = JSON.parse(value)
 
               files.forEach(file => {
@@ -280,6 +284,8 @@
 
               return images.join(' ')
             }
+              return 'NO PHOTOS'
+            }
           },
           {
             label: 'PHOTO SIM',
@@ -288,6 +294,7 @@
             search: false,
             formatter: (value, row) => {
               let images = []
+              if(value) {
               let files = JSON.parse(value)
 
               files.forEach(file => {
@@ -301,6 +308,8 @@
 
               return images.join(' ')
             }
+              return 'NO PHOTOS'
+            }
           },
           {
             label: 'PHOTO KK',
@@ -309,6 +318,7 @@
             search: false,
             formatter: (value, row) => {
               let images = []
+              if(value) {
               let files = JSON.parse(value)
 
               files.forEach(file => {
@@ -322,6 +332,8 @@
 
               return images.join(' ')
             }
+              return 'NO PHOTOS'
+            }
           },
           {
             label: 'PHOTO SKCK',
@@ -330,6 +342,7 @@
             align: 'center',
             formatter: (value, row) => {
               let images = []
+              if(value) {
               let files = JSON.parse(value)
 
               files.forEach(file => {
@@ -342,6 +355,8 @@
               });
 
               return images.join(' ')
+              }
+              return 'NO PHOTOS'
             }
           },
           {
@@ -351,18 +366,21 @@
             align: 'center',
             formatter: (value, row) => {
               let images = []
-              let files = JSON.parse(value)
+              if (value) {
+                let files = JSON.parse(value)
 
-              files.forEach(file => {
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/domisili/${file}/small`
+                files.forEach(file => {
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}supir/image/domisili/${file}/small`
 
-                images.push(image.outerHTML)
-              });
+                  images.push(image.outerHTML)
+                });
 
-              return images.join(' ')
+                return images.join(' ')
+              }
+              return 'NO PHOTOS'
             }
           },
           {
