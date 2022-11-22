@@ -37,18 +37,7 @@
     $('#lookup').hide()
     
     
-    $('.supir-lookup').lookup({
-      title: 'supir Lookup',
-      fileName: 'supir',
-      onSelectRow: (supir, element) => {
-        element.val(supir.namasupir)
-        $(`#${element[0]['name']}Id`).val(supir.id)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      }
-    })
+    
     
 
     $('#crudModal').on('hidden.bs.modal', function() {
@@ -238,18 +227,18 @@
               deleteInvoiceExtraHeader(selectedId)
             }
           },
-          {
-            id: 'approval',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVE',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-              let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+          // {
+          //   id: 'approval',
+          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVE',
+          //   class: 'btn btn-purple btn-sm mr-1',
+          //   onClick: () => {
+          //     let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
 
-              $('#loader').removeClass('d-none')
+          //     $('#loader').removeClass('d-none')
 
-              handleApproval(id)
-            }
-          },
+          //     handleApproval(id)
+          //   }
+          // },
           {
             id: 'export',
             innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
@@ -369,23 +358,23 @@
 
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
+    // function handleApproval(id) {
+    //   $.ajax({
+    //     url: `${apiUrl}invoiceextraheader/${id}/approval`,
+    //     method: 'POST',
+    //     dataType: 'JSON',
+    //     beforeSend: request => {
+    //       request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+    //     },
+    //     success: response => {
+    //       $('#jqGrid').trigger('reloadGrid')
+    //     }
+    //   }).always(() => {
+    //     $('#loader').addClass('d-none')
+    //   })
+    // }
 
-    function handleApproval(id) {
-    $.ajax({
-      url: `${apiUrl}invoiceextraheader/${id}/approval`,
-      method: 'POST',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-      },
-      success: response => {
-        $('#jqGrid').trigger('reloadGrid')
-      }
-    }).always(() => {
-      $('#loader').addClass('d-none')
-    })
-  }
-
+      
 
 
   })

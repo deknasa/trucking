@@ -30,14 +30,6 @@
             align: 'right',
             formatter: currencyFormat,
           },
-          {
-            label: 'NO BUKTI ORDERAN',
-            name: 'orderantrucking_nobukti',
-          },
-          {
-            label: 'NO BUKTI SP',
-            name: 'suratpengantar_nobukti',
-          },
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -103,7 +95,7 @@
       url: `${apiUrl}invoiceextradetail`,
       datatype: "json",
       postData: {
-        invoice_id: id
+        invoiceextra_id: id
       }
     }).trigger('reloadGrid')
   }

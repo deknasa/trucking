@@ -700,10 +700,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('invoicedetail', InvoiceDetailController::class);
     
     Route::get('invoiceextraheader/index', [InvoiceExtraHeaderController::class, 'index']);
-    Route::get('invoiceextraheader/{id}/delete', [InvoiceExtraHeaderController::class, 'delete'])->name('invoiceextraheader.delete');
     Route::get('invoiceextraheader/get', [InvoiceExtraHeaderController::class, 'get'])->name('invoiceextraheader.get');
     Route::get('invoiceextraheader/export', [InvoiceExtraHeaderController::class, 'export'])->name('invoiceextraheader.export');
-    Route::get('invoiceextraheader/report', [InvoiceExtraHeaderController::class, 'report'])->name('invoiceextraheader.report');
+    Route::get('invoiceextraheader/report/{id}', [InvoiceExtraHeaderController::class, 'report'])->name('invoiceextraheader.report');
     Route::resource('invoiceextraheader', InvoiceExtraHeaderController::class);
     Route::resource('invoiceextradetail', InvoiceExtraDetailController::class);
 
