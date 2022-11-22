@@ -82,6 +82,8 @@ use App\Http\Controllers\PengeluaranDetailController;
 
 use App\Http\Controllers\RekapPengeluaranHeaderController;
 use App\Http\Controllers\RekapPengeluaranDetailController;
+use App\Http\Controllers\RekapPenerimaanHeaderController;
+use App\Http\Controllers\RekapPenerimaanDetailController;
 
 use App\Http\Controllers\PenerimaanTruckingHeaderController;
 use App\Http\Controllers\PenerimaanTruckingDetailController;
@@ -576,6 +578,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('rekappengeluaranheader', RekapPengeluaranHeaderController::class);
 
     Route::resource('rekappengeluarandetail', RekapPengeluaranDetailController::class);
+    
+    Route::get('rekappenerimaanheader/{id}/delete', [RekapPenerimaanHeaderController::class, 'delete'])->name('rekappenerimaanheader.delete');
+    Route::get('rekappenerimaanheader/index', [RekapPenerimaanHeaderController::class, 'index']);
+    Route::get('rekappenerimaanheader/get', [RekapPenerimaanHeaderController::class, 'get'])->name('rekappenerimaanheader.get');
+    Route::get('rekappenerimaanheader/export', [RekapPenerimaanHeaderController::class, 'export'])->name('rekappenerimaanheader.export');
+    Route::get('rekappenerimaanheader/report/{id}', [RekapPenerimaanHeaderController::class, 'report'])->name('rekappenerimaanheader.report');
+    Route::resource('rekappenerimaanheader', RekapPenerimaanHeaderController::class);
+
+    Route::resource('rekappenerimaandetail', RekapPenerimaanDetailController::class);
 
     //penerimaan trucking
     Route::get('penerimaantruckingheader/{id}/delete', [PenerimaanTruckingHeaderController::class, 'delete'])->name('penerimaantruckingheader.delete');

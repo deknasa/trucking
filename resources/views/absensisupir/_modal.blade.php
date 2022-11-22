@@ -393,7 +393,9 @@
             max: 24
           }).mask(".inputmask-time");
 
-          $('.supir-lookup').last().lookup({
+          console.log($(document).find('.supir-lookup').last());
+          
+          $(document).find('.supir-lookup').last().lookup({
             title: 'Supir Lookup',
             fileName: 'supir',
             onSelectRow: (supir, element) => {
@@ -403,6 +405,11 @@
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              $(`#crudForm [name="supir_id[]"]`).first().val('')
+              element.val('')
+              element.data('currentValue', element.val())
             }
           })
 
@@ -492,6 +499,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#crudForm [name="supir_id[]"]`).last().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 
@@ -505,7 +517,13 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#crudForm [name="trado_id[]"]`).last().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
+      
     })
 
     $('.absentrado-lookup').last().lookup({
@@ -518,10 +536,17 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#crudForm [name="absen_id[]"]`).last().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 
     initAutoNumeric(detailRow.find('.autonumeric'))
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
     initDatepicker()
 
     setRowNumbers()
@@ -578,6 +603,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        $(`#crudForm [name="type"]`).first().val('')
+        element.data('currentValue', element.val())
       }
     })
 
@@ -591,6 +621,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        $(`#crudForm [name="type"]`).first().val('')
+        element.data('currentValue', element.val())
       }
     })
 
@@ -604,6 +639,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        $(`#crudForm [name="type"]`).first().val('')
+        element.data('currentValue', element.val())
       }
     })
   }

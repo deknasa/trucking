@@ -18,7 +18,7 @@ $.fn.lookup = function (options = null) {
 		element.data("hasLookup", true);
 
 		element.wrap('<div class="input-group"></div>').after(`
-			${options.onClear ? `<button type="button" class="btn btn-transparent position-absolute button-clear" style="right: 30px; z-index: 99;">clear</button>` : ``}
+			${options.onClear ? `<button type="button" class="btn btn-secondary position-absolute button-clear" style="right: 30px; z-index: 99;">Clear</button>` : ``}
 			<div class="input-group-append">
 				<button class="btn btn-primary lookup-toggler" type="button">...</button>
 			</div>

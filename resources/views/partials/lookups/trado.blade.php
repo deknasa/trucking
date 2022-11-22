@@ -26,25 +26,18 @@
           label: 'KM AWAL',
           name: 'kmawal',
           align: 'right',
-          formatter: 'currency',
-          formatoptions: {
-            decimalSeparator: ',',
-            thousandsSeparator: '.'
-          }
+          formatter: currencyFormat,
         },
         {
           label: 'KM GANTI OLI AKHIR',
           name: 'kmakhirgantioli',
           align: 'right',
-          formatter: 'currency',
-          formatoptions: {
-            decimalSeparator: ',',
-            thousandsSeparator: '.'
-          }
+          formatter: currencyFormat,
         },
         {
-          label: 'TGL ASURANSI MATI',
-          name: 'tglasuransimati',
+          label: 'TGL AKHIR GANTI OLI',
+          name: 'tglakhirgantioli',
+          align: 'left',
           formatter: "date",
           formatoptions: {
             srcformat: "ISO8601Long",
@@ -80,8 +73,9 @@
           name: 'modifiedby',
         },
         {
-          label: 'UPDATEDAT',
-          name: 'updated_at',
+          label: 'CREATEDAT',
+          name: 'created_at',
+          align: 'right',
           formatter: "date",
           formatoptions: {
             srcformat: "ISO8601Long",
