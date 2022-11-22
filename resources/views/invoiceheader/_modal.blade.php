@@ -326,7 +326,7 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     initDatepicker()
   }
@@ -656,6 +656,11 @@
       onCancel: (element) => {
         console.log(element.val())
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=agen_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 
@@ -669,8 +674,14 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=jenisorder_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
+
     $('.cabang-lookup').lookup({
       title: 'Cabang Lookup',
       fileName: 'cabang',
@@ -681,6 +692,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=cabang_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
   }
