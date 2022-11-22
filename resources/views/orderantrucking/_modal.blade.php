@@ -35,7 +35,9 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="tglbukti" class="form-control formatdate">
+                <div class="input-group">
+                  <input type="text" name="tglbukti" class="form-control datepicker">
+                </div>
               </div>
             </div>
             <div class="row form-group">
@@ -262,7 +264,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -295,6 +299,7 @@
     getMaxLength(form)
     initLookup()
     initSelect2()
+    initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -484,23 +489,25 @@
 
           if (element.is('select')) {
             element.val(value).trigger('change')
+          } else if (element.hasClass('datepicker')) {
+            element.val(dateFormat(value))
           } else {
             element.val(value)
           }
 
-          if(index == 'container') {
+          if (index == 'container') {
             element.data('current-value', value)
           }
-          if(index == 'agen') {
+          if (index == 'agen') {
             element.data('current-value', value)
           }
-          if(index == 'jenisorder') {
+          if (index == 'jenisorder') {
             element.data('current-value', value)
           }
-          if(index == 'pelanggan') {
+          if (index == 'pelanggan') {
             element.data('current-value', value)
           }
-          if(index == 'tarif') {
+          if (index == 'tarif') {
             element.data('current-value', value)
           }
         })
@@ -514,7 +521,7 @@
   }
 
   function initLookup() {
-   
+
     $('.container-lookup').lookup({
       title: 'Container Lookup',
       fileName: 'container',
@@ -525,7 +532,7 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
-      } 
+      }
     })
 
     $('.agen-lookup').lookup({
@@ -538,7 +545,7 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
-      } 
+      }
     })
     $('.jenisorder-lookup').lookup({
       title: 'Jenis Order Lookup',
@@ -550,7 +557,7 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
-      } 
+      }
     })
     $('.pelanggan-lookup').lookup({
       title: 'Pelanggan Lookup',
@@ -562,7 +569,7 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
-      } 
+      }
     })
     $('.tarif-lookup').lookup({
       title: 'Tarif Lookup',
@@ -574,7 +581,7 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
-      } 
+      }
     })
   }
 </script>

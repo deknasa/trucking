@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class UpahSupirRincianController extends Controller
+
+class PenerimaanGiroDetailController extends Controller
 {
-    public $title = 'Upah Supir Rincian';
+    public $title = 'Penerimaan Giro Detail';
 
     /**
      * Fungsi index
@@ -18,13 +17,13 @@ class UpahSupirRincianController extends Controller
     public function index(Request $request)
     {
         $params = [
-            'upahsupir_id' => $request->upahsupir_id,
+            'penerimaangiro_id' => $request->penerimaangiro_id,
             'whereIn' => $request->whereIn
         ];
 
         $response = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
-            ->get(config('app.api_url') .'upahsupirrincian', $params);
+            ->get(config('app.api_url') .'penerimaangirodetail', $params);
             
         $data = [
             'rows' => $response['data'] ?? []

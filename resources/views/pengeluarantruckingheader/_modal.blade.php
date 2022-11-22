@@ -339,7 +339,7 @@
     //   .then(() => {
     //     showPengeluaranTruckingHeader(form, id)
     //   })
-      showPengeluaranTruckingHeader(form, id)
+    showPengeluaranTruckingHeader(form, id)
 
   }
 
@@ -364,7 +364,7 @@
     //   .then(() => {
     //     showPengeluaranTruckingHeader(form, id)
     //   })
-      showPengeluaranTruckingHeader(form, id)
+    showPengeluaranTruckingHeader(form, id)
 
   }
 
@@ -477,7 +477,7 @@
             title: 'Supir Lookup',
             fileName: 'supir',
             onSelectRow: (supir, element) => {
-              $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
+              element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
               element.val(supir.namasupir)
               element.data('currentValue', element.val())
             },
@@ -536,7 +536,7 @@
       title: 'Supir Lookup',
       fileName: 'supir',
       onSelectRow: (supir, element) => {
-        $(`#crudForm [name="supir_id[]"]`).val(supir.id)
+        element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
       },

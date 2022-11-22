@@ -12,50 +12,262 @@
       colModel: [{
           label: 'ID',
           name: 'id',
-          align: 'right',
-          width: '70px'
+          width: '50px'
         },
         {
           label: 'KETERANGAN',
           name: 'keterangan',
-          align: 'left',
         },
         {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
-          align: 'left',
-          width: 100,
-          stype: 'select',
         },
         {
           label: 'KM AWAL',
           name: 'kmawal',
-          align: 'left'
+          align: 'right',
+          formatter: 'currency',
+          formatoptions: {
+            decimalSeparator: ',',
+            thousandsSeparator: '.'
+          }
         },
         {
-          label: 'KM AKHIR GANTI OLI',
+          label: 'KM GANTI OLI AKHIR',
           name: 'kmakhirgantioli',
-          align: 'left'
+          align: 'right',
+          formatter: 'currency',
+          formatoptions: {
+            decimalSeparator: ',',
+            thousandsSeparator: '.'
+          }
         },
         {
-          label: 'TGL AKHIR GANTI OLI',
-          name: 'tglakhirgantioli',
-          align: 'left'
+          label: 'TGL ASURANSI MATI',
+          name: 'tglasuransimati',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
         },
-
+        {
+          label: 'MEREK',
+          name: 'merek',
+        },
+        {
+          label: 'NO RANGKA',
+          name: 'norangka',
+        },
+        {
+          label: 'NO MESIN',
+          name: 'nomesin',
+        },
+        {
+          label: 'NAMA',
+          name: 'nama',
+        },
+        {
+          label: 'NO STNK',
+          name: 'nostnk',
+        },
+        {
+          label: 'ALAMAT STNK',
+          name: 'alamatstnk',
+        },
         {
           label: 'MODIFIEDBY',
           name: 'modifiedby',
-          align: 'left'
         },
         {
           label: 'UPDATEDAT',
           name: 'updated_at',
-          align: 'right'
-        }, {
-          label: 'CREATEDAT',
-          name: 'created_at',
-          align: 'right'
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'TGL SERVICE OPNAME',
+          name: 'tglserviceopname',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'STATUS STANDARISASI',
+          name: 'statusstandarisasi',
+        },
+        {
+          label: 'KET PROGRESS STANDARISASI',
+          name: 'keteranganprogressstandarisasi',
+        },
+        {
+          label: 'JENIS PLAT',
+          name: 'statusjenisplat',
+        },
+        {
+          label: 'TGL PAJAK STNK',
+          name: 'tglpajakstnk',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'TGL GANTI AKI AKHIR',
+          name: 'tglgantiakiterakhir',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'STATUS MUTASI',
+          name: 'statusmutasi',
+        },
+        {
+          label: 'STATUS VALIDASI KEND',
+          name: 'statusvalidasikendaraan',
+        },
+        {
+          label: 'TIPE',
+          name: 'tipe',
+        },
+        {
+          label: 'JENIS',
+          name: 'jenis',
+        },
+        {
+          label: 'ISI SILINDER',
+          name: 'isisilinder',
+        },
+        {
+          label: 'WARNA',
+          name: 'warna',
+        },
+        {
+          label: 'BAHAN BAKAR',
+          name: 'jenisbahanbakar',
+        },
+        {
+          label: 'JLH SUMBU',
+          name: 'jumlahsumbu',
+        },
+        {
+          label: 'JLH RODA',
+          name: 'jumlahroda',
+        },
+        {
+          label: 'MODEL',
+          name: 'model',
+        },
+        {
+          label: 'BPKB',
+          name: 'nobpkb',
+        },
+        {
+          label: 'STATUS MOBIL STORING',
+          name: 'statusmobilstoring',
+        },
+        {
+          label: 'MANDOR',
+          name: 'mandor_id',
+        },
+        {
+          label: 'JLH BAN SERAP',
+          name: 'jumlahbanserap',
+        },
+        {
+          label: 'STATUS BAN EDIT',
+          name: 'statusappeditban',
+        },
+        {
+          label: 'STATUS LEWAT VALIDASI',
+          name: 'statuslewatvalidasi',
+        },
+        {
+          label: 'PHOTO STNK',
+          name: 'photostnk',
+          align: 'center',
+          search: false,
+          formatter: (value, row) => {
+            let images = []
+
+            if (value) {
+              let files = JSON.parse(value)
+
+              files.forEach(file => {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}trado/image/stnk/${file}/small`
+
+                images.push(image.outerHTML)
+              });
+
+              return images.join(' ')
+            }
+
+            return 'NO PHOTOS'
+          }
+        },
+        {
+          label: 'PHOTO BPKB',
+          name: 'photobpkb',
+          align: 'center',
+          search: false,
+          formatter: (value, row) => {
+            let images = []
+
+            if (value) {
+              let files = JSON.parse(value)
+
+              files.forEach(file => {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}trado/image/bpkb/${file}/small`
+
+                images.push(image.outerHTML)
+              });
+
+              return images.join(' ')
+            }
+
+            return 'NO PHOTOS'
+          }
+        },
+        {
+          label: 'PHOTO TRADO',
+          name: 'phototrado',
+          align: 'center',
+          search: false,
+          formatter: (value, row) => {
+            let images = []
+
+            if (value) {
+              let files = JSON.parse(value)
+
+              files.forEach(file => {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}trado/image/trado/${file}/small`
+
+                images.push(image.outerHTML)
+              });
+
+              return images.join(' ')
+            }
+
+            return 'NO PHOTOS'
+          }
         },
       ],
       autowidth: true,

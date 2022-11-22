@@ -339,6 +339,13 @@
                   </select>
                 </div>
               </div>
+              <div class="form-group col-sm-6 row">
+                <label for="staticEmail" class="col-sm-4 col-form-label">Milik Supir<span class="text-danger">*</span></label>
+                <div class="col-sm-8">
+                  <input type="hidden" name="supir_id">
+                  <input type="text" name="supir" class="form-control supir-lookup">
+                </div>
+              </div>
             </div>
 
             <div class="row p-2">
@@ -412,6 +419,7 @@
 
       let url
       let form = $('#crudForm')
+      
       let formData = new FormData(form[0])
       let Id = form.find('[name=id]').val()
 
@@ -643,6 +651,20 @@
         onSelectRow: (mandor, element) => {
           $('#crudForm [name=mandor_id]').first().val(mandor.id)
           element.val(mandor.namamandor)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        }
+      })
+    }
+    if (!$('.supir-lookup').data('hasLookup')) {
+      $('.supir-lookup').lookup({
+        title: 'Supir Lookup',
+        fileName: 'supir',
+        onSelectRow: (supir, element) => {
+          $('#crudForm [name=supir_id]').first().val(supir.id)
+          element.val(supir.namasupir)
           element.data('currentValue', element.val())
         },
         onCancel: (element) => {

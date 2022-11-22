@@ -335,8 +335,10 @@
   $(document).ready(function() {
     $(document).on('click', '#btnSubmit', function(event) {
       event.preventDefault()
+      // AutoNumeric.getNumber($(`#crudForm [name="nominaldepositsa"]`)[0])
 
       let form = $('#crudForm')
+
       let formData = new FormData(form[0])
       let id = form.find('[name=id]').val()
       let url

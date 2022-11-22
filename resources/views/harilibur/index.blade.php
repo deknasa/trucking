@@ -10,13 +10,11 @@
   </div>
 </div>
 
-<!-- Detail -->
-@include('upahsupir._detail')
-
-@include('upahsupir._modal')
+@include('harilibur._modal')
 
 @push('scripts')
 <script>
+  let indexUrl = "{{ route('harilibur.index') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -31,18 +29,10 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
-  let hasDetail = false
 
   $(document).ready(function() {
-
-
-    // $('#lookup').hide()
-
-   
-
-
     $("#jqGrid").jqGrid({
-        url: `${apiUrl}upahsupir`,
+        url: `${apiUrl}harilibur`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -50,32 +40,18 @@
         colModel: [{
             label: 'ID',
             name: 'id',
-            align: 'right',
             width: '50px'
           },
           {
-            label: 'DARI',
-            name: 'kotadari_id',
-            align: 'left'
+            label: 'TANGGAL LIBUR',
+            name: 'tgl',
           },
           {
-            label: 'TUJUAN',
-            name: 'kotasampai_id',
-            align: 'left'
+            label: 'KETERANGAN',
+            name: 'keterangan',
           },
           {
-            label: 'JARAK',
-            name: 'jarak',
-            align: 'right',
-            formatter: currencyFormat
-          },
-          {
-            label: 'ZONA',
-            name: 'zona_id',
-            align: 'left'
-          },
-          {
-            label: 'STATUS AKTIF',
+            label: 'STATUS',
             name: 'statusaktif',
             stype: 'select',
             searchoptions: {
@@ -101,54 +77,17 @@
             },
           },
           {
-            label: 'TGL MULAI BERLAKU',
-            name: 'tglmulaiberlaku',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'TGL AKHIR BERLAKU',
-            name: 'tglakhirberlaku',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'STATUS LUAR KOTA',
-            name: 'statusluarkota',
-            align: 'left',
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['comboluarkota'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['comboluarkota'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-          },
-          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
-            align: 'left'
+          },
+          {
+            label: 'CREATEDAT',
+            name: 'created_at',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
           {
             label: 'UPDATEDAT',
@@ -163,7 +102,7 @@
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 10,
+        rowNum: rowNum,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
@@ -186,23 +125,12 @@
         loadBeforeSend: (jqXHR) => {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
         },
-        ajaxRowOptions: {
-          async: false,
-        },
         onSelectRow: function(id) {
           activeGrid = $(this)
-
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-
-          if (!hasDetail) {
-            loadDetailGrid(id)
-            hasDetail = true
-          }
-
-          loadDetailData(id)
         },
         loadComplete: function(data) {
           $(document).unbind('keydown')
@@ -244,7 +172,7 @@
           }
 
           setHighlight($(this))
-        }
+        },
       })
 
       .jqGrid('filterToolbar', {
@@ -264,7 +192,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: () => {
-              createUpahSupir()
+              createHariLibur()
             }
           },
           {
@@ -274,7 +202,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-              editUpahSupir(selectedId)
+              editHariLibur(selectedId)
             }
           },
           {
@@ -284,36 +212,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-              deleteUpahSupir(selectedId)
-            }
-          },
-          
-          {
-            id: 'export',
-            title: 'Export',
-            caption: 'Export',
-            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                window.open(`{{ route('upahsupir.export') }}?id=${selectedId}`)
-              }
-            }
-          },  
-          {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                window.open(`{{ route('upahsupir.report') }}?id=${selectedId}`)
-              }
+              deleteHariLibur(selectedId)
             }
           },
         ]
@@ -345,6 +244,18 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
+    if (!`{{ $myAuth->hasPermission('harilibur', 'store') }}`) {
+      $('#add').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('harilibur', 'update') }}`) {
+      $('#edit').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('harilibur', 'destroy') }}`) {
+      $('#delete').attr('disabled', 'disabled')
+    }
+
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {
@@ -373,12 +284,6 @@
 
       let params
       let actionUrl = ``
-
-      if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('upahsupir.export') }}`
-      } else if ($('#rangeModal').data('action') == 'report') {
-        actionUrl = `{{ route('upahsupir.report') }}`
-      }
 
       /* Clear validation messages */
       $('.is-invalid').removeClass('is-invalid')

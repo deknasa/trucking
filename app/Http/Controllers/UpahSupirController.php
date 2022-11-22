@@ -239,92 +239,90 @@ class UpahSupirController extends MyController
 
         return response($response);
     }
-
     public function report(Request $request)
     {
-        $params = [
-            'offset' => $request->dari - 1,
-            'rows' => $request->sampai - $request->dari + 1,
-            'forReport' => true,
-        ];
-
-        $upahsupir = $this->get($params)['rows'];
-
+        
         $detailParams = [
-            'forReport' => true
+            'forReport' => true,
+            'upahsupir_id' => $request->id
         ];
-
-        foreach ($upahsupir as $upahsupirIndex => $item) {
-            $detailParams["whereIn[$upahsupirIndex]"] = $item['id'];
-        }
-
-        $upahsupir_details = Http::withHeaders(request()->header())
+  
+        $upahsupir_detail = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/upahsupir_detail', $detailParams)['data'];
-
-        foreach ($upahsupir_details as $upahsupir_detailsIndex => &$upahsupir_detail) {
-            $upahsupir_detail['nominal_header'] = number_format((float) $upahsupir_detail['nominal_header'], '2', ',', '.');
-            $upahsupir_detail['uangjalan'] = number_format((float) $upahsupir_detail['uangjalan'], '2', ',', '.');
-        }
-
-        return view('reports.upahsupir', compact('upahsupir_details'));
+            ->get('http://localhost/trucking-laravel/public/api/upahsupirrincian', $detailParams);
+        
+        
+        $upahsupir_details = $upahsupir_detail['data'];
+        $user = $upahsupir_detail['user'];
+        return view('reports.upahsupir', compact('upahsupir_details','user'));
     }
 
     public function export(Request $request): void
     {
-        $params = [
-            'offset' => $request->dari - 1,
-            'rows' => $request->sampai - $request->dari + 1,
-            'withRelations' => true,
+        
+        //FETCH HEADER
+        $hutangbayars = Http::withHeaders($request->header())
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') .'upahsupir/'.$request->id)['data'];
+
+        //FETCH DETAIL
+        $detailParams = [
+            'upahsupir_id' => $request->id,
         ];
 
-        $upahsupir = $this->get($params)['rows'];
+        $responses = Http::withHeaders($request->header())
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') .'upahsupirrincian', $detailParams);
 
-        foreach ($upahsupir as &$item) {
-            $item['nominal '] = number_format((float) $item['nominal'], '2', ',', '.');
-
-            foreach ($item['absensi_supir_detail'] as &$upahsupir_detail) {
-                $upahsupir_detail['trado'] = $upahsupir_detail['trado']['nama'] ?? '';
-                $upahsupir_detail['supir'] = $upahsupir_detail['supir']['namasupir'] ?? '';
-                $upahsupir_detail['status'] = $upahsupir_detail['absen_trado']['keterangan'] ?? '';
-                $upahsupir_detail['uangjalan'] = number_format((float) $upahsupir_detail['uangjalan'], '2', ',', '.');
-            }
-        }
+        $hutangbayar_details = $responses['data'];
+        $user = $responses['user'];
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Laporan Kas Gantung');
+        $sheet->setCellValue('A1', 'UPAH SUPIR');
         $sheet->getStyle("A1")->getFont()->setSize(20);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');
 
         $header_start_row = 2;
-        $detail_table_header_row = 7;
+        $header_right_start_row = 2;
+        $detail_table_header_row = 10;
         $detail_start_row = $detail_table_header_row + 1;
-
+       
         $alphabets = range('A', 'Z');
 
         $header_columns = [
             [
-                'label' => 'No Bukti',
-                'index' => 'nobukti',
+                'label' => 'Dari',
+                'index' => 'kotadari',
             ],
             [
-                'label' => 'Tanggal',
-                'index' => 'tgl',
+                'label' => 'Tujuan',
+                'index' => 'kotasampai',
             ],
             [
-                'label' => 'No Bukti KGT',
-                'index' => 'upahsupir_nobukti',
+                'label' => 'Jarak',
+                'index' => 'jarak',
             ],
             [
-                'label' => 'Nominal',
-                'index' => 'nominal',
+                'label' => 'Zona',
+                'index' => 'zona',
             ],
             [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
-            ]
+                'label' => 'Tgl Mulai Berlaku',
+                'index' => 'tglmulaiberlaku',
+            ],
+            [
+                'label' => 'Tgl Akhir Berlaku',
+                'index' => 'tglakhirberlaku',
+            ],
+            [
+                'label' => 'Status Luar Kota',
+                'index' => 'statusluarkotas',
+            ],
         ];
 
         $detail_columns = [
@@ -332,65 +330,137 @@ class UpahSupirController extends MyController
                 'label' => 'No',
             ],
             [
-                'label' => 'Trado',
-                'index' => 'trado',
+                'label' => 'Container',
+                'index' => 'container_id',
             ],
             [
-                'label' => 'Supir',
-                'index' => 'supir',
+                'label' => 'Status Container',
+                'index' => 'statuscontainer_id',
             ],
             [
-                'label' => 'Status',
-                'index' => 'status',
+                'label' => 'Liter',
+                'index' => 'liter',
             ],
             [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
+                'label' => 'Nominal Supir',
+                'index' => 'nominalsupir',
+                'format' => 'currency'
             ],
             [
-                'label' => 'Jam',
-                'index' => 'jam',
+                'label' => 'Nominal Kenek',
+                'index' => 'nominalkenek',
+                'format' => 'currency'
             ],
             [
-                'label' => 'Uang Jalan',
-                'index' => 'uangjalan',
+                'label' => 'Nominal Komisi',
+                'index' => 'nominalkomisi',
+                'format' => 'currency'
+            ],
+            [
+                'label' => 'Nominal Tol',
+                'index' => 'nominaltol',
                 'format' => 'currency'
             ]
         ];
 
-        for ($i = 0; $i < count($upahsupir); $i++) {
-            foreach ($header_columns as $header_column) {
-                $sheet->setCellValue('A' . $header_start_row, $header_column['label']);
-                $sheet->setCellValue('B' . $header_start_row, ':');
-                $sheet->setCellValue('C' . $header_start_row++, $absensis[$i][$header_column['index']]);
-            }
-
-            $header_start_row += count($upahsupir[$i]['absensi_supir_detail']) + 2;
-
-            foreach ($detail_columns as $detail_columns_index => $detail_column) {
-                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
-            }
-
-            $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF02c4f5');
-
-            foreach ($absensis[$i]['absensi_supir_detail'] as $absensi_supir_details_index => $absensi_supir_detail) {
-                foreach ($detail_columns as $detail_columns_index => $detail_column) {
-                    $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $absensi_supir_detail[$detail_column['index']] : $absensi_supir_details_index + 1);
-                }
-                $sheet->setCellValue("A$detail_start_row", $absensi_supir_details_index + 1);
-                $sheet->setCellValue("B$detail_start_row", $absensi_supir_detail['trado']);
-                $sheet->setCellValue("C$detail_start_row", $absensi_supir_detail['supir']);
-                $sheet->setCellValue("D$detail_start_row", $absensi_supir_detail['status']);
-                $sheet->setCellValue("E$detail_start_row", $absensi_supir_detail['keterangan']);
-                $sheet->setCellValue("F$detail_start_row", $absensi_supir_detail['jam']);
-                $sheet->setCellValue("G$detail_start_row", $absensi_supir_detail['uangjalan']);
-
-                $detail_start_row++;
-            }
-
-            $detail_table_header_row += (5 + count($absensis[$i]['absensi_supir_detail']) + 2);
-            $detail_start_row = $detail_table_header_row + 1;
+        //LOOPING HEADER        
+        foreach ($header_columns as $header_column) {
+            $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
+            
+                $sheet->setCellValue('C' . $header_start_row++, ': '.$hutangbayars[$header_column['index']]);
+           
         }
+        foreach ($detail_columns as $detail_columns_index => $detail_column) {
+            $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
+        }
+        $styleArray = array(
+            'borders' => array(
+                'allBorders' => array(
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ),
+            ),
+        );
+
+        $style_number = [
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, 
+			],
+            
+			'borders' => [
+				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], 
+				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] 
+			]
+        ];
+
+        // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
+        $sheet ->getStyle("A$detail_table_header_row:H$detail_table_header_row")->applyFromArray($styleArray);
+
+        // LOOPING DETAIL
+        $nominalSupir = 0;
+        $nominalKenek = 0;
+        $nominalTol = 0;
+        $nominalKomisi = 0;
+        foreach ($hutangbayar_details as $response_index => $response_detail) {
+            
+            foreach ($detail_columns as $detail_columns_index => $detail_column) {
+                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+            }
+            $response_detail['nominalsupirs'] = number_format((float) $response_detail['nominalsupir'], '2', ',', '.');
+            $response_detail['nominalkeneks'] = number_format((float) $response_detail['nominalkenek'], '2', ',', '.');
+            $response_detail['nominalkomisis'] = number_format((float) $response_detail['nominalkomisi'], '2', ',', '.');
+            $response_detail['nominaltols'] = number_format((float) $response_detail['nominaltol'], '2', ',', '.');
+        
+            $sheet->setCellValue("A$detail_start_row", $response_index + 1);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['container_id']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['statuscontainer_id']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['liter']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['nominalsupirs']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['nominalkeneks']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['nominalkomisis']);
+            $sheet->setCellValue("H$detail_start_row", $response_detail['nominaltols']);
+
+            $sheet ->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
+            $sheet ->getStyle("E$detail_start_row:H$detail_start_row")->applyFromArray($style_number);
+            $nominalSupir += $response_detail['nominalsupir'];
+            $nominalKenek += $response_detail['nominalkenek'];
+            $nominalKomisi += $response_detail['nominalkomisi'];
+            $nominalTol += $response_detail['nominaltol'];
+            $detail_start_row++;
+        }
+
+        $total_start_row = $detail_start_row;
+        $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':D'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("E$total_start_row", number_format((float) $nominalSupir, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("F$total_start_row", number_format((float) $nominalKenek, '2', ',', '.'))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("G$total_start_row", number_format((float) $nominalKomisi, '2', ',', '.'))->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("H$total_start_row", number_format((float) $nominalTol, '2', ',', '.'))->getStyle("H$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+
+        // set diketahui dibuat
+        $ttd_start_row = $total_start_row+2;
+        $sheet->setCellValue("B$ttd_start_row", 'Disetujui');
+        $sheet->setCellValue("C$ttd_start_row", 'Diketahui');
+        $sheet->setCellValue("D$ttd_start_row", 'Dibuat');
+        $sheet ->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
+        
+        $sheet->mergeCells("B".($ttd_start_row+1).":B".($ttd_start_row+3));      
+        $sheet->mergeCells("C".($ttd_start_row+1).":C".($ttd_start_row+3));      
+        $sheet->mergeCells("D".($ttd_start_row+1).":D".($ttd_start_row+3));      
+        $sheet ->getStyle("B".($ttd_start_row+1).":B".($ttd_start_row+3))->applyFromArray($styleArray);
+        $sheet ->getStyle("C".($ttd_start_row+1).":C".($ttd_start_row+3))->applyFromArray($styleArray);
+        $sheet ->getStyle("D".($ttd_start_row+1).":D".($ttd_start_row+3))->applyFromArray($styleArray);
+
+        //set tglcetak
+        date_default_timezone_set('Asia/Jakarta');
+        
+        $sheet->setCellValue("B".($ttd_start_row+5), 'Dicetak Pada :');
+        $sheet->getStyle("B".($ttd_start_row+5))->getFont()->setItalic(true);
+        $sheet->setCellValue("C".($ttd_start_row+5), date('d/m/Y H:i:s'));
+        $sheet->getStyle("C".($ttd_start_row+5))->getFont()->setItalic(true);
+        $sheet->setCellValue("D".($ttd_start_row+5), $user['name']);
+        $sheet->getStyle("D".($ttd_start_row+5))->getFont()->setItalic(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -401,23 +471,17 @@ class UpahSupirController extends MyController
         $sheet->getColumnDimension('G')->setAutoSize(true);
         $sheet->getColumnDimension('H')->setAutoSize(true);
 
-        $styleArray = array(
-            'borders' => array(
-                'allBorders' => array(
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ),
-            ),
-        );
+        
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'laporanAbsensi' . date('dmYHis');
-
+        $filename = 'Laporan Upah Supir  ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
 
         $writer->save('php://output');
     }
+
 
     private function combo()
     {

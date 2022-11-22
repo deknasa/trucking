@@ -3,7 +3,7 @@
 
 @push('scripts')
 <script>
-  let pengeluaranTruckingHeaderLookup = $('#pengeluaranTruckingHeaderLookup').jqGrid({
+$('#pengeluaranTruckingHeaderLookup').jqGrid({
     url: `{{ config('app.api_url') . 'pengeluarantruckingheader' }}`,
     mtype: "GET",
     styleUI: 'Bootstrap4',

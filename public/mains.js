@@ -941,6 +941,9 @@ function getOffDays() {
 		url: `${apiUrl}harilibur`,
 		method: "GET",
 		dataType: "JSON",
+		headers: {
+			Authorization: `Bearer ${accessToken}`
+		},
 		data: {
 			limit: 0,
 		},

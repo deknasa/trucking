@@ -96,8 +96,7 @@ use App\Http\Controllers\PengeluaranStokDetailController;
 
 use App\Http\Controllers\GajiSupirHeaderController;
 use App\Http\Controllers\GajiSupirDetailController;
-
-
+use App\Http\Controllers\HariLiburController;
 use App\Http\Controllers\PengeluaranTruckingHeaderController;
 use App\Http\Controllers\PengeluaranTruckingDetailController;
 use App\Http\Controllers\JurnalUmumHeaderController;
@@ -114,6 +113,8 @@ use App\Http\Controllers\HutangBayarHeaderController;
 use App\Http\Controllers\InvoiceDetailController;
 use App\Http\Controllers\InvoiceHeaderController;
 use App\Http\Controllers\LookupController;
+use App\Http\Controllers\PenerimaanGiroDetailController;
+use App\Http\Controllers\PenerimaanGiroHeaderController;
 use App\Http\Controllers\ProsesGajiSupirHeaderController;
 use App\Http\Controllers\ProsesGajiSupirDetailController;
 
@@ -685,7 +686,17 @@ Route::middleware('auth')->group(function () {
     Route::resource('invoiceheader', InvoiceHeaderController::class);
     Route::resource('invoicedetail', InvoiceDetailController::class);
 
+    Route::get('penerimaangiroheader/index', [PenerimaanGiroHeaderController::class, 'index']);
+    Route::get('penerimaangiroheader/{id}/delete', [PenerimaanGiroHeaderController::class, 'delete'])->name('penerimaangiroheader.delete');
+    Route::get('penerimaangiroheader/get', [PenerimaanGiroHeaderController::class, 'get'])->name('penerimaangiroheader.get');
+    Route::get('penerimaangiroheader/export', [PenerimaanGiroHeaderController::class, 'export'])->name('penerimaangiroheader.export');
+    Route::get('penerimaangiroheader/report', [PenerimaanGiroHeaderController::class, 'report'])->name('penerimaangiroheader.report');
+    Route::resource('penerimaangiroheader', PenerimaanGiroHeaderController::class);
+    Route::resource('penerimaangirodetail', PenerimaanGiroDetailController::class);
 
+        
+    Route::get('harilibur/index', [HariLiburController::class, 'index']);
+    Route::resource('harilibur', HariLiburController::class);
 
 });
 

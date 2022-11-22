@@ -11,9 +11,9 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-class PenerimaanHeaderController extends MyController
+class PenerimaanGiroHeaderController extends MyController
 {
-    public $title = 'Penerimaan Kas';
+    public $title = 'Penerimaan Giro';
 
     /**
      * @ClassName
@@ -23,12 +23,10 @@ class PenerimaanHeaderController extends MyController
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
         $data = [            
-            'comboapproval' => $this->comboApproval('list','STATUS APPROVAL','STATUS APPROVAL'),
-            'combokas' => $this->comboApproval('list','STATUS KAS','STATUS KAS'),
-            'comboberkas' => $this->comboApproval('list','STATUS BERKAS','STATUS BERKAS'),
+            'comboapproval' => $this->comboApproval('list','STATUS APPROVAL','STATUS APPROVAL')
         ];
 
-        return view('penerimaan.index', compact('title', 'breadcrumb', 'data'));
+        return view('penerimaangiroheader.index', compact('title', 'breadcrumb', 'data'));
     }
 
     // /**
@@ -47,7 +45,7 @@ class PenerimaanHeaderController extends MyController
 
         $response = Http::withHeaders(request()->header())
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaanheader', $params);
+            ->get(config('app.api_url') . 'penerimaangiroheader', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],

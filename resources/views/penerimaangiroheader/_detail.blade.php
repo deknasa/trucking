@@ -3,65 +3,88 @@
   <div class="row">
     <div class="col-12">
       <table id="detail"></table>
+      <div id="detailPager"></div>
     </div>
   </div>
 </div>
 
 @push('scripts')
 <script>
+
   function loadDetailGrid(id) {
+
     $("#detail").jqGrid({
-        url: `${apiUrl}hutangbayardetail`,
+        url: `${apiUrl}penerimaangirodetail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        colModel: [{
+        colModel: [
+         
+          {
             label: 'NO BUKTI',
             name: 'nobukti',
-          },
+          }, 
           {
-            label: 'NO BUKTI HUTANG',
-            name: 'hutang_nobukti',
-          },
+            label: 'NO WARKAT',
+            name: 'nowarkat',
+          }, 
           {
-            label: 'ALATBAYAR',
-            name: 'alatbayar_id',
-          },
-          {
-            label: 'TGL CAIR',
-            name: 'tglcair',
-            align: 'left',
+            label: 'TGL JATUH TEMPO',
+            name: 'tgljatuhtempo',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },
+          }, 
           {
             label: 'KETERANGAN',
             name: 'keterangan',
           },
           {
-            label: 'POTONGAN',
-            name: 'potongan',
-            formatter: 'number',
-            formatoptions: {
-              thousandsSeparator: ",",
-              decimalPlaces: 0
-            },
-            align: "right",
-          },
-          {
             label: 'NOMINAL',
             name: 'nominal',
-            formatter: 'number',
-            formatoptions: {
-              thousandsSeparator: ",",
-              decimalPlaces: 0
-            },
-            align: "right",
+            align: 'right',
+            formatter: currencyFormat
           },
+          {
+            label: 'COA DEBET',
+            name: 'coadebet',
+          },
+          {
+            label: 'COA KREDIT',
+            name: 'coakredit',
+          },
+         
+          {
+            label: 'BANK',
+            name: 'bank_id',
+          },
+          {
+            label: 'PELANGGAN',
+            name: 'pelanggan_id',
+          },
+          {
+            label: 'INVOICE NO BUKTI',
+            name: 'invoice_nobukti',
+          },
+          {
+            label: 'BANK PELANGGAN',
+            name: 'bankpelanggan_id',
+          },
+          {
+            label: 'JENIS BIAYA',
+            name: 'jenisbiaya',
+          },
+          {
+            label: 'PELUNASAN PIUTANG NO BUKTI',
+            name: 'pelunasanpiutang_nobukti',
+          },
+          {
+            label: 'BULAN BEBAN',
+            name: 'bulanbeban',
+          }
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -76,7 +99,7 @@
         sortable: true,
         viewrecords: true,
         postData: {
-          hutangbayar_id: id
+          penerimaangiro_id: id
         },
         prmNames: {
           sort: 'sortIndex',
@@ -124,10 +147,10 @@
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: `${apiUrl}hutangbayardetail`,
+      url: `${apiUrl}penerimaangirodetail`,
       datatype: "json",
       postData: {
-        hutangbayar_id: id
+        penerimaangiro_id: id
       }
     }).trigger('reloadGrid')
   }

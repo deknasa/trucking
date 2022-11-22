@@ -78,51 +78,6 @@
                             </div>
                         </div>
 
-                        <div class="row form-group">
-                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                <label>
-                                    CABANG <span class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-12 col-sm-9 col-md-10">
-                                <input type="hidden" name="cabang_id">
-                                <input type="text" name="cabang" class="form-control cabang-lookup">
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                <label>
-                                    STATUS KAS <span class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-12 col-sm-9 col-md-10">
-                                <select name="statuskas" class="form-select select2bs4" style="width: 100%;">
-                                    <option value="">-- PILIH STATUS KAS --</option>
-                                </select>
-                            </div>
-                        </div>
-
-
-                        <div class="row form-group">
-                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                <label>
-                                    BANK <span class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-12 col-sm-9 col-md-10">
-                                <input type="hidden" name="bank_id">
-                                <input type="text" name="bank" class="form-control bank-lookup">
-                            </div>
-                        </div>
-
-                        <!-- <div class="row form-group">
-                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                <label>
-                                    NO RESI <span class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-12 col-sm-9 col-md-10">
-                                <input type="text" name="noresi" class="form-control">
-                            </div>
-                        </div> -->
-
                         <div class="table-responsive">
                             <table class="table table-bordered table-bindkeys" id="tablePelunasan" style="width:800px;">
                                 <thead>
@@ -146,14 +101,15 @@
                                 <thead>
                                     <tr>
                                         <th width="1%">No</th>
-                                        <th width="5%">Kode Perk</th>
                                         <th width="4%">Tgl jatuh tempo</th>
                                         <th width="4%">No warkat</th>
+                                        <th width="4%">Bank</th>
                                         <th width="4%">Bank Pelanggan</th>
                                         <th width="6%">Keterangan</th>
                                         <th width="6%">Nominal</th>
                                         <th width="5%">No Invoice</th>
                                         <th width="4%">Jenis Biaya</th>
+                                        <th width="4%">Bulan Beban</th>
                                         <th width="1%">Aksi</th>
                                     </tr>
                                 </thead>
@@ -169,7 +125,7 @@
                                         <td>
                                             <p class="text-right font-weight-bold autonumeric" id="total"></p>
                                         </td>
-                                        <td colspan="2"></td>
+                                        <td colspan="3"></td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                                         </td>
@@ -210,7 +166,7 @@
             deleteRow($(this).parents('tr'))
         })
 
-        $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {
+        $(document).on('input', `#table_body [name="nominal[]"]`, function(event) {
             setTotal()
         })
 
@@ -220,7 +176,7 @@
                 id = $(this).val()
                 console.log(id)
                 $.ajax({
-                    url: `${apiUrl}penerimaanheader/${id}/getPelunasan`,
+                    url: `${apiUrl}penerimaangiroheader/${id}/getPelunasan`,
                     method: 'GET',
                     dataType: 'JSON',
                     headers: {
@@ -233,15 +189,16 @@
                                 <tr class="${data.nobukti}">
                                     <td></td>
                                     <td>
-                                    <input type="text" name="coadebet[]"  class="form-control akunpusat-lookup"">
+                                        <div class="input-group">
+                                            <input type="text" name="tgljatuhtempo[]" value="${data.tgljt}" class="form-control datepicker">   
+                                        </div>
                                     </td>
                                     <td>
-                                    <div class="input-group">
-                                        <input type="text" name="tgljatuhtempo[]" value="${data.tgljt}" class="form-control datepicker">   
-                                    </div>
+                                        <input type="text" name="nowarkat[]"  class="form-control">
                                     </td>
                                     <td>
-                                    <input type="text" name="nowarkat[]"  class="form-control">
+                                        <input type="hidden" name="bank_id[]">
+                                        <input type="text" name="bank[]"  class="form-control bank-lookup">
                                     </td>
                                     <td>
                                         <input type="hidden" name="bankpelanggan_id[]">
@@ -251,15 +208,18 @@
                                     <input type="text" name="keterangan_detail[]" value="${data.keterangan}" class="form-control">
                                     </td>
                                     <td>
-                                    <input type="text" name="nominal_detail[]" value="${data.nominal}" class="form-control autonumeric nominal"> 
+                                    <input type="text" name="nominal[]" value="${data.nominal}" class="form-control autonumeric nominal"> 
                                     </td>
                                     <td>
                                         <input type="text" name="invoice_nobukti[]" value="${data.invoice_nobukti}" class="form-control">
                                     </td>
                                     <td>
-                                    <div class="input-group">
                                         <input type="text" name="jenisbiaya[]" class="form-control">   
-                                    </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" name="bulanbeban[]" class="form-control datepicker">   
+                                        </div>
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
@@ -267,24 +227,22 @@
                                 </tr>
                                 `)
 
-                            // initDatepicker(detailRow.find('.datepicker'))
                             detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(data.tgljt))
-
-                            initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+                            initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
                             $('#detailList tbody').append(detailRow)
                             initDatepicker()
-                            $('.akunpusat-lookup').last().lookup({
-                                title: 'Kode Perkiraan Lookup',
-                                fileName: 'akunpusat',
-                                onSelectRow: (akunpusat, element) => {
-                                    element.val(akunpusat.coa)
+                            $('.bank-lookup').last().lookup({
+                                title: 'Bank Lookup',
+                                fileName: 'bank',
+                                onSelectRow: (bank, element) => {
+                                    element.parents('td').find(`[name="bank_id[]"]`).val(bank.id)
+                                    element.val(bank.namabank)
                                     element.data('currentValue', element.val())
                                 },
                                 onCancel: (element) => {
                                     element.val(element.data('currentValue'))
                                 }
                             })
-
                             $('.bankpelanggan-lookup').last().lookup({
                                 title: 'Bank Pelanggan Lookup',
                                 fileName: 'bankpelanggan',
@@ -320,8 +278,8 @@
             let action = form.data('action')
             let data = $('#crudForm').serializeArray()
 
-            $('#crudForm').find(`[name="nominal_detail[]"`).each((index, element) => {
-                data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
+            $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
+                data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
             })
 
             data.push({
@@ -348,23 +306,23 @@
                 name: 'limit',
                 value: limit
             })
-            console.log(data)
+
             switch (action) {
                 case 'add':
                     method = 'POST'
-                    url = `${apiUrl}penerimaanheader`
+                    url = `${apiUrl}penerimaangiroheader`
                     break;
                 case 'edit':
                     method = 'PATCH'
-                    url = `${apiUrl}penerimaanheader/${Id}`
+                    url = `${apiUrl}penerimaangiroheader/${Id}`
                     break;
                 case 'delete':
                     method = 'DELETE'
-                    url = `${apiUrl}penerimaanheader/${Id}`
+                    url = `${apiUrl}penerimaangiroheader/${Id}`
                     break;
                 default:
                     method = 'POST'
-                    url = `${apiUrl}penerimaanheader`
+                    url = `${apiUrl}penerimaangiroheader`
                     break;
             }
 
@@ -433,9 +391,10 @@
 
 
     function tarikPelunasan(aksi, id = null) {
-        let checked = (aksi == 'edit' || aksi == 'delete') ? 'checked' : '';
+        let checked
+        (aksi == 'edit' || aksi == 'delete') ? checked = 'checked' : '';
         $.ajax({
-            url: `${apiUrl}penerimaanheader/${id}/tarikPelunasan`,
+            url: `${apiUrl}penerimaangiroheader/${id}/tarikPelunasan`,
             method: 'GET',
             dataType: 'JSON',
             headers: {
@@ -474,7 +433,7 @@
     }
 
     function setTotal() {
-        let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
+        let nominalDetails = $(`#table_body [name="nominal[]"]`)
         let total = 0
 
         $.each(nominalDetails, (index, nominalDetail) => {
@@ -488,7 +447,7 @@
         alert(element)
     }
 
-    function createPenerimaan() {
+    function createPenerimaanGiro() {
         let form = $('#crudForm')
 
         $('#crudModal').find('#crudForm').trigger('reset')
@@ -498,7 +457,7 @@
     `)
         form.data('action', 'add')
 
-        $('#crudModalTitle').text('Add Penerimaan')
+        $('#crudModalTitle').text('Add Penerimaan Giro')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
@@ -506,13 +465,12 @@
 
         $('#table_body').html('')
 
-        setStatusKasOptions(form)
         tarikPelunasan('add')
         addRow()
         setTotal()
     }
 
-    function editPenerimaan(id) {
+    function editPenerimaanGiro(id) {
         let form = $('#crudForm')
 
         form.data('action', 'edit')
@@ -521,22 +479,17 @@
       <i class="fa fa-save"></i>
       Simpan
     `)
-        $('#crudModalTitle').text('Edit Penerimaan')
+        $('#crudModalTitle').text('Edit Penerimaan Giro')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        Promise
-            .all([
-                setStatusKasOptions(form)
-            ])
-            .then(() => {
-                tarikPelunasan('edit', id)
-                showPenerimaan(form, id)
-            })
+
+        tarikPelunasan('edit', id)
+        showPenerimaanGiro(form, id)
 
     }
 
-    function deletePenerimaan(id) {
+    function deletePenerimaanGiro(id) {
 
         let form = $('#crudForm')
 
@@ -546,27 +499,20 @@
       <i class="fa fa-save"></i>
       Hapus
     `)
-        $('#crudModalTitle').text('Delete Penerimaan')
+        $('#crudModalTitle').text('Delete Penerimaan Giro')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        Promise
-            .all([
-                setStatusKasOptions(form)
-            ])
-            .then(() => {
-
-                tarikPelunasan('delete', id)
-                showPenerimaan(form, id)
-            })
-
+      
+        tarikPelunasan('delete', id)
+        showPenerimaanGiro(form, id)
     }
 
     function approval(Id) {
         $('#loader').removeClass('d-none')
 
         $.ajax({
-            url: `{{ config('app.api_url') }}penerimaanheader/${Id}/approval`,
+            url: `{{ config('app.api_url') }}penerimaangiroheader/${Id}/approval`,
             method: 'POST',
             dataType: 'JSON',
             beforeSend: request => {
@@ -610,49 +556,11 @@
         })
     }
 
-    const setStatusKasOptions = function(relatedForm) {
-        return new Promise((resolve, reject) => {
-            relatedForm.find('[name=statuskas]').empty()
-            relatedForm.find('[name=statuskas]').append(
-                new Option('-- PILIH STATUS KAS --', '', false, true)
-            ).trigger('change')
-
-            $.ajax({
-                url: `${apiUrl}parameter`,
-                method: 'GET',
-                dataType: 'JSON',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    limit: 0,
-                    filters: JSON.stringify({
-                        "groupOp": "AND",
-                        "rules": [{
-                            "field": "grp",
-                            "op": "cn",
-                            "data": "STATUS KAS"
-                        }]
-                    })
-                },
-                success: response => {
-                    response.data.forEach(statusKas => {
-                        let option = new Option(statusKas.text, statusKas.id)
-
-                        relatedForm.find('[name=statuskas]').append(option).trigger('change')
-                    });
-
-                    resolve()
-                }
-            })
-        })
-    }
-
-    function showPenerimaan(form, id) {
+    function showPenerimaanGiro(form, id) {
         $('#detailList tbody').html('')
 
         $.ajax({
-            url: `${apiUrl}penerimaanheader/${id}`,
+            url: `${apiUrl}penerimaangiroheader/${id}`,
             method: 'GET',
             dataType: 'JSON',
             headers: {
@@ -671,24 +579,12 @@
                         element.val(value)
                     }
 
-                    if (index == 'pelanggan') {
-                        element.data('current-value', value)
-                    }
-                    if (index == 'cabang') {
-                        element.data('current-value', value)
-                    }
-                    if (index == 'bank') {
-                        element.data('current-value', value)
-                    }
                 })
 
                 $.each(response.detail, (index, detail) => {
                     let detailRow = $(`
                     <tr class="${detail.pelunasanpiutang_nobukti}">
                         <td></td>
-                        <td>
-                            <input type="text" name="coadebet[]" data-current-value="${detail.coadebet}" class="form-control akunpusat-lookup">
-                        </td>
                         <td>
                             <div class="input-group">
                                 <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
@@ -698,20 +594,29 @@
                             <input type="text" name="nowarkat[]"  class="form-control">
                         </td>
                         <td>
+                            <input type="hidden" name="bank_id[]">
+                            <input type="text" name="bank[]" data-current-value="${detail.bank}" class="form-control bank-lookup">
+                        </td>
+                        <td>
                             <input type="hidden" name="bankpelanggan_id[]">
                             <input type="text" name="bankpelanggan[]" data-current-value="${detail.bankpelanggan}" class="form-control bankpelanggan-lookup">
                         </td>
                         <td>
-                            <input type="text" name="keterangan_detail[]"  class="form-control">
+                            <input type="text" name="keterangan_detail[]" class="form-control">
                         </td>
                         <td>
-                            <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
+                            <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
                         </td>
                         <td>
-                            <input type="text" name="invoice_nobukti[]"  class="form-control">
+                            <input type="text" name="invoice_nobukti[]" class="form-control">
                         </td>
                         <td>
                             <input type="text" name="jenisbiaya[]" class="form-control">   
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" name="bulanbeban[]" class="form-control datepicker">   
+                            </div>
                         </td>
                         <td>
                             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
@@ -719,35 +624,36 @@
                     </tr>
                     `)
 
-                    detailRow.find(`[name="coadebet[]"]`).val(detail.coadebet)
-                    detailRow.find(`[name="tgljatuhtempo[]"]`).val(detail.tgljatuhtempo)
+                    detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
                     detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
+                    detailRow.find(`[name="bank_id[]"]`).val(detail.bank_id)
+                    detailRow.find(`[name="bank[]"]`).val(detail.bank)
                     detailRow.find(`[name="bankpelanggan_id[]"]`).val(detail.bankpelanggan_id)
                     detailRow.find(`[name="bankpelanggan[]"]`).val(detail.bankpelanggan)
                     detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-                    detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
+                    detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
                     detailRow.find(`[name="invoice_nobukti[]"]`).val(detail.invoice_nobukti)
                     detailRow.find(`[name="jenisbiaya[]"]`).val(detail.jenisbiaya)
+                    detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
 
-                    initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
-                    detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
-
+                    initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
                     $('#detailList tbody').append(detailRow)
 
                     setTotal();
 
-                    $('.akunpusat-lookup').last().lookup({
-                        title: 'Kode Perk. Lookup',
-                        fileName: 'akunpusat',
-                        onSelectRow: (akunpusat, element) => {
-                            element.val(akunpusat.coa)
+                 
+                    $('.bank-lookup').last().lookup({
+                        title: 'Bank Lookup',
+                        fileName: 'bank',
+                        onSelectRow: (bank, element) => {
+                            element.parents('td').find(`[name="bank_id[]"]`).val(bank.id)
+                            element.val(bank.namabank)
                             element.data('currentValue', element.val())
                         },
                         onCancel: (element) => {
                             element.val(element.data('currentValue'))
                         }
                     })
-
                     $('.bankpelanggan-lookup').last().lookup({
                         title: 'Bank Pelanggan Lookup',
                         fileName: 'bankpelanggan',
@@ -778,31 +684,37 @@
       <tr>
         <td></td>
         <td>
-          <input type="text" name="coadebet[]"  class="form-control akunpusat-lookup">
+            <div class="input-group">
+                <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
+            </div>
         </td>
         <td>
-          <div class="input-group">
-            <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
-          </div>
+            <input type="text" name="nowarkat[]"  class="form-control">
         </td>
         <td>
-          <input type="text" name="nowarkat[]"  class="form-control">
+            <input type="hidden" name="bank_id[]">
+            <input type="text" name="bank[]"  class="form-control bank-lookup">
         </td>
         <td>
             <input type="hidden" name="bankpelanggan_id[]">
             <input type="text" name="bankpelanggan[]"  class="form-control bankpelanggan-lookup">
         </td>
         <td>
-          <input type="text" name="keterangan_detail[]"  class="form-control">
+        <input type="text" name="keterangan_detail[]" class="form-control">
         </td>
         <td>
-          <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
+        <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
         </td>
         <td>
-            <input type="text" name="invoice_nobukti[]"  class="form-control">
+            <input type="text" name="invoice_nobukti[]" class="form-control">
         </td>
         <td>
             <input type="text" name="jenisbiaya[]" class="form-control">   
+        </td>
+        <td>
+            <div class="input-group">
+                <input type="text" name="bulanbeban[]" class="form-control datepicker">   
+            </div>
         </td>
         <td>
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
@@ -811,18 +723,18 @@
     `)
 
         $('#detailList tbody').append(detailRow)
-        $('.akunpusat-lookup').last().lookup({
-            title: 'Kode Perkiraan Lookup',
-            fileName: 'akunpusat',
-            onSelectRow: (akunpusat, element) => {
-                element.val(akunpusat.coa)
+        $('.bank-lookup').last().lookup({
+            title: 'Bank Lookup',
+            fileName: 'bank',
+            onSelectRow: (bank, element) => {
+                element.parents('td').find(`[name="bank_id[]"]`).val(bank.id)
+                element.val(bank.namabank)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
             }
         })
-
         $('.bankpelanggan-lookup').last().lookup({
             title: 'Bank Pelanggan Lookup',
             fileName: 'bankpelanggan',
@@ -888,30 +800,6 @@
             onSelectRow: (pelanggan, element) => {
                 $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
                 element.val(pelanggan.namapelanggan)
-                element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-                element.val(element.data('currentValue'))
-            }
-        })
-        $('.cabang-lookup').lookup({
-            title: 'Cabang Lookup',
-            fileName: 'cabang',
-            onSelectRow: (cabang, element) => {
-                $('#crudForm [name=cabang_id]').first().val(cabang.id)
-                element.val(cabang.namacabang)
-                element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-                element.val(element.data('currentValue'))
-            }
-        })
-        $('.bank-lookup').lookup({
-            title: 'Bank Lookup',
-            fileName: 'bank',
-            onSelectRow: (bank, element) => {
-                $('#crudForm [name=bank_id]').first().val(bank.id)
-                element.val(bank.namabank)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
