@@ -35,7 +35,9 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="tglbukti" class="form-control formatdate">
+                <div class="input-group">
+                  <input type="text" name="tglbukti" class="form-control datepicker">
+                </div>
               </div>
             </div>
             <div class="row form-group">
@@ -297,6 +299,7 @@
     getMaxLength(form)
     initLookup()
     initSelect2()
+    initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -486,6 +489,8 @@
 
           if (element.is('select')) {
             element.val(value).trigger('change')
+          } else if (element.hasClass('datepicker')) {
+            element.val(dateFormat(value))
           } else {
             element.val(value)
           }

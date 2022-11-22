@@ -318,8 +318,8 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-  
-      showPenerimaanTruckingHeader(form, id)
+
+    showPenerimaanTruckingHeader(form, id)
 
   }
 
@@ -337,8 +337,8 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-   
-      showPenerimaanTruckingHeader(form, id)
+
+    showPenerimaanTruckingHeader(form, id)
 
   }
 
@@ -411,7 +411,7 @@
             title: 'Supir Lookup',
             fileName: 'supir',
             onSelectRow: (supir, element) => {
-              $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
+              element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
               element.val(supir.namasupir)
               element.data('currentValue', element.val())
             },
@@ -470,7 +470,7 @@
       title: 'Supir Lookup',
       fileName: 'supir',
       onSelectRow: (supir, element) => {
-        $(`#crudForm [name="supir_id[]"]`).val(supir.id)
+        element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
       },

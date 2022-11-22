@@ -5,24 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ServiceInHeaderController extends MyController
 {
     public $title = 'Service in';
-    // /**
-    //  * Fungsi index
-    //  * @ClassName index
-    //  */
+   
     public function index(Request $request)
     {
         $title = $this->title;
         return view('serviceinheader.index', compact('title'));
     }
 
-    // /**
-    //  * Fungsi store
-    //  * @ClassName store
-    //  */
     public function store(Request $request)
     {
         try {
@@ -40,10 +35,7 @@ class ServiceInHeaderController extends MyController
         }
     }
 
-    // /**
-    //  * Fungsi get
-    //  * @ClassName get
-    //  */
+    
     public function get($params = [])
     {
         $params = [
@@ -70,33 +62,8 @@ class ServiceInHeaderController extends MyController
         return $data;
     }
 
-    
-    // /**
-    //  * Fungsi edit
-    //  * @ClassName edit
-    //  */
-    public function edit($id)
-    {
-        $title = $this->title;
+  
 
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "serviceinheader/$id");
-
-        $servicein = $response['data'];
-        $kode = $response['kode'];
-        $serviceNoBukti = $this->getNoBukti('SERVICEIN', 'SERVICEIN', 'serviceinheader');
-
-        $combo = $this->combo();
-
-        return view('serviceinheader.edit', compact('title', 'serviceinheader', 'combo', 'serviceNoBukti'));
-    }
-
-    // /**
-    //  * Fungsi update
-    //  * @ClassName update
-    //  */
     public function update(Request $request, $id)
     {
         // /* Unformat nominal */
@@ -121,33 +88,8 @@ class ServiceInHeaderController extends MyController
         return response($response);
     }
 
-    // /**
-    //  * Fungsi delete
-    //  * @ClassName delete
-    //  */
-    public function delete($id)
-    {
-        try {
-            $title = $this->title;
+   
 
-            $response = Http::withHeaders($this->httpHeaders)
-                ->withOptions(['verify' => false])
-                ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "serviceinheader/$id");
-
-            $servicein = $response['data'];
-            $combo = $this->combo();
-
-            return view('serviceinheader.delete', compact('title', 'combo', 'serviceinheader'));
-        } catch (\Throwable $th) {
-            return redirect()->route('serviceinheader.index');
-        }
-    }
-
-    // /**
-    //  * Fungsi destroy
-    //  * @ClassName destroy
-    //  */
     public function destroy($id)
     {
         $request['modifiedby'] = Auth::user()->name;
@@ -159,10 +101,6 @@ class ServiceInHeaderController extends MyController
         return response($response);
     }
 
-    // /**
-    //  * Fungsi getNoBukti
-    //  * @ClassName getNoBukti
-    //  */
     public function getNoBukti($group, $subgroup, $table)
     {
         $params = [
@@ -181,10 +119,6 @@ class ServiceInHeaderController extends MyController
         return $noBukti;
     }
 
-    // /**
-    //  * Fungsi combo
-    //  * @ClassName combo
-    //  */
     private function combo()
     {
         $response = Http::withHeaders($this->httpHeaders)
@@ -194,4 +128,179 @@ class ServiceInHeaderController extends MyController
 
         return $response['data'];
     }
+    public function report(Request $request)
+    {
+        
+        $detailParams = [
+            'forReport' => true,
+            'servicein_id' => $request->id
+        ];
+  
+        $servicein_detail = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get('http://localhost/trucking-laravel/public/api/serviceindetail', $detailParams);
+        
+        
+        $servicein_details = $servicein_detail['data'];
+        $user = $servicein_detail['user'];
+        return view('reports.servicein', compact('servicein_details','user'));
+    }
+
+    public function export(Request $request): void
+    {
+        
+        //FETCH HEADER
+        $serviceIn = Http::withHeaders($request->header())
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') .'serviceinheader/'.$request->id)['data'];
+
+        //FETCH DETAIL
+        $detailParams = [
+            'servicein_id' => $request->id,
+        ];
+
+        $responses = Http::withHeaders($request->header())
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') .'serviceindetail', $detailParams);
+
+        $servicein_details = $responses['data'];
+        $user = $responses['user'];
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'TAS '.$user['cabang_id']);
+        $sheet->getStyle("A1")->getFont()->setSize(20);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A1:G1');
+
+        $header_start_row = 2;
+        $detail_table_header_row = 8;
+        $detail_start_row = $detail_table_header_row + 1;
+       
+        $alphabets = range('A', 'Z');
+
+        $header_columns = [
+            [
+                'label' => 'No Bukti',
+                'index' => 'nobukti',
+            ],
+            [
+                'label' => 'Tanggal',
+                'index' => 'tglbukti',
+            ],
+            [
+                'label' => 'Trado',
+                'index' => 'trado',
+            ],
+            [
+                'label' => 'Tgl Masuk',
+                'index' => 'tglmasuk',
+            ],
+            [
+                'label' => 'Keterangan',
+                'index' => 'keterangan',
+            ],
+        ];
+
+        $detail_columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'No Bukti',
+                'index' => 'nobukti',
+            ],
+            [
+                'label' => 'Mekanik',
+                'index' => 'mekanik_id',
+            ],
+            [
+                'label' => 'Keterangan',
+                'index' => 'keterangan',
+            ]
+        ];
+
+        //LOOPING HEADER        
+        foreach ($header_columns as $header_column) {
+            $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
+            $sheet->setCellValue('C' . $header_start_row++, ': '.$serviceIn[$header_column['index']]);
+           
+        }
+
+        foreach ($detail_columns as $detail_columns_index => $detail_column) {
+            $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
+        }
+        $styleArray = array(
+            'borders' => array(
+                'allBorders' => array(
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ),
+            ),
+        );
+
+        // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
+        $sheet ->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
+
+        // LOOPING DETAIL
+        foreach ($servicein_details as $response_index => $response_detail) {
+            
+            foreach ($detail_columns as $detail_columns_index => $detail_column) {
+                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+            }
+            $sheet->setCellValue("A$detail_start_row", $response_index + 1);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['mekanik']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
+
+            $sheet ->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
+            $detail_start_row++;
+        }
+
+        // set diketahui dibuat
+        $ttd_start_row = $detail_start_row+2;
+        $sheet->setCellValue("B$ttd_start_row", 'Disetujui');
+        $sheet->setCellValue("C$ttd_start_row", 'Diketahui');
+        $sheet->setCellValue("D$ttd_start_row", 'Dibuat');
+        $sheet ->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
+        
+        $sheet->mergeCells("B".($ttd_start_row+1).":B".($ttd_start_row+3));      
+        $sheet->mergeCells("C".($ttd_start_row+1).":C".($ttd_start_row+3));      
+        $sheet->mergeCells("D".($ttd_start_row+1).":D".($ttd_start_row+3));      
+        $sheet ->getStyle("B".($ttd_start_row+1).":B".($ttd_start_row+3))->applyFromArray($styleArray);
+        $sheet ->getStyle("C".($ttd_start_row+1).":C".($ttd_start_row+3))->applyFromArray($styleArray);
+        $sheet ->getStyle("D".($ttd_start_row+1).":D".($ttd_start_row+3))->applyFromArray($styleArray);
+
+        //set tglcetak
+        date_default_timezone_set('Asia/Jakarta');
+        
+        $sheet->setCellValue("B".($ttd_start_row+5), 'Dicetak Pada :');
+        $sheet->getStyle("B".($ttd_start_row+5))->getFont()->setItalic(true);
+        $sheet->setCellValue("C".($ttd_start_row+5), date('d/m/Y H:i:s'));
+        $sheet->getStyle("C".($ttd_start_row+5))->getFont()->setItalic(true);
+        $sheet->setCellValue("D".($ttd_start_row+5), $user['name']);
+        $sheet->getStyle("D".($ttd_start_row+5))->getFont()->setItalic(true);
+
+        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('G')->setAutoSize(true);
+        $sheet->getColumnDimension('H')->setAutoSize(true);
+
+        
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'Laporan ServiceIn  ' . date('dmYHis');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+    }
+
 }

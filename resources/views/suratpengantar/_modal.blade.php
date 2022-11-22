@@ -141,7 +141,7 @@
                           <div class="form-group">
                             <div class="col-form-label">
                               <label>
-                                PERSENTASE <span class="text-danger">*</span>
+                                PERSENTASE
                               </label>
                             </div>
                             <div class="input-group">
@@ -171,7 +171,7 @@
               <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
-                    DISCOUNT <span class="text-danger">*</span>
+                    DISCOUNT
                   </label>
                 </div>
                 <div>
@@ -428,7 +428,7 @@
               <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
-                    NOMINAL STAFLE <span class="text-danger">*</span>
+                    NOMINAL STAFLE
                   </label>
                 </div>
                 <div>
@@ -453,7 +453,7 @@
               <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
-                    NO TRIP ASAL <span class="text-danger">*</span>
+                    NO TRIP ASAL
                   </label>
                 </div>
                 <div>
@@ -1292,10 +1292,6 @@
             element.val(value).trigger('change')
           } else if (element.hasClass('datepicker')) {
             element.val(dateFormat(value))
-          } else if (element.hasClass('autonumeric')) {
-            let autoNumericInput = AutoNumeric.getAutoNumericElement(element[0])
-
-            autoNumericInput.set(value);
           } else {
             element.val(value)
           }
@@ -1314,7 +1310,20 @@
           (index == 'cabang') ? element.data('current-value', value): '';
 
 
+
         })
+
+        initAutoNumeric(form.find(`[name="nominal"]`))
+        initAutoNumeric(form.find(`[name="nominalTagih"]`))
+        initAutoNumeric(form.find(`[name="nominalstafle"]`))
+        initAutoNumeric(form.find(`[name="omset"]`))
+        initAutoNumeric(form.find(`[name="discount"]`))
+        initAutoNumeric(form.find(`[name="nilaitagihlain"]`))
+        initAutoNumeric(form.find(`[name="qtyton"]`))
+        initAutoNumeric(form.find(`[name="totalton"]`))
+        initAutoNumeric(form.find(`[name="upahbongkardepo"]`))
+        initAutoNumeric(form.find(`[name="upahmuatdepo"]`))
+
         if (response.detail.length === 0) {
           addRow()
         } else {

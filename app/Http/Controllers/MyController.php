@@ -217,6 +217,17 @@ class MyController extends Controller
         return $response['data'] ?? [];
     }
 
+    public function getJenisEmkl(): array
+    {
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'jenisemkl/combo');
+
+        return $response['data'] ?? [];
+    }
+
     /* Compatible for single table */
     public function toExcel(string $title, array $data, array $columns)
     {

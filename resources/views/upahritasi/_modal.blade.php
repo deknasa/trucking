@@ -55,7 +55,7 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="jarak" class="form-control autonumeric">
+                <input type="text" name="jarak" class="form-control text-right">
               </div>
             </div>
             <div class="row form-group">

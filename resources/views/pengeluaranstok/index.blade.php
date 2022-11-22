@@ -32,101 +32,19 @@
   $(document).ready(function() {
     $('#lookup').hide()
     
-    $('.akunpusat-lookup').lookup({
-      title: 'akun pusat Lookup',
-      fileName: 'akunpusat',
-      onSelectRow: (akunpusat, element) => {
-        console.log(akunpusat);
-        element.val(akunpusat.coa)
-      }
-    })
-    /**
-     $('#lookupAkunPusat').hide()
- 
-     $('#crudModal').on('shown.bs.modal', function() {
-       akunPusatLookup.setGridWidth($('#lookupAkunPusat').prev().width())
- 
-       if (detectDeviceType() == 'desktop') {
- 
-         akunPusatLookup.setGridParam({
-           ondblClickRow: function(id) {
-             let rowData = $(this).getRowData(id)
-             console.log(rowData.coa)
- 
-             $('#crudForm [name=coa]').first().val(rowData.coa)
-             $('#lookupAkunPusat').hide()
-           }
-         })
-            //mobile
-       } else if (detectDeviceType() == 'mobile') {
-         akunPusatLookup.setGridParam({
-           onSelectRow: function(id) {
-             let rowData = $(this).getRowData(id)
- 
-             $('#crudForm [name=coa]').first().val(rowData.coa)
-             $('#lookupAkunPusat').hide()
-           }
-         })
-       }
-       $('#crudModal').find("[name]:not(:hidden, [readonly], [disabled], .disabled), button:submit").first().focus()
-     })
-     $('#crudModal').on('hidden.bs.modal', function() {
-       activeGrid = '#jqGrid'
-     })
- 
-     //tampil lookup ketika klik toggler
-     $('#lookupAkunPusatToggler').click(function(event) {
-       akunPusatLookup.setGridWidth($('#lookupAkunPusat').prev().width())
-       $('#lookupAkunPusat').toggle()
- 
-       if (detectDeviceType() != 'desktop') {
-         akunPusatLookup.setGridHeight(window.innerHeight / 1.5)
-       }
- 
-       if (detectDeviceType() == 'desktop') {
-         activeGrid = akunPusatLookup
-       }
-     })
-     
-     //untuk auto search dari kolom input
-     $('[name=coa]').on('input', function(event) {
-       $('#lookupAkunPusat').show()
- 
-       if (detectDeviceType() != 'desktop') {
-         akunPusatLookup.setGridHeight(window.innerHeight / 1.5)
-       }
- 
-       delay(() => {
-         let postData = akunPusatLookup.getGridParam('postData')
-         let colModels = akunPusatLookup.getGridParam('colModel')
-         let rules = []
- 
-         colModels = colModels.filter((colModel) => {
-           return colModel.name !== 'rn'
-         })
- 
-         colModels.forEach(colModel => {
-           rules.push({
-             field: colModel.name,
-             op: 'cn',
-             data: $(this).val()
-           })
-         });
- 
-         postData.filters = JSON.stringify({
-           groupOp: 'OR',
-           rules: rules
-         })
- 
-         akunPusatLookup.trigger('reloadGrid', {
-           page: 1
-         })
-       }, 500)
-     })
-     * 
-     * 
-    */
-
+    // $('.akunpusat-lookup').lookup({
+    //   title: 'akun pusat Lookup',
+    //   fileName: 'akunpusat',
+    //   onSelectRow: (akunpusat, element) => {
+    //     element.val(akunpusat.coa)
+    //     $(`#${element[0]['name']}Id`).val(akunpusat.coa)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   }
+    // })
+   
     $("#jqGrid").jqGrid({
         url: `${apiUrl}pengeluaranstok`,
         mtype: "GET",
@@ -444,109 +362,9 @@
       }
     })
   })
-  const getUserLookup = function(fileName) {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: `${appUrl}/lookup/${fileName}`,
-        method: 'GET',
-        dataType: 'html',
-        success: function(response) {
-          resolve(response)
-        }
-      })
-    })
-  }
+ 
 
-  $.fn.lookup = function(options = null) {
-    this.each(function() {
-      let element = $(this)
-
-      element
-        .wrap('<div class="input-group"></div>')
-        .after(`
-          <div class="input-group-append">
-            <button class="btn btn-primary lookup-toggler" type="button">...</button>
-          </div>
-        `)
-
-      element.siblings('.input-group-append').find('.lookup-toggler').click(function() {
-        activateLookup(element)
-      })
-    })
-
-    function activateLookup(element) {
-      let lookupModal = $(`
-        <div class="modal fade modal-fullscreen" id="lookupModal" tabindex="-1" aria-labelledby="lookupModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <form action="#" id="crudForm">
-              <div class="modal-content">
-                <div class="modal-header bg-primary">
-                  <h5 class="modal-title" id="lookupModalLabel">${options.title}</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      `)
-
-      $('body').append(lookupModal)
-
-      lookupModal.modal('show')
-
-      getUserLookup(options.fileName)
-        .then(response => {
-          lookupModal.find('.modal-body').html(response)
-
-          grid = lookupModal.find('.lookup-grid')
-
-          if (detectDeviceType() == 'desktop') {
-            grid.jqGrid('setGridParam', {
-              ondblClickRow: function(id) {
-                handleSelectedRow(id, lookupModal, element)
-              }
-            })
-          } else if (detectDeviceType() == 'mobile') {
-            grid.jqGrid('setGridParam', {
-              onSelectRow: function(id) {
-                handleSelectedRow(id, lookupModal, element)
-              }
-            })
-          }
-        })
-
-      lookupModal.on('hidden.bs.modal', function() {
-        lookupModal.remove()
-      })
-    }
-
-    function handleSelectedRow(id, lookupModal, element) {
-      console.log(id);
-      if (id !== null) {
-        lookupModal.modal('hide')
-
-        options.onSelectRow(sanitize(grid.getRowData(id)), element)
-      } else {
-        alert('Please select a row')
-      }
-
-    }
-
-    function sanitize(rowData) {
-      Object.keys(rowData).forEach(key => {
-        rowData[key] = rowData[key].replaceAll('<span class="highlight">', '').replaceAll('</span>', '')
-      })
-
-      return rowData
-    }
-
-    return this
-  }
-
+  
 </script>
 @endpush
 @endsection

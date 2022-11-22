@@ -113,30 +113,146 @@
           {
             label: 'PHOTO SUPIR',
             name: 'photosupir',
-            align: 'center'
+            search: false,
+            align: 'center',
+            formatter: (value, row) => {
+              let images = []
+              if(value) {
+              let files = JSON.parse(value)
+
+              files.forEach(file => {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/supir/${file}/small`
+
+                images.push(image.outerHTML)
+              });
+
+              return images.join(' ')
+            }
+              return 'NO PHOTOS'
+            }
           },
           {
             label: 'PHOTO KTP',
             name: 'photoktp',
-            align: 'center'
+            align: 'center',
+            search: false,
+            formatter: (value, row) => {
+              let images = []
+              if(value) {
+              let files = JSON.parse(value)
+
+              files.forEach(file => {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/ktp/${file}/small`
+
+                images.push(image.outerHTML)
+              });
+
+              return images.join(' ')
+            }
+              return 'NO PHOTOS'
+            }
           },
           {
             label: 'PHOTO SIM',
             name: 'photosim',
-            align: 'center'
+            align: 'center',
+            search: false,
+            formatter: (value, row) => {
+              let images = []
+              if(value) {
+              let files = JSON.parse(value)
+
+              files.forEach(file => {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/sim/${file}/small`
+
+                images.push(image.outerHTML)
+              });
+
+              return images.join(' ')
+            }
+              return 'NO PHOTOS'
+            }
           },
           {
             label: 'PHOTO KK',
             name: 'photokk',
-            align: 'center'
+            align: 'center',
+            search: false,
+            formatter: (value, row) => {
+              let images = []
+              if(value) {
+              let files = JSON.parse(value)
+
+              files.forEach(file => {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/kk/${file}/small`
+
+                images.push(image.outerHTML)
+              });
+
+              return images.join(' ')
+            }
+              return 'NO PHOTOS'
+            }
           },
           {
             label: 'PHOTO SKCK',
             name: 'photoskck',
+            search: false,
+            align: 'center',
+            formatter: (value, row) => {
+              let images = []
+              if(value) {
+              let files = JSON.parse(value)
+
+              files.forEach(file => {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/skck/${file}/small`
+
+                images.push(image.outerHTML)
+              });
+
+              return images.join(' ')
+              }
+              return 'NO PHOTOS'
+            }
           },
           {
             label: 'PHOTO DOMISILI',
             name: 'photodomisili',
+            search: false,
+            align: 'center',
+            formatter: (value, row) => {
+              let images = []
+              if (value) {
+                let files = JSON.parse(value)
+
+                files.forEach(file => {
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}supir/image/domisili/${file}/small`
+
+                  images.push(image.outerHTML)
+                });
+
+                return images.join(' ')
+              }
+              return 'NO PHOTOS'
+            }
           },
           {
             label: 'TGL BERHENTI SUPIR',

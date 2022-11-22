@@ -14,8 +14,9 @@
 
 @push('scripts')
 <script>
+  let indexUrl = "{{ route('trado.index') }}"
   let indexRow = 0;
-  let page = 1;
+  let page = 0;
   let pager = '#jqGridPager'
   let popup = "";
   let id = "";
@@ -62,7 +63,7 @@
                       endforeach
 
                       ?>
-          `,
+  `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -77,8 +78,8 @@
             align: 'right',
             formatter: 'currency',
             formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
+              decimalSeparator: '.',
+              thousandsSeparator: ','
             }
           },
           {
@@ -87,8 +88,8 @@
             align: 'right',
             formatter: 'currency',
             formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
+              decimalSeparator: '.',
+              thousandsSeparator: ','
             }
           },
           {
@@ -174,7 +175,7 @@
                       endforeach
 
                       ?>
-          `,
+  `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -204,7 +205,7 @@
                       endforeach
 
                       ?>
-          `,
+  `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -248,7 +249,7 @@
                       endforeach
 
                       ?>
-          `,
+  `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -274,7 +275,7 @@
                       endforeach
 
                       ?>
-          `,
+  `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -336,7 +337,7 @@
                       endforeach
 
                       ?>
-          `,
+  `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -348,6 +349,10 @@
           {
             label: 'MANDOR',
             name: 'mandor_id',
+          },
+          {
+            label: 'SUPIR',
+            name: 'supir_id',
           },
           {
             label: 'JLH BAN SERAP',
@@ -370,7 +375,7 @@
                       endforeach
 
                       ?>
-          `,
+  `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -396,7 +401,7 @@
                       endforeach
 
                       ?>
-          `,
+  `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -487,7 +492,7 @@
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 10,
+        rowNum: rowNum,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
@@ -541,14 +546,14 @@
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
@@ -557,7 +562,7 @@
           }
 
           setHighlight($(this))
-        }
+        },
       })
 
       .jqGrid('filterToolbar', {
@@ -565,9 +570,10 @@
         searchOnEnter: false,
         defaultSearch: 'cn',
         groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           clearGlobalSearch($('#jqGrid'))
-        }
+        },
       })
 
       .customPager({
@@ -575,7 +581,7 @@
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
-            onClick: function(event) {
+            onClick: () => {
               createTrado()
             }
           },
@@ -583,13 +589,10 @@
             id: 'edit',
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
             class: 'btn btn-success btn-sm mr-1',
-            onClick: function(event) {
+            onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                editTrado(selectedId)
-              }
+
+              editTrado(selectedId)
             }
           },
           {
@@ -598,15 +601,11 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                deleteTrado(selectedId)
-              }
+
+              deleteTrado(selectedId)
             }
           },
         ]
-
       })
 
     /* Append clear filter button */
@@ -647,13 +646,49 @@
       $('#delete').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('trado', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+    $('#rangeModal').on('shown.bs.modal', function() {
+      if (autoNumericElements.length > 0) {
+        $.each(autoNumericElements, (index, autoNumericElement) => {
+          autoNumericElement.remove()
+        })
+      }
 
-    if (!`{{ $myAuth->hasPermission('trado', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }
+      $('#formRange [name]:not(:hidden)').first().focus()
+
+      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
+      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
+      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+      $('#formRange [name=sampai]').val(totalRecord)
+
+      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
+        digitGroupSeparator: '.',
+        decimalCharacter: ',',
+        allowDecimalPadding: false,
+        minimumValue: 1,
+        maximumValue: totalRecord
+      })
+    })
+
+    $('#formRange').submit(event => {
+      event.preventDefault()
+
+      let params
+      let actionUrl = ``
+
+      /* Clear validation messages */
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
+
+      /* Set params value */
+      for (var key in postData) {
+        if (params != "") {
+          params += "&";
+        }
+        params += key + "=" + encodeURIComponent(postData[key]);
+      }
+
+      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+    })
   })
 </script>
 @endpush()

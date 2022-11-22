@@ -267,9 +267,12 @@
                                 </tr>
                                 `)
 
-                            initDatepicker(detailRow.find('.datepicker'))
+                            // initDatepicker(detailRow.find('.datepicker'))
+                            detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(data.tgljt))
+
                             initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
                             $('#detailList tbody').append(detailRow)
+                            initDatepicker()
                             $('.akunpusat-lookup').last().lookup({
                                 title: 'Kode Perkiraan Lookup',
                                 fileName: 'akunpusat',
@@ -430,8 +433,7 @@
 
 
     function tarikPelunasan(aksi, id = null) {
-        let checked
-        (aksi == 'edit' || aksi == 'delete') ? checked = 'checked' : '' ;
+        let checked = (aksi == 'edit' || aksi == 'delete') ? 'checked' : '';
         $.ajax({
             url: `${apiUrl}penerimaanheader/${id}/tarikPelunasan`,
             method: 'GET',
@@ -553,7 +555,7 @@
                 setStatusKasOptions(form)
             ])
             .then(() => {
-                
+
                 tarikPelunasan('delete', id)
                 showPenerimaan(form, id)
             })
