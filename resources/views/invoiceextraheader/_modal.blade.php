@@ -46,9 +46,7 @@
               </div>
               
             </div>
-
-            
-                <input type="text" name="nominal" readonly hidden id="nominal" >
+            <input type="text" name="nominal" readonly hidden id="nominal" >
 
              
             
@@ -107,7 +105,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
-  let modalBody = $('#crudModal').find('.modal-body').html()
+  // let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     
@@ -125,13 +123,10 @@
       let method
       let url
       let form = $('#crudForm')
-      let pengeluaranStokHeaderId = form.find('[name=id]').val()
+      let invoiceExtraHeader = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
-      $('#crudForm').find(`[name="detail_qty[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'detail_qty[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_qty[]"]`)[index])
-      })
       $('#crudForm').find(`[name="nominal_detail[]"]`).each((index, element) => {
         data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
       })
@@ -173,11 +168,11 @@
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}invoiceextraheader/${pengeluaranStokHeaderId}`
+          url = `${apiUrl}invoiceextraheader/${invoiceExtraHeader}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}invoiceextraheader/${pengeluaranStokHeaderId}`
+          url = `${apiUrl}invoiceextraheader/${invoiceExtraHeader}`
           break;
         default:
           method = 'POST'
@@ -233,7 +228,7 @@
     setFormBindKeys(form)
       
     activeGrid = null
-    initLookup()
+    // initLookup()
     initDatepicker()
 
     // getMaxLength(form)
@@ -241,7 +236,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    $('#crudModal').find('.modal-body').html(modalBody)
+    // $('#crudModal').find('.modal-body').html(modalBody)
 
   })
 
@@ -257,17 +252,16 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
-
     $('#crudModalTitle').text('Create Invoice Extra')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     addRow()
     sumary()
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
   }
 
-  function editInvoiceExtraHeader(pengeluaranStokHeaderId) {
+  function editInvoiceExtraHeader(invoiceExtraHeader) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -282,11 +276,11 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showInvoiceExtraHeader(form, pengeluaranStokHeaderId)
+    showInvoiceExtraHeader(form, invoiceExtraHeader)
     
   }
 
-  function deleteInvoiceExtraHeader(pengeluaranStokHeaderId) {
+  function deleteInvoiceExtraHeader(invoiceExtraHeader) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -301,7 +295,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showInvoiceExtraHeader(form, pengeluaranStokHeaderId)
+    showInvoiceExtraHeader(form, invoiceExtraHeader)
 
   }
 
@@ -333,8 +327,7 @@
   
   index = 0;
   function addRow() {
-// logid;
-console.log(index);
+
     let detailRow = $(`
     <tr class="trow">
                   <td>
@@ -396,10 +389,10 @@ console.log(index);
     // new AutoNumeric($('#nominal')[0]).set(sumary);
 	}
 
-  function showInvoiceExtraHeader(form, pengeluaranStokHeaderId) {
+  function showInvoiceExtraHeader(form, invoiceExtraHeader) {
     resetRow()
     $.ajax({
-      url: `${apiUrl}invoiceextraheader/${pengeluaranStokHeaderId}`,
+      url: `${apiUrl}invoiceextraheader/${invoiceExtraHeader}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -441,7 +434,6 @@ console.log(index);
           setRowNumbers()
          
           id++;
-          index = id;
         })
         
         sumary()
