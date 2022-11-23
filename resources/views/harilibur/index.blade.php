@@ -45,6 +45,11 @@
           {
             label: 'TANGGAL LIBUR',
             name: 'tgl',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'KETERANGAN',

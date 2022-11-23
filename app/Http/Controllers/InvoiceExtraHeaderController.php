@@ -32,7 +32,7 @@ class InvoiceExtraHeaderController extends MyController
         $response = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'rekappengeluaranheader', $params);
+            ->get(config('app.api_url') . 'invoiceextraheader', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -71,22 +71,22 @@ class InvoiceExtraHeaderController extends MyController
             'withRelations' => true,
 
         ];
-        $rekappengeluaran = $this->find($params,$id)['data'];
+        $invoicceextra = $this->find($params,$id)['data'];
 
-        $data = $rekappengeluaran;
+        $data = $invoicceextra;
         $i =0;
         
         $response = Http::withHeaders($this->httpHeaders)
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
-        ->get(config('app.api_url') . 'rekappengeluarandetail', ['rekappengeluaran_id' => $rekappengeluaran['id']]);
+        ->get(config('app.api_url') . 'invoiceextradetail', ['invoiceextra_id' => $invoicceextra['id']]);
 
         $data["details"] =$response['data'];
         $data["user"] = Auth::user();
      
         
-        $rekappengeluaranheaders = $data;
-        return view('reports.rekappengeluaranheader', compact('rekappengeluaranheaders'));
+        $invoiceextraheaders = $data;
+        return view('reports.invoiceextraheader', compact('invoiceextraheaders'));
     }
 
     public function export(Request $request)
@@ -98,30 +98,30 @@ class InvoiceExtraHeaderController extends MyController
 
         ];
 
-        $notadebets = $this->get($params)['rows'];
+        // return $this->get($params);
+        $invoiceExtras = $this->get($params)['rows'];
         $data = [];
         $i =0;
-        foreach ($notadebets as $notadebet) {
-            $data[$i] =$notadebet;
-            $response = Http::withHeaders($this->httpHeaders)
+        foreach ($invoiceExtras as $invoiceExtras) {
+            $data[$i] =$invoiceExtras;
+           $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'rekappengeluarandetail', [$request->all()]);
+            ->get(config('app.api_url') . 'invoiceextradetail', [$request->all()]);
 
 
-            $data[$i]["details"] =$response['data'];
+            $data[$i]["details"] =$response ['data'];
             $i++;
         }
-        // dd($data);
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Laporan Rekap Pengeluaran');
+        $sheet->setCellValue('A1', 'Laporan Invoice Extra');
         $sheet->getStyle("A1")->getFont()->setSize(20);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:E1');
+        $sheet->mergeCells('A1:D1');
 
         $header_start_row = 2;
-        $detail_table_header_row = 5;
+        $detail_table_header_row = 7;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
@@ -137,14 +137,18 @@ class InvoiceExtraHeaderController extends MyController
             ],
             
             [
-                'label'=>'Bank',
-                'index'=>'bank'
+                'label'=>'Pelanggan',
+                'index'=>'pelanggan'
             ],
             [
-                'label'=>'Approval Status ',
-                'index'=>'statusapproval_memo'
+                'label'=>'Agen',
+                'index'=>'agen'
             ],
             
+            [
+                'label'=>'Nominal',
+                'index'=>'nominal'
+            ],
             [
                 'label'=>'Keterangan',
                 'index'=>'keterangan'
@@ -158,11 +162,7 @@ class InvoiceExtraHeaderController extends MyController
             ],
             [
                 'label'=>'No Bukti',
-                'index'=>'pengeluaran_nobukti'
-            ],
-            [
-                'label'=>'tgl transaksi',
-                'index'=>'tgltransaksi'
+                'index'=>'nobukti'
             ],
             [
                 'label'=>'Keterangan',
@@ -188,22 +188,21 @@ class InvoiceExtraHeaderController extends MyController
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
             }
 
-            $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF02c4f5');
+            $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF02c4f5');
 
             foreach ($data[$i]['details'] as $detail_index => $detail_data) {
                 foreach ($detail_columns as $detail_columns_index => $detail_column) {
                     $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $detail_data[$detail_column['index']] : $detail_index + 1);
                 }
                 $sheet->setCellValue("A$detail_start_row", $detail_index + 1);
-                $sheet->setCellValue("B$detail_start_row", $detail_data['pengeluaran_nobukti']);
-                $sheet->setCellValue("C$detail_start_row", $detail_data['tgltransaksi']);
-                $sheet->setCellValue("D$detail_start_row", $detail_data['keterangan']);
-                $sheet->setCellValue("E$detail_start_row", $detail_data['nominal']);
+                $sheet->setCellValue("B$detail_start_row", $detail_data['nobukti']);
+                $sheet->setCellValue("C$detail_start_row", $detail_data['keterangan']);
+                $sheet->setCellValue("D$detail_start_row", $detail_data['nominal']);
 
                 $detail_start_row++;
             }
 
-            $detail_table_header_row += (5 + count($data[$i]['details']) );
+            $detail_table_header_row += (7 + count($data[$i]['details']) );
             $detail_start_row = $detail_table_header_row + 1;
         }
 
@@ -211,7 +210,6 @@ class InvoiceExtraHeaderController extends MyController
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
 
         $styleArray = array(
             'borders' => array(
@@ -222,7 +220,7 @@ class InvoiceExtraHeaderController extends MyController
         );
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LaporanRekapPengeluaran' . date('dmYHis');
+        $filename = 'Laporaninvoicceextra' . date('dmYHis');
 
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
