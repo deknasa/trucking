@@ -36,7 +36,30 @@
 
     $('#lookup').hide()
     
-    
+    $('.pelanggan-lookup').lookup({
+      title: 'pelanggan Lookup',
+      fileName: 'pelanggan',
+      onSelectRow: (pelanggan, element) => {
+        element.val(pelanggan.namapelanggan)
+        $(`#${element[0]['name']}Id`).val(pelanggan.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
+    $('.agen-lookup').lookup({
+      title: 'agen Lookup',
+      fileName: 'agen',
+      onSelectRow: (agen, element) => {
+        element.val(agen.namaagen)
+        $(`#${element[0]['name']}Id`).val(agen.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      }
+    })
     
     
 
