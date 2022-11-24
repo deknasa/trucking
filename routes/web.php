@@ -116,7 +116,8 @@ use App\Http\Controllers\InvoiceDetailController;
 use App\Http\Controllers\InvoiceHeaderController;
 
 use App\Http\Controllers\InvoiceExtraHeaderController;
-
+use App\Http\Controllers\JurnalUmumPusatDetailController;
+use App\Http\Controllers\JurnalUmumPusatHeaderController;
 use App\Http\Controllers\LookupController;
 use App\Http\Controllers\PenerimaanGiroDetailController;
 use App\Http\Controllers\PenerimaanGiroHeaderController;
@@ -715,7 +716,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('penerimaangiroheader', PenerimaanGiroHeaderController::class);
     Route::resource('penerimaangirodetail', PenerimaanGiroDetailController::class);
 
-        
+    Route::get('jurnalumumpusatheader/get', [JurnalUmumPusatHeaderController::class, 'get'])->name('jurnalumumpusatheader.get');
+    Route::get('jurnalumumpusatheader/export', [JurnalUmumPusatHeaderController::class, 'export'])->name('jurnalumumpusatheader.export');
+    Route::get('jurnalumumpusatheader/report', [JurnalUmumPusatHeaderController::class, 'report'])->name('jurnalumumpusatheader.report');
+    Route::resource('jurnalumumpusatheader', JurnalUmumPusatHeaderController::class);
+
+    Route::resource('jurnalumumpusatdetail', JurnalUmumPusatDetailController::class);
     Route::get('harilibur/index', [HariLiburController::class, 'index']);
     Route::resource('harilibur', HariLiburController::class);
 

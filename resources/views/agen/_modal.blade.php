@@ -118,7 +118,7 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="top" class="form-control autonumeric">
+                <input type="text" name="top" class="form-control text-right">
               </div>
             </div>
             <div class="row form-group">
@@ -140,7 +140,8 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="jenisemkl" class="form-control">
+                <input type="hidden" name="jenisemkl">
+                <input type="text" name="keteranganjenisemkl" class="form-control jenisemkl-lookup">
               </div>
             </div>
           </div>
@@ -163,6 +164,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -175,7 +177,9 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
-      unformatAutoNumeric(data)
+      $('#crudForm').find(`[name="top`).each((index, element) => {
+        data.filter((row) => row.name === 'top')[index].value = AutoNumeric.getNumber($(`#crudForm [name="top`)[index])
+      })
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -269,10 +273,12 @@
 
     getMaxLength(form)
     initSelect2()
+    initLookup()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createAgen() {
@@ -290,6 +296,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
+    initAutoNumeric(form.find(`[name="top"]`))
     setStatusAktifOptions(form)
     setStatusTasOptions(form)
   }
@@ -484,18 +491,40 @@
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } else if (element.hasClass('autonumeric')) {
-            let autoNumericInput = AutoNumeric.getAutoNumericElement(element[0])
-            
-            autoNumericInput.set(value);
-          } else {
+          }  else {
             element.val(value)
           }
+          if (index == 'keteranganjenisemkl') {
+            element.data('current-value', value)
+          }
         })
+        initAutoNumeric($('#crudForm').find(`[name="top"]`))
+
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
           initDisabled()
         }
+      }
+    })
+  }
+
+  function initLookup() {
+    $('.jenisemkl-lookup').lookup({
+      title: 'Jenis EMKL Lookup',
+      fileName: 'jenisemkl',
+      onSelectRow: (jenisemkl, element) => {
+        $('#crudForm [name=jenisemkl]').first().val(jenisemkl.id)
+        element.val(jenisemkl.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        
+        $('#crudForm [name=jenisemkl]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
   }
