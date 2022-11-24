@@ -716,12 +716,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('penerimaangiroheader', PenerimaanGiroHeaderController::class);
     Route::resource('penerimaangirodetail', PenerimaanGiroDetailController::class);
 
+    Route::get('jurnalumumpusatheader/index', [JurnalUmumPusatHeaderController::class, 'index']);
     Route::get('jurnalumumpusatheader/get', [JurnalUmumPusatHeaderController::class, 'get'])->name('jurnalumumpusatheader.get');
     Route::get('jurnalumumpusatheader/export', [JurnalUmumPusatHeaderController::class, 'export'])->name('jurnalumumpusatheader.export');
     Route::get('jurnalumumpusatheader/report', [JurnalUmumPusatHeaderController::class, 'report'])->name('jurnalumumpusatheader.report');
     Route::resource('jurnalumumpusatheader', JurnalUmumPusatHeaderController::class);
-
     Route::resource('jurnalumumpusatdetail', JurnalUmumPusatDetailController::class);
+
+    Route::get('harilibur/get', [HariLiburController::class, 'get'])->name('harilibur.get');
     Route::get('harilibur/index', [HariLiburController::class, 'index']);
     Route::resource('harilibur', HariLiburController::class);
 

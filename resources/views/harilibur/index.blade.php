@@ -14,9 +14,8 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('harilibur.index') }}"
   let indexRow = 0;
-  let page = 0;
+  let page = 1;
   let pager = '#jqGridPager'
   let popup = "";
   let id = "";
@@ -30,7 +29,9 @@
   let autoNumericElements = []
   let rowNum = 10
 
+  
   $(document).ready(function() {
+
     $("#jqGrid").jqGrid({
         url: `${apiUrl}harilibur`,
         mtype: "GET",
@@ -43,20 +44,15 @@
             width: '50px'
           },
           {
-            label: 'TANGGAL LIBUR',
+            label: 'TANGGAL',
             name: 'tgl',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
           },
           {
-            label: 'STATUS',
+            label: 'STATUS AKTIF',
             name: 'statusaktif',
             stype: 'select',
             searchoptions: {
@@ -88,6 +84,7 @@
           {
             label: 'CREATEDAT',
             name: 'created_at',
+            align: 'right',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -97,6 +94,7 @@
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
+            align: 'right',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -137,6 +135,7 @@
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
+
         loadComplete: function(data) {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -153,7 +152,7 @@
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
           })
-
+          
           if (indexRow > $(this).getDataIDs().length - 1) {
             indexRow = $(this).getDataIDs().length - 1;
           }
@@ -161,14 +160,14 @@
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
@@ -305,6 +304,7 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
+
 </script>
 @endpush()
 @endsection
