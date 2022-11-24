@@ -10,10 +10,6 @@ class HariLiburController extends MyController
 {
     public $title = 'Hari Libur';
 
-    /**
-     * Fungsi index
-     * @ClassName index
-     */
     public function index(Request $request)
     {
         $title = $this->title;
@@ -25,7 +21,7 @@ class HariLiburController extends MyController
         return view('harilibur.index', compact('title', 'data'));
     }
 
-    public function get($params = []): array
+    public function get($params = [])
     {
         $params = [
             'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
@@ -33,20 +29,24 @@ class HariLiburController extends MyController
             'sortIndex' => $params['sidx'] ?? request()->sidx,
             'sortOrder' => $params['sord'] ?? request()->sord,
             'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
+            'withRelations' => $params['withRelations'] ?? request()->withRelations ?? false,
         ];
 
         $response = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'harilibur', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
             'records' => $response['attributes']['totalRows'] ?? [],
-            'rows' => $response['data'] ?? []
+            'rows' => $response['data'] ?? [],
+            'params' => $response['params'] ?? [],
         ];
 
         return $data;
     }
+
 
     public function combo($aksi)
     {

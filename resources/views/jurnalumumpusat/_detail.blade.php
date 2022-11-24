@@ -60,7 +60,7 @@
         sortable: true,
         viewrecords: true,
         postData: {
-          jurnalumumpusat_id: id
+          jurnalumum_id: id
         },
         prmNames: {
           sort: 'sortIndex',
@@ -111,7 +111,7 @@
       url: `${apiUrl}jurnalumumpusatdetail`,
       datatype: "json",
       postData: {
-        jurnalumumpusat_id: id
+        jurnalumum_id: id
       }
     }).trigger('reloadGrid')
   }

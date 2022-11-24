@@ -81,7 +81,7 @@
             let method
             let url
             let form = $('#crudForm')
-            let id = form.find('[name=id]').val()
+            let hariLiburId = form.find('[name=id]').val()
             let action = form.data('action')
             let data = $('#crudForm').serializeArray()
 
@@ -117,11 +117,11 @@
                     break;
                 case 'edit':
                     method = 'PATCH'
-                    url = `${apiUrl}harilibur/${id}`
+                    url = `${apiUrl}harilibur/${hariLiburId}`
                     break;
                 case 'delete':
                     method = 'DELETE'
-                    url = `${apiUrl}harilibur/${id}`
+                    url = `${apiUrl}harilibur/${hariLiburId}`
                     break;
                 default:
                     method = 'POST'
@@ -141,11 +141,11 @@
                 },
                 data: data,
                 success: response => {
+                    id = response.data.id                    
                     $('#crudForm').trigger('reset')
                     $('#crudModal').modal('hide')
 
-                    id = response.data.id
-
+                    
                     $('#jqGrid').jqGrid('setGridParam', {
                         page: response.data.page
                     }).trigger('reloadGrid');
@@ -336,7 +336,7 @@
                         element.val(value)
                     }
                 })
-
+                console.log(form.data('action'))
                 if (form.data('action') === 'delete') {
                     form.find('[name]').addClass('disabled')
                     initDisabled()
