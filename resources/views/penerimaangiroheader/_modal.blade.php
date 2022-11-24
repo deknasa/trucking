@@ -84,10 +84,9 @@
                                     <tr>
                                         <th width="1%">PILIH</th>
                                         <th width="2%">NO BUKTI</th>
-                                        <th width="1%">TGL</th>
-                                        <th width="1%">NOMINAL</th>
-                                        <th width="3%">AGEN</th>
-                                        <th width="1%">CABANG</th>
+                                        <th width="2%">TGL</th>
+                                        <th width="2%">NOMINAL</th>
+                                        <th width="3%">PELANGGAN</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -108,13 +107,56 @@
                                         <th width="6%">Keterangan</th>
                                         <th width="6%">Nominal</th>
                                         <th width="5%">No Invoice</th>
+                                        <th width="5%">No Bukti Pelunasan</th>
                                         <th width="4%">Jenis Biaya</th>
                                         <th width="4%">Bulan Beban</th>
                                         <th width="1%">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table_body" class="form-group">
-
+                                <tr id='1'>
+                                    <td>1</td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="nowarkat[]"  class="form-control">
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="bank_id[]">
+                                        <input type="text" name="bank[]"  class="form-control bank-lookup">
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="bankpelanggan_id[]">
+                                        <input type="text" name="bankpelanggan[]"  class="form-control bankpelanggan-lookup">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="keterangan_detail[]" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="nominal[]" class="form-control text-right nominal"> 
+                                    </td>
+                                    <td>
+                                        <input type="text" name="invoice_nobukti[]" class="form-control" readonly>
+                                    </td>
+                                    
+                                    <td>
+                                        <input type="text" name="pelunasanpiutang_nobukti[]" class="form-control" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="jenisbiaya[]" class="form-control">   
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" name="bulanbeban[]" class="form-control datepicker">   
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                                    </td>
+                                </tr>
 
                                 </tbody>
                                 <tfoot>
@@ -125,7 +167,7 @@
                                         <td>
                                             <p class="text-right font-weight-bold autonumeric" id="total"></p>
                                         </td>
-                                        <td colspan="3"></td>
+                                        <td colspan="4"></td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                                         </td>
@@ -172,7 +214,23 @@
 
         $(document).on('click', `#tablePelunasan tbody [name="pelunasan_id[]"]`, function() {
             if ($(this).prop("checked") == true) {
-                // $("#detailList tbody tr:first-child").remove()
+
+                let firstRow = $("#detailList tbody").find('#1')
+                let count = 0;
+                let row = '';
+                let arrData = []
+                $("#detailList tbody tr#1 td").each(function () {
+                    row =$("#detailList tbody tr#1").find(`td:eq(${count}) input`).val()
+                    if(row != '') {arrData.push(row)}
+                    count++
+                    row++
+                })
+                let arrSlice = arrData.slice(1,-1)
+
+                if(arrSlice.length === 0){
+                    $("#detailList tbody").find('#1').remove()
+                }
+
                 id = $(this).val()
                 console.log(id)
                 $.ajax({
@@ -190,7 +248,7 @@
                                     <td></td>
                                     <td>
                                         <div class="input-group">
-                                            <input type="text" name="tgljatuhtempo[]" value="${data.tgljt}" class="form-control datepicker">   
+                                            <input type="text" name="tgljatuhtempo[]" value="${data.tgljt}" class="form-control datepicker" readonly>   
                                         </div>
                                     </td>
                                     <td>
@@ -205,16 +263,19 @@
                                         <input type="text" name="bankpelanggan[]"  class="form-control bankpelanggan-lookup">
                                     </td>
                                     <td>
-                                    <input type="text" name="keterangan_detail[]" value="${data.keterangan}" class="form-control">
+                                    <input type="text" name="keterangan_detail[]" value="${data.keterangan}" class="form-control" readonly>
                                     </td>
                                     <td>
-                                    <input type="text" name="nominal[]" value="${data.nominal}" class="form-control autonumeric nominal"> 
+                                    <input type="text" name="nominal[]" value="${data.nominal}" class="form-control autonumeric " readonly> 
                                     </td>
                                     <td>
-                                        <input type="text" name="invoice_nobukti[]" value="${data.invoice_nobukti}" class="form-control">
+                                        <input type="text" name="invoice_nobukti[]" value="${data.invoice_nobukti}" class="form-control" readonly>
                                     </td>
                                     <td>
-                                        <input type="text" name="jenisbiaya[]" class="form-control">   
+                                        <input type="text" name="pelunasanpiutang_nobukti[]" value="${data.nobukti}" class="form-control" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="jenisbiaya[]" class="form-control">
                                     </td>
                                     <td>
                                         <div class="input-group">
@@ -241,6 +302,10 @@
                                 },
                                 onCancel: (element) => {
                                     element.val(element.data('currentValue'))
+                                },
+                                onClear: (element) => {
+                                    element.val('')
+                                    element.data('currentValue', element.val())
                                 }
                             })
                             $('.bankpelanggan-lookup').last().lookup({
@@ -253,11 +318,17 @@
                                 },
                                 onCancel: (element) => {
                                     element.val(element.data('currentValue'))
+                                },
+                                onClear: (element) => {
+                                    element.parents('td').find(`[name="bankpelanggan_id[]"]`).val('')
+                                    element.val('')
+                                    element.data('currentValue', element.val())
                                 }
                             })
                         })
 
                         setRowNumbers()
+                        setTotal()
                     }
                 })
 
@@ -265,6 +336,7 @@
                 id = $(this).val()
                 nobukti = $(this).parent().find(`[name="pelunasan_nobukti[]"]`).val()
                 $(`#detailList tbody tr[class="${nobukti}"]`).remove()
+                setTotal()
             }
         })
 
@@ -401,33 +473,41 @@
                 Authorization: `Bearer ${accessToken}`
             },
             success: response => {
-                $.each(response.data, (index, data) => {
-                    let tablePelunasan = $(`
-                    <tr>
-                        <td><input name='pelunasan_id[]' type="checkbox" id="checkItem" value="${data.id}" ${checked}>
-                            <input name='pelunasan_nobukti[]' type="hidden" value="${data.nobukti}">
-                        </td>
-                        <td>
-                            <p>${data.nobukti}</p>
-                        </td>
-                        <td>
-                            <p>${dateFormat(data.tglbukti)}</p>
-                        </td>
-                        <td>
-                            <p id="nominalLunas">${data.nominal}</p>
-                        </td>
-                        <td>
-                            <p>${data.agen_id}</p>
-                        </td>
-                        <td>
-                            <p>${data.cabang_id}</p>
-                        </td>
-                    </tr>
+                if(response.data.length === 0){
+                    let tablePelunasan = $(` 
+                        <tr>
+                            <td colspan='6'><p><b><center>TIDAK ADA PELUNASAN</center></b></p></td>
+                        </tr>
                     `)
-
+                    
                     $('#tablePelunasan tbody').append(tablePelunasan)
-                    initAutoNumeric(tablePelunasan.find('#nominalLunas'))
-                })
+                }else{
+                    $.each(response.data, (index, data) => {
+                        let tablePelunasan = $(`
+                        <tr>
+                            <td><input name='pelunasan_id[]' type="checkbox" id="checkItem" value="${data.id}" ${checked}>
+                                <input name='pelunasan_nobukti[]' type="hidden" value="${data.nobukti}">
+                            </td>
+                            <td>
+                                <p>${data.nobukti}</p>
+                            </td>
+                            <td>
+                                <p>${dateFormat(data.tglbukti)}</p>
+                            </td>
+                            <td>
+                                <p id="nominalLunas">${data.nominal}</p>
+                            </td>
+                            <td>
+                                <p>${data.pelanggan}</p>
+                            </td>
+                        </tr>
+                        `)
+
+                        $('#tablePelunasan tbody').append(tablePelunasan)
+                        initAutoNumeric(tablePelunasan.find('#nominalLunas'))
+                    })
+
+                }
             }
         })
     }
@@ -463,10 +543,46 @@
         $('.invalid-feedback').remove()
 
 
-        $('#table_body').html('')
+        // $('#table_body').html('')
+        $('.bank-lookup').last().lookup({
+            title: 'Bank Lookup',
+            fileName: 'bank',
+            onSelectRow: (bank, element) => {
+                $(`#crudForm [name="bank_id[]"]`).last().val(bank.id)
+                element.val(bank.namabank)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=bank_id]').last().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+        $('.bankpelanggan-lookup').last().lookup({
+            title: 'Bank Pelanggan Lookup',
+            fileName: 'bankpelanggan',
+            onSelectRow: (bankpelanggan, element) => {
+                $(`#crudForm [name="bankpelanggan_id[]"]`).last().val(bankpelanggan.id)
+                element.val(bankpelanggan.namabank)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=bankpelanggan_id]').last().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+        
+        initAutoNumeric(form.find('.nominal'))
 
         tarikPelunasan('add')
-        addRow()
+        // addRow()
         setTotal()
     }
 
@@ -582,6 +698,7 @@
                 })
 
                 $.each(response.detail, (index, detail) => {
+                    let readOnly = (detail.pelunasanpiutang_nobukti != '-') ? 'readonly' : '';
                     let detailRow = $(`
                     <tr class="${detail.pelunasanpiutang_nobukti}">
                         <td></td>
@@ -602,13 +719,17 @@
                             <input type="text" name="bankpelanggan[]" data-current-value="${detail.bankpelanggan}" class="form-control bankpelanggan-lookup">
                         </td>
                         <td>
-                            <input type="text" name="keterangan_detail[]" class="form-control">
+                            <input type="text" name="keterangan_detail[]" class="form-control" ${readOnly}>
                         </td>
                         <td>
-                            <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+                            <input type="text" name="nominal[]" class="form-control autonumeric" ${readOnly}> 
                         </td>
                         <td>
-                            <input type="text" name="invoice_nobukti[]" class="form-control">
+                            <input type="text" name="invoice_nobukti[]" class="form-control" ${readOnly}>
+                        </td>
+                        
+                        <td>
+                            <input type="text" name="pelunasanpiutang_nobukti[]" class="form-control" ${readOnly}>
                         </td>
                         <td>
                             <input type="text" name="jenisbiaya[]" class="form-control">   
@@ -634,6 +755,7 @@
                     detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
                     detailRow.find(`[name="invoice_nobukti[]"]`).val(detail.invoice_nobukti)
                     detailRow.find(`[name="jenisbiaya[]"]`).val(detail.jenisbiaya)
+                    detailRow.find(`[name="pelunasanpiutang_nobukti[]"]`).val(detail.pelunasanpiutang_nobukti)
                     detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
 
                     initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
@@ -713,10 +835,14 @@
         <input type="text" name="keterangan_detail[]" class="form-control">
         </td>
         <td>
-        <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+        <input type="text" name="nominal[]" class="form-control autonumeric "> 
         </td>
         <td>
-            <input type="text" name="invoice_nobukti[]" class="form-control">
+            <input type="text" name="invoice_nobukti[]" class="form-control" readonly>
+        </td>
+        
+        <td>
+            <input type="text" name="pelunasanpiutang_nobukti[]" class="form-control" readonly>
         </td>
         <td>
             <input type="text" name="jenisbiaya[]" class="form-control">   
