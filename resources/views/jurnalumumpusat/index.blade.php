@@ -36,13 +36,18 @@
                         </div>
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">Proses data<span class="text-danger">*</span></label>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="approve" value="3" id="inlineRadio1" checked>
+                            <!-- <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="approve" value="approve" id="inlineRadio1" checked>
                                 <label class="form-check-label" for="inlineRadio1">Approve</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="approve" value="4" id="inlineRadio2">
+                                <input class="form-check-input" type="radio" name="approve" value="unapprove" id="inlineRadio2">
                                 <label class="form-check-label" for="inlineRadio2">Unapprove</label>
+                            </div> -->
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <select name="approve" id="approve" class="form-select select2bs4" style="width: 100%;">
+
+                                </select>
                             </div>
                         </div>
 
@@ -77,6 +82,10 @@
     let hasDetail = false
 
     $(document).ready(function() {
+        initSelect2($('#crudForm').find('[name=approve]'), false)
+
+        setStatusApprovalOptions($('#crudForm'))
+
         $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
 
         $('.datepicker').datepicker({
@@ -99,12 +108,17 @@
 			<i class="fa fa-calendar-alt"></i>
 		`);
 
+        $('#approve').on('select2:selected', function() {
+            console.log(tesData);
+        })
+
         $(document).on('click', '#btnReload', function(event) {
+
 
             $('#jqGrid').jqGrid('setGridParam', {
                 postData: {
                     periode: $('#crudForm').find('[name=periode]').val(),
-                    approve: $('#crudForm').find('[name=approve]:checked').val()
+                    approve: $('#crudForm').find('[name=approve]').val()
                 },
             }).trigger('reloadGrid');
         })
@@ -117,14 +131,25 @@
             let url
             let form = $('#crudForm')
             let data = $('#crudForm').serializeArray()
-            let selectedId = $('#jqGrid').jqGrid('getGridParam', 'selarrrow');
+            // let selectedId = $('#jqGrid').jqGrid('getGridParam', 'selarrrow');
 
-            for ($i = 0; $i < selectedId.length; $i++) {
-                data.push({
-                    name: 'jurnalId[]',
-                    value: selectedId[$i]
-                })
-            }
+            // for ($i = 0; $i < selectedId.length; $i++) {
+            //     data.push({
+            //         name: 'jurnalId[]',
+            //         value: selectedId[$i]
+            //     })
+            // }
+            $('#jqGrid tbody tr').each(function(row, tr) {
+                        // console.log(row);
+
+                if ($(this).find(`input`).is(':checked')) {
+                    data.push({
+                        name: 'jurnalId[]',
+                        value: $(this).attr("id")
+                    })
+                }
+            })
+
             data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
@@ -168,7 +193,9 @@
 
                     $('#jqGrid').jqGrid().trigger('reloadGrid');
                     let data = $('#jqGrid').jqGrid("getGridParam", "postData");
+
                     $('#crudForm').find('[name=periode]').val(data.periode)
+                    $('#crudForm').find('[name=approve]').val(data.approve)
                 },
                 error: error => {
                     if (error.status === 422) {
@@ -194,8 +221,21 @@
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
                 datatype: "json",
-                multiselect: true,
-                colModel: [{
+                colModel: [
+                    {
+                        name: 'Pilih',
+                        index: 'Pilih',
+                        formatter: 'checkbox',
+                        editable: true,
+                        edittype: 'checkbox',
+                        search: false,
+                        width: 60,
+                        align: 'center',
+                        formatoptions: {
+                            disabled: false
+                        },
+                    },
+                    {
                         label: 'ID',
                         name: 'id',
                         align: 'right',
@@ -307,6 +347,8 @@
                 sortorder: sortorder,
                 page: page,
                 viewrecords: true,
+                // multiselect: true,
+                // multiPageSelection: true,
                 prmNames: {
                     sort: 'sortIndex',
                     order: 'sortOrder',
@@ -316,11 +358,6 @@
                     root: 'data',
                     total: 'attributes.totalPages',
                     records: 'attributes.totalRows',
-                },
-                postData: {
-                    periode: $('#crudForm').find('[name=periode]').val(),
-                    approve: $('#crudForm').find('[name=approve]:checked').val()
-                
                 },
                 loadBeforeSend: (jqXHR) => {
                     jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
@@ -401,6 +438,9 @@
             })
 
             .customPager({})
+
+
+
         /* Append clear filter button */
         loadClearFilter($('#jqGrid'))
 
@@ -409,6 +449,49 @@
 
 
     })
+
+    const setStatusApprovalOptions = function(relatedForm) {
+        // return new Promise((resolve, reject) => {
+        // relatedForm.find('[name=approve]').empty()
+        relatedForm.find('[name=approve]').append(
+            new Option('-- PILIH STATUS APPROVAL --', '', false, true)
+        ).trigger('change')
+
+        $.ajax({
+            url: `${apiUrl}parameter`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                filters: JSON.stringify({
+                    "groupOp": "AND",
+                    "rules": [{
+                        "field": "grp",
+                        "op": "cn",
+                        "data": "STATUS APPROVAL"
+                    }]
+                })
+            },
+            success: response => {
+
+                response.data.forEach(statusApproval => {
+                    let option = new Option(statusApproval.text, statusApproval.id)
+                    relatedForm.find('[name=approve]').append(option).trigger('change')
+                });
+
+                // relatedForm
+                //     .find('[name=approve]')
+                //     .val($(`#crudForm [name=approve] option:eq(1)`).val())
+                //     .trigger('change')
+                //     .trigger('select2:selected');
+
+                // resolve()
+            }
+        })
+        // })
+    }
 </script>
 @endpush()
 @endsection

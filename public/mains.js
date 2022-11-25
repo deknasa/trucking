@@ -979,11 +979,11 @@ $(document).on("input", ".numbernoseparate", function () {
 });
 
 /* Select2: Autofocus search input on open */
-function initSelect2(elements = null) {
+function initSelect2(elements = null, isInsideModal = true) {
 	let option = {
 		width: "100%",
 		theme: "bootstrap4",
-		dropdownParent: $("#crudModal"),
+		dropdownParent: isInsideModal ? $("#crudModal") : '',
 	};
 
 	if (elements === null) {

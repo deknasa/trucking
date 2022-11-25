@@ -69,8 +69,8 @@
                   Kodepos <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="kodepos" class="form-control">
+              <div class="col-12 col-sm-9 col-md-10"> 
+                <input type="text" name="kodepos" class="form-control numbernoseparate">
               </div>
             </div>
 
@@ -81,7 +81,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="notelp1" class="form-control">
+                <input type="text" name="notelp1" class="form-control numbernoseparate">
               </div>
             </div>
 
@@ -92,7 +92,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="notelp2" class="form-control">
+                <input type="text" name="notelp2" class="form-control numbernoseparate">
               </div>
             </div>
 
