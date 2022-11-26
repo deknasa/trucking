@@ -50,31 +50,6 @@
             width: '50px'
           },
           {
-            label: 'NO BUKTI',
-            name: 'nobukti',
-            align: 'left'
-          },
-          {
-            label: 'TANGGAL BUKTI',
-            name: 'tglbukti',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
-          },
-          {
-            label: 'POSTING DARI',
-            name: 'postingdari',
-            align: 'left'
-          },
-          {
             label: 'STATUS APPROVAL',
             name: 'statusapproval',
             align: 'left',
@@ -100,6 +75,31 @@
                   });
                 }
               },
+          },
+          {
+            label: 'NO BUKTI',
+            name: 'nobukti',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL BUKTI',
+            name: 'tglbukti',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            align: 'left'
+          },
+          {
+            label: 'POSTING DARI',
+            name: 'postingdari',
+            align: 'left'
           },
           {
             label: 'USER APPROVAL',
@@ -307,19 +307,19 @@
               }
             }
           },
-          {
-            id: 'approval',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                approval(selectedId)
-              }
-            }
-          },
+          // {
+          //   id: 'approval',
+          //   innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
+          //   class: 'btn btn-purple btn-sm mr-1',
+          //   onClick: () => {
+          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
+          //       showDialog('Please select a row')
+          //     } else {
+          //       approval(selectedId)
+          //     }
+          //   }
+          // },
         ]
 
       })
