@@ -99,6 +99,11 @@
         },
         onCancel: (element) => {
           element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          $(`#${element[0]['name']}Id`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
         }
       })
     }
@@ -340,12 +345,15 @@
               </td>
              
               <td>
-                ${detail.uangjalan}
+                <span class="autonumeric">
+                  ${detail.uangjalan}
+                </span>                
                 <input type="text" value="${detail.uangjalan}" id="uangjalan" name="uangjalan[]"  readonly hidden>
 
               </td>
             </tr>`)
-          $('#detailList tbody').append(detailRow)
+          $('#detailList tbody').append(detailRow)          
+          initAutoNumeric(detailRow.find('.autonumeric'))
           })      
       }
     })
@@ -389,12 +397,15 @@
                   </td>
                   
                 <td>
-                  ${detail.uangjalan}
+                  <span class="autonumeric">
+                    ${detail.uangjalan}
+                  </span>
                   <input type="text" value="${detail.uangjalan}" id="uangjalan" name="uangjalan[]"  readonly hidden>
               </td>
             </tr>`)
           $('#detailList tbody').append(detailRow)
-          })      
+          initAutoNumeric(detailRow.find('.autonumeric'))
+        })      
       }
     })
   }

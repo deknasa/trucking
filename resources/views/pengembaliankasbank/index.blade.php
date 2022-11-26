@@ -1,0 +1,471 @@
+@extends('layouts.master')
+
+@section('content')
+<!-- Grid Master-->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <table id="jqGrid"></table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+@include('pengembaliankasbank._modal')
+<!-- Detail -->
+@include('pengembaliankasbank._detail')
+
+@push('scripts')
+<script>
+  let indexUrl = "{{ route('pengembaliankasbankheader.index') }}"
+  let getUrl = "{{ route('pengembaliankasbankheader.get') }}"
+  let indexRow = 0;
+  let page = 0;
+  let pager = '#jqGridPager'
+  let popup = "";
+  let id = "";
+  let triggerClick = true;
+  let highlightSearch;
+  let totalRecord
+  let limit
+  let postData
+  let sortname = 'nobukti'
+  let sortorder = 'asc'
+  let autoNumericElements = []
+  let rowNum = 10
+  let hasDetail = false
+
+  $(document).ready(function() {
+
+
+    $("#jqGrid").jqGrid({
+        url: `{{ config('app.api_url') . 'pengembaliankasbankheader' }}`,
+        mtype: "GET",
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        datatype: "json",
+        colModel: [{
+            label: 'ID',
+            name: 'id',
+            align: 'right',
+            width: '50px'
+          },
+          {
+            label: 'NO BUKTI',
+            name: 'nobukti',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL BUKTI',
+            name: 'tglbukti',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'pengeluaran nobukti ',
+            name: 'pengeluaran_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            align: 'left'
+          },
+          {
+            label: 'STATUS JNS TRANSAKSI',
+            name: 'statusjenistransaksi',
+            align: 'left',
+            stype: 'select',
+              searchoptions: {
+                value: `<?php
+                        $i = 1;
+
+                        foreach ($data['combojenistransaksi'] as $status) :
+                          echo "$status[param]:$status[parameter]";
+                          if ($i !== count($data['combojenistransaksi'])) {
+                            echo ";";
+                          }
+                          $i++;
+                        endforeach
+
+                        ?>
+              `,
+                dataInit: function(element) {
+                  $(element).select2({
+                    width: 'resolve',
+                    theme: "bootstrap4"
+                  });
+                }
+              },
+          },
+          {
+            label: 'POSTING DARI',
+            name: 'postingdari',
+            align: 'left'
+          },
+          {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            align: 'left',
+            stype: 'select',
+              searchoptions: {
+                value: `<?php
+                        $i = 1;
+
+                        foreach ($data['comboapproval'] as $status) :
+                          echo "$status[param]:$status[parameter]";
+                          if ($i !== count($data['comboapproval'])) {
+                            echo ";";
+                          }
+                          $i++;
+                        endforeach
+
+                        ?>
+              `,
+                dataInit: function(element) {
+                  $(element).select2({
+                    width: 'resolve',
+                    theme: "bootstrap4"
+                  });
+                }
+              },
+          },
+          {
+            label: 'TGL APPROVAL',
+            name: 'tglapproval',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'USER APPROVAL',
+            name: 'userapproval',
+            align: 'left'
+          },
+          {
+            label: 'DIBAYARKAN KE',
+            name: 'dibayarke',
+            align: 'left'
+          },
+          {
+            label: 'CABANG',
+            name: 'cabang_id',
+            align: 'left'
+          },
+          {
+            label: 'BANK',
+            name: 'bank_id',
+            align: 'left'
+          },
+          {
+            label: 'TRANSFER KE NO REK',
+            name: 'transferkeac',
+            align: 'left'
+          }, 
+          {
+            label: 'TRANSFER NAMA REK',
+            name: 'transferkean',
+            align: 'left'
+          },
+          {
+            label: 'TRANSFER NAMA BANK',
+            name: 'transferkebank',
+            align: 'left'
+          },
+          {
+            label: 'MODIFIEDBY',
+            name: 'modifiedby',
+            align: 'left'
+          },
+          {
+            label: 'CREATEDAT',
+            name: 'created_at',
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+          {
+            label: 'UPDATEDAT',
+            name: 'updated_at',
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+        ],
+        autowidth: true,
+        shrinkToFit: false,
+        height: 350,
+        rowNum: 10,
+        rownumbers: true,
+        rownumWidth: 45,
+        rowList: [10, 20, 50],
+        toolbar: [true, "top"],
+        sortable: true,
+        sortname: sortname,
+        sortorder: sortorder,
+        page: page,
+        viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+        onSelectRow: function(id) {
+          activeGrid = $(this)
+          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
+          page = $(this).jqGrid('getGridParam', 'page')
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+          
+          if (!hasDetail) {
+            loadDetailGrid(id)
+            hasDetail = true
+          }
+
+          loadDetailData(id)
+        },
+        loadComplete: function(data) {
+
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
+          initResize($(this))
+
+          /* Set global variables */
+          sortname = $(this).jqGrid("getGridParam", "sortname")
+          sortorder = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecord = $(this).getGridParam("records")
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
+          postData = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = true  
+
+          $('.clearsearchclass').click(function() {
+            clearColumnSearch()
+          })
+
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
+          }
+
+          setTimeout(function() {
+
+            if (triggerClick) {
+              if (id != '') {
+                indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                id = ''
+              } else if (indexRow != undefined) {
+                $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              }
+
+              if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+                $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              }
+
+              triggerClick = false
+            } else {
+              $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+            }
+          }, 100)
+
+
+          setHighlight($(this))
+        }
+      })
+
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          clearGlobalSearch($('#jqGrid'))
+        },
+      })
+
+      .customPager({
+        buttons: [{
+            id: 'add',
+            innerHTML: '<i class="fa fa-plus"></i> ADD',
+            class: 'btn btn-primary btn-sm mr-1',
+            onClick: function(event) {
+              createPengembalianKasBank()
+            }
+          },
+          {
+            id: 'edit',
+            innerHTML: '<i class="fa fa-pen"></i> EDIT',
+            class: 'btn btn-success btn-sm mr-1',
+            onClick: function(event) {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              }else {
+                editPengembalianKasBank(selectedId)
+              }
+            }
+          },
+          {
+            id: 'delete',
+            innerHTML: '<i class="fa fa-trash"></i> DELETE',
+            class: 'btn btn-danger btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                deletePengembalianKasBank(selectedId)
+              }
+            }
+          },
+          {
+            id: 'export',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('pengembaliankasbankheader.export') }}?id=${selectedId}`)
+              }
+            }
+          },  
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('pengembaliankasbankheader.report') }}?id=${selectedId}`)
+              }
+            }
+          },
+          {
+            id: 'approval',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                handleApproval(selectedId)
+              }
+            }
+          },
+        ]
+
+      })
+
+      function handleApproval(id) {
+        $.ajax({
+          url: `${apiUrl}pengembaliankasbankheader/${id}/approval`,
+          method: 'POST',
+          dataType: 'JSON',
+          beforeSend: request => {
+            request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+          },
+          success: response => {
+            $('#jqGrid').trigger('reloadGrid')
+          }
+        }).always(() => {
+          $('#loader').addClass('d-none')
+        })
+      }
+      
+        
+
+    /* Append clear filter button */
+    loadClearFilter($('#jqGrid'))
+
+    /* Append global search */
+    loadGlobalSearch($('#jqGrid'))
+
+
+    $('#add .ui-pg-div')
+      .addClass(`btn btn-sm btn-primary`)
+      .parent().addClass('px-1')
+
+    $('#edit .ui-pg-div')
+      .addClass('btn btn-sm btn-success')
+      .parent().addClass('px-1')
+
+    $('#delete .ui-pg-div')
+      .addClass('btn btn-sm btn-danger')
+      .parent().addClass('px-1')
+
+    $('#report .ui-pg-div')
+      .addClass('btn btn-sm btn-info')
+      .parent().addClass('px-1')
+
+    $('#export .ui-pg-div')
+      .addClass('btn btn-sm btn-warning')
+      .parent().addClass('px-1')
+
+    $('#approval .ui-pg-div')
+    .addClass('btn btn-purple btn-sm')
+    .css({
+    'background': '#6619ff',
+    'color': '#fff'
+    })
+    .parent().addClass('px-1')
+
+    if (!`{{ $myAuth->hasPermission('pengembaliankasbankheader', 'store') }}`) {
+      $('#add').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('pengembaliankasbankheader', 'update') }}`) {
+      $('#edit').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('pengembaliankasbankheader', 'destroy') }}`) {
+      $('#delete').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('pengembaliankasbankheader', 'export') }}`) {
+      $('#export').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('pengembaliankasbankheader', 'report') }}`) {
+      $('#report').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('pengembaliankasbankheader', 'approval') }}`) {
+      $('#approval').attr('disabled', 'disabled')
+    }
+
+
+    
+  })
+
+  
+</script>
+@endpush()
+@endsection

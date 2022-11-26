@@ -39,6 +39,8 @@ use App\Http\Controllers\KasGantungHeaderController;
 
 use App\Http\Controllers\PengembalianKasGantungDetailController;
 use App\Http\Controllers\PengembalianKasGantungHeaderController;
+use App\Http\Controllers\PengembalianKasBankDetailController;
+use App\Http\Controllers\PengembalianKasBankHeaderController;
 use App\Http\Controllers\NotaKreditHeaderController;
 use App\Http\Controllers\NotaDebetHeaderController;
 
@@ -359,6 +361,12 @@ Route::middleware('auth')->group(function () {
     Route::get('pengembaliankasgantungheader/report', [PengembalianKasGantungHeaderController::class, 'report'])->name('pengembaliankasgantungheader.report');
     Route::get('pengembaliankasgantungheader/index', [PengembalianKasGantungHeaderController::class, 'index']);
     Route::resource('pengembaliankasgantungheader', PengembalianKasGantungHeaderController::class);
+    
+    Route::get('pengembaliankasbankheader/get', [PengembalianKasbankHeaderController::class, 'get'])->name('pengembaliankasbankheader.get');
+    Route::get('pengembaliankasbankheader/export', [PengembalianKasbankHeaderController::class, 'export'])->name('pengembaliankasbankheader.export');
+    Route::get('pengembaliankasbankheader/report', [PengembalianKasbankHeaderController::class, 'report'])->name('pengembaliankasbankheader.report');
+    Route::get('pengembaliankasbankheader/index', [PengembalianKasbankHeaderController::class, 'index']);
+    Route::resource('pengembaliankasbankheader', PengembalianKasbankHeaderController::class);
     
     Route::get('notakreditheader/get', [NotaKreditHeaderController::class, 'get'])->name('notakreditheader.get');
     Route::get('notakreditheader/export', [NotaKreditHeaderController::class, 'export'])->name('notakreditheader.export');

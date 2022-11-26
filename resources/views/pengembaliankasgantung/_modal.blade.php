@@ -273,7 +273,6 @@
 
     getMaxLength(form)
     initDatepicker()
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
 
   })
 
@@ -310,6 +309,8 @@
     $('.invalid-feedback').remove()
     initLookup()
     getKasGantung()
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
+
   }
 
   function editPengembalianKasGantung(userId) {
@@ -431,6 +432,10 @@
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
             }
            })
           })
@@ -468,7 +473,7 @@
             <td>${row}</td>
             <td>${detail.nobukti}</td>
             <td>${detail.tglbukti}</td>
-            <td> <input type="text" name="coadetail[]" value="${detail.coadetail}" class="form-control coa_detail_${detail.detail_id}"></td>
+            <td> <input type="text" name="coadetail[]" value="${detail.coadetail}" class="form-control coa-lookup coa_detail_${detail.detail_id}"></td>
             <td class="text-right" >${nominal}</td>
             <td><input type="text" name="keterangandetail[]" value="${detail.keterangandetail}" class="form-control"></td>
           </tr>`)
@@ -482,8 +487,12 @@
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
             }
-           })
+            })
           })
            totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
            $('#nominalPiutang').append(`${totalNominal}`)           
@@ -527,9 +536,18 @@
           element.val(akunpusat.coa)
           element.data('currentValue', element.val())
         },
+        
         onCancel: (element) => {
           element.val(element.data('currentValue'))
-        }
+        },
+        onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      },
+      onClear: (element) => {
+              element.val('')
+              element.data('currentValue', element.val())
+            }
       })
       $('.penerimaan-lookup').lookup({
         title: 'akun pusat Lookup',
@@ -540,7 +558,11 @@
         },
         onCancel: (element) => {
           element.val(element.data('currentValue'))
-        }
+        },
+        onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
       })
       $('.pelanggan-lookup').lookup({
         title: 'pelanggan Lookup',
@@ -552,7 +574,12 @@
         },
         onCancel: (element) => {
           element.val(element.data('currentValue'))
-        }
+        },
+        onClear: (element) => {
+              element.val('')
+              $(`#${element[0]['name']}Id`).val('')
+              element.data('currentValue', element.val())
+            }
       })
       $('.bank-lookup').lookup({
         title: 'bank Lookup',
@@ -564,7 +591,13 @@
         },
         onCancel: (element) => {
           element.val(element.data('currentValue'))
-        }
+        },
+        onClear: (element) => {
+          $(`#${element[0]['name']}Id`).val('')
+
+              element.val('')
+              element.data('currentValue', element.val())
+            }
       })
 
     }
