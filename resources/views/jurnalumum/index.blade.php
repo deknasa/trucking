@@ -76,8 +76,6 @@
               }
             },
             formatter: (value, options, rowData) => {
-              console.log(rowData);
-
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${rowData.warnastatusapproval}; color: #fff;">
                   <span title="${value}">${rowData.singkatanstatusapproval}</span>

@@ -51,6 +51,33 @@
             width: '50px'
           },
           {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            align: 'left',
+            stype: 'select',
+              searchoptions: {
+                value: `<?php
+                        $i = 1;
+
+                        foreach ($data['comboapproval'] as $status) :
+                          echo "$status[param]:$status[parameter]";
+                          if ($i !== count($data['comboapproval'])) {
+                            echo ";";
+                          }
+                          $i++;
+                        endforeach
+
+                        ?>
+              `,
+                dataInit: function(element) {
+                  $(element).select2({
+                    width: 'resolve',
+                    theme: "bootstrap4"
+                  });
+                }
+              },
+          },
+          {
             label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
@@ -117,33 +144,6 @@
                         foreach ($data['combokas'] as $status) :
                           echo "$status[param]:$status[parameter]";
                           if ($i !== count($data['combokas'])) {
-                            echo ";";
-                          }
-                          $i++;
-                        endforeach
-
-                        ?>
-              `,
-                dataInit: function(element) {
-                  $(element).select2({
-                    width: 'resolve',
-                    theme: "bootstrap4"
-                  });
-                }
-              },
-          },
-          {
-            label: 'STATUS APPROVAL',
-            name: 'statusapproval',
-            align: 'left',
-            stype: 'select',
-              searchoptions: {
-                value: `<?php
-                        $i = 1;
-
-                        foreach ($data['comboapproval'] as $status) :
-                          echo "$status[param]:$status[parameter]";
-                          if ($i !== count($data['comboapproval'])) {
                             echo ";";
                           }
                           $i++;
@@ -411,7 +411,7 @@
           },
           {
             id: 'approval',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')

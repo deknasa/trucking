@@ -131,24 +131,22 @@
             let url
             let form = $('#crudForm')
             let data = $('#crudForm').serializeArray()
-            // let selectedId = $('#jqGrid').jqGrid('getGridParam', 'selarrrow');
+            let selectedId = $('#jqGrid').jqGrid('getGridParam', 'selarrrow');
 
-            // for ($i = 0; $i < selectedId.length; $i++) {
-            //     data.push({
-            //         name: 'jurnalId[]',
-            //         value: selectedId[$i]
-            //     })
-            // }
-            $('#jqGrid tbody tr').each(function(row, tr) {
-                        // console.log(row);
-
-                if ($(this).find(`input`).is(':checked')) {
-                    data.push({
-                        name: 'jurnalId[]',
-                        value: $(this).attr("id")
-                    })
-                }
-            })
+            for ($i = 0; $i < selectedId.length; $i++) {
+                data.push({
+                    name: 'jurnalId[]',
+                    value: selectedId[$i]
+                })
+            }
+            // $('#jqGrid tbody tr').each(function(row, tr) {
+            //     if ($(this).find(`input`).is(':checked')) {
+            //         data.push({
+            //             name: 'jurnalId[]',
+            //             value: $(this).attr("id")
+            //         })
+            //     }
+            // })
 
             data.push({
                 name: 'sortIndex',
@@ -214,7 +212,7 @@
 
         })
 
-
+        var selectedRows = {};
         $("#jqGrid").jqGrid({
                 url: `{{ config('app.api_url') . 'jurnalumumpusatheader' }}`,
                 mtype: "GET",
@@ -222,19 +220,19 @@
                 iconSet: 'fontAwesome',
                 datatype: "json",
                 colModel: [
-                    {
-                        name: 'Pilih',
-                        index: 'Pilih',
-                        formatter: 'checkbox',
-                        editable: true,
-                        edittype: 'checkbox',
-                        search: false,
-                        width: 60,
-                        align: 'center',
-                        formatoptions: {
-                            disabled: false
-                        },
-                    },
+                    // {
+                    //     name: 'Pilih',
+                    //     index: 'Pilih',
+                    //     formatter: 'checkbox',
+                    //     editable: true,
+                    //     edittype: 'checkbox',
+                    //     search: false,
+                    //     width: 60,
+                    //     align: 'center',
+                    //     formatoptions: {
+                    //         disabled: false
+                    //     },
+                    // },
                     {
                         label: 'ID',
                         name: 'id',
@@ -347,8 +345,7 @@
                 sortorder: sortorder,
                 page: page,
                 viewrecords: true,
-                // multiselect: true,
-                // multiPageSelection: true,
+                multiselect: true,
                 prmNames: {
                     sort: 'sortIndex',
                     order: 'sortOrder',
@@ -362,7 +359,15 @@
                 loadBeforeSend: (jqXHR) => {
                     jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
                 },
-                onSelectRow: function(id) {
+                onSelectAll: function (rowIds, status) {
+                    if (status === true) {
+                        for (var i = 0; i < rowIds.length; i++) {
+                            selectedRows[rowIds[i]] = true;
+                        }
+                    } 
+                    console.log(selectedRows)
+                },
+                onSelectRow: function(id,status) {
 
                     activeGrid = $(this)
                     indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
@@ -374,8 +379,13 @@
                         loadDetailGrid(id)
                         hasDetail = true
                     }
-
+                    if (status === false) {
+                        delete selectedRows[id];
+                    } else {
+                        selectedRows[id] = status;
+                    }
                     loadDetailData(id)
+                    console.log(selectedRows)
 
                 },
                 loadComplete: function(data) {
@@ -384,6 +394,10 @@
                     setCustomBindKeys($(this))
                     initResize($(this))
 
+                    for (var rowId in selectedRows) {
+                        $('#jqGrid').setSelection(rowId, true);
+                    }
+                    
                     /* Set global variables */
                     sortname = $(this).jqGrid("getGridParam", "sortname")
                     sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -457,23 +471,23 @@
             new Option('-- PILIH STATUS APPROVAL --', '', false, true)
         ).trigger('change')
 
+        let data = [];
+        data.push({
+            name: 'grp',
+            value: 'STATUS APPROVAL'
+        })
+        data.push({
+            name: 'subgrp',
+            value: 'STATUS APPROVAL'
+        })
         $.ajax({
-            url: `${apiUrl}parameter`,
+            url: `${apiUrl}parameter/combo`,
             method: 'GET',
             dataType: 'JSON',
             headers: {
                 Authorization: `Bearer ${accessToken}`
             },
-            data: {
-                filters: JSON.stringify({
-                    "groupOp": "AND",
-                    "rules": [{
-                        "field": "grp",
-                        "op": "cn",
-                        "data": "STATUS APPROVAL"
-                    }]
-                })
-            },
+            data: data,
             success: response => {
 
                 response.data.forEach(statusApproval => {

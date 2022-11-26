@@ -123,6 +123,7 @@ use App\Http\Controllers\PenerimaanGiroDetailController;
 use App\Http\Controllers\PenerimaanGiroHeaderController;
 use App\Http\Controllers\ProsesGajiSupirHeaderController;
 use App\Http\Controllers\ProsesGajiSupirDetailController;
+use App\Http\Controllers\ReportAllController;
 
 /*
 |--------------------------------------------------------------------------
@@ -726,6 +727,10 @@ Route::middleware('auth')->group(function () {
     Route::get('harilibur/get', [HariLiburController::class, 'get'])->name('harilibur.get');
     Route::get('harilibur/index', [HariLiburController::class, 'index']);
     Route::resource('harilibur', HariLiburController::class);
+
+    Route::get('reportall/report', [ReportAllController::class, 'report'])->name('reportall.report');
+    Route::get('reportall/index', [ReportAllController::class, 'index']);
+    Route::resource('reportall', ReportAllController::class);
 
 });
 
