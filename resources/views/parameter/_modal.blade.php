@@ -80,6 +80,27 @@
                 <input type="text" name="grup" class="form-control parameter-lookup">
               </div>
             </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  SINGKATAN 
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="singkatan" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  WARNA 
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="warna" class="form-control">
+              </div>
+            </div>            
+
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
