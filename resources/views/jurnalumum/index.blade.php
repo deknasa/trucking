@@ -36,7 +36,7 @@
 
   $(document).ready(function() {
 
-   
+
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'jurnalumumheader' }}`,
         mtype: "GET",
@@ -48,6 +48,44 @@
             name: 'id',
             align: 'right',
             width: '50px'
+          },
+          {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboapproval'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboapproval'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              console.log(rowData);
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${rowData.warnastatusapproval}; color: #fff;">
+                  <span title="${value}">${rowData.singkatanstatusapproval}</span>
+                </div>
+              `)
+              
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'NO BUKTI',
@@ -73,33 +111,6 @@
             label: 'POSTING DARI',
             name: 'postingdari',
             align: 'left'
-          },
-          {
-            label: 'STATUS APPROVAL',
-            name: 'statusapproval',
-            align: 'left',
-            stype: 'select',
-              searchoptions: {
-                value: `<?php
-                        $i = 1;
-
-                        foreach ($data['comboapproval'] as $status) :
-                          echo "$status[param]:$status[parameter]";
-                          if ($i !== count($data['comboapproval'])) {
-                            echo ";";
-                          }
-                          $i++;
-                        endforeach
-
-                        ?>
-              `,
-                dataInit: function(element) {
-                  $(element).select2({
-                    width: 'resolve',
-                    theme: "bootstrap4"
-                  });
-                }
-              },
           },
           {
             label: 'USER APPROVAL',
@@ -196,7 +207,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -278,7 +289,7 @@
               }
             }
           },
-          
+
           {
             id: 'export',
             title: 'Export',
@@ -293,7 +304,7 @@
                 window.open(`{{ route('jurnalumumheader.export') }}?id=${selectedId}`)
               }
             }
-          },  
+          },
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
@@ -309,7 +320,7 @@
           },
           {
             id: 'approval',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            innerHTML: '<i class="fa fa-check"></i> APPROVE/UN',
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
@@ -352,12 +363,12 @@
       .parent().addClass('px-1')
 
     $('#approval .ui-pg-div')
-       .addClass('btn btn-purple btn-sm')
-       .css({
+      .addClass('btn btn-purple btn-sm')
+      .css({
         'background': '#6619ff',
         'color': '#fff'
-       })
-       .parent().addClass('px-1')
+      })
+      .parent().addClass('px-1')
 
     if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
@@ -458,8 +469,6 @@
       }
     })
   })
-
-  
 </script>
 @endpush()
 @endsection
