@@ -126,6 +126,7 @@ use App\Http\Controllers\PenerimaanGiroHeaderController;
 use App\Http\Controllers\ProsesGajiSupirHeaderController;
 use App\Http\Controllers\ProsesGajiSupirDetailController;
 use App\Http\Controllers\ReportAllController;
+use App\Http\Controllers\ReportNeracaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -739,6 +740,10 @@ Route::middleware('auth')->group(function () {
     Route::get('reportall/report', [ReportAllController::class, 'report'])->name('reportall.report');
     Route::get('reportall/index', [ReportAllController::class, 'index']);
     Route::resource('reportall', ReportAllController::class);
+
+    Route::get('reportneraca/report', [ReportNeracaController::class, 'report'])->name('reportneraca.report');
+    Route::get('reportneraca/index', [ReportNeracaController::class, 'index']);
+    Route::resource('reportneraca', ReportNeracaController::class);
 
 });
 
