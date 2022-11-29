@@ -34,22 +34,6 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Proses data<span class="text-danger">*</span></label>
-                            <!-- <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="approve" value="approve" id="inlineRadio1" checked>
-                                <label class="form-check-label" for="inlineRadio1">Approve</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="approve" value="unapprove" id="inlineRadio2">
-                                <label class="form-check-label" for="inlineRadio2">Unapprove</label>
-                            </div> -->
-                            <div class="col-12 col-sm-9 col-md-10">
-                                <select name="approve" id="approve" class="form-select select2bs4" style="width: 100%;">
-
-                                </select>
-                            </div>
-                        </div>
 
                     </div>
                 </form>
@@ -59,12 +43,12 @@
     </div>
 </div>
 <!-- Detail -->
-@include('jurnalumumpusat._detail')
+@include('pencairangiropengeluaran._detail')
 
 @push('scripts')
 <script>
-    let indexUrl = "{{ route('jurnalumumpusatheader.index') }}"
-    let getUrl = "{{ route('jurnalumumpusatheader.get') }}"
+    let indexUrl = "{{ route('pencairangiropengeluaranheader.index') }}"
+    let getUrl = "{{ route('pencairangiropengeluaranheader.get') }}"
     let indexRow = 0;
     let page = 0;
     let pager = '#jqGridPager'
@@ -80,6 +64,7 @@
     let autoNumericElements = []
     let rowNum = 10
     let hasDetail = false
+
     let selectedRows = [];
 
     function checkboxHandler(element) {
@@ -96,9 +81,6 @@
     }
 
     $(document).ready(function() {
-        initSelect2($('#crudForm').find('[name=approve]'), false)
-
-        setStatusApprovalOptions($('#crudForm'))
 
         $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
 
@@ -113,26 +95,17 @@
                 }
             }).siblings(".ui-datepicker-trigger")
             .wrap(
-                `
-			<div class="input-group-append">
-			</div>
-		`
-            )
+                `<div class="input-group-append"></div>`)
             .addClass("btn btn-primary").html(`
-			<i class="fa fa-calendar-alt"></i>
-		`);
+			    <i class="fa fa-calendar-alt"></i>
+		    `);
 
-        $('#approve').on('select2:selected', function() {
-            console.log(tesData);
-        })
 
         $(document).on('click', '#btnReload', function(event) {
-
-
+            console.log(selectedRows)
             $('#jqGrid').jqGrid('setGridParam', {
                 postData: {
                     periode: $('#crudForm').find('[name=periode]').val(),
-                    approve: $('#crudForm').find('[name=approve]').val()
                 },
             }).trigger('reloadGrid');
         })
@@ -148,7 +121,7 @@
 
             $.each(selectedRows, function(index, item) {
                 data.push({
-                    name: 'jurnalId[]',
+                    name: 'pengeluaranId[]',
                     value: item
                 })
             });
@@ -183,7 +156,7 @@
             $('#loader').removeClass('d-none')
 
             $.ajax({
-                url: `${apiUrl}jurnalumumpusatheader`,
+                url: `${apiUrl}pencairangiropengeluaranheader`,
                 method: 'POST',
                 dataType: 'JSON',
                 headers: {
@@ -196,20 +169,20 @@
 
                     $('#jqGrid').jqGrid().trigger('reloadGrid');
                     let data = $('#jqGrid').jqGrid("getGridParam", "postData");
-
                     $('#crudForm').find('[name=periode]').val(data.periode)
-                    $('#crudForm').find('[name=approve]').val(data.approve)
                     selectedRows = []
                 },
                 error: error => {
+
                     if (error.status === 422) {
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
-
+                        $('#crudForm').find('[name=periode]').val(data.periode)
                         setErrorMessages(form, error.responseJSON.errors);
                     } else {
-                        showDialog(error.statusText)
+                        showDialog(error.responseJSON.message)
                     }
+                    $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
                 },
             }).always(() => {
                 $('#loader').addClass('d-none')
@@ -218,8 +191,24 @@
 
         })
 
+     
+        // $(document).on('click', '#jqGrid_nextPageButton', function(event) {
+        //     $('#jqGrid tbody tr').each(function(row, tr) {
+        //         if ($(this).find(`td input:checkbox`).is(':checked')) {
+        //             selectedRows.push($(this).find(`td input:checkbox`).val())
+        //         }
+        //     })
+        // })
+        // $(document).on('click', '#jqGrid_previousPageButton', function(event) {
+        //     $('#jqGrid tbody tr').each(function(row, tr) {
+        //         if ($(this).find(`td input:checkbox`).is(':checked')) {
+        //             selectedRows.push($(this).find(`td input:checkbox`).val())
+        //         }
+        //     })
+        // })
+
         $("#jqGrid").jqGrid({
-                url: `{{ config('app.api_url') . 'jurnalumumpusatheader' }}`,
+                url: `{{ config('app.api_url') . 'pencairangiropengeluaranheader' }}`,
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
@@ -245,31 +234,6 @@
                         name: 'id',
                         align: 'right',
                         width: '50px'
-                    },
-                    {
-                        label: 'NO BUKTI',
-                        name: 'nobukti',
-                        align: 'left'
-                    },
-                    {
-                        label: 'TANGGAL BUKTI',
-                        name: 'tglbukti',
-                        align: 'left',
-                        formatter: "date",
-                        formatoptions: {
-                            srcformat: "ISO8601Long",
-                            newformat: "d-m-Y"
-                        }
-                    },
-                    {
-                        label: 'KETERANGAN',
-                        name: 'keterangan',
-                        align: 'left'
-                    },
-                    {
-                        label: 'POSTING DARI',
-                        name: 'postingdari',
-                        align: 'left'
                     },
                     {
                         label: 'STATUS APPROVAL',
@@ -299,19 +263,50 @@
                         },
                     },
                     {
-                        label: 'USER APPROVAL',
-                        name: 'userapproval',
+                        label: 'NO BUKTI',
+                        name: 'nobukti',
                         align: 'left'
                     },
                     {
-                        label: 'TANGGAL APPROVAL',
-                        name: 'tglapproval',
+                        label: 'TGL BUKTI',
+                        name: 'tglbukti',
                         align: 'left',
                         formatter: "date",
                         formatoptions: {
                             srcformat: "ISO8601Long",
-                            newformat: "d-m-Y H:i:s"
+                            newformat: "d-m-Y"
                         }
+                    },
+                    {
+                        label: 'NO BUKTI PENGELUARAN',
+                        name: 'pengeluaran_nobukti',
+                        align: 'left'
+                    },
+                    {
+                        label: 'KETERANGAN',
+                        name: 'keterangan',
+                        align: 'left'
+                    },
+                    {
+                        label: 'ALAT BAYAR',
+                        name: 'alatbayar_id',
+                        align: 'left'
+                    },
+                    {
+                        label: 'BANK',
+                        name: 'bank_id',
+                        align: 'left'
+                    },
+                    {
+                        label: 'DIBAYAR KE',
+                        name: 'dibayarke',
+                        align: 'left'
+                    },
+                    {
+                        label: 'NOMINAL',
+                        name: 'nominal',
+                        align: 'right',
+                        formatter: currencyFormat
                     },
                     {
                         label: 'MODIFIEDBY',
@@ -352,6 +347,9 @@
                 sortorder: sortorder,
                 page: page,
                 viewrecords: true,
+                postData: {
+                    periode: $('#crudForm').find('[name=periode]').val(),
+                },
                 prmNames: {
                     sort: 'sortIndex',
                     order: 'sortOrder',
@@ -365,8 +363,7 @@
                 loadBeforeSend: (jqXHR) => {
                     jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
                 },
-
-                onSelectRow: function(id) {
+                onSelectRow: function(id, status) {
 
                     activeGrid = $(this)
                     indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
@@ -378,16 +375,15 @@
                         loadDetailGrid(id)
                         hasDetail = true
                     }
-
                     loadDetailData(id)
 
                 },
                 loadComplete: function(data) {
-
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
                     initResize($(this))
 
+                    //CHECKED STAY STILL
                     $.each(selectedRows, function(key, value) {
 
                         $('#jqGrid tbody tr').each(function(row, tr) {
@@ -463,49 +459,6 @@
 
 
     })
-
-    const setStatusApprovalOptions = function(relatedForm) {
-        // return new Promise((resolve, reject) => {
-        // relatedForm.find('[name=approve]').empty()
-        relatedForm.find('[name=approve]').append(
-            new Option('-- PILIH STATUS APPROVAL --', '', false, true)
-        ).trigger('change')
-
-        let data = [];
-        data.push({
-            name: 'grp',
-            value: 'STATUS APPROVAL'
-        })
-        data.push({
-            name: 'subgrp',
-            value: 'STATUS APPROVAL'
-        })
-        $.ajax({
-            url: `${apiUrl}parameter/combo`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            data: data,
-            success: response => {
-
-                response.data.forEach(statusApproval => {
-                    let option = new Option(statusApproval.text, statusApproval.id)
-                    relatedForm.find('[name=approve]').append(option).trigger('change')
-                });
-
-                // relatedForm
-                //     .find('[name=approve]')
-                //     .val($(`#crudForm [name=approve] option:eq(1)`).val())
-                //     .trigger('change')
-                //     .trigger('select2:selected');
-
-                // resolve()
-            }
-        })
-        // })
-    }
 </script>
 @endpush()
 @endsection

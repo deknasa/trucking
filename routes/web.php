@@ -119,6 +119,8 @@ use App\Http\Controllers\InvoiceExtraHeaderController;
 use App\Http\Controllers\JurnalUmumPusatDetailController;
 use App\Http\Controllers\JurnalUmumPusatHeaderController;
 use App\Http\Controllers\LookupController;
+use App\Http\Controllers\PencairanGiroPengeluaranDetailController;
+use App\Http\Controllers\PencairanGiroPengeluaranHeaderController;
 use App\Http\Controllers\PenerimaanGiroDetailController;
 use App\Http\Controllers\PenerimaanGiroHeaderController;
 use App\Http\Controllers\ProsesGajiSupirHeaderController;
@@ -732,6 +734,12 @@ Route::middleware('auth')->group(function () {
     Route::get('reportall/index', [ReportAllController::class, 'index']);
     Route::resource('reportall', ReportAllController::class);
 
+    Route::get('pencairangiropengeluaranheader/index', [PencairanGiroPengeluaranHeaderController::class, 'index']);
+    Route::get('pencairangiropengeluaranheader/get', [PencairanGiroPengeluaranHeaderController::class, 'get'])->name('pencairangiropengeluaranheader.get');
+    Route::get('pencairangiropengeluaranheader/export', [PencairanGiroPengeluaranHeaderController::class, 'export'])->name('pencairangiropengeluaranheader.export');
+    Route::get('pencairangiropengeluaranheader/report', [PencairanGiroPengeluaranHeaderController::class, 'report'])->name('pencairangiropengeluaranheader.report');
+    Route::resource('pencairangiropengeluaranheader', PencairanGiroPengeluaranHeaderController::class);
+    Route::resource('pencairangiropengeluarandetail', PencairanGiroPengeluaranDetailController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
