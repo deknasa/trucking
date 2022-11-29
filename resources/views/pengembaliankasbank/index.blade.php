@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-<!-- Grid -->
+<!-- Grid Master-->
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
@@ -10,14 +10,15 @@
   </div>
 </div>
 
-@include('jurnalumum._modal')
+<!-- Modal -->
+@include('pengembaliankasbank._modal')
 <!-- Detail -->
-@include('jurnalumum._detail')
+@include('pengembaliankasbank._detail')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('jurnalumumheader.index') }}"
-  let getUrl = "{{ route('jurnalumumheader.get') }}"
+  let indexUrl = "{{ route('pengembaliankasbankheader.index') }}"
+  let getUrl = "{{ route('pengembaliankasbankheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -38,7 +39,7 @@
 
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'jurnalumumheader' }}`,
+        url: `{{ config('app.api_url') . 'pengembaliankasbankheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -48,42 +49,6 @@
             name: 'id',
             align: 'right',
             width: '50px'
-          },
-          {
-            label: 'STATUS APPROVAL',
-            name: 'statusapproval',
-            align: 'left',
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['comboapproval'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['comboapproval'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-              `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${rowData.warnastatusapproval}; color: #fff;">
-                  <span title="${value}">${rowData.singkatanstatusapproval}</span>
-                </div>
-              `)
-              
-              return formattedValue[0].outerHTML
-            }
           },
           {
             label: 'NO BUKTI',
@@ -101,9 +66,41 @@
             }
           },
           {
+            label: 'pengeluaran nobukti ',
+            name: 'pengeluaran_nobukti',
+            align: 'left'
+          },
+          {
             label: 'KETERANGAN',
             name: 'keterangan',
             align: 'left'
+          },
+          {
+            label: 'STATUS JNS TRANSAKSI',
+            name: 'statusjenistransaksi',
+            align: 'left',
+            stype: 'select',
+              searchoptions: {
+                value: `<?php
+                        $i = 1;
+
+                        foreach ($data['combojenistransaksi'] as $status) :
+                          echo "$status[param]:$status[parameter]";
+                          if ($i !== count($data['combojenistransaksi'])) {
+                            echo ";";
+                          }
+                          $i++;
+                        endforeach
+
+                        ?>
+              `,
+                dataInit: function(element) {
+                  $(element).select2({
+                    width: 'resolve',
+                    theme: "bootstrap4"
+                  });
+                }
+              },
           },
           {
             label: 'POSTING DARI',
@@ -111,19 +108,76 @@
             align: 'left'
           },
           {
-            label: 'USER APPROVAL',
-            name: 'userapproval',
-            align: 'left'
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            align: 'left',
+            stype: 'select',
+              searchoptions: {
+                value: `<?php
+                        $i = 1;
+
+                        foreach ($data['comboapproval'] as $status) :
+                          echo "$status[param]:$status[parameter]";
+                          if ($i !== count($data['comboapproval'])) {
+                            echo ";";
+                          }
+                          $i++;
+                        endforeach
+
+                        ?>
+              `,
+                dataInit: function(element) {
+                  $(element).select2({
+                    width: 'resolve',
+                    theme: "bootstrap4"
+                  });
+                }
+              },
           },
           {
-            label: 'TANGGAL APPROVAL',
+            label: 'TGL APPROVAL',
             name: 'tglapproval',
             align: 'left',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
+              newformat: "d-m-Y"
             }
+          },
+          {
+            label: 'USER APPROVAL',
+            name: 'userapproval',
+            align: 'left'
+          },
+          {
+            label: 'DIBAYARKAN KE',
+            name: 'dibayarke',
+            align: 'left'
+          },
+          {
+            label: 'CABANG',
+            name: 'cabang_id',
+            align: 'left'
+          },
+          {
+            label: 'BANK',
+            name: 'bank_id',
+            align: 'left'
+          },
+          {
+            label: 'TRANSFER KE NO REK',
+            name: 'transferkeac',
+            align: 'left'
+          }, 
+          {
+            label: 'TRANSFER NAMA REK',
+            name: 'transferkean',
+            align: 'left'
+          },
+          {
+            label: 'TRANSFER NAMA BANK',
+            name: 'transferkebank',
+            align: 'left'
           },
           {
             label: 'MODIFIEDBY',
@@ -178,20 +232,18 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
-
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-
+          
           if (!hasDetail) {
             loadDetailGrid(id)
             hasDetail = true
           }
 
           loadDetailData(id)
-
         },
         loadComplete: function(data) {
 
@@ -205,7 +257,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          triggerClick = true  
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -258,7 +310,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
-              createJurnalUmumHeader()
+              createPengembalianKasBank()
             }
           },
           {
@@ -269,8 +321,8 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
-              } else {
-                cekApproval(selectedId, 'EDIT')
+              }else {
+                editPengembalianKasBank(selectedId)
               }
             }
           },
@@ -283,11 +335,10 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                cekApproval(selectedId, 'DELETE')
+                deletePengembalianKasBank(selectedId)
               }
             }
           },
-
           {
             id: 'export',
             title: 'Export',
@@ -299,10 +350,10 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                window.open(`{{ route('jurnalumumheader.export') }}?id=${selectedId}`)
+                window.open(`{{ route('pengembaliankasbankheader.export') }}?id=${selectedId}`)
               }
             }
-          },
+          },  
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
@@ -312,26 +363,44 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                window.open(`{{ route('jurnalumumheader.report') }}?id=${selectedId}`)
+                window.open(`{{ route('pengembaliankasbankheader.report') }}?id=${selectedId}`)
               }
             }
           },
           {
             id: 'approval',
-            innerHTML: '<i class="fa fa-check"></i> APPROVE/UN',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                approval(selectedId)
+                handleApproval(selectedId)
               }
             }
           },
         ]
 
       })
+
+      function handleApproval(id) {
+        $.ajax({
+          url: `${apiUrl}pengembaliankasbankheader/${id}/approval`,
+          method: 'POST',
+          dataType: 'JSON',
+          beforeSend: request => {
+            request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+          },
+          success: response => {
+            $('#jqGrid').trigger('reloadGrid')
+          }
+        }).always(() => {
+          $('#loader').addClass('d-none')
+        })
+      }
+      
+        
 
     /* Append clear filter button */
     loadClearFilter($('#jqGrid'))
@@ -361,112 +430,42 @@
       .parent().addClass('px-1')
 
     $('#approval .ui-pg-div')
-      .addClass('btn btn-purple btn-sm')
-      .css({
-        'background': '#6619ff',
-        'color': '#fff'
-      })
-      .parent().addClass('px-1')
+    .addClass('btn btn-purple btn-sm')
+    .css({
+    'background': '#6619ff',
+    'color': '#fff'
+    })
+    .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengembaliankasbankheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengembaliankasbankheader', 'update') }}`) {
       $('#edit').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengembaliankasbankheader', 'destroy') }}`) {
       $('#delete').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengembaliankasbankheader', 'export') }}`) {
       $('#export').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengembaliankasbankheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) {
+    if (!`{{ $myAuth->hasPermission('pengembaliankasbankheader', 'approval') }}`) {
       $('#approval').attr('disabled', 'disabled')
     }
 
-    $('#rangeModal').on('shown.bs.modal', function() {
-      if (autoNumericElements.length > 0) {
-        $.each(autoNumericElements, (index, autoNumericElement) => {
-          autoNumericElement.remove()
-        })
-      }
 
-      $('#formRange [name]:not(:hidden)').first().focus()
-
-      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
-      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-      $('#formRange [name=sampai]').val(totalRecord)
-
-      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
-        allowDecimalPadding: false,
-        minimumValue: 1,
-        maximumValue: totalRecord
-      })
-    })
-
-    $('#formRange').submit(function(event) {
-      event.preventDefault()
-
-      let params
-      let submitButton = $(this).find('button:submit')
-
-      submitButton.attr('disabled', 'disabled')
-
-      /* Set params value */
-      for (var key in postData) {
-        if (params != "") {
-          params += "&";
-        }
-        params += key + "=" + encodeURIComponent(postData[key]);
-      }
-
-      let formRange = $('#formRange')
-      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
-      params += `&offset=${offset}&limit=${limit}`
-
-      if ($('#rangeModal').data('action') == 'export') {
-        let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}jurnalumumheader/export?${params}`, true)
-        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
-        xhr.responseType = 'arraybuffer'
-
-        xhr.onload = function(e) {
-          if (this.status === 200) {
-            if (this.response !== undefined) {
-              let blob = new Blob([this.response], {
-                type: "application/vnd.ms-excel"
-              })
-              let link = document.createElement('a')
-
-              link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanjurnalumum${(new Date).getTime()}.xlsx`
-              link.click()
-
-              submitButton.removeAttr('disabled')
-            }
-          }
-        }
-
-        xhr.send()
-      } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('jurnalumumheader.report') }}?${params}`)
-
-        submitButton.removeAttr('disabled')
-      }
-    })
+    
   })
+
+  
 </script>
 @endpush()
 @endsection

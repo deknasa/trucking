@@ -105,16 +105,20 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
-  // let modalBody = $('#crudModal').find('.modal-body').html()
-
+  let modalBody = $('#crudModal').find('.modal-body').html()
+  let rowIndex = 0;
   $(document).ready(function() {
     
-    $("#addRow").click(function() {
+    $(document).on('click', "#addRow", function() {
       addRow()
     });
-    
+
     $(document).on('click', '.rmv', function(event) {
       deleteRow($(this).parents('tr'))
+    })
+
+    $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {
+      setTotal()
     })
     
     $('#btnSubmit').click(function(event) {
@@ -228,7 +232,7 @@
     setFormBindKeys(form)
       
     activeGrid = null
-    // initLookup()
+    initLookup()
     initDatepicker()
 
     // getMaxLength(form)
@@ -236,8 +240,8 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    // $('#crudModal').find('.modal-body').html(modalBody)
-
+    $('#crudModal').find('.modal-body').html(modalBody)
+    
   })
 
 
@@ -257,7 +261,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     addRow()
-    sumary()
+
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
   }
 
@@ -325,7 +329,7 @@
   }
 
   
-  index = 0;
+  
   function addRow() {
 
     let detailRow = $(`
@@ -337,7 +341,7 @@
                     <input type="text"  name="keterangan_detail[]" style="" class="form-control">                    
                   </td>                  
                   <td>
-                    <input type="text"  name="nominal_detail[]" id="nominal_detail${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric nominal number${index}">
+                    <input type="text"  name="nominal_detail[]" id="nominal_detail" text-align:right" class="form-control autonumeric nominal number${rowIndex}">
                   </td>                  
                   <td>
                     <div class='btn btn-danger btn-sm rmv'>Hapus</div>
@@ -346,16 +350,13 @@
     `)
     
     $('table #table_body').append(detailRow)
-    var row = index;
-    initAutoNumeric($(`.number${index}`))
-    
+    initAutoNumeric(detailRow.find('.autonumeric'))
     setRowNumbers()
-    index++;
   }
   
   function deleteRow(row) {
     row.remove()
-    sumary()
+    setTotal()
     setRowNumbers()
   }
 
@@ -364,7 +365,7 @@
   }
 
   function setRowNumbers() {
-    let elements = $('table #table_body tr td:nth-child(1)')
+    let elements = $('#detailList tbody tr td:nth-child(1)')
 
     elements.each((index, element) => {
       $(element).text(index + 1)
@@ -375,19 +376,19 @@
     harga = $(`#nominal_detail${id}`)[0];
     harga = AutoNumeric.getNumber(harga);
     
-    sumary();
+
   }
 
-  function sumary(){
-		let sumary =0;
-		$('.nominal').each(function(){
-			var totalItem = AutoNumeric.getNumber($(this)[0]);
-			sumary +=totalItem;
-		})
-    new AutoNumeric($('#sumary')[0]).set(sumary);
-    $('#nominal').val(sumary)
-    // new AutoNumeric($('#nominal')[0]).set(sumary);
-	}
+  function setTotal() {
+    let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
+    let total = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
+    });
+    $(`#nominal`).val(total);
+    new AutoNumeric('#sumary').set(total)
+  }
 
   function showInvoiceExtraHeader(form, invoiceExtraHeader) {
     resetRow()
@@ -420,7 +421,7 @@
                     <input type="text"  name="keterangan_detail[]" style="" class="form-control">                    
                   </td>
                   <td>
-                    <input type="text"  name="nominal_detail[]" id="nominal_detail${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric nominal number${id} form-control">                    
+                    <input type="text"  name="nominal_detail[]" id="nominal_detail${id}"  style="text-align:right" class="autonumeric nominal form-control">                    
                   </td>  
                   <td>
                     <div class='btn btn-danger btn-sm rmv'>Hapus</div>
@@ -430,13 +431,14 @@
           detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
           detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
           $('table #table_body').append(detailRow)
-          initAutoNumeric($(`.number${id}`))
+          initAutoNumeric(detailRow.find('.autonumeric'))
+
           setRowNumbers()
          
           id++;
         })
         
-        sumary()
+
       }
     })
   }
@@ -452,7 +454,12 @@
         },
         onCancel: (element) => {
           element.val(element.data('currentValue'))
-        }
+        },
+        onClear: (element) => {
+          $(`#${element[0]['name']}Id`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
       })
       $('.agen-lookup').lookup({
         title: 'agen Lookup',
@@ -464,7 +471,12 @@
         },
         onCancel: (element) => {
           element.val(element.data('currentValue'))
-        }
+        },
+        onClear: (element) => {
+          $(`#${element[0]['name']}Id`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
       })
   }
 </script>
