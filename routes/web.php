@@ -29,6 +29,7 @@ use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\SupirController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\AlatBayarController;
+use App\Http\Controllers\ApprovalNotaHeaderController;
 use App\Http\Controllers\BankPelangganController;
 use App\Http\Controllers\FormatController;
 use App\Http\Controllers\JenisEmklController;
@@ -752,6 +753,9 @@ Route::middleware('auth')->group(function () {
     Route::get('reportneraca/report', [ReportNeracaController::class, 'report'])->name('reportneraca.report');
     Route::get('reportneraca/index', [ReportNeracaController::class, 'index']);
     Route::resource('reportneraca', ReportNeracaController::class);
+
+    Route::get('approvalnotaheader/index', [ApprovalNotaHeaderController::class, 'index']);
+    Route::resource('approvalnotaheader', ApprovalNotaHeaderController::class);
 
 });
 
