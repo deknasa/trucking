@@ -5,6 +5,7 @@ use App\Http\Controllers\AbsensiSupirHeaderController;
 
 use App\Http\Controllers\AbsensiSupirApprovalDetailController;
 use App\Http\Controllers\AbsensiSupirApprovalHeaderController;
+use App\Http\Controllers\ApprovalTransaksiKasBankHeader;
 
 use App\Http\Controllers\AbsenTradoController;
 use App\Http\Controllers\AuthController;
@@ -719,6 +720,8 @@ Route::middleware('auth')->group(function () {
     Route::get('invoiceextraheader/report/{id}', [InvoiceExtraHeaderController::class, 'report'])->name('invoiceextraheader.report');
     Route::resource('invoiceextraheader', InvoiceExtraHeaderController::class);
     Route::resource('invoiceextradetail', InvoiceExtraDetailController::class);
+
+    Route::resource('approvaltransaksiheader', ApprovalTransaksiKasBankHeader::class);
 
     Route::get('penerimaangiroheader/index', [PenerimaanGiroHeaderController::class, 'index']);
     Route::get('penerimaangiroheader/{id}/delete', [PenerimaanGiroHeaderController::class, 'delete'])->name('penerimaangiroheader.delete');
