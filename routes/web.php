@@ -5,6 +5,7 @@ use App\Http\Controllers\AbsensiSupirHeaderController;
 
 use App\Http\Controllers\AbsensiSupirApprovalDetailController;
 use App\Http\Controllers\AbsensiSupirApprovalHeaderController;
+use App\Http\Controllers\ApprovalTransaksiKasBankHeader;
 
 use App\Http\Controllers\AbsenTradoController;
 use App\Http\Controllers\AuthController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\SupirController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\AlatBayarController;
+use App\Http\Controllers\ApprovalNotaHeaderController;
 use App\Http\Controllers\BankPelangganController;
 use App\Http\Controllers\FormatController;
 use App\Http\Controllers\JenisEmklController;
@@ -121,6 +123,8 @@ use App\Http\Controllers\InvoiceExtraHeaderController;
 use App\Http\Controllers\JurnalUmumPusatDetailController;
 use App\Http\Controllers\JurnalUmumPusatHeaderController;
 use App\Http\Controllers\LookupController;
+use App\Http\Controllers\PencairanGiroPengeluaranDetailController;
+use App\Http\Controllers\PencairanGiroPengeluaranHeaderController;
 use App\Http\Controllers\PenerimaanGiroDetailController;
 use App\Http\Controllers\PenerimaanGiroHeaderController;
 use App\Http\Controllers\ProsesGajiSupirHeaderController;
@@ -718,6 +722,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('invoiceextraheader', InvoiceExtraHeaderController::class);
     Route::resource('invoiceextradetail', InvoiceExtraDetailController::class);
 
+    Route::resource('approvaltransaksiheader', ApprovalTransaksiKasBankHeader::class);
+
     Route::get('penerimaangiroheader/index', [PenerimaanGiroHeaderController::class, 'index']);
     Route::get('penerimaangiroheader/{id}/delete', [PenerimaanGiroHeaderController::class, 'delete'])->name('penerimaangiroheader.delete');
     Route::get('penerimaangiroheader/get', [PenerimaanGiroHeaderController::class, 'get'])->name('penerimaangiroheader.get');
@@ -741,9 +747,18 @@ Route::middleware('auth')->group(function () {
     Route::get('reportall/index', [ReportAllController::class, 'index']);
     Route::resource('reportall', ReportAllController::class);
 
+    Route::get('pencairangiropengeluaranheader/index', [PencairanGiroPengeluaranHeaderController::class, 'index']);
+    Route::get('pencairangiropengeluaranheader/get', [PencairanGiroPengeluaranHeaderController::class, 'get'])->name('pencairangiropengeluaranheader.get');
+    Route::get('pencairangiropengeluaranheader/export', [PencairanGiroPengeluaranHeaderController::class, 'export'])->name('pencairangiropengeluaranheader.export');
+    Route::get('pencairangiropengeluaranheader/report', [PencairanGiroPengeluaranHeaderController::class, 'report'])->name('pencairangiropengeluaranheader.report');
+    Route::resource('pencairangiropengeluaranheader', PencairanGiroPengeluaranHeaderController::class);
+    Route::resource('pencairangiropengeluarandetail', PencairanGiroPengeluaranDetailController::class);
     Route::get('reportneraca/report', [ReportNeracaController::class, 'report'])->name('reportneraca.report');
     Route::get('reportneraca/index', [ReportNeracaController::class, 'index']);
     Route::resource('reportneraca', ReportNeracaController::class);
+
+    Route::get('approvalnotaheader/index', [ApprovalNotaHeaderController::class, 'index']);
+    Route::resource('approvalnotaheader', ApprovalNotaHeaderController::class);
 
 });
 

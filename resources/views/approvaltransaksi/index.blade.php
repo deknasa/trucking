@@ -36,16 +36,19 @@
                         </div>
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">Proses data<span class="text-danger">*</span></label>
-                            <!-- <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="approve" value="approve" id="inlineRadio1" checked>
-                                <label class="form-check-label" for="inlineRadio1">Approve</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="approve" value="unapprove" id="inlineRadio2">
-                                <label class="form-check-label" for="inlineRadio2">Unapprove</label>
-                            </div> -->
+                            
                             <div class="col-12 col-sm-9 col-md-10">
                                 <select name="approve" id="approve" class="form-select select2bs4" style="width: 100%;">
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Transaksi<span class="text-danger">*</span></label>
+                            
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <select name="transaksi" id="transaksi" class="form-select select2bs4" style="width: 100%;">
 
                                 </select>
                             </div>
@@ -59,12 +62,11 @@
     </div>
 </div>
 <!-- Detail -->
-@include('jurnalumumpusat._detail')
+@include('approvaltransaksi._detail')
 
 @push('scripts')
 <script>
-    let indexUrl = "{{ route('jurnalumumpusatheader.index') }}"
-    let getUrl = "{{ route('jurnalumumpusatheader.get') }}"
+    let indexUrl = "{{ route('approvaltransaksiheader.index') }}"
     let indexRow = 0;
     let page = 0;
     let pager = '#jqGridPager'
@@ -96,10 +98,12 @@
     }
 
     $(document).ready(function() {
+
         initSelect2($('#crudForm').find('[name=approve]'), false)
+        initSelect2($('#crudForm').find('[name=transaksi]'), false)
 
         setStatusApprovalOptions($('#crudForm'))
-
+        setTransaksiOptions($('#crudForm'))
         $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
 
         $('.datepicker').datepicker({
@@ -132,7 +136,10 @@
             $('#jqGrid').jqGrid('setGridParam', {
                 postData: {
                     periode: $('#crudForm').find('[name=periode]').val(),
-                    approve: $('#crudForm').find('[name=approve]').val()
+                    approve: $('#crudForm').find('[name=approve]').val(),
+                    transaksi: $('#crudForm').find('[name=transaksi]').val(),
+                    year: '',
+                    mounth: ''
                 },
             }).trigger('reloadGrid');
         })
@@ -148,11 +155,11 @@
 
             $.each(selectedRows, function(index, item) {
                 data.push({
-                    name: 'jurnalId[]',
+                    name: 'transaksiId[]',
                     value: item
                 })
             });
-
+            console.log(data);
             data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
@@ -183,7 +190,7 @@
             $('#loader').removeClass('d-none')
 
             $.ajax({
-                url: `${apiUrl}jurnalumumpusatheader`,
+                url: `${apiUrl}approvaltransaksiheader`,
                 method: 'POST',
                 dataType: 'JSON',
                 headers: {
@@ -199,6 +206,7 @@
 
                     $('#crudForm').find('[name=periode]').val(data.periode)
                     $('#crudForm').find('[name=approve]').val(data.approve)
+                    $('#crudForm').find('[name=transaksi]').val(data.transaksi)
                     selectedRows = []
                 },
                 error: error => {
@@ -219,7 +227,7 @@
         })
 
         $("#jqGrid").jqGrid({
-                url: `{{ config('app.api_url') . 'jurnalumumpusatheader' }}`,
+                url: `{{ config('app.api_url') . 'approvaltransaksiheader' }}`,
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
@@ -374,12 +382,12 @@
                     let limit = $(this).jqGrid('getGridParam', 'postData').limit
                     if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
+                    let jenisTransaksi = $('#crudForm').find('[name=transaksi]').val()
                     if (!hasDetail) {
-                        loadDetailGrid(id)
+                        loadDetailGrid(id,jenisTransaksi)
                         hasDetail = true
                     }
-
-                    loadDetailData(id)
+                    loadDetailData(id, jenisTransaksi)
 
                 },
                 loadComplete: function(data) {
@@ -498,6 +506,46 @@
                 // relatedForm
                 //     .find('[name=approve]')
                 //     .val($(`#crudForm [name=approve] option:eq(1)`).val())
+                //     .trigger('change')
+                //     .trigger('select2:selected');
+
+                // resolve()
+            }
+        })
+        // })
+    }
+    const setTransaksiOptions = function(relatedForm) {
+        relatedForm.find('[name=transaksi]').append(
+            new Option('-- PILIH TRANSAKSI --', '', false, true)
+        ).trigger('change')
+
+        let data = [];
+        data.push({
+            name: 'grp',
+            value: 'PENERIMAAN KAS'
+        })
+        // data.push({
+        //     name: 'subgrp',
+        //     value: 'STATUS APPROVAL'
+        // })
+        $.ajax({
+            url: `${apiUrl}approvaltransaksiheader/combo`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: data,
+            success: response => {
+
+                response.data.forEach(statusApproval => {
+                    let option = new Option(statusApproval.kelompok, statusApproval.kelompok)
+                    relatedForm.find('[name=transaksi]').append(option).trigger('change')
+                });
+
+                // relatedForm
+                //     .find('[name=transaksi]')
+                //     .val($(`#crudForm [name=transaksi] option:eq(1)`).val())
                 //     .trigger('change')
                 //     .trigger('select2:selected');
 

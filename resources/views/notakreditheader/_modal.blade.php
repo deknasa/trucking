@@ -98,7 +98,7 @@
           </div>
             <div class="col-md-12" style="overflow-x:scroll">
               <table class="table table-borderd mt-3" id="detailList" style="table-layout:auto">
-                <thead id="" class="table-secondary">
+                <thead id="table_body" class="table-secondary">
                   <tr>
                     <th><input type="checkbox" id="checkAll"> </th>
                     <th>no</th>
@@ -269,7 +269,6 @@
 
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
-      console.log(data);
       $.ajax({
         url: url,
         method: method,
@@ -311,14 +310,13 @@
     let form = $('#crudForm')
 
     setFormBindKeys(form)
-    
+
     activeGrid = null
-    
+
     getMaxLength(form)
     initLookup()
-    initSelect2()
     initDatepicker()
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
+    initSelect2()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {

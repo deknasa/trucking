@@ -36,17 +36,20 @@
                         </div>
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">Proses data<span class="text-danger">*</span></label>
-                            <!-- <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="approve" value="approve" id="inlineRadio1" checked>
-                                <label class="form-check-label" for="inlineRadio1">Approve</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="approve" value="unapprove" id="inlineRadio2">
-                                <label class="form-check-label" for="inlineRadio2">Unapprove</label>
-                            </div> -->
                             <div class="col-12 col-sm-9 col-md-10">
                                 <select name="approve" id="approve" class="form-select select2bs4" style="width: 100%;">
 
+                                </select>
+                            </div>
+                        </div>
+                       
+                        <div class="row">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Tabel<span class="text-danger">*</span></label>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <select name="tabel" id="tabel" class="form-select select2bs4" style="width: 100%;">
+                                    <option value="">--Pilih Tabel--</option>
+                                    <option value="notadebetheader">Nota Debet</option>
+                                    <option value="notakreditheader">Nota Kredit</option>
                                 </select>
                             </div>
                         </div>
@@ -59,12 +62,11 @@
     </div>
 </div>
 <!-- Detail -->
-@include('jurnalumumpusat._detail')
+@include('approvalnota._detail')
 
 @push('scripts')
 <script>
-    let indexUrl = "{{ route('jurnalumumpusatheader.index') }}"
-    let getUrl = "{{ route('jurnalumumpusatheader.get') }}"
+
     let indexRow = 0;
     let page = 0;
     let pager = '#jqGridPager'
@@ -79,7 +81,6 @@
     let sortorder = 'asc'
     let autoNumericElements = []
     let rowNum = 10
-    let hasDetail = false
     let selectedRows = [];
 
     function checkboxHandler(element) {
@@ -97,6 +98,7 @@
 
     $(document).ready(function() {
         initSelect2($('#crudForm').find('[name=approve]'), false)
+        initSelect2($('#crudForm').find('[name=tabel]'), false)
 
         setStatusApprovalOptions($('#crudForm'))
 
@@ -127,14 +129,20 @@
         })
 
         $(document).on('click', '#btnReload', function(event) {
-
-
             $('#jqGrid').jqGrid('setGridParam', {
                 postData: {
                     periode: $('#crudForm').find('[name=periode]').val(),
-                    approve: $('#crudForm').find('[name=approve]').val()
+                    approve: $('#crudForm').find('[name=approve]').val(),
+                    tabel: $('#crudForm').find('[name=tabel]').val(),
                 },
             }).trigger('reloadGrid');
+
+            $.jgrid.gridUnload("#detail")
+            
+
+            $('#gbox_detail').siblings('.grid-pager').not(':first').remove()
+            loadDetailGrid( $('#crudForm').find('[name=tabel]').val())
+         
         })
 
         $('#btnSubmit').click(function(event) {
@@ -148,7 +156,7 @@
 
             $.each(selectedRows, function(index, item) {
                 data.push({
-                    name: 'jurnalId[]',
+                    name: 'notaId[]',
                     value: item
                 })
             });
@@ -183,7 +191,7 @@
             $('#loader').removeClass('d-none')
 
             $.ajax({
-                url: `${apiUrl}jurnalumumpusatheader`,
+                url: `${apiUrl}approvalnotaheader`,
                 method: 'POST',
                 dataType: 'JSON',
                 headers: {
@@ -199,6 +207,7 @@
 
                     $('#crudForm').find('[name=periode]').val(data.periode)
                     $('#crudForm').find('[name=approve]').val(data.approve)
+                    $('#crudForm').find('[name=tabel]').val(data.tabel)
                     selectedRows = []
                 },
                 error: error => {
@@ -219,7 +228,7 @@
         })
 
         $("#jqGrid").jqGrid({
-                url: `{{ config('app.api_url') . 'jurnalumumpusatheader' }}`,
+                url: `{{ config('app.api_url') . 'approvalnotaheader' }}`,
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
@@ -247,31 +256,6 @@
                         width: '50px'
                     },
                     {
-                        label: 'NO BUKTI',
-                        name: 'nobukti',
-                        align: 'left'
-                    },
-                    {
-                        label: 'TANGGAL BUKTI',
-                        name: 'tglbukti',
-                        align: 'left',
-                        formatter: "date",
-                        formatoptions: {
-                            srcformat: "ISO8601Long",
-                            newformat: "d-m-Y"
-                        }
-                    },
-                    {
-                        label: 'KETERANGAN',
-                        name: 'keterangan',
-                        align: 'left'
-                    },
-                    {
-                        label: 'POSTING DARI',
-                        name: 'postingdari',
-                        align: 'left'
-                    },
-                    {
                         label: 'STATUS APPROVAL',
                         name: 'statusapproval',
                         align: 'left',
@@ -297,6 +281,46 @@
                                 });
                             }
                         },
+                    },
+                    {
+                        label: 'NO BUKTI',
+                        name: 'nobukti',
+                        align: 'left'
+                    },
+                    {
+                        label: 'TANGGAL BUKTI',
+                        name: 'tglbukti',
+                        align: 'left',
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
+                    },
+                    {
+                        label: 'No Bukti Pelunasan Piutang',
+                        name: 'pelunasanpiutang_nobukti',
+                        align: 'left'
+                    },
+                    {
+                        label: 'KETERANGAN',
+                        name: 'keterangan',
+                        align: 'left'
+                    },
+                    {
+                        label: 'POSTING DARI',
+                        name: 'postingdari',
+                        align: 'left'
+                    },
+                    {
+                        label: 'TANGGAL Lunas',
+                        name: 'tgllunas',
+                        align: 'left',
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
                     },
                     {
                         label: 'USER APPROVAL',
@@ -368,18 +392,14 @@
 
                 onSelectRow: function(id) {
 
+                    let tabel = $('#crudForm').find('[name=tabel]').val()
                     activeGrid = $(this)
                     indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
                     page = $(this).jqGrid('getGridParam', 'page')
                     let limit = $(this).jqGrid('getGridParam', 'postData').limit
                     if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-
-                    if (!hasDetail) {
-                        loadDetailGrid(id)
-                        hasDetail = true
-                    }
-
-                    loadDetailData(id)
+                    
+                    loadDetailData(id, tabel)
 
                 },
                 loadComplete: function(data) {
