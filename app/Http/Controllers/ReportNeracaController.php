@@ -23,16 +23,18 @@ class ReportNeracaController extends MyController
     public function report(Request $request)
     {
         $detailParams = [
-            'tanggal' => $request->tgl,
-            'data' => $request->data
+            'tgldr' => $request->tgldr,
+            'tglsd' => $request->tglsd,
+            'coadr' => $request->coadr,
+            'coasd' => $request->coasd,
         ];
-  
+
         $report = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get('http://localhost/trucking-laravel/public/api/reportneraca/report', $detailParams);
            
-
+dd($reports);
         $reports = $report['data']['original']['data'];
         $user = $report['data']['original']['user'];
         return view('reports.reportneraca', compact('reports','user'));

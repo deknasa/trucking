@@ -18,7 +18,8 @@ class Myauth
         'class' => [
             '',
             'jurnalumumpusatheader',
-            'approvaltransaksiheader',
+            
+            
             'dashboard',
         ],
         'method' => [

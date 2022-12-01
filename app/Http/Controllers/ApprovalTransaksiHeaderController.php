@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class ApprovalTransaksiKasBankHeader  extends MyController
+class ApprovalTransaksiHeaderController  extends MyController
 {
     public $title = 'Approval Transaksi Kas Bank';
     
