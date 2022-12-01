@@ -1,11 +1,6 @@
 @extends('layouts.master')
 
 @section('content')
-<style>
-    .ui-datepicker-calendar {
-        display: none;
-    }
-</style>
 <!-- Grid -->
 <div class="container-fluid">
     <div class="row">
@@ -16,12 +11,48 @@
                 <form id="crudForm">
                     <div class="card-body">
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Bulan/Tahun<span class="text-danger">*</span></label>
-                            <div class="col-sm-4 mt-2">
+                            <div class="col-12 col-sm-2 col-md-2 col-form-label">
+                                <label>
+                                    TANGGAL DARI <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-sm-4 col-md-4">
                                 <div class="input-group">
-                                    <input type="text" name="tanggal" class="form-control datepicker">
+                                    <input type="text" name="tgldr" class="form-control datepicker">
                                 </div>
                             </div>
+                        </div>
+                        <div class="form-group row">
+
+                            <div class="col-12 col-sm-2 col-md-2 col-form-label">
+                                <label>
+                                    TANGGAL SAMPAI <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-sm-4 col-md-4">
+                                <div class="input-group">
+                                    <input type="text" name="tglsd" class="form-control datepicker">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Kode Perkiraan Dari<span class="text-danger">*</span></label>
+
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="text" name="coadr" class="form-control coa-lookup">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Kode Perkiraan Sampai<span class="text-danger">*</span></label>
+
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="text" name="coasd" class="form-control coa-lookup">
+                            </div>
+                        </div>
+                        <div class="row">
+
                             <div class="col-sm-4 mt-2">
                                 <button id="btnSubmit" class="btn btn-primary ">
                                     <i class="fa fa-print"></i>
@@ -29,26 +60,6 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Data<span class="text-danger">*</span></label>
-
-                            <div class="col-12 col-sm-9 col-md-10">
-                                <select name="data" id="data" class="form-select select2bs4" style="width: 100%;">
-                                    <option>--PILIH DATA--</option>
-                                    <option value="jurnalumumheader">JURNAL UMUM</option>
-                                    <option value="piutangheader">PIUTANG</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Kode Perk.<span class="text-danger">*</span></label>
-
-                            <div class="col-12 col-sm-9 col-md-10">
-                                <input type="text" name="coa" class="form-control coa-lookup">
-                            </div>
-                        </div>
-
                     </div>
                 </form>
             </div>
@@ -74,36 +85,22 @@
     let autoNumericElements = []
     let rowNum = 10
     let hasDetail = false
-    
+
     $(document).ready(function() {
         initSelect2($('#crudForm').find('[name=data]'), false)
         initLookup()
-        $('#crudForm').find('[name=tanggal]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
+         initDatepicker()
+        $('#crudForm').find('[name=tgldr]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=tglsd]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        
 
-        $('.datepicker').datepicker({
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: true,
-                showOn: "button",
-                dateFormat: 'mm-yy',
-                onClose: function(dateText, inst) {
-                    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-                }
-            }).siblings(".ui-datepicker-trigger")
-            .wrap(
-                `
-			<div class="input-group-append">
-			</div>
-		`
-            )
-            .addClass("btn btn-primary").html(`
-			<i class="fa fa-calendar-alt"></i>
-		`);
 
         $('#btnSubmit').click(function(event) {
-            let tanggal = $('#crudForm').find('[name=tanggal]').val()
-            let data = $('#crudForm').find('[name=data]').val()
-            window.open(`{{ route('reportneraca.report') }}?tgl=${tanggal}&data=${data}`)
+            let tgldr = $('#crudForm').find('[name=tgldr]').val()
+            let tglsd = $('#crudForm').find('[name=tglsd]').val()
+            let coadr = $('#crudForm').find('[name=coadr]').val()
+            let coasd = $('#crudForm').find('[name=coasd]').val()
+            window.open(`{{ route('reportneraca.report') }}?tgldr=${tgldr}&tglsd=${tglsd}&coadr=${coadr}&coasd=${coasd}`)
         })
     })
 
