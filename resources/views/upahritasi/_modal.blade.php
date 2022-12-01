@@ -426,6 +426,8 @@
     $('.invalid-feedback').remove()
     $('#table_body').html('')
     addRow()
+    $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tglakhirberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     setStatusAktifOptions(form)
     setStatusLuarKotaOptions(form)
 

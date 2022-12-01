@@ -112,10 +112,54 @@
           {
             label: 'STATUS LANGSIR',
             name: 'statuslangsir',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['statuslangsir'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['statuslangsir'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+          `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'STATUS PERALIHAN',
             name: 'statusperalihan',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['statusperalihan'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['statusperalihan'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+          `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
           {
             label: 'MODIFIEDBY',

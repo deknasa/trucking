@@ -161,11 +161,12 @@
               <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
-                    OMSET <span class="text-danger">*</span>
+                    TARIF <span class="text-danger">*</span>
                   </label>
                 </div>
                 <div>
-                  <input type="text" name="omset" class="form-control text-right">
+                  <input type="hidden" name="tarif_id">
+                  <input type="text" name="tarif" class="form-control tarif-lookup">
                 </div>
               </div>
               <div class="form-group col-md-4">
@@ -341,14 +342,14 @@
               <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
-                    TARIF <span class="text-danger">*</span>
+                    OMSET <span class="text-danger">*</span>
                   </label>
                 </div>
                 <div>
-                  <input type="hidden" name="tarif_id">
-                  <input type="text" name="tarif" class="form-control tarif-lookup">
+                  <input type="text" name="omset" class="form-control text-right" readonly>
                 </div>
               </div>
+              
 
               <div class="form-group col-md-4">
                 <div class="col-form-label">
@@ -364,11 +365,11 @@
               <div class="form-group col-md-4">
                 <div class="col-form-label">
                   <label>
-                    TOTAL TON <span class="text-danger">*</span>
+                    TOTAL TON 
                   </label>
                 </div>
                 <div>
-                  <input type="text" name="totalton" class="form-control text-right">
+                  <input type="text" name="totalton" class="form-control text-right" readonly>
                 </div>
               </div>
 
@@ -620,6 +621,17 @@
     $("#addRow").click(function() {
       addRow()
     });
+    
+    $(document).on('input', `#crudForm [name="qtyton"]`, function(event) {
+    
+      let qtyton = AutoNumeric.getNumber($(this)[0])
+      let omset = AutoNumeric.getNumber($(`#crudForm [name="omset"]`)[0])
+      let total = qtyton * omset
+
+      $(`#crudForm [name="totalton"]`).val(total)
+      initAutoNumeric($(`#crudForm [name="totalton"]`))
+      console.log(total)
+    })
 
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
@@ -736,9 +748,7 @@
           },
           data: data,
           success: response => {
-            if (response.kodestatus == '0') {
-              showDialog(response.message['keterangan'])
-            } else {
+            
               $.ajax({
                 url: url,
                 method: method,
@@ -767,6 +777,7 @@
                     $('.invalid-feedback').remove()
 
                     setErrorMessages(form, error.responseJSON.errors);
+                    showDialog(error.responseJSON.message)
                   } else {
                     showDialog(error.statusText)
                   }
@@ -775,6 +786,17 @@
                 $('#loader').addClass('d-none')
                 $(this).removeAttr('disabled')
               })
+
+          },
+          error: error => {
+            if (error.status === 422) {
+              $('.is-invalid').removeClass('is-invalid')
+              $('.invalid-feedback').remove()
+
+              setErrorMessages(form, error.responseJSON.errors);
+              showDialog(error.responseJSON.errors)
+            } else {
+              showDialog(error.statusText)
             }
           },
         }).always(() => {
@@ -842,6 +864,7 @@
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
+
   function setTotal() {
     let nominalDetails = $(`#detailList [name="nominal[]"]`)
     let total = 0
@@ -895,7 +918,6 @@
     initAutoNumeric(form.find(`[name="nominal"]`))
     initAutoNumeric(form.find(`[name="nominalTagih"]`))
     initAutoNumeric(form.find(`[name="nominalstafle"]`))
-    initAutoNumeric(form.find(`[name="omset"]`))
     initAutoNumeric(form.find(`[name="discount"]`))
     initAutoNumeric(form.find(`[name="nilaitagihlain"]`))
     initAutoNumeric(form.find(`[name="qtyton"]`))
@@ -1264,7 +1286,6 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-        console.log(response.data)
         form.find(`[name="gajisupir"]`).val(response.data.nominalsupir)
         form.find(`[name="gajikenek"]`).val(response.data.nominalkenek)
         form.find(`[name="komisisupir"]`).val(response.data.nominalkomisi)
@@ -1272,7 +1293,16 @@
         initAutoNumeric($(form).find('[name="gajisupir"]'))
         initAutoNumeric($(form).find('[name="gajikenek"]'))
         initAutoNumeric($(form).find('[name="komisisupir"]'))
-      }
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+          showDialog(error.responseJSON.message)
+        }
+      },
     })
   }
 
@@ -1590,12 +1620,14 @@
         $('#crudForm [name=tarif_id]').first().val(tarif.id)
         element.val(tarif.tujuan)
         element.data('currentValue', element.val())
+        getTarifOmset(tarif.id)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
         $('#crudForm [name=tarif_id]').first().val('')
+        $('#crudForm [name=omset]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -1606,12 +1638,29 @@
       onSelectRow: (orderantrucking, element) => {
         element.val(orderantrucking.nobukti)
         element.data('currentValue', element.val())
+        getOrderanTrucking(orderantrucking.id)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
         element.val('')
+        $('#crudForm [name=agen]').val('')
+        $('#crudForm [name=agen_id]').val('')
+        $('#crudForm [name=container_id]').val('')
+        $('#crudForm [name=container]').val('')
+        $('#crudForm [name=jenisorder_id]').val('')
+        $('#crudForm [name=jenisorder]').val('')
+        $('#crudForm [name=pelanggan_id]').val('')
+        $('#crudForm [name=pelanggan]').val('')
+        $('#crudForm [name=tarif_id]').val('')
+        $('#crudForm [name=tarif]').val('')
+        $('#crudForm [name=nocont]').val('')
+        $('#crudForm [name=nocont2]').val('')
+        $('#crudForm [name=nojob]').val('')
+        $('#crudForm [name=nojob2]').val('')
+        $('#crudForm [name=omset]').val('')
+        $('#crudForm [name=totalton]').val('')
         element.data('currentValue', element.val())
       }
     })
@@ -1635,6 +1684,55 @@
     })
   }
 
+  function getTarifOmset(id){
+    $.ajax({
+        url: `${apiUrl}suratpengantar/${id}/getTarifOmset`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        success: response => {          
+          $('#crudForm [name=omset]').first().val(response.nominal)
+          initAutoNumeric($('#crudForm ').find(`[name="omset"]`))
+        },
+        error: error => {
+          showDialog(error.statusText)
+        }
+      })
+  }
+
+  function getOrderanTrucking(id){
+    $.ajax({
+        url: `${apiUrl}suratpengantar/${id}/getOrderanTrucking`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        success: response => {
+          getTarifOmset(response.data.tarif_id)
+          console.log(response.data)
+          $('#crudForm [name=agen]').val(response.data.agen)
+          $('#crudForm [name=agen_id]').val(response.data.agen_id)
+          $('#crudForm [name=container_id]').val(response.data.container_id)
+          $('#crudForm [name=container]').val(response.data.container)
+          $('#crudForm [name=jenisorder_id]').val(response.data.jenisorder_id)
+          $('#crudForm [name=jenisorder]').val(response.data.jenisorder)
+          $('#crudForm [name=pelanggan_id]').val(response.data.pelanggan_id)
+          $('#crudForm [name=pelanggan]').val(response.data.pelanggan)
+          $('#crudForm [name=tarif_id]').val(response.data.tarif_id)
+          $('#crudForm [name=tarif]').val(response.data.tarif)
+          $('#crudForm [name=nocont]').val(response.data.nocont)
+          $('#crudForm [name=nocont2]').val(response.data.nocont2)
+          $('#crudForm [name=nojob]').val(response.data.nojobemkl)
+          $('#crudForm [name=nojob2]').val(response.data.nojobemkl2)
+        },
+        error: error => {
+          showDialog(error.statusText)
+        }
+      })
+  }
   // function setDummyOption() {
   //   fetch(`http://dummy.test/server/`)
   //     .then(response => {

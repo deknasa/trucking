@@ -36,14 +36,7 @@
                         </div>
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">Proses data<span class="text-danger">*</span></label>
-                            <!-- <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="approve" value="approve" id="inlineRadio1" checked>
-                                <label class="form-check-label" for="inlineRadio1">Approve</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="approve" value="unapprove" id="inlineRadio2">
-                                <label class="form-check-label" for="inlineRadio2">Unapprove</label>
-                            </div> -->
+                           
                             <div class="col-12 col-sm-9 col-md-10">
                                 <select name="approve" id="approve" class="form-select select2bs4" style="width: 100%;">
 
@@ -59,12 +52,10 @@
     </div>
 </div>
 <!-- Detail -->
-@include('jurnalumumpusat._detail')
+@include('approvalhutangbayar._detail')
 
 @push('scripts')
 <script>
-    let indexUrl = "{{ route('jurnalumumpusatheader.index') }}"
-    let getUrl = "{{ route('jurnalumumpusatheader.get') }}"
     let indexRow = 0;
     let page = 0;
     let pager = '#jqGridPager'
@@ -148,7 +139,7 @@
 
             $.each(selectedRows, function(index, item) {
                 data.push({
-                    name: 'jurnalId[]',
+                    name: 'hutangbayarId[]',
                     value: item
                 })
             });
@@ -183,7 +174,7 @@
             $('#loader').removeClass('d-none')
 
             $.ajax({
-                url: `${apiUrl}jurnalumumpusatheader`,
+                url: `${apiUrl}approvalhutangbayar`,
                 method: 'POST',
                 dataType: 'JSON',
                 headers: {
@@ -219,7 +210,7 @@
         })
 
         $("#jqGrid").jqGrid({
-                url: `{{ config('app.api_url') . 'jurnalumumpusatheader' }}`,
+                url: `{{ config('app.api_url') . 'approvalhutangbayar' }}`,
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
@@ -294,8 +285,23 @@
                         align: 'left'
                     },
                     {
-                        label: 'POSTING DARI',
-                        name: 'postingdari',
+                        label: 'COA',
+                        name: 'coa',
+                        align: 'left'
+                    },
+                    {
+                        label: 'NO BUKTI PENGELUARAN',
+                        name: 'pengeluaran_nobukti',
+                        align: 'left'
+                    },
+                    {
+                        label: 'BANK',
+                        name: 'bank_id',
+                        align: 'left'
+                    },
+                    {
+                        label: 'SUPPLIER',
+                        name: 'supplier_id',
                         align: 'left'
                     },
                     {
@@ -495,13 +501,6 @@
                     relatedForm.find('[name=approve]').append(option).trigger('change')
                 });
 
-                // relatedForm
-                //     .find('[name=approve]')
-                //     .val($(`#crudForm [name=approve] option:eq(1)`).val())
-                //     .trigger('change')
-                //     .trigger('select2:selected');
-
-                // resolve()
             }
         })
         // })

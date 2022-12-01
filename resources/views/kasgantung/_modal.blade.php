@@ -469,6 +469,7 @@
 
     initAutoNumeric(detailRow.find('.autonumeric'))
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tglkaskeluar]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     initDatepicker()
 

@@ -246,6 +246,7 @@
                             $('.is-invalid').removeClass('is-invalid')
                             $('.invalid-feedback').remove()
                             setErrorMessages(form, error.responseJSON.errors);
+                            showDialog(error.responseJSON.message)
                         } else {
                             showDialog(error.statusText)
                         }
@@ -386,38 +387,43 @@
                 Authorization: `Bearer ${accessToken}`
             },
             success: response => {
+                let nominal = 0
+                $.each(response.data, (index, detail) => {
 
-                if (response.errors == true) {
-                    showDialog(response.message)
+                    nominal = parseFloat(nominal) + parseFloat(detail.nominal)
+
+                    let detailRow = $(`
+                        <tr >
+                            <td><input name='ric_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
+                            <td>${detail.nobukti}</td>
+                            <td>${detail.tglbukti}</td>
+                            <td>${detail.namasupir}</td>
+                            <td>${detail.keterangan}</td>
+                            <td>${detail.tgldari}</td>
+                            <td>${detail.tglsampai}</td>
+                            <td class="nominal text-right">${detail.nominal}</td>
+                        </tr>
+                    `)
+
+                    $('#ricList tbody').append(detailRow)
+                    initAutoNumeric(detailRow.find('.nominal'))
+                })
+
+                $('#nominal').append(`${nominal}`)
+
+                initAutoNumeric($('#ricList tfoot').find('#nominal'))
+            
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+                    setErrorMessages(form, error.responseJSON.errors);
+                    showDialog(error.responseJSON.message)
                 } else {
-                    let nominal = 0
-                    $.each(response.data, (index, detail) => {
-
-                        nominal = parseFloat(nominal) + parseFloat(detail.nominal)
-
-                        let detailRow = $(`
-                            <tr >
-                                <td><input name='ric_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
-                                <td>${detail.nobukti}</td>
-                                <td>${detail.tglbukti}</td>
-                                <td>${detail.namasupir}</td>
-                                <td>${detail.keterangan}</td>
-                                <td>${detail.tgldari}</td>
-                                <td>${detail.tglsampai}</td>
-                                <td class="nominal text-right">${detail.nominal}</td>
-                            </tr>
-                        `)
-
-                        $('#ricList tbody').append(detailRow)
-                        initAutoNumeric(detailRow.find('.nominal'))
-                    })
-
-                    $('#nominal').append(`${nominal}`)
-
-                    initAutoNumeric($('#ricList tfoot').find('#nominal'))
-
+                    showDialog(error.statusText)
                 }
-            }
+            },
         })
 
     })

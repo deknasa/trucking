@@ -65,11 +65,11 @@
                     <td>1</td>
                     <td>
                       <input type="hidden" name="trado_id[]">
-                      <input type="text" name="trado" class="form-control trado-lookup">
+                      <input type="text" name="trado[]" class="form-control trado-lookup">
                     </td>
                     <td>
                       <input type="hidden" name="supir_id[]">
-                      <input type="text" name="supir" class="form-control supir-lookup">
+                      <input type="text" name="supir[]" class="form-control supir-lookup">
                     </td>
                     <td>
                       <input type="text" name="keterangan_detail[]" class="form-control">
@@ -360,11 +360,11 @@
             <td></td>
             <td>
               <input type="hidden" name="trado_id[]" value="${detail.trado_id}">
-              <input type="text" name="trado" data-current-value="${detail.trado}" class="form-control trado-lookup" value="${detail.trado}">
+              <input type="text" name="trado[]" data-current-value="${detail.trado}" class="form-control trado-lookup" value="${detail.trado}">
             </td>
             <td>
               <input type="hidden" name="supir_id[]">
-              <input type="text" name="supir" data-current-value="${detail.supir}" class="form-control supir-lookup" value="${detail.supir}">
+              <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup" value="${detail.supir}">
             </td>
             <td>
               <input type="text" name="keterangan_detail[]" class="form-control" value="${detail.keterangan}">
@@ -468,11 +468,11 @@
         <td></td>
         <td>
           <input type="hidden" name="trado_id[]">
-          <input type="text" name="trado" class="form-control trado-lookup">
+          <input type="text" name="trado[]" class="form-control trado-lookup">
         </td>
         <td>
           <input type="hidden" name="supir_id[]">
-          <input type="text" name="supir" class="form-control supir-lookup">
+          <input type="text" name="supir[]" class="form-control supir-lookup">
         </td>
         <td>
           <input type="text" name="keterangan_detail[]" class="form-control">
@@ -636,7 +636,7 @@
       },
       onClear: (element) => {
         element.val('')
-        $(`#crudForm [name="trado_id"]`).first().val('')
+        $(`#crudForm [name="trado_id[]"]`).first().val('')
         element.data('currentValue', element.val())
       }
     })

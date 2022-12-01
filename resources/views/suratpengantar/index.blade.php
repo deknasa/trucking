@@ -50,6 +50,12 @@
           {
             label: 'TGLBUKTI',
             name: 'tglbukti',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'PELANGGAN',
@@ -106,6 +112,7 @@
           {
             label: 'GAJI SUPIR',
             name: 'gajisupir',
+            align: 'right',
             formatter: 'currency',
             formatoptions: {
               decimalSeparator: ',',
@@ -115,6 +122,7 @@
           {
             label: 'GAJI KENEK',
             name: 'gajikenek',
+            align: 'right',
             formatter: 'currency',
             formatoptions: {
               decimalSeparator: ',',
@@ -140,6 +148,7 @@
           {
             label: 'NOMINAL PERALIHAN',
             name: 'nominalperalihan',
+            align: 'right',
             formatter: 'currency',
             formatoptions: {
               decimalSeparator: ',',
@@ -153,6 +162,12 @@
           {
             label: 'TGLSP',
             name: 'tglsp',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'MODIFIEDBY',

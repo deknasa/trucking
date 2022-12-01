@@ -293,10 +293,6 @@
                     Authorization: `Bearer ${accessToken}`
                 },
                 success: response => {
-
-                    if (response.errors == true) {
-                        showDialog(response.message)
-                    } else {
                         let gajiSupir = 0
                         let gajiKenek = 0
                         $.each(response.data, (index, detail) => {
@@ -336,8 +332,19 @@
                         initAutoNumeric($('#tripList tfoot').find('#gajiSupir'))
                         initAutoNumeric($('#tripList tfoot').find('#gajiKenek'))
 
+                    },
+                error: error => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        setErrorMessages(form, error.responseJSON.errors);
+                        
+                        showDialog(error.responseJSON.message)
+
+                    } else {
+                        showDialog(error.statusText)
                     }
-                }
+                },
             })
         })
 
@@ -474,6 +481,8 @@
                             $('.is-invalid').removeClass('is-invalid')
                             $('.invalid-feedback').remove()
                             setErrorMessages(form, error.responseJSON.errors);
+                            showDialog(error.responseJSON.message)
+
                         } else {
                             showDialog(error.statusText)
                         }

@@ -30,6 +30,7 @@ use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\SupirController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\AlatBayarController;
+use App\Http\Controllers\ApprovalHutangBayarController;
 use App\Http\Controllers\ApprovalNotaHeaderController;
 use App\Http\Controllers\BankPelangganController;
 use App\Http\Controllers\FormatController;
@@ -759,6 +760,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('approvalnotaheader/index', [ApprovalNotaHeaderController::class, 'index']);
     Route::resource('approvalnotaheader', ApprovalNotaHeaderController::class);
+
+    Route::get('approvalhutangbayar/index', [ApprovalHutangBayarController::class, 'index']);
+    Route::resource('approvalhutangbayar', ApprovalHutangBayarController::class);
 
 });
 

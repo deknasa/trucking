@@ -132,10 +132,9 @@
                   <tr>
                     <th width="1%"></th>
                     <th width="4%">JOB TRUCKING</th>
-                    <th width="4%">SP</th>
-                    <th width="4%">NO CONT</th>
                     <th width="4%">TGL OTOBON</th>
-                    <th width="4%">TUJUAN</th>
+                    <th width="4%">NO CONT</th>
+                    <th width="4%">TARIF</th>
                     <th width="4%">BAGIAN</th>
                     <th width="4%">EMKL</th>
                     <th width="4%">LONG TRIP</th>
@@ -149,7 +148,7 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="11">
+                    <td colspan="10">
                       <p class="font-weight-bold">TOTAL:</p>
                     </td>
                     <td>
@@ -428,10 +427,9 @@
                               <tr >
                                   <td><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
                                   <td>${detail.jobtrucking}</td>
-                                  <td>${detail.nosp}</td>
-                                  <td>${detail.nocont}</td>
                                   <td>${detail.tglsp}</td>
-                                  <td>${detail.sampai}</td>
+                                  <td>${detail.nocont}</td>
+                                  <td>${detail.tarif_id}</td>
                                   <td>${detail.jenisorder_id}</td>
                                   <td>${detail.agen_id}</td>
                                   <td><input name='statuslongtrip[]' type="checkbox" value="${detail.statuslongtrip}" ${cekLongtrip} disabled></td>
@@ -450,6 +448,16 @@
             initAutoNumeric($('#spList tfoot').find('#omset'))
 
           }
+        },
+        error: error => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+                setErrorMessages(form, error.responseJSON.errors);
+                showDialog(error.responseJSON.message)
+            } else {
+                showDialog(error.statusText)
+            }
         }
       })
     } else {
@@ -512,12 +520,11 @@
           let cekPeralihan = detail.statusperalihan == 67 ? "checked" : "";
           let detailRow = $(`
                   <tr >
-                      <td><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" ${disabled} checked></td>
+                      <td><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
                       <td>${detail.jobtrucking}</td>
-                      <td>${detail.nosp}</td>
-                      <td>${detail.nocont}</td>
                       <td>${detail.tglsp}</td>
-                      <td>${detail.sampai}</td>
+                      <td>${detail.nocont}</td>
+                      <td>${detail.tarif_id}</td>
                       <td>${detail.jenisorder_id}</td>
                       <td>${detail.agen_id}</td>
                       <td><input name='statuslongtrip[]' type="checkbox" value="${detail.statuslongtrip}" ${cekLongtrip} disabled></td>

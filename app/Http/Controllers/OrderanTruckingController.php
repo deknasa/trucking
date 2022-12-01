@@ -20,8 +20,12 @@ class OrderanTruckingController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-
-        return view('orderantrucking.index', compact('title'));
+        $data = [
+            'statuslangsir' => $this->combo('list','STATUS LANGSIR','STATUS LANGSIR'),
+            'statusperalihan' => $this->combo('list','STATUS PERALIHAN','STATUS PERALIHAN'),
+            
+        ];
+        return view('orderantrucking.index', compact('title', 'data'));
     }
 
     /**
@@ -67,123 +71,6 @@ class OrderanTruckingController extends MyController
         return view('orderantrucking.add', compact('title','combo'));
     }
 
-    /**
-     * @ClassName
-     */
-    public function store(Request $request): Response
-    {
-        try {
-            // $request->nominal = array_map(function ($nominal) {
-            // $nominal = str_replace('.', '', $nominal);
-            // $nominal = str_replace(',', '', $nominal);
-
-            //     return $nominal;
-            // }, $request->nominal);
-            
-            // $request->merge([
-            //     'nominal' => $request->nominal
-            // ]);
-
-            $request['modifiedby'] = Auth::user()->name;
-
-            $response = Http::withHeaders($this->httpHeaders)
-                ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'orderantrucking', $request->all());
-
-            return response($response, $response->status());
-        } catch (\Throwable $th) {
-            throw $th->getMessage();
-        }
-    }
-
-    /**
-     * @ClassName
-     */
-    public function edit($id): View
-    {
-        $title = $this->title;
-        $combo = $this->combo();
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "orderantrucking/$id");
-        
-        $orderantrucking = $response['data'];
-
-        return view('orderantrucking.edit', compact('title', 'orderantrucking','combo'));
-    }
-
-    /**
-     * @ClassName
-     */
-    public function update(Request $request, $id): Response
-    {
-        // $request->nominal = array_map(function ($nominal) {
-        // $nominal = str_replace('.', '', $nominal);
-        // $nominal = str_replace(',', '', $nominal);
-
-        //     return $nominal;
-        // }, $request->nominal);
-
-        // $request->merge([
-        //     'nominal' => $request->nominal
-        // ]);
-            
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])
-            ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "orderantrucking/$id", $request->all());
-
-        return response($response);
-    }
-
-    /**
-     * @ClassName
-     */
-    public function delete($id)
-    {
-        try {
-            $title = $this->title;
-            $combo = $this->combo();
-
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])
-                ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "orderantrucking/$id");
-
-            $orderantrucking = $response['data'];
-
-            return view('orderantrucking.delete', compact('title', 'orderantrucking','combo'));
-        } catch (\Throwable $th) {
-            return redirect()->route('orderantrucking.index');
-        }
-    }
-
-    /**
-     * @ClassName
-     */
-    public function destroy($id, Request $request)
-    {
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])
-            ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "orderantrucking/$id", $request->all());
-
-        return response($response);
-    }
 
     public function fieldLength(): Response
     {
@@ -194,11 +81,21 @@ class OrderanTruckingController extends MyController
         return response($response['data']);
     }
 
-    private function combo()
+
+    public function combo($aksi, $grp, $subgrp)
     {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp
+        ];
+
         $response = Http::withHeaders($this->httpHeaders)
-            ->get(config('app.api_url') . 'orderantrucking/combo');
-        
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'hutangbayarheader/comboapproval', $status);
+
         return $response['data'];
     }
 
