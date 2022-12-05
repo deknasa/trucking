@@ -171,13 +171,14 @@
                 }
             })
 
-            // .jqGrid("navGrid", pager, {
-            //     search: false,
-            //     refresh: false,
-            //     add: false,
-            //     edit: false,
-            //     del: false,
-            // })
+            .jqGrid("navGrid", pager, {
+                search: false,
+                refresh: false,
+                add: false,
+                edit: false,
+                del: false,
+            })
+            .customPager()
 
     }
 
@@ -300,6 +301,8 @@
                 postData: post
             }).trigger('reloadGrid')
         }
+        
+        $('#gbox_detail').siblings('.grid-pager').not(':first').remove()
 
     }
 </script>

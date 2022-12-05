@@ -60,6 +60,26 @@
             align: "right",
             summaryType:'sum'
           },
+          {
+            label: 'KET. PENYESUAIAN',
+            name: 'keteranganpenyesuaian',
+          },
+          {
+            label: 'PENYESUAIAN',
+            name: 'penyesuaian',
+            formatter: 'number', 
+            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            align: "right",
+            summaryType:'sum'
+          },
+          {
+            label: 'NOMINAL LEBIH BAYAR',
+            name: 'nominallebihbayar',
+            formatter: 'number', 
+            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            align: "right",
+            summaryType:'sum'
+          },
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -80,14 +100,26 @@
 
           let nominals = $(this).jqGrid("getCol", "nominal")
           let totalNominal = 0
+          let penyesuaians = $(this).jqGrid("getCol", "penyesuaian")
+          let totalPenyesuaian = 0
+          let lebihbayars = $(this).jqGrid("getCol", "lebihbayar")
+          let totalLebihBayar = 0
 
           if (nominals.length > 0) {
             totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          }
+          if (penyesuaians.length > 0) {
+            totalPenyesuaian = penyesuaians.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          }
+          if (lebihbayars.length > 0) {
+            totalLebihBayar = lebihbayars.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
           }
 
           $(this).jqGrid('footerData', 'set', {
             nobukti: 'Total:',
             nominal: totalNominal,
+            penyesuaian: totalPenyesuaian,
+            nominallebihbayar: totalLebihBayar,
           }, true)
         }
       })

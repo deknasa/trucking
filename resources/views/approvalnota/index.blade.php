@@ -138,11 +138,7 @@
             }).trigger('reloadGrid');
 
             $.jgrid.gridUnload("#detail")
-            
-
-            $('#gbox_detail').siblings('.grid-pager').not(':first').remove()
             loadDetailGrid( $('#crudForm').find('[name=tabel]').val())
-         
         })
 
         $('#btnSubmit').click(function(event) {
