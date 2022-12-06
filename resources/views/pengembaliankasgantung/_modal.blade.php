@@ -30,24 +30,6 @@
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  dari TANGGAL
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="tgldari" class="form-control datepicker">
-              </div>
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  sampai TANGGAL
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="tglsampai" class="form-control datepicker">
-              </div>
-            </div>
 
             <div class="row">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -57,22 +39,6 @@
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="tglkasmasuk" class="form-control datepicker">
-              </div>
-
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>keterangan <span class="text-danger">*</span> </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="keterangan" class="form-control">
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>penerimaan <span class="text-danger">*</span> </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="penerimaan_nobukti" class="form-control penerimaan-lookup">
               </div>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -103,6 +69,36 @@
               </div>
             </div>
 
+            
+            <div class="row">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  dari TANGGAL
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-4 ">
+                <input type="text" name="tgldari" class="form-control datepicker">
+              </div>
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  sampai TANGGAL
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-4 ">
+                <input type="text" name="tglsampai" class="form-control datepicker">
+              </div>
+            </div>
+
+            <div class="row">
+              
+
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>keterangan <span class="text-danger">*</span> </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="keterangan" class="form-control">
+              </div>
+            </div>
 
 
             <div class="col-md-12" style="overflow-x:scroll">
@@ -168,6 +164,9 @@
       setTotal()
     })
 
+    
+        
+    
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -262,6 +261,8 @@
         $(this).removeAttr('disabled')
       })
     })
+
+
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -281,6 +282,24 @@
     
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+  
+  $('#crudForm').find(`[name="tgldari"]`).change(() => {
+    rangeKasgantung();
+  })
+  $('#crudForm').find(`[name="tglsampai"]`).change(() => {
+    rangeKasgantung();
+  })
+
+  function rangeKasgantung() {
+    var tgldari = $('#crudForm').find(`[name="tgldari"]`).val()
+    var tglsampai = $('#crudForm').find(`[name="tglsampai"]`).val()
+    console.log(tgldari,tglsampai);
+    if (tgldari !== "" && tglsampai !==""){
+      getKasGantung(tgldari,tglsampai)
+    }
+    initDatepicker()
+
+  }
 
   function setTotal() {
     let nominalDetails = $(`#table_body [name="nominal[]"]`)
@@ -308,8 +327,9 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     initLookup()
-    getKasGantung()
+    
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
+    $('#crudForm').find('[name=tglkasmasuk]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
 
   }
 
@@ -390,8 +410,8 @@
     })
   }
 
-  function getKasGantung() {
-    
+  function getKasGantung(dari,sampai) {
+    console.log(dari,sampai);
     $('#detailList tbody').html('')
 
     $.ajax({
@@ -399,7 +419,9 @@
       method: 'GET',
       dataType: 'JSON',
       data: {
-        limit: 0
+        limit: 0,
+        tgldari: dari,
+        tglsampai: sampai
       },
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -440,7 +462,7 @@
            })
           })
            totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
-           $('#nominalPiutang').append(`${totalNominal}`)           
+           $('#nominalPiutang').html(`${totalNominal}`)           
       }
     })
   }

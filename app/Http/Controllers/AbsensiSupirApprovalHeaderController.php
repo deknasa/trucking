@@ -73,15 +73,15 @@ class AbsensiSupirApprovalHeaderController extends MyController
             'withRelations' => true,
 
         ];
-        $notadebet = $this->find($params,$id)['data'];
-        // return $notadebets['id'];
-        $data = $notadebet;
+        $absensisupirapproval = $this->find($params,$id)['data'];
+        // return $absensisupirapprovals['id'];
+        $data = $absensisupirapproval;
         $i =0;
         
             $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'absensisupirapprovaldetail', ['notadebet_id' => $notadebet['id']]);
+            ->get(config('app.api_url') . 'absensisupirapprovaldetail', ['absensisupirapproval_id' => $absensisupirapproval['id']]);
 
             $data["details"] =$response['data'];
             $data["user"] = Auth::user();
