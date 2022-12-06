@@ -325,6 +325,10 @@
           $('#jqGrid').trigger('reloadGrid', {
             page: response.data.page
           }).trigger('reloadGrid');
+          
+          if(id == 0){
+            $('#detail').jqGrid().trigger('reloadGrid')
+          }
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)

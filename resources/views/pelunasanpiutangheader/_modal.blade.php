@@ -391,6 +391,10 @@
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
+          
+          if(id == 0){
+            $('#detail').jqGrid().trigger('reloadGrid')
+          }
 
           $('#detailList tbody').html('')
           $('#nominalPiutang').html('')

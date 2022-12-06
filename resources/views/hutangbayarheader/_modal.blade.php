@@ -98,25 +98,35 @@
                             <th width="5%">TGL CAIR</th>
                           </tr>
                         </thead>
-                          <tbody id="table_body">
+                        <tbody id="table_body">
 
-                          </tbody>
+                        </tbody>
                         <tfoot>
                           <tr>
                             <td colspan="4"></td>
-                            <td><p id="nominalHutang" class="text-right font-weight-bold"></p></td>
-                            <td><p id="sisaHutang" class="text-right font-weight-bold"></p></td>
+                            <td>
+                              <p id="nominalHutang" class="text-right font-weight-bold"></p>
+                            </td>
+                            <td>
+                              <p id="sisaHutang" class="text-right font-weight-bold"></p>
+                            </td>
                             <td></td>
-                            <td><p id="bayarHutang" class="text-right font-weight-bold"></p></td>
-                            <td><p id="potonganHutang" class="text-right font-weight-bold"></p></td>
-                            <td><p id="totalHutang" class="text-right font-weight-bold"></p></td>
+                            <td>
+                              <p id="bayarHutang" class="text-right font-weight-bold"></p>
+                            </td>
+                            <td>
+                              <p id="potonganHutang" class="text-right font-weight-bold"></p>
+                            </td>
+                            <td>
+                              <p id="totalHutang" class="text-right font-weight-bold"></p>
+                            </td>
                             <td></td>
                             <td></td>
                           </tr>
                         </tfoot>
                       </table>
                     </div>
-                    
+
                   </div>
                 </div>
               </div>
@@ -151,24 +161,24 @@
       let sisa = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisa[]"]`)[0])
 
       let bayar = $(this).val()
-      bayar = parseFloat(bayar.replaceAll(',',''));
-      bayar =  Number.isNaN(bayar) ? 0 : bayar
+      bayar = parseFloat(bayar.replaceAll(',', ''));
+      bayar = Number.isNaN(bayar) ? 0 : bayar
 
       console.log(sisa)
       console.log(bayar)
 
-      if(sisa == 0) {
+      if (sisa == 0) {
         let nominal = $(this).closest("tr").find(`[name="nominal[]"]`).val()
-        nominal = parseFloat(nominal.replaceAll(',',''));
-        let totalSisa = nominal-bayar
+        nominal = parseFloat(nominal.replaceAll(',', ''));
+        let totalSisa = nominal - bayar
         console.log(totalSisa)
         $(this).closest("tr").find(".sisa").html(totalSisa)
       } else {
-        let totalSisa = sisa-bayar
+        let totalSisa = sisa - bayar
         $(this).closest("tr").find(".sisa").html(totalSisa)
       }
-      
-      
+
+
       initAutoNumeric($(this).closest("tr").find(".sisa"))
 
       let Sisa = $(`#table_body .sisa`)
@@ -182,9 +192,9 @@
 
       // get potongan for total
       let potongan = AutoNumeric.getNumber($(this).closest("tr").find(`[name="potongan[]"]`)[0])
-      let totalHutang = bayar-potongan
+      let totalHutang = bayar - potongan
       $(this).closest("tr").find(`[name="total[]"]`).val(totalHutang)
-      
+
       initAutoNumeric($(this).closest("tr").find(`[name="total[]"]`))
 
       let Total = $(`#table_body [name="total[]"]`)
@@ -193,7 +203,7 @@
       $.each(Total, (index, ttl) => {
         gt += AutoNumeric.getNumber(ttl)
       });
-      
+
       new AutoNumeric('#totalHutang').set(gt)
     })
 
@@ -201,12 +211,12 @@
       setPotongan()
       let bayar = AutoNumeric.getNumber($(this).closest("tr").find(`[name="bayar[]"]`)[0])
       let potongan = $(this).val()
-      potongan =  parseFloat(potongan.replaceAll(',',''));
-      potongan =  Number.isNaN(potongan) ? 0 : potongan
+      potongan = parseFloat(potongan.replaceAll(',', ''));
+      potongan = Number.isNaN(potongan) ? 0 : potongan
 
-      let total = bayar-potongan
+      let total = bayar - potongan
       $(this).closest("tr").find(`[name="total[]"]`).val(total)
-      
+
       initAutoNumeric($(this).closest("tr").find(`[name="total[]"]`))
 
       let Total = $(`#table_body [name="total[]"]`)
@@ -215,7 +225,7 @@
       $.each(Total, (index, ttl) => {
         gt += AutoNumeric.getNumber(ttl)
       });
-      
+
       new AutoNumeric('#totalHutang').set(gt)
       console.log(total)
     })
@@ -233,7 +243,7 @@
       let action = form.data('action')
       // let tes = $('#crudForm').serializeArray()
       // unformatAutoNumeric(data)
-     let data = []
+      let data = []
 
       data.push({
         name: 'id',
@@ -273,10 +283,10 @@
       })
 
 
-      $('#table_body tr').each(function(row, tr){ 
+      $('#table_body tr').each(function(row, tr) {
         // console.log(row);
-        
-        if($(this).find(`[name="hutang_id[]"]`).is(':checked')) {
+
+        if ($(this).find(`[name="hutang_id[]"]`).is(':checked')) {
 
           data.push({
             name: 'keterangandetail[]',
@@ -294,7 +304,7 @@
             name: 'total[]',
             value: AutoNumeric.getNumber($(`#crudForm [name="total[]"]`)[row])
           })
-          
+
           data.push({
             name: 'alatbayar_id[]',
             value: $(this).find(`[name="alatbayar_id[]"]`).val()
@@ -311,7 +321,7 @@
             name: 'hutang_id[]',
             value: $(this).find(`[name="hutang_id[]"]`).val()
           })
-          
+
         }
       })
       // console.log(typeof(data))
@@ -378,12 +388,16 @@
           id = response.data.id
           $('#crudModal').find('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
-         
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
+
           $('#detailList tbody').html('')
           $('#nominalHutang').html('')
           $('#sisaHutang').html('')
-
+          if(id == 0){
+            $('#detail').jqGrid().trigger('reloadGrid')
+          }
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
           }
@@ -394,7 +408,7 @@
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
             setErrorMessages(form, error.responseJSON.errors);
-            
+
             showDialog(error.responseJSON.message)
 
           } else {
@@ -423,7 +437,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    
+
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -513,22 +527,22 @@
 
           form.find(`[name="${index}"]`).val(value).attr('disabled', false)
 
-           if(element.hasClass('datepicker')){
-              element.val(dateFormat(value))
+          if (element.hasClass('datepicker')) {
+            element.val(dateFormat(value))
           }
 
-          
-          if(index == 'bank') {
+
+          if (index == 'bank') {
             element.data('current-value', value)
           }
-          if(index == 'supplier') {
+          if (index == 'supplier') {
             element.data('current-value', value)
           }
-          if(index == 'coa') {
+          if (index == 'coa') {
             element.data('current-value', value)
           }
         })
-        
+
 
         let supplierId = response.data.supplier_id
 
@@ -563,9 +577,9 @@
           let element = form.find(`[name="${index}"]`)
 
           form.find(`[name="${index}"]`).val(value)
-          
-           if(element.hasClass('datepicker')){
-              element.val(dateFormat(value))
+
+          if (element.hasClass('datepicker')) {
+            element.val(dateFormat(value))
           }
 
         })
@@ -574,7 +588,7 @@
         form.find('[name]').addClass('disabled')
         initDisabled()
         getPembayaran(Id, supplierId, 'delete')
-        
+
       }
     })
   }
@@ -586,7 +600,7 @@
   // });
 
   function getHutang(id) {
-    
+
     $('#detailList tbody').html('')
     $('#detailList tfoot #nominalHutang').html('')
     $('#detailList tfoot #sisaHutang').html('')
@@ -602,11 +616,11 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-       
+
         let totalNominal = 0
         let totalSisa = 0
         $.each(response.data, (index, detail) => {
-         
+
           let id = detail.id
           totalNominal = parseFloat(totalNominal) + parseFloat(detail.total)
           totalSisa = totalSisa + parseFloat(detail.sisa);
@@ -651,6 +665,8 @@
             </tr>
           `)
 
+          
+          detailRow.find(`[name="tglcair[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
           // detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
           // detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
 
@@ -668,12 +684,12 @@
             title: 'Alat Bayar Lookup',
             fileName: 'alatbayar',
             onSelectRow: (alatbayar, element) => {
-                element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
-                element.val(alatbayar.namaalatbayar)
-                element.data('currentValue', element.val())
+              element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
+              element.val(alatbayar.namaalatbayar)
+              element.data('currentValue', element.val())
             },
             onCancel: (element) => {
-                element.val(element.data('currentValue'))
+              element.val(element.data('currentValue'))
             },
             onClear: (element) => {
               element.parents('td').find(`[name="alatbayar_id[]"]`).val('')
@@ -681,7 +697,7 @@
               element.data('currentValue', element.val())
             }
           })
-          
+
         })
         totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
         totalSisa = new Intl.NumberFormat('en-US').format(totalSisa);
@@ -691,11 +707,11 @@
         initAutoNumeric($('#detailList tfoot').find('#nominalHutang'))
         initAutoNumeric($('#detailList tfoot').find('#sisaHutang'))
         setRowNumbers()
-        
-      }
-    }) 
 
-   
+      }
+    })
+
+
   }
 
 
@@ -706,9 +722,9 @@
     let forCheckbox
     let forTotal = 'disabled'
     // if(aksi == 'edit'){
-      url = `${apiUrl}hutangbayarheader/${id}/${supplierId}/getPembayaran`
+    url = `${apiUrl}hutangbayarheader/${id}/${supplierId}/getPembayaran`
     // }
-    if(aksi == 'delete'){ 
+    if (aksi == 'delete') {
       attribut = 'disabled'
       forCheckbox = 'disabled'
     }
@@ -723,17 +739,17 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-       
+
         let totalNominalHutang = 0
         let totalSisa = 0
         let totalNominal = 0
         let total = 0
         $.each(response.data, (index, detail) => {
-          
+
           let id = detail.id
           let hutangbayarId = detail.hutangbayar_id
           let checked
-          
+
           totalNominalHutang = parseFloat(totalNominalHutang) + parseFloat(detail.nominalhutang)
           totalSisa = totalSisa + parseFloat(detail.sisa);
           total = parseFloat(detail.bayar) + parseFloat(detail.potongan)
@@ -741,9 +757,9 @@
           let sisaHidden = parseFloat(detail.sisa) + parseFloat(detail.bayar)
           let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
 
-          if(hutangbayarId != null) {
+          if (hutangbayarId != null) {
             checked = 'checked'
-          }else{
+          } else {
             attribut = 'disabled'
           }
 
@@ -795,9 +811,9 @@
           initAutoNumeric(detailRow.find('.nominal'))
 
           if (detailRow.find(`[name="tglcair[]"]`).val() != '') {
-               detailRow.find(`[name="tglcair[]"]`).val(dateFormat(detail.tglcair))
+            detailRow.find(`[name="tglcair[]"]`).val(dateFormat(detail.tglcair))
           }
-          $('#detailList tbody').append(detailRow)      
+          $('#detailList tbody').append(detailRow)
           setBayar()
           setPotongan()
           setTotal()
@@ -806,12 +822,12 @@
             title: 'Alat Bayar Lookup',
             fileName: 'alatbayar',
             onSelectRow: (alatbayar, element) => {
-                element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
-                element.val(alatbayar.namaalatbayar)
-                element.data('currentValue', element.val())
+              element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
+              element.val(alatbayar.namaalatbayar)
+              element.data('currentValue', element.val())
             },
             onCancel: (element) => {
-                element.val(element.data('currentValue'))
+              element.val(element.data('currentValue'))
             },
             onClear: (element) => {
               element.parents('td').find(`[name="alatbayar_id[]"]`).val('')
@@ -820,48 +836,48 @@
             }
           })
         })
-        
-    
+
+
         $('#nominalHutang').append(`${totalNominalHutang}`)
         $('#sisaHutang').append(`${totalSisa}`)
         initAutoNumeric($('#detailList tfoot').find('#nominalHutang'))
         initAutoNumeric($('#detailList tfoot').find('#sisaHutang'))
         setRowNumbers()
 
-        
+
       }
-    }) 
-    
+    })
+
   }
 
 
-    $(document).on('click', `#detailList tbody [name="hutang_id[]"]`, function() {
+  $(document).on('click', `#detailList tbody [name="hutang_id[]"]`, function() {
 
-      if ($(this).prop("checked") == true) {
+    if ($(this).prop("checked") == true) {
 
-         $(this).closest('tr').find(`td [name="keterangandetail[]"]`).prop('disabled', false)
-         $(this).closest('tr').find(`td [name="bayar[]"]`).prop('disabled', false)
-         $(this).closest('tr').find(`td [name="potongan[]"]`).prop('disabled', false)
-         $(this).closest('tr').find(`td [name="alatbayar[]"]`).prop('disabled', false)
-         $(this).closest('tr').find(`td [name="tglcair[]"]`).prop('disabled', false)
-        setBayar()
-        setPotongan()
-        setTotal()
-      }else{
+      $(this).closest('tr').find(`td [name="keterangandetail[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="bayar[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="potongan[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="alatbayar[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="tglcair[]"]`).prop('disabled', false)
+      setBayar()
+      setPotongan()
+      setTotal()
+    } else {
 
-         $(this).closest('tr').find(`td [name="keterangandetail[]"]`).prop('disabled', true)
-         $(this).closest('tr').find(`td [name="bayar[]"]`).prop('disabled', true)
-         $(this).closest('tr').find(`td [name="potongan[]"]`).prop('disabled', true)
-         $(this).closest('tr').find(`td [name="alatbayar[]"]`).prop('disabled', true)
-         $(this).closest('tr').find(`td [name="tglcair[]"]`).prop('disabled', true)
-        setBayar()
-        setPotongan()
-        setTotal()
-      }
-    })
-    
- 
-  
+      $(this).closest('tr').find(`td [name="keterangandetail[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="bayar[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="potongan[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="alatbayar[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="tglcair[]"]`).prop('disabled', true)
+      setBayar()
+      setPotongan()
+      setTotal()
+    }
+  })
+
+
+
   function setRowNumbers() {
     let elements = $('#detailList tbody tr td:nth-child(2)')
 
@@ -873,7 +889,7 @@
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
-        url: `${apiUrl}pelunasanpiutangheader/field_length`,
+        url: `${apiUrl}hutangbayarheader/field_length`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -947,13 +963,13 @@
         element.data('currentValue', element.val())
       }
     })
-    
+
     $('.supplier-lookup').lookup({
       title: 'Supplier Lookup',
       fileName: 'supplier',
       onSelectRow: (supplier, element) => {
         $('#crudForm [name=supplier_id]').first().val(supplier.id)
-        element.val(supplier.namasupplier) 
+        element.val(supplier.namasupplier)
         getHutang(supplier.id)
         element.data('currentValue', element.val())
       },

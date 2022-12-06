@@ -152,7 +152,7 @@
       let method
       let url
       let form = $('#crudForm')
-      let id = form.find('[name=id]').val()
+      let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
@@ -184,13 +184,13 @@
         value: limit
       })
 
-      let inputs = data.filter((row) => row.name === 'uangjalan[]')
+      // let inputs = data.filter((row) => row.name === 'uangjalan[]')
 
-      inputs.forEach((input, index) => {
-        if (input.value !== '') {
-          input.value = AutoNumeric.getNumber($('#crudForm').find('[name="uangjalan[]"]')[index])
-        }
-      });
+      // inputs.forEach((input, index) => {
+      //   if (input.value !== '') {
+      //     input.value = AutoNumeric.getNumber($('#crudForm').find('[name="uangjalan[]"]')[index])
+      //   }
+      // });
 
       switch (action) {
         case 'add':
@@ -199,11 +199,11 @@
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}absensisupirheader/${id}`
+          url = `${apiUrl}absensisupirheader/${Id}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}absensisupirheader/${id}`
+          url = `${apiUrl}absensisupirheader/${Id}`
           break;
         default:
           method = 'POST'
@@ -223,14 +223,21 @@
         },
         data: data,
         success: response => {
+          console.log(response.data)
           id = response.data.id
-          $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
+          $('#crudForm').trigger('reset')
 
-          // indexRow = response.data.position - 1
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
+          
+          if(id == 0){
+            $('#detail').jqGrid().trigger('reloadGrid')
+          }
+          if (response.data.grp == 'FORMAT') {
+            updateFormat(response.data)
+          }
         },
         error: error => {
           if (error.status === 422) {
@@ -299,7 +306,7 @@
     setTotal()
   }
 
-  function editAbsensiSupir(id) {
+  function editAbsensiSupir(absensiId) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -314,11 +321,11 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showAbsensiSupir(form, id)
+    showAbsensiSupir(form, absensiId)
 
   }
 
-  function deleteAbsensiSupir(id) {
+  function deleteAbsensiSupir(absensiId) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -331,13 +338,13 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    showAbsensiSupir(form, id)
+    showAbsensiSupir(form, absensiId)
   }
 
-  function showAbsensiSupir(form, id) {
+  function showAbsensiSupir(form, absensiId) {
     $('#detailList tbody').html('')
     $.ajax({
-      url: `${apiUrl}absensisupirheader/${id}`,
+      url: `${apiUrl}absensisupirheader/${absensiId}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {

@@ -17,8 +17,6 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('hutangbayarheader.index') }}"
-  let getUrl = "{{ route('hutangbayarheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -49,6 +47,33 @@
               name: 'id',
               align: 'right',
               width: '50px'
+            },
+            {
+              label: 'STATUS APPROVAL',
+              name: 'statusapproval',
+              align: 'left',
+              stype: 'select',
+              searchoptions: {
+                value: `<?php
+                        $i = 1;
+
+                        foreach ($data['comboapproval'] as $status) :
+                          echo "$status[param]:$status[parameter]";
+                          if ($i !== count($data['comboapproval'])) {
+                            echo ";";
+                          }
+                          $i++;
+                        endforeach
+
+                        ?>
+              `,
+                dataInit: function(element) {
+                  $(element).select2({
+                    width: 'resolve',
+                    theme: "bootstrap4"
+                  });
+                }
+              }
             },
             {
               label: 'NO BUKTI',
@@ -89,33 +114,6 @@
               label: 'COA',
               name: 'coa',
               align: 'left'
-            },
-            {
-              label: 'STATUS APPROVAL',
-              name: 'statusapproval',
-              align: 'left',
-              stype: 'select',
-              searchoptions: {
-                value: `<?php
-                        $i = 1;
-
-                        foreach ($data['comboapproval'] as $status) :
-                          echo "$status[param]:$status[parameter]";
-                          if ($i !== count($data['comboapproval'])) {
-                            echo ";";
-                          }
-                          $i++;
-                        endforeach
-
-                        ?>
-              `,
-                dataInit: function(element) {
-                  $(element).select2({
-                    width: 'resolve',
-                    theme: "bootstrap4"
-                  });
-                }
-              },
             },
             {
               label: 'USER APPROVAL',
