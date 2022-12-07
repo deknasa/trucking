@@ -33,6 +33,7 @@ use App\Http\Controllers\BankController;
 use App\Http\Controllers\AlatBayarController;
 use App\Http\Controllers\ApprovalHutangBayarController;
 use App\Http\Controllers\ApprovalNotaHeaderController;
+use App\Http\Controllers\ApprovalPendapatanSupirController;
 use App\Http\Controllers\BankPelangganController;
 use App\Http\Controllers\FormatController;
 use App\Http\Controllers\JenisEmklController;
@@ -127,6 +128,8 @@ use App\Http\Controllers\JurnalUmumPusatHeaderController;
 use App\Http\Controllers\LookupController;
 use App\Http\Controllers\PencairanGiroPengeluaranDetailController;
 use App\Http\Controllers\PencairanGiroPengeluaranHeaderController;
+use App\Http\Controllers\PendapatanSupirDetailController;
+use App\Http\Controllers\PendapatanSupirHeaderController;
 use App\Http\Controllers\PenerimaanGiroDetailController;
 use App\Http\Controllers\PenerimaanGiroHeaderController;
 use App\Http\Controllers\ProsesGajiSupirHeaderController;
@@ -769,6 +772,14 @@ Route::middleware('auth')->group(function () {
     Route::get('approvalhutangbayar/index', [ApprovalHutangBayarController::class, 'index']);
     Route::resource('approvalhutangbayar', ApprovalHutangBayarController::class);
 
+    Route::get('pendapatansupirheader/export', [PendapatanSupirHeaderController::class, 'export'])->name('pendapatansupirheader.export');
+    Route::get('pendapatansupirheader/report', [PendapatanSupirHeaderController::class, 'report'])->name('pendapatansupirheader.report');   
+    Route::get('pendapatansupirheader/index', [PendapatanSupirHeaderController::class, 'index']);
+    Route::resource('pendapatansupirheader', PendapatanSupirHeaderController::class);
+    Route::resource('pendapatansupirdetail', PendapatanSupirDetailController::class);
+
+    Route::get('approvalpendapatansupir/index', [ApprovalPendapatanSupirController::class, 'index']);
+    Route::resource('approvalpendapatansupir', ApprovalPendapatanSupirController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

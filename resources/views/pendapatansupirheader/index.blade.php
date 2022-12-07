@@ -10,14 +10,13 @@
   </div>
 </div>
 
-@include('jurnalumum._modal')
+@include('pendapatansupirheader._modal')
 <!-- Detail -->
-@include('jurnalumum._detail')
+@include('pendapatansupirheader._detail')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('jurnalumumheader.index') }}"
-  let getUrl = "{{ route('jurnalumumheader.get') }}"
+
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -38,7 +37,7 @@
 
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'jurnalumumheader' }}`,
+        url: `{{ config('app.api_url') . 'pendapatansupirheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -74,15 +73,6 @@
                   theme: "bootstrap4"
                 });
               }
-            },
-            formatter: (value, options, rowData) => {
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${rowData.warnastatusapproval}; color: #fff;">
-                  <span title="${value}">${rowData.singkatanstatusapproval}</span>
-                </div>
-              `)
-              
-              return formattedValue[0].outerHTML
             }
           },
           {
@@ -101,14 +91,44 @@
             }
           },
           {
+            label: 'BANK',
+            name: 'bank_id',
+            align: 'left'
+          },
+          {
             label: 'KETERANGAN',
             name: 'keterangan',
             align: 'left'
           },
           {
-            label: 'POSTING DARI',
-            name: 'postingdari',
-            align: 'left'
+            label: 'TANGGAL DARI',
+            name: 'tgldari',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'TANGGAL SAMPAI',
+            name: 'tglsampai',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'PERIODE',
+            name: 'periode',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'USER APPROVAL',
@@ -258,7 +278,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
-              createJurnalUmumHeader()
+              createPendapatanSupir()
             }
           },
           {
@@ -299,7 +319,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                window.open(`{{ route('jurnalumumheader.export') }}?id=${selectedId}`)
+                window.open(`{{ route('pendapatansupirheader.export') }}?id=${selectedId}`)
               }
             }
           },
@@ -312,7 +332,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                window.open(`{{ route('jurnalumumheader.report') }}?id=${selectedId}`)
+                window.open(`{{ route('pendapatansupirheader.report') }}?id=${selectedId}`)
               }
             }
           },
@@ -347,26 +367,33 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'store') }}`) {
+    $('#approval .ui-pg-div')
+      .addClass('btn btn-purple btn-sm')
+      .css({
+        'background': '#6619ff',
+        'color': '#fff'
+      })
+      .parent().addClass('px-1')
+
+    if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'update') }}`) {
       $('#edit').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'destroy') }}`) {
       $('#delete').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'export') }}`) {
       $('#export').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
     }
-    
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {

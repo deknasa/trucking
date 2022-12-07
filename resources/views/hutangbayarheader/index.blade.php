@@ -273,7 +273,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               }else {
-                editHutangBayarHeader(selectedId)
+                cekApproval(selectedId, 'EDIT')
               }
             }
           },
@@ -286,7 +286,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                deleteHutangBayarHeader(selectedId)
+                cekApproval(selectedId, 'DELETE')
               }
             }
           },

@@ -256,6 +256,10 @@
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         $('#table_body').html('')
+        
+        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=tglkeluar]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
         addRow()
     }
 
@@ -399,8 +403,6 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
         setRowNumbers()
     }
 

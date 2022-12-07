@@ -714,6 +714,37 @@
 
   }
 
+  
+  function cekApproval(hutangbayarId, Aksi) {
+      let form = $('#crudForm')
+      $.ajax({
+          url: `{{ config('app.api_url') }}hutangbayarheader/${hutangbayarId}/cekapproval`,
+          method: 'POST',
+          dataType: 'JSON',
+          beforeSend: request => {
+              request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+          },
+          success: response => {
+      
+              if (Aksi == 'EDIT') {
+                  editHutangBayarHeader(hutangbayarId)
+              }
+              if (Aksi == 'DELETE') {
+                  deleteHutangBayarHeader(hutangbayarId)
+              }
+          },
+          error: error => {
+              if (error.status === 422) {
+                  $('.is-invalid').removeClass('is-invalid')
+                  $('.invalid-feedback').remove()
+                  setErrorMessages(form, error.responseJSON.errors);
+                  showDialog(error.responseJSON.message)
+              } else {
+                  showDialog(error.statusText)
+              }
+          },
+      })
+  }
 
   function getPembayaran(id, supplierId, aksi) {
     $('#detailList tbody').html('')
