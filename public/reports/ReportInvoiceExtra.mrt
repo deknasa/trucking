@@ -1,11 +1,11 @@
 {
-  "ReportGuid": "de0a0b7a142ee0014d757a8b3c55469f",
+  "ReportGuid": "9f4fb38746ba5d37a34c5a59867ab97f",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportAbsensiSupirApproval.mrt",
+  "ReportFile": "ReportInvoiceExtra.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1669086705000+0700)/",
+  "ReportChanged": "/Date(1670382932000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -211,48 +211,69 @@
             "Type": "System.String"
           },
           "7": {
+            "Name": "statusapproval",
+            "Index": -1,
+            "NameInSource": "statusapproval",
+            "Alias": "statusapproval",
+            "Type": "System.String"
+          },
+          "8": {
+            "Name": "userapproval",
+            "Index": -1,
+            "NameInSource": "userapproval",
+            "Alias": "userapproval",
+            "Type": "System.String"
+          },
+          "9": {
+            "Name": "tglapproval",
+            "Index": -1,
+            "NameInSource": "tglapproval",
+            "Alias": "tglapproval",
+            "Type": "System.String"
+          },
+          "10": {
             "Name": "statusformat",
             "Index": -1,
             "NameInSource": "statusformat",
             "Alias": "statusformat",
             "Type": "System.String"
           },
-          "8": {
+          "11": {
             "Name": "modifiedby",
             "Index": -1,
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "9": {
+          "12": {
             "Name": "statusformat_memo",
             "Index": -1,
             "NameInSource": "statusformat_memo",
             "Alias": "statusformat_memo",
             "Type": "System.String"
           },
-          "10": {
+          "13": {
             "Name": "pelanggan",
             "Index": -1,
             "NameInSource": "pelanggan",
             "Alias": "pelanggan",
             "Type": "System.String"
           },
-          "11": {
+          "14": {
             "Name": "agen",
             "Index": -1,
             "NameInSource": "agen",
             "Alias": "agen",
             "Type": "System.String"
           },
-          "12": {
+          "15": {
             "Name": "details",
             "Index": -1,
             "NameInSource": "details",
             "Alias": "details",
             "Type": "System.String"
           },
-          "13": {
+          "16": {
             "Name": "user",
             "Index": -1,
             "NameInSource": "user",
@@ -306,9 +327,7 @@
           "0": "details"
         },
         "NameInSource": "absensisupirapproval_details",
-        "Alias": "absensisupirapproval",
-        "ParentSource": "absensisupirapproval",
-        "ChildSource": "absensisupirapproval_details"
+        "Alias": "absensisupirapproval"
       },
       "4": {
         "Name": "absensisupirapproval",
@@ -319,9 +338,7 @@
           "0": "user"
         },
         "NameInSource": "absensisupirapproval_user",
-        "Alias": "absensisupirapproval",
-        "ParentSource": "absensisupirapproval",
-        "ChildSource": "absensisupirapproval_user"
+        "Alias": "absensisupirapproval"
       },
       "5": {
         "Name": "Relation",
@@ -333,9 +350,7 @@
         },
         "NameInSource": "Relation",
         "Alias": "Relation",
-        "Active": true,
-        "ParentSource": "absensisupirapproval",
-        "ChildSource": "absensisupirapproval_details"
+        "Active": true
       },
       "6": {
         "Name": "invoiceextraheader",
@@ -379,7 +394,7 @@
         "0": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand1",
-          "ClientRectangle": "0,4,205.9,34",
+          "ClientRectangle": "0,4,270.4,34",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -756,7 +771,7 @@
         "1": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,46,205.9,6",
+          "ClientRectangle": "0,46,270.4,6",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -982,7 +997,7 @@
           "Ident": "StiGroupFooterBand",
           "Name": "GroupFooterBand1",
           "PrintOn": "OnlyLastPage",
-          "ClientRectangle": "0,60,205.9,42",
+          "ClientRectangle": "0,60,270.4,42",
           "ComponentPlacement": "gf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1298,7 +1313,7 @@
           "Ident": "StiFooterBand",
           "Name": "FooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,110,205.9,2.2",
+          "ClientRectangle": "0,110,270.4,2.2",
           "ComponentPlacement": "f.ap.Page1",
           "Conditions": {
             "0": {
@@ -1480,15 +1495,16 @@
         }
       },
       "PaperSize": "Letter",
-      "PageWidth": 215.9,
-      "PageHeight": 279.4,
+      "Orientation": "Landscape",
+      "PageWidth": 279.4,
+      "PageHeight": 215.9,
       "Watermark": {
         "TextBrush": "solid:50,0,0,0"
       },
       "Margins": {
-        "Left": 5,
+        "Left": 4,
         "Right": 5,
-        "Top": 4,
+        "Top": 5,
         "Bottom": 5
       }
     }

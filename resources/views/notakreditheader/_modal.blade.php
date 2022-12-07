@@ -116,9 +116,8 @@
                   </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="5"></td>
+                    <td colspan="6"></td>
                     <td><p id="nominalPiutang" class="text-right font-weight-bold"></p></td>
-                    <th></th>
                     <th></th>
                   
                    
@@ -565,7 +564,7 @@
           totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
           let detailRow = $(`
           <tr>
-            <td onclick="select(this)"><input name='pelunasanpiutangdetail_id[]' checked type="checkbox" id="checkItem" value="${detail.detail_id}"></td>
+            <td ><input name='pelunasanpiutangdetail_id[]' checked type="checkbox" id="checkItem" value="${detail.detail_id}"></td>
             <td>${row}</td>
             <td>
               ${detail.nobukti}
