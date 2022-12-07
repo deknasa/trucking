@@ -44,14 +44,10 @@ use App\Http\Controllers\KasGantungHeaderController;
 
 use App\Http\Controllers\PengembalianKasGantungDetailController;
 use App\Http\Controllers\PengembalianKasGantungHeaderController;
-<<<<<<< Updated upstream
 use App\Http\Controllers\PengembalianKasBankDetailController;
 use App\Http\Controllers\PengembalianKasBankHeaderController;
 use App\Http\Controllers\NotaKreditHeaderController;
 use App\Http\Controllers\NotaDebetHeaderController;
-=======
-use App\Http\Controllers\NotaKreditHeaderController;
->>>>>>> Stashed changes
 
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\SubKelompokController;
@@ -376,7 +372,6 @@ Route::middleware('auth')->group(function () {
     Route::get('pengembaliankasgantungheader/index', [PengembalianKasGantungHeaderController::class, 'index']);
     Route::resource('pengembaliankasgantungheader', PengembalianKasGantungHeaderController::class);
     
-<<<<<<< Updated upstream
     Route::get('pengembaliankasbankheader/get', [PengembalianKasbankHeaderController::class, 'get'])->name('pengembaliankasbankheader.get');
     Route::get('pengembaliankasbankheader/export', [PengembalianKasbankHeaderController::class, 'export'])->name('pengembaliankasbankheader.export');
     Route::get('pengembaliankasbankheader/report', [PengembalianKasbankHeaderController::class, 'report'])->name('pengembaliankasbankheader.report');
@@ -394,11 +389,6 @@ Route::middleware('auth')->group(function () {
     Route::get('notadebetheader/report/{id}', [NotaDebetHeaderController::class, 'report'])->name('notadebetheader.report');
     Route::get('notadebetheader/index', [NotaDebetHeaderController::class, 'index']);
     Route::resource('notadebetheader', NotaDebetHeaderController::class);
-=======
-    Route::get('notakreditheader/get', [NotaKreditheaderController::class, 'get'])->name('notakreditheader.get');
-    Route::get('notakreditheader/index', [NotaKreditheaderController::class, 'index']);
-    Route::resource('notakreditheader', NotaKreditheaderController::class);
->>>>>>> Stashed changes
 
     Route::get('gudang/field_length', [GudangController::class, 'fieldLength'])->name('gudang.field_length');
     Route::get('gudang/{id}/delete', [GudangController::class, 'delete'])->name('gudang.delete');
