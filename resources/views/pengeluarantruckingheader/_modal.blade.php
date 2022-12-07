@@ -317,6 +317,7 @@
 
 
     $('#table_body').html('')
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     setStatusPostingOptions(form)
     addRow()
@@ -579,8 +580,7 @@
     })
 
     initAutoNumeric(detailRow.find('.autonumeric'))
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
+    
     setRowNumbers()
   }
 

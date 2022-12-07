@@ -47,6 +47,10 @@
           {
             label: 'NO BUKTI PIUTANG',
             name: 'piutang_nobukti',
+          },          
+          {
+            label: 'NO BUKTI INVOICE',
+            name: 'invoice_nobukti',
           },
           {
             label: 'KETERANGAN',

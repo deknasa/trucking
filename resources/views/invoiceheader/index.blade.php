@@ -343,19 +343,6 @@
                 window.open(`{{ route('invoiceheader.report') }}?id=${selectedId}`)
               }
             }
-          },
-          {
-            id: 'approval',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                approval(selectedId)
-              }
-            }
           }
         ]
 
@@ -413,10 +400,6 @@
 
     if (!`{{ $myAuth->hasPermission('invoiceheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('invoiceheader', 'approval') }}`) {
-      $('#approval').attr('disabled', 'disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {

@@ -1713,6 +1713,7 @@
         success: response => {
           getTarifOmset(response.data.tarif_id)
           console.log(response.data)
+          $('#crudForm [name=statusperalihan]').val(response.data.statusperalihan)
           $('#crudForm [name=agen]').val(response.data.agen)
           $('#crudForm [name=agen_id]').val(response.data.agen_id)
           $('#crudForm [name=container_id]').val(response.data.container_id)

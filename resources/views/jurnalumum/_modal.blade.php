@@ -56,25 +56,7 @@
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
-                  <tr>
-                    <td>1</td>
-                    <td>
-                      <input type="text" name="coadebet_detail[]" class="form-control coadebet-lookup">
-                    </td>
-                    <td>
-                      <input type="text" name="coakredit_detail[]" class="form-control coakredit-lookup">
-                    </td>
-                    <td>
-                      <input type="text" name="keterangan_detail[]" class="form-control">
-                    </td>
-                    <td>
-                      <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal">
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                    </td>
-                  </tr>
-
+                 
                 </tbody>
                 <tfoot>
                   <tr>
@@ -276,6 +258,8 @@
 
 
     $('#table_body').html('')
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
     addRow()
     setTotal()
   }
@@ -313,24 +297,6 @@
     $('.invalid-feedback').remove()
     showJurnalUmum(form, id)
 
-  }
-
-  function approval(Id) {
-    $('#loader').removeClass('d-none')
-
-    $.ajax({
-      url: `{{ config('app.api_url') }}jurnalumumheader/${Id}/approval`,
-      method: 'POST',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-      },
-      success: response => {
-        $('#jqGrid').trigger('reloadGrid')
-      }
-    }).always(() => {
-      $('#loader').addClass('d-none')
-    })
   }
 
   function cekApproval(Id, Aksi) {
@@ -513,8 +479,7 @@
       }
     })
     initAutoNumeric(detailRow.find('.autonumeric'))
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
+   
     initDatepicker()
     setRowNumbers()
   }
@@ -559,38 +524,5 @@
     }
   }
 
-  function initLookup() {
-    $('.coadebet-lookup').lookup({
-      title: 'Coa Debet Lookup',
-      fileName: 'akunpusat',
-      onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
-
-    $('.coakredit-lookup').lookup({
-      title: 'Coa Kredit Lookup',
-      fileName: 'akunpusat',
-      onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
-  }
 </script>
 @endpush()

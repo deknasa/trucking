@@ -29,37 +29,20 @@
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
-                                <div class="input-group">
-                                    <input type="text" name="tglbukti" class="form-control datepicker">
-                                </div>
+                                <input type="text" name="tglbukti" class="form-control datepicker">
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                 <label>
-                                    TRADO <span class="text-danger">*</span>
-                                </label>
+                                    BANK <span class="text-danger">*</span></label>
                             </div>
-                            <div class="col-8 col-md-10">
-                                <input type="hidden" name="trado_id">
-                                <input type="text" name="trado" class="form-control trado-lookup">
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <div class="col-12 col-sm-2 col-md-2 col-form-label">
-                                <label>
-                                    TANGGAL MASUK <span class="text-danger">*</span>
-                                </label>
-                            </div>
-                            <div class="col-12 col-sm-4 col-md-4">
-                                <div class="input-group">
-                                    <input type="text" name="tglmasuk" class="form-control datepicker">
-                                </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="hidden" name="bank_id">
+                                <input type="text" name="bank" class="form-control bank-lookup">
                             </div>
                         </div>
-
 
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -71,22 +54,58 @@
                             </div>
                         </div>
 
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                                <label>
+                                    TANGGAL DARI <span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="text" name="tgldari" class="form-control datepicker">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                                <label>
+                                    TANGGAL SAMPAI <span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="text" name="tglsampai" class="form-control datepicker">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                                <label>
+                                    PERIODE <span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="text" name="periode" class="form-control datepicker">
+                            </div>
+                        </div>
+
                         <div class="table-responsive">
-                            <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1350px;">
+                            <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
                                 <thead>
                                     <tr>
                                         <th width="1%">No</th>
-                                        <th width="5%">Mekanik</th>
-                                        <th width="5%">Keterangan</th>
-                                        <th width="1%">Aksi</th>
+                                        <th width="5%">SUPIR</th>
+                                        <th width="5%">KETERANGAN</th>
+                                        <th width="6%">NOMINAL</th>
+                                        <th width="2%">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    
+                                <tbody id="table_body" class="form-group">
+
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="3"></td>
+                                        <td colspan="3">
+                                            <p class="text-right font-weight-bold">TOTAL :</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                                        </td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                                         </td>
@@ -127,6 +146,10 @@
             deleteRow($(this).parents('tr'))
         })
 
+        $(document).on('input', `#table_body [name="nominal[]"]`, function(event) {
+            setTotal()
+        })
+
         $('#btnSubmit').click(function(event) {
             event.preventDefault()
 
@@ -136,6 +159,10 @@
             let Id = form.find('[name=id]').val()
             let action = form.data('action')
             let data = $('#crudForm').serializeArray()
+
+            $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
+                data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
+            })
 
             data.push({
                 name: 'sortIndex',
@@ -161,23 +188,23 @@
                 name: 'limit',
                 value: limit
             })
-
+            console.log(data)
             switch (action) {
                 case 'add':
                     method = 'POST'
-                    url = `${apiUrl}serviceinheader`
+                    url = `${apiUrl}pendapatansupirheader`
                     break;
                 case 'edit':
                     method = 'PATCH'
-                    url = `${apiUrl}serviceinheader/${Id}`
+                    url = `${apiUrl}pendapatansupirheader/${Id}`
                     break;
                 case 'delete':
                     method = 'DELETE'
-                    url = `${apiUrl}serviceinheader/${Id}`
+                    url = `${apiUrl}pendapatansupirheader/${Id}`
                     break;
                 default:
                     method = 'POST'
-                    url = `${apiUrl}serviceinheader`
+                    url = `${apiUrl}pendapatansupirheader`
                     break;
             }
 
@@ -193,16 +220,16 @@
                 },
                 data: data,
                 success: response => {
-                    id = response.data.id
 
-                    $('#crudModal').find('#crudForm').trigger('reset')
+                    id = response.data.id
                     $('#crudModal').modal('hide')
+                    $('#crudModal').find('#crudForm').trigger('reset')
 
                     $('#jqGrid').jqGrid('setGridParam', {
                         page: response.data.page
                     }).trigger('reloadGrid');
 
-                    if(id == 0){
+                    if (id == 0) {
                         $('#detail').jqGrid().trigger('reloadGrid')
                     }
                     if (response.data.grp == 'FORMAT') {
@@ -234,8 +261,8 @@
         activeGrid = null
 
         getMaxLength(form)
-        initLookup()
         initDatepicker()
+        initLookup()
     })
 
     $('#crudModal').on('hidden.bs.modal', () => {
@@ -244,64 +271,115 @@
         $('#crudModal').find('.modal-body').html(modalBody)
     })
 
-    function createServicein() {
+    function setTotal() {
+        let nominalDetails = $(`#table_body [name="nominal[]"]`)
+        let total = 0
+
+        $.each(nominalDetails, (index, nominalDetail) => {
+            total += AutoNumeric.getNumber(nominalDetail)
+        });
+
+        new AutoNumeric('#total').set(total)
+    }
+
+    function createPendapatanSupir() {
         let form = $('#crudForm')
 
         $('#crudModal').find('#crudForm').trigger('reset')
         form.find('#btnSubmit').html(`
-        <i class="fa fa-save"></i>
-        Simpan
-        `)
+      <i class="fa fa-save"></i>
+      Simpan
+    `)
         form.data('action', 'add')
-        $('#crudModalTitle').text('Add Service in')
+
+        $('#crudModalTitle').text('Add Pendapatan Supir')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find('[name=tglmasuk]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
 
         $('#table_body').html('')
+        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
         addRow()
+        setTotal()
     }
 
-    function editServicein(id) {
+    function editPendapatanSupir(pendapatanId) {
         let form = $('#crudForm')
 
         form.data('action', 'edit')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-            <i class="fa fa-save"></i>
-            Simpan
-        `)
-        $('#crudModalTitle').text('Edit Service In ')
+      <i class="fa fa-save"></i>
+      Simpan
+    `)
+        $('#crudModalTitle').text('Edit Pendapatan Supir')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        showServicein(form, id)
+        showPendapatanSupir(form, pendapatanId)
+
     }
 
-    function deleteServicein(id) {
+    function deletePendapatanSupir(pendapatanId) {
+
         let form = $('#crudForm')
 
         form.data('action', 'delete')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-            <i class="fa fa-save"></i>
-            Hapus
-        `)
-        form.find(`.sometimes`).hide()
-        $('#crudModalTitle').text('Delete Service in')
+      <i class="fa fa-save"></i>
+      Hapus
+    `)
+        $('#crudModalTitle').text('Delete Pendapatan Supir')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        showServicein(form, id)
+        showPendapatanSupir(form, pendapatanId)
+
     }
 
-    function showServicein(form, id) {
+
+    function cekApproval(pendapatanId, Aksi) {
+        let form = $('#crudForm')
+        $.ajax({
+            url: `{{ config('app.api_url') }}pendapatansupirheader/${pendapatanId}/cekapproval`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+        
+                if (Aksi == 'EDIT') {
+                    editPendapatanSupir(pendapatanId)
+                }
+                if (Aksi == 'DELETE') {
+                    deletePendapatanSupir(pendapatanId)
+                }
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+                    setErrorMessages(form, error.responseJSON.errors);
+                    showDialog(error.responseJSON.message)
+                } else {
+                    showDialog(error.statusText)
+                }
+            },
+        })
+    }
+
+    function showPendapatanSupir(form, pendapatanId) {
         $('#detailList tbody').html('')
 
         $.ajax({
-            url: `${apiUrl}serviceinheader/${id}`,
+            url: `${apiUrl}pendapatansupirheader/${pendapatanId}`,
             method: 'GET',
             dataType: 'JSON',
             headers: {
@@ -311,65 +389,62 @@
                 $.each(response.data, (index, value) => {
                     let element = form.find(`[name="${index}"]`)
 
-                    if (element.is('select')) {
-                        element.val(value).trigger('change')
-                    } else if (element.hasClass('datepicker')) {
+                    if (element.hasClass('datepicker')) {
                         element.val(dateFormat(value))
                     } else {
                         element.val(value)
                     }
-
-                    if (index == 'trado') {
-                        element.data('current-value', value)
-                    }
-
                 })
 
                 $.each(response.detail, (index, detail) => {
                     let detailRow = $(`
-                    <tr>
+                        <tr>
                         <td></td>
                         <td>
-                            <input type="hidden" name="mekanik_id[]" class="form-control">
-                            <input type="text" name="mekanik[]" data-current-value="${detail.mekanik}" class="form-control mekanik-lookup">
+                            <input type="hidden" name="supir_id[]">
+                            <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
                         </td>
-
                         <td>
-                            <input type="text" name="keterangan_detail[]" class="form-control">
+                            <input type="text" name="keterangan_detail[]" class="form-control">   
                         </td>
-
                         <td>
-                            <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+                            <input type="text" name="nominal[]"  style="text-align:right" class="form-control autonumeric nominal" > 
                         </td>
-                    </tr>`)
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                        </td>
+                        </tr>
+                    `)
 
-                    detailRow.find(`[name="mekanik[]"]`).val(detail.mekanik)
-                    detailRow.find(`[name="mekanik_id[]"]`).val(detail.mekanik_id)
-
+                    detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
+                    detailRow.find(`[name="supir[]"]`).val(detail.supir)
                     detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+                    detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
 
+                    initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
                     $('#detailList tbody').append(detailRow)
+                    setTotal();
 
-                    $('.mekanik-lookup').last().lookup({
-                        title: 'Mekanik Lookup',
-                        fileName: 'mekanik',
-                        onSelectRow: (mekanik, element) => {
-                            element.parents('td').find(`[name="mekanik_id[]"]`).val(mekanik.id)
-                            element.val(mekanik.namamekanik)
+                    $('.supir-lookup').last().lookup({
+                        title: 'Supir Lookup',
+                        fileName: 'supir',
+                        onSelectRow: (supir, element) => {
+                            element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+                            element.val(supir.namasupir)
                             element.data('currentValue', element.val())
                         },
                         onCancel: (element) => {
                             element.val(element.data('currentValue'))
                         },
                         onClear: (element) => {
-                        element.parents('td').find(`[name="mekanik_id[]"]`).val('')
-                        element.val('')
-                        element.data('currentValue', element.val())
+                            element.parents('td').find(`[name="supir_id[]"]`).val('')
+                            element.val('')
+                            element.data('currentValue', element.val())
                         }
                     })
 
-
                 })
+
                 setRowNumbers()
                 if (form.data('action') === 'delete') {
                     form.find('[name]').addClass('disabled')
@@ -380,44 +455,48 @@
     }
 
     function addRow() {
-        let detailRow = (`
-        <tr>
-            <td></td>
-            <td>
-                <input type="hidden" name="mekanik_id[]" class="form-control">
-                <input type="text" name="mekanik[]" class="form-control mekanik-lookup">
-            </td>
-
-            <td>
-                <input type="text" name="keterangan_detail[]" class="form-control">
-            </td>
-
-            <td>
-                <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
-            </td>
-        </tr>`)
+        let detailRow = $(`
+      <tr>
+        <td></td>
+        <td>
+            <input type="hidden" name="supir_id[]">
+            <input type="text" name="supir[]" class="form-control supir-lookup">
+        </td>
+        <td>
+          <input type="text" name="keterangan_detail[]" class="form-control">   
+        </td><td>
+          <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+        </td>
+        <td>
+            <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+        </td>
+      </tr>
+    `)
 
         $('#detailList tbody').append(detailRow)
 
-        $('.mekanik-lookup').last().lookup({
-            title: 'mekanik Lookup',
-            fileName: 'mekanik',
-            onSelectRow: (mekanik, element) => {
-                $(`#crudForm [name="mekanik_id[]"]`).last().val(mekanik.id)
-                element.val(mekanik.namamekanik)
+
+        $('.supir-lookup').last().lookup({
+            title: 'Supir Lookup',
+            fileName: 'supir',
+            onSelectRow: (supir, element) => {
+                element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+                element.val(supir.namasupir)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
-                $(`#crudForm [name="mekanik_id[]"]`).last().val('')
+                element.parents('td').find(`[name="supir_id[]"]`).val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }
         })
-        initDatepicker()
 
+        initAutoNumeric(detailRow.find('.autonumeric'))
+
+        initDatepicker()
         setRowNumbers()
     }
 
@@ -425,6 +504,7 @@
         row.remove()
 
         setRowNumbers()
+        setTotal()
     }
 
     function setRowNumbers() {
@@ -438,7 +518,7 @@
     function getMaxLength(form) {
         if (!form.attr('has-maxlength')) {
             $.ajax({
-                url: `${apiUrl}serviceinheader/field_length`,
+                url: `${apiUrl}jurnalumumheader/field_length`,
                 method: 'GET',
                 dataType: 'JSON',
                 headers: {
@@ -461,25 +541,23 @@
     }
 
     function initLookup() {
-
-        $('.trado-lookup').lookup({
-            title: 'trado Lookup',
-            fileName: 'trado',
-            onSelectRow: (trado, element) => {
-                $('#crudForm [name=trado_id]').first().val(trado.id)
-                element.val(trado.keterangan)
+        $('.bank-lookup').lookup({
+            title: 'Bank Lookup',
+            fileName: 'bank',
+            onSelectRow: (bank, element) => {
+                $('#crudForm [name=bank_id]').first().val(bank.id)
+                element.val(bank.namabank)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
-                $('#crudForm [name=trado_id]').first().val('')
                 element.val('')
+                $(`#crudForm [name="bank_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
         })
-
     }
 </script>
 @endpush()
