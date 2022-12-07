@@ -52,17 +52,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  MEMO <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="memo" class="form-control">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  KELOMPOK 
+                  KELOMPOK
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -72,7 +62,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  TYPE 
+                  TYPE
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -80,26 +70,37 @@
                 <input type="text" name="grup" class="form-control parameter-lookup">
               </div>
             </div>
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  SINGKATAN 
+                  MEMO
                 </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="singkatan" class="form-control">
               </div>
             </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  WARNA 
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="warna" class="form-control">
-              </div>
-            </div>            
+
+            <div class="table-responsive">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1300px;">
+                <thead>
+                  <tr>
+                    <th width="3%">KEY</th>
+                    <th width="8%">VALUE</th>
+                    <th width="2%">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body" class="form-group">
+
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="2"></td>
+                    <td>
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
 
           </div>
           <div class="modal-footer justify-content-start">
@@ -124,6 +125,15 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
+
+    $(document).on('click', "#addRow", function() {
+      addRow()
+    });
+
+    $(document).on('click', '.delete-row', function(event) {
+      deleteRow($(this).parents('tr'))
+    })
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -195,7 +205,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -232,7 +244,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    
+
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -250,7 +262,8 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    
+    $('#table_body').html('')
+    addRow()
   }
 
   function editParameter(parameterId) {
@@ -267,8 +280,8 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showParameter(form,parameterId)
-    
+    showParameter(form, parameterId)
+
   }
 
   function deleteParameter(parameterId) {
@@ -288,7 +301,7 @@
 
     showParameter(form, parameterId)
   }
-  
+
   function showParameter(form, parameterId) {
     $.ajax({
       url: `${apiUrl}parameter/${parameterId}`,
@@ -306,6 +319,28 @@
           } else {
             element.val(value)
           }
+        })
+
+        let memo = response.data.memo
+        let memoToArray = JSON.parse(memo) 
+        
+        $.each(memoToArray, (index, detail) => {
+          let detailRow = $(`
+          <tr>
+            <td>
+                <input type="text" name="key[]" class="form-control">
+            </td>
+            <td>
+                <input type="text" name="value[]" class="form-control">
+            </td>
+            <td>
+                <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+            </td>
+          </tr>`)
+          detailRow.find(`[name="key[]"]`).val(index)
+          detailRow.find(`[name="value[]"]`).val(detail)
+
+          $('#detailList tbody').append(detailRow)
         })
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
@@ -376,6 +411,33 @@
         element.data('currentValue', element.val())
       }
     })
+  }
+
+  function addRow() {
+    let detailRow = (`
+        <tr>
+            <td>
+                <input type="text" name="key[]" class="form-control">
+            </td>
+
+            <td>
+                <input type="text" name="value[]" class="form-control">
+            </td>
+
+            <td>
+                <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+            </td>
+        </tr>`)
+
+    $('#detailList tbody').append(detailRow)
+
+    initDatepicker()
+
+  }
+
+  function deleteRow(row) {
+    row.remove()
+
   }
 </script>
 @endpush()
