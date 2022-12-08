@@ -76,13 +76,20 @@
               }
             },
             formatter: (value, options, rowData) => {
+              let statusApproval = JSON.parse(value)
+
               let formattedValue = $(`
-                <div class="badge" style="background-color: ${rowData.warnastatusapproval}; color: #fff;">
-                  <span title="${value}">${rowData.singkatanstatusapproval}</span>
+                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                  <span>${statusApproval.SINGKATAN}</span>
                 </div>
               `)
               
               return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusApproval = JSON.parse(rowObject.statusapproval)
+              
+              return ` title="${statusApproval.MEMO}"`
             }
           },
           {

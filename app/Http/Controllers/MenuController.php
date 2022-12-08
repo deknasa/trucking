@@ -375,6 +375,9 @@ class MenuController extends MyController
         return $comments;
     }
 
+    /**
+     * @ClassName
+     */
     public function resequence()
     {
         $title = $this->title;
@@ -382,6 +385,9 @@ class MenuController extends MyController
         return view('menu.resequence', compact('title'));
     }
 
+    /**
+     * @ClassName
+     */
     public function storeResequence(Request $request)
     {
         try {
