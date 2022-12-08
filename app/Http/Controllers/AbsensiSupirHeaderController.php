@@ -19,7 +19,13 @@ class AbsensiSupirHeaderController extends MyController
     {
         $title = $this->title;
 
-        return view('absensisupir.index', compact('title'));
+        $breadcrumb = $this->breadcrumb;
+        $data = [
+            'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
+        ];
+
+        return view('absensisupir.index', compact('title', 'breadcrumb', 'data'));        
+
     }
 
     public function create()
@@ -155,6 +161,24 @@ class AbsensiSupirHeaderController extends MyController
         return $data;
     }
 
+
+    public function comboCetak($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
+    }
+        
     public function export(Request $request): void
     {
         
