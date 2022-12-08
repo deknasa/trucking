@@ -492,6 +492,37 @@
     })
   }
 
+  function cekValidasi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}kasgantungheader/${Id}/cekvalidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kodenobukti = response.kodenobukti
+        if (kodenobukti == '1') {
+          var kodestatus = response.kodestatus
+          if (kodestatus == '1') {
+            showDialog(response.message['keterangan'])
+          } else {
+            if (Aksi == 'EDIT') {
+              editKasGantung(Id)
+            }
+            if (Aksi == 'DELETE') {
+              deleteKasGantung(Id)
+            }
+          }
+
+        } else {
+          showDialog(response.message['keterangan'])
+        }
+      }
+    })
+  }
+
+
 
 
   function initLookup() {

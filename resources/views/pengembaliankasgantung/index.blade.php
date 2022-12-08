@@ -35,12 +35,12 @@
   $(document).ready(function() {
 
     $('#lookup').hide()
-    
+
 
 
     $('#crudModal').on('hidden.bs.modal', function() {
-       activeGrid = '#jqGrid'
-     })
+      activeGrid = '#jqGrid'
+    })
 
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'pengembaliankasgantungheader' }}`,
@@ -53,6 +53,50 @@
             name: 'id',
             align: 'right',
             width: '50px'
+          },
+          {
+            label: 'STATUS CETAK',
+            name: 'statuscetak',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combocetak'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combocetak'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusCetak = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+                  <span>${statusCetak.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusCetak = JSON.parse(rowObject.statuscetak)
+
+              return ` title="${statusCetak.MEMO}"`
+            }
           },
           {
             label: 'NO BUKTI',
@@ -78,7 +122,7 @@
             label: 'tgldari',
             name: 'tgldari',
             align: 'left',
-             formatter: "date",
+            formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -88,13 +132,13 @@
             label: 'tglsampai',
             name: 'tglsampai',
             align: 'left',
-             formatter: "date",
+            formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
           },
-          
+
           {
             label: 'postingdari',
             name: 'postingdari',
@@ -104,7 +148,7 @@
             label: 'tglkasmasuk',
             name: 'tglkasmasuk',
             align: 'left',
-             formatter: "date",
+            formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -204,7 +248,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -266,7 +310,11 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              editPengembalianKasGantung(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              }else {
+                cekValidasi(selectedId, 'EDIT')
+              }
             }
           },
           {
@@ -275,7 +323,39 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              deletePengembalianKasGantung(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                cekValidasi(selectedId, 'DELETE')
+              }            }
+          },
+          
+          {
+            id: 'export',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('pengembaliankasgantungheader.export') }}?id=${selectedId}`)
+              }
+            }
+          },  
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${selectedId}`)
+              }
             }
           },
         ]

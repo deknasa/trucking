@@ -13,8 +13,12 @@ class PengembalianKasGantungHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
+        $data = [
+            'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
+        ];
 
-        return view('pengembaliankasgantung.index', compact('title'));
+        return view('pengembaliankasgantung.index', compact('title', 'breadcrumb', 'data'));
     }
 
     public function get($params = [])
@@ -44,5 +48,20 @@ class PengembalianKasGantungHeaderController extends MyController
     }
 
 
+    public function comboCetak($aksi, $grp, $subgrp)
+    {
 
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
+    }
 }
