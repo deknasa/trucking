@@ -288,6 +288,7 @@
     $('.invalid-feedback').remove()
 
     $('#table_body').html('')
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     addRow()
     setTotal()
   }
@@ -408,9 +409,6 @@
     $('#detailList tbody').append(detailRow)
 
     initAutoNumeric(detailRow.find('.autonumeric'))
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
-    initDatepicker()
 
     setRowNumbers()
   }

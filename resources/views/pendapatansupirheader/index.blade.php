@@ -10,14 +10,13 @@
   </div>
 </div>
 
-@include('notakreditheader._modal')
+@include('pendapatansupirheader._modal')
 <!-- Detail -->
-@include('notakreditheader._detail')
+@include('pendapatansupirheader._detail')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('notakreditheader.index') }}"
-  let getUrl = "{{ route('notakreditheader.get') }}"
+
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -31,19 +30,14 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let rowNum = 10
+  let hasDetail = false
 
   $(document).ready(function() {
 
-    $('#lookup').hide()
-    
-
-
-    $('#crudModal').on('hidden.bs.modal', function() {
-       activeGrid = '#jqGrid'
-     })
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'notakreditheader' }}`,
+        url: `{{ config('app.api_url') . 'pendapatansupirheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -53,6 +47,33 @@
             name: 'id',
             align: 'right',
             width: '50px'
+          },
+          {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboapproval'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboapproval'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            }
           },
           {
             label: 'NO BUKTI',
@@ -70,58 +91,86 @@
             }
           },
           {
-            label: 'keterangan',
+            label: 'BANK',
+            name: 'bank_id',
+            align: 'left'
+          },
+          {
+            label: 'KETERANGAN',
             name: 'keterangan',
             align: 'left'
           },
           {
-            label: 'tgllunas',
-            name: 'tgllunas',
+            label: 'TANGGAL DARI',
+            name: 'tgldari',
             align: 'left',
-             formatter: "date",
+            formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
           },
           {
-            label: 'pelunasanpiutang_nobukti',
-            name: 'pelunasanpiutang_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'tglapproval',
-            name: 'tglapproval',
+            label: 'TANGGAL SAMPAI',
+            name: 'tglsampai',
             align: 'left',
-             formatter: "date",
+            formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
           },
           {
-            label: 'status approval',
-            name: 'statusapproval_memo',
-            align: 'left'
+            label: 'PERIODE',
+            name: 'periode',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
-            label: 'user approval',
+            label: 'USER APPROVAL',
             name: 'userapproval',
             align: 'left'
           },
           {
-            label: 'postingdari',
-            name: 'postingdari',
-            align: 'left'
+            label: 'TANGGAL APPROVAL',
+            name: 'tglapproval',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
           {
-            label: 'modifiedby',
+            label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
           },
-          
+          {
+            label: 'CREATEDAT',
+            name: 'created_at',
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+          {
+            label: 'UPDATEDAT',
+            name: 'updated_at',
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
         ],
-
         autowidth: true,
         shrinkToFit: false,
         height: 350,
@@ -150,12 +199,19 @@
         },
         onSelectRow: function(id) {
 
-          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+
+          if (!hasDetail) {
+            loadDetailGrid(id)
+            hasDetail = true
+          }
+
+          loadDetailData(id)
+
         },
         loadComplete: function(data) {
 
@@ -169,7 +225,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -222,7 +278,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
-              createNotaKredit()
+              createPendapatanSupir()
             }
           },
           {
@@ -231,7 +287,11 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              editNotaKredit(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                cekApproval(selectedId, 'EDIT')
+              }
             }
           },
           {
@@ -240,29 +300,27 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              deleteNotaKredit(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                cekApproval(selectedId, 'DELETE')
+              }
             }
           },
-          {
-            id: 'approval',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVE',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-              let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
 
-              $('#loader').removeClass('d-none')
-
-              handleApproval(id)
-            }
-          },
           {
             id: 'export',
-            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-              $('#rangeModal').data('action', 'export')
-              $('#rangeModal').find('button:submit').html(`Export`)
-              $('#rangeModal').modal('show')
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('pendapatansupirheader.export') }}?id=${selectedId}`)
+              }
             }
           },
           {
@@ -271,7 +329,11 @@
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              window.open(`{{url('notakreditheader/report/${selectedId}')}}`)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('pendapatansupirheader.report') }}?id=${selectedId}`)
+              }
             }
           },
         ]
@@ -284,8 +346,6 @@
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
 
-    /* Load detail grid */
-    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn btn-sm btn-primary`)
@@ -308,32 +368,32 @@
       .parent().addClass('px-1')
 
     $('#approval .ui-pg-div')
-      .addClass('btn btn-sm btn-warning')
+      .addClass('btn btn-purple btn-sm')
+      .css({
+        'background': '#6619ff',
+        'color': '#fff'
+      })
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'store') }}`) {
-      $('#add').addClass('ui-disabled')
+    if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'store') }}`) {
+      $('#add').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'update') }}`) {
-      $('#edit').addClass('ui-disabled')
+    if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'update') }}`) {
+      $('#edit').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'destroy') }}`) {
-      $('#delete').addClass('ui-disabled')
+    if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'destroy') }}`) {
+      $('#delete').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'export') }}`) {
-      $('#export').addClass('ui-disabled')
+    if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'export') }}`) {
+      $('#export').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'report') }}`) {
-      $('#report').addClass('ui-disabled')
+    if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'report') }}`) {
+      $('#report').attr('disabled', 'disabled')
     }
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'approval') }}`) {
-      $('#approval').addClass('ui-disabled')
-    }
-
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {
@@ -373,25 +433,41 @@
         params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
-    })
+      let formRange = $('#formRange')
+      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+      params += `&offset=${offset}&limit=${limit}`
 
-  function handleApproval(id) {
-    $.ajax({
-      url: `${apiUrl}notakreditheader/${id}/approval`,
-      method: 'POST',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-      },
-      success: response => {
-        $('#jqGrid').trigger('reloadGrid')
+      if ($('#rangeModal').data('action') == 'export') {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `{{ config('app.api_url') }}jurnalumumheader/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+        xhr.responseType = 'arraybuffer'
+
+        xhr.onload = function(e) {
+          if (this.status === 200) {
+            if (this.response !== undefined) {
+              let blob = new Blob([this.response], {
+                type: "application/vnd.ms-excel"
+              })
+              let link = document.createElement('a')
+
+              link.href = window.URL.createObjectURL(blob)
+              link.download = `laporanjurnalumum${(new Date).getTime()}.xlsx`
+              link.click()
+
+              submitButton.removeAttr('disabled')
+            }
+          }
+        }
+
+        xhr.send()
+      } else if ($('#rangeModal').data('action') == 'report') {
+        window.open(`{{ route('jurnalumumheader.report') }}?${params}`)
+
+        submitButton.removeAttr('disabled')
       }
-    }).always(() => {
-      $('#loader').addClass('d-none')
     })
-  }
-
   })
 </script>
 @endpush()

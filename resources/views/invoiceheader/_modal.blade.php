@@ -503,13 +503,35 @@
   }
 
   function getEdit(invId, aksi) {
+    let form = $('#crudForm')
+    let data = []
+
+    data.push({
+      name: 'agen_id',
+      value: form.find(`[name="agen_id"]`).val()
+    })
+    data.push({
+      name: 'jenisorder_id',
+      value: form.find(`[name="jenisorder_id"]`).val()
+    })
+    data.push({
+      name: 'tgldari',
+      value: form.find(`[name="tgldari"]`).val()
+    })
+    data.push({
+      name: 'tglsampai',
+      value: form.find(`[name="tglsampai"]`).val()
+    })
+    data.push({
+      name: 'limit',
+      value: 0
+    })
+    
     $.ajax({
       url: `${apiUrl}invoiceheader/${invId}/getEdit`,
       method: 'GET',
       dataType: 'JSON',
-      data: {
-        limit: 0
-      },
+      data: data,
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
@@ -605,24 +627,6 @@
     }
   }
 
-
-  function approval(Id) {
-    $('#loader').removeClass('d-none')
-
-    $.ajax({
-      url: `{{ config('app.api_url') }}invoiceheader/${Id}/approval`,
-      method: 'POST',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-      },
-      success: response => {
-        $('#jqGrid').trigger('reloadGrid')
-      }
-    }).always(() => {
-      $('#loader').addClass('d-none')
-    })
-  }
 
   function cekApproval(Id, Aksi) {
     $.ajax({

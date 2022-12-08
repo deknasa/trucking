@@ -81,30 +81,7 @@
                   </tr>
                 </thead>
                 <tbody id="table_body">
-                  <tr>
-                    <td>1</td>
-                    <td>
-                      <input type="hidden" name="supplier_id[]" class="form-control">
-                      <input type="text" name="supplier[]" class="form-control supplier-lookup">
-                    </td>
-
-                    <td>
-                      <div class="input-group">
-                        <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">
-                      </div>
-                    </td>
-                    <td>
-                      <input type="text" name="keterangan_detail[]" class="form-control ">
-                    </td>
-
-                    <td>
-                      <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right ">
-                    </td>
-                    <td>
-                      <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
-                    </td>
-                  </tr>
-
+                  
                 </tbody>
                 <tfoot>
                   <tr>
@@ -315,6 +292,8 @@
     $('.invalid-feedback').remove()
 
     $('#table_body').html('')
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
     addRow()
     setTotal()
   }
@@ -499,6 +478,8 @@
             <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
           </td>
       </tr>`)
+      
+      detailRow.find(`[name="tgljatuhtempo[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
 
     $('#detailList tbody').append(detailRow)
@@ -522,8 +503,7 @@
       }
     })
     initAutoNumeric(detailRow.find('.autonumeric'))
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
+    
     setRowNumbers()
   }
 

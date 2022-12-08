@@ -316,19 +316,6 @@
               }
             }
           },
-          {
-            id: 'approval',
-            innerHTML: '<i class="fa fa-check"></i> APPROVE/UN',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                approval(selectedId)
-              }
-            }
-          },
         ]
 
       })
@@ -360,14 +347,6 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    $('#approval .ui-pg-div')
-      .addClass('btn btn-purple btn-sm')
-      .css({
-        'background': '#6619ff',
-        'color': '#fff'
-      })
-      .parent().addClass('px-1')
-
     if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
@@ -387,11 +366,7 @@
     if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
     }
-
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) {
-      $('#approval').attr('disabled', 'disabled')
-    }
-
+    
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {
