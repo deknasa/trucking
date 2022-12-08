@@ -36,7 +36,7 @@
                         </div>
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">Proses data<span class="text-danger">*</span></label>
-                            
+
                             <div class="col-12 col-sm-9 col-md-10">
                                 <select name="approve" id="approve" class="form-select select2bs4" style="width: 100%;">
 
@@ -46,7 +46,7 @@
 
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">Transaksi<span class="text-danger">*</span></label>
-                            
+
                             <div class="col-12 col-sm-9 col-md-10">
                                 <select name="transaksi" id="transaksi" class="form-select select2bs4" style="width: 100%;">
 
@@ -249,6 +249,50 @@
                         },
                     },
                     {
+                        label: 'STATUS APPROVAL',
+                        name: 'statusapproval',
+                        align: 'left',
+                        stype: 'select',
+                        searchoptions: {
+
+                            value: `<?php
+                                    $i = 1;
+
+                                    foreach ($data['comboapproval'] as $status) :
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['comboapproval'])) {
+                                            echo ";";
+                                        }
+                                        $i++;
+                                    endforeach
+
+                                    ?>
+              `,
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            let statusApproval = JSON.parse(value)
+
+                            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                  <span>${statusApproval.SINGKATAN}</span>
+                </div>
+              `)
+
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusApproval = JSON.parse(rowObject.statusapproval)
+
+                            return ` title="${statusApproval.MEMO}"`
+                        }
+                    },
+                    {
                         label: 'ID',
                         name: 'id',
                         align: 'right',
@@ -278,33 +322,6 @@
                         label: 'POSTING DARI',
                         name: 'postingdari',
                         align: 'left'
-                    },
-                    {
-                        label: 'STATUS APPROVAL',
-                        name: 'statusapproval',
-                        align: 'left',
-                        stype: 'select',
-                        searchoptions: {
-                            value: `<?php
-                                    $i = 1;
-
-                                    foreach ($data['comboapproval'] as $status) :
-                                        echo "$status[param]:$status[parameter]";
-                                        if ($i !== count($data['comboapproval'])) {
-                                            echo ";";
-                                        }
-                                        $i++;
-                                    endforeach
-
-                                    ?>
-              `,
-                            dataInit: function(element) {
-                                $(element).select2({
-                                    width: 'resolve',
-                                    theme: "bootstrap4"
-                                });
-                            }
-                        },
                     },
                     {
                         label: 'USER APPROVAL',
@@ -384,7 +401,7 @@
 
                     let jenisTransaksi = $('#crudForm').find('[name=transaksi]').val()
                     if (!hasDetail) {
-                        loadDetailGrid(id,jenisTransaksi)
+                        loadDetailGrid(id, jenisTransaksi)
                         hasDetail = true
                     }
                     loadDetailData(id, jenisTransaksi)

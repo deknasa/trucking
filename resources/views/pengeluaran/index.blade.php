@@ -55,28 +55,89 @@
             name: 'statusapproval',
             align: 'left',
             stype: 'select',
-              searchoptions: {
-                value: `<?php
-                        $i = 1;
+            searchoptions: {
+              
+              value: `<?php
+                      $i = 1;
 
-                        foreach ($data['comboapproval'] as $status) :
-                          echo "$status[param]:$status[parameter]";
-                          if ($i !== count($data['comboapproval'])) {
-                            echo ";";
-                          }
-                          $i++;
-                        endforeach
+                      foreach ($data['comboapproval'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboapproval'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
 
-                        ?>
+                      ?>
               `,
-                dataInit: function(element) {
-                  $(element).select2({
-                    width: 'resolve',
-                    theme: "bootstrap4"
-                  });
-                }
-              },
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusApproval = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                  <span>${statusApproval.SINGKATAN}</span>
+                </div>
+              `)
+              
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusApproval = JSON.parse(rowObject.statusapproval)
+              
+              return ` title="${statusApproval.MEMO}"`
+            }
           },
+          {
+            label: 'STATUS CETAK',
+            name: 'statuscetak',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combocetak'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combocetak'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusCetak = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+                  <span>${statusCetak.SINGKATAN}</span>
+                </div>
+              `)
+              
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusCetak = JSON.parse(rowObject.statuscetak)
+              
+              return ` title="${statusCetak.MEMO}"`
+            }
+          },     
           {
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -322,7 +383,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               }else {
-                editPengeluaran(selectedId)
+                cekValidasi(selectedId, 'EDIT')
               }
             }
           },
@@ -335,7 +396,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                deletePengeluaran(selectedId)
+                cekValidasi(selectedId, 'DELETE')
               }
             }
           },
@@ -367,19 +428,7 @@
               }
             }
           },
-          {
-            id: 'approval',
-            innerHTML: '<i class="fa fa-check"></i> APPROVAL/UN',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                approval(selectedId)
-              }
-            }
-          },
+
         ]
 
       })

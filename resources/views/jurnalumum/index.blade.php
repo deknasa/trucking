@@ -119,6 +119,21 @@
             align: 'left'
           },
           {
+            label: 'USER APPROVAL',
+            name: 'userapproval',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL APPROVAL',
+            name: 'tglapproval',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
