@@ -18,9 +18,7 @@ class Myauth
         'class' => [
             '',
             'jurnalumumpusatheader',
-            
-            
-            'dashboard',
+            'dashboard'
         ],
         'method' => [
             'gridtab',
@@ -66,7 +64,7 @@ class Myauth
         $method = strtolower($method);
 
         if (!$this->_validatePermission($class, $method)) {
-            abort(401, "You don't have access");
+            abort(403, "You don't have access");
         }
     }
 
