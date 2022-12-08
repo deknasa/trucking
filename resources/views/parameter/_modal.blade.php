@@ -302,6 +302,18 @@
     showParameter(form, parameterId)
   }
 
+  function isJSON(something) {
+    if (typeof something != 'string')
+      something = JSON.stringify(something);
+
+    try {
+      JSON.parse(something);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   function showParameter(form, parameterId) {
     $.ajax({
       url: `${apiUrl}parameter/${parameterId}`,
@@ -322,10 +334,16 @@
         })
 
         let memo = response.data.memo
-        let memoToArray = JSON.parse(memo) 
-        
-        $.each(memoToArray, (index, detail) => {
-          let detailRow = $(`
+        let isJson = isJSON(memo);
+
+        if (isJson === false) {
+          addRow();
+        } else {
+
+          let memoToArray = JSON.parse(memo)
+          $.each(memoToArray, (index, detail) => {
+            
+            let detailRow = $(`
           <tr>
             <td>
                 <input type="text" name="key[]" class="form-control">
@@ -337,11 +355,14 @@
                 <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
             </td>
           </tr>`)
-          detailRow.find(`[name="key[]"]`).val(index)
-          detailRow.find(`[name="value[]"]`).val(detail)
+            detailRow.find(`[name="key[]"]`).val(index)
+            detailRow.find(`[name="value[]"]`).val(detail)
 
-          $('#detailList tbody').append(detailRow)
-        })
+            $('#detailList tbody').append(detailRow)
+          })
+        }
+
+
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
           initDisabled()

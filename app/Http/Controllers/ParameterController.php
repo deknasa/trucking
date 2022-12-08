@@ -163,6 +163,32 @@ class ParameterController extends MyController
 
         return response($response['data']);
     }
+    
+    public function detail(Request $request)
+    {
+        $params = [
+            'id' => $request->id
+        ];
+
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        ])
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "parameter/detail", $params);
+
+            
+        $data = [
+            'total' => $response['attributes']['totalPages'] ?? [],
+            'records' => $response['attributes']['totalRows'] ?? [],
+            'data' => $response['data'],
+            'params' => $params ?? [],
+            'message' => $response['message'] ?? ''
+        ];
+
+        return response($data, $response->status());
+    }
 
     /**
      * @ClassName
