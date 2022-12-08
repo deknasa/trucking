@@ -67,14 +67,6 @@
             name: 'type',
           },
           {
-            label: 'SINGKATAN',
-            name: 'singkatan',
-          },
-          {
-            label: 'WARNA',
-            name: 'warna',
-          },
-          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
           },
