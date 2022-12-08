@@ -80,7 +80,7 @@
 
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
-                  <span title="${value}">${statusApproval.SINGKATAN}</span>
+                  <span title="${statusApproval.MEMO}">${statusApproval.SINGKATAN}</span>
                 </div>
               `)
               
