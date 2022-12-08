@@ -83,7 +83,7 @@
           },
           success: response => {
             console.log(response);
-
+            location.reload();
           }
     
         })

@@ -11,6 +11,7 @@
 </div>
 
 @include('parameter._modal')
+@include('parameter._detail')
 
 @push('scripts')
 <script>
@@ -28,6 +29,7 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
+  let hasDetail = false
 
   $(document).ready(function() {
     $("#jqGrid").jqGrid({
@@ -54,25 +56,12 @@
             name: 'text',
           },
           {
-            label: 'MEMO',
-            name: 'memo',
-          },
-          
-          {
             label: 'KELOMPOK',
             name: 'kelompok',
           },
           {
             label: 'TYPE',
             name: 'type',
-          },
-          {
-            label: 'SINGKATAN',
-            name: 'singkatan',
-          },
-          {
-            label: 'WARNA',
-            name: 'warna',
           },
           {
             label: 'MODIFIEDBY',
@@ -126,11 +115,16 @@
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
         },
         onSelectRow: function(id) {
+          loadDetailGrid(id)
+
+          loadDetailData(id)
+          
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+
         },
         loadComplete: function(data) {
           $(document).unbind('keydown')
