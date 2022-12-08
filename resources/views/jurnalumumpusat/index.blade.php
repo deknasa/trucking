@@ -252,6 +252,7 @@
                         align: 'left',
                         stype: 'select',
                         searchoptions: {
+
                             value: `<?php
                                     $i = 1;
 
@@ -264,7 +265,7 @@
                                     endforeach
 
                                     ?>
-                                `,
+              `,
                             dataInit: function(element) {
                                 $(element).select2({
                                     width: 'resolve',
@@ -272,6 +273,17 @@
                                 });
                             }
                         },
+                        formatter: (value, options, rowData) => {
+                            let statusApproval = JSON.parse(value)
+
+                            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                  <span title="${value}">${statusApproval.SINGKATAN}</span>
+                </div>
+              `)
+
+                            return formattedValue[0].outerHTML
+                        }
                     },
                     {
                         label: 'NO BUKTI',

@@ -212,7 +212,7 @@ class JurnalUmumHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'hutangbayarheader/comboapproval', $status);
+            ->get(config('app.api_url') . 'parameter/comboapproval', $status);
 
         return $response['data'];
     }

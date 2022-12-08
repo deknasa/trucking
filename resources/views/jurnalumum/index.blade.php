@@ -55,6 +55,7 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
+              
               value: `<?php
                       $i = 1;
 
@@ -111,21 +112,6 @@
             label: 'POSTING DARI',
             name: 'postingdari',
             align: 'left'
-          },
-          {
-            label: 'USER APPROVAL',
-            name: 'userapproval',
-            align: 'left'
-          },
-          {
-            label: 'TANGGAL APPROVAL',
-            name: 'tglapproval',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
           },
           {
             label: 'MODIFIEDBY',
