@@ -40,9 +40,9 @@ class KasGantungHeaderController extends MyController
         ];
 
         $response = Http::withHeaders(request()->header())
-        ->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'kasgantung', $params);
+            ->get(config('app.api_url') . 'kasgantung', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -64,7 +64,7 @@ class KasGantungHeaderController extends MyController
         ];
 
         $response = Http::withHeaders($this->httpHeaders)
-        ->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "running_number", $params);
 
@@ -113,15 +113,33 @@ class KasGantungHeaderController extends MyController
         return view('reports.kasgantung', compact('data','kasgantung_details','user'));
     }
 
+    public function comboCetak($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
+    }
+
+
     public function export(Request $request): void
     {
-        
+
         //FETCH HEADER
         $kasgantungs = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'kasgantungheader/'.$request->id)['data'];
-        
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'kasgantungheader/' . $request->id)['data'];
+
         //FETCH DETAIL
         $detailParams = [
             'forExport' => true,
@@ -129,16 +147,16 @@ class KasGantungHeaderController extends MyController
         ];
 
         $responses = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'kasgantungdetail', $detailParams);
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'kasgantungdetail', $detailParams);
 
         $kasgantung_details = $responses['data'];
         $user = $responses['user'];
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'TAS '.$user['cabang_id']);
+        $sheet->setCellValue('A1', 'TAS ' . $user['cabang_id']);
         $sheet->getStyle("A1")->getFont()->setSize(20);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');
@@ -147,7 +165,7 @@ class KasGantungHeaderController extends MyController
         $header_right_start_row = 2;
         $detail_table_header_row = 8;
         $detail_start_row = $detail_table_header_row + 1;
-       
+
         $alphabets = range('A', 'Z');
 
         $header_columns = [
@@ -228,30 +246,30 @@ class KasGantungHeaderController extends MyController
         );
 
         $style_number = [
-			'alignment' => [
-				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, 
-			],
-            
-			'borders' => [
-				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], 
-				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] 
-			]
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+            ],
+
+            'borders' => [
+                'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
+            ]
         ];
 
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $sheet ->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
         $total = 0;
         foreach ($kasgantung_details as $response_index => $response_detail) {
-            
+
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', ',', '.');
-        
+
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['coa']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
@@ -264,33 +282,33 @@ class KasGantungHeaderController extends MyController
         }
 
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A'.$total_start_row.':C'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':C' . $total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("D$total_start_row", number_format((float) $total, '2', ',', '.'))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         //set diketahui dibuat
-        $ttd_start_row = $total_start_row+2;
+        $ttd_start_row = $total_start_row + 2;
         $sheet->setCellValue("B$ttd_start_row", 'Disetujui');
         $sheet->setCellValue("C$ttd_start_row", 'Diketahui');
         $sheet->setCellValue("D$ttd_start_row", 'Dibuat');
-        $sheet ->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
+        $sheet->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
         // $sheet->mergeCells("A$ttd_end_row:C$ttd_end_row");
-        $sheet->mergeCells("B".($ttd_start_row+1).":B".($ttd_start_row+3));      
-        $sheet->mergeCells("C".($ttd_start_row+1).":C".($ttd_start_row+3));      
-        $sheet->mergeCells("D".($ttd_start_row+1).":D".($ttd_start_row+3));      
-        $sheet ->getStyle("B".($ttd_start_row+1).":B".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("C".($ttd_start_row+1).":C".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("D".($ttd_start_row+1).":D".($ttd_start_row+3))->applyFromArray($styleArray);
+        $sheet->mergeCells("B" . ($ttd_start_row + 1) . ":B" . ($ttd_start_row + 3));
+        $sheet->mergeCells("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3));
+        $sheet->mergeCells("D" . ($ttd_start_row + 1) . ":D" . ($ttd_start_row + 3));
+        $sheet->getStyle("B" . ($ttd_start_row + 1) . ":B" . ($ttd_start_row + 3))->applyFromArray($styleArray);
+        $sheet->getStyle("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3))->applyFromArray($styleArray);
+        $sheet->getStyle("D" . ($ttd_start_row + 1) . ":D" . ($ttd_start_row + 3))->applyFromArray($styleArray);
 
         //set tglcetak
         date_default_timezone_set('Asia/Jakarta');
-        
-        $sheet->setCellValue("B".($ttd_start_row+5), 'Dicetak Pada :');
-        $sheet->getStyle("B".($ttd_start_row+5))->getFont()->setItalic(true);
-        $sheet->setCellValue("C".($ttd_start_row+5), date('d/m/Y H:i:s'));
-        $sheet->getStyle("C".($ttd_start_row+5))->getFont()->setItalic(true);
-        $sheet->setCellValue("D".($ttd_start_row+5), $user['name']);
-        $sheet->getStyle("D".($ttd_start_row+5))->getFont()->setItalic(true);
+
+        $sheet->setCellValue("B" . ($ttd_start_row + 5), 'Dicetak Pada :');
+        $sheet->getStyle("B" . ($ttd_start_row + 5))->getFont()->setItalic(true);
+        $sheet->setCellValue("C" . ($ttd_start_row + 5), date('d/m/Y H:i:s'));
+        $sheet->getStyle("C" . ($ttd_start_row + 5))->getFont()->setItalic(true);
+        $sheet->setCellValue("D" . ($ttd_start_row + 5), $user['name']);
+        $sheet->getStyle("D" . ($ttd_start_row + 5))->getFont()->setItalic(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -301,7 +319,7 @@ class KasGantungHeaderController extends MyController
         $sheet->getColumnDimension('G')->setAutoSize(true);
         $sheet->getColumnDimension('H')->setAutoSize(true);
 
-        
+
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Kas Gantung ' . date('dmYHis');
@@ -314,9 +332,9 @@ class KasGantungHeaderController extends MyController
     private function combo()
     {
         $response = Http::withHeaders($this->httpHeaders)
-        ->withOptions(['verify' => false])
+            ->withOptions(['verify' => false])
             ->get(config('app.api_url') . 'kasgantung/combo');
-        
+
         return $response['data'];
     }
 }

@@ -47,49 +47,6 @@
             width: '50px'
           },
           {
-            label: 'STATUS CETAK',
-            name: 'statuscetak',
-            align: 'left',
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combocetak'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combocetak'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusCetak = JSON.parse(value)
-
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
-                  <span>${statusCetak.SINGKATAN}</span>
-                </div>
-              `)
-              
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusCetak = JSON.parse(rowObject.statuscetak)
-              
-              return ` title="${statusCetak.MEMO}"`
-            }
-          },
-          {
             label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
@@ -291,7 +248,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-              cekValidasi(selectedId, 'EDIT')
+              editKasGantung(selectedId)
             }
           },
           {
@@ -301,7 +258,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-              cekValidasi(selectedId, 'DELETE')
+              deleteKasGantung(selectedId)
             }
           },
           
