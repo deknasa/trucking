@@ -155,7 +155,11 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
-
+    
+    $('#crudForm').autocomplete({
+      disabled: true
+    });
+    
     $(document).on('input', `#table_body [name="bayar[]"]`, function(event) {
       setBayar()
       let sisa = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisa[]"]`)[0])
@@ -715,36 +719,36 @@
   }
 
   
-  function cekApproval(hutangbayarId, Aksi) {
-      let form = $('#crudForm')
-      $.ajax({
-          url: `{{ config('app.api_url') }}hutangbayarheader/${hutangbayarId}/cekapproval`,
-          method: 'POST',
-          dataType: 'JSON',
-          beforeSend: request => {
-              request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-          },
-          success: response => {
-      
-              if (Aksi == 'EDIT') {
-                  editHutangBayarHeader(hutangbayarId)
-              }
-              if (Aksi == 'DELETE') {
-                  deleteHutangBayarHeader(hutangbayarId)
-              }
-          },
-          error: error => {
-              if (error.status === 422) {
-                  $('.is-invalid').removeClass('is-invalid')
-                  $('.invalid-feedback').remove()
-                  setErrorMessages(form, error.responseJSON.errors);
-                  showDialog(error.responseJSON.message)
-              } else {
-                  showDialog(error.statusText)
-              }
-          },
-      })
+  function cekValidasi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}hutangbayarheader/${Id}/cekvalidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kodenobukti = response.kodenobukti
+        if (kodenobukti == '1') {
+          var kodestatus = response.kodestatus
+          if (kodestatus == '1') {
+            showDialog(response.message['keterangan'])
+          } else {
+            if (Aksi == 'EDIT') {
+              editHutangBayarHeader(Id)
+            }
+            if (Aksi == 'DELETE') {
+              deleteHutangBayarHeader(Id)
+            }
+          }
+
+        } else {
+          showDialog(response.message['keterangan'])
+        }
+      }
+    })
   }
+
 
   function getPembayaran(id, supplierId, aksi) {
     $('#detailList tbody').html('')

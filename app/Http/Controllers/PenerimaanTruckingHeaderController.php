@@ -15,45 +15,10 @@ class PenerimaanTruckingHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        return view('penerimaantruckingheader.index', compact('title'));
-    }
-
-    public function create()
-    {
-        $title = $this->title;
-
-        $combo = $this->combo();
-
-        return view('penerimaantruckingheader.add', compact('title','combo'));
-    }
-
-    public function store(Request $request)
-    {
-        try {
-             /* Unformat nominal */
-            $request->nominal = array_map(function ($nominal) {
-                $nominal = str_replace('.', '', $nominal);
-                $nominal = str_replace(',', '', $nominal);
-
-                return $nominal;
-            }, $request->nominal);
-
-            $request->merge([
-                'nominal' => $request->nominal
-            ]);
-
-            $request['modifiedby'] = Auth::user()->name;
-
-            $response = Http::withHeaders($this->httpHeaders)
-                ->withOptions(['verify' => false])
-                ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'penerimaantruckingheader', $request->all());
-
-
-            return response($response, $response->status());
-        } catch (\Throwable $th) {
-            throw $th->getMessage();
-        }
+        $data = [
+            'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK')
+        ];
+        return view('penerimaantruckingheader.index', compact('title','data'));
     }
 
     public function get($params = [])
@@ -81,88 +46,6 @@ class PenerimaanTruckingHeaderController extends MyController
 
         return $data;
     }
-
-    public function edit($id)
-    {
-        $title = $this->title;
-
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "penerimaantruckingheader/$id");
-            // dd($response->getBody()->getContents());
-
-        $penerimaantruckingheader = $response['data'];
-        $kode = $response['kode'];
-
-        if($kode == 'PJT'){
-            $pengeluarantruckingheaderNoBukti = $this->getNoBukti('PINJAMAN SUPIR', 'PINJAMAN SUPIR', 'pengeluarantruckingheader');
-        }else{
-            $pengeluarantruckingheaderNoBukti = $this->getNoBukti('BIAYA LAIN SUPIR', 'BIAYA LAIN SUPIR', 'pengeluarantruckingheader');
-        }
-
-
-        $combo = $this->combo();
-
-        return view('penerimaantruckingheader.edit', compact('title', 'penerimaantruckingheader','combo', 'penerimaantruckingheaderNoBukti'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        /* Unformat nominal */
-        $request->nominal = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
-
-            return $nominal;
-        }, $request->nominal);
-
-        $request->merge([
-            'nominal' => $request->nominal
-        ]);
-
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "penerimaantruckingheader/$id", $request->all());
-
-        return response($response);
-    }
-
-    public function delete($id)
-    {
-        try {
-            $title = $this->title;
-
-            $response = Http::withHeaders($this->httpHeaders)
-                ->withOptions(['verify' => false])
-                ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "penerimaantruckingheader/$id");
-
-            $penerimaantruckingheader = $response['data'];
-            
-            $combo = $this->combo();
-
-            return view('penerimaantruckingheader.delete', compact('title','combo', 'penerimaantruckingheader'));
-        } catch (\Throwable $th) {
-            return redirect()->route('penerimaantruckingheader.index');
-        }
-    }
-
-    public function destroy($id)
-    {
-        $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "penerimaantruckingheader/$id");
-
-            
-        return response($response);
-    }
-
     public function getNoBukti($group, $subgroup, $table)
     {
         $params = [
@@ -181,18 +64,30 @@ class PenerimaanTruckingHeaderController extends MyController
         return $noBukti;
     }
 
-    private function combo()
+    public function comboList($aksi, $grp, $subgrp)
     {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
         $response = Http::withHeaders($this->httpHeaders)
-        ->withToken(session('access_token'))
-        ->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'penerimaantruckingheader/combo');
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
 
         return $response['data'];
     }
+
     public function report(Request $request)
     {
-        
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'penerimaantruckingheader/' . $request->id);
+
         $detailParams = [
             'forReport' => true,
             'penerimaantruckingheader_id' => $request->id
@@ -203,10 +98,10 @@ class PenerimaanTruckingHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get('http://localhost/trucking-laravel/public/api/penerimaantruckingdetail', $detailParams);
         
-        
+        $data = $header['data'];
         $penerimaantrucking_details = $penerimaantrucking_detail['data'];
-        $user = $penerimaantrucking_detail['user'];
-        return view('reports.penerimaantruckingheader', compact('penerimaantrucking_details','user'));
+        $user = Auth::user();
+        return view('reports.penerimaantruckingheader', compact('data','penerimaantrucking_details','user'));
     }
 
     public function export(Request $request): void

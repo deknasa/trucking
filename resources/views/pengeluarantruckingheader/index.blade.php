@@ -17,8 +17,6 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('pengeluarantruckingheader.index') }}"
-  let getUrl = "{{ route('pengeluarantruckingheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -51,6 +49,50 @@
             width: '50px'
           },
           {
+            label: 'STATUS CETAK',
+            name: 'statuscetak',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combocetak'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combocetak'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusCetak = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+                  <span>${statusCetak.SINGKATAN}</span>
+                </div>
+              `)
+              
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusCetak = JSON.parse(rowObject.statuscetak)
+              
+              return ` title="${statusCetak.MEMO}"`
+            }
+          },
+          {
             label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
@@ -79,6 +121,21 @@
             label: 'BANK',
             name: 'bank_id',
             align: 'left'
+          },
+          {
+            label: 'USER BUKA CETAK',
+            name: 'userbukacetak',
+            align: 'left'
+          },
+          {
+            label: 'TGL CETAK',
+            name: 'tglbukacetak',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'STATUS POSTING',
@@ -260,7 +317,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               }else {
-                editPengeluaranTruckingHeader(selectedId)
+                cekValidasi(selectedId, 'EDIT')
               }
             }
           },
@@ -273,7 +330,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                deletePengeluaranTruckingHeader(selectedId)
+                cekValidasi(selectedId, 'DELETE')
               }
             }
           },

@@ -43,98 +43,158 @@
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
-              label: 'ID',
-              name: 'id',
-              align: 'right',
-              width: '50px'
-            },
-            {
-              label: 'STATUS APPROVAL',
-              name: 'statusapproval',
-              align: 'left',
-              stype: 'select',
-              searchoptions: {
-                value: `<?php
-                        $i = 1;
+            label: 'ID',
+            name: 'id',
+            align: 'right',
+            width: '50px'
+          },
+          {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
 
-                        foreach ($data['comboapproval'] as $status) :
-                          echo "$status[param]:$status[parameter]";
-                          if ($i !== count($data['comboapproval'])) {
-                            echo ";";
-                          }
-                          $i++;
-                        endforeach
+                      foreach ($data['comboapproval'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboapproval'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
 
-                        ?>
+                      ?>
               `,
-                dataInit: function(element) {
-                  $(element).select2({
-                    width: 'resolve',
-                    theme: "bootstrap4"
-                  });
-                }
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
               }
             },
-            {
-              label: 'NO BUKTI',
-              name: 'nobukti',
-              align: 'left'
+            formatter: (value, options, rowData) => {
+              let statusApproval = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                  <span>${statusApproval.SINGKATAN}</span>
+                </div>
+              `)
+              
+              return formattedValue[0].outerHTML
             },
-            {
-              label: 'TANGGAL BUKTI',
-              name: 'tglbukti',
-              align: 'left',
-              formatter: "date",
-              formatoptions: {
-                srcformat: "ISO8601Long",
-                newformat: "d-m-Y"
+            cellattr: (rowId, value, rowObject) => {
+              let statusApproval = JSON.parse(rowObject.statusapproval)
+              
+              return ` title="${statusApproval.MEMO}"`
+            }
+          },
+          {
+            label: 'STATUS CETAK',
+            name: 'statuscetak',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combocetak'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combocetak'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
               }
             },
-            {
-              label: 'KETERANGAN',
-              name: 'keterangan',
-              align: 'left'
+            formatter: (value, options, rowData) => {
+              let statusCetak = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+                  <span>${statusCetak.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
             },
-            {
-              label: 'BANK',
-              name: 'bank_id',
-              align: 'left'
-            },
-            {
-              label: 'SUPPLIER',
-              name: 'supplier_id',
-              align: 'left'
-            },
-            {
-              label: 'NO BUKTI PENGELUARAN',
-              name: 'pengeluaran_nobukti',
-              align: 'left'
-            },
-            {
-              label: 'COA',
-              name: 'coa',
-              align: 'left'
-            },
-            {
-              label: 'USER APPROVAL',
-              name: 'userapproval',
-              align: 'left'
-            },
-            {
-              label: 'TGL APPROVAL',
-              name: 'tglapproval',
-              align: 'left',
-              formatter: "date",
-              formatoptions: {
-                srcformat: "ISO8601Long",
-                newformat: "d-m-Y H:i:s"
-              }
-            },
-            {
-              label: 'MODIFIEDBY',
-              name: 'modifiedby',
-              align: 'left'
-            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusCetak = JSON.parse(rowObject.statuscetak)
+
+              return ` title="${statusCetak.MEMO}"`
+            }
+          },
+          {
+            label: 'NO BUKTI',
+            name: 'nobukti',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL BUKTI',
+            name: 'tglbukti',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            align: 'left'
+          },
+          {
+            label: 'BANK',
+            name: 'bank_id',
+            align: 'left'
+          },
+          {
+            label: 'SUPPLIER',
+            name: 'supplier_id',
+            align: 'left'
+          },
+          {
+            label: 'NO BUKTI PENGELUARAN',
+            name: 'pengeluaran_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'COA',
+            name: 'coa',
+            align: 'left'
+          },
+          {
+            label: 'USER APPROVAL',
+            name: 'userapproval',
+            align: 'left'
+          },
+          {
+            label: 'TGL APPROVAL',
+            name: 'tglapproval',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+          {
+            label: 'MODIFIEDBY',
+            name: 'modifiedby',
+            align: 'left'
+          },
           {
             label: 'CREATEDAT',
             name: 'created_at',
@@ -155,7 +215,7 @@
               newformat: "d-m-Y H:i:s"
             }
           },
-          ],
+        ],
         autowidth: true,
         shrinkToFit: false,
         height: 350,
@@ -188,7 +248,7 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
+
           if (!hasDetail) {
             loadDetailGrid(id)
             hasDetail = true
@@ -208,7 +268,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -272,8 +332,8 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
-              }else {
-                cekApproval(selectedId, 'EDIT')
+              } else {
+                cekValidasi(selectedId, 'EDIT')
               }
             }
           },
@@ -286,7 +346,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                cekApproval(selectedId, 'DELETE')
+                cekValidasi(selectedId, 'DELETE')
               }
             }
           },
@@ -304,7 +364,7 @@
                 window.open(`{{ route('hutangbayarheader.export') }}?id=${selectedId}`)
               }
             }
-          },  
+          },
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
@@ -370,10 +430,8 @@
     }
 
 
-    
-  })
 
-  
+  })
 </script>
 @endpush()
 @endsection

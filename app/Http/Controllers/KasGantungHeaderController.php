@@ -22,8 +22,10 @@ class KasGantungHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-
-        return view('kasgantung.index', compact('title'));
+        $data = [
+            'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK'),
+        ];
+        return view('kasgantung.index', compact('title','data'));
     }
 
     public function get($params = [])
@@ -52,124 +54,6 @@ class KasGantungHeaderController extends MyController
         return $data;
     }
 
-    /**
-     * Fungsi create
-     * @ClassName create
-     */
-    public function create()
-    {
-        $title = $this->title;
-
-        $noBukti = $this->getNoBukti('KASGANTUNG', 'KASGANTUNG', 'kasgantungheader');
-        $kasGantungNoBukti = $this->getNoBukti('KASGANTUNG', 'KASGANTUNG', 'kasgantungheader');
-        
-        $combo = $this->combo();
-
-        return view('kasgantung.add', compact('title', 'noBukti', 'combo', 'kasGantungNoBukti'));
-    }
-
-    public function store(Request $request)
-    {
-        /* Unformat nominal */
-        $request->nominal = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
-
-            return $nominal;
-        }, $request->nominal);
-
-        $request->merge([
-            'nominal' => $request->nominal
-        ]);
-
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders($this->httpHeaders)
-        ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->post(config('app.api_url') . 'kasgantung', $request->all());
-
-        return response($response, $response->status());
-    }
-
-    /**
-     * Fungsi edit
-     * @ClassName edit
-     */
-    public function edit($id)
-    {
-        $title = $this->title;
-
-        $response = Http::withHeaders($this->httpHeaders)
-        ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "kasgantung/$id");
-        
-        $kasgantung = $response['data'];
-        $kasGantungNoBukti = $this->getNoBukti('KASGANTUNG', 'KASGANTUNG', 'kasgantungheader');
-
-        $combo = $this->combo();
-
-        return view('kasgantung.edit', compact('title', 'kasgantung', 'combo','kasGantungNoBukti'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        /* Unformat nominal */
-        $request->nominal = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
-
-            return $nominal;
-        }, $request->nominal);
-
-        $request->merge([
-            'nominal' => $request->nominal
-        ]);
-
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders($this->httpHeaders)
-        ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "kasgantung/$id", $request->all());
-
-        return response($response);
-    }
-
-    /**
-     * Fungsi delete
-     * @ClassName delete
-     */
-    public function delete($id)
-    {
-        try {
-            $title = $this->title;
-
-            $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-                ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "kasgantung/$id");
-
-            $kasgantung = $response['data'];
-            $combo = $this->combo();
-
-            return view('kasgantung.delete', compact('title', 'combo', 'kasgantung'));
-        } catch (\Throwable $th) {
-            return redirect()->route('kasgantung.index');
-        }
-    }
-
-    public function destroy($id)
-    {
-        $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "kasgantung/$id");
-
-        return response($response);
-    }
 
     public function getNoBukti($group, $subgroup, $table)
     {
@@ -189,9 +73,30 @@ class KasGantungHeaderController extends MyController
         return $noBukti;
     }
 
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
+    }
+
     public function report(Request $request)
     {
         
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'kasgantungheader/' . $request->id);
 
         $detailParams = [
             'forReport' => true,
@@ -201,10 +106,11 @@ class KasGantungHeaderController extends MyController
         $kasgantung_detail = Http::withHeaders(request()->header())
             ->withToken(session('access_token'))
             ->get('http://localhost/trucking-laravel/public/api/kasgantungdetail', $detailParams);
-
+       
+        $data = $header['data'];
         $kasgantung_details = $kasgantung_detail['data'];
-        $user = $kasgantung_detail['user'];
-        return view('reports.kasgantung', compact('kasgantung_details','user'));
+        $user = Auth::user();
+        return view('reports.kasgantung', compact('data','kasgantung_details','user'));
     }
 
     public function export(Request $request): void

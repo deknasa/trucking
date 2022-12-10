@@ -17,7 +17,8 @@ class InvoiceHeaderController extends MyController
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama Invoice',
-            'comboapproval' => $this->comboapproval('list')
+            'comboapproval' => $this->comboList('list','STATUS APPROVAL','STATUS APPROVAL'),
+            'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK'),
         ];
 
         return view('invoiceheader.index', compact('title', 'data'));
@@ -94,19 +95,19 @@ class InvoiceHeaderController extends MyController
         return response($response);
     }
 
-    public function comboapproval($aksi)
+    public function comboList($aksi, $grp, $subgrp)
     {
 
         $status = [
             'status' => $aksi,
-            'grp' => 'STATUS APPROVAL',
-            'subgrp' => 'STATUS APPROVAL',
+            'grp' => $grp,
+            'subgrp' => $subgrp,
         ];
 
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'invoiceheader/comboapproval', $status);
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
 
         return $response['data'];
     }

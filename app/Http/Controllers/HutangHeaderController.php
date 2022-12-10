@@ -21,72 +21,12 @@ class HutangHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        return view('hutang.index', compact('title'));
+        $data = [
+            'combocetak' => $this->comboList('list', 'STATUSCETAK','STATUSCETAK')
+        ];
+        return view('hutang.index', compact('title','data'));
     }
 
-    /**
-     * @ClassName create
-     */
-    public function create()
-    {
-        $title = $this->title;
-
-        return view('hutang.add', compact('title'));
-    }
-
-    /**
-     * @ClassName store
-     */
-    public function store(Request $request)
-    {
-        try {
-
-
-            $request->total = array_map(function ($total) {
-                $total = str_replace('.', '', $total);
-
-                return $total;
-            }, $request->total);
-
-            $request->cicilan = array_map(function ($cicilan) {
-                $cicilan = str_replace('.', '', $cicilan);
-
-                return $cicilan;
-            }, $request->cicilan);
-
-            $request->totalbayar = array_map(function ($totalbayar) {
-                $totalbayar = str_replace('.', '', $totalbayar);
-
-                return $totalbayar;
-            }, $request->totalbayar);
-            
-
-            $request->merge([
-               // 'nominal' => $request->nominal,
-                'total' => $request->total,
-                'cicilan' => $request->cicilan,
-                'totalbayar' => $request->totalbayar,
-
-            ]);
-
-            $request['modifiedby'] = Auth::user()->name;
-
-            $response = Http::withHeaders($this->httpHeaders)
-                ->withOptions(['verify' => false])
-                ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'hutangheader', $request->all());
-
-
-            return response($response, $response->status());
-        } catch (\Throwable $th) {
-            throw $th->getMessage();
-        }
-    }
-
-    // /**
-    //  * Fungsi get
-    //  * @ClassName get
-    //  */
     public function get($params = [])
     {
         $params = [
@@ -113,108 +53,23 @@ class HutangHeaderController extends MyController
         return $data;
     }
 
-
-    /**
-     * Fungsi edit
-     * @ClassName edit
-     */
-    public function edit($id)
+    public function comboList($aksi, $grp, $subgrp)
     {
-        $title = $this->title;
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
 
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "hutangheader/$id");
-            // dd($response->getBody()->getContents());
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
 
-        $hutang = $response['data'];
-        $hutangNoBukti = $this->getNoBukti('HUTANG', 'HUTANG', 'hutangheader');
-
-
-        return view('hutang.edit', compact('title', 'hutang', 'hutangNoBukti'));
+        return $response['data'];
     }
 
-   // /**
-    //  * Fungsi update
-    //  * @ClassName update
-    //  */
-    public function update(Request $request, $id)
-    {
-
-        $request->total = array_map(function ($total) {
-            $total = str_replace('.', '', $total);
-
-            return $total;
-        }, $request->total);
-
-        $request->cicilan = array_map(function ($cicilan) {
-            $cicilan = str_replace('.', '', $cicilan);
-
-            return $cicilan;
-        }, $request->cicilan);
-
-        $request->totalbayar = array_map(function ($totalbayar) {
-            $totalbayar = str_replace('.', '', $totalbayar);
-
-            return $totalbayar;
-        }, $request->totalbayar);
-        
-
-        $request->merge([
-           // 'nominal' => $request->nominal,
-            'total' => $request->total,
-            'cicilan' => $request->cicilan,
-            'totalbayar' => $request->totalbayar,
-
-        ]);
-
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "hutangheader/$id", $request->all());
-
-        return response($response);
-    }
-
-    // /**
-    //  * Fungsi delete
-    //  * @ClassName delete
-    //  */
-    public function delete($id)
-    {
-        try {
-            $title = $this->title;
-
-            $response = Http::withHeaders($this->httpHeaders)
-                ->withOptions(['verify' => false])
-                ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "hutangheader/$id");
-
-            $hutangHeader = $response['data'];
-            $combo = $this->combo();
-
-            return view('hutangheader.delete', compact('title', 'combo', 'hutangheader'));
-        } catch (\Throwable $th) {
-            return redirect()->route('hutangheader.index');
-        }
-    }
-
-     /**
-     * @ClassName
-     */
-    public function destroy($id)
-    {
-        $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "hutangheader/$id");
-
-        return response($response);
-    }
     // /**
     //  * Fungsi getNoBukti
     //  * @ClassName getNoBukti
@@ -240,6 +95,12 @@ class HutangHeaderController extends MyController
     public function report(Request $request)
     {
         
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'hutangheader/' . $request->id);
+
+        
         $detailParams = [
             'forReport' => true,
             'hutang_id' => $request->id
@@ -250,10 +111,10 @@ class HutangHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get('http://localhost/trucking-laravel/public/api/hutangdetail', $detailParams);
         
-        
+        $data = $header['data'];
         $hutang_details = $hutang_detail['data'];
-        $user = $hutang_detail['user'];
-        return view('reports.hutang', compact('hutang_details','user'));
+        $user = Auth::user();
+        return view('reports.hutang', compact('data','hutang_details','user'));
     }
 
     public function export(Request $request): void

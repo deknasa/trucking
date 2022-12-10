@@ -137,6 +137,10 @@
     let modalBody = $('#crudModal').find('.modal-body').html()
 
     $(document).ready(function() {
+        
+        $('#crudForm').autocomplete({
+        disabled: true
+        });
 
         $(document).on('click', "#addRow", function() {
             addRow()
@@ -343,38 +347,36 @@
 
     }
 
-
-    function cekApproval(pendapatanId, Aksi) {
-        let form = $('#crudForm')
+    
+    function cekValidasi(Id, Aksi) {
         $.ajax({
-            url: `{{ config('app.api_url') }}pendapatansupirheader/${pendapatanId}/cekapproval`,
-            method: 'POST',
-            dataType: 'JSON',
-            beforeSend: request => {
-                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-            },
-            success: response => {
-        
+        url: `{{ config('app.api_url') }}pendapatansupirheader/${Id}/cekvalidasi`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+            request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+        success: response => {
+            var kodenobukti = response.kodenobukti
+            if (kodenobukti == '1') {
+            var kodestatus = response.kodestatus
+            if (kodestatus == '1') {
+                showDialog(response.message['keterangan'])
+            } else {
                 if (Aksi == 'EDIT') {
-                    editPendapatanSupir(pendapatanId)
+                editPendapatanSupir(Id)
                 }
                 if (Aksi == 'DELETE') {
-                    deletePendapatanSupir(pendapatanId)
+                deletePendapatanSupir(Id)
                 }
-            },
-            error: error => {
-                if (error.status === 422) {
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
-                    setErrorMessages(form, error.responseJSON.errors);
-                    showDialog(error.responseJSON.message)
-                } else {
-                    showDialog(error.statusText)
-                }
-            },
+            }
+
+            } else {
+            showDialog(response.message['keterangan'])
+            }
+        }
         })
     }
-
     function showPendapatanSupir(form, pendapatanId) {
         $('#detailList tbody').html('')
 

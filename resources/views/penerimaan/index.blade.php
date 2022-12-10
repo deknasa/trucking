@@ -95,6 +95,49 @@
             }
           },
           {
+            label: 'STATUS CETAK',
+            name: 'statuscetak',
+            align: 'left',
+            stype: 'select',
+              searchoptions: {
+                value: `<?php
+                        $i = 1;
+
+                        foreach ($data['combocetak'] as $status) :
+                          echo "$status[param]:$status[parameter]";
+                          if ($i !== count($data['combocetak'])) {
+                            echo ";";
+                          }
+                          $i++;
+                        endforeach
+
+                        ?>
+              `,
+                dataInit: function(element) {
+                  $(element).select2({
+                    width: 'resolve',
+                    theme: "bootstrap4"
+                  });
+                }
+              },
+            formatter: (value, options, rowData) => {
+              let statusCetak = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+                  <span>${statusCetak.SINGKATAN}</span>
+                </div>
+              `)
+              
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusCetak = JSON.parse(rowObject.statuscetak)
+              
+              return ` title="${statusCetak.MEMO}"`
+            }
+          },
+          {
             label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
@@ -184,6 +227,21 @@
           {
             label: 'TANGGAL APPROVAL',
             name: 'tglapproval',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'USER BUKA CETAK',
+            name: 'userbukacetak',
+            align: 'left'
+          },
+          {
+            label: 'TGL CETAK',
+            name: 'tglbukacetak',
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -381,7 +439,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               }else {
-                editPenerimaan(selectedId)
+                cekValidasi(selectedId, 'EDIT')
               }
             }
           },
@@ -394,7 +452,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                deletePenerimaan(selectedId)
+                cekValidasi(selectedId, 'DELETE')
               }
             }
           },
@@ -425,8 +483,7 @@
                 window.open(`{{ route('penerimaanheader.report') }}?id=${selectedId}`)
               }
             }
-          },
-         
+          }
         ]
 
       })
@@ -458,13 +515,6 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    $('#approval .ui-pg-div')
-      .addClass('btn btn-purple btn-sm')
-      .css({
-      'background': '#6619ff',
-      'color': '#fff'
-      })
-      .parent().addClass('px-1')
 
     if (!`{{ $myAuth->hasPermission('penerimaanheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
@@ -484,10 +534,6 @@
 
     if (!`{{ $myAuth->hasPermission('penerimaanheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('penerimaanheader', 'approval') }}`) {
-      $('#approval').attr('disabled', 'disabled')
     }
 
     

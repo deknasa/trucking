@@ -15,33 +15,10 @@ class GajiSupirHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        return view('gajisupirheader.index', compact('title'));
-    }
-
-    // public function create()
-    // {
-    //     $title = $this->title;
-
-    //     $combo = $this->combo();
-
-    //     return view('gajisupirheader.add', compact('title','combo'));
-    // }
-
-    public function store(Request $request)
-    {
-        try {
-            $request['modifiedby'] = Auth::user()->name;
-
-            $response = Http::withHeaders($this->httpHeaders)
-                ->withOptions(['verify' => false])
-                ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'gajisupirheader', $request->all());
-
-
-            return response($response, $response->status());
-        } catch (\Throwable $th) {
-            throw $th->getMessage();
-        }
+        $data = [
+            'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK')
+        ];
+        return view('gajisupirheader.index', compact('title','data'));
     }
 
     public function get($params = [])
@@ -70,70 +47,6 @@ class GajiSupirHeaderController extends MyController
         return $data;
     }
 
-    // public function edit($id)
-    // {
-    //     $title = $this->title;
-
-    //     $response = Http::withHeaders($this->httpHeaders)
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . "gajisupirheader/$id");
-    //         // dd($response->getBody()->getContents());
-
-    //     $gajisupirheader = $response['data'];
-        
-
-    //     $combo = $this->combo();
-
-    //     return view('gajisupirheader.edit', compact('title', 'gajisupirheader','combo'));
-    // }
-
-    public function update(Request $request, $id)
-    {
-        
-
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "gajisupirheader/$id", $request->all());
-
-        return response($response);
-    }
-
-    // public function delete($id)
-    // {
-    //     try {
-    //         $title = $this->title;
-
-    //         $response = Http::withHeaders($this->httpHeaders)
-    //             ->withOptions(['verify' => false])
-    //             ->withToken(session('access_token'))
-    //             ->get(config('app.api_url') . "gajisupirheader/$id");
-
-    //         $gajisupirheader = $response['data'];
-            
-    //         $combo = $this->combo();
-
-    //         return view('gajisupirheader.delete', compact('title','combo', 'gajisupirheader'));
-    //     } catch (\Throwable $th) {
-    //         return redirect()->route('gajisupirheader.index');
-    //     }
-    // }
-
-    public function destroy($id)
-    {
-        $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "gajisupirheader/$id");
-
-            
-        return response($response);
-    }
-
     public function getNoBukti($group, $subgroup, $table)
     {
         $params = [
@@ -151,10 +64,32 @@ class GajiSupirHeaderController extends MyController
 
         return $noBukti;
     }
+    
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
+    }
 
     public function report(Request $request)
     {
         
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'gajisupirheader/' . $request->id);
+
         $detailParams = [
             'forReport' => true,
             'gajisupir_id' => $request->id
@@ -165,10 +100,10 @@ class GajiSupirHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get('http://localhost/trucking-laravel/public/api/gajisupirdetail', $detailParams);
         
-        
+        $data = $header['data'];
         $gajisupir_details = $gajisupir_detail['data'];
-        $user = $gajisupir_detail['user'];
-        return view('reports.gajisupir', compact('gajisupir_details','user'));
+        $user = Auth::user();
+        return view('reports.gajisupir', compact('data','gajisupir_details','user'));
     }
 
     public function export(Request $request): void

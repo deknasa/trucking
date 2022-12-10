@@ -196,6 +196,11 @@
             align: 'left'
           },
           {
+            label: 'USER APPROVAL',
+            name: 'userapproval',
+            align: 'left'
+          },
+          {
             label: 'TGL APPROVAL',
             name: 'tglapproval',
             align: 'left',
@@ -206,9 +211,19 @@
             }
           },
           {
-            label: 'USER APPROVAL',
-            name: 'userapproval',
+            label: 'USER BUKA CETAK',
+            name: 'userbukacetak',
             align: 'left'
+          },
+          {
+            label: 'TGL CETAK',
+            name: 'tglbukacetak',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'DIBAYARKAN KE',
@@ -486,10 +501,6 @@
 
     if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'approval') }}`) {
-      $('#approval').attr('disabled', 'disabled')
     }
 
 

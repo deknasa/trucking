@@ -15,25 +15,13 @@ class ProsesGajiSupirHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        return view('prosesgajisupirheader.index', compact('title'));
+        $data = [
+            'comboapproval' => $this->comboList('list','STATUS APPROVAL','STATUS APPROVAL'),
+            'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK')
+        ];
+        return view('prosesgajisupirheader.index', compact('title','data'));
     }
 
-    public function store(Request $request)
-    {
-        try {
-            $request['modifiedby'] = Auth::user()->name;
-
-            $response = Http::withHeaders($this->httpHeaders)
-                ->withOptions(['verify' => false])
-                ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'prosesgajisupirheader', $request->all());
-
-
-            return response($response, $response->status());
-        } catch (\Throwable $th) {
-            throw $th->getMessage();
-        }
-    }
 
     public function get($params = [])
     {
@@ -60,35 +48,6 @@ class ProsesGajiSupirHeaderController extends MyController
 
         return $data;
     }
-
-    public function update(Request $request, $id)
-    {
-        
-
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "prosesgajisupirheader/$id", $request->all());
-
-        return response($response);
-    }
-
-    
-
-    public function destroy($id)
-    {
-        $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "prosesgajisupirheader/$id");
-
-            
-        return response($response);
-    }
-
     public function getNoBukti($group, $subgroup, $table)
     {
         $params = [
@@ -107,9 +66,31 @@ class ProsesGajiSupirHeaderController extends MyController
         return $noBukti;
     }
 
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
+    }
+
     public function report(Request $request)
     {
         
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'prosesgajisupirheader/' . $request->id);
+
         $detailParams = [
             'forReport' => true,
             'prosesgajisupir_id' => $request->id
@@ -119,10 +100,11 @@ class ProsesGajiSupirHeaderController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get('http://localhost/trucking-laravel/public/api/prosesgajisupirdetail', $detailParams);
-                
+        
+        $data = $header['data'];
         $prosesgajisupir_details = $prosesgajisupir_detail['data'];
-        $user = $prosesgajisupir_detail['user'];
-        return view('reports.prosesgajisupir', compact('prosesgajisupir_details','user'));
+        $user = Auth::user();
+        return view('reports.prosesgajisupir', compact('data','prosesgajisupir_details','user'));
     }
 
     public function export(Request $request): void

@@ -127,6 +127,10 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
+    
+    $('#crudForm').autocomplete({
+      disabled: true
+    });
     $(document).on('click', "#addRow", function() {
       addRow()
     });
@@ -329,6 +333,36 @@
     $('.invalid-feedback').remove()
 
     showPiutangHeader(form, userId)
+  }
+
+  function cekValidasi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}piutangheader/${Id}/cekvalidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kodenobukti = response.kodenobukti
+        if (kodenobukti == '1') {
+          var kodestatus = response.kodestatus
+          if (kodestatus == '1') {
+            showDialog(response.message['keterangan'])
+          } else {
+            if (Aksi == 'EDIT') {
+              editPiutangHeader(Id)
+            }
+            if (Aksi == 'DELETE') {
+              deletePiutangHeader(Id)
+            }
+          }
+
+        } else {
+          showDialog(response.message['keterangan'])
+        }
+      }
+    })
   }
 
   function showPiutangHeader(form, userId) {

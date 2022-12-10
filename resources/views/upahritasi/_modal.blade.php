@@ -203,6 +203,9 @@
   $(document).ready(function() {
 
 
+    $('#crudForm').autocomplete({
+      disabled: true
+    });
     $("#addRow").click(function() {
       addRow()
     });

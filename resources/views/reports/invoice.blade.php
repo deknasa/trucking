@@ -19,7 +19,7 @@
 
     $( document ).ready(function() {
       var statuscetak = invoiceheaders.statuscetak
-      if (statuscetak == 69) {
+      if (statuscetak == 174) {
         $(document).on('keydown', function(e) { 
           if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
             alert("Document Sudah Pernah Dicetak ");
@@ -42,7 +42,7 @@
       
       console.log(invoiceheaders)
       var statuscetak = invoiceheaders.statuscetak
-      if (statuscetak == 69) {
+      if (statuscetak == 174) {
         viewerOptions.toolbar.showPrintButton = false;
         viewerOptions.toolbar.showSaveButton = false;
         viewerOptions.toolbar.showOpenButton = false;

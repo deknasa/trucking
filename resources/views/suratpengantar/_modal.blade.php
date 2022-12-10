@@ -618,6 +618,11 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   $(document).ready(function() {
 
+    
+    $('#crudForm').autocomplete({
+      disabled: true
+    });
+    
     $("#addRow").click(function() {
       addRow()
     });

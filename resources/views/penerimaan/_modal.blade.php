@@ -113,15 +113,15 @@
                             </div>
                         </div>
 
-                        <!-- <div class="row form-group">
+                        <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                 <label>
-                                    NO RESI <span class="text-danger">*</span></label>
+                                    NO RESI
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
                                 <input type="text" name="noresi" class="form-control">
                             </div>
-                        </div> -->
+                        </div>
 
                         <div class="table-responsive">
                             <table class="table table-bordered table-bindkeys" id="tablePelunasan" style="width:800px;">
@@ -242,6 +242,10 @@
     let modalBody = $('#crudModal').find('.modal-body').html()
 
     $(document).ready(function() {
+        
+        $('#crudForm').autocomplete({
+            disabled: true
+        });
 
         $(document).on('click', "#addRow", function() {
             addRow()
@@ -262,19 +266,21 @@
                 let count = 0;
                 let row = '';
                 let arrData = []
-                $("#detailList tbody tr#1 td").each(function () {
-                    row =$("#detailList tbody tr#1").find(`td:eq(${count}) input`).val()
-                    if(row != '') {arrData.push(row)}
+                $("#detailList tbody tr#1 td").each(function() {
+                    row = $("#detailList tbody tr#1").find(`td:eq(${count}) input`).val()
+                    if (row != '') {
+                        arrData.push(row)
+                    }
                     count++
                     row++
                 })
-                let arrSlice = arrData.slice(1,-1)
+                let arrSlice = arrData.slice(1, -1)
 
-                if(arrSlice.length === 0){
+                if (arrSlice.length === 0) {
                     $("#detailList tbody").find('#1').remove()
                 }
 
-                
+
                 id = $(this).val()
                 nobukti = $(this).parent().find(`[name="pelunasan_nobukti[]"]`).val()
                 let text = nobukti.substr(0, 3)
@@ -375,7 +381,7 @@
                         })
 
                         setRowNumbers()
-                        
+
                         setTotal()
                     }
                 })
@@ -468,10 +474,10 @@
                         page: response.data.page
                     }).trigger('reloadGrid');
 
-                    if(id == 0){
+                    if (id == 0) {
                         $('#detail').jqGrid().trigger('reloadGrid')
                     }
-                    
+
                     if (response.data.grp == 'FORMAT') {
                         updateFormat(response.data)
                     }
@@ -630,7 +636,7 @@
                 element.data('currentValue', element.val())
             }
         })
-        
+
         initAutoNumeric(form.find('.nominal'))
         setStatusKasOptions(form)
         tarikPelunasan('add')
@@ -688,27 +694,11 @@
 
     }
 
-    function approval(Id) {
-        $('#loader').removeClass('d-none')
 
-        $.ajax({
-            url: `{{ config('app.api_url') }}penerimaanheader/${Id}/approval`,
-            method: 'POST',
-            dataType: 'JSON',
-            beforeSend: request => {
-                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-            },
-            success: response => {
-                $('#jqGrid').trigger('reloadGrid')
-            }
-        }).always(() => {
-            $('#loader').addClass('d-none')
-        })
-    }
 
-    function cekApproval(Id, Aksi) {
+    function cekValidasi(Id, Aksi) {
         $.ajax({
-            url: `{{ config('app.api_url') }}jurnalumumheader/${Id}/cekapproval`,
+            url: `{{ config('app.api_url') }}penerimaanheader/${Id}/cekvalidasi`,
             method: 'POST',
             dataType: 'JSON',
             beforeSend: request => {
@@ -722,10 +712,10 @@
                         showDialog(response.message['keterangan'])
                     } else {
                         if (Aksi == 'EDIT') {
-                            editJurnalUmumHeader(Id)
+                            editPenerimaan(Id)
                         }
                         if (Aksi == 'DELETE') {
-                            deleteJurnalUmumHeader(Id)
+                            deletePenerimaan(Id)
                         }
                     }
 

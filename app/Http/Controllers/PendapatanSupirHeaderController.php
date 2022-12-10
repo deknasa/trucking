@@ -15,14 +15,36 @@ class PendapatanSupirHeaderController extends MyController
     public function index(Request $request){
         $title = $this->title;
         $data = [            
-            'comboapproval' => $this->comboApproval('list')
+            'comboapproval' => $this->comboList('list','STATUS APPROVAL','STATUS APPROVAL'),
+            'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK')
         ];
         return view('pendapatansupirheader.index', compact('title','data'));
+    }
+
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
     }
     
     public function report(Request $request)
     {
-        
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'pendapatansupirheader/' . $request->id);
+
         $detailParams = [
             'forReport' => true,
             'pendapatansupir_id' => $request->id
@@ -33,9 +55,10 @@ class PendapatanSupirHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get('http://localhost/trucking-laravel/public/api/pendapatansupirdetail', $detailParams);
         
+        $data = $header['data'];
         $pendapatan_details = $pendapatan_detail['data'];
-        $user = $pendapatan_detail['user'];
-        return view('reports.pendapatansupir', compact('pendapatan_details','user'));
+        $user = Auth::user();
+        return view('reports.pendapatansupir', compact('data','pendapatan_details','user'));
     }
 
     public function export(Request $request): void
@@ -224,20 +247,4 @@ class PendapatanSupirHeaderController extends MyController
         $writer->save('php://output');
     }
 
-    public function comboApproval($aksi)
-    {
-
-        $status = [
-            'status' => $aksi,
-            'grp' => 'STATUS APPROVAL',
-            'subgrp' => 'STATUS APPROVAL',
-        ];
-
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'hutangbayarheader/comboapproval', $status);
-
-        return $response['data'];
-    }
 }

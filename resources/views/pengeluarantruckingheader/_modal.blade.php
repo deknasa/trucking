@@ -151,6 +151,10 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
+    
+    $('#crudForm').autocomplete({
+      disabled: true
+    });
 
     $(document).on('click', "#addRow", function() {
       addRow()
@@ -373,6 +377,36 @@
 
   }
 
+  function cekValidasi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}pengeluarantruckingheader/${Id}/cekvalidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kodenobukti = response.kodenobukti
+        if (kodenobukti == '1') {
+          var kodestatus = response.kodestatus
+          if (kodestatus == '1') {
+            showDialog(response.message['keterangan'])
+          } else {
+            if (Aksi == 'EDIT') {
+              editPengeluaranTruckingHeader(Id)
+            }
+            if (Aksi == 'DELETE') {
+              deletePengeluaranTruckingHeader(Id)
+            }
+          }
+
+        } else {
+          showDialog(response.message['keterangan'])
+        }
+      }
+    })
+  }
+  
   const setStatusPostingOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusposting]').empty()

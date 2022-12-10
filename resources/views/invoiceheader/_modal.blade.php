@@ -626,11 +626,9 @@
       })
     }
   }
-
-
-  function cekApproval(Id, Aksi) {
+  function cekValidasi(Id, Aksi) {
     $.ajax({
-      url: `{{ config('app.api_url') }}invoiceheader/${Id}/cekapproval`,
+      url: `{{ config('app.api_url') }}invoiceheader/${Id}/cekvalidasi`,
       method: 'POST',
       dataType: 'JSON',
       beforeSend: request => {

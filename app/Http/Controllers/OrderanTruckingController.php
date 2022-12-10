@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderanTruckingController extends MyController
 {
-    public $title = 'ORDERAN TRUCKING';
+    public $title = 'Orderan Trucking';
 
     /**
      * @ClassName
@@ -94,7 +94,7 @@ class OrderanTruckingController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'hutangbayarheader/comboapproval', $status);
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
 
         return $response['data'];
     }

@@ -186,6 +186,10 @@
 
   $(document).ready(function() {
 
+    $('#crudForm').autocomplete({
+      disabled: true
+    });
+
     $(document).on('click', "#addRow", function() {
       addRow()
     });
@@ -435,53 +439,6 @@
     })
   }
 
-  function approval(Id) {
-    $('#loader').removeClass('d-none')
-
-    $.ajax({
-      url: `{{ config('app.api_url') }}pengeluaranheader/${Id}/approval`,
-      method: 'POST',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-      },
-      success: response => {
-        $('#jqGrid').trigger('reloadGrid')
-      }
-    }).always(() => {
-      $('#loader').addClass('d-none')
-    })
-  }
-
-  function cekApproval(Id, Aksi) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}jurnalumumheader/${Id}/cekapproval`,
-      method: 'POST',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-      },
-      success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'EDIT') {
-              editJurnalUmumHeader(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deleteJurnalUmumHeader(Id)
-            }
-          }
-
-        } else {
-          showDialog(response.message['keterangan'])
-        }
-      }
-    })
-  }
 
   const setStatusJenisTransaksiOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {

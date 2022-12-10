@@ -16,47 +16,10 @@ class PengeluaranTruckingHeaderController extends MyController
     {
         $title = $this->title;
         $data = [            
-            'combostatusposting' => $this->comboApproval('list','STATUS POSTING','STATUS POSTING'),
+            'combostatusposting' => $this->comboList('list','STATUS POSTING','STATUS POSTING'),
+            'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK'),
         ];
         return view('pengeluarantruckingheader.index', compact('title','data'));
-    }
-
-    public function create()
-    {
-        $title = $this->title;
-
-        $combo = $this->combo();
-
-        return view('pengeluarantruckingheader.add', compact('title','combo'));
-    }
-
-    public function store(Request $request)
-    {
-        try {
-             /* Unformat nominal */
-            $request->nominal = array_map(function ($nominal) {
-                $nominal = str_replace('.', '', $nominal);
-                $nominal = str_replace(',', '', $nominal);
-
-                return $nominal;
-            }, $request->nominal);
-
-            $request->merge([
-                'nominal' => $request->nominal
-            ]);
-
-            $request['modifiedby'] = Auth::user()->name;
-
-            $response = Http::withHeaders($this->httpHeaders)
-                ->withOptions(['verify' => false])
-                ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'pengeluarantruckingheader', $request->all());
-
-
-            return response($response, $response->status());
-        } catch (\Throwable $th) {
-            throw $th->getMessage();
-        }
     }
 
     public function get($params = [])
@@ -103,63 +66,7 @@ class PengeluaranTruckingHeaderController extends MyController
         return view('pengeluarantruckingheader.edit', compact('title', 'pengeluarantruckingheader','combo'));
     }
 
-    public function update(Request $request, $id)
-    {
-        /* Unformat nominal */
-        $request->nominal = array_map(function ($nominal) {
-            $nominal = str_replace('.', '', $nominal);
-            $nominal = str_replace(',', '', $nominal);
-
-            return $nominal;
-        }, $request->nominal);
-
-        $request->merge([
-            'nominal' => $request->nominal
-        ]);
-
-        $request['modifiedby'] = Auth::user()->name;
-
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "pengeluarantruckingheader/$id", $request->all());
-
-        return response($response);
-    }
-
-    public function delete($id)
-    {
-        try {
-            $title = $this->title;
-
-            $response = Http::withHeaders($this->httpHeaders)
-                ->withOptions(['verify' => false])
-                ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "pengeluarantruckingheader/$id");
-
-            $pengeluarantruckingheader = $response['data'];
-            
-            $combo = $this->combo();
-
-            return view('pengeluarantruckingheader.delete', compact('title','combo', 'pengeluarantruckingheader'));
-        } catch (\Throwable $th) {
-            return redirect()->route('pengeluarantruckingheader.index');
-        }
-    }
-
-    public function destroy($id)
-    {
-        $request['modifiedby'] = Auth::user()->name;
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "pengeluarantruckingheader/$id");
-
-            
-        return response($response);
-    }
-
-    public function comboApproval($aksi, $grp, $subgrp)
+    public function comboList($aksi, $grp, $subgrp)
     {
 
         $status = [
@@ -171,7 +78,7 @@ class PengeluaranTruckingHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'hutangbayarheader/comboapproval', $status);
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
 
         return $response['data'];
     }
@@ -193,19 +100,13 @@ class PengeluaranTruckingHeaderController extends MyController
         return $noBukti;
     }
 
-    private function combo()
-    {
-        $response = Http::withHeaders($this->httpHeaders)
-        ->withToken(session('access_token'))
-        ->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'pengeluarantruckingheader/combo');
-
-        return $response['data'];
-    }
-
     public function report(Request $request)
     {
-        
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'pengeluarantruckingheader/' . $request->id);
+
         $detailParams = [
             'forReport' => true,
             'pengeluarantruckingheader_id' => $request->id
@@ -216,10 +117,10 @@ class PengeluaranTruckingHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get('http://localhost/trucking-laravel/public/api/pengeluarantruckingdetail', $detailParams);
         
-        
+        $data = $header['data'];
         $pengeluarantrucking_details = $pengeluarantrucking_detail['data'];
-        $user = $pengeluarantrucking_detail['user'];
-        return view('reports.pengeluarantruckingheader', compact('pengeluarantrucking_details','user'));
+        $user = Auth::user();
+        return view('reports.pengeluarantruckingheader', compact('data','pengeluarantrucking_details','user'));
     }
 
     public function export(Request $request): void

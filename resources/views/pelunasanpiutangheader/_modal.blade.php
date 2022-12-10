@@ -177,6 +177,10 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
+    
+    $('#crudForm').autocomplete({
+      disabled: true
+    });
 
     $(document).on('input', `#table_body [name="bayarppd[]"]`, function(event) {
       setTotal()
