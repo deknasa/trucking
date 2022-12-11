@@ -99,6 +99,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusAktif = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                  <span>${statusAktif.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAktif = JSON.parse(rowObject.statusaktif)
+
+              return ` title="${statusAktif.MEMO}"`
+            }
           },
           {
             label: 'TGL MULAI BERLAKU',
@@ -144,6 +160,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusLuarKota = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusLuarKota.WARNA}; color: #fff;">
+                  <span>${statusLuarKota.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusLuarKota = JSON.parse(rowObject.statusluarkota)
+
+              return ` title="${statusLuarKota.MEMO}"`
+            }
           },
           {
             label: 'MODIFIEDBY',

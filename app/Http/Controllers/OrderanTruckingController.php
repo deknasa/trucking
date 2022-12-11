@@ -20,12 +20,15 @@ class OrderanTruckingController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
         $data = [
-            'statuslangsir' => $this->combo('list','STATUS LANGSIR','STATUS LANGSIR'),
-            'statusperalihan' => $this->combo('list','STATUS PERALIHAN','STATUS PERALIHAN'),
-            
+            'combolangsir' => $this->combo('list','STATUS LANGSIR','STATUS LANGSIR'),
+            'comboperalihan' => $this->combo('list','STATUS PERALIHAN','STATUS PERALIHAN'),
+
         ];
-        return view('orderantrucking.index', compact('title', 'data'));
+
+        
+        return view('orderantrucking.index', compact('title', 'breadcrumb', 'data'));   
     }
 
     /**

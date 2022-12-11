@@ -20,11 +20,15 @@ class TarifController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $breadcrumb = $this->breadcrumb;
         $data = [
             'combo' => $this->comboStatusAktif('list'),
+            'comboton' => $this->combocetak('list', 'SISTEM TON', 'SISTEM TON'),
+            'combopenyesuaianharga' => $this->combocetak('list', 'PENYESUAIAN HARGA', 'PENYESUAIAN HARGA'),
         ];
 
-        return view('tarif.index', compact('title','data'));
+        return view('tarif.index', compact('title', 'breadcrumb', 'data'));        
+
     }
 
     /**
@@ -191,6 +195,23 @@ class TarifController extends MyController
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
             ->get(config('app.api_url') . 'tarif/combo');
         
+        return $response['data'];
+    }
+
+    public function combocetak($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
         return $response['data'];
     }
 

@@ -16,7 +16,15 @@ class AbsensiSupirApprovalHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        return view('absensisupirapprovalheader.index', compact('title'));
+        $breadcrumb = $this->breadcrumb;
+        $data = [
+            'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'comboapproval' => $this->comboApproval('list')
+
+        ];
+
+        
+        return view('absensisupirapprovalheader.index', compact('title', 'breadcrumb', 'data'));              
     }
 
     public function get($params = [])
@@ -264,4 +272,42 @@ class AbsensiSupirApprovalHeaderController extends MyController
 
         $writer->save('php://output');
     }
+
+    public function comboCetak($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+        // dd($response )    ;
+        return $response['data'];
+
+    }
+
+    
+    public function comboApproval($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS APPROVAL',
+            'subgrp' => 'STATUS APPROVAL',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/comboapproval', $status);
+
+        return $response['data'];
+    }
+    
 }

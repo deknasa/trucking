@@ -78,6 +78,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusAktif = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                  <span>${statusAktif.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAktif = JSON.parse(rowObject.statusaktif)
+
+              return ` title="${statusAktif.MEMO}"`
+            }
           },
           {
             label: 'NAMA PERUSAHAAN',
@@ -131,6 +147,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusApproval = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                  <span>${statusApproval.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusApproval = JSON.parse(rowObject.statusapproval)
+
+              return ` title="${statusApproval.MEMO}"`
+            }
           },
           {
             label: 'USER APPROVAL',
@@ -167,6 +199,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusTas = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusTas.WARNA}; color: #fff;">
+                  <span>${statusTas.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusTas = JSON.parse(rowObject.statustas)
+
+              return ` title="${statusTas.MEMO}"`
+            }
           },
           {
             label: 'JENIS EMKL',

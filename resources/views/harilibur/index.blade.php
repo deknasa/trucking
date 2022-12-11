@@ -29,7 +29,7 @@
   let autoNumericElements = []
   let rowNum = 10
 
-  
+
   $(document).ready(function() {
 
     $("#jqGrid").jqGrid({
@@ -76,6 +76,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusAktif = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                  <span>${statusAktif.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAktif = JSON.parse(rowObject.statusaktif)
+
+              return ` title="${statusAktif.MEMO}"`
+            }
           },
           {
             label: 'MODIFIEDBY',
@@ -152,7 +168,7 @@
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
           })
-          
+
           if (indexRow > $(this).getDataIDs().length - 1) {
             indexRow = $(this).getDataIDs().length - 1;
           }
@@ -304,7 +320,6 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
-
 </script>
 @endpush()
 @endsection

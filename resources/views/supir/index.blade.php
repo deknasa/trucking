@@ -92,6 +92,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusAktif = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                  <span>${statusAktif.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAktif = JSON.parse(rowObject.statusaktif)
+
+              return ` title="${statusAktif.MEMO}"`
+            }
           },
           {
             label: 'NOM DEPOSIT SALDO AWAL',
@@ -174,6 +190,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusAdaupdategambar = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAdaupdategambar.WARNA}; color: #fff;">
+                  <span>${statusAdaupdategambar.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAdaupdategambar = JSON.parse(rowObject.statusadaupdategambar)
+
+              return ` title="${statusAdaupdategambar.MEMO}"`
+            }
           },
           {
             label: 'STATUS LUAR KOTA',
@@ -200,6 +232,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusLuarkota = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusLuarkota.WARNA}; color: #fff;">
+                  <span>${statusLuarkota.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusLuarkota = JSON.parse(rowObject.statusluarkota)
+
+              return ` title="${statusLuarkota.MEMO}"`
+            }
           },
           {
             label: 'ZONA TERTENTU',
@@ -226,6 +274,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusZonatertentu = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusZonatertentu.WARNA}; color: #fff;">
+                  <span>${statusZonatertentu.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusZonatertentu = JSON.parse(rowObject.statuszonatertentu)
+
+              return ` title="${statusZonatertentu.MEMO}"`
+            }
           },
           {
             label: 'ZONA',
@@ -421,6 +485,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusBlacklist = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusBlacklist.WARNA}; color: #fff;">
+                  <span>${statusBlacklist.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusBlacklist = JSON.parse(rowObject.statusblacklist)
+
+              return ` title="${statusBlacklist.MEMO}"`
+            }
           },
           {
             label: 'MODIFIEDBY',

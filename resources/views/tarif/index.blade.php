@@ -85,6 +85,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusAktif = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                  <span>${statusAktif.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAktif = JSON.parse(rowObject.statusaktif)
+
+              return ` title="${statusAktif.MEMO}"`
+            }
           },
           {
             label: 'TUJUAN ASAL',
@@ -93,6 +109,44 @@
           {
             label: 'SISTEM TON',
             name: 'statussistemton',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboton'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboton'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusSistemton = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusSistemton.WARNA}; color: #fff;">
+                  <span>${statusSistemton.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusSistemton = JSON.parse(rowObject.statussistemton)
+
+              return ` title="${statusSistemton.MEMO}"`
+            }
           },
           {
             label: 'KOTA',
@@ -133,6 +187,44 @@
           {
             label: 'STATUS PENYESUAIAN HARGA',
             name: 'statuspenyesuaianharga',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combopenyesuaianharga'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combopenyesuaianharga'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusPenyesuaianharga = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusPenyesuaianharga.WARNA}; color: #fff;">
+                  <span>${statusPenyesuaianharga.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusPenyesuaianharga = JSON.parse(rowObject.statuspenyesuaianharga)
+
+              return ` title="${statusPenyesuaianharga.MEMO}"`
+            }
           },
           {
             label: 'MODIFIEDBY',

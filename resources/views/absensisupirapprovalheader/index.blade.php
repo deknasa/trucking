@@ -36,8 +36,8 @@
   $(document).ready(function() {
 
     $('#lookup').hide()
-    
-    
+
+
     $('.supir-lookup').lookup({
       title: 'supir Lookup',
       fileName: 'supir',
@@ -50,11 +50,11 @@
         element.val(element.data('currentValue'))
       }
     })
-    
+
 
     $('#crudModal').on('hidden.bs.modal', function() {
-       activeGrid = '#jqGrid'
-     })
+      activeGrid = '#jqGrid'
+    })
 
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'absensisupirapprovalheader' }}`,
@@ -68,7 +68,95 @@
             align: 'right',
             width: '50px'
           },
-          
+          {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboapproval'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboapproval'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusApproval = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                  <span>${statusApproval.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusApproval = JSON.parse(rowObject.statusapproval)
+
+              return ` title="${statusApproval.MEMO}"`
+            }
+          },
+          {
+            label: 'STATUS CETAK',
+            name: 'statuscetak',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combocetak'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combocetak'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusCetak = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+                  <span>${statusCetak.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusCetak = JSON.parse(rowObject.statuscetak)
+
+              return ` title="${statusCetak.MEMO}"`
+            }
+          },
+
           {
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -89,15 +177,10 @@
             name: 'keterangan',
             align: 'left'
           },
-          
+
           {
             label: 'No bukti Absensi Supir',
             name: 'absensisupir_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'status approval',
-            name: 'statusapproval_memo',
             align: 'left'
           },
           {
@@ -137,8 +220,25 @@
           },
           {
             label: 'Status format',
-            name: 'statusformat_memo',
-            align: 'left'
+            name: 'statusformat',
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              let statusFormat = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusFormat.WARNA}; color: #fff;">
+                  <span>${statusFormat.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusFormat = JSON.parse(rowObject.statusformat)
+
+              return ` title="${statusFormat.MEMO}"`
+            }
+
           },
           {
             label: 'MODIFIEDBY',
@@ -214,7 +314,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -276,7 +376,11 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              editAbsensiSupirApprovalHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                cekValidasi(selectedId, 'EDIT')
+              }
             }
           },
           {
@@ -285,19 +389,11 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              deleteAbsensiSupirApprovalHeader(selectedId)
-            }
-          },
-          {
-            id: 'approval',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVE',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-              let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-
-              $('#loader').removeClass('d-none')
-
-              handleApproval(id)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                cekValidasi(selectedId, 'DELETE')
+              }
             }
           },
           {
@@ -421,20 +517,20 @@
     })
 
     function handleApproval(id) {
-    $.ajax({
-      url: `${apiUrl}absensisupirapprovalheader/${id}/approval`,
-      method: 'POST',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-      },
-      success: response => {
-        $('#jqGrid').trigger('reloadGrid')
-      }
-    }).always(() => {
-      $('#loader').addClass('d-none')
-    })
-  }
+      $.ajax({
+        url: `${apiUrl}absensisupirapprovalheader/${id}/approval`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
+        success: response => {
+          $('#jqGrid').trigger('reloadGrid')
+        }
+      }).always(() => {
+        $('#loader').addClass('d-none')
+      })
+    }
 
 
 

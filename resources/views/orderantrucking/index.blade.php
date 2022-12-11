@@ -112,14 +112,15 @@
           {
             label: 'STATUS LANGSIR',
             name: 'statuslangsir',
+            align: 'left',
             stype: 'select',
             searchoptions: {
               value: `<?php
                       $i = 1;
 
-                      foreach ($data['statuslangsir'] as $status) :
+                      foreach ($data['combolangsir'] as $status) :
                         echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['statuslangsir'])) {
+                        if ($i !== count($data['combolangsir'])) {
                           echo ";";
                         }
                         $i++;
@@ -134,18 +135,35 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusLangsir = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusLangsir.WARNA}; color: #fff;">
+                  <span>${statusLangsir.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusLangsir = JSON.parse(rowObject.statuslangsir)
+
+              return ` title="${statusLangsir.MEMO}"`
+            }
           },
           {
             label: 'STATUS PERALIHAN',
             name: 'statusperalihan',
+            align: 'left',
             stype: 'select',
             searchoptions: {
               value: `<?php
                       $i = 1;
 
-                      foreach ($data['statusperalihan'] as $status) :
+                      foreach ($data['comboperalihan'] as $status) :
                         echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['statusperalihan'])) {
+                        if ($i !== count($data['comboperalihan'])) {
                           echo ";";
                         }
                         $i++;
@@ -160,6 +178,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusPeralihan = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusPeralihan.WARNA}; color: #fff;">
+                  <span>${statusPeralihan.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusPeralihan = JSON.parse(rowObject.statusperalihan)
+
+              return ` title="${statusPeralihan.MEMO}"`
+            }
           },
           {
             label: 'MODIFIEDBY',
