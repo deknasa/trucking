@@ -49,6 +49,8 @@ use App\Http\Controllers\PengembalianKasBankHeaderController;
 use App\Http\Controllers\NotaKreditHeaderController;
 use App\Http\Controllers\NotaDebetHeaderController;
 
+use App\Http\Controllers\ApprovalBukaCetakController;
+
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\SubKelompokController;
 use App\Http\Controllers\SupplierController;
@@ -733,6 +735,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('approvalinvoiceheader/index', [ApprovalInvoiceHeaderController::class, 'index']);
     Route::resource('approvalinvoiceheader', ApprovalInvoiceHeaderController::class);
+    
+    Route::get('approvalbukacetak/index', [ApprovalBukaCetakController::class, 'index']);
+    Route::resource('approvalbukacetak', ApprovalBukaCetakController::class);
 
     Route::get('penerimaangiroheader/index', [PenerimaanGiroHeaderController::class, 'index']);
     Route::get('penerimaangiroheader/{id}/delete', [PenerimaanGiroHeaderController::class, 'delete'])->name('penerimaangiroheader.delete');

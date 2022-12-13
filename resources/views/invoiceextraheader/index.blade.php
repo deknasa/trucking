@@ -101,6 +101,11 @@
             align: 'left'
           },
           {
+            label: 'STATUS CETAK',
+            name: 'statusformat_text',
+            align: 'left'
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
