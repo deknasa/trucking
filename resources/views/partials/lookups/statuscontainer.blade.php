@@ -28,29 +28,67 @@
         {
           label: 'Status',
           name: 'statusaktif',
-          width: 100,
-        //   stype: 'select',
-        //   searchoptions: {
-        //     value: `<?php
-        //             $i = 1;
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS AKTIF',
+                    subgrp: 'STATUS AKTIF'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
 
-        //             foreach ($data['combo'] as $status) :
-        //             echo "$status[param]:$status[parameter]";
-        //             if ($i !== count($data['combo'])) {
-        //                 echo ";";
-        //             }
-        //             $i++;
-        //             endforeach
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
 
-        //             ?>
-        // `,
-        //     dataInit: function(element) {
-        //     $(element).select2({
-        //         width: 'resolve',
-        //         theme: "bootstrap4"
-        //     });
-        //     }
-        //  },
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusAktif = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                  <span>${statusAktif.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusAktif = JSON.parse(rowObject.statusaktif)
+
+            return ` title="${statusAktif.MEMO}"`
+          }
         },
         {
           label: 'MODIFIEDBY',

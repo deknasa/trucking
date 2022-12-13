@@ -38,8 +38,6 @@
         {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
-          align: 'left',
-          width: 100,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -47,75 +45,128 @@
                 width: 'resolve',
                 theme: "bootstrap4",
                 ajax: {
-                  url: `${apiUrl}bank/combo`,
-                  method: "get",
+                  url: `${apiUrl}parameter/combo`,
                   dataType: 'JSON',
                   headers: {
                     Authorization: `Bearer ${accessToken}`
                   },
-                  data: function () {
-                    return{
-                        search: 'status'
-                    }
+                  data: {
+                    grp: 'STATUS AKTIF',
+                    subgrp: 'STATUS AKTIF'
                   },
-                  processResults: function (data) {
-                    let datas = []
-                    $.map(data, function (item) {
-                      $.map(item, function (index,value) {
-                            $.each(index, (row, detail) => {
-                              datas.push({
-                                    id: detail.text,
-                                    text: detail.text
-                                })
-                            })
-                              
-                          })
-                        })
-                        console.log(datas)
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
                     return {
-                        results: datas
+                      results: formattedResponse
                     };
-                  }             
+                  },
                 }
               });
             }
           },
+          formatter: (value, options, rowData) => {
+            let statusAktif = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                  <span>${statusAktif.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusAktif = JSON.parse(rowObject.statusaktif)
+
+            return ` title="${statusAktif.MEMO}"`
+          }
         },
         {
           label: 'STATUS PENERIMAAN',
           name: 'statusformatpenerimaan',
-          align: 'left'
+          align: 'left',
+          formatter: (value, options, rowData) => {
+            let statusFormatPenerimaan = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusFormatPenerimaan.WARNA}; color: #fff;">
+                  <span>${statusFormatPenerimaan.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusFormatPenerimaan = JSON.parse(rowObject.statusformatpenerimaan)
+
+            return ` title="${statusFormatPenerimaan.MEMO}"`
+          }
         },
         {
           label: 'STATUS PENGELUARAN',
           name: 'statusformatpengeluaran',
-          align: 'left'
+          align: 'left',
+          formatter: (value, options, rowData) => {
+              let statusFormatPengeluaran = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusFormatPengeluaran.WARNA}; color: #fff;">
+                  <span>${statusFormatPengeluaran.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusFormatPengeluaran = JSON.parse(rowObject.statusformatpengeluaran)
+
+              return ` title="${statusFormatPengeluaran.MEMO}"`
+            }
         },
         {
           label: 'MODIFIEDBY',
           name: 'modifiedby',
           align: 'left'
         },
-          {
-            label: 'CREATEDAT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
+        {
+          label: 'CREATEDAT',
+          name: 'created_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATEDAT',
+          name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
       ],
       autowidth: true,
       responsive: true,

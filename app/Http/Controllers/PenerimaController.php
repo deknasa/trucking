@@ -16,11 +16,28 @@ class PenerimaController extends MyController
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Bank',
-            'combo' => $this->comboStatusAktif('list')
+            'comboaktif' => $this->comboList('list', 'STATUS AKTIF', 'STATUS AKTIF'),
+            'combokaryawan' => $this->comboList('list', 'STATUS KARYAWAN', 'STATUS KARYAWAN'),
         ];
 
         return view('penerima.index', compact('title','data'));
+    }
+
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
     }
 
     /**
@@ -84,19 +101,4 @@ class PenerimaController extends MyController
         }
     }
 
-    public function comboStatusAktif($aksi)
-    {
-
-        $status = [
-            'status' => $aksi,
-            'grp' => 'STATUS AKTIF',
-            'subgrp' => 'STATUS AKTIF',
-        ];
-
-        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'cabang/combostatus', $status);
-
-        return $response['data'];
-    }
 }

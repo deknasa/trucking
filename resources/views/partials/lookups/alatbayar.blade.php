@@ -37,13 +37,133 @@
         },
         {
           label: 'STATUS LANGSUNG CAIR',
-          name: 'statuslangsungcair',
-          align: 'left'
+          name: 'statuslangsunggcair',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS LANGSUNG CAIR',
+                    subgrp: 'STATUS LANGSUNG CAIR'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusLgsgCair = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusLgsgCair.WARNA}; color: #fff;">
+                  <span>${statusLgsgCair.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusLgsgCair = JSON.parse(rowObject.statuslangsunggcair)
+
+            return ` title="${statusLgsgCair.MEMO}"`
+          }
         },
         {
           label: 'STATUS DEFAULT',
           name: 'statusdefault',
-          align: 'left'
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS DEFAULT',
+                    subgrp: 'STATUS DEFAULT'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusDefault = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusDefault.WARNA}; color: #fff;">
+                  <span>${statusDefault.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusDefault = JSON.parse(rowObject.statusdefault)
+
+            return ` title="${statusDefault.MEMO}"`
+          }
         },
         {
           label: 'MODIFIEDBY',

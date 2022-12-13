@@ -64,10 +64,65 @@
           {
             label: 'status format',
             name: 'statusformat',
+            formatter: (value, options, rowData) => {
+              let statusFormat = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusFormat.WARNA}; color: #fff;">
+                  <span>${statusFormat.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusFormat = JSON.parse(rowObject.statusformat)
+
+              return ` title="${statusFormat.MEMO}"`
+            }
           },
           {
             label: 'status hitung stok',
             name: 'statushitungstok',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combohitungstok'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combohitungstok'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusHitungStok = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusHitungStok.WARNA}; color: #fff;">
+                  <span>${statusHitungStok.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusHitungStok = JSON.parse(rowObject.statushitungstok)
+
+              return ` title="${statusHitungStok.MEMO}"`
+            }
           },
           {
             label: 'modifiedby',

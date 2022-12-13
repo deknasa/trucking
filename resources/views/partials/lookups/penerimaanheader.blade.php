@@ -3,150 +3,412 @@
 
 @push('scripts')
 <script>
-$('#penerimaanHeaderLookup').jqGrid({
+  $('#penerimaanHeaderLookup').jqGrid({
       url: `{{ config('app.api_url') . 'penerimaan' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
       colModel: [{
-            label: 'ID',
-            name: 'id',
-            align: 'right',
-            width: '50px'
-          },
-          {
-            label: 'NO BUKTI',
-            name: 'nobukti',
-            align: 'left'
-          },
-          {
-            label: 'TANGGAL BUKTI',
-            name: 'tglbukti',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
+          label: 'ID',
+          name: 'id',
+          align: 'right',
+          width: '50px'
+        },
+        {
+          label: 'STATUS APPROVAL',
+          name: 'statusapproval',
+          align: 'left',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS APPROVAL',
+                    subgrp: 'STATUS APPROVAL'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
             }
           },
-          {
-            label: 'PELANGGAN ',
-            name: 'pelanggan_id',
-            align: 'left'
+          formatter: (value, options, rowData) => {
+            let statusApproval = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                  <span>${statusApproval.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
           },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
-          },
-          {
-            label: 'BANK',
-            name: 'bank_id',
-            align: 'left'
-          },
-          {
-            label: 'POSTING DARI',
-            name: 'postingdari',
-            align: 'left'
-          },
-          {
-            label: 'DITERIMA DARI',
-            name: 'diterimadari',
-            align: 'left'
-          },
-          {
-            label: 'TGL LUNAS',
-            name: 'tgllunas',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
+          cellattr: (rowId, value, rowObject) => {
+            let statusApproval = JSON.parse(rowObject.statusapproval)
+
+            return ` title="${statusApproval.MEMO}"`
+          }
+        },
+        {
+          label: 'STATUS CETAK',
+          name: 'statuscetak',
+          align: 'left',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS CETAK',
+                    subgrp: 'STATUS CETAK'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
             }
           },
-          {
-            label: 'CABANG',
-            name: 'cabang_id',
-            align: 'left'
+          formatter: (value, options, rowData) => {
+            let statusCetak = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+                  <span>${statusCetak.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
           },
-          {
-            label: 'STATUS KAS',
-            name: 'statuskas',
-            align: 'left'
-          },
-         
-          {
-            label: 'STATUS APPROVAL',
-            name: 'statusapproval',
-            align: 'left'
-          },
-          {
-            label: 'USER APPROVAL',
-            name: 'userapproval',
-            align: 'left'
-          },
-          {
-            label: 'TGL APPROVAL',
-            name: 'tglapproval',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
+          cellattr: (rowId, value, rowObject) => {
+            let statusCetak = JSON.parse(rowObject.statuscetak)
+
+            return ` title="${statusCetak.MEMO}"`
+          }
+        },
+        {
+          label: 'NO BUKTI',
+          name: 'nobukti',
+          align: 'left'
+        },
+        {
+          label: 'TANGGAL BUKTI',
+          name: 'tglbukti',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'PELANGGAN ',
+          name: 'pelanggan_id',
+          align: 'left'
+        },
+        {
+          label: 'BANK',
+          name: 'bank_id',
+          align: 'left'
+        },
+        {
+          label: 'KETERANGAN',
+          name: 'keterangan',
+          align: 'left'
+        },
+        {
+          label: 'POSTING DARI',
+          name: 'postingdari',
+          align: 'left'
+        },
+        {
+          label: 'DITERIMA DARI',
+          name: 'diterimadari',
+          align: 'left'
+        },
+        {
+          label: 'TANGGAL LUNAS',
+          name: 'tgllunas',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'CABANG',
+          name: 'cabang_id',
+          align: 'left'
+        },
+        {
+          label: 'STATUS KAS',
+          name: 'statuskas',
+          align: 'left',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS KAS',
+                    subgrp: 'STATUS KAS'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
             }
           },
-          {
-            label: 'NO RESI',
-            name: 'noresi',
-            align: 'left'
+          formatter: (value, options, rowData) => {
+            let statusKas = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusKas.WARNA}; color: #fff;">
+                  <span>${statusKas.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
           },
-         
-          {
-            label: 'STATUS BERKAS',
-            name: 'statusberkas',
-            align: 'left'
-          },
-          {
-            label: 'USER BERKAS',
-            name: 'userberkas',
-            align: 'left'
-          },
-          {
-            label: 'TGL BERKAS',
-            name: 'tglberkas',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
+          cellattr: (rowId, value, rowObject) => {
+            let statusKas = JSON.parse(rowObject.statuskas)
+
+            return ` title="${statusKas.MEMO}"`
+          }
+        },
+        {
+          label: 'USER APPROVAL',
+          name: 'userapproval',
+          align: 'left'
+        },
+        {
+          label: 'TANGGAL APPROVAL',
+          name: 'tglapproval',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'USER BUKA CETAK',
+          name: 'userbukacetak',
+          align: 'left'
+        },
+        {
+          label: 'TGL CETAK',
+          name: 'tglbukacetak',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'NO RESI',
+          name: 'noresi',
+          align: 'left'
+        },
+        {
+          label: 'STATUS BERKAS',
+          name: 'statusberkas',
+          align: 'left',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS BERKAS',
+                    subgrp: 'STATUS BERKAS'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
             }
           },
-          {
-            label: 'MODIFIEDBY',
-            name: 'modifiedby',
-            align: 'left'
+          formatter: (value, options, rowData) => {
+            let statusBerkas = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusBerkas.WARNA}; color: #fff;">
+                  <span>${statusBerkas.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
           },
-          {
-            label: 'CREATEDAT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusBerkas = JSON.parse(rowObject.statusberkas)
+
+            return ` title="${statusBerkas.MEMO}"`
+          }
+        },
+        {
+          label: 'USER BERKAS',
+          name: 'userberkas',
+          align: 'left'
+        },
+        {
+          label: 'TGL BERKAS',
+          name: 'tglberkas',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'MODIFIEDBY',
+          name: 'modifiedby',
+          align: 'left'
+        },
+        {
+          label: 'CREATEDAT',
+          name: 'created_at',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATEDAT',
+          name: 'updated_at',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
       ],
       autowidth: true,
       responsive: true,

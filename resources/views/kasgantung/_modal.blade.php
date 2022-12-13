@@ -158,6 +158,9 @@
 
   $(document).ready(function() {
 
+    $('#crudForm').autocomplete({
+      disabled: true
+    });
     $(document).on('click', "#addRow", function() {
       addRow()
     });

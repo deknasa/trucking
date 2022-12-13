@@ -87,14 +87,62 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusAktif = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                  <span>${statusAktif.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAktif = JSON.parse(rowObject.statusaktif)
+
+              return ` title="${statusAktif.MEMO}"`
+            }
           },
           {
             label: 'STATUS PENERIMAAN',
             name: 'statusformatpenerimaan',
+            formatter: (value, options, rowData) => {
+              let statusFormatPenerimaan = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusFormatPenerimaan.WARNA}; color: #fff;">
+                  <span>${statusFormatPenerimaan.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusFormatPenerimaan = JSON.parse(rowObject.statusformatpenerimaan)
+
+              return ` title="${statusFormatPenerimaan.MEMO}"`
+            }
           },
           {
             label: 'STATUS PENGELUARAN',
             name: 'statusformatpengeluaran',
+            formatter: (value, options, rowData) => {
+              let statusFormatPengeluaran = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusFormatPengeluaran.WARNA}; color: #fff;">
+                  <span>${statusFormatPengeluaran.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusFormatPengeluaran = JSON.parse(rowObject.statusformatpengeluaran)
+
+              return ` title="${statusFormatPengeluaran.MEMO}"`
+            }
           },
           {
             label: 'MODIFIEDBY',

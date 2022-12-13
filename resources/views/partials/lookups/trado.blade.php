@@ -21,6 +21,67 @@
         {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS AKTIF',
+                    subgrp: 'STATUS AKTIF'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusAktif = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                  <span>${statusAktif.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusAktif = JSON.parse(rowObject.statusaktif)
+
+            return ` title="${statusAktif.MEMO}"`
+          }
         },
         {
           label: 'KM AWAL',
@@ -94,6 +155,67 @@
         {
           label: 'STATUS STANDARISASI',
           name: 'statusstandarisasi',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS STANDARISASI',
+                    subgrp: 'STATUS STANDARISASI'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusStandarisasi = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusStandarisasi.WARNA}; color: #fff;">
+                  <span>${statusStandarisasi.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusStandarisasi = JSON.parse(rowObject.statusstandarisasi)
+
+            return ` title="${statusStandarisasi.MEMO}"`
+          }
         },
         {
           label: 'KET PROGRESS STANDARISASI',
@@ -102,6 +224,67 @@
         {
           label: 'JENIS PLAT',
           name: 'statusjenisplat',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'JENIS PLAT',
+                    subgrp: 'JENIS PLAT'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusJenisPlat = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusJenisPlat.WARNA}; color: #fff;">
+                  <span>${statusJenisPlat.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusJenisPlat = JSON.parse(rowObject.statusjenisplat)
+
+            return ` title="${statusJenisPlat.MEMO}"`
+          }
         },
         {
           label: 'TGL PAJAK STNK',
@@ -124,10 +307,132 @@
         {
           label: 'STATUS MUTASI',
           name: 'statusmutasi',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS MUTASI',
+                    subgrp: 'STATUS MUTASI'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusMutasi = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusMutasi.WARNA}; color: #fff;">
+                  <span>${statusMutasi.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusMutasi = JSON.parse(rowObject.statusmutasi)
+
+            return ` title="${statusMutasi.MEMO}"`
+          }
         },
         {
           label: 'STATUS VALIDASI KEND',
           name: 'statusvalidasikendaraan',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS VALIDASI KENDARAAN',
+                    subgrp: 'STATUS VALIDASI KENDARAAN'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusValKendaraan = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusValKendaraan.WARNA}; color: #fff;">
+                  <span>${statusValKendaraan.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusValKendaraan = JSON.parse(rowObject.statusvalidasikendaraan)
+
+            return ` title="${statusValKendaraan.MEMO}"`
+          }
         },
         {
           label: 'TIPE',
@@ -168,6 +473,67 @@
         {
           label: 'STATUS MOBIL STORING',
           name: 'statusmobilstoring',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS MOBIL STORING',
+                    subgrp: 'STATUS MOBIL STORING'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusMobilStoring = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusMobilStoring.WARNA}; color: #fff;">
+                  <span>${statusMobilStoring.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusMobilStoring = JSON.parse(rowObject.statusmobilstoring)
+
+            return ` title="${statusMobilStoring.MEMO}"`
+          }
         },
         {
           label: 'MANDOR',
@@ -180,10 +546,132 @@
         {
           label: 'STATUS BAN EDIT',
           name: 'statusappeditban',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS APPROVAL EDIT BAN',
+                    subgrp: 'STATUS APPROVAL EDIT BAN'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusAppEditBan = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAppEditBan.WARNA}; color: #fff;">
+                  <span>${statusAppEditBan.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusAppEditBan = JSON.parse(rowObject.statusappeditban)
+
+            return ` title="${statusAppEditBan.MEMO}"`
+          }
         },
         {
           label: 'STATUS LEWAT VALIDASI',
           name: 'statuslewatvalidasi',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS LEWAT VALIDASI',
+                    subgrp: 'STATUS LEWAT VALIDASI'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusLewatValidasi = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusLewatValidasi.WARNA}; color: #fff;">
+                  <span>${statusLewatValidasi.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusLewatValidasi = JSON.parse(rowObject.statuslewatvalidasi)
+
+            return ` title="${statusLewatValidasi.MEMO}"`
+          }
         },
         {
           label: 'PHOTO STNK',

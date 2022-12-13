@@ -13,12 +13,29 @@ class SupplierController extends MyController
     {
         $title = $this->title;
 
-        $combo = [
-            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
-            'statusdaftarharga' => $this->getParameter('STATUS DAFTAR HARGA', 'STATUS DAFTAR HARGA'),
+        $data = [            
+            'comboaktif' => $this->comboList('list', 'STATUS AKTIF', 'STATUS AKTIF'),
+            'combodaftarharga' => $this->comboList('list', 'STATUS DAFTAR HARGA', 'STATUS DAFTAR HARGA'),
         ];
 
-        return view('supplier.index', compact('title', 'combo'));
+        return view('supplier.index', compact('title', 'data'));
+    }
+
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
     }
 
     public function create()

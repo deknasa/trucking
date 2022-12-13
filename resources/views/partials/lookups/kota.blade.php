@@ -3,7 +3,7 @@
 
 @push('scripts')
 <script>
- $('#kotaLookup').jqGrid({
+  $('#kotaLookup').jqGrid({
       url: `{{ config('app.api_url') . 'kota' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -26,56 +26,100 @@
           align: 'left'
         },
         {
-            label: 'STATUS AKTIF',
-            name: 'statusaktif',
-            // stype: 'select',
-            // searchoptions: {
-            //   value: `<?php
-            //           $i = 1;
+          label: 'ZONA',
+          name: 'zona_id',
+          align: 'left'
+        },
+        {
+          label: 'STATUS AKTIF',
+          name: 'statusaktif',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS AKTIF',
+                    subgrp: 'STATUS AKTIF'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
 
-            //           foreach ($data['combo'] as $status) :
-            //             echo "$status[param]:$status[parameter]";
-            //             if ($i !== count($data['combo'])) {
-            //               echo ";";
-            //             }
-            //             $i++;
-            //           endforeach
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
 
-            //           ?>
-            // `,
-            //   dataInit: function(element) {
-            //     $(element).select2({
-            //       width: 'resolve',
-            //       theme: "bootstrap4"
-            //     });
-            //   }
-            // },
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusAktif = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                  <span>${statusAktif.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusAktif = JSON.parse(rowObject.statusaktif)
+
+            return ` title="${statusAktif.MEMO}"`
+          }
         },
         {
           label: 'MODIFIEDBY',
           name: 'modifiedby',
           align: 'left'
         },
-          {
-            label: 'CREATEDAT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
+        {
+          label: 'CREATEDAT',
+          name: 'created_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATEDAT',
+          name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
       ],
       autowidth: true,
       responsive: true,

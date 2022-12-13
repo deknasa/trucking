@@ -108,6 +108,44 @@
           {
             label: 'STATUSLONGTRIP',
             name: 'statuslongtrip',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combolongtrip'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combolongtrip'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusLongTrip = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusLongTrip.WARNA}; color: #fff;">
+                  <span>${statusLongTrip.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusLongTrip = JSON.parse(rowObject.statuslongtrip)
+
+              return ` title="${statusLongTrip.MEMO}"`
+            }
           },
           {
             label: 'GAJI SUPIR',
@@ -140,6 +178,44 @@
           {
             label: 'STATUS PERALIHAN',
             name: 'statusperalihan',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboperalihan'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboperalihan'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusPeralihan = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusPeralihan.WARNA}; color: #fff;">
+                  <span>${statusPeralihan.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusPeralihan = JSON.parse(rowObject.statusperalihan)
+
+              return ` title="${statusPeralihan.MEMO}"`
+            }
           },
           {
             label: 'TARIF',

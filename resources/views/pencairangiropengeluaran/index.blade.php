@@ -191,7 +191,7 @@
 
         })
 
-     
+
         // $(document).on('click', '#jqGrid_nextPageButton', function(event) {
         //     $('#jqGrid tbody tr').each(function(row, tr) {
         //         if ($(this).find(`td input:checkbox`).is(':checked')) {
@@ -253,7 +253,7 @@
                                     endforeach
 
                                     ?>
-              `,
+                            `,
                             dataInit: function(element) {
                                 $(element).select2({
                                     width: 'resolve',
@@ -261,6 +261,32 @@
                                 });
                             }
                         },
+                        formatter: (value, options, rowData) => {
+                            if (value != null) {
+
+                                let statusApproval = JSON.parse(value)
+
+                                let formattedValue = $(`
+                                    <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                                    <span>${statusApproval.SINGKATAN}</span>
+                                    </div>
+                                `)
+
+                                return formattedValue[0].outerHTML
+                            } else {
+                                let nullValue = $(`
+                                    <div> </div>
+                                `)
+
+                                return nullValue[0].outerHTML
+                            }
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusApproval = JSON.parse(rowObject.statusapproval)
+                            if(statusApproval != null){
+                                return ` title="${statusApproval.MEMO}"`
+                            }
+                        }
                     },
                     {
                         label: 'NO BUKTI',

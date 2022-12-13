@@ -71,6 +71,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusAktif = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                  <span>${statusAktif.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAktif = JSON.parse(rowObject.statusaktif)
+
+              return ` title="${statusAktif.MEMO}"`
+            }
           },
           {
             label: 'KM AWAL',
@@ -183,6 +199,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusStandarisasi = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusStandarisasi.WARNA}; color: #fff;">
+                  <span>${statusStandarisasi.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusStandarisasi = JSON.parse(rowObject.statusstandarisasi)
+
+              return ` title="${statusStandarisasi.MEMO}"`
+            }
           },
           {
             label: 'KET PROGRESS STANDARISASI',
@@ -213,6 +245,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusJenisPlat = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusJenisPlat.WARNA}; color: #fff;">
+                  <span>${statusJenisPlat.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusJenisPlat = JSON.parse(rowObject.statusjenisplat)
+
+              return ` title="${statusJenisPlat.MEMO}"`
+            }
           },
           {
             label: 'TGL PAJAK STNK',
@@ -257,6 +305,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusMutasi = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusMutasi.WARNA}; color: #fff;">
+                  <span>${statusMutasi.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusMutasi = JSON.parse(rowObject.statusmutasi)
+
+              return ` title="${statusMutasi.MEMO}"`
+            }
           },
           {
             label: 'STATUS VALIDASI KEND',
@@ -283,6 +347,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusValKendaraan = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusValKendaraan.WARNA}; color: #fff;">
+                  <span>${statusValKendaraan.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusValKendaraan = JSON.parse(rowObject.statusvalidasikendaraan)
+
+              return ` title="${statusValKendaraan.MEMO}"`
+            }
           },
           {
             label: 'TIPE',
@@ -345,6 +425,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusMobilStoring = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusMobilStoring.WARNA}; color: #fff;">
+                  <span>${statusMobilStoring.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusMobilStoring = JSON.parse(rowObject.statusmobilstoring)
+
+              return ` title="${statusMobilStoring.MEMO}"`
+            }
           },
           {
             label: 'MANDOR',
@@ -383,6 +479,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusAppEditBan = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAppEditBan.WARNA}; color: #fff;">
+                  <span>${statusAppEditBan.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAppEditBan = JSON.parse(rowObject.statusappeditban)
+
+              return ` title="${statusAppEditBan.MEMO}"`
+            }
           },
           {
             label: 'STATUS LEWAT VALIDASI',
@@ -409,6 +521,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusLewatValidasi = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusLewatValidasi.WARNA}; color: #fff;">
+                  <span>${statusLewatValidasi.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusLewatValidasi = JSON.parse(rowObject.statuslewatvalidasi)
+
+              return ` title="${statusLewatValidasi.MEMO}"`
+            }
           },
           {
             label: 'PHOTO STNK',

@@ -70,6 +70,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusAktif = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                  <span>${statusAktif.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAktif = JSON.parse(rowObject.statusaktif)
+
+              return ` title="${statusAktif.MEMO}"`
+            }
           },
 
           {
