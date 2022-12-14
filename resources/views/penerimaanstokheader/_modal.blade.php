@@ -199,7 +199,9 @@
 <script>
   let hasFormBindKeys = false
 
+
   $(document).ready(function() {
+
 
     $("#addRow").click(function() {
       addRow()
@@ -318,6 +320,7 @@
   })
 
   function kodepenerimaan(kodepenerimaan) {
+    
     $('#crudForm').find('[name=statusformat]').val(kodepenerimaan).trigger('change');
     $('#crudForm').find('[name=statusformat_id]').val(kodepenerimaan);
   }
@@ -439,7 +442,6 @@
       relatedForm.find('[name=statusformat]').append(
         new Option('-- PILIH STATUS FORMAT --', '', false, true)
       ).trigger('change')
-
       $.ajax({
         url: `${apiUrl}parameter`,
         method: 'GET',
