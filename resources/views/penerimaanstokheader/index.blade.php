@@ -35,7 +35,7 @@
   $(document).ready(function() {
 
     $('#lookup').hide()
-    
+
     $('.akunpusat-lookup').lookup({
       title: 'akun pusat Lookup',
       fileName: 'akunpusat',
@@ -46,6 +46,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.penerimaanstok-lookup').lookup({
@@ -59,9 +63,14 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
+
     })
-    
+
     $('.supplier-lookup').lookup({
       title: 'supplier Lookup',
       fileName: 'supplier',
@@ -72,6 +81,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.trado-lookup').lookup({
@@ -84,6 +97,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.gudang-lookup').lookup({
@@ -96,6 +113,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.penerimaanstokheader-lookup').lookup({
@@ -103,6 +124,13 @@
       fileName: 'penerimaanstokheader',
       onSelectRow: (penerimaan, element) => {
         element.val(penerimaan.nobukti)
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.pengeluaranstokheader-lookup').lookup({
@@ -114,6 +142,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.hutang-lookup').lookup({
@@ -125,12 +157,16 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 
     $('#crudModal').on('hidden.bs.modal', function() {
-       activeGrid = '#jqGrid'
-     })
+      activeGrid = '#jqGrid'
+    })
 
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'penerimaanstokheader' }}`,
@@ -224,7 +260,7 @@
             name: 'coa',
             align: 'left'
           },
-          
+
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
@@ -298,7 +334,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
