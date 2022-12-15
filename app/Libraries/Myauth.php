@@ -18,6 +18,8 @@ class Myauth
         'class' => [
             '',
             'dashboard',
+            'logtrail',
+            'stok',
         ],
         'method' => [
             'gridtab',

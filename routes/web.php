@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LogTrailController;
 use App\Http\Controllers\TradoController;
+use App\Http\Controllers\StokController;
 use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\SupirController;
 use App\Http\Controllers\BankController;
@@ -286,6 +287,12 @@ Route::middleware('auth')->group(function () {
     Route::get('trado/get', [TradoController::class, 'get'])->name('trado.get');
     Route::get('trado/index', [TradoController::class, 'index']);
     Route::resource('trado', TradoController::class);
+    
+    Route::get('stok/field_length', [StokController::class, 'fieldLength'])->name('stok.field_length');
+    Route::get('stok/{id}/delete', [StokController::class, 'delete'])->name('stok.delete');
+    Route::get('stok/get', [StokController::class, 'get'])->name('stok.get');
+    Route::get('stok/index', [StokController::class, 'index']);
+    Route::resource('stok', StokController::class);
 
     Route::get('logtrail/index', [LogTrailController::class, 'index']);
     Route::get('logtrail/get', [LogTrailController::class, 'get'])->name('logtrail.get');
