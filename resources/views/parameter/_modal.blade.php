@@ -125,7 +125,6 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
-
     $(document).on('click', "#addRow", function() {
       addRow()
     });
@@ -342,21 +341,33 @@
 
           let memoToArray = JSON.parse(memo)
           $.each(memoToArray, (index, detail) => {
-            
+
             let detailRow = $(`
-          <tr>
-            <td>
-                <input type="text" name="key[]" class="form-control">
-            </td>
-            <td>
-                <input type="text" name="value[]" class="form-control">
-            </td>
-            <td>
-                <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
-            </td>
-          </tr>`)
+              <tr>
+                <td>
+                    <input type="text" name="key[]" class="form-control">
+                </td>
+                <td>
+                  <div class="input-group">
+                    <input type="text" name="value[]" class="form-control">
+                    <div class="input-group-append">
+                      <span class="input-group-text form-control" id="basic-addon2">
+                      <input type="color" name="color[]" style="border:none;">
+                      </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                    <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+                </td>
+            </tr>`)
             detailRow.find(`[name="key[]"]`).val(index)
             detailRow.find(`[name="value[]"]`).val(detail)
+            if(index == 'WARNA') {
+              detailRow.find(`[name="color[]"]`).val(detail)
+            }else{
+              detailRow.find(`[name="color[]"]`).val('#e9ecef')
+            }
 
             $('#detailList tbody').append(detailRow)
           })
@@ -442,7 +453,14 @@
             </td>
 
             <td>
+              <div class="input-group">
                 <input type="text" name="value[]" class="form-control">
+                <div class="input-group-append">
+                  <span class="input-group-text form-control" id="basic-addon2">
+                  <input type="color" name="color[]" style="border:none;">
+                  </span>
+                </div>
+              </div>
             </td>
 
             <td>
@@ -455,6 +473,15 @@
     initDatepicker()
 
   }
+
+  $(document).on('input', `#detailList tbody [name="color[]"]`, function() {
+    let color = $(this).val()
+    $(this).parents('.input-group').find(`[name="value[]"`).val(color)
+    $(this).parents('.input-group').find(`[name="value[]"`).css({'color':`'${color}'`});
+    
+  })
+
+
 
   function deleteRow(row) {
     row.remove()
