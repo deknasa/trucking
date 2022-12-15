@@ -11,6 +11,7 @@ use App\Http\Controllers\ApprovalInvoiceHeaderController;
 use App\Http\Controllers\AbsenTradoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
+use App\Http\Controllers\GandenganController;
 use App\Http\Controllers\ParameterController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -195,6 +196,15 @@ Route::middleware('auth')->group(function () {
     Route::get('cabang/export', [CabangController::class, 'export'])->name('cabang.export');
     Route::get('cabang/report', [CabangController::class, 'report'])->name('cabang.report');
     Route::resource('cabang', CabangController::class);
+
+
+    Route::get('gandengan/field_length', [GandenganController::class, 'fieldLength'])->name('gandengan.field_length');
+    Route::get('gandengan/{id}/delete', [GandenganController::class, 'delete'])->name('gandengan.delete');
+    Route::get('gandengan/index', [GandenganController::class, 'index']);
+    Route::get('gandengan/get', [GandenganController::class, 'get'])->name('gandengan.get');
+    Route::get('gandengan/export', [GandenganController::class, 'export'])->name('gandengan.export');
+    Route::get('gandengan/report', [GandenganController::class, 'report'])->name('gandengan.report');
+    Route::resource('gandengan', GandenganController::class);
 
     Route::get('role/field_length', [RoleController::class, 'fieldLength'])->name('role.field_length');
     Route::get('role/{id}/delete', [RoleController::class, 'delete'])->name('role.delete');

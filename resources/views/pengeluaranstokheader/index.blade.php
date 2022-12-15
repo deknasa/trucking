@@ -46,19 +46,27 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.pengeluaranstok-lookup').lookup({
       title: 'pengeluaran stok Lookup',
       fileName: 'pengeluaranstok',
       onSelectRow: (pengeluaranstok, element) => {
-        kodepengeluaran(pengeluaranstok.statusformat)
+        kodepengeluaran(pengeluaranstok.statusformatid)
         element.val(pengeluaranstok.kodepengeluaran)
         $(`#${element[0]['name']}Id`).val(pengeluaranstok.id)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.supir-lookup').lookup({
@@ -71,6 +79,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     
@@ -84,6 +96,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.supplier-lookup').lookup({
@@ -96,6 +112,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.trado-lookup').lookup({
@@ -108,6 +128,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.gudang-lookup').lookup({
@@ -120,6 +144,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.pengeluaranstokheader-lookup').lookup({
@@ -131,6 +159,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.penerimaanstokheader-lookup').lookup({
@@ -142,6 +174,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
     $('.hutang-lookup').lookup({
@@ -153,6 +189,10 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 

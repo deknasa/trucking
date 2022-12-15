@@ -1,9 +1,10 @@
-<table id="penerimaanStokLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="penerimaanStokLookupPager"></div>
+<table id="gandenganLookup" class="lookup-grid"></table>
+<div id="gandenganLookupPager"></div>
 
+@push('scripts')
 <script>
-  $('#penerimaanStokLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'penerimaanstok' }}`,
+  $('#gandenganLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'gandengan' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -15,8 +16,8 @@
           width: '70px'
         },
         {
-          label: 'KODE PENERIMAAN',
-          name: 'kodepenerimaan',
+          label: 'KODE GANDENGAN',
+          name: 'kodegandengan',
           align: 'left',
         },
         {
@@ -25,63 +26,71 @@
           align: 'left'
         },
         {
-          label: 'COA',
-          name: 'coa',
-          align: 'left'
-        },
-        {
-          label: 'FORMAT BUKTI',
-          name: 'statusformat',
+          label: 'Status',
+          name: 'statusaktif',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS AKTIF',
+                    subgrp: 'STATUS AKTIF'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
           formatter: (value, options, rowData) => {
-            let statusFormat = JSON.parse(value)
+            let statusAktif = JSON.parse(value)
 
             let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusFormat.WARNA}; color: #fff;">
-                  <span>${statusFormat.SINGKATAN}</span>
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                  <span>${statusAktif.SINGKATAN}</span>
                 </div>
               `)
 
             return formattedValue[0].outerHTML
           },
           cellattr: (rowId, value, rowObject) => {
-            let statusFormat = JSON.parse(rowObject.statusformat)
+            let statusAktif = JSON.parse(rowObject.statusaktif)
 
-            return ` title="${statusFormat.MEMO}"`
+            return ` title="${statusAktif.MEMO}"`
           }
-        },        
-        {
-          label: 'status format text',
-          name: 'statusformattext',
-          align: 'left',
-          hidden: true
-        },
-        {
-          label: 'status format id',
-          name: 'statusformatid',
-          align: 'left',
-          hidden: true
         },
 
-        {
-          label: 'STATUS HITUNG STOK',
-          name: 'statushitungstok',
-          formatter: (value, options, rowData) => {
-            let statusHitungstok = JSON.parse(value)
-
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusHitungstok.WARNA}; color: #fff;">
-                  <span>${statusHitungstok.SINGKATAN}</span>
-                </div>
-              `)
-
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusHitungstok = JSON.parse(rowObject.statushitungstok)
-
-            return ` title="${statusHitungstok.MEMO}"`
-          }
-        },                
         {
           label: 'MODIFIEDBY',
           name: 'modifiedby',
@@ -116,12 +125,12 @@
       rownumbers: true,
       rownumWidth: 45,
       rowList: [10, 20, 50],
+      toolbar: [true, "top"],
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
-      toolbar: [true, "top"],
       page: 1,
-      pager: $('#penerimaanStokLookupPager'),
+      pager: $('#gandenganLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -150,26 +159,26 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#penerimaanStokLookup').getGridParam().reccount) {
-            indexRow = $('#penerimaanStokLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#gandenganLookup').getGridParam().reccount) {
+            indexRow = $('#gandenganLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#penerimaanStokLookup [id="${$('#penerimaanStokLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#gandenganLookup [id="${$('#gandenganLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#penerimaanStokLookup [id="${$('#penerimaanStokLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#gandenganLookup [id="${$('#gandenganLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#penerimaanStokLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#penerimaanStokLookup [id="` + $('#penerimaanStokLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#gandenganLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#gandenganLookup [id="` + $('#gandenganLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#penerimaanStokLookup').setSelection($('#penerimaanStokLookup').getDataIDs()[indexRow])
+            $('#gandenganLookup').setSelection($('#gandenganLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -184,7 +193,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupPenerimaanStok').prev().width())
+        $(this).setGridWidth($('#lookupGandengan').prev().width())
         setHighlight($(this))
       }
     })
@@ -196,9 +205,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#penerimaanStokLookup'))
+        clearGlobalSearch($('#gandenganLookup'))
       },
     })
-  loadGlobalSearch($('#penerimaanStokLookup'))
-  loadClearFilter($('#penerimaanStokLookup'))
+
+  loadGlobalSearch($('#gandenganLookup'))
+  loadClearFilter($('#gandenganLookup'))
 </script>
