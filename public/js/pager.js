@@ -2,13 +2,13 @@ function loadPagerHandler(element, grid) {
 	$(element).html(`
 		<button id="${
 			grid.getGridParam().id
-		}_firstPageButton" class="btn btn-sm btn-light mr-2">
+		}_firstPageButton" class="btn btn-sm btn-primary mr-2">
 			<span class="fas fa-angle-double-left"></span>
 		</button>
 
 		<button id="${
 			grid.getGridParam().id
-		}_previousPageButton" class="btn btn-sm btn-light">
+		}_previousPageButton" class="btn btn-sm btn-primary">
 			<span class="fas fa-angle-left"></span>
 		</button>
 		
@@ -24,13 +24,13 @@ function loadPagerHandler(element, grid) {
 
 		<button id="${
 			grid.getGridParam().id
-		}_nextPageButton" class="btn btn-sm btn-light">
+		}_nextPageButton" class="btn btn-sm btn-primary">
 			<span class="fas fa-angle-right"></span>
 		</button>
 
 		<button id="${
 			grid.getGridParam().id
-		}_lastPageButton" class="btn btn-sm btn-light ml-2">
+		}_lastPageButton" class="btn btn-sm btn-primary ml-2">
 			<span class="fas fa-angle-double-right"></span>
 		</button>
 
@@ -215,9 +215,9 @@ $.fn.customPager = function (option = {}) {
 						: ''
 					}
 				</div>
-				<div id="${pagerHandlerId}" class="col-12 col-md-4 d-flex align-items-center justify-content-center">
+				<div id="${pagerHandlerId}" class="pager-handler col-12 col-md-4 d-flex align-items-center justify-content-center">
 				</div>
-				<div id="${pagerInfoId}" class="col-12 col-md-2">
+				<div id="${pagerInfoId}" class="pager-info col-12 col-md-2">
 				</div>
 			</div>
 		</div>
