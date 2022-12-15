@@ -57,10 +57,90 @@
           {
             label: 'STATUS LANGSUNG CAIR',
             name: 'statuslangsunggcair',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combolangsungcair'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combolangsungcair'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusLangsungCair = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusLangsungCair.WARNA}; color: #fff;">
+                  <span>${statusLangsungCair.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusLangsungCair = JSON.parse(rowObject.statuslangsunggcair)
+
+              return ` title="${statusLangsungCair.MEMO}"`
+            }
           },
           {
             label: 'STATUS DEFAULT',
             name: 'statusdefault',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combodefault'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combodefault'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusDefault = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusDefault.WARNA}; color: #fff;">
+                  <span>${statusDefault.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusDefault = JSON.parse(rowObject.statusdefault)
+
+              return ` title="${statusDefault.MEMO}"`
+            }
           },
           {
             label: 'BANK',

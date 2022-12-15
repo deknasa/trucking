@@ -110,16 +110,19 @@
             width: 100,
             stype: 'select',
             searchoptions: {
-              value: `:ALL;
-              <?php
-              foreach ($combo['statusdaftarharga'] as $index => $statusdaftarharga) {
-                echo "$statusdaftarharga[text]:$statusdaftarharga[text]";
+              value: `<?php
+                      $i = 1;
 
-                if ($index < count($combo['statusdaftarharga']) - 1) {
-                  echo ';';
-                }
-              }
-              ?>`,
+                      foreach ($data['combodaftarharga'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combodaftarharga'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -127,6 +130,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusDaftarHarga = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusDaftarHarga.WARNA}; color: #fff;">
+                  <span>${statusDaftarHarga.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusDaftarHarga = JSON.parse(rowObject.statusdaftarharga)
+
+              return ` title="${statusDaftarHarga.MEMO}"`
+            }
           },
           {
             label: 'statusaktif',
@@ -134,16 +153,19 @@
             width: 100,
             stype: 'select',
             searchoptions: {
-              value: `:ALL;
-              <?php
-              foreach ($combo['statusaktif'] as $index => $statusaktif) {
-                echo "$statusaktif[text]:$statusaktif[text]";
+              value: `<?php
+                      $i = 1;
 
-                if ($index < count($combo['statusaktif']) - 1) {
-                  echo ';';
-                }
-              }
-              ?>`,
+                      foreach ($data['comboaktif'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboaktif'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -151,6 +173,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusAktif = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                  <span>${statusAktif.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAktif = JSON.parse(rowObject.statusaktif)
+
+              return ` title="${statusAktif.MEMO}"`
+            }
           },
           {
             label: 'kategoriusaha',

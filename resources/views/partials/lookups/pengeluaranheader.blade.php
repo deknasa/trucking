@@ -3,7 +3,7 @@
 
 @push('scripts')
 <script>
-$('#pengeluaranHeaderLookup').jqGrid({
+  $('#pengeluaranHeaderLookup').jqGrid({
       url: `{{ config('app.api_url') . 'pengeluaran' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -16,22 +16,154 @@ $('#pengeluaranHeaderLookup').jqGrid({
           width: '70px'
         },
         {
-          label: 'NO BUKTI',
-          name: 'nobukti',
+          label: 'STATUS APPROVAL',
+          name: 'statusapproval',
           align: 'left',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS APPROVAL',
+                    subgrp: 'STATUS APPROVAL'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusApproval = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                  <span>${statusApproval.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusApproval = JSON.parse(rowObject.statusapproval)
+
+            return ` title="${statusApproval.MEMO}"`
+          }
         },
         {
-          label: 'TGL BUKTI',
+          label: 'STATUS CETAK',
+          name: 'statuscetak',
+          align: 'left',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS CETAK',
+                    subgrp: 'STATUS CETAK'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusCetak = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+                  <span>${statusCetak.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusCetak = JSON.parse(rowObject.statuscetak)
+
+            return ` title="${statusCetak.MEMO}"`
+          }
+        },
+        {
+          label: 'NO BUKTI',
+          name: 'nobukti',
+          align: 'left'
+        },
+        {
+          label: 'TANGGAL BUKTI',
           name: 'tglbukti',
           align: 'left',
           formatter: "date",
           formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
           }
         },
         {
-          label: 'PELANGGAN',
+          label: 'PELANGGAN ',
           name: 'pelanggan_id',
           align: 'left'
         },
@@ -40,11 +172,71 @@ $('#pengeluaranHeaderLookup').jqGrid({
           name: 'keterangan',
           align: 'left'
         },
-        
         {
           label: 'STATUS JNS TRANSAKSI',
           name: 'statusjenistransaksi',
-          align: 'left'
+          align: 'left',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'JENIS TRANSAKSI',
+                    subgrp: 'JENIS TRANSAKSI'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusJnsTrans = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusJnsTrans.WARNA}; color: #fff;">
+                  <span>${statusJnsTrans.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusJnsTrans = JSON.parse(rowObject.statusjenistransaksi)
+
+            return ` title="${statusJnsTrans.MEMO}"`
+          }
         },
         {
           label: 'POSTING DARI',
@@ -52,9 +244,34 @@ $('#pengeluaranHeaderLookup').jqGrid({
           align: 'left'
         },
         {
-          label: 'STATUS APPROVAL',
-          name: 'statusapproval',
+          label: 'USER APPROVAL',
+          name: 'userapproval',
           align: 'left'
+        },
+        {
+          label: 'TGL APPROVAL',
+          name: 'tglapproval',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'USER BUKA CETAK',
+          name: 'userbukacetak',
+          align: 'left'
+        },
+        {
+          label: 'TGL CETAK',
+          name: 'tglbukacetak',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
         },
         {
           label: 'DIBAYARKAN KE',
@@ -75,7 +292,7 @@ $('#pengeluaranHeaderLookup').jqGrid({
           label: 'TRANSFER KE NO REK',
           name: 'transferkeac',
           align: 'left'
-        }, 
+        },
         {
           label: 'TRANSFER NAMA REK',
           name: 'transferkean',
@@ -91,26 +308,26 @@ $('#pengeluaranHeaderLookup').jqGrid({
           name: 'modifiedby',
           align: 'left'
         },
-          {
-            label: 'CREATEDAT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
+        {
+          label: 'CREATEDAT',
+          name: 'created_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATEDAT',
+          name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
       ],
       autowidth: true,
       responsive: true,

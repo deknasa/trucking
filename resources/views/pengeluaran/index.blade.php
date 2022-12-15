@@ -56,7 +56,7 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-              
+
               value: `<?php
                       $i = 1;
 
@@ -85,12 +85,12 @@
                   <span>${statusApproval.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
               let statusApproval = JSON.parse(rowObject.statusapproval)
-              
+
               return ` title="${statusApproval.MEMO}"`
             }
           },
@@ -100,7 +100,7 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-              
+
               value: `<?php
                       $i = 1;
 
@@ -129,15 +129,15 @@
                   <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
               let statusCetak = JSON.parse(rowObject.statuscetak)
-              
+
               return ` title="${statusCetak.MEMO}"`
             }
-          },     
+          },
           {
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -168,27 +168,43 @@
             name: 'statusjenistransaksi',
             align: 'left',
             stype: 'select',
-              searchoptions: {
-                value: `<?php
-                        $i = 1;
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
 
-                        foreach ($data['combojenistransaksi'] as $status) :
-                          echo "$status[param]:$status[parameter]";
-                          if ($i !== count($data['combojenistransaksi'])) {
-                            echo ";";
-                          }
-                          $i++;
-                        endforeach
+                      foreach ($data['combojenistransaksi'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combojenistransaksi'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
 
-                        ?>
+                      ?>
               `,
-                dataInit: function(element) {
-                  $(element).select2({
-                    width: 'resolve',
-                    theme: "bootstrap4"
-                  });
-                }
-              },
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusJnsTrans = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusJnsTrans.WARNA}; color: #fff;">
+                  <span>${statusJnsTrans.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusJnsTrans = JSON.parse(rowObject.statusjenistransaksi)
+
+              return ` title="${statusJnsTrans.MEMO}"`
+            }
           },
           {
             label: 'POSTING DARI',
@@ -244,7 +260,7 @@
             label: 'TRANSFER KE NO REK',
             name: 'transferkeac',
             align: 'left'
-          }, 
+          },
           {
             label: 'TRANSFER NAMA REK',
             name: 'transferkean',
@@ -313,7 +329,7 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
+
           if (!hasDetail) {
             loadDetailGrid(id)
             hasDetail = true
@@ -333,7 +349,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -397,7 +413,7 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
-              }else {
+              } else {
                 cekValidasi(selectedId, 'EDIT')
               }
             }
@@ -429,7 +445,7 @@
                 window.open(`{{ route('pengeluaranheader.export') }}?id=${selectedId}`)
               }
             }
-          },  
+          },
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
@@ -476,12 +492,12 @@
       .parent().addClass('px-1')
 
     $('#approval .ui-pg-div')
-    .addClass('btn btn-purple btn-sm')
-    .css({
-    'background': '#6619ff',
-    'color': '#fff'
-    })
-    .parent().addClass('px-1')
+      .addClass('btn btn-purple btn-sm')
+      .css({
+        'background': '#6619ff',
+        'color': '#fff'
+      })
+      .parent().addClass('px-1')
 
     if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
@@ -504,10 +520,8 @@
     }
 
 
-    
-  })
 
-  
+  })
 </script>
 @endpush()
 @endsection

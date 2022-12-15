@@ -543,6 +543,8 @@
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
+        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=tgllunas]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
         // $('#table_body').html('')
         $('.bank-lookup').last().lookup({
@@ -895,7 +897,7 @@
             }
         })
         initAutoNumeric(detailRow.find('.autonumeric'))
-        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
         initDatepicker()
         setRowNumbers()

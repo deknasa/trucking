@@ -28,8 +28,28 @@ class SuratPengantarController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $data = [
+            'combolongtrip' => $this->comboList('list','STATUS LONGTRIP','STATUS LONGTRIP'),
+            'comboperalihan' => $this->comboList('list','STATUS PERALIHAN','STATUS PERALIHAN'),
+        ];
+        return view('suratpengantar.index', compact('title','data'));
+    }
 
-        return view('suratpengantar.index', compact('title'));
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
     }
 
     public function get($params = [])

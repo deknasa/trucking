@@ -255,33 +255,6 @@
                         width: '50px'
                     },
                     {
-                        label: 'NO BUKTI',
-                        name: 'nobukti',
-                        align: 'left'
-                    },
-                    {
-                        label: 'TANGGAL BUKTI',
-                        name: 'tglbukti',
-                        align: 'left',
-                        formatter: "date",
-                        formatoptions: {
-                            srcformat: "ISO8601Long",
-                            newformat: "d-m-Y"
-                        }
-                    },
-                    {
-                        label: 'KETERANGAN',
-                        name: 'keterangan',
-                        align: 'left'
-                    },
-                    {
-                        label: 'NOMINAL',
-                        name: 'nominal',
-                        formatter: 'number', 
-                        formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
-                        align: "right",
-                    },
-                    {
                         label: 'STATUS APPROVAL',
                         name: 'statusapproval',
                         align: 'left',
@@ -307,6 +280,49 @@
                                 });
                             }
                         },
+                        formatter: (value, options, rowData) => {
+                            let statusApproval = JSON.parse(value)
+
+                            let formattedValue = $(`
+                                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                                <span>${statusApproval.SINGKATAN}</span>
+                                </div>
+                            `)
+
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusApproval = JSON.parse(rowObject.statusapproval)
+
+                            return ` title="${statusApproval.MEMO}"`
+                        }
+                    },
+                    {
+                        label: 'NO BUKTI',
+                        name: 'nobukti',
+                        align: 'left'
+                    },
+                    {
+                        label: 'TANGGAL BUKTI',
+                        name: 'tglbukti',
+                        align: 'left',
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
+                    },
+                    {
+                        label: 'KETERANGAN',
+                        name: 'keterangan',
+                        align: 'left'
+                    },
+                    {
+                        label: 'NOMINAL',
+                        name: 'nominal',
+                        formatter: 'number', 
+                        formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+                        align: "right",
                     },
                     {
                         label: 'USER APPROVAL',

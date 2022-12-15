@@ -62,20 +62,19 @@
             name: 'statusaktif',
             stype: 'select',
             searchoptions: {
-              value: `:ALL;<?php
-                            $i = 1;
+              value: `<?php
+                      $i = 1;
 
-                            foreach ($combo['statusaktif'] as $statusaktif) :
-                              echo "$statusaktif[text]:$statusaktif[text]";
+                      foreach ($data['comboaktif'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboaktif'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
 
-                              if ($i !== count($combo['statusaktif'])) {
-                                echo ";";
-                              }
-                              $i++;
-                            endforeach
-
-                            ?>
-            `,
+                      ?>
+              `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -83,6 +82,22 @@
                 });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusAktif = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                  <span>${statusAktif.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAktif = JSON.parse(rowObject.statusaktif)
+
+              return ` title="${statusAktif.MEMO}"`
+            }
           },
           {
             label: 'PARENT',
@@ -91,18 +106,178 @@
           {
             label: 'STATUS COA',
             name: 'statuscoa',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combocoa'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combocoa'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusCoa = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusCoa.WARNA}; color: #fff;">
+                  <span>${statusCoa.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusCoa = JSON.parse(rowObject.statuscoa)
+
+              return ` title="${statusCoa.MEMO}"`
+            }
           },
           {
             label: 'STATUS ACCOUNT PAYABLE',
             name: 'statusaccountpayable',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboaccountpayable'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboaccountpayable'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusAccPayable = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAccPayable.WARNA}; color: #fff;">
+                  <span>${statusAccPayable.SINGKATAN}</span>
+                </div>
+              `)
+              
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAccPayable = JSON.parse(rowObject.statusaccountpayable)
+              
+              return ` title="${statusAccPayable.MEMO}"`
+            }
           },
           {
             label: 'STATUS NERACA',
             name: 'statusneraca',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboneraca'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboneraca'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusNeraca = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusNeraca.WARNA}; color: #fff;">
+                  <span>${statusNeraca.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusNeraca = JSON.parse(rowObject.statusneraca)
+
+              return ` title="${statusNeraca.MEMO}"`
+            }
           },
           {
             label: 'STATUS LABA RUGI',
             name: 'statuslabarugi',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combolabarugi'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combolabarugi'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusLabaRugi = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusLabaRugi.WARNA}; color: #fff;">
+                  <span>${statusLabaRugi.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusLabaRugi = JSON.parse(rowObject.statuslabarugi)
+
+              return ` title="${statusLabaRugi.MEMO}"`
+            }
           },
           {
             label: 'COAMAIN',

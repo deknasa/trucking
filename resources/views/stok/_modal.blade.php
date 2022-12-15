@@ -1,0 +1,561 @@
+<div class="modal fade modal-fullscreen" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="#" id="crudForm">
+      <div class="modal-content">
+        <div class="modal-header bg-primary">
+          <h5 class="modal-title" id="crudModalTitle"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="" method="post">
+          <div class="modal-body">
+            <div class="row form-group">
+              <input type="hidden" name="id" hidden class="form-control" readonly>
+
+                <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                  <label>namastok <span class="text-danger">*</span> </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-10">
+                  <input type="text" name="namastok" class="form-control">
+                </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>kelompok <span class="text-danger">*</span> </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="kelompok" class="form-control kelompok-lookup">
+                <input type="text" id="kelompokId" name="kelompok_id" readonly hidden>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>subkelompok <span class="text-danger">*</span> </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="subkelompok" class="form-control subkelompok-lookup">
+                <input type="text" id="subkelompokId" name="subkelompok_id" readonly hidden>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>kategori <span class="text-danger">*</span> </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="kategori" class="form-control kategori-lookup">
+                <input type="text" id="kategoriId" name="kategori_id" readonly hidden>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>merk <span class="text-danger">*</span> </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="merk" class="form-control merk-lookup">
+                <input type="text" id="merkId" name="merk_id" readonly hidden>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>jenistrado <span class="text-danger">*</span> </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="jenistrado" class="form-control jenistrado-lookup">
+                <input type="text" id="jenistradoId" name="jenistrado_id" readonly hidden>
+              </div>
+            </div>
+            <div class="row form-group">
+
+                <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                  <label>keterangan <span class="text-danger">*</span> </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-10">
+                  <input type="text" name="keterangan" class="form-control">
+                </div>
+            </div>
+            <div class="row form-group">
+
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>qtymin <span class="text-danger">*</span> </label>
+                
+              </div>
+              <div class="col-12 col-sm-9 col-md-4">
+                <input type="text" name="qtymin"  style="text-align:right" class="form-control autonumeric" > 
+              </div>
+
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>qtymax <span class="text-danger">*</span> </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-4">
+                <input type="text" name="qtymax"  style="text-align:right" class="form-control autonumeric" > 
+              </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col">
+                  <div class="row mb-2">
+                    <div class="col">
+                      <label class="col-form-label">Upload Foto Stok</label>
+                    </div>
+                  </div>
+                  <div class="dropzone" data-field="gambar">
+                    <div class="fallback">
+                      <input name="gambar" type="file" />
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+          </div>
+          <div class="modal-footer justify-content-start">
+            <button id="btnSubmit" class="btn btn-primary">
+              <i class="fa fa-save"></i>
+              Simpan
+            </button>
+            <button class="btn btn-secondary" data-dismiss="modal">
+              <i class="fa fa-times"></i>
+              Batal
+            </button>
+          </div>
+        </form>
+      </div>
+    </form>
+  </div>
+</div>
+
+@push('scripts')
+<script>
+    Dropzone.autoDiscover = false;
+
+  let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
+  let dropzones = []
+
+  $(document).ready(function() {
+    
+    
+    
+    $(document).on('click', '.rmv', function(event) {
+      deleteRow($(this).parents('tr'))
+    })
+    
+    $('#btnSubmit').click(function(event) {
+      event.preventDefault()
+
+      let url
+      let form = $('#crudForm')
+      
+      let formData = new FormData(form[0])
+      let Id = form.find('[name=id]').val()
+
+      dropzones.forEach(dropzone => {
+        const {
+          paramName
+        } = dropzone.options
+
+        dropzone.files.forEach((file, index) => {
+          formData.append(`${paramName}[${index}]`, file)
+        })
+      })
+
+      formData.append('sortIndex', $('#jqGrid').getGridParam().sortname)
+      formData.append('sortOrder', $('#jqGrid').getGridParam().sortorder)
+      formData.append('filters', $('#jqGrid').getGridParam('postData').filters)
+      formData.append('indexRow', indexRow)
+      formData.append('page', page)
+      formData.append('limit', limit)
+
+      if (form.data('action') == 'add') {
+        url = `${apiUrl}stok`
+      } else if (form.data('action') == 'edit') {
+        url = `${apiUrl}stok/${Id}`
+        formData.append('_method', 'PATCH')
+      } else if (form.data('action') == 'delete') {
+        url = `${apiUrl}stok/${Id}`
+        formData.append('_method', 'DELETE')
+      }
+
+      $(this).attr('disabled', '')
+      $('#loader').removeClass('d-none')
+
+      $.ajax({
+        url: url,
+        method: 'POST',
+        dataType: 'JSON',
+        processData: false,
+        contentType: false,
+        data: formData,
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $('#crudForm').trigger('reset')
+          $('#crudModal').modal('hide')
+
+          id = response.data.id
+
+          $('#jqGrid').trigger('reloadGrid', {
+            page: response.data.page
+          })
+
+          dropzones.forEach(dropzone => {
+            dropzone.removeAllFiles()
+          })
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.statusText)
+          }
+        },
+      }).always(() => {
+        $('#loader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+    })
+  })
+  function kodepengeluaran(kodepengeluaran){
+    $('#crudForm').find('[name=statusformat]').val(kodepengeluaran).trigger('change');
+    $('#crudForm').find('[name=statusformat_id]').val(kodepengeluaran);
+  }
+    
+    $('#crudModal').on('shown.bs.modal', () => {
+      let form = $('#crudForm')
+      
+      setFormBindKeys(form)
+      
+      activeGrid = null
+      initDatepicker()
+      initLookup()
+      initAutoNumeric(form.find(`[name="qtymin[]"]`))
+      initAutoNumeric(form.find(`[name="qtymax[]"]`))
+    // getMaxLength(form)
+  })
+
+  $('#crudModal').on('hidden.bs.modal', () => {
+    $('#crudModal').find('.modal-body').html(modalBody)
+
+    activeGrid = '#jqGrid'
+  })
+
+
+  function createStok() {
+    
+    let form = $('#crudForm')
+
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Simpan
+    `)
+    form.data('action', 'add')
+    form.find(`.sometimes`).show()
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
+
+    $('#crudModalTitle').text('Create Stok')
+    $('#crudModal').modal('show')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+    setStatusFormatOptions(form)
+    initDropzone(form.data('action'))
+  }
+
+  function editStok(stokId) {
+    let form = $('#crudForm')
+
+    form.data('action', 'edit')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+    <i class="fa fa-save"></i>
+    Simpan
+  `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('Edit Pengeluaran Stok')
+    $('#crudModal').modal('show')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setStatusFormatOptions(form)
+      ])
+      .then(() => {
+        showStok(form, stokId)
+        .then((stok) => {
+          initDropzone(form.data('action'), stok)
+        })
+      })
+  }
+
+  function deleteStok(stokId) {
+    let form = $('#crudForm')
+
+    form.data('action', 'delete')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+    <i class="fa fa-save"></i>
+    Hapus
+  `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('Delete Pengeluaran Stok')
+    $('#crudModal').modal('show')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setStatusFormatOptions(form)
+      ])
+      .then(() => {
+        showStok(form, stokId)
+        .then((stok) => {
+          initDropzone(form.data('action'), stok)
+        })
+      })
+  }
+
+  function getMaxLength(form) {
+    if (!form.attr('has-maxlength')) {
+      $.ajax({
+        url: `${apiUrl}stok/field_length`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            if (value !== null && value !== 0 && value !== undefined) {
+              form.find(`[name=${index}]`).attr('maxlength', value)
+            }
+          })
+
+          form.attr('has-maxlength', true)
+        },
+        error: error => {
+          showDialog(error.statusText)
+        }
+      })
+    }
+  }
+
+  const setStatusFormatOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusformat]').empty()
+      relatedForm.find('[name=statusformat]').append(
+        new Option('-- PILIH STATUS FORMAT --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "PENGELUARAN STOK"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusAktif => {
+            let option = new Option(statusAktif.text, statusAktif.id)
+
+            relatedForm.find('[name=statusformat]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+
+
+  function showStok(form, stokId) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}stok/${stokId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`).not(':file')
+
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            } else if (element.hasClass('autonumeric')) {
+              initAutoNumeric(element)
+              element.val(value)
+              // let autoNumericInput = AutoNumeric.getAutoNumericElement(element[0])
+              // autoNumericInput.set(value)
+            } else {
+              element.val(value)
+            }
+          })
+          resolve(response.data)
+
+        }
+      })
+    })
+      
+  }
+
+  function initDropzone(action, data = null) {
+    $('.dropzone').each((index, element) => {
+      if (!element.dropzone) {
+        let newDropzone = new Dropzone(element, {
+          url: 'test',
+          autoProcessQueue: false,
+          addRemoveLinks: true,
+          acceptedFiles: 'image/*',
+          paramName: $(element).data('field'),
+          init: function() {
+            dropzones.push(this)
+          }
+        })
+      }
+
+      element.dropzone.removeAllFiles()
+
+      if (action == 'edit' || action == 'delete') {
+        assignAttachment(element.dropzone, data)
+      }
+    })
+  }
+
+  function assignAttachment(dropzone, data) {
+    const paramName = dropzone.options.paramName
+    const type = paramName.substring(5)
+
+    let files = JSON.parse(data[paramName])
+
+    files.forEach((file) => {
+      getImgURL(`${apiUrl}stok/${file}/ori`, (fileBlob) => {
+        let imageFile = new File([fileBlob], file, {
+          type: 'image/jpeg',
+          lastModified: new Date().getTime()
+        }, 'utf-8')
+
+        dropzone.options.addedfile.call(dropzone, imageFile);
+        dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}stok/${file}/ori`);
+        dropzone.files.push(imageFile)
+      })
+    })
+  }
+  function initLookup() {
+
+    $('.jenistrado-lookup').lookup({
+      title: 'jenistrado Lookup',
+      fileName: 'jenistrado',
+      onSelectRow: (jenistrado, element) => {
+        element.val(jenistrado.kodejenistrado)
+        $(`#${element[0]['name']}Id`).val(jenistrado.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+      
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.merk-lookup').lookup({
+      title: 'merk Lookup',
+      fileName: 'merk',
+      onSelectRow: (merk, element) => {
+        element.val(merk.kodemerk)
+        $(`#${element[0]['name']}Id`).val(merk.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+      
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.kelompok-lookup').lookup({
+      title: 'kelompok Lookup',
+      fileName: 'kelompok',
+      onSelectRow: (kelompok, element) => {
+        element.val(kelompok.kodekelompok)
+        $(`#${element[0]['name']}Id`).val(kelompok.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+      
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.subkelompok-lookup').lookup({
+      title: 'subkelompok Lookup',
+      fileName: 'subkelompok',
+      onSelectRow: (subkelompok, element) => {
+        element.val(subkelompok.kodesubkelompok)
+        $(`#${element[0]['name']}Id`).val(subkelompok.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+      
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.kategori-lookup').lookup({
+      title: 'kategori Lookup',
+      fileName: 'kategori',
+      onSelectRow: (kategori, element) => {
+        element.val(kategori.kodekategori)
+        $(`#${element[0]['name']}Id`).val(kategori.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+      
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+  }
+  function getImgURL(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      console.log(xhr.response);
+      callback(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
+  }
+</script>
+@endpush()

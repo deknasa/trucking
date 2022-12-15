@@ -30,15 +30,57 @@
           align: 'left'
         },
         {
-          label: 'status format',
+          label: 'FORMAT BUKTI',
           name: 'statusformat',
-          align: 'left'
+          formatter: (value, options, rowData) => {
+            let statusFormat = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusFormat.WARNA}; color: #fff;">
+                  <span>${statusFormat.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusFormat = JSON.parse(rowObject.statusformat)
+
+            return ` title="${statusFormat.MEMO}"`
+          }
+        },        
+        {
+          label: 'status format text',
+          name: 'statusformattext',
+          align: 'left',
+          hidden: true
         },
         {
-          label: 'status hitung stok',
+          label: 'status format id',
+          name: 'statusformatid',
+          align: 'left',
+          hidden: true
+        },        
+        {
+          label: 'STATUS HITUNG STOK',
           name: 'statushitungstok',
-          align: 'left'
-        },
+          formatter: (value, options, rowData) => {
+            let statusHitungstok = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusHitungstok.WARNA}; color: #fff;">
+                  <span>${statusHitungstok.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusHitungstok = JSON.parse(rowObject.statushitungstok)
+
+            return ` title="${statusHitungstok.MEMO}"`
+          }
+        },     
         {
           label: 'MODIFIEDBY',
           name: 'modifiedby',

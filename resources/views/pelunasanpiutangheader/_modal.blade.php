@@ -193,7 +193,7 @@
         let nominal = $(this).closest("tr").find(`[name="nominal[]"]`).val()
         nominal = parseFloat(nominal.replaceAll(',', ''));
         let totalSisa = nominal - bayar
-        console.log(totalSisa)
+        
         $(this).closest("tr").find(".sisa").html(totalSisa)
       } else {
         let totalSisa = sisa - bayar
@@ -294,7 +294,7 @@
 
 
       $('#table_body tr').each(function(row, tr) {
-        // console.log(row);
+       
 
         if ($(this).find(`[name="piutang_id[]"]`).is(':checked')) {
 
@@ -325,9 +325,6 @@
 
         }
       })
-      // console.log(typeof(data))
-
-      // console.log(detailData);
 
       data.push({
         name: 'sortIndex',
@@ -354,7 +351,6 @@
         value: limit
       })
 
-      console.log(data);
 
       switch (action) {
         case 'add':

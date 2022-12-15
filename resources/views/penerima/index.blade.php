@@ -61,9 +61,9 @@
               value: `<?php
                       $i = 1;
 
-                      foreach ($data['combo'] as $status) :
+                      foreach ($data['comboaktif'] as $status) :
                       echo "$status[param]:$status[parameter]";
-                      if ($i !== count($data['combo'])) {
+                      if ($i !== count($data['comboaktif'])) {
                           echo ";";
                       }
                       $i++;
@@ -78,10 +78,65 @@
               });
               }
             },
+            formatter: (value, options, rowData) => {
+              let statusAktif = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                  <span>${statusAktif.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAktif = JSON.parse(rowObject.statusaktif)
+
+              return ` title="${statusAktif.MEMO}"`
+            }
           },
           {
             label: 'status karyawan',
             name: 'statuskaryawan',
+            width: 100,
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combokaryawan'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combokaryawan'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusKaryawan = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusKaryawan.WARNA}; color: #fff;">
+                  <span>${statusKaryawan.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusKaryawan = JSON.parse(rowObject.statuskaryawan)
+              console.log(rowObject)
+              return ` title="${statusKaryawan.MEMO}"`
+            }
           },
           {
             label: 'MODIFIEDBY',

@@ -11,6 +11,7 @@ use App\Http\Controllers\ApprovalInvoiceHeaderController;
 use App\Http\Controllers\AbsenTradoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
+use App\Http\Controllers\GandenganController;
 use App\Http\Controllers\ParameterController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -27,6 +28,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LogTrailController;
 use App\Http\Controllers\TradoController;
+use App\Http\Controllers\StokController;
 use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\SupirController;
 use App\Http\Controllers\BankController;
@@ -48,6 +50,8 @@ use App\Http\Controllers\PengembalianKasBankDetailController;
 use App\Http\Controllers\PengembalianKasBankHeaderController;
 use App\Http\Controllers\NotaKreditHeaderController;
 use App\Http\Controllers\NotaDebetHeaderController;
+
+use App\Http\Controllers\ApprovalBukaCetakController;
 
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\SubKelompokController;
@@ -194,6 +198,15 @@ Route::middleware('auth')->group(function () {
     Route::get('cabang/report', [CabangController::class, 'report'])->name('cabang.report');
     Route::resource('cabang', CabangController::class);
 
+
+    Route::get('gandengan/field_length', [GandenganController::class, 'fieldLength'])->name('gandengan.field_length');
+    Route::get('gandengan/{id}/delete', [GandenganController::class, 'delete'])->name('gandengan.delete');
+    Route::get('gandengan/index', [GandenganController::class, 'index']);
+    Route::get('gandengan/get', [GandenganController::class, 'get'])->name('gandengan.get');
+    Route::get('gandengan/export', [GandenganController::class, 'export'])->name('gandengan.export');
+    Route::get('gandengan/report', [GandenganController::class, 'report'])->name('gandengan.report');
+    Route::resource('gandengan', GandenganController::class);
+
     Route::get('role/field_length', [RoleController::class, 'fieldLength'])->name('role.field_length');
     Route::get('role/{id}/delete', [RoleController::class, 'delete'])->name('role.delete');
     Route::get('role/getroleid', [RoleController::class, 'getroleid']);
@@ -274,6 +287,12 @@ Route::middleware('auth')->group(function () {
     Route::get('trado/get', [TradoController::class, 'get'])->name('trado.get');
     Route::get('trado/index', [TradoController::class, 'index']);
     Route::resource('trado', TradoController::class);
+    
+    Route::get('stok/field_length', [StokController::class, 'fieldLength'])->name('stok.field_length');
+    Route::get('stok/{id}/delete', [StokController::class, 'delete'])->name('stok.delete');
+    Route::get('stok/get', [StokController::class, 'get'])->name('stok.get');
+    Route::get('stok/index', [StokController::class, 'index']);
+    Route::resource('stok', StokController::class);
 
     Route::get('logtrail/index', [LogTrailController::class, 'index']);
     Route::get('logtrail/get', [LogTrailController::class, 'get'])->name('logtrail.get');
@@ -733,6 +752,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('approvalinvoiceheader/index', [ApprovalInvoiceHeaderController::class, 'index']);
     Route::resource('approvalinvoiceheader', ApprovalInvoiceHeaderController::class);
+    
+    Route::get('approvalbukacetak/index', [ApprovalBukaCetakController::class, 'index']);
+    Route::resource('approvalbukacetak', ApprovalBukaCetakController::class);
 
     Route::get('penerimaangiroheader/index', [PenerimaanGiroHeaderController::class, 'index']);
     Route::get('penerimaangiroheader/{id}/delete', [PenerimaanGiroHeaderController::class, 'delete'])->name('penerimaangiroheader.delete');

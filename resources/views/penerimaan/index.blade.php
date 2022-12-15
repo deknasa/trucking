@@ -17,8 +17,6 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('penerimaanheader.index') }}"
-  let getUrl = "{{ route('penerimaanheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -56,7 +54,7 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-              
+
               value: `<?php
                       $i = 1;
 
@@ -85,12 +83,12 @@
                   <span>${statusApproval.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
               let statusApproval = JSON.parse(rowObject.statusapproval)
-              
+
               return ` title="${statusApproval.MEMO}"`
             }
           },
@@ -99,41 +97,41 @@
             name: 'statuscetak',
             align: 'left',
             stype: 'select',
-              searchoptions: {
-                value: `<?php
-                        $i = 1;
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
 
-                        foreach ($data['combocetak'] as $status) :
-                          echo "$status[param]:$status[parameter]";
-                          if ($i !== count($data['combocetak'])) {
-                            echo ";";
-                          }
-                          $i++;
-                        endforeach
+                      foreach ($data['combocetak'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combocetak'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
 
-                        ?>
+                      ?>
               `,
-                dataInit: function(element) {
-                  $(element).select2({
-                    width: 'resolve',
-                    theme: "bootstrap4"
-                  });
-                }
-              },
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
             formatter: (value, options, rowData) => {
               let statusCetak = JSON.parse(value)
 
               let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
-                  <span>${statusCetak.SINGKATAN}</span>
+                <div class="badge" style="background-color: ${statuscetak.WARNA}; color: #fff;">
+                  <span>${statuscetak.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
               let statusCetak = JSON.parse(rowObject.statuscetak)
-              
+
               return ` title="${statusCetak.MEMO}"`
             }
           },
@@ -197,27 +195,43 @@
             name: 'statuskas',
             align: 'left',
             stype: 'select',
-              searchoptions: {
-                value: `<?php
-                        $i = 1;
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
 
-                        foreach ($data['combokas'] as $status) :
-                          echo "$status[param]:$status[parameter]";
-                          if ($i !== count($data['combokas'])) {
-                            echo ";";
-                          }
-                          $i++;
-                        endforeach
+                      foreach ($data['combokas'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combokas'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
 
-                        ?>
+                      ?>
               `,
-                dataInit: function(element) {
-                  $(element).select2({
-                    width: 'resolve',
-                    theme: "bootstrap4"
-                  });
-                }
-              },
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusKas = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusKas.WARNA}; color: #fff;">
+                  <span>${statusKas.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusKas = JSON.parse(rowObject.statuskas)
+
+              return ` title="${statusKas.MEMO}"`
+            }
           },
           {
             label: 'USER APPROVAL',
@@ -259,27 +273,43 @@
             name: 'statusberkas',
             align: 'left',
             stype: 'select',
-              searchoptions: {
-                value: `<?php
-                        $i = 1;
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
 
-                        foreach ($data['comboberkas'] as $status) :
-                          echo "$status[param]:$status[parameter]";
-                          if ($i !== count($data['comboberkas'])) {
-                            echo ";";
-                          }
-                          $i++;
-                        endforeach
+                      foreach ($data['comboberkas'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboberkas'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
 
-                        ?>
+                      ?>
               `,
-                dataInit: function(element) {
-                  $(element).select2({
-                    width: 'resolve',
-                    theme: "bootstrap4"
-                  });
-                }
-              },
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusBerkas = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusBerkas.WARNA}; color: #fff;">
+                  <span>${statusBerkas.SINGKATAN}</span>
+                </div>
+              `)
+              
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusBerkas = JSON.parse(rowObject.statusberkas)
+              
+              return ` title="${statusBerkas.MEMO}"`
+            }
           },
           {
             label: 'USER BERKAS',
@@ -354,7 +384,7 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
+
           if (!hasDetail) {
             loadDetailGrid(id)
             hasDetail = true
@@ -374,7 +404,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch()
@@ -438,7 +468,7 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
-              }else {
+              } else {
                 cekValidasi(selectedId, 'EDIT')
               }
             }
@@ -470,7 +500,7 @@
                 window.open(`{{ route('penerimaanheader.export') }}?id=${selectedId}`)
               }
             }
-          },  
+          },
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
@@ -536,10 +566,8 @@
       $('#report').attr('disabled', 'disabled')
     }
 
-    
-  })
 
-  
+  })
 </script>
 @endpush()
 @endsection

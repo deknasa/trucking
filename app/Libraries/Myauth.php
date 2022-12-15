@@ -17,8 +17,9 @@ class Myauth
     private $exceptAuth = [
         'class' => [
             '',
-            'jurnalumumpusatheader',
-            'dashboard'
+            'dashboard',
+            'logtrail',
+            'stok',
         ],
         'method' => [
             'gridtab',

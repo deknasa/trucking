@@ -30,9 +30,31 @@ class AlatBayarController extends MyController
     {
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
-
-        return view('alatbayar.index', compact('title', 'breadcrumb'));
+        $data = [
+            'combolangsungcair' => $this->comboList('list', 'STATUS LANGSUNG CAIR', 'STATUS LANGSUNG CAIR'),
+            'combodefault' => $this->comboList('list', 'STATUS DEFAULT', 'STATUS DEFAULT'),
+        ];
+        return view('alatbayar.index', compact('title', 'breadcrumb','data'));
     }
+
+    
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
+    }
+
 
     public function get($params = [])
     {

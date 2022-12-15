@@ -98,6 +98,10 @@
 
   $(document).ready(function() {
 
+    $('#crudForm').autocomplete({
+      disabled: true
+    });
+    
     $(document).on('click', "#addRow", function() {
       addRow()
     });
@@ -148,7 +152,7 @@
         name: 'limit',
         value: limit
       })
-      console.log(data)
+
       switch (action) {
         case 'add':
           method = 'POST'
@@ -183,7 +187,6 @@
 
 
           id = response.data.id
-          console.log(id)
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
 

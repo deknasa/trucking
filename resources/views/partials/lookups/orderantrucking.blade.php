@@ -3,7 +3,7 @@
 
 @push('scripts')
 <script>
-   $('#orderanTruckingLookup').jqGrid({
+  $('#orderanTruckingLookup').jqGrid({
       url: `{{ config('app.api_url') . 'orderantrucking' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -16,99 +16,221 @@
           width: '70px'
         },
         {
-            label: 'NO BUKTI',
-            name: 'nobukti',
-          },
-          {
-            label: 'TGL BUKTI',
-            name: 'tglbukti',
-          },
-          {
-            label: 'CONTAINER',
-            name: 'container_id',
-          },
-          {
-            label: 'AGEN',
-            name: 'agen_id',
-          },
-          {
-            label: 'JENIS ORDER',
-            name: 'jenisorder_id',
-          },
-          {
-            label: 'PELANGGAN',
-            name: 'pelanggan_id',
-          },
-          {
-            label: 'TUJUAN',
-            name: 'tarif_id',
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
+          label: 'NO BUKTI',
+          name: 'nobukti',
+        },
+        {
+          label: 'TGL BUKTI',
+          name: 'tglbukti',
+        },
+        {
+          label: 'CONTAINER',
+          name: 'container_id',
+        },
+        {
+          label: 'AGEN',
+          name: 'agen_id',
+        },
+        {
+          label: 'JENIS ORDER',
+          name: 'jenisorder_id',
+        },
+        {
+          label: 'PELANGGAN',
+          name: 'pelanggan_id',
+        },
+        {
+          label: 'TUJUAN',
+          name: 'tarif_id',
+        },
+        {
+          label: 'NOMINAL',
+          name: 'nominal',
+          align: 'right',
+          formatter: 'currency',
+          formatoptions: {
+            decimalSeparator: ',',
+            thousandsSeparator: '.'
+          }
+        },
+        {
+          label: 'NO JOBEMKL',
+          name: 'nojobemkl',
+        },
+        {
+          label: 'NO CONT',
+          name: 'nocont',
+        },
+        {
+          label: 'NO SEAL',
+          name: 'noseal',
+        },
+        {
+          label: 'NO JOBEMKL',
+          name: 'nojobemkl2',
+        },
+        {
+          label: 'NO CONT',
+          name: 'nocont2',
+        },
+        {
+          label: 'NO SEAL',
+          name: 'noseal2',
+        },
+        {
+          label: 'STATUS LANGSIR',
+          name: 'statuslangsir',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS LANGSIR',
+                    subgrp: 'STATUS LANGSIR'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
             }
           },
-          {
-            label: 'NO JOBEMKL',
-            name: 'nojobemkl',
+          formatter: (value, options, rowData) => {
+            let statusLangsir = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusLangsir.WARNA}; color: #fff;">
+                  <span>${statusLangsir.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
           },
-          {
-            label: 'NO CONT',
-            name: 'nocont',
-          },
-          {
-            label: 'NO SEAL',
-            name: 'noseal',
-          },
-          {
-            label: 'NO JOBEMKL',
-            name: 'nojobemkl2',
-          },
-          {
-            label: 'NO CONT',
-            name: 'nocont2',
-          },
-          {
-            label: 'NO SEAL',
-            name: 'noseal2',
-          },
-          {
-            label: 'STATUS LANGSIR',
-            name: 'statuslangsir',
-          },
-          {
-            label: 'STATUS PERALIHAN',
-            name: 'statusperalihan',
-          },
-          {
-            label: 'MODIFIEDBY',
-            name: 'modifiedby',
-          },
-          {
-            label: 'CREATEDAT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
+          cellattr: (rowId, value, rowObject) => {
+            let statusLangsir = JSON.parse(rowObject.statuslangsir)
+
+            return ` title="${statusLangsir.MEMO}"`
+          }
+        },
+        {
+          label: 'STATUS PERALIHAN',
+          name: 'statusperalihan',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS PERALIHAN',
+                    subgrp: 'STATUS PERALIHAN'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
             }
           },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
+          formatter: (value, options, rowData) => {
+            let statusPeralihan = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusPeralihan.WARNA}; color: #fff;">
+                  <span>${statusPeralihan.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
           },
+          cellattr: (rowId, value, rowObject) => {
+            let statusPeralihan = JSON.parse(rowObject.statusperalihan)
+
+            return ` title="${statusPeralihan.MEMO}"`
+          }
+        },
+        {
+          label: 'MODIFIEDBY',
+          name: 'modifiedby',
+        },
+        {
+          label: 'CREATEDAT',
+          name: 'created_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATEDAT',
+          name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
       ],
       autowidth: true,
       responsive: true,

@@ -25,16 +25,34 @@ class AkunPusatController extends MyController
     {
         $title = $this->title;
 
-        $combo = [
-            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
+        $data = [
+            'comboaktif' => $this->comboList('list', 'STATUS AKTIF', 'STATUS AKTIF'),
+            'combocoa' => $this->comboList('list', 'STATUS COA', 'STATUS COA'),
+            'comboaccountpayable' => $this->comboList('list', 'STATUS ACCOUNT PAYABLE', 'STATUS ACCOUNT PAYABLE'),
+            'comboneraca' => $this->comboList('list', 'STATUS NERACA', 'STATUS NERACA'),
+            'combolabarugi' => $this->comboList('list', 'STATUS LABA RUGI', 'STATUS LABA RUGI'),
         ];
 
-        return view('akunpusat.index', compact('title', 'combo'));
+        return view('akunpusat.index', compact('title', 'data'));
     }
 
-    /**
-     * @ClassName
-     */
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
+    }
+
     public function create()
     {
         $title = $this->title;

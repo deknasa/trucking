@@ -163,6 +163,22 @@
                   });
                 }
               },
+            formatter: (value, options, rowData) => {
+              let statusPosting = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusPosting.WARNA}; color: #fff;">
+                  <span>${statusPosting.SINGKATAN}</span>
+                </div>
+              `)
+              
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusPosting = JSON.parse(rowObject.statusposting)
+              
+              return ` title="${statusPosting.MEMO}"`
+            }
           },
           {
             label: 'COA',

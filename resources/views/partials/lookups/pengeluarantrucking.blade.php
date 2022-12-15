@@ -3,7 +3,7 @@
 
 @push('scripts')
 <script>
-$('#pengeluaranTruckingLookup').jqGrid({
+  $('#pengeluaranTruckingLookup').jqGrid({
       url: `{{ config('app.api_url') . 'pengeluarantrucking' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -33,33 +33,48 @@ $('#pengeluaranTruckingLookup').jqGrid({
         {
           label: 'FORMAT BUKTI',
           name: 'statusformat',
-          align: 'left',
+          formatter: (value, options, rowData) => {
+            let statusFormat = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusFormat.WARNA}; color: #fff;">
+                  <span>${statusFormat.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusFormat = JSON.parse(rowObject.statusformat)
+
+            return ` title="${statusFormat.MEMO}"`
+          }
         },
         {
           label: 'MODIFIEDBY',
           name: 'modifiedby',
           align: 'left'
         },
-          {
-            label: 'CREATEDAT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
+        {
+          label: 'CREATEDAT',
+          name: 'created_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATEDAT',
+          name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
       ],
       autowidth: true,
       responsive: true,
@@ -149,10 +164,10 @@ $('#pengeluaranTruckingLookup').jqGrid({
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-          clearGlobalSearch($('#pengeluaranTruckingLookup'))
+        clearGlobalSearch($('#pengeluaranTruckingLookup'))
       },
     })
 
-    loadGlobalSearch($('#pengeluaranTruckingLookup'))
-    loadClearFilter($('#pengeluaranTruckingLookup'))
+  loadGlobalSearch($('#pengeluaranTruckingLookup'))
+  loadClearFilter($('#pengeluaranTruckingLookup'))
 </script>

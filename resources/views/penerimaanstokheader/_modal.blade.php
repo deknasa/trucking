@@ -144,7 +144,7 @@
               </div>
             </div>
 
-           
+
 
             <div class="table-responsive">
               <table class="table table-bordered table-bindkeys" style="width: 2000px;">
@@ -199,7 +199,9 @@
 <script>
   let hasFormBindKeys = false
 
+
   $(document).ready(function() {
+
 
     $("#addRow").click(function() {
       addRow()
@@ -318,6 +320,7 @@
   })
 
   function kodepenerimaan(kodepenerimaan) {
+
     $('#crudForm').find('[name=statusformat]').val(kodepenerimaan).trigger('change');
     $('#crudForm').find('[name=statusformat_id]').val(kodepenerimaan);
   }
@@ -439,7 +442,6 @@
       relatedForm.find('[name=statusformat]').append(
         new Option('-- PILIH STATUS FORMAT --', '', false, true)
       ).trigger('change')
-
       $.ajax({
         url: `${apiUrl}parameter`,
         method: 'GET',
@@ -523,7 +525,12 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
+
     })
     initAutoNumeric($(`.number${index}`))
 
@@ -587,7 +594,7 @@
         sum = 0;
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
-           if (element.attr("name") == 'tglbukti') {
+          if (element.attr("name") == 'tglbukti') {
             var result = value.split('-');
             element.val(result[2] + '-' + result[1] + '-' + result[0]);
           } else {

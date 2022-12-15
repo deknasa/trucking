@@ -13,8 +13,28 @@ class PenerimaanStokController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $data = [
+            'combohitungstok' => $this->comboList('list','STATUS HITUNG STOK','STATUS HITUNG STOK')
+        ];
 
-        return view('penerimaanstok.index', compact('title'));
+        return view('penerimaanstok.index', compact('title','data'));
+    }
+
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
     }
 
     /**
