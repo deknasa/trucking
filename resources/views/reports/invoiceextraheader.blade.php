@@ -24,7 +24,8 @@
       var report = new Stimulsoft.Report.StiReport()
       
       var statuscetak = invoiceextraheaders.statuscetak
-      if (statuscetak == 69) {
+      var sudahcetak = invoiceextraheaders['combo']['id']
+      if (statuscetak == sudahcetak) {
         viewerOptions.toolbar.showPrintButton = false;
         viewerOptions.toolbar.showSaveButton = false;
         viewerOptions.toolbar.showOpenButton = false;
@@ -82,7 +83,6 @@
             Authorization: `Bearer {{ session('access_token') }}`
           },
           success: response => {
-            console.log(response);
             location.reload();
           }
     
@@ -96,7 +96,8 @@
   <script type="text/javascript">
     $( document ).ready(function() {
       var statuscetak = invoiceextraheaders.statuscetak
-      if (statuscetak == 69) {
+      var sudahcetak = invoiceextraheaders['combo']['id']
+      if (statuscetak == sudahcetak) {
         $(document).on('keydown', function(e) { 
           if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
             alert("Document SUdah Pernah Dicetak ");

@@ -56,7 +56,7 @@
                     jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
                 },
                 loadComplete: function() {
-
+                    initResize($(this))
                 }
             })
 
