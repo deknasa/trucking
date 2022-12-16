@@ -195,57 +195,57 @@
         name: 'limit',
         value: limit
       })
-      $('#table_body tr').each(function(row, tr){ 
+      // $('#table_body tr').each(function(row, tr){ 
 
-        if($(this).find(`[name="pelunasanpiutangdetail_id[]"]`).is(':checked')) {
-          data.push({
-            name: 'pelunasanpiutangdetail_id[]',
-            value: $(this).find(`[name="pelunasanpiutangdetail_id[]"]`).val()
-          })
-          data.push({
-            name: 'deatail_nobukti_pelunasan[]',
-            value: $(this).find(`[name="deatail_nobukti_pelunasan[]"]`).val()
-          })
+      //   if($(this).find(`[name="pelunasanpiutangdetail_id[]"]`).is(':checked')) {
+      //     data.push({
+      //       name: 'pelunasanpiutangdetail_id[]',
+      //       value: $(this).find(`[name="pelunasanpiutangdetail_id[]"]`).val()
+      //     })
+      //     data.push({
+      //       name: 'deatail_nobukti_pelunasan[]',
+      //       value: $(this).find(`[name="deatail_nobukti_pelunasan[]"]`).val()
+      //     })
           
-          data.push({
-            name: 'deatail_tglcair_pelunasan[]',
-            value: $(this).find(`[name="deatail_tglcair_pelunasan[]"]`).val()
-          })
+      //     data.push({
+      //       name: 'deatail_tglcair_pelunasan[]',
+      //       value: $(this).find(`[name="deatail_tglcair_pelunasan[]"]`).val()
+      //     })
           
-          data.push({
-            name: 'deatail_coapenyesuaian_pelunasan[]',
-            value: $(this).find(`[name="deatail_coapenyesuaian_pelunasan[]"]`).val()
-          })
+      //     data.push({
+      //       name: 'deatail_coapenyesuaian_pelunasan[]',
+      //       value: $(this).find(`[name="deatail_coapenyesuaian_pelunasan[]"]`).val()
+      //     })
           
-          data.push({
-            name: 'deatail_nominal_pelunasan[]',
-            value: $(this).find(`[name="deatail_nominal_pelunasan[]"]`).val()
-          })
+      //     data.push({
+      //       name: 'deatail_nominal_pelunasan[]',
+      //       value: $(this).find(`[name="deatail_nominal_pelunasan[]"]`).val()
+      //     })
           
-          data.push({
-            name: 'deatail_nominalbayar_pelunasan[]',
-            value: $(this).find(`[name="deatail_nominalbayar_pelunasan[]"]`).val()
-          })
+      //     data.push({
+      //       name: 'deatail_nominalbayar_pelunasan[]',
+      //       value: $(this).find(`[name="deatail_nominalbayar_pelunasan[]"]`).val()
+      //     })
           
-          data.push({
-            name: 'deatail_penyesuaian_pelunasan[]',
-            value: $(this).find(`[name="deatail_penyesuaian_pelunasan[]"]`).val()
-          })
+      //     data.push({
+      //       name: 'deatail_penyesuaian_pelunasan[]',
+      //       value: $(this).find(`[name="deatail_penyesuaian_pelunasan[]"]`).val()
+      //     })
           
-          data.push({
-            name: 'deatail_invoice_nobukti_pelunasan[]',
-            value: $(this).find(`[name="deatail_invoice_nobukti_pelunasan[]"]`).val()
-          })
+      //     data.push({
+      //       name: 'deatail_invoice_nobukti_pelunasan[]',
+      //       value: $(this).find(`[name="deatail_invoice_nobukti_pelunasan[]"]`).val()
+      //     })
           
-          data.push({
-            name: 'keterangandetail[]',
-            value: $(this).find(`[name="keterangandetail[]"]`).val()
-          })
+      //     data.push({
+      //       name: 'keterangandetail[]',
+      //       value: $(this).find(`[name="keterangandetail[]"]`).val()
+      //     })
           
           
           
-        }
-      })
+      //   }
+      // })
 
       switch (action) {
         case 'add':
@@ -564,7 +564,7 @@
           totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
           let detailRow = $(`
           <tr>
-            <td ><input name='pelunasanpiutangdetail_id[]' checked type="checkbox" id="checkItem" value="${detail.detail_id}"></td>
+            <td onclick="select(this)"><input name='pelunasanpiutangdetail_id[]' checked type="checkbox" id="checkItem" value="${detail.detail_id}"></td>
             <td>${row}</td>
             <td>
               ${detail.nobukti}

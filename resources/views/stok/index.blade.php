@@ -10,14 +10,12 @@
   </div>
 </div>
 
-@include('invoiceextraheader._modal')
-<!-- Detail -->
-@include('invoiceextraheader._detail')
+@include('stok._modal')
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('invoiceextraheader.index') }}"
-  let getUrl = "{{ route('invoiceextraheader.get') }}"
+  let indexUrl = "{{ route('stok.index') }}"
+  let getUrl = "{{ route('stok.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -28,7 +26,7 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'nobukti'
+  let sortname = 'id'
   let sortorder = 'asc'
   let autoNumericElements = []
 
@@ -36,81 +34,110 @@
 
     $('#lookup').hide()
     
+   
+    
+
     $('#crudModal').on('hidden.bs.modal', function() {
        activeGrid = '#jqGrid'
      })
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'invoiceextraheader' }}`,
-        mtype: "GET",
-        styleUI: 'Bootstrap4',
-        iconSet: 'fontAwesome',
-        datatype: "json",
-        colModel: [{
-            label: 'ID',
-            name: 'id',
+      url: `{{ config('app.api_url') . 'stok' }}`,
+      mtype: "GET",
+      styleUI: 'Bootstrap4',
+      iconSet: 'fontAwesome',
+      datatype: "json",
+      colModel: [{
+        label: 'ID',
+        name: 'id',
+        align: 'right',
+        width: '70px'
+        
+      },
+      {
+        label: 'NAMA',
+        name: 'namastok',
+        align: 'left',
+      },
+      {
+          label: 'STATUS AKTIF',
+          name: 'statusaktif',
+          align: 'left',
+      },
+      {
+          label: 'keterangan',
+          name: 'keterangan',
+          align: 'left',
+      },
+      {
+          label: 'namaterpusat',
+          name: 'namaterpusat',
+          align: 'left',
+      },
+      {
+        label: 'kelompok',
+        name: 'kelompok',
+        align: 'left'
+      },
+      {
+        label: 'jenistrado',
+        name: 'jenistrado',
+        align: 'left'
+      },
+      {
+        label: 'subkelompok',
+        name: 'subkelompok',
+        align: 'left'
+      },
+      {
+        label: 'kategori',
+        name: 'kategori',
+        align: 'left'
+      },
+      {
+        label: 'merk',
+        name: 'merk',
+        align: 'left'
+      },
+      
+      {
+          label: 'qty min',
+          name: 'qtymin',
+          align: 'left',
+      },
+      {
+          label: 'qty max',
+          name: 'qtymax',
+          align: 'left',
+      },
+      
+      {
+          label: 'modifiedby',
+          name: 'modifiedby',
+          align: 'left',
+      },
+          {
+            label: 'CREATEDAT',
+            name: 'created_at',
             align: 'right',
-            width: '50px'
-          },
-          
-          {
-            label: 'STATUS APPROVAL',
-            name: 'statusapproval',
-            align: 'left'
-          },
-          {
-            label: 'NO BUKTI',
-            name: 'nobukti',
-            align: 'left'
-          },
-          {
-            label: 'TANGGAL BUKTI',
-            name: 'tglbukti',
-            align: 'left',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
+              newformat: "d-m-Y H:i:s"
             }
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
+            label: 'UPDATEDAT',
+            name: 'updated_at',
             align: 'right',
-            formatter: currencyFormat,
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
-          {
-            label: 'pelanggan',
-            name: 'pelanggan',
-            align: 'left'
-          },
-          {
-            label: 'agen',
-            name: 'agen',
-            align: 'left'
-          },
-          
-          {
-            label: 'Status format',
-            name: 'statusformat_memo',
-            align: 'left'
-          },
-          {
-            label: 'STATUS CETAK',
-            name: 'statusformat_text',
-            align: 'left'
-          },
-          {
-            label: 'MODIFIEDBY',
-            name: 'modifiedby',
-            align: 'left'
-          },
-        ],
+     
+    ],
 
         autowidth: true,
         shrinkToFit: false,
@@ -140,7 +167,6 @@
         },
         onSelectRow: function(id) {
 
-          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
@@ -212,7 +238,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
-              createInvoiceExtraHeader()
+              createStok()
             }
           },
           {
@@ -221,7 +247,7 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              editInvoiceExtraHeader(selectedId)
+              editStok(selectedId)
             }
           },
           {
@@ -230,38 +256,7 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              deleteInvoiceExtraHeader(selectedId)
-            }
-          },
-          {
-            id: 'approval',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVE',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-              let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-
-              $('#loader').removeClass('d-none')
-
-              handleApproval(id)
-            }
-          },
-          {
-            id: 'export',
-            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
-            onClick: () => {
-              $('#rangeModal').data('action', 'export')
-              $('#rangeModal').find('button:submit').html(`Export`)
-              $('#rangeModal').modal('show')
-            }
-          },
-          {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              window.open(`{{url('invoiceextraheader/report/${selectedId}')}}`)
+              deleteStok(selectedId)
             }
           },
         ]
@@ -273,9 +268,6 @@
 
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
-
-    /* Load detail grid */
-    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn btn-sm btn-primary`)
@@ -297,23 +289,23 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('stok', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('stok', 'update') }}`) {
       $('#edit').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('stok', 'destroy') }}`) {
       $('#delete').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('stok', 'export') }}`) {
       $('#export').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('stok', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
     }
 
@@ -340,47 +332,57 @@
       })
     })
 
-    $('#formRange').submit(function(event) {
-      event.preventDefault()
+    // $('#formRange').submit(function(event) {
+    //   event.preventDefault()
 
-      let params
-      let submitButton = $(this).find('button:submit')
+    //   let params
+    //   let submitButton = $(this).find('button:submit')
 
-      if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('invoiceextraheader.export') }}`
-      }
+    //   submitButton.attr('disabled', 'disabled')
 
-      /* Clear validation messages */
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
+    //   /* Set params value */
+    //   for (var key in postData) {
+    //     if (params != "") {
+    //       params += "&";
+    //     }
+    //     params += key + "=" + encodeURIComponent(postData[key]);
+    //   }
 
-      /* Set params value */
-      for (var key in postData) {
-        if (params != "") {
-          params += "&";
-        }
-        params += key + "=" + encodeURIComponent(postData[key]);
-      }
+    //   let formRange = $('#formRange')
+    //   let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+    //   let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+    //   params += `&offset=${offset}&limit=${limit}`
 
-      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
-    })
-    function handleApproval(id) {
-      $.ajax({
-        url: `${apiUrl}invoiceextraheader/${id}/approval`,
-        method: 'POST',
-        dataType: 'JSON',
-        beforeSend: request => {
-          request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-        },
-        success: response => {
-          $('#jqGrid').trigger('reloadGrid')
-        }
-      }).always(() => {
-        $('#loader').addClass('d-none')
-      })
-    }
+    //   if ($('#rangeModal').data('action') == 'export') {
+    //     let xhr = new XMLHttpRequest()
+    //     xhr.open('GET', `{{ config('app.api_url') }}stok/export?${params}`, true)
+    //     xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+    //     xhr.responseType = 'arraybuffer'
 
-      
+    //     xhr.onload = function(e) {
+    //       if (this.status === 200) {
+    //         if (this.response !== undefined) {
+    //           let blob = new Blob([this.response], {
+    //             type: "application/vnd.ms-excel"
+    //           })
+    //           let link = document.createElement('a')
+
+    //           link.href = window.URL.createObjectURL(blob)
+    //           link.download = `laporanpengeluaranStok${(new Date).getTime()}.xlsx`
+    //           link.click()
+
+    //           submitButton.removeAttr('disabled')
+    //         }
+    //       }
+    //     }
+
+    //     xhr.send()
+    //   } else if ($('#rangeModal').data('action') == 'report') {
+
+    //     submitButton.removeAttr('disabled')
+    //   }
+    // })
+
 
 
   })

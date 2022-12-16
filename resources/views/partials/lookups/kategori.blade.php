@@ -1,17 +1,14 @@
-<table id="bankLookup" class="lookup-grid"></table>
-<div id="bankLookupPager"></div>
+<table id="kategoriLookup" class="lookup-grid"></table>
+<div id="kategoriLookupPager"></div>
 
 @push('scripts')
 <script>
-  $('#bankLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'bank' }}`,
+  $('#kategoriLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'kategori' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
-      postData: {
-        filters: `{!! $filters ?? '' !!}`
-      },
       colModel: [{
           label: 'ID',
           name: 'id',
@@ -19,25 +16,16 @@
           width: '70px'
         },
         {
-          label: 'KODE BANK',
-          name: 'kodebank',
+          label: 'KODE KATEGORI',
+          name: 'kodekategori',
           align: 'left',
         },
         {
-          label: 'NAMA BANK',
-          name: 'namabank',
+          label: 'KETERANGAN',
+          name: 'keterangan',
           align: 'left'
         },
-        {
-          label: 'COA',
-          name: 'coa',
-          align: 'left'
-        },
-        {
-          label: 'TIPE',
-          name: 'tipe',
-          align: 'left'
-        },
+       
         {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
@@ -104,48 +92,6 @@
           }
         },
         {
-          label: 'STATUS PENERIMAAN',
-          name: 'statusformatpenerimaan',
-          align: 'left',
-          formatter: (value, options, rowData) => {
-            let statusFormatPenerimaan = JSON.parse(value)
-
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusFormatPenerimaan.WARNA}; color: #fff;">
-                  <span>${statusFormatPenerimaan.SINGKATAN}</span>
-                </div>
-              `)
-
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusFormatPenerimaan = JSON.parse(rowObject.statusformatpenerimaan)
-
-            return ` title="${statusFormatPenerimaan.MEMO}"`
-          }
-        },
-        {
-          label: 'STATUS PENGELUARAN',
-          name: 'statusformatpengeluaran',
-          align: 'left',
-          formatter: (value, options, rowData) => {
-              let statusFormatPengeluaran = JSON.parse(value)
-
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusFormatPengeluaran.WARNA}; color: #fff;">
-                  <span>${statusFormatPengeluaran.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusFormatPengeluaran = JSON.parse(rowObject.statusformatpengeluaran)
-
-              return ` title="${statusFormatPengeluaran.MEMO}"`
-            }
-        },
-        {
           label: 'MODIFIEDBY',
           name: 'modifiedby',
           align: 'left'
@@ -174,17 +120,17 @@
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
-      height: 450,
+      height: 350,
       rowNum: 10,
       rownumbers: true,
+      toolbar: [true, "top"],
       rownumWidth: 45,
       rowList: [10, 20, 50],
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      toolbar: [true, "top"],
-      pager: $('#bankLookupPager'),
+      pager: $('#kategoriLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -211,27 +157,28 @@
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
+          initResize($(this))
 
-          if (indexRow - 1 > $('#bankLookup').getGridParam().reccount) {
-            indexRow = $('#bankLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#kategoriLookup').getGridParam().reccount) {
+            indexRow = $('#kategoriLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#bankLookup [id="${$('#bankLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#kategoriLookup [id="${$('#kategoriLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#bankLookup [id="${$('#bankLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#kategoriLookup [id="${$('#kategoriLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#bankLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#bankLookup [id="` + $('#bankLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#kategoriLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#kategoriLookup [id="` + $('#kategoriLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#bankLookup').setSelection($('#bankLookup').getDataIDs()[indexRow])
+            $('#kategoriLookup').setSelection($('#kategoriLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -246,7 +193,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupBank').prev().width())
+        $(this).setGridWidth($('#lookupkategori').prev().width())
         setHighlight($(this))
       }
     })
@@ -258,10 +205,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#bankLookup'))
+        clearGlobalSearch($('#kategoriLookup'))
       },
     })
 
-  loadGlobalSearch($('#bankLookup'))
-  loadClearFilter($('#bankLookup'))
+  loadGlobalSearch($('#kategoriLookup'))
+  loadClearFilter($('#kategoriLookup'))
 </script>
