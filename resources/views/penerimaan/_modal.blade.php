@@ -240,12 +240,22 @@
 <script>
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
+    let type
 
     $(document).ready(function() {
-        
         $('#crudForm').autocomplete({
             disabled: true
         });
+        
+        $(document).on('change', '[name=statuskas]', function() {
+            if ($(this).val() == 116) {
+                type = 'kas'
+            } else if ($(this).val() == 117) {
+                type = 'bank'
+            } else {
+                type = null
+            }
+        })
 
         $(document).on('click', "#addRow", function() {
             addRow()
@@ -1077,6 +1087,18 @@
         $('.bank-lookup').lookup({
             title: 'Bank Lookup',
             fileName: 'bank',
+            beforeProcess: function(test) {
+                this.postData = {
+                    filters: JSON.stringify({
+                        "groupOp": "AND",
+                        "rules": [{
+                            "field": "tipe",
+                            "op": "cn",
+                            "data": type
+                        }]
+                    })
+                }
+            },
             onSelectRow: (bank, element) => {
                 $('#crudForm [name=bank_id]').first().val(bank.id)
                 element.val(bank.namabank)

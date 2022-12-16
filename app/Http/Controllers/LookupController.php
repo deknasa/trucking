@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 class LookupController extends Controller
 {
-    public function show($fileName)
+    public function show(Request $request, $fileName)
     {
-        return response()->view("partials.lookups.$fileName");
+        return response()->view("partials.lookups.$fileName", $request->all());
     }
 }

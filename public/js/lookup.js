@@ -1,7 +1,16 @@
-const getLookup = function (fileName) {
+const serialize = function (obj) {
+	var str = [];
+	for (var p in obj)
+		if (obj.hasOwnProperty(p)) {
+			str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+		}
+	return str.join("&");
+};
+
+const getLookup = function (fileName, postData) {
 	return new Promise((resolve, reject) => {
 		$.ajax({
-			url: `${appUrl}/lookup/${fileName}`,
+			url: `${appUrl}/lookup/${fileName}?${serialize(postData)}`,
 			method: "GET",
 			dataType: "html",
 			success: function (response) {
@@ -11,14 +20,30 @@ const getLookup = function (fileName) {
 	});
 };
 
-$.fn.lookup = function (options = null) {
+$.fn.lookup = function (options) {
+	let defaults = {
+		title: null,
+		fileName: null,
+		beforeProcess: function () {},
+		onShowLookup: function (rowData, element) {},
+		onSelectRow: function (rowData, element) {},
+		onCancel: function (element) {},
+		onClear: function (element) {},
+	};
+
+	let settings = $.extend({}, defaults, options);
+
 	this.each(function () {
 		let element = $(this);
 
 		element.data("hasLookup", true);
 
 		element.wrap('<div class="input-group"></div>').after(`
-			${options.onClear ? `<button type="button" class="btn btn-secondary position-absolute button-clear" style="right: 30px; z-index: 99;">C</button>` : ``}
+			${
+				settings.onClear
+					? `<button type="button" class="btn btn-secondary position-absolute button-clear" style="right: 30px; z-index: 99;">C</button>`
+					: ``
+			}
 			<div class="input-group-append">
 				<button class="btn btn-primary lookup-toggler" type="button">...</button>
 			</div>
@@ -27,15 +52,13 @@ $.fn.lookup = function (options = null) {
 		element
 			.siblings(".input-group-append")
 			.find(".lookup-toggler")
-			.click(function () {
+			.click(async function () {
 				activateLookup(element, element.val());
 			});
 
-		element
-			.siblings('.button-clear')
-			.click(function() {
-				handleOnClear(element)
-			})
+		element.siblings(".button-clear").click(function () {
+			handleOnClear(element);
+		});
 
 		element.on("input", function (event) {
 			delay(function () {
@@ -50,10 +73,9 @@ $.fn.lookup = function (options = null) {
 		});
 	});
 
-	function activateLookup(element, searchValue = null) {
-		if (options.onShowLookup) {
-			options.onShowLookup();
-		}
+	async function activateLookup(element, searchValue = null) {
+		settings.beforeProcess();
+		settings.onShowLookup();
 
 		let lookupModal = $(`
       <div class="modal modal-fullscreen" id="lookupModal" tabindex="-1" aria-labelledby="lookupModalLabel" aria-hidden="true">
@@ -61,7 +83,7 @@ $.fn.lookup = function (options = null) {
           <form action="#" id="crudForm">
             <div class="modal-content">
               <div class="modal-header bg-primary">
-                <h5 class="modal-title" id="lookupModalLabel">${options.title}</h5>
+                <h5 class="modal-title" id="lookupModalLabel">${settings.title}</h5>
                 <button type="button" class="close close-button" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -85,7 +107,7 @@ $.fn.lookup = function (options = null) {
 
 		lookupModal.modal("show");
 
-		getLookup(options.fileName).then((response) => {
+		getLookup(settings.fileName, settings.postData ?? null).then((response) => {
 			lookupModal.find(".modal-body").html(response);
 
 			grid = lookupModal.find(".lookup-grid");
@@ -145,24 +167,18 @@ $.fn.lookup = function (options = null) {
 		if (id !== null) {
 			lookupModal.modal("hide");
 
-			if (options.onSelectRow) {
-				options.onSelectRow(sanitize(grid.getRowData(id)), element);
-			}
+			settings.onSelectRow(sanitize(grid.getRowData(id)), element);
 		} else {
 			alert("Please select a row");
 		}
 	}
 
 	function handleOnCancel(element) {
-		if (options.onCancel) {
-			options.onCancel(element);
-		}
+		settings.onCancel(element);
 	}
 
 	function handleOnClear(element) {
-		if(options.onClear) {
-			options.onClear(element)
-		}
+		settings.onClear(element);
 	}
 
 	function sanitize(rowData) {
