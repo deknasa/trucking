@@ -14,10 +14,30 @@ class NotaDebetHeaderController extends MyController
     public function index()
     {
 
-        $title = $this->title;
-        return view('notadebetheader.index', compact('title'));
+        $title = $this->title; 
+        $data = [
+            'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
+            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
+        ];
+        return view('notadebetheader.index', compact('title','data'));
     }
 
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
+    }
     public function get($params = [])
     {
         $params = [

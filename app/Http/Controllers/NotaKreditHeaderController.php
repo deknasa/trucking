@@ -13,10 +13,29 @@ class NotaKreditHeaderController extends MyController
     public $title = 'Nota Kredit';
 
     public function index(Request $request){
-        $title = $this->title;
-        return view('notakreditheader.index', compact('title'));
+        $title = $this->title;$data = [
+            'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
+            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
+        ];
+        return view('notakreditheader.index', compact('title','data'));
     }
 
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
+    }
     public function get($params = [])
     {
         $params = [

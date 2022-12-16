@@ -47,9 +47,7 @@
                             <label class="col-12 col-sm-2 col-form-label mt-2">Tabel<span class="text-danger">*</span></label>
                             <div class="col-12 col-sm-9 col-md-10">
                                 <select name="tabel" id="tabel" class="form-select select2bs4" style="width: 100%;">
-                                    <option value="">--Pilih Tabel--</option>
-                                    <option value="notadebetheader">Nota Debet</option>
-                                    <option value="notakreditheader">Nota Kredit</option>
+                                   
                                 </select>
                             </div>
                         </div>
@@ -101,6 +99,7 @@
         initSelect2($('#crudForm').find('[name=tabel]'), false)
 
         setStatusApprovalOptions($('#crudForm'))
+        setTabelOptions($('#crudForm'))
 
         $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
 
@@ -530,6 +529,47 @@
                 // relatedForm
                 //     .find('[name=approve]')
                 //     .val($(`#crudForm [name=approve] option:eq(1)`).val())
+                //     .trigger('change')
+                //     .trigger('select2:selected');
+
+                // resolve()
+            }
+        })
+        // })
+    }
+    
+    const setTabelOptions = function(relatedForm) {
+        relatedForm.find('[name=tabel]').append(
+            new Option('-- PILIH TABLE --', '', false, true)
+        ).trigger('change')
+
+        let data = [];
+        data.push({
+            name: 'grp',
+            value: 'NOTA DEBET'
+        })
+        // data.push({
+        //     name: 'subgrp',
+        //     value: 'STATUS APPROVAL'
+        // })
+        $.ajax({
+            url: `${apiUrl}approvalnotaheader/combo`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: data,
+            success: response => {
+
+                response.data.forEach(tabel => {
+                    let option = new Option(tabel.kelompok, tabel.kelompok)
+                    relatedForm.find('[name=tabel]').append(option).trigger('change')
+                });
+
+                // relatedForm
+                //     .find('[name=transaksi]')
+                //     .val($(`#crudForm [name=transaksi] option:eq(1)`).val())
                 //     .trigger('change')
                 //     .trigger('select2:selected');
 
