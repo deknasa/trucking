@@ -10,6 +10,7 @@
         </div>
         <form action="" method="post">
           <div class="modal-body">
+          
             <div class="row form-group">
               <input type="hidden" name="id" hidden class="form-control" readonly>
 
@@ -19,7 +20,7 @@
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" readonly name="nobukti" class="form-control">
               </div>
-
+              
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>tglbukti <span class="text-danger">*</span> </label>
               </div>
@@ -27,122 +28,157 @@
                 <input type="text" name="tglbukti" class="form-control datepicker">
               </div>
             </div>
-
-            <div class="row form-group">
-
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>penerimaan stok <span class="text-danger">*</span> </label>
+            <div class="row">
+            
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>penerimaan stok <span class="text-danger">*</span> </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="penerimaanstok" class="form-control penerimaanstok-lookup">
+                    <input type="text" id="penerimaanstokId" name="penerimaanstok_id" hidden readonly>
+                  </div>
+                </div>
               </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="penerimaanstok" class="form-control penerimaanstok-lookup">
-                <input type="text" id="penerimaanstokId" name="penerimaanstok_id" hidden readonly>
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>STATUS FORMAT <span class="text-danger">*</span> </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <select name="statusformat" disabled class="form-select select2bs4" style="width: 100%;">
+                      <option value="">-- PILIH STATUS FORMAT --</option>
+                    </select>
+                    <input type="text" name="statusformat_id" readonly hidden class="form-control">
+                  </div>
+                </div>
               </div>
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>STATUS FORMAT <span class="text-danger">*</span> </label>
+              
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>penerimaan stok nobukti </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="penerimaanstok_nobukti" class="form-control penerimaanstokheader-lookup">
+                  </div>
+                </div>
               </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <select name="statusformat" disabled class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS FORMAT --</option>
-                </select>
-
-                <input type="text" name="statusformat_id" readonly hidden class="form-control">
+              
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>pengeluaran stok nobukti </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="pengeluaranstok_nobukti" class="form-control pengeluaranstokheader-lookup">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>nobon </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="nobon" class="form-control">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>hutang no bukti </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="hutang_nobukti" class="form-control hutang-lookup">
+                  </div>
+                </div>
+              </div>
+  
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                  <label>trado </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-8">
+                  <input type="text" name="trado" class="form-control trado-lookup">
+                  <input type="text" id="tradoId" name="trado_id" hidden readonly>
+                </div>
+                </div>
+              </div>
+              
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>supplier </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="supplier" class="form-control supplier-lookup">
+                    <input type="text" id="supplierId" name="supplier_id" hidden readonly>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>gudang </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="gudang" class="form-control gudang-lookup">
+                    <input type="text" id="gudangId" name="gudang_id" hidden readonly>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>coa </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="coa" class="form-control akunpusat-lookup">
+                  </div>
+                </div>
+              </div>
+                    
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>gudangdari </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="gudangdari" class="form-control gudang-lookup">
+                    <input type="text" id="gudangdariId" name="gudangdari_id" hidden readonly>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>gudangke </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="gudangke" class="form-control gudang-lookup">
+                    <input type="text" id="gudangkeId" name="gudangke_id" hidden readonly>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>penerimaan stok nobukti </label>
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                  <label>keterangan <span class="text-danger">*</span> </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-10">
+                  <input type="text" name="keterangan" class="form-control">
+                </div>
               </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="penerimaanstok_nobukti" class="form-control penerimaanstokheader-lookup">
-              </div>
-
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>pengeluaran stok nobukti </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="pengeluaranstok_nobukti" class="form-control pengeluaranstokheader-lookup">
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>nobon </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="nobon" class="form-control">
-              </div>
-
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>hutang no bukti </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="hutang_nobukti" class="form-control hutang-lookup">
-              </div>
-            </div>
-
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>trado </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="trado" class="form-control trado-lookup">
-                <input type="text" id="tradoId" name="trado_id" hidden readonly>
-              </div>
-
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>supplier </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="supplier" class="form-control supplier-lookup">
-                <input type="text" id="supplierId" name="supplier_id" hidden readonly>
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>gudang </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="gudang" class="form-control gudang-lookup">
-                <input type="text" id="gudangId" name="gudang_id" hidden readonly>
-              </div>
-
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>coa </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="coa" class="form-control akunpusat-lookup">
-              </div>
-            </div>
-
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>gudangdari </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="gudangdari" class="form-control gudang-lookup">
-                <input type="text" id="gudangdariId" name="gudangdari_id" hidden readonly>
-              </div>
-
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>gudangke </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="gudangke" class="form-control gudang-lookup">
-                <input type="text" id="gudangkeId" name="gudangke_id" hidden readonly>
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>keterangan <span class="text-danger">*</span> </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="keterangan" class="form-control">
-              </div>
-            </div>
+              
 
 
 
@@ -152,12 +188,12 @@
                   <tr>
                     <th width="5%">No</th>
                     <th width="20%">stok</th>
-                    <th width="5%">vulkanisirke</th>
+                    <th class="data_tbl" width="5%">vulkanisirke</th>
                     <th width="10%">keterangan</th>
-                    <th width="10%">qty</th>
-                    <th width="20%">harga</th>
-                    <th width="5%">persentase discount</th>
-                    <th width="20%">Total</th>
+                    <th class="data_tbl" width="10%">qty</th>
+                    <th class="data_tbl" width="20%">harga</th>
+                    <th class="data_tbl" width="5%">persentase discount</th>
+                    <th class="data_tbl" width="20%">Total</th>
                     <th width="5%">Aksi</th>
                   </tr>
                 </thead>
@@ -166,10 +202,10 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="6"></td>
+                    <td colspan="6" class="colspan"></td>
 
-                    <td class="font-weight-bold"> Total : </td>
-                    <td id="sumary" class="text-right font-weight-bold"> </td>
+                    <td class="font-weight-bold data_tbl"> Total : </td>
+                    <td id="sumary" class="text-right font-weight-bold data_tbl"> </td>
                     <td>
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
@@ -320,19 +356,70 @@
   })
 
   function kodepenerimaan(kodepenerimaan) {
-
+    // console.log(kodepenerimaan);
     $('#crudForm').find('[name=statusformat]').val(kodepenerimaan).trigger('change');
+    cekKodePenerimaan(kodepenerimaan)
     $('#crudForm').find('[name=statusformat_id]').val(kodepenerimaan);
   }
-
+  function cekKodePenerimaan(kode) {
+    $.ajax({
+          url: `${apiUrl}parameter`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: {
+            filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "PENERIMAAN STOK"
+            },
+            {
+              "field": "subgrp",
+              "op": "cn",
+              "data": "PO STOK BUKTI"
+            }]
+          })
+        },
+        success: response => {
+          if (response.data[0].id==kode) {
+            tampilanpo();
+          } else {
+            tampilanall();
+          }
+        }
+      })
+    
+  }
   function tampilanpo() {
-    $('[name=penerimaanstok_nobukti]').parents('.row').hide()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=hutang_nobukti]').parents('.form-group').hide()
+    $('[name=trado]').parents('.form-group').hide()
+    $('[name=gudang]').parents('.form-group').hide()
+    $('[name=gudangdari]').parents('.form-group').hide()
+    $('[name=gudangke]').parents('.form-group').hide()
+    $('[name=coa]').parents('.form-group').hide()
+    $('.data_tbl').hide();
+    $('.colspan').attr('colspan',3);
 
   }
 
   function tampilanall() {
-    $('[name=penerimaanstok_nobukti]').parents('.row').show()
-
+    // $('[name=penerimaanstok_nobukti]').parents('.row').show()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').show()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').show()
+    $('[name=hutang_nobukti]').parents('.form-group').show()
+    $('[name=trado]').parents('.form-group').show()
+    $('[name=gudang]').parents('.form-group').show()
+    $('[name=gudangdari]').parents('.form-group').show()
+    $('[name=gudangke]').parents('.form-group').show()
+    $('[name=coa]').parents('.form-group').show()
+    $('.data_tbl').show();
+    $('.colspan').attr('colspan',6);
   }
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -495,25 +582,25 @@
                     <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${index}">
                     <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>                 
-                  <td>
-                    <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                  <td class="data_tbl">
+                    <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control" >                    
                   </td>  
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
-                  <td>
-                    <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}">
+                  <td class="data_tbl">
+                    <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
                   </td>  
                   
-                  <td>
-                    <input type="text"  name="detail_harga[]" id="detail_harga${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}">
+                  <td class="data_tbl">
+                    <input type="text"  name="detail_harga[]" id="detail_harga${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
                   </td>  
                   
-                  <td>
-                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}">
+                  <td class="data_tbl">
+                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
                   </td>  
-                  <td>
-                    <input type="text"  name="totalItem[]" readonly id="totalItem${index}" style="text-align:right" class="form-control totalItem autonumeric number${index}">                    
+                  <td class="data_tbl">
+                    <input type="text"  name="totalItem[]" readonly id="totalItem${index}" style="text-align:right" class="form-control totalItem autonumeric number${index}" >                    
                   </td>  
                   
                   <td>
@@ -543,7 +630,7 @@
 
     })
     initAutoNumeric($(`.number${index}`))
-
+    cekKodePenerimaan($('#crudForm').find('[name=statusformat]').val())
     setRowNumbers()
     index++;
   }
@@ -625,24 +712,24 @@
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>
-                  <td>
+                  <td class="data_tbl">
                     <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                   </td>  
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
-                  <td>
+                  <td class="data_tbl">
                     <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                   </td>  
                   
-                  <td>
+                  <td class="data_tbl">
                     <input type="text"  name="detail_harga[]" id="detail_harga${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
                   
-                  <td>
+                  <td class="data_tbl">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
-                  <td>
+                  <td class="data_tbl">
                     <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                   </td>  
                   <td>

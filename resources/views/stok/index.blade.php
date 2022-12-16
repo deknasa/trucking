@@ -60,10 +60,32 @@
         align: 'left',
       },
       {
-          label: 'STATUS AKTIF',
-          name: 'statusaktif',
-          align: 'left',
+        label: 'STATUS aktif',
+        name: 'statusaktif',
+        align: 'left',
+        formatter: (value, options, rowData) => {
+          let statusaktif = JSON.parse(value)
+          if (!statusaktif) {
+            return ''
+          }
+          
+          let formattedValue = $(`
+            <div class="badge" style="background-color: ${statusaktif.WARNA}; color: #fff;">
+              <span>${statusaktif.SINGKATAN}</span>
+            </div>
+          `)
+          
+          return formattedValue[0].outerHTML
+        },
+        cellattr: (rowId, value, rowObject) => {
+          let statusaktif = JSON.parse(rowObject.statusaktif)
+          if (!statusaktif) {
+            return ` title=" "`
+          }
+          return ` title="${statusaktif.MEMO}"`
+        }
       },
+          
       {
           label: 'keterangan',
           name: 'keterangan',
