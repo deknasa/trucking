@@ -325,6 +325,16 @@
     $('#crudForm').find('[name=statusformat_id]').val(kodepenerimaan);
   }
 
+  function tampilanpo() {
+    $('[name=penerimaanstok_nobukti]').parents('.row').hide()
+
+  }
+
+  function tampilanall() {
+    $('[name=penerimaanstok_nobukti]').parents('.row').show()
+
+  }
+
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
 
