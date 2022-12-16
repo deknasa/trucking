@@ -364,6 +364,7 @@
             detailRow.find(`[name="key[]"]`).val(index)
             detailRow.find(`[name="value[]"]`).val(detail)
             if(index == 'WARNA') {
+              detailRow.find(`[name="value[]"]`).css({'color':`'${detail}'`});
               detailRow.find(`[name="color[]"]`).val(detail)
             }else{
               detailRow.find(`[name="color[]"]`).val('#e9ecef')

@@ -129,6 +129,10 @@
 
   $(document).ready(function() {
 
+    $('#crudForm').autocomplete({
+      disabled: true
+    });
+    
     Inputmask("datetime", {
       inputFormat: "HH:MM",
       max: 24
