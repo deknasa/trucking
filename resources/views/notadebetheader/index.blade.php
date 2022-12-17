@@ -99,50 +99,50 @@
               return ` title="${statusApproval.MEMO}"`
             }
           },
-          // {
-          //   label: 'STATUS CETAK',
-          //   name: 'statuscetak',
-          //   align: 'left',
-          //   stype: 'select',
-          //   searchoptions: {
-          //     value: `<?php
-          //             $i = 1;
+          {
+            label: 'STATUS CETAK',
+            name: 'statuscetak_memo',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
 
-          //             foreach ($data['combocetak'] as $status) :
-          //               echo "$status[param]:$status[parameter]";
-          //               if ($i !== count($data['combocetak'])) {
-          //                 echo ";";
-          //               }
-          //               $i++;
-          //             endforeach
+                      foreach ($data['combocetak'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combocetak'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
 
-          //             ?>
-          //     `,
-          //     dataInit: function(element) {
-          //       $(element).select2({
-          //         width: 'resolve',
-          //         theme: "bootstrap4"
-          //       });
-          //     }
-          //   },
-          //   formatter: (value, options, rowData) => {
-          //     let statusCetak = JSON.parse(value)
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusCetak = JSON.parse(value)
 
-          //     let formattedValue = $(`
-          //       <div class="badge" style="background-color: ${statuscetak.WARNA}; color: #fff;">
-          //         <span>${statuscetak.SINGKATAN}</span>
-          //       </div>
-          //     `)
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+                  <span>${statusCetak.SINGKATAN}</span>
+                </div>
+              `)
 
-          //     return formattedValue[0].outerHTML
-          //   },
-          //   cellattr: (rowId, value, rowObject) => {
-          //     console.log(rowObject)
-          //     let statusCetak = JSON.parse(rowObject.statuscetak)
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              console.log(rowObject)
+              let statusCetak = JSON.parse(rowObject.statuscetak_memo)
 
-          //     return ` title="${statusCetak.MEMO}"`
-          //   }
-          // },
+              return ` title="${statusCetak.MEMO}"`
+            }
+          },
           {
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -334,7 +334,11 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              editNotaDebet(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                cekValidasi(selectedId, 'EDIT')
+              }
             }
           },
           {
@@ -343,19 +347,11 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              deleteNotaDebet(selectedId)
-            }
-          },
-          {
-            id: 'approval',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVE',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-              let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-
-              $('#loader').removeClass('d-none')
-
-              handleApproval(id)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                cekValidasi(selectedId, 'DELETE')
+              }
             }
           },
           {

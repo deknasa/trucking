@@ -122,8 +122,8 @@
               let statusCetak = JSON.parse(value)
 
               let formattedValue = $(`
-                <div class="badge" style="background-color: ${statuscetak.WARNA}; color: #fff;">
-                  <span>${statuscetak.SINGKATAN}</span>
+                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+                  <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
 

@@ -1,11 +1,11 @@
 {
-  "ReportGuid": "816fcf40a15b9bc1bcab01c468472732",
+  "ReportGuid": "53973cd7e57d98661a3b2076e2694bd7",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "ReportNotaKredit.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1671184117000+0700)/",
+  "ReportChanged": "/Date(1667469439000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -23,114 +23,100 @@
     "DataSources": {
       "0": {
         "Ident": "StiDataTableSource",
-        "Name": "notakredit",
-        "Alias": "notakredit",
+        "Name": "notakreditheader_details",
+        "Alias": "notakreditheader_details",
         "Columns": {
           "0": {
-            "Name": "nobukti_header",
-            "Index": -1,
-            "NameInSource": "nobukti_header",
-            "Alias": "nobukti_header",
-            "Type": "System.String"
-          },
-          "1": {
-            "Name": "keterangan_header",
-            "Index": -1,
-            "NameInSource": "keterangan_header",
-            "Alias": "keterangan_header",
-            "Type": "System.String"
-          },
-          "2": {
-            "Name": "tglbukti",
-            "Index": -1,
-            "NameInSource": "tglbukti",
-            "Alias": "tglbukti",
-            "Type": "System.DateTime"
-          },
-          "3": {
             "Name": "id",
             "Index": -1,
             "NameInSource": "id",
             "Alias": "id",
             "Type": "System.Decimal"
           },
-          "4": {
+          "1": {
             "Name": "notakredit_id",
             "Index": -1,
             "NameInSource": "notakredit_id",
             "Alias": "notakredit_id",
             "Type": "System.String"
           },
-          "5": {
+          "2": {
             "Name": "nobukti",
             "Index": -1,
             "NameInSource": "nobukti",
             "Alias": "nobukti",
             "Type": "System.String"
           },
-          "6": {
+          "3": {
             "Name": "tglterima",
             "Index": -1,
             "NameInSource": "tglterima",
             "Alias": "tglterima",
             "Type": "System.DateTime"
           },
-          "7": {
+          "4": {
             "Name": "invoice_nobukti",
             "Index": -1,
             "NameInSource": "invoice_nobukti",
             "Alias": "invoice_nobukti",
             "Type": "System.String"
           },
-          "8": {
+          "5": {
             "Name": "nominal",
             "Index": -1,
             "NameInSource": "nominal",
             "Alias": "nominal",
             "Type": "System.String"
           },
-          "9": {
+          "6": {
             "Name": "nominalbayar",
             "Index": -1,
             "NameInSource": "nominalbayar",
             "Alias": "nominalbayar",
             "Type": "System.String"
           },
-          "10": {
+          "7": {
             "Name": "penyesuaian",
             "Index": -1,
             "NameInSource": "penyesuaian",
             "Alias": "penyesuaian",
             "Type": "System.String"
           },
-          "11": {
+          "8": {
             "Name": "keterangan",
             "Index": -1,
             "NameInSource": "keterangan",
             "Alias": "keterangan",
             "Type": "System.String"
           },
-          "12": {
+          "9": {
             "Name": "coaadjust",
             "Index": -1,
             "NameInSource": "coaadjust",
             "Alias": "coaadjust",
             "Type": "System.String"
           },
-          "13": {
+          "10": {
             "Name": "modifiedby",
             "Index": -1,
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
+          },
+          "11": {
+            "Name": "relationId",
+            "Index": -1,
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
           }
         },
-        "NameInSource": "Data.notakredit"
+        "NameInSource": "Data.notakreditheader_details"
       },
       "1": {
         "Ident": "StiDataTableSource",
-        "Name": "user",
-        "Alias": "user",
+        "Name": "notakreditheader_user",
+        "Alias": "notakreditheader_user",
         "Columns": {
           "0": {
             "Name": "id",
@@ -201,9 +187,129 @@
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
+          },
+          "10": {
+            "Name": "relationId",
+            "Index": -1,
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
           }
         },
-        "NameInSource": "Data.user"
+        "NameInSource": "Data.notakreditheader_user"
+      },
+      "2": {
+        "Ident": "StiDataTableSource",
+        "Name": "notakreditheader",
+        "Alias": "notakreditheader",
+        "Columns": {
+          "0": {
+            "Name": "id",
+            "Index": -1,
+            "NameInSource": "id",
+            "Alias": "id",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "nobukti",
+            "Index": -1,
+            "NameInSource": "nobukti",
+            "Alias": "nobukti",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "pelunasanpiutang_nobukti",
+            "Index": -1,
+            "NameInSource": "pelunasanpiutang_nobukti",
+            "Alias": "pelunasanpiutang_nobukti",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "tglbukti",
+            "Index": -1,
+            "NameInSource": "tglbukti",
+            "Alias": "tglbukti",
+            "Type": "System.DateTime"
+          },
+          "4": {
+            "Name": "keterangan",
+            "Index": -1,
+            "NameInSource": "keterangan",
+            "Alias": "keterangan",
+            "Type": "System.String"
+          },
+          "5": {
+            "Name": "postingdari",
+            "Index": -1,
+            "NameInSource": "postingdari",
+            "Alias": "postingdari",
+            "Type": "System.String"
+          },
+          "6": {
+            "Name": "statusapproval",
+            "Index": -1,
+            "NameInSource": "statusapproval",
+            "Alias": "statusapproval",
+            "Type": "System.String"
+          },
+          "7": {
+            "Name": "tgllunas",
+            "Index": -1,
+            "NameInSource": "tgllunas",
+            "Alias": "tgllunas",
+            "Type": "System.DateTime"
+          },
+          "8": {
+            "Name": "userapproval",
+            "Index": -1,
+            "NameInSource": "userapproval",
+            "Alias": "userapproval",
+            "Type": "System.String"
+          },
+          "9": {
+            "Name": "tglapproval",
+            "Index": -1,
+            "NameInSource": "tglapproval",
+            "Alias": "tglapproval",
+            "Type": "System.DateTime"
+          },
+          "10": {
+            "Name": "statusformat",
+            "Index": -1,
+            "NameInSource": "statusformat",
+            "Alias": "statusformat",
+            "Type": "System.String"
+          },
+          "11": {
+            "Name": "modifiedby",
+            "Index": -1,
+            "NameInSource": "modifiedby",
+            "Alias": "modifiedby",
+            "Type": "System.String"
+          },
+          "12": {
+            "Name": "statusapproval_memo",
+            "Index": -1,
+            "NameInSource": "statusapproval_memo",
+            "Alias": "statusapproval_memo",
+            "Type": "System.String"
+          },
+          "13": {
+            "Name": "details",
+            "Index": -1,
+            "NameInSource": "details",
+            "Alias": "details",
+            "Type": "System.String"
+          },
+          "14": {
+            "Name": "user",
+            "Index": -1,
+            "NameInSource": "user",
+            "Alias": "user",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.notakreditheader"
       }
     },
     "Relations": {
@@ -249,7 +355,7 @@
         "0": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand1",
-          "ClientRectangle": "0,4,205.9,34",
+          "ClientRectangle": "0,0,205.9,34",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -430,7 +536,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{notakredit.nobukti_header}"
+                "Value": "{notakreditheader.nobukti}"
               },
               "VertAlignment": "Center",
               "Border": ";;;;;;;solid:Black",
@@ -448,7 +554,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{notakredit.tglbukti}"
+                "Value": "{notakreditheader.tglbukti}"
               },
               "VertAlignment": "Center",
               "Border": ";;;;;;;solid:Black",
@@ -470,7 +576,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{notakredit.keterangan_header}"
+                "Value": "{notakreditheader.keterangan}"
               },
               "VertAlignment": "Center",
               "Border": ";;;;;;;solid:Black",
@@ -646,7 +752,7 @@
         "1": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,46,205.9,6",
+          "ClientRectangle": "0,34,205.9,6",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -683,7 +789,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{notakredit.keterangan}"
+                "Value": "{notakreditheader_details.keterangan}"
               },
               "VertAlignment": "Center",
               "Border": ";;;;;;;solid:Black",
@@ -707,7 +813,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{notakredit.tglterima}"
+                "Value": "{notakreditheader_details.tglterima}"
               },
               "VertAlignment": "Center",
               "Border": ";;;;;;;solid:Black",
@@ -729,7 +835,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{notakredit.coaadjust}"
+                "Value": "{notakreditheader_details.coaadjust}"
               },
               "VertAlignment": "Center",
               "Border": ";;;;;;;solid:Black",
@@ -750,7 +856,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{notakredit.nominal}"
+                "Value": "{notakreditheader_details.nominal}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
@@ -775,7 +881,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{notakredit.nominalbayar}"
+                "Value": "{notakreditheader_details.nominalbayar}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
@@ -800,7 +906,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{notakredit.penyesuaian}"
+                "Value": "{notakreditheader_details.penyesuaian}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
@@ -896,7 +1002,7 @@
               "ReferenceToGuid": "60ddd9b84f8b8561cc80797e8c125742"
             }
           },
-          "DataSourceName": "notakredit",
+          "DataSourceName": "notakreditheader_details",
           "Sort": {
             "0": "ASC",
             "1": "FNInvoice",
@@ -908,7 +1014,7 @@
           "Ident": "StiGroupFooterBand",
           "Name": "GroupFooterBand1",
           "PrintOn": "OnlyLastPage",
-          "ClientRectangle": "0,60,205.9,42",
+          "ClientRectangle": "0,40,205.9,42",
           "ComponentPlacement": "gf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -920,7 +1026,7 @@
               "Ident": "StiText",
               "Name": "Text12",
               "Guid": "fb13e035224f06c5ffb7ea9d89a46dcf",
-              "ClientRectangle": "126,2,26,6",
+              "ClientRectangle": "128,2,26,6",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -946,7 +1052,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{Sum(notakredit.penyesuaian)}"
+                "Value": "{Sum(notakreditheader_details.penyesuaian)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
@@ -1234,7 +1340,7 @@
           "Ident": "StiFooterBand",
           "Name": "FooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,110,205.9,2.2",
+          "ClientRectangle": "0,82,205.9,2.2",
           "ComponentPlacement": "f.ap.Page1",
           "Conditions": {
             "0": {
@@ -1273,7 +1379,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive5",
           "Guid": "67f5a2ef265e0908dc6be08f40bae62e",
-          "ClientRectangle": "4,46,0.254,14",
+          "ClientRectangle": "4,34,0.254,6",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1285,7 +1391,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive12",
           "Guid": "c109a879a3f18077f530d5d76c67b8e6",
-          "ClientRectangle": "14,46,0.254,14",
+          "ClientRectangle": "14,34,0.254,6",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1297,7 +1403,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive6",
           "Guid": "eb5bc805f4a2d25ab43b7f126c7118ca",
-          "ClientRectangle": "40,46,0.254,14",
+          "ClientRectangle": "40,34,0.254,6",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1309,7 +1415,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive7",
           "Guid": "c772d3f0ed9519c1fa0ebe64a1442ce1",
-          "ClientRectangle": "66,46,0.254,14",
+          "ClientRectangle": "66,34,0.254,6",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1321,7 +1427,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive8",
           "Guid": "45555bbc5cabe0c0ed519cbbc196fa65",
-          "ClientRectangle": "98,46,0.254,14",
+          "ClientRectangle": "98,34,0.254,6",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1333,7 +1439,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive9",
           "Guid": "ad3d73831c73a4550d983df64a081908",
-          "ClientRectangle": "130,46,0.254,14",
+          "ClientRectangle": "130,34,0.254,6",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1345,7 +1451,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive10",
           "Guid": "a7c2479e930d935522eee5f8d4cb38fe",
-          "ClientRectangle": "162,46,0.254,14",
+          "ClientRectangle": "162,34,0.254,6",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1357,7 +1463,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive11",
           "Guid": "60ddd9b84f8b8561cc80797e8c125742",
-          "ClientRectangle": "204,46,0.254,14",
+          "ClientRectangle": "204,34,0.254,6",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1369,7 +1475,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive1",
           "Guid": "fdcc98a5e158c1c673241e99dda57396",
-          "ClientRectangle": "4,68,0.254,26",
+          "ClientRectangle": "4,48,0.254,26",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1381,7 +1487,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive2",
           "Guid": "87a6945e0ff1eaa581be491af105dbea",
-          "ClientRectangle": "70,68,0.254,26",
+          "ClientRectangle": "70,48,0.254,26",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1393,7 +1499,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive3",
           "Guid": "d7689c802110cf4227d2ba1aa1cd07b5",
-          "ClientRectangle": "102,68,0.254,26",
+          "ClientRectangle": "102,48,0.254,26",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1405,7 +1511,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive4",
           "Guid": "0dd5e243058f5070ee46b9b8401fd33b",
-          "ClientRectangle": "38,68,0.254,26",
+          "ClientRectangle": "38,48,0.254,26",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"

@@ -400,7 +400,7 @@ Route::middleware('auth')->group(function () {
     
     Route::get('notakreditheader/get', [NotaKreditHeaderController::class, 'get'])->name('notakreditheader.get');
     Route::get('notakreditheader/export', [NotaKreditHeaderController::class, 'export'])->name('notakreditheader.export');
-    Route::get('notakreditheader/report/{id}', [NotaKreditHeaderController::class, 'report'])->name('notakreditheader.report');
+    Route::get('notakreditheader/report', [NotaKreditHeaderController::class, 'report'])->name('notakreditheader.report');
     Route::get('notakreditheader/index', [NotaKreditHeaderController::class, 'index']);
     Route::resource('notakreditheader', NotaKreditHeaderController::class);
     

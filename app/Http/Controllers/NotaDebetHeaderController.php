@@ -81,6 +81,23 @@ class NotaDebetHeaderController extends MyController
             ->get(config('app.api_url') . 'notadebetheader/'.$id);
     }
 
+    public function combo($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ];
+                
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+
+        return $response['data'];
+    }
+
+
     /**
      * @ClassName
      */
@@ -106,6 +123,11 @@ class NotaDebetHeaderController extends MyController
             $data["user"] = Auth::user();
             
 
+        $combo = $this->combo('list');
+        
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $data["combo"] =  $combo[$key];
+        
         $notadebetheaders = $data;
         return view('reports.notadebetheader', compact('notadebetheaders'));
     }
