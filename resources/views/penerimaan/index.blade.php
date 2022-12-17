@@ -119,20 +119,25 @@
               }
             },
             formatter: (value, options, rowData) => {
-              let statusCetak = JSON.parse(value)
-
+              let statuscetak = JSON.parse(value)
+              if (!statuscetak) {
+                return ''
+              }
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
                   <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
-
+              
               return formattedValue[0].outerHTML
             },
+            
             cellattr: (rowId, value, rowObject) => {
-              let statusCetak = JSON.parse(rowObject.statuscetak)
-
-              return ` title="${statusCetak.MEMO}"`
+              let statuscetak = JSON.parse(rowObject.statuscetak)
+              if (!statuscetak) {
+                return ` title=" "`
+              }
+              return ` title="${statuscetak.MEMO}"`
             }
           },
           {
