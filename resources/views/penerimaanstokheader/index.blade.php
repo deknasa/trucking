@@ -113,6 +113,23 @@
     $('.gudang-lookup').lookup({
       title: 'Gudang Lookup',
       fileName: 'gudang',
+      beforeProcess: function(test) {
+        var penerimaanstokId= $(`#penerimaanstokId`).val();
+        console.log(penerimaanstokId);
+        if (penerimaanstokId == 3) {
+          this.postData = {
+            // $(`#penerimaanstokId`).val()
+            filters: JSON.stringify({
+              "groupOp": "AND",
+              "rules": [{
+                  "field": "gudang",
+                  "op": "cn",
+                  "data": "GUDANG KANTOR"
+              }]
+            })
+          }
+        }
+      },
       onSelectRow: (gudang, element) => {
         element.val(gudang.gudang)
         $(`#${element[0]['name']}Id`).val(gudang.id)
@@ -129,6 +146,23 @@
     $('.penerimaanstokheader-lookup').lookup({
       title: 'penerimaan stok header Lookup',
       fileName: 'penerimaanstokheader',
+      beforeProcess: function(test) {
+        var penerimaanstokId= $(`#penerimaanstokId`).val();
+        if (penerimaanstokId == 3) {
+          this.postData = {
+            // $(`#penerimaanstokId`).val()
+            filters: JSON.stringify({
+              "groupOp": "AND",
+              "rules": [{
+                  "field": "penerimaanstok_id_not_null",
+                  "op": "cn",
+                  "data": 2
+              }]
+            })
+          }
+        }
+      },
+            
       onSelectRow: (penerimaan, element) => {
         element.val(penerimaan.nobukti)
       },

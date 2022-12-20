@@ -183,18 +183,18 @@
 
 
             <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys" style="width: 2000px;">
+              <table class="table table-bordered table-bindkeys" style="width: 100%;">
                 <thead>
                   <tr>
-                    <th width="5%">No</th>
-                    <th width="20%">stok</th>
-                    <th class="data_tbl" width="5%">vulkanisirke</th>
-                    <th width="10%">keterangan</th>
-                    <th class="data_tbl" width="10%">qty</th>
-                    <th class="data_tbl" width="20%">harga</th>
-                    <th class="data_tbl" width="5%">persentase discount</th>
-                    <th class="data_tbl" width="20%">Total</th>
-                    <th width="5%">Aksi</th>
+                    <th style="width : 5%">No</th>
+                    <th style="width: 20%">stok</th>
+                    <th class="data_tbl tbl_vulkanisirke" style="width : 20px">vulkanisirke</th>
+                    <th style="width:20%">keterangan</th>
+                    <th class="data_tbl tbl_qty" style="width:10%">qty</th>
+                    <th class="data_tbl tbl_harga" style="width:20%">harga</th>
+                    <th class="data_tbl tbl_persentase" style="width : 20px">persentase discount</th>
+                    <th class="data_tbl tbl_total" style="width:20%">Total</th>
+                    <th style="width : 5%">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -362,37 +362,78 @@
     $('#crudForm').find('[name=statusformat_id]').val(kodepenerimaan);
   }
   function cekKodePenerimaan(kode) {
-    $.ajax({
-          url: `${apiUrl}parameter`,
-          method: 'GET',
-          dataType: 'JSON',
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
-          data: {
-            filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "PENERIMAAN STOK"
-            },
-            {
-              "field": "subgrp",
-              "op": "cn",
-              "data": "PO STOK BUKTI"
-            }]
-          })
-        },
-        success: response => {
-          if (response.data[0].id==kode) {
-            tampilanpo();
-          } else {
-            tampilanall();
-          }
-        }
-      })
+    switch (kode) {
+      case '132':
+        //DOT
+        tampilandot()
+        break;
+      case '133':
+        //POT
+        tampilanpo()
+        break;
+      case '134':
+        //PBT
+        tampilanpbt()
+        break;
     
+      default:
+        tampilanall()
+        break;
+    }
+    // $.ajax({
+    //   url: `${apiUrl}parameter`,
+    //   method: 'GET',
+    //   dataType: 'JSON',
+    //   headers: {
+    //     Authorization: `Bearer ${accessToken}`
+    //   },
+    //   data: {
+    //     filters: JSON.stringify({
+    //       "groupOp": "AND",
+    //       "rules": [{
+    //         "field": "grp",
+    //         "op": "cn",
+    //         "data": "PENERIMAAN STOK"
+    //       },
+    //       {
+    //         "field": "subgrp",
+    //         "op": "cn",
+    //         "data": "PO STOK BUKTI"
+    //       }]
+    //     })
+    //   },
+    //   success: response => {
+    //     if (response.data[0].id==kode) {
+    //       tampilanpo();
+    //     } else {
+    //       tampilanall();
+    //     }
+    //   }
+    // })
+    
+  }
+          
+  
+  function tampilandot() {
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=nobon]').parents('.form-group').show()
+    $('[name=hutang_nobukti]').parents('.form-group').hide()
+    $('[name=trado]').parents('.form-group').hide()
+    $('[name=supplier]').parents('.form-group').show()
+    $('[name=gudang]').parents('.form-group').hide()
+    
+    $('[name=gudangdari]').parents('.form-group').show()
+    $('[name=gudangke]').parents('.form-group').show()
+    $('[name=coa]').parents('.form-group').hide()
+    $('.tbl_vulkanisirke').hide();
+    $('.tbl_qty').show();
+    $('.tbl_harga').show();
+    $('.tbl_persentase').hide();
+    $('.tbl_total').hide();
+    $('.colspan').attr('colspan',3);
+    $('[name=gudang]').val('').attr('readonly',false);
+    $('[name=gudang_id]').val('')
   }
   function tampilanpo() {
     $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
@@ -400,24 +441,68 @@
     $('[name=hutang_nobukti]').parents('.form-group').hide()
     $('[name=trado]').parents('.form-group').hide()
     $('[name=gudang]').parents('.form-group').hide()
+    
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
-    $('.data_tbl').hide();
-    $('.colspan').attr('colspan',3);
-
+    $('.tbl_vulkanisirke').hide();
+    $('.tbl_qty').hide();
+    $('.tbl_harga').hide();
+    $('.tbl_persentase').hide();
+    $('.tbl_total').hide();
+    $('.colspan').attr('colspan',1);
+    $('[name=gudang]').val('').attr('readonly',false);
+    $('[name=gudang_id]').val('')
+  }
+  function tampilanpbt() {
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').show()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=nobon]').parents('.form-group').show()
+    $('[name=hutang_nobukti]').parents('.form-group').hide()
+    $('[name=trado]').parents('.form-group').hide()
+    $('[name=supplier]').parents('.form-group').show()
+    $('[name=gudang]').parents('.form-group').show()
+    $('[name=gudangdari]').parents('.form-group').hide()
+    $('[name=gudangke]').parents('.form-group').hide()
+    $('[name=coa]').parents('.form-group').hide()
+    $('.tbl_vulkanisirke').hide();
+    $('.tbl_qty').show();
+    $('.tbl_harga').show();
+    $('.tbl_persentase').show();
+    $('.tbl_total').show();
+    $('.colspan').attr('colspan',5);
+    $.ajax({
+        url: `${apiUrl}gudang/1`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        success: response => {
+          var data =response.data;
+          $('[name=gudang]').val(data.gudang).attr('readonly',true);
+          $('[name=gudang_id]').val(data.id)
+        },
+        error: error => {
+          showDialog(error.statusText)
+        }
+      })
   }
 
   function tampilanall() {
-    // $('[name=penerimaanstok_nobukti]').parents('.row').show()
     $('[name=penerimaanstok_nobukti]').parents('.form-group').show()
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').show()
+    $('[name=nobon]').parents('.form-group').show()
     $('[name=hutang_nobukti]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').show()
+    $('[name=supplier]').parents('.form-group').show()
     $('[name=gudang]').parents('.form-group').show()
     $('[name=gudangdari]').parents('.form-group').show()
     $('[name=gudangke]').parents('.form-group').show()
     $('[name=coa]').parents('.form-group').show()
+    $('[name=gudang]').val('').attr('readonly',false);
+    $('[name=gudang_id]').val('')
+
     $('.data_tbl').show();
     $('.colspan').attr('colspan',6);
   }
@@ -582,24 +667,24 @@
                     <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${index}">
                     <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>                 
-                  <td class="data_tbl">
+                  <td class="data_tbl tbl_vulkanisirke">
                     <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control" >                    
                   </td>  
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
-                  <td class="data_tbl">
+                  <td class="data_tbl tbl_qty">
                     <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
                   </td>  
                   
-                  <td class="data_tbl">
+                  <td class="data_tbl tbl_harga">
                     <input type="text"  name="detail_harga[]" id="detail_harga${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
                   </td>  
                   
-                  <td class="data_tbl">
+                  <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
                   </td>  
-                  <td class="data_tbl">
+                  <td class="data_tbl tbl_total">
                     <input type="text"  name="totalItem[]" readonly id="totalItem${index}" style="text-align:right" class="form-control totalItem autonumeric number${index}" >                    
                   </td>  
                   
@@ -712,24 +797,24 @@
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>
-                  <td class="data_tbl">
+                  <td class="data_tbl tbl_vulkanisirke">
                     <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                   </td>  
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
-                  <td class="data_tbl">
+                  <td class="data_tbl tbl_qty">
                     <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                   </td>  
                   
-                  <td class="data_tbl">
+                  <td class="data_tbl tbl_harga">
                     <input type="text"  name="detail_harga[]" id="detail_harga${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
                   
-                  <td class="data_tbl">
+                  <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
-                  <td class="data_tbl">
+                  <td class="data_tbl tbl_total">
                     <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                   </td>  
                   <td>
