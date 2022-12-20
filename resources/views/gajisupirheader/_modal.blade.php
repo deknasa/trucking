@@ -307,7 +307,6 @@
                 value: limit
             })
 
-            console.log(data);
 
             switch (action) {
                 case 'add':
@@ -374,12 +373,11 @@
                         }
                     },
                     error: error => {
+                        console.log(error)
                         if (error.status === 422) {
                             $('.is-invalid').removeClass('is-invalid')
                             $('.invalid-feedback').remove()
                             setErrorMessages(form, error.responseJSON.errors);
-                            showDialog(error.responseJSON.message)
-
                         } else {
                             showDialog(error.statusText)
                         }

@@ -86,6 +86,31 @@
         initLookup()
         setKeteranganOptions($('#crudForm'))
 
+        let data = []
+        data.push({
+            name: 'grp',
+            value: 'GUDANG KANTOR'
+        })
+        data.push({
+            name: 'subgrp',
+            value: 'GUDANG KANTOR'
+        })
+        $.ajax({
+            url: `${apiUrl}parameter/combo`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: data,
+            success: response => {
+                response.data.forEach(gudangKantor => {
+                    $('#crudForm').find('[name=gudang_id]').val(gudangKantor.text)
+                    $('#crudForm').find('[name=gudang]').val(gudangKantor.grp)
+                });
+            }
+        })
+
         $("#jqGrid").jqGrid({
                 url: `${apiUrl}stokpersediaan`,
                 mtype: "GET",
@@ -299,7 +324,6 @@
             $('#gudang').hide()
             $('#trado').hide()
         } else {
-            $('#gudang').hide()
             $('#trado').hide()
             $('#gandengan').hide()
         }
@@ -362,37 +386,44 @@
 
 
     const setKeteranganOptions = function(relatedForm) {
-        // return new Promise((resolve, reject) => {
-        // relatedForm.find('[name=approve]').empty()
-        relatedForm.find('[name=keterangan]').append(
-            new Option('-- PILIH FILTER --', '', false, true)
-        ).trigger('change')
+        return new Promise((resolve, reject) => {
+            relatedForm.find('[name=keterangan]').empty()
+            relatedForm.find('[name=keterangan]').append(
+                new Option('-- PILIH FILTER --', '', false, true)
+            ).trigger('change')
 
-        let data = [];
-        data.push({
-            name: 'grp',
-            value: 'STOK PERSEDIAAN'
-        })
-        data.push({
-            name: 'subgrp',
-            value: 'STOK PERSEDIAAN'
-        })
-        $.ajax({
-            url: `${apiUrl}parameter/combo`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            data: data,
-            success: response => {
+            let data = [];
+            data.push({
+                name: 'grp',
+                value: 'STOK PERSEDIAAN'
+            })
+            data.push({
+                name: 'subgrp',
+                value: 'STOK PERSEDIAAN'
+            })
+            $.ajax({
+                url: `${apiUrl}parameter/combo`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
 
-                response.data.forEach(stokPersediaan => {
-                    let option = new Option(stokPersediaan.text, stokPersediaan.id)
-                    relatedForm.find('[name=keterangan]').append(option).trigger('change')
-                });
+                    response.data.forEach(stokPersediaan => {
+                        let option = new Option(stokPersediaan.text, stokPersediaan.id)
+                        relatedForm.find('[name=keterangan]').append(option).trigger('change')
+                    });
 
-            }
+                    relatedForm
+                        .find('[name=keterangan]')
+                        .val($(`#crudForm [name=keterangan] option:eq(1)`).val())
+                        .trigger('change')
+                        .trigger('select2:selected');
+                    // resolve()
+                }
+            })
         })
     }
 </script>

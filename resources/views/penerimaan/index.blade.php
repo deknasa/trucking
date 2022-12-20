@@ -119,8 +119,8 @@
               }
             },
             formatter: (value, options, rowData) => {
-              let statuscetak = JSON.parse(value)
-              if (!statuscetak) {
+              let statusCetak = JSON.parse(value)
+              if (!statusCetak) {
                 return ''
               }
               let formattedValue = $(`
@@ -133,11 +133,11 @@
             },
             
             cellattr: (rowId, value, rowObject) => {
-              let statuscetak = JSON.parse(rowObject.statuscetak)
-              if (!statuscetak) {
+              let statusCetak = JSON.parse(rowObject.statuscetak)
+              if (!statusCetak) {
                 return ` title=" "`
               }
-              return ` title="${statuscetak.MEMO}"`
+              return ` title="${statusCetak.MEMO}"`
             }
           },
           {

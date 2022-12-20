@@ -777,12 +777,11 @@
                   }
                 },
                 error: error => {
+                  console.log('postdata ',error)
                   if (error.status === 422) {
                     $('.is-invalid').removeClass('is-invalid')
                     $('.invalid-feedback').remove()
-
                     setErrorMessages(form, error.responseJSON.errors);
-                    showDialog(error.responseJSON.message)
                   } else {
                     showDialog(error.statusText)
                   }
@@ -794,12 +793,11 @@
 
           },
           error: error => {
+            console.log('cekupah ',error)
             if (error.status === 422) {
               $('.is-invalid').removeClass('is-invalid')
               $('.invalid-feedback').remove()
-
-              setErrorMessages(form, error.responseJSON.errors);
-              showDialog(error.responseJSON.errors)
+              showDialog(error.responseJSON.message)
             } else {
               showDialog(error.statusText)
             }
@@ -1417,7 +1415,7 @@
           <input type="text" name="keterangan_detail[]" class="form-control">
         </td>
         <td>
-          <input type="text" name="nominal[]" class="form-control autonumeric">
+          <input type="text" name="nominal[]" class="form-control autonumeric" value="0">
         </td>
         <td>
           <input type="text" name="nominalTagih[]" class="form-control autonumeric">
