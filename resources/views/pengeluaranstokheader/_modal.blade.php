@@ -135,12 +135,12 @@
               <thead>
                 <tr>
                   <th width="50">No</th>
-                  <th width="200">stok</th>
-                  <th width="100">vulkanisirke</th>
-                  <th width="250">keterangan</th>
+                  <th width="300">stok</th>
+                  <th class="data_tbl" width="100">vulkanisirke</th>
+                  <th width="350">keterangan</th>
                   <th width="150">qty</th>
                   <th width="150">harga</th>
-                  <th width="50">persentase discount</th>
+                  <th class="data_tbl" width="50">persentase discount</th>
                   <th width="150">Total</th>
                   <th>Aksi</th>
                 </tr>
@@ -149,10 +149,10 @@
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan="6"></td>
+                  <td colspan="6" ></td>
                   
-                  <td class="font-weight-bold"> Total : </td>
-                  <td id="sumary" class="text-right font-weight-bold">  </td>
+                  <td class="font-weight-bold  data_tbl"> Total : </td>
+                  <td id="sumary" class="text-right font-weight-bold data_tbl">  </td>
                   <td>
                     <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                   </td>
@@ -303,7 +303,61 @@
   })
   function kodepengeluaran(kodepengeluaran){
     $('#crudForm').find('[name=statusformat]').val(kodepengeluaran).trigger('change');
+    cekKodePengeluaran(kodepengeluaran)
     $('#crudForm').find('[name=statusformat_id]').val(kodepengeluaran);
+  }
+
+  function cekKodePengeluaran(kode) {
+    $.ajax({
+          url: `${apiUrl}parameter`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: {
+            filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "PENGELUARAN STOK"
+            },
+            {
+              "field": "subgrp",
+              "op": "cn",
+              "data": "SPK STOK BUKTI"
+            }]
+          })
+        },
+        success: response => {
+          if (response.data[0].id==kode) {
+            tampilanspk();
+          } else {
+            tampilanall();
+          }
+        }
+      })
+    
+  }
+  function tampilanspk() {
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=servicein_nobukti]').parents('.form-group').hide()
+    $('[name=supplier]').parents('.form-group').hide()
+    $('.data_tbl').hide();
+    $('.colspan').attr('colspan',3);
+
+  }
+
+  function tampilanall() {
+    // $('[name=penerimaanstok_nobukti]').parents('.row').show()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').show()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').show()
+    $('[name=service_nobukti]').parents('.form-group').show()
+    $('[name=supplier]').parents('.form-group').show()
+    $('.data_tbl').show();
+    $('.colspan').attr('colspan',6);
   }
     
     $('#crudModal').on('shown.bs.modal', () => {
@@ -468,7 +522,7 @@
                     <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${index}">
                     <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>                 
-                  <td>
+                  <td class="data_tbl">
                     <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                   </td>  
                   <td>
@@ -482,7 +536,7 @@
                     <input type="text"  name="detail_harga[]" id="detail_harga${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}">
                   </td>  
                   
-                  <td>
+                  <td class="data_tbl">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}">
                   </td>  
                   <td>
@@ -515,7 +569,7 @@
       }
     })
     initAutoNumeric($(`.number${index}`))
-    
+    cekKodePengeluaran($('#crudForm').find('[name=statusformat]').val())   
     setRowNumbers()
     index++;
   }
