@@ -549,7 +549,7 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS LUAR KOTA"
+              "data": "UPAH SUPIR LUAR KOTA"
             }]
           })
         },
