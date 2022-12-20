@@ -140,6 +140,7 @@ use App\Http\Controllers\ProsesGajiSupirHeaderController;
 use App\Http\Controllers\ProsesGajiSupirDetailController;
 use App\Http\Controllers\ReportAllController;
 use App\Http\Controllers\ReportNeracaController;
+use App\Http\Controllers\StokPersediaanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -803,6 +804,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('approvalpendapatansupir/index', [ApprovalPendapatanSupirController::class, 'index']);
     Route::resource('approvalpendapatansupir', ApprovalPendapatanSupirController::class);
+    
+    Route::get('stokpersediaan/index', [StokPersediaanController::class, 'index']);
+    Route::resource('stokpersediaan', StokPersediaanController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

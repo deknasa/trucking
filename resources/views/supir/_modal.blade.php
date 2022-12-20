@@ -625,20 +625,40 @@
     const paramName = dropzone.options.paramName
     const type = paramName.substring(5)
 
-    let files = JSON.parse(data[paramName])
+    if (data[paramName] == '') {
+      $('.dropzone').each((index, element) => {
+        if (!element.dropzone) {
+          let newDropzone = new Dropzone(element, {
+            url: 'test',
+            autoProcessQueue: false,
+            addRemoveLinks: true,
+            acceptedFiles: 'image/*',
+            paramName: $(element).data('field'),
+            init: function() {
+              dropzones.push(this)
+            }
+          })
+        }
 
-    files.forEach((file) => {
-      getImgURL(`${apiUrl}supir/image/${type}/${file}/ori`, (fileBlob) => {
-        let imageFile = new File([fileBlob], file, {
-          type: 'image/jpeg',
-          lastModified: new Date().getTime()
-        }, 'utf-8')
-
-        dropzone.options.addedfile.call(dropzone, imageFile);
-        dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}supir/image/${type}/${file}/ori`);
-        dropzone.files.push(imageFile)
+        element.dropzone.removeAllFiles()
       })
-    })
+    } else {
+
+      let files = JSON.parse(data[paramName])
+
+      files.forEach((file) => {
+        getImgURL(`${apiUrl}supir/image/${type}/${file}/ori`, (fileBlob) => {
+          let imageFile = new File([fileBlob], file, {
+            type: 'image/jpeg',
+            lastModified: new Date().getTime()
+          }, 'utf-8')
+
+          dropzone.options.addedfile.call(dropzone, imageFile);
+          dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}supir/image/${type}/${file}/ori`);
+          dropzone.files.push(imageFile)
+        })
+      })
+    }
   }
 
   const setSupirLamaOptions = function(relatedForm) {
