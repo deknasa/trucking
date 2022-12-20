@@ -41,7 +41,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-6" style="display:none">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
                     <label>STATUS FORMAT <span class="text-danger">*</span> </label>
@@ -204,8 +204,8 @@
                   <tr>
                     <td colspan="6" class="colspan"></td>
 
-                    <td class="font-weight-bold data_tbl"> Total : </td>
-                    <td id="sumary" class="text-right font-weight-bold data_tbl"> </td>
+                    <td class="font-weight-bold data_tbl sumrow"> Total : </td>
+                    <td id="sumary" class="text-right font-weight-bold data_tbl sumrow"> </td>
                     <td>
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
@@ -422,18 +422,21 @@
     $('[name=trado]').parents('.form-group').hide()
     $('[name=supplier]').parents('.form-group').show()
     $('[name=gudang]').parents('.form-group').hide()
-    
-    $('[name=gudangdari]').parents('.form-group').show()
-    $('[name=gudangke]').parents('.form-group').show()
+    $('[name=gudangdari]').parents('.form-group').hide()
+    $('[name=gudangke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_qty').show();
     $('.tbl_harga').show();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
-    $('.colspan').attr('colspan',3);
+    $('.colspan').attr('colspan',5);
+    $('.sumrow').hide();
     $('[name=gudang]').val('').attr('readonly',false);
     $('[name=gudang_id]').val('')
+    $('[name=supplier]').val('').attr('readonly',false);
+    $('[name=supplier]').data('currentValue','')
+    $('[name=supplier_id]').val('')
   }
   function tampilanpo() {
     $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
@@ -441,18 +444,21 @@
     $('[name=hutang_nobukti]').parents('.form-group').hide()
     $('[name=trado]').parents('.form-group').hide()
     $('[name=gudang]').parents('.form-group').hide()
-    
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
-    $('.tbl_qty').hide();
+    $('.tbl_qty').show();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
-    $('.colspan').attr('colspan',1);
+    $('.colspan').attr('colspan',4);
+    $('.sumrow').hide();
     $('[name=gudang]').val('').attr('readonly',false);
     $('[name=gudang_id]').val('')
+    $('[name=supplier]').val('').attr('readonly',false);
+    $('[name=supplier]').data('currentValue','')
+    $('[name=supplier_id]').val('')
   }
   function tampilanpbt() {
     $('[name=penerimaanstok_nobukti]').parents('.form-group').show()
@@ -461,7 +467,7 @@
     $('[name=hutang_nobukti]').parents('.form-group').hide()
     $('[name=trado]').parents('.form-group').hide()
     $('[name=supplier]').parents('.form-group').show()
-    $('[name=gudang]').parents('.form-group').show()
+    $('[name=gudang]').parents('.form-group').hide()
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
@@ -471,6 +477,7 @@
     $('.tbl_persentase').show();
     $('.tbl_total').show();
     $('.colspan').attr('colspan',5);
+    $('.sumrow').show();
     $.ajax({
         url: `${apiUrl}gudang/1`,
         method: 'GET',
@@ -502,10 +509,53 @@
     $('[name=coa]').parents('.form-group').show()
     $('[name=gudang]').val('').attr('readonly',false);
     $('[name=gudang_id]').val('')
-
+    $('.sumrow').show();
     $('.data_tbl').show();
     $('.colspan').attr('colspan',6);
+    $('[name=nobon]').val('')
+    $('[name=supplier]').val('').attr('readonly',false);
+    $('[name=supplier]').data('currentValue','')
+    $('[name=supplier_id]').val('')
   }
+
+  function setSuplier(penerimaan_id){
+    $.ajax({
+        url: `${apiUrl}penerimaanstokheader/${penerimaan_id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        success: response => {
+          var data =response.data;
+          $('[name=supplier]').val(data.supplier).attr('readonly',true);
+          $('[name=supplier]').data('currentValue',data.supplier)
+
+          $('[name=supplier_id]').val(data.supplier_id)
+        },
+        error: error => {
+          showDialog(error.statusText)
+        }
+      })
+  }
+  // function setNobon(penerimaan_id){
+  //   $.ajax({
+  //       url: `${apiUrl}penerimaanstokheader/1`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         'Authorization': `Bearer ${accessToken}`
+  //       },
+  //       success: response => {
+  //         var data =response.data;
+  //         $('[name=gudang]').val(data.gudang).attr('readonly',true);
+  //         $('[name=gudang_id]').val(data.id)
+  //       },
+  //       error: error => {
+  //         showDialog(error.statusText)
+  //       }
+  //     })
+  // }
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')

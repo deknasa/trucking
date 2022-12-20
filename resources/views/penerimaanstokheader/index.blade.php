@@ -113,23 +113,6 @@
     $('.gudang-lookup').lookup({
       title: 'Gudang Lookup',
       fileName: 'gudang',
-      beforeProcess: function(test) {
-        var penerimaanstokId= $(`#penerimaanstokId`).val();
-        console.log(penerimaanstokId);
-        if (penerimaanstokId == 3) {
-          this.postData = {
-            // $(`#penerimaanstokId`).val()
-            filters: JSON.stringify({
-              "groupOp": "AND",
-              "rules": [{
-                  "field": "gudang",
-                  "op": "cn",
-                  "data": "GUDANG KANTOR"
-              }]
-            })
-          }
-        }
-      },
       onSelectRow: (gudang, element) => {
         element.val(gudang.gudang)
         $(`#${element[0]['name']}Id`).val(gudang.id)
@@ -156,7 +139,7 @@
               "rules": [{
                   "field": "penerimaanstok_id_not_null",
                   "op": "cn",
-                  "data": 2
+                  "data": 2 //id POT
               }]
             })
           }
@@ -164,6 +147,13 @@
       },
             
       onSelectRow: (penerimaan, element) => {
+        var penerimaanstokId= $(`#penerimaanstokId`).val();
+        if (penerimaanstokId == 3) {
+          setSuplier(penerimaan.id);
+          $('[name=nobon]').val(penerimaan.nobon)
+          // console.log(penerimaan.supplier,
+          // penerimaan.nobon);
+        }
         element.val(penerimaan.nobukti)
       },
       onCancel: (element) => {
