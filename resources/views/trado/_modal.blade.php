@@ -155,7 +155,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Status Standarisasi <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statusstandarisasi" class="form-control select2bs4" z-index="3">
+                  <select name="statusstandarisasi" class="form-control select2bs4">
                     <option value="">-- PILIH STATUS STANDARISASI --</option>
                   </select>
                 </div>
@@ -184,7 +184,7 @@
                 <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Speksi Mati <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tglspeksimati" z-index="3">
+                    <input type="text" class="form-control datepicker" name="tglspeksimati">
                   </div>
                 </div>
               </div>
@@ -210,7 +210,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Status Mutasi <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statusmutasi" class="form-control select2bs4" z-index="3">
+                  <select name="statusmutasi" class="form-control select2bs4">
                     <option value="">-- PILIH STATUS MUTASI --</option>
                   </select>
                 </div>
@@ -221,7 +221,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Status Validasi Kendaraan <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statusvalidasikendaraan" class="form-control select2bs4" z-index="3">
+                  <select name="statusvalidasikendaraan" class="form-control select2bs4">
                     <option value="">-- PILIH STATUS VALIDASI KENDARAAN --</option>
                   </select>
                 </div>
@@ -299,7 +299,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Status Mobil Storing <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statusmobilstoring" class="form-control select2bs4" z-index="3">
+                  <select name="statusmobilstoring" class="form-control select2bs4">
                     <option value="">-- PILIH STATUS MOBIL STORING --</option>
                   </select>
                 </div>
@@ -323,7 +323,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">STATUS APPEDIT BAN <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statusappeditban" class="form-control select2bs4" z-index="3">
+                  <select name="statusappeditban" class="form-control select2bs4">
                     <option value="">-- PILIH STATUS APPEDIT BAN --</option>
                   </select>
                 </div>
@@ -334,7 +334,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Lewat Validasi <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <select name="statuslewatvalidasi" class="form-control select2bs4" z-index="3">
+                  <select name="statuslewatvalidasi" class="form-control select2bs4">
                     <option value="">-- PILIH LEWAT VALIDASI --</option>
                   </select>
                 </div>
@@ -419,7 +419,7 @@
 
       let url
       let form = $('#crudForm')
-      
+
       let formData = new FormData(form[0])
       let Id = form.find('[name=id]').val()
 
@@ -712,20 +712,40 @@
     const paramName = dropzone.options.paramName
     const type = paramName.substring(5)
 
-    let files = JSON.parse(data[paramName])
+    if (data[paramName] == '') {
+      $('.dropzone').each((index, element) => {
+        if (!element.dropzone) {
+          let newDropzone = new Dropzone(element, {
+            url: 'test',
+            autoProcessQueue: false,
+            addRemoveLinks: true,
+            acceptedFiles: 'image/*',
+            paramName: $(element).data('field'),
+            init: function() {
+              dropzones.push(this)
+            }
+          })
+        }
 
-    files.forEach((file) => {
-      getImgURL(`${apiUrl}trado/image/${type}/${file}/ori`, (fileBlob) => {
-        let imageFile = new File([fileBlob], file, {
-          type: 'image/jpeg',
-          lastModified: new Date().getTime()
-        }, 'utf-8')
-
-        dropzone.options.addedfile.call(dropzone, imageFile);
-        dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}trado/image/${type}/${file}/ori`);
-        dropzone.files.push(imageFile)
+        element.dropzone.removeAllFiles()
       })
-    })
+    } else {
+      let files = JSON.parse(data[paramName])
+
+      files.forEach((file) => {
+        getImgURL(`${apiUrl}trado/image/${type}/${file}/ori`, (fileBlob) => {
+          let imageFile = new File([fileBlob], file, {
+            type: 'image/jpeg',
+            lastModified: new Date().getTime()
+          }, 'utf-8')
+
+          dropzone.options.addedfile.call(dropzone, imageFile);
+          dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}trado/image/${type}/${file}/ori`);
+          dropzone.files.push(imageFile)
+        })
+      })
+
+    }
   }
 
   const setStatusLewatValidasiOptions = function(relatedForm) {
