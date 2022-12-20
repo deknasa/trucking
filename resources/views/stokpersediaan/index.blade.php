@@ -100,10 +100,17 @@
                     {
                         label: 'STOK',
                         name: 'stok_id',
+                        width: '500px'
                     },
                     {
                         label: 'QTY',
                         name: 'qty',
+                        align: 'right',
+                        formatter: 'currency',
+                        formatoptions: {
+                            decimalSeparator: '.',
+                            thousandsSeparator: ','
+                        }
                     },
 
                     {
