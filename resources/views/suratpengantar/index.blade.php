@@ -44,11 +44,15 @@
             width: '50px'
           },
           {
-            label: 'NOBUKTI',
+            label: 'JOB TRUCKING',
+            name: 'jobtrucking',
+          },
+          {
+            label: 'NO TRIP',
             name: 'nobukti',
           },
           {
-            label: 'TGLBUKTI',
+            label: 'TGL TRIP',
             name: 'tglbukti',
             align: 'left',
             formatter: "date",
@@ -58,7 +62,25 @@
             }
           },
           {
-            label: 'PELANGGAN',
+            label: 'NO SP',
+            name: 'nosp',
+          },
+          {
+            label: 'TGLSP',
+            name: 'tglsp',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'NOJOB',
+            name: 'nojob',
+          },
+          {
+            label: 'SHIPPER',
             name: 'pelanggan_id',
           },
           {
@@ -74,6 +96,34 @@
             name: 'sampai_id',
           },
           {
+            label: 'GAJI SUPIR',
+            name: 'gajisupir',
+            align: 'right',
+            formatter: 'currency',
+            formatoptions: {
+              decimalSeparator: ',',
+              thousandsSeparator: '.'
+            }
+          },
+          {
+            label: 'JARAK',
+            name: 'jarak',
+            align: 'right',
+            formatter: 'currency',
+            formatoptions: {
+              decimalSeparator: ',',
+              thousandsSeparator: '.'
+            }
+          },
+          {
+            label: 'AGEN',
+            name: 'agen_id',
+          },
+          {
+            label: 'JENIS ORDER',
+            name: 'jenisorder_id',
+          },
+          {
             label: 'CONTAINER',
             name: 'container_id'
           },
@@ -82,15 +132,19 @@
             name: 'nocont'
           },
           {
-            label: 'NO CONT2',
-            name: 'nocont2'
+            label: 'NO SEAL',
+            name: 'noseal',
           },
           {
-            label: 'STATUS CONTAINER',
+            label: 'FULL/EMPTY',
             name: 'statuscontainer_id',
           },
           {
-            label: 'TRADO',
+            label: 'GUDANG',
+            name: 'gudang',
+          },
+          {
+            label: 'NO POLISI',
             name: 'trado_id',
           },
           {
@@ -98,15 +152,11 @@
             name: 'supir_id',
           },
           {
-            label: 'NOJOB',
-            name: 'nojob',
+            label: 'CHASIS',
+            name: 'gandengan_id',
           },
           {
-            label: 'NOJOB2',
-            name: 'nojob2',
-          },
-          {
-            label: 'STATUSLONGTRIP',
+            label: 'LONGTRIP',
             name: 'statuslongtrip',
             stype: 'select',
             searchoptions: {
@@ -148,35 +198,7 @@
             }
           },
           {
-            label: 'GAJI SUPIR',
-            name: 'gajisupir',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
-          },
-          {
-            label: 'GAJI KENEK',
-            name: 'gajikenek',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
-          },
-          {
-            label: 'AGEN',
-            name: 'agen_id',
-          },
-          {
-            label: 'JENIS ORDER',
-            name: 'jenisorder_id',
-          },
-          {
-            label: 'STATUS PERALIHAN',
+            label: 'PERALIHAN',
             name: 'statusperalihan',
             stype: 'select',
             searchoptions: {
@@ -218,33 +240,101 @@
             }
           },
           {
-            label: 'TARIF',
+            label: 'OMSET',
+            name: 'statusritasiomset',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboritasiomset'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboritasiomset'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusRitasiOmset = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusRitasiOmset.WARNA}; color: #fff;">
+                  <span>${statusRitasiOmset.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusRitasiOmset = JSON.parse(rowObject.statusritasiomset)
+
+              return ` title="${statusRitasiOmset.MEMO}"`
+            }
+          },
+          {
+            label: 'LOKASI BONGKAR MUAT',
             name: 'tarif_id',
           },
           {
-            label: 'NOMINAL PERALIHAN',
-            name: 'nominalperalihan',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
+            label: 'MANDOR TRADO',
+            name: 'mandortrado_id',
           },
           {
-            label: 'NO SP',
-            name: 'nosp',
+            label: 'MANDOR SUPIR',
+            name: 'mandorsupir_id',
           },
           {
-            label: 'TGLSP',
-            name: 'tglsp',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
+            label: 'GUDANG SAMA',
+            name: 'statusgudangsama',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combogudangsama'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combogudangsama'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusGudangSama = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusGudangSama.WARNA}; color: #fff;">
+                  <span>${statusGudangSama.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusGudangSama = JSON.parse(rowObject.statusgudangsama)
+
+              return ` title="${statusGudangSama.MEMO}"`
             }
-          },
+          },     
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',

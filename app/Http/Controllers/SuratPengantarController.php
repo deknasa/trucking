@@ -31,6 +31,8 @@ class SuratPengantarController extends MyController
         $data = [
             'combolongtrip' => $this->comboList('list','STATUS LONGTRIP','STATUS LONGTRIP'),
             'comboperalihan' => $this->comboList('list','STATUS PERALIHAN','STATUS PERALIHAN'),
+            'comboritasiomset' => $this->comboList('list','STATUS RITASI OMSET','STATUS RITASI OMSET'),
+            'combogudangsama' => $this->comboList('list','STATUS GUDANG SAMA','STATUS GUDANG SAMA'),
         ];
         return view('suratpengantar.index', compact('title','data'));
     }
