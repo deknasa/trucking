@@ -33,6 +33,7 @@ class SuratPengantarController extends MyController
             'comboperalihan' => $this->comboList('list','STATUS PERALIHAN','STATUS PERALIHAN'),
             'comboritasiomset' => $this->comboList('list','STATUS RITASI OMSET','STATUS RITASI OMSET'),
             'combogudangsama' => $this->comboList('list','STATUS GUDANG SAMA','STATUS GUDANG SAMA'),
+            'combobatalmuat' => $this->comboList('list','STATUS BATAL MUAT','STATUS BATAL MUAT')
         ];
         return view('suratpengantar.index', compact('title','data'));
     }

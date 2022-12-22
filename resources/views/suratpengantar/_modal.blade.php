@@ -253,6 +253,14 @@
                     <input type="text" name="gudang" class="form-control">
                   </div>
                 </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">BATAL MUAT<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statusbatalmuat" class="form-control select2bs4" id="statusbatalmuat">
+                      <option value="">-- PILIH STATUS BATAL MUAT --</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -650,6 +658,7 @@
     setStatusPeralihanOptions(form)
     setStatusRitasiOmsetOptions(form)
     setStatusGudangSamaOptions(form)
+    setStatusBatalMuatOptions(form)
     addRow()
     setTotal()
     setTotalTagih()
@@ -679,7 +688,8 @@
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
         setStatusRitasiOmsetOptions(form),
-        setStatusGudangSamaOptions(form)
+        setStatusGudangSamaOptions(form),
+        setStatusBatalMuatOptions(form)
       ])
       .then(() => {
         showSuratPengantar(form, id)
@@ -706,7 +716,8 @@
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
         setStatusRitasiOmsetOptions(form),
-        setStatusGudangSamaOptions(form)
+        setStatusGudangSamaOptions(form),
+        setStatusBatalMuatOptions(form)
       ])
       .then(() => {
         showSuratPengantar(form, id)
@@ -878,6 +889,42 @@
             let option = new Option(statusGudangSama.text, statusGudangSama.id)
 
             relatedForm.find('[name=statusgudangsama]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+  const setStatusBatalMuatOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusbatalmuat]').empty()
+      relatedForm.find('[name=statusbatalmuat]').append(
+        new Option('-- PILIH STATUS BATAL MUAT --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS BATAL MUAT"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusBatalMuat => {
+            let option = new Option(statusBatalMuat.text, statusBatalMuat.id)
+
+            relatedForm.find('[name=statusbatalmuat]').append(option).trigger('change')
           });
 
           resolve()

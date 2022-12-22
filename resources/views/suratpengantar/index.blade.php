@@ -336,6 +336,48 @@
             }
           },     
           {
+            label: 'BATAL MUAT',
+            name: 'statusbatalmuat',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combobatalmuat'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combobatalmuat'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusBatalMuat = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusBatalMuat.WARNA}; color: #fff;">
+                  <span>${statusBatalMuat.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusBatalMuat = JSON.parse(rowObject.statusbatalmuat)
+
+              return ` title="${statusBatalMuat.MEMO}"`
+            }
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
           },
