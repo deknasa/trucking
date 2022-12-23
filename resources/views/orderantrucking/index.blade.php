@@ -98,15 +98,15 @@
             name: 'noseal',
           },
           {
-            label: 'NO JOBEMKL',
+            label: 'NO JOBEMKL 2',
             name: 'nojobemkl2',
           },
           {
-            label: 'NO CONT',
+            label: 'NO CONT 2',
             name: 'nocont2',
           },
           {
-            label: 'NO SEAL',
+            label: 'NO SEAL 2',
             name: 'noseal2',
           },
           {
