@@ -13,10 +13,29 @@ class NotaKreditHeaderController extends MyController
     public $title = 'Nota Kredit';
 
     public function index(Request $request){
-        $title = $this->title;
-        return view('notakreditheader.index', compact('title'));
+        $title = $this->title;$data = [
+            'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
+            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
+        ];
+        return view('notakreditheader.index', compact('title','data'));
     }
 
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
+    }
     public function get($params = [])
     {
         $params = [
@@ -60,34 +79,55 @@ class NotaKreditHeaderController extends MyController
             ->get(config('app.api_url') . 'notakreditheader/'.$id);
     }
 
-   /**
-     * @ClassName
-     */
-    public function report(Request $request,$id)
-    {
-        $params = [
-            'offset' => $request->dari - 1,
-            'rows' => $request->sampai - $request->dari + 1,
-            'withRelations' => true,
+    // OLD REPORT
+    // public function report(Request $request,$id)
+    // {
+    //     $params = [
+    //         'offset' => $request->dari - 1,
+    //         'rows' => $request->sampai - $request->dari + 1,
+    //         'withRelations' => true,
 
-        ];
+    //     ];
 
-        $notakredit = $this->find($params,$id)['data'];
-        $data = $notakredit;
-        $i =0;
+    //     $notakredit = $this->find($params,$id)['data'];
+    //     $data = $notakredit;
+    //     $i =0;
         
-            $response = Http::withHeaders($this->httpHeaders)
+    //         $response = Http::withHeaders($this->httpHeaders)
+    //         ->withOptions(['verify' => false])
+    //         ->withToken(session('access_token'))
+    //         ->get(config('app.api_url') . 'notakredit_detail', ['notakredit_id' => $notakredit['id']]);
+
+
+    //         $data["details"] =$response['data'];
+    //         $data["user"] = Auth::user();
+    //     $notakreditheaders = $data;
+    //     return view('reports.notakreditheader', compact('notakreditheaders'));
+    // }
+
+    public function report(Request $request)
+    {
+
+        $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'notakredit_detail', ['notakredit_id' => $notakredit['id']]);
+            ->get(config('app.api_url') . 'notakreditheader/' . $request->id);
 
+        $detailParams = [
+            'forReport' => true,
+            'notakredit_id' => $request->id
+        ];
 
-            $data["details"] =$response['data'];
-            $data["user"] = Auth::user();
-        $notakreditheaders = $data;
-        return view('reports.notakreditheader', compact('notakreditheaders'));
+        $nota_kredit = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get('http://localhost/trucking-laravel/public/api/notakredit_detail', $detailParams);
+
+        $data = $header['data'];
+        $nota_kredits = $nota_kredit['data'];
+        $user = Auth::user();
+        return view('reports.notakreditheader', compact('data','nota_kredits', 'user'));
     }
-
     /**
      * @ClassName
      */

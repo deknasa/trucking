@@ -120,114 +120,8 @@
                         </div>
 
                         <div class="row mt-5">
-                            <div class="col-md-9 offset-md-3">
-                                <div class="row form-group">
-                                    <div class="col-3 col-md-3">
-                                        <label>
-                                            Sub Total <span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="subtotal" class="form-control autonumeric" disabled>
-                                    </div>
-                                    <div class="col-3 col-md-3">
-                                        <label>
-                                            U. Makan Harian <span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="uangmakanharian" class="form-control autonumeric">
-                                    </div>
-                                    <div class="col-3 col-md-3">
-                                        <label>
-                                            Saldo Pinjaman <span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="saldopinjaman" class="form-control autonumeric" readonly>
-                                    </div>
-                                    <div class="col-3 col-md-3">
-                                        <label>
-                                            Saldo Pinjaman (Semua)<span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="saldopinjamansemua" class="form-control autonumeric" readonly>
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <div class="col-3 col-md-3">
-                                        <label>
-                                            Deposito<span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="deposito" class="form-control autonumeric">
-                                    </div>
-                                    <div class="col-3 col-md-3">
-                                        <label>
-                                            U. Jalan All<span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="uangjalan" class="form-control autonumeric" readonly>
-                                    </div>
-
-                                    <div class="col-3 col-md-3">
-                                        <label>
-                                            Pinj. Pribadi<span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="pinjamanpribadi" class="form-control autonumeric">
-                                    </div>
-
-                                    <div class="col-3 col-md-3">
-                                        <label>
-                                            Pot. Pinjaman<span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="potonganpinjaman" class="form-control autonumeric">
-                                    </div>
-                                </div>
-
-                                <div class="row form-group">
-                                    <div class="col-3 col-md-3">
-                                        <label>
-                                            Pot. Pinjaman (Semua)<span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="potonganpinjamansemua" class="form-control autonumeric" readonly>
-                                    </div>
-                                    <div class="col-3 col-md-3">
-                                        <label>
-                                            Sisa<span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="sisa" class="form-control autonumeric" readonly>
-                                    </div>
-                                    <div class="col-3 col-md-3">
-                                        <label>
-                                            U. BBM<span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="bbm" class="form-control autonumeric">
-                                    </div>
-                                    <div class="col-3 col-md-3">
-                                        <label>
-                                            Gaji Minus<span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="gajiminus" class="form-control autonumeric">
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <div class="col-3 col-md-3">
-                                        <label>
-                                            Sisa Pinjaman<span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="sisapinjaman" class="form-control autonumeric" readonly>
-                                    </div>
-                                    <div class="col-3 col-md-3">
-                                        <label>
-                                            Sisa Pinjaman (Semua)<span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="sisapinjamansemua" class="form-control autonumeric" readonly>
-                                    </div>
-                                    <div class="col-3 col-md-3">
-                                        <label>
-                                            U. Jalan Tidak Terhitung<span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="uangjalantidakterhitung" class="form-control autonumeric" readonly>
-                                    </div>
-                                    <div class="col-3 col-md-3">
-                                        <label>
-                                            Total (Sub Total + uang Makan)<span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="total" class="form-control autonumeric" readonly>
-                                    </div>
-                                </div>
+                            <div class="col-md-9 offset-md-3" id="detailLainnya">
+                                
                             </div>
                         </div>
 
@@ -413,7 +307,6 @@
                 value: limit
             })
 
-            console.log(data);
 
             switch (action) {
                 case 'add':
@@ -480,12 +373,11 @@
                         }
                     },
                     error: error => {
+                        console.log(error)
                         if (error.status === 422) {
                             $('.is-invalid').removeClass('is-invalid')
                             $('.invalid-feedback').remove()
                             setErrorMessages(form, error.responseJSON.errors);
-                            showDialog(error.responseJSON.message)
-
                         } else {
                             showDialog(error.statusText)
                         }
@@ -519,9 +411,6 @@
     })
 
 
-
-
-
     function createGajiSupirHeader() {
         let form = $('#crudForm')
 
@@ -537,7 +426,10 @@
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
+        $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#detailLainnya').html('')
+        detailLainnya()
         initDatepicker()
         form.find(`[name="subtotal"]`).addClass('disabled')
     }
@@ -610,6 +502,7 @@
     }
 
     function showGajiSupir(form, gajiId, aksi) {
+        detailLainnya()
         $.ajax({
             url: `${apiUrl}gajisupirheader/${gajiId}`,
             method: 'GET',
@@ -806,6 +699,121 @@
         }
     }
 
+    function detailLainnya() {
+        let detailRow = $(`
+        <div class="row form-group" >
+                                    <div class="col-3 col-md-3">
+                                        <label>
+                                            Sub Total <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="subtotal" class="form-control autonumeric" disabled>
+                                    </div>
+                                    <div class="col-3 col-md-3">
+                                        <label>
+                                            U. Makan Harian <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="uangmakanharian" class="form-control autonumeric">
+                                    </div>
+                                    <div class="col-3 col-md-3">
+                                        <label>
+                                            Saldo Pinjaman <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="saldopinjaman" class="form-control autonumeric" readonly>
+                                    </div>
+                                    <div class="col-3 col-md-3">
+                                        <label>
+                                            Saldo Pinjaman (Semua)<span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="saldopinjamansemua" class="form-control autonumeric" readonly>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-3 col-md-3">
+                                        <label>
+                                            Deposito<span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="deposito" class="form-control autonumeric">
+                                    </div>
+                                    <div class="col-3 col-md-3">
+                                        <label>
+                                            U. Jalan All<span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="uangjalan" class="form-control autonumeric" readonly>
+                                    </div>
+
+                                    <div class="col-3 col-md-3">
+                                        <label>
+                                            Pinj. Pribadi<span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="pinjamanpribadi" class="form-control autonumeric">
+                                    </div>
+
+                                    <div class="col-3 col-md-3">
+                                        <label>
+                                            Pot. Pinjaman<span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="potonganpinjaman" class="form-control autonumeric">
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-3 col-md-3">
+                                        <label>
+                                            Pot. Pinjaman (Semua)<span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="potonganpinjamansemua" class="form-control autonumeric" readonly>
+                                    </div>
+                                    <div class="col-3 col-md-3">
+                                        <label>
+                                            Sisa<span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="sisa" class="form-control autonumeric" readonly>
+                                    </div>
+                                    <div class="col-3 col-md-3">
+                                        <label>
+                                            U. BBM<span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="bbm" class="form-control autonumeric">
+                                    </div>
+                                    <div class="col-3 col-md-3">
+                                        <label>
+                                            Gaji Minus<span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="gajiminus" class="form-control autonumeric">
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-3 col-md-3">
+                                        <label>
+                                            Sisa Pinjaman<span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="sisapinjaman" class="form-control autonumeric" readonly>
+                                    </div>
+                                    <div class="col-3 col-md-3">
+                                        <label>
+                                            Sisa Pinjaman (Semua)<span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="sisapinjamansemua" class="form-control autonumeric" readonly>
+                                    </div>
+                                    <div class="col-3 col-md-3">
+                                        <label>
+                                            U. Jalan Tidak Terhitung<span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="uangjalantidakterhitung" class="form-control autonumeric" readonly>
+                                    </div>
+                                    <div class="col-3 col-md-3">
+                                        <label>
+                                            Total (Sub Total + uang Makan)<span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="total" class="form-control autonumeric" readonly>
+                                    </div>
+                                </div>
+    `)
+        $('#detailLainnya').append(detailRow)
+
+        initAutoNumeric(detailRow.find('.autonumeric'))
+
+    }
 
     function initLookup() {
         $('.supir-lookup').lookup({

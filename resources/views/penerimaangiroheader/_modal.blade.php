@@ -645,35 +645,36 @@
         })
     }
 
-    function cekApproval(Id, Aksi) {
-        $.ajax({
-            url: `{{ config('app.api_url') }}jurnalumumheader/${Id}/cekapproval`,
-            method: 'POST',
-            dataType: 'JSON',
-            beforeSend: request => {
-                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-            },
-            success: response => {
-                var kodenobukti = response.kodenobukti
-                if (kodenobukti == '1') {
-                    var kodestatus = response.kodestatus
-                    if (kodestatus == '1') {
-                        showDialog(response.message['keterangan'])
-                    } else {
-                        if (Aksi == 'EDIT') {
-                            editJurnalUmumHeader(Id)
-                        }
-                        if (Aksi == 'DELETE') {
-                            deleteJurnalUmumHeader(Id)
-                        }
-                    }
-
-                } else {
-                    showDialog(response.message['keterangan'])
-                }
+ 
+    function cekValidasi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}penerimaangiroheader/${Id}/cekvalidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kodenobukti = response.kodenobukti
+        if (kodenobukti == '1') {
+          var kodestatus = response.kodestatus
+          if (kodestatus == '1') {
+            showDialog(response.message['keterangan'])
+          } else {
+            if (Aksi == 'EDIT') {
+              editPenerimaanGiro(Id)
             }
-        })
-    }
+            if (Aksi == 'DELETE') {
+              deletePenerimaanGiro(Id)
+            }
+          }
+
+        } else {
+          showDialog(response.message['keterangan'])
+        }
+      }
+    })
+  }
 
     function showPenerimaanGiro(form, id) {
         $('#detailList tbody').html('')

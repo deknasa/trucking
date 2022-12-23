@@ -22,8 +22,9 @@ class PenerimaanGiroHeaderController extends MyController
     {
         $title = $this->title;
         $breadcrumb = $this->breadcrumb;
-        $data = [            
-            'comboapproval' => $this->comboApproval('list','STATUS APPROVAL','STATUS APPROVAL')
+        $data = [
+            'comboapproval' => $this->comboApproval('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
+            'combocetak' => $this->comboApproval('list', 'STATUSCETAK', 'STATUSCETAK')
         ];
 
         return view('penerimaangiroheader.index', compact('title', 'breadcrumb', 'data'));
@@ -62,7 +63,7 @@ class PenerimaanGiroHeaderController extends MyController
         return $data;
     }
 
-   
+
     public function fieldLength(): Response
     {
         $response = Http::withHeaders($this->httpHeaders)
@@ -126,31 +127,36 @@ class PenerimaanGiroHeaderController extends MyController
 
     public function report(Request $request)
     {
-        
+
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'penerimaangiroheader/' . $request->id);
+
         $detailParams = [
             'forReport' => true,
             'penerimaangiro_id' => $request->id
         ];
-  
+
         $penerimaangiro_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get('http://localhost/trucking-laravel/public/api/penerimaangirodetail', $detailParams);
-        
-        
+
+        $data = $header['data'];
         $penerimaangiro_details = $penerimaangiro_detail['data'];
-        $user = $penerimaangiro_detail['user'];
-        return view('reports.penerimaangiroheader', compact('penerimaangiro_details','user'));
+        $user = Auth::user();
+        return view('reports.penerimaangiroheader', compact('data','penerimaangiro_details', 'user'));
     }
 
     public function export(Request $request): void
     {
-        
+
         //FETCH HEADER
         $penerimaangiros = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'penerimaangiroheader/'.$request->id)['data'];
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'penerimaangiroheader/' . $request->id)['data'];
 
         //FETCH DETAIL
         $detailParams = [
@@ -158,9 +164,9 @@ class PenerimaanGiroHeaderController extends MyController
         ];
 
         $responses = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'penerimaangirodetail', $detailParams);
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'penerimaangirodetail', $detailParams);
 
         $penerimaangiro_details = $responses['data'];
         $user = $responses['user'];
@@ -175,7 +181,7 @@ class PenerimaanGiroHeaderController extends MyController
         $header_start_row = 2;
         $detail_table_header_row = 9;
         $detail_start_row = $detail_table_header_row + 1;
-       
+
         $alphabets = range('A', 'Z');
 
         $header_columns = [
@@ -263,9 +269,8 @@ class PenerimaanGiroHeaderController extends MyController
         //LOOPING HEADER        
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
-            
-                $sheet->setCellValue('C' . $header_start_row++, ': '.$penerimaangiros[$header_column['index']]);
-           
+
+            $sheet->setCellValue('C' . $header_start_row++, ': ' . $penerimaangiros[$header_column['index']]);
         }
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
@@ -279,30 +284,30 @@ class PenerimaanGiroHeaderController extends MyController
         );
 
         $style_number = [
-			'alignment' => [
-				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, 
-			],
-            
-			'borders' => [
-				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], 
-				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] 
-			]
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+            ],
+
+            'borders' => [
+                'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
+            ]
         ];
 
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $sheet ->getStyle("A$detail_table_header_row:M$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$detail_table_header_row:M$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
         $nominal = 0;
         foreach ($penerimaangiro_details as $response_index => $response_detail) {
-            
+
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', ',', '.');
-        
+
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['nowarkat']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['tgljatuhtempo']);
@@ -317,40 +322,40 @@ class PenerimaanGiroHeaderController extends MyController
             $sheet->setCellValue("L$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("M$detail_start_row", $response_detail['nominals']);
 
-            $sheet ->getStyle("A$detail_start_row:M$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("M$detail_start_row")->applyFromArray($style_number);
+            $sheet->getStyle("A$detail_start_row:M$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("M$detail_start_row")->applyFromArray($style_number);
             $nominal += $response_detail['nominal'];
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A'.$total_start_row.':L'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':L'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->mergeCells('A' . $total_start_row . ':L' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':L' . $total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("M$total_start_row", number_format((float) $nominal, '2', ',', '.'))->getStyle("M$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         // set diketahui dibuat
-        $ttd_start_row = $total_start_row+2;
+        $ttd_start_row = $total_start_row + 2;
         $sheet->setCellValue("B$ttd_start_row", 'Disetujui');
         $sheet->setCellValue("C$ttd_start_row", 'Diketahui');
         $sheet->setCellValue("D$ttd_start_row", 'Dibuat');
-        $sheet ->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
-        
-        $sheet->mergeCells("B".($ttd_start_row+1).":B".($ttd_start_row+3));      
-        $sheet->mergeCells("C".($ttd_start_row+1).":C".($ttd_start_row+3));      
-        $sheet->mergeCells("D".($ttd_start_row+1).":D".($ttd_start_row+3));      
-        $sheet ->getStyle("B".($ttd_start_row+1).":B".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("C".($ttd_start_row+1).":C".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("D".($ttd_start_row+1).":D".($ttd_start_row+3))->applyFromArray($styleArray);
+        $sheet->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
+
+        $sheet->mergeCells("B" . ($ttd_start_row + 1) . ":B" . ($ttd_start_row + 3));
+        $sheet->mergeCells("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3));
+        $sheet->mergeCells("D" . ($ttd_start_row + 1) . ":D" . ($ttd_start_row + 3));
+        $sheet->getStyle("B" . ($ttd_start_row + 1) . ":B" . ($ttd_start_row + 3))->applyFromArray($styleArray);
+        $sheet->getStyle("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3))->applyFromArray($styleArray);
+        $sheet->getStyle("D" . ($ttd_start_row + 1) . ":D" . ($ttd_start_row + 3))->applyFromArray($styleArray);
 
         //set tglcetak
         date_default_timezone_set('Asia/Jakarta');
-        
-        $sheet->setCellValue("B".($ttd_start_row+5), 'Dicetak Pada :');
-        $sheet->getStyle("B".($ttd_start_row+5))->getFont()->setItalic(true);
-        $sheet->setCellValue("C".($ttd_start_row+5), date('d/m/Y H:i:s'));
-        $sheet->getStyle("C".($ttd_start_row+5))->getFont()->setItalic(true);
-        $sheet->setCellValue("D".($ttd_start_row+5), $user['name']);
-        $sheet->getStyle("D".($ttd_start_row+5))->getFont()->setItalic(true);
+
+        $sheet->setCellValue("B" . ($ttd_start_row + 5), 'Dicetak Pada :');
+        $sheet->getStyle("B" . ($ttd_start_row + 5))->getFont()->setItalic(true);
+        $sheet->setCellValue("C" . ($ttd_start_row + 5), date('d/m/Y H:i:s'));
+        $sheet->getStyle("C" . ($ttd_start_row + 5))->getFont()->setItalic(true);
+        $sheet->setCellValue("D" . ($ttd_start_row + 5), $user['name']);
+        $sheet->getStyle("D" . ($ttd_start_row + 5))->getFont()->setItalic(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -366,7 +371,7 @@ class PenerimaanGiroHeaderController extends MyController
         $sheet->getColumnDimension('L')->setAutoSize(true);
         $sheet->getColumnDimension('M')->setAutoSize(true);
 
-        
+
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Penerimaan Giro ' . date('dmYHis');

@@ -408,6 +408,36 @@
         showNotaDebet(form, userId)
       })
   }
+  
+  function cekValidasi(Id, Aksi) {
+    $.ajax({
+        url: `{{ config('app.api_url') }}notadebetheader/${Id}/cekvalidasi`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+            request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+        success: response => {
+            var kodenobukti = response.kodenobukti
+            if (kodenobukti == '1') {
+                var kodestatus = response.kodestatus
+                if (kodestatus == '1') {
+                    showDialog(response.message['keterangan'])
+                } else {
+                    if (Aksi == 'EDIT') {
+                        editNotaDebet(Id)
+                    }
+                    if (Aksi == 'DELETE') {
+                        deleteNotaDebet(Id)
+                    }
+                }
+
+            } else {
+                showDialog(response.message['keterangan'])
+            }
+        }
+    })
+  }
 
   function showNotaDebet(form, userId) {
     $('#detailList tbody').html('')

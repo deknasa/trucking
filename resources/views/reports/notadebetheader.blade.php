@@ -14,6 +14,8 @@
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <script type="text/javascript">
+     var notadebet = <?= json_encode($notadebetheaders);?>
+
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'stimulsoft/license.php') }}");
       var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
@@ -21,6 +23,14 @@
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
       var report = new Stimulsoft.Report.StiReport()
       
+      var statuscetak = notadebet.statuscetak
+      var sudahcetak = notadebet['combo']['id']
+      if (statuscetak == sudahcetak) {
+        viewerOptions.toolbar.showPrintButton = false;
+        viewerOptions.toolbar.showSaveButton = false;
+        viewerOptions.toolbar.showOpenButton = false;
+      }
+
       var options = new Stimulsoft.Designer.StiDesignerOptions()
       options.appearance.fullScreenMode = true
 
@@ -43,7 +53,62 @@
       viewer.report = report
       // designer.renderHtml("content")
       // designer.report = report
+      
+      viewer.onPrintReport = function (event) {
+        triggerEvent(window, 'afterprint');
+      }
+      function triggerEvent(el, type) {
+        // IE9+ and other modern browsers
+        if ('createEvent' in document) {
+            var e = document.createEvent('HTMLEvents');
+            e.initEvent(type, false, true);
+            el.dispatchEvent(e);
+        } else {
+          // IE8
+          var e = document.createEventObject();
+          e.eventType = type;
+          el.fireEvent('on' + e.eventType, e);
+        }
+      }
+
+      window.addEventListener('afterprint', (event) => {
+        var id = notadebet.id
+        var apiUrl = `{{ config('app.api_url') }}`;
+        
+        $.ajax({
+          url: `${apiUrl}notadebetheader/${id}/printreport`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            Authorization: `Bearer {{ session('access_token') }}`
+          },
+          success: response => {
+            location.reload();
+          }
+    
+        })
+          
+      });
     }
+  </script>
+  <script type="text/javascript">
+    $( document ).ready(function() {
+      var statuscetak = notadebet.statuscetak
+      var sudahcetak = notadebet['combo']['id']
+      if (statuscetak == sudahcetak) {
+        $(document).on('keydown', function(e) { 
+          if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+            alert("Document SUdah Pernah Dicetak ");
+            e.cancelBubble = true;
+            e.preventDefault();
+            e.stopImmediatePropagation();
+          }  
+        });  
+      }
+
+
+    });
+        
   </script>
   <style>
     .stiJsViewerPage {

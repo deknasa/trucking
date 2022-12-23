@@ -62,27 +62,7 @@
       title: 'penerimaan stok Lookup',
       fileName: 'penerimaanstok',
       onSelectRow: (penerimaanstok, element) => {
-        $.ajax({
-          url: `${apiUrl}parameter/combo`,
-          method: 'GET',
-          dataType: 'JSON',
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
-          data: {
-            grp: 'po stok',
-            subgrp: 'po stok'
-          },
-          success: response => {
-            if (response.data[0].text==penerimaanstok.id) {
-              tampilanpo();
-            } else {
-              tampilanall();
-            }
-          }
-        })
-
-
+        
         kodepenerimaan(penerimaanstok.statusformatid)
         element.val(penerimaanstok.kodepenerimaan)
         $(`#${element[0]['name']}Id`).val(penerimaanstok.id)
@@ -149,7 +129,31 @@
     $('.penerimaanstokheader-lookup').lookup({
       title: 'penerimaan stok header Lookup',
       fileName: 'penerimaanstokheader',
+      beforeProcess: function(test) {
+        var penerimaanstokId= $(`#penerimaanstokId`).val();
+        if (penerimaanstokId == 3) {
+          this.postData = {
+            // $(`#penerimaanstokId`).val()
+            filters: JSON.stringify({
+              "groupOp": "AND",
+              "rules": [{
+                  "field": "penerimaanstok_id_not_null",
+                  "op": "cn",
+                  "data": 2 //id POT
+              }]
+            })
+          }
+        }
+      },
+            
       onSelectRow: (penerimaan, element) => {
+        var penerimaanstokId= $(`#penerimaanstokId`).val();
+        if (penerimaanstokId == 3) {
+          setSuplier(penerimaan.id);
+          $('[name=nobon]').val(penerimaan.nobon)
+          // console.log(penerimaan.supplier,
+          // penerimaan.nobon);
+        }
         element.val(penerimaan.nobukti)
       },
       onCancel: (element) => {

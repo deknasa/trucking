@@ -8,6 +8,9 @@
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
+      postData: {
+        filters: `{!! $filters ?? '' !!}`
+      },
       colModel: [{
           label: 'ID',
           name: 'id',

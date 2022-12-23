@@ -56,18 +56,6 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  AGEN <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-8 col-md-10">
-                <input type="hidden" name="agen_id">
-                <input type="text" name="agen" class="form-control agen-lookup">
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
                   CABANG <span class="text-danger">*</span>
                 </label>
               </div>
@@ -260,14 +248,6 @@
         value: form.find(`[name="bank_id"]`).val()
       })
       data.push({
-        name: 'agen',
-        value: form.find(`[name="agen"]`).val()
-      })
-      data.push({
-        name: 'agen_id',
-        value: form.find(`[name="agen_id"]`).val()
-      })
-      data.push({
         name: 'cabang',
         value: form.find(`[name="cabang"]`).val()
       })
@@ -405,13 +385,14 @@
           }
         },
         error: error => {
+          console.log(error)
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
+
             setErrorMessages(form, error.responseJSON.errors);
-            showDialog(error.responseJSON.message)
           } else {
-            showDialog(error.responseJSON.message)
+            showDialog(error.statusText)
           }
         },
       }).always(() => {
@@ -894,24 +875,7 @@
   }
 
   function initLookup() {
-    $('.agen-lookup').lookup({
-      title: 'Agen Lookup',
-      fileName: 'agen',
-      onSelectRow: (agen, element) => {
-        $('#crudForm [name=agen_id]').first().val(agen.id)
-        element.val(agen.namaagen)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $('#crudForm [name=agen_id]').first().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
-
+    
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',

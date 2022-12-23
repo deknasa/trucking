@@ -14,10 +14,30 @@ class NotaDebetHeaderController extends MyController
     public function index()
     {
 
-        $title = $this->title;
-        return view('notadebetheader.index', compact('title'));
+        $title = $this->title; 
+        $data = [
+            'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
+            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
+        ];
+        return view('notadebetheader.index', compact('title','data'));
     }
 
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
+    }
     public function get($params = [])
     {
         $params = [
@@ -61,6 +81,23 @@ class NotaDebetHeaderController extends MyController
             ->get(config('app.api_url') . 'notadebetheader/'.$id);
     }
 
+    public function combo($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ];
+                
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+
+        return $response['data'];
+    }
+
+
     /**
      * @ClassName
      */
@@ -86,6 +123,11 @@ class NotaDebetHeaderController extends MyController
             $data["user"] = Auth::user();
             
 
+        $combo = $this->combo('list');
+        
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $data["combo"] =  $combo[$key];
+        
         $notadebetheaders = $data;
         return view('reports.notadebetheader', compact('notadebetheaders'));
     }

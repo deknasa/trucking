@@ -122,7 +122,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>
-                  JOB EMKL 2 <span class="text-danger">*</span></label>
+                  JOB EMKL 2 </label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="nojobemkl2" class="form-control">

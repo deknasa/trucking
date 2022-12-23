@@ -140,6 +140,7 @@ use App\Http\Controllers\ProsesGajiSupirHeaderController;
 use App\Http\Controllers\ProsesGajiSupirDetailController;
 use App\Http\Controllers\ReportAllController;
 use App\Http\Controllers\ReportNeracaController;
+use App\Http\Controllers\StokPersediaanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -400,7 +401,7 @@ Route::middleware('auth')->group(function () {
     
     Route::get('notakreditheader/get', [NotaKreditHeaderController::class, 'get'])->name('notakreditheader.get');
     Route::get('notakreditheader/export', [NotaKreditHeaderController::class, 'export'])->name('notakreditheader.export');
-    Route::get('notakreditheader/report/{id}', [NotaKreditHeaderController::class, 'report'])->name('notakreditheader.report');
+    Route::get('notakreditheader/report', [NotaKreditHeaderController::class, 'report'])->name('notakreditheader.report');
     Route::get('notakreditheader/index', [NotaKreditHeaderController::class, 'index']);
     Route::resource('notakreditheader', NotaKreditHeaderController::class);
     
@@ -803,6 +804,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('approvalpendapatansupir/index', [ApprovalPendapatanSupirController::class, 'index']);
     Route::resource('approvalpendapatansupir', ApprovalPendapatanSupirController::class);
+    
+    Route::get('stokpersediaan/index', [StokPersediaanController::class, 'index']);
+    Route::resource('stokpersediaan', StokPersediaanController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

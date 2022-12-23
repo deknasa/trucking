@@ -512,8 +512,8 @@ class UpahSupirController extends MyController
 
         $status = [
             'status' => $aksi,
-            'grp' => 'STATUS LUAR KOTA',
-            'subgrp' => 'STATUS LUAR KOTA',
+            'grp' => 'UPAH SUPIR LUAR KOTA',
+            'subgrp' => 'UPAH SUPIR LUAR KOTA',
         ];
 
         $response = Http::withHeaders($this->httpHeaders)

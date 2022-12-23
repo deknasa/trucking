@@ -14,11 +14,33 @@
               <input type="hidden" name="id" hidden class="form-control" readonly>
 
                 <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                  <label>namastok <span class="text-danger">*</span> </label>
+                  <label>nama stok <span class="text-danger">*</span> </label>
                 </div>
                 <div class="col-12 col-sm-9 col-md-10">
                   <input type="text" name="namastok" class="form-control">
                 </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>nama terpusat <span class="text-danger">*</span> </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="namaterpusat" class="form-control">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  status aktif <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS AKTIF --</option>
+                </select>
+              </div>
             </div>
 
             <div class="row form-group">
@@ -32,7 +54,7 @@
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>subkelompok <span class="text-danger">*</span> </label>
+                <label>sub kelompok <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="subkelompok" class="form-control subkelompok-lookup">
@@ -50,7 +72,7 @@
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>merk <span class="text-danger">*</span> </label>
+                <label>merk </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="merk" class="form-control merk-lookup">
@@ -59,7 +81,7 @@
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>jenistrado <span class="text-danger">*</span> </label>
+                <label>jenistrado </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="jenistrado" class="form-control jenistrado-lookup">
@@ -82,14 +104,14 @@
                 
               </div>
               <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="qtymin"  style="text-align:right" class="form-control autonumeric" > 
+                <input type="text" name="qtymin"  style="text-align:right" class="form-control " > 
               </div>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>qtymax <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="qtymax"  style="text-align:right" class="form-control autonumeric" > 
+                <input type="text" name="qtymax"  style="text-align:right" class="form-control " > 
               </div>
             </div>
 
@@ -177,6 +199,12 @@
         formData.append('_method', 'DELETE')
       }
 
+      // $('#crudForm').find(`[name="qtymin"]`).each((index, element) => {
+      //   data.filter((row) => row.name === 'qtymin')[index].value = AutoNumeric.getNumber($(`#crudForm [name="qtymin"]`)[index])
+      // })
+      // $('#crudForm').find(`[name="qtymax"]`).each((index, element) => {
+      //   data.filter((row) => row.name === 'qtymax')[index].value = AutoNumeric.getNumber($(`#crudForm [name="qtymax"]`)[index])
+      // })
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
 
@@ -221,8 +249,8 @@
     })
   })
   function kodepengeluaran(kodepengeluaran){
-    $('#crudForm').find('[name=statusformat]').val(kodepengeluaran).trigger('change');
-    $('#crudForm').find('[name=statusformat_id]').val(kodepengeluaran);
+    $('#crudForm').find('[name=statusaktif]').val(kodepengeluaran).trigger('change');
+    $('#crudForm').find('[name=statusaktif_id]').val(kodepengeluaran);
   }
     
     $('#crudModal').on('shown.bs.modal', () => {
@@ -233,8 +261,7 @@
       activeGrid = null
       initDatepicker()
       initLookup()
-      initAutoNumeric(form.find(`[name="qtymin[]"]`))
-      initAutoNumeric(form.find(`[name="qtymax[]"]`))
+      initSelect2()
     // getMaxLength(form)
   })
 
@@ -262,8 +289,10 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    setStatusFormatOptions(form)
+    setStatusAktifOptions(form)
     initDropzone(form.data('action'))
+    initAutoNumeric(form.find(`[name="qtymin"]`))
+    initAutoNumeric(form.find(`[name="qtymax"]`))
   }
 
   function editStok(stokId) {
@@ -283,7 +312,7 @@
 
     Promise
       .all([
-        setStatusFormatOptions(form)
+        setStatusAktifOptions(form)
       ])
       .then(() => {
         showStok(form, stokId)
@@ -310,7 +339,7 @@
 
     Promise
       .all([
-        setStatusFormatOptions(form)
+        setStatusAktifOptions(form)
       ])
       .then(() => {
         showStok(form, stokId)
@@ -345,11 +374,11 @@
     }
   }
 
-  const setStatusFormatOptions = function(relatedForm) {
+  const setStatusAktifOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusformat]').empty()
-      relatedForm.find('[name=statusformat]').append(
-        new Option('-- PILIH STATUS FORMAT --', '', false, true)
+      relatedForm.find('[name=statusaktif]').empty()
+      relatedForm.find('[name=statusaktif]').append(
+        new Option('-- PILIH STATUS AKTIF --', '', false, true)
       ).trigger('change')
 
       $.ajax({
@@ -365,7 +394,7 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "PENGELUARAN STOK"
+              "data": "STATUS AKTIF"
             }]
           })
         },
@@ -373,7 +402,7 @@
           response.data.forEach(statusAktif => {
             let option = new Option(statusAktif.text, statusAktif.id)
 
-            relatedForm.find('[name=statusformat]').append(option).trigger('change')
+            relatedForm.find('[name=statusaktif]').append(option).trigger('change')
           });
 
           resolve()
@@ -403,14 +432,13 @@
             } else if (element.hasClass('autonumeric')) {
               initAutoNumeric(element)
               element.val(value)
-              // let autoNumericInput = AutoNumeric.getAutoNumericElement(element[0])
-              // autoNumericInput.set(value)
             } else {
               element.val(value)
             }
           })
           resolve(response.data)
-
+          initAutoNumeric(form.find(`[name="qtymin"]`))
+          initAutoNumeric(form.find(`[name="qtymax"]`))
         }
       })
     })
@@ -515,6 +543,18 @@
     $('.subkelompok-lookup').lookup({
       title: 'subkelompok Lookup',
       fileName: 'subkelompok',
+      beforeProcess: function(test) {
+        this.postData = {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+                "field": "kelompok_id",
+                "op": "cn",
+                "data": $(`#kelompokId`).val()
+            }]
+          })
+        }
+      },
       onSelectRow: (subkelompok, element) => {
         element.val(subkelompok.kodesubkelompok)
         $(`#${element[0]['name']}Id`).val(subkelompok.id)
@@ -532,6 +572,18 @@
     $('.kategori-lookup').lookup({
       title: 'kategori Lookup',
       fileName: 'kategori',
+      beforeProcess: function(test) {
+        this.postData = {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+                "field": "subkelompok_id",
+                "op": "cn",
+                "data": $(`#subkelompokId`).val()
+            }]
+          })
+        }
+      },
       onSelectRow: (kategori, element) => {
         element.val(kategori.kodekategori)
         $(`#${element[0]['name']}Id`).val(kategori.id)

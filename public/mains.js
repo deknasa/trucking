@@ -864,8 +864,7 @@ function initDatepicker() {
 			showOn: "button",
 			beforeShow: function (element) {
 				$(element).css({
-					position: "relative",
-					zIndex: 9999,
+					position: "relative"
 				});
 			},
 			beforeShowDay: function (date) {

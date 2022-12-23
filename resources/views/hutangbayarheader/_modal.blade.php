@@ -412,9 +412,6 @@
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
             setErrorMessages(form, error.responseJSON.errors);
-
-            showDialog(error.responseJSON.message)
-
           } else {
             showDialog(error.statusText)
           }

@@ -206,7 +206,7 @@
     $('#crudForm').autocomplete({
       disabled: true
     });
-    $("#addRow").click(function() {
+    $(document).on('click', '#addRow', function(event) {
       addRow()
     });
 

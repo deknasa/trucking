@@ -11,139 +11,108 @@
         <form action="" method="post">
           <div class="modal-body">
             <input type="hidden" name="id">
-
             <div class="row">
-              <!-- <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>ID</label>
-                </div>
-                <div>
-                  <input type="text" name="id" class="form-control" readonly>
-                </div>
-              </div> -->
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    NO BUKTI <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="nobukti" class="form-control" readonly>
-                </div>
-              </div>
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label col-form-label">
-                  <label>
-                    TGL BUKTI <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <div class="input-group">
-                    <input type="text" name="tglbukti" class="form-control datepicker">
+              <div class="col-md-4">
+                <div class="form-group ">
+                  <label class="col-sm-4 col-form-label">NO TRANSAKSI <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nobukti" class="form-control" readonly>
                   </div>
                 </div>
-              </div>
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    TGL SP <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <div class="input-group">
-                    <input type="text" name="tglsp" class="form-control datepicker">
-                  </div>
-                </div>
-              </div>
-
-
-              <div class="form-group col-md-4">
-                <div class="col-12 col-md-6 col-form-label">
-                  <label>
-                    JOB TRUCKING <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="jobtrucking" class="form-control orderantrucking-lookup">
-                </div>
-              </div>
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    NO SP <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="nosp" class="form-control">
-                </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    STATUS LONGTRIP <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <select name="statuslongtrip" class="form-control select2bs4" id="statuslongtrip">
-                    <option value="">-- PILIH STATUS LONGTRIP --</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group col-md-6">
-                <div class="col-form-label">
-                  <label>
-                    DARI <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="hidden" name="dari_id">
-                  <input type="text" name="dari" class="form-control kotadari-lookup">
-                </div>
-
-                <div class="col-form-label">
-                  <label>
-                    TUJUAN <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="hidden" name="sampai_id">
-                  <input type="text" name="sampai" class="form-control kotasampai-lookup">
-                </div>
-
-              </div>
-
-              <div class="col-md-6">
-                <div class="card">
-                  <div class="card-header bg-info">
-                    Peralihan
-                  </div>
-                  <div class="card-body">
-                    <div class="form-group">
-                      <div class="col-form-label">
-                        <label>
-                          STATUS PERALIHAN <span class="text-danger">*</span>
-                        </label>
-                      </div>
-                      <div>
-                        <select name="statusperalihan" class="form-control select2bs4" id="statusperalihan">
-                          <option value="">-- PILIH STATUS PERALIHAN --</option>
-                        </select>
-                      </div>
+                <div class="form-group ">
+                  <label class="col-sm-4 col-form-label">TANGGAL TRIP <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <div class="input-group">
+                      <input type="text" name="tglbukti" class="form-control datepicker">
                     </div>
-                    <div id="peralihan">
-                      <div class="row">
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <div class="col-form-label">
-                              <label>
-                                PERSENTASE
-                              </label>
-                            </div>
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">JOB TRUCKING<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="jobtrucking" class="form-control orderantrucking-lookup">
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">JENIS SURAT PENGANTAR <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statuslongtrip" class="form-control select2bs4" id="statuslongtrip">
+                      <option value="">-- PILIH STATUS LONGTRIP --</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-4 col-form-label">NO SP<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nosp" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-4 col-form-label">NO POLISI<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="trado_id">
+                    <input type="text" name="trado" class="form-control trado-lookup">
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-4 col-form-label">SUPIR<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="supir_id">
+                    <input type="text" name="supir" class="form-control supir-lookup">
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-4 col-form-label">DARI<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="dari_id">
+                    <input type="text" name="dari" class="form-control kotadari-lookup">
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">NOMOR GANDENGAN / CHASIS<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="gandengan_id">
+                    <input type="text" name="gandengan" class="form-control gandengan-lookup">
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-4 col-form-label">CONTAINER<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="container_id">
+                    <input type="text" name="container" class="form-control container-lookup" readonly>
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-4 col-form-label">NOMOR CONTAINER<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nocont" class="form-control" readonly>
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">NO SEAL<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="noseal" class="form-control" readonly>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="col-md-12">
+                  <div class="card mt-3">
+                    <div class="card-header bg-info">
+                    </div>
+                    <div class="card-body">
+                      <div class="form-group">
+                        <label class="col-sm-12 col-form-label">Status Peralihan<span class="text-danger">*</span></label>
+                        <div class="col-sm-12">
+                          <select name="statusperalihan" class="form-control select2bs4" id="statusperalihan">
+                            <option value="">-- PILIH STATUS PERALIHAN --</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div id="peralihan">
+                        <div class="form-group">
+                          <label class="col-sm-4 col-form-label">Persentase</label>
+                          <div class="col-sm-12">
                             <div class="input-group">
                               <input type="text" name="persentaseperalihan" class="form-control numbernoseparate">
                               <div class="input-group-append">
@@ -156,369 +125,145 @@
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    TARIF <span class="text-danger">*</span>
-                  </label>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Ritasi omset<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statusritasiomset" class="form-control select2bs4" id="statusritasiomset">
+                      <option value="">-- PILIH STATUS RITASI OMSET --</option>
+                    </select>
+                  </div>
                 </div>
-                <div>
-                  <input type="hidden" name="tarif_id">
-                  <input type="text" name="tarif" class="form-control tarif-lookup">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">NO SP 2</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nosp2" class="form-control">
+                  </div>
                 </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    DISCOUNT
-                  </label>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">GUDANG SAMA<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statusgudangsama" class="form-control select2bs4" id="statusgudangsama">
+                      <option value="">-- PILIH STATUS GUDANG SAMA --</option>
+                    </select>
+                  </div>
                 </div>
-                <div>
-                  <input type="text" name="discount" class="form-control text-right">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">KETERANGAN<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="keterangan" class="form-control">
+                  </div>
                 </div>
-              </div>
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    PELANGGAN <span class="text-danger">*</span></label>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">TUJUAN<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="sampai_id">
+                    <input type="text" name="sampai" class="form-control kotasampai-lookup">
+                  </div>
                 </div>
-                <div>
-                  <input type="hidden" name="pelanggan_id">
-                  <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Lokasi BONGKAR/MUAT<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="lokasibongkarmuat" class="form-control" readonly>
+                  </div>
                 </div>
-              </div>
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    KETERANGAN <span class="text-danger">*</span>
-                  </label>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">FULL / EMPTY<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="statuscontainer_id">
+                    <input type="text" name="statuscontainer" class="form-control statuscontainer-lookup">
+                  </div>
                 </div>
-                <div>
-                  <input type="text" name="keterangan" class="form-control">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">NO CONTAINER 2</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nocont2" class="form-control" readonly>
+                  </div>
                 </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    CONTAINER <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="hidden" name="container_id">
-                  <input type="text" name="container" class="form-control container-lookup">
-                </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    NO CONT <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="nocont" class="form-control">
-                </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    NO CONT 2
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="nocont2" class="form-control">
-                </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    STATUS CONTAINER <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="hidden" name="statuscontainer_id">
-                  <input type="text" name="statuscontainer" class="form-control statuscontainer-lookup">
-                </div>
-              </div>
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    TRADO <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="hidden" name="trado_id">
-                  <input type="text" name="trado" class="form-control trado-lookup">
-                </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    SUPIR <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="hidden" name="supir_id">
-                  <input type="text" name="supir" class="form-control supir-lookup">
-                </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    AGEN <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="hidden" name="agen_id">
-                  <input type="text" name="agen" class="form-control agen-lookup">
-                </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    JENIS ORDER <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="hidden" name="jenisorder_id">
-                  <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
-                </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    NO JOB <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="nojob" class="form-control">
-                </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    NO JOB 2
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="nojob2" class="form-control">
-                </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    NO SP TAGIH LAIN
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="nosptagihlain" class="form-control">
-                </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    NILAI TAGIH LAIN
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="nilaitagihlain" class="form-control text-right">
-                </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    TUJUAN TAGIH
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="tujuantagih" class="form-control">
-                </div>
-              </div>
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    OMSET <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="omset" class="form-control text-right" readonly>
-                </div>
-              </div>
-              
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    QTY TON <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="qtyton" class="form-control text-right">
-                </div>
-              </div>
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    TOTAL TON 
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="totalton" class="form-control text-right" readonly>
-                </div>
-              </div>
-
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    STATUS RITASI OMSET <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <select name="statusritasiomset" class="form-control select2bs4" id="statusritasiomset">
-                    <option value="">-- PILIH STATUS RITASI OMSET --</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    STATUS NOTIF <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <select name="statusnotif" class="form-control select2bs4" id="statusnotif">
-                    <option value="">-- PILIH STATUS NOTIF --</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    STATUS ONE WAY <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <select name="statusoneway" class="form-control select2bs4" id="statusoneway">
-                    <option value="">-- PILIH STATUS ONE WAY --</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    STATUS EDIT TUJUAN<span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <select name="statusedittujuan" class="form-control select2bs4" id="statusedittujuan">
-                    <option value="">-- PILIH STATUS EDIT TUJUAN--</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    NOMINAL STAFLE
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="nominalstafle" class="form-control text-right">
-                </div>
-              </div>
-
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    STATUS TRIP<span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <select name="statustrip" class="form-control select2bs4" id="statustrip">
-                    <option value="">-- PILIH STATUS TRIP--</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    NO TRIP ASAL
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="notripasal" class="form-control text-right">
-                </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    TGL DOOR <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <div class="input-group">
-                    <input type="text" name="tgldoor" class="form-control datepicker">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">NO SEAL 2</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="noseal2" class="form-control" readonly>
                   </div>
                 </div>
               </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    UPAH BONGKAR DEPO <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="upahbongkardepo" class="form-control text-right">
-                </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    UPAH MUAT DEPO <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div>
-                  <input type="text" name="upahmuatdepo" class="form-control text-right">
-                </div>
-              </div>
-              <div class="form-group col-md-4">
-                <div class="col-form-label">
-                  <label>
-                    STATUS DISC
-                  </label>
-                </div>
-                <div>
-                  <select name="statusdisc" class="form-control select2bs4" id="statusdisc">
-                    <option value="">-- PILIH STATUS DISC--</option>
-                  </select>
-                </div>
-              </div>
+              <div class="col-md-4">
 
-              <div class="form-group col-md-4">
-                <div class=" col-form-label">
-                  <label>
-                    CABANG <span class="text-danger">*</span>
-                  </label>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">SHIPPER<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="pelanggan_id">
+                    <input type="text" name="pelanggan" class="form-control pelanggan-lookup" readonly>
+                  </div>
                 </div>
-                <div>
-                  <input type="hidden" name="cabang_id">
-                  <input type="text" name="cabang" class="form-control cabang-lookup">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">EMKL<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="agen_id">
+                    <input type="text" name="agen" class="form-control agen-lookup" readonly>
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">JENIS ORDERAN<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="jenisorder_id">
+                    <input type="text" name="jenisorder" class="form-control jenisorder-lookup" readonly>
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">TUJUAN<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="tarif_id">
+                    <input type="text" name="tarif" class="form-control tarif-lookup" readonly>
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">NO JOB<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nojob" class="form-control" readonly>
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">NO JOB 2</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nojob2" class="form-control" readonly>
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">CABANG<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="cabang_id">
+                    <input type="text" name="cabang" class="form-control cabang-lookup">
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">HARGA PER TON<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="hargaperton" class="form-control" readonly>
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">QTY TON<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="qtyton" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">GUDANG<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="gudang" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">BATAL MUAT<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statusbatalmuat" class="form-control select2bs4" id="statusbatalmuat">
+                      <option value="">-- PILIH STATUS BATAL MUAT --</option>
+                    </select>
+                  </div>
                 </div>
               </div>
-
             </div>
+
 
             <div class="card">
               <div class="card-header bg-info">
@@ -595,7 +340,9 @@
                 </div>
               </div>
             </div>
+
           </div>
+
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
               <i class="fa fa-save"></i>
@@ -618,17 +365,17 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   $(document).ready(function() {
 
-    
+
     $('#crudForm').autocomplete({
       disabled: true
     });
-    
+
     $("#addRow").click(function() {
       addRow()
     });
-    
+
     $(document).on('input', `#crudForm [name="qtyton"]`, function(event) {
-    
+
       let qtyton = AutoNumeric.getNumber($(this)[0])
       let omset = AutoNumeric.getNumber($(`#crudForm [name="omset"]`)[0])
       let total = qtyton * omset
@@ -753,53 +500,51 @@
           },
           data: data,
           success: response => {
-            
-              $.ajax({
-                url: url,
-                method: method,
-                dataType: 'JSON',
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                },
-                data: data,
-                success: response => {
 
-                  id = response.data.id
-                  $('#crudModal').modal('hide')
-                  $('#crudModal').find('#crudForm').trigger('reset')
+            $.ajax({
+              url: url,
+              method: method,
+              dataType: 'JSON',
+              headers: {
+                Authorization: `Bearer ${accessToken}`
+              },
+              data: data,
+              success: response => {
 
-                  $('#jqGrid').jqGrid('setGridParam', {
-                    page: response.data.page
-                  }).trigger('reloadGrid');
+                id = response.data.id
+                $('#crudModal').modal('hide')
+                $('#crudModal').find('#crudForm').trigger('reset')
 
-                  if (response.data.grp == 'FORMAT') {
-                    updateFormat(response.data)
-                  }
-                },
-                error: error => {
-                  if (error.status === 422) {
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
+                $('#jqGrid').jqGrid('setGridParam', {
+                  page: response.data.page
+                }).trigger('reloadGrid');
 
-                    setErrorMessages(form, error.responseJSON.errors);
-                    showDialog(error.responseJSON.message)
-                  } else {
-                    showDialog(error.statusText)
-                  }
-                },
-              }).always(() => {
-                $('#loader').addClass('d-none')
-                $(this).removeAttr('disabled')
-              })
+                if (response.data.grp == 'FORMAT') {
+                  updateFormat(response.data)
+                }
+              },
+              error: error => {
+                console.log('postdata ', error)
+                if (error.status === 422) {
+                  $('.is-invalid').removeClass('is-invalid')
+                  $('.invalid-feedback').remove()
+                  setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                  showDialog(error.statusText)
+                }
+              },
+            }).always(() => {
+              $('#loader').addClass('d-none')
+              $(this).removeAttr('disabled')
+            })
 
           },
           error: error => {
+            console.log('cekupah ', error)
             if (error.status === 422) {
               $('.is-invalid').removeClass('is-invalid')
               $('.invalid-feedback').remove()
-
-              setErrorMessages(form, error.responseJSON.errors);
-              showDialog(error.responseJSON.errors)
+              showDialog(error.responseJSON.message)
             } else {
               showDialog(error.statusText)
             }
@@ -912,23 +657,15 @@
     setStatusLongTripOptions(form)
     setStatusPeralihanOptions(form)
     setStatusRitasiOmsetOptions(form)
-    setStatusNotifOptions(form)
-    setStatusOnewayOptions(form)
-    setStatusEditTujuanOptions(form)
-    setStatusTripOptions(form)
+    setStatusGudangSamaOptions(form)
+    setStatusBatalMuatOptions(form)
     addRow()
     setTotal()
     setTotalTagih()
 
     initAutoNumeric(form.find(`[name="nominal"]`))
     initAutoNumeric(form.find(`[name="nominalTagih"]`))
-    initAutoNumeric(form.find(`[name="nominalstafle"]`))
-    initAutoNumeric(form.find(`[name="discount"]`))
-    initAutoNumeric(form.find(`[name="nilaitagihlain"]`))
     initAutoNumeric(form.find(`[name="qtyton"]`))
-    initAutoNumeric(form.find(`[name="totalton"]`))
-    initAutoNumeric(form.find(`[name="upahbongkardepo"]`))
-    initAutoNumeric(form.find(`[name="upahmuatdepo"]`))
   }
 
   function editSuratPengantar(id) {
@@ -951,10 +688,8 @@
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
         setStatusRitasiOmsetOptions(form),
-        setStatusNotifOptions(form),
-        setStatusOnewayOptions(form),
-        setStatusEditTujuanOptions(form),
-        setStatusTripOptions(form)
+        setStatusGudangSamaOptions(form),
+        setStatusBatalMuatOptions(form)
       ])
       .then(() => {
         showSuratPengantar(form, id)
@@ -981,10 +716,8 @@
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
         setStatusRitasiOmsetOptions(form),
-        setStatusNotifOptions(form),
-        setStatusOnewayOptions(form),
-        setStatusEditTujuanOptions(form),
-        setStatusTripOptions(form)
+        setStatusGudangSamaOptions(form),
+        setStatusBatalMuatOptions(form)
       ])
       .then(() => {
         showSuratPengantar(form, id)
@@ -1127,11 +860,11 @@
       })
     })
   }
-  const setStatusNotifOptions = function(relatedForm) {
+  const setStatusGudangSamaOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusnotif]').empty()
-      relatedForm.find('[name=statusnotif]').append(
-        new Option('-- PILIH STATUS NOTIF --', '', false, true)
+      relatedForm.find('[name=statusgudangsama]').empty()
+      relatedForm.find('[name=statusgudangsama]').append(
+        new Option('-- PILIH STATUS GUDANG SAMA --', '', false, true)
       ).trigger('change')
 
       $.ajax({
@@ -1147,15 +880,15 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS NOTIF"
+              "data": "STATUS GUDANG SAMA"
             }]
           })
         },
         success: response => {
-          response.data.forEach(statusNotif => {
-            let option = new Option(statusNotif.text, statusNotif.id)
+          response.data.forEach(statusGudangSama => {
+            let option = new Option(statusGudangSama.text, statusGudangSama.id)
 
-            relatedForm.find('[name=statusnotif]').append(option).trigger('change')
+            relatedForm.find('[name=statusgudangsama]').append(option).trigger('change')
           });
 
           resolve()
@@ -1163,11 +896,11 @@
       })
     })
   }
-  const setStatusOnewayOptions = function(relatedForm) {
+  const setStatusBatalMuatOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusoneway]').empty()
-      relatedForm.find('[name=statusoneway]').append(
-        new Option('-- PILIH STATUS ONE WAY --', '', false, true)
+      relatedForm.find('[name=statusbatalmuat]').empty()
+      relatedForm.find('[name=statusbatalmuat]').append(
+        new Option('-- PILIH STATUS BATAL MUAT --', '', false, true)
       ).trigger('change')
 
       $.ajax({
@@ -1183,87 +916,15 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS ONE WAY"
+              "data": "STATUS BATAL MUAT"
             }]
           })
         },
         success: response => {
-          response.data.forEach(statusOneWay => {
-            let option = new Option(statusOneWay.text, statusOneWay.id)
+          response.data.forEach(statusBatalMuat => {
+            let option = new Option(statusBatalMuat.text, statusBatalMuat.id)
 
-            relatedForm.find('[name=statusoneway]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-  const setStatusEditTujuanOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusedittujuan]').empty()
-      relatedForm.find('[name=statusedittujuan]').append(
-        new Option('-- PILIH STATUS EDIT TUJUAN --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS EDIT TUJUAN"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusEditTujuan => {
-            let option = new Option(statusEditTujuan.text, statusEditTujuan.id)
-
-            relatedForm.find('[name=statusedittujuan]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-  const setStatusTripOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statustrip]').empty()
-      relatedForm.find('[name=statustrip]').append(
-        new Option('-- PILIH STATUS TRIP --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS TRIP"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusTrip => {
-            let option = new Option(statusTrip.text, statusTrip.id)
-
-            relatedForm.find('[name=statustrip]').append(option).trigger('change')
+            relatedForm.find('[name=statusbatalmuat]').append(option).trigger('change')
           });
 
           resolve()
@@ -1349,17 +1010,15 @@
 
 
         })
+        
+        getTarifOmset(response.data.tarif_id)
 
         initAutoNumeric(form.find(`[name="nominal"]`))
         initAutoNumeric(form.find(`[name="nominalTagih"]`))
-        initAutoNumeric(form.find(`[name="nominalstafle"]`))
-        initAutoNumeric(form.find(`[name="omset"]`))
-        initAutoNumeric(form.find(`[name="discount"]`))
-        initAutoNumeric(form.find(`[name="nilaitagihlain"]`))
         initAutoNumeric(form.find(`[name="qtyton"]`))
-        initAutoNumeric(form.find(`[name="totalton"]`))
-        initAutoNumeric(form.find(`[name="upahbongkardepo"]`))
-        initAutoNumeric(form.find(`[name="upahmuatdepo"]`))
+        initAutoNumeric(form.find(`[name="gajisupir"]`))
+        initAutoNumeric(form.find(`[name="gajikenek"]`))
+        initAutoNumeric(form.find(`[name="komisisupir"]`))
 
         if (response.detail.length === 0) {
           addRow()
@@ -1417,10 +1076,10 @@
           <input type="text" name="keterangan_detail[]" class="form-control">
         </td>
         <td>
-          <input type="text" name="nominal[]" class="form-control autonumeric">
+          <input type="text" name="nominal[]" class="form-control autonumeric" value="0">
         </td>
         <td>
-          <input type="text" name="nominalTagih[]" class="form-control autonumeric">
+          <input type="text" name="nominalTagih[]" class="form-control autonumeric" value="0">
         </td>
         <td>
           <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
@@ -1582,6 +1241,23 @@
         element.data('currentValue', element.val())
       }
     })
+    $('.gandengan-lookup').lookup({
+      title: 'Gandengan Lookup',
+      fileName: 'gandengan',
+      onSelectRow: (gandengan, element) => {
+        $('#crudForm [name=gandengan_id]').first().val(gandengan.id)
+        element.val(gandengan.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=gandengan_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
     $('.agen-lookup').lookup({
       title: 'Agen Lookup',
       fileName: 'agen',
@@ -1689,55 +1365,62 @@
     })
   }
 
-  function getTarifOmset(id){
+  function getTarifOmset(id) {
     $.ajax({
-        url: `${apiUrl}suratpengantar/${id}/getTarifOmset`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {          
-          $('#crudForm [name=omset]').first().val(response.nominal)
-          initAutoNumeric($('#crudForm ').find(`[name="omset"]`))
-        },
-        error: error => {
-          showDialog(error.statusText)
-        }
-      })
+      url: `${apiUrl}suratpengantar/${id}/getTarifOmset`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      success: response => {
+        $('#crudForm [name=lokasibongkarmuat]').first().val(response.dataTarif.tujuan)
+        $('#crudForm [name=hargaperton]').first().val(response.dataTarif.nominalton)
+        // initAutoNumeric($('#crudForm ').find(`[name="omset"]`))
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
   }
 
-  function getOrderanTrucking(id){
+  function getOrderanTrucking(id) {
     $.ajax({
-        url: `${apiUrl}suratpengantar/${id}/getOrderanTrucking`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          getTarifOmset(response.data.tarif_id)
-          console.log(response.data)
-          $('#crudForm [name=statusperalihan]').val(response.data.statusperalihan)
-          $('#crudForm [name=agen]').val(response.data.agen)
-          $('#crudForm [name=agen_id]').val(response.data.agen_id)
-          $('#crudForm [name=container_id]').val(response.data.container_id)
-          $('#crudForm [name=container]').val(response.data.container)
-          $('#crudForm [name=jenisorder_id]').val(response.data.jenisorder_id)
-          $('#crudForm [name=jenisorder]').val(response.data.jenisorder)
-          $('#crudForm [name=pelanggan_id]').val(response.data.pelanggan_id)
-          $('#crudForm [name=pelanggan]').val(response.data.pelanggan)
-          $('#crudForm [name=tarif_id]').val(response.data.tarif_id)
-          $('#crudForm [name=tarif]').val(response.data.tarif)
-          $('#crudForm [name=nocont]').val(response.data.nocont)
-          $('#crudForm [name=nocont2]').val(response.data.nocont2)
-          $('#crudForm [name=nojob]').val(response.data.nojobemkl)
-          $('#crudForm [name=nojob2]').val(response.data.nojobemkl2)
-        },
-        error: error => {
-          showDialog(error.statusText)
-        }
-      })
+      url: `${apiUrl}suratpengantar/${id}/getOrderanTrucking`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      success: response => {
+        getTarifOmset(response.data.tarif_id)
+        console.log(response.data)
+        $('#crudForm [name=statusperalihan]').val(response.data.statusperalihan)
+        $('#crudForm [name=agen]').val(response.data.agen)
+        $('#crudForm [name=agen_id]').val(response.data.agen_id)
+        $('#crudForm [name=container_id]').val(response.data.container_id)
+        $('#crudForm [name=container]').val(response.data.container)
+        $('#crudForm [name=jenisorder_id]').val(response.data.jenisorder_id)
+        $('#crudForm [name=jenisorder]').val(response.data.jenisorder)
+        $('#crudForm [name=pelanggan_id]').val(response.data.pelanggan_id)
+        $('#crudForm [name=pelanggan]').val(response.data.pelanggan)
+        $('#crudForm [name=tarif_id]').val(response.data.tarif_id)
+        $('#crudForm [name=tarif]').val(response.data.tarif)
+        $('#crudForm [name=nocont]').val(response.data.nocont)
+        $('#crudForm [name=nocont2]').val(response.data.nocont2)
+        $('#crudForm [name=nojob]').val(response.data.nojobemkl)
+        $('#crudForm [name=nojob2]').val(response.data.nojobemkl2)
+        $('#crudForm [name=noseal]').val(response.data.noseal)
+        $('#crudForm [name=noseal2]').val(response.data.noseal2)
+        $('#crudForm [name=statusperalihan]')
+                        .val(response.data.statusperalihan)
+                        .trigger('change')
+                        .trigger('select2:selected');
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
   }
   // function setDummyOption() {
   //   fetch(`http://dummy.test/server/`)
