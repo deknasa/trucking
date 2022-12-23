@@ -10,8 +10,9 @@
         </div>
         <form action="" method="post">
           <div class="modal-body">
+
             <div class="row form-group">
-                <input type="hidden" name="id" hidden class="form-control" readonly>
+              <input type="hidden" name="id" hidden class="form-control" readonly>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>nobukti <span class="text-danger">*</span> </label>
@@ -35,7 +36,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="pengeluaranstok" class="form-control pengeluaranstok-lookup">
-                <input type="text" id="pengeluaranstokId" name="pengeluaranstok_id" readonly hidden >
+                <input type="text" id="pengeluaranstokId" name="pengeluaranstok_id" readonly hidden>
               </div>
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>STATUS FORMAT <span class="text-danger">*</span> </label>
@@ -51,14 +52,14 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>pengeluaran stok nobukti  </label>
+                <label>pengeluaran stok nobukti </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="pengeluaranstok_nobukti" class="form-control pengeluaranstokheader-lookup">
               </div>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>penerimaan stok nobukti  </label>
+                <label>penerimaan stok nobukti </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="penerimaanstok_nobukti" class="form-control penerimaanstokheader-lookup">
@@ -66,62 +67,62 @@
             </div>
 
             <div class="row form-group">
-             
+
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>servicein no bukti  </label>
+                <label>servicein no bukti </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="servicein_nobukti" class="form-control servicein-lookup">
               </div>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>kerusakan  </label>
+                <label>kerusakan </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="kerusakan" class="form-control kerusakan-lookup">
-                <input type="text" id="kerusakanId" name="kerusakan_id" readonly hidden >
+                <input type="text" id="kerusakanId" name="kerusakan_id" readonly hidden>
               </div>
-              
+
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>supir  </label>
+                <label>supir </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="supir" class="form-control supir-lookup">
-                <input type="text" id="supirId" name="supir_id" readonly hidden >
+                <input type="text" id="supirId" name="supir_id" readonly hidden>
               </div>
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>trado  </label>
+                <label>trado </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="trado" class="form-control trado-lookup">
-                <input type="text" id="tradoId" name="trado_id" readonly hidden >
+                <input type="text" id="tradoId" name="trado_id" readonly hidden>
               </div>
-              
+
             </div>
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>supplier  </label>
+                <label>supplier </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="supplier" class="form-control supplier-lookup">
-                <input type="text" id="supplierId" name="supplier_id" readonly hidden >
+                <input type="text" id="supplierId" name="supplier_id" readonly hidden>
               </div>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>gudang  </label>
+                <label>gudang </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="gudang" class="form-control gudang-lookup">
-                <input type="text" id="gudangId" name="gudang_id" readonly hidden >
+                <input type="text" id="gudangId" name="gudang_id" readonly hidden>
               </div>
 
-             
+
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>keterangan <span class="text-danger">*</span> </label>
@@ -130,18 +131,18 @@
                 <input type="text" name="keterangan" class="form-control">
               </div>
             </div>
-            
+
             <table class="table table-bordered table-bindkeys">
               <thead>
                 <tr>
                   <th width="50">No</th>
                   <th width="300">stok</th>
-                  <th class="data_tbl" width="100">vulkanisirke</th>
+                  <th class="data_tbl tbl_vulkanisirke" width="100">vulkanisirke</th>
                   <th width="350">keterangan</th>
                   <th width="150">qty</th>
-                  <th width="150">harga</th>
-                  <th class="data_tbl" width="50">persentase discount</th>
-                  <th width="150">Total</th>
+                  <th class="data_tbl tbl_harga width=" 150">harga</th>
+                  <th class="data_tbl tbl_persentase" width="50">persentase discount</th>
+                  <th class="data_tbl tbl_total" width="150">Total</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -149,17 +150,17 @@
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan="6" ></td>
-                  
-                  <td class="font-weight-bold  data_tbl"> Total : </td>
-                  <td id="sumary" class="text-right font-weight-bold data_tbl">  </td>
+                  <td colspan="6" class="colspan"></td>
+
+                  <td class="font-weight-bold  data_tbl tbl_total"> Total : </td>
+                  <td id="sumary" class="text-right font-weight-bold data_tbl tbl_total"> </td>
                   <td>
                     <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                   </td>
                 </tr>
               </tfoot>
             </table>
-                
+
 
 
           </div>
@@ -185,15 +186,15 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
-    
+
     $("#addRow").click(function() {
       addRow()
     });
-    
+
     $(document).on('click', '.rmv', function(event) {
       deleteRow($(this).parents('tr'))
     })
-    
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -301,7 +302,8 @@
       })
     })
   })
-  function kodepengeluaran(kodepengeluaran){
+
+  function kodepengeluaran(kodepengeluaran) {
     $('#crudForm').find('[name=statusformat]').val(kodepengeluaran).trigger('change');
     cekKodePengeluaran(kodepengeluaran)
     $('#crudForm').find('[name=statusformat_id]').val(kodepengeluaran);
@@ -309,16 +311,16 @@
 
   function cekKodePengeluaran(kode) {
     $.ajax({
-          url: `${apiUrl}parameter`,
-          method: 'GET',
-          dataType: 'JSON',
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
-          data: {
-            filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
+      url: `${apiUrl}parameter`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        filters: JSON.stringify({
+          "groupOp": "AND",
+          "rules": [{
               "field": "grp",
               "op": "cn",
               "data": "PENGELUARAN STOK"
@@ -327,26 +329,32 @@
               "field": "subgrp",
               "op": "cn",
               "data": "SPK STOK BUKTI"
-            }]
-          })
-        },
-        success: response => {
-          if (response.data[0].id==kode) {
-            tampilanspk();
-          } else {
-            tampilanall();
-          }
+            }
+          ]
+        })
+      },
+      success: response => {
+        if (response.data[0].id == kode) {
+          tampilanspk();
+        } else {
+          tampilanall();
         }
-      })
-    
+      }
+    })
+
   }
+
   function tampilanspk() {
     $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
     $('[name=servicein_nobukti]').parents('.form-group').hide()
     $('[name=supplier]').parents('.form-group').hide()
-    $('.data_tbl').hide();
-    $('.colspan').attr('colspan',3);
+    $('.tbl_vulkanisirke').hide();
+    $('.tbl_harga').hide();
+    $('.tbl_persentase').hide();
+    $('.tbl_total').hide();
+    $('.colspan').attr('colspan', 4);
+    $('.sumrow').hide();
 
   }
 
@@ -356,17 +364,20 @@
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').show()
     $('[name=service_nobukti]').parents('.form-group').show()
     $('[name=supplier]').parents('.form-group').show()
-    $('.data_tbl').show();
-    $('.colspan').attr('colspan',6);
+    $('.tbl_vulkanisirke').show();
+    $('.tbl_harga').show();
+    $('.tbl_persentase').show();
+    $('.tbl_total').show();
+    $('.colspan').attr('colspan', 6);
   }
-    
-    $('#crudModal').on('shown.bs.modal', () => {
-      let form = $('#crudForm')
-      
-      setFormBindKeys(form)
-      
-      activeGrid = null
-      initDatepicker()
+
+  $('#crudModal').on('shown.bs.modal', () => {
+    let form = $('#crudForm')
+
+    setFormBindKeys(form)
+
+    activeGrid = null
+    initDatepicker()
 
     // getMaxLength(form)
   })
@@ -389,7 +400,7 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     $('#crudModalTitle').text('Create Pengeluaran Stok')
     $('#crudModal').modal('show')
@@ -510,6 +521,7 @@
     })
   }
   index = 0;
+
   function addRow() {
 
     let detailRow = $(`
@@ -522,7 +534,7 @@
                     <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${index}">
                     <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>                 
-                  <td class="data_tbl">
+                  <td class="data_tbl tbl_vulkanisirke">
                     <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                   </td>  
                   <td>
@@ -532,14 +544,14 @@
                     <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}">
                   </td>  
                   
-                  <td>
+                  <td class="data_tbl tbl_harga">
                     <input type="text"  name="detail_harga[]" id="detail_harga${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}">
                   </td>  
                   
-                  <td class="data_tbl">
+                  <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}">
                   </td>  
-                  <td>
+                  <td class="data_tbl tbl_total">
                     <input type="text"  name="totalItem[]" readonly id="totalItem${index}" style="text-align:right" class="form-control totalItem autonumeric number${index}">                    
                   </td>  
                   
@@ -548,7 +560,7 @@
                   </td>
               </tr>
     `)
-    
+
     $('table #table_body').append(detailRow)
     var row = index;
     $(`.detail_stok_${row}`).lookup({
@@ -569,11 +581,11 @@
       }
     })
     initAutoNumeric($(`.number${index}`))
-    cekKodePengeluaran($('#crudForm').find('[name=statusformat]').val())   
+    cekKodePengeluaran($('#crudForm').find('[name=statusformat]').val())
     setRowNumbers()
     index++;
   }
-  
+
   function deleteRow(row) {
     row.remove()
     sumary()
@@ -600,22 +612,22 @@
     qty = AutoNumeric.getNumber(qty);
     harga = AutoNumeric.getNumber(harga);
     discount = AutoNumeric.getNumber(discount);
-    
+
     total = qty * harga;
-    nominaldiscount = total * (discount/100);
+    nominaldiscount = total * (discount / 100);
     total -= nominaldiscount;
     new AutoNumeric($(`#totalItem${id}`)[0]).set(total)
     sumary();
   }
 
-  function sumary(){
-		let sumary =0;
-		$('.totalItem').each(function(){
-			var totalItem = AutoNumeric.getNumber($(this)[0]);
-			sumary +=totalItem;
-		})
+  function sumary() {
+    let sumary = 0;
+    $('.totalItem').each(function() {
+      var totalItem = AutoNumeric.getNumber($(this)[0]);
+      sumary += totalItem;
+    })
     new AutoNumeric($('#sumary')[0]).set(sumary);
-	}
+  }
 
   function showPengeluaranstokHeader(form, pengeluaranStokHeaderId) {
     resetRow()
@@ -627,12 +639,12 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-        sum =0;
+        sum = 0;
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
-          if(element.attr("name") == 'tglbukti'){
+          if (element.attr("name") == 'tglbukti') {
             var result = value.split('-');
-            element.val(result[2]+'-'+result[1]+'-'+result[0]);
+            element.val(result[2] + '-' + result[1] + '-' + result[0]);
           } else {
             element.val(value)
           }
