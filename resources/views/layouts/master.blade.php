@@ -176,7 +176,7 @@
   
   <script type="text/javascript">
     let accessToken = `{{ session('access_token') }}`
-    let appUrl = `{{ config('app.url') }}`
+    let appUrl = `{{ url()->to('/') }}`
     let apiUrl = `{{ config('app.api_url') }}`
 
     function separatorNumber(object) {
