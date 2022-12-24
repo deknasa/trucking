@@ -139,7 +139,7 @@
                 </div>
               </div>
 
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-6" style="display: none">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
                     <label>gudang </label>
