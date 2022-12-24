@@ -2,6 +2,7 @@
 <div id="penerimaanStokHeaderLookupPager"></div>
 
 <script>
+  var sendedFilters = `{!! $filters ?? '' !!}`
   $('#penerimaanStokHeaderLookup').jqGrid({
       url: `{{ config('app.api_url') . 'penerimaanstokheader' }}`,
       mtype: "GET",
@@ -218,9 +219,21 @@
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
         clearGlobalSearch($('#penerimaanStokHeaderLookup'))
+        let currentFilters = JSON.parse($(this).jqGrid('getGridParam').postData.filters)
+        if (JSON.parse(sendedFilters).rules[0]) {
+          currentFilters.rules.push(JSON.parse(sendedFilters).rules[0])
+        }
+
+        $(this).jqGrid('setGridParam', {
+          postData: {
+            filters: JSON.stringify(currentFilters),
+          }
+        })
       },
     })
   loadGlobalSearch($('#penerimaanStokHeaderLookup'))
+  additionalRulesGlobalSearch(sendedFilters)
+
   loadClearFilter($('#penerimaanStokHeaderLookup'))
 </script>
 

@@ -1,6 +1,7 @@
 let sidebarIsOpen = false;
 let formats;
 let offDays;
+let addedRules;
 
 $(document).ready(function () {
 	setFormats();
@@ -750,6 +751,9 @@ function loadGlobalSearch(grid) {
 					l = colModel.length,
 					i,
 					cm;
+				if (addedRules) {
+					rules.push(addedRules);
+				}
 				for (i = 0; i < l; i++) {
 					cm = colModel[i];
 					if (
@@ -783,6 +787,12 @@ function loadGlobalSearch(grid) {
 			}, 500);
 		}
 	);
+}
+
+function additionalRulesGlobalSearch(params) {
+	if (JSON.parse(params).rules[0]) {
+		addedRules = JSON.parse(params).rules[0];
+	}
 }
 
 function clearColumnSearch(grid) {

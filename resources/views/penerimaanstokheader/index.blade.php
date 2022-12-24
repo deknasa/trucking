@@ -143,6 +143,14 @@
               }]
             })
           }
+        }else{
+          this.postData = {
+            // $(`#penerimaanstokId`).val()
+            filters: JSON.stringify({
+              "groupOp": "or",
+              "rules": [ ]
+            })
+          }
         }
       },
             
