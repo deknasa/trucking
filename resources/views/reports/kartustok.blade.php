@@ -37,6 +37,7 @@
 
       dataSet.readJson({
         'data': <?= json_encode($data); ?>,
+        'dataHeader': <?= json_encode($dataHeader); ?>,
         'user': <?= json_encode($user); ?>
       })
 

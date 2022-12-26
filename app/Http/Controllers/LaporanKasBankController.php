@@ -42,9 +42,9 @@ class LaporanKasBankController extends MyController
 
         $data = $header['data'];
         $user = Auth::user();
-        return view('reports.laporankasbank', compact('data', 'user','detailParams'));
+        return view('reports.laporankasbank', compact('data', 'user', 'detailParams'));
     }
-    
+
     public function export(Request $request): void
     {
         $detailParams = [
@@ -56,53 +56,32 @@ class LaporanKasBankController extends MyController
         $responses = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'kartustok/report', $detailParams);
+            ->get(config('app.api_url') . 'laporankasbank/report', $detailParams);
 
         $kartustok = $responses['data'];
         $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'KARTU STOK');
+        $sheet->setCellValue('A1', 'TAS');
         $sheet->getStyle("A1")->getFont()->setSize(20);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');
 
-        $header_start_row = 2;
-        $detail_table_header_row = 2;
-        $detail_start_row = $detail_table_header_row + 1;
+        $sheet->setCellValue('A2', 'Laporan Kas Harian');
+        $sheet->getStyle("A2")->getFont()->setSize(16);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
+        $sheet->mergeCells('A2:G2');
+        
+        $sheet->setCellValue('A4', 'Periode');
+        $sheet->setCellValue('B4', ': ' . $detailParams['dari']);
 
-        $alphabets = range('A', 'Z');
+        $sheet->setCellValue('C4', 's/d');
+        $sheet->setCellValue('D4', $detailParams['sampai']);
 
-        $detail_columns = [
-            [
-                'label' => 'No',
-            ],
-            [
-                'label' => 'Kode Barang',
-                'index' => 'kodebarang',
-            ],
-            [
-                'label' => 'Nama Barang',
-                'index' => 'namabarang',
-            ],
-            [
-                'label' => 'Kategori',
-                'index' => 'kategori_id',
-            ],
-            [
-                'label' => 'QTY Masuk',
-                'index' => 'qtymasuk'
-            ],
-            [
-                'label' => 'QTY Keluar',
-                'index' => 'qtykeluar'
-            ]
-        ];
-
-        foreach ($detail_columns as $detail_columns_index => $detail_column) {
-            $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
-        }
+        $detail_table_header_row = 6;
+        $detail_start_row = $detail_table_header_row + 4;
+        
         $styleArray = array(
             'borders' => array(
                 'allBorders' => array(
@@ -111,49 +90,92 @@ class LaporanKasBankController extends MyController
             ),
         );
 
+        $style_number = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+            ],
+
+            'borders' => [
+                'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
+            ]
+        ];
+        
+        $sheet->setCellValue('A7', 'Buku Kas/Bank');
+        $sheet->setCellValue('B7', 'BANK TRUCKING');
+        $sheet->setCellValue('B8', 'Saldo Awal');
+        $sheet->setCellValue('F8', number_format((float) '250000', '2', ',', '.'))->getStyle("F8")->getAlignment()->setHorizontal('right');
+
+        $alphabets = range('A', 'Z');
+
+        $detail_columns = [
+            [
+                'label' => 'No Bukti',
+                'index' => 'nobukti',
+            ],
+            [
+                'label' => 'Nama Perkiraan',
+                'index' => 'namaperkiraan',
+            ],
+            [
+                'label' => 'Keterangan',
+                'index' => 'keterangan',
+            ],
+            [
+                'label' => 'Debet',
+                'index' => 'debet'
+            ],
+            [
+                'label' => 'Kredit',
+                'index' => 'kredit'
+            ],
+            [
+                'label' => 'Saldo',
+                'index' => 'saldo'
+            ]
+        ];
+
+
+        foreach ($detail_columns as $detail_columns_index => $detail_column) {
+            $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
+        }
         $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
-        foreach ($kartustok as $response_index => $response_detail) {
-            
-            foreach ($detail_columns as $detail_columns_index => $detail_column) {
-                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-            }
+        // foreach ($kartustok as $response_index => $response_detail) {
 
-            $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['kodebarang']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['namabarang']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['kategori_id']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['qtymasuk']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['qtykeluar']);
+        //     foreach ($detail_columns as $detail_columns_index => $detail_column) {
+        //         $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+        //     }
 
-            $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-            $detail_start_row++;
-        }
+        //     $sheet->setCellValue("A$detail_start_row", $response_index + 1);
+        //     $sheet->setCellValue("B$detail_start_row", $response_detail['kodebarang']);
+        //     $sheet->setCellValue("C$detail_start_row", $response_detail['namabarang']);
+        //     $sheet->setCellValue("D$detail_start_row", $response_detail['kategori_id']);
+        //     $sheet->setCellValue("E$detail_start_row", $response_detail['qtymasuk']);
+        //     $sheet->setCellValue("F$detail_start_row", $response_detail['qtykeluar']);
 
-        // set diketahui dibuat
+        //     $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
+        //     $detail_start_row++;
+        // }
+
+        $sheet->mergeCells('A' . $detail_start_row . ':C' . $detail_start_row);
+        $sheet->setCellValue("A$detail_start_row", 'Total :')->getStyle('A' . $detail_start_row . ':C' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("D$detail_start_row", number_format((float) '250000', '2', ',', '.'))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("E$detail_start_row", number_format((float) '250000', '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("F$detail_start_row", number_format((float) '250000', '2', ',', '.'))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+
+        
         $ttd_start_row = $detail_start_row + 2;
-        $sheet->setCellValue("B$ttd_start_row", 'Disetujui');
-        $sheet->setCellValue("C$ttd_start_row", 'Diketahui');
-        $sheet->setCellValue("D$ttd_start_row", 'Dibuat');
-        $sheet->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
+        $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
+        $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');
+        $sheet->setCellValue("F$ttd_start_row", 'Disusun Oleh,');
 
-        $sheet->mergeCells("B" . ($ttd_start_row + 1) . ":B" . ($ttd_start_row + 3));
-        $sheet->mergeCells("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3));
-        $sheet->mergeCells("D" . ($ttd_start_row + 1) . ":D" . ($ttd_start_row + 3));
-        $sheet->getStyle("B" . ($ttd_start_row + 1) . ":B" . ($ttd_start_row + 3))->applyFromArray($styleArray);
-        $sheet->getStyle("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3))->applyFromArray($styleArray);
-        $sheet->getStyle("D" . ($ttd_start_row + 1) . ":D" . ($ttd_start_row + 3))->applyFromArray($styleArray);
-
-        //set tglcetak
-        date_default_timezone_set('Asia/Jakarta');
-
-        $sheet->setCellValue("B" . ($ttd_start_row + 5), 'Dicetak Pada :');
-        $sheet->getStyle("B" . ($ttd_start_row + 5))->getFont()->setItalic(true);
-        $sheet->setCellValue("C" . ($ttd_start_row + 5), date('d/m/Y H:i:s'));
-        $sheet->getStyle("C" . ($ttd_start_row + 5))->getFont()->setItalic(true);
-        $sheet->setCellValue("D" . ($ttd_start_row + 5), $user['name']);
-        $sheet->getStyle("D" . ($ttd_start_row + 5))->getFont()->setItalic(true);
+        $sheet->setCellValue("A". ($ttd_start_row + 3), '( Bpk. Hasan )');
+        $sheet->setCellValue("C". ($ttd_start_row + 3), '( Rina )');
+        $sheet->setCellValue("F". ($ttd_start_row + 3), '(                )');
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -165,7 +187,7 @@ class LaporanKasBankController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Kartu Stok  ' . date('dmYHis');
+        $filename = 'Laporan Kas/Bank' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

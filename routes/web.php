@@ -815,6 +815,7 @@ Route::middleware('auth')->group(function () {
     Route::get('kartustok/index', [KartuStokController::class, 'index']);
     Route::resource('kartustok', KartuStokController::class);
 
+    Route::get('laporankasbank/export', [LaporanKasBankController::class, 'export'])->name('laporankasbank.export');
     Route::get('laporankasbank/report', [LaporanKasBankController::class, 'report'])->name('laporankasbank.report');
     Route::get('laporankasbank/index', [LaporanKasBankController::class, 'index']);
     Route::resource('laporankasbank', LaporanKasBankController::class);

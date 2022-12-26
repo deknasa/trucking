@@ -42,6 +42,10 @@
                                     <i class="fas fa-sync"></i>
                                     Preview
                                 </a>
+                                <a id="btnExport" class="btn btn-warning mr-2 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
+                                </a>
                             </div>
                         </div>
 
@@ -94,6 +98,20 @@
             showDialog('ISI SELURUH KOLOM')
         }
     })
+
+    $(document).on('click', `#btnExport`, function(event) {
+        let dari = $('#crudForm').find('[name=dari]').val()
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+        let bank_id = $('#crudForm').find('[name=bank_id]').val()
+
+        if (dari != '' && sampai != '') {
+
+            window.open(`{{ route('laporankasbank.export') }}?dari=${dari}&sampai=${sampai}&bankid=${bank_id}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
+  
   
 
     function initLookup() {

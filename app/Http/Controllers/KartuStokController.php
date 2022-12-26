@@ -44,10 +44,11 @@ class KartuStokController extends MyController
             ->get(config('app.api_url') . 'kartustok/report', $detailParams);
 
         $data = $header['data'];
+        $dataHeader = $header['dataheader'];
         $user = Auth::user();
-        return view('reports.kartustok', compact('data', 'user'));
+        return view('reports.kartustok', compact('data', 'user', 'dataHeader'));
     }
-    
+
     public function export(Request $request): void
     {
         $detailParams = [
@@ -64,28 +65,62 @@ class KartuStokController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'kartustok/report', $detailParams);
 
+        $dataHeader = $responses['dataheader'];
         $kartustok = $responses['data'];
         $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'KARTU STOK');
+        $sheet->setCellValue('A1', 'TAS');
         $sheet->getStyle("A1")->getFont()->setSize(20);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:G1');
+        $sheet->mergeCells('A1:K1');
+        $sheet->setCellValue('A2', 'Laporan Kartu Stok');
+        $sheet->getStyle("A2")->getFont()->setSize(18);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:K2');
 
-        $header_start_row = 2;
-        $detail_table_header_row = 2;
+
+        $header_start_row = 3;
+        $header_right_start_row = 3;
+        $detail_table_header_row = 8;
         $detail_start_row = $detail_table_header_row + 1;
+        $mergecell_start_row = 7;
 
         $alphabets = range('A', 'Z');
+        $header_columns = [
+            [
+                'label' => 'Periode',
+                'index' => 'dari',
+            ],
+            [
+                'label' => 'stok',
+                'index' => 'stokdari',
+            ],
+            [
+                'label' => 'Gudang',
+                'index' => 'datafilter',
+            ],
+        ];
+        
+        $header_right_columns = [
+
+            [
+                'label' => 's/d',
+                'index' => 'sampai',
+            ],
+        ];
+        $underheader_right_columns = [
+
+            [
+                'label' => 's/d',
+                'index' => 'stoksampai',
+            ],
+        ];
 
         $detail_columns = [
             [
-                'label' => 'No',
-            ],
-            [
-                'label' => 'Kode Barang',
+                'label' => 'Kd Brg',
                 'index' => 'kodebarang',
             ],
             [
@@ -93,18 +128,56 @@ class KartuStokController extends MyController
                 'index' => 'namabarang',
             ],
             [
+                'label' => 'Tanggal',
+                'index' => 'tglbukti',
+            ],
+            [
+                'label' => 'No Bukti',
+                'index' => 'nobukti',
+            ],
+            [
                 'label' => 'Kategori',
                 'index' => 'kategori_id',
             ],
             [
-                'label' => 'QTY Masuk',
+                'label' => 'QTY',
                 'index' => 'qtymasuk'
             ],
             [
-                'label' => 'QTY Keluar',
+                'label' => 'Nominal',
+                'index' => 'nilaimasuk'
+            ],
+            [
+                'label' => 'QTY',
                 'index' => 'qtykeluar'
-            ]
+            ],
+            [
+                'label' => 'Nominal',
+                'index' => 'nilaikeluar'
+            ],
+            [
+                'label' => 'QTY',
+                'index' => 'qtysaldo'
+            ],
+            [
+                'label' => 'Nominal',
+                'index' => 'nilaisaldo'
+            ],
         ];
+        foreach ($header_columns as $header_column) {
+            $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
+            $sheet->setCellValue('C' . $header_start_row++, ': ' . $dataHeader[$header_column['index']]);
+        }
+        
+        foreach ($header_right_columns as $header_right_column) {
+            $sheet->setCellValue('D' . $header_right_start_row, $header_right_column['label']);
+            $sheet->setCellValue('E' . $header_right_start_row++, $dataHeader['sampai']);
+        }
+        foreach ($underheader_right_columns as $header_right_column) {
+            $sheet->setCellValue('D4', $header_right_column['label']);
+            $sheet->setCellValue('E4', $dataHeader['stoksampai']);
+        }
+
 
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
@@ -117,7 +190,20 @@ class KartuStokController extends MyController
             ),
         );
 
-        $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray);
+        $style_number = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+            ],
+
+            'borders' => [
+                'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
+            ]
+        ];
+
+        $sheet->getStyle("A$detail_table_header_row:K$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
         foreach ($kartustok as $response_index => $response_detail) {
@@ -126,40 +212,34 @@ class KartuStokController extends MyController
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
 
-            $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['kodebarang']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['namabarang']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['kategori_id']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['qtymasuk']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['qtykeluar']);
+            $sheet->setCellValue("A$detail_start_row", $response_detail['kodebarang']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['namabarang']);
+            $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
+            $sheet->setCellValue("D$detail_start_row", $response_detail['nobukti']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['kategori_id']);
+            $sheet->setCellValue("F$detail_start_row", number_format((float) $response_detail['qtymasuk'], '2', '.', ','));
+            $sheet->setCellValue("G$detail_start_row", number_format((float) $response_detail['nilaimasuk'], '2', '.', ','));
+            $sheet->setCellValue("H$detail_start_row", number_format((float) $response_detail['qtykeluar'], '2', '.', ','));
+            $sheet->setCellValue("I$detail_start_row", number_format((float) $response_detail['nilaikeluar'], '2', '.', ','));
+            $sheet->setCellValue("J$detail_start_row", number_format((float) $response_detail['qtysaldo'], '2', '.', ','));
+            $sheet->setCellValue("K$detail_start_row", number_format((float) $response_detail['nilaisaldo'], '2', '.', ','));
 
-            $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("A$detail_start_row:J$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("F$detail_start_row:K$detail_start_row")->applyFromArray($style_number);
             $detail_start_row++;
         }
-
-        // set diketahui dibuat
-        $ttd_start_row = $detail_start_row + 2;
-        $sheet->setCellValue("B$ttd_start_row", 'Disetujui');
-        $sheet->setCellValue("C$ttd_start_row", 'Diketahui');
-        $sheet->setCellValue("D$ttd_start_row", 'Dibuat');
-        $sheet->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
-
-        $sheet->mergeCells("B" . ($ttd_start_row + 1) . ":B" . ($ttd_start_row + 3));
-        $sheet->mergeCells("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3));
-        $sheet->mergeCells("D" . ($ttd_start_row + 1) . ":D" . ($ttd_start_row + 3));
-        $sheet->getStyle("B" . ($ttd_start_row + 1) . ":B" . ($ttd_start_row + 3))->applyFromArray($styleArray);
-        $sheet->getStyle("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3))->applyFromArray($styleArray);
-        $sheet->getStyle("D" . ($ttd_start_row + 1) . ":D" . ($ttd_start_row + 3))->applyFromArray($styleArray);
-
-        //set tglcetak
-        date_default_timezone_set('Asia/Jakarta');
-
-        $sheet->setCellValue("B" . ($ttd_start_row + 5), 'Dicetak Pada :');
-        $sheet->getStyle("B" . ($ttd_start_row + 5))->getFont()->setItalic(true);
-        $sheet->setCellValue("C" . ($ttd_start_row + 5), date('d/m/Y H:i:s'));
-        $sheet->getStyle("C" . ($ttd_start_row + 5))->getFont()->setItalic(true);
-        $sheet->setCellValue("D" . ($ttd_start_row + 5), $user['name']);
-        $sheet->getStyle("D" . ($ttd_start_row + 5))->getFont()->setItalic(true);
+        
+        $sheet->mergeCells('A' . $mergecell_start_row . ':E' . $mergecell_start_row);
+        $sheet->mergeCells('F' . $mergecell_start_row . ':G' . $mergecell_start_row);
+        $sheet->mergeCells('H' . $mergecell_start_row . ':I' . $mergecell_start_row);
+        $sheet->mergeCells('J' . $mergecell_start_row . ':K' . $mergecell_start_row);
+        $sheet->setCellValue("A$mergecell_start_row", '')->getStyle('A' . $mergecell_start_row . ':E' . $mergecell_start_row)->applyFromArray($styleArray);
+        $sheet->setCellValue("F$mergecell_start_row", 'Masuk')->getStyle('F' . $mergecell_start_row . ':G' . $mergecell_start_row)->applyFromArray($styleArray)->getFont();
+        $sheet->getStyle("F$mergecell_start_row")->getAlignment()->setHorizontal('center');
+        $sheet->setCellValue("H$mergecell_start_row", 'Keluar')->getStyle('H' . $mergecell_start_row . ':I' . $mergecell_start_row)->applyFromArray($styleArray)->getFont();
+        $sheet->getStyle("H$mergecell_start_row")->getAlignment()->setHorizontal('center');
+        $sheet->setCellValue("J$mergecell_start_row", 'Saldo')->getStyle('J' . $mergecell_start_row . ':K' . $mergecell_start_row)->applyFromArray($styleArray)->getFont();
+        $sheet->getStyle("J$mergecell_start_row")->getAlignment()->setHorizontal('center');
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -167,8 +247,11 @@ class KartuStokController extends MyController
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
-
-
+        $sheet->getColumnDimension('G')->setAutoSize(true);
+        $sheet->getColumnDimension('H')->setAutoSize(true);
+        $sheet->getColumnDimension('I')->setAutoSize(true);
+        $sheet->getColumnDimension('J')->setAutoSize(true);
+        $sheet->getColumnDimension('K')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Kartu Stok  ' . date('dmYHis');
