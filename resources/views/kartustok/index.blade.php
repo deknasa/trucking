@@ -201,7 +201,18 @@
                         label: 'QTY MASUK',
                         name: 'qtymasuk',
                         align: 'right',
-                        formatter: 'currency',
+                        formatter: 'number',
+                        formatoptions: {
+                            decimalSeparator: '.',
+                            thousandsSeparator: ','
+                        }
+                    },
+                    
+                    {
+                        label: 'NILAI MASUK',
+                        name: 'nilaimasuk',
+                        align: 'right',
+                        formatter: 'number',
                         formatoptions: {
                             decimalSeparator: '.',
                             thousandsSeparator: ','
@@ -211,12 +222,44 @@
                         label: 'QTY KELUAR',
                         name: 'qtykeluar',
                         align: 'right',
-                        formatter: 'currency',
+                        formatter: 'number',
                         formatoptions: {
                             decimalSeparator: '.',
                             thousandsSeparator: ','
                         }
                     },
+                    {
+                        label: 'NILAI KELUAR',
+                        name: 'nilaikeluar',
+                        align: 'right',
+                        formatter: 'number',
+                        formatoptions: {
+                            decimalSeparator: '.',
+                            thousandsSeparator: ','
+                        }
+                    },
+                    {
+                        label: 'QTY SALDO',
+                        name: 'qtysaldo',
+                        align: 'right',
+                        formatter: 'number',
+                        formatoptions: {
+                            decimalSeparator: '.',
+                            thousandsSeparator: ','
+                        }
+                    },
+
+                    {
+                        label: 'NILAI SALDO',
+                        name: 'nilaisaldo',
+                        align: 'right',
+                        formatter: 'number',
+                        formatoptions: {
+                            decimalSeparator: '.',
+                            thousandsSeparator: ','
+                        }
+                    },
+
 
                     {
                         label: 'MODIFIEDBY',
