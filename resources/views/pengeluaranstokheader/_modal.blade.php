@@ -29,108 +29,142 @@
               </div>
             </div>
 
-            <div class="row form-group">
+            <div class="row">
 
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>pengeluaran stok <span class="text-danger">*</span> </label>
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>pengeluaran stok <span class="text-danger">*</span> </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="pengeluaranstok" class="form-control pengeluaranstok-lookup">
+                    <input type="text" id="pengeluaranstokId" name="pengeluaranstok_id" readonly hidden>
+                  </div>
+                </div>
               </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="pengeluaranstok" class="form-control pengeluaranstok-lookup">
-                <input type="text" id="pengeluaranstokId" name="pengeluaranstok_id" readonly hidden>
-              </div>
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>STATUS FORMAT <span class="text-danger">*</span> </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <select name="statusformat" disabled class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS FORMAT --</option>
-                </select>
 
-                <input type="text" name="statusformat_id" readonly hidden class="form-control">
+                
+              <div class="form-group col-md-6" style="display: none">
+                <div class="row" >
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>STATUS FORMAT <span class="text-danger">*</span> </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <select name="statusformat" disabled class="form-select select2bs4" style="width: 100%;">
+                      <option value="">-- PILIH STATUS FORMAT --</option>
+                    </select>
+                    <input type="text" name="statusformat_id" readonly hidden class="form-control">
+                  </div>
+                </div>
               </div>
+              
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>pengeluaran stok nobukti </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="pengeluaranstok_nobukti" class="form-control pengeluaranstokheader-lookup">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>penerimaan stok nobukti </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="penerimaanstok_nobukti" class="form-control penerimaanstokheader-lookup">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>servicein no bukti </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="servicein_nobukti" class="form-control servicein-lookup">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>kerusakan </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="kerusakan" class="form-control kerusakan-lookup">
+                    <input type="text" id="kerusakanId" name="kerusakan_id" readonly hidden>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>supir </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="supir" class="form-control supir-lookup">
+                    <input type="text" id="supirId" name="supir_id" readonly hidden>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>trado </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="trado" class="form-control trado-lookup">
+                    <input type="text" id="tradoId" name="trado_id" readonly hidden>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>supplier </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="supplier" class="form-control supplier-lookup">
+                    <input type="text" id="supplierId" name="supplier_id" readonly hidden>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6" style="display: none">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>gudang </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="gudang" class="form-control gudang-lookup">
+                    <input type="text" id="gudangId" name="gudang_id" readonly hidden>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-12">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                    <label>keterangan <span class="text-danger">*</span> </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-10">
+                    <input type="text" name="keterangan" class="form-control">
+                  </div>
+                </div>
+              </div>
+
+
             </div>
 
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>pengeluaran stok nobukti </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="pengeluaranstok_nobukti" class="form-control pengeluaranstokheader-lookup">
-              </div>
-
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>penerimaan stok nobukti </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="penerimaanstok_nobukti" class="form-control penerimaanstokheader-lookup">
-              </div>
-            </div>
-
-            <div class="row form-group">
-
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>servicein no bukti </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="servicein_nobukti" class="form-control servicein-lookup">
-              </div>
-
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>kerusakan </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="kerusakan" class="form-control kerusakan-lookup">
-                <input type="text" id="kerusakanId" name="kerusakan_id" readonly hidden>
-              </div>
-
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>supir </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="supir" class="form-control supir-lookup">
-                <input type="text" id="supirId" name="supir_id" readonly hidden>
-              </div>
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>trado </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="trado" class="form-control trado-lookup">
-                <input type="text" id="tradoId" name="trado_id" readonly hidden>
-              </div>
-
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>supplier </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="supplier" class="form-control supplier-lookup">
-                <input type="text" id="supplierId" name="supplier_id" readonly hidden>
-              </div>
-
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>gudang </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="gudang" class="form-control gudang-lookup">
-                <input type="text" id="gudangId" name="gudang_id" readonly hidden>
-              </div>
-
-
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>keterangan <span class="text-danger">*</span> </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="keterangan" class="form-control">
-              </div>
-            </div>
 
             <table class="table table-bordered table-bindkeys">
               <thead>
@@ -140,7 +174,7 @@
                   <th class="data_tbl tbl_vulkanisirke" width="100">vulkanisirke</th>
                   <th width="350">keterangan</th>
                   <th width="150">qty</th>
-                  <th class="data_tbl tbl_harga width=" 150">harga</th>
+                  <th class="data_tbl tbl_harga" width="150">harga</th>
                   <th class="data_tbl tbl_persentase" width="50">persentase discount</th>
                   <th class="data_tbl tbl_total" width="150">Total</th>
                   <th>Aksi</th>
@@ -186,8 +220,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
-
-    $("#addRow").click(function() {
+    $(document).on('click', '#addRow', function(event) {
       addRow()
     });
 
@@ -334,6 +367,8 @@
         })
       },
       success: response => {
+        console.log(response.data[0].id);
+        console.log(kode);
         if (response.data[0].id == kode) {
           tampilanspk();
         } else {
@@ -378,16 +413,15 @@
 
     activeGrid = null
     initDatepicker()
-
+    initLookup()
+    initSelect2()
     // getMaxLength(form)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
-    $('#crudModal').find('.modal-body').html(modalBody)
-
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
-
 
   function createPengeluaranstokHeader() {
     resetRow()
@@ -640,6 +674,7 @@
       },
       success: response => {
         sum = 0;
+        var statusformat;
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
           if (element.attr("name") == 'tglbukti') {
@@ -650,6 +685,7 @@
           }
           if (index == "statusformat") {
             kodepengeluaran(value)
+            statusformat = value;
           }
         })
         $.each(response.detail, (id, detail) => {
@@ -663,7 +699,7 @@
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>
-                  <td>
+                   <td class="data_tbl tbl_vulkanisirke">
                     <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                   </td>  
                   <td>
@@ -673,14 +709,14 @@
                     <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                   </td>  
                   
-                  <td>
+                  <td class="data_tbl tbl_harga">
                     <input type="text"  name="detail_harga[]" id="detail_harga${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
                   
-                  <td>
+                  <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
-                  <td>
+                  <td class="data_tbl tbl_total">
                     <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                   </td>  
                   <td>
@@ -716,8 +752,173 @@
           id++;
         })
         sumary()
+        
+        kodepengeluaran(statusformat)
+
       }
     })
+  }
+
+  function initLookup() {
+      $('.akunpusat-lookup').lookup({
+        title: 'akun pusat Lookup',
+        fileName: 'akunpusat',
+        onSelectRow: (akunpusat, element) => {
+          element.val(akunpusat.coa)
+          $(`#${element[0]['name']}Id`).val(akunpusat.coa)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+      $('.pengeluaranstok-lookup').lookup({
+        title: 'pengeluaran stok Lookup',
+        fileName: 'pengeluaranstok',
+        onSelectRow: (pengeluaranstok, element) => {
+          kodepengeluaran(pengeluaranstok.statusformatid)
+          element.val(pengeluaranstok.kodepengeluaran)
+          $(`#${element[0]['name']}Id`).val(pengeluaranstok.id)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+      $('.supir-lookup').lookup({
+        title: 'supir Lookup',
+        fileName: 'supir',
+        onSelectRow: (supir, element) => {
+          element.val(supir.namasupir)
+          $(`#${element[0]['name']}Id`).val(supir.id)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+      
+      $('.kerusakan-lookup').lookup({
+        title: 'kerusakan Lookup',
+        fileName: 'kerusakan',
+        onSelectRow: (kerusakan, element) => {
+          element.val(kerusakan.keterangan)
+          $(`#${element[0]['name']}Id`).val(kerusakan.id)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+      $('.supplier-lookup').lookup({
+        title: 'supplier Lookup',
+        fileName: 'supplier',
+        onSelectRow: (supplier, element) => {
+          element.val(supplier.namasupplier)
+          $(`#${element[0]['name']}Id`).val(supplier.id)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+      $('.trado-lookup').lookup({
+        title: 'Trado Lookup',
+        fileName: 'trado',
+        onSelectRow: (trado, element) => {
+          element.val(trado.keterangan)
+          $(`#${element[0]['name']}Id`).val(trado.id)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+      $('.gudang-lookup').lookup({
+        title: 'Gudang Lookup',
+        fileName: 'gudang',
+        onSelectRow: (gudang, element) => {
+          element.val(gudang.gudang)
+          $(`#${element[0]['name']}Id`).val(gudang.id)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+      $('.pengeluaranstokheader-lookup').lookup({
+        title: 'pengeluaran stok header Lookup',
+        fileName: 'pengeluaranstokheader',
+        onSelectRow: (pengeluaran, element) => {
+          element.val(pengeluaran.nobukti)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+      $('.penerimaanstokheader-lookup').lookup({
+        title: 'penerimaan stok header Lookup',
+        fileName: 'penerimaanstokheader',
+        onSelectRow: (penerimaan, element) => {
+          element.val(penerimaan.nobukti)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+      $('.hutang-lookup').lookup({
+        title: 'hutang header Lookup',
+        fileName: 'hutangheader',
+        onSelectRow: (hutang, element) => {
+          element.val(hutang.nobukti)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
   }
 </script>
 @endpush()

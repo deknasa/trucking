@@ -356,7 +356,7 @@
   })
 
   function kodepenerimaan(kodepenerimaan) {
-    // console.log(kodepenerimaan);
+    console.log(kodepenerimaan);
     $('#crudForm').find('[name=statusformat]').val(kodepenerimaan).trigger('change');
     cekKodePenerimaan(kodepenerimaan)
     $('#crudForm').find('[name=statusformat_id]').val(kodepenerimaan);
@@ -824,6 +824,7 @@
       },
       success: response => {
         sum = 0;
+        var statusformat;
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
           if (element.attr("name") == 'tglbukti') {
@@ -834,6 +835,7 @@
           }
           if (index == "statusformat") {
             kodepenerimaan(value)
+            statusformat = value;
           }
         })
         $.each(response.detail, (id, detail) => {
@@ -900,6 +902,7 @@
           id++;
         })
         sumary()
+        kodepenerimaan(statusformat)
       }
     })
   }
