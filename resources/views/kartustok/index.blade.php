@@ -184,14 +184,25 @@
                         width: '50px'
                     },
                     {
+                        label: 'NO BUKTI',
+                        name: 'nobukti',
+                    },
+                    {
+                        label: 'TGL BUKTI',
+                        name: 'tglbukti',
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
+                    },
+                    {
                         label: 'KODE BARANG',
                         name: 'kodebarang',
-                        width: '250px'
                     },
                     {
                         label: 'NAMA BARANG',
                         name: 'namabarang',
-                        width: '250px'
                     },
                     {
                         label: 'KATEGORI',
@@ -207,7 +218,7 @@
                             thousandsSeparator: ','
                         }
                     },
-                    
+
                     {
                         label: 'NILAI MASUK',
                         name: 'nilaimasuk',
@@ -391,7 +402,7 @@
             showDialog('ISI SELURUH KOLOM')
         }
     })
-    
+
     $(document).on('click', `#btnExport`, function(event) {
         let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
         let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()

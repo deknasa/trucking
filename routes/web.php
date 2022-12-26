@@ -130,6 +130,7 @@ use App\Http\Controllers\InvoiceExtraHeaderController;
 use App\Http\Controllers\JurnalUmumPusatDetailController;
 use App\Http\Controllers\JurnalUmumPusatHeaderController;
 use App\Http\Controllers\KartuStokController;
+use App\Http\Controllers\LaporanKasBankController;
 use App\Http\Controllers\LookupController;
 use App\Http\Controllers\PencairanGiroPengeluaranDetailController;
 use App\Http\Controllers\PencairanGiroPengeluaranHeaderController;
@@ -813,6 +814,10 @@ Route::middleware('auth')->group(function () {
     Route::get('kartustok/report', [KartuStokController::class, 'report'])->name('kartustok.report');
     Route::get('kartustok/index', [KartuStokController::class, 'index']);
     Route::resource('kartustok', KartuStokController::class);
+
+    Route::get('laporankasbank/report', [LaporanKasBankController::class, 'report'])->name('laporankasbank.report');
+    Route::get('laporankasbank/index', [LaporanKasBankController::class, 'index']);
+    Route::resource('laporankasbank', LaporanKasBankController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
