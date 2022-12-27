@@ -178,11 +178,7 @@
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
                 datatype: "json",
-                colModel: [{
-                        label: 'ID',
-                        name: 'id',
-                        width: '50px'
-                    },
+                colModel: [
                     {
                         label: 'NO BUKTI',
                         name: 'nobukti',
