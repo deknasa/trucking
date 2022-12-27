@@ -13,18 +13,18 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-class LaporanKasBankController extends MyController
+class LaporanBukuBesarController extends MyController
 {
-    public $title = 'Laporan Kas/Bank';
+    public $title = 'Laporan Buku Besar';
 
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Kas/Bank',
+            'pagename' => 'Menu Utama Laporan Buku Besar',
         ];
 
-        return view('laporankasbank.index', compact('title'));
+        return view('laporanbukubesar.index', compact('title'));
     }
 
     public function report(Request $request)
@@ -32,17 +32,19 @@ class LaporanKasBankController extends MyController
         $detailParams = [
             'dari' => $request->dari,
             'sampai' => $request->sampai,
-            'bankid' => $request->bankid,
+            'coadari_id' => $request->coadari_id,
+            'coasampai_id' => $request->coasampai_id,
         ];
 
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporankasbank/report', $detailParams);
+            ->get(config('app.api_url') . 'laporanbukubesar/report', $detailParams);
 
         $data = $header['data'];
+        $dataheader = $header['dataheader'];
         $user = Auth::user();
-        return view('reports.laporankasbank', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanbukubesar', compact('data', 'user', 'dataheader'));
     }
 
     public function export(Request $request): void
@@ -50,37 +52,48 @@ class LaporanKasBankController extends MyController
         $detailParams = [
             'dari' => $request->dari,
             'sampai' => $request->sampai,
-            'bankid' => $request->bankid,
+            'coadari_id' => $request->coadari_id,
+            'coasampai_id' => $request->coasampai_id,
         ];
 
         $responses = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporankasbank/report', $detailParams);
+            ->get(config('app.api_url') . 'laporanbukubesar/report', $detailParams);
 
-        $kartustok = $responses['data'];
+        $bukubesar = $responses['data'];
+        $dataheader = $responses['dataheader'];
         $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'TAS');
-        $sheet->getStyle("A1")->getFont()->setSize(20);
+        $sheet->setCellValue('A1', 'TAS ' . $dataheader['cabang']);
+        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:G1');
+        $sheet->mergeCells('A1:F1');
 
-        $sheet->setCellValue('A2', 'Laporan Kas Harian');
-        $sheet->getStyle("A2")->getFont()->setSize(16);
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
-        $sheet->mergeCells('A2:G2');
+        $sheet->setCellValue('A2', 'Buku Besar Divisi Trucking');
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:F2');
 
-        $sheet->setCellValue('A4', 'Periode');
-        $sheet->setCellValue('B4', ': ' . $detailParams['dari']);
+        $sheet->setCellValue('A3', 'Periode : ' . $dataheader['dari'] . ' s/d ' . $dataheader['sampai']);
+        $sheet->getStyle("A3")->getFont()->setSize(12)->setBold(true);
+        $sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A3:F3');
 
-        $sheet->setCellValue('C4', 's/d');
-        $sheet->setCellValue('D4', $detailParams['sampai']);
+        $sheet->setCellValue('A4', 'No Perk. : ' .  $dataheader['coadari'] . ' s/d ' . $dataheader['coasampai']);
+        $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
+        $sheet->getStyle('A4')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A4:F4');
 
-        $detail_table_header_row = 6;
-        $detail_start_row = $detail_table_header_row + 4;
+        $sheet->setCellValue('A5', ' ' . $dataheader['ketcoadari'] . ' s/d ' . $dataheader['ketcoasampai']);
+        $sheet->getStyle("A5")->getFont()->setSize(12)->setBold(true);
+        $sheet->getStyle('A5')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A5:F5');
+
+        $detail_table_header_row = 7;
+        $detail_start_row = $detail_table_header_row + 1;
 
         $styleArray = array(
             'borders' => array(
@@ -103,19 +116,16 @@ class LaporanKasBankController extends MyController
             ]
         ];
 
-        $sheet->setCellValue('A7', 'Buku Kas/Bank');
-        $sheet->setCellValue('B7', 'BANK TRUCKING');
-
         $alphabets = range('A', 'Z');
 
         $detail_columns = [
             [
-                'label' => 'No Bukti',
-                'index' => 'nobukti',
+                'label' => 'Tgl Bukti',
+                'index' => 'tglbukti',
             ],
             [
-                'label' => 'Nama Perkiraan',
-                'index' => 'namaperkiraan',
+                'label' => 'No Bukti',
+                'index' => 'nobukti',
             ],
             [
                 'label' => 'Keterangan',
@@ -142,36 +152,36 @@ class LaporanKasBankController extends MyController
         $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray)->getFont()->setBold(true);
 
         // LOOPING DETAIL
-        // $totalDebet = 0;
-        // $totalKredit = 0;
-        // $totalSaldo = 0;
-        // foreach ($kartustok as $response_index => $response_detail) {
+        $totalKredit = 0;
+        $totalDebet = 0;
+        $totalSaldo = 0;
+        foreach ($bukubesar as $response_index => $response_detail) {
 
-        //     foreach ($detail_columns as $detail_columns_index => $detail_column) {
-        //         $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-        //     }
+            foreach ($detail_columns as $detail_columns_index => $detail_column) {
+                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+            }
 
-        //     $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
-        //     $sheet->setCellValue("B$detail_start_row", $response_detail['namaperkiraan']);
-        //     $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
-        //     $sheet->setCellValue("D$detail_start_row", $response_detail['debet']);
-        //     $sheet->setCellValue("E$detail_start_row", $response_detail['kredit']);
-        //     $sheet->setCellValue("F$detail_start_row", $response_detail['saldo']);
+            $sheet->setCellValue("A$detail_start_row", $response_detail['tglbukti']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("D$detail_start_row", number_format((float) $response_detail['debet'], '2', ',', '.'));
+            $sheet->setCellValue("E$detail_start_row", number_format((float) $response_detail['kredit'], '2', ',', '.'));
+            $sheet->setCellValue("F$detail_start_row", number_format((float) $response_detail['saldo'], '2', ',', '.'));
 
-        //     $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-        //      $sheet->getStyle("D$detail_start_row:F$detail_start_row")->applyFromArray($style_number);
+            $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("D$detail_start_row:F$detail_start_row")->applyFromArray($style_number);
 
-        //    $totalKredit += $response_detail['kredit'];
-        //     $totalDebet += $response_detail['debet'];
-        //     $totalSaldo += $response_detail['saldo'];
-        //     $detail_start_row++;
-        // }
+            $totalKredit += $response_detail['kredit'];
+            $totalDebet += $response_detail['debet'];
+            $totalSaldo += $response_detail['saldo'];
+            $detail_start_row++;
+        }
 
         $sheet->mergeCells('A' . $detail_start_row . ':C' . $detail_start_row);
         $sheet->setCellValue("A$detail_start_row", 'Total :')->getStyle('A' . $detail_start_row . ':C' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        // $sheet->setCellValue("D$detail_start_row", number_format((float) $totalDebet, '2', ',', '.'))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        // $sheet->setCellValue("E$detail_start_row", number_format((float) $totalKredit, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        // $sheet->setCellValue("F$detail_start_row", number_format((float) $totalSaldo, '2', ',', '.'))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("D$detail_start_row", number_format((float) $totalDebet, '2', ',', '.'))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("E$detail_start_row", number_format((float) $totalKredit, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("F$detail_start_row", number_format((float) $totalSaldo, '2', ',', '.'))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
 
         $ttd_start_row = $detail_start_row + 2;
