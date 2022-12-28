@@ -36,7 +36,13 @@ $(document).ready(function () {
 	$(document).on("hidden.bs.modal", ".modal", function () {
 		$(".modal:visible").length && $(document.body).addClass("modal-open");
 	});
+
+	$('#loader').addClass('d-none')
 });
+
+window.onbeforeunload =() => {
+	$('#loader').removeClass('d-none')
+}
 
 function setFormats() {
 	$.ajax({

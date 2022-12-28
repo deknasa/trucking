@@ -43,8 +43,8 @@
 </head>
 
 <body class="layout-fixed sidebar-collapse">
-  <div class="loader d-none" id="loader">
-    <h1 id="txt1">Mohon Tunggu</h1>
+  <div class="loader" id="loader">
+    <h1 id="txt1">Loading</h1>
   </div>
 
   <div id="dialog-message" title="Pesan" class="text-center text-danger" style="display: none;">

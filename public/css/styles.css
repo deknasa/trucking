@@ -51,16 +51,15 @@
 	top: 0px;
 	width: 100%;
 	height: 100%;
-	opacity: 0.8;
 	z-index: 9999;
-	background: url("../images/loading-red.gif") 50% 50% no-repeat
-		rgb(249, 249, 249);
-	background-size: 50px;
+	background: url("../images/hour-glass.gif") 50% 50% no-repeat
+		rgba(255, 255, 255, .8);
+	background-size: 84px;
 }
 
 #txt1 {
 	position: fixed;
-	top: 56%;
+	top: 60%;
 	left: 50%;
 	text-align: center;
 	transform: translate(-50%, -50%);
@@ -238,4 +237,16 @@
 
 .ui-jqgrid-btable tbody tr.table-active {
 	background-color: var(--jqgrid-hovered-row-background) !important;
+}
+
+.ui-jqgrid .loading {
+	height: 64px;
+	display: flex;
+	align-items: end;
+	justify-content: center;
+	background-image: url("../images/loading-red.gif");
+	background-repeat: no-repeat;
+	background-position: 50% 8%;
+	background-color: #fff;
+	background-size: 32px;
 }
