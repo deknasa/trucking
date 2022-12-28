@@ -387,6 +387,28 @@
               // detailRow.find(`[name="value[]"]`).prop('disabled', true);      
               let test = $('#detailList tbody').find(`#${index}`).prepend(inputColor);
               detailRow.find(`[name="color[]"]`).val(detail)
+              detailRow.find(`[name="key[]"]`).addClass('disabled')
+              initDisabled()
+            }
+            if(index == 'JURNAL'){
+              detailRow.find(`[name="key[]"]`).addClass('disabled')
+              initDisabled()
+              detailRow.find(`[name="value[]"]`).addClass("coa-lookup")
+              $('.coa-lookup').last().lookup({
+                title: 'Jurnal Lookup',
+                fileName: 'akunpusat',
+                onSelectRow: (akunpusat, element) => {
+                  element.val(akunpusat.coa)
+                  element.data('currentValue', element.val())
+                },
+                onCancel: (element) => {
+                  element.val(element.data('currentValue'))
+                },
+                onClear: (element) => {
+                  element.val('')
+                  element.data('currentValue', element.val())
+                }
+              })
             }
           })
         }
@@ -471,10 +493,7 @@
             </td>
 
             <td>
-              <div class="input-group">
                 <input type="text" name="value[]" class="form-control">
-                
-              </div>
             </td>
 
             <td>
@@ -502,9 +521,34 @@
                     </div>`)
 
     if ($(this).val().toLowerCase() == 'warna') {
+      $(this).parent().siblings().find(`[name="value[]"]`).wrap('<div class="input-group"></div>');
       $(this).parent().siblings().find(`.input-group`).prepend(inputColor);
-    } else {
-      $(this).parent().siblings().find(`.input-group`).find(`.input-group-prepend`).remove()
+    } else if($(this).val().toLowerCase() == 'jurnal') {
+      // $(this).parent().siblings().removeClass('input-group');
+      $(this).parent().siblings().find(`[name="value[]"]`).addClass("coa-lookup")
+      $('.coa-lookup').last().lookup({
+        title: 'Jurnal Lookup',
+        fileName: 'akunpusat',
+        onSelectRow: (akunpusat, element) => {
+          element.val(akunpusat.coa)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+    }else {
+      console.log($(this))
+      
+      $(this).parent().siblings().find('.input-group-append').remove()
+      $(this).parent().siblings().find('.input-group .btn').remove()
+      $(this).parent().siblings().find(`[name="value[]"]`).removeClass("coa-lookup")
+      $(this).parent().siblings().find(`.input-group-prepend`).remove();
+      $(this).parent().siblings().find('.input-group').children().unwrap();
     }
   })
 
