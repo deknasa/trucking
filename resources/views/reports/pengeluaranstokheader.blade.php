@@ -6,7 +6,7 @@
 <head>
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>Report Invoice Extra</title>
+  <title>Report Pengeluaran Stok</title>
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.viewer.office2013.whiteblue.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.designer.office2013.whiteblue.css') }}">
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.reports.js') }}"></script>
@@ -14,7 +14,8 @@
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <script type="text/javascript">
-    var invoiceextraheaders = <?= json_encode($invoiceextraheaders);?>
+    var pengeluaranstokheaders = {!! json_encode($pengeluaranstokheaders); !!}
+    var parameterStatusFormat = {!! json_encode($parameterStatusFormat); !!}
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'stimulsoft/license.php') }}");
@@ -23,8 +24,8 @@
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
       var report = new Stimulsoft.Report.StiReport()
       
-      var statuscetak = invoiceextraheaders.statuscetak
-      var sudahcetak = invoiceextraheaders['combo']['id']
+      var statuscetak = pengeluaranstokheaders.statuscetak
+      var sudahcetak = pengeluaranstokheaders['combo']['id']
       if (statuscetak == sudahcetak) {
         viewerOptions.toolbar.showPrintButton = false;
         viewerOptions.toolbar.showSaveButton = false;
@@ -39,12 +40,16 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ asset('public/reports/ReportInvoiceExtra.mrt') }}`)
+      if (pengeluaranstokheaders.statusformat == parameterStatusFormat.id) {
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokSpk.mrt') }}`)
+      }else{
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokRbt.mrt') }}`)
+      }
 
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
-        'invoiceextraheader': invoiceextraheaders
+        'pengeluaranstokheader': pengeluaranstokheaders
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)
@@ -72,11 +77,11 @@
       }
 
       window.addEventListener('afterprint', (event) => {
-        var id = invoiceextraheaders.id
+        var id = pengeluaranstokheaders.id
         var apiUrl = `{{ config('app.api_url') }}`;
         
         $.ajax({
-          url: `${apiUrl}invoiceextraheader/${id}/printreport`,
+          url: `${apiUrl}pengeluaranstokheader/${id}/printreport`,
           method: 'GET',
           dataType: 'JSON',
           headers: {
@@ -95,8 +100,8 @@
 
   <script type="text/javascript">
     $( document ).ready(function() {
-      var statuscetak = invoiceextraheaders.statuscetak
-      var sudahcetak = invoiceextraheaders['combo']['id']
+      var statuscetak = pengeluaranstokheaders.statuscetak
+      var sudahcetak = pengeluaranstokheaders['combo']['id']
       if (statuscetak == sudahcetak) {
         $(document).on('keydown', function(e) { 
           if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
