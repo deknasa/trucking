@@ -44,7 +44,8 @@
 
 <body class="layout-fixed sidebar-collapse">
   <div class="loader" id="loader">
-    <h1 id="txt1">Loading</h1>
+    <img src="{{ asset('images/hour-glass.gif') }}">
+    <span>Loading</span>
   </div>
 
   <div id="dialog-message" title="Pesan" class="text-center text-danger" style="display: none;">

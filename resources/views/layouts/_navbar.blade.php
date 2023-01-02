@@ -15,10 +15,6 @@
   </ul>
 </nav>
 
-<div class="loader hidden" id="loading1">
-  <h1 id="txt1">Mohon Tunggu</h1>
-</div>
-
 <div id="dialog-message" title="Pesan" class="text-center text-danger" style="display: none;">
   <span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
   <p></p>
