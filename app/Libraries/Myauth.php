@@ -21,6 +21,7 @@ class Myauth
             'logtrail',
             'kartustok',
             'historipenerimaanstok',
+            'historipengeluaranstok',
             'gudang'
         ],
         'method' => [

@@ -131,6 +131,7 @@ use App\Http\Controllers\JurnalUmumPusatDetailController;
 use App\Http\Controllers\JurnalUmumPusatHeaderController;
 use App\Http\Controllers\KartuStokController;
 use App\Http\Controllers\HistoriPenerimaanStokController;
+use App\Http\Controllers\HistoriPengeluaranStokController;
 use App\Http\Controllers\LaporanBukuBesarController;
 use App\Http\Controllers\LaporanKasBankController;
 use App\Http\Controllers\LookupController;
@@ -821,6 +822,11 @@ Route::middleware('auth')->group(function () {
     Route::get('historipenerimaanstok/report', [HistoriPenerimaanStokController::class, 'report'])->name('historipenerimaanstok.report');
     Route::get('historipenerimaanstok/index', [HistoriPenerimaanStokController::class, 'index']);
     Route::resource('historipenerimaanstok', HistoriPenerimaanStokController::class);
+    
+    Route::get('historipengeluaranstok/export', [HistoriPengeluaranStokController::class, 'export'])->name('historipengeluaranstok.export');
+    Route::get('historipengeluaranstok/report', [HistoriPengeluaranStokController::class, 'report'])->name('historipengeluaranstok.report');
+    Route::get('historipengeluaranstok/index', [HistoriPengeluaranStokController::class, 'index']);
+    Route::resource('historipengeluaranstok', HistoriPengeluaranStokController::class);
 
     Route::get('laporankasbank/export', [LaporanKasBankController::class, 'export'])->name('laporankasbank.export');
     Route::get('laporankasbank/report', [LaporanKasBankController::class, 'report'])->name('laporankasbank.report');
