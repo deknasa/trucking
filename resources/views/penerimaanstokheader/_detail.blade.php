@@ -3,7 +3,6 @@
   <div class="row">
     <div class="col-12">
       <table id="detail"></table>
-      <div id="detailPager"></div>
     </div>
   </div>
 </div>
@@ -145,7 +144,7 @@
         add: false,
         edit: false,
         del: false,
-      })
+      }).customPager()
   }
 
   function loadDetailData(id) {
