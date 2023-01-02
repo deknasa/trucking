@@ -19,7 +19,7 @@ class Myauth
             '',
             'dashboard',
             'logtrail',
-            'stok',
+            'approvalbukacetak',
         ],
         'method' => [
             'gridtab',
