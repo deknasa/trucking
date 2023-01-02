@@ -1,4 +1,4 @@
-.grid-pager .pager-handler button {
-  display: flex;
-  background-color: var(--jqgrid-pager-icon-color) !important;
+.hover-primary:hover {
+  background: #eaf2ff;
+  border: 1px solid #b7d2ff;
 }

@@ -2,13 +2,13 @@ function loadPagerHandler(element, grid) {
 	$(element).html(`
 		<button id="${
 			grid.getGridParam().id
-		}_firstPageButton" class="btn btn-sm btn-primary mr-2">
+		}_firstPageButton" class="btn btn-sm hover-primary mr-2 d-flex">
 			<span class="fas fa-angle-double-left"></span>
 		</button>
 
 		<button id="${
 			grid.getGridParam().id
-		}_previousPageButton" class="btn btn-sm btn-primary">
+		}_previousPageButton" class="btn btn-sm hover-primary d-flex">
 			<span class="fas fa-angle-left"></span>
 		</button>
 		
@@ -24,13 +24,13 @@ function loadPagerHandler(element, grid) {
 
 		<button id="${
 			grid.getGridParam().id
-		}_nextPageButton" class="btn btn-sm btn-primary">
+		}_nextPageButton" class="btn btn-sm hover-primary d-flex">
 			<span class="fas fa-angle-right"></span>
 		</button>
 
 		<button id="${
 			grid.getGridParam().id
-		}_lastPageButton" class="btn btn-sm btn-primary ml-2">
+		}_lastPageButton" class="btn btn-sm hover-primary ml-2 d-flex">
 			<span class="fas fa-angle-double-right"></span>
 		</button>
 
