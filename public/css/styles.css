@@ -1,8 +1,8 @@
 :root {
 	--jqgrid-hovered-row-background: #eaf2ff;
 	--jqgrid-selected-row-background: #ffe48d;
-	--jqgrid-border-color: #95B8E7;
-	--jqgrid-pager-icon-color: #1D96E8;
+	--jqgrid-border-color: #95b8e7;
+	--jqgrid-pager-icon-color: #1d96e8;
 }
 
 .ui-jqgrid-bdiv td {
@@ -55,7 +55,7 @@
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-	background-color: rgba(255, 255, 255, .8);
+	background-color: rgba(255, 255, 255, 0.8);
 }
 
 .loader img {
@@ -240,19 +240,22 @@
 }
 
 .ui-jqgrid .loading {
-	height: 64px;
 	display: flex;
-	align-items: end;
+	align-items: center;
 	justify-content: center;
-	background-image: url("../images/loading-red.gif");
-	background-repeat: no-repeat;
-	background-position: 50% 8%;
-	background-color: #fff;
-	background-size: 32px;
+}
+
+.ui-jqgrid .loading::before {
+	content:"";
+	background-image: url('../images/loading-red.gif');
+	background-size: 1.5rem;
+	display: inline-block;
+	width: 1.5rem; 
+	height: 1.5rem;
 }
 
 .ui-userdata.ui-userdata-top {
-	background: linear-gradient(to bottom,#EFF5FF 0,#E0ECFF 100%);
+	background: linear-gradient(to bottom, #eff5ff 0, #e0ecff 100%);
 	border-color: var(--jqgrid-border-color);
 }
 
