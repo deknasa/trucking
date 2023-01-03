@@ -5,6 +5,11 @@
 	--jqgrid-pager-icon-color: #1d96e8;
 }
 
+@font-face {
+	font-family: dejavu;
+	src: url("../../libraries/font/DejaVuSansMono.ttf");
+}
+
 .ui-jqgrid-bdiv td {
 	padding: 6px;
 }
@@ -14,6 +19,16 @@
 	background-color: white;
 	top: -10px;
 	margin-top: 10px;
+	font-family: dejavu;
+	font-size: .875rem;
+}
+
+.ui-jqgrid .ui-icon-asc {
+	margin-top: -2px;
+}
+
+.ui-jqgrid .ui-icon-desc {
+	margin-top: 4px;
 }
 
 .tambah {
@@ -139,11 +154,6 @@
 	width: auto !important;
 }
 
-* {
-	font-size: 14px;
-	text-transform: uppercase;
-}
-
 .content-header {
 	padding-top: 0.5rem !important;
 	padding-bottom: 0.5rem !important;
@@ -232,7 +242,7 @@
 
 .ui-jqgrid-btable tbody tr.table-success > td {
 	background-color: var(--jqgrid-selected-row-background) !important;
-	border-color: inherit;
+	border-color: #dee2e6;
 }
 
 .ui-jqgrid-btable tbody tr.table-active {
@@ -246,11 +256,11 @@
 }
 
 .ui-jqgrid .loading::before {
-	content:"";
-	background-image: url('../images/loading-red.gif');
+	content: "";
+	background-image: url("../images/loading-red.gif");
 	background-size: 1.5rem;
 	display: inline-block;
-	width: 1.5rem; 
+	width: 1.5rem;
 	height: 1.5rem;
 }
 
