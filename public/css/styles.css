@@ -7,7 +7,7 @@
 
 @font-face {
 	font-family: dejavu;
-	src: url("../../libraries/font/DejaVuSansMono.ttf");
+	src: url("../libraries/font/DejaVuSansMono.ttf");
 }
 
 .ui-jqgrid-bdiv td {
