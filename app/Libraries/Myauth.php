@@ -19,7 +19,10 @@ class Myauth
             '',
             'dashboard',
             'logtrail',
-            'approvalbukacetak',
+            'kartustok',
+            'historipenerimaanstok',
+            'historipengeluaranstok',
+            'gudang'
         ],
         'method' => [
             'gridtab',

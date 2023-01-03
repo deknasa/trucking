@@ -143,7 +143,7 @@
         add: false,
         edit: false,
         del: false,
-      })
+      }).customPager()
   }
 
   function loadDetailData(id) {
