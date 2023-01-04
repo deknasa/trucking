@@ -111,19 +111,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}absen_trado`
+          url = `${apiUrl}absentrado`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}absen_trado/${absenTradoId}`
+          url = `${apiUrl}absentrado/${absenTradoId}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}absen_trado/${absenTradoId}`
+          url = `${apiUrl}absentrado/${absenTradoId}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}absen_trado`
+          url = `${apiUrl}absentrado`
           break;
       }
 
@@ -251,7 +251,7 @@
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
-        url: `${apiUrl}absen_trado/field_length`,
+        url: `${apiUrl}absentrado/field_length`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -312,7 +312,7 @@
 
   function showAbsenTrado(form, absenTradoId) {
     $.ajax({
-      url: `${apiUrl}absen_trado/${absenTradoId}`,
+      url: `${apiUrl}absentrado/${absenTradoId}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
