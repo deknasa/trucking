@@ -19,7 +19,7 @@ class Myauth
             '',
             'dashboard',
             'logtrail',
-            'kartustok',
+            'tutupbuku',
             'historipenerimaanstok',
             'historipengeluaranstok',
             'gudang'
