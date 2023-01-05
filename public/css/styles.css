@@ -10,6 +10,19 @@
 	src: url("../libraries/font/DejaVuSansMono.ttf");
 }
 
+html {
+	font-size: 14px;
+}
+
+.main-footer,
+.content-wrapper {
+	margin-left: 0 !important;
+}
+
+.sidebar-open #sidebar-overlay {
+	display: block !important;
+}
+
 .ui-jqgrid-bdiv td {
 	padding: 6px;
 }
@@ -20,7 +33,7 @@
 	top: -10px;
 	margin-top: 10px;
 	font-family: dejavu;
-	font-size: .875rem;
+	font-size: 0.875rem;
 }
 
 .ui-jqgrid .ui-icon-asc {
@@ -70,7 +83,7 @@
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-	background-color: rgba(255, 255, 255, 0.8);
+	background-color: rgba(255, 255, 255, 0);
 }
 
 .loader img {

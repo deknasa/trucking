@@ -218,14 +218,14 @@ $(document).ajaxError((event, jqXHR, ajaxSettings, thrownError) => {
 	}
 });
 
-$(window).on("resize", function (event) {
-	if ($(window).width() > 990) {
-		$("body").removeClass();
-		setTimeout(() => {
-			$("body").addClass("sidebar-closed sidebar-collapse");
-		}, 0);
-	}
-});
+// $(window).on("resize", function (event) {
+// 	if ($(window).width() > 990) {
+// 		$("body").removeClass();
+// 		setTimeout(() => {
+// 			$("body").addClass("sidebar-closed sidebar-collapse");
+// 		}, 0);
+// 	}
+// });
 
 $(".sidebars").click(function (e) {
 	$("body").addClass("sidebar-open");
@@ -849,7 +849,7 @@ function startTime() {
 		$(".time-place").html(
 			new Date()
 				.toLocaleString("id", {
-					dateStyle: "long",
+					dateStyle: "medium",
 					timeStyle: "medium",
 				})
 				.replaceAll(".", ":")

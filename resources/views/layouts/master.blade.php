@@ -4,22 +4,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>{{ $title ?? 'No title' }} | Trucking</title>
-
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <title>{{ $title ?? 'No title' }} | Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/fontawesome-free/css/all.min.css') }}">
 
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
 
-  <!-- Daterangepicker -->
-  <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+  
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/daterangepicker/daterangepicker.css') }}">
 
   <!-- JqGrid -->
   <link rel="stylesheet" href="{{ asset('libraries/jqgrid/570/css/ui.jqgrid-bootstrap4.css') }}" />
@@ -39,10 +39,9 @@
   <link rel="stylesheet" href="{{ asset('css/pager.css') }}">
 
   <link rel="stylesheet" href="{{ asset('plugins/dropzone/dropzone.css') }}">
-
 </head>
 
-<body class="layout-fixed sidebar-collapse">
+<body class="hold-transition sidebar-collapse layout-fixed">
   <div class="loader" id="loader">
     <img src="{{ asset('images/hour-glass.gif') }}">
     <span>Loading</span>
@@ -53,53 +52,52 @@
     <p></p>
   </div>
 
-  <div class="wrapper">
-    @include('layouts._navbar')
-
-    @include('layouts._sidebar')
-
-    <!-- Modal for report and export -->
-    <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <form id="formRange" target="_blank">
-            @csrf
-            <div class="modal-body">
-              <input type="hidden" name="sidx">
-              <input type="hidden" name="sord">
-
-              <div class="form-group row">
-                <div class="col-sm-2 col-form-label">
-                  <label for="">Dari</label>
-                </div>
-                <div class="col-sm-10">
-                  <input type="text" name="dari" class="form-control autonumeric-report" autofocus>
-                </div>
-              </div>
-
-              <div class="form-group row">
-                <div class="col-sm-2 col-form-label">
-                  <label for="">Sampai</label>
-                </div>
-                <div class="col-sm-10">
-                  <input type="text" name="sampai" class="form-control autonumeric-report">
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Report</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-            </div>
-          </form>
+  <!-- Modal for report and export -->
+  <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <form id="formRange" target="_blank">
+          @csrf
+          <div class="modal-body">
+            <input type="hidden" name="sidx">
+            <input type="hidden" name="sord">
+
+            <div class="form-group row">
+              <div class="col-sm-2 col-form-label">
+                <label for="">Dari</label>
+              </div>
+              <div class="col-sm-10">
+                <input type="text" name="dari" class="form-control autonumeric-report" autofocus>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-2 col-form-label">
+                <label for="">Sampai</label>
+              </div>
+              <div class="col-sm-10">
+                <input type="text" name="sampai" class="form-control autonumeric-report">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Report</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+          </div>
+        </form>
       </div>
     </div>
+  </div>
+
+  <div class="wrapper">
+    @include('layouts._navbar')
+    @include('layouts._sidebar')
 
     <div class="content-wrapper">
       <div class="content-header">
@@ -107,7 +105,7 @@
           <div class="row mb-2">
             <div class="col-sm-12">
               <ol class="breadcrumb">
-                <li class="breadcrumb-item active">
+                <li class="breadcrumb-item active" style="text-transform: uppercase;">
                   {!! \App\Helpers\Menu::setBreadcrumb() !!}
                 </li>
               </ol>
@@ -115,37 +113,41 @@
           </div>
         </div>
       </div>
-      @yield('content')
+
+      <section class="content">
+        @yield('content')
+      </section>
     </div>
 
-    @include('layouts._footer')
+    <footer class="main-footer">
+      <strong>Design &copy; by <a href="#">IT PUSAT</a>.</strong>
+    </footer>
   </div>
 
   <!-- jQuery -->
-  <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-  
-  <!-- Highlight -->
-  <script src="{{ asset('js/highlight.js') }}"></script>
-
-  <!-- Bootstrap 4 -->
-  <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
 
   <!-- jQuery UI -->
   <script src="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.js') }}"></script>
 
-  <!-- ChartJS -->
-  <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
+  <!-- Highlight -->
+  <script src="{{ asset('js/highlight.js') }}"></script>
 
-  <!-- Daterangepicker -->
-  <script src="{{ asset('plugins/dropzone/dropzone.js') }}"></script>
+  <!-- Bootstrap 4 -->
+  <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+  <!-- ChartJS -->
+  <script src="{{ asset('adminlte/plugins/chart.js/Chart.min.js') }}"></script>
 
   <!-- daterangepicker -->
-  <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+  <script src="{{ asset('adminlte/plugins/moment/moment.min.js') }}"></script>
+  <script src="{{ asset('adminlte/plugins/daterangepicker/daterangepicker.js') }}"></script>
 
-  <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
+  <!-- overlayScrollbars -->
+  <script src="{{ asset('adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
 
   <!-- AdminLTE App -->
-  <script src="{{ asset('dist/js/adminlte.js') }}"></script>
+  <script src="{{ asset('adminlte/dist/js/adminlte.js') }}"></script>
 
   <!-- JqGrid -->
   <script src="{{ asset('libraries/jqgrid/570/js/jquery.jqGrid.js') }}"></script>
@@ -157,7 +159,6 @@
   <!-- Select2 -->
   <script src="{{ asset('plugins/select2/4.0.13/js/select2-customized.js') }}"></script>
 
-  <!-- Custom global script -->
   <!-- Inputmask -->
   <script src="{{ asset('libraries/inputmask/5.0.6/jquery.inputmask.min.js') }}"></script>
 
@@ -167,14 +168,12 @@
   <!-- Custom global script -->
   <script src="{{ asset('js/pager.js') }}"></script>
   <script src="{{ asset('js/lookup.js') }}"></script>
-
   <script src="{{ asset('mains.js') }}"></script>
+  <script src="{{ asset('js/app.js') }}"></script>
 
   <!-- Custom page script -->
   @stack('scripts')
 
-  <script src="{{ asset('js/app.js') }}"></script>
-  
   <script type="text/javascript">
     let accessToken = `{{ session('access_token') }}`
     let appUrl = `{{ url()->to('/') }}`
@@ -192,7 +191,6 @@
       return true;
     }
 
-    
     $(".formatdate").datepicker({
         dateFormat: 'dd-mm-yy',
         assumeNearbyYear: true
@@ -230,6 +228,14 @@
             $(document).find('#progressbar').remove()
           }
         })
+    })
+
+    $(document).on('collapsed.lte.pushmenu', () => {
+      $('body').removeClass('sidebar-open')
+    })
+
+    $(document).on('shown.lte.pushmenu', () => {
+      $('body').addClass('sidebar-open')
     })
   </script>
 </body>
