@@ -8,6 +8,7 @@ use App\Http\Controllers\AbsensiSupirApprovalHeaderController;
 use App\Http\Controllers\ApprovalTransaksiHeaderController;
 use App\Http\Controllers\ApprovalInvoiceHeaderController;
 
+use App\Http\Controllers\TutupBukuController;
 use App\Http\Controllers\AbsenTradoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
@@ -690,6 +691,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('hutangheader', HutangHeaderController::class);
     
     Route::resource('hutangdetail', HutangDetailController::class);
+    
+    Route::get('tutupbuku/index', [TutupBukuController::class,'index']);
+    Route::resource('tutupbuku', TutupBukuController::class);
 
     Route::get('piutangheader/index', [PiutangHeaderController::class, 'index']);
     Route::get('piutangheader/{id}/delete', [PiutangHeaderController::class, 'delete'])->name('piutangheader.delete');
