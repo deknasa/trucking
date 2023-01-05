@@ -181,6 +181,15 @@
           formData.append(`${paramName}[${index}]`, file)
         })
       })
+      formData.delete(`qtymin`);
+      $('#crudForm').find(`[name="qtymin"]`).each((index, element) => {
+        formData.append(`qtymin`, AutoNumeric.getNumber($(`#crudForm [name="qtymin"]`)[index]))
+      })
+      formData.delete(`qtymax`);
+      $('#crudForm').find(`[name="qtymax"]`).each((index, element) => {
+        formData.append(`qtymax`, AutoNumeric.getNumber($(`#crudForm [name="qtymax"]`)[index]))
+      })
+
 
       formData.append('sortIndex', $('#jqGrid').getGridParam().sortname)
       formData.append('sortOrder', $('#jqGrid').getGridParam().sortorder)

@@ -85,13 +85,13 @@
         }
       })
 
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
+      // .jqGrid("navGrid", pager, {
+      //   search: false,
+      //   refresh: false,
+      //   add: false,
+      //   edit: false,
+      //   del: false,
+      // })
       
       .customPager()
   }

@@ -52,7 +52,7 @@
         rownumWidth: 45,
         rowList: [10, 20, 50],
         sortable: true,
-        pager: pager,
+        // pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',
@@ -72,13 +72,7 @@
         }
       })
 
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
+      .customPager()
   }
 
   function loadLogtrailDetailGrid(id) {
@@ -100,7 +94,7 @@
         rownumWidth: 45,
         rowList: [10, 20, 50],
         sortable: true,
-        pager: pager,
+        // pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',
@@ -120,13 +114,7 @@
         }
       })
 
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
+      .customPager()
   }
 
   function loadLogtrailHeaderData(id) {

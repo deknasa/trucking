@@ -84,7 +84,9 @@
             },
             formatter: (value, options, rowData) => {
               let statusApproval = JSON.parse(value)
-
+              if (!statusApproval) {
+                return ''
+              }
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
                   <span>${statusApproval.SINGKATAN}</span>
@@ -95,7 +97,9 @@
             },
             cellattr: (rowId, value, rowObject) => {
               let statusApproval = JSON.parse(rowObject.statusapproval_memo)
-
+              if (!statusApproval) {
+                return ` title=""`
+              }
               return ` title="${statusApproval.MEMO}"`
             }
           },
@@ -141,7 +145,9 @@
             cellattr: (rowId, value, rowObject) => {
               console.log(rowObject)
               let statusCetak = JSON.parse(rowObject.statuscetak_memo)
-
+              if (!statusCetak) {
+                return ` title=""`
+              }
               return ` title="${statusCetak.MEMO}"`
             }
           },

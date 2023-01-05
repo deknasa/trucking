@@ -76,7 +76,7 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        pager: pager,
+        // pager: pager,
         viewrecords: true,
         
         loadBeforeSend: (jqXHR) => {
@@ -108,7 +108,7 @@
         add: false,
         edit: false,
         del: false,
-      })
+      }).customPager()
   }
 
   function loadDetailData(id) {

@@ -32,7 +32,7 @@
               </div>
             </div>
 
-            <div class="row">
+            {{-- <div class="row">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                  TANGGAL approval <span class="text-danger">*</span>
@@ -55,7 +55,7 @@
                   <option value="">-- PILIH STATUS approval --</option>
                 </select>
               </div>
-            </div>
+            </div> --}}
 
             <div class="row">
 
@@ -80,14 +80,6 @@
 
             <div class="row">
               
-              {{-- <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>STATUS FORMAT <span class="text-danger">*</span> </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <select name="statusformat" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS FORMAT --</option>
-                </select>
-              </div> --}}
 
             <div class="col-12 col-sm-3 col-md-2 col-form-label">
               <label>keterangan <span class="text-danger">*</span> </label>
@@ -339,6 +331,8 @@
     let form = $('#crudForm')
 
     form.trigger('reset')
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
     Simpan
@@ -356,6 +350,8 @@
   }
 
   function editNotaKredit(userId) {
+    console.log('editNotaKredit');
+
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -382,6 +378,7 @@
   }
 
   function deleteNotaKredit(userId) {
+    console.log('deleteNotaKredit');
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -498,7 +495,10 @@
           let id = detail.id
           row++
           let nominal = new Intl.NumberFormat('en-US').format(detail.nominal);
+          let nominalbayar = new Intl.NumberFormat('en-US').format(detail.nominalbayar);
+          let penyesuaian = new Intl.NumberFormat('en-US').format(detail.penyesuaian);
           totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
+          
           let detailRow = $(`
           <tr>
             <td onclick="select(this)"><input name='pelunasanpiutangdetail_id[]' type="checkbox" id="checkItem" value="${detail.detail_id}"></td>
@@ -516,23 +516,23 @@
               <input type="hidden" value="${detail.coapenyesuaian}" disabled name="deatail_coapenyesuaian_pelunasan[]"  readonly>
             </td>
             <td>
-              ${detail.nominal}
+              ${nominal}
               <input type="hidden" value="${detail.nominal}" disabled name="deatail_nominal_pelunasan[]"  readonly>
             </td>
             <td>
-              ${detail.nominalbayar}
+              ${nominalbayar}
               <input type="hidden" value="${detail.nominalbayar}" disabled name="deatail_nominalbayar_pelunasan[]"  readonly>
             </td>
             <td>
-              ${detail.penyesuaian}
+              ${penyesuaian}
               <input type="hidden" value="${detail.penyesuaian}" disabled name="deatail_penyesuaian_pelunasan[]"  readonly>
             </td>
+              <td>
+                <textarea disabled name="keterangandetail[]" class="form-control" id=""  rows="1"></textarea>
+              </td>
+            
             
               <input type="hidden" value="${detail.invoice_nobukti}" disabled name="deatail_invoice_nobukti_pelunasan[]" readonly>
-            
-            <td>
-              <td><textarea disabled name="keterangandetail[]" class="form-control" id=""  rows="1"></textarea></td>
-            </td>
           </tr>`)
           $('#detailList tbody').append(detailRow)
           })

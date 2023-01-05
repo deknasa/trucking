@@ -23,7 +23,7 @@
 
   function loadDetailGrid() {
     let pager = '#detailPager'
-
+    let limit
     $("#detail").jqGrid({
         url: `{{ config('app.api_url') . 'penerimaanstokdetail' }}`,
         mtype: "GET",
@@ -123,12 +123,18 @@
         toolbar: [true, "top"],
         sortable: true,
         pager: pager,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
         viewrecords: true,
         loadComplete: function(data) {
           initResize($(this))
           
+          console.log($(this).jqGrid('getGridParam', 'postData').limit);
           detailsPostData = $(this).jqGrid('getGridParam', 'postData')
-          
+
           sum = $('#detail').jqGrid("getCol", "total", false, "sum")
     
           $(this).jqGrid('footerData', 'set', {
