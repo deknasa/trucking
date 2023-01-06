@@ -27,19 +27,31 @@
             name: 'tglbukti',
           },
           {
-            label: 'COA',
+            label: 'KODE PERKIRAAN',
             name: 'coa',
-          },          
+          },
+          {
+            label: 'NAMA PERKIRAAN',
+            name: 'keterangancoa',
+          },
+          {
+            label: 'DEBET',
+            name: 'nominaldebet',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'KREDIT',
+            name: 'nominalkredit',
+            align: 'right',
+            formatter: currencyFormat,
+          },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'right',
-            formatter: currencyFormat,
+            width: '500px'
           }
+
         ],
         autowidth: true,
         shrinkToFit: false,
