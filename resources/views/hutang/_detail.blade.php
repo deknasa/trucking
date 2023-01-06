@@ -40,11 +40,11 @@
             label: 'NO BUKTI',
             name: 'nobukti',
           }, 
-          {
-            label: 'SUPPLIER',
-            name: 'supplier_id',
-          },
         
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+          },
           {
             label: 'TGL JATUH TEMPO',
             name: 'tgljatuhtempo',
@@ -54,10 +54,6 @@
               newformat: "d-m-Y"
             }
           }, 
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-          },
           {
             label: 'TOTAL',
             name: 'total',

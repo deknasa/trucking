@@ -121,6 +121,11 @@
             align: 'left'
           },
           {
+            label: 'SUPPLIER',
+            name: 'supplier_id',
+            align: 'left'
+          },
+          {
             label: 'TOTAL',
             name: 'total',
             align: 'right',

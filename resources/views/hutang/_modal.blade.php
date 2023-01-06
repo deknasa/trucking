@@ -48,18 +48,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  COA <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-8 col-md-10">
-                <input type="text" name="akunpusat" class="form-control akunpusat-lookup">
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  PELANGGAN <span class="text-danger">*</span>
+                  PELANGGAN 
                 </label>
               </div>
               <div class="col-8 col-md-10">
@@ -68,24 +57,35 @@
               </div>
             </div>
 
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  SUPPLIER 
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <input type="hidden" name="supplier_id">
+                <input type="text" name="supplier" class="form-control supplier-lookup">
+              </div>
+            </div>
+
             <div class="table-responsive">
               <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
                 <thead>
                   <tr>
                     <th width="1%">No</th>
-                    <th width="5%">Supplier</th>
-                    <th width="3%">Tgl Jatuh Tempo</th>
                     <th width="5%">Keterangan</th>
+                    <th width="3%">Tgl Jatuh Tempo</th>
                     <th width="6%">Total</th>
                     <th width="1%">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body">
-                  
+
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="4">
+                    <td colspan="3">
                       <h5 class="text-right font-weight-bold">TOTAL:</h5>
                     </td>
                     <td>
@@ -122,7 +122,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
-    
+
     $('#crudForm').autocomplete({
       disabled: true
     });
@@ -224,8 +224,8 @@
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
-          
-          if(id == 0){
+
+          if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
 
@@ -240,7 +240,8 @@
 
             setErrorMessages(form, error.responseJSON.errors);
           } else {
-            showDialog(error.statusText)
+            console.log(error)
+            showDialog(error.responseJSON.message)
           }
         },
       }).always(() => {
@@ -336,7 +337,7 @@
     $('.invalid-feedback').remove()
     showHutangHeader(form, id)
   }
-  
+
   function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}hutangheader/${Id}/cekvalidasi`,
@@ -420,6 +421,9 @@
           if (index == 'pelanggan') {
             element.data('current-value', value)
           }
+          if (index == 'supplier') {
+            element.data('current-value', value)
+          }
         })
 
         $.each(response.detail, (index, detail) => {
@@ -427,16 +431,12 @@
             <tr>
               <td> </td>
               <td>
-                <input type="hidden" name="supplier_id[]" class="form-control">
-                <input type="text" name="supplier[]" data-current-value="${detail.supplier}" class="form-control supplier-lookup">
+                <input type="text" name="keterangan_detail[]"  class="form-control">
               </td>
               <td>
                 <div class="input-group">
                   <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">
                 </div>
-              </td>
-              <td>
-                <input type="text" name="keterangan_detail[]"  class="form-control">
               </td>
               <td>
                   <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right autonumeric" > 
@@ -447,8 +447,6 @@
             </tr>
           `)
 
-          detailRow.find(`[name="supplier[]"]`).val(detail.supplier)
-          detailRow.find(`[name="supplier_id[]"]`).val(detail.supplier_id)
           detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
           detailRow.find(`[name="total_detail[]"]`).val(detail.total)
           detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
@@ -459,25 +457,6 @@
           $('#detailList tbody').append(detailRow)
           initDatepicker(detailRow.find('.datepicker'))
           setTotal()
-
-          $('.supplier-lookup').last().lookup({
-            title: 'supplier Lookup',
-            fileName: 'supplier',
-            onSelectRow: (supplier, element) => {
-              element.parents('td').find(`[name="supplier_id[]"]`).val(supplier.id)
-              element.val(supplier.namasupplier)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="supplier_id[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
-
         })
 
         setRowNumbers()
@@ -494,16 +473,12 @@
       <tr>
           <td> </td>
           <td>
-            <input type="hidden" name="supplier_id[]" class="form-control">
-            <input type="text" name="supplier[]" class="form-control supplier-lookup">
+            <input type="text" name="keterangan_detail[]"  class="form-control">
           </td>
           <td>
             <div class="input-group">
               <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">
             </div>
-          </td>
-          <td>
-            <input type="text" name="keterangan_detail[]"  class="form-control">
           </td>
           <td>
               <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right autonumeric" > 
@@ -512,32 +487,15 @@
             <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
           </td>
       </tr>`)
-      
-      detailRow.find(`[name="tgljatuhtempo[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
+    detailRow.find(`[name="tgljatuhtempo[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
 
     $('#detailList tbody').append(detailRow)
     initDatepicker(detailRow.find('.datepicker'))
 
-    $('.supplier-lookup').last().lookup({
-      title: 'supplier Lookup',
-      fileName: 'supplier',
-      onSelectRow: (supplier, element) => {
-        $(`#crudForm [name="supplier_id[]"]`).last().val(supplier.id)
-        element.val(supplier.namasupplier)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $(`#crudForm [name="supplier_id[]"]`).last().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
     initAutoNumeric(detailRow.find('.autonumeric'))
-    
+
     setRowNumbers()
   }
 
@@ -587,6 +545,24 @@
       },
       onClear: (element) => {
         $('#crudForm [name=pelanggan_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.supplier-lookup').lookup({
+      title: 'supplier Lookup',
+      fileName: 'supplier',
+      onSelectRow: (supplier, element) => {
+        $(`#crudForm [name="supplier_id"]`).first().val(supplier.id)
+        element.val(supplier.namasupplier)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#crudForm [name="supplier_id"]`).first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
