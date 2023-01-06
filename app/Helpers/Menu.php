@@ -55,10 +55,10 @@ class Menu
       if ((count($menu['child']) > 0 || $menu['link'] != '' || $menu['aco_id'] != 0) && (new Menu())->hasClickableChild($menu)) {
         $string .= '
           <li class="nav-item">
-            <a id="' . ($menu['menuparent'] == 0 ? $index : $menu['menukode']) . '" href="' . (count($menu['child']) > 0 ? 'javascript:void(0)' : ($menu['link'] != '' ? strtolower(url($menu['link'])) : strtolower(url($menu['menuexe'])))) . '" class="nav-link ' . (@$currentMenu->id == $menu['menuid'] ? 'active hover' : '') . '">
+            <a id="' . (strtolower($menu['menukode'])) . '" href="' . (count($menu['child']) > 0 ? 'javascript:void(0)' : ($menu['link'] != '' ? strtolower(url($menu['link'])) : strtolower(url($menu['menuexe'])))) . '" class="nav-link ' . (@$currentMenu->id == $menu['menuid'] ? 'active hover' : '') . '">
               <i class="nav-icon ' . (strtolower($menu['menuicon']) ?? 'far fa-circle') . '"></i>
               <p>
-                ' . ($menu['menuparent'] == 0 ? $index : substr($menu['menukode'], -1)) . '. ' . $menu['menuname'] . '
+                ' . (substr($menu['menukode'], -1)) . '. ' . $menu['menuname'] . '
                 ' . (count($menu['child']) > 0 ? '<i class="right fas fa-angle-left"></i>' : '') . '
               </p>
             </a>
