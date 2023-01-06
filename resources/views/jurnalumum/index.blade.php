@@ -109,6 +109,18 @@
             }
           },
           {
+            label: 'DEBET',
+            name: 'nominaldebet',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'KREDIT',
+            name: 'nominalkredit',
+            align: 'right',
+            formatter: currencyFormat,
+          },          
+          {
             label: 'KETERANGAN',
             name: 'keterangan',
             align: 'left'
