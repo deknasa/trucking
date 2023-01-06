@@ -123,7 +123,7 @@
         rowList: [10, 20, 50],
         toolbar: [true, "top"],
         sortable: true,
-        pager: pager,
+        // pager: pager,
         viewrecords: true,
         loadComplete: function(data) {
           detailsPostData = $(this).jqGrid('getGridParam', 'postData')
@@ -137,13 +137,7 @@
           
         }
       })
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      }).customPager()
+      .customPager()
   }
 
   function loadDetailData(id) {

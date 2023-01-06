@@ -32,30 +32,6 @@
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                 TANGGAL approval <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <div class="input-group">
-                  <input type="text" name="tglapproval" class="form-control formatdate datepicker">
-
-                </div>
-              </div>
-
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  status approval <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <select name="statusapproval" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS approval --</option>
-                </select>
-              </div>
-            </div>
 
             <div class="row">
 
@@ -66,7 +42,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <div class="input-group">
-                <input type="text" name="tgllunas" class="form-control formatdate datepicker">
+                <input type="text" name="tgllunas" class="form-control datepicker">
               </div>
               </div>
               
@@ -80,14 +56,6 @@
 
             <div class="row">
               
-              {{-- <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>STATUS FORMAT <span class="text-danger">*</span> </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <select name="statusformat" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS FORMAT --</option>
-                </select>
-              </div> --}}
 
             <div class="col-12 col-sm-3 col-md-2 col-form-label">
               <label>keterangan <span class="text-danger">*</span> </label>
@@ -318,7 +286,6 @@
     initLookup()
     initSelect2()
     initDatepicker()
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -342,6 +309,8 @@
     let form = $('#crudForm')
 
     form.trigger('reset')
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
     Simpan
@@ -502,6 +471,8 @@
           let id = detail.id
           row++
           let nominal = new Intl.NumberFormat('en-US').format(detail.nominal);
+          let nominalbayar = new Intl.NumberFormat('en-US').format(detail.nominalbayar);
+          let lebihbayar = new Intl.NumberFormat('en-US').format(detail.lebihbayar);
           totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
           let detailRow = $(`
           <tr>
@@ -520,15 +491,15 @@
               <input type="hidden" value="${detail.coalebihbayar}" disabled name="deatail_coalebihbayar_pelunasan[]"  readonly>
             </td>
             <td>
-              ${detail.nominal}
+              ${nominal}
               <input type="hidden" value="${detail.nominal}" disabled name="deatail_nominal_pelunasan[]"  readonly>
             </td>
             <td>
-              ${detail.nominalbayar}
+              ${nominalbayar}
               <input type="hidden" value="${detail.nominalbayar}" disabled name="deatail_nominalbayar_pelunasan[]"  readonly>
             </td>
             <td>
-              ${detail.lebihbayar}
+              ${lebihbayar}
               <input type="hidden" value="${detail.lebihbayar}" disabled name="deatail_lebihbayar_pelunasan[]"  readonly>
             </td>
             <input type="hidden" value="${detail.invoice_nobukti}" disabled name="deatail_invoice_nobukti_pelunasan[]" readonly>

@@ -20,8 +20,14 @@ class Myauth
             'dashboard',
             'logtrail',
             'tutupbuku',
+            'pengembaliankasbankheader',
             'historipenerimaanstok',
             'historipengeluaranstok',
+            'reportall',
+            'reportneraca',
+            'approvalbukacetak',
+            'laporanbukubesar',
+            'laporankasbank',
             'gudang'
         ],
         'method' => [

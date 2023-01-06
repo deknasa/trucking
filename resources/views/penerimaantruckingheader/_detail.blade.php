@@ -61,7 +61,7 @@
         rowList: [10, 20, 50],
         toolbar: [true, "top"],
         sortable: true,
-        pager: pager,
+        // pager: pager,
         viewrecords: true,
         loadComplete: function(data) {
         }
@@ -73,7 +73,7 @@
         add: false,
         edit: false,
         del: false,
-      })
+      }).customPager()
   }
 
   function loadDetailData(id) {

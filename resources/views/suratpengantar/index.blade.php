@@ -182,7 +182,9 @@
             },
             formatter: (value, options, rowData) => {
               let statusLongTrip = JSON.parse(value)
-
+              if (!statusLongTrip) {
+                return ''
+              }
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusLongTrip.WARNA}; color: #fff;">
                   <span>${statusLongTrip.SINGKATAN}</span>
@@ -193,7 +195,9 @@
             },
             cellattr: (rowId, value, rowObject) => {
               let statusLongTrip = JSON.parse(rowObject.statuslongtrip)
-
+              if (!statusLongTrip) {
+                return ` title=""`
+              }
               return ` title="${statusLongTrip.MEMO}"`
             }
           },
@@ -224,7 +228,9 @@
             },
             formatter: (value, options, rowData) => {
               let statusPeralihan = JSON.parse(value)
-
+              if (!statusPeralihan) {
+                return ''
+              }
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusPeralihan.WARNA}; color: #fff;">
                   <span>${statusPeralihan.SINGKATAN}</span>
@@ -235,7 +241,9 @@
             },
             cellattr: (rowId, value, rowObject) => {
               let statusPeralihan = JSON.parse(rowObject.statusperalihan)
-
+              if (!statusPeralihan) {
+                return ` title=""`
+              }
               return ` title="${statusPeralihan.MEMO}"`
             }
           },
@@ -266,7 +274,9 @@
             },
             formatter: (value, options, rowData) => {
               let statusRitasiOmset = JSON.parse(value)
-
+              if (!statusRitasiOmset) {
+                return ''
+              }
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusRitasiOmset.WARNA}; color: #fff;">
                   <span>${statusRitasiOmset.SINGKATAN}</span>
@@ -277,7 +287,9 @@
             },
             cellattr: (rowId, value, rowObject) => {
               let statusRitasiOmset = JSON.parse(rowObject.statusritasiomset)
-
+              if (!statusRitasiOmset) {
+                return ` title=""`
+              }
               return ` title="${statusRitasiOmset.MEMO}"`
             }
           },
@@ -320,7 +332,9 @@
             },
             formatter: (value, options, rowData) => {
               let statusGudangSama = JSON.parse(value)
-
+              if (!statusGudangSama) {
+                return ''
+              }
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusGudangSama.WARNA}; color: #fff;">
                   <span>${statusGudangSama.SINGKATAN}</span>
@@ -331,7 +345,9 @@
             },
             cellattr: (rowId, value, rowObject) => {
               let statusGudangSama = JSON.parse(rowObject.statusgudangsama)
-
+              if (!statusGudangSama) {
+                return ` title=""`
+              }
               return ` title="${statusGudangSama.MEMO}"`
             }
           },     
@@ -362,7 +378,9 @@
             },
             formatter: (value, options, rowData) => {
               let statusBatalMuat = JSON.parse(value)
-
+              if (!statusBatalMuat) {
+                return ''
+              }
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusBatalMuat.WARNA}; color: #fff;">
                   <span>${statusBatalMuat.SINGKATAN}</span>
@@ -373,7 +391,9 @@
             },
             cellattr: (rowId, value, rowObject) => {
               let statusBatalMuat = JSON.parse(rowObject.statusbatalmuat)
-
+              if (!statusBatalMuat) {
+                return ` title=""`
+              }
               return ` title="${statusBatalMuat.MEMO}"`
             }
           },

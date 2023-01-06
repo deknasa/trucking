@@ -253,7 +253,9 @@
           },
           formatter: (value, options, rowData) => {
             let statusKas = JSON.parse(value)
-
+            if (!statusKas) {
+                return ''
+              }
             let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusKas.WARNA}; color: #fff;">
                   <span>${statusKas.SINGKATAN}</span>
@@ -264,7 +266,9 @@
           },
           cellattr: (rowId, value, rowObject) => {
             let statusKas = JSON.parse(rowObject.statuskas)
-
+             if (!statusKas) {
+                return ` title=" "`
+              }
             return ` title="${statusKas.MEMO}"`
           }
         },

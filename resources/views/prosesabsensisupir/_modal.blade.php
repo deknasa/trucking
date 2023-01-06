@@ -164,7 +164,7 @@
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-
+            console.log(error);
             setErrorMessages(form, error.responseJSON.errors);
           } else {
             showDialog(error.statusText)

@@ -56,7 +56,7 @@
         rowList: [10, 20, 50],
         toolbar: [true, "top"],
         sortable: true,
-        pager: pager,
+        // pager: pager,
         viewrecords: true,
         footerrow:true,
         userDataOnFooter: true,
@@ -96,13 +96,7 @@
         }
       })
 
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
+      .customPager()
   }
 
   function loadDetailData(id) {

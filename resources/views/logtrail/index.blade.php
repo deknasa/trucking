@@ -159,7 +159,7 @@
         sortname: sortname,
         sortorder: sortorder,
         page: page,
-        pager: pager,
+        // pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',
@@ -229,13 +229,7 @@
         }
       })
 
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
+      .customPager()
 
       .jqGrid('filterToolbar', {
         stringResult: true,
