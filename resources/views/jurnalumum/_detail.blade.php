@@ -27,14 +27,9 @@
             name: 'tglbukti',
           },
           {
-            label: 'COA DEBET',
-            name: 'coadebet',
-          },
-          {
-            label: 'COA KREDIT',
-            name: 'coakredit',
-          },
-          
+            label: 'COA',
+            name: 'coa',
+          },          
           {
             label: 'KETERANGAN',
             name: 'keterangan',

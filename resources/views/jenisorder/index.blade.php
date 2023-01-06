@@ -42,7 +42,7 @@
             width: '50px'
           },
           {
-            label: 'KODE JNS EMKL',
+            label: 'KODE JNS ORDER',
             name: 'kodejenisorder',
           },
           {
