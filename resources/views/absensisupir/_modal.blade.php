@@ -53,10 +53,10 @@
                     <th width="1%">No</th>
                     <th width="5%">Trado</th>
                     <th width="5%">Supir</th>
-                    <th width="5%">Keterangan</th>
+                    <th width="7%">Keterangan</th>
                     <th width="5%">Status</th>
                     <th width="3%">Jam</th>
-                    <th width="7%">Uang Jalan</th>
+                    <th width="4%">Uang Jalan</th>
                     <th width="2%">Aksi</th>
                   </tr>
                 </thead>
