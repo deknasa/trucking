@@ -40,7 +40,8 @@
             label: 'ID',
             name: 'id',
             align: 'right',
-            width: '70px'
+            width: '70px',
+            hidden: true
           },
           {
             label: 'NAMA MENU',
@@ -48,7 +49,7 @@
             align: 'left'
           },
           {
-            label: 'SEQ MENU',
+            label: 'SEQ. MENU',
             name: 'menuseq',
             align: 'left'
           },
@@ -206,6 +207,7 @@
         }
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

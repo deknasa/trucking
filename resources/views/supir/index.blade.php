@@ -40,7 +40,8 @@
         colModel: [{
             label: 'ID',
             name: 'id',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
             label: 'NAMA',
@@ -68,7 +69,7 @@
             name: 'telp',
           },
           {
-            label: 'STATUS AKTIF',
+            label: 'STATUS',
             name: 'statusaktif',
             stype: 'select',
             searchoptions: {
@@ -110,7 +111,7 @@
             }
           },
           {
-            label: 'NOM DEPOSIT SALDO AWAL',
+            label: 'NOM. DEPOSIT SALDO AWAL',
             name: 'nominaldepositsa',
             align: 'right',
             formatter: currencyFormat,
@@ -122,7 +123,7 @@
             formatter: currencyFormat,
           },
           {
-            label: 'NOM PINJ SALDO AWAL',
+            label: 'NOM. PINJ SALDO AWAL',
             name: 'nominalpinjamansaldoawal',
             align: 'right',
             formatter: currencyFormat,
@@ -166,7 +167,7 @@
             name: 'nokk',
           },
           {
-            label: 'STATUS ADA UPDATE GBR',
+            label: 'UPDATE GBR',
             name: 'statusadaupdategambar',
             stype: 'select',
             searchoptions: {
@@ -208,7 +209,7 @@
             }
           },
           {
-            label: 'STATUS LUAR KOTA',
+            label: 'LUAR KOTA',
             name: 'statusluarkota',
             stype: 'select',
             searchoptions: {
@@ -603,6 +604,7 @@
         },
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

@@ -39,7 +39,8 @@
         colModel: [{
             label: 'ID',
             name: 'id',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
             label: 'Nama Penerima',
@@ -54,7 +55,7 @@
             name: 'noktp',
           },
           {
-            label: 'status aktif',
+            label: 'status',
             name: 'statusaktif',
             stype: 'select',
             searchoptions: {
@@ -239,6 +240,7 @@
         },
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

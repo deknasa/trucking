@@ -180,7 +180,7 @@
                 datatype: "json",
                 colModel: [
                     {
-                        label: 'NO BUKTI',
+                        label: 'NO. BUKTI',
                         name: 'nobukti',
                     },
                     {
@@ -352,6 +352,7 @@
                 },
             })
 
+            .jqGrid("setLabel", "rn", "No.")
             .jqGrid('filterToolbar', {
                 stringResult: true,
                 searchOnEnter: false,

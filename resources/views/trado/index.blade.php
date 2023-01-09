@@ -40,7 +40,8 @@
         colModel: [{
             label: 'ID',
             name: 'id',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
             label: 'KETERANGAN',
@@ -122,11 +123,11 @@
             name: 'merek',
           },
           {
-            label: 'NO RANGKA',
+            label: 'NO. RANGKA',
             name: 'norangka',
           },
           {
-            label: 'NO MESIN',
+            label: 'NO. MESIN',
             name: 'nomesin',
           },
           {
@@ -134,7 +135,7 @@
             name: 'nama',
           },
           {
-            label: 'NO STNK',
+            label: 'NO. STNK',
             name: 'nostnk',
           },
           {
@@ -217,7 +218,7 @@
             }
           },
           {
-            label: 'KET PROGRESS STANDARISASI',
+            label: 'KET. PROGRESS STANDARISASI',
             name: 'keteranganprogressstandarisasi',
           },
           {
@@ -693,6 +694,7 @@
         },
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

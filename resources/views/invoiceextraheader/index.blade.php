@@ -50,7 +50,8 @@
             label: 'ID',
             name: 'id',
             align: 'right',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           
           {
@@ -59,7 +60,7 @@
             align: 'left'
           },
           {
-            label: 'NO BUKTI',
+            label: 'NO. BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -95,11 +96,6 @@
             align: 'left'
           },
           
-          {
-            label: 'Status format',
-            name: 'statusformat_memo',
-            align: 'left'
-          },
           {
             label: 'STATUS CETAK',
             name: 'statusformat_text',
@@ -195,6 +191,7 @@
         }
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

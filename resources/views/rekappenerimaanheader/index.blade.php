@@ -52,10 +52,16 @@
             label: 'ID',
             name: 'id',
             align: 'right',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
-            label: 'NO BUKTI',
+            label: 'status approval',
+            name: 'statusapproval_memo',
+            align: 'left'
+          },
+          {
+            label: 'NO. BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -90,7 +96,7 @@
             align: 'left'
           },          
           {
-            label: 'tglapproval',
+            label: 'tgl approval',
             name: 'tglapproval',
             align: 'left',
              formatter: "date",
@@ -98,11 +104,6 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },
-          {
-            label: 'status approval',
-            name: 'statusapproval_memo',
-            align: 'left'
           },
           {
             label: 'user approval',
@@ -200,6 +201,7 @@
         }
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
