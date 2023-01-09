@@ -166,6 +166,11 @@
             align: 'left'
           },
           {
+            label: 'PELANGGAN',
+            name: 'pelanggan_id',
+            align: 'left'
+          },
+          {
             label: 'NO BUKTI PENGELUARAN',
             name: 'pengeluaran_nobukti',
             align: 'left'
