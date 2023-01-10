@@ -44,7 +44,8 @@
             label: 'ID',
             name: 'id',
             align: 'right',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
             label: 'STATUS CETAK',
@@ -91,7 +92,7 @@
             }
           },     
           {
-            label: 'NO BUKTI',
+            label: 'NO. BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -118,6 +119,11 @@
           {
             label: 'PELANGGAN',
             name: 'pelanggan_id',
+            align: 'left'
+          },
+          {
+            label: 'SUPPLIER',
+            name: 'supplier_id',
             align: 'left'
           },
           {
@@ -234,7 +240,7 @@
           setHighlight($(this))
         }
       })
-
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

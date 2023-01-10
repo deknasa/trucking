@@ -43,36 +43,59 @@
                 <input type="text" name="keterangan" class="form-control">
               </div>
             </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  BANK <span class="text-danger">*</span>
-                </label>
+
+            <div class="border p-3">
+              <h6>Posting Pengeluaran</h6>
+
+              <div class="row form-group">
+                <div class="col-12 col-md-2 col-form-label">
+                  <label>
+                    POST <span class="text-danger">*</span></label>
+                </div>
+                <div class="col-12 col-md-4">
+                  <input type="hidden" name="bank_id">
+                  <input type="text" name="bank" class="form-control bank-lookup">
+                </div>
+                <div class="col-12 col-md-2 col-form-label">
+                  <label>TANGGAL POST</label>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="input-group">
+                    <input type="text" name="tglkaskeluar" class="form-control datepicker">
+                  </div>
+                </div>
               </div>
-              <div class="col-8 col-md-10">
-                <input type="hidden" name="bank_id">
-                <input type="text" name="bank" class="form-control bank-lookup">
+              <div class="row form-group">
+                <div class="col-12 col-md-2 col-form-label">
+                  <label>
+                    NO BUKTI KAS KELUAR <span class="text-danger">*</span></label>
+                </div>
+                <div class="col-12 col-md-4">
+                  <input type="text" name="pengeluaran_nobukti" id="pengeluaran_nobukti" class="form-control" readonly>
+                </div>
               </div>
             </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+
+            <div class="row mt-3 form-group">
+
+              <div class="col-12 col-sm-2 col-md-2 col-form-label">
                 <label>
-                  COA <span class="text-danger">*</span>
+                  Supplier
                 </label>
               </div>
-              <div class="col-8 col-md-10">
-                <input type="text" name="coa" class="form-control coa-lookup">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  Supplier <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-8 col-md-10">
+              <div class="col-12 col-sm-4 col-md-4">
                 <input type="hidden" name="supplier_id">
                 <input type="text" name="supplier" class="form-control supplier-lookup">
+              </div>
+
+              <div class="col-12 col-sm-2 col-md-2 col-form-label">
+                <label>
+                  Pelanggan
+                </label>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4">
+                <input type="hidden" name="pelanggan_id">
+                <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
               </div>
             </div>
 
@@ -155,11 +178,11 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
-    
+
     $('#crudForm').autocomplete({
       disabled: true
     });
-    
+
     $(document).on('input', `#table_body [name="bayar[]"]`, function(event) {
       setBayar()
       let sisa = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisa[]"]`)[0])
@@ -274,16 +297,12 @@
         value: form.find(`[name="bank"]`).val()
       })
       data.push({
-        name: 'coa',
-        value: form.find(`[name="coa"]`).val()
-      })
-      data.push({
         name: 'supplier_id',
         value: form.find(`[name="supplier_id"]`).val()
       })
       data.push({
-        name: 'supplier',
-        value: form.find(`[name="supplier"]`).val()
+        name: 'pelanggan_id',
+        value: form.find(`[name="pelanggan_id"]`).val()
       })
 
 
@@ -399,7 +418,7 @@
           $('#detailList tbody').html('')
           $('#nominalHutang').html('')
           $('#sisaHutang').html('')
-          if(id == 0){
+          if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
           if (response.data.grp == 'FORMAT') {
@@ -492,6 +511,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tglkaskeluar]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     initDatepicker()
     setBayar()
@@ -532,22 +552,35 @@
             element.val(dateFormat(value))
           }
 
-
           if (index == 'bank') {
             element.data('current-value', value)
           }
           if (index == 'supplier') {
             element.data('current-value', value)
           }
-          if (index == 'coa') {
+          if (index == 'pelanggan') {
             element.data('current-value', value)
           }
         })
 
+        form.find(`[name="tglkaskeluar"]`).val(dateFormat(tgl)).attr('disabled', false)
+        let fieldId = 0;
+        let field = '';
+        if (response.data.supplier_id != 0) {
+          fieldId = response.data.supplier_id
+          field = 'supplier_id'
+          $('#crudForm [name=pelanggan_id]').siblings().find('.input-group-append .lookup-toggler').prop('disabled', true)
+          $('#crudForm [name=pelanggan]').prop('disabled', true)
+        } else {
+          fieldId = response.data.pelanggan_id
+          field = 'pelanggan_id'
 
-        let supplierId = response.data.supplier_id
+          $('#crudForm [name=supplier_id]').siblings().find('.input-group-append .lookup-toggler').prop('disabled', true)
+          $('#crudForm [name=supplier]').prop('disabled', true)
+        }
 
-        getPembayaran(Id, supplierId, 'edit')
+
+        getPembayaran(Id, fieldId, field, 'edit')
       }
     })
   }
@@ -584,11 +617,18 @@
           }
 
         })
-        let supplierId = response.data.supplier_id
+        let fieldId = 0;
+        let field = '';
+        if (response.data.supplier_id != '') {
+          fieldId = response.data.supplier_id
+          field = 'supplier_id'
+        } else if (response.data.pelanggan_id != '') {
+          fieldId = response.data.pelanggan_id
+          field = 'pelanggan_id'
+        }
 
-        form.find('[name]').addClass('disabled')
-        initDisabled()
-        getPembayaran(Id, supplierId, 'delete')
+
+        getPembayaran(Id, fieldId, field, 'delete')
 
       }
     })
@@ -600,14 +640,14 @@
   //   $grid.jqGrid("setGridWidth", newWidth, true);
   // });
 
-  function getHutang(id) {
+  function getHutang(id, field) {
 
     $('#detailList tbody').html('')
     $('#detailList tfoot #nominalHutang').html('')
     $('#detailList tfoot #sisaHutang').html('')
 
     $.ajax({
-      url: `${apiUrl}hutangbayarheader/${id}/getHutang`,
+      url: `${apiUrl}hutangbayarheader/${id}/${field}/getHutang`,
       method: 'GET',
       dataType: 'JSON',
       data: {
@@ -666,7 +706,7 @@
             </tr>
           `)
 
-          
+
           detailRow.find(`[name="tglcair[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
           // detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
           // detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
@@ -715,7 +755,7 @@
 
   }
 
-  
+
   function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}hutangbayarheader/${Id}/cekvalidasi`,
@@ -747,14 +787,14 @@
   }
 
 
-  function getPembayaran(id, supplierId, aksi) {
+  function getPembayaran(id, fieldId, field, aksi) {
     $('#detailList tbody').html('')
     let url
     let attribut
     let forCheckbox
     let forTotal = 'disabled'
     // if(aksi == 'edit'){
-    url = `${apiUrl}hutangbayarheader/${id}/${supplierId}/getPembayaran`
+    url = `${apiUrl}hutangbayarheader/${id}/${fieldId}/${field}/getPembayaran`
     // }
     if (aksi == 'delete') {
       attribut = 'disabled'
@@ -844,6 +884,8 @@
 
           if (detailRow.find(`[name="tglcair[]"]`).val() != '') {
             detailRow.find(`[name="tglcair[]"]`).val(dateFormat(detail.tglcair))
+          } else {
+            detailRow.find(`[name="tglcair[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
           }
           $('#detailList tbody').append(detailRow)
           setBayar()
@@ -881,7 +923,6 @@
     })
 
   }
-
 
   $(document).on('click', `#detailList tbody [name="hutang_id[]"]`, function() {
 
@@ -1002,8 +1043,11 @@
       onSelectRow: (supplier, element) => {
         $('#crudForm [name=supplier_id]').first().val(supplier.id)
         element.val(supplier.namasupplier)
-        getHutang(supplier.id)
+        getHutang(supplier.id, 'supplier_id')
         element.data('currentValue', element.val())
+
+        $('#crudForm [name=pelanggan_id]').siblings().find('.input-group-append .lookup-toggler').prop('disabled', true)
+        $('#crudForm [name=pelanggan]').prop('disabled', true)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1012,6 +1056,44 @@
         $('#crudForm [name=supplier_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+        $('#crudForm [name=pelanggan_id]').siblings().find('.input-group-append .lookup-toggler').prop('disabled', false)
+        $('#crudForm [name=pelanggan]').prop('disabled', false)
+        $('#detailList tbody').html('')
+        $('#nominalHutang').html('')
+        $('#sisaHutang').html('')
+        $('#bayarHutang').html('')
+        $('#potonganHutang').html('')
+        $('#totalHutang').html('')
+      }
+    })
+
+    $('.pelanggan-lookup').lookup({
+      title: 'Pelanggan Lookup',
+      fileName: 'pelanggan',
+      onSelectRow: (pelanggan, element) => {
+        $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
+        element.val(pelanggan.namapelanggan)
+        getHutang(pelanggan.id, 'pelanggan_id')
+        element.data('currentValue', element.val())
+
+        $('#crudForm [name=supplier_id]').siblings().find('.input-group-append .lookup-toggler').prop('disabled', true)
+        $('#crudForm [name=supplier]').prop('disabled', true)
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=pelanggan_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+        $('#crudForm [name=supplier_id]').siblings().find('.input-group-append .lookup-toggler').prop('disabled', false)
+        $('#crudForm [name=supplier]').prop('disabled', false)
+        $('#detailList tbody').html('')
+        $('#nominalHutang').html('')
+        $('#sisaHutang').html('')
+        $('#bayarHutang').html('')
+        $('#potonganHutang').html('')
+        $('#totalHutang').html('')
       }
     })
   }

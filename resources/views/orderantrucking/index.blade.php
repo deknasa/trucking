@@ -40,10 +40,11 @@
         colModel: [{
             label: 'ID',
             name: 'id',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
-            label: 'NO BUKTI',
+            label: 'NO. BUKTI',
             name: 'nobukti',
           },
           {
@@ -86,27 +87,27 @@
             }
           },
           {
-            label: 'NO JOBEMKL',
+            label: 'NO. JOBEMKL',
             name: 'nojobemkl',
           },
           {
-            label: 'NO CONT',
+            label: 'NO. CONT',
             name: 'nocont',
           },
           {
-            label: 'NO SEAL',
+            label: 'NO. SEAL',
             name: 'noseal',
           },
           {
-            label: 'NO JOBEMKL 2',
+            label: 'NO. JOBEMKL 2',
             name: 'nojobemkl2',
           },
           {
-            label: 'NO CONT 2',
+            label: 'NO. CONT 2',
             name: 'nocont2',
           },
           {
-            label: 'NO SEAL 2',
+            label: 'NO. SEAL 2',
             name: 'noseal2',
           },
           {
@@ -297,6 +298,7 @@
         },
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

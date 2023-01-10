@@ -39,14 +39,15 @@
         colModel: [{
             label: 'id',
             name: 'id',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
-            label: 'namasupplier',
+            label: 'nama supplier',
             name: 'namasupplier',
           },
           {
-            label: 'namakontak',
+            label: 'nama kontak',
             name: 'namakontak',
           },
           {
@@ -80,11 +81,11 @@
             name: 'web',
           },
           {
-            label: 'namapemilik',
+            label: 'nama pemilik',
             name: 'namapemilik',
           },
           {
-            label: 'jenisusaha',
+            label: 'jenis usaha',
             name: 'jenisusaha',
           },
           // {
@@ -96,7 +97,7 @@
             name: 'bank',
           },
           {
-            label: 'rekeningbank',
+            label: 'rekening bank',
             name: 'rekeningbank',
           },
 
@@ -105,7 +106,7 @@
             name: 'jabatan',
           },
           {
-            label: 'statusdaftarharga',
+            label: 'status daftar harga',
             name: 'statusdaftarharga',
             width: 100,
             stype: 'select',
@@ -148,7 +149,7 @@
             }
           },
           {
-            label: 'statusaktif',
+            label: 'status',
             name: 'statusaktif',
             width: 100,
             stype: 'select',
@@ -191,7 +192,7 @@
             }
           },
           {
-            label: 'kategoriusaha',
+            label: 'kategori usaha',
             name: 'kategoriusaha',
           },
 
@@ -296,6 +297,7 @@
         },
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

@@ -248,7 +248,8 @@
                         label: 'ID',
                         name: 'id',
                         align: 'right',
-                        width: '50px'
+                        width: '50px',
+                        hidden: true
                     },
                     {
                         label: 'STATUS APPROVAL',
@@ -294,7 +295,7 @@
                         }
                     },
                     {
-                        label: 'NO BUKTI',
+                        label: 'NO. BUKTI',
                         name: 'nobukti',
                         align: 'left'
                     },
@@ -309,7 +310,7 @@
                         }
                     },
                     {
-                        label: 'No Bukti Pelunasan Piutang',
+                        label: 'No. Bukti Pelunasan Piutang',
                         name: 'pelunasanpiutang_nobukti',
                         align: 'left'
                     },
@@ -471,6 +472,7 @@
                 }
             })
 
+            .jqGrid("setLabel", "rn", "No.")
             .jqGrid('filterToolbar', {
                 stringResult: true,
                 searchOnEnter: false,

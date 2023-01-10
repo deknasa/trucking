@@ -40,14 +40,15 @@
         colModel: [{
             label: 'ID',
             name: 'id',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
-            label: 'KODE ALATBAYAR',
+            label: 'KODE ALAT BAYAR',
             name: 'kodealatbayar',
           },
           {
-            label: 'NAMA ALATBAYAR',
+            label: 'NAMA ALAT BAYAR',
             name: 'namaalatbayar',
           },
           {
@@ -247,6 +248,7 @@
         },
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

@@ -52,7 +52,8 @@
             label: 'ID',
             name: 'id',
             align: 'right',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
             label: 'STATUS CETAK',
@@ -99,7 +100,7 @@
             }
           },
           {
-            label: 'NO BUKTI',
+            label: 'NO. BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -119,7 +120,7 @@
             align: 'left'
           },
           {
-            label: 'tgldari',
+            label: 'TANGGAL dari',
             name: 'tgldari',
             align: 'left',
             formatter: "date",
@@ -129,7 +130,7 @@
             }
           },
           {
-            label: 'tglsampai',
+            label: 'TANGGAL sampai',
             name: 'tglsampai',
             align: 'left',
             formatter: "date",
@@ -140,12 +141,12 @@
           },
 
           {
-            label: 'postingdari',
+            label: 'posting dari',
             name: 'postingdari',
             align: 'left'
           },
           {
-            label: 'tglkasmasuk',
+            label: 'TANGGAL kas masuk',
             name: 'tglkasmasuk',
             align: 'left',
             formatter: "date",
@@ -170,7 +171,7 @@
             align: 'left'
           },
           {
-            label: 'penerimaan_nobukti',
+            label: 'No. Bukti Penerimaan',
             name: 'penerimaan_nobukti',
             align: 'left'
           },
@@ -284,6 +285,7 @@
         }
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

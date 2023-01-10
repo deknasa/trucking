@@ -9,7 +9,6 @@
 
 @push('scripts')
 <script>
-
   function loadDetailGrid(id) {
     $("#detail").jqGrid({
         url: `${apiUrl}jurnalumumpusatdetail`,
@@ -17,8 +16,7 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        colModel: [
-          {
+        colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
           },
@@ -27,24 +25,29 @@
             name: 'tglbukti',
           },
           {
-            label: 'COA DEBET',
-            name: 'coadebet',
+            label: 'KODE PERKIRAAN',
+            name: 'coa',
           },
           {
-            label: 'COA KREDIT',
-            name: 'coakredit',
+            label: 'NAMA PERKIRAAN',
+            name: 'keterangancoa',
           },
-          
+          {
+            label: 'DEBET',
+            name: 'nominaldebet',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'KREDIT',
+            name: 'nominalkredit',
+            align: 'right',
+            formatter: currencyFormat,
+          },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            formatter: 'number', 
-            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
-            align: "right",
+            width: '500px'
           }
         ],
         autowidth: true,

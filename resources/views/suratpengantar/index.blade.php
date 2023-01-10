@@ -41,18 +41,19 @@
         colModel: [{
             label: 'ID',
             name: 'id',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
             label: 'JOB TRUCKING',
             name: 'jobtrucking',
           },
           {
-            label: 'NO TRIP',
+            label: 'NO. TRIP',
             name: 'nobukti',
           },
           {
-            label: 'TGL TRIP',
+            label: 'TANGGAL TRIP',
             name: 'tglbukti',
             align: 'left',
             formatter: "date",
@@ -62,11 +63,11 @@
             }
           },
           {
-            label: 'NO SP',
+            label: 'NO. SP',
             name: 'nosp',
           },
           {
-            label: 'TGLSP',
+            label: 'TANGGAL SP',
             name: 'tglsp',
             align: 'left',
             formatter: "date",
@@ -76,7 +77,7 @@
             }
           },
           {
-            label: 'NOJOB',
+            label: 'NO. JOB',
             name: 'nojob',
           },
           {
@@ -128,11 +129,11 @@
             name: 'container_id'
           },
           {
-            label: 'NO CONT',
+            label: 'NO. CONT',
             name: 'nocont'
           },
           {
-            label: 'NO SEAL',
+            label: 'NO. SEAL',
             name: 'noseal',
           },
           {
@@ -144,7 +145,7 @@
             name: 'gudang',
           },
           {
-            label: 'NO POLISI',
+            label: 'NO. POLISI',
             name: 'trado_id',
           },
           {
@@ -499,6 +500,7 @@
         },
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

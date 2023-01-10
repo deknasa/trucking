@@ -66,7 +66,8 @@
             label: 'ID',
             name: 'id',
             align: 'right',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
             label: 'STATUS APPROVAL',
@@ -166,7 +167,7 @@
           },
 
           {
-            label: 'NO BUKTI',
+            label: 'NO. BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -187,7 +188,7 @@
           },
 
           {
-            label: 'No bukti Absensi Supir',
+            label: 'No. bukti Absensi Supir',
             name: 'absensisupir_nobukti',
             align: 'left'
           },
@@ -207,7 +208,7 @@
             }
           },
           {
-            label: 'No bukti pengeluaran',
+            label: 'No. bukti pengeluaran',
             name: 'pengeluaran_nobukti',
             align: 'left'
           },
@@ -225,28 +226,6 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },
-          {
-            label: 'Status format',
-            name: 'statusformat',
-            align: 'left',
-            formatter: (value, options, rowData) => {
-              let statusFormat = JSON.parse(value)
-
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusFormat.WARNA}; color: #fff;">
-                  <span>${statusFormat.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusFormat = JSON.parse(rowObject.statusformat)
-
-              return ` title="${statusFormat.MEMO}"`
-            }
-
           },
           {
             label: 'MODIFIEDBY',
@@ -358,6 +337,7 @@
         }
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

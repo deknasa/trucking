@@ -46,7 +46,8 @@
             label: 'ID',
             name: 'id',
             align: 'right',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
             label: 'STATUS CETAK',
@@ -93,7 +94,7 @@
             }
           },
           {
-            label: 'NO BUKTI',
+            label: 'NO. BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -128,7 +129,7 @@
             align: 'left'
           },
           {
-            label: 'TGL CETAK',
+            label: 'TANGGAL CETAK',
             name: 'tglbukacetak',
             align: 'left',
             formatter: "date",
@@ -186,7 +187,7 @@
             align: 'left'
           },
           {
-            label: 'NO BUKTI PENGELUARAN',
+            label: 'NO. BUKTI PENGELUARAN',
             name: 'pengeluaran_nobukti',
             align: 'left'
           },
@@ -304,6 +305,7 @@
         }
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

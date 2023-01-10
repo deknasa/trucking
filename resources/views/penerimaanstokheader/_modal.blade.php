@@ -190,10 +190,10 @@
                     <th style="width: 20%">stok</th>
                     <th class="data_tbl tbl_vulkanisirke" style="width : 20px">vulkanisirke</th>
                     <th style="width:20%">keterangan</th>
-                    <th class="data_tbl tbl_qty" style="width:10%">qty</th>
-                    <th class="data_tbl tbl_harga" style="width:20%">harga</th>
-                    <th class="data_tbl tbl_persentase" style="width : 20px">persentase discount</th>
-                    <th class="data_tbl tbl_total" style="width:20%">Total</th>
+                    <th class="data_tbl tbl_qty" style="width:5%">qty</th>
+                    <th class="data_tbl tbl_harga" style="width:10%">harga</th>
+                    <th class="data_tbl tbl_persentase" style="width :5%">persentase discount</th>
+                    <th class="data_tbl tbl_total" style="width:10%">Total</th>
                     <th style="width : 5%">Aksi</th>
                   </tr>
                 </thead>

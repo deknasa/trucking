@@ -47,7 +47,8 @@
             label: 'ID',
             name: 'id',
             align: 'right',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
             label: 'STATUS APPROVAL',
@@ -94,7 +95,7 @@
             }
           },
           {
-            label: 'NO BUKTI',
+            label: 'NO. BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -108,6 +109,18 @@
               newformat: "d-m-Y"
             }
           },
+          {
+            label: 'DEBET',
+            name: 'nominaldebet',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'KREDIT',
+            name: 'nominalkredit',
+            align: 'right',
+            formatter: currencyFormat,
+          },          
           {
             label: 'KETERANGAN',
             name: 'keterangan',
@@ -249,6 +262,7 @@
         }
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
