@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.css" />
 
   <!-- Custom styles -->
-  <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/pager.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/styles.css?version='. config('app.version')) }}">
+  <link rel="stylesheet" href="{{ asset('css/pager.css?version='. config('app.version')) }}">
 
   <link rel="stylesheet" href="{{ asset('plugins/dropzone/dropzone.css') }}">
 </head>
@@ -166,10 +166,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.js"></script>
 
   <!-- Custom global script -->
-  <script src="{{ asset('js/pager.js') }}"></script>
-  <script src="{{ asset('js/lookup.js') }}"></script>
-  <script src="{{ asset('mains.js') }}"></script>
-  <script src="{{ asset('js/app.js') }}"></script>
+  <script src="{{ asset('js/pager.js?version='. config('app.version')) }}"></script>
+  <script src="{{ asset('js/lookup.js?version='. config('app.version')) }}"></script>
+  <script src="{{ asset('mains.js?version='. config('app.version')) }}"></script>
+  <script src="{{ asset('js/app.js?version='. config('app.version')) }}"></script>
 
   <!-- Custom page script -->
   @stack('scripts')
