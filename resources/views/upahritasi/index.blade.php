@@ -35,40 +35,6 @@
 
   $(document).ready(function() {
 
-
-    // $('#lookup').hide()
-
-    // $('.kotadari-lookup').lookup({
-    //   title: 'kota Lookup',
-    //   fileName: 'kota',
-    //   onSelectRow: (kota, element) => {
-    //     $('#crudForm [name=kotadari_id]').first().val(kota.id)
-    //     element.val(kota.keterangan)
-
-    //   }
-    // })
-
-    // $('.kotasampai-lookup').lookup({
-    //   title: 'kota Lookup',
-    //   fileName: 'kota',
-    //   onSelectRow: (kota, element) => {
-    //     $('#crudForm [name=kotasampai_id]').first().val(kota.id)
-    //     element.val(kota.keterangan)
-
-    //   }
-    // })
-
-    // $('.zona-lookup').lookup({
-    //   title: 'zona Lookup',
-    //   fileName: 'zona',
-    //   onSelectRow: (zona, element) => {
-    //     $('#crudForm [name=zona_id]').first().val(zona.id)
-    //     element.val(zona.zona)
-
-    //   }
-    // })
-
-
     $("#jqGrid").jqGrid({
         url: `${apiUrl}upahritasi`,
         mtype: "GET",
@@ -79,7 +45,8 @@
             label: 'ID',
             name: 'id',
             align: 'right',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
             label: 'DARI',
@@ -103,7 +70,7 @@
             align: 'left'
           },
           {
-            label: 'STATUS AKTIF',
+            label: 'STATUS',
             name: 'statusaktif',
             stype: 'select',
             searchoptions: {
@@ -286,6 +253,7 @@
         }
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

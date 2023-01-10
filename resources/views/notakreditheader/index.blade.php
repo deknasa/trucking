@@ -52,7 +52,8 @@
             label: 'ID',
             name: 'id',
             align: 'right',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
             label: 'status approval',
@@ -151,7 +152,7 @@
             }
           },
           {
-            label: 'NO BUKTI',
+            label: 'NO. BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -186,7 +187,7 @@
             align: 'left'
           },
           {
-            label: 'tglapproval',
+            label: 'TANGGAL APPROVAL',
             name: 'tglapproval',
             align: 'left',
              formatter: "date",
@@ -295,7 +296,8 @@
           setHighlight($(this))
         }
       })
-
+      
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

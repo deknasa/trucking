@@ -48,7 +48,8 @@
             label: 'ID',
             name: 'id',
             align: 'right',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
             label: 'STATUS APPROVAL',
@@ -139,7 +140,7 @@
             }
           },
           {
-            label: 'NO BUKTI',
+            label: 'NO. BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -217,7 +218,7 @@
             align: 'left'
           },
           {
-            label: 'TGL APPROVAL',
+            label: 'TANGGAL APPROVAL',
             name: 'tglapproval',
             align: 'left',
             formatter: "date",
@@ -232,7 +233,7 @@
             align: 'left'
           },
           {
-            label: 'TGL CETAK',
+            label: 'TANGGAL CETAK',
             name: 'tglbukacetak',
             align: 'left',
             formatter: "date",
@@ -385,6 +386,7 @@
         }
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

@@ -40,7 +40,8 @@
         colModel: [{
             label: 'ID',
             name: 'id',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
             label: 'KODE KELOMPOK',
@@ -193,6 +194,7 @@
         },
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

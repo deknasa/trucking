@@ -44,7 +44,8 @@
         colModel: [{
             label: 'ID',
             name: 'id',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
             label: 'STATUS CETAK',
@@ -94,12 +95,12 @@
             }
           },
           {
-            label: 'NO BUKTI',
+            label: 'NO. BUKTI',
             name: 'nobukti',
             align: 'left'
           },
           {
-            label: 'TANGGAL',
+            label: 'TANGGAL BUKTI',
             name: 'tglbukti',
             formatter: "date",
             formatoptions: {
@@ -123,7 +124,7 @@
             align: 'left'
           },
           {
-            label: 'NO BUKTI KAS KELUAR',
+            label: 'NO. BUKTI KAS KELUAR',
             name: 'pengeluaran_nobukti',
             align: 'left'
           },
@@ -147,7 +148,7 @@
             align: 'left'
           },
           {
-            label: 'TGL CETAK',
+            label: 'TANGGAL CETAK',
             name: 'tglbukacetak',
             formatter: "date",
             formatoptions: {
@@ -268,6 +269,7 @@
         }
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

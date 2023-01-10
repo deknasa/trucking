@@ -43,7 +43,8 @@
             label: 'ID',
             name: 'id',
             align: 'right',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
             label: 'STATUS CETAK',
@@ -99,7 +100,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL',
+            label: 'TANGGAL BUKTI',
             name: 'tglbukti',
             align: 'left',
             formatter: 'date',
@@ -237,6 +238,7 @@
         }
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

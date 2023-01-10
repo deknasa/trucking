@@ -43,7 +43,8 @@
                         label: 'ID',
                         name: 'id',
                         align: 'right',
-                        width: '50px'
+                        width: '50px',
+                        hidden: true
                     },
                     {
                         label: 'STATUS APPROVAL',
@@ -132,7 +133,7 @@
                         }
                     },
                     {
-                        label: 'NO BUKTI',
+                        label: 'NO. BUKTI',
                         name: 'nobukti',
                         align: 'left'
                     },
@@ -305,6 +306,7 @@
                 }
             })
 
+            .jqGrid("setLabel", "rn", "No.")
             .jqGrid('filterToolbar', {
                 stringResult: true,
                 searchOnEnter: false,
