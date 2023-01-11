@@ -172,6 +172,9 @@
   <!-- Inputmask -->
   <script src="{{ asset('libraries/inputmask/5.0.6/jquery.inputmask.min.js') }}"></script>
 
+  <!-- dropzone -->
+  <script src="{{ asset('plugins/dropzone/dropzone.js') }}"></script>
+
   <!-- Nestable2 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.js"></script>
 

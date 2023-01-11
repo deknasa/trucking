@@ -114,7 +114,7 @@
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 0,
+        rowNum: 10,
         rownumbers: true,
         footerrow: true,
 		    userDataOnFooter: true,
@@ -122,7 +122,7 @@
         rowList: [10, 20, 50],
         toolbar: [true, "top"],
         sortable: true,
-        pager: pager,
+        // pager: pager,
         prmNames: {
           sort: 'sortIndex',
           order: 'sortOrder',
@@ -131,10 +131,8 @@
         viewrecords: true,
         loadComplete: function(data) {
           initResize($(this))
-          
-          console.log($(this).jqGrid('getGridParam', 'postData').limit);
           detailsPostData = $(this).jqGrid('getGridParam', 'postData')
-
+// console.log(detailsPostData);
           sum = $('#detail').jqGrid("getCol", "total", false, "sum")
     
           $(this).jqGrid('footerData', 'set', {
@@ -144,13 +142,7 @@
           
         }
       })
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      }).customPager()
+      .customPager()
   }
 
   function loadDetailData(id) {

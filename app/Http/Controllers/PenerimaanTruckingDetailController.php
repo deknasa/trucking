@@ -14,7 +14,10 @@ class PenerimaanTruckingDetailController extends Controller
     {
         $params = [
             'penerimaantruckingheader_id' => $request->penerimaantruckingheader_id,
-            'whereIn' => $request->whereIn
+            'whereIn' => $request->whereIn,
+            'offset' => $request->rows ?? (($request->page - 1) * $request->limit),
+            'page' =>$request->page, 
+            'limit' =>  $request->limit ?? 0,
         ];
 
         $response = Http::withHeaders($request->header())
@@ -23,7 +26,9 @@ class PenerimaanTruckingDetailController extends Controller
             ->get(config('app.api_url') .'penerimaantruckingdetail', $params);
             
         $data = [
-            'rows' => $response['data'] ?? []
+            'rows' => $response['data'] ?? [],
+            'total' => $response['attributes']['totalPages'] ?? [],
+            'records' => $response['attributes']['totalRows'] ?? [],
         ];
 
         return response($data);
