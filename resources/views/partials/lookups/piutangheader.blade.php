@@ -13,7 +13,8 @@
           label: 'ID',
           name: 'id',
           align: 'right',
-          width: '70px'
+          width: '70px',
+          hidden: true
         },
         {
           label: 'NO BUKTI',
@@ -51,7 +52,7 @@
           align: "right",
         },
         {
-          label: 'NO BUKTI INVOICE',
+          label: 'NO. BUKTI INVOICE',
           name: 'invoice_nobukti',
           align: 'left'
         },
@@ -162,6 +163,7 @@
       }
     })
 
+    .jqGrid("setLabel", "rn", "No.")
     .jqGrid('filterToolbar', {
       stringResult: true,
       searchOnEnter: false,

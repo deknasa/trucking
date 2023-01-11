@@ -13,7 +13,8 @@
           label: 'ID',
           name: 'id',
           align: 'right',
-          width: '70px'
+          width: '70px',
+          hidden: true
         },
         {
           label: 'STATUS CETAK',
@@ -82,7 +83,7 @@
           }
         },
         {
-          label: 'NO BUKTI',
+          label: 'NO. BUKTI',
           name: 'nobukti',
           align: 'left'
         },
@@ -117,7 +118,7 @@
           align: 'left'
         },
         {
-          label: 'NO BUKTI PENERIMAAN',
+          label: 'NO. BUKTI PENERIMAAN',
           name: 'penerimaan_nobukti',
           align: 'left'
         },
@@ -127,7 +128,7 @@
           align: 'left'
         },
         {
-          label: 'TGL CETAK',
+          label: 'TANGGAL CETAK',
           name: 'tglbukacetak',
           align: 'left',
           formatter: "date",
@@ -244,6 +245,7 @@
       }
     })
 
+    .jqGrid("setLabel", "rn", "No.")
     .jqGrid('filterToolbar', {
       stringResult: true,
       searchOnEnter: false,

@@ -165,7 +165,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
-    
+
     $('#crudForm').autocomplete({
       disabled: true
     });
@@ -181,7 +181,7 @@
         let nominal = $(this).closest("tr").find(`[name="nominal[]"]`).val()
         nominal = parseFloat(nominal.replaceAll(',', ''));
         let totalSisa = nominal - bayar
-        
+
         $(this).closest("tr").find(".sisa").html(totalSisa)
       } else {
         let totalSisa = sisa - bayar
@@ -274,7 +274,7 @@
 
 
       $('#table_body tr').each(function(row, tr) {
-       
+
 
         if ($(this).find(`[name="piutang_id[]"]`).is(':checked')) {
 
@@ -371,8 +371,8 @@
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
-          
-          if(id == 0){
+
+          if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
 
@@ -454,36 +454,15 @@
     new AutoNumeric('#bayarNominalLebih').set(totalNominalLebih)
   }
 
+  function setSisa() {
+    let nominalDetails = $(`.sisa`)
+    let bayar = 0
+    $.each(nominalDetails, (index, nominalDetail) => {
+      bayar += AutoNumeric.getNumber(nominalDetail)
+    });
 
-  $(document).on('click', `#detailList tbody [name="piutang_id[]"]`, function() {
-
-    if ($(this).prop("checked") == true) {
-
-      id = $(this).val()
-      $(this).closest('tr').find(`td [name="keterangandetailppd[]"]`).prop('disabled', false)
-      $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', false)
-      $(this).closest('tr').find(`td [name="bayarppd[]"]`).prop('disabled', false)
-      $(this).closest('tr').find(`td [name="keteranganpenyesuaianppd[]"]`).prop('disabled', false)
-      $(this).closest('tr').find(`td [name="penyesuaianppd[]"]`).prop('disabled', false)
-      $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', false)
-
-      setTotal()
-      setPenyesuaian()
-      setNominalLebih()
-      
-    } else {
-      $(this).closest('tr').find(`td [name="keterangandetailppd[]"]`).prop('disabled', true)
-      $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', true)
-      $(this).closest('tr').find(`td [name="bayarppd[]"]`).prop('disabled', true)
-      $(this).closest('tr').find(`td [name="keteranganpenyesuaianppd[]"]`).prop('disabled', true)
-      $(this).closest('tr').find(`td [name="penyesuaianppd[]"]`).prop('disabled', true)
-      $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', true)
-
-      setTotal()
-      setPenyesuaian()
-      setNominalLebih()
-    }
-  })
+    new AutoNumeric('#sisaPiutang').set(bayar)
+  }
 
   function createPelunasanPiutangHeader() {
     let form = $('#crudForm')
@@ -668,7 +647,7 @@
                 <textarea name="keterangandetailppd[]" rows="1" disabled class="form-control"></textarea>
               </td>
               <td>
-                <input type="text" name="bayarppd[]" disabled class="form-control bayar autonumeric">
+                <input type="text" name="bayarppd[]" disabled class="form-control bayar text-right">
               </td>
               <td>
                 <textarea name="keteranganpenyesuaianppd[]" rows="1" disabled class="form-control"></textarea>
@@ -685,9 +664,10 @@
           // detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
           // detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
 
-          initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
+          // initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
           initAutoNumericNoMinus(detailRow.find(`[name="penyesuaianppd[]"]`))
           initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
+          initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
           initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
           initAutoNumeric(detailRow.find('.sisa'))
           initAutoNumeric(detailRow.find('.nominal'))
@@ -793,9 +773,9 @@
             </tr>
           `)
 
-          initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
-          initAutoNumericNoMinus(detailRow.find(`[name="penyesuaianppd[]"]`))
-          initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
+          initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`).not(':disabled'))
+          initAutoNumericNoMinus(detailRow.find(`[name="penyesuaianppd[]"]`).not(':disabled'))
+          initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`).not(':disabled'))
           initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
           initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
           initAutoNumeric(detailRow.find('.sisa'))
@@ -821,6 +801,55 @@
   $("#checkAll").click(function() {
     $('input:checkbox').not(this).prop('checked', this.checked);
   });
+
+
+  $(document).on('click', `#detailList tbody [name="piutang_id[]"]`, function() {
+
+    if ($(this).prop("checked") == true) {
+
+      id = $(this).val()
+      $(this).closest('tr').find(`td [name="keterangandetailppd[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="bayarppd[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="keteranganpenyesuaianppd[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="penyesuaianppd[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', false)
+
+      let sisa = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="sisa[]"]`)[0])
+
+      initAutoNumeric($(this).closest('tr').find(`td [name="bayarppd[]"]`).val(sisa))
+
+      let bayar = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="bayarppd[]"]`)[0])
+      let totalSisa = sisa - bayar
+
+      $(this).closest("tr").find(".sisa").html(totalSisa)
+      $(this).closest("tr").find(`[name="sisa[]"]`).val(totalSisa)
+      initAutoNumeric($(this).closest("tr").find(".sisa"))
+
+      setTotal()
+      setPenyesuaian()
+      setNominalLebih()
+      setSisa()
+
+    } else {
+      $(this).closest('tr').find(`td [name="keterangandetailppd[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="bayarppd[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="keteranganpenyesuaianppd[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="penyesuaianppd[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="bayarppd[]"]`).val('')
+      let nominalHutang = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="nominal[]"]`)[0])
+      initAutoNumeric($(this).closest('tr').find(`td [name="sisa[]"]`).val(nominalHutang))
+      $(this).closest("tr").find(".sisa").html(nominalHutang)
+      initAutoNumeric($(this).closest("tr").find(".sisa"))
+
+      setTotal()
+      setPenyesuaian()
+      setNominalLebih()
+      setSisa()
+    }
+  })
 
 
   function setRowNumbers() {
@@ -875,7 +904,7 @@
   }
 
   function initLookup() {
-    
+
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',

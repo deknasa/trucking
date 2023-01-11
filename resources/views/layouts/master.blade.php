@@ -35,23 +35,33 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.css" />
 
   <!-- Custom styles -->
-  <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/pager.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/styles.css?version='. config('app.version')) }}">
+  <link rel="stylesheet" href="{{ asset('css/pager.css?version='. config('app.version')) }}">
 
   <link rel="stylesheet" href="{{ asset('plugins/dropzone/dropzone.css') }}">
 </head>
 
 <body class="hold-transition sidebar-collapse layout-fixed">
+  <?php
+    $previousRoute = str_replace(url('/'), '', url()->previous());
+  ?>
+
+  @if($previousRoute == '/login')
+  <div class="splash" id="splash">
+    <img src="{{ asset('images/logo-ori.png') }}">
+  </div>
+  @else
   <div class="loader" id="loader">
-    <img src="{{ asset('images/hour-glass.gif') }}">
+    <img src="{{ asset('images/hour-glass.gif') }}" rel="preload">
     <span>Loading</span>
   </div>
+  @endif
 
   <div id="dialog-message" title="Pesan" class="text-center text-danger" style="display: none;">
     <span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
     <p></p>
   </div>
-
+  
   <!-- Modal for report and export -->
   <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -162,14 +172,17 @@
   <!-- Inputmask -->
   <script src="{{ asset('libraries/inputmask/5.0.6/jquery.inputmask.min.js') }}"></script>
 
+  <!-- dropzone -->
+  <script src="{{ asset('plugins/dropzone/dropzone.js') }}"></script>
+
   <!-- Nestable2 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.js"></script>
 
   <!-- Custom global script -->
-  <script src="{{ asset('js/pager.js') }}"></script>
-  <script src="{{ asset('js/lookup.js') }}"></script>
-  <script src="{{ asset('mains.js') }}"></script>
-  <script src="{{ asset('js/app.js') }}"></script>
+  <script src="{{ asset('js/pager.js?version='. config('app.version')) }}"></script>
+  <script src="{{ asset('js/lookup.js?version='. config('app.version')) }}"></script>
+  <script src="{{ asset('mains.js?version='. config('app.version')) }}"></script>
+  <script src="{{ asset('js/app.js?version='. config('app.version')) }}"></script>
 
   <!-- Custom page script -->
   @stack('scripts')

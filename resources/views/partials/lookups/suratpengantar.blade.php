@@ -13,15 +13,16 @@
           label: 'ID',
           name: 'id',
           align: 'right',
-          width: '50px'
+          width: '50px',
+          hidden: true
         },
 
         {
-          label: 'NOBUKTI',
+          label: 'NO. BUKTI',
           name: 'nobukti',
         },
         {
-          label: 'TGLBUKTI',
+          label: 'TANGGAL BUKTI',
           name: 'tglbukti',
         },
         {
@@ -246,7 +247,7 @@
           name: 'nosp',
         },
         {
-          label: 'TGLSP',
+          label: 'TANGGAL SP',
           name: 'tglsp',
         },
         {
@@ -355,6 +356,7 @@
       }
     })
 
+    .jqGrid("setLabel", "rn", "No.")
     .jqGrid('filterToolbar', {
       stringResult: true,
       searchOnEnter: false,

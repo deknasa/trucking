@@ -12,92 +12,134 @@
         <input type="hidden" name="id">
           <div class="modal-body">
             <div class="row">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  NO BUKTI
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="nobukti" class="form-control" readonly>
-              </div>
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  TANGGAL BUKTI <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="tglbukti" class="form-control datepicker">
-              </div>
-            </div>
 
-
-            <div class="row">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  TANGGAL Masuk 
-                </label>
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>
+                      NO BUKTI
+                    </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="nobukti" class="form-control" readonly>
+                  </div>
+                </div>
               </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="tglkasmasuk" class="form-control datepicker">
+              
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>
+                      TANGGAL BUKTI <span class="text-danger">*</span>
+                    </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="tglbukti" class="form-control datepicker">
+                  </div>
+                </div>
               </div>
 
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>coa kas masuk </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="coa" class="form-control akunpusat-lookup">
+              {{-- <div class="col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>COA KAS MASUK </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="coa" class="form-control akunpusat-lookup">
+                  </div>
+                </div>
+              </div> --}}
+              
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>PELANGGAN <span class="text-danger">*</span> </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
+                    <input type="text" id="pelangganId" name="pelanggan_id" readonly hidden>
+                  </div>
+                </div>
               </div>
 
-            </div>
-            <div class="row">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>pelanggan <span class="text-danger">*</span> </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
-                <input type="text" id="pelangganId" name="pelanggan_id" readonly hidden>
-              </div>
-            {{-- </div>
-
-            <div class="row"> --}}
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>bank <span class="text-danger">*</span> </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="bank" class="form-control bank-lookup">
-                <input type="text" id="bankId" name="bank_id" readonly hidden>
-              </div>
-            </div>
-
-            
-            <div class="row">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  dari TANGGAL
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4 ">
-                <input type="text" name="tgldari" class="form-control datepicker">
-              </div>
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  sampai TANGGAL
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4 ">
-                <input type="text" name="tglsampai" class="form-control datepicker">
-              </div>
-            </div>
-
-            <div class="row">
               
 
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>keterangan <span class="text-danger">*</span> </label>
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>
+                      DARI TANGGAL
+                    </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8 ">
+                    <input type="text" name="tgldari" class="form-control datepicker">
+                  </div>
+                </div>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="keterangan" class="form-control">
+
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>
+                      SAMPAI TANGGAL
+                    </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8 ">
+                    <input type="text" name="tglsampai" class="form-control datepicker">
+                  </div>
+                </div>
               </div>
+
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>KETERANGAN <span class="text-danger">*</span> </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="keterangan" class="form-control">
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row border p-3">
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>Post <span class="text-danger">*</span> </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="bank" class="form-control bank-lookup">
+                    <input type="text" id="bankId" name="bank_id" readonly hidden>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>
+                      TANGGAL Post 
+                    </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="tglkasmasuk" class="form-control datepicker">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>penerimaan nobukti <span class="text-danger">*</span> </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="penerimaan_nobukti" class="form-control" readonly>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
 
@@ -272,32 +314,29 @@
 
     activeGrid = null
 
-    getMaxLength(form)
-    initDatepicker()
+    // getMaxLength(form)
 
+    initDatepicker()
+    
+    $(`[name=tgldari], [name=tglsampai]`)
+      .on("change", function() {
+        rangeKasgantung();
+      })
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    
     $('#crudModal').find('.modal-body').html(modalBody)
+    initDatepicker()
+    
   })
-  
-  $('#crudForm').find(`[name="tgldari"]`).change(() => {
-    rangeKasgantung();
-  })
-  $('#crudForm').find(`[name="tglsampai"]`).change(() => {
-    rangeKasgantung();
-  })
-
   function rangeKasgantung() {
     var tgldari = $('#crudForm').find(`[name="tgldari"]`).val()
     var tglsampai = $('#crudForm').find(`[name="tglsampai"]`).val()
-    console.log(tgldari,tglsampai);
+    console.log(tgldari, tglsampai);
     if (tgldari !== "" && tglsampai !==""){
       getKasGantung(tgldari,tglsampai)
     }
-    initDatepicker()
 
   }
 
@@ -411,7 +450,6 @@
   }
 
   function getKasGantung(dari,sampai) {
-    console.log(dari,sampai);
     $('#detailList tbody').html('')
 
     $.ajax({
@@ -429,6 +467,7 @@
       success: response => {
         let totalNominal = 0
         let row = 0
+        $('#detailList tbody').html('')
         $.each(response.data, (index, detail) => {
           let id = detail.id
           row++
@@ -456,12 +495,12 @@
               element.val(element.data('currentValue'))
             },
             onClear: (element) => {
-        element.val('')
-        element.data('currentValue', element.val())
+              element.val('')
+              element.data('currentValue', element.val())
             }
            })
           })
-           totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
+          //  totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
            $('#nominalPiutang').html(`${totalNominal}`)           
       }
     })
@@ -483,11 +522,11 @@
         console.log(response);
         let totalNominal = 0
         let row = 0
+        $('#detailList tbody').html('')
         $.each(response.data, (index, detail) => {
           let id = detail.id
           row++
           let nominal = new Intl.NumberFormat('en-US').format(detail.nominal);
-          console.log(detail);
           totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
           let detailRow = $(`
           <tr>
@@ -511,14 +550,14 @@
               element.val(element.data('currentValue'))
             },
             onClear: (element) => {
-        element.val('')
-        element.data('currentValue', element.val())
+              element.val('')
+              element.data('currentValue', element.val())
             }
             })
           })
-           totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
-           $('#nominalPiutang').append(`${totalNominal}`)           
-      }
+          totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
+          $('#nominalPiutang').html(`${totalNominal}`)
+        }
     })
     
   }

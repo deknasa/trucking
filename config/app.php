@@ -242,4 +242,6 @@ return [
     'api_url' => env('API_URL', 'http://localhost/trucking-laravel/public/api/'),
 
     'apppath' => 'c:/xampp/htdocs/truck/app/http/',
+
+    'version' => '0.1.0',
 ];

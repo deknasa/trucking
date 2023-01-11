@@ -13,7 +13,10 @@ class HutangDetailController extends Controller
     {
         $params = [
             'hutang_id' => $request->hutang_id,
-            'whereIn' => $request->whereIn
+            'whereIn' => $request->whereIn,
+            'offset' => $request->offset ?? (($request->page - 1) * $request->limit),
+            'page' => $request->page, 
+            'limit' =>  $request->limit ?? 0,
         ];
 
         $response = Http::withHeaders($request->header())
@@ -22,7 +25,9 @@ class HutangDetailController extends Controller
             ->get(config('app.api_url') .'hutangdetail', $params);
             
         $data = [
-            'rows' => $response['data'] ?? []
+            'total' => $response['attributes']['totalPages'] ?? [],
+            'records' => $response['attributes']['totalRows'] ?? [],
+            'rows' => $response['data'] ?? [],
         ];
 
         return response($data);

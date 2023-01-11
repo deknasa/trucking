@@ -13,14 +13,15 @@
           label: 'ID',
           name: 'id',
           align: 'right',
-          width: '70px'
+          width: '70px',
+          hidden: true
         },
         {
-          label: 'NO BUKTI',
+          label: 'NO. BUKTI',
           name: 'nobukti',
         },
         {
-          label: 'TGL BUKTI',
+          label: 'TANGGAL BUKTI',
           name: 'tglbukti',
         },
         {
@@ -54,27 +55,27 @@
           }
         },
         {
-          label: 'NO JOBEMKL',
+          label: 'NO. JOBEMKL',
           name: 'nojobemkl',
         },
         {
-          label: 'NO CONT',
+          label: 'NO. CONT',
           name: 'nocont',
         },
         {
-          label: 'NO SEAL',
+          label: 'NO. SEAL',
           name: 'noseal',
         },
         {
-          label: 'NO JOBEMKL',
+          label: 'NO. JOBEMKL',
           name: 'nojobemkl2',
         },
         {
-          label: 'NO CONT',
+          label: 'NO. CONT',
           name: 'nocont2',
         },
         {
-          label: 'NO SEAL',
+          label: 'NO. SEAL',
           name: 'noseal2',
         },
         {
@@ -313,6 +314,7 @@
       }
     })
 
+    .jqGrid("setLabel", "rn", "No.")
     .jqGrid('filterToolbar', {
       stringResult: true,
       searchOnEnter: false,

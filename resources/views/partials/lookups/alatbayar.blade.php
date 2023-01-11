@@ -13,7 +13,8 @@
           label: 'ID',
           name: 'id',
           align: 'right',
-          width: '70px'
+          width: '70px',
+          hidden: true
         },
         {
           label: 'KODE ALAT BAYAR',
@@ -37,7 +38,7 @@
         },
         {
           label: 'STATUS LANGSUNG CAIR',
-          name: 'statuslangsunggcair',
+          name: 'statuslangsungcair',
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -95,7 +96,7 @@
             return formattedValue[0].outerHTML
           },
           cellattr: (rowId, value, rowObject) => {
-            let statusLgsgCair = JSON.parse(rowObject.statuslangsunggcair)
+            let statusLgsgCair = JSON.parse(rowObject.statuslangsungcair)
 
             return ` title="${statusLgsgCair.MEMO}"`
           }
@@ -271,6 +272,7 @@
       }
     })
 
+    .jqGrid("setLabel", "rn", "No.")
     .jqGrid('filterToolbar', {
       stringResult: true,
       searchOnEnter: false,

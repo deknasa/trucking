@@ -60,14 +60,14 @@
               <div class="row form-group">
                 <div class="col-12 col-md-2 col-form-label">
                   <label>
-                    POST <span class="text-danger">*</span></label>
+                    POSTING <span class="text-danger">*</span></label>
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="hidden" name="bank_id">
                   <input type="text" name="bank" class="form-control bank-lookup">
                 </div>
                 <div class="col-12 col-md-2 col-form-label">
-                  <label>TANGGAL POST</label>
+                  <label>TANGGAL POSTING</label>
                 </div>
                 <div class="col-12 col-md-4">
                   <div class="input-group">

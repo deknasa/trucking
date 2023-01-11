@@ -25,20 +25,6 @@
             name: 'hutang_nobukti',
           },
           {
-            label: 'ALATBAYAR',
-            name: 'alatbayar_id',
-          },
-          {
-            label: 'TGL CAIR',
-            name: 'tglcair',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
             label: 'KETERANGAN',
             name: 'keterangan',
           },
