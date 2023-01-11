@@ -44,6 +44,31 @@
               </div>
             </div>
 
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  ALAT BAYAR <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+
+                <input type="hidden" name="alatbayar_id" class="form-control">
+                <input type="text" name="alatbayar" class="form-control alatbayar-lookup">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  TANGGAL CAIR <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+
+                <div class="input-group">
+                  <input type="text" name="tglcair" class="form-control datepicker">
+                </div>
+              </div>
+            </div>
+
             <div class="border p-3">
               <h6>Posting Pengeluaran</h6>
 
@@ -75,6 +100,8 @@
                 </div>
               </div>
             </div>
+
+
 
             <div class="row mt-3 form-group">
 
@@ -117,8 +144,6 @@
                             <th width="6%">BAYAR</th>
                             <th width="6%">POTONGAN</th>
                             <th width="7%">TOTAL</th>
-                            <th width="6%">ALAT BAYAR</th>
-                            <th width="5%">TGL CAIR</th>
                           </tr>
                         </thead>
                         <tbody id="table_body">
@@ -143,8 +168,6 @@
                             <td>
                               <p id="totalHutang" class="text-right font-weight-bold"></p>
                             </td>
-                            <td></td>
-                            <td></td>
                           </tr>
                         </tfoot>
                       </table>
@@ -185,53 +208,8 @@
 
     $(document).on('input', `#table_body [name="bayar[]"]`, function(event) {
       setBayar()
-      let sisa = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisa[]"]`)[0])
-
-      let bayar = $(this).val()
-      bayar = parseFloat(bayar.replaceAll(',', ''));
-      bayar = Number.isNaN(bayar) ? 0 : bayar
-
-      console.log(sisa)
-      console.log(bayar)
-
-      if (sisa == 0) {
-        let nominal = $(this).closest("tr").find(`[name="nominal[]"]`).val()
-        nominal = parseFloat(nominal.replaceAll(',', ''));
-        let totalSisa = nominal - bayar
-        console.log(totalSisa)
-        $(this).closest("tr").find(".sisa").html(totalSisa)
-      } else {
-        let totalSisa = sisa - bayar
-        $(this).closest("tr").find(".sisa").html(totalSisa)
-      }
-
-
-      initAutoNumeric($(this).closest("tr").find(".sisa"))
-
-      let Sisa = $(`#table_body .sisa`)
-      let total = 0
-
-      $.each(Sisa, (index, SISA) => {
-        total += AutoNumeric.getNumber(SISA)
-      });
-
-      new AutoNumeric('#sisaHutang').set(total)
-
-      // get potongan for total
-      let potongan = AutoNumeric.getNumber($(this).closest("tr").find(`[name="potongan[]"]`)[0])
-      let totalHutang = bayar - potongan
-      $(this).closest("tr").find(`[name="total[]"]`).val(totalHutang)
-
-      initAutoNumeric($(this).closest("tr").find(`[name="total[]"]`))
-
-      let Total = $(`#table_body [name="total[]"]`)
-      let gt = 0
-
-      $.each(Total, (index, ttl) => {
-        gt += AutoNumeric.getNumber(ttl)
-      });
-
-      new AutoNumeric('#totalHutang').set(gt)
+      let element = $(this);
+      setSisaHutang(element)
     })
 
     $(document).on('input', `#table_body [name="potongan[]"]`, function(event) {
@@ -305,6 +283,18 @@
         value: form.find(`[name="pelanggan_id"]`).val()
       })
 
+      data.push({
+        name: 'alatbayar_id',
+        value: form.find(`[name="alatbayar_id"]`).val()
+      })
+      data.push({
+        name: 'alatbayar',
+        value: form.find(`[name="alatbayar"]`).val()
+      })
+      data.push({
+        name: 'tglcair',
+        value: form.find(`[name="tglcair"]`).val()
+      })
 
       $('#table_body tr').each(function(row, tr) {
         // console.log(row);
@@ -328,18 +318,6 @@
             value: AutoNumeric.getNumber($(`#crudForm [name="total[]"]`)[row])
           })
 
-          data.push({
-            name: 'alatbayar_id[]',
-            value: $(this).find(`[name="alatbayar_id[]"]`).val()
-          })
-          data.push({
-            name: 'alatbayar[]',
-            value: $(this).find(`[name="alatbayar[]"]`).val()
-          })
-          data.push({
-            name: 'tglcair[]',
-            value: $(this).find(`[name="tglcair[]"]`).val()
-          })
           data.push({
             name: 'hutang_id[]',
             value: $(this).find(`[name="hutang_id[]"]`).val()
@@ -472,6 +450,17 @@
     new AutoNumeric('#bayarHutang').set(bayar)
   }
 
+  function setSisa() {
+    let nominalDetails = $(`.sisa`)
+    let bayar = 0
+    $.each(nominalDetails, (index, nominalDetail) => {
+      bayar += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#sisaHutang').set(bayar)
+  }
+
+
   function setPotongan() {
     let potongan = $(`#table_body [name="potongan[]"]:not([disabled])`)
     let totalPotongan = 0
@@ -484,7 +473,7 @@
   }
 
   function setTotal() {
-    let total = $(`#table_body [name="total[]"]:not([disabled])`)
+    let total = $(`#table_body [name="total[]"]`)
     let totalHutang = 0
 
     $.each(total, (index, total) => {
@@ -512,6 +501,7 @@
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglkaskeluar]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tglcair]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     initDatepicker()
     setBayar()
@@ -559,6 +549,9 @@
             element.data('current-value', value)
           }
           if (index == 'pelanggan') {
+            element.data('current-value', value)
+          }
+          if (index == 'alatbayar') {
             element.data('current-value', value)
           }
         })
@@ -686,22 +679,13 @@
                 <textarea name="keterangandetail[]" rows="1" disabled class="form-control"></textarea>
               </td>
               <td>
-                <input type="text" name="bayar[]" disabled class="form-control bayar autonumeric">
+                <input type="text" name="bayar[]" disabled class="form-control bayar text-right">
               </td>
               <td>
                 <input type="text" name="potongan[]" disabled class="form-control autonumeric">
               </td>
               <td>
                 <input type="text" name="total[]" disabled class="form-control autonumeric">
-              </td>
-              <td>
-                <input type="hidden" name="alatbayar_id[]" disabled class="form-control">
-                <input type="text" name="alatbayar[]" disabled class="form-control alatbayar-lookup">
-              </td>
-              <td>
-                <div class="input-group">
-                  <input type="text" name="tglcair[]" disabled class="form-control datepicker">
-                </div>
               </td>
             </tr>
           `)
@@ -711,7 +695,7 @@
           // detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
           // detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
 
-          initAutoNumericNoMinus(detailRow.find(`[name="bayar[]"]`))
+          // initAutoNumericNoMinus(detailRow.find(`[name="bayar[]"]`))
           initAutoNumericNoMinus(detailRow.find(`[name="potongan[]"]`))
           initAutoNumericNoMinus(detailRow.find(`[name="total[]"]`))
           initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
@@ -721,23 +705,6 @@
           $('#detailList tbody').append(detailRow)
           setTotal()
           initDatepicker()
-          $('.alatbayar-lookup').last().lookup({
-            title: 'Alat Bayar Lookup',
-            fileName: 'alatbayar',
-            onSelectRow: (alatbayar, element) => {
-              element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
-              element.val(alatbayar.namaalatbayar)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="alatbayar_id[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
 
         })
         totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
@@ -848,33 +815,24 @@
               </td>
               <td>
                 <p class="sisa text-right autonumeric">${sisa}</p>
-                <input type="hidden" name="sisa[]" class="autonumeric" value="${sisaHidden}">
+                <input type="hidden" name="sisa[]" class="autonumeric" value="${sisa}">
               </td>
               <td>
                 <textarea name="keterangandetail[]" rows="1" class="form-control" ${attribut}>${detail.keterangan || ''}</textarea>
               </td>
               <td>
-                <input type="text" name="bayar[]" class="form-control bayar autonumeric" value="${detail.bayar || ''}" ${attribut}>
+                <input type="text" name="bayar[]" class="form-control autonumeric text-right" value="${detail.bayar || ''}" ${attribut}>
               </td>
               <td>
                 <input type="text" name="potongan[]" class="form-control autonumeric" value="${detail.potongan || ''}" ${attribut}>
               </td>
               <td>
-                <input type="text" name="total[]" class="form-control disabled autonumeric" value="${total || ''}" ${forTotal}>
-              </td>
-              <td>
-                <input type="hidden" name="alatbayar_id[]" class="form-control" value="${detail.alatbayar_id || ''}" ${attribut}>
-                <input type="text" name="alatbayar[]" class="form-control alatbayar-lookup" value="${detail.alatbayar || ''}" ${attribut}>
-              </td>
-              <td>
-                <div class="input-group">
-                  <input type="text" name="tglcair[]" class="form-control datepicker" value="${detail.tglcair || ''}" ${attribut}>
-                </div>
+                <input type="text" name="total[]" class="form-control autonumeric" value="${total || ''}" disabled>
               </td>
             </tr>
           `)
 
-          initAutoNumericNoMinus(detailRow.find(`[name="bayar[]"]`))
+          initAutoNumeric(detailRow.find(`[name="bayar[]"]`).not(':disabled'))
           initAutoNumericNoMinus(detailRow.find(`[name="potongan[]"]`))
           initAutoNumericNoMinus(detailRow.find(`[name="total[]"]`))
           initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
@@ -882,33 +840,11 @@
           initAutoNumeric(detailRow.find('.sisa'))
           initAutoNumeric(detailRow.find('.nominal'))
 
-          if (detailRow.find(`[name="tglcair[]"]`).val() != '') {
-            detailRow.find(`[name="tglcair[]"]`).val(dateFormat(detail.tglcair))
-          } else {
-            detailRow.find(`[name="tglcair[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-          }
           $('#detailList tbody').append(detailRow)
-          setBayar()
           setPotongan()
           setTotal()
           initDatepicker()
-          $('.alatbayar-lookup').last().lookup({
-            title: 'Alat Bayar Lookup',
-            fileName: 'alatbayar',
-            onSelectRow: (alatbayar, element) => {
-              element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
-              element.val(alatbayar.namaalatbayar)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="alatbayar_id[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
+          setBayar()
         })
 
 
@@ -927,25 +863,43 @@
   $(document).on('click', `#detailList tbody [name="hutang_id[]"]`, function() {
 
     if ($(this).prop("checked") == true) {
-
       $(this).closest('tr').find(`td [name="keterangandetail[]"]`).prop('disabled', false)
       $(this).closest('tr').find(`td [name="bayar[]"]`).prop('disabled', false)
       $(this).closest('tr').find(`td [name="potongan[]"]`).prop('disabled', false)
-      $(this).closest('tr').find(`td [name="alatbayar[]"]`).prop('disabled', false)
-      $(this).closest('tr').find(`td [name="tglcair[]"]`).prop('disabled', false)
+
+      let sisa = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="sisa[]"]`)[0])
+
+      initAutoNumeric($(this).closest('tr').find(`td [name="bayar[]"]`).val(sisa))
+      initAutoNumeric($(this).closest('tr').find(`td [name="total[]"]`).val(sisa))
+
+      let bayar = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="bayar[]"]`)[0])
+      let totalSisa = sisa - bayar
+
+      $(this).closest("tr").find(".sisa").html(totalSisa)
+      $(this).closest("tr").find(`[name="sisa[]"]`).val(totalSisa)
+      initAutoNumeric($(this).closest("tr").find(".sisa"))
+
       setBayar()
       setPotongan()
       setTotal()
+      setSisa()
     } else {
 
       $(this).closest('tr').find(`td [name="keterangandetail[]"]`).prop('disabled', true)
-      $(this).closest('tr').find(`td [name="bayar[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="bayar[]"]`).val('').prop('disabled', true)
       $(this).closest('tr').find(`td [name="potongan[]"]`).prop('disabled', true)
-      $(this).closest('tr').find(`td [name="alatbayar[]"]`).prop('disabled', true)
-      $(this).closest('tr').find(`td [name="tglcair[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="total[]"]`).val('').prop('disabled', true)
+
+      let nominalHutang = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="nominal[]"]`)[0])
+      initAutoNumeric($(this).closest('tr').find(`td [name="sisa[]"]`).val(nominalHutang))
+      $(this).closest("tr").find(".sisa").html(nominalHutang)
+      initAutoNumeric($(this).closest("tr").find(".sisa"))
+
+
       setBayar()
       setPotongan()
       setTotal()
+      setSisa()
     }
   })
 
@@ -984,6 +938,52 @@
     }
   }
 
+  function setSisaHutang(element) {
+
+    let sisa = AutoNumeric.getNumber(element.closest("tr").find(`[name="sisa[]"]`)[0])
+
+    let bayar = element.val()
+    bayar = parseFloat(bayar.replaceAll(',', ''));
+    bayar = Number.isNaN(bayar) ? 0 : bayar
+
+    if (sisa == 0) {
+      let nominal = element.closest("tr").find(`[name="nominal[]"]`).val()
+      nominal = parseFloat(nominal.replaceAll(',', ''));
+      let totalSisa = nominal - bayar
+      element.closest("tr").find(".sisa").html(totalSisa)
+    } else {
+      let totalSisa = sisa - bayar
+      element.closest("tr").find(".sisa").html(totalSisa)
+    }
+
+
+    initAutoNumeric(element.closest("tr").find(".sisa"))
+
+    let Sisa = $(`#table_body .sisa`)
+    let total = 0
+
+    $.each(Sisa, (index, SISA) => {
+      total += AutoNumeric.getNumber(SISA)
+    });
+
+    new AutoNumeric('#sisaHutang').set(total)
+
+    // get potongan for total
+    let potongan = AutoNumeric.getNumber(element.closest("tr").find(`[name="potongan[]"]`)[0])
+    let totalHutang = bayar - potongan
+    element.closest("tr").find(`[name="total[]"]`).val(totalHutang)
+
+    initAutoNumeric(element.closest("tr").find(`[name="total[]"]`))
+
+    let Total = $(`#table_body [name="total[]"]`)
+    let gt = 0
+
+    $.each(Total, (index, ttl) => {
+      gt += AutoNumeric.getNumber(ttl)
+    });
+
+    new AutoNumeric('#totalHutang').set(gt)
+  }
 
   function initAutoNumericNoMinus(elements = null) {
     let option = {
@@ -1094,6 +1094,23 @@
         $('#bayarHutang').html('')
         $('#potonganHutang').html('')
         $('#totalHutang').html('')
+      }
+    })
+    $('.alatbayar-lookup').lookup({
+      title: 'Alat Bayar Lookup',
+      fileName: 'alatbayar',
+      onSelectRow: (alatbayar, element) => {
+        $('#crudForm [name=alatbayar_id]').first().val(alatbayar.id)
+        element.val(alatbayar.namaalatbayar)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=alatbayar_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
   }

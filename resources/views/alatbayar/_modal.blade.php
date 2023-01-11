@@ -55,7 +55,7 @@
                   STATUS LANGSUNG CAIR <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statuslangsunggcair" class="form-select select2bs4" style="width: 100%;">
+                <select name="statuslangsungcair" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS LANGSUNG CAIR --</option>
                 </select>
               </div>
@@ -79,6 +79,15 @@
               <div class="col-12 col-md-10">
                 <input type="hidden" name="bank_id">
                 <input type="text" name="bank" class="form-control bank-lookup">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2 col-form-label">
+                <label>
+                  COA </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="coa" class="form-control coa-lookup">
               </div>
             </div>
           </div>
@@ -353,8 +362,8 @@
 
   const setLangsungCairOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statuslangsunggcair]').empty()
-      relatedForm.find('[name=statuslangsunggcair]').append(
+      relatedForm.find('[name=statuslangsungcair]').empty()
+      relatedForm.find('[name=statuslangsungcair]').append(
         new Option('-- PILIH STATUS LANGSUNG CAIR --', '', false, true)
       ).trigger('change')
 
@@ -379,7 +388,7 @@
           response.data.forEach(statusLangsunggCair => {
             let option = new Option(statusLangsunggCair.text, statusLangsunggCair.id)
 
-            relatedForm.find('[name=statuslangsunggcair]').append(option).trigger('change')
+            relatedForm.find('[name=statuslangsungcair]').append(option).trigger('change')
           });
           resolve()
         }
@@ -407,6 +416,9 @@
           if(index == 'bank') {
             element.data('current-value', value)
           }
+          if(index == 'coa') {
+            element.data('current-value', value)
+          }
         })
 
         if (form.data('action') === 'delete') {
@@ -431,6 +443,21 @@
       },
       onClear: (element) => {
         $('#crudForm [name=bank_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.coa-lookup').lookup({
+      title: 'COA Lookup',
+      fileName: 'akunpusat',
+      onSelectRow: (coa, element) => {
+        element.val(coa.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
         element.val('')
         element.data('currentValue', element.val())
       }

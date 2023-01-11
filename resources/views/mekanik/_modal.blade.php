@@ -144,7 +144,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -197,7 +199,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setStatusAktifOptions(form)
+    setStatusAktifOptions(form, 'add')
   }
 
   function editMekanik(mekanikId) {
@@ -217,7 +219,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form, 'edit')
       ])
       .then(() => {
         showMekanik(form, mekanikId)
@@ -241,7 +243,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form, 'delete')
       ])
       .then(() => {
         showMekanik(form, mekanikId)
@@ -273,7 +275,7 @@
     }
   }
 
-  const setStatusAktifOptions = function(relatedForm) {
+  const setStatusAktifOptions = function(relatedForm, action) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusaktif]').empty()
       relatedForm.find('[name=statusaktif]').append(
@@ -297,13 +299,20 @@
             }]
           })
         },
-        success: response => {
+        success: response => { 
           response.data.forEach(statusAktif => {
             let option = new Option(statusAktif.text, statusAktif.id)
 
+            let memoToArray = JSON.parse(statusAktif.memo)
             relatedForm.find('[name=statusaktif]').append(option).trigger('change')
+            if(memoToArray.DEFAULT == 'YA' && action == 'add') {
+              console.log(memoToArray.DEFAULT)
+              console.log(statusAktif.id)
+              console.log(statusAktif.text)
+              // relatedForm.find('[name=statusaktif]').data('select2').results.clear()
+              relatedForm.find('[name=statusaktif]').val(statusAktif.id).trigger('change').trigger('select2:selected');
+            }
           });
-
           resolve()
         }
       })
