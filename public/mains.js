@@ -39,6 +39,12 @@ $(document).ready(function () {
 	});
 
 	$('#loader').addClass('d-none')
+
+	$('#splash img').addClass('animate-zoom-in')
+	
+	setTimeout(() => {
+		$('#splash').addClass('d-none')
+	}, 500);
 });
 
 window.onbeforeunload =() => {
