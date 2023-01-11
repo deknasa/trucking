@@ -35,32 +35,11 @@
               </div>
             </div>
 
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  KETERANGAN <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="keterangan" class="form-control">
-              </div>
-            </div>
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  PELANGGAN 
-                </label>
-              </div>
-              <div class="col-8 col-md-10">
-                <input type="hidden" name="pelanggan_id">
-                <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  SUPPLIER 
+                  SUPPLIER <span class="text-danger">*</span></label>
                 </label>
               </div>
               <div class="col-8 col-md-10">
@@ -418,9 +397,6 @@
           if (index == 'akunpusat') {
             element.data('current-value', value)
           }
-          if (index == 'pelanggan') {
-            element.data('current-value', value)
-          }
           if (index == 'supplier') {
             element.data('current-value', value)
           }
@@ -532,23 +508,6 @@
       }
     })
 
-    $('.pelanggan-lookup').lookup({
-      title: 'pelanggan Lookup',
-      fileName: 'pelanggan',
-      onSelectRow: (pelanggan, element) => {
-        $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
-        element.val(pelanggan.namapelanggan)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $('#crudForm [name=pelanggan_id]').first().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
 
     $('.supplier-lookup').lookup({
       title: 'supplier Lookup',

@@ -152,11 +152,6 @@
             }
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
-          },
-          {
             label: 'BANK',
             name: 'bank_id',
             align: 'left'
@@ -164,11 +159,6 @@
           {
             label: 'SUPPLIER',
             name: 'supplier_id',
-            align: 'left'
-          },
-          {
-            label: 'PELANGGAN',
-            name: 'pelanggan_id',
             align: 'left'
           },
           {
@@ -180,6 +170,21 @@
             label: 'COA',
             name: 'coa',
             align: 'left'
+          },
+          {
+            label: 'ALAT BAYAR',
+            name: 'alatbayar_id',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL CAIR',
+            name: 'tglcair',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'USER APPROVAL',

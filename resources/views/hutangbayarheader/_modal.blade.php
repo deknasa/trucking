@@ -37,16 +37,6 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  KETERANGAN <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="keterangan" class="form-control">
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
                   ALAT BAYAR <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -67,6 +57,20 @@
                   <input type="text" name="tglcair" class="form-control datepicker">
                 </div>
               </div>
+            </div>
+
+            <div class="row form-group">
+
+              <div class="col-12 col-sm-2 col-md-2 col-form-label">
+                <label>
+                  Supplier <span class="text-danger">*</span></label>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="supplier_id">
+                <input type="text" name="supplier" class="form-control supplier-lookup">
+              </div>
+
             </div>
 
             <div class="border p-3">
@@ -102,29 +106,6 @@
             </div>
 
 
-
-            <div class="row mt-3 form-group">
-
-              <div class="col-12 col-sm-2 col-md-2 col-form-label">
-                <label>
-                  Supplier
-                </label>
-              </div>
-              <div class="col-12 col-sm-4 col-md-4">
-                <input type="hidden" name="supplier_id">
-                <input type="text" name="supplier" class="form-control supplier-lookup">
-              </div>
-
-              <div class="col-12 col-sm-2 col-md-2 col-form-label">
-                <label>
-                  Pelanggan
-                </label>
-              </div>
-              <div class="col-12 col-sm-4 col-md-4">
-                <input type="hidden" name="pelanggan_id">
-                <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
-              </div>
-            </div>
 
             <div class="row mt-5">
               <div class="col-md-12">
@@ -279,10 +260,9 @@
         value: form.find(`[name="supplier_id"]`).val()
       })
       data.push({
-        name: 'pelanggan_id',
-        value: form.find(`[name="pelanggan_id"]`).val()
+        name: 'supplier',
+        value: form.find(`[name="supplier"]`).val()
       })
-
       data.push({
         name: 'alatbayar_id',
         value: form.find(`[name="alatbayar_id"]`).val()
@@ -548,31 +528,13 @@
           if (index == 'supplier') {
             element.data('current-value', value)
           }
-          if (index == 'pelanggan') {
-            element.data('current-value', value)
-          }
           if (index == 'alatbayar') {
             element.data('current-value', value)
           }
         })
 
         form.find(`[name="tglkaskeluar"]`).val(dateFormat(tgl)).attr('disabled', false)
-        let fieldId = 0;
-        let field = '';
-        if (response.data.supplier_id != 0) {
-          fieldId = response.data.supplier_id
-          field = 'supplier_id'
-          $('#crudForm [name=pelanggan_id]').siblings().find('.input-group-append .lookup-toggler').prop('disabled', true)
-          $('#crudForm [name=pelanggan]').prop('disabled', true)
-        } else {
-          fieldId = response.data.pelanggan_id
-          field = 'pelanggan_id'
-
-          $('#crudForm [name=supplier_id]').siblings().find('.input-group-append .lookup-toggler').prop('disabled', true)
-          $('#crudForm [name=supplier]').prop('disabled', true)
-        }
-
-
+       
         getPembayaran(Id, fieldId, field, 'edit')
       }
     })
@@ -610,16 +572,6 @@
           }
 
         })
-        let fieldId = 0;
-        let field = '';
-        if (response.data.supplier_id != '') {
-          fieldId = response.data.supplier_id
-          field = 'supplier_id'
-        } else if (response.data.pelanggan_id != '') {
-          fieldId = response.data.pelanggan_id
-          field = 'pelanggan_id'
-        }
-
 
         getPembayaran(Id, fieldId, field, 'delete')
 
@@ -1045,9 +997,6 @@
         element.val(supplier.namasupplier)
         getHutang(supplier.id, 'supplier_id')
         element.data('currentValue', element.val())
-
-        $('#crudForm [name=pelanggan_id]').siblings().find('.input-group-append .lookup-toggler').prop('disabled', true)
-        $('#crudForm [name=pelanggan]').prop('disabled', true)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1056,8 +1005,6 @@
         $('#crudForm [name=supplier_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
-        $('#crudForm [name=pelanggan_id]').siblings().find('.input-group-append .lookup-toggler').prop('disabled', false)
-        $('#crudForm [name=pelanggan]').prop('disabled', false)
         $('#detailList tbody').html('')
         $('#nominalHutang').html('')
         $('#sisaHutang').html('')
@@ -1067,35 +1014,6 @@
       }
     })
 
-    $('.pelanggan-lookup').lookup({
-      title: 'Pelanggan Lookup',
-      fileName: 'pelanggan',
-      onSelectRow: (pelanggan, element) => {
-        $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
-        element.val(pelanggan.namapelanggan)
-        getHutang(pelanggan.id, 'pelanggan_id')
-        element.data('currentValue', element.val())
-
-        $('#crudForm [name=supplier_id]').siblings().find('.input-group-append .lookup-toggler').prop('disabled', true)
-        $('#crudForm [name=supplier]').prop('disabled', true)
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $('#crudForm [name=pelanggan_id]').first().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-        $('#crudForm [name=supplier_id]').siblings().find('.input-group-append .lookup-toggler').prop('disabled', false)
-        $('#crudForm [name=supplier]').prop('disabled', false)
-        $('#detailList tbody').html('')
-        $('#nominalHutang').html('')
-        $('#sisaHutang').html('')
-        $('#bayarHutang').html('')
-        $('#potonganHutang').html('')
-        $('#totalHutang').html('')
-      }
-    })
     $('.alatbayar-lookup').lookup({
       title: 'Alat Bayar Lookup',
       fileName: 'alatbayar',

@@ -107,18 +107,8 @@
             }
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
-          },
-          {
             label: 'COA',
             name: 'coa',
-            align: 'left'
-          },
-          {
-            label: 'PELANGGAN',
-            name: 'pelanggan_id',
             align: 'left'
           },
           {
