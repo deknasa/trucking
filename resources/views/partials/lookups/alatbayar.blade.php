@@ -37,7 +37,7 @@
         },
         {
           label: 'STATUS LANGSUNG CAIR',
-          name: 'statuslangsunggcair',
+          name: 'statuslangsungcair',
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -95,7 +95,7 @@
             return formattedValue[0].outerHTML
           },
           cellattr: (rowId, value, rowObject) => {
-            let statusLgsgCair = JSON.parse(rowObject.statuslangsunggcair)
+            let statusLgsgCair = JSON.parse(rowObject.statuslangsungcair)
 
             return ` title="${statusLgsgCair.MEMO}"`
           }
