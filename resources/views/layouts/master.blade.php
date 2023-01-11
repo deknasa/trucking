@@ -43,10 +43,10 @@
 
 <body class="hold-transition sidebar-collapse layout-fixed">
   <?php
-    $previousRoute = app('router')->getRoutes()->match(app('request')->create(url()->previous()))->getName();
+    $previousRoute = str_replace(url('/'), '', url()->previous());
   ?>
 
-  @if($previousRoute == 'login')
+  @if($previousRoute == '/login')
   <div class="splash" id="splash">
     <img src="{{ asset('images/logo-ori.png') }}">
   </div>

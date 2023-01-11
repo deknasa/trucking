@@ -14,9 +14,29 @@
   <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
+  <style>
+    #splash {
+      position: fixed;
+      width: 100%;
+      height: 100vh;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+    }
+
+    #splash img {
+      width: 150px;
+      height: 150px;
+    }
+  </style>
 </head>
 
 <body class="hold-transition login-page">
+  <div class="splash d-none" id="splash">
+    <img src="{{ asset('images/logo-ori.png') }}">
+  </div>
   <div class="login-box">
     <div class="login-logo">
       <img class="mx-auto d-block" src="{{ asset('images/logo.png') }}">
@@ -78,6 +98,11 @@
   <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <!-- AdminLTE App -->
   <script src="{{ asset('js/adminlte.min.js') }}"></script>
+  <script>
+    window.onbeforeunload = () => {
+      $('#splash').removeClass('d-none')
+    }
+  </script>
 </body>
 
 </html>
