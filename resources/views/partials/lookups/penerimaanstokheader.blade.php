@@ -3,6 +3,7 @@
 
 <script>
   var sendedFilters = `{!! $filters ?? '' !!}`
+
   $('#penerimaanStokHeaderLookup').jqGrid({
       url: `{{ config('app.api_url') . 'penerimaanstokheader' }}`,
       mtype: "GET",
@@ -10,7 +11,8 @@
       iconSet: 'fontAwesome',
       datatype: "json",
       postData: {
-        filters: `{!! $filters ?? '' !!}`
+        penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
+        // filters: `{!! $filters ?? '' !!}`
       },
       colModel: [{
             label: 'ID',

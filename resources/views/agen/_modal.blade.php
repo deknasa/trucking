@@ -297,8 +297,14 @@
     $('.invalid-feedback').remove()
 
     initAutoNumeric(form.find(`[name="top"]`))
-    setStatusAktifOptions(form)
-    setStatusTasOptions(form)
+    Promise
+      .all([
+        setStatusAktifOptions(form),
+        setStatusTasOptions(form)
+      ])
+      .then(() => {
+        showDefault(form)
+      })
   }
 
   function editAgen(agenId) {
@@ -525,6 +531,33 @@
         $('#crudForm [name=jenisemkl]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+      }
+    })
+  }
+
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}agen/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
       }
     })
   }

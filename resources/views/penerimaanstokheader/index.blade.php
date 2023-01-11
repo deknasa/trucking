@@ -131,27 +131,33 @@
       fileName: 'penerimaanstokheader',
       beforeProcess: function(test) {
         var penerimaanstokId= $(`#penerimaanstokId`).val();
-        if (penerimaanstokId == 3) {
-          this.postData = {
-            // $(`#penerimaanstokId`).val()
-            filters: JSON.stringify({
-              "groupOp": "AND",
-              "rules": [{
-                  "field": "penerimaanstok_id_not_null",
-                  "op": "cn",
-                  "data": 2 //id POT
-              }]
-            })
+        this.postData = {
+            penerimaanstok_id:penerimaanstokId,
           }
-        }else{
-          this.postData = {
-            // $(`#penerimaanstokId`).val()
-            filters: JSON.stringify({
-              "groupOp": "or",
-              "rules": [ ]
-            })
-          }
-        }
+
+        // if (penerimaanstokId == 3) {
+        //   this.postData = {
+        //     // $(`#penerimaanstokId`).val()
+        //     penerimaanstok_id:penerimaanstokId,
+        //     filters: JSON.stringify({
+        //       "groupOp": "AND",
+        //       "rules": [{
+        //           "field": "penerimaanstok_id_not_null",
+        //           "op": "cn",
+        //           "data": 2 //id POT
+        //       }]
+        //     })
+        //   }
+        // }
+        // else{
+        //   this.postData = {
+        //     // $(`#penerimaanstokId`).val()
+        //     filters: JSON.stringify({
+        //       "groupOp": "or",
+        //       "rules": [ ]
+        //     })
+        //   }
+        // }
       },
             
       onSelectRow: (penerimaan, element) => {
