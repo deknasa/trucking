@@ -16,17 +16,23 @@ class PenerimaanStokDetailController extends Controller
     {
         $params = [
             'penerimaanstokheader_id' => $request->penerimaanstokheader_id,
-            'whereIn' => $request->whereIn
+            'whereIn' => $request->whereIn,
+            'offset' => $request->rows ?? (($request->page - 1) * $request->limit),
+            'page' =>$request->page, 
+            'limit' =>  $request->limit ?? 0,
         ];
 
-        $response = Http::withHeaders($request->header())
+         $response = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') .'penerimaanstokdetail', $params);
-            
-        $data = [
-            'rows' => $response['data'] ?? []
-        ];
+        
+            $data = [
+                'total' => $response['attributes']['totalPages'] ?? [],
+                'records' => $response['attributes']['totalRows'] ?? [],
+                'rows' => $response['data'] ?? [],
+            ];
+        
 
         return response($data);
     }

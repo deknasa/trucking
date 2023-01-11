@@ -42,16 +42,26 @@
 </head>
 
 <body class="hold-transition sidebar-collapse layout-fixed">
+  <?php
+    $previousRoute = app('router')->getRoutes()->match(app('request')->create(url()->previous()))->getName();
+  ?>
+
+  @if($previousRoute == 'login')
+  <div class="splash" id="splash">
+    <img src="{{ asset('images/logo-ori.png') }}">
+  </div>
+  @else
   <div class="loader" id="loader">
-    <img src="{{ asset('images/hour-glass.gif') }}">
+    <img src="{{ asset('images/hour-glass.gif') }}" rel="preload">
     <span>Loading</span>
   </div>
+  @endif
 
   <div id="dialog-message" title="Pesan" class="text-center text-danger" style="display: none;">
     <span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
     <p></p>
   </div>
-
+  
   <!-- Modal for report and export -->
   <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -161,6 +171,9 @@
 
   <!-- Inputmask -->
   <script src="{{ asset('libraries/inputmask/5.0.6/jquery.inputmask.min.js') }}"></script>
+
+  <!-- dropzone -->
+  <script src="{{ asset('plugins/dropzone/dropzone.js') }}"></script>
 
   <!-- Nestable2 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.js"></script>

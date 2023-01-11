@@ -39,7 +39,7 @@
     </nav>
 
   </div>
-  <div class="text-center text-secondary">
-    {{ config('app.version') }}
+  <div class="text-center text-white text-small">
+    version {{ config('app.version') }}
   </div>
 </aside>
