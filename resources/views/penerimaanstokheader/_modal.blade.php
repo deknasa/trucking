@@ -94,7 +94,7 @@
                     <label>hutang no bukti </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="hutang_nobukti" class="form-control hutang-lookup">
+                    <input type="text" name="hutang_nobukti" class="form-control" readonly>
                   </div>
                 </div>
               </div>
@@ -464,7 +464,7 @@
     $('[name=penerimaanstok_nobukti]').parents('.form-group').show()
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
     $('[name=nobon]').parents('.form-group').show()
-    $('[name=hutang_nobukti]').parents('.form-group').hide()
+    $('[name=hutang_nobukti]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').hide()
     $('[name=supplier]').parents('.form-group').show()
     $('[name=gudang]').parents('.form-group').hide()

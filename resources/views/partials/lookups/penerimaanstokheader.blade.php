@@ -3,6 +3,7 @@
 
 <script>
   var sendedFilters = `{!! $filters ?? '' !!}`
+
   $('#penerimaanStokHeaderLookup').jqGrid({
       url: `{{ config('app.api_url') . 'penerimaanstokheader' }}`,
       mtype: "GET",
@@ -10,16 +11,18 @@
       iconSet: 'fontAwesome',
       datatype: "json",
       postData: {
-        filters: `{!! $filters ?? '' !!}`
+        penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
+        // filters: `{!! $filters ?? '' !!}`
       },
       colModel: [{
             label: 'ID',
             name: 'id',
             align: 'right',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
-            label: 'NO BUKTI',
+            label: 'NO. BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -211,6 +214,7 @@
       }
     })
 
+    .jqGrid("setLabel", "rn", "No.")
     .jqGrid('filterToolbar', {
       stringResult: true,
       searchOnEnter: false,

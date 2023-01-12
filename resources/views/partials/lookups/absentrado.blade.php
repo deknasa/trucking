@@ -13,7 +13,8 @@
           label: 'ID',
           name: 'id',
           align: 'right',
-          width: '70px'
+          width: '70px',
+          hidden: true
         },
         {
           label: 'KODE ABSEN',
@@ -196,6 +197,7 @@
       }
     })
 
+    .jqGrid("setLabel", "rn", "No.")
     .jqGrid('filterToolbar', {
       stringResult: true,
       searchOnEnter: false,

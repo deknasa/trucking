@@ -71,6 +71,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -182,6 +183,8 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createMekanik() {
@@ -299,17 +302,15 @@
             }]
           })
         },
-        success: response => { 
+        success: response => {
           response.data.forEach(statusAktif => {
+            console.log(statusAktif);
             let option = new Option(statusAktif.text, statusAktif.id)
-
             let memoToArray = JSON.parse(statusAktif.memo)
             relatedForm.find('[name=statusaktif]').append(option).trigger('change')
-            if(memoToArray.DEFAULT == 'YA' && action == 'add') {
-              console.log(memoToArray.DEFAULT)
-              console.log(statusAktif.id)
-              console.log(statusAktif.text)
-              // relatedForm.find('[name=statusaktif]').data('select2').results.clear()
+
+            if (memoToArray.DEFAULT == 'YA' && action == 'add') {
+              
               relatedForm.find('[name=statusaktif]').val(statusAktif.id).trigger('change').trigger('select2:selected');
             }
           });
@@ -318,6 +319,9 @@
       })
     })
   }
+  // $(`#crudForm [name=statusaktif]`).on('change', function() {
+  //   $(`#crudForm [name=statusaktif]`).data('select2').results.clear()
+  // })
 
   function showMekanik(form, mekanikId) {
     $.ajax({

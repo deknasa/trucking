@@ -13,10 +13,11 @@
             label: 'ID',
             name: 'id',
             align: 'right',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
-            label: 'NO BUKTI',
+            label: 'NO. BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -45,13 +46,13 @@
             name: 'bank_id',
             align: 'left'
           },
-          // {
-          //   label: 'DITERIMA DARI',
-          //   name: 'diterimadari',
-          //   align: 'left'
-          // },
           {
-            label: 'TGL LUNAS',
+            label: 'DITERIMA DARI',
+            name: 'diterimadari',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL LUNAS',
             name: 'tgllunas',
             align: 'left',
             formatter: "date",
@@ -80,42 +81,42 @@
             name: 'statusapproval',
             align: 'left'
           },
-          // {
-          //   label: 'USER APPROVAL',
-          //   name: 'userapproval',
-          //   align: 'left'
-          // },
-          // {
-          //   label: 'TGL APPROVAL',
-          //   name: 'tglapproval',
-          //   align: 'left',
-          //   formatter: "date",
-          //   formatoptions: {
-          //     srcformat: "ISO8601Long",
-          //     newformat: "d-m-Y"
-          //   }
-          // },
+          {
+            label: 'USER APPROVAL',
+            name: 'userapproval',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL APPROVAL',
+            name: 'tglapproval',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
          
-          // {
-          //   label: 'STATUS BERKAS',
-          //   name: 'statusberkas',
-          //   align: 'left'
-          // },
-          // {
-          //   label: 'USER BERKAS',
-          //   name: 'userberkas',
-          //   align: 'left'
-          // },
-          // {
-          //   label: 'TGL BERKAS',
-          //   name: 'tglberkas',
-          //   align: 'left',
-          //   formatter: "date",
-          //   formatoptions: {
-          //     srcformat: "ISO8601Long",
-          //     newformat: "d-m-Y"
-          //   }
-          // },
+          {
+            label: 'STATUS BERKAS',
+            name: 'statusberkas',
+            align: 'left'
+          },
+          {
+            label: 'USER BERKAS',
+            name: 'userberkas',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL BERKAS',
+            name: 'tglberkas',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
@@ -222,6 +223,7 @@
       }
     })
 
+    .jqGrid("setLabel", "rn", "No.")
     .jqGrid('filterToolbar', {
       stringResult: true,
       searchOnEnter: false,

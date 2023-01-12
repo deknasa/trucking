@@ -44,6 +44,8 @@
                   Status Aktif <span class="text-danger">*</span>
                 </label>
               </div>
+
+              
               <div class="col-12 col-sm-9 col-md-10">
                 <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS AKTIF --</option>
@@ -198,8 +200,18 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    
+    // setStatusAktifOptions(form)
 
-    setStatusAktifOptions(form)
+    Promise
+      .all([
+        setStatusAktifOptions(form)
+      ])
+      // console.log('c')
+      .then(() => {
+        showDefault(form)
+      })
+
   }
 
   function editCabang(cabangId) {
@@ -322,6 +334,7 @@
       },
       success: response => {
         $.each(response.data, (index, value) => {
+          console.log(value)
           let element = form.find(`[name="${index}"]`)
 
           if (element.is('select')) {
@@ -335,6 +348,33 @@
           form.find('[name]').addClass('disabled')
           initDisabled()
         }
+      }
+    })
+  }
+
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}cabang/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
       }
     })
   }

@@ -79,12 +79,6 @@
             }
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
-          },
-
-          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'

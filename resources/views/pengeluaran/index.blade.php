@@ -160,11 +160,6 @@
             align: 'left'
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
-          },
-          {
             label: 'STATUS JNS TRANSAKSI',
             name: 'statusjenistransaksi',
             align: 'left',
