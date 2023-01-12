@@ -14,33 +14,15 @@
   <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
-  <style>
-    #splash {
-      position: fixed;
-      width: 100%;
-      height: 100vh;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #fff;
-    }
-
-    #splash img {
-      width: 150px;
-      height: 150px;
-    }
-  </style>
+  <!-- Custom Style -->
+  <link rel="stylesheet" href="{{ asset('css/styles.css?version=' . config('app.version')) }}">
 </head>
 
 <body class="hold-transition login-page">
-  <div class="splash d-none" id="splash">
-    <img src="{{ asset('images/logo-ori.png') }}">
-  </div>
   <div class="login-box">
     <div class="login-logo">
-      <img class="mx-auto d-block" src="{{ asset('images/logo.png') }}">
-      <h5><b>PT. TRANSPORINDO AGUNG SEJAHTERA</b></h5>
+      <img class="mx-auto d-block" src="{{ asset('images/logo-min.png') }}" width="150" height="150">
+      <h5 style="font-family: 'Open Sans Condensed';"><b>PT. TRANSPORINDO AGUNG SEJAHTERA</b></h5>
     </div>
     <div class="card">
       <div class="card-body login-card-body">
@@ -98,11 +80,6 @@
   <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <!-- AdminLTE App -->
   <script src="{{ asset('js/adminlte.min.js') }}"></script>
-  <script>
-    window.onbeforeunload = () => {
-      $('#splash').removeClass('d-none')
-    }
-  </script>
 </body>
 
 </html>

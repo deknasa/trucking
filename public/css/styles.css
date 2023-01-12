@@ -10,6 +10,11 @@
 	src: url("../libraries/font/DejaVuSansMono.ttf");
 }
 
+@font-face {
+	font-family: 'Open Sans Condensed';
+	src: url("../libraries/font/open-sans-condensed/OpenSans-CondBold.ttf");
+}
+
 html {
 	font-size: 14px;
 }
@@ -88,22 +93,6 @@ html {
 	align-items: center;
 	justify-content: center;
 	background-color: rgba(255, 255, 255, 0);
-}
-
-#splash {
-	position: fixed;
-	width: 100%;
-	height: 100vh;
-	z-index: 9999;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	background: #fff;
-}
-
-#splash img {
-	width: 150px;
-	height: 150px;
 }
 
 .loader img {
@@ -304,20 +293,4 @@ html {
 
 .ui-jqgrid {
 	border-color: var(--jqgrid-border-color);
-}
-
-.animate-zoom-in {
-	 animation: zoom-in .5s normal forwards;
-}
-
-@keyframes zoom-in {
-	from {
-		opacity: 1;
-	}
-	
-	to {
-		width: 500px;
-		height: 500px;
-		opacity: 0;
-	}
 }

@@ -42,20 +42,10 @@
 </head>
 
 <body class="hold-transition sidebar-collapse layout-fixed">
-  <?php
-    $previousRoute = str_replace(url('/'), '', url()->previous());
-  ?>
-
-  @if($previousRoute == '/login')
-  <div class="splash" id="splash">
-    <img src="{{ asset('images/logo-ori.png') }}">
-  </div>
-  @else
   <div class="loader" id="loader">
     <img src="{{ asset('images/hour-glass.gif') }}" rel="preload">
     <span>Loading</span>
   </div>
-  @endif
 
   <div id="dialog-message" title="Pesan" class="text-center text-danger" style="display: none;">
     <span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
