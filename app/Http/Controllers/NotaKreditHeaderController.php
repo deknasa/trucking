@@ -180,10 +180,6 @@ class NotaKreditHeaderController extends MyController
                 'index'=>'tglbukti'
             ],
             [
-                'label'=>'Keterangan',
-                'index'=>'keterangan'
-            ],
-            [
                 'label'=>'Approval Status ',
                 'index'=>'statusapproval_memo'
             ],

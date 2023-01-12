@@ -36,11 +36,6 @@
           name: 'tglmasuk',
           align: 'left',
         },
-        {
-          label: 'KETERANGAN',
-          name: 'keterangan',
-          align: 'left',
-        },
 
         {
           label: 'MODIFIEDBY',

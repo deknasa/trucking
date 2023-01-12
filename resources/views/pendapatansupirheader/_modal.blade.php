@@ -47,16 +47,6 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                 <label>
-                                    KETERANGAN <span class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-12 col-sm-9 col-md-10">
-                                <input type="text" name="keterangan" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                <label>
                                     TANGGAL DARI <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">

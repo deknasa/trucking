@@ -143,7 +143,7 @@ class PengeluaranTruckingHeaderController extends MyController
         ->get(config('app.api_url') .'pengeluarantruckingdetail', $detailParams);
 
         $pengeluarantrucking_details = $responses['data'];
-        $user = $responses['user'];
+        $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -182,10 +182,6 @@ class PengeluaranTruckingHeaderController extends MyController
             [
                 'label' => 'No Bukti Pengeluaran',
                 'index' => 'pengeluaran_nobukti',
-            ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
             ],
         ];
 

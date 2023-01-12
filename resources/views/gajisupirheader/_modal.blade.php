@@ -39,14 +39,6 @@
                                 <div class="row form-group">
                                     <div class="col-12 col-md-12">
                                         <label>
-                                            KETERANGAN <span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" name="keterangan" class="form-control" autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <div class="col-12 col-md-12">
-                                        <label>
                                             SUPIR <span class="text-danger">*</span>
                                         </label>
                                         <input type="hidden" name="supir_id">

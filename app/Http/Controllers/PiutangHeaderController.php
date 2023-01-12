@@ -128,7 +128,7 @@ class PiutangHeaderController extends MyController
             ->get(config('app.api_url') . 'piutangdetail', $detailParams);
 
         $piutang_details = $responses['data'];
-        $user = $responses['user'];
+        $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -156,10 +156,6 @@ class PiutangHeaderController extends MyController
             [
                 'label' => 'No Bukti Invoice',
                 'index' => 'invoice_nobukti',
-            ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
             ],
         ];
         $header_right_columns = [

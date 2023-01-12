@@ -281,10 +281,6 @@ class JurnalUmumHeaderController extends MyController
                 'label' => 'Tanggal',
                 'index' => 'tglbukti',
             ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
-            ],
         ];
 
         $detail_columns = [

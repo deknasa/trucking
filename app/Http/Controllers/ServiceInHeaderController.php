@@ -199,10 +199,6 @@ class ServiceInHeaderController extends MyController
                 'label' => 'Tgl Masuk',
                 'index' => 'tglmasuk',
             ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
-            ],
         ];
 
         $detail_columns = [

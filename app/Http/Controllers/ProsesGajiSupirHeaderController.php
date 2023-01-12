@@ -127,7 +127,7 @@ class ProsesGajiSupirHeaderController extends MyController
         ->get(config('app.api_url') .'prosesgajisupirdetail', $detailParams);
 
         $prosesgajisupir_details = $responses['data'];
-        $user = $responses['user'];
+        $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -150,10 +150,6 @@ class ProsesGajiSupirHeaderController extends MyController
             [
                 'label' => 'Tanggal',
                 'index' => 'tglbukti',
-            ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
             ],
         ];
 

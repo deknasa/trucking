@@ -168,11 +168,6 @@
             }
           },
           {
-            label: 'keterangan',
-            name: 'keterangan',
-            align: 'left'
-          },
-          {
             label: 'TANGGAL lunas',
             name: 'tgllunas',
             align: 'left',
@@ -330,40 +325,41 @@
       })
 
       .customPager({
-        buttons: [{
-            id: 'add',
-            innerHTML: '<i class="fa fa-plus"></i> ADD',
-            class: 'btn btn-primary btn-sm mr-1',
-            onClick: function(event) {
-              createNotaDebet()
-            }
-          },
-          {
-            id: 'edit',
-            innerHTML: '<i class="fa fa-pen"></i> EDIT',
-            class: 'btn btn-success btn-sm mr-1',
-            onClick: function(event) {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                cekValidasi(selectedId, 'EDIT')
-              }
-            }
-          },
-          {
-            id: 'delete',
-            innerHTML: '<i class="fa fa-trash"></i> DELETE',
-            class: 'btn btn-danger btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                cekValidasi(selectedId, 'DELETE')
-              }
-            }
-          },
+        buttons: [
+          // {
+          //   id: 'add',
+          //   innerHTML: '<i class="fa fa-plus"></i> ADD',
+          //   class: 'btn btn-primary btn-sm mr-1',
+          //   onClick: function(event) {
+          //     createNotaDebet()
+          //   }
+          // },
+          // {
+          //   id: 'edit',
+          //   innerHTML: '<i class="fa fa-pen"></i> EDIT',
+          //   class: 'btn btn-success btn-sm mr-1',
+          //   onClick: function(event) {
+          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
+          //       showDialog('Please select a row')
+          //     } else {
+          //       cekValidasi(selectedId, 'EDIT')
+          //     }
+          //   }
+          // },
+          // {
+          //   id: 'delete',
+          //   innerHTML: '<i class="fa fa-trash"></i> DELETE',
+          //   class: 'btn btn-danger btn-sm mr-1',
+          //   onClick: () => {
+          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
+          //       showDialog('Please select a row')
+          //     } else {
+          //       cekValidasi(selectedId, 'DELETE')
+          //     }
+          //   }
+          // },
           {
             id: 'export',
             innerHTML: '<i class="fa fa-file-export"></i> EXPORT',

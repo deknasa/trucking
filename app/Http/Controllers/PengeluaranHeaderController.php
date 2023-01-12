@@ -215,10 +215,6 @@ class PengeluaranHeaderController extends MyController
                 'index' => 'dibayarke',
             ],
             [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
-            ],
-            [
                 'label' => 'Bank',
                 'index' => 'bank',
             ],

@@ -51,16 +51,6 @@
               <div class="row form-group">
                 <div class="col-12 col-md-2 col-form-label">
                   <label>
-                    KETERANGAN <span class="text-danger">*</span></label>
-                </div>
-                <div class="col-12 col-md-10">
-                  <input type="text" name="keterangan" class="form-control">
-                </div>
-              </div>
-
-              <div class="row form-group">
-                <div class="col-12 col-md-2 col-form-label">
-                  <label>
                     TGL TERIMA <span class="text-danger">*</span>
                   </label>
                 </div>

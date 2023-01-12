@@ -158,7 +158,7 @@ class PenerimaanHeaderController extends MyController
             ->get(config('app.api_url') . 'penerimaandetail', $detailParams);
 
         $penerimaan_details = $responses['data'];
-        $user = $responses['user'];
+        $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -197,10 +197,6 @@ class PenerimaanHeaderController extends MyController
             [
                 'label' => 'Tgl Lunas',
                 'index' => 'tgllunas',
-            ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
             ],
         ];
 

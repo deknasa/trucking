@@ -169,7 +169,7 @@ class PenerimaanGiroHeaderController extends MyController
             ->get(config('app.api_url') . 'penerimaangirodetail', $detailParams);
 
         $penerimaangiro_details = $responses['data'];
-        $user = $responses['user'];
+        $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();

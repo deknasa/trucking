@@ -153,11 +153,6 @@
                         align: 'left'
                     },
                     {
-                        label: 'KETERANGAN',
-                        name: 'keterangan',
-                        align: 'left'
-                    },
-                    {
                         label: 'POSTING DARI',
                         name: 'postingdari',
                         align: 'left'

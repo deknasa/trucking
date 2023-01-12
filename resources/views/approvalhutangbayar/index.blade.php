@@ -297,11 +297,6 @@
                         }
                     },
                     {
-                        label: 'KETERANGAN',
-                        name: 'keterangan',
-                        align: 'left'
-                    },
-                    {
                         label: 'COA',
                         name: 'coa',
                         align: 'left'

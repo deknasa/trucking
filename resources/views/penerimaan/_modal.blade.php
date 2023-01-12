@@ -49,16 +49,6 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                 <label>
-                                    KETERANGAN <span class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-12 col-sm-9 col-md-10">
-                                <input type="text" name="keterangan" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                <label>
                                     DITERIMA DARI <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
@@ -122,7 +112,7 @@
                                 <input type="text" name="noresi" class="form-control">
                             </div>
                         </div>
-
+<!-- 
                         <div class="table-responsive">
                             <table class="table table-bordered table-bindkeys" id="tablePelunasan" style="width:800px;">
                                 <thead>
@@ -138,7 +128,7 @@
 
                                 </tbody>
                             </table>
-                        </div>
+                        </div> -->
 
                         <div class="table-responsive">
                             <table class="table table-bordered table-bindkeys" id="detailList" style="width:2010px;">
@@ -159,47 +149,6 @@
                                     </tr>
                                 </thead>
                                 <tbody id="table_body" class="form-group">
-                                    <tr id='1'>
-                                        <td>1</td>
-                                        <td>
-                                            <input type="text" name="coadebet[]" class="form-control akunpusat-lookup">
-                                        </td>
-                                        <td>
-                                            <div class="input-group">
-                                                <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <input type="text" name="nowarkat[]" class="form-control">
-                                        </td>
-                                        <td>
-                                            <input type="hidden" name="bankpelanggan_id[]">
-                                            <input type="text" name="bankpelanggan[]" class="form-control bankpelanggan-lookup">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="keterangan_detail[]" class="form-control">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="nominal_detail[]" class="form-control text-right nominal">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="invoice_nobukti[]" class="form-control" readonly>
-                                        </td>
-                                        <td>
-                                            <input type="text" name="pelunasanpiutang_nobukti[]" class="form-control" readonly>
-                                        </td>
-                                        <td>
-                                            <input type="text" name="jenisbiaya[]" class="form-control">
-                                        </td>
-                                        <td>
-                                            <div class="input-group">
-                                                <input type="text" name="bulanbeban[]" class="form-control datepicker">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                                        </td>
-                                    </tr>
 
                                 </tbody>
                                 <tfoot>
@@ -269,140 +218,140 @@
             setTotal()
         })
 
-        $(document).on('click', `#tablePelunasan tbody [name="pelunasan_id[]"]`, function() {
-            if ($(this).prop("checked") == true) {
+        // $(document).on('click', `#tablePelunasan tbody [name="pelunasan_id[]"]`, function() {
+        //     if ($(this).prop("checked") == true) {
 
-                let firstRow = $("#detailList tbody").find('#1')
-                let count = 0;
-                let row = '';
-                let arrData = []
-                $("#detailList tbody tr#1 td").each(function() {
-                    row = $("#detailList tbody tr#1").find(`td:eq(${count}) input`).val()
-                    if (row != '') {
-                        arrData.push(row)
-                    }
-                    count++
-                    row++
-                })
-                let arrSlice = arrData.slice(1, -1)
+        //         let firstRow = $("#detailList tbody").find('#1')
+        //         let count = 0;
+        //         let row = '';
+        //         let arrData = []
+        //         $("#detailList tbody tr#1 td").each(function() {
+        //             row = $("#detailList tbody tr#1").find(`td:eq(${count}) input`).val()
+        //             if (row != '') {
+        //                 arrData.push(row)
+        //             }
+        //             count++
+        //             row++
+        //         })
+        //         let arrSlice = arrData.slice(1, -1)
 
-                if (arrSlice.length === 0) {
-                    $("#detailList tbody").find('#1').remove()
-                }
+        //         if (arrSlice.length === 0) {
+        //             $("#detailList tbody").find('#1').remove()
+        //         }
 
 
-                id = $(this).val()
-                nobukti = $(this).parent().find(`[name="pelunasan_nobukti[]"]`).val()
-                let text = nobukti.substr(0, 3)
-                let table = (text == 'PPT') ? 'pelunasan' : 'giro';
-                $.ajax({
-                    url: `${apiUrl}penerimaanheader/${id}/${table}/getPelunasan`,
-                    method: 'GET',
-                    dataType: 'JSON',
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    },
-                    success: response => {
-                        $.each(response.data, (index, data) => {
+        //         id = $(this).val()
+        //         nobukti = $(this).parent().find(`[name="pelunasan_nobukti[]"]`).val()
+        //         let text = nobukti.substr(0, 3)
+        //         let table = (text == 'PPT') ? 'pelunasan' : 'giro';
+        //         $.ajax({
+        //             url: `${apiUrl}penerimaanheader/${id}/${table}/getPelunasan`,
+        //             method: 'GET',
+        //             dataType: 'JSON',
+        //             headers: {
+        //                 Authorization: `Bearer ${accessToken}`
+        //             },
+        //             success: response => {
+        //                 $.each(response.data, (index, data) => {
 
-                            let detailRow = $(`
-                                <tr class="${data.nobukti}">
-                                    <td></td>
-                                    <td>
-                                    <input type="text" name="coadebet[]"  class="form-control akunpusat-lookup"">
-                                    </td>
-                                    <td>
-                                        <div class="input-group">
-                                            <input type="text" name="tgljatuhtempo[]" value="${data.tgljt}" class="form-control datepicker" readonly>   
-                                        </div>
-                                    </td>
-                                    <td>
-                                    <input type="text" name="nowarkat[]"  class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="hidden" name="bankpelanggan_id[]">
-                                        <input type="text" name="bankpelanggan[]"  class="form-control bankpelanggan-lookup">
-                                    </td>
-                                    <td>
-                                    <input type="text" name="keterangan_detail[]" value="${data.keterangan}" class="form-control" readonly>
-                                    </td>
-                                    <td>
-                                    <input type="text" name="nominal_detail[]" value="${data.nominal}" class="form-control text-right" readonly> 
-                                    </td>
-                                    <td>
-                                        <input type="text" name="invoice_nobukti[]" value="${data.invoice_nobukti}" class="form-control" readonly>
-                                    </td>
-                                    <td>
-                                        <input type="text" name="pelunasanpiutang_nobukti[]" value="${data.nobukti}" class="form-control" readonly>
-                                    </td>
-                                    <td>
-                                        <input type="text" name="jenisbiaya[]" class="form-control">
-                                    </td>
-                                    <td>
-                                        <div class="input-group">
-                                            <input type="text" name="bulanbeban[]" class="form-control datepicker">   
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                                    </td>
-                                </tr>
-                                `)
+        //                     let detailRow = $(`
+        //                         <tr class="${data.nobukti}">
+        //                             <td></td>
+        //                             <td>
+        //                             <input type="text" name="coadebet[]"  class="form-control akunpusat-lookup"">
+        //                             </td>
+        //                             <td>
+        //                                 <div class="input-group">
+        //                                     <input type="text" name="tgljatuhtempo[]" value="${data.tgljt}" class="form-control datepicker" readonly>   
+        //                                 </div>
+        //                             </td>
+        //                             <td>
+        //                             <input type="text" name="nowarkat[]"  class="form-control">
+        //                             </td>
+        //                             <td>
+        //                                 <input type="hidden" name="bankpelanggan_id[]">
+        //                                 <input type="text" name="bankpelanggan[]"  class="form-control bankpelanggan-lookup">
+        //                             </td>
+        //                             <td>
+        //                             <input type="text" name="keterangan_detail[]" value="${data.keterangan}" class="form-control" readonly>
+        //                             </td>
+        //                             <td>
+        //                             <input type="text" name="nominal_detail[]" value="${data.nominal}" class="form-control text-right" readonly> 
+        //                             </td>
+        //                             <td>
+        //                                 <input type="text" name="invoice_nobukti[]" value="${data.invoice_nobukti}" class="form-control" readonly>
+        //                             </td>
+        //                             <td>
+        //                                 <input type="text" name="pelunasanpiutang_nobukti[]" value="${data.nobukti}" class="form-control" readonly>
+        //                             </td>
+        //                             <td>
+        //                                 <input type="text" name="jenisbiaya[]" class="form-control">
+        //                             </td>
+        //                             <td>
+        //                                 <div class="input-group">
+        //                                     <input type="text" name="bulanbeban[]" class="form-control datepicker">   
+        //                                 </div>
+        //                             </td>
+        //                             <td>
+        //                                 <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+        //                             </td>
+        //                         </tr>
+        //                         `)
 
-                            // initDatepicker(detailRow.find('.datepicker'))
-                            detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(data.tgljt))
+        //                     // initDatepicker(detailRow.find('.datepicker'))
+        //                     detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(data.tgljt))
 
-                            initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
-                            $('#detailList tbody').append(detailRow)
-                            initDatepicker()
-                            $('.akunpusat-lookup').last().lookup({
-                                title: 'Kode Perkiraan Lookup',
-                                fileName: 'akunpusat',
-                                onSelectRow: (akunpusat, element) => {
-                                    element.val(akunpusat.coa)
-                                    element.data('currentValue', element.val())
-                                },
-                                onCancel: (element) => {
-                                    element.val(element.data('currentValue'))
-                                },
-                                onClear: (element) => {
-                                    element.val('')
-                                    element.data('currentValue', element.val())
-                                }
-                            })
+        //                     initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+        //                     $('#detailList tbody').append(detailRow)
+        //                     initDatepicker()
+        //                     $('.akunpusat-lookup').last().lookup({
+        //                         title: 'Kode Perkiraan Lookup',
+        //                         fileName: 'akunpusat',
+        //                         onSelectRow: (akunpusat, element) => {
+        //                             element.val(akunpusat.coa)
+        //                             element.data('currentValue', element.val())
+        //                         },
+        //                         onCancel: (element) => {
+        //                             element.val(element.data('currentValue'))
+        //                         },
+        //                         onClear: (element) => {
+        //                             element.val('')
+        //                             element.data('currentValue', element.val())
+        //                         }
+        //                     })
 
-                            $('.bankpelanggan-lookup').last().lookup({
-                                title: 'Bank Pelanggan Lookup',
-                                fileName: 'bankpelanggan',
-                                onSelectRow: (bankpelanggan, element) => {
-                                    element.parents('td').find(`[name="bankpelanggan_id[]"]`).val(bankpelanggan.id)
-                                    element.val(bankpelanggan.namabank)
-                                    element.data('currentValue', element.val())
-                                },
-                                onCancel: (element) => {
-                                    element.val(element.data('currentValue'))
-                                },
-                                onClear: (element) => {
-                                    element.parents('td').find(`[name="bankpelanggan_id[]"]`).val('')
-                                    element.val('')
-                                    element.data('currentValue', element.val())
-                                }
-                            })
-                        })
+        //                     $('.bankpelanggan-lookup').last().lookup({
+        //                         title: 'Bank Pelanggan Lookup',
+        //                         fileName: 'bankpelanggan',
+        //                         onSelectRow: (bankpelanggan, element) => {
+        //                             element.parents('td').find(`[name="bankpelanggan_id[]"]`).val(bankpelanggan.id)
+        //                             element.val(bankpelanggan.namabank)
+        //                             element.data('currentValue', element.val())
+        //                         },
+        //                         onCancel: (element) => {
+        //                             element.val(element.data('currentValue'))
+        //                         },
+        //                         onClear: (element) => {
+        //                             element.parents('td').find(`[name="bankpelanggan_id[]"]`).val('')
+        //                             element.val('')
+        //                             element.data('currentValue', element.val())
+        //                         }
+        //                     })
+        //                 })
 
-                        setRowNumbers()
+        //                 setRowNumbers()
 
-                        setTotal()
-                    }
-                })
+        //                 setTotal()
+        //             }
+        //         })
 
-            } else if ($(this).prop("checked") == false) {
-                id = $(this).val()
-                nobukti = $(this).parent().find(`[name="pelunasan_nobukti[]"]`).val()
-                $(`#detailList tbody tr[class="${nobukti}"]`).remove()
-                setTotal()
-            }
-        })
+        //     } else if ($(this).prop("checked") == false) {
+        //         id = $(this).val()
+        //         nobukti = $(this).parent().find(`[name="pelunasan_nobukti[]"]`).val()
+        //         $(`#detailList tbody tr[class="${nobukti}"]`).remove()
+        //         setTotal()
+        //     }
+        // })
 
         $('#btnSubmit').click(function(event) {
             event.preventDefault()
@@ -529,56 +478,56 @@
     })
 
 
-    function tarikPelunasan(aksi, id = null) {
-        let checked = (aksi == 'edit' || aksi == 'delete') ? 'checked' : '';
-        $.ajax({
-            url: `${apiUrl}penerimaanheader/${id}/tarikPelunasan`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-                if (response.data.length === 0) {
-                    let tablePelunasan = $(` 
-                        <tr>
-                            <td colspan='6'><p><b><center>TIDAK ADA PELUNASAN/GIRO</center></b></p></td>
-                        </tr>
-                    `)
+    // function tarikPelunasan(aksi, id = null) {
+    //     let checked = (aksi == 'edit' || aksi == 'delete') ? 'checked' : '';
+    //     $.ajax({
+    //         url: `${apiUrl}penerimaanheader/${id}/tarikPelunasan`,
+    //         method: 'GET',
+    //         dataType: 'JSON',
+    //         headers: {
+    //             Authorization: `Bearer ${accessToken}`
+    //         },
+    //         success: response => {
+    //             if (response.data.length === 0) {
+    //                 let tablePelunasan = $(` 
+    //                     <tr>
+    //                         <td colspan='6'><p><b><center>TIDAK ADA PELUNASAN/GIRO</center></b></p></td>
+    //                     </tr>
+    //                 `)
 
-                    $('#tablePelunasan tbody').append(tablePelunasan)
-                } else {
+    //                 $('#tablePelunasan tbody').append(tablePelunasan)
+    //             } else {
 
-                    $.each(response.data, (index, data) => {
-                        let tablePelunasan = $(`
-                        <tr>
-                            <td>
-                                <input name='pelunasan_id[]' type="checkbox" id="checkItem" value="${data.id}" ${checked}>
-                                <input name='pelunasan_nobukti[]' type="hidden" value="${data.nobukti}">
+    //                 $.each(response.data, (index, data) => {
+    //                     let tablePelunasan = $(`
+    //                     <tr>
+    //                         <td>
+    //                             <input name='pelunasan_id[]' type="checkbox" id="checkItem" value="${data.id}" ${checked}>
+    //                             <input name='pelunasan_nobukti[]' type="hidden" value="${data.nobukti}">
                                 
-                            </td>
-                            <td>
-                                <p>${data.nobukti}</p>
-                            </td>
-                            <td>
-                                <p>${dateFormat(data.tglbukti)}</p>
-                            </td>
-                            <td>
-                                <p id="nominalLunas" class="text-right">${data.nominal}</p>
-                            </td>
-                            <td>
-                                <p>${data.pelanggan}</p>
-                            </td>
-                        </tr>
-                        `)
+    //                         </td>
+    //                         <td>
+    //                             <p>${data.nobukti}</p>
+    //                         </td>
+    //                         <td>
+    //                             <p>${dateFormat(data.tglbukti)}</p>
+    //                         </td>
+    //                         <td>
+    //                             <p id="nominalLunas" class="text-right">${data.nominal}</p>
+    //                         </td>
+    //                         <td>
+    //                             <p>${data.pelanggan}</p>
+    //                         </td>
+    //                     </tr>
+    //                     `)
 
-                        $('#tablePelunasan tbody').append(tablePelunasan)
-                        initAutoNumeric(tablePelunasan.find('#nominalLunas'))
-                    })
-                }
-            }
-        })
-    }
+    //                     $('#tablePelunasan tbody').append(tablePelunasan)
+    //                     initAutoNumeric(tablePelunasan.find('#nominalLunas'))
+    //                 })
+    //             }
+    //         }
+    //     })
+    // }
 
     function setTotal() {
         let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
@@ -612,45 +561,12 @@
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tgllunas]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-        // $('#table_body').html('')
-        $('.akunpusat-lookup').last().lookup({
-            title: 'Kode Perkiraan Lookup',
-            fileName: 'akunpusat',
-            onSelectRow: (akunpusat, element) => {
-                element.val(akunpusat.coa)
-                element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-                element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-                element.val('')
-                element.data('currentValue', element.val())
-            }
-        })
-
-        $('.bankpelanggan-lookup').last().lookup({
-            title: 'Bank Pelanggan Lookup',
-            fileName: 'bankpelanggan',
-            onSelectRow: (bankpelanggan, element) => {
-                $(`#crudForm [name="bankpelanggan_id[]"]`).last().val(bankpelanggan.id)
-                element.val(bankpelanggan.namabank)
-                element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-                element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-                $(`#crudForm [name="bankpelanggan_id[]"]`).last().val('')
-                element.val('')
-                element.data('currentValue', element.val())
-            }
-        })
+        $('#table_body').html('')
+        addRow();
 
         initAutoNumeric(form.find('.nominal'))
         setStatusKasOptions(form)
-        tarikPelunasan('add')
-        // addRow()
+        // tarikPelunasan('add')
         setTotal()
     }
 
@@ -672,7 +588,7 @@
                 setStatusKasOptions(form)
             ])
             .then(() => {
-                tarikPelunasan('edit', id)
+                // tarikPelunasan('edit', id)
                 showPenerimaan(form, id)
             })
 
@@ -698,7 +614,7 @@
             ])
             .then(() => {
 
-                tarikPelunasan('delete', id)
+                // tarikPelunasan('delete', id)
                 showPenerimaan(form, id)
             })
 

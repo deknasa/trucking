@@ -156,13 +156,7 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
-          },
-          
+          },          
           {
             label: 'TANGGAL DARI',
             name: 'tgldari',
