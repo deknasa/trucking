@@ -18,6 +18,31 @@
                 <input type="text" name="id" class="form-control" readonly>
               </div>
             </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  PARENT
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="parent_id">
+                <input type="text" name="parent" class="form-control parent-lookup">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  UPAH SUPIR
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="upahsupir_id">
+                <input type="text" name="upahsupir" class="form-control upahsupir-lookup">
+              </div>
+            </div>
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
@@ -63,16 +88,6 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  TUJUAN ASAL
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="tujuanasal" class="form-control">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
                   SISTEM TON <span class="text-danger">*</span>
                 </label>
               </div>
@@ -95,7 +110,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>
-                  ZONA <span class="text-danger">*</span></label>
+                  ZONA </label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="zona_id">
@@ -121,18 +136,6 @@
               <div class="col-12 col-md-10">
                 <div class="input-group">
                   <input type="text" name="tglmulaiberlaku" class="form-control datepicker">
-                </div>
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
-                  TGL AKHIR BERLAKU <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <div class="input-group">
-                  <input type="text" name="tglakhirberlaku" class="form-control datepicker">
                 </div>
               </div>
             </div>
@@ -180,7 +183,7 @@
       let data = $('#crudForm').serializeArray()
       let nominal = $(`#crudForm [name="nominal"]`).val()
       let nominalton = $(`#crudForm [name="nominalton"]`).val()
-      
+
       $('#crudForm').find(`[name="nominal`).each((index, element) => {
         data.filter((row) => row.name === 'nominal')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal`)[index])
       })
@@ -284,7 +287,7 @@
     initLookup()
     initSelect2()
     initDatepicker()
-    
+
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -307,12 +310,17 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    $('#crudForm').find('[name=tglakhirberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    setStatusPenyesuaianHargaOptions(form)
-    setStatusSistemTonOptions(form)
-    setStatusAktifOptions(form)
-    
+    Promise
+      .all([
+        setStatusAktifOptions(form),
+        setStatusPenyesuaianHargaOptions(form),
+        setStatusSistemTonOptions(form)
+      ])
+      // console.log('c')
+      .then(() => {
+        showDefault(form)
+      })
     initAutoNumeric(form.find(`[name="nominal"]`))
     initAutoNumeric(form.find(`[name="nominalton"]`))
   }
@@ -431,7 +439,7 @@
     })
   }
 
-  
+
   const setStatusSistemTonOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statussistemton]').empty()
@@ -525,19 +533,19 @@
           } else {
             element.val(value)
           }
-          
 
-          if(index == 'container') {
+
+          if (index == 'container') {
             element.data('current-value', value)
           }
-          if(index == 'kota') {
+          if (index == 'kota') {
             element.data('current-value', value)
           }
-          if(index == 'zona') {
+          if (index == 'zona') {
             element.data('current-value', value)
           }
         })
-        
+
         initAutoNumeric($('#crudForm').find(`[name="nominal"]`))
         initAutoNumeric($('#crudForm').find(`[name="nominalton"]`))
 
@@ -567,7 +575,7 @@
         element.data('currentValue', element.val())
       }
     })
-    
+
     $('.kota-lookup').lookup({
       title: 'Kota Lookup',
       fileName: 'kota',
@@ -585,7 +593,7 @@
         element.data('currentValue', element.val())
       }
     })
-    
+
     $('.zona-lookup').lookup({
       title: 'Zona Lookup',
       fileName: 'zona',
@@ -601,6 +609,70 @@
         $('#crudForm [name=zona_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+      }
+    })
+
+    $('.parent-lookup').lookup({
+      title: 'Tarif Lookup',
+      fileName: 'tarif',
+      onSelectRow: (tarif, element) => {
+        $('#crudForm [name=parent_id]').first().val(tarif.id)
+        element.val(tarif.tujuan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=parent_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.upahsupir-lookup').lookup({
+      title: 'Upah Supir Lookup',
+      fileName: 'upahsupir',
+      onSelectRow: (upahsupir, element) => {
+        $('#crudForm [name=upahsupir_id]').first().val(upahsupir.id)
+        $('#crudForm [name=tujuan]').val(upahsupir.kotasampai_id)
+        element.val(upahsupir.kotasampai_id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=upahsupir_id]').first().val('')
+        $('#crudForm [name=tujuan]').val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+  }
+  
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}tarif/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
       }
     })
   }

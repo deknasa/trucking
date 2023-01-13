@@ -44,6 +44,14 @@
             hidden: true
           },
           {
+            label: 'PARENT',
+            name: 'parent_id',
+          },
+          {
+            label: 'UPAH SUPIR',
+            name: 'upahsupir_id',
+          },
+          {
             label: 'TUJUAN',
             name: 'tujuan',
           },
@@ -102,10 +110,6 @@
 
               return ` title="${statusAktif.MEMO}"`
             }
-          },
-          {
-            label: 'TUJUAN ASAL',
-            name: 'tujuanasal',
           },
           {
             label: 'SISTEM TON',
@@ -170,15 +174,6 @@
           {
             label: 'TGL MULAI BERLAKU',
             name: 'tglmulaiberlaku',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'TGL AKHIR BERLAKU',
-            name: 'tglakhirberlaku',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
