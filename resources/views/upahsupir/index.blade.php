@@ -55,6 +55,11 @@
             hidden: true
           },
           {
+            label: 'PARENT',
+            name: 'parent_id',
+            align: 'left'
+          },
+          {
             label: 'DARI',
             name: 'kotadari_id',
             align: 'left'
@@ -126,15 +131,7 @@
               newformat: "d-m-Y"
             }
           },
-          {
-            label: 'TGL AKHIR BERLAKU',
-            name: 'tglakhirberlaku',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
+          
           {
             label: 'STATUS LUAR KOTA',
             name: 'statusluarkota',

@@ -58,7 +58,7 @@
         ],
         autowidth: true,
         shrinkToFit: false,
-        height: 350,
+        height: 250,
         rowNum: 0,
         rownumbers: true,
         rownumWidth: 45,
@@ -89,6 +89,39 @@
         },
         loadComplete: function(data) {
           initResize($(this))
+          
+          
+          
+          
+          let nominalsupirs = $(this).jqGrid("getCol", "nominalsupir")
+          let nominalkeneks = $(this).jqGrid("getCol", "nominalkenek")
+          let nominalkomisis = $(this).jqGrid("getCol", "nominalkomisi")
+          let nominaltols = $(this).jqGrid("getCol", "nominaltol")
+          let totalNominalsupir = 0
+          let totalNominalkenek = 0
+          let totalNominalkomisi = 0
+          let totalNominaltol = 0
+
+          if (nominalsupirs.length > 0) {
+            totalNominalsupir = nominalsupirs.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          }
+          if (nominalkeneks.length > 0) {
+            totalNominalkenek = nominalkeneks.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          }
+          if (nominalkomisis.length > 0) {
+            totalNominalkomisi = nominalkomisis.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          }
+          if (nominaltols.length > 0) {
+            totalNominaltol = nominaltols.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          }
+
+          $(this).jqGrid('footerData', 'set', {
+            container_id: 'Total:',
+            nominalsupir: totalNominalsupir,
+            nominalkenek: totalNominalkenek,
+            nominalkomisi: totalNominalkomisi,
+            nominaltol: totalNominaltol,
+          }, true)
 
         }
       })
