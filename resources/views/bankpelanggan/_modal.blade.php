@@ -206,7 +206,13 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setStatusAktifOptions(form)
+    Promise
+    .all([
+      setStatusAktifOptions(form)
+    ])
+    .then(() => {
+      showDefault(form)
+    })
   }
 
   function editBankPelanggan(bankPelangganId) {
@@ -316,6 +322,33 @@
           resolve()
         }
       })
+    })
+  }
+  
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}bankpelanggan/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
+      }
     })
   }
 

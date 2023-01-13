@@ -215,7 +215,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -268,13 +270,45 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setStatusCoaOptions(form)
-    setStatusAccountPayableOptions(form)
-    setStatusLabaRugiOptions(form)
-    setStatusNeracaOptions(form)
-    setStatusAktifOptions(form)
+    Promise
+      .all([
+        setStatusCoaOptions(form),
+        setStatusAccountPayableOptions(form),
+        setStatusLabaRugiOptions(form),
+        setStatusNeracaOptions(form),
+        setStatusAktifOptions(form)
+      ])
+      .then(() => {
+        showDefault(form)
+      })
   }
 
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}akunpusat/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
+      }
+    })
+  }
   function editAkunPusat(akunPusatId) {
     let form = $('#crudForm')
 

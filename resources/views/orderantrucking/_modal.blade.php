@@ -323,8 +323,14 @@
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    setStatusLangsirOptions(form)
-    setStatusPeralihanOptions(form)
+    Promise
+    .all([
+      setStatusLangsirOptions(form),
+      setStatusPeralihanOptions(form)
+    ])
+    .then(() => {
+      showDefault(form)
+    })
   }
 
   function editOrderanTrucking(orderanTruckingId) {
@@ -517,6 +523,33 @@
           form.find('[name]').addClass('disabled')
           initDisabled()
         }
+      }
+    })
+  }
+
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}orderantrucking/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
       }
     })
   }

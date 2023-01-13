@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class MandorController extends MyController
 {
-    public $title = 'MANDOR';
+    public $title = 'Mandor';
 
     /**
      * @ClassName

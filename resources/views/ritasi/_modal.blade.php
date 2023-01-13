@@ -253,7 +253,13 @@
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    setStatusRitasiOptions(form)
+    Promise
+    .all([
+      setStatusRitasiOptions(form)
+    ])
+    .then(() => {
+      showDefault(form)
+    })
   }
 
   function editRitasi(ritasiId) {
@@ -304,6 +310,32 @@
       })
   }
 
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}ritasi/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
+      }
+    })
+  }
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({

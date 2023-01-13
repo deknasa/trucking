@@ -654,11 +654,18 @@
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglsp]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    setStatusLongTripOptions(form)
-    setStatusPeralihanOptions(form)
-    setStatusRitasiOmsetOptions(form)
-    setStatusGudangSamaOptions(form)
-    setStatusBatalMuatOptions(form)
+    Promise
+      .all([
+
+        setStatusLongTripOptions(form),
+        setStatusPeralihanOptions(form),
+        setStatusRitasiOmsetOptions(form),
+        setStatusGudangSamaOptions(form),
+        setStatusBatalMuatOptions(form)
+      ])
+      .then(() => {
+        showDefault(form)
+      })
     addRow()
     setTotal()
     setTotalTagih()
@@ -1010,7 +1017,7 @@
 
 
         })
-        
+
         getTarifOmset(response.data.tarif_id)
 
         initAutoNumeric(form.find(`[name="nominal"]`))
@@ -1365,6 +1372,33 @@
     })
   }
 
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}suratpengantar/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
+      }
+    })
+  }
+
   function getTarifOmset(id) {
     $.ajax({
       url: `${apiUrl}suratpengantar/${id}/getTarifOmset`,
@@ -1413,9 +1447,9 @@
         $('#crudForm [name=noseal]').val(response.data.noseal)
         $('#crudForm [name=noseal2]').val(response.data.noseal2)
         $('#crudForm [name=statusperalihan]')
-                        .val(response.data.statusperalihan)
-                        .trigger('change')
-                        .trigger('select2:selected');
+          .val(response.data.statusperalihan)
+          .trigger('change')
+          .trigger('select2:selected');
       },
       error: error => {
         showDialog(error.statusText)

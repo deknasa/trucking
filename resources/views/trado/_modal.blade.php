@@ -508,14 +508,21 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setStatusAktifOptions(form)
-    setStatusStandarisasiOptions(form)
-    setStatusJenisPlatOptions(form)
-    setStatusMutasiOptions(form)
-    setStatusValidasiKendaraanOptions(form)
-    setStatusMobilStoringOptions(form)
-    setAppeditBanOptions(form)
-    setStatusLewatValidasiOptions(form)
+
+    Promise
+      .all([
+        setStatusAktifOptions(form),
+        setStatusStandarisasiOptions(form),
+        setStatusJenisPlatOptions(form),
+        setStatusMutasiOptions(form),
+        setStatusValidasiKendaraanOptions(form),
+        setStatusMobilStoringOptions(form),
+        setAppeditBanOptions(form),
+        setStatusLewatValidasiOptions(form)
+      ])
+      .then(() => {
+        showDefault(form)
+      })
 
     setFormBindKeys(form)
     initDropzone(form.data('action'))
@@ -1063,6 +1070,32 @@
     xhr.open('GET', url);
     xhr.responseType = 'blob';
     xhr.send();
+  }
+
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}trado/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+          let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } else {
+            element.val(value)
+          }
+        })
+
+
+      }
+    })
   }
 </script>
 @endpush()

@@ -44,7 +44,7 @@
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>coa </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-4">
+              <div class="col-12 col-md-10">
                 <input type="text" name="coa" class="form-control akunpusat-lookup">
               </div>
             </div>
@@ -227,8 +227,14 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    setStatusFormatListOptions(form)
-    setStatusHitungListOptions(form)
+    Promise
+    .all([
+      setStatusFormatListOptions(form),
+      setStatusHitungListOptions(form)
+    ])
+    .then(() => {
+      showDefault(form)
+    })
   }
 
   function editPengeluaranStok(pengeluaranstokId) {
@@ -432,6 +438,32 @@
       onClear: (element) => {
         element.val('')
         element.data('currentValue', element.val())
+      }
+    })
+  }
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}pengeluaranstok/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
       }
     })
   }
