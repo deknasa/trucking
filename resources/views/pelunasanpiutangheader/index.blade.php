@@ -67,23 +67,18 @@
             }
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
-          },
-          {
             label: 'BANK',
             name: 'bank_id',
             align: 'left'
           },
           {
-            label: 'AGEN',
-            name: 'agen_id',
+            label: 'ALAT BAYAR',
+            name: 'alatbayar_id',
             align: 'left'
           },
           {
-            label: 'CABANG',
-            name: 'cabang_id',
+            label: 'AGEN',
+            name: 'agen_id',
             align: 'left'
           },
           {
