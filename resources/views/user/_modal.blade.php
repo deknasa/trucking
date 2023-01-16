@@ -48,7 +48,7 @@
                 <input type="password" name="password" class="form-control">
               </div>
             </div>
-            <div class="row form-group">
+            <!-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   Cabang <span class="text-danger">*</span>
@@ -59,7 +59,7 @@
                   <option value="">-- PILIH CABANG --</option>
                 </select>
               </div>
-            </div>
+            </div> -->
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
@@ -241,9 +241,15 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setCabangOptions(form)
-    setStatusKaryawanOptions(form)
-    setStatusAktifOptions(form)
+    Promise
+    .all([
+      setCabangOptions(form),
+      setStatusKaryawanOptions(form),
+      setStatusAktifOptions(form)
+    ])
+    .then(() => {
+      showDefault(form)
+    })
   }
 
   function editUser(userId) {
@@ -442,6 +448,32 @@
             element.val(value)
           }
         })
+      }
+    })
+  }
+  
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}user/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+          let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } else {
+            element.val(value)
+          }
+        })
+
+
       }
     })
   }

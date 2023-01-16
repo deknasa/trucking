@@ -445,7 +445,7 @@
 
   function showDefault(form) {
     $.ajax({
-      url: `${apiUrl}agen/default`,
+      url: `${apiUrl}bank/default`,
       method: 'GET',
       dataType: 'JSON',
       headers: {

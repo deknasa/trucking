@@ -435,8 +435,15 @@
     addRow()
     $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglakhirberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    setStatusAktifOptions(form)
-    setStatusLuarKotaOptions(form)
+
+    Promise
+    .all([
+        setStatusAktifOptions(form),
+        setStatusLuarKotaOptions(form)
+      ])
+    .then(() => {
+        showDefault(form)
+      })
 
     setNominalSupir()
     setNominalKenek()
@@ -543,7 +550,7 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS LUAR KOTA"
+              "data": "UPAH SUPIR LUAR KOTA"
             }]
           })
         },
@@ -815,6 +822,33 @@
     setNominalKenek()
     setNominalKomisi()
     setNominalTol()
+  }
+  
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}upahritasi/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
+      }
+    })
   }
 
   function setRowNumbers() {
