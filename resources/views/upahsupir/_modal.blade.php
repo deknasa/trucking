@@ -822,6 +822,7 @@
       }
     })
   }
+  
   function addRow() {
     let detailRow = $(`
       <tr>

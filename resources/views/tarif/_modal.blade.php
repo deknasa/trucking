@@ -150,6 +150,47 @@
                 </select>
               </div>
             </div>
+
+            <div class="table-responsive">
+              <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="">
+                <thead class="table-secondary">
+                  <tr>
+                    <th width="5%">NO</th>
+                    <th width="25%">CONTAINER</th>
+                    <th width="25%">NOMINAL</th>
+                    {{-- <th width="5%">AKSI</th> --}}
+                  </tr>
+                </thead>
+                <tbody id="table_body" class="form-group">
+                  <tr>
+                    <td>1</td>
+                    <td>
+                      <input type="hidden" name="container_id[]">
+                      <input type="text" name="container[]" class="form-control container-lookup">
+                    </td>
+                    <td>
+                      <input type="text" name="nominal[]" class="form-control autonumeric">
+                    </td>
+                    {{-- <td>
+                      <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                    </td> --}}
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="1">
+                      <p class="text-right font-weight-bold">TOTAL :</p>
+                    </td>
+                    <td>
+                      <p class="text-right font-weight-bold autonumeric" id="nominal"></p>
+                    </td>
+                    <td>
+                      {{-- <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button> --}}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -171,7 +212,23 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+
   $(document).ready(function() {
+
+    $('#crudForm').autocomplete({
+      disabled: true
+    });
+
+    $(document).on('click', '#addRow', function(event) {
+      addRow()
+    });
+
+    $(document).on('click', '.delete-row', function(event) {
+      deleteRow($(this).parents('tr'))
+    })
+
+
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -190,6 +247,13 @@
       $('#crudForm').find(`[name="nominalton`).each((index, element) => {
         data.filter((row) => row.name === 'nominalton')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalton`)[index])
       })
+
+
+
+      $(document).on('input', `#table_body [name="nominal[]"]`, function(event) {
+        setNominal()
+      })
+
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -649,7 +713,79 @@
       }
     })
   }
+
   
+  function deleteRow(row) {
+    row.remove()
+
+    setRowNumbers()
+    setNominal()
+
+  }
+
+  
+  function setNominal() {
+    let nominalDetails = $(`#table_body [name="nominal[]"]`)
+    let total = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#nominal').set(total)
+  }
+
+
+  function addRow() {
+    let detailRow = $(`
+      <tr>
+        <td></td>
+        <td>
+          <input type="hidden" name="container_id[]">
+          <input type="text" name="container[]" class="form-control container-lookup">
+        </td>
+        <td>
+          <input type="text" name="nominal[]" class="form-control autonumeric">
+        </td>
+        <td>
+          <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+        </td>
+      </tr>
+    `)
+    $('#detailList tbody').append(detailRow)
+
+    $('.container-lookup').last().lookup({
+      title: 'Container Lookup',
+      fileName: 'container',
+      onSelectRow: (container, element) => {
+        $(`#crudForm [name="container_id[]"]`).last().val(container.id)
+        element.val(container.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#crudForm [name="container_id[]"]`).last().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    
+
+    initAutoNumeric(detailRow.find('.autonumeric'))
+    setRowNumbers()
+  }
+
+  function setRowNumbers() {
+    let elements = $('#detailList tbody tr td:nth-child(1)')
+
+    elements.each((index, element) => {
+      $(element).text(index + 1)
+    })
+  }
+
   function showDefault(form) {
     $.ajax({
       url: `${apiUrl}tarif/default`,
@@ -661,18 +797,17 @@
       success: response => {
         $.each(response.data, (index, value) => {
           console.log(value)
-           let element = form.find(`[name="${index}"]`)
+          let element = form.find(`[name="${index}"]`)
           // let element = form.find(`[name="statusaktif"]`)
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } 
-          else {
+          } else {
             element.val(value)
           }
         })
-        
-       
+
+
       }
     })
   }
