@@ -134,7 +134,7 @@
             </div>
                   
             <div class="table-responsive">
-              <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="">
+              <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="width:1800px">
                 <thead class="table-secondary">
                   <tr>
                     <th width="1%">NO</th>
