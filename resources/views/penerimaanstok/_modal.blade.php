@@ -439,6 +439,12 @@
     $('.akunpusat-lookup').lookup({
       title: 'Akun Pusat Lookup',
       fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          levelCoa: '3',
+        }
+      },      
       onSelectRow: (akunpusat, element) => {
         element.val(akunpusat.coa)
         element.data('currentValue', element.val())
