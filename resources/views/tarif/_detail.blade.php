@@ -41,7 +41,7 @@
         sortable: true,
         viewrecords: true,
         postData: {
-          upahsupir_id: id
+          tarif_id: id
         },
         prmNames: {
           sort: 'sortIndex',
@@ -95,7 +95,7 @@
       url: `${apiUrl}tarifrincian`,
       datatype: "json",
       postData: {
-        upahsupir_id: id
+        tarif_id: id
       }
     }).trigger('reloadGrid')
   }

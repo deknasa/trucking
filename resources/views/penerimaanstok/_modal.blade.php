@@ -56,11 +56,11 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  status format <span class="text-danger">*</span>
+                  format <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusformat" class="form-select select2bs4" style="width: 100%;">
+                <select name="format" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS FORMAT --</option>
                 </select>
               </div>
@@ -290,8 +290,8 @@
   
   const setStatusFormatListOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusformat]').empty()
-      relatedForm.find('[name=statusformat]').append(
+      relatedForm.find('[name=format]').empty()
+      relatedForm.find('[name=format]').append(
         new Option('-- PILIH STATUS FORMAT --', '', false, true)
       ).trigger('change')
 
@@ -317,7 +317,7 @@
           response.data.forEach(statusFormatList => {
             let option = new Option(statusFormatList.text, statusFormatList.id)
 
-            relatedForm.find('[name=statusformat]').append(option).trigger('change')
+            relatedForm.find('[name=format]').append(option).trigger('change')
           });
 
           resolve()

@@ -70,23 +70,23 @@
             name: 'coa',
           },
           {
-            label: 'status format',
-            name: 'statusformat',
+            label: 'format',
+            name: 'format',
             formatter: (value, options, rowData) => {
-              let statusFormat = JSON.parse(value)
+              let Format = JSON.parse(value)
 
               let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusFormat.WARNA}; color: #fff;">
-                  <span>${statusFormat.SINGKATAN}</span>
+                <div class="badge" style="background-color: ${Format.WARNA}; color: #fff;">
+                  <span>${Format.SINGKATAN}</span>
                 </div>
               `)
 
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
-              let statusFormat = JSON.parse(rowObject.statusformat)
+              let Format = JSON.parse(rowObject.format)
 
-              return ` title="${statusFormat.MEMO}"`
+              return ` title="${Format.MEMO}"`
             }
           },
           {

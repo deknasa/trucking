@@ -10,6 +10,8 @@
   </div>
 </div>
 
+@include('tarif._detail')
+
 @include('tarif._modal')
 
 @push('scripts')
@@ -28,6 +30,7 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
+   let hasDetail = false
 
   $(document).ready(function() {
     
@@ -55,20 +58,7 @@
             label: 'TUJUAN',
             name: 'tujuan',
           },
-          {
-            label: 'CONTAINER',
-            name: 'container_id',
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: '.',
-              thousandsSeparator: ','
-            }
-          },
+
           {
             label: 'STATUS',
             name: 'statusaktif',
@@ -161,16 +151,7 @@
             label: 'ZONA',
             name: 'zona_id',
           },
-          {
-            label: 'NOMINAL TON',
-            name: 'nominalton',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
-          },
+         
           {
             label: 'TGL MULAI BERLAKU',
             name: 'tglmulaiberlaku',
@@ -279,6 +260,13 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+
+           if (!hasDetail) {
+            loadDetailGrid(id)
+            hasDetail = true
+          }
+
+          loadDetailData(id)
         },
         loadComplete: function(data) {
           $(document).unbind('keydown')
