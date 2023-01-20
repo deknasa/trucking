@@ -125,7 +125,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                 </tbody>
                             </table>
                         </div> -->
@@ -139,11 +138,10 @@
                                         <th width="4%">Tgl jatuh tempo</th>
                                         <th width="4%">No warkat</th>
                                         <th width="7%">Bank Pelanggan</th>
-                                        <th width="6%">Keterangan</th>
+                                        <th width="10%">Keterangan</th>
                                         <th width="6%">Nominal</th>
                                         <th width="5%">No Invoice</th>
                                         <th width="5%">No Bukti Pelunasan</th>
-                                        <th width="4%">Jenis Biaya</th>
                                         <th width="4%">Bulan Beban</th>
                                         <th width="1%">Aksi</th>
                                     </tr>
@@ -159,7 +157,7 @@
                                         <td>
                                             <p class="text-right font-weight-bold autonumeric" id="total"></p>
                                         </td>
-                                        <td colspan="4"></td>
+                                        <td colspan="3"></td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                                         </td>
@@ -190,12 +188,10 @@
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
     let type
-
     $(document).ready(function() {
         $('#crudForm').autocomplete({
             disabled: true
         });
-
         $(document).on('change', '[name=statuskas]', function() {
             if ($(this).val() == 116) {
                 type = 'kas'
@@ -205,22 +201,17 @@
                 type = null
             }
         })
-
         $(document).on('click', "#addRow", function() {
             addRow()
         });
-
         $(document).on('click', '.delete-row', function(event) {
             deleteRow($(this).parents('tr'))
         })
-
         $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {
             setTotal()
         })
-
         // $(document).on('click', `#tablePelunasan tbody [name="pelunasan_id[]"]`, function() {
         //     if ($(this).prop("checked") == true) {
-
         //         let firstRow = $("#detailList tbody").find('#1')
         //         let count = 0;
         //         let row = '';
@@ -234,12 +225,9 @@
         //             row++
         //         })
         //         let arrSlice = arrData.slice(1, -1)
-
         //         if (arrSlice.length === 0) {
         //             $("#detailList tbody").find('#1').remove()
         //         }
-
-
         //         id = $(this).val()
         //         nobukti = $(this).parent().find(`[name="pelunasan_nobukti[]"]`).val()
         //         let text = nobukti.substr(0, 3)
@@ -253,7 +241,6 @@
         //             },
         //             success: response => {
         //                 $.each(response.data, (index, data) => {
-
         //                     let detailRow = $(`
         //                         <tr class="${data.nobukti}">
         //                             <td></td>
@@ -297,10 +284,8 @@
         //                             </td>
         //                         </tr>
         //                         `)
-
         //                     // initDatepicker(detailRow.find('.datepicker'))
         //                     detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(data.tgljt))
-
         //                     initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
         //                     $('#detailList tbody').append(detailRow)
         //                     initDatepicker()
@@ -319,7 +304,6 @@
         //                             element.data('currentValue', element.val())
         //                         }
         //                     })
-
         //                     $('.bankpelanggan-lookup').last().lookup({
         //                         title: 'Bank Pelanggan Lookup',
         //                         fileName: 'bankpelanggan',
@@ -338,13 +322,10 @@
         //                         }
         //                     })
         //                 })
-
         //                 setRowNumbers()
-
         //                 setTotal()
         //             }
         //         })
-
         //     } else if ($(this).prop("checked") == false) {
         //         id = $(this).val()
         //         nobukti = $(this).parent().find(`[name="pelunasan_nobukti[]"]`).val()
@@ -352,21 +333,17 @@
         //         setTotal()
         //     }
         // })
-
         $('#btnSubmit').click(function(event) {
             event.preventDefault()
-
             let method
             let url
             let form = $('#crudForm')
             let Id = form.find('[name=id]').val()
             let action = form.data('action')
             let data = $('#crudForm').serializeArray()
-
             $('#crudForm').find(`[name="nominal_detail[]"`).each((index, element) => {
                 data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
             })
-
             data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
@@ -391,7 +368,6 @@
                 name: 'limit',
                 value: limit
             })
-
             switch (action) {
                 case 'add':
                     method = 'POST'
@@ -410,10 +386,8 @@
                     url = `${apiUrl}penerimaanheader`
                     break;
             }
-
             $(this).attr('disabled', '')
             $('#loader').removeClass('d-none')
-
             $.ajax({
                 url: url,
                 method: method,
@@ -423,20 +397,15 @@
                 },
                 data: data,
                 success: response => {
-
-
                     id = response.data.id
                     $('#crudModal').modal('hide')
                     $('#crudModal').find('#crudForm').trigger('reset')
-
                     $('#jqGrid').jqGrid('setGridParam', {
                         page: response.data.page
                     }).trigger('reloadGrid');
-
                     if (id == 0) {
                         $('#detail').jqGrid().trigger('reloadGrid')
                     }
-
                     if (response.data.grp == 'FORMAT') {
                         updateFormat(response.data)
                     }
@@ -445,7 +414,6 @@
                     if (error.status === 422) {
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
-
                         setErrorMessages(form, error.responseJSON.errors);
                     } else {
                         showDialog(error.statusText)
@@ -457,27 +425,19 @@
             })
         })
     })
-
     $('#crudModal').on('shown.bs.modal', () => {
         let form = $('#crudForm')
-
         setFormBindKeys(form)
-
         activeGrid = null
-
         getMaxLength(form)
         initLookup()
         initSelect2()
         initDatepicker()
     })
-
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
-
         $('#crudModal').find('.modal-body').html(modalBody)
     })
-
-
     // function tarikPelunasan(aksi, id = null) {
     //     let checked = (aksi == 'edit' || aksi == 'delete') ? 'checked' : '';
     //     $.ajax({
@@ -494,17 +454,14 @@
     //                         <td colspan='6'><p><b><center>TIDAK ADA PELUNASAN/GIRO</center></b></p></td>
     //                     </tr>
     //                 `)
-
     //                 $('#tablePelunasan tbody').append(tablePelunasan)
     //             } else {
-
     //                 $.each(response.data, (index, data) => {
     //                     let tablePelunasan = $(`
     //                     <tr>
     //                         <td>
     //                             <input name='pelunasan_id[]' type="checkbox" id="checkItem" value="${data.id}" ${checked}>
     //                             <input name='pelunasan_nobukti[]' type="hidden" value="${data.nobukti}">
-
     //                         </td>
     //                         <td>
     //                             <p>${data.nobukti}</p>
@@ -520,7 +477,6 @@
     //                         </td>
     //                     </tr>
     //                     `)
-
     //                     $('#tablePelunasan tbody').append(tablePelunasan)
     //                     initAutoNumeric(tablePelunasan.find('#nominalLunas'))
     //                 })
@@ -528,51 +484,40 @@
     //         }
     //     })
     // }
-
     function setTotal() {
         let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
         let total = 0
-
         $.each(nominalDetails, (index, nominalDetail) => {
             total += AutoNumeric.getNumber(nominalDetail)
         });
-
         new AutoNumeric('#total').set(total)
     }
-
     function select(element) {
         alert(element)
     }
-
     function createPenerimaan() {
         let form = $('#crudForm')
-
         $('#crudModal').find('#crudForm').trigger('reset')
         form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
       Simpan
     `)
         form.data('action', 'add')
-
         $('#crudModalTitle').text('Add Penerimaan')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tgllunas]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
         $('#table_body').html('')
         addRow();
-
         initAutoNumeric(form.find('.nominal'))
         setStatusKasOptions(form)
         // tarikPelunasan('add')
         setTotal()
     }
-
     function editPenerimaan(id) {
         let form = $('#crudForm')
-
         form.data('action', 'edit')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
@@ -591,13 +536,9 @@
                 // tarikPelunasan('edit', id)
                 showPenerimaan(form, id)
             })
-
     }
-
     function deletePenerimaan(id) {
-
         let form = $('#crudForm')
-
         form.data('action', 'delete')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
@@ -613,15 +554,10 @@
                 setStatusKasOptions(form)
             ])
             .then(() => {
-
                 // tarikPelunasan('delete', id)
                 showPenerimaan(form, id)
             })
-
     }
-
-
-
     function cekValidasi(Id, Aksi) {
         $.ajax({
             url: `{{ config('app.api_url') }}penerimaanheader/${Id}/cekvalidasi`,
@@ -644,21 +580,18 @@
                             deletePenerimaan(Id)
                         }
                     }
-
                 } else {
                     showDialog(response.message['keterangan'])
                 }
             }
         })
     }
-
     const setStatusKasOptions = function(relatedForm) {
         return new Promise((resolve, reject) => {
             relatedForm.find('[name=statuskas]').empty()
             relatedForm.find('[name=statuskas]').append(
                 new Option('-- PILIH STATUS KAS --', '', false, true)
             ).trigger('change')
-
             $.ajax({
                 url: `${apiUrl}parameter`,
                 method: 'GET',
@@ -680,19 +613,15 @@
                 success: response => {
                     response.data.forEach(statusKas => {
                         let option = new Option(statusKas.text, statusKas.id)
-
                         relatedForm.find('[name=statuskas]').append(option).trigger('change')
                     });
-
                     resolve()
                 }
             })
         })
     }
-
     function showPenerimaan(form, id) {
         $('#detailList tbody').html('')
-
         $.ajax({
             url: `${apiUrl}penerimaanheader/${id}`,
             method: 'GET',
@@ -702,7 +631,6 @@
             },
             success: response => {
                 let tgl = response.data.tglbukti
-
                 $.each(response.data, (index, value) => {
                     let element = form.find(`[name="${index}"]`)
                     if (element.is('select')) {
@@ -712,7 +640,6 @@
                     } else {
                         element.val(value)
                     }
-
                     if (index == 'pelanggan') {
                         element.data('current-value', value)
                     }
@@ -723,7 +650,6 @@
                         element.data('current-value', value)
                     }
                 })
-
                 $.each(response.detail, (index, detail) => {
                     let readOnly = (detail.pelunasanpiutang_nobukti != '-') ? 'readonly' : '';
                     let detailRow = $(`
@@ -757,10 +683,6 @@
                             <input type="text" name="pelunasanpiutang_nobukti[]" class="form-control" ${readOnly}>
                         </td>
                         <td>
-                            <input type="text" name="jenisbiaya[]" class="form-control">   
-                        </td>
-                        
-                        <td>
                             <div class="input-group">
                                 <input type="text" name="bulanbeban[]" class="form-control datepicker">   
                             </div>
@@ -770,7 +692,6 @@
                         </td>
                     </tr>
                     `)
-
                     detailRow.find(`[name="coadebet[]"]`).val(detail.coadebet)
                     detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
                     detailRow.find(`[name="bankpelanggan_id[]"]`).val(detail.bankpelanggan_id)
@@ -779,16 +700,11 @@
                     detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
                     detailRow.find(`[name="invoice_nobukti[]"]`).val(detail.invoice_nobukti)
                     detailRow.find(`[name="pelunasanpiutang_nobukti[]"]`).val(detail.pelunasanpiutang_nobukti)
-                    detailRow.find(`[name="jenisbiaya[]"]`).val(detail.jenisbiaya)
-
                     initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
                     detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
                     detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
-
                     $('#detailList tbody').append(detailRow)
-
                     setTotal();
-
                     $('.akunpusat-lookup').last().lookup({
                         title: 'Kode Perk. Lookup',
                         fileName: 'akunpusat',
@@ -810,7 +726,6 @@
                             element.data('currentValue', element.val())
                         }
                     })
-
                     $('.bankpelanggan-lookup').last().lookup({
                         title: 'Bank Pelanggan Lookup',
                         fileName: 'bankpelanggan',
@@ -828,9 +743,7 @@
                             element.data('currentValue', element.val())
                         }
                     })
-
                 })
-
                 setRowNumbers()
                 initDatepicker()
                 if (form.data('action') === 'delete') {
@@ -840,7 +753,6 @@
             }
         })
     }
-
     function addRow() {
         let detailRow = $(`
       <tr>
@@ -873,9 +785,6 @@
             <input type="text" name="pelunasanpiutang_nobukti[]"  class="form-control" readonly>
         </td>
         <td>
-            <input type="text" name="jenisbiaya[]" class="form-control">   
-        </td>
-        <td>
             <div class="input-group">
                 <input type="text" name="bulanbeban[]" class="form-control datepicker">   
             </div>
@@ -885,7 +794,6 @@
         </td>
       </tr>
     `)
-
         $('#detailList tbody').append(detailRow)
         $('.akunpusat-lookup').last().lookup({
             title: 'Kode Perkiraan Lookup',
@@ -908,7 +816,6 @@
                 element.data('currentValue', element.val())
             }
         })
-
         $('.bankpelanggan-lookup').last().lookup({
             title: 'Bank Pelanggan Lookup',
             fileName: 'bankpelanggan',
@@ -929,26 +836,20 @@
         initAutoNumeric(detailRow.find('.autonumeric'))
         // $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
         initDatepicker()
         setRowNumbers()
     }
-
     function deleteRow(row) {
         row.remove()
-
         setRowNumbers()
         setTotal()
     }
-
     function setRowNumbers() {
         let elements = $('#detailList tbody tr td:nth-child(1)')
-
         elements.each((index, element) => {
             $(element).text(index + 1)
         })
     }
-
     function getMaxLength(form) {
         if (!form.attr('has-maxlength')) {
             $.ajax({
@@ -964,7 +865,6 @@
                             form.find(`[name=${index}]`).attr('maxlength', value)
                         }
                     })
-
                     form.attr('has-maxlength', true)
                 },
                 error: error => {
@@ -973,9 +873,7 @@
             })
         }
     }
-
     function initLookup() {
-
         $('.pelanggan-lookup').lookup({
             title: 'Pelanggan Lookup',
             fileName: 'pelanggan',
@@ -993,7 +891,6 @@
                 element.data('currentValue', element.val())
             }
         })
-
         $('.cabang-lookup').lookup({
             title: 'Cabang Lookup',
             fileName: 'cabang',
@@ -1011,7 +908,6 @@
                 element.data('currentValue', element.val())
             }
         })
-
         $('.bank-lookup').lookup({
             title: 'Bank Lookup',
             fileName: 'bank',

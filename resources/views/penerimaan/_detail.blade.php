@@ -65,18 +65,7 @@
             label: 'BANK',
             name: 'bank_id',
           },
-          // {
-          //   label: 'PELANGGAN',
-          //   name: 'pelanggan_id',
-          // },
-          // {
-          //   label: 'INVOICE NO BUKTI',
-          //   name: 'invoice_nobukti',
-          // },
-          // {
-          //   label: 'PELANGGAN',
-          //   name: 'pelanggan_id',
-          // },
+   
           {
             label: 'INVOICE NO BUKTI',
             name: 'invoice_nobukti',
@@ -85,10 +74,7 @@
             label: 'BANK PELANGGAN',
             name: 'bankpelanggan_id',
           },
-          {
-            label: 'JENIS BIAYA',
-            name: 'jenisbiaya',
-          },
+        
          
           {
             label: 'PELUNASAN PIUTANG NO BUKTI',
