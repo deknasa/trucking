@@ -62,10 +62,6 @@
             name: 'bank_id',
           },
           {
-            label: 'PELANGGAN',
-            name: 'pelanggan_id',
-          },
-          {
             label: 'INVOICE NO BUKTI',
             name: 'invoice_nobukti',
           },

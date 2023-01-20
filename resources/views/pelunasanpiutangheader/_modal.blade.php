@@ -96,6 +96,16 @@
                 <input type="text" name="notadebet_nobukti" class="form-control">
               </div>
             </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  NO WARKAT
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <input type="text" name="nowarkat" class="form-control">
+              </div>
+            </div>
 
             <div class="row mt-5">
               <div class="col-md-12">
@@ -259,10 +269,6 @@
         value: form.find(`[name="tglbukti"]`).val()
       })
       data.push({
-        name: 'keterangan',
-        value: form.find(`[name="keterangan"]`).val()
-      })
-      data.push({
         name: 'bank',
         value: form.find(`[name="bank"]`).val()
       })
@@ -285,6 +291,26 @@
       data.push({
         name: 'agen_id',
         value: form.find(`[name="agen_id"]`).val()
+      })
+      data.push({
+        name: 'nowarkat',
+        value: form.find(`[name="nowarkat"]`).val()
+      })
+      data.push({
+        name: 'penerimaan_nobukti',
+        value: form.find(`[name="penerimaan_nobukti"]`).val()
+      })
+      data.push({
+        name: 'penerimaangiro_nobukti',
+        value: form.find(`[name="penerimaangiro_nobukti"]`).val()
+      })
+      data.push({
+        name: 'notakredit_nobukti',
+        value: form.find(`[name="notakredit_nobukti"]`).val()
+      })
+      data.push({
+        name: 'notadebet_nobukti',
+        value: form.find(`[name="notadebet_nobukti"]`).val()
       })
 
 
@@ -432,7 +458,6 @@
     getMaxLength(form)
     initLookup()
     initDatepicker()
-    initSelect2()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -544,8 +569,17 @@
           if (index == 'agen') {
             element.data('current-value', value)
           }
+          if(index != 'agen' && index != 'agen_id'){
+            
+            form.find(`[name="${index}"]`).addClass('disabled')
+            initDisabled()
+          }
+          
         })
 
+
+        form.find(`[name="agen"]`).prop('disabled', false)
+        form.find(`[name="agen_id"]`).prop('disabled', false)
         let agenId = response.data.agen_id
         $('#editpiutang').show()
         // Promise
@@ -657,18 +691,20 @@
                 <input type="text" name="bayarppd[]" disabled class="form-control bayar text-right">
               </td>
               <td>
-                <input type="text" name="potonganppd[]" disabled class="form-control autonumeric">
+                <input type="text" name="potonganppd[]" disabled class="form-control">
               </td>
               <td>
-                <select name="coapotonganppd[]" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH COA POTONGAN --</option>
-                </select>
+                <div id="jobTruckingWrapper">
+                  <select name="coapotonganppd[]" class="form-select select2bs4" style="width: 100%;">
+                    <option value="">-- PILIH COA POTONGAN --</option>
+                  </select>
+                </div>
               </td>
               <td>
                 <textarea name="keteranganpotonganppd[]" rows="1" disabled class="form-control"></textarea>
               </td>
               <td>
-                <input type="text" name="nominallebihbayarppd[]" disabled class="form-control autonumeric">
+                <input type="text" name="nominallebihbayarppd[]" disabled class="form-control">
               </td>
             </tr>
           `)
@@ -705,6 +741,37 @@
     })
 
 
+  }
+
+  function initNewSelect2(elements = null, isInsideModal = true) {
+    let option = {
+      width: "100%",
+      theme: "bootstrap4",
+      dropdownParent: isInsideModal ? $("#crudModal") : '',
+      templateResult: formatSelect,
+      templateSelection: formatSelect,
+      escapeMarkup: function(m) {
+        return m;
+      },
+      matcher: matcher
+    };
+
+    if (elements === null) {
+      $(document)
+        .find("select")
+        .select2(option)
+        .on("select2:open", function(e) {
+          document.querySelector(".select2-search__field").focus();
+        });
+    } else {
+      $.each(elements, (index, element) => {
+        $(element)
+          .select2(option)
+          .on("select2:open", function(e) {
+            document.querySelector(".select2-search__field").focus();
+          });
+      });
+    }
   }
 
 
@@ -929,44 +996,75 @@
     }
   }
 
+  function formatSelect(result) {
+    console.log(result)
+    return `
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-2 text-sm p-1 text-break border-right"> ${result.coa} </div>
+          <div class="col-2 text-sm p-1 text-break border-right"> ${result.keterangancoa} </div>
+        </div>
+      </div>
+    `
+  }
+  function matcher(query, option) {
+    // firstEmptySelect = true;
+
+    // just return if no filter
+    if (!query.term) {
+      return option
+    }
+
+    let columns = ['coa', 'keterangancoa']
+    let words = query.term.toUpperCase().split(" ")
+
+    for (let i = 0; i < columns.length; i++) {
+      for (let wordsIndex = 0; wordsIndex < words.length; wordsIndex++) {
+        if (option[columns[i]]) {
+          if (option[columns[i]].toUpperCase().indexOf(words[wordsIndex]) >= 0) {
+            return option
+          }
+        }
+      }
+    }
+
+    return false;
+  }
 
   const setCoaPotonganOptions = function(relatedForm, value) {
     return new Promise((resolve, reject) => {
       relatedForm.find(`[name="coapotonganppd[]"]`).empty()
       relatedForm.find(`[name="coapotonganppd[]"]`).append(
-        new Option('-- PILIH STATUS AKTIF --', '', false, true)
+        new Option('-- PILIH COA POTONGAN --', '', false, true)
       ).trigger('change')
 
+      let data = [];
+      data.push({
+        name: 'filter',
+        value: 'JURNAL POTONGAN'
+      })
       $.ajax({
-        url: `${apiUrl}parameter`,
+        url: `${apiUrl}parameter/getcoa`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "kelompok",
-              "op": "cn",
-              "data": "JURNAL POTONGAN"
-            }]
-          })
-        },
+        data: data,
         success: response => {
+          
           response.data.forEach(jurnalPotongan => {
-            let memoToArray = JSON.parse(jurnalPotongan.memo)
-            let option = new Option(memoToArray.JURNAL, memoToArray.JURNAL)
+
+            let option = new Option(jurnalPotongan.coa, jurnalPotongan.coa)
 
             relatedForm.find(`[name="coapotonganppd[]"]`).append(option).trigger('change')
           });
-          if(value != ''){
+          if (value != '') {
             relatedForm
-                    .find(`[name="coapotonganppd[]"]`)
-                    .val(value)
-                    .trigger('change')
-                    .trigger('select2:selected');
+              .find(`[name="coapotonganppd[]"]`)
+              .val(value)
+              .trigger('change')
+              .trigger('select2:selected');
 
           }
           resolve()

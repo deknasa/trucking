@@ -258,7 +258,7 @@
         //                         <tr class="${data.nobukti}">
         //                             <td></td>
         //                             <td>
-        //                             <input type="text" name="coadebet[]"  class="form-control akunpusat-lookup"">
+        //                             <input type="text" name="coakredit[]"  class="form-control akunpusat-lookup"">
         //                             </td>
         //                             <td>
         //                                 <div class="input-group">
@@ -730,7 +730,7 @@
                     <tr class="${detail.pelunasanpiutang_nobukti}">
                         <td></td>
                         <td>
-                            <input type="text" name="coadebet[]" data-current-value="${detail.coadebet}" class="form-control akunpusat-lookup">
+                            <input type="text" name="coakredit[]" data-current-value="${detail.coakredit}" class="form-control akunpusat-lookup">
                         </td>
                         <td>
                             <div class="input-group">
@@ -771,7 +771,7 @@
                     </tr>
                     `)
 
-                    detailRow.find(`[name="coadebet[]"]`).val(detail.coadebet)
+                    detailRow.find(`[name="coakredit[]"]`).val(detail.coakredit)
                     detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
                     detailRow.find(`[name="bankpelanggan_id[]"]`).val(detail.bankpelanggan_id)
                     detailRow.find(`[name="bankpelanggan[]"]`).val(detail.bankpelanggan)
@@ -840,7 +840,7 @@
       <tr>
         <td></td>
         <td>
-          <input type="text" name="coadebet[]"  class="form-control akunpusat-lookup">
+          <input type="text" name="coakredit[]"  class="form-control akunpusat-lookup">
         </td>
         <td>
           <div class="input-group">

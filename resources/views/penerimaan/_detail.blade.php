@@ -65,21 +65,13 @@
             label: 'BANK',
             name: 'bank_id',
           },
-          // {
-          //   label: 'PELANGGAN',
-          //   name: 'pelanggan_id',
-          // },
-          // {
-          //   label: 'INVOICE NO BUKTI',
-          //   name: 'invoice_nobukti',
-          // },
-          // {
-          //   label: 'PELANGGAN',
-          //   name: 'pelanggan_id',
-          // },
           {
             label: 'INVOICE NO BUKTI',
             name: 'invoice_nobukti',
+          },
+          {
+            label: 'PELUNASAN PIUTANG NO BUKTI',
+            name: 'pelunasanpiutang_nobukti',
           },
           {
             label: 'BANK PELANGGAN',
@@ -90,25 +82,9 @@
             name: 'jenisbiaya',
           },
           {
-            label: 'PELANGGAN',
-            name: 'pelanggan_id',
+            label: 'BULAN BEBAN',
+            name: 'bulanbeban',
           },
-          {
-            label: 'PELUNASAN PIUTANG NO BUKTI',
-            name: 'pelunasanpiutang_nobukti',
-          },
-          // {
-          //   label: 'BULAN BEBAN',
-          //   name: 'bulanbeban',
-          // }
-          // {
-          //   label: 'PENERIMAAN PIUTANG NO BUKTI',
-          //   name: 'penerimaanpiutang_nobukti',
-          // },
-          // {
-          //   label: 'BULAN BEBAN',
-          //   name: 'bulanbeban',
-          // }
         ],
         autowidth: true,
         shrinkToFit: false,
