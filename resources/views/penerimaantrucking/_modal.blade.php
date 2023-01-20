@@ -55,7 +55,7 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statusformat" class="form-select select2bs4" style="width: 100%;">
+                <select name="format" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH FORMAT --</option>
                 </select>
               </div>
@@ -288,8 +288,8 @@
 
   const setStatusFormatOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusformat]').empty()
-      relatedForm.find('[name=statusformat]').append(
+      relatedForm.find('[name=format]').empty()
+      relatedForm.find('[name=format]').append(
         new Option('-- PILIH FORMAT --', '', false, true)
       ).trigger('change')
 
@@ -314,7 +314,7 @@
           response.data.forEach(statusFormat => {
             let option = new Option(statusFormat.text, statusFormat.id)
 
-            relatedForm.find('[name=statusformat]').append(option).trigger('change')
+            relatedForm.find('[name=format]').append(option).trigger('change')
           });
 
           resolve()
@@ -340,13 +340,13 @@
           } else {
             element.val(value)
           }
-          
+
           if (index == 'coa') {
-              element.data('current-value', value)
+            element.data('current-value', value)
           }
-          
+
         })
-        
+
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
           initDisabled()
@@ -355,24 +355,30 @@
     })
   }
 
-  function initLookup()
-  {
+  function initLookup() {
     $('.akunpusat-lookup').lookup({
-        title: 'COA Lookup',
-        fileName: 'akunpusat',
-        onSelectRow: (akunpusat, element) => {
-            element.val(akunpusat.coa)
-            element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-            element.val(element.data('currentValue'))
-        },
+      title: 'COA Lookup',
+      fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          levelCoa: '3',
+        }
+      },
+      onSelectRow: (akunpusat, element) => {
+        $('#crudForm').find('[name=level]').val('3').trigger('change');
+        element.val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
       onClear: (element) => {
         element.val('')
-            element.data('currentValue', element.val())
+        element.data('currentValue', element.val())
       }
     })
-                    
+
   }
 </script>
 @endpush()

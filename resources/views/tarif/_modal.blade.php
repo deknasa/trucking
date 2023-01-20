@@ -53,7 +53,7 @@
                 <input type="text" name="tujuan" class="form-control">
               </div>
             </div>
-            <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>
                   CONTAINER <span class="text-danger">*</span></label>
@@ -63,7 +63,7 @@
                 <input type="text" name="container" class="form-control container-lookup">
               </div>
             </div>
-            <div class="row form-group">
+             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   NOMINAL <span class="text-danger">*</span>
@@ -72,7 +72,7 @@
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="nominal" class="form-control text-right">
               </div>
-            </div>
+            </div>--}}
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
@@ -117,7 +117,7 @@
                 <input type="text" name="zona" class="form-control zona-lookup">
               </div>
             </div>
-            <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   NOMINAL TON
@@ -126,7 +126,7 @@
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="nominalton" class="form-control text-right">
               </div>
-            </div>
+            </div>--}}
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>
@@ -150,6 +150,47 @@
                 </select>
               </div>
             </div>
+
+            <div class="table-responsive">
+              <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="width:1800px">
+                <thead class="table-secondary">
+                  <tr>
+                    <th width="5%">NO</th>
+                    <th width="50%">CONTAINER</th>
+                    <th width="30%">NOMINAL</th>
+                    {{-- <th width="5%">AKSI</th> --}}
+                  </tr>
+                </thead>
+                <tbody id="table_body" class="form-group">
+                {{--<tr>
+                    <td>1</td>
+                    <td>
+                      <input type="hidden" name="container_id[]">
+                      <input type="text" name="container[]" class="form-control container-lookup">
+                    </td>
+                    <td>
+                      <input type="text" name="nominal[]" class="form-control autonumeric">
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                    </td> 
+                  </tr>--}}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="2">
+                      <p class="text-right font-weight-bold">TOTAL :</p>
+                    </td>
+                    <td>
+                      <p class="text-right font-weight-bold autonumeric" id="nominal"></p>
+                    </td>
+                    <td>
+                      {{-- <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button> --}}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -171,7 +212,28 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+
   $(document).ready(function() {
+
+    $('#crudForm').autocomplete({
+      disabled: true
+    });
+
+    $(document).on('click', '#addRow', function(event) {
+      addRow()
+    });
+
+    $(document).on('input', `#table_body [name="nominal[]"]`, function(event) {
+      setNominal()
+    })
+
+
+    $(document).on('click', '.delete-row', function(event) {
+      deleteRow($(this).parents('tr'))
+    })
+
+
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -181,15 +243,17 @@
       let tarifId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
-      let nominal = $(`#crudForm [name="nominal"]`).val()
-      let nominalton = $(`#crudForm [name="nominalton"]`).val()
+      let formData = data
 
-      $('#crudForm').find(`[name="nominal`).each((index, element) => {
-        data.filter((row) => row.name === 'nominal')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal`)[index])
+
+      $('#crudForm').find(`[name="nominal[]"]`).each((index, element) => {
+        console.log(element);
+        data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
       })
-      $('#crudForm').find(`[name="nominalton`).each((index, element) => {
-        data.filter((row) => row.name === 'nominalton')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalton`)[index])
-      })
+
+
+
+
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -227,6 +291,7 @@
         case 'delete':
           method = 'DELETE'
           url = `${apiUrl}tarif/${tarifId}`
+
           break;
         default:
           method = 'POST'
@@ -236,7 +301,6 @@
 
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
-
       $.ajax({
         url: url,
         method: method,
@@ -245,6 +309,7 @@
           Authorization: `Bearer ${accessToken}`
         },
         data: data,
+
         success: response => {
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
@@ -254,6 +319,11 @@
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
+
+
+          if (id == 0) {
+            $('#detail').jqGrid().trigger('reloadGrid')
+          }
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -304,12 +374,14 @@
     Simpan
   `)
     form.data('action', 'add')
-    form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Tarif')
+    // form.find(`.sometimes`).show()
+    $('#crudModalTitle').text('Add Tarif')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
+    setUpRow()
 
     Promise
       .all([
@@ -546,8 +618,35 @@
           }
         })
 
-        initAutoNumeric($('#crudForm').find(`[name="nominal"]`))
-        initAutoNumeric($('#crudForm').find(`[name="nominalton"]`))
+
+ $.each(response.detail, (index, detail) => {
+            // $.each(response.data.upahsupir_rincian, (index, detail) => {
+            let detailRow = $(`
+              <tr>
+                <td></td>
+                <td>
+                  <input type="hidden" name="container_id[]">
+                  <input type="text" name="container[]" data-current-value="${detail.container}" class="form-control " readonly>
+                </td>
+                <td>
+                  <input type="text" name="nominal[]" class="form-control autonumeric">
+                </td>
+                
+              </tr>
+            `)
+    
+            detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+            detailRow.find(`[name="container[]"]`).val(detail.container)
+            detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+    
+            $('#detailList tbody').append(detailRow)
+    
+            initAutoNumeric(detailRow.find('.autonumeric'))
+            setNominal()
+          })
+          // setuprowshow(userId);
+
+          setRowNumbers()
 
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
@@ -649,7 +748,116 @@
       }
     })
   }
-  
+
+
+  function setUpRow() {
+    $.ajax({
+      url: `${apiUrl}tarif/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.detail, (index, detail) => {
+
+          let detailRow = $(`
+            <tr>
+              <td></td>
+              <td>
+                <input type="hidden" name="container_id[]">
+                <input type="text" name="container[]" data-current-value="${detail.container}" class="form-control" readonly>
+              </td>
+              <td>
+                <input type="text" name="nominal[]" class="form-control autonumeric">
+              </td>
+            </tr>
+            `)
+          detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+          detailRow.find(`[name="container[]"]`).val(detail.container)
+          initAutoNumeric(detailRow.find('.autonumeric'))
+          setNominal()
+          $('#detailList tbody').append(detailRow)
+
+        })
+        setRowNumbers()
+      }
+    })
+
+  }
+
+
+  function deleteRow(row) {
+    row.remove()
+
+    setRowNumbers()
+    setNominal()
+
+  }
+
+
+  function setNominal() {
+    let nominalDetails = $(`#table_body [name="nominal[]"]`)
+    let total = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#nominal').set(total)
+  }
+
+
+  function addRow() {
+    let detailRow = $(`
+      <tr>
+        <td></td>
+        <td>
+          <input type="hidden" name="container_id[]">
+          <input type="text" name="container[]" class="form-control container-lookup">
+        </td>
+        <td>
+          <input type="text" name="nominal[]" class="form-control autonumeric">
+        </td>
+        <td>
+          <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+        </td>
+      </tr>
+    `)
+    $('#detailList tbody').append(detailRow)
+
+    $('.container-lookup').last().lookup({
+      title: 'Container Lookup',
+      fileName: 'container',
+      onSelectRow: (container, element) => {
+        $(`#crudForm [name="container_id[]"]`).last().val(container.id)
+        element.val(container.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#crudForm [name="container_id[]"]`).last().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+
+
+    initAutoNumeric(detailRow.find('.autonumeric'))
+    setRowNumbers()
+  }
+
+  function setRowNumbers() {
+    let elements = $('#detailList tbody tr td:nth-child(1)')
+
+    elements.each((index, element) => {
+      $(element).text(index + 1)
+    })
+  }
+
   function showDefault(form) {
     $.ajax({
       url: `${apiUrl}tarif/default`,
@@ -661,18 +869,17 @@
       success: response => {
         $.each(response.data, (index, value) => {
           console.log(value)
-           let element = form.find(`[name="${index}"]`)
+          let element = form.find(`[name="${index}"]`)
           // let element = form.find(`[name="statusaktif"]`)
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } 
-          else {
+          } else {
             element.val(value)
           }
         })
-        
-       
+
+
       }
     })
   }
