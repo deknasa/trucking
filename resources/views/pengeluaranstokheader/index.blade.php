@@ -67,11 +67,7 @@
               newformat: "d-m-Y"
             }
           },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
-          },
+          
           {
             label: 'Gudang',
             name: 'gudang',
@@ -116,8 +112,23 @@
             align: 'left'
           },
           {
+            label: 'penerimaan nobukti',
+            name: 'penerimaan_nobukti',
+            align: 'left'
+          },
+          {
             label: 'kerusakan',
             name: 'kerusakan',
+            align: 'left'
+          },
+          {
+            label: 'status potong retur',
+            name: 'statuspotongretur',
+            align: 'left'
+          },
+          {
+            label: 'bank',
+            name: 'bank',
             align: 'left'
           },
           {
