@@ -38,25 +38,16 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  PELANGGAN <span class="text-danger">*</span></label>
+                  PELANGGAN <span class="text-danger"></span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="pelanggan_id">
                 <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
               </div>
             </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  CABANG <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="hidden" name="cabang_id">
-                <input type="text" name="cabang" class="form-control cabang-lookup">
-              </div>
-            </div>
 
-            <div class="row form-group">
+
+            {{--<div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   STATUS JENIS TRANSAKSI <span class="text-danger">*</span></label>
@@ -66,7 +57,7 @@
                   <option value="">-- PILIH STATUS JENIS TRANSAKSI --</option>
                 </select>
               </div>
-            </div>
+            </div>--}}
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -86,6 +77,17 @@
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="bank_id">
                 <input type="text" name="bank" class="form-control bank-lookup">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  ALAT BAYAR <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="alatbayar_id">
+                <input type="text" name="alatbayar" class="form-control alatbayar-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -121,12 +123,11 @@
                 <thead>
                   <tr>
                     <th width="1%">No</th>
-                    <th width="5%">Alat Bayar</th>
-                    <th width="4%">No warkat</th>
-                    <th width="4%">Tgl jatuh tempo</th>
+                    <th width="5%">Coa Debet</th>
                     <th width="6%">Keterangan</th>
                     <th width="6%">Nominal</th>
-                    <th width="5%">Coa Debet</th>
+                    <th width="4%">No warkat</th>
+                    <th width="4%">Tgl jatuh tempo</th>
                     <th width="4%">Bulan beban</th>
                     <th width="1%">Aksi</th>
                   </tr>
@@ -137,13 +138,13 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="5">
+                    <td colspan="3">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
                     <td>
                       <p class="text-right font-weight-bold autonumeric" id="total"></p>
                     </td>
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                     <td>
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
@@ -272,8 +273,8 @@
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
-          
-          if(id == 0){
+
+          if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
 
@@ -300,6 +301,7 @@
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
+    
 
     setFormBindKeys(form)
 
@@ -346,7 +348,7 @@
 
     $('#table_body').html('')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-   
+
     setStatusJenisTransaksiOptions(form)
     addRow()
     setTotal()
@@ -507,9 +509,14 @@
             <tr>
                 <td></td>
                 <td>
-                    <input type="hidden" name="alatbayar_id[]">
-                    <input type="text" name="alatbayar[]" data-current-value="${detail.alatbayar}" class="form-control alatbayar-lookup">
+                <input type="text" name="coadebet[]" data-current-value="${detail.coadebet}" class="form-control akunpusat-lookup">
+                </td>                <td>
+                    <input type="text" name="keterangan_detail[]"  class="form-control">
                 </td>
+                <td>
+                    <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
+                </td>
+
                 <td>
                     <input type="text" name="nowarkat[]"  class="form-control">
                 </td>
@@ -517,15 +524,6 @@
                     <div class="input-group">
                         <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
                     </div>
-                </td>
-                <td>
-                    <input type="text" name="keterangan_detail[]"  class="form-control">
-                </td>
-                <td>
-                    <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
-                </td>
-                <td>
-                <input type="text" name="coadebet[]" data-current-value="${detail.coadebet}" class="form-control akunpusat-lookup">
                 </td>
                 <td>
                     <div class="input-group">
@@ -538,8 +536,6 @@
             </tr>
           `)
 
-          detailRow.find(`[name="alatbayar_id[]"]`).val(detail.alatbayar_id)
-          detailRow.find(`[name="alatbayar[]"]`).val(detail.alatbayar)
           detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
           detailRow.find(`[name="tgljatuhtempo[]"]`).val(detail.tgljatuhtempo)
           detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
@@ -555,8 +551,13 @@
           setTotal();
 
           $('.alatbayar-lookup').last().lookup({
-            title: 'Coa Kredit Lookup',
+            title: 'Alat Bayar Lookup',
             fileName: 'alatbayar',
+            beforeProcess: function(test) {
+              this.postData = {
+                bank_Id: bank_ID ,
+              }
+            },
             onSelectRow: (alatbayar, element) => {
 
               element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
@@ -575,6 +576,12 @@
           $('.akunpusat-lookup').last().lookup({
             title: 'Kode Perk. Lookup',
             fileName: 'akunpusat',
+            beforeProcess: function(test) {
+              // var levelcoa = $(`#levelcoa`).val();
+              this.postData = {
+                levelCoa: '3',
+              }
+            },
             onSelectRow: (akunpusat, element) => {
               element.val(akunpusat.coa)
               element.data('currentValue', element.val())
@@ -606,8 +613,14 @@
       <tr>
         <td></td>
         <td>
-          <input type="hidden" name="alatbayar_id[]">
-          <input type="text" name="alatbayar[]"  class="form-control alatbayar-lookup">
+            <input type="text" name="coadebet[]"  class="form-control akunpusat-lookup">
+        </td>
+       
+        <td>
+          <input type="text" name="keterangan_detail[]"  class="form-control">
+        </td>
+        <td>
+          <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
         </td>
         <td>
           <input type="text" name="nowarkat[]"  class="form-control">
@@ -616,15 +629,6 @@
           <div class="input-group">
             <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
           </div>
-        </td>
-        <td>
-          <input type="text" name="keterangan_detail[]"  class="form-control">
-        </td>
-        <td>
-          <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
-        </td>
-        <td>
-            <input type="text" name="coadebet[]"  class="form-control akunpusat-lookup">
         </td>
         <td>
           <div class="input-group">
@@ -642,6 +646,12 @@
     $('.alatbayar-lookup').last().lookup({
       title: 'Alat Bayar Lookup',
       fileName: 'alatbayar',
+      beforeProcess: function(test) {
+        // const bank_ID=0        
+        this.postData = {
+          bank_Id: bank_ID ,
+        }
+      },
       onSelectRow: (alatbayar, element) => {
         $(`#crudForm [name="alatbayar_id[]"]`).last().val(alatbayar.id)
         element.val(alatbayar.namaalatbayar)
@@ -659,6 +669,12 @@
     $('.akunpusat-lookup').last().lookup({
       title: 'Kode Perkiraan Lookup',
       fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          levelCoa: '3',
+        }
+      },
       onSelectRow: (akunpusat, element) => {
         element.val(akunpusat.coa)
         element.data('currentValue', element.val())
@@ -718,6 +734,12 @@
     }
   }
 
+  function bankID(bankID) {
+    console.log(bankID);
+    bank_ID = bankID 
+
+  }
+
   function initLookup() {
 
     $('.pelanggan-lookup').lookup({
@@ -759,8 +781,11 @@
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',
+     
       onSelectRow: (bank, element) => {
         $('#crudForm [name=bank_id]').first().val(bank.id)
+  
+        bankID(bank.id)
         element.val(bank.namabank)
         element.data('currentValue', element.val())
       },

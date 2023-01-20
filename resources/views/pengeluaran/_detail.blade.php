@@ -18,37 +18,9 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        colModel: [
-          {
+        colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
-          }, 
-          {
-            label: 'ALAT BAYAR',
-            name: 'alatbayar_id',
-          }, 
-          {
-            label: 'NO WARKAT',
-            name: 'nowarkat',
-          }, 
-          {
-            label: 'TGL JATUH TEMPO',
-            name: 'tgljatuhtempo',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          }, 
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-          }, 
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'right',
-            formatter: currencyFormat,
           },
           {
             label: 'COA DEBET',
@@ -57,6 +29,30 @@
           {
             label: 'COA KREDIT',
             name: 'coakredit',
+          },
+
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+          },
+          {
+            label: 'NOMINAL',
+            name: 'nominal',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'NO WARKAT',
+            name: 'nowarkat',
+          },
+          {
+            label: 'TGL JATUH TEMPO',
+            name: 'tgljatuhtempo',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'BULAN BEBAN',

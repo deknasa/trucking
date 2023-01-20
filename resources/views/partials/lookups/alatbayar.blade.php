@@ -9,6 +9,10 @@
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
+      postData: {
+        statusdefault: `{!! $statusDefault?? '' !!}`,
+        bank_id: `{!! $bank_Id?? '' !!}`,
+      },      
       colModel: [{
           label: 'ID',
           name: 'id',

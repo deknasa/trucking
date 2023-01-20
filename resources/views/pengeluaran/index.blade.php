@@ -160,49 +160,10 @@
             align: 'left'
           },
           {
-            label: 'STATUS JNS TRANSAKSI',
-            name: 'statusjenistransaksi',
-            align: 'left',
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combojenistransaksi'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combojenistransaksi'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-              `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusJnsTrans = JSON.parse(value)
-
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusJnsTrans.WARNA}; color: #fff;">
-                  <span>${statusJnsTrans.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusJnsTrans = JSON.parse(rowObject.statusjenistransaksi)
-
-              return ` title="${statusJnsTrans.MEMO}"`
-            }
-          },
-          {
+            label: 'ALAT BAYAR',
+            name: 'alatbayar_id',
+            align: 'left'
+          },          {
             label: 'POSTING DARI',
             name: 'postingdari',
             align: 'left'
@@ -242,11 +203,7 @@
             name: 'dibayarke',
             align: 'left'
           },
-          {
-            label: 'CABANG',
-            name: 'cabang_id',
-            align: 'left'
-          },
+
           {
             label: 'BANK',
             name: 'bank_id',
