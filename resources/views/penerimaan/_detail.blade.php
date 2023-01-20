@@ -89,10 +89,7 @@
             label: 'JENIS BIAYA',
             name: 'jenisbiaya',
           },
-          {
-            label: 'PELANGGAN',
-            name: 'pelanggan_id',
-          },
+         
           {
             label: 'PELUNASAN PIUTANG NO BUKTI',
             name: 'pelunasanpiutang_nobukti',

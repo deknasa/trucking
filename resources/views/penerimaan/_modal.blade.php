@@ -38,7 +38,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                 <label>
-                                    PELANGGAN <span class="text-danger">*</span></label>
+                                    PELANGGAN <span class="text-danger"></span></label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
                                 <input type="hidden" name="pelanggan_id">
@@ -68,8 +68,8 @@
                             </div>
                         </div>
 
-                        <div class="row form-group">
-                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                        {{--<div class="row form-group">
+                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                 <label>
                                     CABANG <span class="text-danger">*</span></label>
                             </div>
@@ -77,10 +77,10 @@
                                 <input type="hidden" name="cabang_id">
                                 <input type="text" name="cabang" class="form-control cabang-lookup">
                             </div>
-                        </div>
+                        </div>--}}
 
-                        <div class="row form-group">
-                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                        {{-- <div class="row form-group">
+                         <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                 <label>
                                     STATUS KAS <span class="text-danger">*</span></label>
                             </div>
@@ -89,7 +89,7 @@
                                     <option value="">-- PILIH STATUS KAS --</option>
                                 </select>
                             </div>
-                        </div>
+                        </div>--}}
 
 
                         <div class="row form-group">
@@ -103,7 +103,7 @@
                             </div>
                         </div>
 
-                        <div class="row form-group">
+                        {{-- <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                 <label>
                                     NO RESI
@@ -111,8 +111,8 @@
                             <div class="col-12 col-sm-9 col-md-10">
                                 <input type="text" name="noresi" class="form-control">
                             </div>
-                        </div>
-<!-- 
+                        </div>--}}
+                        <!-- 
                         <div class="table-responsive">
                             <table class="table table-bordered table-bindkeys" id="tablePelunasan" style="width:800px;">
                                 <thead>
@@ -195,7 +195,7 @@
         $('#crudForm').autocomplete({
             disabled: true
         });
-        
+
         $(document).on('change', '[name=statuskas]', function() {
             if ($(this).val() == 116) {
                 type = 'kas'
@@ -504,7 +504,7 @@
     //                         <td>
     //                             <input name='pelunasan_id[]' type="checkbox" id="checkItem" value="${data.id}" ${checked}>
     //                             <input name='pelunasan_nobukti[]' type="hidden" value="${data.nobukti}">
-                                
+
     //                         </td>
     //                         <td>
     //                             <p>${data.nobukti}</p>
@@ -792,6 +792,12 @@
                     $('.akunpusat-lookup').last().lookup({
                         title: 'Kode Perk. Lookup',
                         fileName: 'akunpusat',
+                        beforeProcess: function(test) {
+                            // var levelcoa = $(`#levelcoa`).val();
+                            this.postData = {
+                                levelCoa: '3',
+                            }
+                        },
                         onSelectRow: (akunpusat, element) => {
                             element.val(akunpusat.coa)
                             element.data('currentValue', element.val())
@@ -884,6 +890,12 @@
         $('.akunpusat-lookup').last().lookup({
             title: 'Kode Perkiraan Lookup',
             fileName: 'akunpusat',
+            beforeProcess: function(test) {
+                            // var levelcoa = $(`#levelcoa`).val();
+                            this.postData = {
+                                levelCoa: '3',
+                            }
+                        },            
             onSelectRow: (akunpusat, element) => {
                 element.val(akunpusat.coa)
                 element.data('currentValue', element.val())
