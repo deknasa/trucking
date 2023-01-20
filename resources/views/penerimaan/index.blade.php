@@ -166,6 +166,11 @@
             align: 'left'
           },
           {
+            label: 'AGEN ',
+            name: 'agen_id',
+            align: 'left'
+          },
+          {
             label: 'BANK',
             name: 'bank_id',
             align: 'left'

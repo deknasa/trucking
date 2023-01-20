@@ -153,6 +153,11 @@
                         align: 'left'
                     },
                     {
+                        label: 'AGEN',
+                        name: 'agen_id',
+                        align: 'left'
+                    },
+                    {
                         label: 'POSTING DARI',
                         name: 'postingdari',
                         align: 'left'
@@ -344,7 +349,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Please select a row')
                             } else {
-                                cekValidasi(selectedId, 'EDIT')
+                                cekValidasi(selectedId, 'DELETE')
                             }
                         }
                     },

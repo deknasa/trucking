@@ -82,6 +82,26 @@
             align: 'left'
           },
           {
+            label: 'NO. BUKTI PENERIMAAN',
+            name: 'penerimaan_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'NO. BUKTI GIRO',
+            name: 'penerimaangiro_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'NOTA DEBET',
+            name: 'notadebet_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'NOTA KREDIT',
+            name: 'notakredit_nobukti',
+            align: 'left'
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
