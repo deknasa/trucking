@@ -174,6 +174,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+  let bankId
 
   $(document).ready(function() {
 
@@ -301,7 +302,7 @@
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
-    
+
 
     setFormBindKeys(form)
 
@@ -349,10 +350,49 @@
     $('#table_body').html('')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    setStatusJenisTransaksiOptions(form)
+
+    Promise
+      .all([
+        setStatusJenisTransaksiOptions(form)
+      ])
+      // console.log('c')
+      .then(() => {
+        showDefault(form)
+      })
+
+
+
+
     addRow()
     setTotal()
   }
+
+
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}pengeluaranheader/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        bankId = response.data.bank_id
+
+        $.each(response.data, (index, value) => {
+          let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } else {
+            element.val(value)
+          }
+        })
+      }
+    })
+  }
+
 
   function editPengeluaran(id) {
     let form = $('#crudForm')
@@ -484,6 +524,8 @@
         let tgl = response.data.tglbukti
 
         $.each(response.data, (index, value) => {
+          bankId = response.data.bank_id
+          console.log(response.data.bank_id)
           let element = form.find(`[name="${index}"]`)
           if (element.is('select')) {
             element.val(value).trigger('change')
@@ -555,14 +597,15 @@
             fileName: 'alatbayar',
             beforeProcess: function(test) {
               this.postData = {
-                bank_Id: bank_ID ,
+                bank_Id: bankId,
               }
             },
             onSelectRow: (alatbayar, element) => {
 
-              element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
-              element.val(alatbayar.coa)
+              $('#crudForm [name=alatbayar_id]').first().val(alatbayar.id)
+              element.val(alatbayar.namaalatbayar)
               element.data('currentValue', element.val())
+
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
@@ -649,7 +692,7 @@
       beforeProcess: function(test) {
         // const bank_ID=0        
         this.postData = {
-          bank_Id: bank_ID ,
+          bank_Id: bankId,
         }
       },
       onSelectRow: (alatbayar, element) => {
@@ -734,12 +777,6 @@
     }
   }
 
-  function bankID(bankID) {
-    console.log(bankID);
-    bank_ID = bankID 
-
-  }
-
   function initLookup() {
 
     $('.pelanggan-lookup').lookup({
@@ -781,11 +818,11 @@
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',
-     
+
       onSelectRow: (bank, element) => {
         $('#crudForm [name=bank_id]').first().val(bank.id)
-  
-        bankID(bank.id)
+
+        bankId = bank.id
         element.val(bank.namabank)
         element.data('currentValue', element.val())
       },

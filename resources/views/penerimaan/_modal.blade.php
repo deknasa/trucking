@@ -492,9 +492,11 @@
         });
         new AutoNumeric('#total').set(total)
     }
+
     function select(element) {
         alert(element)
     }
+
     function createPenerimaan() {
         let form = $('#crudForm')
         $('#crudModal').find('#crudForm').trigger('reset')
@@ -512,10 +514,46 @@
         $('#table_body').html('')
         addRow();
         initAutoNumeric(form.find('.nominal'))
-        setStatusKasOptions(form)
+
         // tarikPelunasan('add')
+
+        Promise
+            .all([
+                setStatusKasOptions(form)
+            ])
+            // console.log('c')
+            .then(() => {
+                showDefault(form)
+            })
         setTotal()
     }
+
+
+    function showDefault(form) {
+        $.ajax({
+            url: `${apiUrl}penerimaanheader/default`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            success: response => {
+                bankId = response.data.bank_id
+
+                $.each(response.data, (index, value) => {
+                    let element = form.find(`[name="${index}"]`)
+                    // let element = form.find(`[name="statusaktif"]`)
+
+                    if (element.is('select')) {
+                        element.val(value).trigger('change')
+                    } else {
+                        element.val(value)
+                    }
+                })
+            }
+        })
+    }
+
     function editPenerimaan(id) {
         let form = $('#crudForm')
         form.data('action', 'edit')
@@ -537,6 +575,7 @@
                 showPenerimaan(form, id)
             })
     }
+
     function deletePenerimaan(id) {
         let form = $('#crudForm')
         form.data('action', 'delete')
@@ -558,6 +597,7 @@
                 showPenerimaan(form, id)
             })
     }
+
     function cekValidasi(Id, Aksi) {
         $.ajax({
             url: `{{ config('app.api_url') }}penerimaanheader/${Id}/cekvalidasi`,
@@ -620,6 +660,7 @@
             })
         })
     }
+
     function showPenerimaan(form, id) {
         $('#detailList tbody').html('')
         $.ajax({
@@ -754,6 +795,7 @@
             }
         })
     }
+
     function addRow() {
         let detailRow = $(`
       <tr>
@@ -800,11 +842,11 @@
             title: 'Kode Perkiraan Lookup',
             fileName: 'akunpusat',
             beforeProcess: function(test) {
-                            // var levelcoa = $(`#levelcoa`).val();
-                            this.postData = {
-                                levelCoa: '3',
-                            }
-                        },            
+                // var levelcoa = $(`#levelcoa`).val();
+                this.postData = {
+                    levelCoa: '3',
+                }
+            },
             onSelectRow: (akunpusat, element) => {
                 element.val(akunpusat.coa)
                 element.data('currentValue', element.val())
@@ -840,17 +882,20 @@
         initDatepicker()
         setRowNumbers()
     }
+
     function deleteRow(row) {
         row.remove()
         setRowNumbers()
         setTotal()
     }
+
     function setRowNumbers() {
         let elements = $('#detailList tbody tr td:nth-child(1)')
         elements.each((index, element) => {
             $(element).text(index + 1)
         })
     }
+
     function getMaxLength(form) {
         if (!form.attr('has-maxlength')) {
             $.ajax({
@@ -874,6 +919,7 @@
             })
         }
     }
+
     function initLookup() {
         $('.pelanggan-lookup').lookup({
             title: 'Pelanggan Lookup',
