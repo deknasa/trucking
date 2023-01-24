@@ -35,7 +35,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="npwp" class="form-control">
+                <input id='input_masknpwp' type="text" name="npwp" class="form-control">
               </div>
             </div>
             <div class="row form-group">
@@ -45,7 +45,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="noktp" class="form-control numbernoseparate">
+                <input id='input_maskktp' type="text" name="noktp" class="form-control numbernoseparate">
               </div>
             </div>
             <div class="row form-group">
@@ -91,10 +91,30 @@
 
 @push('scripts')
 <script>
+  $('#input_masknpwp').inputmask({
+    mask: '99.999.999.9-999.999',
+    definitions: {
+      A: {
+        validator: "[A-Za-z0-9]"
+      },
+    },
+  });
+
+  $('#input_maskktp').inputmask({
+    mask: '9999999999999999',
+    definitions: {
+      A: {
+        validator: "[A-Za-z0-9]"
+      },
+    },
+  });
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
+
+
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -104,6 +124,9 @@
       let penerimaId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+
+
+
 
       data.push({
         name: 'sortIndex',
@@ -166,7 +189,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -185,8 +210,12 @@
       }).always(() => {
         $('#loader').addClass('d-none')
         $(this).removeAttr('disabled')
+
+
       })
     })
+
+
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -208,6 +237,24 @@
   function createPenerima() {
     let form = $('#crudForm')
 
+    $('#input_masknpwp').inputmask({
+      mask: '99.999.999.9-999.999',
+      definitions: {
+        A: {
+          validator: "[A-Za-z0-9]"
+        },
+      },
+    });
+
+    $('#input_maskktp').inputmask({
+      mask: '9999999999999999',
+      definitions: {
+        A: {
+          validator: "[A-Za-z0-9]"
+        },
+      },
+    });
+
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
@@ -221,18 +268,35 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      setStatusAktifOptions(form),
-      setStatusKaryawanOptions(form)
-    ])
-    .then(() => {
-      showDefault(form)
-    })
+      .all([
+        setStatusAktifOptions(form),
+        setStatusKaryawanOptions(form)
+      ])
+      .then(() => {
+        showDefault(form)
+      })
   }
 
   function editPenerima(penerimaId) {
     let form = $('#crudForm')
 
+    $('#input_masknpwp').inputmask({
+      mask: '99.999.999.9-999.999',
+      definitions: {
+        A: {
+          validator: "[A-Za-z0-9]"
+        },
+      },
+    });
+
+    $('#input_maskktp').inputmask({
+      mask: '9999999999999999',
+      definitions: {
+        A: {
+          validator: "[A-Za-z0-9]"
+        },
+      },
+    });
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -392,21 +456,21 @@
       success: response => {
         $.each(response.data, (index, value) => {
           console.log(value)
-           let element = form.find(`[name="${index}"]`)
+          let element = form.find(`[name="${index}"]`)
           // let element = form.find(`[name="statusaktif"]`)
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } 
-          else {
+          } else {
             element.val(value)
           }
         })
-        
-       
+
+
       }
     })
   }
+
   function showPenerima(form, penerimaId) {
     $.ajax({
       url: `${apiUrl}penerima/${penerimaId}`,

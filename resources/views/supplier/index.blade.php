@@ -60,7 +60,7 @@
             name: 'kota',
           },
           {
-            label: 'kodepos',
+            label: 'kode pos',
             name: 'kodepos',
           },
           {
@@ -149,7 +149,7 @@
             }
           },
           {
-            label: 'status',
+            label: 'status aktif',
             name: 'statusaktif',
             width: 100,
             stype: 'select',

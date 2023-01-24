@@ -118,7 +118,7 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="top" class="form-control text-right">
+                <input type="text" name="top" class="form-control text-right numbernoseparate">
               </div>
             </div>
             <div class="row form-group">
