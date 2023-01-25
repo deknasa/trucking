@@ -124,7 +124,7 @@
     $('#crudForm').autocomplete({
       disabled: true
     });
-    
+
     Inputmask("datetime", {
       inputFormat: "HH:MM",
       max: 24
@@ -227,8 +227,8 @@
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
-          
-          if(id == 0){
+
+          if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
           if (response.data.grp == 'FORMAT') {
@@ -400,13 +400,14 @@
           }).mask(".inputmask-time");
 
           console.log($(document).find('.supir-lookup').last());
-          
+
           $(document).find('.supir-lookup').last().lookup({
             title: 'Supir Lookup',
             fileName: 'supir',
+
             onSelectRow: (supir, element) => {
               element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
-                                    
+
               element.val(supir.namasupir)
               element.data('currentValue', element.val())
             },
@@ -423,6 +424,11 @@
           $('.trado-lookup').last().lookup({
             title: 'Trado Lookup',
             fileName: 'trado',
+            beforeProcess: function(test) {
+              this.postData = {
+                Aktif: 'AKTIF',
+              }
+            },
             onSelectRow: (trado, element) => {
               element.parents('td').find(`[name="trado_id[]"]`).val(trado.id)
               element.val(trado.keterangan)
@@ -525,170 +531,180 @@
     })
 
     $('.trado-lookup').last().lookup({
-      title: 'Trado Lookup',
-      fileName: 'trado',
-      onSelectRow: (trado, element) => {
-        $(`#crudForm [name="trado_id[]"]`).last().val(trado.id)
-        element.val(trado.keterangan)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $(`#crudForm [name="trado_id[]"]`).last().val('')
-        element.val('')
-        element.data('currentValue', element.val())
+        title: 'Trado Lookup',
+        fileName: 'trado',
+        beforeProcess: function(test) {
+          this.postData = {
+            Aktif: 'AKTIF',
+          }
+        },
+          onSelectRow: (trado, element) => {
+              $(`#crudForm [name="trado_id[]"]`).last().val(trado.id)
+              element.val(trado.keterangan)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              $(`#crudForm [name="trado_id[]"]`).last().val('')
+              element.val('')
+              element.data('currentValue', element.val())
+            }
+
+        })
+
+      $('.absentrado-lookup').last().lookup({
+        title: 'Absen Trado Lookup',
+        fileName: 'absentrado',
+        onSelectRow: (absentrado, element) => {
+          $(`#crudForm [name="absen_id[]"]`).last().val(absentrado.id)
+          element.val(absentrado.keterangan)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          $(`#crudForm [name="absen_id[]"]`).last().val('')
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+
+      initAutoNumeric(detailRow.find('.autonumeric'))
+
+      setRowNumbers()
+    }
+
+    function deleteRow(row) {
+      row.remove()
+
+      setRowNumbers()
+    }
+
+    function setRowNumbers() {
+      let elements = $('#detailList tbody tr td:nth-child(1)')
+
+      elements.each((index, element) => {
+        $(element).text(index + 1)
+      })
+    }
+
+    function getMaxLength(form) {
+      if (!form.attr('has-maxlength')) {
+        $.ajax({
+          url: `${apiUrl}absensisupirheader/field_length`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          },
+          success: response => {
+            $.each(response.data, (index, value) => {
+              if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
+              }
+            })
+
+            form.attr('has-maxlength', true)
+          },
+          error: error => {
+            showDialog(error.statusText)
+          }
+        })
       }
-      
-    })
+    }
 
-    $('.absentrado-lookup').last().lookup({
-      title: 'Absen Trado Lookup',
-      fileName: 'absentrado',
-      onSelectRow: (absentrado, element) => {
-        $(`#crudForm [name="absen_id[]"]`).last().val(absentrado.id)
-        element.val(absentrado.keterangan)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $(`#crudForm [name="absen_id[]"]`).last().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
-
-    initAutoNumeric(detailRow.find('.autonumeric'))
-   
-    setRowNumbers()
-  }
-
-  function deleteRow(row) {
-    row.remove()
-
-    setRowNumbers()
-  }
-
-  function setRowNumbers() {
-    let elements = $('#detailList tbody tr td:nth-child(1)')
-
-    elements.each((index, element) => {
-      $(element).text(index + 1)
-    })
-  }
-
-  function getMaxLength(form) {
-    if (!form.attr('has-maxlength')) {
+    function cekValidasi(Id, Aksi) {
       $.ajax({
-        url: `${apiUrl}absensisupirheader/field_length`,
-        method: 'GET',
+        url: `{{ config('app.api_url') }}absensisupirheader/${Id}/cekvalidasi`,
+        method: 'POST',
         dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         success: response => {
-          $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
+          var kodenobukti = response.kodenobukti
+          if (kodenobukti == '1') {
+            var kodestatus = response.kodestatus
+            if (kodestatus == '1') {
+              showDialog(response.message['keterangan'])
+            } else {
+              if (Aksi == 'EDIT') {
+                editAbsensiSupir(Id)
+              }
+              if (Aksi == 'DELETE') {
+                deleteAbsensiSupir(Id)
+              }
             }
-          })
 
-          form.attr('has-maxlength', true)
-        },
-        error: error => {
-          showDialog(error.statusText)
+          } else {
+            showDialog(response.message['keterangan'])
+          }
         }
       })
     }
-  }
 
-  function cekValidasi(Id, Aksi) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}absensisupirheader/${Id}/cekvalidasi`,
-      method: 'POST',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-      },
-      success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'EDIT') {
-              editAbsensiSupir(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deleteAbsensiSupir(Id)
-            }
-          }
-
-        } else {
-          showDialog(response.message['keterangan'])
+    function initLookup() {
+      $('.supir-lookup').lookup({
+        title: 'Supir Lookup',
+        fileName: 'supir',
+        onSelectRow: (supir, element) => {
+          $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
+          element.val(supir.namasupir)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          $(`#crudForm [name="supir_id"]`).first().val('')
+          element.data('currentValue', element.val())
         }
-      }
-    })
-  }
+      })
 
-  function initLookup() {
-    $('.supir-lookup').lookup({
-      title: 'Supir Lookup',
-      fileName: 'supir',
-      onSelectRow: (supir, element) => {
-        $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
-        element.val(supir.namasupir)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.val('')
-        $(`#crudForm [name="supir_id"]`).first().val('')
-        element.data('currentValue', element.val())
-      }
-    })
+      $('.trado-lookup').lookup({
+        title: 'Trado Lookup',
+        fileName: 'trado',
+        beforeProcess: function(test) {
+          this.postData = {
+            Aktif: 'AKTIF',
+          }
+        },
+        onSelectRow: (trado, element) => {
+          $(`#crudForm [name="trado_id[]"]`).first().val(trado.id)
+          element.val(trado.keterangan)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          $(`#crudForm [name="trado_id[]"]`).first().val('')
+          element.data('currentValue', element.val())
+        }
+      })
 
-    $('.trado-lookup').lookup({
-      title: 'Trado Lookup',
-      fileName: 'trado',
-      onSelectRow: (trado, element) => {
-        $(`#crudForm [name="trado_id[]"]`).first().val(trado.id)
-        element.val(trado.keterangan)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.val('')
-        $(`#crudForm [name="trado_id[]"]`).first().val('')
-        element.data('currentValue', element.val())
-      }
-    })
-
-    $('.absentrado-lookup').lookup({
-      title: 'Absen Trado Lookup',
-      fileName: 'absentrado',
-      onSelectRow: (absentrado, element) => {
-        $(`#crudForm [name="absen_id[]"]`).first().val(absentrado.id)
-        element.val(absentrado.keterangan)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.val('')
-        $(`#crudForm [name="absen_id"]`).first().val('')
-        element.data('currentValue', element.val())
-      }
-    })
-  }
+      $('.absentrado-lookup').lookup({
+        title: 'Absen Trado Lookup',
+        fileName: 'absentrado',
+        onSelectRow: (absentrado, element) => {
+          $(`#crudForm [name="absen_id[]"]`).first().val(absentrado.id)
+          element.val(absentrado.keterangan)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          $(`#crudForm [name="absen_id"]`).first().val('')
+          element.data('currentValue', element.val())
+        }
+      })
+    }
 </script>
 @endpush
