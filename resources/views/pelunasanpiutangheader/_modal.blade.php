@@ -196,7 +196,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
-
+  let bankId
   $(document).ready(function() {
 
     $('#crudForm').autocomplete({
@@ -569,12 +569,12 @@
           if (index == 'agen') {
             element.data('current-value', value)
           }
-          if(index != 'agen' && index != 'agen_id'){
-            
+          if (index != 'agen' && index != 'agen_id') {
+
             form.find(`[name="${index}"]`).addClass('disabled')
             initDisabled()
           }
-          
+
         })
 
 
@@ -694,11 +694,7 @@
                 <input type="text" name="potonganppd[]" disabled class="form-control">
               </td>
               <td>
-                <div id="jobTruckingWrapper">
-                  <select name="coapotonganppd[]" class="form-select select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH COA POTONGAN --</option>
-                  </select>
-                </div>
+                  <input type="text" name="coapotonganppd[]" disabled class="form-control coapotongan-lookup">
               </td>
               <td>
                 <textarea name="keteranganpotonganppd[]" rows="1" disabled class="form-control"></textarea>
@@ -725,8 +721,30 @@
           setPenyesuaian()
           setNominalLebih()
 
-          initSelect2()
-          setCoaPotonganOptions(detailRow)
+          // initSelect2()
+          // setCoaPotonganOptions(detailRow)
+
+          $('.coapotongan-lookup').last().lookup({
+            title: 'Coa Potongan Lookup',
+            fileName: 'akunpusat',
+            beforeProcess: function(test) {
+              // var levelcoa = $(`#levelcoa`).val();
+              this.postData = {
+                potongan: '1',
+              }
+            },
+            onSelectRow: (akunpusat, element) => {
+              element.val(akunpusat.coa)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.val('')
+              element.data('currentValue', element.val())
+            }
+          })
         })
         // totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
         // totalSisa = new Intl.NumberFormat('en-US').format(totalSisa);
@@ -742,38 +760,6 @@
 
 
   }
-
-  function initNewSelect2(elements = null, isInsideModal = true) {
-    let option = {
-      width: "100%",
-      theme: "bootstrap4",
-      dropdownParent: isInsideModal ? $("#crudModal") : '',
-      templateResult: formatSelect,
-      templateSelection: formatSelect,
-      escapeMarkup: function(m) {
-        return m;
-      },
-      matcher: matcher
-    };
-
-    if (elements === null) {
-      $(document)
-        .find("select")
-        .select2(option)
-        .on("select2:open", function(e) {
-          document.querySelector(".select2-search__field").focus();
-        });
-    } else {
-      $.each(elements, (index, element) => {
-        $(element)
-          .select2(option)
-          .on("select2:open", function(e) {
-            document.querySelector(".select2-search__field").focus();
-          });
-      });
-    }
-  }
-
 
   function getPelunasan(id, agenId, aksi) {
 
@@ -813,9 +799,8 @@
           totalNominalPiutang = parseFloat(totalNominalPiutang) + parseFloat(detail.nominalpiutang)
           totalSisa = totalSisa + parseFloat(detail.sisa);
           let nominal = new Intl.NumberFormat('en-US').format(detail.nominalpiutang);
-          let sisaHidden = parseFloat(detail.sisa) + parseFloat(detail.nominal)
+          // let sisaHidden = parseFloat(detail.sisa) + parseFloat(detail.nominal)
           let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
-
           if (pelunasanPiutangId != null) {
             checked = 'checked'
           } else {
@@ -835,21 +820,19 @@
               </td>
               <td>
                 <p class="sisa text-right">${sisa}</p>
-                <input type="hidden" name="sisa[]" class="autonumeric" value="${sisaHidden}">
+                <input type="hidden" name="sisa[]" class="autonumeric" value="${sisa}">
               </td>
               <td>
                 <textarea name="keterangandetailppd[]" rows="1" class="form-control" ${attribut}>${detail.keterangan || ''}</textarea>
               </td>
               <td>
-                <input type="text" name="bayarppd[]" class="form-control bayar autonumeric" value="${detail.nominal || ''}" ${attribut}>
+                <input type="text" name="bayarppd[]" class="form-control bayar text-right" value="${detail.nominal || ''}" ${attribut}>
               </td>
               <td>
-                <input type="text" name="potonganppd[]" class="form-control autonumeric" value="${detail.potongan || ''}" ${attribut}>
+                <input type="text" name="potonganppd[]" class="form-control" value="${detail.potongan || ''}" ${attribut}>
               </td>
               <td>
-                <select name="coapotonganppd[]" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH COA POTONGAN --</option>
-                </select>
+                <input type="text" name="coapotonganppd[]" class="form-control coapotongan-lookup" data-current-value="${detail.coapotongan}" ${attribut}>
               </td>
               <td>
                 <textarea name="keteranganpotonganppd[]" rows="1" class="form-control" ${attribut}>${detail.keteranganpotongan || ''}</textarea>
@@ -860,9 +843,19 @@
             </tr>
           `)
 
-          initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`).not(':disabled'))
-          initAutoNumericNoMinus(detailRow.find(`[name="potonganppd[]"]`).not(':disabled'))
-          initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`).not(':disabled'))
+          detailRow.find(`[name="coapotonganppd[]"]`).val(detail.coapotongan)
+          if (aksi == 'edit') {
+
+            initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`).not(':disabled'))
+            initAutoNumericNoMinus(detailRow.find(`[name="potonganppd[]"]`).not(':disabled'))
+            initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`).not(':disabled'))
+          }
+          if (aksi == 'delete') {
+
+            initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
+            initAutoNumericNoMinus(detailRow.find(`[name="potonganppd[]"]`))
+            initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
+          }
           initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
           initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
           initAutoNumeric(detailRow.find('.sisa'))
@@ -873,8 +866,27 @@
           setPenyesuaian()
           setNominalLebih()
 
-          initSelect2()
-          setCoaPotonganOptions(detailRow, detail.coapotongan)
+          $('.coapotongan-lookup').last().lookup({
+            title: 'Coa Potongan Lookup',
+            fileName: 'akunpusat',
+            beforeProcess: function(test) {
+              // var levelcoa = $(`#levelcoa`).val();
+              this.postData = {
+                potongan: '1',
+              }
+            },
+            onSelectRow: (akunpusat, element) => {
+              element.val(akunpusat.coa)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.val('')
+              element.data('currentValue', element.val())
+            }
+          })
 
         })
         $('#nominalPiutang').append(`${totalNominalPiutang}`)
@@ -908,9 +920,9 @@
       $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', false)
 
       let sisa = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="sisa[]"]`)[0])
-
       initAutoNumeric($(this).closest('tr').find(`td [name="bayarppd[]"]`).val(sisa))
-
+      initAutoNumericNoMinus($(this).closest('tr').find(`td [name="potonganppd[]"]`))
+      initAutoNumericNoMinus($(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`))
       let bayar = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="bayarppd[]"]`)[0])
       let totalSisa = sisa - bayar
 
@@ -996,82 +1008,6 @@
     }
   }
 
-  function formatSelect(result) {
-    console.log(result)
-    return `
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-2 text-sm p-1 text-break border-right"> ${result.coa} </div>
-          <div class="col-2 text-sm p-1 text-break border-right"> ${result.keterangancoa} </div>
-        </div>
-      </div>
-    `
-  }
-  function matcher(query, option) {
-    // firstEmptySelect = true;
-
-    // just return if no filter
-    if (!query.term) {
-      return option
-    }
-
-    let columns = ['coa', 'keterangancoa']
-    let words = query.term.toUpperCase().split(" ")
-
-    for (let i = 0; i < columns.length; i++) {
-      for (let wordsIndex = 0; wordsIndex < words.length; wordsIndex++) {
-        if (option[columns[i]]) {
-          if (option[columns[i]].toUpperCase().indexOf(words[wordsIndex]) >= 0) {
-            return option
-          }
-        }
-      }
-    }
-
-    return false;
-  }
-
-  const setCoaPotonganOptions = function(relatedForm, value) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find(`[name="coapotonganppd[]"]`).empty()
-      relatedForm.find(`[name="coapotonganppd[]"]`).append(
-        new Option('-- PILIH COA POTONGAN --', '', false, true)
-      ).trigger('change')
-
-      let data = [];
-      data.push({
-        name: 'filter',
-        value: 'JURNAL POTONGAN'
-      })
-      $.ajax({
-        url: `${apiUrl}parameter/getcoa`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: data,
-        success: response => {
-          
-          response.data.forEach(jurnalPotongan => {
-
-            let option = new Option(jurnalPotongan.coa, jurnalPotongan.coa)
-
-            relatedForm.find(`[name="coapotonganppd[]"]`).append(option).trigger('change')
-          });
-          if (value != '') {
-            relatedForm
-              .find(`[name="coapotonganppd[]"]`)
-              .val(value)
-              .trigger('change')
-              .trigger('select2:selected');
-
-          }
-          resolve()
-        }
-      })
-    })
-  }
 
   function initLookup() {
 
@@ -1079,6 +1015,8 @@
       title: 'Bank Lookup',
       fileName: 'bank',
       onSelectRow: (bank, element) => {
+        
+        bankId = bank.id
         $('#crudForm [name=bank_id]').first().val(bank.id)
         element.val(bank.namabank)
         element.data('currentValue', element.val())
@@ -1096,6 +1034,12 @@
     $('.alatbayar-lookup').lookup({
       title: 'Alat Bayar Lookup',
       fileName: 'alatbayar',
+      beforeProcess: function(test) {
+        // const bank_ID=0        
+        this.postData = {
+          bank_Id: bankId,
+        }
+      },
       onSelectRow: (alatbayar, element) => {
         $('#crudForm [name=alatbayar_id]').first().val(alatbayar.id)
         element.val(alatbayar.namaalatbayar)
