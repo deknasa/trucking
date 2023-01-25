@@ -597,6 +597,12 @@
             fileName: 'alatbayar',
             beforeProcess: function(test) {
               this.postData = {
+                Aktif: 'AKTIF',
+
+              }
+            },
+            beforeProcess: function(test) {
+              this.postData = {
                 bank_Id: bankId,
               }
             },
@@ -623,6 +629,7 @@
               // var levelcoa = $(`#levelcoa`).val();
               this.postData = {
                 levelCoa: '3',
+                Aktif: 'AKTIF',
               }
             },
             onSelectRow: (akunpusat, element) => {
@@ -693,6 +700,7 @@
         // const bank_ID=0        
         this.postData = {
           bank_Id: bankId,
+          Aktif: 'AKTIF',
         }
       },
       onSelectRow: (alatbayar, element) => {
@@ -716,6 +724,7 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           levelCoa: '3',
+          Aktif: 'AKTIF',
         }
       },
       onSelectRow: (akunpusat, element) => {
@@ -782,6 +791,12 @@
     $('.pelanggan-lookup').lookup({
       title: 'Pelanggan Lookup',
       fileName: 'pelanggan',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
       onSelectRow: (pelanggan, element) => {
         $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
         element.val(pelanggan.namapelanggan)
@@ -800,6 +815,12 @@
     $('.cabang-lookup').lookup({
       title: 'Cabang Lookup',
       fileName: 'cabang',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
       onSelectRow: (cabang, element) => {
         $('#crudForm [name=cabang_id]').first().val(cabang.id)
         element.val(cabang.namacabang)
@@ -818,7 +839,12 @@
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
 
+        }
+      },
       onSelectRow: (bank, element) => {
         $('#crudForm [name=bank_id]').first().val(bank.id)
 

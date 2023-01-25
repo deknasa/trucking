@@ -328,8 +328,8 @@
           $('#jqGrid').trigger('reloadGrid', {
             page: response.data.page
           }).trigger('reloadGrid');
-          
-          if(id == 0){
+
+          if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
 
@@ -437,11 +437,11 @@
     $('#crudForm').find('[name=tglakhirberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     Promise
-    .all([
+      .all([
         setStatusAktifOptions(form),
         setStatusLuarKotaOptions(form)
       ])
-    .then(() => {
+      .then(() => {
         showDefault(form)
       })
 
@@ -636,9 +636,9 @@
           if (index == 'zona') {
             element.data('current-value', value)
           }
-          
+
         })
-        
+
         initAutoNumeric($('#crudForm').find(`[name=jarak]`))
 
         $.each(response.detail, (index, detail) => {
@@ -697,6 +697,13 @@
           $('.container-lookup').last().lookup({
             title: 'Container Lookup',
             fileName: 'container',
+            beforeProcess: function(test) {
+              // var levelcoa = $(`#levelcoa`).val();
+              this.postData = {
+
+                Aktif: 'AKTIF',
+              }
+            },
             onSelectRow: (container, element) => {
               element.parents('td').find(`[name="container_id[]"]`).val(container.id)
               element.val(container.keterangan)
@@ -715,6 +722,13 @@
           $('.statuscontainer-lookup').last().lookup({
             title: 'Status Container Lookup',
             fileName: 'statuscontainer',
+            beforeProcess: function(test) {
+              // var levelcoa = $(`#levelcoa`).val();
+              this.postData = {
+
+                Aktif: 'AKTIF',
+              }
+            },
             onSelectRow: (statuscontainer, element) => {
               element.parents('td').find(`[name="statuscontainer_id[]"]`).val(statuscontainer.id)
               element.val(statuscontainer.keterangan)
@@ -777,6 +791,13 @@
     $('.container-lookup').last().lookup({
       title: 'Container Lookup',
       fileName: 'container',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (container, element) => {
         $(`#crudForm [name="container_id[]"]`).last().val(container.id)
         element.val(container.keterangan)
@@ -795,6 +816,13 @@
     $('.statuscontainer-lookup').last().lookup({
       title: 'Status Container Lookup',
       fileName: 'statuscontainer',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (statuscontainer, element) => {
         $(`#crudForm [name="statuscontainer_id[]"]`).last().val(statuscontainer.id)
         element.val(statuscontainer.keterangan)
@@ -823,7 +851,7 @@
     setNominalKomisi()
     setNominalTol()
   }
-  
+
   function showDefault(form) {
     $.ajax({
       url: `${apiUrl}upahritasi/default`,
@@ -835,18 +863,17 @@
       success: response => {
         $.each(response.data, (index, value) => {
           console.log(value)
-           let element = form.find(`[name="${index}"]`)
+          let element = form.find(`[name="${index}"]`)
           // let element = form.find(`[name="statusaktif"]`)
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } 
-          else {
+          } else {
             element.val(value)
           }
         })
-        
-       
+
+
       }
     })
   }
@@ -863,6 +890,13 @@
     $('.kotadari-lookup').lookup({
       title: 'Kota Dari Lookup',
       fileName: 'kota',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kotadari_id]').first().val(kota.id)
         element.val(kota.keterangan)
@@ -881,6 +915,13 @@
     $('.kotasampai-lookup').lookup({
       title: 'Kota Tujuan Lookup',
       fileName: 'kota',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kotasampai_id]').first().val(kota.id)
         element.val(kota.keterangan)
@@ -899,6 +940,13 @@
     $('.zona-lookup').lookup({
       title: 'Zona Lookup',
       fileName: 'zona',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (zona, element) => {
         $('#crudForm [name=zona_id]').first().val(zona.id)
         element.val(zona.zona)

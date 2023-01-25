@@ -731,6 +731,8 @@
               // var levelcoa = $(`#levelcoa`).val();
               this.postData = {
                 potongan: '1',
+                levelCoa: '3',
+                Aktif: 'AKTIF',
               }
             },
             onSelectRow: (akunpusat, element) => {
@@ -873,6 +875,8 @@
               // var levelcoa = $(`#levelcoa`).val();
               this.postData = {
                 potongan: '1',
+                Aktif: 'AKTIF',
+                levelCoa: '3',
               }
             },
             onSelectRow: (akunpusat, element) => {
@@ -1014,8 +1018,13 @@
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (bank, element) => {
-        
+
         bankId = bank.id
         $('#crudForm [name=bank_id]').first().val(bank.id)
         element.val(bank.namabank)
@@ -1038,6 +1047,7 @@
         // const bank_ID=0        
         this.postData = {
           bank_Id: bankId,
+          Aktif: 'AKTIF',
         }
       },
       onSelectRow: (alatbayar, element) => {
@@ -1058,6 +1068,12 @@
     $('.agen-lookup').lookup({
       title: 'Agen Detail Lookup',
       fileName: 'agen',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)

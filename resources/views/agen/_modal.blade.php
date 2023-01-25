@@ -518,6 +518,11 @@
     $('.jenisemkl-lookup').lookup({
       title: 'Jenis EMKL Lookup',
       fileName: 'jenisemkl',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },      
       onSelectRow: (jenisemkl, element) => {
         $('#crudForm [name=jenisemkl]').first().val(jenisemkl.id)
         element.val(jenisemkl.keterangan)

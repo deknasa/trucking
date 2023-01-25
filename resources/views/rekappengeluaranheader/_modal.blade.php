@@ -220,8 +220,15 @@
 
   function initLookup() {
     $('.bank-lookup').lookup({
-      title: 'pelunasan piutang Lookup',
+      title: 'Bank Lookup',
       fileName: 'bank',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (bank, element) => {
         element.val(bank.kodebank)
         parameterPengeluaran.bank = bank.id;

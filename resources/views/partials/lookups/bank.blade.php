@@ -10,7 +10,8 @@
       iconSet: 'fontAwesome',
       datatype: "json",
       postData: {
-        filters: `{!! $filters ?? '' !!}`
+        filters: `{!! $filters ?? '' !!}`,
+        aktif: `{!! $Aktif ?? '' !!}`,
       },
       colModel: [{
           label: 'ID',

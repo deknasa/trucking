@@ -72,7 +72,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+
                                 </tbody>
                                 <tfoot>
                                     <tr>
@@ -192,7 +192,7 @@
                         page: response.data.page
                     }).trigger('reloadGrid');
 
-                    if(id == 0){
+                    if (id == 0) {
                         $('#detail').jqGrid().trigger('reloadGrid')
                     }
                     if (response.data.grp == 'FORMAT') {
@@ -343,6 +343,13 @@
                     $('.mekanik-lookup').last().lookup({
                         title: 'Mekanik Lookup',
                         fileName: 'mekanik',
+                        beforeProcess: function(test) {
+                            // var levelcoa = $(`#levelcoa`).val();
+                            this.postData = {
+
+                                Aktif: 'AKTIF',
+                            }
+                        },
                         onSelectRow: (mekanik, element) => {
                             element.parents('td').find(`[name="mekanik_id[]"]`).val(mekanik.id)
                             element.val(mekanik.namamekanik)
@@ -352,9 +359,9 @@
                             element.val(element.data('currentValue'))
                         },
                         onClear: (element) => {
-                        element.parents('td').find(`[name="mekanik_id[]"]`).val('')
-                        element.val('')
-                        element.data('currentValue', element.val())
+                            element.parents('td').find(`[name="mekanik_id[]"]`).val('')
+                            element.val('')
+                            element.data('currentValue', element.val())
                         }
                     })
 
@@ -392,6 +399,13 @@
         $('.mekanik-lookup').last().lookup({
             title: 'mekanik Lookup',
             fileName: 'mekanik',
+            beforeProcess: function(test) {
+                // var levelcoa = $(`#levelcoa`).val();
+                this.postData = {
+
+                    Aktif: 'AKTIF',
+                }
+            },
             onSelectRow: (mekanik, element) => {
                 $(`#crudForm [name="mekanik_id[]"]`).last().val(mekanik.id)
                 element.val(mekanik.namamekanik)
@@ -455,6 +469,13 @@
         $('.trado-lookup').lookup({
             title: 'trado Lookup',
             fileName: 'trado',
+            beforeProcess: function(test) {
+                // var levelcoa = $(`#levelcoa`).val();
+                this.postData = {
+
+                    Aktif: 'AKTIF',
+                }
+            },
             onSelectRow: (trado, element) => {
                 $('#crudForm [name=trado_id]').first().val(trado.id)
                 element.val(trado.keterangan)

@@ -9,6 +9,9 @@
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
+      postData: {
+        aktif: `{!! $Aktif ?? '' !!}`,
+      },   
       colModel: [{
           label: 'ID',
           name: 'id',

@@ -811,6 +811,11 @@
         $('.supir-lookup').lookup({
             title: 'Supir Lookup',
             fileName: 'supir',
+            beforeProcess: function(test) {
+              this.postData = {
+                Aktif: 'AKTIF',
+              }
+            },            
             onSelectRow: (supir, element) => {
                 $('#crudForm [name=supir_id]').first().val(supir.id)
                 element.val(supir.namasupir)

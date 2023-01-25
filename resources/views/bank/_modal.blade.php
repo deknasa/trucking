@@ -508,6 +508,7 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           levelCoa: '3',
+          Aktif: 'AKTIF',
         }
       },
       onSelectRow: (akunpusat, element) => {

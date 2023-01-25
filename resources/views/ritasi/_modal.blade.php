@@ -448,6 +448,13 @@
     $('.suratpengantar-lookup').lookup({
       title: 'Surat Pengantar Lookup',
       fileName: 'suratpengantar',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (suratpengantar, element) => {
         element.val(suratpengantar.nobukti)
         element.data('currentValue', element.val())
@@ -463,6 +470,13 @@
     $('.dari-lookup').lookup({
       title: 'Dari Lookup',
       fileName: 'kota',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (kota, element) => {
         $('#crudForm [name=dari_id]').first().val(kota.id)
         element.val(kota.keterangan)
@@ -480,6 +494,13 @@
     $('.sampai-lookup').lookup({
       title: 'Sampai Lookup',
       fileName: 'kota',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (kota, element) => {
         $('#crudForm [name=sampai_id]').first().val(kota.id)
         element.val(kota.keterangan)
@@ -497,6 +518,13 @@
     $('.trado-lookup').lookup({
       title: 'Trado Lookup',
       fileName: 'trado',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (trado, element) => {
         $('#crudForm [name=trado_id]').first().val(trado.id)
         element.val(trado.keterangan)
@@ -514,6 +542,13 @@
     $('.supir-lookup').lookup({
       title: 'Supir Lookup',
       fileName: 'supir',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (supir, element) => {
         $('#crudForm [name=supir_id]').first().val(supir.id)
         element.val(supir.namasupir)

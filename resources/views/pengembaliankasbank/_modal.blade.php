@@ -43,7 +43,7 @@
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="pengeluaran_nobukti" class="form-control pengeluaran-lookup">
               </div>
-            
+
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   KETERANGAN <span class="text-danger">*</span></label>
@@ -52,7 +52,7 @@
                 <input type="text" name="keterangan" class="form-control">
               </div>
             </div>
-              
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
@@ -83,7 +83,7 @@
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="dibayarke" class="form-control">
               </div>
-              
+
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   BANK <span class="text-danger">*</span></label>
@@ -102,7 +102,7 @@
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="transferkeac" class="form-control">
               </div>
-              
+
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   TRANSFER KE AN
@@ -576,6 +576,12 @@
           $('.alatbayar-lookup').last().lookup({
             title: 'Coa Kredit Lookup',
             fileName: 'alatbayar',
+            beforeProcess: function(test) {
+              // var levelcoa = $(`#levelcoa`).val();
+              this.postData = {
+                Aktif: 'AKTIF',
+              }
+            },
             onSelectRow: (alatbayar, element) => {
 
               element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
@@ -594,6 +600,13 @@
           $('.akunpusat-lookup').last().lookup({
             title: 'Kode Perk. Lookup',
             fileName: 'akunpusat',
+            beforeProcess: function(test) {
+              // var levelcoa = $(`#levelcoa`).val();
+              this.postData = {
+                Aktif: 'AKTIF',
+                levelCoa: '3',
+              }
+            },
             onSelectRow: (akunpusat, element) => {
               element.val(akunpusat.coa)
               element.data('currentValue', element.val())
@@ -609,6 +622,13 @@
           $('.coakredit-lookup').last().lookup({
             title: 'Kode Perk. Lookup',
             fileName: 'akunpusat',
+            beforeProcess: function(test) {
+              // var levelcoa = $(`#levelcoa`).val();
+              this.postData = {
+                Aktif: 'AKTIF',
+                levelCoa: '3',
+              }
+            },
             onSelectRow: (akunpusat, element) => {
               element.val(akunpusat.coa)
               element.data('currentValue', element.val())
@@ -679,6 +699,13 @@
     $('.alatbayar-lookup').last().lookup({
       title: 'Alat Bayar Lookup',
       fileName: 'alatbayar',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
       onSelectRow: (alatbayar, element) => {
         $(`#crudForm [name="alatbayar_id[]"]`).last().val(alatbayar.id)
         element.val(alatbayar.namaalatbayar)
@@ -696,6 +723,14 @@
     $('.akunpusat-lookup').last().lookup({
       title: 'Kode Perkiraan Lookup',
       fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+          levelCoa: '3',
+
+        }
+      },
       onSelectRow: (akunpusat, element) => {
         element.val(akunpusat.coa)
         element.data('currentValue', element.val())
@@ -711,6 +746,14 @@
     $('.coakredit-lookup').last().lookup({
       title: 'Kode Perkiraan Lookup',
       fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+          levelCoa: '3',
+
+        }
+      },
       onSelectRow: (akunpusat, element) => {
         element.val(akunpusat.coa)
         element.data('currentValue', element.val())
@@ -775,6 +818,13 @@
     $('.pengeluaran-lookup').lookup({
       title: 'pengeluaran Lookup',
       fileName: 'pengeluaranheader',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
       onSelectRow: (pengeluaran, element) => {
         element.val(pengeluaran.nobukti)
         element.data('currentValue', element.val())
@@ -791,6 +841,13 @@
     $('.cabang-lookup').lookup({
       title: 'Cabang Lookup',
       fileName: 'cabang',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
       onSelectRow: (cabang, element) => {
         $('#crudForm [name=cabang_id]').first().val(cabang.id)
         element.val(cabang.namacabang)
@@ -809,6 +866,13 @@
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
       onSelectRow: (bank, element) => {
         $('#crudForm [name=bank_id]').first().val(bank.id)
         element.val(bank.namabank)

@@ -67,7 +67,7 @@
                                 </div>
                             </div>
                         </div>
-<!-- 
+                        <!-- 
                         <div class="table-responsive">
                             <table class="table table-bordered table-bindkeys" id="tablePelunasan" style="width:800px;">
                                 <thead>
@@ -368,7 +368,9 @@
                         page: response.data.page
                     }).trigger('reloadGrid');
 
-                    if(id == 0){$('#detail').jqGrid().trigger('reloadGrid')}
+                    if (id == 0) {
+                        $('#detail').jqGrid().trigger('reloadGrid')
+                    }
                     if (response.data.grp == 'FORMAT') {
                         updateFormat(response.data)
                     }
@@ -427,7 +429,7 @@
     //                         <td colspan='6'><p><b><center>TIDAK ADA PELUNASAN</center></b></p></td>
     //                     </tr>
     //                 `)
-                    
+
     //                 $('#tablePelunasan tbody').append(tablePelunasan)
     //             }else{
     //                 $.each(response.data, (index, data) => {
@@ -494,7 +496,7 @@
         $('#crudForm').find('[name=tgllunas]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
         $('#table_body').html('')
-        
+
         addRow()
         initAutoNumeric(form.find('.nominal'))
 
@@ -535,7 +537,7 @@
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-      
+
         // tarikPelunasan('delete', id)
         showPenerimaanGiro(form, id)
     }
@@ -558,36 +560,36 @@
         })
     }
 
- 
-    function cekValidasi(Id, Aksi) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}penerimaangiroheader/${Id}/cekvalidasi`,
-      method: 'POST',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-      },
-      success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'EDIT') {
-              editPenerimaanGiro(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deletePenerimaanGiro(Id)
-            }
-          }
 
-        } else {
-          showDialog(response.message['keterangan'])
-        }
-      }
-    })
-  }
+    function cekValidasi(Id, Aksi) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}penerimaangiroheader/${Id}/cekvalidasi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var kodenobukti = response.kodenobukti
+                if (kodenobukti == '1') {
+                    var kodestatus = response.kodestatus
+                    if (kodestatus == '1') {
+                        showDialog(response.message['keterangan'])
+                    } else {
+                        if (Aksi == 'EDIT') {
+                            editPenerimaanGiro(Id)
+                        }
+                        if (Aksi == 'DELETE') {
+                            deletePenerimaanGiro(Id)
+                        }
+                    }
+
+                } else {
+                    showDialog(response.message['keterangan'])
+                }
+            }
+        })
+    }
 
     function showPenerimaanGiro(form, id) {
         $('#detailList tbody').html('')
@@ -680,10 +682,16 @@
 
                     setTotal();
 
-                 
+
                     $('.bank-lookup').last().lookup({
                         title: 'Bank Lookup',
                         fileName: 'bank',
+                        beforeProcess: function(test) {
+                            this.postData = {
+                                Aktif: 'AKTIF',
+
+                            }
+                        },
                         onSelectRow: (bank, element) => {
                             element.parents('td').find(`[name="bank_id[]"]`).val(bank.id)
                             element.val(bank.namabank)
@@ -701,6 +709,12 @@
                     $('.bankpelanggan-lookup').last().lookup({
                         title: 'Bank Pelanggan Lookup',
                         fileName: 'bankpelanggan',
+                        beforeProcess: function(test) {
+                            this.postData = {
+                                Aktif: 'AKTIF',
+
+                            }
+                        },
                         onSelectRow: (bankpelanggan, element) => {
                             element.parents('td').find(`[name="bankpelanggan_id[]"]`).val(bankpelanggan.id)
                             element.val(bankpelanggan.namabank)
@@ -779,6 +793,12 @@
         $('.bank-lookup').last().lookup({
             title: 'Bank Lookup',
             fileName: 'bank',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+
+                }
+            },
             onSelectRow: (bank, element) => {
                 $(`#crudForm [name="bank_id[]"]`).last().val(bank.id)
                 element.val(bank.namabank)
@@ -796,6 +816,12 @@
         $('.bankpelanggan-lookup').last().lookup({
             title: 'Bank Pelanggan Lookup',
             fileName: 'bankpelanggan',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+
+                }
+            },
             onSelectRow: (bankpelanggan, element) => {
                 $(`#crudForm [name="bankpelanggan_id[]"]`).last().val(bankpelanggan.id)
                 element.val(bankpelanggan.namabank)
@@ -862,6 +888,12 @@
         $('.pelanggan-lookup').lookup({
             title: 'Pelanggan Lookup',
             fileName: 'pelanggan',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+
+                }
+            },
             onSelectRow: (pelanggan, element) => {
                 $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
                 element.val(pelanggan.namapelanggan)

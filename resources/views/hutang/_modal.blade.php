@@ -495,6 +495,12 @@
     $('.akunpusat-lookup').lookup({
       title: 'Akun Pusat Lookup',
       fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          levelCoa: '3',
+        }
+      },
       onSelectRow: (akunpusat, element) => {
         element.val(akunpusat.coa)
         element.data('currentValue', element.val())
@@ -512,6 +518,11 @@
     $('.supplier-lookup').lookup({
       title: 'supplier Lookup',
       fileName: 'supplier',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (supplier, element) => {
         $(`#crudForm [name="supplier_id"]`).first().val(supplier.id)
         element.val(supplier.namasupplier)

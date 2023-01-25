@@ -754,6 +754,7 @@
                             // var levelcoa = $(`#levelcoa`).val();
                             this.postData = {
                                 levelCoa: '3',
+                                Aktif: 'AKTIF',
                             }
                         },
                         onSelectRow: (akunpusat, element) => {
@@ -771,6 +772,11 @@
                     $('.bankpelanggan-lookup').last().lookup({
                         title: 'Bank Pelanggan Lookup',
                         fileName: 'bankpelanggan',
+                        beforeProcess: function(test) {
+                            this.postData = {
+                                Aktif: 'AKTIF',
+                            }
+                        },
                         onSelectRow: (bankpelanggan, element) => {
                             element.parents('td').find(`[name="bankpelanggan_id[]"]`).val(bankpelanggan.id)
                             element.val(bankpelanggan.namabank)
@@ -845,6 +851,7 @@
                 // var levelcoa = $(`#levelcoa`).val();
                 this.postData = {
                     levelCoa: '3',
+                    Aktif: 'AKTIF',
                 }
             },
             onSelectRow: (akunpusat, element) => {
@@ -862,6 +869,11 @@
         $('.bankpelanggan-lookup').last().lookup({
             title: 'Bank Pelanggan Lookup',
             fileName: 'bankpelanggan',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
             onSelectRow: (bankpelanggan, element) => {
                 $(`#crudForm [name="bankpelanggan_id[]"]`).last().val(bankpelanggan.id)
                 element.val(bankpelanggan.namabank)
@@ -924,6 +936,11 @@
         $('.pelanggan-lookup').lookup({
             title: 'Pelanggan Lookup',
             fileName: 'pelanggan',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
             onSelectRow: (pelanggan, element) => {
                 $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
                 element.val(pelanggan.namapelanggan)
@@ -941,6 +958,11 @@
         $('.cabang-lookup').lookup({
             title: 'Cabang Lookup',
             fileName: 'cabang',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
             onSelectRow: (cabang, element) => {
                 $('#crudForm [name=cabang_id]').first().val(cabang.id)
                 element.val(cabang.namacabang)
@@ -967,7 +989,8 @@
                             "op": "cn",
                             "data": type
                         }]
-                    })
+                    }),
+                    Aktif: 'AKTIF',
                 }
             },
             onSelectRow: (bank, element) => {

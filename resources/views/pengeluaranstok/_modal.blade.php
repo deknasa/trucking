@@ -417,6 +417,7 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           levelCoa: '3',
+          Aktif: 'AKTIF',          
         }
       },      
       onSelectRow: (akunpusat, element) => {
@@ -432,8 +433,14 @@
       }
     })
     $('.trado-lookup').lookup({
-      title: 'akun pusat Lookup',
+      title: 'Trado Lookup',
       fileName: 'trado',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },      
       onSelectRow: (trado, element) => {
         element.val(trado.keterangan)
         element.data('currentValue', element.val())

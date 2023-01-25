@@ -43,9 +43,9 @@
                 </div>
               </div>
 
-                
+
               <div class="form-group col-md-6" style="display: none">
-                <div class="row" >
+                <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
                     <label>STATUS FORMAT <span class="text-danger">*</span> </label>
                   </div>
@@ -57,7 +57,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
@@ -79,7 +79,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
@@ -102,7 +102,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
@@ -114,7 +114,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
@@ -600,6 +600,12 @@
     $(`.detail_stok_${row}`).lookup({
       title: 'stok Lookup',
       fileName: 'stok',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
       onSelectRow: (stok, element) => {
         element.val(stok.namastok)
         parent = element.closest('td');
@@ -739,6 +745,12 @@
           $(`#detail_stok_${id}`).lookup({
             title: 'stok Lookup',
             fileName: 'stok',
+            beforeProcess: function(test) {
+              this.postData = {
+                Aktif: 'AKTIF',
+
+              }
+            },
             onSelectRow: (stok, element) => {
               element.val(stok.namastok)
               parent = element.closest('td');
@@ -752,7 +764,7 @@
           id++;
         })
         sumary()
-        
+
         kodepengeluaran(statusformat)
 
       }
@@ -760,165 +772,226 @@
   }
 
   function initLookup() {
-      $('.akunpusat-lookup').lookup({
-        title: 'akun pusat Lookup',
-        fileName: 'akunpusat',
-        onSelectRow: (akunpusat, element) => {
-          element.val(akunpusat.coa)
-          $(`#${element[0]['name']}Id`).val(akunpusat.coa)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
-          element.val('')
-          element.data('currentValue', element.val())
+    $('.akunpusat-lookup').lookup({
+      title: 'akun pusat Lookup',
+      fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          levelCoa: '3',
+          Aktif: 'AKTIF',
         }
-      })
-      $('.pengeluaranstok-lookup').lookup({
-        title: 'pengeluaran stok Lookup',
-        fileName: 'pengeluaranstok',
-        onSelectRow: (pengeluaranstok, element) => {
-          kodepengeluaran(pengeluaranstok.statusformatid)
-          element.val(pengeluaranstok.kodepengeluaran)
-          $(`#${element[0]['name']}Id`).val(pengeluaranstok.id)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
-          element.val('')
-          element.data('currentValue', element.val())
+      },
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.coa)
+        $(`#${element[0]['name']}Id`).val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.pengeluaranstok-lookup').lookup({
+      title: 'pengeluaran stok Lookup',
+      fileName: 'pengeluaranstok',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
         }
-      })
-      $('.supir-lookup').lookup({
-        title: 'supir Lookup',
-        fileName: 'supir',
-        onSelectRow: (supir, element) => {
-          element.val(supir.namasupir)
-          $(`#${element[0]['name']}Id`).val(supir.id)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
-          element.val('')
-          element.data('currentValue', element.val())
+      },
+      onSelectRow: (pengeluaranstok, element) => {
+        kodepengeluaran(pengeluaranstok.statusformatid)
+        element.val(pengeluaranstok.kodepengeluaran)
+        $(`#${element[0]['name']}Id`).val(pengeluaranstok.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.supir-lookup').lookup({
+      title: 'supir Lookup',
+      fileName: 'supir',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
         }
-      })
-      
-      $('.kerusakan-lookup').lookup({
-        title: 'kerusakan Lookup',
-        fileName: 'kerusakan',
-        onSelectRow: (kerusakan, element) => {
-          element.val(kerusakan.keterangan)
-          $(`#${element[0]['name']}Id`).val(kerusakan.id)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
-          element.val('')
-          element.data('currentValue', element.val())
+      },
+      onSelectRow: (supir, element) => {
+        element.val(supir.namasupir)
+        $(`#${element[0]['name']}Id`).val(supir.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.kerusakan-lookup').lookup({
+      title: 'kerusakan Lookup',
+      fileName: 'kerusakan',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
         }
-      })
-      $('.supplier-lookup').lookup({
-        title: 'supplier Lookup',
-        fileName: 'supplier',
-        onSelectRow: (supplier, element) => {
-          element.val(supplier.namasupplier)
-          $(`#${element[0]['name']}Id`).val(supplier.id)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
-          element.val('')
-          element.data('currentValue', element.val())
+      },
+      onSelectRow: (kerusakan, element) => {
+        element.val(kerusakan.keterangan)
+        $(`#${element[0]['name']}Id`).val(kerusakan.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.supplier-lookup').lookup({
+      title: 'supplier Lookup',
+      fileName: 'supplier',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
         }
-      })
-      $('.trado-lookup').lookup({
-        title: 'Trado Lookup',
-        fileName: 'trado',
-        onSelectRow: (trado, element) => {
-          element.val(trado.keterangan)
-          $(`#${element[0]['name']}Id`).val(trado.id)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
-          element.val('')
-          element.data('currentValue', element.val())
+      },
+      onSelectRow: (supplier, element) => {
+        element.val(supplier.namasupplier)
+        $(`#${element[0]['name']}Id`).val(supplier.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.trado-lookup').lookup({
+      title: 'Trado Lookup',
+      fileName: 'trado',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
         }
-      })
-      $('.gudang-lookup').lookup({
-        title: 'Gudang Lookup',
-        fileName: 'gudang',
-        onSelectRow: (gudang, element) => {
-          element.val(gudang.gudang)
-          $(`#${element[0]['name']}Id`).val(gudang.id)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
-          element.val('')
-          element.data('currentValue', element.val())
+      },
+      onSelectRow: (trado, element) => {
+        element.val(trado.keterangan)
+        $(`#${element[0]['name']}Id`).val(trado.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.gudang-lookup').lookup({
+      title: 'Gudang Lookup',
+      fileName: 'gudang',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
         }
-      })
-      $('.pengeluaranstokheader-lookup').lookup({
-        title: 'pengeluaran stok header Lookup',
-        fileName: 'pengeluaranstokheader',
-        onSelectRow: (pengeluaran, element) => {
-          element.val(pengeluaran.nobukti)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
-          element.val('')
-          element.data('currentValue', element.val())
+      },
+      onSelectRow: (gudang, element) => {
+        element.val(gudang.gudang)
+        $(`#${element[0]['name']}Id`).val(gudang.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.pengeluaranstokheader-lookup').lookup({
+      title: 'pengeluaran stok header Lookup',
+      fileName: 'pengeluaranstokheader',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
         }
-      })
-      $('.penerimaanstokheader-lookup').lookup({
-        title: 'penerimaan stok header Lookup',
-        fileName: 'penerimaanstokheader',
-        onSelectRow: (penerimaan, element) => {
-          element.val(penerimaan.nobukti)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
-          element.val('')
-          element.data('currentValue', element.val())
+      },
+      onSelectRow: (pengeluaran, element) => {
+        element.val(pengeluaran.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.penerimaanstokheader-lookup').lookup({
+      title: 'penerimaan stok header Lookup',
+      fileName: 'penerimaanstokheader',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
         }
-      })
-      $('.hutang-lookup').lookup({
-        title: 'hutang header Lookup',
-        fileName: 'hutangheader',
-        onSelectRow: (hutang, element) => {
-          element.val(hutang.nobukti)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
-          element.val('')
-          element.data('currentValue', element.val())
+      },
+      onSelectRow: (penerimaan, element) => {
+        element.val(penerimaan.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.hutang-lookup').lookup({
+      title: 'hutang header Lookup',
+      fileName: 'hutangheader',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
         }
-      })
+      },
+      onSelectRow: (hutang, element) => {
+        element.val(hutang.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
   }
 </script>
 @endpush()

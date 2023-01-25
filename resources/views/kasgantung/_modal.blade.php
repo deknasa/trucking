@@ -552,6 +552,11 @@
     $('.penerima-lookup').lookup({
       title: 'Penerima Lookup',
       fileName: 'penerima',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },      
       onSelectRow: (penerima, element) => {
         $('#crudForm [name=penerima_id]').first().val(penerima.id)
         element.val(penerima.namapenerima)
@@ -570,6 +575,11 @@
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },          
       onSelectRow: (bank, element) => {
         $('#crudForm [name=bank_id]').first().val(bank.id)
         element.val(bank.namabank)

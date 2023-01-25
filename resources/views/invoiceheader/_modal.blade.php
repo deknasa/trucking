@@ -654,6 +654,11 @@
     $('.agen-lookup').lookup({
       title: 'Agen Lookup',
       fileName: 'agen',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },      
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)
@@ -673,6 +678,11 @@
     $('.jenisorder-lookup').lookup({
       title: 'Jenis Order Lookup',
       fileName: 'jenisorder',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },      
       onSelectRow: (jenisorder, element) => {
         $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
         element.val(jenisorder.keterangan)
@@ -691,6 +701,11 @@
     $('.cabang-lookup').lookup({
       title: 'Cabang Lookup',
       fileName: 'cabang',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },      
       onSelectRow: (cabang, element) => {
         $('#crudForm [name=cabang_id]').first().val(cabang.id)
         element.val(cabang.namacabang)

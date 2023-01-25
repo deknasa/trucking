@@ -534,7 +534,7 @@
         })
 
         form.find(`[name="tglkaskeluar"]`).val(dateFormat(tgl)).attr('disabled', false)
-       
+
         getPembayaran(Id, fieldId, field, 'edit')
       }
     })
@@ -958,6 +958,12 @@
     $('.coa-lookup').lookup({
       title: 'COA Lookup',
       fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          levelCoa: '3',
+        }
+      },
       onSelectRow: (coa, element) => {
         element.val(coa.coa)
         element.data('currentValue', element.val())
@@ -974,6 +980,11 @@
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (bank, element) => {
         $('#crudForm [name=bank_id]').first().val(bank.id)
         element.val(bank.namabank)
@@ -992,6 +1003,11 @@
     $('.supplier-lookup').lookup({
       title: 'Supplier Lookup',
       fileName: 'supplier',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (supplier, element) => {
         $('#crudForm [name=supplier_id]').first().val(supplier.id)
         element.val(supplier.namasupplier)
@@ -1017,6 +1033,11 @@
     $('.alatbayar-lookup').lookup({
       title: 'Alat Bayar Lookup',
       fileName: 'alatbayar',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (alatbayar, element) => {
         $('#crudForm [name=alatbayar_id]').first().val(alatbayar.id)
         element.val(alatbayar.namaalatbayar)
