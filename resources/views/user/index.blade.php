@@ -3,9 +3,31 @@
 @section('content')
 <!-- Grid -->
 <div class="container-fluid">
-  <div class="row">
+  <div class="row mb-3">
     <div class="col-12">
       <table id="jqGrid"></table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-header p-0 border-bottom-0">
+          <ul class="nav nav-tabs" id="tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="role" data-toggle="pill" href="#role" role="tab" aria-controls="role" aria-selected="true">Role</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="acl" data-toggle="pill" href="#acl" role="tab" aria-controls="acl" aria-selected="false">Acl</a>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body">
+          <div class="tab-content" id="tabContent">
+            <div class="tab-pane active" id="role-tab" role="tabpanel" aria-labelledby="role-tab"></div>
+            <div class="tab-pane" id="acl-tab" role="tabpanel" aria-labelledby="acl-tab"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -25,9 +47,11 @@
   let sortname = 'user'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let currentTab = 'role'
 
   $(document).ready(function() {
-    jqGrid = $("#jqGrid").jqGrid({
+    jqGrid = $("#jqGrid")
+      .jqGrid({
         url: `${apiUrl}user`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
@@ -173,12 +197,16 @@
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          let userId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+
+          $(`.tab-pane#${currentTab}-tab`).html('').load(`${appUrl}/user/${currentTab}/grid`, function() {
+            loadGrid(userId)
+          })
         },
         loadComplete: function(data) {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
-          initResize($(this))
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -402,6 +430,18 @@
 
         submitButton.removeAttr('disabled')
       }
+    })
+
+    $('#tab').find('.nav-link').on('shown.bs.tab', function() {
+      let userId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+
+      currentTab = $(this).attr('id')
+
+      $('.tab-pane').removeClass('active')
+      $(`.tab-pane#${currentTab}-tab`).addClass('active')
+      $(`.tab-pane#${currentTab}-tab`).html('').load(`${appUrl}/user/${currentTab}/grid`, function() {
+        loadGrid(userId)
+      })
     })
   })
 </script>

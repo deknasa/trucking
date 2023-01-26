@@ -34,7 +34,7 @@
     });
 
     function Start() {
-      Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'stimulsoft/license.php') }}");
+      Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
       var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
 
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)

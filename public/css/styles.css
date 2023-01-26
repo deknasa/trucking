@@ -294,3 +294,9 @@ html {
 .ui-jqgrid {
 	border-color: var(--jqgrid-border-color);
 }
+
+.ui-jqgrid,
+.ui-jqgrid-view,
+.ui-jqgrid-view > * {
+	width: 100% !important;
+}

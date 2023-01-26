@@ -28,7 +28,8 @@ class Myauth
             'approvalbukacetak',
             'laporanbukubesar',
             'laporankasbank',
-            'gudang'
+            'gudang',
+            'user'
         ],
         'method' => [
             'gridtab',

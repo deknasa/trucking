@@ -204,7 +204,9 @@ $.fn.customPager = function (option = {}) {
 								buttonElement.innerHTML = button.innerHTML;
 	
 								if (button.onClick) {
-									$(document).on("click", `#${buttonElement.id}`, function () {
+									$(document).on("click", `#${buttonElement.id}`, function (event) {
+										event.stopImmediatePropagation();
+	
 										button.onClick();
 									});
 								}

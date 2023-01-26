@@ -184,9 +184,9 @@
                     <td>
                       <p class="text-right font-weight-bold autonumeric" id="nominal"></p>
                     </td>
-                    <td>
-                      {{-- <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button> --}}
-                    </td>
+                    {{-- <td>
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
+                    </td> --}}
                   </tr>
                 </tfoot>
               </table>
@@ -587,6 +587,7 @@
   }
 
   function showTarif(form, tarifId) {
+    $('#detailList tbody').html('')
     $.ajax({
       url: `${apiUrl}tarif/${tarifId}`,
       method: 'GET',
@@ -624,6 +625,9 @@
             let detailRow = $(`
               <tr>
                 <td></td>
+                
+                
+                <input type="hidden" name="detail_id[]" value="${detail.id}">
                 <td>
                   <input type="hidden" name="container_id[]">
                   <input type="text" name="container[]" data-current-value="${detail.container}" class="form-control " readonly>
@@ -746,6 +750,8 @@
         $('#crudForm [name=parent_id]').first().val(tarif.id)
         element.val(tarif.tujuan)
         element.data('currentValue', element.val())
+        let form = $('#crudForm')
+        showTarif(form, tarif.id)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -799,6 +805,8 @@
           let detailRow = $(`
             <tr>
               <td></td>
+              <input type="hidden" name="detail_id[]" value="0">
+              
               <td>
                 <input type="hidden" name="container_id[]">
                 <input type="text" name="container[]" data-current-value="${detail.container}" class="form-control" readonly>
