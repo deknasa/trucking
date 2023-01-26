@@ -86,8 +86,8 @@
                   TARIF <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="hidden" name="tarif_id">
-                <input type="text" name="tarif" class="form-control tarif-lookup">
+                <input type="hidden" name="tarifrincian_id">
+                <input type="text" name="tarifrincian" class="form-control tarifrincian-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -514,7 +514,7 @@
           if (index == 'pelanggan') {
             element.data('current-value', value)
           }
-          if (index == 'tarif') {
+          if (index == 'tarifrincian') {
             element.data('current-value', value)
           }
         })
@@ -536,6 +536,8 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        containerId = -1
+
         $.each(response.data, (index, value) => {
           console.log(value)
            let element = form.find(`[name="${index}"]`)
@@ -567,6 +569,7 @@
       onSelectRow: (container, element) => {
         $('#crudForm [name=container_id]').first().val(container.id)
         element.val(container.keterangan)
+        containerId = container.id
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -633,6 +636,7 @@
       },    
       onSelectRow: (pelanggan, element) => {
         $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
+      
         element.val(pelanggan.namapelanggan)
         element.data('currentValue', element.val())
       },
@@ -645,24 +649,25 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.tarif-lookup').lookup({
-      title: 'Tarif Lookup',
-      fileName: 'tarif',
+    $('.tarifrincian-lookup').lookup({
+      title: 'Tarif Rincian Lookup',
+      fileName: 'tarifrincian',
       beforeProcess: function(test) {
-        this.postData = {
-          Aktif: 'AKTIF',
-        }
-      },          
-      onSelectRow: (tarif, element) => {
-        $('#crudForm [name=tarif_id]').first().val(tarif.id)
-        element.val(tarif.tujuan)
+              this.postData = {
+                container_Id: containerId,
+                Aktif: 'AKTIF',
+              }
+            },               
+      onSelectRow: (tarifrincian, element) => {
+        $('#crudForm [name=tarifrincian_id]').first().val(tarifrincian.id)
+        element.val(tarifrincian.tujuan)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=tarif_id]').first().val('')
+        $('#crudForm [name=tarifrincian_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }

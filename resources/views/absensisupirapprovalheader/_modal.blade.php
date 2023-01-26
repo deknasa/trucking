@@ -353,7 +353,7 @@
                 <span class="autonumeric">
                   ${detail.uangjalan}
                 </span>                
-                <input type="text" value="${detail.uangjalan}" id="uangjalan" name="uangjalan[]"  readonly hidden>
+                <input type="text" class="text-right" value="${detail.uangjalan}" id="uangjalan" name="uangjalan[]"  readonly hidden>
 
               </td>
             </tr>`)
@@ -405,7 +405,7 @@
                   <span class="autonumeric">
                     ${detail.uangjalan}
                   </span>
-                  <input type="text" value="${detail.uangjalan}" id="uangjalan" name="uangjalan[]"  readonly hidden>
+                  <input type="text" class="text-right" value="${detail.uangjalan}" id="uangjalan" name="uangjalan[]"  readonly hidden>
               </td>
             </tr>`)
           $('#detailList tbody').append(detailRow)
