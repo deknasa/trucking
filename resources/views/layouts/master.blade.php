@@ -157,7 +157,7 @@
   <script src="{{ asset('libraries/autonumeric/4.5.4/autonumeric.min.js') }}"></script>
 
   <!-- Select2 -->
-  <script src="{{ asset('plugins/select2/4.0.13/js/select2-customized.js') }}"></script>
+  <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
 
   <!-- Inputmask -->
   <script src="{{ asset('libraries/inputmask/5.0.6/jquery.inputmask.min.js') }}"></script>

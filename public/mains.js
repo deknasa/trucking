@@ -278,7 +278,7 @@ function setErrorMessages(form, errors) {
 			$(element).addClass("is-invalid");
 			$(`
 					<div class="invalid-feedback">
-					${error}
+					${error[0].toLowerCase()}
 					</div>
 			`).appendTo($(element).parent());
 		} else {

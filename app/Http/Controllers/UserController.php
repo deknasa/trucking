@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Menu;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
-
 
 class UserController extends MyController
 {
@@ -23,6 +23,16 @@ class UserController extends MyController
         ];
 
         return view('user.index', compact('title', 'data'));
+    }
+
+    public function aclGrid()
+    {
+        return view('user.acl._grid');
+    }
+
+    public function roleGrid()
+    {
+        return view('user.role._grid');
     }
 
     public function create()
