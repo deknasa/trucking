@@ -203,6 +203,13 @@
     $('.invalid-feedback').remove()
 
     setStatusAktifOptions(form, 'add')
+    Promise 
+      .all([
+        setStatusAktifOptions(form, 'add')
+      ])
+      .then(() => {
+        showDefault(form)
+      })
   }
 
   function editMekanik(mekanikId) {
@@ -345,6 +352,33 @@
           form.find('[name]').addClass('disabled')
           initDisabled()
         }
+      }
+    })
+  }
+  
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}mekanik/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
       }
     })
   }

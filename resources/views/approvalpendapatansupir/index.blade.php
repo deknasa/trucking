@@ -302,11 +302,6 @@
                         align: 'left'
                     },
                     {
-                        label: 'KETERANGAN',
-                        name: 'keterangan',
-                        align: 'left'
-                    },
-                    {
                         label: 'TANGGAL DARI',
                         name: 'tgldari',
                         align: 'left',

@@ -171,10 +171,6 @@ class HutangHeaderController extends MyController
                 'index' => 'akunpusat',
             ],
             [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
-            ],
-            [
                 'label' => 'Total',
                 'index' => 'total',
                 'format' => 'currency'

@@ -10,7 +10,7 @@
         </div>
         <form action="" method="post">
           <div class="modal-body">
-          
+
             <div class="row form-group">
               <input type="hidden" name="id" hidden class="form-control" readonly>
 
@@ -20,7 +20,7 @@
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" readonly name="nobukti" class="form-control">
               </div>
-              
+
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>tglbukti <span class="text-danger">*</span> </label>
               </div>
@@ -29,7 +29,7 @@
               </div>
             </div>
             <div class="row">
-            
+
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
@@ -54,7 +54,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
@@ -65,7 +65,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
@@ -76,7 +76,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
@@ -87,7 +87,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
@@ -98,19 +98,19 @@
                   </div>
                 </div>
               </div>
-  
+
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                  <label>trado </label>
-                </div>
-                <div class="col-12 col-sm-9 col-md-8">
-                  <input type="text" name="trado" class="form-control trado-lookup">
-                  <input type="text" id="tradoId" name="trado_id" hidden readonly>
-                </div>
+                    <label>trado </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="trado" class="form-control trado-lookup">
+                    <input type="text" id="tradoId" name="trado_id" hidden readonly>
+                  </div>
                 </div>
               </div>
-              
+
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
@@ -122,7 +122,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
@@ -134,7 +134,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
@@ -145,7 +145,7 @@
                   </div>
                 </div>
               </div>
-                    
+
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
@@ -170,15 +170,15 @@
               </div>
             </div>
 
-              <div class="row form-group">
-                <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                  <label>keterangan <span class="text-danger">*</span> </label>
-                </div>
-                <div class="col-12 col-sm-9 col-md-10">
-                  <input type="text" name="keterangan" class="form-control">
-                </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>keterangan <span class="text-danger">*</span> </label>
               </div>
-              
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="keterangan" class="form-control">
+              </div>
+            </div>
+
 
 
 
@@ -361,6 +361,7 @@
     cekKodePenerimaan(kodepenerimaan)
     $('#crudForm').find('[name=statusformat_id]').val(kodepenerimaan);
   }
+
   function cekKodePenerimaan(kode) {
     switch (kode) {
       case '132':
@@ -375,7 +376,7 @@
         //PBT
         tampilanpbt()
         break;
-    
+
       default:
         tampilanall()
         break;
@@ -410,10 +411,10 @@
     //     }
     //   }
     // })
-    
+
   }
-          
-  
+
+
   function tampilandot() {
     $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
@@ -430,14 +431,15 @@
     $('.tbl_harga').show();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
-    $('.colspan').attr('colspan',5);
+    $('.colspan').attr('colspan', 5);
     $('.sumrow').hide();
-    $('[name=gudang]').val('').attr('readonly',false);
+    $('[name=gudang]').val('').attr('readonly', false);
     $('[name=gudang_id]').val('')
-    $('[name=supplier]').val('').attr('readonly',false);
-    $('[name=supplier]').data('currentValue','')
+    $('[name=supplier]').val('').attr('readonly', false);
+    $('[name=supplier]').data('currentValue', '')
     $('[name=supplier_id]').val('')
   }
+
   function tampilanpo() {
     $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
@@ -452,14 +454,15 @@
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
-    $('.colspan').attr('colspan',4);
+    $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
-    $('[name=gudang]').val('').attr('readonly',false);
+    $('[name=gudang]').val('').attr('readonly', false);
     $('[name=gudang_id]').val('')
-    $('[name=supplier]').val('').attr('readonly',false);
-    $('[name=supplier]').data('currentValue','')
+    $('[name=supplier]').val('').attr('readonly', false);
+    $('[name=supplier]').data('currentValue', '')
     $('[name=supplier_id]').val('')
   }
+
   function tampilanpbt() {
     $('[name=penerimaanstok_nobukti]').parents('.form-group').show()
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
@@ -476,24 +479,24 @@
     $('.tbl_harga').show();
     $('.tbl_persentase').show();
     $('.tbl_total').show();
-    $('.colspan').attr('colspan',5);
+    $('.colspan').attr('colspan', 5);
     $('.sumrow').show();
     $.ajax({
-        url: `${apiUrl}gudang/1`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          var data =response.data;
-          $('[name=gudang]').val(data.gudang).attr('readonly',true);
-          $('[name=gudang_id]').val(data.id)
-        },
-        error: error => {
-          showDialog(error.statusText)
-        }
-      })
+      url: `${apiUrl}gudang/1`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      success: response => {
+        var data = response.data;
+        $('[name=gudang]').val(data.gudang).attr('readonly', true);
+        $('[name=gudang_id]').val(data.id)
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
   }
 
   function tampilanall() {
@@ -507,36 +510,36 @@
     $('[name=gudangdari]').parents('.form-group').show()
     $('[name=gudangke]').parents('.form-group').show()
     $('[name=coa]').parents('.form-group').show()
-    $('[name=gudang]').val('').attr('readonly',false);
+    $('[name=gudang]').val('').attr('readonly', false);
     $('[name=gudang_id]').val('')
     $('.sumrow').show();
     $('.data_tbl').show();
-    $('.colspan').attr('colspan',6);
+    $('.colspan').attr('colspan', 6);
     $('[name=nobon]').val('')
-    $('[name=supplier]').val('').attr('readonly',false);
-    $('[name=supplier]').data('currentValue','')
+    $('[name=supplier]').val('').attr('readonly', false);
+    $('[name=supplier]').data('currentValue', '')
     $('[name=supplier_id]').val('')
   }
 
-  function setSuplier(penerimaan_id){
+  function setSuplier(penerimaan_id) {
     $.ajax({
-        url: `${apiUrl}penerimaanstokheader/${penerimaan_id}`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          var data =response.data;
-          $('[name=supplier]').val(data.supplier).attr('readonly',true);
-          $('[name=supplier]').data('currentValue',data.supplier)
+      url: `${apiUrl}penerimaanstokheader/${penerimaan_id}`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      success: response => {
+        var data = response.data;
+        $('[name=supplier]').val(data.supplier).attr('readonly', true);
+        $('[name=supplier]').data('currentValue', data.supplier)
 
-          $('[name=supplier_id]').val(data.supplier_id)
-        },
-        error: error => {
-          showDialog(error.statusText)
-        }
-      })
+        $('[name=supplier_id]').val(data.supplier_id)
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
   }
   // function setNobon(penerimaan_id){
   //   $.ajax({
@@ -749,6 +752,12 @@
     $(`.detail_stok_${row}`).lookup({
       title: 'stok Lookup',
       fileName: 'stok',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
       onSelectRow: (stok, element) => {
         element.val(stok.namastok)
         parent = element.closest('td');
@@ -889,6 +898,12 @@
           $(`#detail_stok_${id}`).lookup({
             title: 'stok Lookup',
             fileName: 'stok',
+            beforeProcess: function(test) {
+              this.postData = {
+                Aktif: 'AKTIF',
+
+              }
+            },
             onSelectRow: (stok, element) => {
               element.val(stok.namastok)
               parent = element.closest('td');

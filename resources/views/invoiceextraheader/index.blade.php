@@ -53,11 +53,99 @@
             width: '50px',
             hidden: true
           },
-          
           {
             label: 'STATUS APPROVAL',
             name: 'statusapproval',
-            align: 'left'
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboapproval'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboapproval'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusApproval = JSON.parse(value)
+              if (!statusApproval) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                  <span>${statusApproval.SINGKATAN}</span>
+                </div>
+              `)
+              
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusApproval = JSON.parse(rowObject.statusapproval)
+              if (!statusApproval) {
+                return ` title=" "`
+              }
+              return ` title="${statusApproval.MEMO}"`
+            }
+          },
+          {
+            label: 'STATUS CETAK',
+            name: 'statuscetak',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combocetak'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combocetak'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusCetak = JSON.parse(value)
+              if (!statusCetak) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+                  <span>${statusCetak.SINGKATAN}</span>
+                </div>
+              `)
+              
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusCetak = JSON.parse(rowObject.statuscetak)
+              if (!statusCetak) {
+                return ` title=" "`
+              }
+              return ` title="${statusCetak.MEMO}"`
+            }
           },
           {
             label: 'NO. BUKTI',
@@ -73,11 +161,6 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
           },
           {
             label: 'NOMINAL',
@@ -97,14 +180,29 @@
           },
           
           {
-            label: 'STATUS CETAK',
-            name: 'statusformat_text',
-            align: 'left'
-          },
-          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
+          },
+          {
+            label: 'CREATEDAT',
+            name: 'created_at',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+          {
+            label: 'UPDATEDAT',
+            name: 'updated_at',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
         ],
 
@@ -230,18 +328,18 @@
               deleteInvoiceExtraHeader(selectedId)
             }
           },
-          {
-            id: 'approval',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVE',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-              let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+          // {
+          //   id: 'approval',
+          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVE',
+          //   class: 'btn btn-purple btn-sm mr-1',
+          //   onClick: () => {
+          //     let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
 
-              $('#loader').removeClass('d-none')
+          //     $('#loader').removeClass('d-none')
 
-              handleApproval(id)
-            }
-          },
+          //     handleApproval(id)
+          //   }
+          // },
           {
             id: 'export',
             innerHTML: '<i class="fa fa-file-export"></i> EXPORT',

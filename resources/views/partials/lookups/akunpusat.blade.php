@@ -8,6 +8,12 @@
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
+      postData: {
+        level: `{!! $levelCoa ?? '' !!}`,
+        potongan: `{!! $potongan ?? '' !!}`,
+        aktif: `{!! $Aktif ?? '' !!}`,        
+        // filters: `{!! $filters ?? '' !!}`
+      },
       colModel: [{
           label: 'ID',
           name: 'id',

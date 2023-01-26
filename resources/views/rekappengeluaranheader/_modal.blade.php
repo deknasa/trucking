@@ -30,16 +30,6 @@
             <div class="row form-group">
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>keterangan <span class="text-danger">*</span> </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="keterangan" class="form-control">
-              </div>
-
-            </div>
-            <div class="row form-group">
-
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>tgl transaksi <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -230,8 +220,15 @@
 
   function initLookup() {
     $('.bank-lookup').lookup({
-      title: 'pelunasan piutang Lookup',
+      title: 'Bank Lookup',
       fileName: 'bank',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (bank, element) => {
         element.val(bank.kodebank)
         parameterPengeluaran.bank = bank.id;

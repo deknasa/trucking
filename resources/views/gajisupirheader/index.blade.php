@@ -118,11 +118,6 @@
             align: 'left',
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left',
-          },
-          {
             label: 'NOMINAL',
             name: 'nominal',
             formatter: 'number', 

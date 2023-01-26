@@ -82,7 +82,7 @@ class PendapatanSupirHeaderController extends MyController
             ->get(config('app.api_url') .'pendapatansupirdetail', $detailParams);
 
         $pendapatan_details = $responses['data'];
-        $user = $responses['user'];
+        $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -109,10 +109,6 @@ class PendapatanSupirHeaderController extends MyController
             [
                 'label' => 'Bank',
                 'index' => 'bank',
-            ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
             ],
             [
                 'label' => 'Dari',

@@ -84,12 +84,7 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },
-          {
-            label: 'keterangan',
-            name: 'keterangan',
-            align: 'left'
-          },          
+          },      
           {
             label: 'TANGGAL approval',
             name: 'tglapproval',

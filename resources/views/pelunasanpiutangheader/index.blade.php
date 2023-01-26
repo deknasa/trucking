@@ -67,13 +67,13 @@
             }
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
+            label: 'BANK',
+            name: 'bank_id',
             align: 'left'
           },
           {
-            label: 'BANK',
-            name: 'bank_id',
+            label: 'ALAT BAYAR',
+            name: 'alatbayar_id',
             align: 'left'
           },
           {
@@ -82,8 +82,23 @@
             align: 'left'
           },
           {
-            label: 'CABANG',
-            name: 'cabang_id',
+            label: 'NO. BUKTI PENERIMAAN',
+            name: 'penerimaan_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'NO. BUKTI GIRO',
+            name: 'penerimaangiro_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'NOTA DEBET',
+            name: 'notadebet_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'NOTA KREDIT',
+            name: 'notakredit_nobukti',
             align: 'left'
           },
           {

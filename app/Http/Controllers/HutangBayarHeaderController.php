@@ -167,10 +167,6 @@ class HutangBayarHeaderController extends MyController
                 'label' => 'No Bukti Pengeluaran',
                 'index' => 'pengeluaran_nobukti',
             ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
-            ],
         ];
 
         $detail_columns = [

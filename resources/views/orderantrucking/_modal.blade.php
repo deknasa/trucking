@@ -323,8 +323,14 @@
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    setStatusLangsirOptions(form)
-    setStatusPeralihanOptions(form)
+    Promise
+    .all([
+      setStatusLangsirOptions(form),
+      setStatusPeralihanOptions(form)
+    ])
+    .then(() => {
+      showDefault(form)
+    })
   }
 
   function editOrderanTrucking(orderanTruckingId) {
@@ -521,11 +527,43 @@
     })
   }
 
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}orderantrucking/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
+      }
+    })
+  }
+
   function initLookup() {
 
     $('.container-lookup').lookup({
       title: 'Container Lookup',
       fileName: 'container',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },          
       onSelectRow: (container, element) => {
         $('#crudForm [name=container_id]').first().val(container.id)
         element.val(container.keterangan)
@@ -544,6 +582,11 @@
     $('.agen-lookup').lookup({
       title: 'Agen Lookup',
       fileName: 'agen',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },          
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)
@@ -561,6 +604,11 @@
     $('.jenisorder-lookup').lookup({
       title: 'Jenis Order Lookup',
       fileName: 'jenisorder',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },          
       onSelectRow: (jenisorder, element) => {
         $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
         element.val(jenisorder.keterangan)
@@ -578,6 +626,11 @@
     $('.pelanggan-lookup').lookup({
       title: 'Pelanggan Lookup',
       fileName: 'pelanggan',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },    
       onSelectRow: (pelanggan, element) => {
         $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
         element.val(pelanggan.namapelanggan)
@@ -595,6 +648,11 @@
     $('.tarif-lookup').lookup({
       title: 'Tarif Lookup',
       fileName: 'tarif',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },          
       onSelectRow: (tarif, element) => {
         $('#crudForm [name=tarif_id]').first().val(tarif.id)
         element.val(tarif.tujuan)

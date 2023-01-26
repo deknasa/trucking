@@ -50,14 +50,6 @@
 
              
             
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>keterangan <span class="text-danger">*</span> </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="keterangan" class="form-control">
-              </div>
-            </div>
             
             <table class="table table-bordered table-bindkeys">
               <thead>
@@ -447,6 +439,11 @@
     $('.pelanggan-lookup').lookup({
         title: 'pelanggan Lookup',
         fileName: 'pelanggan',
+        beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },        
         onSelectRow: (pelanggan, element) => {
           element.val(pelanggan.namapelanggan)
           $(`#${element[0]['name']}Id`).val(pelanggan.id)
@@ -464,6 +461,11 @@
       $('.agen-lookup').lookup({
         title: 'agen Lookup',
         fileName: 'agen',
+        beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },        
         onSelectRow: (agen, element) => {
           element.val(agen.namaagen)
           $(`#${element[0]['name']}Id`).val(agen.id)

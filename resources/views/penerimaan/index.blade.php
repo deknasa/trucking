@@ -166,13 +166,13 @@
             align: 'left'
           },
           {
-            label: 'BANK',
-            name: 'bank_id',
+            label: 'AGEN ',
+            name: 'agen_id',
             align: 'left'
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
+            label: 'BANK',
+            name: 'bank_id',
             align: 'left'
           },
           {
@@ -193,58 +193,6 @@
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'CABANG',
-            name: 'cabang_id',
-            align: 'left'
-          },
-          {
-            label: 'STATUS KAS',
-            name: 'statuskas',
-            align: 'left',
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combokas'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combokas'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-              `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusKas = JSON.parse(value)
-              if (!statusKas) {
-                return ''
-              }
-              let formattedValue = $(`
-              <div class="badge" style="background-color: ${statusKas.WARNA}; color: #fff;">
-                  <span>${statusKas.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusKas = JSON.parse(rowObject.statuskas)
-              if (!statusKas) {
-                return ` title=" "`
-              }
-              return ` title="${statusKas.MEMO}"`
             }
           },
           {
@@ -276,11 +224,6 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },
-          {
-            label: 'NO RESI',
-            name: 'noresi',
-            align: 'left'
           },
           {
             label: 'STATUS BERKAS',

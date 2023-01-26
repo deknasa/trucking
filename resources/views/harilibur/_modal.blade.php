@@ -141,11 +141,11 @@
                 },
                 data: data,
                 success: response => {
-                    id = response.data.id                    
+                    id = response.data.id
                     $('#crudForm').trigger('reset')
                     $('#crudModal').modal('hide')
 
-                    
+
                     $('#jqGrid').jqGrid('setGridParam', {
                         page: response.data.page
                     }).trigger('reloadGrid');
@@ -205,7 +205,13 @@
         $('.invalid-feedback').remove()
         $('#crudForm').find('[name=tgl]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-        setStatusAktifOptions(form)
+        Promise
+            .all([
+                setStatusAktifOptions(form)
+            ])
+            .then(() => {
+                showDefault(form)
+            })
     }
 
     function editHariLibur(id) {
@@ -344,5 +350,32 @@
             }
         })
     }
+
+    function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}harilibur/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
+      }
+    })
+  }
 </script>
 @endpush()

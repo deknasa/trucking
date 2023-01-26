@@ -156,11 +156,6 @@
             }
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
-          },
-          {
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',

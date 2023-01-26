@@ -428,12 +428,17 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setStatusAktifOptions(form)
-    setSupirLamaOptions(form)
-    setStatusAdaUpdateGambarOptions(form)
-    setStatusLuarKotaOptions(form)
-    setStatusZonaTertentuOptions(form)
-    setStatusBlackListOptions(form)
+    Promise
+      .all([
+        setStatusAktifOptions(form),
+        setStatusAdaUpdateGambarOptions(form),
+        setStatusLuarKotaOptions(form),
+        setStatusZonaTertentuOptions(form),
+        setStatusBlackListOptions(form)
+      ])
+      .then(() => {
+        showDefault(form)
+      })
     $('#crudForm').find('[name=tgllahir]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglmasuk]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglterbitsim]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -465,7 +470,6 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setSupirLamaOptions(form),
         setStatusAdaUpdateGambarOptions(form),
         setStatusLuarKotaOptions(form),
         setStatusZonaTertentuOptions(form),
@@ -501,7 +505,6 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setSupirLamaOptions(form),
         setStatusAdaUpdateGambarOptions(form),
         setStatusLuarKotaOptions(form),
         setStatusZonaTertentuOptions(form),
@@ -582,7 +585,7 @@
         title: 'Supir Lookup',
         fileName: 'supir',
         onSelectRow: (supir, element) => {
-          $('#crudForm [name=supir_id]').first().val(supir.id)
+          $('#crudForm [name=supirold_id]').first().val(supir.id)
           element.val(supir.namasupir)
           element.data('currentValue', element.val())
         },
@@ -590,7 +593,7 @@
           element.val(element.data('currentValue'))
         },
         onClear: (element) => {
-          $('#crudForm [name=supir_id]').first().val('')
+          $('#crudForm [name=supirold_id]').first().val('')
           element.val('')
           element.data('currentValue', element.val())
         }
@@ -660,37 +663,6 @@
       })
     }
   }
-
-  const setSupirLamaOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=supirold_id]').empty()
-      relatedForm.find('[name=supirold_id]').append(
-        new Option('-- PILIH SUPIR LAMA --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}supir`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-        },
-        success: response => {
-          response.data.forEach(supir => {
-            let option = new Option(supir.namasupir, supir.id)
-
-            relatedForm.find('[name=supirold_id]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
 
   const setStatusBlackListOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
@@ -891,6 +863,33 @@
     xhr.open('GET', url);
     xhr.responseType = 'blob';
     xhr.send();
+  }
+
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}supir/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
+      }
+    })
   }
 </script>
 @endpush()

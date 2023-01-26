@@ -35,15 +35,6 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  KETERANGAN <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="keterangan" class="form-control">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
                   BANK <span class="text-danger">*</span>
                 </label>
               </div>
@@ -56,12 +47,63 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  CABANG <span class="text-danger">*</span>
+                  ALAT BAYAR <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-8 col-md-10">
-                <input type="hidden" name="cabang_id">
-                <input type="text" name="cabang" class="form-control cabang-lookup">
+                <input type="hidden" name="alatbayar_id">
+                <input type="text" name="alatbayar" class="form-control alatbayar-lookup">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  NO BUKTI PENERIMAAN
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <input type="text" name="penerimaan_nobukti" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  NO BUKTI PENERIMAAN GIRO
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <input type="text" name="penerimaangiro_nobukti" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  NO BUKTI NOTA KREDIT
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <input type="text" name="notakredit_nobukti" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  NO BUKTI NOTA DEBET
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <input type="text" name="notadebet_nobukti" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  NO WARKAT
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <input type="text" name="nowarkat" class="form-control">
               </div>
             </div>
 
@@ -70,24 +112,14 @@
                 <div class="card">
                   <div class="card-body">
                     <div class="row form-group">
-                      <div class="col-md-2">
-                        <label>
-                          PELANGGAN <span class="text-danger">*</span>
-                        </label>
-                      </div>
-                      <div class="col-md-4">
-                        <input type="hidden" name="pelanggan_id" class="form-control">
-                        <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
-                      </div>
-
-                      <div class="col-md-1 offset-md-1">
+                      <div class="col-md-1">
                         <label>
                           AGEN <span class="text-danger">*</span>
                         </label>
                       </div>
                       <div class="col-md-4">
-                        <input type="hidden" name="agendetail_id" class="form-control">
-                        <input type="text" name="agendetail" class="form-control agendetail-lookup">
+                        <input type="hidden" name="agen_id" class="form-control">
+                        <input type="text" name="agen" class="form-control agen-lookup">
                       </div>
                     </div>
 
@@ -104,8 +136,9 @@
                             <th width="5%">SISA</th>
                             <th width="5%">KETERANGAN</th>
                             <th width="6%">BAYAR</th>
-                            <th width="5%">KETERANGAN PENYESUAIAN</th>
-                            <th width="6%">PENYESUAIAN</th>
+                            <th width="6%">POTONGAN</th>
+                            <th width="6%">COA POTONGAN</th>
+                            <th width="5%">KETERANGAN POTONGAN</th>
                             <th width="6%">NOMINAL LEBIH BAYAR</th>
                           </tr>
                         </thead>
@@ -125,10 +158,10 @@
                             <td>
                               <p id="bayarPiutang" class="text-right font-weight-bold"></p>
                             </td>
-                            <td></td>
                             <td>
-                              <p id="bayarPenyesuaian" class="text-right font-weight-bold"></p>
+                              <p id="bayarPotongan" class="text-right font-weight-bold"></p>
                             </td>
+                            <td colspan="2"></td>
                             <td>
                               <p id="bayarNominalLebih" class="text-right font-weight-bold"></p>
                             </td>
@@ -163,7 +196,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
-
+  let bankId
   $(document).ready(function() {
 
     $('#crudForm').autocomplete({
@@ -201,7 +234,7 @@
       new AutoNumeric('#sisaPiutang').set(total)
     })
 
-    $(document).on('input', `#table_body [name="penyesuaianppd[]"]`, function(event) {
+    $(document).on('input', `#table_body [name="potonganppd[]"]`, function(event) {
       setPenyesuaian()
     })
     $(document).on('input', `#table_body [name="nominallebihbayarppd[]"]`, function(event) {
@@ -236,10 +269,6 @@
         value: form.find(`[name="tglbukti"]`).val()
       })
       data.push({
-        name: 'keterangan',
-        value: form.find(`[name="keterangan"]`).val()
-      })
-      data.push({
         name: 'bank',
         value: form.find(`[name="bank"]`).val()
       })
@@ -248,28 +277,40 @@
         value: form.find(`[name="bank_id"]`).val()
       })
       data.push({
-        name: 'cabang',
-        value: form.find(`[name="cabang"]`).val()
+        name: 'alatbayar',
+        value: form.find(`[name="alatbayar"]`).val()
       })
       data.push({
-        name: 'cabang_id',
-        value: form.find(`[name="cabang_id"]`).val()
+        name: 'alatbayar_id',
+        value: form.find(`[name="alatbayar_id"]`).val()
       })
       data.push({
-        name: 'pelanggan',
-        value: form.find(`[name="pelanggan"]`).val()
+        name: 'agen',
+        value: form.find(`[name="agen"]`).val()
       })
       data.push({
-        name: 'pelanggan_id',
-        value: form.find(`[name="pelanggan_id"]`).val()
+        name: 'agen_id',
+        value: form.find(`[name="agen_id"]`).val()
       })
       data.push({
-        name: 'agendetail',
-        value: form.find(`[name="agendetail"]`).val()
+        name: 'nowarkat',
+        value: form.find(`[name="nowarkat"]`).val()
       })
       data.push({
-        name: 'agendetail_id',
-        value: form.find(`[name="agendetail_id"]`).val()
+        name: 'penerimaan_nobukti',
+        value: form.find(`[name="penerimaan_nobukti"]`).val()
+      })
+      data.push({
+        name: 'penerimaangiro_nobukti',
+        value: form.find(`[name="penerimaangiro_nobukti"]`).val()
+      })
+      data.push({
+        name: 'notakredit_nobukti',
+        value: form.find(`[name="notakredit_nobukti"]`).val()
+      })
+      data.push({
+        name: 'notadebet_nobukti',
+        value: form.find(`[name="notadebet_nobukti"]`).val()
       })
 
 
@@ -287,12 +328,16 @@
             value: AutoNumeric.getNumber($(`#crudForm [name="bayarppd[]"]`)[row])
           })
           data.push({
-            name: 'keteranganpenyesuaianppd[]',
-            value: $(this).find(`[name="keteranganpenyesuaianppd[]"]`).val()
+            name: 'keteranganpotonganppd[]',
+            value: $(this).find(`[name="keteranganpotonganppd[]"]`).val()
           })
           data.push({
-            name: 'penyesuaianppd[]',
-            value: AutoNumeric.getNumber($(`#crudForm [name="penyesuaianppd[]"]`)[row])
+            name: 'potonganppd[]',
+            value: AutoNumeric.getNumber($(`#crudForm [name="potonganppd[]"]`)[row])
+          })
+          data.push({
+            name: 'coapotonganppd[]',
+            value: $(this).find(`[name="coapotonganppd[]"]`).val()
           })
           data.push({
             name: 'nominallebihbayarppd[]',
@@ -433,14 +478,14 @@
   }
 
   function setPenyesuaian() {
-    let penyesuaian = $(`#table_body [name="penyesuaianppd[]"]:not([disabled])`)
+    let potongan = $(`#table_body [name="potonganppd[]"]:not([disabled])`)
     let totalPenyesuaian = 0
 
-    $.each(penyesuaian, (index, penyesuaian) => {
-      totalPenyesuaian += AutoNumeric.getNumber(penyesuaian)
+    $.each(potongan, (index, potongan) => {
+      totalPenyesuaian += AutoNumeric.getNumber(potongan)
     });
 
-    new AutoNumeric('#bayarPenyesuaian').set(totalPenyesuaian)
+    new AutoNumeric('#bayarPotongan').set(totalPenyesuaian)
   }
 
   function setNominalLebih() {
@@ -524,26 +569,26 @@
           if (index == 'agen') {
             element.data('current-value', value)
           }
-          if (index == 'cabang') {
-            element.data('current-value', value)
+          if (index != 'agen' && index != 'agen_id') {
+
+            form.find(`[name="${index}"]`).addClass('disabled')
+            initDisabled()
           }
+
         })
 
 
-        $.each(response.detail, (index, value) => {
-          form.find(`[name="${index}"]`).val(value).attr('disabled', false)
-
-          if (index == 'pelanggan') {
-            form.find(`[name="${index}"]`).data('current-value', value)
-          }
-          if (index == 'agendetail') {
-            form.find(`[name="${index}"]`).data('current-value', value)
-          }
-        })
-
-        let agenId = response.detail.agendetail_id
+        form.find(`[name="agen"]`).prop('disabled', false)
+        form.find(`[name="agen_id"]`).prop('disabled', false)
+        let agenId = response.data.agen_id
         $('#editpiutang').show()
-
+        // Promise
+        // .all([
+        //   setCoaPotonganOptions($('#detailList tbody'))
+        // ])
+        // .then(() => {
+        //   getPelunasan(Id, agenId, 'edit')
+        // })
         getPelunasan(Id, agenId, 'edit')
       }
     })
@@ -581,10 +626,7 @@
           }
 
         })
-        $.each(response.detail, (index, value) => {
-          form.find(`[name="${index}"]`).val(value)
-        })
-        let agenId = response.detail.agendetail_id
+        let agenId = response.data.agen_id
 
         form.find('[name]').addClass('disabled')
         initDisabled()
@@ -602,7 +644,6 @@
   // });
 
   function getPiutang(id) {
-
     $('#detailList tbody').html('')
     $('#detailList tfoot #nominalPiutang').html('')
     $('#detailList tfoot #sisaPiutang').html('')
@@ -650,13 +691,16 @@
                 <input type="text" name="bayarppd[]" disabled class="form-control bayar text-right">
               </td>
               <td>
-                <textarea name="keteranganpenyesuaianppd[]" rows="1" disabled class="form-control"></textarea>
+                <input type="text" name="potonganppd[]" disabled class="form-control">
               </td>
               <td>
-                <input type="text" name="penyesuaianppd[]" disabled class="form-control autonumeric">
+                  <input type="text" name="coapotonganppd[]" disabled class="form-control coapotongan-lookup">
               </td>
               <td>
-                <input type="text" name="nominallebihbayarppd[]" disabled class="form-control autonumeric">
+                <textarea name="keteranganpotonganppd[]" rows="1" disabled class="form-control"></textarea>
+              </td>
+              <td>
+                <input type="text" name="nominallebihbayarppd[]" disabled class="form-control">
               </td>
             </tr>
           `)
@@ -665,7 +709,7 @@
           // detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
 
           // initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
-          initAutoNumericNoMinus(detailRow.find(`[name="penyesuaianppd[]"]`))
+          initAutoNumericNoMinus(detailRow.find(`[name="potonganppd[]"]`))
           initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
           initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
           initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
@@ -677,6 +721,32 @@
           setPenyesuaian()
           setNominalLebih()
 
+          // initSelect2()
+          // setCoaPotonganOptions(detailRow)
+
+          $('.coapotongan-lookup').last().lookup({
+            title: 'Coa Potongan Lookup',
+            fileName: 'akunpusat',
+            beforeProcess: function(test) {
+              // var levelcoa = $(`#levelcoa`).val();
+              this.postData = {
+                potongan: '1',
+                levelCoa: '3',
+                Aktif: 'AKTIF',
+              }
+            },
+            onSelectRow: (akunpusat, element) => {
+              element.val(akunpusat.coa)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.val('')
+              element.data('currentValue', element.val())
+            }
+          })
         })
         // totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
         // totalSisa = new Intl.NumberFormat('en-US').format(totalSisa);
@@ -693,8 +763,8 @@
 
   }
 
-
   function getPelunasan(id, agenId, aksi) {
+
     $('#detailList tbody').html('')
     let url
     let attribut
@@ -731,9 +801,8 @@
           totalNominalPiutang = parseFloat(totalNominalPiutang) + parseFloat(detail.nominalpiutang)
           totalSisa = totalSisa + parseFloat(detail.sisa);
           let nominal = new Intl.NumberFormat('en-US').format(detail.nominalpiutang);
-          let sisaHidden = parseFloat(detail.sisa) + parseFloat(detail.nominal)
+          // let sisaHidden = parseFloat(detail.sisa) + parseFloat(detail.nominal)
           let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
-
           if (pelunasanPiutangId != null) {
             checked = 'checked'
           } else {
@@ -753,19 +822,22 @@
               </td>
               <td>
                 <p class="sisa text-right">${sisa}</p>
-                <input type="hidden" name="sisa[]" class="autonumeric" value="${sisaHidden}">
+                <input type="hidden" name="sisa[]" class="autonumeric" value="${sisa}">
               </td>
               <td>
                 <textarea name="keterangandetailppd[]" rows="1" class="form-control" ${attribut}>${detail.keterangan || ''}</textarea>
               </td>
               <td>
-                <input type="text" name="bayarppd[]" class="form-control bayar autonumeric" value="${detail.nominal || ''}" ${attribut}>
+                <input type="text" name="bayarppd[]" class="form-control bayar text-right" value="${detail.nominal || ''}" ${attribut}>
               </td>
               <td>
-                <textarea name="keteranganpenyesuaianppd[]" rows="1" class="form-control" ${attribut}>${detail.keteranganpenyesuaian || ''}</textarea>
+                <input type="text" name="potonganppd[]" class="form-control" value="${detail.potongan || ''}" ${attribut}>
               </td>
               <td>
-                <input type="text" name="penyesuaianppd[]" class="form-control autonumeric" value="${detail.penyesuaian || ''}" ${attribut}>
+                <input type="text" name="coapotonganppd[]" class="form-control coapotongan-lookup" data-current-value="${detail.coapotongan}" ${attribut}>
+              </td>
+              <td>
+                <textarea name="keteranganpotonganppd[]" rows="1" class="form-control" ${attribut}>${detail.keteranganpotongan || ''}</textarea>
               </td>
               <td>
                 <input type="text" name="nominallebihbayarppd[]" class="form-control autonumeric" value="${detail.nominallebihbayar || ''}" ${attribut}>
@@ -773,9 +845,19 @@
             </tr>
           `)
 
-          initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`).not(':disabled'))
-          initAutoNumericNoMinus(detailRow.find(`[name="penyesuaianppd[]"]`).not(':disabled'))
-          initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`).not(':disabled'))
+          detailRow.find(`[name="coapotonganppd[]"]`).val(detail.coapotongan)
+          if (aksi == 'edit') {
+
+            initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`).not(':disabled'))
+            initAutoNumericNoMinus(detailRow.find(`[name="potonganppd[]"]`).not(':disabled'))
+            initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`).not(':disabled'))
+          }
+          if (aksi == 'delete') {
+
+            initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
+            initAutoNumericNoMinus(detailRow.find(`[name="potonganppd[]"]`))
+            initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
+          }
           initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
           initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
           initAutoNumeric(detailRow.find('.sisa'))
@@ -785,6 +867,31 @@
           setTotal()
           setPenyesuaian()
           setNominalLebih()
+
+          $('.coapotongan-lookup').last().lookup({
+            title: 'Coa Potongan Lookup',
+            fileName: 'akunpusat',
+            beforeProcess: function(test) {
+              // var levelcoa = $(`#levelcoa`).val();
+              this.postData = {
+                potongan: '1',
+                Aktif: 'AKTIF',
+                levelCoa: '3',
+              }
+            },
+            onSelectRow: (akunpusat, element) => {
+              element.val(akunpusat.coa)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.val('')
+              element.data('currentValue', element.val())
+            }
+          })
+
         })
         $('#nominalPiutang').append(`${totalNominalPiutang}`)
         $('#sisaPiutang').append(`${totalSisa}`)
@@ -811,14 +918,15 @@
       $(this).closest('tr').find(`td [name="keterangandetailppd[]"]`).prop('disabled', false)
       $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', false)
       $(this).closest('tr').find(`td [name="bayarppd[]"]`).prop('disabled', false)
-      $(this).closest('tr').find(`td [name="keteranganpenyesuaianppd[]"]`).prop('disabled', false)
-      $(this).closest('tr').find(`td [name="penyesuaianppd[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="keteranganpotonganppd[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="potonganppd[]"]`).prop('disabled', false)
+      $(this).closest('tr').find(`td [name="coapotonganppd[]"]`).prop('disabled', false)
       $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', false)
 
       let sisa = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="sisa[]"]`)[0])
-
       initAutoNumeric($(this).closest('tr').find(`td [name="bayarppd[]"]`).val(sisa))
-
+      initAutoNumericNoMinus($(this).closest('tr').find(`td [name="potonganppd[]"]`))
+      initAutoNumericNoMinus($(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`))
       let bayar = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="bayarppd[]"]`)[0])
       let totalSisa = sisa - bayar
 
@@ -835,8 +943,9 @@
       $(this).closest('tr').find(`td [name="keterangandetailppd[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="bayarppd[]"]`).prop('disabled', true)
-      $(this).closest('tr').find(`td [name="keteranganpenyesuaianppd[]"]`).prop('disabled', true)
-      $(this).closest('tr').find(`td [name="penyesuaianppd[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="keteranganpotonganppd[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="potonganppd[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="coapotonganppd[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="bayarppd[]"]`).val('')
       let nominalHutang = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="nominal[]"]`)[0])
@@ -903,12 +1012,20 @@
     }
   }
 
+
   function initLookup() {
 
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (bank, element) => {
+
+        bankId = bank.id
         $('#crudForm [name=bank_id]').first().val(bank.id)
         element.val(bank.namabank)
         element.data('currentValue', element.val())
@@ -923,47 +1040,42 @@
       }
     })
 
-    $('.cabang-lookup').lookup({
-      title: 'Cabang Lookup',
-      fileName: 'cabang',
-      onSelectRow: (cabang, element) => {
-        $('#crudForm [name=cabang_id]').first().val(cabang.id)
-        element.val(cabang.namacabang)
+    $('.alatbayar-lookup').lookup({
+      title: 'Alat Bayar Lookup',
+      fileName: 'alatbayar',
+      beforeProcess: function(test) {
+        // const bank_ID=0        
+        this.postData = {
+          bank_Id: bankId,
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (alatbayar, element) => {
+        $('#crudForm [name=alatbayar_id]').first().val(alatbayar.id)
+        element.val(alatbayar.namaalatbayar)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=cabang_id]').first().val('')
+        $('#crudForm [name=alatbayar_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
     })
 
-    $('.pelanggan-lookup').lookup({
-      title: 'Pelanggan Lookup',
-      fileName: 'pelanggan',
-      onSelectRow: (pelanggan, element) => {
-        $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
-        element.val(pelanggan.namapelanggan)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $('#crudForm [name=pelanggan_id]').first().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
-
-    $('.agendetail-lookup').lookup({
+    $('.agen-lookup').lookup({
       title: 'Agen Detail Lookup',
       fileName: 'agen',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
       onSelectRow: (agen, element) => {
-        $('#crudForm [name=agendetail_id]').first().val(agen.id)
+        $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)
         getPiutang(agen.id)
         element.data('currentValue', element.val())
@@ -972,7 +1084,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=agendetail_id]').first().val('')
+        $('#crudForm [name=agen_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }

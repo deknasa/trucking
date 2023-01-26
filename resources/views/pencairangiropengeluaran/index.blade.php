@@ -310,11 +310,6 @@
                         align: 'left'
                     },
                     {
-                        label: 'KETERANGAN',
-                        name: 'keterangan',
-                        align: 'left'
-                    },
-                    {
                         label: 'ALAT BAYAR',
                         name: 'alatbayar_id',
                         align: 'left'

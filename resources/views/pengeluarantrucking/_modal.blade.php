@@ -55,7 +55,7 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statusformat" class="form-select select2bs4" style="width: 100%;">
+                <select name="format" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH FORMAT --</option>
                 </select>
               </div>
@@ -288,8 +288,8 @@
 
   const setStatusFormatOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusformat]').empty()
-      relatedForm.find('[name=statusformat]').append(
+      relatedForm.find('[name=format]').empty()
+      relatedForm.find('[name=format]').append(
         new Option('-- PILIH FORMAT --', '', false, true)
       ).trigger('change')
 
@@ -314,7 +314,7 @@
           response.data.forEach(statusFormat => {
             let option = new Option(statusFormat.text, statusFormat.id)
 
-            relatedForm.find('[name=statusformat]').append(option).trigger('change')
+            relatedForm.find('[name=format]').append(option).trigger('change')
           });
 
           resolve()
@@ -359,6 +359,13 @@
     $('.akunpusat-lookup').lookup({
       title: 'COA Lookup',
       fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          levelCoa: '3',
+          Aktif: 'AKTIF',          
+        }
+      },      
       onSelectRow: (akunpusat, element) => {
         element.val(akunpusat.coa)
         element.data('currentValue', element.val())

@@ -56,11 +56,11 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  status format <span class="text-danger">*</span>
+                  format <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusformat" class="form-select select2bs4" style="width: 100%;">
+                <select name="format" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS FORMAT --</option>
                 </select>
               </div>
@@ -228,8 +228,14 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setStatusFormatListOptions(form)
-    setStatusHitungListOptions(form)
+    Promise
+    .all([
+      setStatusFormatListOptions(form),
+      setStatusHitungListOptions(form)
+    ])
+    .then(() => {
+      showDefault(form)
+    })
   }
 
   function editPenerimaanStok(penerimaanstokId) {
@@ -284,8 +290,8 @@
   
   const setStatusFormatListOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusformat]').empty()
-      relatedForm.find('[name=statusformat]').append(
+      relatedForm.find('[name=format]').empty()
+      relatedForm.find('[name=format]').append(
         new Option('-- PILIH STATUS FORMAT --', '', false, true)
       ).trigger('change')
 
@@ -311,7 +317,7 @@
           response.data.forEach(statusFormatList => {
             let option = new Option(statusFormatList.text, statusFormatList.id)
 
-            relatedForm.find('[name=statusformat]').append(option).trigger('change')
+            relatedForm.find('[name=format]').append(option).trigger('change')
           });
 
           resolve()
@@ -357,6 +363,32 @@
     })
   }
     
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}penerimaanstok/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
+      }
+    })
+  }
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
@@ -407,6 +439,13 @@
     $('.akunpusat-lookup').lookup({
       title: 'Akun Pusat Lookup',
       fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          levelCoa: '3',
+          Aktif: 'AKTIF',          
+        }
+      },      
       onSelectRow: (akunpusat, element) => {
         element.val(akunpusat.coa)
         element.data('currentValue', element.val())

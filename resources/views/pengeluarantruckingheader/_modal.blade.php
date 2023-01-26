@@ -49,16 +49,6 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  KETERANGAN <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="keterangan" class="form-control">
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
                   BANK <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -151,7 +141,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
-    
+
     $('#crudForm').autocomplete({
       disabled: true
     });
@@ -248,8 +238,8 @@
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
-          
-          if(id == 0){
+
+          if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
 
@@ -406,7 +396,7 @@
       }
     })
   }
-  
+
   const setStatusPostingOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusposting]').empty()
@@ -515,6 +505,12 @@
           $('.supir-lookup').last().lookup({
             title: 'Supir Lookup',
             fileName: 'supir',
+            beforeProcess: function(test) {
+              // var levelcoa = $(`#levelcoa`).val();
+              this.postData = {
+                Aktif: 'AKTIF',
+              }
+            },
             onSelectRow: (supir, element) => {
               element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
               element.val(supir.namasupir)
@@ -533,6 +529,13 @@
           $('.penerimaantruckingheader-lookup').last().lookup({
             title: 'Penerimaan Trucking Lookup',
             fileName: 'penerimaantruckingheader',
+            beforeProcess: function(test) {
+              // var levelcoa = $(`#levelcoa`).val();
+              this.postData = {
+
+                Aktif: 'AKTIF',
+              }
+            },
             onSelectRow: (penerimaantruckingheader, element) => {
               element.val(penerimaantruckingheader.nobukti)
               element.data('currentValue', element.val())
@@ -583,6 +586,13 @@
     $('.supir-lookup').last().lookup({
       title: 'Supir Lookup',
       fileName: 'supir',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (supir, element) => {
         $(`#crudForm [name="supir_id[]"]`).last().val(supir.id)
         element.val(supir.namasupir)
@@ -600,6 +610,13 @@
     $('.penerimaantruckingheader-lookup').last().lookup({
       title: 'Penerimaan Trucking Lookup',
       fileName: 'penerimaantruckingheader',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (penerimaantruckingheader, element) => {
         element.val(penerimaantruckingheader.nobukti)
         element.data('currentValue', element.val())
@@ -614,7 +631,7 @@
     })
 
     initAutoNumeric(detailRow.find('.autonumeric'))
-    
+
     setRowNumbers()
   }
 
@@ -663,6 +680,13 @@
     $('.pengeluarantrucking-lookup').lookup({
       title: 'Pengeluaran Trucking Lookup',
       fileName: 'pengeluarantrucking',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (pengeluarantrucking, element) => {
         $('#crudForm [name=pengeluarantrucking_id]').first().val(pengeluarantrucking.id)
         element.val(pengeluarantrucking.keterangan)
@@ -680,6 +704,13 @@
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (bank, element) => {
         $('#crudForm [name=bank_id]').first().val(bank.id)
         element.val(bank.namabank)
@@ -698,6 +729,13 @@
     $('.pengeluaran-lookup').lookup({
       title: 'Pengeluaran Lookup',
       fileName: 'pengeluaranheader',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (pengeluaranheader, element) => {
         element.val(pengeluaranheader.nobukti)
         element.data('currentValue', element.val())
@@ -714,6 +752,13 @@
     $('.akunpusat-lookup').lookup({
       title: 'Kode Perk. Lookup',
       fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          levelCoa: '3',
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (akunpusat, element) => {
         element.val(akunpusat.coa)
         element.data('currentValue', element.val())

@@ -157,7 +157,7 @@ class InvoiceHeaderController extends MyController
             ->get(config('app.api_url') . 'invoicedetail', $detailParams);
 
         $invoice_details = $responses['data'];
-        $user = $responses['user'];
+        $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();

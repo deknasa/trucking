@@ -259,10 +259,6 @@ class ServiceOutHeaderController extends MyController
                 'label' => 'Tgl Keluar',
                 'index' => 'tglkeluar',
             ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
-            ],
         ];
 
         $detail_columns = [

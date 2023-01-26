@@ -253,7 +253,13 @@
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    setStatusRitasiOptions(form)
+    Promise
+    .all([
+      setStatusRitasiOptions(form)
+    ])
+    .then(() => {
+      showDefault(form)
+    })
   }
 
   function editRitasi(ritasiId) {
@@ -304,6 +310,32 @@
       })
   }
 
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}ritasi/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
+      }
+    })
+  }
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
@@ -416,6 +448,13 @@
     $('.suratpengantar-lookup').lookup({
       title: 'Surat Pengantar Lookup',
       fileName: 'suratpengantar',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (suratpengantar, element) => {
         element.val(suratpengantar.nobukti)
         element.data('currentValue', element.val())
@@ -431,6 +470,13 @@
     $('.dari-lookup').lookup({
       title: 'Dari Lookup',
       fileName: 'kota',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (kota, element) => {
         $('#crudForm [name=dari_id]').first().val(kota.id)
         element.val(kota.keterangan)
@@ -448,6 +494,13 @@
     $('.sampai-lookup').lookup({
       title: 'Sampai Lookup',
       fileName: 'kota',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (kota, element) => {
         $('#crudForm [name=sampai_id]').first().val(kota.id)
         element.val(kota.keterangan)
@@ -465,6 +518,13 @@
     $('.trado-lookup').lookup({
       title: 'Trado Lookup',
       fileName: 'trado',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (trado, element) => {
         $('#crudForm [name=trado_id]').first().val(trado.id)
         element.val(trado.keterangan)
@@ -482,6 +542,13 @@
     $('.supir-lookup').lookup({
       title: 'Supir Lookup',
       fileName: 'supir',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (supir, element) => {
         $('#crudForm [name=supir_id]').first().val(supir.id)
         element.val(supir.namasupir)

@@ -103,11 +103,6 @@
           align: 'left'
         },
         {
-          label: 'KETERANGAN',
-          name: 'keterangan',
-          align: 'left'
-        },
-        {
           label: 'BANK',
           name: 'bank_id',
           align: 'left'

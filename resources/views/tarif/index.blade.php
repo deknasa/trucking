@@ -10,6 +10,8 @@
   </div>
 </div>
 
+@include('tarif._detail')
+
 @include('tarif._modal')
 
 @push('scripts')
@@ -28,6 +30,7 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
+   let hasDetail = false
 
   $(document).ready(function() {
     
@@ -44,23 +47,18 @@
             hidden: true
           },
           {
+            label: 'PARENT',
+            name: 'parent_id',
+          },
+          {
+            label: 'UPAH SUPIR',
+            name: 'upahsupir_id',
+          },
+          {
             label: 'TUJUAN',
             name: 'tujuan',
           },
-          {
-            label: 'CONTAINER',
-            name: 'container_id',
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: '.',
-              thousandsSeparator: ','
-            }
-          },
+
           {
             label: 'STATUS',
             name: 'statusaktif',
@@ -102,10 +100,6 @@
 
               return ` title="${statusAktif.MEMO}"`
             }
-          },
-          {
-            label: 'TUJUAN ASAL',
-            name: 'tujuanasal',
           },
           {
             label: 'SISTEM TON',
@@ -157,28 +151,10 @@
             label: 'ZONA',
             name: 'zona_id',
           },
-          {
-            label: 'NOMINAL TON',
-            name: 'nominalton',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
-          },
+         
           {
             label: 'TGL MULAI BERLAKU',
             name: 'tglmulaiberlaku',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'TGL AKHIR BERLAKU',
-            name: 'tglakhirberlaku',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -284,6 +260,13 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+
+           if (!hasDetail) {
+            loadDetailGrid(id)
+            hasDetail = true
+          }
+
+          loadDetailData(id)
         },
         loadComplete: function(data) {
           $(document).unbind('keydown')

@@ -31,11 +31,6 @@
             }
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
-          },
-          {
             label: 'NO. BUKTI KGT',
             name: 'kasgantung_nobukti',
             align: 'left'

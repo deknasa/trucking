@@ -215,8 +215,13 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    // setSubKelompokOptions(form)
-    setStatusAktifOptions(form)
+    Promise
+    .all([
+      setStatusAktifOptions(form)
+    ])
+    .then(() => {
+      showDefault(form)
+    })
   }
 
   function editKategori(kategoriId) {
@@ -378,6 +383,32 @@
         $('#crudForm [name=subkelompok_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+      }
+    })
+  }
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}kategori/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
       }
     })
   }

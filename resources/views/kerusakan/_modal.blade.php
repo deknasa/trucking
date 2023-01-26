@@ -133,8 +133,10 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
-          
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
+
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
           }
@@ -187,6 +189,13 @@
     $('.invalid-feedback').remove()
 
     setStatusAktifOptions(form)
+    Promise
+      .all([
+        setStatusAktifOptions(form)
+      ])
+      .then(() => {
+        showDefault(form)
+      })
   }
 
   function editKerusakan(kerusakanId) {
@@ -322,6 +331,32 @@
           form.find('[name]').addClass('disabled')
           initDisabled()
         }
+      }
+    })
+  }
+
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}kerusakan/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+          let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } else {
+            element.val(value)
+          }
+        })
+
+
       }
     })
   }

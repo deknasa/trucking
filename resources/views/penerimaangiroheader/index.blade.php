@@ -153,8 +153,8 @@
                         align: 'left'
                     },
                     {
-                        label: 'KETERANGAN',
-                        name: 'keterangan',
+                        label: 'AGEN',
+                        name: 'agen_id',
                         align: 'left'
                     },
                     {
@@ -349,7 +349,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Please select a row')
                             } else {
-                                cekValidasi(selectedId, 'EDIT')
+                                cekValidasi(selectedId, 'DELETE')
                             }
                         }
                     },

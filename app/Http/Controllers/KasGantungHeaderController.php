@@ -152,7 +152,7 @@ class KasGantungHeaderController extends MyController
             ->get(config('app.api_url') . 'kasgantungdetail', $detailParams);
 
         $kasgantung_details = $responses['data'];
-        $user = $responses['user'];
+        $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -184,10 +184,6 @@ class KasGantungHeaderController extends MyController
             [
                 'label' => 'Penerima :',
                 'index' => 'penerima',
-            ],
-            [
-                'label' => 'Keterangan :',
-                'index' => 'keterangan',
             ],
         ];
         $header_right_columns = [

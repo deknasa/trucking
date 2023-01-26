@@ -227,10 +227,6 @@ class AbsensiSupirHeaderController extends MyController
                 'label' => 'No Bukti Kas Gantung',
                 'index' => 'kasgantung_nobukti',
             ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
-            ],
         ];
 
         $detail_columns = [

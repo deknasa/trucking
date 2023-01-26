@@ -47,16 +47,6 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                 <label>
-                                    KETERANGAN <span class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-12 col-sm-9 col-md-10">
-                                <input type="text" name="keterangan" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                <label>
                                     TANGGAL DARI <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
@@ -137,9 +127,9 @@
     let modalBody = $('#crudModal').find('.modal-body').html()
 
     $(document).ready(function() {
-        
+
         $('#crudForm').autocomplete({
-        disabled: true
+            disabled: true
         });
 
         $(document).on('click', "#addRow", function() {
@@ -347,36 +337,37 @@
 
     }
 
-    
+
     function cekValidasi(Id, Aksi) {
         $.ajax({
-        url: `{{ config('app.api_url') }}pendapatansupirheader/${Id}/cekvalidasi`,
-        method: 'POST',
-        dataType: 'JSON',
-        beforeSend: request => {
-            request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-        },
-        success: response => {
-            var kodenobukti = response.kodenobukti
-            if (kodenobukti == '1') {
-            var kodestatus = response.kodestatus
-            if (kodestatus == '1') {
-                showDialog(response.message['keterangan'])
-            } else {
-                if (Aksi == 'EDIT') {
-                editPendapatanSupir(Id)
-                }
-                if (Aksi == 'DELETE') {
-                deletePendapatanSupir(Id)
-                }
-            }
+            url: `{{ config('app.api_url') }}pendapatansupirheader/${Id}/cekvalidasi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var kodenobukti = response.kodenobukti
+                if (kodenobukti == '1') {
+                    var kodestatus = response.kodestatus
+                    if (kodestatus == '1') {
+                        showDialog(response.message['keterangan'])
+                    } else {
+                        if (Aksi == 'EDIT') {
+                            editPendapatanSupir(Id)
+                        }
+                        if (Aksi == 'DELETE') {
+                            deletePendapatanSupir(Id)
+                        }
+                    }
 
-            } else {
-            showDialog(response.message['keterangan'])
+                } else {
+                    showDialog(response.message['keterangan'])
+                }
             }
-        }
         })
     }
+
     function showPendapatanSupir(form, pendapatanId) {
         $('#detailList tbody').html('')
 
@@ -430,6 +421,11 @@
                     $('.supir-lookup').last().lookup({
                         title: 'Supir Lookup',
                         fileName: 'supir',
+                        beforeProcess: function(test) {
+                            this.postData = {
+                                Aktif: 'AKTIF',
+                            }
+                        },
                         onSelectRow: (supir, element) => {
                             element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
                             element.val(supir.namasupir)
@@ -481,6 +477,12 @@
         $('.supir-lookup').last().lookup({
             title: 'Supir Lookup',
             fileName: 'supir',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
+
             onSelectRow: (supir, element) => {
                 element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
                 element.val(supir.namasupir)
@@ -546,6 +548,12 @@
         $('.bank-lookup').lookup({
             title: 'Bank Lookup',
             fileName: 'bank',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
+
             onSelectRow: (bank, element) => {
                 $('#crudForm [name=bank_id]').first().val(bank.id)
                 element.val(bank.namabank)

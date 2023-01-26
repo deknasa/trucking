@@ -126,7 +126,7 @@ class GajiSupirHeaderController extends MyController
         ->get(config('app.api_url') .'gajisupirdetail', $detailParams);
 
         $gajisupir_details = $responses['data'];
-        $user = $responses['user'];
+        $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -153,10 +153,6 @@ class GajiSupirHeaderController extends MyController
             [
                 'label' => 'Supir',
                 'index' => 'supir',
-            ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
             ],
             [
                 'label' => 'Nominal',

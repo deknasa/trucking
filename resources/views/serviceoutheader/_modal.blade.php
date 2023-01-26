@@ -191,7 +191,7 @@
                         page: response.data.page
                     }).trigger('reloadGrid');
 
-                    if(id == 0){
+                    if (id == 0) {
                         $('#detail').jqGrid().trigger('reloadGrid')
                     }
                     if (response.data.grp == 'FORMAT') {
@@ -247,7 +247,7 @@
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         $('#table_body').html('')
-        
+
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tglkeluar]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
@@ -339,6 +339,7 @@
                     $('.serviceinheader-lookup').last().lookup({
                         title: 'servicein Lookup',
                         fileName: 'serviceinheader',
+
                         onSelectRow: (servicein, element) => {
                             element.val(servicein.nobukti)
                             element.data('currentValue', element.val())
@@ -441,6 +442,13 @@
         $('.trado-lookup').lookup({
             title: 'trado Lookup',
             fileName: 'trado',
+            beforeProcess: function(test) {
+                // var levelcoa = $(`#levelcoa`).val();
+                this.postData = {
+
+                    Aktif: 'AKTIF',
+                }
+            },
             onSelectRow: (trado, element) => {
                 $('#crudForm [name=trado_id]').first().val(trado.id)
                 element.val(trado.keterangan)

@@ -2,7 +2,7 @@
 <div id="penerimaanStokHeaderLookupPager"></div>
 
 <script>
-  var sendedFilters = `{!! $filters ?? '' !!}`
+  // var sendedFilters = `{!! $filters ?? '' !!}`
 
   $('#penerimaanStokHeaderLookup').jqGrid({
       url: `{{ config('app.api_url') . 'penerimaanstokheader' }}`,
@@ -13,6 +13,8 @@
       postData: {
         penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
         // filters: `{!! $filters ?? '' !!}`
+        supplier_id: `{!! $supplier_id ?? '' !!}`,
+        pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
       },
       colModel: [{
             label: 'ID',
@@ -223,20 +225,23 @@
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
         clearGlobalSearch($('#penerimaanStokHeaderLookup'))
-        let currentFilters = JSON.parse($(this).jqGrid('getGridParam').postData.filters)
-        if (JSON.parse(sendedFilters).rules[0]) {
-          currentFilters.rules.push(JSON.parse(sendedFilters).rules[0])
-        }
+        // let currentFilters = JSON.parse($(this).jqGrid('getGridParam').postData.filters)
+        // if (JSON.parse(sendedFilters).rules[0]) {
+        //   currentFilters.rules.push(JSON.parse(sendedFilters).rules[0])
+        //   console.log(currentFilters);
+        // }else{
+        //   console.log('das');
+        // }
 
-        $(this).jqGrid('setGridParam', {
-          postData: {
-            filters: JSON.stringify(currentFilters),
-          }
-        })
+        // $(this).jqGrid('setGridParam', {
+        //   postData: {
+        //     filters: JSON.stringify(currentFilters),
+        //   }
+        // })
       },
     })
   loadGlobalSearch($('#penerimaanStokHeaderLookup'))
-  additionalRulesGlobalSearch(sendedFilters)
+  // additionalRulesGlobalSearch(sendedFilters)
 
   loadClearFilter($('#penerimaanStokHeaderLookup'))
 </script>

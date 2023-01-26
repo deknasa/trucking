@@ -15,6 +15,17 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
+                  Parent 
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="parent_id" class="form-control upahritasi-lookup">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
                   DARI <span class="text-danger">*</span>
                 </label>
               </div>
@@ -36,7 +47,7 @@
               </div>
             </div>
 
-            <div class="row form-group">
+            <div class="row form-group" style="display: none">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   ZONA <span class="text-danger">*</span>
@@ -82,7 +93,7 @@
                 </div>
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group" style="display: none">
               <div class="col-12 col-md-2 col-form-label">
                 <label>
                   TGL AKHIR BERLAKU <span class="text-danger">*</span>
@@ -94,7 +105,7 @@
                 </div>
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group" style="display: none">
               <div class="col-12 col-md-2 col-form-label">
                 <label>
                   STATUS LUAR KOTA <span class="text-danger">*</span>
@@ -108,18 +119,14 @@
             </div>
 
             <div class="table-responsive">
-              <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="width:1800px">
+              <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="width:1300px">
                 <thead>
                   <tr>
                     <th width="1%">NO</th>
                     <th width="5%">CONTAINER</th>
-                    <th width="6%">STATUS CONTAINER</th>
                     <th width="7%">NOMINAL SUPIR</th>
-                    <th width="7%">NOMINAL KENEK</th>
-                    <th width="7%">NOMINAL KOMISI</th>
-                    <th width="7%">NOMINAL TOL</th>
                     <th width="2%">LITER</th>
-                    <th width="1%">AKSI</th>
+                    {{-- <th width="1%">AKSI</th> --}}
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -129,21 +136,9 @@
                       <input type="hidden" name="container_id[]">
                       <input type="text" name="container[]" class="form-control container-lookup">
                     </td>
-                    <td>
-                      <input type="hidden" name="statuscontainer_id[]" class="form-control">
-                      <input type="text" name="statuscontainer[]" class="form-control statuscontainer-lookup">
-                    </td>
+                   
                     <td>
                       <input type="text" name="nominalsupir[]" class="form-control autonumeric">
-                    </td>
-                    <td>
-                      <input type="text" name="nominalkenek[]" class="form-control autonumeric">
-                    </td>
-                    <td>
-                      <input type="text" name="nominalkomisi[]" class="form-control autonumeric">
-                    </td>
-                    <td>
-                      <input type="text" name="nominaltol[]" class="form-control autonumeric">
                     </td>
                     <td>
                       <input type="text" name="liter[]" class="form-control autonumeric">
@@ -155,25 +150,17 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="3">
+                    <td colspan="2">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
                     <td>
                       <p class="text-right font-weight-bold autonumeric" id="nominalSupir"></p>
                     </td>
-                    <td>
-                      <p class="text-right font-weight-bold autonumeric" id="nominalKenek"></p>
-                    </td>
-                    <td>
-                      <p class="text-right font-weight-bold autonumeric" id="nominalKomisi"></p>
-                    </td>
-                    <td>
-                      <p class="text-right font-weight-bold autonumeric" id="nominalTol"></p>
-                    </td>
+                    
                     <td></td>
-                    <td>
+                    {{-- <td>
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
-                    </td>
+                    </td> --}}
                   </tr>
                 </tfoot>
               </table>
@@ -214,17 +201,7 @@
       setNominalSupir()
     })
 
-    $(document).on('input', `#table_body [name="nominalkenek[]"]`, function(event) {
-      setNominalKenek()
-    })
-
-    $(document).on('input', `#table_body [name="nominalkomisi[]"]`, function(event) {
-      setNominalKomisi()
-    })
-
-    $(document).on('input', `#table_body [name="nominaltol[]"]`, function(event) {
-      setNominalTol()
-    })
+   
 
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
@@ -384,38 +361,7 @@
     new AutoNumeric('#nominalSupir').set(total)
   }
 
-  function setNominalKenek() {
-    let nominalDetails = $(`#table_body [name="nominalkenek[]"]`)
-    let total = 0
-
-    $.each(nominalDetails, (index, nominalDetail) => {
-      total += AutoNumeric.getNumber(nominalDetail)
-    });
-
-    new AutoNumeric('#nominalKenek').set(total)
-  }
-
-  function setNominalKomisi() {
-    let nominalDetails = $(`#table_body [name="nominalkomisi[]"]`)
-    let total = 0
-
-    $.each(nominalDetails, (index, nominalDetail) => {
-      total += AutoNumeric.getNumber(nominalDetail)
-    });
-
-    new AutoNumeric('#nominalKomisi').set(total)
-  }
-
-  function setNominalTol() {
-    let nominalDetails = $(`#table_body [name="nominaltol[]"]`)
-    let total = 0
-
-    $.each(nominalDetails, (index, nominalDetail) => {
-      total += AutoNumeric.getNumber(nominalDetail)
-    });
-
-    new AutoNumeric('#nominalTol').set(total)
-  }
+  
 
   function createUpahRitasi() {
     let form = $('#crudForm')
@@ -432,16 +378,20 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#table_body').html('')
-    addRow()
+    setUpRow()
     $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglakhirberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    setStatusAktifOptions(form)
-    setStatusLuarKotaOptions(form)
+
+    Promise
+    .all([
+        setStatusAktifOptions(form),
+        setStatusLuarKotaOptions(form)
+      ])
+    .then(() => {
+        showDefault(form)
+      })
 
     setNominalSupir()
-    setNominalKenek()
-    setNominalKomisi()
-    setNominalTol()
     initAutoNumeric(form.find(`[name="jarak"]`))
 
   }
@@ -543,7 +493,7 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS LUAR KOTA"
+              "data": "UPAH SUPIR LUAR KOTA"
             }]
           })
         },
@@ -641,88 +591,34 @@
               <td></td>
               <td>
                 <input type="hidden" name="container_id[]">
-                <input type="text" name="container[]" data-current-value="${detail.container}" class="form-control container-lookup">
+                <input type="text" name="container[]" readonly data-current-value="${detail.container}" class="form-control container-lookup">
               </td>
-              <td>
-                <input type="hidden" name="statuscontainer_id[]" class="form-control">
-                <input type="text" name="statuscontainer[]" data-current-value="${detail.statuscontainer}" class="form-control statuscontainer-lookup">
-              </td>
+              
               <td>
                 <input type="text" name="nominalsupir[]" class="form-control autonumeric">
               </td>
-              <td>
-                <input type="text" name="nominalkenek[]" class="form-control autonumeric">
-              </td>
-              <td>
-                <input type="text" name="nominalkomisi[]" class="form-control autonumeric ">
-              </td>
-              <td>
-                <input type="text" name="nominaltol[]" class="form-control autonumeric">
-              </td>
+              
               <td>
                 <input type="text" name="liter[]" class="form-control autonumeric">
               </td>
-              <td>
-                <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-              </td>
+              
             </tr>
           `)
 
 
           detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
           detailRow.find(`[name="container[]"]`).val(detail.container)
-          detailRow.find(`[name="statuscontainer_id[]"]`).val(detail.statuscontainer_id)
-          detailRow.find(`[name="statuscontainer[]"]`).val(detail.statuscontainer)
           detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
-          detailRow.find(`[name="nominalkenek[]"]`).val(detail.nominalkenek)
-          detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
-          detailRow.find(`[name="nominaltol[]"]`).val(detail.nominaltol)
           detailRow.find(`[name="liter[]"]`).val(detail.liter);
 
           $('#detailList tbody').append(detailRow)
 
           initAutoNumeric(detailRow.find('.autonumeric'))
           setNominalSupir()
-          setNominalKenek()
-          setNominalKomisi()
-          setNominalTol()
-
-          $('.container-lookup').last().lookup({
-            title: 'Container Lookup',
-            fileName: 'container',
-            onSelectRow: (container, element) => {
-              element.parents('td').find(`[name="container_id[]"]`).val(container.id)
-              element.val(container.keterangan)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="container_id[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
-
-          $('.statuscontainer-lookup').last().lookup({
-            title: 'Status Container Lookup',
-            fileName: 'statuscontainer',
-            onSelectRow: (statuscontainer, element) => {
-              element.parents('td').find(`[name="statuscontainer_id[]"]`).val(statuscontainer.id)
-              element.val(statuscontainer.keterangan)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="statuscontainer_id[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
         })
+
+        setupRowShow(userId);
+
         setRowNumbers()
 
         if (form.data('action') === 'delete') {
@@ -733,6 +629,89 @@
     })
   }
 
+  function setUpRow() {
+    $.ajax({
+        url: `${apiUrl}upahritasirincian/setuprow`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.detail, (index, detail) => {
+            
+            let detailRow = $(`
+            <tr>
+              <td></td>
+              <td>
+                <input type="hidden" name="container_id[]">
+                <input type="text" name="container[]" readonly data-current-value="${detail.container}" class="form-control" readonly>
+              </td>
+             
+              <td>
+                <input type="text" name="nominalsupir[]" class="form-control autonumeric">
+              </td>
+              
+              <td>
+                <input type="text" name="liter[]" class="form-control autonumeric">
+              </td>
+              
+            </tr>
+            `)
+            detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+            detailRow.find(`[name="container[]"]`).val(detail.container)
+            initAutoNumeric(detailRow.find('.autonumeric'))
+            setNominalSupir()
+            $('#detailList tbody').append(detailRow)
+            
+          })
+          setRowNumbers()
+        }
+      })
+   
+  }
+  function setupRowShow(id) {
+    $.ajax({
+        url: `${apiUrl}upahritasirincian/setuprowshow/${id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.detail, (index, detail) => {
+            
+            let detailRow = $(`
+            <tr>
+              <td></td>
+              <td>
+                <input type="hidden" name="container_id[]">
+                <input type="text" name="container[]" readonly data-current-value="${detail.container}" class="form-control" readonly>
+              </td>
+             
+              <td>
+                <input type="text" name="nominalsupir[]" class="form-control autonumeric">
+              </td>
+              
+              <td>
+                <input type="text" name="liter[]" class="form-control autonumeric">
+              </td>
+              
+            </tr>
+            `)
+            detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+            detailRow.find(`[name="container[]"]`).val(detail.container)
+            initAutoNumeric(detailRow.find('.autonumeric'))
+            setNominalSupir()
+            $('#detailList tbody').append(detailRow)
+            
+          })
+          setRowNumbers()
+        }
+      })
+   
+  }
+
   function addRow() {
     let detailRow = $(`
       <tr>
@@ -741,10 +720,7 @@
           <input type="hidden" name="container_id[]">
           <input type="text" name="container[]" class="form-control container-lookup">
         </td>
-        <td>
-          <input type="hidden" name="statuscontainer_id[]" class="form-control">
-          <input type="text" name="statuscontainer[]" class="form-control statuscontainer-lookup">
-        </td>
+       
         <td>
           <input type="text" name="nominalsupir[]" class="form-control autonumeric">
         </td>
@@ -760,9 +736,7 @@
         <td>
           <input type="text" name="liter[]" class="form-control autonumeric">
         </td>
-        <td>
-          <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-        </td>
+        
       </tr>
     `)
 
@@ -785,23 +759,6 @@
       }
     })
 
-    $('.statuscontainer-lookup').last().lookup({
-      title: 'Status Container Lookup',
-      fileName: 'statuscontainer',
-      onSelectRow: (statuscontainer, element) => {
-        $(`#crudForm [name="statuscontainer_id[]"]`).last().val(statuscontainer.id)
-        element.val(statuscontainer.keterangan)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $(`#crudForm [name="statuscontainer_id[]"]`).last().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
 
     initAutoNumeric(detailRow.find('.autonumeric'))
     setRowNumbers()
@@ -812,9 +769,33 @@
 
     setRowNumbers()
     setNominalSupir()
-    setNominalKenek()
-    setNominalKomisi()
-    setNominalTol()
+  }
+  
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}upahritasi/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+           let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } 
+          else {
+            element.val(value)
+          }
+        })
+        
+       
+      }
+    })
   }
 
   function setRowNumbers() {
@@ -826,6 +807,25 @@
   }
 
   function initLookup() {
+    $('.upahritasi-lookup').lookup({
+      title: 'upah ritasi Lookup',
+      fileName: 'upahritasi',
+      onSelectRow: (upahritasi, element) => {
+
+        $('#crudForm [name=parent_id]').first().val(upahritasi.id)
+        element.data('currentValue', element.val())
+        let form = $('#crudForm')
+        showUpahRitasi(form,upahritasi.id)
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=parent_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
     $('.kotadari-lookup').lookup({
       title: 'Kota Dari Lookup',
       fileName: 'kota',

@@ -10,6 +10,9 @@
       iconSet: 'fontAwesome',
       datatype: "json",
       postData: {
+        aktif: `{!! $Aktif ?? '' !!}`,
+      },   
+      postData: {
         filters: `{!! $filters ?? '' !!}`
       },
       colModel: [{

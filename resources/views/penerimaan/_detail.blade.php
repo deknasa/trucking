@@ -10,7 +10,6 @@
 
 @push('scripts')
 <script>
-
   function loadDetailGrid(id) {
 
     $("#detail").jqGrid({
@@ -32,7 +31,7 @@
           {
             label: 'NO WARKAT',
             name: 'nowarkat',
-          }, 
+          },
           {
             label: 'TGL JATUH TEMPO',
             name: 'tgljatuhtempo',
@@ -41,7 +40,7 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          }, 
+          },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
@@ -60,55 +59,29 @@
             label: 'COA KREDIT',
             name: 'coakredit',
           },
-         
+
           {
             label: 'BANK',
             name: 'bank_id',
           },
-          // {
-          //   label: 'PELANGGAN',
-          //   name: 'pelanggan_id',
-          // },
-          // {
-          //   label: 'INVOICE NO BUKTI',
-          //   name: 'invoice_nobukti',
-          // },
-          // {
-          //   label: 'PELANGGAN',
-          //   name: 'pelanggan_id',
-          // },
           {
             label: 'INVOICE NO BUKTI',
             name: 'invoice_nobukti',
           },
           {
-            label: 'BANK PELANGGAN',
-            name: 'bankpelanggan_id',
-          },
-          {
-            label: 'JENIS BIAYA',
-            name: 'jenisbiaya',
-          },
-          {
-            label: 'PELANGGAN',
-            name: 'pelanggan_id',
-          },
-          {
             label: 'PELUNASAN PIUTANG NO BUKTI',
             name: 'pelunasanpiutang_nobukti',
           },
-          // {
-          //   label: 'BULAN BEBAN',
-          //   name: 'bulanbeban',
-          // }
-          // {
-          //   label: 'PENERIMAAN PIUTANG NO BUKTI',
-          //   name: 'penerimaanpiutang_nobukti',
-          // },
-          // {
-          //   label: 'BULAN BEBAN',
-          //   name: 'bulanbeban',
-          // }
+          {
+            label: 'BANK PELANGGAN',
+            name: 'bankpelanggan_id',
+          },
+
+
+          {
+            label: 'BULAN BEBAN',
+            name: 'bulanbeban',
+          },
         ],
         autowidth: true,
         shrinkToFit: false,

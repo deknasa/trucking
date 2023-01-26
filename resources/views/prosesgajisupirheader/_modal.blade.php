@@ -38,15 +38,6 @@
                         <div class="row form-group">
                             <div class="col-12 col-md-2 col-form-label">
                                 <label>
-                                    KETERANGAN <span class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-12 col-md-10">
-                                <input type="text" name="keterangan" class="form-control" autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-12 col-md-2 col-form-label">
-                                <label>
                                     PERIODE <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-md-10">
@@ -95,7 +86,6 @@
                                         <th width="4%">RIC</th>
                                         <th width="2%">TGL BUKTI</th>
                                         <th width="4%">SUPIR</th>
-                                        <th width="5%">KETERANGAN</th>
                                         <th width="2%">TGL DARI</th>
                                         <th width="2%">TGL SAMPAI</th>
                                         <th width="4%">NOMINAL</th>
@@ -106,7 +96,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="7">
+                                        <td colspan="6">
                                             <p class="text-right font-weight-bold">TOTAL:</p>
                                         </td>
                                         <td>
@@ -433,7 +423,6 @@
                             <td>${detail.nobukti}</td>
                             <td>${detail.tglbukti}</td>
                             <td>${detail.namasupir}</td>
-                            <td>${detail.keterangan}</td>
                             <td>${detail.tgldari}</td>
                             <td>${detail.tglsampai}</td>
                             <td class="nominal text-right">${detail.nominal}</td>
@@ -489,7 +478,6 @@
                                 <td>${detail.nobukti}</td>
                                 <td>${detail.tglbukti}</td>
                                 <td>${detail.namasupir}</td>
-                                <td>${detail.keterangan}</td>
                                 <td>${detail.tgldari}</td>
                                 <td>${detail.tglsampai}</td>
                                 <td class="nominal text-right">${detail.nominal}</td>

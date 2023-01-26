@@ -124,7 +124,7 @@ class PenerimaanTruckingHeaderController extends MyController
         ->get(config('app.api_url') .'penerimaantruckingdetail', $detailParams);
 
         $penerimaantrucking_details = $responses['data'];
-        $user = $responses['user'];
+        $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -163,10 +163,6 @@ class PenerimaanTruckingHeaderController extends MyController
             [
                 'label' => 'No Bukti Penerimaan',
                 'index' => 'penerimaan_nobukti',
-            ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
             ],
         ];
 

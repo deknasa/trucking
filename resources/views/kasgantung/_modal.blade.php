@@ -44,16 +44,6 @@
                 <input type="text" name="penerima" class="form-control penerima-lookup">
               </div>
             </div>
-            <div class="row">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  KETERANGAN
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="keterangan" class="form-control">
-              </div>
-            </div>
             <div class="border p-3">
               <h6>Posting Pengeluaran</h6>
 
@@ -562,6 +552,11 @@
     $('.penerima-lookup').lookup({
       title: 'Penerima Lookup',
       fileName: 'penerima',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },      
       onSelectRow: (penerima, element) => {
         $('#crudForm [name=penerima_id]').first().val(penerima.id)
         element.val(penerima.namapenerima)
@@ -580,6 +575,11 @@
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },          
       onSelectRow: (bank, element) => {
         $('#crudForm [name=bank_id]').first().val(bank.id)
         element.val(bank.namabank)

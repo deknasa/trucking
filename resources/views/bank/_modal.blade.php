@@ -72,24 +72,24 @@
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>
-                  KODE PENERIMAAN <span class="text-danger">*</span>
+                  FORMAT PENERIMAAN <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statusformatpenerimaan" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH KODE PENERIMAAN --</option>
+                <select name="formatpenerimaan" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH FORMAT PENERIMAAN --</option>
                 </select>
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>
-                  KODE PENGELUARAN <span class="text-danger">*</span>
+                  format PENGELUARAN <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statusformatpengeluaran" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH KODE PENGELUARAN --</option>
+                <select name="formatpengeluaran" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH FORMAT PENGELUARAN --</option>
                 </select>
               </div>
             </div>
@@ -187,7 +187,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -244,7 +246,13 @@
 
     setStatusFormatPenerimaanOptions(form)
     setStatusFormatPengeluaranOptions(form)
-    setStatusAktifOptions(form)
+    Promise
+      .all([
+        setStatusAktifOptions(form)
+      ])
+      .then(() => {
+        showDefault(form)
+      })
   }
 
   function editBank(bankId) {
@@ -363,9 +371,9 @@
 
   const setStatusFormatPenerimaanOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusformatpenerimaan]').empty()
-      relatedForm.find('[name=statusformatpenerimaan]').append(
-        new Option('-- PILIH STATUS PENERIMAAN --', '', false, true)
+      relatedForm.find('[name=formatpenerimaan]').empty()
+      relatedForm.find('[name=formatpenerimaan]').append(
+        new Option('-- PILIH FORMAT PENERIMAAN --', '', false, true)
       ).trigger('change')
 
       $.ajax({
@@ -389,7 +397,7 @@
           response.data.forEach(penerimaanBank => {
             let option = new Option(penerimaanBank.text, penerimaanBank.id)
 
-            relatedForm.find('[name=statusformatpenerimaan]').append(option).trigger('change')
+            relatedForm.find('[name=formatpenerimaan]').append(option).trigger('change')
           });
 
           resolve()
@@ -400,9 +408,9 @@
 
   const setStatusFormatPengeluaranOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusformatpengeluaran]').empty()
-      relatedForm.find('[name=statusformatpengeluaran]').append(
-        new Option('-- PILIH KODE PENERIMAAN --', '', false, true)
+      relatedForm.find('[name=formatpengeluaran]').empty()
+      relatedForm.find('[name=formatpengeluaran]').append(
+        new Option('-- PILIH FORMAT PENERIMAAN --', '', false, true)
       ).trigger('change')
 
       $.ajax({
@@ -426,12 +434,38 @@
           response.data.forEach(pengeluaranBank => {
             let option = new Option(pengeluaranBank.text, pengeluaranBank.id)
 
-            relatedForm.find('[name=statusformatpengeluaran]').append(option).trigger('change')
+            relatedForm.find('[name=formatpengeluaran]').append(option).trigger('change')
           });
 
           resolve()
         }
       })
+    })
+  }
+
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}bank/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+          let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } else {
+            element.val(value)
+          }
+        })
+
+
+      }
     })
   }
 
@@ -453,10 +487,10 @@
             element.val(value)
           }
 
-          if(index == 'coa') {
+          if (index == 'coa') {
             element.data('current-value', value)
           }
-          
+
         })
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
@@ -470,6 +504,13 @@
     $('.coa-lookup').lookup({
       title: 'COA Lookup',
       fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          levelCoa: '3',
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (akunpusat, element) => {
         element.val(akunpusat.coa)
         element.data('currentValue', element.val())

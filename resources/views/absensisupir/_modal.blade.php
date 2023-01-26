@@ -36,33 +36,25 @@
                 <input type="text" name="tglbukti" class="form-control datepicker">
               </div>
             </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>KETERANGAN</label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="keterangan" class="form-control">
-              </div>
-            </div>
 
             <hr>
             <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 2000px;">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500;">
                 <thead>
                   <tr>
                     <th width="1%">No</th>
                     <th width="5%">Trado</th>
-                    <th width="5%">Supir</th>
+                    <th width="4%">Supir</th>
                     <th width="7%">Keterangan</th>
-                    <th width="5%">Status</th>
+                    <th width="4%">Status</th>
                     <th width="3%">Jam</th>
-                    <th width="4%">Uang Jalan</th>
-                    <th width="2%">Aksi</th>
+                    <th width="3%">Uang Jalan</th>
+                    {{-- <th width="2%">Aksi</th> --}}
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
                   <tr>
-                    <td>1</td>
+                    {{-- <td>1</td>
                     <td>
                       <input type="hidden" name="trado_id[]">
                       <input type="text" name="trado[]" class="form-control trado-lookup">
@@ -86,7 +78,7 @@
                     </td>
                     <td>
                       <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                    </td>
+                    </td> --}}
 
                   </tr>
                 </tbody>
@@ -98,9 +90,9 @@
                     <td>
                       <h5 id="total" class="text-right font-weight-bold"></h5>
                     </td>
-                    <td>
+                    {{-- <td>
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                    </td>
+                    </td>--}}
                   </tr>
                 </tfoot>
               </table>
@@ -132,7 +124,7 @@
     $('#crudForm').autocomplete({
       disabled: true
     });
-    
+
     Inputmask("datetime", {
       inputFormat: "HH:MM",
       max: 24
@@ -235,8 +227,8 @@
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
-          
-          if(id == 0){
+
+          if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
           if (response.data.grp == 'FORMAT') {
@@ -308,8 +300,142 @@
     $('#table_body').html('')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    addRow()
+    setUpRow()
+
+
+
+
     setTotal()
+  }
+
+
+  function setUpRow() {
+    $.ajax({
+      url: `${apiUrl}absensisupirheader/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.detail, (index, detail) => {
+
+          let detailRow = $(`
+            <tr>
+              <td></td>
+                    <td>
+                      <input type="hidden" name="trado_id[]">
+                      <input type="text" name="trado[]"  data-current-value="${detail.trado}" class="form-control readonly">
+                    </td>
+                    <td>
+                      <input type="hidden" name="supir_id[]">
+                      <input type="text" name="supir[]" class="form-control supir-lookup">
+                    </td>
+                    <td>
+                      <input type="text" name="keterangan_detail[]" class="form-control">
+                    </td>
+                    <td>
+                      <input type="hidden" name="absen_id[]">
+                      <input type="text" name="absen" class="form-control absentrado-lookup">
+                    </td>
+                    <td>
+                      <input type="text" class="form-control inputmask-time" name="jam[]"></input>
+                    </td>
+                    <td>
+                      <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]">
+                    </td>              
+            </tr>
+            `)
+          detailRow.find(`[name="trado_id[]"]`).val(detail.trado_id)
+          detailRow.find(`[name="trado[]"]`).val(detail.trado)
+          initAutoNumeric(detailRow.find('.autonumeric'))
+          $('#detailList tbody').append(detailRow)
+
+          detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
+          initAutoNumeric(detailRow.find(`[name="uangjalan[]"]`))
+          $('#detailList tbody').append(detailRow)
+          Inputmask("datetime", {
+            inputFormat: "HH:MM",
+            max: 24
+          }).mask(".inputmask-time");
+
+          console.log($(document).find('.supir-lookup').last());
+
+          $(document).find('.supir-lookup').last().lookup({
+            title: 'Supir Lookup',
+            fileName: 'supir',
+            beforeProcess: function(test) {
+              this.postData = {
+                Aktif: 'AKTIF',
+              }
+            },
+            onSelectRow: (supir, element) => {
+              element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+
+              element.val(supir.namasupir)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.parents('td').find(`[name="supir_id[]"]`).val('')
+              element.val('')
+              element.data('currentValue', element.val())
+            }
+          })
+
+          $('.trado-lookup').last().lookup({
+            title: 'Trado Lookup',
+            fileName: 'trado',
+            beforeProcess: function(test) {
+              this.postData = {
+                Aktif: 'AKTIF',
+              }
+            },
+            onSelectRow: (trado, element) => {
+              element.parents('td').find(`[name="trado_id[]"]`).val(trado.id)
+              element.val(trado.keterangan)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.parents('td').find(`[name="trado_id[]"]`).val('')
+              element.val('')
+              element.data('currentValue', element.val())
+            }
+          })
+
+          $('.absentrado-lookup').last().lookup({
+            title: 'Absen Trado Lookup',
+            fileName: 'absentrado',
+            beforeProcess: function(test) {
+              this.postData = {
+                Aktif: 'AKTIF',
+              }
+            },
+            onSelectRow: (absentrado, element) => {
+              element.parents('td').find(`[name="absen_id[]"]`).val(absentrado.id)
+              element.val(absentrado.keterangan)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.parents('td').find(`[name="absen_id[]"]`).val('')
+              element.val('')
+              element.data('currentValue', element.val())
+            }
+          })
+
+        })
+        setRowNumbers()
+      }
+    })
+
   }
 
   function editAbsensiSupir(absensiId) {
@@ -373,7 +499,7 @@
             <td></td>
             <td>
               <input type="hidden" name="trado_id[]" value="${detail.trado_id}">
-              <input type="text" name="trado[]" data-current-value="${detail.trado}" class="form-control trado-lookup" value="${detail.trado}">
+              <input type="text" name="trado[]" data-current-value="${detail.trado}" class="form-control" readonly value="${detail.trado}">
             </td>
             <td>
               <input type="hidden" name="supir_id[]">
@@ -392,9 +518,7 @@
             <td>
               <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}">
             </td>
-            <td>
-              <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-            </td>
+          
 
           </tr>
           `)
@@ -408,13 +532,18 @@
           }).mask(".inputmask-time");
 
           console.log($(document).find('.supir-lookup').last());
-          
+
           $(document).find('.supir-lookup').last().lookup({
             title: 'Supir Lookup',
             fileName: 'supir',
+            beforeProcess: function(test) {
+              this.postData = {
+                Aktif: 'AKTIF',
+              }
+            },
             onSelectRow: (supir, element) => {
               element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
-                                    
+
               element.val(supir.namasupir)
               element.data('currentValue', element.val())
             },
@@ -431,6 +560,11 @@
           $('.trado-lookup').last().lookup({
             title: 'Trado Lookup',
             fileName: 'trado',
+            beforeProcess: function(test) {
+              this.postData = {
+                Aktif: 'AKTIF',
+              }
+            },
             onSelectRow: (trado, element) => {
               element.parents('td').find(`[name="trado_id[]"]`).val(trado.id)
               element.val(trado.keterangan)
@@ -449,6 +583,11 @@
           $('.absentrado-lookup').last().lookup({
             title: 'Absen Trado Lookup',
             fileName: 'absentrado',
+            beforeProcess: function(test) {
+              this.postData = {
+                Aktif: 'AKTIF',
+              }
+            },
             onSelectRow: (absentrado, element) => {
               element.parents('td').find(`[name="absen_id[]"]`).val(absentrado.id)
               element.val(absentrado.keterangan)
@@ -481,7 +620,7 @@
         <td></td>
         <td>
           <input type="hidden" name="trado_id[]">
-          <input type="text" name="trado[]" class="form-control trado-lookup">
+          <input type="text" name="trado[]" class="form-control trado-lookup readonly">
         </td>
         <td>
           <input type="hidden" name="supir_id[]">
@@ -500,9 +639,7 @@
         <td>
           <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]">
         </td>
-        <td>
-          <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-        </td>
+    
 
       </tr>
     `)
@@ -517,6 +654,11 @@
     $('.supir-lookup').last().lookup({
       title: 'Supir Lookup',
       fileName: 'supir',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (supir, element) => {
         $(`#crudForm [name="supir_id[]"]`).last().val(supir.id)
         element.val(supir.namasupir)
@@ -535,6 +677,11 @@
     $('.trado-lookup').last().lookup({
       title: 'Trado Lookup',
       fileName: 'trado',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (trado, element) => {
         $(`#crudForm [name="trado_id[]"]`).last().val(trado.id)
         element.val(trado.keterangan)
@@ -548,12 +695,17 @@
         element.val('')
         element.data('currentValue', element.val())
       }
-      
+
     })
 
     $('.absentrado-lookup').last().lookup({
       title: 'Absen Trado Lookup',
       fileName: 'absentrado',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (absentrado, element) => {
         $(`#crudForm [name="absen_id[]"]`).last().val(absentrado.id)
         element.val(absentrado.keterangan)
@@ -570,7 +722,7 @@
     })
 
     initAutoNumeric(detailRow.find('.autonumeric'))
-   
+
     setRowNumbers()
   }
 
@@ -647,6 +799,11 @@
     $('.supir-lookup').lookup({
       title: 'Supir Lookup',
       fileName: 'supir',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (supir, element) => {
         $(`#crudForm [name="supir_id[]"]`).first().val(supir.id)
         element.val(supir.namasupir)
@@ -665,6 +822,11 @@
     $('.trado-lookup').lookup({
       title: 'Trado Lookup',
       fileName: 'trado',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (trado, element) => {
         $(`#crudForm [name="trado_id[]"]`).first().val(trado.id)
         element.val(trado.keterangan)
@@ -683,6 +845,11 @@
     $('.absentrado-lookup').lookup({
       title: 'Absen Trado Lookup',
       fileName: 'absentrado',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (absentrado, element) => {
         $(`#crudForm [name="absen_id[]"]`).first().val(absentrado.id)
         element.val(absentrado.keterangan)

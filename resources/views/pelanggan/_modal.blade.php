@@ -62,7 +62,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  alamat2 <span class="text-danger">*</span>
+                  alamat2 <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -97,6 +97,21 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  Status Aktif <span class="text-danger">*</span>
+                </label>
+              </div>
+
+
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS AKTIF --</option>
+                </select>
               </div>
             </div>
           </div>
@@ -192,7 +207,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -243,7 +260,82 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setStatusAktifOptions(form)
+      ])
+      // console.log('c')
+      .then(() => {
+        showDefault(form)
+      })
   }
+
+
+  const setStatusAktifOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusaktif]').empty()
+      relatedForm.find('[name=statusaktif]').append(
+        new Option('-- PILIH STATUS AKTIF --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS AKTIF"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusAktif => {
+            let option = new Option(statusAktif.text, statusAktif.id)
+
+            relatedForm.find('[name=statusaktif]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+
+
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}pelanggan/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, value) => {
+          console.log(value)
+          let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } else {
+            element.val(value)
+          }
+        })
+
+
+      }
+    })
+  }
+
 
   function editPelanggan(pelangganId) {
     let form = $('#crudForm')
@@ -260,7 +352,15 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showPelanggan(form, pelangganId)
+    Promise
+      .all([
+        setStatusAktifOptions(form)
+      ])
+      // console.log('c')
+      .then(() => {
+        showPelanggan(form, pelangganId)
+      })
+
   }
 
   function deletePelanggan(pelangganId) {
@@ -278,7 +378,14 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showPelanggan(form, pelangganId)
+    Promise
+      .all([
+        setStatusAktifOptions(form)
+      ])
+      // console.log('c')
+      .then(() => {
+        showPelanggan(form, pelangganId)
+      })
   }
 
   function getMaxLength(form) {

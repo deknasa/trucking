@@ -1,31 +1,45 @@
-<table id="stokLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="stokLookupPager"></div>
+<table id="upahSupirLookup" class="lookup-grid"></table>
+<div id="upahSupirLookupPager"></div>
 
+@push('scripts')
 <script>
-$('#stokLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'stok' }}`,
+ $('#upahSupirLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'upahsupir' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
-      postData: {
-        aktif: `{!! $Aktif ?? '' !!}`,
-      },         
-      colModel: [{
-        label: 'ID',
-        name: 'id',
-        align: 'right',
-        width: '70px',
-        hidden: true
-        
-      },
-      {
-        label: 'NAMA',
-        name: 'namastok',
-        align: 'left',
-      },
-      {
-          label: 'Status',
+      colModel: [
+        {
+            label: 'ID',
+            name: 'id',
+            align: 'right',
+            width: '50px',
+            hidden: true
+          },
+          {
+            label: 'DARI',
+            name: 'kotadari_id',
+            align: 'left'
+          },
+          {
+            label: 'TUJUAN',
+            name: 'kotasampai_id',
+            align: 'left'
+          },
+          {
+            label: 'JARAK',
+            name: 'jarak',
+            align: 'right',
+            formatter: currencyFormat
+          },
+          {
+            label: 'ZONA',
+            name: 'zona_id',
+            align: 'left'
+          },
+        {
+          label: 'STATUS AKTIF',
           name: 'statusaktif',
           stype: 'select',
           searchoptions: {
@@ -88,58 +102,86 @@ $('#stokLookup').jqGrid({
 
             return ` title="${statusAktif.MEMO}"`
           }
-        },      {
-          label: 'keterangan',
-          name: 'keterangan',
-          align: 'left',
-      },
-      {
-          label: 'namaterpusat',
-          name: 'namaterpusat',
-          align: 'left',
-      },
-      {
-        label: 'kelompok',
-        name: 'kelompok',
-        align: 'left'
-      },
-      {
-        label: 'jenistrado',
-        name: 'jenistrado',
-        align: 'left'
-      },
-      {
-        label: 'subkelompok',
-        name: 'subkelompok',
-        align: 'left'
-      },
-      {
-        label: 'kategori',
-        name: 'kategori',
-        align: 'left'
-      },
-      {
-        label: 'merk',
-        name: 'merk',
-        align: 'left'
-      },
-      
-      {
-          label: 'qty min',
-          name: 'qtymin',
-          align: 'left',
-      },
-      {
-          label: 'qty max',
-          name: 'qtymax',
-          align: 'left',
-      },
-      
-      {
-          label: 'modifiedby',
-          name: 'modifiedby',
-          align: 'left',
-      },
+        },
+          {
+            label: 'TGL MULAI BERLAKU',
+            name: 'tglmulaiberlaku',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'STATUS LUAR KOTA',
+            name: 'statusluarkota',
+            stype: 'select',
+            searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS LUAR KOTA',
+                    subgrp: 'STATUS LUAR KOTA'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+            formatter: (value, options, rowData) => {
+              let statusLuarKota = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusLuarKota.WARNA}; color: #fff;">
+                  <span>${statusLuarKota.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusLuarKota = JSON.parse(rowObject.statusluarkota)
+
+              return ` title="${statusLuarKota.MEMO}"`
+            }
+          },
+          {
+            label: 'MODIFIEDBY',
+            name: 'modifiedby',
+            align: 'left'
+          },
           {
             label: 'CREATEDAT',
             name: 'created_at',
@@ -160,22 +202,21 @@ $('#stokLookup').jqGrid({
               newformat: "d-m-Y H:i:s"
             }
           },
-     
-    ],
-        autowidth: true,
+      ],
+      autowidth: true,
       responsive: true,
       shrinkToFit: false,
-      height: 450,
+      height: 350,
       rowNum: 10,
       rownumbers: true,
       rownumWidth: 45,
       rowList: [10, 20, 50],
+      toolbar: [true, "top"],
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      toolbar: [true, "top"],
-      pager: $('#stokLookupPager'),
+      pager: $('#upahSupirLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -204,26 +245,26 @@ $('#stokLookup').jqGrid({
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#stokLookup').getGridParam().reccount) {
-            indexRow = $('#stokLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#upahSupirLookup').getGridParam().reccount) {
+            indexRow = $('#upahSupirLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#stokLookup [id="${$('#stokLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#upahSupirLookup [id="${$('#upahSupirLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#stokLookup [id="${$('#stokLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#upahSupirLookup [id="${$('#upahSupirLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#stokLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#stokLookup [id="` + $('#stokLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#upahSupirLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#upahSupirLookup [id="` + $('#upahSupirLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#stokLookup').setSelection($('#stokLookup').getDataIDs()[indexRow])
+            $('#upahSupirLookup').setSelection($('#upahSupirLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -238,7 +279,7 @@ $('#stokLookup').jqGrid({
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupCabang').prev().width())
+        $(this).setGridWidth($('#lookuptarif').prev().width())
         setHighlight($(this))
       }
     })
@@ -251,10 +292,10 @@ $('#stokLookup').jqGrid({
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#stokLookup'))
+          clearGlobalSearch($('#upahSupirLookup'))
       },
     })
 
-  loadGlobalSearch($('#stokLookup'))
-  loadClearFilter($('#stokLookup'))
+    loadGlobalSearch($('#upahSupirLookup'))
+    loadClearFilter($('#upahSupirLookup'))
 </script>

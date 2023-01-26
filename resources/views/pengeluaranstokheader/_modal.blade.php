@@ -44,7 +44,7 @@
               </div>
 
                 
-              <div class="form-group col-md-6" style="display: none">
+              {{-- <div class="form-group col-md-6" style="display: none">
                 <div class="row" >
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
                     <label>STATUS FORMAT <span class="text-danger">*</span> </label>
@@ -56,15 +56,28 @@
                     <input type="text" name="statusformat_id" readonly hidden class="form-control">
                   </div>
                 </div>
-              </div>
-              
+              </div> --}}
+              <input type="text" name="statusformat_id" readonly hidden class="form-control">
+
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>pengeluaran stok nobukti </label>
+                    <label>supplier </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="pengeluaranstok_nobukti" class="form-control pengeluaranstokheader-lookup">
+                    <input type="text" name="supplier" class="form-control supplier-lookup">
+                    <input type="text" id="supplierId" name="supplier_id" readonly hidden>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>servicein no bukti </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="servicein_nobukti" class="form-control servicein-lookup">
                   </div>
                 </div>
               </div>
@@ -83,13 +96,13 @@
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>servicein no bukti </label>
+                    <label>pengeluaran stok nobukti </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="servicein_nobukti" class="form-control servicein-lookup">
+                    <input type="text" name="pengeluaranstok_nobukti" class="form-control pengeluaranstokheader-lookup">
                   </div>
                 </div>
-              </div>
+              </div>              
 
               <div class="form-group col-md-6">
                 <div class="row">
@@ -126,20 +139,8 @@
                   </div>
                 </div>
               </div>
-
+             
               <div class="form-group col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>supplier </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="supplier" class="form-control supplier-lookup">
-                    <input type="text" id="supplierId" name="supplier_id" readonly hidden>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group col-md-6" style="display: none">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
                     <label>gudang </label>
@@ -151,16 +152,54 @@
                 </div>
               </div>
 
-              <div class="form-group col-md-12">
+              <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                    <label>keterangan <span class="text-danger">*</span> </label>
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>gandengan </label>
                   </div>
-                  <div class="col-12 col-sm-9 col-md-10">
-                    <input type="text" name="keterangan" class="form-control">
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="gandengan" class="form-control gandengan-lookup">
+                    <input type="text" id="gandenganId" name="gandengan_id" readonly hidden>
                   </div>
                 </div>
               </div>
+
+              <div class="form-group col-md-6">
+                <div class="row" >
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>STATUS POTONG RETUR <span class="text-danger">*</span> </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <select name="statuspotongretur" id="statuspotongretur" class="form-select select2bs4" style="width: 100%;">
+                      <option value="">-- PILIH STATUS POTONG RETUR --</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6" style="display: none">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>bank </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="bank" class="form-control bank-lookup">
+                    <input type="text" id="bankId" name="bank_id" readonly hidden>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-6" style="display: none">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>TANGGAL POST  </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="tglkasmasuk" class="form-control datepicker">
+                  </div>
+                </div>
+              </div>
+
+              
 
 
             </div>
@@ -169,15 +208,15 @@
             <table class="table table-bordered table-bindkeys">
               <thead>
                 <tr>
-                  <th width="50">No</th>
-                  <th width="300">stok</th>
-                  <th class="data_tbl tbl_vulkanisirke" width="100">vulkanisirke</th>
-                  <th width="350">keterangan</th>
-                  <th width="150">qty</th>
-                  <th class="data_tbl tbl_harga" width="150">harga</th>
-                  <th class="data_tbl tbl_persentase" width="50">persentase discount</th>
-                  <th class="data_tbl tbl_total" width="150">Total</th>
-                  <th>Aksi</th>
+                  <th style="width : 5%">No</th>
+                    <th style="width : 20%">stok</th>
+                    <th class="data_tbl tbl_vulkanisirke" style="width : 20px">vulkanisirke</th>
+                    <th style="width : 20%">keterangan</th>
+                    <th class="tbl_qty" style="width : 5%">qty</th>
+                    <th class="data_tbl tbl_harga" style="width : 10%">harga</th>
+                    <th class="data_tbl tbl_persentase" style="width : 5%">persentase discount</th>
+                    <th class="data_tbl tbl_total" style="width : 10%">Total</th>
+                    <th style="width : 5%">Aksi</th>
                 </tr>
               </thead>
               <tbody id="table_body" class="form-group">
@@ -217,6 +256,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let kodepengeluaranstok
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
@@ -226,6 +266,17 @@
 
     $(document).on('click', '.rmv', function(event) {
       deleteRow($(this).parents('tr'))
+    })
+    $(document).on('change', '#statuspotongretur', function(event) {
+      // deleteRow($(this).parents('tr'))
+      // console.log();
+      if ($(this).val() == 219) {
+        $('[name=bank]').parents('.form-group').show()
+        $('[name=tglkasmasuk]').parents('.form-group').show()
+      }else{
+        $('[name=bank]').parents('.form-group').hide()
+        $('[name=tglkasmasuk]').parents('.form-group').hide()
+      }
     })
 
     $('#btnSubmit').click(function(event) {
@@ -337,9 +388,24 @@
   })
 
   function kodepengeluaran(kodepengeluaran) {
-    $('#crudForm').find('[name=statusformat]').val(kodepengeluaran).trigger('change');
     cekKodePengeluaran(kodepengeluaran)
     $('#crudForm').find('[name=statusformat_id]').val(kodepengeluaran);
+    // console.log(kodepengeluaranstok);
+    // switch (kodepengeluaranstok) {
+    //   case "SPK":
+    //     tampilanSpkAddRow();
+    //     break;
+    //   case "RBT":
+    //     tampilanRbtAddRow();
+    //     break;
+    //   case "KOR":
+    //     tampilanKorAddRow();
+    //     break;
+    
+    //   default:
+    //     tampilanAllRow();
+    //     break;
+    // }
   }
 
   function cekKodePengeluaran(kode) {
@@ -359,50 +425,144 @@
               "data": "PENGELUARAN STOK"
             },
             {
-              "field": "subgrp",
+              "field": "id",
               "op": "cn",
-              "data": "SPK STOK BUKTI"
+              "data": kode
             }
           ]
         })
       },
       success: response => {
-        console.log(response.data[0].id);
-        console.log(kode);
-        if (response.data[0].id == kode) {
-          tampilanspk();
-        } else {
+        if (kode) {
+          if (response.data[0].subgrp == "SPK STOK BUKTI") {
+            tampilanspk();
+            enabledKorDisable()
+            kodepengeluaranstok = "SPK";
+          } else if(response.data[0].subgrp == "RETUR BELI BUKTI") {
+            tampilanrbt();
+            enabledKorDisable()
+            kodepengeluaranstok = "RBT";
+          } else if(response.data[0].subgrp == "KOREKSI STOK MINUS BUKTI") {
+            tampilankor();
+            kodepengeluaranstok = "KOR";
+          }
+        } else{
+          console.log(kodepengeluaranstok);
           tampilanall();
         }
       }
     })
-
+    
   }
 
   function tampilanspk() {
+    $('[name=nobukti]').parents('.form-group').show()
+    $('[name=tglbukti]').parents('.form-group').show()
+    $('[name=pengeluaranstok]').parents('.form-group').show()
+    $('[name=kerusakan]').parents('.form-group').show()
+    $('[name=supir]').parents('.form-group').show()
+    $('[name=trado]').parents('.form-group').show()
+    $('[name=gandengan]').parents('.form-group').show()
+    $('[name=gudang]').parents('.form-group').show()
+    $('[name=statuspotongretur]').parents('.form-group').hide()
+
+    
     $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
     $('[name=servicein_nobukti]').parents('.form-group').hide()
     $('[name=supplier]').parents('.form-group').hide()
+    tampilanSpkAddRow();
+  }
+
+  function tampilanSpkAddRow() {
+    $('.tbl_qty').show()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
-
   }
 
+  function tampilanrbt() {
+    $('[name=nobukti]').parents('.form-group').show()
+    $('[name=tglbukti]').parents('.form-group').show()
+    $('[name=pengeluaranstok]').parents('.form-group').show()
+    $('[name=supplier]').parents('.form-group').show()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').show()
+    $('[name=trado]').parents('.form-group').show()
+    $('[name=gandengan]').parents('.form-group').show()
+    $('[name=gudang]').parents('.form-group').show()
+    
+    $('[name=statuspotongretur]').parents('.form-group').show()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=servicein_nobukti]').parents('.form-group').hide()
+    $('[name=kerusakan]').parents('.form-group').hide()
+    $('[name=supir]').parents('.form-group').hide()
+    $('[name=trado]').parents('.form-group').hide()
+   tampilanRbtAddRow();
+  }
+
+  function tampilanRbtAddRow() {
+    $('.tbl_qty').show()
+    $('.tbl_harga').show()
+    $('.tbl_total').show()
+    $('.tbl_vulkanisirke').hide();
+    $('.tbl_persentase').hide();
+    $('.colspan').attr('colspan', 4);
+  }
+
+  function tampilankor() {
+    $('[name=nobukti]').parents('.form-group').show()
+    $('[name=tglbukti]').parents('.form-group').show()
+    $('[name=pengeluaranstok]').parents('.form-group').show()
+    $('[name=trado]').parents('.form-group').show()
+    $('[name=gandengan]').parents('.form-group').show()
+    $('[name=gudang]').parents('.form-group').show()
+    $('[name=supplier]').parents('.form-group').hide()
+    $('[name=servicein_nobukti]').parents('.form-group').hide()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=kerusakan]').parents('.form-group').hide()
+    $('[name=supir]').parents('.form-group').hide()
+    $('[name=statuspotongretur]').parents('.form-group').hide()
+tampilanKorAddRow();
+  }
+  function tampilanKorAddRow() {
+    $('.tbl_qty').show()
+    $('.tbl_vulkanisirke').hide();
+    $('.tbl_harga').hide();
+    $('.tbl_persentase').hide();
+    $('.tbl_total').hide();
+    $('.colspan').attr('colspan', 4);
+    $('.sumrow').hide();
+  }
+    
+    
   function tampilanall() {
-    // $('[name=penerimaanstok_nobukti]').parents('.row').show()
+    $('[name=nobukti]').parents('.form-group').show()
+    $('[name=tglbukti]').parents('.form-group').show()
+    $('[name=pengeluaranstok]').parents('.form-group').show()
+    $('[name=supplier]').parents('.form-group').show()
+    $('[name=servicein_nobukti]').parents('.form-group').show()
     $('[name=penerimaanstok_nobukti]').parents('.form-group').show()
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').show()
-    $('[name=service_nobukti]').parents('.form-group').show()
-    $('[name=supplier]').parents('.form-group').show()
-    $('.tbl_vulkanisirke').show();
-    $('.tbl_harga').show();
-    $('.tbl_persentase').show();
-    $('.tbl_total').show();
+    $('[name=kerusakan]').parents('.form-group').show()
+    $('[name=supir]').parents('.form-group').show()
+    $('[name=trado]').parents('.form-group').show()
+    $('[name=gandengan]').parents('.form-group').show()
+    $('[name=gudang]').parents('.form-group').show()
+    $('[name=statuspotongretur]').parents('.form-group').show()
+     
+   tampilanAllRow();
+    // $('.data_tbl').show();
+  }
+  function tampilanAllRow() {
+    $('.tbl_vulkanisirke').show()
+    $('.tbl_qty').show()
+    $('.tbl_harga').show()
+    $('.tbl_persentase').show()
+    $('.tbl_total').show()
     $('.colspan').attr('colspan', 6);
   }
 
@@ -442,7 +602,9 @@
     $('.invalid-feedback').remove()
     addRow()
     sumary()
-    setStatusFormatOptions(form)
+    // setStatusFormatOptions(form)
+    setStatusPotongReturOptions(form)
+
   }
 
   function editPengeluaranstokHeader(pengeluaranStokHeaderId) {
@@ -462,7 +624,8 @@
 
     Promise
       .all([
-        setStatusFormatOptions(form)
+        // setStatusFormatOptions(form)
+        setStatusPotongReturOptions(form)
       ])
       .then(() => {
         showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
@@ -486,7 +649,8 @@
 
     Promise
       .all([
-        setStatusFormatOptions(form)
+        // setStatusFormatOptions(form)
+        setStatusPotongReturOptions(form)
       ])
       .then(() => {
         showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
@@ -518,11 +682,48 @@
     }
   }
 
-  const setStatusFormatOptions = function(relatedForm) {
+  // const setStatusFormatOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statusformat]').empty()
+  //     relatedForm.find('[name=statusformat]').append(
+  //       new Option('-- PILIH STATUS FORMAT --', '', false, true)
+  //     ).trigger('change')
+
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "PENGELUARAN STOK"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statusAktif => {
+  //           let option = new Option(statusAktif.text, statusAktif.id)
+
+  //           relatedForm.find('[name=statusformat]').append(option).trigger('change')
+  //         });
+
+  //         resolve()
+  //       }
+  //     })
+  //   })
+  // }
+  const setStatusPotongReturOptions = function(relatedForm) {
+
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusformat]').empty()
-      relatedForm.find('[name=statusformat]').append(
-        new Option('-- PILIH STATUS FORMAT --', '', false, true)
+      relatedForm.find('[name=statuspotongretur]').empty()
+      relatedForm.find('[name=statuspotongretur]').append(
+        new Option('-- PILIH STATUS POTONG RETUR --', '', false, true)
       ).trigger('change')
 
       $.ajax({
@@ -538,7 +739,7 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "PENGELUARAN STOK"
+              "data": "STATUS POTONG RETUR"
             }]
           })
         },
@@ -546,7 +747,7 @@
           response.data.forEach(statusAktif => {
             let option = new Option(statusAktif.text, statusAktif.id)
 
-            relatedForm.find('[name=statusformat]').append(option).trigger('change')
+            relatedForm.find('[name=statuspotongretur]').append(option).trigger('change')
           });
 
           resolve()
@@ -615,7 +816,8 @@
       }
     })
     initAutoNumeric($(`.number${index}`))
-    cekKodePengeluaran($('#crudForm').find('[name=statusformat]').val())
+    cekKodePengeluaran($('#crudForm').find('[name=statusformat_id]').val())
+    
     setRowNumbers()
     index++;
   }
@@ -654,6 +856,54 @@
     sumary();
   }
 
+
+  function lookupSelected(el){
+    if (kodepengeluaranstok =="KOR") {
+      // console.log(kodepengeluaranstok);
+      // console.log(el);
+      switch (el) {
+        case 'trado':
+          $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr('disabled',true)
+          $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled',true)
+          $('#gandenganId').attr('disabled',true);
+          $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().attr('disabled',true)
+          $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled',true)
+          $('#gudangId').attr('disabled',true);
+          break;
+        case 'gandengan':
+          $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr('disabled',true)
+          $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled',true)
+          $('#tradoId').attr('disabled',true);
+          $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().attr('disabled',true)
+          $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled',true)
+          $('#gudangId').attr('disabled',true);
+          
+          break;
+          case 'gudang':
+          $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr('disabled',true)
+          $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled',true)
+          $('#tradoId').attr('disabled',true);
+          $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr('disabled',true)
+          $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled',true)
+          $('#gandenganId').attr('disabled',true);
+          
+          break;
+        default:
+          break;
+        }
+    }
+    
+  }
+
+  function enabledKorDisable(){
+    $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().attr("disabled", false);
+    $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr("disabled", false);
+    $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr("disabled", false);
+    $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+  }
+  
   function sumary() {
     let sumary = 0;
     $('.totalItem').each(function() {
@@ -673,6 +923,7 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        console.log(response);
         sum = 0;
         var statusformat;
         $.each(response.data, (index, value) => {
@@ -680,6 +931,11 @@
           if (element.attr("name") == 'tglbukti') {
             var result = value.split('-');
             element.val(result[2] + '-' + result[1] + '-' + result[0]);
+          } else if (element.attr("name") == 'tglkasmasuk') {
+            var result = value.split('-');
+            element.val(result[2] + '-' + result[1] + '-' + result[0]);
+          } else if (element.is('select')) {
+            element.val(value).trigger('change')
           } else {
             element.val(value)
           }
@@ -754,6 +1010,92 @@
         sumary()
         
         kodepengeluaran(statusformat)
+
+      }
+    })
+  }
+
+  
+  function getSpb(detail_id) {
+    resetRow()
+    $.ajax({
+      url: `${apiUrl}penerimaanstokdetail?penerimaanstokheader_id=${detail_id}`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        console.log(response);
+        sum = 0;
+        var statusformat;
+        
+        $.each(response.data, (id, detail) => {
+          let detailRow = $(`
+            <tr class="trow">
+                  <td>
+                    <div class="baris">1</div>
+                  </td>
+                  
+                  <td>
+                    <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
+                    <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                  </td>
+                   <td class="data_tbl tbl_vulkanisirke">
+                    <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                  </td>  
+                  <td>
+                    <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                  </td>
+                  <td>
+                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                  </td>  
+                  
+                  <td class="data_tbl tbl_harga">
+                    <input type="text"  name="detail_harga[]" id="detail_harga${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                  </td>  
+                  
+                  <td class="data_tbl tbl_persentase">
+                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                  </td>  
+                  <td class="data_tbl tbl_total">
+                    <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
+                  </td>  
+                  <td>
+                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                  </td>
+              </tr>
+          `)
+          detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
+          detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
+          detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
+          detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
+          detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
+          detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
+          detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
+          detailRow.find(`[name="totalItem[]"]`).val(detail.total)
+          detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
+          $('table #table_body').append(detailRow)
+          initAutoNumeric($(`.number${id}`))
+          setRowNumbers()
+          // $(`#detail_stok_${id}`).lookup({
+          //   title: 'stok Lookup',
+          //   fileName: 'stok',
+          //   onSelectRow: (stok, element) => {
+          //     element.val(stok.namastok)
+          //     parent = element.closest('td');
+          //     parent.children('.detailstokId').val(stok.id)
+          //     element.data('currentValue', element.val())
+          //   },
+          //   onCancel: (element) => {
+          //     element.val(element.data('currentValue'))
+          //   }
+          // })
+          id++;
+        })
+        sumary()
+        
+        kodepengeluaran($('#crudForm').find('[name=statusformat_id]').val())
 
       }
     })
@@ -839,9 +1181,29 @@
         },
         onClear: (element) => {
           element.val('')
+          $(`#${element[0]['name']}Id`).val('')
           element.data('currentValue', element.val())
         }
       })
+
+      $('.bank-lookup').lookup({
+        title: 'bank Lookup',
+        fileName: 'bank',
+        onSelectRow: (bank, element) => {
+          element.val(bank.namabank)
+          $(`#${element[0]['name']}Id`).val(bank.id)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          $(`#${element[0]['name']}Id`).val('')
+          element.data('currentValue', element.val())
+        }
+      })
+      
       $('.trado-lookup').lookup({
         title: 'Trado Lookup',
         fileName: 'trado',
@@ -849,6 +1211,7 @@
           element.val(trado.keterangan)
           $(`#${element[0]['name']}Id`).val(trado.id)
           element.data('currentValue', element.val())
+          lookupSelected(`trado`);
         },
         onCancel: (element) => {
           element.val(element.data('currentValue'))
@@ -856,8 +1219,30 @@
         onClear: (element) => {
           element.val('')
           element.data('currentValue', element.val())
+          enabledKorDisable()
         }
       })
+
+      $('.gandengan-lookup').lookup({
+        title: 'gandengan Lookup',
+        fileName: 'gandengan',
+        onSelectRow: (gandengan, element) => {
+          element.val(gandengan.keterangan)
+          $(`#${element[0]['name']}Id`).val(gandengan.id)
+          element.data('currentValue', element.val())
+          lookupSelected(`gandengan`);
+
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          element.data('currentValue', element.val())
+          enabledKorDisable()
+        }
+      })
+     
       $('.gudang-lookup').lookup({
         title: 'Gudang Lookup',
         fileName: 'gudang',
@@ -865,6 +1250,7 @@
           element.val(gudang.gudang)
           $(`#${element[0]['name']}Id`).val(gudang.id)
           element.data('currentValue', element.val())
+          lookupSelected(`gudang`);
         },
         onCancel: (element) => {
           element.val(element.data('currentValue'))
@@ -872,6 +1258,7 @@
         onClear: (element) => {
           element.val('')
           element.data('currentValue', element.val())
+          enabledKorDisable()
         }
       })
       $('.pengeluaranstokheader-lookup').lookup({
@@ -895,7 +1282,18 @@
         onSelectRow: (penerimaan, element) => {
           element.val(penerimaan.nobukti)
           element.data('currentValue', element.val())
+          if (kodepengeluaranstok == "RBT") {
+            getSpb(penerimaan.id)
+          }
         },
+        beforeProcess: function(test) {
+          var supplierId= $(`#supplierId`).val();
+          var pengeluaranstokId= $(`#pengeluaranstokId`).val();
+          this.postData = {
+            supplier_id:supplierId,
+            pengeluaranstok_id:pengeluaranstokId
+          }
+        },  
         onCancel: (element) => {
           element.val(element.data('currentValue'))
         },
@@ -919,6 +1317,23 @@
           element.data('currentValue', element.val())
         }
       })
+      $('.servicein-lookup').lookup({
+        title: 'service in Lookup',
+        fileName: 'serviceinheader',
+        onSelectRow: (gandengan, element) => {
+          element.val(gandengan.nobukti)
+          console.log(gandengan);
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+
   }
 </script>
 @endpush()

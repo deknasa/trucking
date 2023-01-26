@@ -37,14 +37,6 @@
             name: 'nobukti',
           },
           {
-            label: 'PELANGGAN',
-            name: 'pelanggan_id',
-          },
-          {
-            label: 'AGEN',
-            name: 'agen_id',
-          },
-          {
             label: 'NO BUKTI PIUTANG',
             name: 'piutang_nobukti',
           },          
@@ -65,12 +57,16 @@
             summaryType:'sum'
           },
           {
-            label: 'KET. PENYESUAIAN',
-            name: 'keteranganpenyesuaian',
+            label: 'KET. POTONGAN',
+            name: 'keteranganpotongan',
           },
           {
-            label: 'PENYESUAIAN',
-            name: 'penyesuaian',
+            label: 'COA POTONGAN',
+            name: 'coapotongan',
+          },
+          {
+            label: 'POTONGAN',
+            name: 'potongan',
             formatter: 'number', 
             formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
             align: "right",
