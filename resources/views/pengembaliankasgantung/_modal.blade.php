@@ -9,7 +9,7 @@
           </button>
         </div>
         <form action="" method="post">
-        <input type="hidden" name="id">
+          <input type="hidden" name="id">
           <div class="modal-body">
             <div class="row">
 
@@ -25,7 +25,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
@@ -49,7 +49,7 @@
                   </div>
                 </div>
               </div> --}}
-              
+
               <div class="col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
@@ -62,7 +62,7 @@
                 </div>
               </div>
 
-              
+
 
               <div class="col-md-6">
                 <div class="row">
@@ -120,7 +120,7 @@
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
                     <label>
-                      TANGGAL Post 
+                      TANGGAL Post
                     </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
@@ -156,16 +156,18 @@
                     <th>KETERANGAN</th>
                   </tr>
                 </thead>
-                  <tbody id="table_body">
+                <tbody id="table_body">
 
-                  </tbody>
+                </tbody>
                 <tfoot>
                   <tr>
                     <td colspan="5"></td>
-                    <td><p id="nominalPiutang" class="text-right font-weight-bold"></p></td>
+                    <td>
+                      <p id="nominalPiutang" class="text-right font-weight-bold"></p>
+                    </td>
                     <th></th>
-                  
-                   
+
+
                   </tr>
                 </tfoot>
               </table>
@@ -197,7 +199,7 @@
     $(document).on('click', "#addRow", function() {
       addRow()
     });
-    
+
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
     })
@@ -206,9 +208,9 @@
       setTotal()
     })
 
-    
-        
-    
+
+
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -282,7 +284,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -317,7 +321,7 @@
     // getMaxLength(form)
 
     initDatepicker()
-    
+
     $(`[name=tgldari], [name=tglsampai]`)
       .on("change", function() {
         rangeKasgantung();
@@ -328,14 +332,15 @@
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker()
-    
+
   })
+
   function rangeKasgantung() {
     var tgldari = $('#crudForm').find(`[name="tgldari"]`).val()
     var tglsampai = $('#crudForm').find(`[name="tglsampai"]`).val()
     console.log(tgldari, tglsampai);
-    if (tgldari !== "" && tglsampai !==""){
-      getKasGantung(tgldari,tglsampai)
+    if (tgldari !== "" && tglsampai !== "") {
+      getKasGantung(tgldari, tglsampai)
     }
 
   }
@@ -366,9 +371,9 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     initLookup()
-    
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
-    $('#crudForm').find('[name=tglkasmasuk]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
+
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tglkasmasuk]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
   }
 
@@ -389,7 +394,7 @@
     initLookup()
     showpengembalianKasGantung(form, userId)
     getPengembalian(userId)
-    
+
   }
 
   function deletePengembalianKasGantung(userId) {
@@ -407,9 +412,9 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-   
+
     showpengembalianKasGantung(form, userId)
-    getPengembalian(userId)   
+    getPengembalian(userId)
   }
 
 
@@ -430,7 +435,7 @@
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } else if(element.hasClass('datepicker')){
+          } else if (element.hasClass('datepicker')) {
             element.val(dateFormat(value))
           } else {
             element.val(value)
@@ -449,7 +454,7 @@
     })
   }
 
-  function getKasGantung(dari,sampai) {
+  function getKasGantung(dari, sampai) {
     $('#detailList tbody').html('')
 
     $.ajax({
@@ -487,6 +492,13 @@
           $(`.coa_detail_${detail.detail_id}`).lookup({
             title: 'akun pusat Lookup',
             fileName: 'akunpusat',
+            beforeProcess: function(test) {
+              // var levelcoa = $(`#levelcoa`).val();
+              this.postData = {
+                levelCoa: '3',
+                Aktif: 'AKTIF',
+              }
+            },
             onSelectRow: (akunpusat, element) => {
               element.val(akunpusat.coa)
               element.data('currentValue', element.val())
@@ -498,10 +510,10 @@
               element.val('')
               element.data('currentValue', element.val())
             }
-           })
           })
-          //  totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
-           $('#nominalPiutang').html(`${totalNominal}`)           
+        })
+        //  totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
+        $('#nominalPiutang').html(`${totalNominal}`)
       }
     })
   }
@@ -542,6 +554,13 @@
           $(`.coa_detail_${detail.detail_id}`).lookup({
             title: 'akun pusat Lookup',
             fileName: 'akunpusat',
+            beforeProcess: function(test) {
+              // var levelcoa = $(`#levelcoa`).val();
+              this.postData = {
+                levelCoa: '3',
+                Aktif: 'AKTIF',
+              }
+            },
             onSelectRow: (akunpusat, element) => {
               element.val(akunpusat.coa)
               element.data('currentValue', element.val())
@@ -553,15 +572,15 @@
               element.val('')
               element.data('currentValue', element.val())
             }
-            })
           })
-          totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
-          $('#nominalPiutang').html(`${totalNominal}`)
-        }
+        })
+        totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
+        $('#nominalPiutang').html(`${totalNominal}`)
+      }
     })
-    
+
   }
-  
+
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
@@ -589,7 +608,7 @@
     }
   }
 
-  
+
   function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengembaliankasgantungheader/${Id}/cekvalidasi`,
@@ -620,80 +639,107 @@
     })
   }
 
- 
+
   function initLookup() {
-      $('.akunpusat-lookup').lookup({
-        title: 'akun pusat Lookup',
-        fileName: 'akunpusat',
-        onSelectRow: (akunpusat, element) => {
-          element.val(akunpusat.coa)
-          element.data('currentValue', element.val())
-        },
-        
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
+    $('.akunpusat-lookup').lookup({
+      title: 'akun pusat Lookup',
+      fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          levelCoa: '3',
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
         element.val('')
         element.data('currentValue', element.val())
       },
       onClear: (element) => {
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-      })
-      $('.penerimaan-lookup').lookup({
-        title: 'akun pusat Lookup',
-        fileName: 'penerimaan',
-        onSelectRow: (penerimaan, element) => {
-          element.val(penerimaan.nobukti)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
         element.val('')
         element.data('currentValue', element.val())
       }
-      })
-      $('.pelanggan-lookup').lookup({
-        title: 'pelanggan Lookup',
-        fileName: 'pelanggan',
-        onSelectRow: (pelanggan, element) => {
-          element.val(pelanggan.namapelanggan)
-          $(`#${element[0]['name']}Id`).val(pelanggan.id)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
-              element.val('')
-              $(`#${element[0]['name']}Id`).val('')
-              element.data('currentValue', element.val())
-            }
-      })
-      $('.bank-lookup').lookup({
-        title: 'bank Lookup',
-        fileName: 'bank',
-        onSelectRow: (bank, element) => {
-          element.val(bank.namabank)
-          $(`#${element[0]['name']}Id`).val(bank.id)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
-          $(`#${element[0]['name']}Id`).val('')
+    })
+    $('.penerimaan-lookup').lookup({
+      title: 'penerimaan Lookup',
+      fileName: 'penerimaan',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
 
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-      })
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (penerimaan, element) => {
+        element.val(penerimaan.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.pelanggan-lookup').lookup({
+      title: 'pelanggan Lookup',
+      fileName: 'pelanggan',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
 
-    }
-  
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (pelanggan, element) => {
+        element.val(pelanggan.namapelanggan)
+        $(`#${element[0]['name']}Id`).val(pelanggan.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        $(`#${element[0]['name']}Id`).val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.bank-lookup').lookup({
+      title: 'bank Lookup',
+      fileName: 'bank',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (bank, element) => {
+        element.val(bank.namabank)
+        $(`#${element[0]['name']}Id`).val(bank.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#${element[0]['name']}Id`).val('')
+
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+  }
 </script>
 @endpush()

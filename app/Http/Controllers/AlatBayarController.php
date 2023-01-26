@@ -33,6 +33,7 @@ class AlatBayarController extends MyController
         $data = [
             'combolangsungcair' => $this->comboList('list', 'STATUS LANGSUNG CAIR', 'STATUS LANGSUNG CAIR'),
             'combodefault' => $this->comboList('list', 'STATUS DEFAULT', 'STATUS DEFAULT'),
+            'combo' => $this->comboList('list', 'STATUS AKTIF', 'STATUS AKTIF'),
         ];
         return view('alatbayar.index', compact('title', 'breadcrumb','data'));
     }
@@ -189,4 +190,6 @@ class AlatBayarController extends MyController
         
         return $response['data'];
     }
+
+    
 }

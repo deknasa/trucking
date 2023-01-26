@@ -1,33 +1,58 @@
-<table id="kerusakanLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="kerusakanLookupPager"></div>
+<table id="upahRitasiLookup" class="lookup-grid"></table>
+<div id="upahRitasiLookupPager"></div>
 
+@push('scripts')
 <script>
-$('#kerusakanLookup').jqGrid({
-  url: `{{ config('app.api_url') . 'kerusakan' }}`,
-        mtype: "GET",
-        styleUI: 'Bootstrap4',
-        iconSet: 'fontAwesome',
-        datatype: "json",
-        postData: {
-        aktif: `{!! $Aktif ?? '' !!}`,
-      },           
-        colModel: [{
+ $('#upahRitasiLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'upahritasi' }}`,
+      mtype: "GET",
+      styleUI: 'Bootstrap4',
+      iconSet: 'fontAwesome',
+      datatype: "json",
+      colModel: [{
             label: 'ID',
             name: 'id',
+            align: 'right',
             width: '50px',
             hidden: true
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
+            label: 'DARI',
+            name: 'kotadari_id',
+            align: 'left'
           },
+          {
+            label: 'TUJUAN',
+            name: 'kotasampai_id',
+            align: 'left'
+          },
+          {
+            label: 'JARAK',
+            name: 'jarak',
+            align: 'right',
+            formatter: currencyFormat
+          },
+          
           {
             label: 'STATUS',
             name: 'statusaktif',
+            stype: 'select',
           },
+          {
+            label: 'TGL MULAI BERLAKU',
+            name: 'tglmulaiberlaku',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          
+         
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
+            align: 'left'
           },
           {
             label: 'CREATEDAT',
@@ -50,20 +75,20 @@ $('#kerusakanLookup').jqGrid({
             }
           },
         ],
-        autowidth: true,
+      autowidth: true,
       responsive: true,
       shrinkToFit: false,
-      height: 450,
+      height: 350,
       rowNum: 10,
       rownumbers: true,
       rownumWidth: 45,
       rowList: [10, 20, 50],
+      toolbar: [true, "top"],
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      toolbar: [true, "top"],
-      pager: $('#kerusakanLookupPager'),
+      pager: $('#upahRitasiLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -92,26 +117,26 @@ $('#kerusakanLookup').jqGrid({
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#kerusakanLookup').getGridParam().reccount) {
-            indexRow = $('#kerusakanLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#upahRitasiLookup').getGridParam().reccount) {
+            indexRow = $('#upahRitasiLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#kerusakanLookup [id="${$('#kerusakanLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#upahRitasiLookup [id="${$('#upahRitasiLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#kerusakanLookup [id="${$('#kerusakanLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#upahRitasiLookup [id="${$('#upahRitasiLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#kerusakanLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#kerusakanLookup [id="` + $('#kerusakanLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#upahRitasiLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#upahRitasiLookup [id="` + $('#upahRitasiLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#kerusakanLookup').setSelection($('#kerusakanLookup').getDataIDs()[indexRow])
+            $('#upahRitasiLookup').setSelection($('#upahRitasiLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -126,7 +151,7 @@ $('#kerusakanLookup').jqGrid({
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupCabang').prev().width())
+        $(this).setGridWidth($('#lookuptarif').prev().width())
         setHighlight($(this))
       }
     })
@@ -139,10 +164,10 @@ $('#kerusakanLookup').jqGrid({
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#kerusakanLookup'))
+          clearGlobalSearch($('#upahRitasiLookup'))
       },
     })
 
-  loadGlobalSearch($('#kerusakanLookup'))
-  loadClearFilter($('#kerusakanLookup'))
+    loadGlobalSearch($('#upahRitasiLookup'))
+    loadClearFilter($('#upahRitasiLookup'))
 </script>

@@ -10,7 +10,8 @@
       iconSet: 'fontAwesome',
       datatype: "json",
       postData: {
-        filters: `{!! $filters ?? '' !!}`
+        filters: `{!! $filters ?? '' !!}`,
+        aktif: `{!! $Aktif ?? '' !!}`,
       },
       colModel: [{
           label: 'ID',
@@ -105,8 +106,8 @@
           }
         },
         {
-          label: 'STATUS PENERIMAAN',
-          name: 'statusformatpenerimaan',
+          label: 'FORMAT PENERIMAAN',
+          name: 'formatpenerimaan',
           align: 'left',
           formatter: (value, options, rowData) => {
             let statusFormatPenerimaan = JSON.parse(value)
@@ -120,14 +121,14 @@
             return formattedValue[0].outerHTML
           },
           cellattr: (rowId, value, rowObject) => {
-            let statusFormatPenerimaan = JSON.parse(rowObject.statusformatpenerimaan)
+            let statusFormatPenerimaan = JSON.parse(rowObject.formatpenerimaan)
 
             return ` title="${statusFormatPenerimaan.MEMO}"`
           }
         },
         {
-          label: 'STATUS PENGELUARAN',
-          name: 'statusformatpengeluaran',
+          label: 'FORMAT PENGELUARAN',
+          name: 'formatpengeluaran',
           align: 'left',
           formatter: (value, options, rowData) => {
               let statusFormatPengeluaran = JSON.parse(value)
@@ -141,7 +142,7 @@
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
-              let statusFormatPengeluaran = JSON.parse(rowObject.statusformatpengeluaran)
+              let statusFormatPengeluaran = JSON.parse(rowObject.formatpengeluaran)
 
               return ` title="${statusFormatPengeluaran.MEMO}"`
             }

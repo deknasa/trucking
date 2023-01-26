@@ -655,6 +655,13 @@
       $('.mandor-lookup').lookup({
         title: 'Mandor Lookup',
         fileName: 'mandor',
+        beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },          
         onSelectRow: (mandor, element) => {
           $('#crudForm [name=mandor_id]').first().val(mandor.id)
           element.val(mandor.namamandor)
@@ -674,6 +681,13 @@
       $('.supir-lookup').lookup({
         title: 'Supir Lookup',
         fileName: 'supir',
+        beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },          
         onSelectRow: (supir, element) => {
           $('#crudForm [name=supir_id]').first().val(supir.id)
           element.val(supir.namasupir)

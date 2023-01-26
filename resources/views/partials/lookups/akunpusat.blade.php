@@ -10,6 +10,8 @@
       datatype: "json",
       postData: {
         level: `{!! $levelCoa ?? '' !!}`,
+        potongan: `{!! $potongan ?? '' !!}`,
+        aktif: `{!! $Aktif ?? '' !!}`,        
         // filters: `{!! $filters ?? '' !!}`
       },
       colModel: [{

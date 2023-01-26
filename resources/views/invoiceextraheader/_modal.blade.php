@@ -439,6 +439,11 @@
     $('.pelanggan-lookup').lookup({
         title: 'pelanggan Lookup',
         fileName: 'pelanggan',
+        beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },        
         onSelectRow: (pelanggan, element) => {
           element.val(pelanggan.namapelanggan)
           $(`#${element[0]['name']}Id`).val(pelanggan.id)
@@ -456,6 +461,11 @@
       $('.agen-lookup').lookup({
         title: 'agen Lookup',
         fileName: 'agen',
+        beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },        
         onSelectRow: (agen, element) => {
           element.val(agen.namaagen)
           $(`#${element[0]['name']}Id`).val(agen.id)

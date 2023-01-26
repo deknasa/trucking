@@ -47,7 +47,7 @@
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
-                 
+
                 </tbody>
                 <tfoot>
                   <tr>
@@ -92,7 +92,7 @@
     $('#crudForm').autocomplete({
       disabled: true
     });
-    
+
     $(document).on('click', "#addRow", function() {
       addRow()
     });
@@ -185,7 +185,9 @@
             page: response.data.page
           }).trigger('reloadGrid');
 
-          if(id == 0){$('#detail').jqGrid().trigger('reloadGrid')}
+          if (id == 0) {
+            $('#detail').jqGrid().trigger('reloadGrid')
+          }
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
           }
@@ -378,6 +380,12 @@
           $('.coadebet-lookup').last().lookup({
             title: 'Coa Debet Lookup',
             fileName: 'akunpusat',
+            beforeProcess: function(test) {
+              this.postData = {
+                Aktif: 'AKTIF',
+                levelCoa: '3',
+              }
+            },
             onSelectRow: (akunpusat, element) => {
               element.val(akunpusat.coa)
               element.data('currentValue', element.val())
@@ -473,7 +481,7 @@
       }
     })
     initAutoNumeric(detailRow.find('.autonumeric'))
-   
+
     initDatepicker()
     setRowNumbers()
   }
@@ -517,6 +525,5 @@
       })
     }
   }
-
 </script>
 @endpush()

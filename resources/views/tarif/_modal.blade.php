@@ -660,6 +660,13 @@
     $('.container-lookup').lookup({
       title: 'Container Lookup',
       fileName: 'container',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (container, element) => {
         $('#crudForm [name=container_id]').first().val(container.id)
         element.val(container.keterangan)
@@ -678,6 +685,13 @@
     $('.kota-lookup').lookup({
       title: 'Kota Lookup',
       fileName: 'kota',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kota_id]').first().val(kota.id)
         element.val(kota.keterangan)
@@ -696,6 +710,13 @@
     $('.zona-lookup').lookup({
       title: 'Zona Lookup',
       fileName: 'zona',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (zona, element) => {
         $('#crudForm [name=zona_id]').first().val(zona.id)
         element.val(zona.keterangan)
@@ -714,6 +735,13 @@
     $('.parent-lookup').lookup({
       title: 'Tarif Lookup',
       fileName: 'tarif',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (tarif, element) => {
         $('#crudForm [name=parent_id]').first().val(tarif.id)
         element.val(tarif.tujuan)
@@ -731,6 +759,13 @@
     $('.upahsupir-lookup').lookup({
       title: 'Upah Supir Lookup',
       fileName: 'upahsupir',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (upahsupir, element) => {
         $('#crudForm [name=upahsupir_id]').first().val(upahsupir.id)
         $('#crudForm [name=tujuan]').val(upahsupir.kotasampai_id)
@@ -829,6 +864,13 @@
     $('.container-lookup').last().lookup({
       title: 'Container Lookup',
       fileName: 'container',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (container, element) => {
         $(`#crudForm [name="container_id[]"]`).last().val(container.id)
         element.val(container.keterangan)

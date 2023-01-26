@@ -91,6 +91,11 @@
       $('.absensisupir-lookup').lookup({
         title: 'absensisupir Lookup',
         fileName: 'absensisupir',
+        beforeProcess: function(test) {
+              this.postData = {
+                Aktif: 'AKTIF',
+              }
+            },        
         onSelectRow: (absensisupir, element) => {
           element.val(absensisupir.nobukti)
           $(`#absensisupir_kasgantung`).val(absensisupir.kasgantung_nobukti)

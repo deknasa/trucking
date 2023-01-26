@@ -860,6 +860,13 @@
     $('.container-lookup').last().lookup({
       title: 'Container Lookup',
       fileName: 'container',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (container, element) => {
         $(`#crudForm [name="container_id[]"]`).last().val(container.id)
         element.val(container.keterangan)
@@ -878,6 +885,13 @@
     $('.statuscontainer-lookup').last().lookup({
       title: 'Status Container Lookup',
       fileName: 'statuscontainer',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (statuscontainer, element) => {
         $(`#crudForm [name="statuscontainer_id[]"]`).last().val(statuscontainer.id)
         element.val(statuscontainer.keterangan)
@@ -1065,6 +1079,13 @@
     $('.kotadari-lookup').lookup({
       title: 'Kota Dari Lookup',
       fileName: 'kota',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kotadari_id]').first().val(kota.id)
         element.val(kota.keterangan)
@@ -1083,6 +1104,13 @@
     $('.kotasampai-lookup').lookup({
       title: 'Kota Tujuan Lookup',
       fileName: 'tarif',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kotasampai_id]').first().val(kota.id)
         element.val(kota.tujuan)
@@ -1101,6 +1129,13 @@
     $('.zona-lookup').lookup({
       title: 'Zona Lookup',
       fileName: 'zona',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
       onSelectRow: (zona, element) => {
         $('#crudForm [name=zona_id]').first().val(zona.id)
         element.val(zona.zona)

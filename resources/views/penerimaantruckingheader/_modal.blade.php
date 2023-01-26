@@ -45,7 +45,7 @@
                 <input type="text" name="penerimaantrucking" class="form-control penerimaantrucking-lookup">
               </div>
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
@@ -129,7 +129,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
-    
+
     $('#crudForm').autocomplete({
       disabled: true
     });
@@ -227,10 +227,10 @@
             page: response.data.page
           }).trigger('reloadGrid');
 
-          if(id == 0){
+          if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
-          
+
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
           }
@@ -340,7 +340,7 @@
     showPenerimaanTruckingHeader(form, id)
 
   }
-  
+
   function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}penerimaantruckingheader/${Id}/cekvalidasi`,
@@ -439,6 +439,12 @@
           $('.supir-lookup').last().lookup({
             title: 'Supir Lookup',
             fileName: 'supir',
+            beforeProcess: function(test) {
+              this.postData = {
+                Aktif: 'AKTIF',
+
+              }
+            },
             onSelectRow: (supir, element) => {
               element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
               element.val(supir.namasupir)
@@ -457,6 +463,12 @@
           $('.pengeluarantruckingheader-lookup').last().lookup({
             title: 'Pengeluaran Trucking Lookup',
             fileName: 'pengeluarantruckingheader',
+            beforeProcess: function(test) {
+              this.postData = {
+                Aktif: 'AKTIF',
+
+              }
+            },
             onSelectRow: (pengeluarantruckingheader, element) => {
               element.val(pengeluarantruckingheader.nobukti)
               element.data('currentValue', element.val())
@@ -507,6 +519,12 @@
     $('.supir-lookup').last().lookup({
       title: 'Supir Lookup',
       fileName: 'supir',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
       onSelectRow: (supir, element) => {
         $(`#crudForm [name="supir_id[]"]`).last().val(supir.id)
         element.val(supir.namasupir)
@@ -524,6 +542,12 @@
     $('.pengeluarantruckingheader-lookup').last().lookup({
       title: 'Pengeluaran Trucking Lookup',
       fileName: 'pengeluarantruckingheader',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
       onSelectRow: (pengeluarantruckingheader, element) => {
         element.val(pengeluarantruckingheader.nobukti)
         element.data('currentValue', element.val())
@@ -538,7 +562,7 @@
     })
 
     initAutoNumeric(detailRow.find('.autonumeric'))
-    
+
     setRowNumbers()
   }
 
@@ -587,6 +611,12 @@
     $('.penerimaantrucking-lookup').lookup({
       title: 'Penerimaan Trucking Lookup',
       fileName: 'penerimaantrucking',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
       onSelectRow: (penerimaantrucking, element) => {
         $('#crudForm [name=penerimaantrucking_id]').first().val(penerimaantrucking.id)
         element.val(penerimaantrucking.keterangan)
@@ -605,6 +635,12 @@
     $('.bank-lookup').lookup({
       title: 'Bank Lookup',
       fileName: 'bank',
+      beforeProcess: function(test) {
+                            this.postData = {
+                                Aktif: 'AKTIF',
+
+                            }
+                        },      
       onSelectRow: (bank, element) => {
         $('#crudForm [name=bank_id]').first().val(bank.id)
         element.val(bank.namabank)
@@ -623,6 +659,12 @@
     $('.penerimaan-lookup').lookup({
       title: 'Penerimaan Lookup',
       fileName: 'penerimaanheader',
+      beforeProcess: function(test) {
+                            this.postData = {
+                                Aktif: 'AKTIF',
+
+                            }
+                        },      
       onSelectRow: (penerimaanheader, element) => {
         element.val(penerimaanheader.nobukti)
         element.data('currentValue', element.val())
@@ -639,6 +681,12 @@
     $('.akunpusat-lookup').lookup({
       title: 'Kode Perk. Lookup',
       fileName: 'akunpusat',
+      beforeProcess: function(test) {
+                            this.postData = {
+                                Aktif: 'AKTIF',
+
+                            }
+                        },      
       onSelectRow: (akunpusat, element) => {
         element.val(akunpusat.coa)
         element.data('currentValue', element.val())

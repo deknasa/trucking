@@ -15,8 +15,12 @@ class PelangganController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $data = [
+            'pagename' => 'Menu Utama Pelanggan',
+            'combo' => $this->combo('list')
+        ];
 
-        return view('pelanggan.index', compact('title'));
+        return view('pelanggan.index', compact('title', 'data'));
     }
     
     /**
@@ -65,5 +69,23 @@ class PelangganController extends MyController
         } catch (\Throwable $th) {
             return redirect()->route('pelanggan.index');
         }
+    }
+
+    
+    public function combo($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'pelanggan/combostatus', $status);
+
+        return $response['data'];
     }
 }

@@ -118,7 +118,7 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="top" class="form-control text-right">
+                <input type="text" name="top" class="form-control text-right numbernoseparate">
               </div>
             </div>
             <div class="row form-group">
@@ -518,6 +518,11 @@
     $('.jenisemkl-lookup').lookup({
       title: 'Jenis EMKL Lookup',
       fileName: 'jenisemkl',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },      
       onSelectRow: (jenisemkl, element) => {
         $('#crudForm [name=jenisemkl]').first().val(jenisemkl.id)
         element.val(jenisemkl.keterangan)

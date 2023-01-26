@@ -72,6 +72,20 @@
               </div>
             </div>
             <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  Status Aktif <span class="text-danger">*</span>
+                </label>
+              </div>
+
+
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS AKTIF --</option>
+                </select>
+              </div>
+            </div>
+            <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>
                   BANK <span class="text-danger">*</span></label>
@@ -184,7 +198,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -240,14 +256,15 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      setLangsungCairOptions(form),
-      setDefaultOptions(form)
-    ])
-    .then(() => {
-      showDefault(form)
-    })
-    
+      .all([
+        setLangsungCairOptions(form),
+        setDefaultOptions(form),
+        setStatusAktifOptions(form)
+      ])
+      .then(() => {
+        showDefault(form)
+      })
+
   }
 
   function editAlatBayar(alatBayarId) {
@@ -269,7 +286,8 @@
       .all([
         setLangsungCairOptions(form),
         setDefaultOptions(form),
-        
+        setStatusAktifOptions(form)
+
       ])
       .then(() => {
         showAlatBayar(form, alatBayarId)
@@ -295,7 +313,8 @@
       .all([
         setLangsungCairOptions(form),
         setDefaultOptions(form),
-        
+        setStatusAktifOptions(form)
+
       ])
       .then(() => {
         showAlatBayar(form, alatBayarId)
@@ -327,7 +346,44 @@
     }
   }
 
- 
+
+
+  const setStatusAktifOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusaktif]').empty()
+      relatedForm.find('[name=statusaktif]').append(
+        new Option('-- PILIH STATUS AKTIF --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS AKTIF"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusAktif => {
+            let option = new Option(statusAktif.text, statusAktif.id)
+
+            relatedForm.find('[name=statusaktif]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
 
   const setDefaultOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
@@ -413,18 +469,17 @@
       success: response => {
         $.each(response.data, (index, value) => {
           console.log(value)
-           let element = form.find(`[name="${index}"]`)
+          let element = form.find(`[name="${index}"]`)
           // let element = form.find(`[name="statusaktif"]`)
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } 
-          else {
+          } else {
             element.val(value)
           }
         })
-        
-       
+
+
       }
     })
   }
@@ -446,10 +501,10 @@
           } else {
             element.val(value)
           }
-          if(index == 'bank') {
+          if (index == 'bank') {
             element.data('current-value', value)
           }
-          if(index == 'coa') {
+          if (index == 'coa') {
             element.data('current-value', value)
           }
         })

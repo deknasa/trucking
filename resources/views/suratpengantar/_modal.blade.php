@@ -1118,6 +1118,13 @@
     $('.kotadari-lookup').lookup({
       title: 'Kota Dari Lookup',
       fileName: 'kota',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=dari_id]').first().val(kota.id)
         element.val(kota.keterangan)
@@ -1138,6 +1145,13 @@
     $('.kotasampai-lookup').lookup({
       title: 'Kota Tujuan Lookup',
       fileName: 'kota',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=sampai_id]').first().val(kota.id)
         element.val(kota.keterangan)
@@ -1158,6 +1172,13 @@
     $('.pelanggan-lookup').lookup({
       title: 'Pelanggan Lookup',
       fileName: 'pelanggan',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (pelanggan, element) => {
         $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
         element.val(pelanggan.namapelanggan)
@@ -1176,6 +1197,13 @@
     $('.container-lookup').lookup({
       title: 'Container Lookup',
       fileName: 'container',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (container, element) => {
         $('#crudForm [name=container_id]').first().val(container.id)
         element.val(container.keterangan)
@@ -1197,6 +1225,13 @@
     $('.statuscontainer-lookup').lookup({
       title: 'Status Container Lookup',
       fileName: 'statuscontainer',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (statuscontainer, element) => {
         $('#crudForm [name=statuscontainer_id]').first().val(statuscontainer.id)
         element.val(statuscontainer.keterangan)
@@ -1217,6 +1252,13 @@
     $('.trado-lookup').lookup({
       title: 'Trado Lookup',
       fileName: 'trado',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (trado, element) => {
         $('#crudForm [name=trado_id]').first().val(trado.id)
         element.val(trado.keterangan)
@@ -1234,6 +1276,13 @@
     $('.supir-lookup').lookup({
       title: 'Supir Lookup',
       fileName: 'supir',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (supir, element) => {
         $('#crudForm [name=supir_id]').first().val(supir.id)
         element.val(supir.namasupir)
@@ -1251,6 +1300,13 @@
     $('.gandengan-lookup').lookup({
       title: 'Gandengan Lookup',
       fileName: 'gandengan',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (gandengan, element) => {
         $('#crudForm [name=gandengan_id]').first().val(gandengan.id)
         element.val(gandengan.keterangan)
@@ -1268,6 +1324,13 @@
     $('.agen-lookup').lookup({
       title: 'Agen Lookup',
       fileName: 'agen',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)
@@ -1286,6 +1349,13 @@
     $('.jenisorder-lookup').lookup({
       title: 'Jenis Order Lookup',
       fileName: 'jenisorder',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (jenisorder, element) => {
         $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
         element.val(jenisorder.keterangan)
@@ -1304,6 +1374,13 @@
     $('.tarif-lookup').lookup({
       title: 'Tarif Lookup',
       fileName: 'tarif',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (tarif, element) => {
         $('#crudForm [name=tarif_id]').first().val(tarif.id)
         element.val(tarif.tujuan)
@@ -1323,6 +1400,13 @@
     $('.orderantrucking-lookup').lookup({
       title: 'Job Trucking Lookup',
       fileName: 'orderantrucking',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (orderantrucking, element) => {
         element.val(orderantrucking.nobukti)
         element.data('currentValue', element.val())
@@ -1356,6 +1440,13 @@
     $('.cabang-lookup').lookup({
       title: 'Cabang Lookup',
       fileName: 'cabang',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (cabang, element) => {
         $('#crudForm [name=cabang_id]').first().val(cabang.id)
         element.val(cabang.namacabang)
@@ -1383,18 +1474,17 @@
       success: response => {
         $.each(response.data, (index, value) => {
           console.log(value)
-           let element = form.find(`[name="${index}"]`)
+          let element = form.find(`[name="${index}"]`)
           // let element = form.find(`[name="statusaktif"]`)
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } 
-          else {
+          } else {
             element.val(value)
           }
         })
-        
-       
+
+
       }
     })
   }

@@ -106,43 +106,43 @@
             }
           },
           {
-            label: 'STATUS PENERIMAAN',
-            name: 'statusformatpenerimaan',
+            label: 'FORMAT PENERIMAAN',
+            name: 'formatpenerimaan',
             formatter: (value, options, rowData) => {
-              let statusFormatPenerimaan = JSON.parse(value)
+              let FormatPenerimaan = JSON.parse(value)
 
               let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusFormatPenerimaan.WARNA}; color: #fff;">
-                  <span>${statusFormatPenerimaan.SINGKATAN}</span>
+                <div class="badge" style="background-color: ${FormatPenerimaan.WARNA}; color: #fff;">
+                  <span>${FormatPenerimaan.SINGKATAN}</span>
                 </div>
               `)
 
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
-              let statusFormatPenerimaan = JSON.parse(rowObject.statusformatpenerimaan)
+              let FormatPenerimaan = JSON.parse(rowObject.formatpenerimaan)
 
-              return ` title="${statusFormatPenerimaan.MEMO}"`
+              return ` title="${FormatPenerimaan.MEMO}"`
             }
           },
           {
-            label: 'STATUS PENGELUARAN',
-            name: 'statusformatpengeluaran',
+            label: 'FORMAT PENGELUARAN',
+            name: 'formatpengeluaran',
             formatter: (value, options, rowData) => {
-              let statusFormatPengeluaran = JSON.parse(value)
+              let FormatPengeluaran = JSON.parse(value)
 
               let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusFormatPengeluaran.WARNA}; color: #fff;">
-                  <span>${statusFormatPengeluaran.SINGKATAN}</span>
+                <div class="badge" style="background-color: ${FormatPengeluaran.WARNA}; color: #fff;">
+                  <span>${FormatPengeluaran.SINGKATAN}</span>
                 </div>
               `)
 
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
-              let statusFormatPengeluaran = JSON.parse(rowObject.statusformatpengeluaran)
+              let FormatPengeluaran = JSON.parse(rowObject.formatpengeluaran)
 
-              return ` title="${statusFormatPengeluaran.MEMO}"`
+              return ` title="${FormatPengeluaran.MEMO}"`
             }
           },
           {
