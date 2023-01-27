@@ -3,7 +3,6 @@
   <div class="row">
     <div class="col-12">
       <table id="detail"></table>
-      <div id="detailPager"></div>
     </div>
   </div>
 </div>
@@ -57,7 +56,7 @@
         footerrow:true,
         userDataOnFooter: true,
         postData: {
-          absensi_id: id
+          absensisupirapproval_id: id
         },
         prmNames: {
           sort: 'sortIndex',
@@ -66,8 +65,8 @@
         },
         jsonReader: {
           root: 'data',
-          total: 'attributes.totalPages',
-          records: 'attributes.totalRows',
+          total: 'total',
+          records: 'records',
         },
         loadBeforeSend: (jqXHR) => {
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
@@ -90,15 +89,7 @@
             uangjalan: totalNominal,
           }, true)
         }
-      })
-
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
+      }).customPager()
   }
 
   function loadDetailData(id) {
