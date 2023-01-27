@@ -210,7 +210,7 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">TUJUAN<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">TUJUAN TARIF<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="tarifrincian_id">
                     <input type="text" name="tarifrincian" class="form-control tarifrincian-lookup" readonly>
