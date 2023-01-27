@@ -20,31 +20,10 @@
             label: 'CONTAINER',
             name: 'container_id',
           },
-          {
-            label: 'STATUS CONTAINER',
-            name: 'statuscontainer_id',
-          },
+         
           {
             label: 'NOMINAL SUPIR',
             name: 'nominalsupir',
-            align: 'right',
-            formatter: currencyFormat
-          },
-          {
-            label: 'NOMINAL KENEK',
-            name: 'nominalkenek',
-            align: 'right',
-            formatter: currencyFormat
-          },
-          {
-            label: 'NOMINAL KOMISI',
-            name: 'nominalkomisi',
-            align: 'right',
-            formatter: currencyFormat
-          },
-          {
-            label: 'NOMINAL TOL',
-            name: 'nominaltol',
             align: 'right',
             formatter: currencyFormat
           },
