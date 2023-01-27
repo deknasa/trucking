@@ -96,7 +96,7 @@
                   JOB EMKL <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="nojobemkl" class="form-control">
+                <input type="text" name="nojobemkl" class="form-control orderanemkl-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -125,7 +125,7 @@
                   JOB EMKL 2 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="nojobemkl2" class="form-control">
+                <input type="text" name="nojobemkl2" class="form-control orderanemkl-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -581,6 +581,27 @@
         element.data('currentValue', element.val())
       }
     })
+
+    $('.orderanemkl-lookup').lookup({
+      title: 'orderanemkl Lookup',
+      fileName: 'orderanemkl',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },          
+      onSelectRow: (orderanemkl, element) => {
+        element.val(orderanemkl.nojob)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })    
 
     $('.agen-lookup').lookup({
       title: 'Agen Lookup',

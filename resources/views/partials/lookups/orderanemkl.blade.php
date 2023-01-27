@@ -1,16 +1,16 @@
 <table id="orderanemklLookup" class="lookup-grid"></table>
-<div id="cabangLookupPager"></div>
+<div id="orderanemklLookupPager"></div>
 
 @push('scripts')
 <script>
-  $('#cabangLookup').jqGrid({
+  $('#orderanemklLookup').jqGrid({
       url: `{{ config('app.emkl_api_url') . 'orderanemkl' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
       postData: {
-        aktif: `{!! $Aktif ?? '' !!}`,
+        container_id: `{!! $Container_id ?? '' !!}`,
       },          
       colModel: [
         {
@@ -41,7 +41,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#cabangLookupPager'),
+      pager: $('#orderanemklLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -70,26 +70,26 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#cabangLookup').getGridParam().reccount) {
-            indexRow = $('#cabangLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#orderanemklLookup').getGridParam().reccount) {
+            indexRow = $('#orderanemklLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#cabangLookup [id="${$('#cabangLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#orderanemklLookup [id="${$('#orderanemklLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#cabangLookup [id="${$('#cabangLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#orderanemklLookup [id="${$('#orderanemklLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#cabangLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#cabangLookup [id="` + $('#cabangLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#orderanemklLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#orderanemklLookup [id="` + $('#orderanemklLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#cabangLookup').setSelection($('#cabangLookup').getDataIDs()[indexRow])
+            $('#orderanemklLookup').setSelection($('#orderanemklLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -104,7 +104,7 @@
           clearColumnSearch()
         })
 
-        $(this).setGridWidth($('#lookupCabang').prev().width())
+        $(this).setGridWidth($('#lookuporderanemkl').prev().width())
         setHighlight($(this))
       }
     })
@@ -117,10 +117,10 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        clearGlobalSearch($('#cabangLookup'))
+        clearGlobalSearch($('#orderanemklLookup'))
       },
     })
 
-  loadGlobalSearch($('#cabangLookup'))
-  loadClearFilter($('#cabangLookup'))
+  loadGlobalSearch($('#orderanemklLookup'))
+  loadClearFilter($('#orderanemklLookup'))
 </script>
