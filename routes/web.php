@@ -144,6 +144,8 @@ use App\Http\Controllers\PenerimaanGiroDetailController;
 use App\Http\Controllers\PenerimaanGiroHeaderController;
 use App\Http\Controllers\ProsesGajiSupirHeaderController;
 use App\Http\Controllers\ProsesGajiSupirDetailController;
+use App\Http\Controllers\ProsesUangJalanSupirDetailController;
+use App\Http\Controllers\ProsesUangJalanSupirHeaderController;
 use App\Http\Controllers\ReportAllController;
 use App\Http\Controllers\ReportNeracaController;
 use App\Http\Controllers\StokPersediaanController;
@@ -843,6 +845,13 @@ Route::middleware('auth')->group(function () {
     Route::get('laporanbukubesar/report', [LaporanBukuBesarController::class, 'report'])->name('laporanbukubesar.report');
     Route::get('laporanbukubesar/index', [LaporanBukuBesarController::class, 'index']);
     Route::resource('laporanbukubesar', LaporanBukuBesarController::class);
+    
+    Route::get('prosesuangjalansupirheader/index', [ProsesUangJalanSupirHeaderController::class, 'index']);
+    Route::get('prosesuangjalansupirheader/get', [ProsesUangJalanSupirHeaderController::class, 'get'])->name('prosesuangjalansupirheader.get');
+    Route::get('prosesuangjalansupirheader/export', [ProsesUangJalanSupirHeaderController::class, 'export'])->name('prosesuangjalansupirheader.export');
+    Route::get('prosesuangjalansupirheader/report', [ProsesUangJalanSupirHeaderController::class, 'report'])->name('prosesuangjalansupirheader.report');
+    Route::resource('prosesuangjalansupirheader', ProsesUangJalanSupirHeaderController::class);
+    Route::resource('prosesuangjalansupirdetail', ProsesUangJalanSupirDetailController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
