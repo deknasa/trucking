@@ -598,11 +598,6 @@
             beforeProcess: function(test) {
               this.postData = {
                 Aktif: 'AKTIF',
-
-              }
-            },
-            beforeProcess: function(test) {
-              this.postData = {
                 bank_Id: bankId,
               }
             },

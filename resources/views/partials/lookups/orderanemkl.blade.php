@@ -10,7 +10,9 @@
       iconSet: 'fontAwesome',
       datatype: "json",
       postData: {
-        container_id: `{!! $Container_id ?? '' !!}`,
+        container_id: `{!! $container_Id ?? '' !!}`,
+        jenisorder_id: `{!! $jenisorder_Id ?? '' !!}`,
+        aktif: `{!! $Aktif ?? '' !!}`,
       },          
       colModel: [
         {

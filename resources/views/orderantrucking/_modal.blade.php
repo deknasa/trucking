@@ -191,6 +191,8 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+  let jenisorderId
+  let containerId
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -493,6 +495,9 @@
       success: response => {
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
+          containerId = response.data.container_id
+          jenisorderId = response.data.jenisorder_id
+
 
           if (element.is('select')) {
             element.val(value).trigger('change')
@@ -536,7 +541,8 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-        containerId = -1
+        containerId = 0
+        jenisorderId = 0
 
         $.each(response.data, (index, value) => {
           console.log(value)
@@ -588,6 +594,9 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          jenisorder_Id: jenisorderId,
+          container_Id: containerId,
+
         }
       },          
       onSelectRow: (orderanemkl, element) => {
@@ -635,6 +644,7 @@
       },          
       onSelectRow: (jenisorder, element) => {
         $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
+        jenisorderId = jenisorder.id
         element.val(jenisorder.keterangan)
         element.data('currentValue', element.val())
       },
