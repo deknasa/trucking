@@ -232,6 +232,8 @@ Route::middleware('auth')->group(function () {
     Route::get('user/get', [UserController::class, 'get'])->name('user.get');
     Route::get('user/export', [UserController::class, 'export'])->name('user.export');
     Route::get('user/report', [UserController::class, 'report'])->name('user.report');
+    Route::get('user/acl/grid', [UserController::class, 'aclGrid']);
+    Route::get('user/role/grid', [UserController::class, 'roleGrid']);
     Route::resource('user', UserController::class);
 
     Route::get('menu/field_length', [MenuController::class, 'fieldLength'])->name('menu.field_length');

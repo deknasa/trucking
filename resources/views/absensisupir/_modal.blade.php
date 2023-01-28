@@ -42,13 +42,13 @@
               <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500;">
                 <thead>
                   <tr>
-                    <th width="1%">No</th>
-                    <th width="5%">Trado</th>
-                    <th width="4%">Supir</th>
-                    <th width="7%">Keterangan</th>
-                    <th width="4%">Status</th>
-                    <th width="3%">Jam</th>
-                    <th width="3%">Uang Jalan</th>
+                    <th width="2%">No</th>
+                    <th width="13%">Trado</th>
+                    <th width="15%">Supir</th>
+                    <th width="30%">Keterangan</th>
+                    <th width="15%">Status</th>
+                    <th width="10%">Jam</th>
+                    <th width="15%">Uang Jalan</th>
                     {{-- <th width="2%">Aksi</th> --}}
                   </tr>
                 </thead>
@@ -352,7 +352,6 @@
           $('#detailList tbody').append(detailRow)
 
           detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
-          initAutoNumeric(detailRow.find(`[name="uangjalan[]"]`))
           $('#detailList tbody').append(detailRow)
           Inputmask("datetime", {
             inputFormat: "HH:MM",

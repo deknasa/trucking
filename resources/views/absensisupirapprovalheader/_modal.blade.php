@@ -40,30 +40,19 @@
               </div>
             </div>
             
-            <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>keterangan <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">
               </div>
-            </div>
+            </div> --}}
             
-            <table class="table table-bordered table-bindkeys " id="detailList">
-              <thead>
-                <tr>
-                  <th width="50">No</th>
-                  <th width="">Supir</th>
-                  <th width="">Trado</th>
-                  <th width="">keterangan detail</th>
-                  <th width="">uang jalan</th>
-                </tr>
-              </thead>
-              <tbody id="table_body" class="form-group">
-              </tbody>
-            </table>
+            <table id="modalgrid"></table>
+            <div id="modalgridPager"></div>
+            <div id="detailList"></div>
                 
-
 
           </div>
           <div class="modal-footer justify-content-start">
@@ -87,6 +76,7 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
 
+  
   function initLookup() {
       $('.absensisupir-lookup').lookup({
         title: 'absensisupir Lookup',
@@ -224,6 +214,7 @@
     getMaxLength(form)
     initLookup()
     initDatepicker()
+    loadModalGrid()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
   })
 
@@ -313,7 +304,8 @@
   }
 
   function getAbsensi(id) {
-    $('#detailList tbody').html('')
+    $('#detailList').html('')
+    
 
     $.ajax({
       url: `${apiUrl}absensisupirapprovalheader/${id}/getabsensi`,
@@ -327,44 +319,29 @@
       },
       success: response => {
         let totalNominal = 0
-        let row = 0
         $.each(response.data, (index, detail) => {
           let id = detail.id
-          row++
           let detailRow = $(`
-            <tr class="trow">
-              <td>${row}</td>
-              
-              <td>
-                ${detail.supir}
-                <input type="text" value="${detail.supir_id}" id="supir_id" name="supir_id[]"  readonly hidden>
+          <input type="text" value="${detail.supir_id}" id="supir_id" name="supir_id[]"  readonly  hidden >
+          <input type="text" value="${detail.trado_id}" id="trado_id" name="trado_id[]"  readonly  hidden >
+          <input type="text" value="${detail.uangjalan}" id="uangjalan" name="uangjalan[]"  readonly  hidden >
+          `)
+          $('#detailList').append(detailRow)
 
-              </td>                 
-              <td>
-                ${detail.trado}
-                <input type="text" value="${detail.trado_id}" id="trado_id" name="trado_id[]"  readonly hidden>
+        })
+        // console.log(response.data);
 
-              </td>  
-              <td>
-                ${detail.keterangan_detail}
-              </td>
-             
-              <td>
-                <span class="autonumeric">
-                  ${detail.uangjalan}
-                </span>                
-                <input type="text" value="${detail.uangjalan}" id="uangjalan" name="uangjalan[]"  readonly hidden>
-
-              </td>
-            </tr>`)
-          $('#detailList tbody').append(detailRow)          
-          initAutoNumeric(detailRow.find('.autonumeric'))
-          })      
+        $('#modalgrid').setGridParam({
+          datatype: "local",
+          data:response.data
+        }).trigger('reloadGrid')
       }
     })
+      
+
   }
   function getApprovalAbsensi(id) {
-    $('#detailList tbody').html('')
+    $('#detailList').html('')
 
     $.ajax({
       url: `${apiUrl}absensisupirapprovalheader/${id}/getapproval`,
@@ -405,7 +382,7 @@
                   <span class="autonumeric">
                     ${detail.uangjalan}
                   </span>
-                  <input type="text" value="${detail.uangjalan}" id="uangjalan" name="uangjalan[]"  readonly hidden>
+                  <input type="text" class="text-right" value="${detail.uangjalan}" id="uangjalan" name="uangjalan[]"  readonly hidden>
               </td>
             </tr>`)
           $('#detailList tbody').append(detailRow)
@@ -415,6 +392,65 @@
     })
   }
 
+  function loadModalGrid() {
+
+    $("#modalgrid").jqGrid({
+
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        datatype: "local",
+        colModel: [{
+            label: 'supir',
+            name: 'supir',
+          },
+          {
+            label: 'Trado',
+            name: 'trado',
+          },
+          {
+            label: 'keterangan detail',
+            name: 'keterangan_detail',
+          },
+          {
+            label: 'uang jalan',
+            name: 'uangjalan',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+        ],
+        autowidth: true,
+        shrinkToFit: false,
+        height: 350,
+        rowNum: 10,
+        rownumbers: true,
+        rownumWidth: 45,
+        rowList: [10, 20, 50],
+        toolbar: [true, "top"],
+        sortable: true,
+       pager:"#modalgridPager",
+        viewrecords: true,
+        footerrow:true,
+        userDataOnFooter: true,
+        
+       
+        loadComplete: function(data) {
+          initResize($(this))
+          
+          let nominals = $(this).jqGrid("getCol", "uangjalan")
+          let totalNominal = 0
+
+          if (nominals.length > 0) {
+            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          }
+
+          $(this).jqGrid('footerData', 'set', {
+            trado: 'Total:',
+            uangjalan: totalNominal,
+          }, true)
+        }
+      })
+
+  }
   
   function cekValidasi(Id, Aksi) {
     $.ajax({

@@ -210,10 +210,10 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">TUJUAN<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">TUJUAN TARIF<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
-                    <input type="hidden" name="tarif_id">
-                    <input type="text" name="tarif" class="form-control tarif-lookup" readonly>
+                    <input type="hidden" name="tarifrincian_id">
+                    <input type="text" name="tarifrincian" class="form-control tarifrincian-lookup" readonly>
                   </div>
                 </div>
                 <div class="form-group ">
@@ -1011,14 +1011,14 @@
           (index == 'supir') ? element.data('current-value', value): '';
           (index == 'agen') ? element.data('current-value', value): '';
           (index == 'jenisorder') ? element.data('current-value', value): '';
-          (index == 'tarif') ? element.data('current-value', value): '';
+          (index == 'tarifrincian') ? element.data('current-value', value): '';
           (index == 'cabang') ? element.data('current-value', value): '';
 
 
 
         })
 
-        getTarifOmset(response.data.tarif_id)
+        getTarifOmset(response.data.tarifrincian_id)
 
         initAutoNumeric(form.find(`[name="nominal"]`))
         initAutoNumeric(form.find(`[name="nominalTagih"]`))
@@ -1206,6 +1206,8 @@
       },
       onSelectRow: (container, element) => {
         $('#crudForm [name=container_id]').first().val(container.id)
+        containerId = container.id
+        console.log(container.id)
         element.val(container.keterangan)
         element.data('currentValue', element.val())
         getGaji()
@@ -1371,27 +1373,27 @@
       }
     })
 
-    $('.tarif-lookup').lookup({
-      title: 'Tarif Lookup',
-      fileName: 'tarif',
+    $('.tarifrincian-lookup').lookup({
+      title: 'Tarif Rincian Lookup',
+      fileName: 'tarifrincian',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
-          Aktif: 'AKTIF',
+          Aktif: 'AKTIF1',
+          container_Id: containerId,
         }
       },
-      onSelectRow: (tarif, element) => {
-        $('#crudForm [name=tarif_id]').first().val(tarif.id)
-        element.val(tarif.tujuan)
+      onSelectRow: (tarifrincian, element) => {
+        $('#crudForm [name=tarifrincian_id]').first().val(tarifrincian.id)
+        element.val(tarifrincian.tujuan)
         element.data('currentValue', element.val())
-        getTarifOmset(tarif.id)
+        getTarifOmset(tarifrincian.id)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=tarif_id]').first().val('')
+        $('#crudForm [name=tarifrincian_id]').first().val('')
         $('#crudForm [name=omset]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
@@ -1425,8 +1427,8 @@
         $('#crudForm [name=jenisorder]').val('')
         $('#crudForm [name=pelanggan_id]').val('')
         $('#crudForm [name=pelanggan]').val('')
-        $('#crudForm [name=tarif_id]').val('')
-        $('#crudForm [name=tarif]').val('')
+        $('#crudForm [name=tarifrincian_id]').val('')
+        $('#crudForm [name=tarifrincian]').val('')
         $('#crudForm [name=nocont]').val('')
         $('#crudForm [name=nocont2]').val('')
         $('#crudForm [name=nojob]').val('')
@@ -1472,6 +1474,7 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        containerId = -1
         $.each(response.data, (index, value) => {
           console.log(value)
           let element = form.find(`[name="${index}"]`)
@@ -1519,6 +1522,7 @@
       success: response => {
         getTarifOmset(response.data.tarif_id)
         console.log(response.data)
+        containerId = response.data.container_id
         $('#crudForm [name=statusperalihan]').val(response.data.statusperalihan)
         $('#crudForm [name=agen]').val(response.data.agen)
         $('#crudForm [name=agen_id]').val(response.data.agen_id)
@@ -1528,8 +1532,8 @@
         $('#crudForm [name=jenisorder]').val(response.data.jenisorder)
         $('#crudForm [name=pelanggan_id]').val(response.data.pelanggan_id)
         $('#crudForm [name=pelanggan]').val(response.data.pelanggan)
-        $('#crudForm [name=tarif_id]').val(response.data.tarif_id)
-        $('#crudForm [name=tarif]').val(response.data.tarif)
+        $('#crudForm [name=tarifrincian_id]').val(response.data.tarif_id)
+        $('#crudForm [name=tarifrincian]').val(response.data.tarif)
         $('#crudForm [name=nocont]').val(response.data.nocont)
         $('#crudForm [name=nocont2]').val(response.data.nocont2)
         $('#crudForm [name=nojob]').val(response.data.nojobemkl)

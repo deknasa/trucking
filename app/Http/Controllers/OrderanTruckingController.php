@@ -91,7 +91,7 @@ class OrderanTruckingController extends MyController
         $status = [
             'status' => $aksi,
             'grp' => $grp,
-            'subgrp' => $subgrp
+            'subgrp' => $subgrp,
         ];
 
         $response = Http::withHeaders($this->httpHeaders)
@@ -100,6 +100,8 @@ class OrderanTruckingController extends MyController
             ->get(config('app.api_url') . 'parameter/combolist', $status);
 
         return $response['data'];
+        
+                
     }
 
 }
