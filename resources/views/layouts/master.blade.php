@@ -174,6 +174,7 @@
   <script src="{{ asset('mains.js?version='. config('app.version')) }}"></script>
   <script src="{{ asset('js/app.js?version='. config('app.version')) }}"></script>
 
+
   <!-- Custom page script -->
   @stack('scripts')
 
@@ -181,7 +182,7 @@
     let accessToken = `{{ session('access_token') }}`
     let appUrl = `{{ url()->to('/') }}`
     let apiUrl = `{{ config('app.api_url') }}`
-
+    let apiEmklUrl = `{{ config('app.emkl_api_url') }}`
     function separatorNumber(object) {
       var value = parseInt(object.value.replaceAll('.', '').replaceAll(',', ''));
 
