@@ -9,16 +9,6 @@ use Illuminate\Support\Facades\URL;
 
 class Menu
 {
-  public $myController;
-
-  public function __construct()
-  {
-    $this->myController = new MyController;
-    $this->myController->setClass();
-    $this->myController->setMethod();
-    $this->myController->setBreadcrumb($this->myController->class);
-  }
-
   public function printRecursiveMenuForResequence($menus)
   {
     $string = '<ul class="dd-list">';
@@ -41,18 +31,12 @@ class Menu
     return $string;
   }
 
-  public function printRecursiveMenu(array $menus, bool $hasParent = false)
+  public function printRecursiveMenu(array $menus, bool $hasParent = false, $currentMenu)
   {
-    $currentMenu = DB::table('menu')
-      ->select('menu.id', 'menu.menuparent')
-      ->join('acos', 'menu.aco_id', 'acos.id')
-      ->where('acos.class', (new Menu())->myController->class)
-      ->first();
-
     $string = $hasParent ? '<ul class="ml-4 nav nav-treeview">' : '';
 
-    foreach ($menus as $index => $menu) {
-      if ((count($menu['child']) > 0 || $menu['link'] != '' || $menu['aco_id'] != 0) && (new Menu())->hasClickableChild($menu)) {
+    foreach ($menus as $menu) {
+      if ((count($menu['child']) > 0 || $menu['link'] != '' || $menu['aco_id'] != 0) && $this->hasClickableChild($menu)) {
         $string .= '
           <li class="nav-item">
             <a id="' . (strtolower($menu['menukode'])) . '" href="' . (count($menu['child']) > 0 ? 'javascript:void(0)' : ($menu['link'] != '' ? strtolower(url($menu['link'])) : strtolower(url($menu['menuexe'])))) . '" class="nav-link ' . (@$currentMenu->id == $menu['menuid'] ? 'active hover' : '') . '">
@@ -62,7 +46,7 @@ class Menu
                 ' . (count($menu['child']) > 0 ? '<i class="right fas fa-angle-left"></i>' : '') . '
               </p>
             </a>
-            ' . (count($menu['child']) > 0 ? Menu::printRecursiveMenu($menu['child'], true) : '') . '
+            ' . (count($menu['child']) > 0 ? $this->printRecursiveMenu($menu['child'], true, $currentMenu) : '') . '
           </li>
         ';
       }
@@ -79,14 +63,14 @@ class Menu
 
     if (count($menu['child']) > 0) {
       foreach ($menu['child'] as $menuChild) {
-        $clickable = (new Menu())->hasClickableChild($menuChild);
+        $clickable = $this->hasClickableChild($menuChild);
 
         if ($clickable) {
           return true;
         }
       }
     } else {
-      return (new Menu())->isClickableChild($menu);
+      return $this->isClickableChild($menu);
     }
 
     return $result;
@@ -139,15 +123,5 @@ class Menu
       }
     }
     return $str;
-  }
-
-  public function setBreadcrumb()
-  {
-    $myController = new MyController;
-    $myController->setClass();
-    $myController->setMethod();
-    $myController->setBreadcrumb($myController->class);
-
-    return (new Menu)->myController->breadcrumb . ' / ' . (new Menu)->myController->method;
   }
 }

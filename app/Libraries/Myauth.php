@@ -10,10 +10,7 @@ use stdClass;
 
 class Myauth
 {
-    private $server, $user, $pass, $db;
     public $isLogin, $userPK;
-    private $conn;
-    private $authController;
     private $exceptAuth = [
         'class' => [
             '',
@@ -54,20 +51,6 @@ class Myauth
             'approval'
         ],
     ];
-
-    public function __construct($params)
-    {
-        $url = URL::to('/');
-        $this->server = $params['server'];
-        $this->user = $params['user'];
-        $this->pass = $params['pass'];
-        $this->db = $params['db'];
-        $this->port = isset($params['port']) ? $params['port'] : 3306;
-        $this->isLogin = isset($params['isLogin']) ? $params['isLogin'] : 0;
-        $this->userPK = $params['userPK'];
-        $this->baseUrl = $url;
-        $this->authController = isset($params['authController']) ? $params['authController'] : 'login';
-    }
 
     public function auth($class = null, $method = null): void
     {
