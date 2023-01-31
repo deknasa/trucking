@@ -2,12 +2,7 @@
 
 namespace App\Libraries;
 
-use App\Models\UserRole;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\URL;
-use stdClass;
-
 class Myauth
 {
     public $isLogin, $userPK;
@@ -72,7 +67,7 @@ class Myauth
 
     private function _validatePermission($class = null, $method = null)
     {
-        if (!Auth::check()) {
+        if (!auth()->check()) {
             return redirect()->route('login');
         }
         
@@ -81,21 +76,17 @@ class Myauth
             return true;
         }
         
-        $userRole = DB::table('userrole')
-            ->where('user_id', Auth::user()->id)
-            ->get();
-        
         $data_union = DB::table('acos')
             ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('acl', 'acos.id', '=', 'acl.aco_id')
             ->where('acos.class', 'like', "%$class%")
-            ->where('acl.role_id', $userRole[0]->user_id ?? null);
+            ->whereIn('acl.role_id', auth()->user()->roles->pluck('id')->toArray() ?? null);
 
         $data = DB::table('acos')
             ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('useracl', 'acos.id', '=', 'useracl.aco_id')
             ->where('acos.class', 'like', "%$class%")
-            ->where('useracl.user_id', Auth::user()->id)
+            ->where('useracl.user_id', auth()->user()->id)
             ->unionAll($data_union)
             ->get();
         

@@ -176,7 +176,7 @@ Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->name('login.process');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth','authorized'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('/');
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
