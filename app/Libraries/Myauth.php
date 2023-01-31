@@ -20,7 +20,7 @@ class Myauth
             'dashboard',
             'logtrail',
             'tutupbuku',
-            'pengembaliankasbankheader',
+            'mandorabsensisupir',
             'historipenerimaanstok',
             'historipengeluaranstok',
             'reportall',
