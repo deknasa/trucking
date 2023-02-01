@@ -39,9 +39,9 @@
 
 @push('scripts')
 <script>
-  $(document).ready(function() {
     // setbulanJobOptions($('#lookupModal'))
-
+    Showdefault()
+   
     $('.datepicker').datepicker({
         changeMonth: true,
         changeYear: true,
@@ -65,7 +65,6 @@
 
     $('#btnPreview').click(function(event) {
 
-      let bulan_job = $('#lookupModal').find('[name=bulanjob]').val()
 
       console.log(bulan_job)
       console.log('test')
@@ -98,12 +97,33 @@
             align: 'left',
           },
           {
+            label: 'TANGGAL',
+            name: 'tgl',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
             label: 'NO CONTAINER',
             name: 'nocont',
             align: 'left'
-          }, {
+          },
+          {
             label: 'NO SEAL',
             name: 'noseal',
+            align: 'left'
+          },
+          {
+            label: 'JENIS ORDERAN',
+            name: 'jenisorderan',
+            align: 'left'
+          },
+          {
+            label: 'PELANGGAN',
+            name: 'pelanggan',
             align: 'left'
           },
         ],
@@ -231,5 +251,16 @@
       })
     }
 
-  });
+
+  function Showdefault() {
+    $('#lookupModal').find('[name=bulanjob]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
+    let bulan_job = $('#lookupModal').find('[name=bulanjob]').val()
+    $('#orderanemklLookup').jqGrid('setGridParam', {
+      postData: {
+        bulanjob: bulan_job,
+      },
+    }).trigger('reloadGrid');
+
+
+  }
 </script>
