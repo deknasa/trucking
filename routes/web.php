@@ -45,6 +45,7 @@ use App\Http\Controllers\JenisTradoController;
 use App\Http\Controllers\KasGantungDetailController;
 use App\Http\Controllers\KasGantungHeaderController;
 use App\Http\Controllers\MandorAbsensiSupirController;
+use App\Http\Controllers\MandorTripController;
 
 use App\Http\Controllers\PengembalianKasGantungDetailController;
 use App\Http\Controllers\PengembalianKasGantungHeaderController;
@@ -269,6 +270,7 @@ Route::middleware('auth')->group(function () {
     Route::get('mandorabsensisupir/index', [MandorAbsensiSupirController::class, 'index']);
     Route::resource('mandorabsensisupir', MandorAbsensiSupirController::class);
 
+    Route::resource('mandortrip', MandorTripController::class);
 
     Route::get('userrole/{id}/delete', [UserRoleController::class, 'delete'])->name('userrole.delete');
     Route::get('userrole/field_length', [UserRoleController::class, 'fieldLength'])->name('userrole.field_length');

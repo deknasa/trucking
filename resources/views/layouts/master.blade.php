@@ -51,6 +51,10 @@
     <span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
     <p></p>
   </div>
+  <div id="dialog-success-message" title="Pesan" class="text-center text-success" style="display: none;">
+    <span class="fa fa-check" aria-hidden="true" style="font-size:25px;"></span>
+    <p></p>
+  </div>
   
   <!-- Modal for report and export -->
   <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
