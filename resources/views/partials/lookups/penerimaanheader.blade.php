@@ -16,138 +16,138 @@
           width: '50px',
           hidden: true
         },
-        {
-          label: 'STATUS APPROVAL',
-          name: 'statusapproval',
-          align: 'left',
-          stype: 'select',
-          searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'STATUS APPROVAL',
-                    subgrp: 'STATUS APPROVAL'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.text,
-                      text: row.text
-                    }));
+        // {
+        //   label: 'STATUS APPROVAL',
+        //   name: 'statusapproval',
+        //   align: 'left',
+        //   stype: 'select',
+        //   searchoptions: {
+        //     dataInit: function(element) {
+        //       $(element).select2({
+        //         width: 'resolve',
+        //         theme: "bootstrap4",
+        //         ajax: {
+        //           url: `${apiUrl}parameter/combo`,
+        //           dataType: 'JSON',
+        //           headers: {
+        //             Authorization: `Bearer ${accessToken}`
+        //           },
+        //           data: {
+        //             grp: 'STATUS APPROVAL',
+        //             subgrp: 'STATUS APPROVAL'
+        //           },
+        //           beforeSend: () => {
+        //             // clear options
+        //             $(element).data('select2').$results.children().filter((index, element) => {
+        //               // clear options except index 0, which
+        //               // is the "searching..." label
+        //               if (index > 0) {
+        //                 element.remove()
+        //               }
+        //             })
+        //           },
+        //           processResults: (response) => {
+        //             let formattedResponse = response.data.map(row => ({
+        //               id: row.text,
+        //               text: row.text
+        //             }));
 
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
+        //             formattedResponse.unshift({
+        //               id: '',
+        //               text: 'ALL'
+        //             });
 
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
-          },
-          formatter: (value, options, rowData) => {
-            let statusApproval = JSON.parse(value)
+        //             return {
+        //               results: formattedResponse
+        //             };
+        //           },
+        //         }
+        //       });
+        //     }
+        //   },
+        //   formatter: (value, options, rowData) => {
+        //     let statusApproval = JSON.parse(value)
 
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
-                  <span>${statusApproval.SINGKATAN}</span>
-                </div>
-              `)
+        //     let formattedValue = $(`
+        //         <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+        //           <span>${statusApproval.SINGKATAN}</span>
+        //         </div>
+        //       `)
 
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusApproval = JSON.parse(rowObject.statusapproval)
+        //     return formattedValue[0].outerHTML
+        //   },
+        //   cellattr: (rowId, value, rowObject) => {
+        //     let statusApproval = JSON.parse(rowObject.statusapproval)
 
-            return ` title="${statusApproval.MEMO}"`
-          }
-        },
-        {
-          label: 'STATUS CETAK',
-          name: 'statuscetak',
-          align: 'left',
-          stype: 'select',
-          searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'STATUS CETAK',
-                    subgrp: 'STATUS CETAK'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.text,
-                      text: row.text
-                    }));
+        //     return ` title="${statusApproval.MEMO}"`
+        //   }
+        // },
+        // {
+        //   label: 'STATUS CETAK',
+        //   name: 'statuscetak',
+        //   align: 'left',
+        //   stype: 'select',
+        //   searchoptions: {
+        //     dataInit: function(element) {
+        //       $(element).select2({
+        //         width: 'resolve',
+        //         theme: "bootstrap4",
+        //         ajax: {
+        //           url: `${apiUrl}parameter/combo`,
+        //           dataType: 'JSON',
+        //           headers: {
+        //             Authorization: `Bearer ${accessToken}`
+        //           },
+        //           data: {
+        //             grp: 'STATUS CETAK',
+        //             subgrp: 'STATUS CETAK'
+        //           },
+        //           beforeSend: () => {
+        //             // clear options
+        //             $(element).data('select2').$results.children().filter((index, element) => {
+        //               // clear options except index 0, which
+        //               // is the "searching..." label
+        //               if (index > 0) {
+        //                 element.remove()
+        //               }
+        //             })
+        //           },
+        //           processResults: (response) => {
+        //             let formattedResponse = response.data.map(row => ({
+        //               id: row.text,
+        //               text: row.text
+        //             }));
 
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
+        //             formattedResponse.unshift({
+        //               id: '',
+        //               text: 'ALL'
+        //             });
 
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
-          },
-          formatter: (value, options, rowData) => {
-            let statusCetak = JSON.parse(value)
+        //             return {
+        //               results: formattedResponse
+        //             };
+        //           },
+        //         }
+        //       });
+        //     }
+        //   },
+        //   formatter: (value, options, rowData) => {
+        //     let statusCetak = JSON.parse(value)
 
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
-                  <span>${statusCetak.SINGKATAN}</span>
-                </div>
-              `)
+        //     let formattedValue = $(`
+        //         <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+        //           <span>${statusCetak.SINGKATAN}</span>
+        //         </div>
+        //       `)
 
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusCetak = JSON.parse(rowObject.statuscetak)
+        //     return formattedValue[0].outerHTML
+        //   },
+        //   cellattr: (rowId, value, rowObject) => {
+        //     let statusCetak = JSON.parse(rowObject.statuscetak)
 
-            return ` title="${statusCetak.MEMO}"`
-          }
-        },
+        //     return ` title="${statusCetak.MEMO}"`
+        //   }
+        // },
         {
           label: 'NO. BUKTI',
           name: 'nobukti',
@@ -203,76 +203,76 @@
           name: 'cabang_id',
           align: 'left'
         },
-        {
-          label: 'STATUS KAS',
-          name: 'statuskas',
-          align: 'left',
-          stype: 'select',
-          searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'STATUS KAS',
-                    subgrp: 'STATUS KAS'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.text,
-                      text: row.text
-                    }));
+        // {
+        //   label: 'STATUS KAS',
+        //   name: 'statuskas',
+        //   align: 'left',
+        //   stype: 'select',
+        //   searchoptions: {
+        //     dataInit: function(element) {
+        //       $(element).select2({
+        //         width: 'resolve',
+        //         theme: "bootstrap4",
+        //         ajax: {
+        //           url: `${apiUrl}parameter/combo`,
+        //           dataType: 'JSON',
+        //           headers: {
+        //             Authorization: `Bearer ${accessToken}`
+        //           },
+        //           data: {
+        //             grp: 'STATUS KAS',
+        //             subgrp: 'STATUS KAS'
+        //           },
+        //           beforeSend: () => {
+        //             // clear options
+        //             $(element).data('select2').$results.children().filter((index, element) => {
+        //               // clear options except index 0, which
+        //               // is the "searching..." label
+        //               if (index > 0) {
+        //                 element.remove()
+        //               }
+        //             })
+        //           },
+        //           processResults: (response) => {
+        //             let formattedResponse = response.data.map(row => ({
+        //               id: row.text,
+        //               text: row.text
+        //             }));
 
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
+        //             formattedResponse.unshift({
+        //               id: '',
+        //               text: 'ALL'
+        //             });
 
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
-          },
-          formatter: (value, options, rowData) => {
-            let statusKas = JSON.parse(value)
-            if (!statusKas) {
-                return ''
-              }
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusKas.WARNA}; color: #fff;">
-                  <span>${statusKas.SINGKATAN}</span>
-                </div>
-              `)
+        //             return {
+        //               results: formattedResponse
+        //             };
+        //           },
+        //         }
+        //       });
+        //     }
+        //   },
+        //   formatter: (value, options, rowData) => {
+        //     let statusKas = JSON.parse(value)
+        //     if (!statusKas) {
+        //         return ''
+        //       }
+        //     let formattedValue = $(`
+        //         <div class="badge" style="background-color: ${statusKas.WARNA}; color: #fff;">
+        //           <span>${statusKas.SINGKATAN}</span>
+        //         </div>
+        //       `)
 
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusKas = JSON.parse(rowObject.statuskas)
-             if (!statusKas) {
-                return ` title=" "`
-              }
-            return ` title="${statusKas.MEMO}"`
-          }
-        },
+        //     return formattedValue[0].outerHTML
+        //   },
+        //   cellattr: (rowId, value, rowObject) => {
+        //     let statusKas = JSON.parse(rowObject.statuskas)
+        //      if (!statusKas) {
+        //         return ` title=" "`
+        //       }
+        //     return ` title="${statusKas.MEMO}"`
+        //   }
+        // },
         {
           label: 'USER APPROVAL',
           name: 'userapproval',
