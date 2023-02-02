@@ -111,7 +111,7 @@
                                                             <p class="text-right font-weight-bold">TOTAL :</p>
                                                         </td>
                                                         <td>
-                                                            <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                                                            <p class="text-right font-weight-bold autonumeric" id="totalTransfer"></p>
                                                         </td>
                                                         <td colspan="2"></td>
                                                         <td>
@@ -143,7 +143,7 @@
                                             </div>
                                             <div class="col-md-10">
                                                 <div class="input-group">
-                                                    <input type="text" name="nilaiadjust" class="form-control autonumeric">
+                                                    <input type="text" name="nilaiadjust" readonly class="form-control text-right">
                                                 </div>
                                             </div>
                                         </div>
@@ -179,7 +179,7 @@
                                                         NO BUKTI BARU
                                                 </div>
                                                 <div class="col-12 col-md-4">
-                                                    <input type="text" name="pengeluaran_nobukti" id="pengeluaran_nobukti" class="form-control" readonly>
+                                                    <input type="text" name="penerimaan_nobukti" class="form-control" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -218,7 +218,7 @@
                                             </div>
                                             <div class="col-md-10">
                                                 <div class="input-group">
-                                                    <input type="text" name="nilaideposit" class="form-control autonumeric">
+                                                    <input type="text" name="nilaideposit" class="form-control text-right">
                                                 </div>
                                             </div>
                                         </div>
@@ -254,13 +254,13 @@
                                                         NO BUKTI BARU
                                                 </div>
                                                 <div class="col-12 col-md-4">
-                                                    <input type="text" name="pengeluaran_nobukti" id="pengeluaran_nobukti" class="form-control" readonly>
+                                                    <input type="text" name="penerimaandeposit_nobukti" id="pengeluaran_nobukti" class="form-control" readonly>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="pengembalian" role="tabpanel" aria-labelledby="pengembalian-tab">
-                                        <!-- <div class="row form-group mt-3">
+                                        <div class="row form-group mt-3">
                                             <div class="col-12 col-md-2 col-form-label">
                                                 <label>
                                                     POSTING
@@ -269,23 +269,14 @@
                                                 <input type="hidden" name="bank_idpengembalian">
                                                 <input type="text" name="bankpengembalian" class="form-control bankpengembalian-lookup">
                                             </div>
-                                        </div> 
-                                        <div class="row form-group">
-                                            <div class="col-12 col-md-2 col-form-label">
-                                                <label>
-                                                    KETERANGAN
-                                            </div>
-                                            <div class="col-12 col-md-4">
-                                                <input type="text" name="keteranganpengembalian" class="form-control">
-                                            </div>
-                                        </div> -->
-                                        <!-- <div class="table-responsive">
+                                        </div>
+                                        <div class="table-responsive">
                                             <table class="table table-bordered table-bindkeys" id="detailPengembalian" style="width:1450px;">
                                                 <thead>
                                                     <tr>
-                                                        <th width="5%">No</th>
+                                                        <th width="5%">Pilih</th>
                                                         <th width="15%">No Bukti</th>
-                                                        <th width="10%">Tgl Bukti</th>
+                                                        <th width="10%">Tanggal</th>
                                                         <th width="10%">Supir</th>
                                                         <th width="10%">Jlh Pinjaman</th>
                                                         <th width="10%">Total Bayar</th>
@@ -297,19 +288,29 @@
                                                 </thead>
                                                 <tbody id="tbodyPengembalian" class="form-group">
                                                 </tbody>
-                                                <tfoot>
+                                                <tfoot id="tfootPengembalian">
                                                     <tr>
-                                                        <td colspan="3">
-                                                            <p class="text-right font-weight-bold">TOTAL :</p>
+                                                        <td colspan="4"></td>
+                                                        <td>
+                                                            <p class="text-right font-weight-bold" id="jlhPinjaman"></p>
                                                         </td>
                                                         <td>
-                                                            <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                                                            <p class="text-right font-weight-bold" id="ttlBayar"></p>
                                                         </td>
-                                                        <td colspan="3"></td>
+                                                        <td>
+                                                            <p class="text-right font-weight-bold" id="sisa"></p>
+                                                        </td>
+                                                        <td>
+                                                            <p class="text-right font-weight-bold" id="nomBayar"></p>
+                                                        </td>
+                                                        <td>
+                                                            <p class="text-right font-weight-bold autonumeric" id="sisaPinjaman"></p>
+                                                        </td>
+                                                        <td></td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
-                                        </div> -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -339,6 +340,7 @@
 
     $(document).ready(function() {
 
+        $('#addRowTransfer').hide()
         $('#crudForm').autocomplete({
             disabled: true
         });
@@ -346,16 +348,46 @@
         $(document).on('click', "#addRowTransfer", function() {
             addRowTransfer()
         });
-        $(document).on('click', "#addRow", function() {
-            addRow()
-        });
 
         $(document).on('click', '.delete-row', function(event) {
             deleteRow($(this).parents('tr'))
         })
 
-        $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {
-            setTotal()
+        $(document).on('input', `#detailTransfer #tbodyTransfer [name="nilaitransfer[]"]`, function(event) {
+            setTotalTransfer()
+        })
+        $(document).on('input', `#detailPengembalian #tbodyPengembalian [name="nombayar[]"]`, function(event) {
+
+            let sisa = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisa[]"]`)[0])
+
+            let bayar = $(this).val()
+            bayar = parseFloat(bayar.replaceAll(',', ''));
+            bayar = Number.isNaN(bayar) ? 0 : bayar
+            console.log(sisa)
+            if (sisa == 0) {
+                let jlhPinjaman = $(this).closest("tr").find(`[name="jlhpinjaman[]"]`).val()
+                jlhPinjaman = parseFloat(jlhPinjaman.replaceAll(',', ''));
+                let totalSisa = jlhPinjaman - bayar
+
+                $(this).closest("tr").find(`[name="sisapinjaman[]"]`).val(totalSisa)
+            } else {
+                let totalSisa = sisa - bayar
+                initAutoNumeric($(this).closest("tr").find(`[name="sisapinjaman[]"]`).val(totalSisa))
+            }
+
+
+            // initAutoNumeric($(this).closest("tr").find(".sisa"))
+
+            // let Sisa = $(`#table_body .sisa`)
+            // let total = 0
+
+            // $.each(Sisa, (index, SISA) => {
+            //     total += AutoNumeric.getNumber(SISA)
+            // });
+
+            // new AutoNumeric('#sisaPiutang').set(total)
+            setNomBayar()
+            setSisaPinjaman()
         })
 
         $('#btnSubmit').click(function(event) {
@@ -368,11 +400,29 @@
             let action = form.data('action')
             let data = $('#crudForm').serializeArray()
 
-            $('#crudForm').find(`[name="nilaitransfer[]"]`).each((index, element) => {
-                data.filter((row) => row.name === 'nilaitransfer[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nilaitransfer[]"]`)[index])
-            })
-            data.filter((row) => row.name === 'nilaiadjust')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nilaiadjust"]`)[0])
-            data.filter((row) => row.name === 'nilaideposit')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nilaideposit"]`)[0])
+            if (action == 'add') {
+                $('#crudForm').find(`[name="nilaitransfer[]"]`).each((index, element) => {
+                    data.filter((row) => row.name === 'nilaitransfer[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nilaitransfer[]"]`)[index])
+                })
+                data.filter((row) => row.name === 'nilaiadjust')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nilaiadjust"]`)[0])
+                data.filter((row) => row.name === 'nilaideposit')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nilaideposit"]`)[0])
+                $('#tbodyPengembalian tr').each(function(index, tr) {
+
+
+                    if ($(this).find(`[name="pjt_id[]"]`).is(':checked')) {
+
+                        data.filter((row) => row.name === 'keteranganpinjaman[]')[index].value = $(this).find(`[name="keteranganpinjaman[]"]`).val()
+                        data.filter((row) => row.name === 'pjt_id[]')[index].value = $(this).find(`[name="pjt_id[]"]`).val()
+                        data.filter((row) => row.name === 'nombayar[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nombayar[]"]`)[index])
+                        data.filter((row) => row.name === 'pengeluarantruckingheader_nobukti[]')[index].value = $(this).find(`[name="pengeluarantruckingheader_nobukti[]"]`).val()
+
+
+                    }
+                })
+
+
+            }
+
             data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
@@ -397,6 +447,9 @@
                 name: 'limit',
                 value: limit
             })
+
+
+
 
             switch (action) {
                 case 'add':
@@ -453,7 +506,7 @@
 
                         setErrorMessages(form, error.responseJSON.errors);
                     } else {
-                        showDialog(error.statusText)
+                        showDialog(error.responseJSON.message)
                     }
                 },
             }).always(() => {
@@ -481,15 +534,59 @@
         $('#crudModal').find('.modal-body').html(modalBody)
     })
 
-    function setTotal() {
-        let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
+    // function setTotal() {
+    //     let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
+    //     let total = 0
+
+    //     $.each(nominalDetails, (index, nominalDetail) => {
+    //         total += AutoNumeric.getNumber(nominalDetail)
+    //     });
+
+    //     new AutoNumeric('#total').set(total)
+    // }
+
+    function setTotalTransfer() {
+        let nominalDetails = $(`#detailTransfer #tbodyTransfer [name="nilaitransfer[]"]`)
         let total = 0
 
         $.each(nominalDetails, (index, nominalDetail) => {
             total += AutoNumeric.getNumber(nominalDetail)
         });
 
-        new AutoNumeric('#total').set(total)
+        new AutoNumeric('#totalTransfer').set(total)
+    }
+
+    function setNomBayar() {
+        let nominalDetails = $(`#detailPengembalian #tbodyPengembalian [name="nombayar[]"]:not([disabled])`)
+        let total = 0
+
+        $.each(nominalDetails, (index, nominalDetail) => {
+            total += AutoNumeric.getNumber(nominalDetail)
+        });
+
+        new AutoNumeric('#nomBayar').set(total)
+    }
+
+    function setNomBayars() {
+        let nominalDetails = $(`#detailPengembalian #tbodyPengembalian [name="nombayar[]"]`)
+        let total = 0
+
+        $.each(nominalDetails, (index, nominalDetail) => {
+            total += AutoNumeric.getNumber(nominalDetail)
+        });
+
+        new AutoNumeric('#nomBayar').set(total)
+    }
+
+    function setSisaPinjaman() {
+        let nominalDetails = $(`#detailPengembalian #tbodyPengembalian [name="sisapinjaman[]"]`)
+        let total = 0
+
+        $.each(nominalDetails, (index, nominalDetail) => {
+            total += AutoNumeric.getNumber(nominalDetail)
+        });
+
+        new AutoNumeric('#sisaPinjaman').set(total)
     }
 
     function createProsesUangJalanSupir() {
@@ -511,7 +608,9 @@
         $('#crudForm').find('[name=tgladjust]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tgldeposit]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         addRowTransfer()
-        setTotal()
+        $('#addRowTransfer').show()
+        initAutoNumeric(form.find(`[name="nilaideposit"]`))
+
     }
 
     function editProsesUangJalanSupir(userId) {
@@ -529,7 +628,8 @@
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
-
+        $('#detailTransfer').find("th").last().hide()
+        $('#detailTransfer tfoot').find("td").last().hide()
         showProsesUangJalanSupir(form, userId)
 
     }
@@ -554,7 +654,7 @@
 
     function cekValidasi(Id, Aksi) {
         $.ajax({
-            url: `{{ config('app.api_url') }}piutangheader/${Id}/cekvalidasi`,
+            url: `{{ config('app.api_url') }}prosesuangjalansupirheader/${Id}/cekvalidasi`,
             method: 'POST',
             dataType: 'JSON',
             beforeSend: request => {
@@ -586,7 +686,7 @@
         $('#detailList tbody').html('')
 
         $.ajax({
-            url: `${apiUrl}piutangheader/${userId}`,
+            url: `${apiUrl}prosesuangjalansupirheader/${userId}`,
             method: 'GET',
             dataType: 'JSON',
             headers: {
@@ -601,37 +701,226 @@
                         element.val(value)
                     }
 
+                    if (index != 'id') {
+                        element.prop('disabled', true)
+                    }
                 })
 
                 form.find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))
-                form.find(`[name="agen"]`).val(response.data.agen.namaagen)
-                form.find(`[name="agen"]`).data('currentValue', response.data.agen.namaagen)
+                form.find(`[name="supir"]`).val(response.data.supir)
+                form.find(`[name="supir"]`).data('currentValue', response.data.supir)
+                form.find(`[name="trado"]`).val(response.data.trado)
+                form.find(`[name="trado"]`).data('currentValue', response.data.trado)
 
-                $.each(response.data.piutang_details, (index, detail) => {
+                $.each(response.detail.transfer, (index, detail) => {
                     let detailRow = $(`
-            <tr>
-              <td></td>
-              <td>
-                <input type="text" name="keterangan_detail[]" class="form-control">
-              </td>
-              <td>
-                <input type="text" name="nominal_detail[]" class="form-control nominal autonumeric">
-              </td>
-              <td>
-                <button type="button" class="btn btn-danger btn-sm delete-row">HAPUS</button>
-              </td>
-            </tr>
-          `)
+                    <tr>
+                        <td></td>
+                        <td>
+                            <div class="row form-group">
+                                <div class="col-12 col-md-12">
+                                    <div class="input-group">
+                                        <input type="text" name="tgltransfer[]" disabled class="form-control datepicker">
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="row form-group">
+                                <div class="col-12 col-md-12">
+                                    <input type="text" name="keterangantransfer[]" class="form-control">
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="row form-group">
+                                <div class="col-12 col-md-12">
+                                    <input type="text" name="nilaitransfer[]" disabled class="form-control autonumeric">
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="row form-group">
+                                <div class="col-12 col-md-12">
+                                    <input type="hidden" name="bank_idtransfer[]">
+                                    <input type="text" name="banktransfer[]" disabled class="form-control bank-lookup">
+                                </div>
+                            </div>
+                        </td>
+                        
+                        <td>
+                            <div class="row form-group">
+                                <div class="col-12 col-md-12">
+                                    <input type="text" name="nobukti_kasbank[]" disabled class="form-control">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    `)
 
-                    detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-                    detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
+                    detailRow.find(`[name="tgltransfer[]"]`).val(dateFormat(detail.pengeluarantrucking_tglbukti))
+                    detailRow.find(`[name="keterangantransfer[]"]`).val(detail.keterangan)
+                    detailRow.find(`[name="nilaitransfer[]"]`).val(detail.nominal)
+                    detailRow.find(`[name="banktransfer[]"]`).val(detail.bank)
+                    detailRow.find(`[name="bank_idtransfer[]"]`).val(detail.pengeluarantrucking_bank_id)
+                    detailRow.find(`[name="nobukti_kasbank[]"]`).val(detail.pengeluarantrucking_nobukti)
 
-                    initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
-                    $('#detailList tbody').append(detailRow)
-                    setTotal()
+                    initAutoNumeric(detailRow.find(`[name="nilaitransfer[]"]`))
+                    $('#detailTransfer #tbodyTransfer').append(detailRow)
+                    initDatepicker()
+                    setTotalTransfer()
+
+                    $('.bank-lookup').last().lookup({
+                        title: 'Bank Lookup',
+                        fileName: 'bank',
+                        beforeProcess: function(test) {
+                            this.postData = {
+                                Aktif: 'AKTIF',
+                            }
+                        },
+                        onSelectRow: (bank, element) => {
+                            element.parents('td').find(`[name="bank_idtransfer[]"]`).val(bank.id)
+                            element.val(bank.namabank)
+                            element.data('currentValue', element.val())
+                        },
+                        onCancel: (element) => {
+                            element.val(element.data('currentValue'))
+                        },
+                        onClear: (element) => {
+                            element.parents('td').find(`[name="bank_idtransfer[]"]`).val('')
+                            element.val('')
+                            element.data('currentValue', element.val())
+                        }
+                    })
+
                 })
 
-                setRowNumbers()
+                setRowNumbers('#detailTransfer #tbodyTransfer')
+
+                $.each(response.detail.adjust, (index, value) => {
+                    let element = form.find(`[name="${index}"]`)
+                    if (element.is('select')) {
+                        element.val(value).trigger('change')
+                    } else {
+                        element.val(value)
+                    }
+                    if (index == 'keteranganadjust') {
+                        element.prop('disabled', false)
+                    } else {
+                        element.prop('disabled', true)
+                    }
+                })
+
+                if (response.detail.deposito == null) {
+                    form.find('#deposit [name]').prop('disabled', true)
+                } else {
+
+                    $.each(response.detail.deposito, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else {
+                            element.val(value)
+                        }
+
+                        if (index == 'keterangandeposit') {
+                            element.prop('disabled', false)
+                        } else {
+                            element.prop('disabled', true)
+                        }
+                    })
+
+                    initAutoNumeric(form.find(`[name="nilaideposit"]`))
+                    form.find(`[name="tgldeposit"]`).val(dateFormat(response.detail.deposito.tgldeposit))
+                    form.find(`[name="bankdeposit"]`).data('currentValue', response.detail.deposito.bankdeposit)
+                }
+
+                let totaljlhPinjaman = 0
+                let totalttlBayar = 0
+                let totalSisa = 0
+                $.each(response.detail.pengembalian.detail, (index, detail) => {
+                    totaljlhPinjaman = parseFloat(totaljlhPinjaman) + parseFloat(detail.jlhpinjaman)
+                    totalttlBayar = parseFloat(totalttlBayar) + parseFloat(detail.totalbayar)
+                    totalSisa = parseFloat(totalSisa) + parseFloat(detail.sisa)
+                    let jlhpinjaman = new Intl.NumberFormat('en-US').format(detail.jlhpinjaman);
+                    let totalbayar = new Intl.NumberFormat('en-US').format(detail.totalbayar);
+                    let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
+                    let checked
+                    let disabled
+                    // if (detail.pengeluarantruckingheader_nobukti != null) {
+                    //     checked = 'checked'
+                    // } else {
+                    //     disabled = 'disabled'
+                    // }
+
+                    let detailRow = $(`
+                    <tr >
+                        <td><input name='pjt_id[]' type="checkbox" id="checkItem" value="${detail.id}" checked disabled></td>
+                    
+                        <td>${detail.nobukti}</td>
+                        <td>${detail.tglbukti}</td>
+                        <td>${detail.namasupir}</td>
+                        <td>
+                            <p class="text-right">${jlhpinjaman}</p>
+                            <input type="hidden" name="jlhpinjaman[]" class="autonumeric" value="${detail.jlhpinjaman}">
+                        </td>
+                        <td>
+                            <p class="text-right">${totalbayar}</p>
+                            <input type="hidden" name="totalbayar[]" class="autonumeric" value="${totalbayar}">
+                        </td>
+                        <td>
+                            <p class="text-right sisa autonumeric">${sisa}</p>
+                            <input type="hidden" name="sisa[]" class="autonumeric" value="${sisa}">
+                        </td>
+                        <td>
+                            <input type="hidden" name="pengeluarantruckingheader_nobukti[]" value="${detail.nobukti}">
+                            <input type="text" name="nombayar[]" disabled class="form-control text-right" value="${detail.nominal}">
+                        </td>
+                        <td>
+                            <input type="text" name="sisapinjaman[]" disabled class="form-control text-right" value="${detail.sisa}">
+                        </td>
+                        <td>
+                            <textarea name="keteranganpinjaman[]" rows="1" disabled class="form-control">${(detail.keterangan == null) ? '' : detail.keterangan}</textarea>
+                        </td>
+                    </tr>
+                    `)
+
+                    initAutoNumeric(detailRow.find(`[name="jlhpinjaman[]"]`))
+                    initAutoNumeric(detailRow.find(`[name="totalbayar[]"]`))
+                    initAutoNumeric(detailRow.find(`[name="nombayar[]"]`))
+                    initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
+                    initAutoNumeric(detailRow.find(`[name="sisapinjaman[]"]`))
+                    initAutoNumeric(detailRow.find('.sisa'))
+                    initAutoNumeric(detailRow.find('.totalbayar'))
+                    initAutoNumeric(detailRow.find('.jlhpinjaman'))
+
+                    $('#detailPengembalian #tbodyPengembalian').append(detailRow)
+
+                    setNomBayars()
+                    setSisaPinjaman()
+                })
+
+
+                $('#jlhPinjaman').append(`${totaljlhPinjaman}`)
+                initAutoNumeric($('#detailPengembalian tfoot').find('#jlhPinjaman'))
+                $('#ttlBayar').append(`${totalttlBayar}`)
+                initAutoNumeric($('#detailPengembalian tfoot').find('#ttlBayar'))
+                $('#sisa').append(`${totalSisa}`)
+                initAutoNumeric($('#detailPengembalian tfoot').find('#sisa'))
+                initAutoNumeric(form.find(`[name="nilaiadjust"]`))
+                form.find(`[name="tgladjust"]`).val(dateFormat(response.detail.adjust.tgladjust))
+                form.find(`[name="bankadjust"]`).data('currentValue', response.detail.adjust.bankadjust)
+
+                if (response.detail.pengembalian.bank != null) {
+                    form.find(`[name="bank_idpengembalian"]`).val(response.detail.pengembalian.bank.bank_idpengembalian)
+                    form.find(`[name="bankpengembalian"]`).val(response.detail.pengembalian.bank.bankpengembalian).prop('disabled', true)
+                    form.find(`[name="bankpengembalian"]`).data('currentValue', response.detail.pengembalian.bank.bankpengembalian)
+
+                } else {
+                    form.find('#pengembalian [name]').prop('disabled', true)
+                }
+
+
 
                 if (form.data('action') === 'delete') {
                     form.find('[name]').addClass('disabled')
@@ -718,16 +1007,139 @@
         $('#crudForm').find(`[name="tgltransfer[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         initDatepicker();
         initAutoNumeric(detailRow.find('.autonumeric'))
-
+        setTotalTransfer()
         setRowNumbers('#detailTransfer #tbodyTransfer')
     }
 
-    
+    function getPinjaman(supirId) {
+        $('#detailPengembalian #tbodyPengembalian').html('')
+        $('#detailPengembalian #tfootPengembalian #jlhPinjaman').html('')
+        $('#detailPengembalian #tfootPengembalian #ttlBayar').html('')
+        $('#detailPengembalian #tfootPengembalian #sisa').html('')
+
+        $.ajax({
+            url: `${apiUrl}prosesuangjalansupirheader/${supirId}/getPinjaman`,
+            method: 'GET',
+            dataType: 'JSON',
+            data: {
+                limit: 0
+            },
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            success: response => {
+
+                let totaljlhPinjaman = 0
+                let totalttlBayar = 0
+                let totalSisa = 0
+                $.each(response.data, (index, detail) => {
+
+                    let ttlbyr = (detail.totalbayar != null) ? parseFloat(detail.totalbayar) : 0;
+                    let sisabyr = (detail.sisa != null) ? parseFloat(detail.sisa) : 0;
+                    totaljlhPinjaman = parseFloat(totaljlhPinjaman) + parseFloat(detail.jlhpinjaman)
+                    totalttlBayar = parseFloat(totalttlBayar) + ttlbyr;
+                    totalSisa = parseFloat(totalSisa) + sisabyr
+
+                    let jlhpinjaman = new Intl.NumberFormat('en-US').format(detail.jlhpinjaman);
+                    let totalbayar = new Intl.NumberFormat('en-US').format(detail.totalbayar);
+                    let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
+
+                    let detailRow = $(`
+                    <tr >
+                    <td><input name='pjt_id[]' type="checkbox" id="checkItem" value="${detail.id}"></td>
+                    
+                    <td>${detail.nobukti}</td>
+                    <td>${detail.tglbukti}</td>
+                    <td>${detail.namasupir}</td>
+                    <td>
+                        <p class="text-right">${jlhpinjaman}</p>
+                        <input type="hidden" name="jlhpinjaman[]" class="autonumeric" value="${jlhpinjaman}">
+                    </td>
+                    <td>
+                        <p class="text-right">${totalbayar}</p>
+                        <input type="hidden" name="totalbayar[]" class="autonumeric" value="${totalbayar}">
+                    </td>
+                    <td>
+                        <p class="text-right sisa autonumeric">${sisa}</p>
+                        <input type="hidden" name="sisa[]" class="autonumeric" value="${sisa}">
+                    </td>
+                    <td id='${detail.id}'>
+                        <input type="hidden" name="pengeluarantruckingheader_nobukti[]" value="${detail.nobukti}">
+                        <input type="text" name="nombayar[]" disabled class="form-control text-right">
+                    </td>
+                    <td>
+                        <input type="text" name="sisapinjaman[]" disabled class="form-control text-right" value="${sisa}">
+                    </td>
+                    <td>
+                        <textarea name="keteranganpinjaman[]" rows="1" disabled class="form-control"></textarea>
+                    </td>
+                    </tr>
+                `)
+
+                    initAutoNumeric(detailRow.find(`[name="jlhpinjaman[]"]`))
+                    initAutoNumeric(detailRow.find(`[name="totalbayar[]"]`))
+                    initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
+                    initAutoNumeric(detailRow.find(`[name="sisapinjaman[]"]`))
+                    initAutoNumeric(detailRow.find('.sisa'))
+                    initAutoNumeric(detailRow.find('.totalbayar'))
+                    initAutoNumeric(detailRow.find('.jlhpinjaman'))
+
+                    $('#detailPengembalian #tbodyPengembalian').append(detailRow)
+
+                    setNomBayar()
+                    setSisaPinjaman()
+                })
+
+                $('#jlhPinjaman').append(`${totaljlhPinjaman}`)
+                initAutoNumeric($('#detailPengembalian tfoot').find('#jlhPinjaman'))
+                $('#ttlBayar').append(`${totalttlBayar}`)
+                console.log(totalttlBayar)
+                console.log(totalSisa)
+                initAutoNumeric($('#detailPengembalian tfoot').find('#ttlBayar'))
+                $('#sisa').append(`${totalSisa}`)
+                initAutoNumeric($('#detailPengembalian tfoot').find('#sisa'))
+            }
+        })
+
+
+    }
+    $(document).on('click', `#detailPengembalian #tbodyPengembalian [name="pjt_id[]"]`, function() {
+
+        if ($(this).prop("checked") == true) {
+
+            id = $(this).val()
+            $(this).closest('tr').find(`td [name="nombayar[]"]`).prop('disabled', false)
+            // $(this).closest('tr').find(`td [name="sisapinjaman[]"]`).prop('disabled', false)
+            $(this).closest('tr').find(`td [name="keteranganpinjaman[]"]`).prop('disabled', false)
+
+            let sisa = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="sisa[]"]`)[0])
+            initAutoNumeric($(this).closest('tr').find(`td [name="nombayar[]"]`).val(sisa))
+            let sisapinjaman = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="sisapinjaman[]"]`)[0])
+
+            setNomBayar()
+            setSisaPinjaman()
+        } else {
+
+            let sisa = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="sisa[]"]`)[0])
+            initAutoNumeric($(this).closest('tr').find(`td [name="sisapinjaman[]"]`).val(sisa))
+            let id = $(this).val()
+
+            $(this).closest('tr').find(`td [name="keteranganpinjaman[]"]`).prop('disabled', true)
+            $(this).closest('tr').find(`td [name="nombayar[]"]`).remove();
+            let newNomBayarElement = `<input type="text" name="nombayar[]" disabled class="form-control text-right">`;
+            $(this).closest('tr').find(`#${id}`).append(newNomBayarElement)
+            // $(this).closest('tr').find(`td [name="nombayar[]"]`).removeData('autonumeric');
+            setNomBayar()
+            setSisaPinjaman()
+        }
+    })
+
     function deleteRow(row) {
         row.remove()
 
         setRowNumbers()
-        setTotal()
+        // setTotal()
+        setTotalTransfer()
     }
 
     function setRowNumbers(attr) {
@@ -770,6 +1182,9 @@
 
             onSelectRow: (absensisupir, element) => {
                 element.val(absensisupir.nobukti)
+
+                $('#crudForm [name=nilaiadjust]').first().val(absensisupir.nominal)
+                initAutoNumeric($('#crudForm [name=nilaiadjust]'))
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
@@ -804,6 +1219,7 @@
             fileName: 'supir',
             onSelectRow: (supir, element) => {
                 $('#crudForm [name=supir_id]').first().val(supir.id)
+                getPinjaman(supir.id)
                 element.val(supir.namasupir)
                 element.data('currentValue', element.val())
             },

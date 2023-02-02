@@ -180,7 +180,7 @@ Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->name('login.process');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth','authorized'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('/');
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -539,6 +539,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('tarif/field_length', [TarifController::class, 'fieldLength'])->name('tarif.field_length');
     Route::get('tarif/{id}/delete', [TarifController::class, 'delete'])->name('tarif.delete');
+    Route::get('tarif/export', [TarifController::class, 'export'])->name('tarif.export');
     Route::get('tarif/get', [TarifController::class, 'get'])->name('tarif.get');
     Route::get('tarif/index', [TarifController::class, 'index']);
     Route::resource('tarif', TarifController::class);

@@ -2,18 +2,10 @@
 
 namespace App\Libraries;
 
-use App\Models\UserRole;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\URL;
-use stdClass;
-
 class Myauth
 {
-    private $server, $user, $pass, $db;
     public $isLogin, $userPK;
-    private $conn;
-    private $authController;
     private $exceptAuth = [
         'class' => [
             '',
@@ -55,20 +47,6 @@ class Myauth
         ],
     ];
 
-    public function __construct($params)
-    {
-        $url = URL::to('/');
-        $this->server = $params['server'];
-        $this->user = $params['user'];
-        $this->pass = $params['pass'];
-        $this->db = $params['db'];
-        $this->port = isset($params['port']) ? $params['port'] : 3306;
-        $this->isLogin = isset($params['isLogin']) ? $params['isLogin'] : 0;
-        $this->userPK = $params['userPK'];
-        $this->baseUrl = $url;
-        $this->authController = isset($params['authController']) ? $params['authController'] : 'login';
-    }
-
     public function auth($class = null, $method = null): void
     {
         $class = strtolower($class);
@@ -89,7 +67,7 @@ class Myauth
 
     private function _validatePermission($class = null, $method = null)
     {
-        if (!Auth::check()) {
+        if (!auth()->check()) {
             return redirect()->route('login');
         }
         
@@ -98,21 +76,17 @@ class Myauth
             return true;
         }
         
-        $userRole = DB::table('userrole')
-            ->where('user_id', Auth::user()->id)
-            ->get();
-        
         $data_union = DB::table('acos')
             ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('acl', 'acos.id', '=', 'acl.aco_id')
             ->where('acos.class', 'like', "%$class%")
-            ->where('acl.role_id', $userRole[0]->user_id ?? null);
+            ->whereIn('acl.role_id', auth()->user()->roles->pluck('id')->toArray() ?? null);
 
         $data = DB::table('acos')
             ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('useracl', 'acos.id', '=', 'useracl.aco_id')
             ->where('acos.class', 'like', "%$class%")
-            ->where('useracl.user_id', Auth::user()->id)
+            ->where('useracl.user_id', auth()->user()->id)
             ->unionAll($data_union)
             ->get();
         

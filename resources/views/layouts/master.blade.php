@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ $title ?? 'No title' }} | Dashboard</title>
+  <title>{{ $title ?? 'No title' }} | {{ config('app.name') }}</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -98,6 +98,39 @@
       </div>
     </div>
   </div>
+  
+  <!-- Modal for import tarif -->
+  <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="importModalLabel">Pilih file</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="formImport" method="post" enctype="multipart/form-data">
+          @csrf
+          <div class="modal-body">
+            
+            <div class="form-group row">
+              <div class="col-sm-2 col-form-label">
+                <label for="">File</label>
+              </div>
+              <div class="col-sm-10">
+                <input type="file" name="fileImport">
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" id="btnImport">Import</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <div class="wrapper">
     @include('layouts._navbar')
@@ -110,7 +143,7 @@
             <div class="col-sm-12">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item active" style="text-transform: uppercase;">
-                  {!! \App\Helpers\Menu::setBreadcrumb() !!}
+                  {!! $breadcrumb !!}
                 </li>
               </ol>
             </div>
