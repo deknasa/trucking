@@ -270,6 +270,7 @@ Route::middleware('auth')->group(function () {
     Route::get('mandorabsensisupir/index', [MandorAbsensiSupirController::class, 'index']);
     Route::resource('mandorabsensisupir', MandorAbsensiSupirController::class);
 
+    Route::get('mandortrip/historytrip', [MandorTripController::class,'show']);
     Route::resource('mandortrip', MandorTripController::class);
 
     Route::get('userrole/{id}/delete', [UserRoleController::class, 'delete'])->name('userrole.delete');

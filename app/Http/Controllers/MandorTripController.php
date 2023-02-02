@@ -21,4 +21,12 @@ class MandorTripController extends MyController
 
         return view('mandortrip.create', compact('title'));
     }
+    public function show()
+    {
+
+        $title = $this->title;
+        
+
+        return view('mandortrip.history', compact('title'));
+    }
 }

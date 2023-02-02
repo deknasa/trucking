@@ -58,7 +58,9 @@
                   <label class="col-sm-4 col-form-label">NO POLISI<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="trado_id">
-                    <input type="text" name="trado" class="form-control trado-lookup">
+                    <input type="hidden" name="supir_id">
+                    <input type="hidden" name="absensidetail_id">
+                    <input type="text" name="trado" class="form-control absensisupirdetail-lookup">
                   </div>
                 </div>
                 <div class="form-group ">
@@ -609,6 +611,35 @@
       },
       onClear: (element) => {
         $('#crudForm [name=trado_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.absensisupirdetail-lookup').lookup({
+      title: 'Trado Lookup',
+      fileName: 'absensisupirdetail',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (absensi, element) => {
+        console.log(absensi);
+        $('#crudForm [name=trado_id]').first().val(absensi.trado_id)
+        $('#crudForm [name=supir_id]').first().val(absensi.supir_id)
+        $('#crudForm [name=absensidetail_id]').first().val(absensi.id)
+        element.val(absensi.trado)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=trado_id]').first().val('')
+        $('#crudForm [name=supir_id]').first().val('')
+        $('#crudForm [name=absensidetail_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
