@@ -1047,6 +1047,13 @@ function destroySelect2() {
 // 	});
 // }
 
+function showSuccessDialog(statusText = "", message = "") {
+	$("#dialog-success-message").find("p").remove();
+	$("#dialog-success-message").append(`<p> ${statusText} </p><p> ${message} </p>`);
+	$("#dialog-success-message").dialog({
+		modal: true,
+	});
+}
 function showDialog(statusText = "", message = "") {
 	$("#dialog-message").find("p").remove();
 	$("#dialog-message").append(`<p> ${statusText} </p><p> ${message} </p>`);
