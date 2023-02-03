@@ -13,12 +13,12 @@ class PengembalianKasGantungHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
         ];
 
-        return view('pengembaliankasgantung.index', compact('title', 'breadcrumb', 'data'));
+        return view('pengembaliankasgantung.index', compact('title', 'data'));
     }
 
     public function get($params = [])

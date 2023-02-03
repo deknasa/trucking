@@ -21,12 +21,12 @@ class KelompokController extends MyController
     {
 
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [
             'combo' => $this->combo('list'),
         ];
 
-        return view('kelompok.index', compact('title', 'breadcrumb', 'data'));
+        return view('kelompok.index', compact('title', 'data'));
     }
 
     /**
@@ -68,12 +68,12 @@ class KelompokController extends MyController
     {
 
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $combo = [
             'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
         ];
 
-        return view('kelompok.add', compact('title', 'breadcrumb', 'combo'));
+        return view('kelompok.add', compact('title', 'combo'));
     }
 
     /**

@@ -22,12 +22,12 @@ class KerusakanController extends MyController
     
 
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [
             'combo' => $this->combo('list'),
         ];
 
-        return view('kerusakan.index', compact('title', 'breadcrumb', 'data'));
+        return view('kerusakan.index', compact('title', 'data'));
     }
 
     /**
@@ -69,12 +69,12 @@ class KerusakanController extends MyController
     {
 
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $combo = [
             'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
         ];
 
-        return view('kerusakan.add', compact('title', 'breadcrumb', 'combo'));
+        return view('kerusakan.add', compact('title', 'combo'));
     }
 
     /**

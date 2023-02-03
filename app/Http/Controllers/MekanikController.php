@@ -26,12 +26,12 @@ class MekanikController extends MyController
     {
 
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [
             'combo' => $this->comboStatusAktif('list'),
         ];
 
-        return view('mekanik.index', compact('title', 'breadcrumb', 'data'));
+        return view('mekanik.index', compact('title', 'data'));
     }
 
     public function get($params = [])
@@ -66,10 +66,10 @@ class MekanikController extends MyController
     public function create()
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $combo = $this->combo();
         
-        return view('mekanik.add', compact('title', 'breadcrumb','combo'));
+        return view('mekanik.add', compact('title','combo'));
     }
 
     public function store(Request $request): Response

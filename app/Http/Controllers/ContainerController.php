@@ -23,12 +23,12 @@ class ContainerController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [
             'combo' => $this->combo('list'),
         ];
 
-        return view('container.index', compact('title', 'breadcrumb', 'data'));
+        return view('container.index', compact('title', 'data'));
     }
 
     public function get($params = []): array
