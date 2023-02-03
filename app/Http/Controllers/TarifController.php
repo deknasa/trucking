@@ -238,60 +238,72 @@ class TarifController extends MyController
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
         ->get(config('app.api_url') . 'tarif/listpivot')['data'];
-        
-        foreach($tarif[0] as $key => $value)
-        {
-            dd($key);
-        }
+       
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'TAS TARIF');
-        $sheet->getStyle("A1")->getFont()->setSize(20);
-        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:G1');
+        // $sheet->setCellValue('A1', 'TAS TARIF');
+        // $sheet->getStyle("A1")->getFont()->setSize(20);
+        // $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        // $sheet->mergeCells('A1:G1');
 
-        $header_start_row = 2;
-        $detail_table_header_row = 7;
-        $detail_start_row = $detail_table_header_row + 1;
+        $header_start_row = 1;
+        $detail_start_row = 2;
 
-        $header_columns = [
-            [
-                'label' => 'No Bukti',
-                'index' => 'nobukti',
-            ],
-            [
-                'label' => 'Tanggal',
-                'index' => 'tglbukti',
-            ],
-            [
-                'label' => 'No Bukti Invoice',
-                'index' => 'invoice_nobukti',
-            ],
-        ];
-
-        $detail_columns = [
-            [
-                'label' => 'No',
-            ],
-            [
-                'label' => 'No Bukti',
-                'index' => 'nobukti',
-            ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
-            ],
-            [
-                'label' => 'Nominal',
-                'index' => 'nominal',
-                'format' => 'currency'
-            ]
-        ];
-
-        foreach ($header_columns as $header_column) {
-            $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
-            $sheet->setCellValue('C' . $header_start_row++, ': ');
+        $header_columns = [];
+        foreach($tarif[0] as $key => $value)
+        {
+            $header_columns[] =  [
+                'label' => $key,
+                'index' => $key
+            ];
         }
+        // $detail_columns = [];
+        // foreach($tarif[0] as $key => $value)
+        // {
+        //     $detail_columns[] =  [
+        //         'label' => $key,
+        //         'index' => $key
+        //     ];
+        // }
+
+
+        $alphabets = range('A', 'Z');
+        foreach ($header_columns as $detail_columns_index => $detail_column) {
+            $sheet->setCellValue($alphabets[$detail_columns_index] . $header_start_row, $detail_column['label'] ?? $detail_columns_index + 1);
+        }
+        
+        $styleArray = array(
+            'borders' => array(
+                'allBorders' => array(
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ),
+            ),
+        );
+        $sheet->getStyle("A$header_start_row:D$header_start_row")->applyFromArray($styleArray);
+
+        $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
+
+        // LOOPING DETAIL
+        $total = 0;
+        foreach ($tarif as $response_index => $response_detail) {
+
+
+            $sheet->setCellValue("A$detail_start_row", $response_detail['tujuan']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['id']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['20`']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['40`']);
+
+            $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
+            $detail_start_row++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'Data Tarif  ' . date('dmYHis');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
     }
 }
