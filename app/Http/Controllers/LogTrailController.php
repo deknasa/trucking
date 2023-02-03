@@ -26,9 +26,8 @@ class LogTrailController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
 
-        return view('logtrail.index', compact('title', 'breadcrumb'));
+        return view('logtrail.index', compact('title'));
     }
 
     public function get($params = [])
