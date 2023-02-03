@@ -11,25 +11,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card card-primary">
-                <div class="card-header">
-                </div>
-                <form id="crudForm">
-                    <div class="card-body">
-                        
-
-                        <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Supir<span class="text-danger">*</span></label>
-                            
-                            <div class="col-12 col-sm-9 col-md-10">
-                              <input type="hidden" name="supir_id" >
-                              <input type="text" name="supir" class="form-control supir-lookup">
-                            </div>
-                        </div>
-
-                    </div>
-                </form>
-            </div>
+            
             <table id="jqGrid"></table>
         </div>
     </div>
@@ -75,7 +57,7 @@
 
 
       $("#jqGrid").jqGrid({
-        url: `${apiUrl}mandortrip/history`,
+        url: `${apiUrl}mandortrip/list`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -354,10 +336,10 @@
             }
           },
       ],
-        autowidth: true,
+      autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 10,
+        rowNum: rowNum,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
@@ -366,100 +348,83 @@
         sortname: sortname,
         sortorder: sortorder,
         page: page,
+        pager: pager,
         viewrecords: true,
         prmNames: {
-            sort: 'sortIndex',
-            order: 'sortOrder',
-            rows: 'limit'
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
         },
         jsonReader: {
-            root: 'data',
-            total: 'attributes.totalPages',
-            records: 'attributes.totalRows',
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
         },
         loadBeforeSend: (jqXHR) => {
-            jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
         },
-
         onSelectRow: function(id) {
-
-            activeGrid = $(this)
-            indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-            page = $(this).jqGrid('getGridParam', 'page')
-            let limit = $(this).jqGrid('getGridParam', 'postData').limit
-            if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-
-           
+          activeGrid = $(this)
+          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
+          page = $(this).jqGrid('getGridParam', 'page')
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
+          initResize($(this))
 
-            $(document).unbind('keydown')
-            setCustomBindKeys($(this))
-            initResize($(this))
+          /* Set global variables */
+          sortname = $(this).jqGrid("getGridParam", "sortname")
+          sortorder = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecord = $(this).getGridParam("records")
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
+          postData = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = true
 
-            $.each(selectedRows, function(key, value) {
+          $('.clearsearchclass').click(function() {
+            clearColumnSearch()
+          })
 
-                $('#jqGrid tbody tr').each(function(row, tr) {
-                    if ($(this).find(`td input:checkbox`).val() == value) {
-                        $(this).find(`td input:checkbox`).prop('checked', true)
-                    }
-                })
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
+          }
 
-            });
-
-            /* Set global variables */
-            sortname = $(this).jqGrid("getGridParam", "sortname")
-            sortorder = $(this).jqGrid("getGridParam", "sortorder")
-            totalRecord = $(this).getGridParam("records")
-            limit = $(this).jqGrid('getGridParam', 'postData').limit
-            postData = $(this).jqGrid('getGridParam', 'postData')
-            triggerClick = true
-
-            $('.clearsearchclass').click(function() {
-                clearColumnSearch()
-            })
-
-            if (indexRow > $(this).getDataIDs().length - 1) {
-                indexRow = $(this).getDataIDs().length - 1;
+          if (triggerClick) {
+            if (id != '') {
+              indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              id = ''
+            } else if (indexRow != undefined) {
+              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
-            setTimeout(function() {
+            if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+            }
 
-                if (triggerClick) {
-                    if (id != '') {
-                        indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-                        $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-                        id = ''
-                    } else if (indexRow != undefined) {
-                        $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-                    }
+            triggerClick = false
+          } else {
+            $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+          }
 
-                    if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-                        $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-                    }
-
-                    triggerClick = false
-                } else {
-                    $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
-                }
-            }, 100)
-
-
-            setHighlight($(this))
-        }
+          setHighlight($(this))
+        },
       })
+
       .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
         defaultSearch: 'cn',
         groupOp: 'AND',
-        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           clearGlobalSearch($('#jqGrid'))
-        },
+        }
       })
-      .customPager({})
+
+      .customPager()
       
       
       

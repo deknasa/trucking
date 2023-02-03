@@ -247,7 +247,6 @@
 
 
       $('#crudForm').find(`[name="nominal[]"]`).each((index, element) => {
-        console.log(element);
         data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
       })
 
@@ -586,7 +585,7 @@
     })
   }
 
-  function showTarif(form, tarifId) {
+  function showTarif(form, tarifId, parent = false) {
     $('#detailList tbody').html('')
     $.ajax({
       url: `${apiUrl}tarif/${tarifId}`,
@@ -596,6 +595,12 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        if (parent) {
+          delete response.data['id'];
+          delete response.data['parent_id'];
+          delete response.data['parent'];
+        }
+
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
 
@@ -603,9 +608,11 @@
             element.val(value).trigger('change')
           } else if (element.hasClass('datepicker')) {
             element.val(dateFormat(value))
-          } else {
-            element.val(value)
           }
+          else {
+              element.val(value)
+          }
+
 
 
           if (index == 'container') {
@@ -747,11 +754,11 @@
         }
       },        
       onSelectRow: (tarif, element) => {
-        $('#crudForm [name=parent_id]').first().val(tarif.id)
+        let form = $('#crudForm')
+        showTarif(form, tarif.id,true)
         element.val(tarif.tujuan)
         element.data('currentValue', element.val())
-        let form = $('#crudForm')
-        showTarif(form, tarif.id)
+        $('#crudForm [name=parent_id]').first().val(tarif.id)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -918,7 +925,6 @@
       },
       success: response => {
         $.each(response.data, (index, value) => {
-          console.log(value)
           let element = form.find(`[name="${index}"]`)
           // let element = form.find(`[name="statusaktif"]`)
 
