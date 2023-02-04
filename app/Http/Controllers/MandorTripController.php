@@ -19,7 +19,7 @@ class MandorTripController extends MyController
         $title = $this->title;
         
 
-        return view('mandortrip.create', compact('title'));
+        return view('inputtrip.index', compact('title'));
     }
     public function history()
     {
@@ -27,7 +27,7 @@ class MandorTripController extends MyController
         $title = $this->title;
         
 
-        return view('mandortrip.history', compact('title'));
+        return view('historytrip.index', compact('title'));
     }
     public function list()
     {
@@ -35,6 +35,6 @@ class MandorTripController extends MyController
         $title = $this->title;
         
 
-        return view('mandortrip.list', compact('title'));
+        return view('listtrip.index', compact('title'));
     }
 }

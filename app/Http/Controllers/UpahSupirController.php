@@ -258,7 +258,7 @@ class UpahSupirController extends MyController
         return view('reports.upahsupir', compact('upahsupir_details','user'));
     }
 
-    public function export(Request $request)
+    public function export(Request $request): void
     {
 
         // $tarif = Http::withHeaders($request->header())
