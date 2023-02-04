@@ -21,12 +21,12 @@ class AbsenTradoController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [
             'combo' => $this->combo('list'),
         ];
 
-        return view('absentrado.index', compact('title', 'breadcrumb', 'data'));
+        return view('absentrado.index', compact('title', 'data'));
     }
 
     /**
@@ -67,12 +67,12 @@ class AbsenTradoController extends MyController
     public function create(): View
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $combo = [
             'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
         ];
 
-        return view('absentrado.add', compact('title', 'breadcrumb', 'combo'));
+        return view('absentrado.add', compact('title', 'combo'));
     }
 
     /**

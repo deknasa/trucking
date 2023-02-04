@@ -21,7 +21,7 @@ class PenerimaanHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [
             'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'combokas' => $this->comboList('list', 'STATUS KAS', 'STATUS KAS'),
@@ -29,7 +29,7 @@ class PenerimaanHeaderController extends MyController
             'comboberkas' => $this->comboList('list', 'STATUS BERKAS', 'STATUS BERKAS'),
         ];
 
-        return view('penerimaan.index', compact('title', 'breadcrumb', 'data'));
+        return view('penerimaan.index', compact('title', 'data'));
     }
 
     // /**

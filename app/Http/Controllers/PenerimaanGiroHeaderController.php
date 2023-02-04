@@ -21,13 +21,13 @@ class PenerimaanGiroHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [
             'comboapproval' => $this->comboApproval('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'combocetak' => $this->comboApproval('list', 'STATUSCETAK', 'STATUSCETAK')
         ];
 
-        return view('penerimaangiroheader.index', compact('title', 'breadcrumb', 'data'));
+        return view('penerimaangiroheader.index', compact('title', 'data'));
     }
 
     // /**

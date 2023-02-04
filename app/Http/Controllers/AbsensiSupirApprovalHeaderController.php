@@ -16,7 +16,7 @@ class AbsensiSupirApprovalHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
             'comboapproval' => $this->comboApproval('list')
@@ -24,7 +24,7 @@ class AbsensiSupirApprovalHeaderController extends MyController
         ];
 
         
-        return view('absensisupirapprovalheader.index', compact('title', 'breadcrumb', 'data'));              
+        return view('absensisupirapprovalheader.index', compact('title', 'data'));              
     }
 
     public function get($params = [])

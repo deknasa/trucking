@@ -19,6 +19,7 @@ class AbsensiSupirHeaderController extends MyController
     {
         $title = $this->title;
 
+        
         $data = [
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
         ];

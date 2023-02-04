@@ -21,7 +21,7 @@ class ZonaController extends MyController
     {
 
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        $breadcrumb = $this->breadcrumb ;
         $data = [
             'combo' => $this->combo('list'),
         ];

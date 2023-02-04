@@ -20,14 +20,14 @@ class PengeluaranHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [            
             'comboapproval' => $this->comboApproval('list','STATUS APPROVAL','STATUS APPROVAL'),
             'combocetak' => $this->comboCetak('list','STATUSCETAK','STATUSCETAK'),
             'combojenistransaksi' => $this->comboApproval('list','JENIS TRANSAKSI','JENIS TRANSAKSI'),
         ];
 
-        return view('pengeluaran.index', compact('title', 'breadcrumb', 'data'));
+        return view('pengeluaran.index', compact('title', 'data'));
     }
 
     public function get($params = [])

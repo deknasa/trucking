@@ -29,12 +29,12 @@ class BankPelangganController extends MyController
     {
    
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [
             'combo' => $this->combo('list'),
         ];
 
-        return view('bankpelanggan.index', compact('title', 'breadcrumb', 'data'));
+        return view('bankpelanggan.index', compact('title', 'data'));
     }
 
     public function get($params = [])
@@ -70,12 +70,12 @@ class BankPelangganController extends MyController
     {
    
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $combo = [
             'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
         ];
 
-        return view('bankpelanggan.add', compact('title', 'breadcrumb', 'combo'));
+        return view('bankpelanggan.add', compact('title', 'combo'));
     }
 
     public function store(Request $request): Response

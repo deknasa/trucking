@@ -21,12 +21,12 @@ class GudangController extends MyController
     {
  
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [
             'combo' => $this->combo('list'),
         ];
 
-        return view('gudang.index', compact('title', 'breadcrumb', 'data'));
+        return view('gudang.index', compact('title', 'data'));
     }
 
     /**
@@ -68,12 +68,12 @@ class GudangController extends MyController
     {
 
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $combo = [
             'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
         ];
 
-        return view('gudang.add', compact('title', 'breadcrumb', 'combo'));
+        return view('gudang.add', compact('title', 'combo'));
     }
 
     /**
