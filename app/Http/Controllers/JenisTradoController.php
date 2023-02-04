@@ -22,12 +22,12 @@ class JenisTradoController extends MyController
       
 
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [
             'combo' => $this->combo('list'),
         ];
 
-        return view('jenistrado.index', compact('title', 'breadcrumb', 'data'));
+        return view('jenistrado.index', compact('title', 'data'));
     }
 
     /**
@@ -70,12 +70,12 @@ class JenisTradoController extends MyController
       
 
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $combo = [
             'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
         ];
 
-        return view('jenistrado.add', compact('title', 'breadcrumb', 'combo'));
+        return view('jenistrado.add', compact('title', 'combo'));
     }
 
     /**

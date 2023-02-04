@@ -21,12 +21,12 @@ class JenisOrderController extends MyController
     {
   
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [
             'combo' => $this->combo('list'),
         ];
 
-        return view('jenisorder.index', compact('title', 'breadcrumb', 'data'));
+        return view('jenisorder.index', compact('title', 'data'));
     }
 
     /**
@@ -69,12 +69,12 @@ class JenisOrderController extends MyController
      
 
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $combo = [
             'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
         ];
 
-        return view('jenisorder.add', compact('title', 'breadcrumb', 'combo'));
+        return view('jenisorder.add', compact('title', 'combo'));
     }
 
     /**

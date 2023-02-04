@@ -23,6 +23,7 @@ class ContainerController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        
         $data = [
             'combo' => $this->combo('list'),
         ];

@@ -21,7 +21,7 @@ class AgenController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $combo = [
             'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
             'statusapproval' => $this->getParameter('STATUS APPROVAL', 'STATUS APPROVAL'),
@@ -29,7 +29,7 @@ class AgenController extends MyController
             'jenisemkl' => $this->getJenisEmkl(),
         ];
 
-        return view('agen.index', compact('title', 'breadcrumb', 'combo'));
+        return view('agen.index', compact('title', 'combo'));
     }
 
     /**
@@ -71,7 +71,7 @@ class AgenController extends MyController
     public function create(): View
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
 
         $combo = [
             'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
@@ -79,7 +79,7 @@ class AgenController extends MyController
             'jenisemkl' => $this->getJenisEmkl(),
         ];
 
-        return view('agen.add', compact('title', 'breadcrumb', 'combo'));
+        return view('agen.add', compact('title', 'combo'));
     }
 
     /**

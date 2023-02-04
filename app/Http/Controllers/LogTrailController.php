@@ -26,6 +26,7 @@ class LogTrailController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        
 
         return view('logtrail.index', compact('title'));
     }
@@ -66,9 +67,9 @@ class LogTrailController extends MyController
     public function create(): View
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
 
-        return view('logtrail.add', compact('title', 'breadcrumb'));
+        return view('logtrail.add', compact('title'));
     }
 
     public function store(Request $request): Response

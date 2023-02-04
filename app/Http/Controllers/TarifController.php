@@ -22,13 +22,15 @@ class TarifController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        
         $data = [
             'combo' => $this->comboStatusAktif('list'),
             'comboton' => $this->combocetak('list', 'SISTEM TON', 'SISTEM TON'),
             'combopenyesuaianharga' => $this->combocetak('list', 'PENYESUAIAN HARGA', 'PENYESUAIAN HARGA'),
         ];
 
-        return view('tarif.index', compact('title', 'data'));
+        return view('tarif.index', compact('title', 'data'));        
+
     }
 
     /**

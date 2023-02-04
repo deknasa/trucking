@@ -29,13 +29,13 @@ class AlatBayarController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [
             'combolangsungcair' => $this->comboList('list', 'STATUS LANGSUNG CAIR', 'STATUS LANGSUNG CAIR'),
             'combodefault' => $this->comboList('list', 'STATUS DEFAULT', 'STATUS DEFAULT'),
             'combo' => $this->comboList('list', 'STATUS AKTIF', 'STATUS AKTIF'),
         ];
-        return view('alatbayar.index', compact('title', 'breadcrumb','data'));
+        return view('alatbayar.index', compact('title','data'));
     }
 
     
@@ -89,10 +89,10 @@ class AlatBayarController extends MyController
     public function create()
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $combo = $this->combo();
 
-        return view('alatbayar.add', compact('title', 'breadcrumb','combo'));
+        return view('alatbayar.add', compact('title','combo'));
     }
 
     public function store(Request $request): Response
