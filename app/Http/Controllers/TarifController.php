@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class TarifController extends MyController
 {
@@ -71,7 +73,7 @@ class TarifController extends MyController
         $title = $this->title;
         $combo = $this->combo();
 
-        return view('tarif.add', compact('title','combo'));
+        return view('tarif.add', compact('title', 'combo'));
     }
 
     /**
@@ -114,7 +116,7 @@ class TarifController extends MyController
 
         $tarif = $response['data'];
 
-        return view('tarif.edit', compact('title', 'tarif','combo'));
+        return view('tarif.edit', compact('title', 'tarif', 'combo'));
     }
 
     /**
@@ -128,7 +130,7 @@ class TarifController extends MyController
             'nominal' => str_replace(',', '', str_replace('.', '', $request->nominal)),
             'nominalton' => str_replace(',', '', str_replace('.', '', $request->nominalton)),
         ]);
-        
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -157,7 +159,7 @@ class TarifController extends MyController
 
             $tarif = $response['data'];
 
-            return view('tarif.delete', compact('title', 'tarif','combo'));
+            return view('tarif.delete', compact('title', 'tarif', 'combo'));
         } catch (\Throwable $th) {
             return redirect()->route('tarif.index');
         }
@@ -194,7 +196,7 @@ class TarifController extends MyController
     {
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])->withToken(session('access_token'))
             ->get(config('app.api_url') . 'tarif/combo');
-        
+
         return $response['data'];
     }
 
@@ -231,4 +233,79 @@ class TarifController extends MyController
         return $response['data'];
     }
 
+    public function export(Request $request): void
+    {
+
+        $tarif = Http::withHeaders($request->header())
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') . 'tarif/listpivot')['data'];
+       
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        // $sheet->setCellValue('A1', 'TAS TARIF');
+        // $sheet->getStyle("A1")->getFont()->setSize(20);
+        // $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        // $sheet->mergeCells('A1:G1');
+
+        $header_start_row = 1;
+        $detail_start_row = 2;
+
+        $header_columns = [];
+        foreach($tarif[0] as $key => $value)
+        {
+            $header_columns[] =  [
+                'label' => $key,
+                'index' => $key
+            ];
+        }
+        // $detail_columns = [];
+        // foreach($tarif[0] as $key => $value)
+        // {
+        //     $detail_columns[] =  [
+        //         'label' => $key,
+        //         'index' => $key
+        //     ];
+        // }
+
+
+        $alphabets = range('A', 'Z');
+        foreach ($header_columns as $detail_columns_index => $detail_column) {
+            $sheet->setCellValue($alphabets[$detail_columns_index] . $header_start_row, $detail_column['label'] ?? $detail_columns_index + 1);
+        }
+        
+        $styleArray = array(
+            'borders' => array(
+                'allBorders' => array(
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ),
+            ),
+        );
+        $sheet->getStyle("A$header_start_row:D$header_start_row")->applyFromArray($styleArray);
+
+        $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
+
+        // LOOPING DETAIL
+        $total = 0;
+        foreach ($tarif as $response_index => $response_detail) {
+
+
+            $sheet->setCellValue("A$detail_start_row", $response_detail['tujuan']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['id']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['20`']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['40`']);
+
+            $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
+            $detail_start_row++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'Data Tarif  ' . date('dmYHis');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+    }
 }

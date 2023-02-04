@@ -130,7 +130,8 @@
           {
             label: 'UANG JALAN',
             name: 'nominaluangjalan',
-            align: 'left'
+            align: 'right',
+            formatter: currencyFormat
           },
           {
             label: 'USER APPROVAL',

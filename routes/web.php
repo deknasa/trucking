@@ -270,7 +270,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('mandorabsensisupir/index', [MandorAbsensiSupirController::class, 'index']);
     Route::resource('mandorabsensisupir', MandorAbsensiSupirController::class);
 
-    Route::get('mandortrip/historytrip', [MandorTripController::class,'show']);
+    Route::get('mandortrip/list', [MandorTripController::class,'list']);
+    Route::get('mandortrip/historytrip', [MandorTripController::class,'history']);
     Route::resource('mandortrip', MandorTripController::class);
 
     Route::get('userrole/{id}/delete', [UserRoleController::class, 'delete'])->name('userrole.delete');
@@ -539,6 +540,7 @@ Route::middleware(['auth','authorized'])->group(function () {
 
     Route::get('tarif/field_length', [TarifController::class, 'fieldLength'])->name('tarif.field_length');
     Route::get('tarif/{id}/delete', [TarifController::class, 'delete'])->name('tarif.delete');
+    Route::get('tarif/export', [TarifController::class, 'export'])->name('tarif.export');
     Route::get('tarif/get', [TarifController::class, 'get'])->name('tarif.get');
     Route::get('tarif/index', [TarifController::class, 'index']);
     Route::resource('tarif', TarifController::class);

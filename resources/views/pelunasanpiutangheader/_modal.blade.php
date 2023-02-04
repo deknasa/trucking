@@ -687,7 +687,7 @@
               <td>
                 <textarea name="keterangandetailppd[]" rows="1" disabled class="form-control"></textarea>
               </td>
-              <td>
+              <td id=${id}>
                 <input type="text" name="bayarppd[]" disabled class="form-control bayar text-right">
               </td>
               <td>
@@ -827,7 +827,7 @@
               <td>
                 <textarea name="keterangandetailppd[]" rows="1" class="form-control" ${attribut}>${detail.keterangan || ''}</textarea>
               </td>
-              <td>
+              <td id=${id}>
                 <input type="text" name="bayarppd[]" class="form-control bayar text-right" value="${detail.nominal || ''}" ${attribut}>
               </td>
               <td>
@@ -940,6 +940,7 @@
       setSisa()
 
     } else {
+      let id = $(this).val()
       $(this).closest('tr').find(`td [name="keterangandetailppd[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="bayarppd[]"]`).prop('disabled', true)
@@ -952,7 +953,11 @@
       initAutoNumeric($(this).closest('tr').find(`td [name="sisa[]"]`).val(nominalHutang))
       $(this).closest("tr").find(".sisa").html(nominalHutang)
       initAutoNumeric($(this).closest("tr").find(".sisa"))
-
+      
+      $(this).closest('tr').find(`td [name="bayarppd[]"]`).remove();
+      let newBayarElement = `<input type="text" name="bayarppd[]" class="form-control bayar text-right" disabled>`
+              
+      $(this).closest('tr').find(`#${id}`).append(newBayarElement)
       setTotal()
       setPenyesuaian()
       setNominalLebih()

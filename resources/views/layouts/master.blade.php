@@ -98,6 +98,39 @@
       </div>
     </div>
   </div>
+  
+  <!-- Modal for import tarif -->
+  <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="importModalLabel">Pilih file</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="formImport" method="post" enctype="multipart/form-data">
+          @csrf
+          <div class="modal-body">
+            
+            <div class="form-group row">
+              <div class="col-sm-2 col-form-label">
+                <label for="">File</label>
+              </div>
+              <div class="col-sm-10">
+                <input type="file" name="fileImport">
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" id="btnImport">Import</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <div class="wrapper">
     @include('layouts._navbar')

@@ -30,10 +30,10 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
-   let hasDetail = false
+  let hasDetail = false
 
   $(document).ready(function() {
-    
+
     $("#jqGrid").jqGrid({
         url: `${apiUrl}tarif`,
         mtype: "GET",
@@ -151,7 +151,7 @@
             label: 'ZONA',
             name: 'zona_id',
           },
-         
+
           {
             label: 'TGL MULAI BERLAKU',
             name: 'tglmulaiberlaku',
@@ -261,7 +261,7 @@
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
-           if (!hasDetail) {
+          if (!hasDetail) {
             loadDetailGrid(id)
             hasDetail = true
           }
@@ -351,6 +351,25 @@
               deleteTarif(selectedId)
             }
           },
+          {
+            id: 'export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              window.open(`{{ route('tarif.export') }}`)
+            }
+          },
+
+          {
+            id: 'import',
+            innerHTML: '<i class="fas fa-file-upload"></i> UPDATE HARGA',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              // $('#importModal').data('action', 'import')
+              $('#importModal').find('button:submit').html(`Update Harga`)
+              $('#importModal').modal('show')
+            }
+          },
         ]
       })
 
@@ -392,51 +411,57 @@
       $('#delete').attr('disabled', 'disabled')
     }
 
-    $('#rangeModal').on('shown.bs.modal', function() {
-      if (autoNumericElements.length > 0) {
-        $.each(autoNumericElements, (index, autoNumericElement) => {
-          autoNumericElement.remove()
-        })
-      }
+    $('#importModal').on('shown.bs.modal', function() {
 
-      $('#formRange [name]:not(:hidden)').first().focus()
 
-      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
-      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-      $('#formRange [name=sampai]').val(totalRecord)
+      $('#formImport [name]:not(:hidden)').first().focus()
 
-      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
-        allowDecimalPadding: false,
-        minimumValue: 1,
-        maximumValue: totalRecord
-      })
     })
 
-    $('#formRange').submit(event => {
+    $('#btnImport').click(function(event) {
       event.preventDefault()
 
-      let params
-      let actionUrl = ``
+      let url = `${apiUrl}tarif/import`
+      let form_data = new FormData(document.getElementById('formImport'))
+      let form = $('#formImport')
 
-      /* Clear validation messages */
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
+      $(this).attr('disabled', '')
+      $('#loader').removeClass('d-none')
 
-      /* Set params value */
-      for (var key in postData) {
-        if (params != "") {
-          params += "&";
-        }
-        params += key + "=" + encodeURIComponent(postData[key]);
-      }
+      $.ajax({
+        url: url,
+        method: 'post',
+        processData: false,
+        contentType: false,
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: form_data,
+        success: response => {
+          $('#formImport').trigger('reset')
+          $('#importModal').modal('hide')
+          $('#jqGrid').jqGrid().trigger('reloadGrid');
 
-      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.statusText)
+          }
+        },
+      }).always(() => {
+        $('#loader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
     })
   })
-
 </script>
 @endpush()
 @endsection

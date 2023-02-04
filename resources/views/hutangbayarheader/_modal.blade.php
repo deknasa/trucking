@@ -276,35 +276,38 @@
         value: form.find(`[name="tglcair"]`).val()
       })
 
-      $('#table_body tr').each(function(row, tr) {
-        // console.log(row);
+      if (action != 'delete') {
 
-        if ($(this).find(`[name="hutang_id[]"]`).is(':checked')) {
+        $('#table_body tr').each(function(row, tr) {
+          // console.log(row);
 
-          data.push({
-            name: 'keterangandetail[]',
-            value: $(this).find(`[name="keterangandetail[]"]`).val()
-          })
-          data.push({
-            name: 'bayar[]',
-            value: AutoNumeric.getNumber($(`#crudForm [name="bayar[]"]`)[row])
-          })
-          data.push({
-            name: 'potongan[]',
-            value: AutoNumeric.getNumber($(`#crudForm [name="potongan[]"]`)[row])
-          })
-          data.push({
-            name: 'total[]',
-            value: AutoNumeric.getNumber($(`#crudForm [name="total[]"]`)[row])
-          })
+          if ($(this).find(`[name="hutang_id[]"]`).is(':checked')) {
 
-          data.push({
-            name: 'hutang_id[]',
-            value: $(this).find(`[name="hutang_id[]"]`).val()
-          })
+            data.push({
+              name: 'keterangandetail[]',
+              value: $(this).find(`[name="keterangandetail[]"]`).val()
+            })
+            data.push({
+              name: 'bayar[]',
+              value: AutoNumeric.getNumber($(`#crudForm [name="bayar[]"]`)[row])
+            })
+            data.push({
+              name: 'potongan[]',
+              value: AutoNumeric.getNumber($(`#crudForm [name="potongan[]"]`)[row])
+            })
+            data.push({
+              name: 'total[]',
+              value: AutoNumeric.getNumber($(`#crudForm [name="total[]"]`)[row])
+            })
 
-        }
-      })
+            data.push({
+              name: 'hutang_id[]',
+              value: $(this).find(`[name="hutang_id[]"]`).val()
+            })
+
+          }
+        })
+      }
       // console.log(typeof(data))
 
       // console.log(detailData);
@@ -531,11 +534,17 @@
           if (index == 'alatbayar') {
             element.data('current-value', value)
           }
+
+          if (index == 'tglbukti' || index == 'supplier_id' || index == 'supplier' || index == 'tglcair') {
+            element.prop('disabled', false)
+          } else {
+            element.prop("disabled", true)
+          }
         })
 
         form.find(`[name="tglkaskeluar"]`).val(dateFormat(tgl)).attr('disabled', false)
 
-        getPembayaran(Id, fieldId, field, 'edit')
+        getPembayaran(Id, response.data.supplier_id, 'edit')
       }
     })
   }
@@ -573,7 +582,7 @@
 
         })
 
-        getPembayaran(Id, fieldId, field, 'delete')
+        getPembayaran(Id, response.data.supplier_id, 'delete')
 
       }
     })
@@ -630,7 +639,7 @@
               <td>
                 <textarea name="keterangandetail[]" rows="1" disabled class="form-control"></textarea>
               </td>
-              <td>
+              <td id='${detail.id}'>
                 <input type="text" name="bayar[]" disabled class="form-control bayar text-right">
               </td>
               <td>
@@ -650,6 +659,7 @@
           // initAutoNumericNoMinus(detailRow.find(`[name="bayar[]"]`))
           initAutoNumericNoMinus(detailRow.find(`[name="potongan[]"]`))
           initAutoNumericNoMinus(detailRow.find(`[name="total[]"]`))
+          initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
           initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
           initAutoNumeric(detailRow.find('.sisa'))
           initAutoNumeric(detailRow.find('.nominal'))
@@ -706,14 +716,14 @@
   }
 
 
-  function getPembayaran(id, fieldId, field, aksi) {
+  function getPembayaran(id, supplierId, aksi) {
     $('#detailList tbody').html('')
     let url
     let attribut
     let forCheckbox
     let forTotal = 'disabled'
     // if(aksi == 'edit'){
-    url = `${apiUrl}hutangbayarheader/${id}/${fieldId}/${field}/getPembayaran`
+    url = `${apiUrl}hutangbayarheader/${id}/${supplierId}/getPembayaran`
     // }
     if (aksi == 'delete') {
       attribut = 'disabled'
@@ -772,7 +782,7 @@
               <td>
                 <textarea name="keterangandetail[]" rows="1" class="form-control" ${attribut}>${detail.keterangan || ''}</textarea>
               </td>
-              <td>
+              <td id='${detail.id}'>
                 <input type="text" name="bayar[]" class="form-control autonumeric text-right" value="${detail.bayar || ''}" ${attribut}>
               </td>
               <td>
@@ -837,6 +847,7 @@
       setSisa()
     } else {
 
+      let id = $(this).val()
       $(this).closest('tr').find(`td [name="keterangandetail[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="bayar[]"]`).val('').prop('disabled', true)
       $(this).closest('tr').find(`td [name="potongan[]"]`).prop('disabled', true)
@@ -847,7 +858,10 @@
       $(this).closest("tr").find(".sisa").html(nominalHutang)
       initAutoNumeric($(this).closest("tr").find(".sisa"))
 
-
+      $(this).closest('tr').find(`td [name="bayar[]"]`).remove();
+      let newBayarElement = `<input type="text" name="bayar[]" class="form-control text-right" disabled>`
+            
+      $(this).closest('tr').find(`#${id}`).append(newBayarElement)  
       setBayar()
       setPotongan()
       setTotal()
