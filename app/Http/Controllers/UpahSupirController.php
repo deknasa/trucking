@@ -258,7 +258,138 @@ class UpahSupirController extends MyController
         return view('reports.upahsupir', compact('upahsupir_details','user'));
     }
 
-    public function export(Request $request): void
+    public function export(Request $request)
+    {
+
+        // $tarif = Http::withHeaders($request->header())
+        // ->withOptions(['verify' => false])
+        // ->withToken(session('access_token'))
+        // ->get(config('app.api_url') . 'tarif/listpivot')['data'];
+        $upahsupir = [
+            [
+                "dari"=> "BELAWAN",
+                "tujuan"=> "AMPLAS",
+                "Container"=> "20`",
+                "SUPIR FULL CONTAINER"=> "50.000,00",
+                "SUPIR EMPTY CONTAINER"=> "50.000,00",
+                "SUPIR FULL EMPTY CONTAINER"=> "50.000,00",
+                "KENEK FULL CONTAINER"=> "0,00",
+                "KENEK EMPTY CONTAINER"=> "0,00",
+                "KENEK FULL EMPTY CONTAINER"=> "0,00",
+                "KOMISI FULL CONTAINER"=> "0,00",
+                "KOMISI EMPTY CONTAINER"=> "0,00",
+                "KOMISI FULL EMPTY CONTAINER"=> "0,00",
+                "TOL FULL CONTAINER"=> "0,00",
+                "TOL EMPTY CONTAINER"=> "0,00",
+                "TOL FULL EMPTY CONTAINER"=> "0,00",
+                "LITER FULL CONTAINER"=> "0,00",
+                "LITER EMPTY CONTAINER"=> "0,00",
+                "LITER FULL EMPTY CONTAINER"=> "0,00",
+                // "dari"=> "BELAWAN",
+                // "tujuan"=> "AMPLAS"
+            ],
+            [
+                "dari"=> "BELAWAN",
+                "tujuan"=> "AMPLAS",
+                "Container"=> "2X20`",
+                "SUPIR FULL CONTAINER"=> "50.000,00",
+                "SUPIR EMPTY CONTAINER"=> "50.000,00",
+                "SUPIR FULL EMPTY CONTAINER"=> "50.000,00",
+                "KENEK FULL CONTAINER"=> "0,00",
+                "KENEK EMPTY CONTAINER"=> "0,00",
+                "KENEK FULL EMPTY CONTAINER"=> "0,00",
+                "KOMISI FULL CONTAINER"=> "0,00",
+                "KOMISI EMPTY CONTAINER"=> "0,00",
+                "KOMISI FULL EMPTY CONTAINER"=> "0,00",
+                "TOL FULL CONTAINER"=> "0,00",
+                "TOL EMPTY CONTAINER"=> "0,00",
+                "TOL FULL EMPTY CONTAINER"=> "0,00",
+                "LITER FULL CONTAINER"=> "0,00",
+                "LITER EMPTY CONTAINER"=> "0,00",
+                "LITER FULL EMPTY CONTAINER"=> "0,00",
+                // "dari"=> "BELAWAN",
+                // "tujuan"=> "AMPLAS"
+            ],
+            [
+                "dari"=> "BELAWAN",
+                "tujuan"=> "AMPLAS",
+                "Container"=> "40`",
+                "SUPIR FULL CONTAINER"=> "50.000,00",
+                "SUPIR EMPTY CONTAINER"=> "50.000,00",
+                "SUPIR FULL EMPTY CONTAINER"=> "50.000,00",
+                "KENEK FULL CONTAINER"=> "0,00",
+                "KENEK EMPTY CONTAINER"=> "0,00",
+                "KENEK FULL EMPTY CONTAINER"=> "0,00",
+                "KOMISI FULL CONTAINER"=> "0,00",
+                "KOMISI EMPTY CONTAINER"=> "0,00",
+                "KOMISI FULL EMPTY CONTAINER"=> "0,00",
+                "TOL FULL CONTAINER"=> "0,00",
+                "TOL EMPTY CONTAINER"=> "0,00",
+                "TOL FULL EMPTY CONTAINER"=> "0,00",
+                "LITER FULL CONTAINER"=> "0,00",
+                "LITER EMPTY CONTAINER"=> "0,00",
+                "LITER FULL EMPTY CONTAINER"=> "0,00",
+                // "dari"=> "BELAWAN",
+                // "tujuan"=> "AMPLAS"
+            ],
+        ];
+        
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $header_start_row = 1;
+        $detail_start_row = 2;
+
+        $header_columns = [];
+        foreach($upahsupir[0] as $key => $value)
+        {
+            $header_columns[] =  [
+                'label' => $key,
+                'index' => $key
+            ];
+        }
+        $alphabets = array();
+        for ($i = 'A'; $i <= 'Z'; $i++) {
+                $alphabets[] =  $i;
+        }
+        foreach ($header_columns as $data_columns_index => $data_column) {
+            $sheet->setCellValue( $alphabets[$data_columns_index]. $header_start_row, $data_column['label'] ?? $data_columns_index + 1);
+        }
+        $lastColumn = $alphabets[$data_columns_index];
+        $styleArray = array(
+            'borders' => array(
+                'allBorders' => array(
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ),
+            ),
+        );
+        
+        $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->applyFromArray($styleArray);
+
+        $sheet->getStyle("A$detail_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);
+
+        // LOOPING DETAIL
+        $total = 0;
+        foreach ($upahsupir as $response_index => $response_detail) {
+            $alphabets = range('A', 'Z');
+            foreach ($header_columns as $data_columns_index => $data_column) {
+                $sheet->setCellValue($alphabets[$data_columns_index].$detail_start_row, $response_detail[$data_column['index']]);
+                $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
+            }
+            $sheet->getStyle("A$header_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);
+            $detail_start_row++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'Data Upah Supir  ' . date('dmYHis');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+    }
+
+    public function OLDexport(Request $request): void
     {
         
         //FETCH HEADER
