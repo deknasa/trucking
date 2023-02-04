@@ -20,7 +20,9 @@ class Myauth
             'approvalbukacetak',
             'laporanbukubesar',
             'laporankasbank',
-            'mandortrip',
+            'inputtrip',
+            'historytrip',
+            'listtrip',
             'gudang',
             'user'
         ],
