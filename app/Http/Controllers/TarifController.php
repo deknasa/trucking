@@ -270,10 +270,14 @@ class TarifController extends MyController
         // }
 
 
-        $alphabets = range('A', 'Z');
-        foreach ($header_columns as $detail_columns_index => $detail_column) {
-            $sheet->setCellValue($alphabets[$detail_columns_index] . $header_start_row, $detail_column['label'] ?? $detail_columns_index + 1);
+        $alphabets = array();
+        for ($i = 'A'; $i <= 'Z'; $i++) {
+                $alphabets[] =  $i;
         }
+        foreach ($header_columns as $data_columns_index => $data_column) {
+            $sheet->setCellValue( $alphabets[$data_columns_index]. $header_start_row, $data_column['label'] ?? $data_columns_index + 1);
+        }
+        $lastColumn = $alphabets[$data_columns_index];
         
         $styleArray = array(
             'borders' => array(
@@ -282,21 +286,19 @@ class TarifController extends MyController
                 ),
             ),
         );
-        $sheet->getStyle("A$header_start_row:D$header_start_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->applyFromArray($styleArray);
 
-        $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$detail_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
         $total = 0;
         foreach ($tarif as $response_index => $response_detail) {
-
-
-            $sheet->setCellValue("A$detail_start_row", $response_detail['tujuan']);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['id']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['20`']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['40`']);
-
-            $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
+            $alphabets = range('A', 'Z');
+            foreach ($header_columns as $data_columns_index => $data_column) {
+                $sheet->setCellValue($alphabets[$data_columns_index].$detail_start_row, $response_detail[$data_column['index']]);
+                $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
+            }
+            $sheet->getStyle("A$header_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);
             $detail_start_row++;
         }
 
