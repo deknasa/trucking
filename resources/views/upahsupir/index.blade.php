@@ -358,6 +358,16 @@
               }
             }
           },
+          {
+            id: 'import',
+            innerHTML: '<i class="fas fa-file-upload"></i> UPDATE HARGA',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              // $('#importModal').data('action', 'import')
+              $('#importModal').find('button:submit').html(`Update Harga`)
+              $('#importModal').modal('show')
+            }
+          },
         ]
       })
 
@@ -386,7 +396,55 @@
     $('#export .ui-pg-div')
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
+      
+    $('#importModal').on('shown.bs.modal', function() {
+      $('#formImport [name]:not(:hidden)').first().focus()
+    })
 
+    $('#btnImport').click(function(event) {
+      event.preventDefault()
+
+      let url = `${apiUrl}upahsupir/import`
+      let form_data = new FormData(document.getElementById('formImport'))
+      let form = $('#formImport')
+
+      $(this).attr('disabled', '')
+      $('#loader').removeClass('d-none')
+
+      $.ajax({
+        url: url,
+        method: 'post',
+        processData: false,
+        contentType: false,
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: form_data,
+        success: response => {
+          $('#formImport').trigger('reset')
+          $('#importModal').modal('hide')
+          $('#jqGrid').jqGrid().trigger('reloadGrid');
+
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.statusText)
+          }
+        },
+      }).always(() => {
+        $('#loader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+    })
+    
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {
