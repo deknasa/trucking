@@ -507,7 +507,7 @@
           if (kondisi == true) {
             showDialog(response.message['keterangan'])
           } else {
-              deleteJurnalUmumHeader(Id)
+              deleteTrado(Id)
           }
 
       }
