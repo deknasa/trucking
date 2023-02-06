@@ -37,4 +37,12 @@ class MandorTripController extends MyController
 
         return view('listtrip.index', compact('title'));
     }
+    public function list()
+    {
+
+        $title = $this->title;
+        
+
+        return view('mandortrip.list', compact('title'));
+    }
 }
