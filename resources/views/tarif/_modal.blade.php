@@ -27,7 +27,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="parent_id">
-                <input type="text" name="parent" class="form-control parent-lookup">
+                <input type="text" name="parent" class="form-control parent-lookup" autofocus>
               </div>
             </div>
 
@@ -152,12 +152,12 @@
             </div>
 
             <div class="table-responsive">
-              <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="width:1800px">
+              <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="width:500px">
                 <thead class="table-secondary">
                   <tr>
                     <th width="5%">NO</th>
-                    <th width="50%">CONTAINER</th>
-                    <th width="30%">NOMINAL</th>
+                    <th width="55%">CONTAINER</th>
+                    <th width="40%">NOMINAL</th>
                     {{-- <th width="5%">AKSI</th> --}}
                   </tr>
                 </thead>

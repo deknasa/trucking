@@ -74,6 +74,22 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
+                  Default <span class="text-danger">*</span>
+                </label>
+              </div>
+
+              
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="default" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS DEFAULT --</option>
+                </select>
+              </div>
+            </div>
+
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
                   MEMO
                 </label>
               </div>
@@ -279,6 +295,45 @@
 
     $('#table_body').html('')
     addRow()
+
+      setDefaultOptions(form)
+  }
+
+  const setDefaultOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=default]').empty()
+      relatedForm.find('[name=default]').append(
+        new Option('-- PILIH STATUS DEFAULT --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS DEFAULT PARAMETER"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(Default => {
+            let option = new Option(Default.text, Default.text)
+
+            relatedForm.find('[name=default]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
   }
 
   function editParameter(parameterId) {
@@ -295,7 +350,15 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showParameter(form, parameterId)
+
+    Promise
+      .all([
+        setDefaultOptions(form)
+      ])
+      .then(() => {
+        showParameter(form, parameterId)
+      })
+
 
   }
 
@@ -314,7 +377,14 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showParameter(form, parameterId)
+    Promise
+      .all([
+        setDefaultOptions(form)
+      ])
+      .then(() => {
+        showParameter(form, parameterId)
+      })
+
   }
 
   function isJSON(something) {
@@ -340,7 +410,6 @@
       success: response => {
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
-
           if (element.is('select')) {
             element.val(value).trigger('change')
           } else {

@@ -280,6 +280,7 @@
   }
   
   function ShowAbsensiSupirApproval(form, userId) {
+  
     $('#detailList tbody').html('')
     $.ajax({
       url: `${apiUrl}absensisupirapprovalheader/${userId}`,

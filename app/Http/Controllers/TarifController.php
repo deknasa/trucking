@@ -22,15 +22,14 @@ class TarifController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        
+
         $data = [
             'combo' => $this->comboStatusAktif('list'),
             'comboton' => $this->combocetak('list', 'SISTEM TON', 'SISTEM TON'),
             'combopenyesuaianharga' => $this->combocetak('list', 'PENYESUAIAN HARGA', 'PENYESUAIAN HARGA'),
         ];
 
-        return view('tarif.index', compact('title', 'data'));        
-
+        return view('tarif.index', compact('title', 'data'));
     }
 
     /**
@@ -237,11 +236,12 @@ class TarifController extends MyController
     {
 
         $tarif = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') . 'tarif/listpivot')['data'];
-       
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'tarif/listpivot')['data'];
 
+
+            // dd($tarif);
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         // $sheet->setCellValue('A1', 'TAS TARIF');
@@ -253,12 +253,14 @@ class TarifController extends MyController
         $detail_start_row = 2;
 
         $header_columns = [];
-        foreach($tarif[0] as $key => $value)
-        {
-            $header_columns[] =  [
-                'label' => $key,
-                'index' => $key
-            ];
+       
+        foreach ($tarif[0] as $key => $value) {
+            if ($key <> 'id') {
+                $header_columns[] =  [
+                    'label' => $key,
+                    'index' => $key
+                ];
+            }
         }
         // $detail_columns = [];
         // foreach($tarif[0] as $key => $value)
@@ -272,13 +274,13 @@ class TarifController extends MyController
 
         $alphabets = array();
         for ($i = 'A'; $i <= 'Z'; $i++) {
-                $alphabets[] =  $i;
+            $alphabets[] =  $i;
         }
         foreach ($header_columns as $data_columns_index => $data_column) {
-            $sheet->setCellValue( $alphabets[$data_columns_index]. $header_start_row, $data_column['label'] ?? $data_columns_index + 1);
+                $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, $data_column['label'] ?? $data_columns_index + 1);
         }
         $lastColumn = $alphabets[$data_columns_index];
-        
+
         $styleArray = array(
             'borders' => array(
                 'allBorders' => array(
@@ -294,13 +296,25 @@ class TarifController extends MyController
         $total = 0;
         foreach ($tarif as $response_index => $response_detail) {
             $alphabets = range('A', 'Z');
+            $sheet->getStyle("B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+            $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
             foreach ($header_columns as $data_columns_index => $data_column) {
-                $sheet->setCellValue($alphabets[$data_columns_index].$detail_start_row, $response_detail[$data_column['index']]);
+                if ($data_columns_index==1) {
+                    $tgl=date('Y/m/d',strtotime($response_detail[$data_column['index']]));
+                    $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel(
+                        $tgl ); 
+                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $excelDateValue);
+                } else {
+                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
+                }
                 $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
             }
             $sheet->getStyle("A$header_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);
             $detail_start_row++;
         }
+
+      
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Data Tarif  ' . date('dmYHis');

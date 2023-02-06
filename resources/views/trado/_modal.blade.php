@@ -464,6 +464,7 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
+
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
 
@@ -476,6 +477,7 @@
           dropzones.forEach(dropzone => {
             dropzone.removeAllFiles()
           })
+
         },
         error: error => {
           if (error.status === 422) {
@@ -491,6 +493,27 @@
       })
     })
   })
+
+  function cekValidasidelete(Id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}trado/${Id}/cekValidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+          if (kondisi == true) {
+            showDialog(response.message['keterangan'])
+          } else {
+              deleteJurnalUmumHeader(Id)
+          }
+
+      }
+    })
+  }
+
 
   function createTrado() {
     let form = $('#crudForm')
@@ -656,12 +679,12 @@
         title: 'Mandor Lookup',
         fileName: 'mandor',
         beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        this.postData = {
-      
-          Aktif: 'AKTIF',
-        }
-      },          
+          // var levelcoa = $(`#levelcoa`).val();
+          this.postData = {
+
+            Aktif: 'AKTIF',
+          }
+        },
         onSelectRow: (mandor, element) => {
           $('#crudForm [name=mandor_id]').first().val(mandor.id)
           element.val(mandor.namamandor)
@@ -682,12 +705,12 @@
         title: 'Supir Lookup',
         fileName: 'supir',
         beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        this.postData = {
-      
-          Aktif: 'AKTIF',
-        }
-      },          
+          // var levelcoa = $(`#levelcoa`).val();
+          this.postData = {
+
+            Aktif: 'AKTIF',
+          }
+        },
         onSelectRow: (supir, element) => {
           $('#crudForm [name=supir_id]').first().val(supir.id)
           element.val(supir.namasupir)
