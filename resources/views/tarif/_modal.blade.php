@@ -27,7 +27,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="parent_id">
-                <input type="text" name="parent" class="form-control parent-lookup">
+                <input type="text" name="parent" class="form-control parent-lookup" autofocus>
               </div>
             </div>
 
@@ -152,12 +152,12 @@
             </div>
 
             <div class="table-responsive">
-              <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="width:1800px">
+              <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="width:500px">
                 <thead class="table-secondary">
                   <tr>
                     <th width="5%">NO</th>
-                    <th width="50%">CONTAINER</th>
-                    <th width="30%">NOMINAL</th>
+                    <th width="55%">CONTAINER</th>
+                    <th width="40%">NOMINAL</th>
                     {{-- <th width="5%">AKSI</th> --}}
                   </tr>
                 </thead>
@@ -247,7 +247,6 @@
 
 
       $('#crudForm').find(`[name="nominal[]"]`).each((index, element) => {
-        console.log(element);
         data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
       })
 
@@ -586,7 +585,7 @@
     })
   }
 
-  function showTarif(form, tarifId) {
+  function showTarif(form, tarifId, parent = false) {
     $('#detailList tbody').html('')
     $.ajax({
       url: `${apiUrl}tarif/${tarifId}`,
@@ -596,6 +595,12 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        if (parent) {
+          delete response.data['id'];
+          delete response.data['parent_id'];
+          delete response.data['parent'];
+        }
+
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
 
@@ -603,9 +608,11 @@
             element.val(value).trigger('change')
           } else if (element.hasClass('datepicker')) {
             element.val(dateFormat(value))
-          } else {
-            element.val(value)
           }
+          else {
+              element.val(value)
+          }
+
 
 
           if (index == 'container') {
@@ -747,11 +754,11 @@
         }
       },        
       onSelectRow: (tarif, element) => {
-        $('#crudForm [name=parent_id]').first().val(tarif.id)
+        let form = $('#crudForm')
+        showTarif(form, tarif.id,true)
         element.val(tarif.tujuan)
         element.data('currentValue', element.val())
-        let form = $('#crudForm')
-        showTarif(form, tarif.id)
+        $('#crudForm [name=parent_id]').first().val(tarif.id)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -918,7 +925,6 @@
       },
       success: response => {
         $.each(response.data, (index, value) => {
-          console.log(value)
           let element = form.find(`[name="${index}"]`)
           // let element = form.find(`[name="statusaktif"]`)
 
@@ -933,5 +939,26 @@
       }
     })
   }
+  
+  function cekValidasidelete(Id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}tarif/${Id}/cekValidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+          if (kondisi == true) {
+            showDialog(response.message['keterangan'])
+          } else {
+              deleteTarif(Id)
+          }
+
+      }
+    })
+  }
+
 </script>
 @endpush()

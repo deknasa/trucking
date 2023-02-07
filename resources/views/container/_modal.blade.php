@@ -186,6 +186,28 @@
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
+  function cekValidasidelete(Id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}container/${Id}/cekValidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+        console.log(kondisi)
+          if (kondisi == true) {
+            showDialog(response.message['keterangan'])
+          } else {
+            deleteContainer(Id)
+          }
+
+      }
+    })
+  }
+
+
   function createContainer() {
     let form = $('#crudForm')
 

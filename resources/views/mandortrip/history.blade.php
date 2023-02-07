@@ -116,14 +116,14 @@
           label: 'CONTAINER',
           name: 'container_id'
         },
-        {
-          label: 'NO CONT',
-          name: 'nocont'
-        },
-        {
-          label: 'NO CONT2',
-          name: 'nocont2'
-        },
+        // {
+        //   label: 'NO CONT',
+        //   name: 'nocont'
+        // },
+        // {
+        //   label: 'NO CONT2',
+        //   name: 'nocont2'
+        // },
         {
           label: 'STATUS CONTAINER',
           name: 'statuscontainer_id',
@@ -136,14 +136,14 @@
           label: 'SUPIR',
           name: 'supir_id',
         },
-        {
-          label: 'NOJOB',
-          name: 'nojob',
-        },
-        {
-          label: 'NOJOB2',
-          name: 'nojob2',
-        },
+        // {
+        //   label: 'NOJOB',
+        //   name: 'nojob',
+        // },
+        // {
+        //   label: 'NOJOB2',
+        //   name: 'nojob2',
+        // },
         {
           label: 'STATUSLONGTRIP',
           name: 'statuslongtrip',
@@ -213,24 +213,24 @@
             return ` title="${statusLongTrip.MEMO}"`
           }
         },
-        {
-          label: 'GAJI SUPIR',
-          name: 'gajisupir',
-          formatter: 'currency',
-          formatoptions: {
-            decimalSeparator: ',',
-            thousandsSeparator: '.'
-          }
-        },
-        {
-          label: 'GAJI KENEK',
-          name: 'gajikenek',
-          formatter: 'currency',
-          formatoptions: {
-            decimalSeparator: ',',
-            thousandsSeparator: '.'
-          }
-        },
+        // {
+        //   label: 'GAJI SUPIR',
+        //   name: 'gajisupir',
+        //   formatter: 'currency',
+        //   formatoptions: {
+        //     decimalSeparator: ',',
+        //     thousandsSeparator: '.'
+        //   }
+        // },
+        // {
+        //   label: 'GAJI KENEK',
+        //   name: 'gajikenek',
+        //   formatter: 'currency',
+        //   formatoptions: {
+        //     decimalSeparator: ',',
+        //     thousandsSeparator: '.'
+        //   }
+        // },
         {
           label: 'AGEN',
           name: 'agen_id',
@@ -239,96 +239,96 @@
           label: 'JENIS ORDER',
           name: 'jenisorder_id',
         },
-        {
-          label: 'STATUS PERALIHAN',
-          name: 'statusperalihan',
-          stype: 'select',
-          searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'STATUS PERALIHAN',
-                    subgrp: 'STATUS PERALIHAN'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.text,
-                      text: row.text
-                    }));
+        // {
+        //   label: 'STATUS PERALIHAN',
+        //   name: 'statusperalihan',
+        //   stype: 'select',
+        //   searchoptions: {
+        //     dataInit: function(element) {
+        //       $(element).select2({
+        //         width: 'resolve',
+        //         theme: "bootstrap4",
+        //         ajax: {
+        //           url: `${apiUrl}parameter/combo`,
+        //           dataType: 'JSON',
+        //           headers: {
+        //             Authorization: `Bearer ${accessToken}`
+        //           },
+        //           data: {
+        //             grp: 'STATUS PERALIHAN',
+        //             subgrp: 'STATUS PERALIHAN'
+        //           },
+        //           beforeSend: () => {
+        //             // clear options
+        //             $(element).data('select2').$results.children().filter((index, element) => {
+        //               // clear options except index 0, which
+        //               // is the "searching..." label
+        //               if (index > 0) {
+        //                 element.remove()
+        //               }
+        //             })
+        //           },
+        //           processResults: (response) => {
+        //             let formattedResponse = response.data.map(row => ({
+        //               id: row.text,
+        //               text: row.text
+        //             }));
 
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
+        //             formattedResponse.unshift({
+        //               id: '',
+        //               text: 'ALL'
+        //             });
 
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
-          },
-          formatter: (value, options, rowData) => {
-            let statusPeralihan = JSON.parse(value)
-            if (!statusPeralihan) {
-              return '';
-            }
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusPeralihan.WARNA}; color: #fff;">
-                  <span>${statusPeralihan.SINGKATAN}</span>
-                </div>
-              `)
+        //             return {
+        //               results: formattedResponse
+        //             };
+        //           },
+        //         }
+        //       });
+        //     }
+        //   },
+        //   formatter: (value, options, rowData) => {
+        //     let statusPeralihan = JSON.parse(value)
+        //     if (!statusPeralihan) {
+        //       return '';
+        //     }
+        //     let formattedValue = $(`
+        //         <div class="badge" style="background-color: ${statusPeralihan.WARNA}; color: #fff;">
+        //           <span>${statusPeralihan.SINGKATAN}</span>
+        //         </div>
+        //       `)
 
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusPeralihan = JSON.parse(rowObject.statusperalihan)
-            if (!statusPeralihan) {
-              return '';
-            }
-            return ` title="${statusPeralihan.MEMO}"`
-          }
-        },
+        //     return formattedValue[0].outerHTML
+        //   },
+        //   cellattr: (rowId, value, rowObject) => {
+        //     let statusPeralihan = JSON.parse(rowObject.statusperalihan)
+        //     if (!statusPeralihan) {
+        //       return '';
+        //     }
+        //     return ` title="${statusPeralihan.MEMO}"`
+        //   }
+        // },
         {
           label: 'TARIF',
           name: 'tarif_id',
         },
-        {
-          label: 'NOMINAL PERALIHAN',
-          name: 'nominalperalihan',
-          formatter: 'currency',
-          formatoptions: {
-            decimalSeparator: ',',
-            thousandsSeparator: '.'
-          }
-        },
-        {
-          label: 'NO SP',
-          name: 'nosp',
-        },
-        {
-          label: 'TANGGAL SP',
-          name: 'tglsp',
-        },
+        // {
+        //   label: 'NOMINAL PERALIHAN',
+        //   name: 'nominalperalihan',
+        //   formatter: 'currency',
+        //   formatoptions: {
+        //     decimalSeparator: ',',
+        //     thousandsSeparator: '.'
+        //   }
+        // },
+        // {
+        //   label: 'NO SP',
+        //   name: 'nosp',
+        // },
+        // {
+        //   label: 'TANGGAL SP',
+        //   name: 'tglsp',
+        // },
         {
           label: 'MODIFIEDBY',
           name: 'modifiedby',

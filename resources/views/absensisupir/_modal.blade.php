@@ -39,7 +39,7 @@
 
             <hr>
             <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500;">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1800;">
                 <thead>
                   <tr>
                     <th width="2%">No</th>

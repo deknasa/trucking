@@ -235,63 +235,92 @@ class TarifController extends MyController
     {
 
         $tarif = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') . 'tarif/listpivot')['data'];
-        
-        foreach($tarif[0] as $key => $value)
-        {
-            dd($key);
-        }
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'tarif/listpivot')['data'];
 
+
+            // dd($tarif);
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'TAS TARIF');
-        $sheet->getStyle("A1")->getFont()->setSize(20);
-        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:G1');
+        // $sheet->setCellValue('A1', 'TAS TARIF');
+        // $sheet->getStyle("A1")->getFont()->setSize(20);
+        // $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        // $sheet->mergeCells('A1:G1');
 
-        $header_start_row = 2;
-        $detail_table_header_row = 7;
-        $detail_start_row = $detail_table_header_row + 1;
+        $header_start_row = 1;
+        $detail_start_row = 2;
 
-        $header_columns = [
-            [
-                'label' => 'No Bukti',
-                'index' => 'nobukti',
-            ],
-            [
-                'label' => 'Tanggal',
-                'index' => 'tglbukti',
-            ],
-            [
-                'label' => 'No Bukti Invoice',
-                'index' => 'invoice_nobukti',
-            ],
-        ];
-
-        $detail_columns = [
-            [
-                'label' => 'No',
-            ],
-            [
-                'label' => 'No Bukti',
-                'index' => 'nobukti',
-            ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
-            ],
-            [
-                'label' => 'Nominal',
-                'index' => 'nominal',
-                'format' => 'currency'
-            ]
-        ];
-
-        foreach ($header_columns as $header_column) {
-            $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
-            $sheet->setCellValue('C' . $header_start_row++, ': ');
+        $header_columns = [];
+       
+        foreach ($tarif[0] as $key => $value) {
+            if ($key <> 'id') {
+                $header_columns[] =  [
+                    'label' => $key,
+                    'index' => $key
+                ];
+            }
         }
+        // $detail_columns = [];
+        // foreach($tarif[0] as $key => $value)
+        // {
+        //     $detail_columns[] =  [
+        //         'label' => $key,
+        //         'index' => $key
+        //     ];
+        // }
+
+
+        $alphabets = array();
+        for ($i = 'A'; $i <= 'Z'; $i++) {
+            $alphabets[] =  $i;
+        }
+        foreach ($header_columns as $data_columns_index => $data_column) {
+                $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, $data_column['label'] ?? $data_columns_index + 1);
+        }
+        $lastColumn = $alphabets[$data_columns_index];
+
+        $styleArray = array(
+            'borders' => array(
+                'allBorders' => array(
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ),
+            ),
+        );
+        $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->applyFromArray($styleArray);
+
+        $sheet->getStyle("A$detail_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);
+
+        // LOOPING DETAIL
+        $total = 0;
+        foreach ($tarif as $response_index => $response_detail) {
+            $alphabets = range('A', 'Z');
+            $sheet->getStyle("B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+            $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+            foreach ($header_columns as $data_columns_index => $data_column) {
+                if ($data_columns_index==1) {
+                    $tgl=date('Y/m/d',strtotime($response_detail[$data_column['index']]));
+                    $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel(
+                        $tgl ); 
+                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $excelDateValue);
+                } else {
+                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
+                }
+                $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
+            }
+            $sheet->getStyle("A$header_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);
+            $detail_start_row++;
+        }
+
+      
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'Data Tarif  ' . date('dmYHis');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
     }
 }

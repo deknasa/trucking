@@ -22,12 +22,12 @@ class JenisEmklController extends MyController
       
 
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [
             'combo' => $this->combo('list'),
         ];
 
-        return view('jenisemkl.index', compact('title', 'breadcrumb', 'data'));
+        return view('jenisemkl.index', compact('title', 'data'));
     }
 
     /**
@@ -70,12 +70,12 @@ class JenisEmklController extends MyController
        
 
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $combo = [
             'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
         ];
 
-        return view('jenisemkl.add', compact('title', 'breadcrumb', 'combo'));
+        return view('jenisemkl.add', compact('title', 'combo'));
     }
 
     /**

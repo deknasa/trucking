@@ -442,6 +442,11 @@
           if (index == 'bank') {
             element.data('current-value', value)
           }
+          if (index == 'penerima' || index == 'penerima_id') {
+            element.prop('disabled', false)
+          } else {
+            element.prop("disabled", true)
+          }
         })
 
         $.each(response.detail, (index, detail) => {

@@ -347,8 +347,11 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              deleteTarif(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                cekValidasidelete(selectedId)
+              }
             }
           },
           {
@@ -439,12 +442,19 @@
         },
         data: form_data,
         success: response => {
-          $('#formImport').trigger('reset')
-          $('#importModal').modal('hide')
-          $('#jqGrid').jqGrid().trigger('reloadGrid');
+          var kondisi = response.kondisi
+          console.log(kondisi)
+          if (kondisi == false) {
+            $('#formImport').trigger('reset')
+            $('#importModal').modal('hide')
+            $('#jqGrid').jqGrid().trigger('reloadGrid');
 
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+          } else {
+            showDialog(response.message['keterangan'])
+          }
         },
         error: error => {
           if (error.status === 422) {

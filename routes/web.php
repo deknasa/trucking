@@ -24,6 +24,10 @@ use App\Http\Controllers\AkunPusatController;
 use App\Http\Controllers\UserAclController;
 use App\Http\Controllers\ErrorController;
 
+use App\Http\Controllers\HistoryTripController;
+use App\Http\Controllers\ListTripController;
+use App\Http\Controllers\InputTripController;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
@@ -270,8 +274,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('mandorabsensisupir/index', [MandorAbsensiSupirController::class, 'index']);
     Route::resource('mandorabsensisupir', MandorAbsensiSupirController::class);
 
-    Route::get('mandortrip/historytrip', [MandorTripController::class,'show']);
-    Route::resource('mandortrip', MandorTripController::class);
+    Route::get('historytrip', [HistoryTripController::class,'index']);
+    Route::get('listtrip', [ListTripController::class,'index']);
+    Route::get('inputtrip', [InputTripController::class,'index']);
 
     Route::get('userrole/{id}/delete', [UserRoleController::class, 'delete'])->name('userrole.delete');
     Route::get('userrole/field_length', [UserRoleController::class, 'fieldLength'])->name('userrole.field_length');

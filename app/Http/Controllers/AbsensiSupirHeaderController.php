@@ -19,12 +19,11 @@ class AbsensiSupirHeaderController extends MyController
     {
         $title = $this->title;
 
-        $breadcrumb = $this->breadcrumb;
         $data = [
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
         ];
 
-        return view('absensisupir.index', compact('title', 'breadcrumb', 'data'));        
+        return view('absensisupir.index', compact('title', 'data'));        
 
     }
 

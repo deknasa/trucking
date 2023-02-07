@@ -80,7 +80,7 @@
     })
 
     $('#orderanemklLookup').jqGrid({
-        url: `{{ config('app.emkl_api_url') . 'orderanemkl' }}`,
+        url: `{{ config('app.api_url') . 'orderanemkl' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',

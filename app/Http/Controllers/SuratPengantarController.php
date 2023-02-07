@@ -87,10 +87,10 @@ class SuratPengantarController extends MyController
     public function create()
     {
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $combo = $this->combo();
 
-        return view('suratpengantar.add', compact('title', 'breadcrumb','combo'));
+        return view('suratpengantar.add', compact('title','combo'));
     }
 
     public function store(Request $request): Response

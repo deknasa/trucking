@@ -496,5 +496,24 @@
       }
     })
   }
+  function cekValidasidelete(Id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}penerima/${Id}/cekValidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+          if (kondisi == true) {
+            showDialog(response.message['keterangan'])
+          } else {
+              deletePenerima(Id)
+          }
+
+      }
+    })
+  }
 </script>
 @endpush()

@@ -280,6 +280,7 @@
   }
   
   function ShowAbsensiSupirApproval(form, userId) {
+  
     $('#detailList tbody').html('')
     $.ajax({
       url: `${apiUrl}absensisupirapprovalheader/${userId}`,
@@ -358,36 +359,18 @@
         let row = 0
         $.each(response.data, (index, detail) => {
           let id = detail.id
-          row++
           let detailRow = $(`
-            <tr class="trow">
-              <tr class="trow">
-              <td>${row}</td>
-              
-              <td>
-                ${detail.supir}
-                <input type="text" value="${detail.supir_id}" id="supir_id" name="supir_id[]"  readonly hidden>
+          <input type="text" value="${detail.supir_id}" id="supir_id" name="supir_id[]"  readonly  hidden >
+          <input type="text" value="${detail.trado_id}" id="trado_id" name="trado_id[]"  readonly  hidden >
+          <input type="text" value="${detail.uangjalan}" id="uangjalan" name="uangjalan[]"  readonly  hidden >
+          `)
+          $('#detailList').append(detailRow)
 
-              </td>                 
-              <td>
-                ${detail.trado}
-                <input type="text" value="${detail.trado_id}" id="trado_id" name="trado_id[]"  readonly hidden>
-                
-                </td>  
-                <td>
-                  ${detail.keterangan_detail}
-                  </td>
-                  
-                <td>
-                  <span class="autonumeric">
-                    ${detail.uangjalan}
-                  </span>
-                  <input type="text" class="text-right" value="${detail.uangjalan}" id="uangjalan" name="uangjalan[]"  readonly hidden>
-              </td>
-            </tr>`)
-          $('#detailList tbody').append(detailRow)
-          initAutoNumeric(detailRow.find('.autonumeric'))
-        })      
+        })
+        $('#modalgrid').setGridParam({
+          datatype: "local",
+          data:response.data
+        }).trigger('reloadGrid')
       }
     })
   }

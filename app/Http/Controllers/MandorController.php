@@ -21,12 +21,12 @@ class MandorController extends MyController
     {
   
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $data = [
             'combo' => $this->combo('list'),
         ];
 
-        return view('mandor.index', compact('title', 'breadcrumb', 'data'));
+        return view('mandor.index', compact('title', 'data'));
     }
 
     /**
@@ -69,12 +69,12 @@ class MandorController extends MyController
       
 
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+        
         $combo = [
             'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
         ];
 
-        return view('mandor.add', compact('title', 'breadcrumb', 'combo'));
+        return view('mandor.add', compact('title', 'combo'));
     }
 
     /**

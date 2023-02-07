@@ -17,7 +17,7 @@
 
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{ asset('adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
-  
+
   <!-- Daterange picker -->
   <link rel="stylesheet" href="{{ asset('adminlte/plugins/daterangepicker/daterangepicker.css') }}">
 
@@ -55,7 +55,7 @@
     <span class="fa fa-check" aria-hidden="true" style="font-size:25px;"></span>
     <p></p>
   </div>
-  
+
   <!-- Modal for report and export -->
   <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -98,7 +98,7 @@
       </div>
     </div>
   </div>
-  
+
   <!-- Modal for import tarif -->
   <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -112,8 +112,8 @@
         <form id="formImport" method="post" enctype="multipart/form-data">
           @csrf
           <div class="modal-body">
-            
-            <div class="form-group row">
+
+            <div class="form-group row" id="file">
               <div class="col-sm-2 col-form-label">
                 <label for="">File</label>
               </div>
@@ -121,10 +121,54 @@
                 <input type="file" name="fileImport">
               </div>
             </div>
-
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-primary" id="btnImport">Import</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for export upahritasi&upahsupir-->
+  <div class="modal fade" id="rangeTglModal" tabindex="-1" aria-labelledby="rangeTglModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="rangeTglModalLabel">Pilih tanggal</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="formRangeTgl" target="_blank">
+          @csrf
+          <div class="modal-body">
+
+            <div class="form-group row">
+              <div class="col-sm-2 col-form-label">
+                <label for="">Dari</label>
+              </div>
+              <div class="col-sm-10">
+                <div class="input-group">
+                  <input type="text" name="dari" class="form-control datepicker" autofocus>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-2 col-form-label">
+                <label for="">Sampai</label>
+              </div>
+              <div class="col-sm-10">
+                <div class="input-group">
+                  <input type="text" name="sampai" class="form-control datepicker">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Report</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
           </div>
         </form>
@@ -220,6 +264,7 @@
     let appUrl = `{{ url()->to('/') }}`
     let apiUrl = `{{ config('app.api_url') }}`
     let apiEmklUrl = `{{ config('app.emkl_api_url') }}`
+
     function separatorNumber(object) {
       var value = parseInt(object.value.replaceAll('.', '').replaceAll(',', ''));
 

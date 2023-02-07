@@ -21,12 +21,12 @@ class ZonaController extends MyController
     {
 
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+       
         $data = [
             'combo' => $this->combo('list'),
         ];
 
-        return view('zona.index', compact('title', 'breadcrumb', 'data'));
+        return view('zona.index', compact('title' , 'data'));
     }
 
     /**
@@ -69,12 +69,12 @@ class ZonaController extends MyController
  
 
         $title = $this->title;
-        $breadcrumb = $this->breadcrumb;
+      
         $combo = [
             'status' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
         ];
 
-        return view('zona.add', compact('title', 'breadcrumb', 'combo'));
+        return view('zona.add', compact('title', 'combo'));
     }
 
     /**

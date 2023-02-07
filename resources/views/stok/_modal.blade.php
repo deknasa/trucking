@@ -651,5 +651,24 @@
     xhr.responseType = 'blob';
     xhr.send();
   }
+  function cekValidasidelete(Id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}stok/${Id}/cekValidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+          if (kondisi == true) {
+            showDialog(response.message['keterangan'])
+          } else {
+              deleteStok(Id)
+          }
+
+      }
+    })
+  }
 </script>
 @endpush()
