@@ -41,7 +41,7 @@
 <script>
     // setbulanJobOptions($('#lookupModal'))
     Showdefault()
-   
+    // gettgljob(`{!! $nojobemkl ?? '' !!}`)
     $('.datepicker').datepicker({
         changeMonth: true,
         changeYear: true,
@@ -65,12 +65,11 @@
 
     $('#btnPreview').click(function(event) {
 
-
-      console.log(bulan_job)
-      console.log('test')
+      console.log('testa')
+      
       $('#orderanemklLookup').jqGrid('setGridParam', {
         postData: {
-          bulanjob: bulan_job,
+          bulanjob: $('[name=bulanjob]').val(),
         },
       }).trigger('reloadGrid');
 
@@ -89,7 +88,7 @@
           container_id: `{!! $container_Id ?? '' !!}`,
           jenisorder_id: `{!! $jenisorder_Id ?? '' !!}`,
           aktif: `{!! $Aktif ?? '' !!}`,
-          bulanjob: `{!! $bulan_job ?? '' !!}`,
+          bulanjob: $('[name=bulanjob]').val(),
         },
         colModel: [{
             label: 'NO JOB',
@@ -137,7 +136,7 @@
         rowList: [10, 20, 50],
         toolbar: [true, "top"],
         sortable: true,
-        sortname: 'id',
+        sortname: 'nojob',
         sortorder: 'asc',
         page: 1,
         pager: $('#orderanemklLookupPager'),
@@ -223,9 +222,8 @@
     loadGlobalSearch($('#orderanemklLookup'))
     loadClearFilter($('#orderanemklLookup'))
 
-    const setbulanJobOptions = function(relatedForm) {
+     setbulanJobOptions = function(relatedForm) {
       return new Promise((resolve, reject) => {
-        console.log('test');
         relatedForm.find('[name=bulanjob]').empty()
         relatedForm.find('[name=bulanjob]').append(
           new Option('-- PILIH BULAN1 JOB --', '', false, true)
@@ -262,5 +260,23 @@
     }).trigger('reloadGrid');
 
 
+  }
+
+  function gettgljob(job) {
+    console.log(job)
+    $.ajax({
+      url: `${apiUrl}orderanemkl/${job}/getTglJob`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      success: response => {
+        $('[name=bulanjob]').first().val(response.orderanemkl.tgl)
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
   }
 </script>
