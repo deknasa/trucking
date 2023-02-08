@@ -34,7 +34,9 @@
                     </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="tglbukti" class="form-control datepicker">
+                    <div class="input-group">
+                      <input type="text" name="tglbukti" class="form-control datepicker">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -72,7 +74,9 @@
                     </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8 ">
-                    <input type="text" name="tgldari" class="form-control datepicker">
+                    <div class="input-group">
+                      <input type="text" name="tgldari" class="form-control datepicker">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -85,7 +89,9 @@
                     </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8 ">
-                    <input type="text" name="tglsampai" class="form-control datepicker">
+                    <div class="input-group">
+                      <input type="text" name="tglsampai" class="form-control datepicker">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -124,7 +130,9 @@
                     </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="tglkasmasuk" class="form-control datepicker">
+                    <div class="input-group">
+                      <input type="text" name="tglkasmasuk" class="form-control datepicker">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -202,6 +210,9 @@
 
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
+    })
+    $(document).on('click', '.checkItem', function(event) {
+      enabledRow($(this).data("id") )
     })
 
     $(document).on('input', `#table_body [name="nominal[]"]`, function(event) {
@@ -344,7 +355,20 @@
     }
 
   }
-
+  
+  function enabledRow(row) {
+    let check = $(`#kasgantungdetail_${row}`)
+    if (check.prop("checked") == true) {
+      // console.log(row);
+      $(`#coa_detail_${row}`).prop('disabled',false)
+      $(`#keterangan_detail_${row}`).prop('disabled',false)
+    }else if (check.prop("checked") == false) {
+      // console.log('disabale');
+      $(`#coa_detail_${row}`).prop('disabled',false)
+      $(`#keterangan_detail_${row}`).prop('disabled',false)
+    }
+      
+  }
   function setTotal() {
     let nominalDetails = $(`#table_body [name="nominal[]"]`)
     let total = 0
@@ -480,13 +504,13 @@
           totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
           let detailRow = $(`
           <tr>
-            <td ><input name='kasgantungdetail_id[]' type="checkbox" id="checkItem" value="${detail.detail_id}"></td>
+            <td ><input name='kasgantungdetail_id[]' type="checkbox" class="checkItem" id="kasgantungdetail_${detail.detail_id}" data-id="${detail.detail_id}"  value="${detail.detail_id}"></td>
             <td>${row}</td>
             <td>${detail.nobukti}</td>
             <td>${detail.tglbukti}</td>
-            <td> <input type="text" name="coadetail[]" class="form-control coa_detail_${detail.detail_id}"></td>
+            <td> <input type="text" name="coadetail[]" disabled id="coa_detail_${detail.detail_id}"  class="form-control coa_detail_${detail.detail_id}"></td>
             <td class="text-right" >${nominal}</td>
-            <td><input type="text" name="keterangandetail[]" class="form-control"></td>
+            <td><input type="text" name="keterangandetail[]" disabled id="keterangan_detail_${detail.detail_id}"  class="form-control keterangan_detail_${detail.detail_id}"></td>
           </tr>`)
           $('#detailList tbody').append(detailRow)
           $(`.coa_detail_${detail.detail_id}`).lookup({
@@ -542,13 +566,13 @@
           totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
           let detailRow = $(`
           <tr>
-            <td ><input name='kasgantungdetail_id[]' type="checkbox" checked id="checkItem" value="${detail.detail_id}"></td>
+            <td ><input name='kasgantungdetail_id[]' type="checkbox" checked id="checkItem" class="checkItem" id="kasgantungdetail_${detail.detail_id}" data-id="${detail.detail_id} "  value="${detail.detail_id}"></td>
             <td>${row}</td>
             <td>${detail.nobukti}</td>
             <td>${detail.tglbukti}</td>
-            <td> <input type="text" name="coadetail[]" value="${detail.coadetail}" class="form-control coa-lookup coa_detail_${detail.detail_id}"></td>
+            <td> <input type="text" name="coadetail[]" value="${detail.coadetail}" id="coa_detail_${detail.detail_id} "class="form-control coa-lookup coa_detail_${detail.detail_id}"></td>
             <td class="text-right" >${nominal}</td>
-            <td><input type="text" name="keterangandetail[]" value="${detail.keterangandetail}" class="form-control"></td>
+            <td><input type="text" name="keterangandetail[]" value="${detail.keterangandetail}" id="keterangan_detail_${detail.detail_id} "class="form-control"></td>
           </tr>`)
           $('#detailList tbody').append(detailRow)
           $(`.coa_detail_${detail.detail_id}`).lookup({

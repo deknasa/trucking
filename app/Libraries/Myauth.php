@@ -18,6 +18,7 @@ class Myauth
             'reportall',
             'reportneraca',
             'approvalbukacetak',
+            'pengembaliankasbankheader',
             'laporanbukubesar',
             'laporankasbank',
             'inputtrip',

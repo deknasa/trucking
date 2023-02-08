@@ -413,9 +413,9 @@
     })
   }
 
-  function cekApproval(Id, Aksi) {
+  function cekvalidasi(Id, Aksi) {
     $.ajax({
-      url: `{{ config('app.api_url') }}jurnalumumheader/${Id}/cekapproval`,
+      url: `{{ config('app.api_url') }}pengembaliankasbankheader/${Id}/cekvalidasi`,
       method: 'POST',
       dataType: 'JSON',
       beforeSend: request => {
@@ -429,10 +429,11 @@
             showDialog(response.message['keterangan'])
           } else {
             if (Aksi == 'EDIT') {
-              editJurnalUmumHeader(Id)
+              
+              editPengembalianKasBank(Id)
             }
             if (Aksi == 'DELETE') {
-              deleteJurnalUmumHeader(Id)
+              deletePengembalianKasBank(Id)
             }
           }
 
@@ -583,7 +584,7 @@
               }
             },
             onSelectRow: (alatbayar, element) => {
-
+console.log(alatbayar.id);
               element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
               element.val(alatbayar.coa)
               element.data('currentValue', element.val())
