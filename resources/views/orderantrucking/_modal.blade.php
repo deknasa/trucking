@@ -596,8 +596,9 @@
           Aktif: 'AKTIF',
           jenisorder_Id: jenisorderId,
           container_Id: containerId,
-
         }
+        jobemkl=$('#crudForm [name=nojobemkl]').val()
+        jobemkl2=$('#crudForm [name=nojobemkl2]').val()
       },          
       onSelectRow: (orderanemkl, element) => {
         element.val(orderanemkl.nojob)
@@ -619,6 +620,7 @@
         this.postData = {
           Aktif: 'AKTIF',
         }
+        
       },          
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)

@@ -41,7 +41,7 @@
 <script>
     // setbulanJobOptions($('#lookupModal'))
     Showdefault()
-    // gettgljob(`{!! $nojobemkl ?? '' !!}`)
+    gettgljob(jobemkl)
     $('.datepicker').datepicker({
         changeMonth: true,
         changeYear: true,
@@ -65,7 +65,7 @@
 
     $('#btnPreview').click(function(event) {
 
-      console.log('testa')
+      // console.log('testa')
       
       $('#orderanemklLookup').jqGrid('setGridParam', {
         postData: {
@@ -265,14 +265,19 @@
   function gettgljob(job) {
     console.log(job)
     $.ajax({
-      url: `${apiUrl}orderanemkl/${job}/getTglJob`,
+      url: `${apiUrl}orderanemkl/getTglJob`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
         'Authorization': `Bearer ${accessToken}`
       },
+      data: {
+        'job': job
+      },
+
       success: response => {
-        $('[name=bulanjob]').first().val(response.orderanemkl.tgl)
+        console.log=(response.tgl)
+        $('[name=bulanjob]').first().val(response.tgl)
       },
       error: error => {
         showDialog(error.statusText)
