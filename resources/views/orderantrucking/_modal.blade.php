@@ -106,7 +106,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="nocont" class="form-control">
+                <input type="text" name="nocont" class="form-control"  readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -116,7 +116,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="noseal" class="form-control">
+                <input type="text" name="noseal" class="form-control"  readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -135,7 +135,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="nocont2" class="form-control">
+                <input type="text" name="nocont2" class="form-control"  readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -145,7 +145,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="noseal2" class="form-control">
+                <input type="text" name="noseal2" class="form-control"  readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -562,6 +562,24 @@
     })
   }
 
+  
+  function getagentas(id) {
+    $.ajax({
+      url: `${apiUrl}orderantrucking/${id}/getagentas`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      success: response => {
+        console.log(response.data.statustas)
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
+  }
+
   function initLookup() {
 
     $('.container-lookup').lookup({
@@ -624,6 +642,7 @@
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)
         element.data('currentValue', element.val())
+        // getagentas(agen.id)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
