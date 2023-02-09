@@ -584,9 +584,9 @@
         } else {
           $('#crudForm [name=nojobemkl]').attr('readonly', false)
           $('#crudForm [name=nojobemkl2]').attr('readonly', false)
-          
-          
-       
+
+
+
         }
 
         console.log(statustas)
@@ -606,7 +606,7 @@
         this.postData = {
           Aktif: 'AKTIF',
         }
-        
+
       },
       onSelectRow: (container, element) => {
         $('#crudForm [name=container_id]').first().val(container.id)
@@ -637,6 +637,9 @@
       onSelectRow: (orderanemkl, element) => {
         element.val(orderanemkl.nojob)
         element.data('currentValue', element.val())
+
+        $('#crudForm [name=nocont]').first().val(orderanemkl.nocont)
+        $('#crudForm [name=noseal]').first().val(orderanemkl.noseal)
       },
       onCancel: (element) => {
         agen
