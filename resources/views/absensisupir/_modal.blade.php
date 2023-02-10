@@ -33,7 +33,10 @@
                 <label>TANGGAL</label>
               </div>
               <div class="col-12 col-md-10">
+                <div class="input-group">
+
                 <input type="text" name="tglbukti" class="form-control datepicker">
+              </div>
               </div>
             </div>
 

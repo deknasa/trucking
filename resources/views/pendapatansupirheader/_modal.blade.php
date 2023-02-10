@@ -29,7 +29,9 @@
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
-                                <input type="text" name="tglbukti" class="form-control datepicker">
+                                <div class="input-group">
+                                    <input type="text" name="tglbukti" class="form-control datepicker">
+                                </div>
                             </div>
                         </div>
 
@@ -50,7 +52,9 @@
                                     TANGGAL DARI <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
-                                <input type="text" name="tgldari" class="form-control datepicker">
+                                <div class="input-group">
+                                    <input type="text" name="tgldari" class="form-control datepicker">
+                                </div>
                             </div>
                         </div>
 
@@ -60,7 +64,9 @@
                                     TANGGAL SAMPAI <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
-                                <input type="text" name="tglsampai" class="form-control datepicker">
+                                <div class="input-group">
+                                    <input type="text" name="tglsampai" class="form-control datepicker">
+                                </div>
                             </div>
                         </div>
 
@@ -70,7 +76,9 @@
                                     PERIODE <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
-                                <input type="text" name="periode" class="form-control datepicker">
+                                <div class="input-group">
+                                    <input type="text" name="periode" class="form-control datepicker">
+                                </div>
                             </div>
                         </div>
 

@@ -24,7 +24,9 @@
                 <label>tgl bukti <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="tglbukti" class="form-control datepicker">
+                <div class="input-group">
+                  <input type="text" name="tglbukti" class="form-control datepicker">
+                </div>
               </div>
             </div>
             <div class="row form-group">
@@ -33,7 +35,9 @@
                 <label>tgl transaksi <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="tgltransaksi" onchange="setPengeluaranTgl();" class="form-control datepicker">
+                <div class="input-group">
+                  <input type="text" name="tgltransaksi" onchange="setPengeluaranTgl();" class="form-control datepicker">
+                </div>
               </div>
 
             </div>
@@ -379,6 +383,35 @@
         getRekapPengeluaran(rekapPengeluaranId)
 
       }
+    })
+  }
+
+  function cekValidasi(Id, Aksi) {
+    $.ajax({
+        url: `{{ config('app.api_url') }}rekappengeluaranheader/${Id}/cekvalidasi`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+            request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+        success: response => {
+            var kodenobukti = response.kodenobukti
+            if (kodenobukti == '1') {
+                var kodestatus = response.kodestatus
+                if (kodestatus == '1') {
+                    showDialog(response.message['keterangan'])
+                } else {
+                    if (Aksi == 'EDIT') {
+                        editRekapPengeluaranHeader(Id)
+                    }
+                    if (Aksi == 'DELETE') {
+                        deleteRekapPengeluaranHeader(Id)
+                    }
+                }
+            } else {
+                showDialog(response.message['keterangan'])
+            }
+        }
     })
   }
 

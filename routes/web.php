@@ -295,6 +295,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('mandorabsensisupir/index', [MandorAbsensiSupirController::class, 'index']);
     Route::resource('mandorabsensisupir', MandorAbsensiSupirController::class);
 
+    Route::get('historytrip/index', [HistoryTripController::class,'index']);
+    Route::get('listtrip/index', [ListTripController::class,'index']);
+    Route::get('inputtrip/index', [InputTripController::class,'index']);
     Route::get('historytrip', [HistoryTripController::class,'index']);
     Route::get('listtrip', [ListTripController::class,'index']);
     Route::get('inputtrip', [InputTripController::class,'index']);

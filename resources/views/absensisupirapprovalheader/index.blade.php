@@ -358,19 +358,7 @@
               createAbsensiSupirApprovalHeader()
             }
           },
-          {
-            id: 'edit',
-            innerHTML: '<i class="fa fa-pen"></i> EDIT',
-            class: 'btn btn-success btn-sm mr-1',
-            onClick: function(event) {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                cekValidasi(selectedId, 'EDIT')
-              }
-            }
-          },
+          
           {
             id: 'delete',
             innerHTML: '<i class="fa fa-trash"></i> DELETE',

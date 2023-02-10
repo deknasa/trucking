@@ -57,8 +57,54 @@
           },
           {
             label: 'status approval',
-            name: 'statusapproval_memo',
-            align: 'left'
+            name: 'statusapproval',
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              let statusApproval = JSON.parse(value)
+              if (!statusApproval) {
+                return ``
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                  <span>${statusApproval.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusApproval = JSON.parse(rowObject.statusapproval)
+              if (!statusApproval) {
+                return ` title=""`
+              }
+              return ` title="${statusApproval.MEMO}"`
+            }
+          },
+          {
+            label: 'status cetak',
+            name: 'statuscetak',
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              let statusCetak = JSON.parse(value)
+              if (!statusCetak) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+                  <span>${statusCetak.SINGKATAN}</span>
+                </div>
+              `)
+              
+              return formattedValue[0].outerHTML
+            },
+            
+            cellattr: (rowId, value, rowObject) => {
+              let statusCetak = JSON.parse(rowObject.statuscetak)
+              if (!statusCetak) {
+                return ` title=" "`
+              }
+              return ` title="${statusCetak.MEMO}"`
+            }
           },
           {
             label: 'NO. BUKTI',
@@ -223,7 +269,11 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              editRekapPenerimaanHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                cekValidasi(selectedId, 'EDIT')
+              }
             }
           },
           {
@@ -232,7 +282,11 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              deleteRekapPenerimaanHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                cekValidasi(selectedId, 'DELETE')
+              }
             }
           },
           {

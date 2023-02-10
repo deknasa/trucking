@@ -25,7 +25,9 @@
                 <label>tglbukti <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="tglbukti" class="form-control datepicker">
+                <div class="input-group">
+                  <input type="text" name="tglbukti" class="form-control datepicker">
+                </div>
               </div>
             </div>
             <div class="row">
@@ -820,6 +822,35 @@
       sumary += totalItem;
     })
     new AutoNumeric($('#sumary')[0]).set(sumary);
+  }
+
+  function cekValidasi(Id, Aksi) {
+    $.ajax({
+        url: `{{ config('app.api_url') }}penerimaanstokheader/${Id}/cekvalidasi`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+            request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+        success: response => {
+            var kodenobukti = response.kodenobukti
+            if (kodenobukti == '1') {
+                var kodestatus = response.kodestatus
+                if (kodestatus == '1') {
+                    showDialog(response.message['keterangan'])
+                } else {
+                    if (Aksi == 'EDIT') {
+                        editPenerimaanstokHeader(Id)
+                    }
+                    if (Aksi == 'DELETE') {
+                        deletePenerimaanstokHeader(Id)
+                    }
+                }
+            } else {
+                showDialog(response.message['keterangan'])
+            }
+        }
+    })
   }
 
   function showPenerimaanstokHeader(form, penerimaanStokHeaderId) {

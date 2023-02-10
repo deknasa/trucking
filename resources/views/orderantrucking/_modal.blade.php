@@ -106,7 +106,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="nocont" class="form-control">
+                <input type="text" name="nocont" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -116,7 +116,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="noseal" class="form-control">
+                <input type="text" name="noseal" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -135,7 +135,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="nocont2" class="form-control">
+                <input type="text" name="nocont2" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -145,7 +145,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="noseal2" class="form-control">
+                <input type="text" name="noseal2" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -195,6 +195,7 @@
   let containerId
 
   $(document).ready(function() {
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -204,6 +205,7 @@
       let orderanTruckingId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+
 
       data.push({
         name: 'sortIndex',
@@ -324,15 +326,17 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm [name=nojobemkl]').attr('readonly', true)
+    $('#crudForm [name=nojobemkl2]').attr('readonly', true)
 
     Promise
-    .all([
-      setStatusLangsirOptions(form),
-      setStatusPeralihanOptions(form)
-    ])
-    .then(() => {
-      showDefault(form)
-    })
+      .all([
+        setStatusLangsirOptions(form),
+        setStatusPeralihanOptions(form)
+      ])
+      .then(() => {
+        showDefault(form)
+      })
   }
 
   function editOrderanTrucking(orderanTruckingId) {
@@ -546,18 +550,49 @@
 
         $.each(response.data, (index, value) => {
           console.log(value)
-           let element = form.find(`[name="${index}"]`)
+          let element = form.find(`[name="${index}"]`)
           // let element = form.find(`[name="statusaktif"]`)
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } 
-          else {
+          } else {
             element.val(value)
           }
         })
-        
-       
+
+
+      }
+    })
+  }
+
+
+  function getagentas(id) {
+    $.ajax({
+      url: `${apiUrl}orderantrucking/${id}/getagentas`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      success: response => {
+
+        statustas = response.data.statustas
+        console.log(statustas)
+        if (statustas == '0') {
+          $('#crudForm [name=nojobemkl]').attr('readonly', true)
+          $('#crudForm [name=nojobemkl2]').attr('readonly', true)
+        } else {
+          $('#crudForm [name=nojobemkl]').attr('readonly', false)
+          $('#crudForm [name=nojobemkl2]').attr('readonly', false)
+
+
+
+        }
+
+        console.log(statustas)
+      },
+      error: error => {
+        showDialog(error.statusText)
       }
     })
   }
@@ -571,7 +606,8 @@
         this.postData = {
           Aktif: 'AKTIF',
         }
-      },          
+
+      },
       onSelectRow: (container, element) => {
         $('#crudForm [name=container_id]').first().val(container.id)
         element.val(container.keterangan)
@@ -596,21 +632,24 @@
           Aktif: 'AKTIF',
           jenisorder_Id: jenisorderId,
           container_Id: containerId,
-
         }
-      },          
+      },
       onSelectRow: (orderanemkl, element) => {
         element.val(orderanemkl.nojob)
         element.data('currentValue', element.val())
+
+        $('#crudForm [name=nocont]').first().val(orderanemkl.nocont)
+        $('#crudForm [name=noseal]').first().val(orderanemkl.noseal)
       },
       onCancel: (element) => {
+        agen
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
         element.val('')
         element.data('currentValue', element.val())
       }
-    })    
+    })
 
     $('.agen-lookup').lookup({
       title: 'Agen Lookup',
@@ -619,11 +658,13 @@
         this.postData = {
           Aktif: 'AKTIF',
         }
-      },          
+
+      },
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)
         element.data('currentValue', element.val())
+        getagentas(agen.id)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -641,7 +682,7 @@
         this.postData = {
           Aktif: 'AKTIF',
         }
-      },          
+      },
       onSelectRow: (jenisorder, element) => {
         $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
         jenisorderId = jenisorder.id
@@ -664,10 +705,10 @@
         this.postData = {
           Aktif: 'AKTIF',
         }
-      },    
+      },
       onSelectRow: (pelanggan, element) => {
         $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
-      
+
         element.val(pelanggan.namapelanggan)
         element.data('currentValue', element.val())
       },
@@ -684,11 +725,11 @@
       title: 'Tarif Rincian Lookup',
       fileName: 'tarifrincian',
       beforeProcess: function(test) {
-              this.postData = {
-                container_Id: containerId,
-                Aktif: 'AKTIF',
-              }
-            },               
+        this.postData = {
+          container_Id: containerId,
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (tarifrincian, element) => {
         $('#crudForm [name=tarifrincian_id]').first().val(tarifrincian.id)
         element.val(tarifrincian.tujuan)

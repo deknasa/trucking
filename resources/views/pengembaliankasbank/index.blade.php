@@ -321,8 +321,8 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
-              }else {
-                editPengembalianKasBank(selectedId)
+              } else {
+                cekValidasi(selectedId, 'DELETE')
               }
             }
           },
@@ -335,7 +335,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                deletePengembalianKasBank(selectedId)
+                cekvalidasi(selectedId, 'DELETE')
               }
             }
           },
