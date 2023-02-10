@@ -29,13 +29,15 @@
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
-                <input type="text" name="tglbukti" class="form-control datepicker">
+                <div class="input-group">
+                  <input type="text" name="tglbukti" class="form-control datepicker">
+                </div>
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  BANK <span class="text-danger">*</span>
+                  BANK/KAS <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-8 col-md-10">
@@ -63,7 +65,7 @@
                 </label>
               </div>
               <div class="col-8 col-md-10">
-                <input type="text" name="penerimaan_nobukti" class="form-control">
+                <input type="text" name="penerimaan_nobukti" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -73,7 +75,7 @@
                 </label>
               </div>
               <div class="col-8 col-md-10">
-                <input type="text" name="penerimaangiro_nobukti" class="form-control">
+                <input type="text" name="penerimaangiro_nobukti" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -83,7 +85,7 @@
                 </label>
               </div>
               <div class="col-8 col-md-10">
-                <input type="text" name="notakredit_nobukti" class="form-control">
+                <input type="text" name="notakredit_nobukti" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -93,7 +95,7 @@
                 </label>
               </div>
               <div class="col-8 col-md-10">
-                <input type="text" name="notadebet_nobukti" class="form-control">
+                <input type="text" name="notadebet_nobukti" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -210,15 +212,19 @@
       let bayar = $(this).val()
       bayar = parseFloat(bayar.replaceAll(',', ''));
       bayar = Number.isNaN(bayar) ? 0 : bayar
-      if (sisa == 0) {
         let nominal = $(this).closest("tr").find(`[name="nominal[]"]`).val()
+      if (sisa == 0) {
         nominal = parseFloat(nominal.replaceAll(',', ''));
         let totalSisa = nominal - bayar
 
         $(this).closest("tr").find(".sisa").html(totalSisa)
+        $(this).closest("tr").find(`[name="sisa[]"]`).val(totalSisa)
       } else {
-        let totalSisa = sisa - bayar
+        
+        nominal = parseFloat(nominal.replaceAll(',', ''));
+        let totalSisa = nominal - bayar
         $(this).closest("tr").find(".sisa").html(totalSisa)
+        $(this).closest("tr").find(`[name="sisa[]"]`).val(totalSisa)
       }
 
 
@@ -319,6 +325,10 @@
 
         if ($(this).find(`[name="piutang_id[]"]`).is(':checked')) {
 
+          data.push({
+            name: 'sisa[]',
+            value: AutoNumeric.getNumber($(`#crudForm [name="sisa[]"]`)[row])
+          })
           data.push({
             name: 'keterangandetailppd[]',
             value: $(this).find(`[name="keterangandetailppd[]"]`).val()
@@ -690,8 +700,8 @@
               <td id=${id}>
                 <input type="text" name="bayarppd[]" disabled class="form-control bayar text-right">
               </td>
-              <td>
-                <input type="text" name="potonganppd[]" disabled class="form-control">
+              <td id="potongan${id}">
+                <input type="text" name="potonganppd[]" disabled class="form-control text-right">
               </td>
               <td>
                   <input type="text" name="coapotonganppd[]" disabled class="form-control coapotongan-lookup">
@@ -699,8 +709,8 @@
               <td>
                 <textarea name="keteranganpotonganppd[]" rows="1" disabled class="form-control"></textarea>
               </td>
-              <td>
-                <input type="text" name="nominallebihbayarppd[]" disabled class="form-control">
+              <td id="lebih${id}">
+                <input type="text" name="nominallebihbayarppd[]" disabled class="form-control text-right">
               </td>
             </tr>
           `)
@@ -709,8 +719,8 @@
           // detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
 
           // initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
-          initAutoNumericNoMinus(detailRow.find(`[name="potonganppd[]"]`))
-          initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
+          // initAutoNumericNoMinus(detailRow.find(`[name="potonganppd[]"]`))
+          // initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
           initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
           initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
           initAutoNumeric(detailRow.find('.sisa'))
@@ -731,7 +741,7 @@
               // var levelcoa = $(`#levelcoa`).val();
               this.postData = {
                 potongan: '1',
-                levelCoa: '3',
+                levelCoa: '2',
                 Aktif: 'AKTIF',
               }
             },
@@ -830,8 +840,8 @@
               <td id=${id}>
                 <input type="text" name="bayarppd[]" class="form-control bayar text-right" value="${detail.nominal || ''}" ${attribut}>
               </td>
-              <td>
-                <input type="text" name="potonganppd[]" class="form-control" value="${detail.potongan || ''}" ${attribut}>
+              <td id="potongan${id}">
+                <input type="text" name="potonganppd[]" class="form-control text-right" value="${detail.potongan || ''}" ${attribut}>
               </td>
               <td>
                 <input type="text" name="coapotonganppd[]" class="form-control coapotongan-lookup" data-current-value="${detail.coapotongan}" ${attribut}>
@@ -839,7 +849,7 @@
               <td>
                 <textarea name="keteranganpotonganppd[]" rows="1" class="form-control" ${attribut}>${detail.keteranganpotongan || ''}</textarea>
               </td>
-              <td>
+              <td id="lebih${id}">
                 <input type="text" name="nominallebihbayarppd[]" class="form-control autonumeric" value="${detail.nominallebihbayar || ''}" ${attribut}>
               </td>
             </tr>
@@ -876,7 +886,7 @@
               this.postData = {
                 potongan: '1',
                 Aktif: 'AKTIF',
-                levelCoa: '3',
+                levelCoa: '2',
               }
             },
             onSelectRow: (akunpusat, element) => {
@@ -925,8 +935,8 @@
 
       let sisa = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="sisa[]"]`)[0])
       initAutoNumeric($(this).closest('tr').find(`td [name="bayarppd[]"]`).val(sisa))
-      initAutoNumericNoMinus($(this).closest('tr').find(`td [name="potonganppd[]"]`))
-      initAutoNumericNoMinus($(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`))
+      initAutoNumeric($(this).closest('tr').find(`td [name="potonganppd[]"]`))
+      initAutoNumeric($(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`))
       let bayar = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="bayarppd[]"]`)[0])
       let totalSisa = sisa - bayar
 
@@ -955,9 +965,16 @@
       initAutoNumeric($(this).closest("tr").find(".sisa"))
       
       $(this).closest('tr').find(`td [name="bayarppd[]"]`).remove();
+      $(this).closest('tr').find(`td [name="potonganppd[]"]`).remove();
+      $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).remove();
       let newBayarElement = `<input type="text" name="bayarppd[]" class="form-control bayar text-right" disabled>`
+      let newPotonganElement = `<input type="text" name="potonganppd[]" class="form-control text-right" disabled>`
+      let newLebihElement = `<input type="text" name="nominallebihbayarppd[]" class="form-control text-right" disabled>`
               
       $(this).closest('tr').find(`#${id}`).append(newBayarElement)
+      $(this).closest('tr').find(`#potongan${id}`).append(newPotonganElement)
+      $(this).closest('tr').find(`#lebih${id}`).append(newLebihElement)
+
       setTotal()
       setPenyesuaian()
       setNominalLebih()

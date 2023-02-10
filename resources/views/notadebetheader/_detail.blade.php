@@ -45,6 +45,7 @@
           {
             label: 'coa lebihbayar',
             name: 'coalebihbayar',
+            width: 200
           },
           {
             label: 'invoice nobukti',

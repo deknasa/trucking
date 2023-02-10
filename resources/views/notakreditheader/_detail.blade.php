@@ -45,6 +45,7 @@
           {
             label: 'coa adjust',
             name: 'coaadjust',
+            width: 200
           },
           {
             label: 'invoice nobukti',
