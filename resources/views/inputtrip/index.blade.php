@@ -35,7 +35,15 @@
                   <label class="col-sm-12 col-form-label">EMKL<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="agen_id">
-                    <input type="text" name="agen" class="form-control agen-lookup" readonly>
+                    <input type="text" name="agen" class="form-control agen-lookup">
+                  </div>
+                </div>
+
+                <div class="form-group ">
+                  <label class="col-sm-4 col-form-label">CONTAINER<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="container_id">
+                    <input type="text" name="container" class="form-control container-lookup">
                   </div>
                 </div>
 
@@ -43,12 +51,12 @@
                   <label class="col-sm-12 col-form-label">TUJUAN TARIF<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="tarifrincian_id">
-                    <input type="text" name="tarifrincian" class="form-control tarifrincian-lookup" readonly>
+                    <input type="text" name="tarifrincian" class="form-control tarifrincian-lookup">
                   </div>
                 </div>
 
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">Lokasi BONGKAR/MUAT<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">Lokasi BONGKAR/MUAT</span></label>
                   <div class="col-sm-12">
                     <input type="text" name="lokasibongkarmuat" class="form-control" readonly>
                   </div>
@@ -83,7 +91,7 @@
                   <label class="col-sm-12 col-form-label">SHIPPER<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="pelanggan_id">
-                    <input type="text" name="pelanggan" class="form-control pelanggan-lookup" readonly>
+                    <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
                   </div>
                 </div>
 
@@ -99,17 +107,11 @@
                   <label class="col-sm-12 col-form-label">JENIS ORDERAN<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="jenisorder_id">
-                    <input type="text" name="jenisorder" class="form-control jenisorder-lookup" readonly>
+                    <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
                   </div>
                 </div>
 
-                <div class="form-group ">
-                  <label class="col-sm-4 col-form-label">CONTAINER<span class="text-danger">*</span></label>
-                  <div class="col-sm-12">
-                    <input type="hidden" name="container_id">
-                    <input type="text" name="container" class="form-control container-lookup" readonly>
-                  </div>
-                </div>
+               
 
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">FULL / EMPTY<span class="text-danger">*</span></label>
