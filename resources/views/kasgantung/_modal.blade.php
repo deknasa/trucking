@@ -36,7 +36,7 @@
             <div class="row">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  PENERIMA <span class="text-danger">*</span>
+                  PENERIMA
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -50,25 +50,17 @@
               <div class="row form-group">
                 <div class="col-12 col-md-2 col-form-label">
                   <label>
-                    POSTING <span class="text-danger">*</span></label>
+                    POSTING </label>
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="hidden" name="bank_id">
-                  <input type="text" name="bank" class="form-control bank-lookup">
-                </div>
-                <div class="col-12 col-md-2 col-form-label">
-                  <label>TANGGAL POSTING</label>
-                </div>
-                <div class="col-12 col-md-4">
-                  <div class="input-group">
-                    <input type="text" name="tglkaskeluar" class="form-control datepicker">
-                  </div>
+                  <input type="text" name="bank" class="form-control" readonly>
                 </div>
               </div>
               <div class="row form-group">
                 <div class="col-12 col-md-2 col-form-label">
                   <label>
-                    NO BUKTI KAS KELUAR <span class="text-danger">*</span></label>
+                    NO BUKTI KAS KELUAR </label>
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="text" name="pengeluaran_nobukti" id="pengeluaran_nobukti" class="form-control" readonly>
@@ -78,12 +70,12 @@
 
 
             <div class="table-responsive">
-              <table class="table table-bordered mt-3" id="detailList" style="width:1350px">
+              <table class="table table-bordered mt-3" id="detailList" style="width: 1000px;">
                 <thead class="table-secondary">
                   <tr>
                     <th width="1%">NO</th>
-                    <th width="5%">KETERANGAN</th>
-                    <th width="5%">NOMINAL</th>
+                    <th width="70%">KETERANGAN</th>
+                    <th width="28%">NOMINAL</th>
                     <th width="1%">AKSI</th>
                   </tr>
                 </thead>
@@ -314,7 +306,8 @@
     $('#table_body').html('')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglkaskeluar]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
+    
+    showDefault(form)
     addRow()
     setTotal()
   }
@@ -551,7 +544,30 @@
   }
 
 
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}kasgantungheader/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        bankId = response.data.bank_id
 
+        $.each(response.data, (index, value) => {
+          let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } else {
+            element.val(value)
+          }
+        })
+      }
+    })
+  }
 
   function initLookup() {
     $('.penerima-lookup').lookup({
@@ -583,6 +599,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          // tipe: 'KAS',
         }
       },          
       onSelectRow: (bank, element) => {

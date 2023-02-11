@@ -30,7 +30,9 @@
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <input type="text" name="tglbukti" class="form-control datepicker">
+                  <div class="input-group">
+                    <input type="text" name="tglbukti" class="form-control datepicker">
+                  </div>
                 </div>
               </div>
 
@@ -48,13 +50,13 @@
             </div>
 
             <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width:1450px;">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1000px;;">
                 <thead>
                   <tr>
-                    <th width="5%">No</th>
-                    <th width="40%">Keterangan</th>
-                    <th width="40%">Nominal</th>
-                    <th width="15%">Aksi</th>
+                    <th width="2%">No</th>
+                    <th width="70%">Keterangan</th>
+                    <th width="26%">Nominal</th>
+                    <th width="2%">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -117,7 +119,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
-    
+
     $('#crudForm').autocomplete({
       disabled: true
     });
@@ -212,10 +214,10 @@
             page: response.data.page
           }).trigger('reloadGrid');
 
-          if(id == 0){
+          if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
-          
+
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
           }
@@ -340,7 +342,36 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if (Aksi == 'EDIT') {
+            // if (Aksi == 'EDIT') {
+            //   editPiutangHeader(Id)
+            // }
+            // if (Aksi == 'DELETE') {
+            //   deletePiutangHeader(Id)
+            // }
+            cekValidasiAksi(Id,Aksi)
+          }
+
+        } else {
+          showDialog(response.message['keterangan'])
+        }
+      }
+    })
+  }
+
+  function cekValidasiAksi(Id,Aksi){
+    $.ajax({
+      url: `{{ config('app.api_url') }}piutangheader/${Id}/cekValidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+          if (kondisi == true) {
+            showDialog(response.message['keterangan'])
+          } else {
+              if (Aksi == 'EDIT') {
               editPiutangHeader(Id)
             }
             if (Aksi == 'DELETE') {
@@ -348,9 +379,6 @@
             }
           }
 
-        } else {
-          showDialog(response.message['keterangan'])
-        }
       }
     })
   }
@@ -484,10 +512,10 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)

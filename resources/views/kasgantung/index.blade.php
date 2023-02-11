@@ -124,15 +124,6 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL KAS KELUAR',
-            name: 'tglkaskeluar',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
             label: 'POSTING DARI',
             name: 'postingdari',
             align: 'left'

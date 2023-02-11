@@ -12,6 +12,7 @@
       postData: {
         filters: `{!! $filters ?? '' !!}`,
         aktif: `{!! $Aktif ?? '' !!}`,
+        tipe: `{!! $tipe ?? '' !!}`,
       },
       colModel: [{
           label: 'ID',
