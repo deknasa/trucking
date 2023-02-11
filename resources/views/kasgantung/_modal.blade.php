@@ -366,6 +366,31 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
+            cekValidasiAksi(Id,Aksi)
+          }
+
+        } else {
+          showDialog(response.message['keterangan'])
+        }
+      }
+    })
+  }
+
+  function cekValidasiAksi(Id, Aksi) {
+    console.log('cekaski')
+    $.ajax({
+      url: `{{ config('app.api_url') }}kasgantungheader/${Id}/cekValidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+       
+        var kondisi = response.kondisi
+          if (kondisi == true) {
+            showDialog(response.message['keterangan'])
+          } else {
             if (Aksi == 'EDIT') {
               editKasGantung(Id)
             }
@@ -373,10 +398,6 @@
               deleteKasGantung(Id)
             }
           }
-
-        } else {
-          showDialog(response.message['keterangan'])
-        }
       }
     })
   }
@@ -513,35 +534,35 @@
     })
   }
 
-  function cekValidasi(Id, Aksi) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}kasgantungheader/${Id}/cekvalidasi`,
-      method: 'POST',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-      },
-      success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'EDIT') {
-              editKasGantung(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deleteKasGantung(Id)
-            }
-          }
+  // function cekValidasi(Id, Aksi) {
+  //   $.ajax({
+  //     url: `{{ config('app.api_url') }}kasgantungheader/${Id}/cekvalidasi`,
+  //     method: 'POST',
+  //     dataType: 'JSON',
+  //     beforeSend: request => {
+  //       request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+  //     },
+  //     success: response => {
+  //       var kodenobukti = response.kodenobukti
+  //       if (kodenobukti == '1') {
+  //         var kodestatus = response.kodestatus
+  //         if (kodestatus == '1') {
+  //           showDialog(response.message['keterangan'])
+  //         } else {
+  //           if (Aksi == 'EDIT') {
+  //             editKasGantung(Id)
+  //           }
+  //           if (Aksi == 'DELETE') {
+  //             deleteKasGantung(Id)
+  //           }
+  //         }
 
-        } else {
-          showDialog(response.message['keterangan'])
-        }
-      }
-    })
-  }
+  //       } else {
+  //         showDialog(response.message['keterangan'])
+  //       }
+  //     }
+  //   })
+  // }
 
 
   function showDefault(form) {

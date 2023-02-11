@@ -23,6 +23,10 @@
             name: 'nobukti',
           },
           {
+            label: 'NO BUKTI KAS GANTUNG',
+            name: 'kasgantung_nobukti',
+          },
+          {
             label: 'KETERANGAN',
             name: 'keterangan',
           },

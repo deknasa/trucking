@@ -34,9 +34,6 @@
 
   $(document).ready(function() {
 
-    $('#lookup').hide()
-
-
 
     $('#crudModal').on('hidden.bs.modal', function() {
       activeGrid = '#jqGrid'
@@ -154,11 +151,6 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },
-          {
-            label: 'statusformat',
-            name: 'statusformat',
-            align: 'left'
           },
           {
             label: 'pelanggan',

@@ -55,7 +55,7 @@
               <div class="col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>PELANGGAN <span class="text-danger">*</span> </label>
+                    <label>PELANGGAN</label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
@@ -96,58 +96,30 @@
                 </div>
               </div>
 
-              <div class="col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>KETERANGAN <span class="text-danger">*</span> </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="keterangan" class="form-control">
-                  </div>
-                </div>
-              </div>
-
             </div>
 
-            <div class="row border p-3">
-              <div class="col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>Post <span class="text-danger">*</span> </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="bank" class="form-control bank-lookup">
-                    <input type="text" id="bankId" name="bank_id" readonly hidden>
-                  </div>
+            <div class="border p-3">
+              <h6>Posting Penerimaan</h6>
+              
+              <div class="row form-group">
+                <div class="col-12 col-md-2 col-form-label">
+                  <label>
+                    POSTING </label>
+                </div>
+                <div class="col-12 col-md-4">
+                  <input type="text" name="bank" class="form-control" readonly>
+                  <input type="text" id="bankId" name="bank_id"  hidden>
                 </div>
               </div>
-
-              <div class="col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>
-                      TANGGAL Post
-                    </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <div class="input-group">
-                      <input type="text" name="tglkasmasuk" class="form-control datepicker">
-                    </div>
-                  </div>
+              <div class="row form-group">
+                <div class="col-12 col-md-2 col-form-label">
+                  <label>
+                    NO BUKTI KAS KELUAR </label>
+                </div>
+                <div class="col-12 col-md-4">
+                <input type="text" name="penerimaan_nobukti" class="form-control" readonly>
                 </div>
               </div>
-
-              <div class="col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>penerimaan nobukti <span class="text-danger">*</span> </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="penerimaan_nobukti" class="form-control" readonly>
-                  </div>
-                </div>
-              </div>
-
             </div>
 
 
@@ -212,7 +184,7 @@
       deleteRow($(this).parents('tr'))
     })
     $(document).on('click', '.checkItem', function(event) {
-      enabledRow($(this).data("id") )
+      enabledRow($(this).data("id"))
     })
 
     $(document).on('input', `#table_body [name="nominal[]"]`, function(event) {
@@ -355,20 +327,21 @@
     }
 
   }
-  
+
   function enabledRow(row) {
     let check = $(`#kasgantungdetail_${row}`)
     if (check.prop("checked") == true) {
       // console.log(row);
-      $(`#coa_detail_${row}`).prop('disabled',false)
-      $(`#keterangan_detail_${row}`).prop('disabled',false)
-    }else if (check.prop("checked") == false) {
+      $(`#coa_detail_${row}`).prop('disabled', false)
+      $(`#keterangan_detail_${row}`).prop('disabled', false)
+    } else if (check.prop("checked") == false) {
       // console.log('disabale');
-      $(`#coa_detail_${row}`).prop('disabled',false)
-      $(`#keterangan_detail_${row}`).prop('disabled',false)
+      $(`#coa_detail_${row}`).prop('disabled', false)
+      $(`#keterangan_detail_${row}`).prop('disabled', false)
     }
-      
+
   }
+
   function setTotal() {
     let nominalDetails = $(`#table_body [name="nominal[]"]`)
     let total = 0
@@ -397,8 +370,8 @@
     initLookup()
 
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    $('#crudForm').find('[name=tglkasmasuk]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
+    showDefault(form)
   }
 
   function editPengembalianKasGantung(userId) {
@@ -663,6 +636,32 @@
     })
   }
 
+  
+
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}pengembaliankasgantungheader/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        bankId = response.data.bank_id
+
+        $.each(response.data, (index, value) => {
+          let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } else {
+            element.val(value)
+          }
+        })
+      }
+    })
+  }
 
   function initLookup() {
     $('.akunpusat-lookup').lookup({

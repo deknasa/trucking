@@ -342,12 +342,7 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            // if (Aksi == 'EDIT') {
-            //   editPiutangHeader(Id)
-            // }
-            // if (Aksi == 'DELETE') {
-            //   deletePiutangHeader(Id)
-            // }
+            
             cekValidasiAksi(Id,Aksi)
           }
 
