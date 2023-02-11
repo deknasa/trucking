@@ -193,6 +193,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   let jenisorderId
   let containerId
+  var statustas
 
   $(document).ready(function() {
 
@@ -565,6 +566,34 @@
     })
   }
 
+  function setJobReadOnly() {
+
+    let nojobemkl = $('#crudForm [name=nojobemkl]')
+    let nojobemkl2 = $('#crudForm [name=nojobemkl2]')
+    if (statustas == '0') {
+      //bukan tas
+      // console.log('bukan');
+      nojobemkl.attr('readonly', true)
+      nojobemkl.parents('.input-group').find('.input-group-append').hide()
+      nojobemkl.parents('.input-group').find('.button-clear').hide()
+      nojobemkl2.attr('readonly', true)
+      nojobemkl2.parents('.input-group').find('.input-group-append').hide()
+      nojobemkl2.parents('.input-group').find('.button-clear').hide()
+    } else {
+      //tas
+      nojobemkl.attr('readonly', false)
+      nojobemkl.parents('.input-group').find('.input-group-append').show()
+      nojobemkl.parents('.input-group').find('.button-clear').show()
+      nojobemkl2.attr('readonly', false)
+      nojobemkl2.parents('.input-group').find('.input-group-append').show()
+      nojobemkl2.parents('.input-group').find('.button-clear').show()
+    }
+  }
+      
+
+
+
+
 
   function getagentas(id) {
     $.ajax({
@@ -577,19 +606,8 @@
       success: response => {
 
         statustas = response.data.statustas
-        console.log(statustas)
-        if (statustas == '0') {
-          $('#crudForm [name=nojobemkl]').attr('readonly', true)
-          $('#crudForm [name=nojobemkl2]').attr('readonly', true)
-        } else {
-          $('#crudForm [name=nojobemkl]').attr('readonly', false)
-          $('#crudForm [name=nojobemkl2]').attr('readonly', false)
-
-
-
-        }
-
-        console.log(statustas)
+        setJobReadOnly()
+        // console.log(statustas)
       },
       error: error => {
         showDialog(error.statusText)
