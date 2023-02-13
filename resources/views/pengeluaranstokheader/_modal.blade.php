@@ -59,7 +59,6 @@
                   </div>
                 </div>
               </div> --}}
-              <input type="text" name="statusformat_id" readonly hidden class="form-control">
 
               <div class="form-group col-md-6">
                 <div class="row">
@@ -260,7 +259,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
-  let kodepengeluaranstok
+  let kodePengeluaranStok
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
@@ -391,94 +390,94 @@
     })
   })
 
-  function kodepengeluaran(kodepengeluaran) {
-    cekKodePengeluaran(kodepengeluaran)
-    $('#crudForm').find('[name=statusformat_id]').val(kodepengeluaran);
-    // console.log(kodepengeluaranstok);
-    // switch (kodepengeluaranstok) {
-    //   case "SPK":
-    //     tampilanSpkAddRow();
-    //     break;
-    //   case "RBT":
-    //     tampilanRbtAddRow();
-    //     break;
-    //   case "KOR":
-    //     tampilanKorAddRow();
-    //     break;
-    
-    //   default:
-    //     tampilanAllRow();
-    //     break;
-    // }
+  function setKodePengeluaran(kode) {
+    kodePengeluaranStok = kode;
+    console.log(kodePengeluaranStok);
+    setTampilanForm();
   }
 
-  function cekKodePengeluaran(kode) {
-    $.ajax({
-      url: `${apiUrl}parameter`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        filters: JSON.stringify({
-          "groupOp": "AND",
-          "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "PENGELUARAN STOK"
-            },
-            {
-              "field": "id",
-              "op": "cn",
-              "data": kode
-            }
-          ]
-        })
-      },
-      success: response => {
-        if (kode) {
-          if (response.data[0].subgrp == "SPK STOK BUKTI") {
-            tampilanspk();
-            enabledKorDisable()
-            kodepengeluaranstok = "SPK";
-          } else if(response.data[0].subgrp == "RETUR BELI BUKTI") {
-            tampilanrbt();
-            enabledKorDisable()
-            kodepengeluaranstok = "RBT";
-          } else if(response.data[0].subgrp == "KOREKSI STOK MINUS BUKTI") {
-            tampilankor();
-            kodepengeluaranstok = "KOR";
-          }
-        } else{
-          console.log(kodepengeluaranstok);
-          tampilanall();
-        }
-      }
-    })
+  function setTampilanForm(){
+    tampilanall()
+    switch (kodePengeluaranStok) {
+      case 'SPK':
+        tampilanspk()
+        break;
+      case 'RBT':
+        tampilanrbt()
+        break;
+      case 'KOR':
+        tampilankor()
+        break;
     
+      default:
+        tampilanall()
+        break;
+    }
   }
+
+  // function cekKodePengeluaran(kode) {
+  //   $.ajax({
+  //     url: `${apiUrl}parameter`,
+  //     method: 'GET',
+  //     dataType: 'JSON',
+  //     headers: {
+  //       Authorization: `Bearer ${accessToken}`
+  //     },
+  //     data: {
+  //       filters: JSON.stringify({
+  //         "groupOp": "AND",
+  //         "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "PENGELUARAN STOK"
+  //           },
+  //           {
+  //             "field": "id",
+  //             "op": "cn",
+  //             "data": kode
+  //           }
+  //         ]
+  //       })
+  //     },
+  //     success: response => {
+  //       if (kode) {
+  //         if (response.data[0].subgrp == "SPK STOK BUKTI") {
+  //           tampilanspk();
+  //           enabledKorDisable()
+  //           kodepengeluaranstok = "SPK";
+  //         } else if(response.data[0].subgrp == "RETUR BELI BUKTI") {
+  //           tampilanrbt();
+  //           enabledKorDisable()
+  //           kodepengeluaranstok = "RBT";
+  //         } else if(response.data[0].subgrp == "KOREKSI STOK MINUS BUKTI") {
+  //           tampilankor();
+  //           kodepengeluaranstok = "KOR";
+  //         }
+  //       } else{
+  //         console.log(kodepengeluaranstok);
+  //         tampilanall();
+  //       }
+  //     }
+  //   })
+    
+  // }
 
   function tampilanspk() {
-    $('[name=nobukti]').parents('.form-group').show()
-    $('[name=tglbukti]').parents('.form-group').show()
-    $('[name=pengeluaranstok]').parents('.form-group').show()
-    $('[name=kerusakan]').parents('.form-group').show()
-    $('[name=supir]').parents('.form-group').show()
-    $('[name=trado]').parents('.form-group').show()
-    $('[name=gandengan]').parents('.form-group').show()
-    $('[name=gudang]').parents('.form-group').show()
-    $('[name=statuspotongretur]').parents('.form-group').hide()
-
+    // $('[name=nobukti]').parents('.form-group').show()
+    // $('[name=tglbukti]').parents('.form-group').show()
+    // $('[name=pengeluaranstok]').parents('.form-group').show()
+    // $('[name=kerusakan]').parents('.form-group').show()
+    // $('[name=supir]').parents('.form-group').show()
+    // $('[name=trado]').parents('.form-group').show()
+    // $('[name=gandengan]').parents('.form-group').show()
+    // $('[name=gudang]').parents('.form-group').show()
     
+    
+    $('[name=statuspotongretur]').parents('.form-group').hide()
     $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
     $('[name=servicein_nobukti]').parents('.form-group').hide()
     $('[name=supplier]').parents('.form-group').hide()
-    tampilanSpkAddRow();
-  }
-
-  function tampilanSpkAddRow() {
     $('.tbl_qty').show()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_harga').hide();
@@ -488,27 +487,33 @@
     $('.sumrow').hide();
   }
 
+  // function tampilanSpkAddRow() {
+  //   $('.tbl_qty').show()
+  //   $('.tbl_vulkanisirke').hide();
+  //   $('.tbl_harga').hide();
+  //   $('.tbl_persentase').hide();
+  //   $('.tbl_total').hide();
+  //   $('.colspan').attr('colspan', 4);
+  //   $('.sumrow').hide();
+  // }
+
   function tampilanrbt() {
-    $('[name=nobukti]').parents('.form-group').show()
-    $('[name=tglbukti]').parents('.form-group').show()
-    $('[name=pengeluaranstok]').parents('.form-group').show()
-    $('[name=supplier]').parents('.form-group').show()
-    $('[name=penerimaanstok_nobukti]').parents('.form-group').show()
-    $('[name=trado]').parents('.form-group').show()
-    $('[name=gandengan]').parents('.form-group').show()
-    $('[name=gudang]').parents('.form-group').show()
+    // $('[name=nobukti]').parents('.form-group').show()
+    // $('[name=tglbukti]').parents('.form-group').show()
+    // $('[name=pengeluaranstok]').parents('.form-group').show()
+    // $('[name=supplier]').parents('.form-group').show()
+    // $('[name=penerimaanstok_nobukti]').parents('.form-group').show()
+    // $('[name=trado]').parents('.form-group').show()
+    // $('[name=gandengan]').parents('.form-group').show()
+    // $('[name=gudang]').parents('.form-group').show()
+    // $('[name=statuspotongretur]').parents('.form-group').show()
     
-    $('[name=statuspotongretur]').parents('.form-group').show()
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
     $('[name=servicein_nobukti]').parents('.form-group').hide()
     $('[name=kerusakan]').parents('.form-group').hide()
     $('[name=supir]').parents('.form-group').hide()
     $('[name=trado]').parents('.form-group').hide()
-   tampilanRbtAddRow();
-  }
-
-  function tampilanRbtAddRow() {
-    $('.tbl_qty').show()
+   $('.tbl_qty').show()
     $('.tbl_harga').show()
     $('.tbl_total').show()
     $('.tbl_vulkanisirke').hide();
@@ -516,13 +521,22 @@
     $('.colspan').attr('colspan', 4);
   }
 
+  // function tampilanRbtAddRow() {
+  //   $('.tbl_qty').show()
+  //   $('.tbl_harga').show()
+  //   $('.tbl_total').show()
+  //   $('.tbl_vulkanisirke').hide();
+  //   $('.tbl_persentase').hide();
+  //   $('.colspan').attr('colspan', 4);
+  // }
+
   function tampilankor() {
-    $('[name=nobukti]').parents('.form-group').show()
-    $('[name=tglbukti]').parents('.form-group').show()
-    $('[name=pengeluaranstok]').parents('.form-group').show()
-    $('[name=trado]').parents('.form-group').show()
-    $('[name=gandengan]').parents('.form-group').show()
-    $('[name=gudang]').parents('.form-group').show()
+    // $('[name=nobukti]').parents('.form-group').show()
+    // $('[name=tglbukti]').parents('.form-group').show()
+    // $('[name=pengeluaranstok]').parents('.form-group').show()
+    // $('[name=trado]').parents('.form-group').show()
+    // $('[name=gandengan]').parents('.form-group').show()
+    // $('[name=gudang]').parents('.form-group').show()
     $('[name=supplier]').parents('.form-group').hide()
     $('[name=servicein_nobukti]').parents('.form-group').hide()
     $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
@@ -530,10 +544,7 @@
     $('[name=kerusakan]').parents('.form-group').hide()
     $('[name=supir]').parents('.form-group').hide()
     $('[name=statuspotongretur]').parents('.form-group').hide()
-tampilanKorAddRow();
-  }
-  function tampilanKorAddRow() {
-    $('.tbl_qty').show()
+$('.tbl_qty').show()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
@@ -541,6 +552,15 @@ tampilanKorAddRow();
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
   }
+  // function tampilanKorAddRow() {
+  //   $('.tbl_qty').show()
+  //   $('.tbl_vulkanisirke').hide();
+  //   $('.tbl_harga').hide();
+  //   $('.tbl_persentase').hide();
+  //   $('.tbl_total').hide();
+  //   $('.colspan').attr('colspan', 4);
+  //   $('.sumrow').hide();
+  // }
     
     
   function tampilanall() {
@@ -685,43 +705,6 @@ tampilanKorAddRow();
       })
     }
   }
-
-  // const setStatusFormatOptions = function(relatedForm) {
-  //   return new Promise((resolve, reject) => {
-  //     relatedForm.find('[name=statusformat]').empty()
-  //     relatedForm.find('[name=statusformat]').append(
-  //       new Option('-- PILIH STATUS FORMAT --', '', false, true)
-  //     ).trigger('change')
-
-  //     $.ajax({
-  //       url: `${apiUrl}parameter`,
-  //       method: 'GET',
-  //       dataType: 'JSON',
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`
-  //       },
-  //       data: {
-  //         filters: JSON.stringify({
-  //           "groupOp": "AND",
-  //           "rules": [{
-  //             "field": "grp",
-  //             "op": "cn",
-  //             "data": "PENGELUARAN STOK"
-  //           }]
-  //         })
-  //       },
-  //       success: response => {
-  //         response.data.forEach(statusAktif => {
-  //           let option = new Option(statusAktif.text, statusAktif.id)
-
-  //           relatedForm.find('[name=statusformat]').append(option).trigger('change')
-  //         });
-
-  //         resolve()
-  //       }
-  //     })
-  //   })
-  // }
   const setStatusPotongReturOptions = function(relatedForm) {
 
     return new Promise((resolve, reject) => {
@@ -820,8 +803,7 @@ tampilanKorAddRow();
       }
     })
     initAutoNumeric($(`.number${index}`))
-    cekKodePengeluaran($('#crudForm').find('[name=statusformat_id]').val())
-    
+    setTampilanForm()    
     setRowNumbers()
     index++;
   }
@@ -862,7 +844,7 @@ tampilanKorAddRow();
 
 
   function lookupSelected(el){
-    if (kodepengeluaranstok =="KOR") {
+    if (kodePengeluaranStok =="KOR") {
       // console.log(kodepengeluaranstok);
       // console.log(el);
       switch (el) {
@@ -943,10 +925,6 @@ tampilanKorAddRow();
           } else {
             element.val(value)
           }
-          if (index == "statusformat") {
-            kodepengeluaran(value)
-            statusformat = value;
-          }
         })
         $.each(response.detail, (id, detail) => {
           let detailRow = $(`
@@ -1013,7 +991,7 @@ tampilanKorAddRow();
         })
         sumary()
         
-        kodepengeluaran(statusformat)
+        setKodePengeluaran(response.data.pengeluaranstok);
 
       }
     })
@@ -1099,8 +1077,6 @@ tampilanKorAddRow();
         })
         sumary()
         
-        kodepengeluaran($('#crudForm').find('[name=statusformat_id]').val())
-
       }
     })
   }
@@ -1155,7 +1131,8 @@ tampilanKorAddRow();
         title: 'pengeluaran stok Lookup',
         fileName: 'pengeluaranstok',
         onSelectRow: (pengeluaranstok, element) => {
-          kodepengeluaran(pengeluaranstok.statusformatid)
+          // setKodePengeluaran(pengeluaranstok.statusformatid)
+          setKodePengeluaran(pengeluaranstok.kodepengeluaran)
           element.val(pengeluaranstok.kodepengeluaran)
           $(`#${element[0]['name']}Id`).val(pengeluaranstok.id)
           element.data('currentValue', element.val())
@@ -1315,7 +1292,7 @@ tampilanKorAddRow();
         onSelectRow: (penerimaan, element) => {
           element.val(penerimaan.nobukti)
           element.data('currentValue', element.val())
-          if (kodepengeluaranstok == "RBT") {
+          if (kodePengeluaranStok == "RBT") {
             getSpb(penerimaan.id)
           }
         },

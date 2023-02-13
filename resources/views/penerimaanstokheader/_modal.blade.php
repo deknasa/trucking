@@ -43,19 +43,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group col-md-6" style="display:none">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>STATUS FORMAT <span class="text-danger">*</span> </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <select name="statusformat" disabled class="form-select select2bs4" style="width: 100%;">
-                      <option value="">-- PILIH STATUS FORMAT --</option>
-                    </select>
-                    <input type="text" name="statusformat_id" readonly hidden class="form-control">
-                  </div>
-                </div>
-              </div>
+              
 
               <div class="form-group col-md-6">
                 <div class="row">
@@ -236,12 +224,12 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
-
+  let modalBody = $('#crudModal').find('.modal-body').html()
+  var KodePenerimaanId
 
   $(document).ready(function() {
-
-
-    $("#addRow").click(function() {
+    addRow()
+    $(document).on('click', '#addRow', function(event){
       addRow()
     });
 
@@ -357,80 +345,41 @@
     })
   })
 
-  function kodepenerimaan(kodepenerimaan) {
-    console.log(kodepenerimaan);
-    $('#crudForm').find('[name=statusformat]').val(kodepenerimaan).trigger('change');
-    cekKodePenerimaan(kodepenerimaan)
-    $('#crudForm').find('[name=statusformat_id]').val(kodepenerimaan);
+  function setKodePenerimaan(kode) {
+    KodePenerimaanId = kode;
+    setTampilanForm();
   }
 
-  function cekKodePenerimaan(kode) {
-    switch (kode) {
-      case '132':
-        //DOT
+  function setTampilanForm(){
+    tampilanall()
+    switch (KodePenerimaanId) {
+      case 'DOT':
         tampilandot()
         break;
-      case '133':
-        //POT
+      case 'POT':
         tampilanpo()
         break;
-      case '134':
-        //PBT
+      case 'PBT':
         tampilanpbt()
         break;
-
+    
       default:
         tampilanall()
         break;
     }
-    // $.ajax({
-    //   url: `${apiUrl}parameter`,
-    //   method: 'GET',
-    //   dataType: 'JSON',
-    //   headers: {
-    //     Authorization: `Bearer ${accessToken}`
-    //   },
-    //   data: {
-    //     filters: JSON.stringify({
-    //       "groupOp": "AND",
-    //       "rules": [{
-    //         "field": "grp",
-    //         "op": "cn",
-    //         "data": "PENERIMAAN STOK"
-    //       },
-    //       {
-    //         "field": "subgrp",
-    //         "op": "cn",
-    //         "data": "PO STOK BUKTI"
-    //       }]
-    //     })
-    //   },
-    //   success: response => {
-    //     if (response.data[0].id==kode) {
-    //       tampilanpo();
-    //     } else {
-    //       tampilanall();
-    //     }
-    //   }
-    // })
-
   }
 
 
   function tampilandot() {
     $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
-    $('[name=nobon]').parents('.form-group').show()
     $('[name=hutang_nobukti]').parents('.form-group').hide()
     $('[name=trado]').parents('.form-group').hide()
-    $('[name=supplier]').parents('.form-group').show()
     $('[name=gudang]').parents('.form-group').hide()
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
-    $('.tbl_qty').show();
-    $('.tbl_harga').show();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
     $('.colspan').attr('colspan', 5);
@@ -452,7 +401,6 @@
     $('[name=gudangke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
-    $('.tbl_qty').show();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
@@ -466,21 +414,13 @@
   }
 
   function tampilanpbt() {
-    $('[name=penerimaanstok_nobukti]').parents('.form-group').show()
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
-    $('[name=nobon]').parents('.form-group').show()
-    $('[name=hutang_nobukti]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').hide()
-    $('[name=supplier]').parents('.form-group').show()
     $('[name=gudang]').parents('.form-group').hide()
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
-    $('.tbl_qty').show();
-    $('.tbl_harga').show();
-    $('.tbl_persentase').show();
-    $('.tbl_total').show();
     $('.colspan').attr('colspan', 5);
     $('.sumrow').show();
     $.ajax({
@@ -517,10 +457,10 @@
     $('.sumrow').show();
     $('.data_tbl').show();
     $('.colspan').attr('colspan', 6);
-    $('[name=nobon]').val('')
-    $('[name=supplier]').val('').attr('readonly', false);
+    // $('[name=nobon]').val('')
+    $('[name=supplier]').attr('readonly', false);
     $('[name=supplier]').data('currentValue', '')
-    $('[name=supplier_id]').val('')
+    // $('[name=supplier_id]').val('')
   }
 
   function setSuplier(penerimaan_id) {
@@ -543,24 +483,7 @@
       }
     })
   }
-  // function setNobon(penerimaan_id){
-  //   $.ajax({
-  //       url: `${apiUrl}penerimaanstokheader/1`,
-  //       method: 'GET',
-  //       dataType: 'JSON',
-  //       headers: {
-  //         'Authorization': `Bearer ${accessToken}`
-  //       },
-  //       success: response => {
-  //         var data =response.data;
-  //         $('[name=gudang]').val(data.gudang).attr('readonly',true);
-  //         $('[name=gudang_id]').val(data.id)
-  //       },
-  //       error: error => {
-  //         showDialog(error.statusText)
-  //       }
-  //     })
-  // }
+  
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
@@ -569,12 +492,15 @@
 
     activeGrid = null
     initDatepicker()
+    initLookup()
+    initSelect2()
 
-    // getMaxLength(form)
+    getMaxLength(form)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
 
@@ -593,11 +519,11 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    tampilanall()
     addRow()
     sumary()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    setStatusFormatOptions(form)
   }
 
   function editPenerimaanstokHeader(penerimaanStokHeaderId) {
@@ -614,14 +540,7 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
-    Promise
-      .all([
-        setStatusFormatOptions(form)
-      ])
-      .then(() => {
-        showPenerimaanstokHeader(form, penerimaanStokHeaderId)
-      })
+    showPenerimaanstokHeader(form, penerimaanStokHeaderId)
   }
 
   function deletePenerimaanstokHeader(penerimaanStokHeaderId) {
@@ -638,14 +557,9 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    showPenerimaanstokHeader(form, penerimaanStokHeaderId)
 
-    Promise
-      .all([
-        setStatusFormatOptions(form)
-      ])
-      .then(() => {
-        showPenerimaanstokHeader(form, penerimaanStokHeaderId)
-      })
+     
   }
 
   function getMaxLength(form) {
@@ -673,45 +587,10 @@
     }
   }
 
-  const setStatusFormatOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusformat]').empty()
-      relatedForm.find('[name=statusformat]').append(
-        new Option('-- PILIH STATUS FORMAT --', '', false, true)
-      ).trigger('change')
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "PENERIMAAN STOK"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusAktif => {
-            let option = new Option(statusAktif.text, statusAktif.id)
-
-            relatedForm.find('[name=statusformat]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
+  
   index = 0;
 
   function addRow() {
-
     let detailRow = $(`
     <tr class="trow">
                   <td>
@@ -776,7 +655,7 @@
 
     })
     initAutoNumeric($(`.number${index}`))
-    cekKodePenerimaan($('#crudForm').find('[name=statusformat]').val())
+    setTampilanForm()
     setRowNumbers()
     index++;
   }
@@ -864,7 +743,6 @@
       },
       success: response => {
         sum = 0;
-        var statusformat;
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
           if (element.attr("name") == 'tglbukti') {
@@ -873,11 +751,8 @@
           } else {
             element.val(value)
           }
-          if (index == "statusformat") {
-            kodepenerimaan(value)
-            statusformat = value;
-          }
         })
+
         $.each(response.detail, (id, detail) => {
           let detailRow = $(`
             <tr class="trow">
@@ -948,9 +823,186 @@
           id++;
         })
         sumary()
-        kodepenerimaan(statusformat)
+        setKodePenerimaan(response.data.penerimaanstok);
+
       }
     })
   }
+
+  function initLookup(params) {
+    $('.akunpusat-lookup').lookup({
+      title: 'akun pusat Lookup',
+      fileName: 'akunpusat',
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.coa)
+        $(`#${element[0]['name']}Id`).val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.penerimaanstok-lookup').lookup({
+      title: 'penerimaan stok Lookup',
+      fileName: 'penerimaanstok',
+      onSelectRow: (penerimaanstok, element) => {
+        setKodePenerimaan(penerimaanstok.kodepenerimaan)
+        element.val(penerimaanstok.kodepenerimaan)
+        $(`#${element[0]['name']}Id`).val(penerimaanstok.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        $(`#${element[0]['name']}Id`).val('')
+        element.data('currentValue', element.val())
+      }
+
+    })
+
+    $('.supplier-lookup').lookup({
+      title: 'supplier Lookup',
+      fileName: 'supplier',
+      onSelectRow: (supplier, element) => {
+        element.val(supplier.namasupplier)
+        $(`#${element[0]['name']}Id`).val(supplier.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.trado-lookup').lookup({
+      title: 'Trado Lookup',
+      fileName: 'trado',
+      onSelectRow: (trado, element) => {
+        element.val(trado.keterangan)
+        $(`#${element[0]['name']}Id`).val(trado.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.gudang-lookup').lookup({
+      title: 'Gudang Lookup',
+      fileName: 'gudang',
+      onSelectRow: (gudang, element) => {
+        element.val(gudang.gudang)
+        $(`#${element[0]['name']}Id`).val(gudang.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.penerimaanstokheader-lookup').lookup({
+      title: 'penerimaan stok header Lookup',
+      fileName: 'penerimaanstokheader',
+      beforeProcess: function(test) {
+        var penerimaanstokId= $(`#penerimaanstokId`).val();
+        this.postData = {
+            penerimaanstok_id:penerimaanstokId,
+          }
+          /**
+           if (penerimaanstokId == 3) {
+             this.postData = {
+               // $(`#penerimaanstokId`).val()
+               penerimaanstok_id:penerimaanstokId,
+               filters: JSON.stringify({
+                 "groupOp": "AND",
+                 "rules": [{
+                     "field": "penerimaanstok_id_not_null",
+                     "op": "cn",
+                     "data": 2 //id POT
+                 }]
+               })
+             }
+           }
+           else{
+             this.postData = {
+               // $(`#penerimaanstokId`).val()
+               filters: JSON.stringify({
+                 "groupOp": "or",
+                 "rules": [ ]
+               })
+             }
+           }
+           
+           **/
+      
+      
+      },
+      onSelectRow: (penerimaan, element) => {
+        var penerimaanstokId= $(`#penerimaanstokId`).val();
+        if (penerimaanstokId == 3) {
+          setSuplier(penerimaan.id);
+          $('[name=nobon]').val(penerimaan.nobon)
+          // console.log(penerimaan.supplier,
+          // penerimaan.nobon);
+        }
+        element.val(penerimaan.nobukti)
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+           
+          
+    $('.pengeluaranstokheader-lookup').lookup({
+      title: 'pengeluaran stok header Lookup',
+      fileName: 'pengeluaranstokheader',
+      onSelectRow: (pengeluaran, element) => {
+        element.val(pengeluaran.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.hutang-lookup').lookup({
+      title: 'hutang header Lookup',
+      fileName: 'hutangheader',
+      onSelectRow: (hutang, element) => {
+        element.val(hutang.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+  }
+  
 </script>
 @endpush()

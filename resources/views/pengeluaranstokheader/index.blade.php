@@ -276,7 +276,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                cekValidasi(selectedId, 'DELETE')
+                cekValidasi(selectedId, 'EDIT')
               }
             }
           },

@@ -32,7 +32,7 @@
         },
         {
           label: 'FORMAT BUKTI',
-          name: 'statusformat',
+          name: 'format',
           formatter: (value, options, rowData) => {
             let statusFormat = JSON.parse(value)
 
@@ -45,11 +45,11 @@
             return formattedValue[0].outerHTML
           },
           cellattr: (rowId, value, rowObject) => {
-            let statusFormat = JSON.parse(rowObject.statusformat)
+            let statusFormat = JSON.parse(rowObject.format)
 
             return ` title="${statusFormat.MEMO}"`
           }
-        },        
+        },             
         {
           label: 'status format text',
           name: 'statusformattext',

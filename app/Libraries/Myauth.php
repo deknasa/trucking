@@ -24,6 +24,8 @@ class Myauth
             'inputtrip',
             'historytrip',
             'listtrip',
+            'penerimaanstokdetail',
+            'pengeluaranstokdetail',
             'gudang',
             'user'
         ],
