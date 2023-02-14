@@ -50,7 +50,7 @@
             </div>
 
             <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1000px;;">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1000px;">
                 <thead>
                   <tr>
                     <th width="2%">No</th>
