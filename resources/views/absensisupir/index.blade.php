@@ -16,6 +16,11 @@
 
 @push('scripts')
 <script>
+  // $(document).on('click', '#approve-btn', function(event) {
+  // });
+  $('#menu-approve').dropdown('toggle')
+
+
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -308,7 +313,41 @@
               }
             }
           },
-        ]
+        ],
+        approveBtn:[{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> APPROVE',
+          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          dropmenuHTML: [
+            {
+              id:'approval',
+              text:"Absensi Approval",
+              onClick: () => {
+                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                approve(selectedId)
+              }
+            },
+            {
+              id:'ccccc',
+              text:"Absensi ccccc",
+              onClick: () => {
+                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                approve(selectedId)
+              }
+            },
+            {
+              id:'eeeeee',
+              text:"Absensi eeeeee",
+              onClick: () => {
+                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                approve(selectedId)
+              }
+            },
+            
+          ],
+        }]
 
       })
 
@@ -356,6 +395,9 @@
 
     if (!`{{ $myAuth->hasPermission('absensisupirheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
+    }
+    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'report') }}`) {
+      $('#approve').attr('disabled', 'disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -432,8 +474,42 @@
         submitButton.removeAttr('disabled')
       }
     })
+
+    function approve(id) {
+      $.ajax({
+        url: `${apiUrl}absensisupirheader/${id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          showConfirm("Approve",response.data.nobukti,`absensisupirheader/${response.data.id}/approval`)
+        },
+      })
+    }
   })
 
+  function processResult(result,destination) {
+    if (result) {
+      // console.log(destination);
+      $.ajax({
+        url: `${apiUrl}${destination}`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          console.log(response);
+          $('#jqGrid').jqGrid().trigger('reloadGrid');
+        },
+      })
+      
+    }
+
+}
+    
 </script>
 @endpush()
 @endsection
