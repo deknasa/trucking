@@ -161,6 +161,9 @@
 
   $(document).ready(function() {
 
+    $('#crudForm').autocomplete({
+      disabled: true
+    });
     $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {
       setTotal()
     })

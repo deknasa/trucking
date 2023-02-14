@@ -47,13 +47,13 @@
 
 
 
-            <table class="table table-bordered table-bindkeys">
+            <table class="table table-bordered table-bindkeys" style="width: 1000px;">
               <thead>
                 <tr>
-                  <th width="50">No</th>
-                  <th>keterangan</th>
-                  <th>harga</th>
-                  <th width="50">Aksi</th>
+                  <th width="2%">No</th>
+                  <th width="70%">keterangan</th>
+                  <th width="26%">harga</th>
+                  <th width="2%">Aksi</th>
                 </tr>
               </thead>
               <tbody id="table_body" class="form-group">
@@ -97,6 +97,9 @@
   let rowIndex = 0;
   $(document).ready(function() {
 
+    $('#crudForm').autocomplete({
+      disabled: true
+    });
     $(document).on('click', "#addRow", function() {
       addRow()
     });
@@ -192,6 +195,9 @@
           $('#jqGrid').trigger('reloadGrid', {
             page: response.data.page
           })
+          if(id == 0){
+            $('#detail').jqGrid().trigger('reloadGrid')
+          }
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)

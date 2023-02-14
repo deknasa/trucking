@@ -87,16 +87,22 @@
         loadComplete: function(data) {
           initResize($(this))
 
-          let nominals = $(this).jqGrid("getCol", "nominal")
-          let totalNominal = 0
+          let nominaldebet = $(this).jqGrid("getCol", "nominaldebet")
+          let totalNominalDebet = 0
+          let nominalkredit = $(this).jqGrid("getCol", "nominalkredit")
+          let totalNominalKredit = 0
 
-          if (nominals.length > 0) {
-            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          if (nominaldebet.length > 0) {
+            totalNominalDebet = nominaldebet.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          }
+          if (nominalkredit.length > 0) {
+            totalNominalKredit = nominalkredit.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
           }
 
           $(this).jqGrid('footerData', 'set', {
             nobukti: 'Total:',
-            nominal: totalNominal,
+            nominaldebet: totalNominalDebet,
+            nominalkredit: totalNominalKredit,
           }, true)
         }
       })
