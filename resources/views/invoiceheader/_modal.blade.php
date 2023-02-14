@@ -39,18 +39,6 @@
               <div class="row form-group">
                 <div class="col-12 col-md-2 col-form-label">
                   <label>
-                    CABANG <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div class="col-12 col-md-10">
-                  <input type="hidden" name="cabang_id">
-                  <input type="text" name="cabang" class="form-control cabang-lookup">
-                </div>
-              </div>
-
-              <div class="row form-group">
-                <div class="col-12 col-md-2 col-form-label">
-                  <label>
                     TGL TERIMA <span class="text-danger">*</span>
                   </label>
                 </div>
@@ -698,28 +686,6 @@
       }
     })
 
-    $('.cabang-lookup').lookup({
-      title: 'Cabang Lookup',
-      fileName: 'cabang',
-      beforeProcess: function(test) {
-        this.postData = {
-          Aktif: 'AKTIF',
-        }
-      },      
-      onSelectRow: (cabang, element) => {
-        $('#crudForm [name=cabang_id]').first().val(cabang.id)
-        element.val(cabang.namacabang)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $('#crudForm [name=cabang_id]').first().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
   }
 </script>
 @endpush()

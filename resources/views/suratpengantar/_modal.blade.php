@@ -14,7 +14,7 @@
             <div class="row">
               <div class="col-md-4">
                 <div class="form-group ">
-                  <label class="col-sm-4 col-form-label">NO TRANSAKSI <span class="text-danger">*</span></label>
+                  <label class="col-sm-4 col-form-label">NO TRANSAKSI </label>
                   <div class="col-sm-12">
                     <input type="text" name="nobukti" class="form-control" readonly>
                   </div>
@@ -69,7 +69,7 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NOMOR GANDENGAN / CHASIS<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">NOMOR GANDENGAN / CHASIS</label>
                   <div class="col-sm-12">
                     <input type="hidden" name="gandengan_id">
                     <input type="text" name="gandengan" class="form-control gandengan-lookup">
@@ -79,17 +79,17 @@
                   <label class="col-sm-4 col-form-label">CONTAINER<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="container_id">
-                    <input type="text" name="container" class="form-control container-lookup" readonly>
+                    <input type="text" name="container" class="form-control container-lookup">
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-4 col-form-label">NOMOR CONTAINER<span class="text-danger">*</span></label>
+                  <label class="col-sm-4 col-form-label">NOMOR CONTAINER</label>
                   <div class="col-sm-12">
                     <input type="text" name="nocont" class="form-control" readonly>
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NO SEAL<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">NO SEAL</label>
                   <div class="col-sm-12">
                     <input type="text" name="noseal" class="form-control" readonly>
                   </div>
@@ -111,13 +111,20 @@
                       </div>
                       <div id="peralihan">
                         <div class="form-group">
-                          <label class="col-sm-4 col-form-label">Persentase</label>
-                          <div class="col-sm-12">
-                            <div class="input-group">
-                              <input type="text" name="persentaseperalihan" class="form-control numbernoseparate">
-                              <div class="input-group-append">
-                                <span class="input-group-text">%</span>
-                              </div>
+                          <label class="col-sm-4 col-form-label">Nominal Peralihan</label>
+                          <div class="col-md-12">
+                            <input type="text" name="nominalperalihan" class="form-control text-right" disabled>
+                            <input type="hidden" name="omset">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+
+                        <div class="col-md-4">
+                          <div class="input-group">
+                            <input type="text" name="persentaseperalihan" class="form-control numbernoseparate" readonly>
+                            <div class="input-group-append">
+                              <span class="input-group-text">%</span>
                             </div>
                           </div>
                         </div>
@@ -125,20 +132,20 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group ">
+                <!-- <div class="form-group ">
                   <label class="col-sm-12 col-form-label">Ritasi omset<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <select name="statusritasiomset" class="form-control select2bs4" id="statusritasiomset">
                       <option value="">-- PILIH STATUS RITASI OMSET --</option>
                     </select>
                   </div>
-                </div>
-                <div class="form-group ">
+                </div> -->
+                <!-- <div class="form-group ">
                   <label class="col-sm-12 col-form-label">NO SP 2</label>
                   <div class="col-sm-12">
                     <input type="text" name="nosp2" class="form-control">
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">GUDANG SAMA<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
@@ -148,7 +155,7 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">KETERANGAN<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">KETERANGAN</label>
                   <div class="col-sm-12">
                     <input type="text" name="keterangan" class="form-control">
                   </div>
@@ -161,7 +168,7 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">Lokasi BONGKAR/MUAT<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">Lokasi BONGKAR/MUAT</label>
                   <div class="col-sm-12">
                     <input type="text" name="lokasibongkarmuat" class="form-control" readonly>
                   </div>
@@ -192,32 +199,32 @@
                   <label class="col-sm-12 col-form-label">SHIPPER<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="pelanggan_id">
-                    <input type="text" name="pelanggan" class="form-control pelanggan-lookup" readonly>
+                    <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
                   </div>
                 </div>
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">EMKL<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="agen_id">
-                    <input type="text" name="agen" class="form-control agen-lookup" readonly>
+                    <input type="text" name="agen" class="form-control agen-lookup">
                   </div>
                 </div>
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">JENIS ORDERAN<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="jenisorder_id">
-                    <input type="text" name="jenisorder" class="form-control jenisorder-lookup" readonly>
+                    <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
                   </div>
                 </div>
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">TUJUAN TARIF<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="tarifrincian_id">
-                    <input type="text" name="tarifrincian" class="form-control tarifrincian-lookup" readonly>
+                    <input type="text" name="tarifrincian" class="form-control tarifrincian-lookup">
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NO JOB<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">NO JOB</label>
                   <div class="col-sm-12">
                     <input type="text" name="nojob" class="form-control" readonly>
                   </div>
@@ -228,15 +235,15 @@
                     <input type="text" name="nojob2" class="form-control" readonly>
                   </div>
                 </div>
-                <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">CABANG<span class="text-danger">*</span></label>
+                <!-- <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">CABANG</label>
                   <div class="col-sm-12">
                     <input type="hidden" name="cabang_id">
                     <input type="text" name="cabang" class="form-control cabang-lookup">
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">HARGA PER TON<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">HARGA PER TON</label>
                   <div class="col-sm-12">
                     <input type="text" name="hargaperton" class="form-control" readonly>
                   </div>
@@ -271,49 +278,47 @@
               </div>
               <div class="card-body">
                 <div class="row form-group">
-                  <div class="col-form-label">
+                  <div class="col-12 col-md-2 col-form-label">
                     <label>
-                      GAJI SUPIR <span class="text-danger">*</span>
-                    </label>
+                      GAJI SUPIR </label>
                   </div>
-                  <div class="col-12 col-md-10">
+                  <div class="col-12 col-md-4">
                     <input type="text" name="gajisupir" id="gajisupir" class="form-control autonumeric" readonly>
                   </div>
                 </div>
                 <div class="row form-group">
-                  <div class="col-form-label">
+                  <div class="col-12 col-md-2 col-form-label">
                     <label>
-                      GAJI KENEK <span class="text-danger">*</span>
-                    </label>
+                      GAJI KENEK </label>
                   </div>
-                  <div class="col-12 col-md-10">
+                  <div class="col-12 col-md-4">
                     <input type="text" name="gajikenek" id="gajikenek" class="form-control autonumeric" readonly>
                   </div>
                 </div>
                 <div class="row form-group">
-                  <div class="col-form-label">
+                  <div class="col-12 col-md-2 col-form-label">
                     <label>
-                      KOMISI SUPIR <span class="text-danger">*</span>
-                    </label>
+                      KOMISI SUPIR </label>
                   </div>
-                  <div class="col-12 col-md-10">
+                  <div class="col-12 col-md-4">
                     <input type="text" name="komisisupir" id="komisisupir" class="form-control autonumeric" readonly>
                   </div>
                 </div>
+
 
                 <h3 class="text-center">Biaya Tambahan</h3>
 
                 <div class="row">
                   <div class="col-12">
                     <div class="table-responsive">
-                      <table id="detailList" class="table table-bordered table-bindkeys">
+                      <table id="detailList" class="table table-bordered table-bindkeys" style="width: 800;">
                         <thead>
                           <tr>
-                            <th width="50">No</th>
-                            <th>Keterangan</th>
-                            <th>Nominal</th>
-                            <th>Nominal Tagih</th>
-                            <th>Aksi</th>
+                            <th width="1%">No</th>
+                            <th width="60%">Keterangan</th>
+                            <th width="19%">Nominal Supir</th>
+                            <th width="19%">Nominal Tagih</th>
+                            <th width="1%">Aksi</th>
                           </tr>
                         </thead>
                         <tbody class="form-group">
@@ -363,9 +368,12 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+
   $(document).ready(function() {
 
-
+    $(document).on('input', `#crudForm [name="nominalperalihan"]`, function(event) {
+      setPersentase()
+    })
     $('#crudForm').autocomplete({
       disabled: true
     });
@@ -374,20 +382,31 @@
       addRow()
     });
 
-    $(document).on('input', `#crudForm [name="qtyton"]`, function(event) {
+    // $(document).on('input', `#crudForm [name="qtyton"]`, function(event) {
 
-      let qtyton = AutoNumeric.getNumber($(this)[0])
-      let omset = AutoNumeric.getNumber($(`#crudForm [name="omset"]`)[0])
-      let total = qtyton * omset
+    //   let qtyton = AutoNumeric.getNumber($(this)[0])
+    //   let omset = AutoNumeric.getNumber($(`#crudForm [name="omset"]`)[0])
+    //   let total = qtyton * omset
 
-      $(`#crudForm [name="totalton"]`).val(total)
-      initAutoNumeric($(`#crudForm [name="totalton"]`))
-      console.log(total)
+    //   $(`#crudForm [name="totalton"]`).val(total)
+    //   initAutoNumeric($(`#crudForm [name="totalton"]`))
+    //   console.log(total)
+    // })
+
+    $(document).on('change', '#statusperalihan', function(event) {
+      let status = $("#statusperalihan option:selected").text()
+      if (status == 'PERALIHAN') {
+        $(`#crudForm [name="nominalperalihan"]`).prop('disabled', false)
+      } else {
+        $(`#crudForm [name="nominalperalihan"]`).prop('disabled', true)
+        $(`#crudForm [name="nominalperalihan"]`).val('')
+        $(`#crudForm [name="persentaseperalihan"]`).val('')
+      }
     })
-
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
     })
+
 
     $(document).on('input', `#detailList [name="nominal[]"]`, function(event) {
       setTotal()
@@ -414,33 +433,17 @@
       $('#crudForm').find(`[name="nominalTagih[]"]`).each((index, element) => {
         data.filter((row) => row.name === 'nominalTagih[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalTagih[]"]`)[index])
       })
-      $('#crudForm').find(`[name="nominalstafle"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominalstafle')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalstafle"]`)[index])
-      })
-      $('#crudForm').find(`[name="omset"]`).each((index, element) => {
-        data.filter((row) => row.name === 'omset')[index].value = AutoNumeric.getNumber($(`#crudForm [name="omset"]`)[index])
-      })
-      $('#crudForm').find(`[name="discount"]`).each((index, element) => {
-        data.filter((row) => row.name === 'discount')[index].value = AutoNumeric.getNumber($(`#crudForm [name="discount"]`)[index])
-      })
-      $('#crudForm').find(`[name="nilaitagihlain"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nilaitagihlain')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nilaitagihlain"]`)[index])
-      })
+      // $('#crudForm').find(`[name="nominalperalihan"]`).each((index, element) => {
+      //   data.filter((row) => row.name === 'nominalperalihan')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalperalihan"]:not([disabled])`)[index])
+      // })
 
+      if ($(`#crudForm [name="nominalperalihan"]`).val() == 'PERALIHAN') {
+        $('#crudForm').find(`[name="nominalperalihan"]`).each((index, element) => {
+          data.filter((row) => row.name === 'nominalperalihan')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalperalihan"]`)[index])
+        })
+      }
       $('#crudForm').find(`[name="qtyton"]`).each((index, element) => {
         data.filter((row) => row.name === 'qtyton')[index].value = AutoNumeric.getNumber($(`#crudForm [name="qtyton"]`)[index])
-      })
-
-      $('#crudForm').find(`[name="totalton"]`).each((index, element) => {
-        data.filter((row) => row.name === 'totalton')[index].value = AutoNumeric.getNumber($(`#crudForm [name="totalton"]`)[index])
-      })
-
-      $('#crudForm').find(`[name="upahbongkardepo"]`).each((index, element) => {
-        data.filter((row) => row.name === 'upahbongkardepo')[index].value = AutoNumeric.getNumber($(`#crudForm [name="upahbongkardepo"]`)[index])
-      })
-
-      $('#crudForm').find(`[name="upahmuatdepo"]`).each((index, element) => {
-        data.filter((row) => row.name === 'upahmuatdepo')[index].value = AutoNumeric.getNumber($(`#crudForm [name="upahmuatdepo"]`)[index])
       })
 
       data.push({
@@ -601,7 +604,6 @@
     setFormBindKeys(form)
 
     activeGrid = null
-
     getMaxLength(form)
     initLookup()
     initDatepicker()
@@ -613,6 +615,21 @@
 
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+
+
+  function setPersentase() {
+    let nominalDetails = $(`#crudForm [name="nominalperalihan"]`)
+    let omset = $(`#crudForm [name="omset"]`).val()
+    let total = 0
+    $.each(nominalDetails, (index, nominalDetail) => {
+
+      console.log(AutoNumeric.getNumber(nominalDetail))
+      console.log(omset)
+      total = AutoNumeric.getNumber(nominalDetail) / omset
+    });
+
+    $(`#crudForm [name="persentaseperalihan"]`).val(total)
+  }
 
 
   function setTotal() {
@@ -659,7 +676,6 @@
 
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
-        setStatusRitasiOmsetOptions(form),
         setStatusGudangSamaOptions(form),
         setStatusBatalMuatOptions(form)
       ])
@@ -670,9 +686,10 @@
     setTotal()
     setTotalTagih()
 
-    initAutoNumeric(form.find(`[name="nominal"]`))
+
     initAutoNumeric(form.find(`[name="nominalTagih"]`))
     initAutoNumeric(form.find(`[name="qtyton"]`))
+    initAutoNumeric(form.find(`[name="nominalperalihan"]`))
   }
 
   function editSuratPengantar(id) {
@@ -694,7 +711,6 @@
       .all([
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
-        setStatusRitasiOmsetOptions(form),
         setStatusGudangSamaOptions(form),
         setStatusBatalMuatOptions(form)
       ])
@@ -722,7 +738,6 @@
       .all([
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
-        setStatusRitasiOmsetOptions(form),
         setStatusGudangSamaOptions(form),
         setStatusBatalMuatOptions(form)
       ])
@@ -831,42 +846,42 @@
   }
 
 
-  const setStatusRitasiOmsetOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusritasiomset]').empty()
-      relatedForm.find('[name=statusritasiomset]').append(
-        new Option('-- PILIH STATUS RITASI OMSET --', '', false, true)
-      ).trigger('change')
+  // const setStatusRitasiOmsetOptions = function(relatedForm) {
+  //   return new Promise((resolve, reject) => {
+  //     relatedForm.find('[name=statusritasiomset]').empty()
+  //     relatedForm.find('[name=statusritasiomset]').append(
+  //       new Option('-- PILIH STATUS RITASI OMSET --', '', false, true)
+  //     ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS RITASI OMSET"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusRitasiOmset => {
-            let option = new Option(statusRitasiOmset.text, statusRitasiOmset.id)
+  //     $.ajax({
+  //       url: `${apiUrl}parameter`,
+  //       method: 'GET',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       data: {
+  //         filters: JSON.stringify({
+  //           "groupOp": "AND",
+  //           "rules": [{
+  //             "field": "grp",
+  //             "op": "cn",
+  //             "data": "STATUS RITASI OMSET"
+  //           }]
+  //         })
+  //       },
+  //       success: response => {
+  //         response.data.forEach(statusRitasiOmset => {
+  //           let option = new Option(statusRitasiOmset.text, statusRitasiOmset.id)
 
-            relatedForm.find('[name=statusritasiomset]').append(option).trigger('change')
-          });
+  //           relatedForm.find('[name=statusritasiomset]').append(option).trigger('change')
+  //         });
 
-          resolve()
-        }
-      })
-    })
-  }
+  //         resolve()
+  //       }
+  //     })
+  //   })
+  // }
   const setStatusGudangSamaOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusgudangsama]').empty()
@@ -1023,6 +1038,7 @@
         initAutoNumeric(form.find(`[name="nominal"]`))
         initAutoNumeric(form.find(`[name="nominalTagih"]`))
         initAutoNumeric(form.find(`[name="qtyton"]`))
+        initAutoNumeric(form.find(`[name="nominalperalihan"]`))
         initAutoNumeric(form.find(`[name="gajisupir"]`))
         initAutoNumeric(form.find(`[name="gajikenek"]`))
         initAutoNumeric(form.find(`[name="komisisupir"]`))
@@ -1439,30 +1455,6 @@
       }
     })
 
-    $('.cabang-lookup').lookup({
-      title: 'Cabang Lookup',
-      fileName: 'cabang',
-      beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        this.postData = {
-
-          Aktif: 'AKTIF',
-        }
-      },
-      onSelectRow: (cabang, element) => {
-        $('#crudForm [name=cabang_id]').first().val(cabang.id)
-        element.val(cabang.namacabang)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $('#crudForm [name=cabang_id]').first().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
   }
 
   function showDefault(form) {
@@ -1476,7 +1468,6 @@
       success: response => {
         containerId = -1
         $.each(response.data, (index, value) => {
-          console.log(value)
           let element = form.find(`[name="${index}"]`)
           // let element = form.find(`[name="statusaktif"]`)
 
@@ -1503,7 +1494,7 @@
       success: response => {
         $('#crudForm [name=lokasibongkarmuat]').first().val(response.dataTarif.tujuan)
         $('#crudForm [name=hargaperton]').first().val(response.dataTarif.nominalton)
-        // initAutoNumeric($('#crudForm ').find(`[name="omset"]`))
+        $('#crudForm ').find(`[name="omset"]`).val(response.dataTarif.nominal)
       },
       error: error => {
         showDialog(error.statusText)

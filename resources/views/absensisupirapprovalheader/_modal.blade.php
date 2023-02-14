@@ -14,18 +14,18 @@
                 <input type="hidden" name="id" hidden class="form-control" readonly>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>nobukti <span class="text-danger">*</span> </label>
+                <label>nobukti </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" readonly name="nobukti" class="form-control">
               </div>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>tglbukti <span class="text-danger">*</span> </label>
+                <label>tglbukti </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">  
                 <div class="input-group">
-                  <input type="text" name="tglbukti" class="form-control datepicker">
+                  <input type="text" name="tglbukti" class="form-control" readonly>
                 </div>
               </div>
             </div>
@@ -89,6 +89,7 @@
         onSelectRow: (absensisupir, element) => {
           element.val(absensisupir.nobukti)
           $(`#absensisupir_kasgantung`).val(absensisupir.kasgantung_nobukti)
+          $(`#crudForm [name="tglbukti"]`).val(absensisupir.tglbukti)
           getAbsensi(absensisupir.id)
           element.data('currentValue', element.val())
         },
@@ -98,6 +99,7 @@
         onClear: (element) => {
           $(`#${element[0]['name']}Id`).val('')
         element.val('')
+        $(`#crudForm [name="tglbukti"]`).val('')
         element.data('currentValue', element.val())
         }
       })
@@ -215,7 +217,6 @@
     initLookup()
     initDatepicker()
     loadModalGrid()
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {

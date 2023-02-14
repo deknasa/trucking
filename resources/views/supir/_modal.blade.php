@@ -62,33 +62,25 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Nominal Deposit SA</label>
                 <div class="col-sm-8">
-                  <input type="text" name="nominaldepositsa" class="form-control autonumeric">
+                  <input type="text" name="nominaldepositsa" class="form-control autonumeric" readonly>
                 </div>
               </div>
-
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Deposit Ke</label>
-                <div class="col-sm-8">
-                  <input type="text" name="depositke" class="form-control autonumeric">
-                </div>
-              </div>
-
 
 
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Nominal Pinjaman</label>
                 <div class="col-sm-8">
-                  <input type="text" name="nominalpinjamansaldoawal" class="form-control autonumeric">
+                  <input type="text" name="nominalpinjamansaldoawal" class="form-control autonumeric" readonly>
                 </div>
               </div>
 
-              <div class="form-group col-sm-6 row">
+              <!-- <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">SUPIR LAMA</label>
                 <div class="col-sm-8">
                   <input type="hidden" name="supirold_id">
                   <input type="text" name="supir" class="form-control supir-lookup">
                 </div>
-              </div>
+              </div> -->
 
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Masuk <span class="text-danger">*</span></label>
@@ -120,12 +112,12 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">No SIM <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" name="nosim" id="nosim" class="form-control numbernoseparate">
+                  <input type="text" name="nosim" id="nosim" maxlength="12" class="form-control numbernoseparate">
                 </div>
               </div>
 
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Keterangan <span class="text-danger">*</span></label>
+                <label for="staticEmail" class="col-sm-4 col-form-label">Keterangan</label>
                 <div class="col-sm-8">
                   <input type="text" name="keterangan" class="form-control">
                 </div>
@@ -134,54 +126,14 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">No KTP <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" name="noktp" id="noktp" class="form-control numbernoseparate">
+                  <input type="text" name="noktp" id="noktp" maxlength="16" class="form-control numbernoseparate">
                 </div>
               </div>
 
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">No KK <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" name="nokk" id="nokk" class="form-control numbernoseparate">
-                </div>
-              </div>
-
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">STATUS UPDATE GBR <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="statusadaupdategambar" class="form-control select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH STATUS UPDATE GBR --</option>
-                  </select>
-                </div>
-              </div>
-
-
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">STATUS ZONA TERTENTU <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="statuszonatertentu" class="form-control select2bs4" style="width: 100%;" z-index='3'>
-                    <option value="">-- PILIH STATUS ZONA TERTENTU --</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">STATUS LUAR KOTA <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="statusluarkota" class="form-control select2bs4" style="width: 100%;" z-index='3'>
-                    <option value="">-- PILIH STATUS LUAR KOTA --</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group col-sm-6 row">
-                <div class="col-12 col-sm-4 col-form-label">
-                  <label>
-                    ZONA <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div class="col-sm-8">
-                  <input type="hidden" name="zona_id">
-                  <input type="text" name="zona" class="form-control zona-lookup">
+                  <input type="text" name="nokk" id="nokk" maxlength="16" class="form-control numbernoseparate">
                 </div>
               </div>
 
@@ -200,30 +152,6 @@
                 </div>
               </div>
 
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Berhenti Supir</label>
-                <div class="col-sm-8">
-                  <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tglberhentisupir">
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Keterangan Resign</label>
-                <div class="col-sm-8">
-                  <input type="text" name="keteranganresign" class="form-control">
-                </div>
-              </div>
-
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">STATUS BLACKLIST <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="statusblacklist" class="form-control select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH STATUS BLACKLIST --</option>
-                  </select>
-                </div>
-              </div>
             </div>
 
             <div class="row p-2">
@@ -431,10 +359,6 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusAdaUpdateGambarOptions(form),
-        setStatusLuarKotaOptions(form),
-        setStatusZonaTertentuOptions(form),
-        setStatusBlackListOptions(form)
       ])
       .then(() => {
         showDefault(form)
@@ -470,10 +394,6 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusAdaUpdateGambarOptions(form),
-        setStatusLuarKotaOptions(form),
-        setStatusZonaTertentuOptions(form),
-        setStatusBlackListOptions(form)
       ])
       .then(() => {
         showSupir(form, id)
@@ -505,10 +425,6 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusAdaUpdateGambarOptions(form),
-        setStatusLuarKotaOptions(form),
-        setStatusZonaTertentuOptions(form),
-        setStatusBlackListOptions(form)
       ])
       .then(() => {
         showSupir(form, id)
@@ -664,157 +580,6 @@
     }
   }
 
-  const setStatusBlackListOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusblacklist]').empty()
-      relatedForm.find('[name=statusblacklist]').append(
-        new Option('-- PILIH STATUS BLACKLIST --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "BLACKLIST SUPIR"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusBlackList => {
-            let option = new Option(statusBlackList.text, statusBlackList.id)
-
-            relatedForm.find('[name=statusblacklist]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setStatusZonaTertentuOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statuszonatertentu]').empty()
-      relatedForm.find('[name=statuszonatertentu]').append(
-        new Option('-- PILIH STATUS ZONA TERTENTU --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "ZONA TERTENTU"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusZonaTertentu => {
-            let option = new Option(statusZonaTertentu.text, statusZonaTertentu.id)
-
-            relatedForm.find('[name=statuszonatertentu]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setStatusLuarKotaOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusluarkota]').empty()
-      relatedForm.find('[name=statusluarkota]').append(
-        new Option('-- PILIH STATUS LUAR KOTA --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS LUAR KOTA"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusLuarKota => {
-            let option = new Option(statusLuarKota.text, statusLuarKota.id)
-
-            relatedForm.find('[name=statusluarkota]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setStatusAdaUpdateGambarOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusadaupdategambar]').empty()
-      relatedForm.find('[name=statusadaupdategambar]').append(
-        new Option('-- PILIH STATUS ADA UPDATE GAMBAR --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS ADA UPDATE GAMBAR"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusAdaUpdateGambar => {
-            let option = new Option(statusAdaUpdateGambar.text, statusAdaUpdateGambar.id)
-
-            relatedForm.find('[name=statusadaupdategambar]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
 
   const setStatusAktifOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {

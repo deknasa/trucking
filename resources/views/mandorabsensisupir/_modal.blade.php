@@ -51,7 +51,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  Status <span class="text-danger">*</span>
+                  Status 
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -64,7 +64,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  KETERANGAN <span class="text-danger">*</span>
+                  KETERANGAN 
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">

@@ -11,7 +11,7 @@
         <form action="" method="post">
           <div class="modal-body">
             <div class="row form-group">
-                <input type="hidden" name="id" hidden class="form-control" readonly>
+              <input type="hidden" name="id" hidden class="form-control" readonly>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>nobukti <span class="text-danger">*</span> </label>
@@ -24,33 +24,29 @@
                 <label>tglbukti <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="tglbukti" class="form-control datepicker">
+                <div class="input-group">
+                  <input type="text" name="tglbukti" class="form-control datepicker">
+                </div>
               </div>
             </div>
 
-            
+
             <div class="row form-group">
+
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>agen <span class="text-danger">*</span>  </label>
+                <label>agen <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="agen" class="form-control agen-lookup">
-                <input type="text" id="agenId" name="agen_id" readonly hidden >
+                <input type="text" id="agenId" name="agen_id" readonly hidden>
               </div>
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>pelanggan  <span class="text-danger">*</span> </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
-                <input type="text" id="pelangganId" name="pelanggan_id" readonly hidden >
-              </div>
-              
-            </div>
-            <input type="text" name="nominal" readonly hidden id="nominal" >
 
-             
-            
-            
+            </div>
+            <input type="text" name="nominal" readonly hidden id="nominal">
+
+
+
+
             <table class="table table-bordered table-bindkeys">
               <thead>
                 <tr>
@@ -65,16 +61,16 @@
               <tfoot>
                 <tr>
                   <td colspan=""></td>
-                  
+
                   <td class="font-weight-bold"> Total : </td>
-                  <td id="sumary" class="text-right font-weight-bold">  </td>
+                  <td id="sumary" class="text-right font-weight-bold"> </td>
                   <td>
                     <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                   </td>
                 </tr>
               </tfoot>
             </table>
-                
+
 
 
           </div>
@@ -100,7 +96,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   let rowIndex = 0;
   $(document).ready(function() {
-    
+
     $(document).on('click', "#addRow", function() {
       addRow()
     });
@@ -112,7 +108,7 @@
     $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {
       setTotal()
     })
-    
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -217,12 +213,12 @@
       })
     })
   })
-    
+
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
-      
+
     setFormBindKeys(form)
-      
+
     activeGrid = null
     initLookup()
     initDatepicker()
@@ -233,8 +229,9 @@
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
-    
+
   })
+
   function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}invoiceextraheader/${Id}/cekvalidasi`,
@@ -251,7 +248,7 @@
             showDialog(response.message['keterangan'])
           } else {
             if (Aksi == 'EDIT') {
-                editInvoiceExtraHeader(Id)
+              editInvoiceExtraHeader(Id)
             }
             if (Aksi == 'DELETE') {
               deleteInvoiceExtraHeader(Id)
@@ -284,7 +281,7 @@
     $('.invalid-feedback').remove()
     addRow()
 
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
   }
 
   function editInvoiceExtraHeader(invoiceExtraHeader) {
@@ -303,7 +300,7 @@
     $('.invalid-feedback').remove()
 
     showInvoiceExtraHeader(form, invoiceExtraHeader)
-    
+
   }
 
   function deleteInvoiceExtraHeader(invoiceExtraHeader) {
@@ -350,8 +347,8 @@
     }
   }
 
-  
-  
+
+
   function addRow() {
 
     let detailRow = $(`
@@ -370,12 +367,12 @@
                   </td>
               </tr>
     `)
-    
+
     $('table #table_body').append(detailRow)
     initAutoNumeric(detailRow.find('.autonumeric'))
     setRowNumbers()
   }
-  
+
   function deleteRow(row) {
     row.remove()
     setTotal()
@@ -397,7 +394,7 @@
   function cal(id) {
     harga = $(`#nominal_detail${id}`)[0];
     harga = AutoNumeric.getNumber(harga);
-    
+
 
   }
 
@@ -422,13 +419,13 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-        sum =0;
+        sum = 0;
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
-          if(element.attr("name") == 'tglbukti'){
+          if (element.attr("name") == 'tglbukti') {
             var result = value.split('-');
-            element.val(result[2]+'-'+result[1]+'-'+result[0]);
-          }else{
+            element.val(result[2] + '-' + result[1] + '-' + result[0]);
+          } else {
             element.val(value)
           }
         })
@@ -456,60 +453,39 @@
           initAutoNumeric(detailRow.find('.autonumeric'))
 
           setRowNumbers()
-         
+
           id++;
         })
-        
+
 
       }
     })
   }
 
   function initLookup() {
-    $('.pelanggan-lookup').lookup({
-        title: 'pelanggan Lookup',
-        fileName: 'pelanggan',
-        beforeProcess: function(test) {
+    // 
+    $('.agen-lookup').lookup({
+      title: 'agen Lookup',
+      fileName: 'agen',
+      beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
         }
-      },        
-        onSelectRow: (pelanggan, element) => {
-          element.val(pelanggan.namapelanggan)
-          $(`#${element[0]['name']}Id`).val(pelanggan.id)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
-          $(`#${element[0]['name']}Id`).val('')
+      },
+      onSelectRow: (agen, element) => {
+        element.val(agen.namaagen)
+        $(`#${element[0]['name']}Id`).val(agen.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#${element[0]['name']}Id`).val('')
         element.val('')
         element.data('currentValue', element.val())
       }
-      })
-      $('.agen-lookup').lookup({
-        title: 'agen Lookup',
-        fileName: 'agen',
-        beforeProcess: function(test) {
-        this.postData = {
-          Aktif: 'AKTIF',
-        }
-      },        
-        onSelectRow: (agen, element) => {
-          element.val(agen.namaagen)
-          $(`#${element[0]['name']}Id`).val(agen.id)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
-          $(`#${element[0]['name']}Id`).val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-      })
+    })
   }
 </script>
 @endpush()
