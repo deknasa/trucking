@@ -287,8 +287,32 @@
     initLookup()
     initDatepicker()
     initSelect2(null,false)
-    
+    enabledTarif()
   })
+
+  function enabledTarif() {
+    
+    let container_id = $('#crudForm [name=container_id]')
+    let tarifrincian = $('#crudForm [name=tarifrincian]')
+// tarifrincian
+    if (container_id.val() == '') {
+      tarifrincian.attr('readonly', true)
+      tarifrincian.parents('.input-group').find('.input-group-append').hide()
+      tarifrincian.parents('.input-group').find('.button-clear').hide()
+      // nojobemkl2.attr('readonly', true)
+      // nojobemkl2.parents('.input-group').find('.input-group-append').hide()
+      // nojobemkl2.parents('.input-group').find('.button-clear').hide()
+    } else {
+      
+      tarifrincian.attr('readonly', false)
+      tarifrincian.parents('.input-group').find('.input-group-append').show()
+      tarifrincian.parents('.input-group').find('.button-clear').show()
+      // nojobemkl2.attr('readonly', false)
+      // nojobemkl2.parents('.input-group').find('.input-group-append').show()
+      // nojobemkl2.parents('.input-group').find('.button-clear').show()
+    }
+  }
+    
 
   function createSuratPengantar() {
     let form = $('#crudForm')
@@ -552,15 +576,18 @@
         console.log(container.id)
         element.val(container.keterangan)
         element.data('currentValue', element.val())
+        enabledTarif()
         // getGaji()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+        enabledTarif()
       },
       onClear: (element) => {
         $('#crudForm [name=container_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+        enabledTarif()
         // getGaji()
       }
     })
