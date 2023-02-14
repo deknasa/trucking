@@ -156,7 +156,7 @@ html {
 	background: #fff;
 	position: sticky;
 	bottom: 0;
-	overflow-x: scroll;
+	/* overflow-x: scroll; */
 }
 
 /* Make jqgrid pager sticky to bottom */
@@ -164,7 +164,7 @@ html {
 	background: #fff;
 	position: sticky;
 	bottom: 0;
-	overflow-x: scroll;
+	/* overflow-x: scroll; */
 }
 
 [id^="gview_"] {
@@ -242,7 +242,7 @@ html {
 }
 
 .overflow-x-hidden {
-	overflow-x: hidden;
+	/* overflow-x: hidden; */
 }
 
 .ui-datepicker {

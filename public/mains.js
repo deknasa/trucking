@@ -1074,6 +1074,24 @@ function showDialog(statusText = "", message = "") {
 	$('.ui-dialog .ui-dialog-titlebar-close').css(css_property);
 }
 
+function showConfirm(statusText = "", message = "",urlDestination="") {
+	$("#dialog-confirm").find("p").remove();
+	$("#dialog-confirm").append(`<p> ${statusText} </p><p> ${message} </p>`);
+	$("#dialog-confirm").dialog({
+		modal: true,
+		buttons: {
+			"Yakin": function() {
+				$( this ).dialog( "close" );
+				processResult(true,urlDestination)
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+				processResult(false,)
+			}
+		  },
+	});
+}
+
 $(document).ready(function () {
 	$("#sidebarButton").click(function () {
 		setTimeout(() => {

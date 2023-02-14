@@ -185,11 +185,33 @@ $.fn.customPager = function (option = {}) {
 	let grid = $(this);
 	let pagerHandlerId = `${grid.getGridParam().id}PagerHandler`;
 	let pagerInfoId = `${grid.getGridParam().id}InfoHandler`;
+	let approveBtn ="";
+	if (option.approveBtn) {
+		option.approveBtn.forEach(element => {
+			approveBtn +=`<div class="btn-group dropup  scrollable-menu">`
+			approveBtn +=`<button type="button" class="${element.class}" data-toggle="dropdown" id="${element.id}">
+			${element.innerHTML}
+			</button>`
+			approveBtn +=`<ul class="dropdown-menu" id="menu-approve" aria-labelledby="${element.id}">`
+			if (element.dropmenuHTML) {
+				element.dropmenuHTML.forEach(dropmenuHTML => {
+					approveBtn +=`<li><a class="dropdown-item" id='${dropmenuHTML.id}' href="#">${dropmenuHTML.text}</a></li>`
+					$(document).on("click", `#${dropmenuHTML.id}`, function (event) {
+						event.stopImmediatePropagation();
+
+						dropmenuHTML.onClick();
+					});
+				});	
+			}
+			approveBtn +=`</ul>`
+			approveBtn +="</div>"
+		});
+	}
 
 	$(`#gbox_${$(this).getGridParam().id}`).after(`
 		<div class="col-12 bg-white grid-pager overflow-x-hidden">
 			<div class="row d-flex align-items-center text-center text-md-left">
-				<div class="col-12 col-md-6">
+				<div class="col-12 col-md-4">
 					${
 						typeof option.buttons !== "undefined"
 						 ? option.buttons
@@ -217,12 +239,18 @@ $.fn.customPager = function (option = {}) {
 						: ''
 					}
 				</div>
+				
+				<div class="col-12 col-md-2 dropup">
+				
+					 ${approveBtn}
+				</div>
 				<div id="${pagerHandlerId}" class="pager-handler col-12 col-md-4 d-flex align-items-center justify-content-center">
 				</div>
 				<div id="${pagerInfoId}" class="pager-info col-12 col-md-2">
 				</div>
 			</div>
 		</div>
+		
 	`);
 
 	loadPagerHandler(`#${pagerHandlerId}`, grid);
