@@ -166,136 +166,136 @@
             label: 'KK',
             name: 'nokk',
           },
-          {
-            label: 'UPDATE GBR',
-            name: 'statusadaupdategambar',
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
+          // {
+          //   label: 'UPDATE GBR',
+          //   name: 'statusadaupdategambar',
+          //   stype: 'select',
+          //   searchoptions: {
+          //     value: `<?php
+          //             $i = 1;
 
-                      foreach ($data['statusadaupdategambar'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['statusadaupdategambar'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
+          //             foreach ($data['statusadaupdategambar'] as $status) :
+          //               echo "$status[param]:$status[parameter]";
+          //               if ($i !== count($data['statusadaupdategambar'])) {
+          //                 echo ";";
+          //               }
+          //               $i++;
+          //             endforeach
 
-                      ?>
-          `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusAdaupdategambar = JSON.parse(value)
+          //             ?>
+          // `,
+          //     dataInit: function(element) {
+          //       $(element).select2({
+          //         width: 'resolve',
+          //         theme: "bootstrap4"
+          //       });
+          //     }
+          //   },
+          //   formatter: (value, options, rowData) => {
+          //     let statusAdaupdategambar = JSON.parse(value)
 
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusAdaupdategambar.WARNA}; color: #fff;">
-                  <span>${statusAdaupdategambar.SINGKATAN}</span>
-                </div>
-              `)
+          //     let formattedValue = $(`
+          //       <div class="badge" style="background-color: ${statusAdaupdategambar.WARNA}; color: #fff;">
+          //         <span>${statusAdaupdategambar.SINGKATAN}</span>
+          //       </div>
+          //     `)
 
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusAdaupdategambar = JSON.parse(rowObject.statusadaupdategambar)
+          //     return formattedValue[0].outerHTML
+          //   },
+          //   cellattr: (rowId, value, rowObject) => {
+          //     let statusAdaupdategambar = JSON.parse(rowObject.statusadaupdategambar)
 
-              return ` title="${statusAdaupdategambar.MEMO}"`
-            }
-          },
-          {
-            label: 'LUAR KOTA',
-            name: 'statusluarkota',
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
+          //     return ` title="${statusAdaupdategambar.MEMO}"`
+          //   }
+          // },
+          // {
+          //   label: 'LUAR KOTA',
+          //   name: 'statusluarkota',
+          //   stype: 'select',
+          //   searchoptions: {
+          //     value: `<?php
+          //             $i = 1;
 
-                      foreach ($data['statusluarkota'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['statusluarkota'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
+          //             foreach ($data['statusluarkota'] as $status) :
+          //               echo "$status[param]:$status[parameter]";
+          //               if ($i !== count($data['statusluarkota'])) {
+          //                 echo ";";
+          //               }
+          //               $i++;
+          //             endforeach
 
-                      ?>
-          `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusLuarkota = JSON.parse(value)
+          //             ?>
+          // `,
+          //     dataInit: function(element) {
+          //       $(element).select2({
+          //         width: 'resolve',
+          //         theme: "bootstrap4"
+          //       });
+          //     }
+          //   },
+          //   formatter: (value, options, rowData) => {
+          //     let statusLuarkota = JSON.parse(value)
 
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusLuarkota.WARNA}; color: #fff;">
-                  <span>${statusLuarkota.SINGKATAN}</span>
-                </div>
-              `)
+          //     let formattedValue = $(`
+          //       <div class="badge" style="background-color: ${statusLuarkota.WARNA}; color: #fff;">
+          //         <span>${statusLuarkota.SINGKATAN}</span>
+          //       </div>
+          //     `)
 
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusLuarkota = JSON.parse(rowObject.statusluarkota)
+          //     return formattedValue[0].outerHTML
+          //   },
+          //   cellattr: (rowId, value, rowObject) => {
+          //     let statusLuarkota = JSON.parse(rowObject.statusluarkota)
 
-              return ` title="${statusLuarkota.MEMO}"`
-            }
-          },
-          {
-            label: 'ZONA TERTENTU',
-            name: 'statuszonatertentu',
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
+          //     return ` title="${statusLuarkota.MEMO}"`
+          //   }
+          // },
+          // {
+          //   label: 'ZONA TERTENTU',
+          //   name: 'statuszonatertentu',
+          //   stype: 'select',
+          //   searchoptions: {
+          //     value: `<?php
+          //             $i = 1;
 
-                      foreach ($data['statuszonatertentu'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['statuszonatertentu'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
+          //             foreach ($data['statuszonatertentu'] as $status) :
+          //               echo "$status[param]:$status[parameter]";
+          //               if ($i !== count($data['statuszonatertentu'])) {
+          //                 echo ";";
+          //               }
+          //               $i++;
+          //             endforeach
 
-                      ?>
-          `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusZonatertentu = JSON.parse(value)
+          //             ?>
+          // `,
+          //     dataInit: function(element) {
+          //       $(element).select2({
+          //         width: 'resolve',
+          //         theme: "bootstrap4"
+          //       });
+          //     }
+          //   },
+          //   formatter: (value, options, rowData) => {
+          //     let statusZonatertentu = JSON.parse(value)
 
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusZonatertentu.WARNA}; color: #fff;">
-                  <span>${statusZonatertentu.SINGKATAN}</span>
-                </div>
-              `)
+          //     let formattedValue = $(`
+          //       <div class="badge" style="background-color: ${statusZonatertentu.WARNA}; color: #fff;">
+          //         <span>${statusZonatertentu.SINGKATAN}</span>
+          //       </div>
+          //     `)
 
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusZonatertentu = JSON.parse(rowObject.statuszonatertentu)
+          //     return formattedValue[0].outerHTML
+          //   },
+          //   cellattr: (rowId, value, rowObject) => {
+          //     let statusZonatertentu = JSON.parse(rowObject.statuszonatertentu)
 
-              return ` title="${statusZonatertentu.MEMO}"`
-            }
-          },
-          {
-            label: 'ZONA',
-            name: 'zona_id',
-          },
+          //     return ` title="${statusZonatertentu.MEMO}"`
+          //   }
+          // },
+          // {
+          //   label: 'ZONA',
+          //   name: 'zona_id',
+          // },
           {
             label: 'angsuranpinjaman',
             name: 'angsuranpinjaman',
@@ -448,61 +448,61 @@
               return 'NO PHOTOS'
             }
           },
-          {
-            label: 'TGL BERHENTI SUPIR',
-            name: 'tglberhentisupir',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'KET RESIGN',
-            name: 'keteranganresign',
-          },
-          {
-            label: 'STATUS BLACKLIST',
-            name: 'statusblacklist',
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
+          // {
+          //   label: 'TGL BERHENTI SUPIR',
+          //   name: 'tglberhentisupir',
+          //   formatter: "date",
+          //   formatoptions: {
+          //     srcformat: "ISO8601Long",
+          //     newformat: "d-m-Y"
+          //   }
+          // },
+          // {
+          //   label: 'KET RESIGN',
+          //   name: 'keteranganresign',
+          // },
+          // {
+          //   label: 'STATUS BLACKLIST',
+          //   name: 'statusblacklist',
+          //   stype: 'select',
+          //   searchoptions: {
+          //     value: `<?php
+          //             $i = 1;
 
-                      foreach ($data['statusblacklist'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['statusblacklist'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
+          //             foreach ($data['statusblacklist'] as $status) :
+          //               echo "$status[param]:$status[parameter]";
+          //               if ($i !== count($data['statusblacklist'])) {
+          //                 echo ";";
+          //               }
+          //               $i++;
+          //             endforeach
 
-                      ?>
-          `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusBlacklist = JSON.parse(value)
+          //             ?>
+          // `,
+          //     dataInit: function(element) {
+          //       $(element).select2({
+          //         width: 'resolve',
+          //         theme: "bootstrap4"
+          //       });
+          //     }
+          //   },
+          //   formatter: (value, options, rowData) => {
+          //     let statusBlacklist = JSON.parse(value)
 
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusBlacklist.WARNA}; color: #fff;">
-                  <span>${statusBlacklist.SINGKATAN}</span>
-                </div>
-              `)
+          //     let formattedValue = $(`
+          //       <div class="badge" style="background-color: ${statusBlacklist.WARNA}; color: #fff;">
+          //         <span>${statusBlacklist.SINGKATAN}</span>
+          //       </div>
+          //     `)
 
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusBlacklist = JSON.parse(rowObject.statusblacklist)
+          //     return formattedValue[0].outerHTML
+          //   },
+          //   cellattr: (rowId, value, rowObject) => {
+          //     let statusBlacklist = JSON.parse(rowObject.statusblacklist)
 
-              return ` title="${statusBlacklist.MEMO}"`
-            }
-          },
+          //     return ` title="${statusBlacklist.MEMO}"`
+          //   }
+          // },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',

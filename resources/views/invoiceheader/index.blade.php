@@ -194,7 +194,7 @@
             align: 'left'
           },
           {
-            label: 'CABANG',
+            label: 'NO. PAJAK INVOICE',
             name: 'cabang_id',
             align: 'left'
           },

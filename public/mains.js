@@ -1060,6 +1060,18 @@ function showDialog(statusText = "", message = "") {
 	$("#dialog-message").dialog({
 		modal: true,
 	});
+	
+	$(".ui-dialog-titlebar-close").find("p").remove();
+	$('.ui-dialog-titlebar-close').append(`<p>X</p>`);
+	$('.ui-widget-header').css('background', '#db1f30');
+	let css_property =
+	{
+		"border": "none",
+		"background": "#db1f30",
+		"color" : '#000'
+	}
+	
+	$('.ui-dialog .ui-dialog-titlebar-close').css(css_property);
 }
 
 $(document).ready(function () {

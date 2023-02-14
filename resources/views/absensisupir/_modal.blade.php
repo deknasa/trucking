@@ -505,17 +505,17 @@
             </td>
             <td>
               <input type="hidden" name="supir_id[]">
-              <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup" value="${detail.supir}">
+              <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control" readonly value="${detail.supir}">
             </td>
             <td>
-              <input type="text" name="keterangan_detail[]" class="form-control" value="${detail.keterangan}">
+              <input type="text" name="keterangan_detail[]" class="form-control" readonly value="${detail.keterangan}">
             </td>
             <td>
               <input type="hidden" name="absen_id[]" value="${detail.absen_id}">
-              <input type="text" name="absen"  data-current-value="${detail.absen}" class="form-control absentrado-lookup" value="${detail.absen}">
+              <input type="text" name="absen"  data-current-value="${detail.absen}" readonly class="form-control" value="${detail.absen}">
             </td>
             <td>
-              <input type="text" class="form-control inputmask-time" name="jam[]" value="${detail.jam}"></input>
+              <input type="text" class="form-control inputmask-time" name="jam[]" readonly value="${detail.jam}"></input>
             </td>
             <td>
               <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}">
@@ -782,6 +782,29 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
+            cekValidasiAksi(Id,Aksi)
+          }
+
+        } else {
+          showDialog(response.message['keterangan'])
+        }
+      }
+    })
+  }
+  
+  function cekValidasiAksi(Id,Aksi){
+    $.ajax({
+      url: `{{ config('app.api_url') }}absensisupirheader/${Id}/cekValidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+          if (kondisi == true) {
+            showDialog(response.message['keterangan'])
+          } else {
             if (Aksi == 'EDIT') {
               editAbsensiSupir(Id)
             }
@@ -790,9 +813,6 @@
             }
           }
 
-        } else {
-          showDialog(response.message['keterangan'])
-        }
       }
     })
   }
