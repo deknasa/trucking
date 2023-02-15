@@ -58,20 +58,16 @@
     .html(`
     <i class="fa fa-calendar-alt"></i>
   `);
-
   jobEmkl = $('#crudForm [name=nojobemkl]').val()
-
   Promise.all([
       getTglJob(jobEmkl),
       showDefault()
     ]).then((response) => {
       loadOrderanEmkl()
     })
-
   $('#btnPreview').click(function(event) {
     loadOrderanEmkl()
   })
-
   $('#orderanemklLookup')
     .jqGrid({
       styleUI: 'Bootstrap4',
@@ -147,18 +143,16 @@
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
       },
       loadBeforeSend: (jqXHR) => {
-        jqXHR.setRequestHeader('Authorization', `Bearer {{ session('emkl_access_token') }}`)
+        jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       loadComplete: function(data) {
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-
           if (indexRow - 1 > $('#orderanemklLookup').getGridParam().reccount) {
             indexRow = $('#orderanemklLookup').getGridParam().reccount - 1
           }
-
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
@@ -167,33 +161,27 @@
             } else if (indexRow != undefined) {
               $(`#orderanemklLookup [id="${$('#orderanemklLookup').getDataIDs()[indexRow]}"]`).click()
             }
-
             if ($('#orderanemklLookup').getDataIDs()[indexRow] == undefined) {
               $(`#orderanemklLookup [id="` + $('#orderanemklLookup').getDataIDs()[0] + `"]`).click()
             }
-
             triggerClick = false
           } else {
             $('#orderanemklLookup').setSelection($('#orderanemklLookup').getDataIDs()[indexRow])
           }
         }
-
         /* Set global variables */
         sortname = $(this).jqGrid("getGridParam", "sortname")
         sortorder = $(this).jqGrid("getGridParam", "sortorder")
         totalRecord = $(this).getGridParam("records")
         limit = $(this).jqGrid('getGridParam', 'postData').limit
         postData = $(this).jqGrid('getGridParam', 'postData')
-
         $('.clearsearchclass').click(function() {
           clearColumnSearch()
         })
-
         $(this).setGridWidth($('#lookuporderanemkl').prev().width())
         setHighlight($(this))
       }
     })
-
     .jqGrid("setLabel", "rn", "No.")
     .jqGrid('filterToolbar', {
       stringResult: true,
@@ -205,37 +193,31 @@
         clearGlobalSearch($('#orderanemklLookup'))
       },
     })
-
   loadGlobalSearch($('#orderanemklLookup'))
   loadClearFilter($('#orderanemklLookup'))
-
   setbulanJobOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=bulanjob]').empty()
       relatedForm.find('[name=bulanjob]').append(
         new Option('-- PILIH BULAN1 JOB --', '', false, true)
       ).trigger('change')
-
       $.ajax({
-        url: `${apiEmklUrl}/orderanemkl/getBulanJob`,
+        url: `${apiEmklUrl}orderanemkl/getBulanJob`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
-          Authorization: `Bearer {{ session('emkl_access_token') }}`
+          Authorization: `Bearer ${accessToken}`
         },
         success: response => {
           response.data.forEach(bulanJob => {
             let option = new Option(bulanJob.text, bulanJob.id)
-
             relatedForm.find('[name=bulanjob]').append(option).trigger('change')
           });
-
           resolve()
         }
       })
     })
   }
-
   function showDefault() {
     return new Promise(function(resolve, reject) {
       $('#lookupModal')
@@ -244,27 +226,23 @@
           $.datepicker.formatDate('mm-yy', new Date())
         )
         .trigger('change');
-
       let bulanJob = $('#lookupModal').find('[name=bulanjob]').val()
-
       $('#orderanemklLookup').jqGrid('setGridParam', {
         postData: {
           bulanjob: bulanJob,
         },
       }).trigger('reloadGrid');
-
       resolve('test');
     })
   }
-
   function getTglJob(job) {
     return new Promise(function(resolve, reject) {
       $.ajax({
-        url: `${apiEmklUrl}/orderanemkl/getTglJob`,
+        url: `${apiUrl}orderanemkl/getTglJob`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
-          'Authorization': `Bearer {{ session('emkl_access_token') }}`
+          'Authorization': `Bearer ${accessToken}`
         },
         data: {
           'job': job
@@ -275,24 +253,20 @@
             year: 'numeric',
             month: '2-digit'
           }).replace('/', '-')
-
           $('[name=bulanjob]').first().val(formattedDate)
-
           resolve()
         },
         error: error => {
           showDialog(error.statusText)
-
           reject();
         }
       })
     })
   }
-
   function loadOrderanEmkl() {
     $('#orderanemklLookup')
       .jqGrid('setGridParam', {
-        url: `${apiEmklUrl}/orderanemkl`,
+        url: `{{ config('app.api_url') . 'orderanemkl' }}`,
         mtype: "GET",
         datatype: "json",
         postData: {

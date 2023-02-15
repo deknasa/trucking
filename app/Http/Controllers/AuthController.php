@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LoginRequest;
 use App\Libraries\Myauth;
 use App\Models\Menu;
-use Exception;
+use App\Models\User;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Redirect;
 
 class AuthController extends Controller
 {
@@ -26,14 +28,26 @@ class AuthController extends Controller
      * 
      * @return void
      */
-    public function login(LoginRequest $request)
+    public function login(Request $request)
     {
-        if (Auth::attempt($request->validated())) {
-            $accessToken = $this->getAccessToken($request->user, $request->password);
-            $emklAccessToken = $this->getEmklAccessToken(config('emkl.api.user'), config('emkl.api.password'));
+        $request->validate([
+            'user' => 'required',
+            'password' => 'required'
+        ]);
+        
+        $credentials = [
+            'user' => $request->user,
+            'password' => $request->password
+        ];
+
+
+        if (Auth::attempt($credentials)) {
+            $token = Http::withHeaders([
+                'Accept' => 'application/json'
+            ])->withOptions(['verify' => false])
+            ->post(config('app.api_url') . 'token', $credentials);
             
-            session(['access_token' => $accessToken]);
-            session(['emkl_access_token' => $emklAccessToken]);
+            session(['access_token' => $token['access_token']]);
             session(['menus' => $this->getMenu()]);
 
             return redirect()->route('dashboard');
@@ -41,38 +55,6 @@ class AuthController extends Controller
             return redirect()->back()->withErrors([
                 'user_not_found' => 'User not registered'
             ]);
-        }
-    }
-
-    public function getAccessToken(string $user, string $password): string
-    {
-        $response = Http::accept('application/json')
-            ->withoutVerifying()
-            ->post(config('app.api_url') . 'token', [
-                'user' => $user,
-                'password' => $password
-            ]);
-
-        if (!$response->ok()) {
-            throw new Exception('Error while fetching access token.');
-        } else {
-            return $response->json('access_token');
-        }
-    }
-
-    public function getEmklAccessToken(string $user, string $password): string
-    {
-        $response = Http::accept('application/json')
-            ->withoutVerifying()
-            ->post(config('emkl.api.url') . '/auth/token', [
-                'user' => $user,
-                'password' => $password
-            ]);
-
-        if (!$response->ok()) {
-            throw new Exception('Error while fetching EMKL access token.');
-        } else {
-            return $response->json('access_token');
         }
     }
 
@@ -113,7 +95,8 @@ class AuthController extends Controller
         Auth::logout();
 
         session()->forget('menus');
-
+        
         return redirect()->route('login');
     }
+
 }
