@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $uri = Route::current()->uri ?? null;
             $class = explode('/', $uri)[0];
-            $method = Route::current()->getActionMethod();
+            $method = Route::current() ? Route::current()->getActionMethod() : '';
 
             $currentMenu = DB::table('menu')
               ->select('menu.id', 'menu.menuparent')
