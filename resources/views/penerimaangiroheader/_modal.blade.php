@@ -147,6 +147,10 @@
 
     $(document).ready(function() {
 
+        $('#crudForm').autocomplete({
+            disabled: true
+        });
+
         $(document).on('click', "#addRow", function() {
             addRow()
         });
@@ -576,17 +580,38 @@
                     if (kodestatus == '1') {
                         showDialog(response.message['keterangan'])
                     } else {
-                        if (Aksi == 'EDIT') {
-                            editPenerimaanGiro(Id)
-                        }
-                        if (Aksi == 'DELETE') {
-                            deletePenerimaanGiro(Id)
-                        }
+                        cekValidasiAksi(Id, Aksi)
                     }
 
                 } else {
                     showDialog(response.message['keterangan'])
                 }
+            }
+        })
+    }
+
+
+    function cekValidasiAksi(Id, Aksi) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}penerimaangiroheader/${Id}/cekValidasiAksi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var kondisi = response.kondisi
+                if (kondisi == true) {
+                    showDialog(response.message['keterangan'])
+                } else {
+                    if (Aksi == 'EDIT') {
+                        editPenerimaanGiro(Id)
+                    }
+                    if (Aksi == 'DELETE') {
+                        deletePenerimaanGiro(Id)
+                    }
+                }
+
             }
         })
     }

@@ -177,6 +177,9 @@
             page: response.data.page
           })
 
+          if (id == 0) {
+            $('#detail').jqGrid().trigger('reloadGrid')
+          }
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
           }
@@ -266,7 +269,7 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Pengeluaran Stok')
+    $('#crudModalTitle').text('Create Rekap Pengeluaran')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -282,7 +285,7 @@
     Simpan
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Pengeluaran Stok')
+    $('#crudModalTitle').text('Edit Rekap Pengeluaran')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -300,7 +303,7 @@
     Hapus
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Pengeluaran Stok')
+    $('#crudModalTitle').text('Delete Rekap Pengeluaran')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -452,12 +455,13 @@
                 <input type="text" value=" ${detail.keterangan_detail}" id="keterangan_detail" readonly hidden name="keterangan_detail[]"  >
               </td>
               <td>
-                ${detail.nominal}
+                <p class="text-right nominal">${detail.nominal}</p>
                 <input type="text" value="${detail.nominal}" id="nominal" readonly hidden name="nominal[]"  >
               </td>  
             </tr>`)
           $('#detailList tbody').append(detailRow)
           totalNominal +=parseInt(detail.nominal)
+          initAutoNumeric(detailRow.find('.nominal'))
           })      
           new AutoNumeric($('#sumary')[0]).set(totalNominal);
       }
@@ -487,8 +491,8 @@
               <td>${row}</td>
               
               <td>
-                ${detail.nobukti}
-                <input type="text" value="${detail.nobukti}" id="pengeluaran_nobukti" readonly hidden name="pengeluaran_nobukti[]"  >
+                ${detail.pengeluaran_nobukti}
+                <input type="text" value="${detail.pengeluaran_nobukti}" id="pengeluaran_nobukti" readonly hidden name="pengeluaran_nobukti[]"  >
               </td>                 
               <td>
                 ${detail.tglbukti}
@@ -499,14 +503,15 @@
                 <input type="text" value=" ${detail.keterangan_detail}" id="keterangan_detail" readonly hidden name="keterangan_detail[]"  >
               </td>
               <td>
-                ${detail.nominal}
+                <p class="text-right nominal">${detail.nominal}</p>
                 <input type="text" value="${detail.nominal}" id="nominal" readonly hidden name="nominal[]"  >
               </td>  
             </tr>`)
           $('#detailList tbody').append(detailRow)
-          // totalNominal +=parseInt(detail.nominal)
+          totalNominal +=parseInt(detail.nominal)
+          initAutoNumeric(detailRow.find('.nominal'))
           })      
-          // new AutoNumeric($('#sumary')[0]).set(totalNominal);
+          new AutoNumeric($('#sumary')[0]).set(totalNominal);
       }
     })
   }

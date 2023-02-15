@@ -85,19 +85,11 @@
                   <input type="hidden" name="bank_id">
                   <input type="text" name="bank" class="form-control bank-lookup">
                 </div>
-                <div class="col-12 col-md-2 col-form-label">
-                  <label>TANGGAL POST</label>
-                </div>
-                <div class="col-12 col-md-4">
-                  <div class="input-group">
-                    <input type="text" name="tglkaskeluar" class="form-control datepicker">
-                  </div>
-                </div>
               </div>
               <div class="row form-group">
                 <div class="col-12 col-md-2 col-form-label">
                   <label>
-                    NO BUKTI KAS KELUAR <span class="text-danger">*</span></label>
+                    NO BUKTI KAS KELUAR </label>
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="text" name="pengeluaran_nobukti" id="pengeluaran_nobukti" class="form-control" readonly>
@@ -180,7 +172,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
-
+  let bankId
   $(document).ready(function() {
 
     $('#crudForm').autocomplete({
@@ -483,7 +475,6 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    $('#crudForm').find('[name=tglkaskeluar]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglcair]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     initDatepicker()
@@ -542,7 +533,6 @@
           }
         })
 
-        form.find(`[name="tglkaskeluar"]`).val(dateFormat(tgl)).attr('disabled', false)
 
         getPembayaran(Id, response.data.supplier_id, 'edit')
       }
@@ -997,6 +987,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          bankId: bankId
         }
       },
       onSelectRow: (bank, element) => {
@@ -1055,6 +1046,8 @@
       onSelectRow: (alatbayar, element) => {
         $('#crudForm [name=alatbayar_id]').first().val(alatbayar.id)
         element.val(alatbayar.namaalatbayar)
+        console.log(alatbayar)
+        bankId = alatbayar.bank_id
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {

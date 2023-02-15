@@ -223,7 +223,7 @@
 
   function initLookup() {
     $('.bank-lookup').lookup({
-      title: 'pelunasan piutang Lookup',
+      title: 'bank Lookup',
       fileName: 'bank',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
@@ -449,12 +449,13 @@
                 <input type="text" value=" ${detail.keterangan_detail}" id="keterangan_detail" readonly hidden name="keterangan_detail[]"  >
               </td>
               <td>
-                ${detail.nominal}
+                <p class="text-right nominal">${detail.nominal}</p>
                 <input type="text" value="${detail.nominal}" id="nominal" readonly hidden name="nominal[]"  >
               </td>  
             </tr>`)
           $('#detailList tbody').append(detailRow)
           totalNominal +=parseInt(detail.nominal)
+          initAutoNumeric(detailRow.find('.nominal'))
           })      
           new AutoNumeric($('#sumary')[0]).set(totalNominal);
       }
@@ -496,14 +497,15 @@
                 <input type="text" value=" ${detail.keterangan_detail}" id="keterangan_detail" readonly hidden name="keterangan_detail[]"  >
               </td>
               <td>
-                ${detail.nominal}
+              <p class="text-right nominal">${detail.nominal}</p>
                 <input type="text" value="${detail.nominal}" id="nominal" readonly hidden name="nominal[]"  >
               </td>  
             </tr>`)
           $('#detailList tbody').append(detailRow)
-          // totalNominal +=parseInt(detail.nominal)
+          totalNominal +=parseInt(detail.nominal)
+          initAutoNumeric(detailRow.find('.nominal'))
           })      
-          // new AutoNumeric($('#sumary')[0]).set(totalNominal);
+          new AutoNumeric($('#sumary')[0]).set(totalNominal);
       }
     })
   }

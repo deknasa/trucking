@@ -10,23 +10,12 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('hutangdetail.index') }}"
-  /**
-   * Custom Functions
-   */
-  var delay = (function() {
-    var timer = 0;
-    return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })()
-
+ 
   function loadDetailGrid() {
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
-        url: `{{ config('app.api_url') . 'hutangdetail' }}`,
+        url: `${apiUrl}hutangdetail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -72,12 +61,19 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        // pager: pager,
         viewrecords: true,
+        postData: {
+          hutang_id: id
+        },
         prmNames: {
           sort: 'sortIndex',
           order: 'sortOrder',
           rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
         },
         
         loadBeforeSend: (jqXHR) => {
@@ -108,7 +104,7 @@
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: detailIndexUrl,
+      url: `${apiUrl}hutangdetail`,
       datatype: "json",
       postData: {
         hutang_id: id

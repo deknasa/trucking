@@ -23,10 +23,6 @@
             name: 'nobukti',
           },
           {
-            label: 'ALAT BAYAR',
-            name: 'alatbayar_id',
-          },
-          {
             label: 'NO WARKAT',
             name: 'nowarkat',
           },

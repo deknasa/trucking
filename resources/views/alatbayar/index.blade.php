@@ -188,7 +188,7 @@
           },          
           {
             label: 'BANK',
-            name: 'bank_id',
+            name: 'bank',
           },
           {
             label: 'MODIFIEDBY',
