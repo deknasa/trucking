@@ -93,7 +93,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2 col-form-label">
                 <label>
-                  JOB EMKL <span class="text-danger">*</span></label>
+                  JOB EMKL </label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="nojobemkl" class="form-control orderanemkl-lookup">
@@ -194,6 +194,7 @@
   let jenisorderId
   let containerId
   var statustas
+  var kodecontainer
 
   $(document).ready(function() {
 
@@ -527,6 +528,10 @@
           if (index == 'tarifrincian') {
             element.data('current-value', value)
           }
+
+          if (index == 'agen_id') {
+            getagentas(value)
+          }
         })
 
         if (form.data('action') === 'delete') {
@@ -589,10 +594,33 @@
       nojobemkl2.parents('.input-group').find('.button-clear').show()
     }
   }
-      
+
+  function setContEnable() {
+    if (statustas == '0') {
+      //bukan tas
+      $('#crudForm [name=nocont]').attr('readonly', false)
+      $('#crudForm [name=noseal]').attr('readonly', false)
+      $('#crudForm [name=nocont2]').attr('readonly', false)
+      $('#crudForm [name=noseal2]').attr('readonly', false)
+    } else {
+      $('#crudForm [name=nocont]').attr('readonly', true)
+      $('#crudForm [name=noseal]').attr('readonly', true)
+      $('#crudForm [name=nocont2]').attr('readonly', true)
+      $('#crudForm [name=noseal2]').attr('readonly', true)
+    }
+  }
 
 
-
+  function setCont2Enable() {
+    if (kodecontainer == '1') {
+      //2x20
+      $('#crudForm [name=nocont2]').attr('readonly', false)
+      $('#crudForm [name=noseal2]').attr('readonly', false)
+    } else {
+      $('#crudForm [name=nocont2]').attr('readonly', true)
+      $('#crudForm [name=noseal2]').attr('readonly', true)
+    }
+  }
 
 
   function getagentas(id) {
@@ -607,7 +635,27 @@
 
         statustas = response.data.statustas
         setJobReadOnly()
+        setContEnable()
         // console.log(statustas)
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
+  }
+
+  function getcont(id) {
+    $.ajax({
+      url: `${apiUrl}orderantrucking/${id}/getcont`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      success: response => {
+
+        kodecontainer = response.data.kodecontainer
+        setCont2Enable()
       },
       error: error => {
         showDialog(error.statusText)
@@ -631,6 +679,7 @@
         element.val(container.keterangan)
         containerId = container.id
         element.data('currentValue', element.val())
+        getcont(containerId)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -763,7 +812,7 @@
       }
     })
   }
-  
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}orderantrucking/${Id}/cekValidasi`,
@@ -774,11 +823,11 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-            deleteOrderanTrucking(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteOrderanTrucking(Id)
+        }
 
       }
     })

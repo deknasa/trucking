@@ -1502,6 +1502,30 @@
     })
   }
 
+  function cekValidasidelete(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}suratpengantar/${Id}/cekValidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+          if (kondisi == true) {
+            showDialog(response.message['keterangan'])
+          } else {
+            if(Aksi == 'EDIT'){
+              editSuratPengantar(Id)
+            }else{
+              deleteSuratPengantar(Id)
+            }
+          }
+
+      }
+    })
+  }
+
   function getOrderanTrucking(id) {
     $.ajax({
       url: `${apiUrl}suratpengantar/${id}/getOrderanTrucking`,

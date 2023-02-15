@@ -29,63 +29,13 @@
               </div>
             </div>
 
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Kilometer Awal <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control autonumeric" name="kmawal">
-                </div>
-              </div>
-
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Kilometer Akhir <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control autonumeric" name="kmakhirgantioli">
-                </div>
-              </div>
-            </div>
 
             <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Akhir Ganti oli <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tglakhirgantioli">
-                  </div>
-                </div>
-              </div>
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Tgl STNK Mati <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tglstnkmati">
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Asuransi Mati <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tglasuransimati">
-                  </div>
-                </div>
-              </div>
+              
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Tahun <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input pattern="[0-9.]+" type="text" class="form-control numbernoseparate" name="tahun">
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Tahun Produksi Akhir <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control numbernoseparate" name="akhirproduksi">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
@@ -134,42 +84,6 @@
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Standarisasi <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tglstandarisasi">
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Service Opname <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tglserviceopname">
-                  </div>
-                </div>
-              </div>
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Status Standarisasi <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="statusstandarisasi" class="form-control select2bs4">
-                    <option value="">-- PILIH STATUS STANDARISASI --</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Keterangan Progress Standarisasi <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" name="keteranganprogressstandarisasi">
-                </div>
-              </div>
-              <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Jenis Plat <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <select name="statusjenisplat" class="form-control select2bs4">
@@ -181,49 +95,11 @@
 
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Speksi Mati <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tglspeksimati">
-                  </div>
-                </div>
-              </div>
-              <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Pajak STNK <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <div class="input-group">
                     <input type="text" class="form-control datepicker" name="tglpajakstnk">
                   </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Ganti aki terakhir <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tglgantiakiterakhir">
-                  </div>
-                </div>
-              </div>
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Status Mutasi <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="statusmutasi" class="form-control select2bs4">
-                    <option value="">-- PILIH STATUS MUTASI --</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Status Validasi Kendaraan <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="statusvalidasikendaraan" class="form-control select2bs4">
-                    <option value="">-- PILIH STATUS VALIDASI KENDARAAN --</option>
-                  </select>
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
@@ -297,53 +173,34 @@
 
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Status Mobil Storing <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="statusmobilstoring" class="form-control select2bs4">
-                    <option value="">-- PILIH STATUS MOBIL STORING --</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Milik Mandor <span class="text-danger">*</span></label>
+                <label for="staticEmail" class="col-sm-4 col-form-label">Milik Mandor </label>
                 <div class="col-sm-8">
                   <input type="hidden" name="mandor_id">
                   <input type="text" name="mandor" class="form-control mandor-lookup">
                 </div>
               </div>
-            </div>
-
-            <div class="row">
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Jumlah Ban Serap <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control numbernoseparate" name="jumlahbanserap">
                 </div>
               </div>
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">STATUS APPEDIT BAN <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="statusappeditban" class="form-control select2bs4">
-                    <option value="">-- PILIH STATUS APPEDIT BAN --</option>
-                  </select>
-                </div>
-              </div>
             </div>
 
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Lewat Validasi <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="statuslewatvalidasi" class="form-control select2bs4">
-                    <option value="">-- PILIH LEWAT VALIDASI --</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Milik Supir<span class="text-danger">*</span></label>
+                <label for="staticEmail" class="col-sm-4 col-form-label">Milik Supir</label>
                 <div class="col-sm-8">
                   <input type="hidden" name="supir_id">
                   <input type="text" name="supir" class="form-control supir-lookup">
+                </div>
+              </div>
+              <div class="form-group col-sm-6 row">
+                <label for="staticEmail" class="col-sm-4 col-form-label">STATUS GEROBAK <span class="text-danger">*</span></label>
+                <div class="col-sm-8">
+                  <select name="statusgerobak" class="form-control select2bs4">
+                    <option value="">-- PILIH STATUS GEROBAK --</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -535,13 +392,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusStandarisasiOptions(form),
         setStatusJenisPlatOptions(form),
-        setStatusMutasiOptions(form),
-        setStatusValidasiKendaraanOptions(form),
-        setStatusMobilStoringOptions(form),
-        setAppeditBanOptions(form),
-        setStatusLewatValidasiOptions(form)
+        setStatusGerobak(form)
       ])
       .then(() => {
         showDefault(form)
@@ -573,13 +425,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusStandarisasiOptions(form),
         setStatusJenisPlatOptions(form),
-        setStatusMutasiOptions(form),
-        setStatusValidasiKendaraanOptions(form),
-        setStatusMobilStoringOptions(form),
-        setAppeditBanOptions(form),
-        setStatusLewatValidasiOptions(form)
+        setStatusGerobak(form)
       ])
       .then(() => {
         showTrado(form, id)
@@ -611,13 +458,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusStandarisasiOptions(form),
         setStatusJenisPlatOptions(form),
-        setStatusMutasiOptions(form),
-        setStatusValidasiKendaraanOptions(form),
-        setStatusMobilStoringOptions(form),
-        setAppeditBanOptions(form),
-        setStatusLewatValidasiOptions(form)
+        setStatusGerobak(form)
       ])
       .then(() => {
         showTrado(form, id)
@@ -792,11 +634,12 @@
     }
   }
 
-  const setStatusLewatValidasiOptions = function(relatedForm) {
+
+  const setStatusGerobak = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statuslewatvalidasi]').empty()
-      relatedForm.find('[name=statuslewatvalidasi]').append(
-        new Option('-- PILIH STATUS LEWAT VALIDASI --', '', false, true)
+      relatedForm.find('[name=statusgerobak]').empty()
+      relatedForm.find('[name=statusgerobak]').append(
+        new Option('-- PILIH STATUS GEROBAK --', '', false, true)
       ).trigger('change')
 
       $.ajax({
@@ -813,169 +656,15 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS LEWAT VALIDASI"
+              "data": "STATUS GEROBAK"
             }]
           })
         },
         success: response => {
-          response.data.forEach(statusLewatValidasi => {
-            let option = new Option(statusLewatValidasi.text, statusLewatValidasi.id)
+          response.data.forEach(jenisPlat => {
+            let option = new Option(jenisPlat.text, jenisPlat.id)
 
-            relatedForm.find('[name=statuslewatvalidasi]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-
-  const setAppeditBanOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusappeditban]').empty()
-      relatedForm.find('[name=statusappeditban]').append(
-        new Option('-- PILIH STATUS APPEDIT BAN --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS APPROVAL EDIT BAN"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusAppeditBan => {
-            let option = new Option(statusAppeditBan.text, statusAppeditBan.id)
-
-            relatedForm.find('[name=statusappeditban]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-  //sini
-
-  const setStatusMobilStoringOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusmobilstoring]').empty()
-      relatedForm.find('[name=statusmobilstoring]').append(
-        new Option('-- PILIH STATUS MOBIL STORING --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS MOBIL STORING"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusMobilStoring => {
-            let option = new Option(statusMobilStoring.text, statusMobilStoring.id)
-
-            relatedForm.find('[name=statusmobilstoring]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setStatusValidasiKendaraanOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusvalidasikendaraan]').empty()
-      relatedForm.find('[name=statusvalidasikendaraan]').append(
-        new Option('-- PILIH STATUS VALIDASI KENDARAAN --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS VALIDASI KENDARAAN"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusValidasiKendaraan => {
-            let option = new Option(statusValidasiKendaraan.text, statusValidasiKendaraan.id)
-
-            relatedForm.find('[name=statusvalidasikendaraan]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setStatusMutasiOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusmutasi]').empty()
-      relatedForm.find('[name=statusmutasi]').append(
-        new Option('-- PILIH STATUS MUTASI --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS MUTASI"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusMutasi => {
-            let option = new Option(statusMutasi.text, statusMutasi.id)
-
-            relatedForm.find('[name=statusmutasi]').append(option).trigger('change')
+            relatedForm.find('[name=statusgerobak]').append(option).trigger('change')
           });
 
           resolve()
@@ -1014,44 +703,6 @@
             let option = new Option(jenisPlat.text, jenisPlat.id)
 
             relatedForm.find('[name=statusjenisplat]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
-
-  const setStatusStandarisasiOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusstandarisasi]').empty()
-      relatedForm.find('[name=statusstandarisasi]').append(
-        new Option('-- PILIH STATUS STANDARISASI --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS STANDARISASI"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusStandarisasi => {
-            let option = new Option(statusStandarisasi.text, statusStandarisasi.id)
-
-            relatedForm.find('[name=statusstandarisasi]').append(option).trigger('change')
           });
 
           resolve()
