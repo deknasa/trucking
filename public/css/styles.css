@@ -300,3 +300,25 @@ html {
 .ui-jqgrid-view > * {
 	width: 100% !important;
 }
+/* .scrollable-meddnu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+	z-index: 9999999999999999999;
+} */
+/* .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset .yescls
+{
+    font-size:15px;
+    color: #FFFFFF;
+    width: 150px;
+    background: #90C93E;
+    
+}
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset .cancelcls
+{
+    font-size:15px;
+    color: #FFFFFF;
+    width: 150px;
+    background: #F86379;
+    
+} */

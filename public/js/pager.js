@@ -211,7 +211,8 @@ $.fn.customPager = function (option = {}) {
 	$(`#gbox_${$(this).getGridParam().id}`).after(`
 		<div class="col-12 bg-white grid-pager overflow-x-hidden">
 			<div class="row d-flex align-items-center text-center text-md-left">
-				<div class="col-12 col-md-4">
+				<div class="col-12 col-md-6">
+					<div class="d-md-inline d-block">
 					${
 						typeof option.buttons !== "undefined"
 						 ? option.buttons
@@ -238,12 +239,15 @@ $.fn.customPager = function (option = {}) {
 							.join("")
 						: ''
 					}
+					</div>
+
+					<div class="d-md-inline d-block">
+					${approveBtn}
+					</div>
 				</div>
 				
-				<div class="col-12 col-md-2 dropup">
 				
-					 ${approveBtn}
-				</div>
+				
 				<div id="${pagerHandlerId}" class="pager-handler col-12 col-md-4 d-flex align-items-center justify-content-center">
 				</div>
 				<div id="${pagerInfoId}" class="pager-info col-12 col-md-2">
