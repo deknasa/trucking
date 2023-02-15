@@ -147,7 +147,7 @@
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
       },
       loadBeforeSend: (jqXHR) => {
-        jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        jqXHR.setRequestHeader('Authorization', `Bearer {{ session('emkl_access_token') }}`)
       },
       loadComplete: function(data) {
         if (detectDeviceType() == 'desktop') {
@@ -217,11 +217,11 @@
       ).trigger('change')
 
       $.ajax({
-        url: `${apiEmklUrl}orderanemkl/getBulanJob`,
+        url: `${apiEmklUrl}/orderanemkl/getBulanJob`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer {{ session('emkl_access_token') }}`
         },
         success: response => {
           response.data.forEach(bulanJob => {
@@ -260,11 +260,11 @@
   function getTglJob(job) {
     return new Promise(function(resolve, reject) {
       $.ajax({
-        url: `${apiUrl}orderanemkl/getTglJob`,
+        url: `${apiEmklUrl}/orderanemkl/getTglJob`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
-          'Authorization': `Bearer ${accessToken}`
+          'Authorization': `Bearer {{ session('emkl_access_token') }}`
         },
         data: {
           'job': job
@@ -292,7 +292,7 @@
   function loadOrderanEmkl() {
     $('#orderanemklLookup')
       .jqGrid('setGridParam', {
-        url: `{{ config('app.api_url') . 'orderanemkl' }}`,
+        url: `${apiEmklUrl}/orderanemkl`,
         mtype: "GET",
         datatype: "json",
         postData: {
