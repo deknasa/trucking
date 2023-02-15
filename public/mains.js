@@ -1079,17 +1079,27 @@ function showConfirm(statusText = "", message = "",urlDestination="") {
 	$("#dialog-confirm").append(`<p> ${statusText} </p><p> ${message} </p>`);
 	$("#dialog-confirm").dialog({
 		modal: true,
-		buttons: {
-			"Yakin": function() {
-				$( this ).dialog( "close" );
-				processResult(true,urlDestination)
+		buttons: [
+			{
+				text: "Ok",
+				open: function() { $(this).addClass('btn btn-success')},
+				click: function() {
+					$( this ).dialog( "close" );
+					processResult(true,urlDestination)
+				},
 			},
-			Cancel: function() {
-				$( this ).dialog( "close" );
-				processResult(false,)
+			{
+				text:"Cencel",
+				open: function() { $(this).addClass('btn btn-danger')},
+				click: function() {
+					$( this ).dialog( "close" );
+					processResult(false)
+				}
 			}
-		  },
+		],
 	});
+			
+			
 }
 
 $(document).ready(function () {

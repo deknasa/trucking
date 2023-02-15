@@ -29,6 +29,8 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
+  var statusTidakBolehLuarkota;
+  var statusBukanBlackList;
 
   $(document).ready(function() {
     $("#jqGrid").jqGrid({
@@ -649,7 +651,41 @@
              
             }
           },
-        ]
+        ],
+        approveBtn:[{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> APPROVE',
+          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          dropmenuHTML: [
+            {
+              id:'approvalBlackListSupir',
+              text:"Approval Black List Supir",
+              onClick: () => {
+                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                approvalBlackListSupir(selectedId)
+              }
+            },
+            {
+              id:'approvalSupirLuarKota',
+              text:"Approval Supir Luar Kota",
+              onClick: () => {
+                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                approvalSupirLuarKota(selectedId)
+              }
+            },
+            {
+              id:'approvalSupirResign',
+              text:"Approval Supir Resign",
+              onClick: () => {
+                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                approvalSupirResign(selectedId)
+                
+              }
+            },
+          ]
+        }]
       })
 
     /* Append clear filter button */
@@ -689,6 +725,45 @@
     if (!`{{ $myAuth->hasPermission('supir', 'destroy') }}`) {
       $('#delete').attr('disabled', 'disabled')
     }
+
+    getTidakBolehLuarkota()
+    getBukanBlackList()
+    $('#tglModal').on('shown.bs.modal', function(id) {
+      $('#tglModal [name]:not(:hidden)').first().focus()
+      initDatepicker()
+      $('#tglModal').find('[name=tgl]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    })
+
+    $('#tglModal').submit(event => {
+      event.preventDefault()
+      let form = $('#formTgl')
+      let id = form.find('[name=id]').val()
+      let url = `${apiUrl}supir/${id}/approvalresign`
+
+      $.ajax({
+        url: url,
+        method: 'POST',
+        dataType: 'JSON',
+        data: {tanggalberhenti:form.find('[name=tgl]').val()},
+         headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $('#tglModal').trigger('reset')
+          $('#tglModal').modal('hide')
+          id = response.data.id          
+        },
+        error: error => {
+          console.error(error);
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            setErrorMessages(form, error.responseJSON.errors);
+          }
+        }
+      })
+    })
+
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -733,7 +808,127 @@
 
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
+
+
+    function approvalBlackListSupir(supirId){
+      
+      $.ajax({
+        url: `${apiUrl}supir/${supirId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let msg = `YAKIN approved Black List Supir ${response.data.namasupir}`
+          if (response.data.statusblacklist === statusBukanBlackList) {
+            msg = `YAKIN Unapproved Black List Supir ${response.data.namasupir}`
+          }
+          showConfirm(msg,"",`supir/${response.data.id}/approvalblacklist`)
+        },
+      })
+    }
+    function approvalSupirLuarKota(supirId){
+      $.ajax({
+        url: `${apiUrl}supir/${supirId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          console.log(statusTidakBolehLuarkota);
+          let msg = ` YAKIN approved STATUS Luar Kota Supir ${response.data.namasupir} ?`
+          if (response.data.statusluarkota === statusTidakBolehLuarkota) {
+            msg = `YAKIN UNapproved STATUS Luar Kota Supir ${response.data.namasupir} ?`
+          }
+          showConfirm(msg,"",`supir/${response.data.id}/approvalluarkota`)
+        },
+      })
+    }
+    function approvalSupirResign(supirId){
+      $.ajax({
+        url: `${apiUrl}supir/${supirId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          if (response.data.tglberhentisupir == "1900-01-01") {
+            $('#tglModal').find('button:submit').html(`Approve Resign`)
+            $('#tglModal').find('label').html(`Tgl Supir Resign`)
+            $('#tglModalLabel').html(`PILIH TANGGAL Supir Resign`)
+                $('#tglModal').find('[name=id]').val(`${selectedId}`)
+                $('#tglModal').modal('show')
+          }else{
+            showConfirm("unapproval Supir Resign",response.data.namasupir,`supir/${response.data.id}/approvalresign`)
+          }
+        },
+      })
+    }
+    
   })
+  function getTidakBolehLuarkota() {
+    
+    $.ajax({
+      url: `${apiUrl}parameter`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        filters: JSON.stringify({
+          "groupOp": "AND",
+          "rules": [{
+            "field": "grp",
+            "op": "cn",
+            "data": "STATUS LUAR KOTA"
+          },{
+            "field": "text",
+            "op": "cn",
+            "data": "TIDAK BOLEH LUAR KOTA"
+          }]
+        })
+      },
+      success: response => {
+        statusTidakBolehLuarkota =  response.data[0].id;
+      }
+    })
+  }
+  function getBukanBlackList() {
+    
+    $.ajax({
+      url: `${apiUrl}parameter`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        filters: JSON.stringify({
+          "groupOp": "AND",
+          "rules": [{
+            "field": "grp",
+            "op": "cn",
+            "data": "BLACKLIST SUPIR"
+          },{
+            "field": "text",
+            "op": "cn",
+            "data": "BUKAN SUPIR BLACKLIST"
+          }]
+        })
+      },
+      success: response => {
+        statusBukanBlackList =  response.data[0].id;
+      }
+    })
+  }
+    
+    
 </script>
 @endpush()
 @endsection
