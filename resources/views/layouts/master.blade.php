@@ -55,8 +55,8 @@
     <span class="fa fa-check" aria-hidden="true" style="font-size:25px;"></span>
     <p></p>
   </div>
-  <div id="dialog-confirm" title="Pesan" class="text-center text-success" style="display: none;">
-    <span class="fa fa-check" aria-hidden="true" style="font-size:25px;"></span>
+  <div id="dialog-confirm" title="Pesan" class="text-center " style="display: none;">
+    <span class="fa fa-exclamation-triangle text-warning" aria-hidden="true" style="font-size:25px;"></span>
     <p></p>
   </div>
 
@@ -170,6 +170,42 @@
                 </div>
               </div>
             </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Report</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for tgl resign-->
+  <div class="modal fade" id="tglModal" tabindex="-1" aria-labelledby="tglModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="tglModalLabel">Pilih tanggal</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="formTgl" target="_blank">
+          @csrf
+          <div class="modal-body">
+
+            <div class="form-group row">
+              <div class="col-sm-2 col-form-label">
+                <label for="">Tgl</label>
+              </div>
+              <input type="text" name="id" class="" hidden autofocus>
+              <div class="col-sm-10">
+                <div class="input-group">
+                  <input type="text" name="tgl" class="form-control datepicker" autofocus>
+                </div>
+              </div>
+            </div>
+          
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-primary">Report</button>
@@ -327,6 +363,31 @@
     $(document).on('shown.lte.pushmenu', () => {
       $('body').addClass('sidebar-open')
     })
+
+    function processResult(result,destination = "") {
+      if (result) {
+        // console.log(destination);
+        $.ajax({
+          url: `${apiUrl}${destination}`,
+          method: 'POST',
+          dataType: 'JSON',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          success: response => {
+            $('#jqGrid').jqGrid().trigger('reloadGrid');
+          },
+          error: error => {
+            if (error.status === 422) {
+              $('.is-invalid').removeClass('is-invalid')
+              $('.invalid-feedback').remove()
+  
+              setErrorMessages(form, error.responseJSON.errors);
+            }
+          }
+        })
+      }
+    }
   </script>
 </body>
 
