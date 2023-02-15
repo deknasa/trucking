@@ -138,14 +138,14 @@
               </div>
 
 
-              <div class="form-group col-sm-6 row">
+              <div class="form-group col-sm-6 row" style="display:none;">
                 <label for="staticEmail" class="col-sm-4 col-form-label ">Angsuran Pinjaman</label>
                 <div class="col-sm-8">
                   <input type="text" name="angsuranpinjaman" class="form-control autonumeric">
                 </div>
               </div>
 
-              <div class="form-group col-sm-6 row">
+              <div class="form-group col-sm-6 row" style="display:none;">
                 <label for="staticEmail" class="col-sm-4 col-form-label ">Plafon Deposito</label>
                 <div class="col-sm-8">
                   <input type="text" name="plafondeposito" class="form-control autonumeric">

@@ -16,11 +16,6 @@
 
 @push('scripts')
 <script>
-  // $(document).on('click', '#approve-btn', function(event) {
-  // });
-  $('#menu-approve').dropdown('toggle')
-
-
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -490,25 +485,25 @@
     }
   })
 
-  function processResult(result,destination) {
-    if (result) {
-      // console.log(destination);
-      $.ajax({
-        url: `${apiUrl}${destination}`,
-        method: 'POST',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          console.log(response);
-          $('#jqGrid').jqGrid().trigger('reloadGrid');
-        },
-      })
+  // function processResult(result,destination) {
+  //   if (result) {
+  //     // console.log(destination);
+  //     $.ajax({
+  //       url: `${apiUrl}${destination}`,
+  //       method: 'POST',
+  //       dataType: 'JSON',
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`
+  //       },
+  //       success: response => {
+  //         console.log(response);
+  //         $('#jqGrid').jqGrid().trigger('reloadGrid');
+  //       },
+  //     })
       
-    }
+  //   }
+  // }
 
-}
     
 </script>
 @endpush()
