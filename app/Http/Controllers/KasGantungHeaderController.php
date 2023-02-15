@@ -23,9 +23,9 @@ class KasGantungHeaderController extends MyController
     {
         $title = $this->title;
         $data = [
-            'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK'),
+            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
         ];
-        return view('kasgantung.index', compact('title','data'));
+        return view('kasgantung.index', compact('title', 'data'));
     }
 
     public function get($params = [])
@@ -92,8 +92,7 @@ class KasGantungHeaderController extends MyController
 
     public function report(Request $request)
     {
-        
-        $header = Http::withHeaders(request()->header())
+        $header = Http::accept('application/json')
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'kasgantungheader/' . $request->id);
@@ -103,14 +102,15 @@ class KasGantungHeaderController extends MyController
             'kasgantung_id' => $request->id
         ];
 
-        $kasgantung_detail = Http::withHeaders(request()->header())
+        $kasgantung_detail = Http::accept('application/json')
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/kasgantungdetail', $detailParams);
-       
+            ->get(config('app.api_url') . 'kasgantungdetail', $detailParams);
+
         $data = $header['data'];
         $kasgantung_details = $kasgantung_detail['data'];
         $user = Auth::user();
-        return view('reports.kasgantung', compact('data','kasgantung_details','user'));
+
+        return view('reports.kasgantung', compact('data', 'kasgantung_details', 'user'));
     }
 
     public function comboCetak($aksi, $grp, $subgrp)
@@ -135,18 +135,18 @@ class KasGantungHeaderController extends MyController
     {
 
         //FETCH HEADER
-        $kasgantungs = Http::withHeaders($request->header())
+        $kasgantungs = Http::accept('application/json')
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'kasgantungheader/' . $request->id)['data'];
 
         //FETCH DETAIL
         $detailParams = [
-            'forExport' => true,
+            'limit' => 0,
             'kasgantung_id' => $request->id
         ];
 
-        $responses = Http::withHeaders($request->header())
+        $responses = Http::accept('application/json')
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'kasgantungdetail', $detailParams);

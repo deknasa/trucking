@@ -9,7 +9,6 @@
 
 @push('scripts')
 <script>
- 
   function loadDetailGrid(id) {
     $("#detail").jqGrid({
         url: `${apiUrl}kasgantungdetail`,
@@ -17,8 +16,7 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        colModel: [
-          {
+        colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
           },
@@ -69,19 +67,12 @@
           activeGrid = $(this)
         },
         loadComplete: function(data) {
-          initResize($(this))
-          
-          let nominals = $(this).jqGrid("getCol", "nominal")
-          let totalNominal = 0
-
-          if (nominals.length > 0) {
-            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          if (data.attributes) {
+            $(this).jqGrid('footerData', 'set', {
+              nobukti: 'Total:',
+              nominal: data.attributes.totalNominal,
+            }, true)
           }
-
-          $(this).jqGrid('footerData', 'set', {
-            nobukti: 'Total:',
-            nominal: totalNominal,
-          }, true)
         }
       })
 
@@ -92,7 +83,7 @@
         edit: false,
         del: false,
       })
-      
+
       .customPager()
   }
 
