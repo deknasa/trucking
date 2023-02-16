@@ -49,41 +49,45 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  BANK <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="hidden" name="bank_id">
-                <input type="text" name="bank" class="form-control bank-lookup">
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
                   COA <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="coa" class="form-control akunpusat-lookup">
               </div>
             </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  NO BUKTI PENERIMAAN <span class="text-danger">*</span></label>
+
+            <div class="border p-3">
+              <h6>Posting Penerimaan</h6>
+
+              <div class="row form-group">
+                <div class="col-12 col-md-2 col-form-label">
+                  <label>
+                    POSTING <span class="text-danger">*</span></label>
+                </div>
+                <div class="col-12 col-md-4">
+                  <input type="hidden" name="bank_id">
+                  <input type="text" name="bank" class="form-control bank-lookup">
+                </div>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="penerimaan_nobukti" class="form-control penerimaan-lookup">
+              <div class="row form-group">
+                <div class="col-12 col-md-2 col-form-label">
+                  <label>
+                    NO BUKTI KAS/BANK MASUK </label>
+                </div>
+                <div class="col-12 col-md-4">
+                  <input type="text" name="penerimaan_nobukti" id="penerimaan_nobukti" class="form-control" readonly>
+                </div>
               </div>
             </div>
 
             <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1350px;">
+              <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1000px;">
                 <thead>
                   <tr>
                     <th width="1%">No</th>
-                    <th width="5%">SUPIR</th>
-                    <th width="5%">NO BUKTI PENGELUARAN TRUCKING</th>
-                    <th width="6%">Nominal</th>
+                    <th width="40%">SUPIR</th>
+                    <th width="30%">NO BUKTI PENGELUARAN TRUCKING</th>
+                    <th width="28%">Nominal</th>
                     <th width="1%">Aksi</th>
                   </tr>
                 </thead>
@@ -317,7 +321,8 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
+    form.find(`[name="bank"]`).removeClass('bank-lookup')
+    form.find(`[name="penerimaantrucking"]`).removeClass('penerimaantrucking-lookup')
     showPenerimaanTruckingHeader(form, id)
 
   }
@@ -337,6 +342,8 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
+    form.find(`[name="bank"]`).removeClass('bank-lookup')
+    form.find(`[name="penerimaantrucking"]`).removeClass('penerimaantrucking-lookup')
     showPenerimaanTruckingHeader(form, id)
 
   }
@@ -356,6 +363,29 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
+            cekValidasiAksi(Id,Aksi)
+          }
+
+        } else {
+          showDialog(response.message['keterangan'])
+        }
+      }
+    })
+  }
+  
+  function cekValidasiAksi(Id,Aksi){
+    $.ajax({
+      url: `{{ config('app.api_url') }}penerimaantruckingheader/${Id}/cekValidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+          if (kondisi == true) {
+            showDialog(response.message['keterangan'])
+          } else {
             if (Aksi == 'EDIT') {
               editPenerimaanTruckingHeader(Id)
             }
@@ -364,9 +394,6 @@
             }
           }
 
-        } else {
-          showDialog(response.message['keterangan'])
-        }
       }
     })
   }
@@ -393,18 +420,16 @@
           }
 
           if (index == 'penerimaantrucking') {
-            element.data('current-value', value)
+            element.data('current-value', value).prop('readonly', true)
           }
           if (index == 'bank') {
-            element.data('current-value', value)
+            element.data('current-value', value).prop('readonly', true)
           }
           if (index == 'coa') {
             element.data('current-value', value)
           }
-          if (index == 'penerimaan_nobukti') {
-            element.data('current-value', value)
-          }
         })
+
 
         $.each(response.detail, (index, detail) => {
           let detailRow = $(`
@@ -652,28 +677,6 @@
       onClear: (element) => {
         element.val('')
         $(`#crudForm [name="bank_id"]`).first().val('')
-        element.data('currentValue', element.val())
-      }
-    })
-
-    $('.penerimaan-lookup').lookup({
-      title: 'Penerimaan Lookup',
-      fileName: 'penerimaanheader',
-      beforeProcess: function(test) {
-                            this.postData = {
-                                Aktif: 'AKTIF',
-
-                            }
-                        },      
-      onSelectRow: (penerimaanheader, element) => {
-        element.val(penerimaanheader.nobukti)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.val('')
         element.data('currentValue', element.val())
       }
     })

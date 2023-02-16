@@ -163,6 +163,7 @@ use App\Http\Controllers\LaporanTripGandenganDetailController;
 use App\Http\Controllers\LaporanTripTradoController;
 use App\Http\Controllers\LaporanUangJalanController;
 use App\Http\Controllers\LookupController;
+use App\Http\Controllers\PemutihanSupirController;
 use App\Http\Controllers\PencairanGiroPengeluaranDetailController;
 use App\Http\Controllers\PencairanGiroPengeluaranHeaderController;
 use App\Http\Controllers\PendapatanSupirDetailController;
@@ -978,6 +979,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanhistorypinjaman/export', [LaporanHistoryPinjamanController::class, 'export'])->name('laporanhistorypinjaman.export');
     Route::get('laporanhistorypinjaman/index', [LaporanHistoryPinjamanController::class, 'index']);
     Route::resource('laporanhistorypinjaman', LaporanHistoryPinjamanController::class);
+
+    Route::get('pemutihansupir/index', [PemutihanSupirController::class, 'index']);
+    Route::resource('pemutihansupir', PemutihanSupirController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

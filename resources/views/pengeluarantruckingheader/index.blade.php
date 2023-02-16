@@ -123,21 +123,6 @@
             align: 'left'
           },
           {
-            label: 'USER BUKA CETAK',
-            name: 'userbukacetak',
-            align: 'left'
-          },
-          {
-            label: 'TANGGAL CETAK',
-            name: 'tglbukacetak',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
             label: 'STATUS POSTING',
             name: 'statusposting',
             align: 'left',
@@ -193,6 +178,21 @@
             label: 'NO. BUKTI PENGELUARAN',
             name: 'pengeluaran_nobukti',
             align: 'left'
+          },
+          {
+            label: 'USER BUKA CETAK',
+            name: 'userbukacetak',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL CETAK',
+            name: 'tglbukacetak',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'MODIFIEDBY',
