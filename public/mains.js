@@ -1056,19 +1056,24 @@ function showSuccessDialog(statusText = "", message = "") {
 }
 function showDialog(statusText = "", message = "") {
 	$("#dialog-message").find("p").remove();
-	$("#dialog-message").append(`<p> ${statusText} </p><p> ${message} </p>`);
+	$("#dialog-message").append(`<p class="text-dark"> ${statusText} </p><p> ${message} </p>`);
 	$("#dialog-message").dialog({
 		modal: true,
 	});
 	
 	$(".ui-dialog-titlebar-close").find("p").remove();
 	$('.ui-dialog-titlebar-close').append(`<p>X</p>`);
-	$('.ui-widget-header').css('background', '#db1f30');
+	let css_header =
+	{
+		"background": "#db1f30",
+		"color" : '#fff'
+	}
+	$('.ui-widget-header').css(css_header);
 	let css_property =
 	{
 		"border": "none",
 		"background": "#db1f30",
-		"color" : '#000'
+		"color" : '#fff'
 	}
 	
 	$('.ui-dialog .ui-dialog-titlebar-close').css(css_property);
