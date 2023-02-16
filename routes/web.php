@@ -8,6 +8,7 @@ use App\Http\Controllers\AbsensiSupirApprovalHeaderController;
 use App\Http\Controllers\ApprovalTransaksiHeaderController;
 use App\Http\Controllers\ApprovalInvoiceHeaderController;
 
+use App\Http\Controllers\BukaAbsensiController;
 use App\Http\Controllers\TutupBukuController;
 use App\Http\Controllers\AbsenTradoController;
 use App\Http\Controllers\AuthController;
@@ -285,6 +286,8 @@ Route::middleware(['auth','authorized'])->group(function () {
 
     Route::resource('absensisupir_detail', AbsensiSupirDetailController::class);
     
+    Route::resource('bukaabsensi', BukaAbsensiController::class);
+
     Route::get('absensisupirapprovalheader/{id}/delete', [AbsensiSupirApprovalHeaderController::class, 'delete'])->name('absensisupirapprovalheader.delete');
     Route::get('absensisupirapprovalheader/index', [AbsensiSupirApprovalHeaderController::class, 'index']);
     Route::get('absensisupirapprovalheader/get', [AbsensiSupirApprovalHeaderController::class, 'get'])->name('absensisupirapprovalheader.get');
