@@ -240,7 +240,10 @@ return [
      * be called for every API Request.
      */
     'api_url' => env('API_URL', 'http://localhost/trucking-laravel/public/api/'),
+
     'emkl_api_url' => env('EMKL_API_URL', 'http://localhost/emkl-api/public/api/'),
+
+    'trucking_forwarder_url' => env('TRUCKING_FORWARDER_URL'),
 
     'apppath' => 'c:/xampp/htdocs/truck/app/http/',
 
