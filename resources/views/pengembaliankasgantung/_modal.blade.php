@@ -621,12 +621,7 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if (Aksi == 'EDIT') {
-              editPengembalianKasGantung(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deletePengembalianKasGantung(Id)
-            }
+            cekValidasiAksi(Id,Aksi)
           }
 
         } else {
@@ -636,6 +631,31 @@
     })
   }
 
+   
+  function cekValidasiAksi(Id,Aksi){
+    $.ajax({
+      url: `{{ config('app.api_url') }}pengembaliankasgantungheader/${Id}/cekValidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+          if (kondisi == true) {
+            showDialog(response.message['keterangan'])
+          } else {
+            if (Aksi == 'EDIT') {
+              editPengembalianKasGantung(Id)
+            }
+            if (Aksi == 'DELETE') {
+              deletePengembalianKasGantung(Id)
+            }
+          }
+
+      }
+    })
+  }
   
 
   function showDefault(form) {

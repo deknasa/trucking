@@ -33,8 +33,13 @@
         },
         {
           label: 'BANK',
-          name: 'bank_id',
+          name: 'bank',
           align: 'left'
+        },
+        {
+          label: 'bank_id',
+          name: 'bank_id',
+          hidden: true
         },
         {
           label: 'KETERANGAN',

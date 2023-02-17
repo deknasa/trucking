@@ -46,50 +46,43 @@
               </div>
             </div>
 
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  BANK <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="hidden" name="bank_id">
-                <input type="text" name="bank" class="form-control bank-lookup">
-              </div>
-            </div>
-
-            <!-- <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  STATUS POSTING <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusposting" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS POSTING --</option>
-                </select>
-              </div>
-            </div> -->
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  COA
+                  COA <span class="text-danger">*</span>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="coa" class="form-control akunpusat-lookup">
               </div>
             </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  NO BUKTI PENGELUARAN
+            
+            <div class="border p-3">
+              <h6>Posting Pengeluaran</h6>
+
+              <div class="row form-group">
+                <div class="col-12 col-md-2 col-form-label">
+                  <label>
+                    POSTING <span class="text-danger">*</span></label>
+                </div>
+                <div class="col-12 col-md-4">
+                  <input type="hidden" name="bank_id">
+                  <input type="text" name="bank" class="form-control bank-lookup">
+                </div>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="pengeluaran_nobukti" class="form-control pengeluaran-lookup">
+              <div class="row form-group">
+                <div class="col-12 col-md-2 col-form-label">
+                  <label>
+                    NO BUKTI KAS/BANK MASUK </label>
+                </div>
+                <div class="col-12 col-md-4">
+                  <input type="text" name="pengeluaran_nobukti" id="pengeluaran_nobukti" class="form-control" readonly>
+                </div>
               </div>
             </div>
 
             <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1350px;">
+              <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1350px;">
                 <thead>
                   <tr>
                     <th width="1%">No</th>
@@ -338,6 +331,9 @@
     //   .then(() => {
     //     showPengeluaranTruckingHeader(form, id)
     //   })
+    
+    form.find(`[name="bank"]`).removeClass('bank-lookup')
+    form.find(`[name="pengeluarantrucking"]`).removeClass('pengeluarantrucking-lookup')
     showPengeluaranTruckingHeader(form, id)
 
   }
@@ -363,6 +359,9 @@
     //   .then(() => {
     //     showPengeluaranTruckingHeader(form, id)
     //   })
+    
+    form.find(`[name="bank"]`).removeClass('bank-lookup')
+    form.find(`[name="pengeluarantrucking"]`).removeClass('pengeluarantrucking-lookup')
     showPengeluaranTruckingHeader(form, id)
 
   }
@@ -382,6 +381,29 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
+            cekValidasiAksi(Id,Aksi)
+          }
+
+        } else {
+          showDialog(response.message['keterangan'])
+        }
+      }
+    })
+  }
+  
+  function cekValidasiAksi(Id,Aksi){
+    $.ajax({
+      url: `{{ config('app.api_url') }}pengeluarantruckingheader/${Id}/cekValidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+          if (kondisi == true) {
+            showDialog(response.message['keterangan'])
+          } else {
             if (Aksi == 'EDIT') {
               editPengeluaranTruckingHeader(Id)
             }
@@ -390,9 +412,6 @@
             }
           }
 
-        } else {
-          showDialog(response.message['keterangan'])
-        }
       }
     })
   }
@@ -459,15 +478,12 @@
           }
 
           if (index == 'pengeluarantrucking') {
-            element.data('current-value', value)
+            element.data('current-value', value).prop('readonly', true)
           }
           if (index == 'bank') {
-            element.data('current-value', value)
+            element.data('current-value', value).prop('readonly', true)
           }
           if (index == 'coa') {
-            element.data('current-value', value)
-          }
-          if (index == 'pengeluaran_nobukti') {
             element.data('current-value', value)
           }
         })

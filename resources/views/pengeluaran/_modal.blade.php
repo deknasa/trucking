@@ -456,12 +456,7 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if (Aksi == 'EDIT') {
-              editPengeluaran(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deletePengeluaran(Id)
-            }
+            cekValidasiAksi(Id,Aksi)
           }
 
         } else {
@@ -471,6 +466,31 @@
     })
   }
 
+
+  function cekValidasiAksi(Id,Aksi){
+    $.ajax({
+      url: `{{ config('app.api_url') }}pengeluaranheader/${Id}/cekValidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+          if (kondisi == true) {
+            showDialog(response.message['keterangan'])
+          } else {
+            if (Aksi == 'EDIT') {
+              editPengeluaran(Id)
+            }
+            if (Aksi == 'DELETE') {
+              deletePengeluaran(Id)
+            }
+          }
+
+      }
+    })
+  }
 
   const setStatusJenisTransaksiOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
@@ -538,7 +558,7 @@
           if (index == 'pelanggan') {
             element.data('current-value', value)
           }
-          if (index == 'cabang') {
+          if (index == 'alatbayar') {
             element.data('current-value', value)
           }
           if (index == 'bank') {
@@ -592,31 +612,6 @@
 
           setTotal();
 
-          $('.alatbayar-lookup').last().lookup({
-            title: 'Alat Bayar Lookup',
-            fileName: 'alatbayar',
-            beforeProcess: function(test) {
-              this.postData = {
-                Aktif: 'AKTIF',
-                bank_Id: bankId,
-              }
-            },
-            onSelectRow: (alatbayar, element) => {
-
-              $('#crudForm [name=alatbayar_id]').first().val(alatbayar.id)
-              element.val(alatbayar.namaalatbayar)
-              element.data('currentValue', element.val())
-
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="alatbayar_id[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
           $('.akunpusat-lookup').last().lookup({
             title: 'Kode Perk. Lookup',
             fileName: 'akunpusat',
@@ -688,30 +683,7 @@
 
     $('#detailList tbody').append(detailRow)
 
-    $('.alatbayar-lookup').last().lookup({
-      title: 'Alat Bayar Lookup',
-      fileName: 'alatbayar',
-      beforeProcess: function(test) {
-        // const bank_ID=0        
-        this.postData = {
-          bank_Id: bankId,
-          Aktif: 'AKTIF',
-        }
-      },
-      onSelectRow: (alatbayar, element) => {
-        $(`#crudForm [name="alatbayar_id[]"]`).last().val(alatbayar.id)
-        element.val(alatbayar.namaalatbayar)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $(`#crudForm [name="alatbayar_id[]"]`).last().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
+   
     $('.akunpusat-lookup').last().lookup({
       title: 'Kode Perkiraan Lookup',
       fileName: 'akunpusat',
@@ -806,26 +778,26 @@
         element.data('currentValue', element.val())
       }
     })
-
-    $('.cabang-lookup').lookup({
-      title: 'Cabang Lookup',
-      fileName: 'cabang',
+    $('.alatbayar-lookup').lookup({
+      title: 'Alat Bayar Lookup',
+      fileName: 'alatbayar',
       beforeProcess: function(test) {
+        // const bank_ID=0        
         this.postData = {
+          bank_Id: bankId,
           Aktif: 'AKTIF',
-
         }
       },
-      onSelectRow: (cabang, element) => {
-        $('#crudForm [name=cabang_id]').first().val(cabang.id)
-        element.val(cabang.namacabang)
+      onSelectRow: (alatbayar, element) => {
+        $(`#crudForm [name="alatbayar_id"]`).first().val(alatbayar.id)
+        element.val(alatbayar.namaalatbayar)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=cabang_id]').first().val('')
+        $(`#crudForm [name="alatbayar_id"]`).first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }

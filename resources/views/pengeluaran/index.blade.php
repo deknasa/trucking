@@ -163,9 +163,36 @@
             label: 'ALAT BAYAR',
             name: 'alatbayar_id',
             align: 'left'
-          },          {
+          },
+          {
             label: 'POSTING DARI',
             name: 'postingdari',
+            align: 'left'
+          },
+          {
+            label: 'DIBAYARKAN KE',
+            name: 'dibayarke',
+            align: 'left'
+          },
+
+          {
+            label: 'BANK',
+            name: 'bank_id',
+            align: 'left'
+          },
+          {
+            label: 'TRANSFER KE NO REK',
+            name: 'transferkeac',
+            align: 'left'
+          },
+          {
+            label: 'TRANSFER NAMA REK',
+            name: 'transferkean',
+            align: 'left'
+          },
+          {
+            label: 'TRANSFER NAMA BANK',
+            name: 'transferkebank',
             align: 'left'
           },
           {
@@ -197,32 +224,6 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },
-          {
-            label: 'DIBAYARKAN KE',
-            name: 'dibayarke',
-            align: 'left'
-          },
-
-          {
-            label: 'BANK',
-            name: 'bank_id',
-            align: 'left'
-          },
-          {
-            label: 'TRANSFER KE NO REK',
-            name: 'transferkeac',
-            align: 'left'
-          },
-          {
-            label: 'TRANSFER NAMA REK',
-            name: 'transferkean',
-            align: 'left'
-          },
-          {
-            label: 'TRANSFER NAMA BANK',
-            name: 'transferkebank',
-            align: 'left'
           },
           {
             label: 'MODIFIEDBY',

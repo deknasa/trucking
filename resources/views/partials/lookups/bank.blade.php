@@ -13,6 +13,7 @@
         filters: `{!! $filters ?? '' !!}`,
         aktif: `{!! $Aktif ?? '' !!}`,
         tipe: `{!! $tipe ?? '' !!}`,
+        bankId: `{!! $bankId ?? '' !!}`,
       },
       colModel: [{
           label: 'ID',

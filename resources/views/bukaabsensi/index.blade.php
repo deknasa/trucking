@@ -10,7 +10,7 @@
   </div>
 </div>
 
-@include('alatbayar._modal')
+@include('bukaabsensi._modal')
 
 @push('scripts')
 <script>
@@ -24,15 +24,14 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'kodealatbayar'
+  let sortname = 'tglabsensi'
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
 
   $(document).ready(function() {
-    
     $("#jqGrid").jqGrid({
-        url: `${apiUrl}alatbayar`,
+        url: `${apiUrl}bukaabsensi`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -44,152 +43,16 @@
             hidden: true
           },
           {
-            label: 'KODE ALAT BAYAR',
-            name: 'kodealatbayar',
-          },
-          {
-            label: 'NAMA ALAT BAYAR',
-            name: 'namaalatbayar',
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-          },
-          {
-            label: 'STATUS LANGSUNG CAIR',
-            name: 'statuslangsungcair',
-            align: 'left',
-            stype: 'select',
-            searchoptions: {
-              
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combolangsungcair'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combolangsungcair'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-              `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusLangsungCair = JSON.parse(value)
-
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusLangsungCair.WARNA}; color: #fff;">
-                  <span>${statusLangsungCair.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusLangsungCair = JSON.parse(rowObject.statuslangsungcair)
-
-              return ` title="${statusLangsungCair.MEMO}"`
+            label: 'Tgl absensi',
+            name: 'tglabsensi',
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
             }
           },
-          {
-            label: 'STATUS DEFAULT',
-            name: 'statusdefault',
-            align: 'left',
-            stype: 'select',
-            searchoptions: {
-              
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combodefault'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combodefault'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-              `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusDefault = JSON.parse(value)
-
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusDefault.WARNA}; color: #fff;">
-                  <span>${statusDefault.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusDefault = JSON.parse(rowObject.statusdefault)
-
-              return ` title="${statusDefault.MEMO}"`
-            }
-          },
-          {
-            label: 'Status',
-            name: 'statusaktif',
-            width: 100,
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combo'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combo'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusAktif = JSON.parse(value)
-
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
-                  <span>${statusAktif.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusAktif = JSON.parse(rowObject.statusaktif)
-
-              return ` title="${statusAktif.MEMO}"`
-            }
-          },          
-          {
-            label: 'BANK',
-            name: 'bank',
-          },
+          
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
@@ -262,7 +125,7 @@
           triggerClick = true
 
           $('.clearsearchclass').click(function() {
-            highlightSearch = ''
+            clearColumnSearch()
           })
 
           if (indexRow > $(this).getDataIDs().length - 1) {
@@ -272,14 +135,14 @@
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+              $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
             }
 
             if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+              $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
@@ -297,9 +160,10 @@
         searchOnEnter: false,
         defaultSearch: 'cn',
         groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           clearGlobalSearch($('#jqGrid'))
-        }
+        },
       })
 
       .customPager({
@@ -308,7 +172,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: () => {
-              createAlatBayar()
+              createBukaAbsensi()
             }
           },
           {
@@ -318,7 +182,11 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-              editAlatBayar(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                editBukaAbsensi(selectedId)
+              }
             }
           },
           {
@@ -330,7 +198,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasidelete(selectedId)
+                deleteBukaAbsensi(selectedId)
               }
             }
           },
@@ -363,15 +231,15 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('alatbayar', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('bukaabsensi', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('alatbayar', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('bukaabsensi', 'update') }}`) {
       $('#edit').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('alatbayar', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('bukaabsensi', 'destroy') }}`) {
       $('#delete').attr('disabled', 'disabled')
     }
 
@@ -419,7 +287,6 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
-
 </script>
 @endpush()
 @endsection

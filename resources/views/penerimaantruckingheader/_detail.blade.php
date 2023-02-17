@@ -10,23 +10,13 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('penerimaantruckingdetail.index') }}"
-  /**
-   * Custom Functions
-   */
-  var delay = (function() {
-    var timer = 0;
-    return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })()
+  
 
   function loadDetailGrid() {
     let pager = '#detailPager'
 
     $("#detail").jqGrid({
-        url: `{{ config('app.api_url') . 'penerimaantruckingdetail' }}`,
+        url: `${apiUrl}penerimaantruckingdetail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -47,28 +37,55 @@
           {
             label: 'NOMINAL',
             name: 'nominal',
-            formatter: 'number', 
-            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
-            align: "right",
+            align: 'right',
+            formatter: currencyFormat,
           }
-        ],
+        ], 
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 10,
+        rowNum: 0,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
+        footerrow: true,
+        userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        // pager: pager,
+        viewrecords: true,
+        postData: {
+          penerimaantruckingheader_id: id
+        },
         prmNames: {
           sort: 'sortIndex',
           order: 'sortOrder',
           rows: 'limit'
         },
-        viewrecords: true,
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
+        onSelectRow: function(id) {
+          activeGrid = $(this)
+        },
         loadComplete: function(data) {
+          initResize($(this))
+
+          let nominals = $(this).jqGrid("getCol", "nominal")
+          let totalNominal = 0
+
+          if (nominals.length > 0) {
+            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          }
+
+          $(this).jqGrid('footerData', 'set', {
+            nobukti: 'Total:',
+            nominal: totalNominal,
+          }, true)
         }
       })
 
@@ -83,7 +100,7 @@
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: detailIndexUrl,
+      url: `${apiUrl}penerimaantruckingdetail`,
       datatype: "json",
       postData: {
         penerimaantruckingheader_id: id

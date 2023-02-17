@@ -49,13 +49,13 @@
             </div>
 
             <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1000px;">
                 <thead>
                   <tr>
                     <th width="1%">No</th>
-                    <th width="5%">Keterangan</th>
-                    <th width="3%">Tgl Jatuh Tempo</th>
-                    <th width="6%">Total</th>
+                    <th width="60%">Keterangan</th>
+                    <th width="18%">Tgl Jatuh Tempo</th>
+                    <th width="20%">Total</th>
                     <th width="1%">Aksi</th>
                   </tr>
                 </thead>
@@ -332,6 +332,29 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
+            cekValidasiAksi(Id,Aksi)
+          }
+
+        } else {
+          showDialog(response.message['keterangan'])
+        }
+      }
+    })
+  }
+
+  function cekValidasiAksi(Id,Aksi){
+    $.ajax({
+      url: `{{ config('app.api_url') }}hutangheader/${Id}/cekValidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+          if (kondisi == true) {
+            showDialog(response.message['keterangan'])
+          } else {
             if (Aksi == 'EDIT') {
               editHutangHeader(Id)
             }
@@ -340,9 +363,6 @@
             }
           }
 
-        } else {
-          showDialog(response.message['keterangan'])
-        }
       }
     })
   }
