@@ -38,7 +38,7 @@
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 0,
+        rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
@@ -67,19 +67,12 @@
           activeGrid = $(this)
         },
         loadComplete: function(data) {
-          initResize($(this))
-
-          let nominals = $(this).jqGrid("getCol", "nominal")
-          let totalNominal = 0
-
-          if (nominals.length > 0) {
-            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          if (data.attributes) {
+            $(this).jqGrid('footerData', 'set', {
+              nobukti: 'Total:',
+              nominal: data.attributes.totalNominal,
+            }, true)
           }
-
-          $(this).jqGrid('footerData', 'set', {
-            nobukti: 'Total:',
-            nominal: totalNominal,
-          }, true)
         }
       })
 

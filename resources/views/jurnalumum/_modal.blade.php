@@ -29,8 +29,9 @@
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
-
-                <input type="text" name="tglbukti" class="form-control datepicker">
+                <div class="input-group">
+                  <input type="text" name="tglbukti" class="form-control datepicker">
+                </div>
               </div>
             </div>
 
