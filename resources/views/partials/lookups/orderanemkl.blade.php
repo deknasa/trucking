@@ -142,8 +142,10 @@
         let rows = $(this).jqGrid('getGridParam', 'postData').limit
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
       },
-      loadBeforeSend: (jqXHR) => {
-        jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      loadBeforeSend: (jqXHR, settings) => {
+        settings.xhrFields = {
+          withCredentials: true
+        }
       },
       loadComplete: function(data) {
         if (detectDeviceType() == 'desktop') {
@@ -238,12 +240,16 @@
   function getTglJob(job) {
     return new Promise(function(resolve, reject) {
       $.ajax({
-        url: `${apiUrl}orderanemkl/getTglJob`,
+        url: `{{ config('app.trucking_forwarder_url') }}/getTglJob.php`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
-          'Authorization': `Bearer ${accessToken}`
+          Authorization: `Bearer ${accessToken}`
         },
+        xhrFields: {
+          withCredentials: true
+        },
+        crossDomain: true,
         data: {
           'job': job
         },
@@ -266,7 +272,7 @@
   function loadOrderanEmkl() {
     $('#orderanemklLookup')
       .jqGrid('setGridParam', {
-        url: `{{ config('app.api_url') . 'orderanemkl' }}`,
+        url: `{{ config('app.trucking_forwarder_url') }}/orderanemkl.php`,
         mtype: "GET",
         datatype: "json",
         postData: {

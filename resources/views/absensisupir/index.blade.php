@@ -31,7 +31,7 @@
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false
-
+  var statusTidakBisaEdit;
   $(document).ready(function() {
     $("#jqGrid").jqGrid({
         url: `${apiUrl}absensisupirheader`,
@@ -317,29 +317,14 @@
           class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
           dropmenuHTML: [
             {
-              id:'approval',
-              text:"Absensi Approval",
+              id:'approvalEdit',
+              text:"Absensi Approval Edit",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                approve(selectedId)
+                approveEdit(selectedId)
               }
             },
-            {
-              id:'ccccc',
-              text:"Absensi ccccc",
-              onClick: () => {
-                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                approve(selectedId)
-              }
-            },
-            {
-              id:'eeeeee',
-              text:"Absensi eeeeee",
-              onClick: () => {
-                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                approve(selectedId)
-              }
-            },
+            
             
           ],
         }]
@@ -391,8 +376,8 @@
     if (!`{{ $myAuth->hasPermission('absensisupirheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
     }
-    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'report') }}`) {
-      $('#approve').attr('disabled', 'disabled')
+    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'update') }}`) {
+      $('#approvalEdit').attr('disabled', 'disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -483,26 +468,55 @@
         },
       })
     }
+    getStatusEdit()
+    function approveEdit(id) {
+      $.ajax({
+        url: `${apiUrl}absensisupirheader/${id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let msg = `YAKIN Approve Status Edit `
+          console.log(statusTidakBisaEdit);
+          if (response.data.statusapprovaleditabsensi === statusTidakBisaEdit) {
+            msg = `YAKIN UnApprove Status Edit `
+          }
+          showConfirm(msg,response.data.nobukti,`absensisupirheader/${response.data.id}/approvalEditAbsensi`)
+        },
+      })
+    }
   })
-
-  // function processResult(result,destination) {
-  //   if (result) {
-  //     // console.log(destination);
-  //     $.ajax({
-  //       url: `${apiUrl}${destination}`,
-  //       method: 'POST',
-  //       dataType: 'JSON',
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`
-  //       },
-  //       success: response => {
-  //         console.log(response);
-  //         $('#jqGrid').jqGrid().trigger('reloadGrid');
-  //       },
-  //     })
-      
-  //   }
-  // }
+  function getStatusEdit() {
+    
+    $.ajax({
+      url: `${apiUrl}parameter`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        filters: JSON.stringify({
+          "groupOp": "AND",
+          "rules": [{
+            "field": "grp",
+            "op": "cn",
+            "data": "STATUS EDIT ABSENSI"
+          },{
+            "field": "text",
+            "op": "cn",
+            "data": "TIDAK BOLEH EDIT ABSENSI"
+          }]
+        })
+      },
+      success: response => {
+        statusTidakBisaEdit =  response.data[0].id;
+      }
+    })
+  }
 
     
 </script>

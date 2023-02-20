@@ -711,7 +711,6 @@
         $('#crudForm [name=noseal]').first().val(orderanemkl.noseal)
       },
       onCancel: (element) => {
-        agen
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
