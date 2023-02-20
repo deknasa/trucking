@@ -300,9 +300,15 @@ html {
 .ui-jqgrid-view > * {
 	width: 100% !important;
 }
+
 .dropdown-menu{
 	background-color:#95b8e7;
 }
+
+.select2-results__option {
+	border-bottom: 1px solid #ced4da;
+}
+
 /* .scrollable-meddnu {
     height: auto;
     max-height: 200px;

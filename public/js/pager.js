@@ -240,14 +240,10 @@ $.fn.customPager = function (option = {}) {
 						: ''
 					}
 					</div>
-
 					<div class="d-md-inline d-block">
-					${approveBtn}
+						${approveBtn}
 					</div>
 				</div>
-				
-				
-				
 				<div id="${pagerHandlerId}" class="pager-handler col-12 col-md-4 d-flex align-items-center justify-content-center">
 				</div>
 				<div id="${pagerInfoId}" class="pager-info col-12 col-md-2">

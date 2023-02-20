@@ -41,7 +41,7 @@ $.fn.lookup = function (options) {
 		element.wrap('<div class="input-group"></div>').after(`
 			${
 				settings.onClear
-					? `<button type="button" class="btn btn-secondary position-absolute button-clear" style="right: 30px; z-index: 99;">C</button>`
+					? `<button type="button" class="btn position-absolute button-clear text-secondary" style="right: 30px; z-index: 99;"><i class="fa fa-times"></i></button>`
 					: ``
 			}
 			<div class="input-group-append">
