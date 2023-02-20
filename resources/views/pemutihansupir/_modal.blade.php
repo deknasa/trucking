@@ -54,7 +54,7 @@
                   </label>
                 </div>
                 <div class="col-12 col-md-10">
-                  <input type="text" name="pengeluaransupir" class="form-control" readonly>
+                  <input type="text" name="pengeluaransupir" class="form-control text-right" readonly>
                 </div>
               </div>
               <div class="row form-group">
@@ -64,7 +64,7 @@
                   </label>
                 </div>
                 <div class="col-12 col-md-10">
-                  <input type="text" name="penerimaansupir" class="form-control" readonly>
+                  <input type="text" name="penerimaansupir" class="form-control text-right" readonly>
                 </div>
               </div>
             </div>
@@ -104,9 +104,6 @@
       deleteRow($(this).parents('tr'))
     })
 
-    $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {
-      setTotal()
-    })
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -118,8 +115,11 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
-      $('#crudForm').find(`[name="nominal_detail[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
+      $('#crudForm').find(`[name="pengeluaransupir"]`).each((index, element) => {
+        data.filter((row) => row.name === 'pengeluaransupir')[index].value = AutoNumeric.getNumber($(`#crudForm [name="pengeluaransupir"]`)[index])
+      })
+      $('#crudForm').find(`[name="penerimaansupir"]`).each((index, element) => {
+        data.filter((row) => row.name === 'penerimaansupir')[index].value = AutoNumeric.getNumber($(`#crudForm [name="penerimaansupir"]`)[index])
       })
 
       data.push({
@@ -362,6 +362,7 @@
       },
       onSelectRow: (supir, element) => {
         $('#crudForm [name=supir_id]').first().val(supir.id)
+        getDataPemutihan(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
       },
@@ -370,8 +371,31 @@
       },
       onClear: (element) => {
         $('#crudForm [name=supir_id]').first().val('')
+        $('#crudForm [name=pengeluaransupir]').first().val('')
+        $('#crudForm [name=penerimaansupir]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+      }
+    })
+  }
+
+  function getDataPemutihan(supirId){
+    
+    $.ajax({
+      url: `${apiUrl}pemutihansupir/${supirId}/getdatapemutihan`,
+      method: 'GET',
+      dataType: 'JSON',
+      data: {
+        limit: 0
+      },
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+       
+        initAutoNumeric($('#crudForm [name=pengeluaransupir]').val(response.data.pengeluaran))
+        initAutoNumeric($('#crudForm [name=penerimaansupir]').val(response.data.penerimaan))
+        console.log(response.data)
       }
     })
   }

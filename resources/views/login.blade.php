@@ -23,6 +23,7 @@
     <div class="login-logo">
       <img class="mx-auto d-block" src="{{ asset('images/logo-min.png') }}" width="150" height="150">
       <h5 style="font-family: 'Open Sans Condensed';"><b>PT. TRANSPORINDO AGUNG SEJAHTERA</b></h5>
+      <p style="font-family: 'Open Sans Condensed'; font-size:1rem" class="text-success"><b>TRUCKING DEV</b></p>
     </div>
     <div class="card">
       <div class="card-body login-card-body">

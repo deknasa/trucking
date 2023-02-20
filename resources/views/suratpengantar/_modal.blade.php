@@ -161,16 +161,16 @@
                   </div>
                 </div>
                 <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Lokasi BONGKAR/MUAT</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="lokasibongkarmuat" class="form-control" readonly>
+                  </div>
+                </div>
+                <div class="form-group ">
                   <label class="col-sm-12 col-form-label">TUJUAN<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="sampai_id">
                     <input type="text" name="sampai" class="form-control kotasampai-lookup">
-                  </div>
-                </div>
-                <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">Lokasi BONGKAR/MUAT</label>
-                  <div class="col-sm-12">
-                    <input type="text" name="lokasibongkarmuat" class="form-control" readonly>
                   </div>
                 </div>
                 <div class="form-group ">
