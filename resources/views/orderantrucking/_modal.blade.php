@@ -600,8 +600,10 @@
       //bukan tas
       $('#crudForm [name=nocont]').attr('readonly', false)
       $('#crudForm [name=noseal]').attr('readonly', false)
-      $('#crudForm [name=nocont2]').attr('readonly', false)
-      $('#crudForm [name=noseal2]').attr('readonly', false)
+      if (kodecontainer == '1') {
+        $('#crudForm [name=nocont2]').attr('readonly', false)
+        $('#crudForm [name=noseal2]').attr('readonly', false)
+      }
     } else {
       $('#crudForm [name=nocont]').attr('readonly', true)
       $('#crudForm [name=noseal]').attr('readonly', true)

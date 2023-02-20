@@ -83,14 +83,14 @@
                         </div>
 
                         <div class="table-responsive">
-                            <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
+                            <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1200px;">
                                 <thead>
                                     <tr>
                                         <th width="1%">No</th>
-                                        <th width="5%">SUPIR</th>
-                                        <th width="5%">KETERANGAN</th>
-                                        <th width="6%">NOMINAL</th>
-                                        <th width="2%">Aksi</th>
+                                        <th width="40%">SUPIR</th>
+                                        <th width="40%">KETERANGAN</th>
+                                        <th width="18%">NOMINAL</th>
+                                        <th width="1%">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table_body" class="form-group">
