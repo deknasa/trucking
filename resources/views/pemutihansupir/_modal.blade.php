@@ -221,7 +221,6 @@
 
     getMaxLength(form)
     initLookup()
-    initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -247,8 +246,10 @@
     $('.invalid-feedback').remove()
 
     $('#table_body').html('')
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     
+    initDatepicker()
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
   }
 
   function editPemutihanSupir(userId) {
@@ -309,12 +310,17 @@
             element.val(value)
           }
 
+
         })
 
-        form.find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))
-        form.find(`[name="supir"]`).data('currentValue', response.data.namasupir)
+        form.find(`[name="supir"]`).val(response.data.supir.namasupir)
+        form.find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti)).prop('readonly', true)
+        form.find(`[name="supir"]`).data('currentValue', response.data.supir.namasupir)
 
-      
+        destroyDatepicker()
+        initAutoNumeric($('#crudForm [name=pengeluaransupir]').val(response.data.pengeluaransupir))
+        initAutoNumeric($('#crudForm [name=penerimaansupir]').val(response.data.penerimaansupir))
+
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
           initDisabled()
@@ -323,6 +329,31 @@
     })
   }
 
+  function cekValidasi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}pemutihansupir/${Id}/cekvalidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+        if (kondisi == true) {
+
+          if (Aksi == 'EDIT') {
+            editPemutihanSupir(Id)
+          }
+          if (Aksi == 'DELETE') {
+            deletePemutihanSupir(Id)
+          }
+        } else {
+          showDialog(response.message['keterangan'])
+        }
+
+      }
+    })
+  }
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
@@ -379,8 +410,8 @@
     })
   }
 
-  function getDataPemutihan(supirId){
-    
+  function getDataPemutihan(supirId) {
+
     $.ajax({
       url: `${apiUrl}pemutihansupir/${supirId}/getdatapemutihan`,
       method: 'GET',
@@ -392,7 +423,7 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-       
+
         initAutoNumeric($('#crudForm [name=pengeluaransupir]').val(response.data.pengeluaran))
         initAutoNumeric($('#crudForm [name=penerimaansupir]').val(response.data.penerimaan))
         console.log(response.data)
