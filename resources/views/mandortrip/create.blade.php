@@ -120,6 +120,14 @@
                 </div>
 
                 <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">NO JOB TRUCKING<span class="text-danger"></span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="jobtrucking" class="form-control jobtrucking-lookup">
+                  </div>
+                </div>
+
+
+                <div class="form-group ">
                   <label class="col-sm-12 col-form-label">GUDANG<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="text" name="gudang" class="form-control">
@@ -299,6 +307,7 @@
     $('.invalid-feedback').remove()
     // $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     // $('#crudForm').find('[name=tglsp]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm [name=jobtrucking]').attr('readonly', true)
 
     Promise
       .all([
@@ -454,6 +463,25 @@
       }
     })
   }
+
+  
+  function setJobReadOnly() {
+
+let jobtrucking = $('#crudForm [name=jobtrucking]')
+if (statustas == '0') {
+  //bukan tas
+  // console.log('bukan');
+  jobtrucking.attr('readonly', true)
+  jobtrucking.parents('.input-group').find('.input-group-append').hide()
+  jobtrucking.parents('.input-group').find('.button-clear').hide()
+} else {
+  //tas
+  jobtrucking.attr('readonly', false)
+  jobtrucking.parents('.input-group').find('.input-group-append').show()
+  jobtrucking.parents('.input-group').find('.button-clear').show()
+}
+}
+
   function initLookup() {
     $('.kotadari-lookup').lookup({
       title: 'Kota Dari Lookup',
@@ -479,6 +507,28 @@
         element.val('')
         element.data('currentValue', element.val())
         // getGaji()
+      }
+    })
+
+    $('.jobtrucking-lookup').lookup({
+      title: 'Job Trucking Lookup',
+      fileName: 'jobtrucking',
+      beforeProcess: function(test) {
+  
+      },
+      onSelectRow: (kota, element) => {
+        $('#crudForm [name=jobtrucking]').first().val(jobtrucking.nobukti)
+        element.val(jobtrucking.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=jobtrucking]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+
       }
     })
 

@@ -10,7 +10,7 @@
         </div>
         <form action="" method="post">
           <div class="modal-body">
-           
+
             <input type="text" name="id" hidden readonly>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
@@ -21,7 +21,7 @@
               <div class="col-12 col-sm-9 col-md-10">
                 <div class="input-group">
 
-                  <input type="text" name="tglbukti" class="form-control datepicker">
+                  <input type="text" name="tglbukti" class="form-control" readonly>
                 </div>
 
               </div>
@@ -51,7 +51,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  Status 
+                  Status
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -59,12 +59,12 @@
                 <input type="text" name="absen" class="form-control absentrado-lookup">
               </div>
             </div>
-            
+
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  KETERANGAN 
+                  KETERANGAN
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -143,7 +143,7 @@
           method = 'POST'
           url = `${apiUrl}mandorabsensisupir`
           break;
-       
+
         default:
           method = 'POST'
           url = `${apiUrl}mandorabsensisupir`
@@ -167,7 +167,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -178,7 +180,25 @@
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
 
-            setErrorMessages(form, error.responseJSON.errors);
+            let errorMessages = error.responseJSON.errors
+
+            if (errorMessages['supir_id'] && errorMessages['supir_id'].length > 0) {
+              form.find(`[name=supir]`).addClass("is-invalid")
+              $(`
+                <div class="invalid-feedback">
+                ${errorMessages['supir_id'][0].toLowerCase()}
+                </div>
+              `).appendTo(form.find(`[name=supir]`).parent())
+            }
+
+            if (errorMessages['jam'] && errorMessages['jam'].length > 0) {
+              form.find(`[name=jam]`).addClass("is-invalid")
+              $(`
+                <div class="invalid-feedback">
+                ${errorMessages['jam'][0].toLowerCase()}
+                </div>
+              `).appendTo(form.find(`[name=jam]`).parent())
+            }
           } else {
             showDialog(error.statusText)
           }
@@ -202,9 +222,9 @@
     initSelect2()
     initLookup()
     Inputmask("datetime", {
-            inputFormat: "HH:MM",
-            max: 24
-          }).mask(".inputmask-time");
+      inputFormat: "HH:MM",
+      max: 24
+    }).mask(".inputmask-time");
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -229,7 +249,7 @@
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     showAbsensi(form, tradoId)
-    
+
   }
 
   function getMaxLength(form) {
@@ -257,7 +277,7 @@
     }
   }
 
- 
+
 
   function showAbsensi(form, tradoId) {
     $.ajax({
@@ -271,8 +291,11 @@
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
           if (element.attr("name") == 'tglbukti') {
-            var result = value.split('-');
-            element.val(result[2] + '-' + result[1] + '-' + result[0]);
+            if (value) {
+              let result = value.split('-');
+
+              element.val(result[2] + '-' + result[1] + '-' + result[0]);
+            }
           } else {
             element.val(value)
           }
@@ -297,18 +320,17 @@
       success: response => {
         $.each(response.data, (index, value) => {
           console.log(value)
-           let element = form.find(`[name="${index}"]`)
+          let element = form.find(`[name="${index}"]`)
           // let element = form.find(`[name="statusaktif"]`)
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } 
-          else {
+          } else {
             element.val(value)
           }
         })
-        
-       
+
+
       }
     })
   }
@@ -338,7 +360,7 @@
       }
     })
 
-   
+
     $('.absentrado-lookup').lookup({
       title: 'Absen Trado Lookup',
       fileName: 'absentrado',
