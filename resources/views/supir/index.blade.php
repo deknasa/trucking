@@ -174,17 +174,18 @@
           //   stype: 'select',
           //   searchoptions: {
           //     value: `<?php
-          //             $i = 1;
+                          //             $i = 1;
 
-          //             foreach ($data['statusadaupdategambar'] as $status) :
-          //               echo "$status[param]:$status[parameter]";
-          //               if ($i !== count($data['statusadaupdategambar'])) {
-          //                 echo ";";
-          //               }
-          //               $i++;
-          //             endforeach
+                          //             foreach ($data['statusadaupdategambar'] as $status) :
+                          //               echo "$status[param]:$status[parameter]";
+                          //               if ($i !== count($data['statusadaupdategambar'])) {
+                          //                 echo ";";
+                          //               }
+                          //               $i++;
+                          //             endforeach
 
-          //             ?>
+                          //             
+                          ?>
           // `,
           //     dataInit: function(element) {
           //       $(element).select2({
@@ -226,8 +227,9 @@
                         $i++;
                       endforeach
 
+
                       ?>
-          `,
+           `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -236,20 +238,30 @@
               }
             },
             formatter: (value, options, rowData) => {
-              let statusLuarkota = JSON.parse(value)
+              if (value != null) {
 
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusLuarkota.WARNA}; color: #fff;">
-                  <span>${statusLuarkota.SINGKATAN}</span>
-                </div>
-              `)
+                let statusLuarkota = JSON.parse(value)
 
-              return formattedValue[0].outerHTML
+                let formattedValue = $(`
+                  <div class="badge" style="background-color: ${statusLuarkota.WARNA}; color: #fff;">
+                    <span>${statusLuarkota.SINGKATAN}</span>
+                  </div>
+                `)
+
+                return formattedValue[0].outerHTML
+              }else{
+                return `&nbsp;`;
+              }
             },
             cellattr: (rowId, value, rowObject) => {
-              let statusLuarkota = JSON.parse(rowObject.statusluarkota)
+              if(rowObject.statusluarkota != null){
 
-              return ` title="${statusLuarkota.MEMO}"`
+                let statusLuarkota = JSON.parse(rowObject.statusluarkota)
+                
+                return ` title="${statusLuarkota.MEMO}"`
+              }else{
+                return ` title="${rowObject.statusluarkota}"`
+              }
             }
           },
           // {
@@ -258,17 +270,18 @@
           //   stype: 'select',
           //   searchoptions: {
           //     value: `<?php
-          //             $i = 1;
+                          //             $i = 1;
 
-          //             foreach ($data['statuszonatertentu'] as $status) :
-          //               echo "$status[param]:$status[parameter]";
-          //               if ($i !== count($data['statuszonatertentu'])) {
-          //                 echo ";";
-          //               }
-          //               $i++;
-          //             endforeach
+                          //             foreach ($data['statuszonatertentu'] as $status) :
+                          //               echo "$status[param]:$status[parameter]";
+                          //               if ($i !== count($data['statuszonatertentu'])) {
+                          //                 echo ";";
+                          //               }
+                          //               $i++;
+                          //             endforeach
 
-          //             ?>
+                          //             
+                          ?>
           // `,
           //     dataInit: function(element) {
           //       $(element).select2({
@@ -313,20 +326,20 @@
             align: 'center',
             formatter: (value, row) => {
               let images = []
-              if(value) {
-              let files = JSON.parse(value)
+              if (value) {
+                let files = JSON.parse(value)
 
-              files.forEach(file => {
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/supir/${file}/small`
+                files.forEach(file => {
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}supir/image/supir/${file}/small`
 
-                images.push(image.outerHTML)
-              });
+                  images.push(image.outerHTML)
+                });
 
-              return images.join(' ')
-            }
+                return images.join(' ')
+              }
               return 'NO PHOTOS'
             }
           },
@@ -337,20 +350,20 @@
             search: false,
             formatter: (value, row) => {
               let images = []
-              if(value) {
-              let files = JSON.parse(value)
+              if (value) {
+                let files = JSON.parse(value)
 
-              files.forEach(file => {
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/ktp/${file}/small`
+                files.forEach(file => {
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}supir/image/ktp/${file}/small`
 
-                images.push(image.outerHTML)
-              });
+                  images.push(image.outerHTML)
+                });
 
-              return images.join(' ')
-            }
+                return images.join(' ')
+              }
               return 'NO PHOTOS'
             }
           },
@@ -361,20 +374,20 @@
             search: false,
             formatter: (value, row) => {
               let images = []
-              if(value) {
-              let files = JSON.parse(value)
+              if (value) {
+                let files = JSON.parse(value)
 
-              files.forEach(file => {
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/sim/${file}/small`
+                files.forEach(file => {
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}supir/image/sim/${file}/small`
 
-                images.push(image.outerHTML)
-              });
+                  images.push(image.outerHTML)
+                });
 
-              return images.join(' ')
-            }
+                return images.join(' ')
+              }
               return 'NO PHOTOS'
             }
           },
@@ -385,20 +398,20 @@
             search: false,
             formatter: (value, row) => {
               let images = []
-              if(value) {
-              let files = JSON.parse(value)
+              if (value) {
+                let files = JSON.parse(value)
 
-              files.forEach(file => {
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/kk/${file}/small`
+                files.forEach(file => {
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}supir/image/kk/${file}/small`
 
-                images.push(image.outerHTML)
-              });
+                  images.push(image.outerHTML)
+                });
 
-              return images.join(' ')
-            }
+                return images.join(' ')
+              }
               return 'NO PHOTOS'
             }
           },
@@ -409,19 +422,19 @@
             align: 'center',
             formatter: (value, row) => {
               let images = []
-              if(value) {
-              let files = JSON.parse(value)
+              if (value) {
+                let files = JSON.parse(value)
 
-              files.forEach(file => {
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/skck/${file}/small`
+                files.forEach(file => {
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}supir/image/skck/${file}/small`
 
-                images.push(image.outerHTML)
-              });
+                  images.push(image.outerHTML)
+                });
 
-              return images.join(' ')
+                return images.join(' ')
               }
               return 'NO PHOTOS'
             }
@@ -489,21 +502,29 @@
               }
             },
             formatter: (value, options, rowData) => {
-              let statusBlacklist = JSON.parse(value)
+              if (value != null) {
 
-              let formattedValue = $(`
+                let statusBlacklist = JSON.parse(value)
+                let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusBlacklist.WARNA}; color: #fff;">
                   <span>${statusBlacklist.SINGKATAN}</span>
                 </div>
               `)
 
-              return formattedValue[0].outerHTML
+                return formattedValue[0].outerHTML
+              }
             },
             cellattr: (rowId, value, rowObject) => {
-              let statusBlacklist = JSON.parse(rowObject.statusblacklist)
+              if (rowObject.statusblacklist != null) {
+                let statusBlacklist = JSON.parse(rowObject.statusblacklist)
+                return ` title="${statusBlacklist.MEMO}"`
+              }
 
-              return ` title="${statusBlacklist.MEMO}"`
             }
+          },
+          {
+            label: 'NO BUKTI PEMUTIHAN SUPIR',
+            name: 'pemutihansupir_nobukti',
           },
           {
             label: 'MODIFIEDBY',
@@ -648,40 +669,39 @@
               } else {
                 cekValidasidelete(selectedId)
               }
-             
+
             }
           },
         ],
-        approveBtn:[{
+        approveBtn: [{
           id: 'approve',
           title: 'Approve',
           caption: 'Approve',
           innerHTML: '<i class="fa fa-check"></i> APPROVE',
           class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
-            {
-              id:'approvalBlackListSupir',
-              text:"Approval Black List Supir",
+          dropmenuHTML: [{
+              id: 'approvalBlackListSupir',
+              text: "Approval Black List Supir",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approvalBlackListSupir(selectedId)
               }
             },
             {
-              id:'approvalSupirLuarKota',
-              text:"Approval Supir Luar Kota",
+              id: 'approvalSupirLuarKota',
+              text: "Approval Supir Luar Kota",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approvalSupirLuarKota(selectedId)
               }
             },
             {
-              id:'approvalSupirResign',
-              text:"Approval Supir Resign",
+              id: 'approvalSupirResign',
+              text: "Approval Supir Resign",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approvalSupirResign(selectedId)
-                
+
               }
             },
           ]
@@ -744,14 +764,16 @@
         url: url,
         method: 'POST',
         dataType: 'JSON',
-        data: {tanggalberhenti:form.find('[name=tgl]').val()},
-         headers: {
+        data: {
+          tanggalberhenti: form.find('[name=tgl]').val()
+        },
+        headers: {
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
           $('#tglModal').trigger('reset')
           $('#tglModal').modal('hide')
-          id = response.data.id          
+          id = response.data.id
         },
         error: error => {
           console.error(error);
@@ -810,8 +832,8 @@
     })
 
 
-    function approvalBlackListSupir(supirId){
-      
+    function approvalBlackListSupir(supirId) {
+
       $.ajax({
         url: `${apiUrl}supir/${supirId}`,
         method: 'GET',
@@ -824,11 +846,12 @@
           if (response.data.statusblacklist === statusBukanBlackList) {
             msg = `YAKIN Unapproved Black List Supir ${response.data.namasupir}`
           }
-          showConfirm(msg,"",`supir/${response.data.id}/approvalblacklist`)
+          showConfirm(msg, "", `supir/${response.data.id}/approvalblacklist`)
         },
       })
     }
-    function approvalSupirLuarKota(supirId){
+
+    function approvalSupirLuarKota(supirId) {
       $.ajax({
         url: `${apiUrl}supir/${supirId}`,
         method: 'GET',
@@ -842,11 +865,12 @@
           if (response.data.statusluarkota === statusTidakBolehLuarkota) {
             msg = `YAKIN UNapproved STATUS Luar Kota Supir ${response.data.namasupir} ?`
           }
-          showConfirm(msg,"",`supir/${response.data.id}/approvalluarkota`)
+          showConfirm(msg, "", `supir/${response.data.id}/approvalluarkota`)
         },
       })
     }
-    function approvalSupirResign(supirId){
+
+    function approvalSupirResign(supirId) {
       $.ajax({
         url: `${apiUrl}supir/${supirId}`,
         method: 'GET',
@@ -859,18 +883,19 @@
             $('#tglModal').find('button:submit').html(`Approve Resign`)
             $('#tglModal').find('label').html(`Tgl Supir Resign`)
             $('#tglModalLabel').html(`PILIH TANGGAL Supir Resign`)
-                $('#tglModal').find('[name=id]').val(`${selectedId}`)
-                $('#tglModal').modal('show')
-          }else{
-            showConfirm("unapproval Supir Resign",response.data.namasupir,`supir/${response.data.id}/approvalresign`)
+            $('#tglModal').find('[name=id]').val(`${selectedId}`)
+            $('#tglModal').modal('show')
+          } else {
+            showConfirm("unapproval Supir Resign", response.data.namasupir, `supir/${response.data.id}/approvalresign`)
           }
         },
       })
     }
-    
+
   })
+
   function getTidakBolehLuarkota() {
-    
+
     $.ajax({
       url: `${apiUrl}parameter`,
       method: 'GET',
@@ -886,7 +911,7 @@
             "field": "grp",
             "op": "cn",
             "data": "STATUS LUAR KOTA"
-          },{
+          }, {
             "field": "text",
             "op": "cn",
             "data": "TIDAK BOLEH LUAR KOTA"
@@ -894,12 +919,13 @@
         })
       },
       success: response => {
-        statusTidakBolehLuarkota =  response.data[0].id;
+        statusTidakBolehLuarkota = response.data[0].id;
       }
     })
   }
+
   function getBukanBlackList() {
-    
+
     $.ajax({
       url: `${apiUrl}parameter`,
       method: 'GET',
@@ -915,7 +941,7 @@
             "field": "grp",
             "op": "cn",
             "data": "BLACKLIST SUPIR"
-          },{
+          }, {
             "field": "text",
             "op": "cn",
             "data": "BUKAN SUPIR BLACKLIST"
@@ -923,12 +949,10 @@
         })
       },
       success: response => {
-        statusBukanBlackList =  response.data[0].id;
+        statusBukanBlackList = response.data[0].id;
       }
     })
   }
-    
-    
 </script>
 @endpush()
 @endsection
