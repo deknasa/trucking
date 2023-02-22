@@ -136,7 +136,7 @@
                             <th width="5%">NO BUKTI INVOICE</th>
                             <th width="5%">NOMINAL PIUTANG</th>
                             <th width="5%">SISA</th>
-                            <th width="5%">KETERANGAN</th>
+                            <th width="11%">KETERANGAN</th>
                             <th width="6%">BAYAR</th>
                             <th width="6%">POTONGAN</th>
                             <th width="6%">COA POTONGAN</th>
@@ -208,21 +208,21 @@
     $(document).on('input', `#table_body [name="bayarppd[]"]`, function(event) {
       setTotal()
       let sisa = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisa[]"]`)[0])
-
+      let potonganppd = AutoNumeric.getNumber($(this).closest("tr").find(`[name="potonganppd[]"]`)[0])
       let bayar = $(this).val()
       bayar = parseFloat(bayar.replaceAll(',', ''));
       bayar = Number.isNaN(bayar) ? 0 : bayar
         let nominal = $(this).closest("tr").find(`[name="nominal[]"]`).val()
       if (sisa == 0) {
         nominal = parseFloat(nominal.replaceAll(',', ''));
-        let totalSisa = nominal - bayar
+        let totalSisa = nominal - bayar - potonganppd
 
         $(this).closest("tr").find(".sisa").html(totalSisa)
         $(this).closest("tr").find(`[name="sisa[]"]`).val(totalSisa)
       } else {
         
         nominal = parseFloat(nominal.replaceAll(',', ''));
-        let totalSisa = nominal - bayar
+        let totalSisa = nominal - bayar - potonganppd
         $(this).closest("tr").find(".sisa").html(totalSisa)
         $(this).closest("tr").find(`[name="sisa[]"]`).val(totalSisa)
       }
@@ -242,6 +242,37 @@
 
     $(document).on('input', `#table_body [name="potonganppd[]"]`, function(event) {
       setPenyesuaian()
+      let sisa = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisa[]"]`)[0])
+      let bayar = AutoNumeric.getNumber($(this).closest("tr").find(`[name="bayarppd[]"]`)[0])
+      let potonganppd = $(this).val()
+      potonganppd = parseFloat(potonganppd.replaceAll(',', ''));
+      potonganppd = Number.isNaN(potonganppd) ? 0 : potonganppd
+        let nominal = $(this).closest("tr").find(`[name="nominal[]"]`).val()
+      if (sisa == 0) {
+        nominal = parseFloat(nominal.replaceAll(',', ''));
+        let totalSisa = nominal - bayar - potonganppd
+
+        $(this).closest("tr").find(".sisa").html(totalSisa)
+        $(this).closest("tr").find(`[name="sisa[]"]`).val(totalSisa)
+      } else {
+        
+        nominal = parseFloat(nominal.replaceAll(',', ''));
+        let totalSisa = nominal - bayar - potonganppd
+        $(this).closest("tr").find(".sisa").html(totalSisa)
+        $(this).closest("tr").find(`[name="sisa[]"]`).val(totalSisa)
+      }
+
+
+      initAutoNumeric($(this).closest("tr").find(".sisa"))
+
+      let Sisa = $(`#table_body .sisa`)
+      let total = 0
+
+      $.each(Sisa, (index, SISA) => {
+        total += AutoNumeric.getNumber(SISA)
+      });
+
+      new AutoNumeric('#sisaPiutang').set(total)
     })
     $(document).on('input', `#table_body [name="nominallebihbayarppd[]"]`, function(event) {
       setNominalLebih()

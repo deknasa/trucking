@@ -187,10 +187,33 @@
 
     $(document).on('input', `#table_body [name="potongan[]"]`, function(event) {
       setPotongan()
+      let sisa = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisa[]"]`)[0])
       let bayar = AutoNumeric.getNumber($(this).closest("tr").find(`[name="bayar[]"]`)[0])
       let potongan = $(this).val()
       potongan = parseFloat(potongan.replaceAll(',', ''));
       potongan = Number.isNaN(potongan) ? 0 : potongan
+
+      if (sisa == 0) {
+      let nominal = $(this).closest("tr").find(`[name="nominal[]"]`).val()
+      nominal = parseFloat(nominal.replaceAll(',', ''));
+      let totalSisa = nominal - bayar - potongan
+      $(this).closest("tr").find(".sisa").html(totalSisa)
+    } else {
+      let totalSisa = sisa - bayar - potongan
+      $(this).closest("tr").find(".sisa").html(totalSisa)
+    }
+
+
+    initAutoNumeric($(this).closest("tr").find(".sisa"))
+
+    let Sisa = $(`#table_body .sisa`)
+    let ttlsisa = 0
+
+    $.each(Sisa, (index, SISA) => {
+      ttlsisa += AutoNumeric.getNumber(SISA)
+    });
+
+    new AutoNumeric('#sisaHutang').set(ttlsisa)
 
       let total = bayar - potongan
       $(this).closest("tr").find(`[name="total[]"]`).val(total)
@@ -897,6 +920,7 @@
   function setSisaHutang(element) {
 
     let sisa = AutoNumeric.getNumber(element.closest("tr").find(`[name="sisa[]"]`)[0])
+    let potongan = AutoNumeric.getNumber(element.closest("tr").find(`[name="potongan[]"]`)[0])
 
     let bayar = element.val()
     bayar = parseFloat(bayar.replaceAll(',', ''));
@@ -905,10 +929,10 @@
     if (sisa == 0) {
       let nominal = element.closest("tr").find(`[name="nominal[]"]`).val()
       nominal = parseFloat(nominal.replaceAll(',', ''));
-      let totalSisa = nominal - bayar
+      let totalSisa = nominal - bayar - potongan
       element.closest("tr").find(".sisa").html(totalSisa)
     } else {
-      let totalSisa = sisa - bayar
+      let totalSisa = sisa - bayar - potongan
       element.closest("tr").find(".sisa").html(totalSisa)
     }
 
@@ -925,7 +949,6 @@
     new AutoNumeric('#sisaHutang').set(total)
 
     // get potongan for total
-    let potongan = AutoNumeric.getNumber(element.closest("tr").find(`[name="potongan[]"]`)[0])
     let totalHutang = bayar - potongan
     element.closest("tr").find(`[name="total[]"]`).val(totalHutang)
 
