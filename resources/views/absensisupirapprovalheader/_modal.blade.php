@@ -117,7 +117,8 @@
       let absensiSupirApproval = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
-
+      let sortname = 'nobukti'
+      let sortorder = 'asc'
 
       data.push({
         name: 'sortIndex',
