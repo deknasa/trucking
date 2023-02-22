@@ -41,7 +41,7 @@
         rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
-        rowList: [10, 20, 50],
+        rowList: [10, 20, 50, 0],
         footerrow: true,
         userDataOnFooter: true,
         toolbar: [true, "top"],
@@ -67,6 +67,7 @@
           activeGrid = $(this)
         },
         loadComplete: function(data) {
+          changeJqGridRowListText()
           if (data.attributes) {
             $(this).jqGrid('footerData', 'set', {
               nobukti: 'Total:',

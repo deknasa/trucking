@@ -53,7 +53,7 @@
         rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
-        rowList: [10, 20, 50],
+        rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
         // pager: pager,
@@ -80,6 +80,7 @@
           activeGrid = $(this)
         },
         loadComplete: function(data) {
+          changeJqGridRowListText()
           initResize($(this))
           
           let nominals = $(this).jqGrid("getCol", "uangjalan")
