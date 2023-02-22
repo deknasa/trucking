@@ -46,7 +46,16 @@
           {
             label: 'NAMA MENU',
             name: 'menuname',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              let totalParent = rowData.menukode.length
+
+              for (let i = 0; i < totalParent - 1; i++) {
+                value = `· ${value}`
+              }
+
+              return value
+            }
           },
           {
             label: 'SEQ. MENU',
