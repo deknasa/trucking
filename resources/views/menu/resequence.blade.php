@@ -12,7 +12,7 @@
             <div class="row">
               <div class="col-12">
                 <div class="dd">
-                  {!! \App\Helpers\Menu::printRecursiveMenuForResequence($sqlmenu) !!}
+                  {!! \App\Helpers\Menu::printRecursiveMenuForResequence(session('menus')) !!}
                 </div>
               </div>
             </div>

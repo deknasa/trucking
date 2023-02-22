@@ -3,18 +3,18 @@ function loadPagerHandler(element, grid) {
 		<button id="${
 			grid.getGridParam().id
 		}_firstPageButton" class="btn btn-sm hover-primary mr-2 d-flex">
-			<span class="fas fa-angle-double-left"></span>
+			<span class="fas fa-step-backward"></span>
 		</button>
 
 		<button id="${
 			grid.getGridParam().id
 		}_previousPageButton" class="btn btn-sm hover-primary d-flex">
-			<span class="fas fa-angle-left"></span>
+			<span class="fas fa-backward"></span>
 		</button>
 		
-		<div class="input-group input-group-sm mx-2 d-flex align-items-center my-1">
+		<div class="d-flex align-items-center my-1 mx-3 justify-content-between gap-10">
 			<span>Page</span>
-			<input id="${grid.getGridParam().id}_pagerInput" class="form-control" value="${
+			<input id="${grid.getGridParam().id}_pagerInput" class="pager-input" value="${
 		grid.getGridParam().page
 	}">
 			<span id="${grid.getGridParam().id}_totalPage">of ${
@@ -25,13 +25,13 @@ function loadPagerHandler(element, grid) {
 		<button id="${
 			grid.getGridParam().id
 		}_nextPageButton" class="btn btn-sm hover-primary d-flex">
-			<span class="fas fa-angle-right"></span>
+			<span class="fas fa-forward"></span>
 		</button>
 
 		<button id="${
 			grid.getGridParam().id
 		}_lastPageButton" class="btn btn-sm hover-primary ml-2 d-flex">
-			<span class="fas fa-angle-double-right"></span>
+			<span class="fas fa-step-forward"></span>
 		</button>
 
 		<select id="${grid.getGridParam().id}_rowList" class="ml-2">
@@ -210,8 +210,8 @@ $.fn.customPager = function (option = {}) {
 
 	$(`#gbox_${$(this).getGridParam().id}`).after(`
 		<div class="col-12 bg-white grid-pager overflow-x-hidden">
-			<div class="row d-flex align-items-center text-center text-md-left">
-				<div class="col-12 col-md-6">
+			<div class="row d-flex align-items-center text-center text-lg-left">
+				<div class="col-12 col-lg-6">
 					<div class="d-md-inline d-block">
 					${
 						typeof option.buttons !== "undefined"
@@ -244,9 +244,13 @@ $.fn.customPager = function (option = {}) {
 						${approveBtn}
 					</div>
 				</div>
-				<div id="${pagerHandlerId}" class="pager-handler col-12 col-md-4 d-flex align-items-center justify-content-center">
-				</div>
-				<div id="${pagerInfoId}" class="pager-info col-12 col-md-2">
+				<div class="col-12 col-lg-6">
+					<div class="row d-flex align-items-center justify-content-center justify-content-lg-end pr-2">
+						<div id="${pagerHandlerId}" class="pager-handler d-flex align-items-center justify-content-center mx-2">
+						</div>
+						<div id="${pagerInfoId}" class="pager-info">
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
