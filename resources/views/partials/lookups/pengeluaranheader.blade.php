@@ -331,7 +331,7 @@
       rowNum: 10,
       rownumbers: true,
       rownumWidth: 45,
-      rowList: [10, 20, 50],
+      rowList: [10, 20, 50, 0],
       toolbar: [true, "top"],
       sortable: true,
       sortname: 'id',
@@ -361,6 +361,7 @@
         jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       loadComplete: function(data) {
+          changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

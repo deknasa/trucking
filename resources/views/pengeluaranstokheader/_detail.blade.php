@@ -120,12 +120,13 @@
         footerrow: true,
 		    userDataOnFooter: true,
         rownumWidth: 45,
-        rowList: [10, 20, 50],
+        rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
         // pager: pager,
         viewrecords: true,
         loadComplete: function(data) {
+          changeJqGridRowListText()
           detailsPostData = $(this).jqGrid('getGridParam', 'postData')
           
           sum = $('#detail').jqGrid("getCol", "total", false, "sum")

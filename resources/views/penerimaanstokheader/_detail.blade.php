@@ -119,7 +119,7 @@
         footerrow: true,
 		    userDataOnFooter: true,
         rownumWidth: 45,
-        rowList: [10, 20, 50],
+        rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
         // pager: pager,
@@ -130,6 +130,7 @@
         },
         viewrecords: true,
         loadComplete: function(data) {
+          changeJqGridRowListText()
           initResize($(this))
           detailsPostData = $(this).jqGrid('getGridParam', 'postData')
 // console.log(detailsPostData);

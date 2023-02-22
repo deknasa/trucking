@@ -260,7 +260,7 @@
         rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
-        rowList: [10, 20, 50],
+        rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
         sortname: sortname,
@@ -290,6 +290,7 @@
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
         },
         loadComplete: function(data) {
+          changeJqGridRowListText()
 
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
