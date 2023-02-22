@@ -235,7 +235,7 @@ $('#stokLookup').jqGrid({
         postData = $(this).jqGrid('getGridParam', 'postData')
 
         $('.clearsearchclass').click(function() {
-          clearColumnSearch()
+          clearColumnSearch($(this))
         })
 
         $(this).setGridWidth($('#lookupCabang').prev().width())

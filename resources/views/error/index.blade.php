@@ -126,7 +126,7 @@
           triggerClick = true
 
           $('.clearsearchclass').click(function() {
-            clearColumnSearch()
+            clearColumnSearch($(this))
           })
 
           if (triggerClick) {

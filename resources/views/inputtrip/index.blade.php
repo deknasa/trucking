@@ -123,7 +123,7 @@
 
 
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NO JOB TRUCKING<span class="text-danger"></span></label>
+                  <label name="labeljobtrucking" class="col-sm-12 col-form-label">NO JOB TRUCKING<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="text" name="jobtrucking" class="form-control jobtrucking-lookup">
                   </div>
@@ -145,10 +145,7 @@
                   <i class="fa fa-save"></i>
                   Simpan
                 </button>
-                <button class="btn btn-secondary" type="reset">
-                  <i class="fa fa-times"></i>
-                  Batal
-                </button>
+                
               </div>
             </form>
           </div>
@@ -173,6 +170,8 @@
   let gandenganId
   let tarifrincianId
   let statusLongtrip
+  var statuspelabuhan
+
   $(document).ready(function() {
 
     $('#btnSubmit').click(function(event) {
@@ -333,7 +332,6 @@
     $('.invalid-feedback').remove()
     // $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     // $('#crudForm').find('[name=tglsp]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    $('#crudForm [name=jobtrucking]').attr('readonly', true)
     Promise
       .all([
         setStatusLongTripOptions(form),
@@ -430,11 +428,15 @@
       success: response => {
         containerId = 0
         jenisorderId = 0
-        tradoId=0
-        gandenganId=0
-        pelangganId=0
-        taridrincianId=0
-        statusLongtrip=0
+        tradoId = 0
+        gandenganId = 0
+        pelangganId = 0
+        taridrincianId = 0
+        statusLongtrip = 0
+        statuspelabuhan='1'
+        setJobReadOnly()
+   
+
 
         $.each(response.data, (index, value) => {
           console.log(value)
@@ -497,22 +499,51 @@
     })
   }
 
+
+  function getpelabuhan(id) {
+    $.ajax({
+      url: `${apiUrl}suratpengantar/${id}/getpelabuhan`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      success: response => {
+        // console.log('test')
+        // console.log(response.data.status)
+        statuspelabuhan = response.data.status
+        setJobReadOnly()
+      
+        // console.log(statustas)
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
+  }
+
+
   function setJobReadOnly() {
 
     let jobtrucking = $('#crudForm [name=jobtrucking]')
-    if (statustas == '0') {
+    let labeljobtrucking = $('#crudForm [name=labeljobtrucking]')
+    if (statuspelabuhan == '0') {
       //bukan tas
       // console.log('bukan');
-      jobtrucking.attr('readonly', true)
+      jobtrucking.attr('hidden', true)
+      labeljobtrucking.attr('hidden', true)
       jobtrucking.parents('.input-group').find('.input-group-append').hide()
       jobtrucking.parents('.input-group').find('.button-clear').hide()
     } else {
       //tas
-      jobtrucking.attr('readonly', false)
+      labeljobtrucking.attr('hidden', false)
+      jobtrucking.attr('hidden', false)
       jobtrucking.parents('.input-group').find('.input-group-append').show()
       jobtrucking.parents('.input-group').find('.button-clear').show()
     }
   }
+
+ 
 
 
   function initLookup() {
@@ -529,6 +560,7 @@
       onSelectRow: (kota, element) => {
         $('#crudForm [name=dari_id]').first().val(kota.id)
         kotadariId = kota.id
+        getpelabuhan(kota.id)
         element.val(kota.keterangan)
         element.data('currentValue', element.val())
         // getGaji()
@@ -548,16 +580,15 @@
       title: 'Job Trucking Lookup',
       fileName: 'jobtrucking',
       beforeProcess: function(test) {
-        console.log('test');
-        console.log(tarifrincianId)
+    
         this.postData = {
           jenisorder_id: jenisorderId,
-          container_id: containerId,        
-          pelanggan_id: pelangganId,        
+          container_id: containerId,
+          pelanggan_id: pelangganId,
           gandengan_id: gandenganId,
           trado_id: tradoId,
-          statuslongtrip: statusLongtrip,        
-          tarif_id: tarifrincianId,        
+          statuslongtrip: statusLongtrip,
+          tarif_id: tarifrincianId,
         }
       },
       onSelectRow: (jobtrucking, element) => {
@@ -589,6 +620,7 @@
       onSelectRow: (kota, element) => {
         $('#crudForm [name=sampai_id]').first().val(kota.id)
         kotasampaiId = kota.id
+
         element.val(kota.keterangan)
         element.data('currentValue', element.val())
         // getGaji()
