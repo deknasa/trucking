@@ -60,9 +60,9 @@
               </div>
 
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Nominal Deposit SA</label>
+                <label for="staticEmail" class="col-sm-4 col-form-label">No Bukti Pemutihan</label>
                 <div class="col-sm-8">
-                  <input type="text" name="nominaldepositsa" class="form-control autonumeric" readonly>
+                  <input type="text" name="pemutihansupir_nobukti" class="form-control pemutihan-lookup">
                 </div>
               </div>
 
@@ -70,7 +70,7 @@
               <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">Nominal Pinjaman</label>
                 <div class="col-sm-8">
-                  <input type="text" name="nominalpinjamansaldoawal" class="form-control autonumeric" readonly>
+                  <input type="text" name="nominalpinjamansaldoawal" class="form-control text-right" readonly>
                 </div>
               </div>
 
@@ -263,7 +263,6 @@
   $(document).ready(function() {
     $(document).on('click', '#btnSubmit', function(event) {
       event.preventDefault()
-      // AutoNumeric.getNumber($(`#crudForm [name="nominaldepositsa"]`)[0])
 
       let form = $('#crudForm')
 
@@ -338,6 +337,23 @@
         $(this).removeAttr('disabled')
       })
     })
+  })
+
+  
+  // $('#crudModal').on('shown.bs.modal', () => {
+  //   let form = $('#crudForm')
+
+  //   setFormBindKeys(form)
+
+  //   activeGrid = null
+
+  //   getMaxLength(form)
+  //   initLookup()
+  // })
+  $('#crudModal').on('hidden.bs.modal', () => {
+    activeGrid = '#jqGrid'
+
+    $('#crudForm [name=nominalpinjamansaldoawal]').attr('value', '')
   })
 
   function createSupir() {
@@ -475,6 +491,7 @@
     })
   }
 
+
   function initLookup() {
     if (!$('.zona-lookup').data('hasLookup')) {
       $('.zona-lookup').lookup({
@@ -511,6 +528,30 @@
         onClear: (element) => {
           $('#crudForm [name=supirold_id]').first().val('')
           element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+    }
+
+    if (!$('.pemutihan-lookup').data('hasLookup')) {
+      $('.pemutihan-lookup').lookup({
+        title: 'Pemutihan Supir Lookup',
+        fileName: 'pemutihansupir',
+        onSelectRow: (pemutihansupir, element) => {
+
+          newPengeluaran = pemutihansupir.pengeluaransupir.replace(',', '');
+          newPenerimaan = pemutihansupir.penerimaansupir.replace(',', '');
+          pinjaman = parseFloat(newPengeluaran) - parseFloat(newPenerimaan);
+          initAutoNumeric($('#crudForm [name=nominalpinjamansaldoawal]').val(pinjaman))
+          element.val(pemutihansupir.nobukti)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          $('#crudForm [name=nominalpinjamansaldoawal]').val('')
           element.data('currentValue', element.val())
         }
       })
@@ -620,7 +661,7 @@
   }
 
 
-  
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}supir/${Id}/cekValidasi`,
@@ -632,11 +673,11 @@
       success: response => {
         var kondisi = response.kondisi
         console.log(kondisi)
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-            deleteSupir(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteSupir(Id)
+        }
 
       }
     })
@@ -664,19 +705,17 @@
       },
       success: response => {
         $.each(response.data, (index, value) => {
-          console.log(value)
-           let element = form.find(`[name="${index}"]`)
+          let element = form.find(`[name="${index}"]`)
           // let element = form.find(`[name="statusaktif"]`)
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } 
-          else {
+          } else {
             element.val(value)
           }
         })
-        
-       
+
+
       }
     })
   }

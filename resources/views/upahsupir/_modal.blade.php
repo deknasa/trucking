@@ -134,17 +134,17 @@
             </div>
                   
             <div class="table-responsive">
-              <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="width:1800px">
+              <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="width:1500px">
                 <thead class="table-secondary">
                   <tr>
-                    <th width="1%">NO</th>
-                    <th width="5%">CONTAINER</th>
-                    <th width="15%">STATUS CONTAINER</th>
-                    <th width="15%">NOMINAL SUPIR</th>
-                    <th width="15%">NOMINAL KENEK</th>
-                    <th width="15%">NOMINAL KOMISI</th>
-                    <th width="15%">NOMINAL TOL</th>
-                    <th width="15%">LITER</th>
+                    <th width="5%">NO</th>
+                    <th width="10%">CONTAINER</th>
+                    <th width="25%">STATUS CONTAINER</th>
+                    <th width="12%">NOMINAL SUPIR</th>
+                    <th width="12%">NOMINAL KENEK</th>
+                    <th width="12%">NOMINAL KOMISI</th>
+                    <th width="12%">NOMINAL TOL</th>
+                    <th width="12%">LITER</th>
                     {{-- <th width="1%">AKSI</th> --}}
                   </tr>
                 </thead>
@@ -935,19 +935,19 @@
                 <input type="text" name="statuscontainer[]" data-current-value="${detail.statuscontainer}" class="form-control" readonly>
               </td>
               <td>
-                <input type="text" name="nominalsupir[]" class="form-control autonumeric">
+                <input type="text" name="nominalsupir[]" data-current-value="${detail.nominalsupir}" class="form-control autonumeric">
               </td>
               <td>
-                <input type="text" name="nominalkenek[]" class="form-control autonumeric">
+                <input type="text" name="nominalkenek[]" data-current-value="${detail.nominalkenek}" class="form-control autonumeric">
               </td>
               <td>
-                <input type="text" name="nominalkomisi[]" class="form-control autonumeric">
+                <input type="text" name="nominalkomisi[]" data-current-value="${detail.nominalkomisi}" class="form-control autonumeric">
               </td>
               <td>
-                <input type="text" name="nominaltol[]" class="form-control autonumeric">
+                <input type="text" name="nominaltol[]" data-current-value="${detail.nominaltol}" class="form-control autonumeric">
               </td>
               <td>
-                <input type="text" name="liter[]" class="form-control autonumeric">
+                <input type="text" name="liter[]" data-current-value="${detail.liter}" class="form-control autonumeric">
               </td>
               
             </tr>
@@ -956,6 +956,17 @@
             detailRow.find(`[name="container[]"]`).val(detail.container)
             detailRow.find(`[name="statuscontainer_id[]"]`).val(detail.statuscontainer_id)
             detailRow.find(`[name="statuscontainer[]"]`).val(detail.statuscontainer)
+            detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
+            detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
+            detailRow.find(`[name="nominalkenek[]"]`).val(detail.nominalkenek)
+            detailRow.find(`[name="nominalkenek[]"]`).val(detail.nominalkenek)
+            detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
+            detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
+            detailRow.find(`[name="nominaltol[]"]`).val(detail.nominaltol)
+            detailRow.find(`[name="nominaltol[]"]`).val(detail.nominaltol)
+            detailRow.find(`[name="liter[]"]`).val(detail.liter)
+            detailRow.find(`[name="liter[]"]`).val(detail.liter)
+
             initAutoNumeric(detailRow.find('.autonumeric'))
             setNominalSupir()
             setNominalKenek()

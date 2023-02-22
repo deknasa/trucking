@@ -63,10 +63,14 @@
           {
             label: 'PENERIMAAN SUPIR',
             name: 'penerimaansupir',
+            align: 'right',
+            formatter: currencyFormat
           },
           {
             label: 'PENGELUARAN SUPIR',
             name: 'pengeluaransupir',
+            align: 'right',
+            formatter: currencyFormat
           },
           {
             label: 'MODIFIEDBY',
@@ -196,8 +200,11 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              editPemutihanSupir(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                cekValidasi(selectedId, 'EDIT')
+              }
             }
           },
           {
@@ -206,8 +213,11 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              deletePemutihanSupir(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                cekValidasi(selectedId, 'DELETE')
+              }
             }
           },
         ]

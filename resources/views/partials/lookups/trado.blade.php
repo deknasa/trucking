@@ -791,7 +791,7 @@
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
       },
       loadBeforeSend: (jqXHR) => {
-        jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
       },
       loadComplete: function(data) {
         if (detectDeviceType() == 'desktop') {

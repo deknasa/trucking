@@ -8,6 +8,24 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-header p-0 border-bottom-0">
+          <ul class="nav nav-tabs" id="tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="acl" data-toggle="pill" href="#acl" role="tab" aria-controls="acl" aria-selected="false">Acl</a>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body">
+          <div class="tab-content" id="tabContent">
+            <div class="tab-pane" id="acl-tab" role="tabpanel" aria-labelledby="acl-tab"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 @include('role._modal')
@@ -27,6 +45,7 @@
   let sortname = 'rolename'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let currentTab = 'acl'
 
   $(document).ready(function() {
     $("#jqGrid").jqGrid({
@@ -95,7 +114,11 @@
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let rows = $(this).jqGrid('getGridParam', 'postData').limit
+          let roleId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
+          $(`.tab-pane#${currentTab}-tab`).html('').load(`${appUrl}/user/${currentTab}/grid`, function() {
+            loadGrid(roleId)
+          })
         },
         loadBeforeSend: (jqXHR) => {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
@@ -326,6 +349,18 @@
 
         submitButton.removeAttr('disabled')
       }
+    })
+    
+    $('#tab').find('.nav-link').on('shown.bs.tab', function() {
+      let roleId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+
+      currentTab = $(this).attr('id')
+
+      $('.tab-pane').removeClass('active')
+      $(`.tab-pane#${currentTab}-tab`).addClass('active')
+      $(`.tab-pane#${currentTab}-tab`).html('').load(`${appUrl}/user/${currentTab}/grid`, function() {
+        loadGrid(roleId)
+      })
     })
   })
 </script>

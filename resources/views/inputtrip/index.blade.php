@@ -6,12 +6,12 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-       
+
         <form action="#" id="crudForm">
           <div class=" ">
             <div class="card-header bg-primary">
               <h5 class="card-title" id="crudModalTitle"> {{$title}} </h5>
-             
+
             </div>
             <form action="" method="post">
               <div class="card-body">
@@ -111,7 +111,7 @@
                   </div>
                 </div>
 
-               
+
 
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">FULL / EMPTY<span class="text-danger">*</span></label>
@@ -121,6 +121,15 @@
                   </div>
                 </div>
 
+
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">NO JOB TRUCKING<span class="text-danger"></span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="jobtrucking" class="form-control jobtrucking-lookup">
+                  </div>
+                </div>
+
+
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">GUDANG<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
@@ -128,8 +137,8 @@
                   </div>
                 </div>
 
-                
-                
+
+
               </div>
               <div class="card-footer justify-content-start">
                 <button id="btnSubmit" class="btn btn-primary">
@@ -144,9 +153,9 @@
             </form>
           </div>
         </form>
-        
-     </div>
-      
+
+      </div>
+
     </div>
   </div>
 </div>
@@ -154,12 +163,18 @@
 @push('scripts')
 
 <script>
-  
   let indexRow = 0;
-    let triggerClick = true;
-    let id = "";
-  $(document).ready(function () {
-    
+  let triggerClick = true;
+  let id = "";
+  let jenisorderId
+  let containerId
+  let tradoId
+  let pelangganId
+  let gandenganId
+  let tarifrincianId
+  let statusLongtrip
+  $(document).ready(function() {
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -170,11 +185,11 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
-      
-      
+
+
       method = 'POST'
       url = `${apiUrl}inputtrip`
-      
+
       data.push({
         name: 'indexRow',
         value: indexRow
@@ -183,7 +198,7 @@
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
 
-      if (action == 'add' ) {
+      if (action == 'add') {
         $.ajax({
           url: `{{ config('app.api_url') }}suratpengantar/cekUpahSupir`,
           method: 'POST',
@@ -204,7 +219,7 @@
               data: data,
               success: response => {
                 console.log(response.message);
-                showSuccessDialog(response.message,response.data.nobukti)
+                showSuccessDialog(response.message, response.data.nobukti)
                 $('#crudForm').trigger('reset')
               },
               error: error => {
@@ -280,21 +295,21 @@
 
     let form = $('#crudForm')
     setFormBindKeys(form)
-    
+
     activeGrid = null
     createSuratPengantar()
     getMaxLength(form)
     initLookup()
     initDatepicker()
-    initSelect2(null,false)
+    initSelect2(null, false)
     enabledTarif()
   })
 
   function enabledTarif() {
-    
+
     let container_id = $('#crudForm [name=container_id]')
     let tarifrincian = $('#crudForm [name=tarifrincian]')
-// tarifrincian
+    // tarifrincian
     if (container_id.val() == '') {
       tarifrincian.attr('readonly', true)
       tarifrincian.parents('.input-group').find('.input-group-append').hide()
@@ -305,7 +320,7 @@
       tarifrincian.parents('.input-group').find('.button-clear').show()
     }
   }
-    
+
 
   function createSuratPengantar() {
     let form = $('#crudForm')
@@ -318,7 +333,7 @@
     $('.invalid-feedback').remove()
     // $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     // $('#crudForm').find('[name=tglsp]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
+    $('#crudForm [name=jobtrucking]').attr('readonly', true)
     Promise
       .all([
         setStatusLongTripOptions(form),
@@ -357,7 +372,7 @@
         success: response => {
           response.data.forEach(statusLongTrip => {
             let option = new Option(statusLongTrip.text, statusLongTrip.id)
-
+            statusLongtrip = statusLongTrip.id
             relatedForm.find('[name=statuslongtrip]').append(option).trigger('change')
           });
 
@@ -413,7 +428,14 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-        containerId = -1
+        containerId = 0
+        jenisorderId = 0
+        tradoId=0
+        gandenganId=0
+        pelangganId=0
+        taridrincianId=0
+        statusLongtrip=0
+
         $.each(response.data, (index, value) => {
           console.log(value)
           let element = form.find(`[name="${index}"]`)
@@ -455,6 +477,7 @@
       })
     }
   }
+
   function getTarifOmset(id) {
     $.ajax({
       url: `${apiUrl}suratpengantar/${id}/getTarifOmset`,
@@ -473,6 +496,25 @@
       }
     })
   }
+
+  function setJobReadOnly() {
+
+    let jobtrucking = $('#crudForm [name=jobtrucking]')
+    if (statustas == '0') {
+      //bukan tas
+      // console.log('bukan');
+      jobtrucking.attr('readonly', true)
+      jobtrucking.parents('.input-group').find('.input-group-append').hide()
+      jobtrucking.parents('.input-group').find('.button-clear').hide()
+    } else {
+      //tas
+      jobtrucking.attr('readonly', false)
+      jobtrucking.parents('.input-group').find('.input-group-append').show()
+      jobtrucking.parents('.input-group').find('.button-clear').show()
+    }
+  }
+
+
   function initLookup() {
     $('.kotadari-lookup').lookup({
       title: 'Kota Dari Lookup',
@@ -486,6 +528,7 @@
       },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=dari_id]').first().val(kota.id)
+        kotadariId = kota.id
         element.val(kota.keterangan)
         element.data('currentValue', element.val())
         // getGaji()
@@ -501,6 +544,38 @@
       }
     })
 
+    $('.jobtrucking-lookup').lookup({
+      title: 'Job Trucking Lookup',
+      fileName: 'jobtrucking',
+      beforeProcess: function(test) {
+        console.log('test');
+        console.log(tarifrincianId)
+        this.postData = {
+          jenisorder_id: jenisorderId,
+          container_id: containerId,        
+          pelanggan_id: pelangganId,        
+          gandengan_id: gandenganId,
+          trado_id: tradoId,
+          statuslongtrip: statusLongtrip,        
+          tarif_id: tarifrincianId,        
+        }
+      },
+      onSelectRow: (jobtrucking, element) => {
+        $('#crudForm [name=jobtrucking]').first().val(jobtrucking.jobtrucking)
+        element.val(jobtrucking.jobtrucking)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=jobtrucking]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+
+      }
+    })
+
     $('.kotasampai-lookup').lookup({
       title: 'Kota Tujuan Lookup',
       fileName: 'kota',
@@ -513,6 +588,7 @@
       },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=sampai_id]').first().val(kota.id)
+        kotasampaiId = kota.id
         element.val(kota.keterangan)
         element.data('currentValue', element.val())
         // getGaji()
@@ -540,6 +616,8 @@
       },
       onSelectRow: (pelanggan, element) => {
         $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
+        pelangganId = pelanggan.id
+
         element.val(pelanggan.namapelanggan)
         element.data('currentValue', element.val())
       },
@@ -566,7 +644,7 @@
       onSelectRow: (container, element) => {
         $('#crudForm [name=container_id]').first().val(container.id)
         containerId = container.id
-        console.log(container.id)
+        console.log(containerId)
         element.val(container.keterangan)
         element.data('currentValue', element.val())
         enabledTarif()
@@ -598,6 +676,7 @@
       },
       onSelectRow: (statuscontainer, element) => {
         $('#crudForm [name=statuscontainer_id]').first().val(statuscontainer.id)
+
         element.val(statuscontainer.keterangan)
         element.data('currentValue', element.val())
         // getGaji()
@@ -625,6 +704,8 @@
       },
       onSelectRow: (trado, element) => {
         $('#crudForm [name=trado_id]').first().val(trado.id)
+        tradoId = trado.id
+
         element.val(trado.keterangan)
         element.data('currentValue', element.val())
       },
@@ -652,6 +733,7 @@
         $('#crudForm [name=trado_id]').first().val(absensi.trado_id)
         $('#crudForm [name=supir_id]').first().val(absensi.supir_id)
         $('#crudForm [name=absensidetail_id]').first().val(absensi.id)
+        tradoId = absensi.trado_id
         element.val(absensi.trado)
         element.data('currentValue', element.val())
       },
@@ -666,7 +748,7 @@
         element.data('currentValue', element.val())
       }
     })
-   
+
     $('.gandengan-lookup').lookup({
       title: 'Gandengan Lookup',
       fileName: 'gandengan',
@@ -679,6 +761,8 @@
       },
       onSelectRow: (gandengan, element) => {
         $('#crudForm [name=gandengan_id]').first().val(gandengan.id)
+        gandenganId = gandengan.id
+
         element.val(gandengan.keterangan)
         element.data('currentValue', element.val())
       },
@@ -728,6 +812,7 @@
       },
       onSelectRow: (jenisorder, element) => {
         $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
+        jenisorderId = jenisorder.id
         element.val(jenisorder.keterangan)
         element.data('currentValue', element.val())
       },
@@ -753,6 +838,7 @@
       },
       onSelectRow: (tarifrincian, element) => {
         $('#crudForm [name=tarifrincian_id]').first().val(tarifrincian.id)
+        tarifrincianId = tarifrincian.id
         element.val(tarifrincian.tujuan)
         element.data('currentValue', element.val())
         getTarifOmset(tarifrincian.id)
@@ -767,12 +853,9 @@
         element.data('currentValue', element.val())
       }
     })
-    
+
   }
 </script>
 @endpush
 
 @endsection
-
-
-
