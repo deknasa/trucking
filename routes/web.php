@@ -250,6 +250,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('role/getroleid', [RoleController::class, 'getroleid']);
     Route::get('role/index', [RoleController::class, 'index']);
     Route::get('role/get', [RoleController::class, 'get'])->name('role.get');
+    Route::get('role/acl/grid', [RoleController::class, 'aclGrid']);
     Route::get('role/export', [RoleController::class, 'export'])->name('role.export');
     Route::get('role/report', [RoleController::class, 'report'])->name('role.report');
     Route::resource('role', RoleController::class);

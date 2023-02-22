@@ -509,7 +509,7 @@
             }
           })
         })
-        //  totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
+         totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
         $('#nominalPiutang').html(`${totalNominal}`)
       }
     })

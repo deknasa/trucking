@@ -1,24 +1,29 @@
-<table id="userRoleGrid"></table>
+<table id="roleAclGrid"></table>
 
-@include('user.role._modal')
+@include('role.acl._modal')
 
 <script>
-  function loadGrid(userId) {
-    $('#userRoleGrid')
+  function loadGrid(roleId) {
+    $('#roleAclGrid')
       .jqGrid({
-        url: `${apiUrl}user/${userId}/role`,
+        url: `${apiUrl}role/${roleId}/acl`,
         datatype: 'json',
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         colModel: [{
-            label: 'USER',
-            name: 'user',
+            label: 'ROLE',
+            name: 'role',
             align: 'left',
             hidden: true
           },
           {
-            label: 'ROLE',
-            name: 'rolename',
+            label: 'CLASS',
+            name: 'class',
+            align: 'left'
+          },
+          {
+            label: 'METHOD',
+            name: 'method',
             align: 'left'
           },
           {
@@ -42,7 +47,7 @@
         height: 350,
         rownumbers: true,
         rownumWidth: 45,
-        rowNum: 10,
+        rowNum: 0,
         rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
@@ -53,36 +58,33 @@
           rows: 'limit'
         },
         jsonReader: {
-          root: 'data',
+          root: 'data'
         },
         onSelectRow: function(id) {
           activeGrid = $(this)
         },
         loadBeforeSend: (jqXHR) => {
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-        },
-        loadComplete: function(data) {
-          changeJqGridRowListText()
         }
       })
 
       .customPager({
         buttons: [{
-          id: 'editUserRole',
+          id: 'editUserAcl',
           innerHTML: '<i class="fa fa-pen"></i> EDIT',
           class: 'btn btn-success btn-sm',
           onClick: () => {
-            let userId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+            let roleId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
 
-            editUserRole(userId)
+            editUserAcl(roleId)
           }
         }]
       })
   }
 
-  function loadRoleData(userId) {
-    $('#userRoleGrid').setGridParam({
-      url: `${apiUrl}user/${userId}/role`,
+  function loadAclData(roleId) {
+    $('#roleAclGrid').setGridParam({
+      url: `${apiUrl}role/${roleId}/acl`,
       datatype: 'json'
     }).trigger('reloadGrid')
   }

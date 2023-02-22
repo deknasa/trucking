@@ -124,7 +124,9 @@
             },
             formatter: (value, options, rowData) => {
               let statusCetak = JSON.parse(value)
-
+              if (!statusCetak) {
+                return ``
+              }
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
                   <span>${statusCetak.SINGKATAN}</span>
@@ -135,7 +137,9 @@
             },
             cellattr: (rowId, value, rowObject) => {
               let statusCetak = JSON.parse(rowObject.statuscetak)
-
+              if (!statusCetak) {
+                return ` title=""`
+              }
               return ` title="${statusCetak.MEMO}"`
             }
           },
@@ -257,7 +261,7 @@
         rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
-        rowList: [10, 20, 50],
+        rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
         sortname: sortname,
@@ -292,6 +296,7 @@
           loadDetailData(id)
         },
         loadComplete: function(data) {
+          changeJqGridRowListText()
 
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

@@ -622,7 +622,7 @@
       rowNum: 10,
       rownumbers: true,
       rownumWidth: 45,
-      rowList: [10, 20, 50],
+      rowList: [10, 20, 50, 0],
       toolbar: [true, "top"],
       sortable: true,
       sortname: 'id',
@@ -649,9 +649,10 @@
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
       },
       loadBeforeSend: (jqXHR) => {
-        jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
       },
       loadComplete: function(data) {
+          changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

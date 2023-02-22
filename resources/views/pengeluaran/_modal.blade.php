@@ -119,16 +119,16 @@
             </div>
 
             <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 2000px ;">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
                 <thead>
                   <tr>
                     <th width="1%">No</th>
-                    <th width="5%">Coa Debet</th>
-                    <th width="6%">Keterangan</th>
-                    <th width="6%">Nominal</th>
-                    <th width="4%">No warkat</th>
-                    <th width="4%">Tgl jatuh tempo</th>
-                    <th width="4%">Bulan beban</th>
+                    <th width="15%">Coa Debet</th>
+                    <th width="25%">Keterangan</th>
+                    <th width="10%">Nominal</th>
+                    <th width="10%">No warkat</th>
+                    <th width="10%">Tgl jatuh tempo</th>
+                    <th width="10%">Bulan beban</th>
                     <th width="1%">Aksi</th>
                   </tr>
                 </thead>
@@ -603,8 +603,8 @@
           detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
           detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
           detailRow.find(`[name="coadebet[]"]`).val(detail.coadebet)
-          detailRow.find(`[name="bulanbeban[]"]`).val(detail.bulanbeban)
-
+          
+          detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
           initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
 
           detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))

@@ -226,64 +226,6 @@
             }
           },
           {
-            label: 'STATUS BERKAS',
-            name: 'statusberkas',
-            align: 'left',
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['comboberkas'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['comboberkas'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-              `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusBerkas = JSON.parse(value)
-
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusBerkas.WARNA}; color: #fff;">
-                  <span>${statusBerkas.SINGKATAN}</span>
-                </div>
-              `)
-              
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusBerkas = JSON.parse(rowObject.statusberkas)
-              
-              return ` title="${statusBerkas.MEMO}"`
-            }
-          },
-          {
-            label: 'USER BERKAS',
-            name: 'userberkas',
-            align: 'left'
-          },
-          {
-            label: 'TANGGAL BERKAS',
-            name: 'tglberkas',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
@@ -315,7 +257,7 @@
         rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
-        rowList: [10, 20, 50],
+        rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
         sortname: sortname,
@@ -350,6 +292,7 @@
           loadDetailData(id)
         },
         loadComplete: function(data) {
+          changeJqGridRowListText()
 
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

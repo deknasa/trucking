@@ -117,7 +117,8 @@
       let absensiSupirApproval = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
-
+      let sortname = 'nobukti'
+      let sortorder = 'asc'
 
       data.push({
         name: 'sortIndex',
@@ -408,7 +409,7 @@
         rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
-        rowList: [10, 20, 50],
+        rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
        pager:"#modalgridPager",
@@ -418,6 +419,7 @@
         
        
         loadComplete: function(data) {
+          changeJqGridRowListText()
           initResize($(this))
           
           let nominals = $(this).jqGrid("getCol", "uangjalan")
