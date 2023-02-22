@@ -45,6 +45,10 @@ window.onbeforeunload =() => {
 	$('#loader').removeClass('d-none')
 }
 
+function changeJqGridRowListText() {
+	$(document).find('select[id$="rowList"] option[value=0]').text('ALL')
+}
+
 function setFormats() {
 	$.ajax({
 		url: `${appUrl}/formats/global.json`,

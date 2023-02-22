@@ -125,16 +125,7 @@
                 </div>
               </div>
 
-              <div class="form-group col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>coa </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="coa" class="form-control akunpusat-lookup">
-                  </div>
-                </div>
-              </div>
+             
 
               <div class="form-group col-md-6">
                 <div class="row">
@@ -142,7 +133,7 @@
                     <label>gudangdari </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="gudangdari" class="form-control gudang-lookup">
+                    <input type="text" name="gudangdari" class="form-control gudangdari-lookup">
                     <input type="text" id="gudangdariId" name="gudangdari_id" hidden readonly>
                   </div>
                 </div>
@@ -153,8 +144,67 @@
                     <label>gudangke </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="gudangke" class="form-control gudang-lookup">
+                    <input type="text" name="gudangke" class="form-control gudangke-lookup">
                     <input type="text" id="gudangkeId" name="gudangke_id" hidden readonly>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>trado dari</label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="tradodari" class="form-control tradodari-lookup">
+                    <input type="text" id="tradodariId" name="tradodari_id" hidden readonly>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>trado ke </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="tradoke" class="form-control tradoke-lookup">
+                    <input type="text" id="tradokeId" name="tradoke_id" hidden readonly>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>gandengan dari</label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="gandengandari" class="form-control gandengandari-lookup">
+                    <input type="text" id="gandengandariId" name="gandengandari_id" hidden readonly>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>gandengan ke </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="gandenganke" class="form-control gandenganke-lookup">
+                    <input type="text" id="gandengankeId" name="gandenganke_id" hidden readonly>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>coa </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="coa" class="form-control akunpusat-lookup">
                   </div>
                 </div>
               </div>
@@ -173,18 +223,18 @@
 
 
             <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys" style="width: 100%;">
+              <table class="table table-bordered table-bindkeys" style="width: 950;">
                 <thead>
                   <tr>
-                    <th style="width : 5%">No</th>
-                    <th style="width: 20%">stok</th>
-                    <th class="data_tbl tbl_vulkanisirke" style="width : 20px">vulkanisirke</th>
-                    <th style="width:20%">keterangan</th>
-                    <th class="data_tbl tbl_qty" style="width:5%">qty</th>
-                    <th class="data_tbl tbl_harga" style="width:10%">harga</th>
-                    <th class="data_tbl tbl_persentase" style="width :5%">persentase discount</th>
-                    <th class="data_tbl tbl_total" style="width:10%">Total</th>
-                    <th style="width : 5%">Aksi</th>
+                    <th style="width: 10px">No</th>
+                    <th style="width: 100px">stok</th>
+                    <th class="data_tbl tbl_vulkanisirke" style="width: 10px">vulkanisir ke</th>
+                    <th style="width:100px">keterangan</th>
+                    <th class="data_tbl tbl_qty" style="width: 10px">qty</th>
+                    <th class="data_tbl tbl_harga" style="width:100px">harga</th>
+                    <th class="data_tbl tbl_persentase" style="width :10px">persentase discount</th>
+                    <th class="data_tbl tbl_total" style="width: 100px">Total</th>
+                    <th style="width: 10px">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -362,6 +412,9 @@
       case 'PBT':
         tampilanpbt()
         break;
+      case 'PGT':
+        tampilanpgt()
+        break;
     
       default:
         tampilanall()
@@ -378,6 +431,11 @@
     $('[name=gudang]').parents('.form-group').hide()
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
+    $('[name=gandengan]').parents('.form-group').hide()
+    $('[name=tradodari]').parents('.form-group').hide()
+    $('[name=tradoke]').parents('.form-group').hide()
+    $('[name=gandengandari]').parents('.form-group').hide()
+    $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_persentase').hide();
@@ -399,6 +457,11 @@
     $('[name=gudang]').parents('.form-group').hide()
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
+    $('[name=gandengan]').parents('.form-group').hide()
+    $('[name=tradodari]').parents('.form-group').hide()
+    $('[name=tradoke]').parents('.form-group').hide()
+    $('[name=gandengandari]').parents('.form-group').hide()
+    $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_harga').hide();
@@ -419,6 +482,11 @@
     $('[name=gudang]').parents('.form-group').hide()
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
+    $('[name=gandengan]').parents('.form-group').hide()
+    $('[name=tradodari]').parents('.form-group').hide()
+    $('[name=tradoke]').parents('.form-group').hide()
+    $('[name=gandengandari]').parents('.form-group').hide()
+    $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
     $('.colspan').attr('colspan', 5);
@@ -439,6 +507,21 @@
         showDialog(error.statusText)
       }
     })
+  }
+  function tampilanpgt() {
+    $('[name=gudang]').parents('.form-group').hide()
+    $('[name=trado]').parents('.form-group').hide()
+    $('[name=gandengan]').parents('.form-group').hide()
+    
+    $('[name=gudangdari]').parents('.form-group').show()
+    $('[name=gudangke]').parents('.form-group').show()
+    $('[name=gandengan]').parents('.form-group').show()
+    $('[name=tradodari]').parents('.form-group').show()
+    $('[name=tradoke]').parents('.form-group').show()
+    $('[name=gandengandari]').parents('.form-group').show()
+    $('[name=gandenganke]').parents('.form-group').show()
+    
+    
   }
 
   function tampilanall() {
@@ -483,7 +566,176 @@
       }
     })
   }
-  
+
+
+  function lookupSelectedDari(el) {
+    let trado = $('#crudForm').find(`[name="trado"]`).parents('.input-group').children()
+    let tradodari = $('#crudForm').find(`[name="tradodari"]`).parents('.input-group').children()
+    let gandengan = $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children()
+    let gandengandari = $('#crudForm').find(`[name="gandengandari"]`).parents('.input-group').children()
+    let gudang = $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children()
+    let gudangdari = $('#crudForm').find(`[name="gudangdari"]`).parents('.input-group').children()
+
+
+    switch (el) {
+        case 'tradodari':
+          gandengan.attr('disabled',true)
+          gandengan.find('.lookup-toggler').attr('disabled',true)
+          $('#gandenganId').attr('disabled',true);
+          gandengandari.attr('disabled',true)
+          gandengandari.find('.lookup-toggler').attr('disabled',true)
+          $('#gandengandariId').attr('disabled',true);
+
+          gudang.attr('disabled',true)
+          gudang.find('.lookup-toggler').attr('disabled',true)
+          $('#gudangId').attr('disabled',true);
+          gudangdari.attr('disabled',true)
+          gudangdari.find('.lookup-toggler').attr('disabled',true)
+          $('#gudangdariId').attr('disabled',true);
+          $('#tradodariId').attr('disabled',false);
+
+          break;
+        case 'gandengandari':
+         trado.attr('disabled',true)
+         trado.find('.lookup-toggler').attr('disabled',true)
+          $('#tradoId').attr('disabled',true);
+          tradodari.attr('disabled',true)
+          tradodari.find('.lookup-toggler').attr('disabled',true)
+          $('#tradodariId').attr('disabled',true);
+
+          gudang.attr('disabled',true)
+          gudang.find('.lookup-toggler').attr('disabled',true)
+          $('#gudangId').attr('disabled',true);
+          gudangdari.attr('disabled',true)
+          gudangdari.find('.lookup-toggler').attr('disabled',true)
+          $('#gudangdariId').attr('disabled',true);
+          $('#gandengandariId').attr('disabled',false);
+
+          break;
+        case 'gudangdari':
+          trado.attr('disabled',true)
+          trado.find('.lookup-toggler').attr('disabled',true)
+          $('#tradoId').attr('disabled',true);
+          tradodari.attr('disabled',true)
+          tradodari.find('.lookup-toggler').attr('disabled',true)
+          $('#tradodariId').attr('disabled',true);
+
+          gandengan.attr('disabled',true)
+          gandengan.find('.lookup-toggler').attr('disabled',true)
+          $('#gandenganId').attr('disabled',true);
+          gandengandari.attr('disabled',true)
+          gandengandari.find('.lookup-toggler').attr('disabled',true)
+          $('#gandengandariId').attr('disabled',true);
+          $('#gudangdariId').attr('disabled',false);
+
+          break;
+        default:
+          break;
+        }
+  }
+
+  function lookupSelectedKe(el) {
+    
+    let tradoke = $('#crudForm').find(`[name="tradoke"]`).parents('.input-group').children()
+    
+    let gandenganke = $('#crudForm').find(`[name="gandenganke"]`).parents('.input-group').children()
+    
+    let gudangke = $('#crudForm').find(`[name="gudangke"]`).parents('.input-group').children()
+
+    switch (el) {
+        case 'tradoke':
+          gandenganke.attr('disabled',true)
+          gandenganke.find('.lookup-toggler').attr('disabled',true)
+          $('#gandengankeId').attr('disabled',true);
+          gudangke.attr('disabled',true)
+          gudangke.find('.lookup-toggler').attr('disabled',true)
+          $('#gudangkeId').attr('disabled',true);
+          $('#tradokeId').attr('disabled',false);
+
+          break;
+        case 'gandenganke':
+          tradoke.attr('disabled',true)
+          tradoke.find('.lookup-toggler').attr('disabled',true)
+          $('#tradokeId').attr('disabled',true);
+
+          gudangke.attr('disabled',true)
+          gudangke.find('.lookup-toggler').attr('disabled',true)
+          $('#gudangkeId').attr('disabled',true);
+          $('#gandengankeId').attr('disabled',false);
+
+          break;
+        case 'gudangke':
+          tradoke.attr('disabled',true)
+          tradoke.find('.lookup-toggler').attr('disabled',true)
+          $('#tradokeId').attr('disabled',true);
+
+          gandenganke.attr('disabled',true)
+          gandenganke.find('.lookup-toggler').attr('disabled',true)
+          $('#gandengankeId').attr('disabled',true);
+          $('#gudangkeId').attr('disabled',false);
+
+          break;
+        default:
+          break;
+        }
+  }
+
+  function enabledLookupSelected(){
+
+    let trado = $('#crudForm').find(`[name="trado"]`).parents('.input-group').children()
+    let tradodari = $('#crudForm').find(`[name="tradodari"]`).parents('.input-group').children()
+    let gandengan = $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children()
+    let gandengandari = $('#crudForm').find(`[name="gandengandari"]`).parents('.input-group').children()
+    let gudang = $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children()
+    let gudangdari = $('#crudForm').find(`[name="gudangdari"]`).parents('.input-group').children()
+    $('#tradodariId').attr('disabled',false);
+    $('#gandengandariId').attr('disabled',false);
+    $('#gudangdariId').attr('disabled',false);
+    $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().attr("disabled", false);
+    $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    $('#crudForm').find(`[name="gudangdari"]`).parents('.input-group').children().attr("disabled", false);
+    $('#crudForm').find(`[name="gudangdari"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    $('#crudForm').find(`[name="gudangke"]`).parents('.input-group').children().attr("disabled", false);
+    $('#crudForm').find(`[name="gudangke"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    
+    $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr("disabled", false);
+    $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    $('#crudForm').find(`[name="tradodari"]`).parents('.input-group').children().attr("disabled", false);
+    $('#crudForm').find(`[name="tradodari"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    $('#crudForm').find(`[name="tradoke"]`).parents('.input-group').children().attr("disabled", false);
+    $('#crudForm').find(`[name="tradoke"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    
+    $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr("disabled", false);
+    $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    $('#crudForm').find(`[name="gandengandari"]`).parents('.input-group').children().attr("disabled", false);
+    $('#crudForm').find(`[name="gandengandari"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    $('#crudForm').find(`[name="gandenganke"]`).parents('.input-group').children().attr("disabled", false);
+    $('#crudForm').find(`[name="gandenganke"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+  }
+  function enabledLookupSelectedKe(){
+
+    let trado = $('#crudForm').find(`[name="trado"]`).parents('.input-group').children()
+    let tradoke = $('#crudForm').find(`[name="tradoke"]`).parents('.input-group').children()
+    let gandengan = $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children()
+    let gandenganke = $('#crudForm').find(`[name="gandenganke"]`).parents('.input-group').children()
+    let gudang = $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children()
+    let gudangke = $('#crudForm').find(`[name="gudangke"]`).parents('.input-group').children()
+    $('#tradokeId').attr('disabled',false);
+    $('#tradokeId').val('');
+    $('#gandengankeId').attr('disabled',false);
+    $('#gandengankeId').val('');
+    $('#gudangkeId').attr('disabled',false);
+    $('#gudangkeId').val('');
+    gudangke.attr("disabled", false);
+    gudangke.find(`.lookup-toggler`).attr("disabled", false);
+    
+    tradoke.attr("disabled", false);
+    tradoke.find(`.lookup-toggler`).attr("disabled", false);
+    
+    gandenganke.attr("disabled", false);
+    gandenganke.find(`.lookup-toggler`).attr("disabled", false);
+  }
+
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
@@ -883,6 +1135,7 @@
         element.data('currentValue', element.val())
       }
     })
+
     $('.trado-lookup').lookup({
       title: 'Trado Lookup',
       fileName: 'trado',
@@ -899,6 +1152,24 @@
         element.data('currentValue', element.val())
       }
     })
+
+    $('.gandengan-lookup').lookup({
+      title: 'gandengan Lookup',
+      fileName: 'gandengan',
+      onSelectRow: (trado, element) => {
+        element.val(trado.keterangan)
+        $(`#${element[0]['name']}Id`).val(trado.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
     $('.gudang-lookup').lookup({
       title: 'Gudang Lookup',
       fileName: 'gudang',
@@ -999,6 +1270,123 @@
       },
       onClear: (element) => {
         element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+
+    $('.tradoke-lookup').lookup({
+      title: 'Trado Lookup',
+      fileName: 'trado',
+      onSelectRow: (trado, element) => {
+        element.val(trado.keterangan)
+        $(`#${element[0]['name']}Id`).val(trado.id)
+        element.data('currentValue', element.val())
+        lookupSelectedKe(`tradoke`);
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        enabledLookupSelectedKe()
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.gandenganke-lookup').lookup({
+      title: 'gandengan Lookup',
+      fileName: 'gandengan',
+      onSelectRow: (trado, element) => {
+        element.val(trado.keterangan)
+        $(`#${element[0]['name']}Id`).val(trado.id)
+        element.data('currentValue', element.val())
+        lookupSelectedKe(`gandenganke`);
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        enabledLookupSelectedKe()
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.gudangke-lookup').lookup({
+      title: 'Gudang Lookup',
+      fileName: 'gudang',
+      onSelectRow: (gudang, element) => {
+        element.val(gudang.gudang)
+        $(`#${element[0]['name']}Id`).val(gudang.id)
+        element.data('currentValue', element.val())
+        lookupSelectedKe(`gudangke`);
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        enabledLookupSelectedKe()
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.tradodari-lookup').lookup({
+      title: 'Trado Lookup',
+      fileName: 'trado',
+      onSelectRow: (trado, element) => {
+        element.val(trado.keterangan)
+        $(`#${element[0]['name']}Id`).val(trado.id)
+        element.data('currentValue', element.val())
+        lookupSelectedDari(`tradodari`);
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        enabledLookupSelected()
+        element.val('')
+        $(`#${element[0]['name']}Id`).val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.gandengandari-lookup').lookup({
+      title: 'gandengan Lookup',
+      fileName: 'gandengan',
+      onSelectRow: (trado, element) => {
+        element.val(trado.keterangan)
+        $(`#${element[0]['name']}Id`).val(trado.id)
+        element.data('currentValue', element.val())
+        lookupSelectedDari(`gandengandari`);
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        enabledLookupSelected()
+        element.val('')
+        $(`#${element[0]['name']}Id`).val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.gudangdari-lookup').lookup({
+      title: 'Gudang Lookup',
+      fileName: 'gudang',
+      onSelectRow: (gudang, element) => {
+        element.val(gudang.gudang)
+        $(`#${element[0]['name']}Id`).val(gudang.id)
+        element.data('currentValue', element.val())
+        lookupSelectedDari(`gudangdari`);
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        enabledLookupSelected()
+        element.val('')
+        $(`#${element[0]['name']}Id`).val('')
         element.data('currentValue', element.val())
       }
     })
