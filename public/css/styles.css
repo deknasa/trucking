@@ -200,17 +200,15 @@ html {
 }
 
 .modal.modal-fullscreen .modal-dialog {
-	width: 100vw;
-	height: 100vh;
-	margin: 0;
+	width: 95vw;
+	height: 100%;
 	padding: 0;
 	max-width: none;
 }
 
 .modal.modal-fullscreen .modal-content {
 	height: auto;
-	height: 100vh;
-	border-radius: 0;
+	height: 100%;
 	border: none;
 }
 
@@ -218,23 +216,10 @@ html {
 	overflow-y: auto;
 }
 
-.modal.modal-fullscreen .modal-dialog {
-	width: 100vw;
-	height: 100vh;
-	margin: 0;
-	padding: 0;
-	max-width: none;
-}
-
-.modal.modal-fullscreen .modal-content {
-	height: auto;
-	height: 100vh;
-	border-radius: 0;
-	border: none;
-}
-
-.modal.modal-fullscreen .modal-body {
-	overflow-y: auto;
+.modal.modal-fullscreen .modal-footer {
+	position: sticky;
+    bottom: 0;
+    background: inherit;
 }
 
 .highlight {
