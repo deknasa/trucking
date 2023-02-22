@@ -52,6 +52,8 @@
         toolbar: [true, "top"],
         sortable: true,
         pager: pager,
+        sortname: sortname,
+        sortorder: sortorder,
         viewrecords: true,
         footerrow:true,
         userDataOnFooter: true,
