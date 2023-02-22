@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Http;
 
 class TutupBukuController extends MyController
 {
-    public $title = 'Kartu Stok';
+    public $title = 'Tutup Buku';
 
     public function index(Request $request)
     {
