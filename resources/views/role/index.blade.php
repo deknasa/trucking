@@ -14,13 +14,13 @@
         <div class="card-header p-0 border-bottom-0">
           <ul class="nav nav-tabs" id="tab" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" id="acl" data-toggle="pill" href="#acl" role="tab" aria-controls="acl" aria-selected="false">Acl</a>
+              <a class="nav-link active" id="acl" data-toggle="pill" href="#acl" role="tab" aria-controls="acl" aria-selected="true">Acl</a>
             </li>
           </ul>
         </div>
         <div class="card-body">
           <div class="tab-content" id="tabContent">
-            <div class="tab-pane" id="acl-tab" role="tabpanel" aria-labelledby="acl-tab"></div>
+            <div class="tab-pane active" id="acl-tab" role="tabpanel" aria-labelledby="acl-tab"></div>
           </div>
         </div>
       </div>
@@ -109,6 +109,9 @@
           total: 'attributes.totalPages',
           records: 'attributes.totalRows',
         },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
         onSelectRow: function(id) {
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
@@ -116,12 +119,9 @@
           let rows = $(this).jqGrid('getGridParam', 'postData').limit
           let roleId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
-          $(`.tab-pane#${currentTab}-tab`).html('').load(`${appUrl}/user/${currentTab}/grid`, function() {
+          $(`.tab-pane#${currentTab}-tab`).html('').load(`${appUrl}/role/${currentTab}/grid`, function() {
             loadGrid(roleId)
           })
-        },
-        loadBeforeSend: (jqXHR) => {
-          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
         },
         loadComplete: function(data) {
           $(document).unbind('keydown')
@@ -358,7 +358,7 @@
 
       $('.tab-pane').removeClass('active')
       $(`.tab-pane#${currentTab}-tab`).addClass('active')
-      $(`.tab-pane#${currentTab}-tab`).html('').load(`${appUrl}/user/${currentTab}/grid`, function() {
+      $(`.tab-pane#${currentTab}-tab`).html('').load(`${appUrl}/role/${currentTab}/grid`, function() {
         loadGrid(roleId)
       })
     })
