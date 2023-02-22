@@ -22,7 +22,8 @@
             label: 'id',
             name: 'id',
             align: 'right',
-            width: '50px'
+            width: '50px',
+            hidden: true
           },
           {
             label: 'NO BUKTI',

@@ -714,6 +714,7 @@
                         beforeProcess: function(test) {
                             this.postData = {
                                 Aktif: 'AKTIF',
+                                tipe: 'BANK'
 
                             }
                         },
@@ -821,6 +822,7 @@
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    tipe: 'BANK'
 
                 }
             },
