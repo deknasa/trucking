@@ -4,6 +4,10 @@
   color: #186dff;
 }
 
+.pager-handler {
+  white-space: nowrap;
+}
+
 .pager-input {
   max-width: 50px;
   min-width: 20px;

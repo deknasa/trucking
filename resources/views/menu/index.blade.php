@@ -24,7 +24,7 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'menuname'
+  let sortname = 'menukode'
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
@@ -46,6 +46,7 @@
           {
             label: 'NAMA MENU',
             name: 'menuname',
+            width: 250,
             align: 'left',
             formatter: (value, options, rowData) => {
               let totalParent = rowData.menukode.length
@@ -57,12 +58,6 @@
               return value
             }
           },
-          {
-            label: 'SEQ. MENU',
-            name: 'menuseq',
-            align: 'left'
-          },
-
           {
             label: 'MENU PARENT',
             name: 'menuparent',

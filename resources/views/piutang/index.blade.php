@@ -120,6 +120,18 @@
             formatter: currencyFormat,
           },
           {
+            label: 'NOMINAL PELUNASAN',
+            name: 'nominalpelunasan',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'SISA PIUTANG',
+            name: 'sisapiutang',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
             label: 'NO. BUKTI INVOICE',
             name: 'invoice_nobukti',
             align: 'left'
