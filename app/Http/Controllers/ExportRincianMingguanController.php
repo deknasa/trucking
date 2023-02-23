@@ -13,26 +13,29 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-class ExportPemakaianBarangController extends MyController
+class ExportRincianMingguanController extends MyController
 {
-    public $title = 'Export Pemakaian Barang';
+    public $title = 'Export Rincian Mingguan';
 
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Export Pemakaian Barang',
+            'pagename' => 'Menu Utama Export Rincian Mingguan',
         ];
 
-        return view('exportpemakaianbarang.index', compact('title'));
+        return view('exportrincianmingguan.index', compact('title'));
     }
 
     public function export(Request $request): void
     {
         $detailParams = [
-            'periode' => $request->periode,
-            'jenis' => $request->jenis
+            'dari' => $request->dari,
+            'sampai' => $request->sampai,
+            'supirdari_id' => $request->supirdari_id,
+            'supirsampai_id' => $request->supirsampai_id,
         ];
+        dd($detailParams);
         date_default_timezone_set("Asia/Jakarta");
 
         $monthNum  = intval(substr($request->periode, 0, 2));
@@ -42,14 +45,14 @@ class ExportPemakaianBarangController extends MyController
         // $responses = Http::withHeaders($request->header())
         //     ->withOptions(['verify' => false])
         //     ->withToken(session('access_token'))
-        //     ->get(config('app.api_url') . 'exportpemakaianbarang/export', $detailParams);
+        //     ->get(config('app.api_url') . 'exportrincianmingguan/export', $detailParams);
 
         // $pengeluaran = $responses['data'];
         // $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Pemakaian Barang PER TRADO : '. $monthName.' - '.$yearNum);
+        $sheet->setCellValue('A1', 'LAPORAN HARIAN ');
 
         $header_start_row = 4;
         $detail_start_row = 5;
@@ -81,7 +84,7 @@ class ExportPemakaianBarangController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORANPEMAKAIANBARANGPERTRADO' . date('dmYHis');
+        $filename = 'RINCIANMINGGUANPENDAPATANBERSIHSUPIR' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
