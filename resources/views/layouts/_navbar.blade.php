@@ -10,7 +10,10 @@
 
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
-      <div class="time-place text-right"></div>
+      <div class="datetime-place text-right">
+        <span class="date-place"></span>
+        <span class="time-place ml-3"></span>
+      </div>
     </li>
   </ul>
 </nav>
