@@ -38,15 +38,15 @@ $(document).ready(function () {
 		$(".modal:visible").length && $(document.body).addClass("modal-open");
 	});
 
-	$('#loader').addClass('d-none')
+	$("#loader").addClass("d-none");
 });
 
-window.onbeforeunload =() => {
-	$('#loader').removeClass('d-none')
-}
+window.onbeforeunload = () => {
+	$("#loader").removeClass("d-none");
+};
 
 function changeJqGridRowListText() {
-	$(document).find('select[id$="rowList"] option[value=0]').text('ALL')
+	$(document).find('select[id$="rowList"] option[value=0]').text("ALL");
 }
 
 function setFormats() {
@@ -850,14 +850,18 @@ function loadClearFilter(grid) {
 
 function startTime() {
 	setInterval(() => {
-		$(".time-place").html(
-			new Date()
-				.toLocaleString("id", {
-					dateStyle: "medium",
-					timeStyle: "medium",
-				})
-				.replaceAll(".", ":")
-		);
+		let date = new Date();
+
+		let day = date.toLocaleString("id", {
+			dateStyle: "medium",
+		});
+
+		let time = date.toLocaleString("id", {
+			timeStyle: "medium",
+		});
+
+		$('.datetime-place .date-place').html(day)
+		$('.datetime-place .time-place').html(time.replaceAll('.', ':'))
 	}, 1000);
 }
 
@@ -884,7 +888,7 @@ function initDatepicker() {
 			showOn: "button",
 			beforeShow: function (element) {
 				$(element).css({
-					position: "relative"
+					position: "relative",
 				});
 			},
 			beforeShowDay: function (date) {
@@ -961,7 +965,7 @@ function getOffDays() {
 		method: "GET",
 		dataType: "JSON",
 		headers: {
-			Authorization: `Bearer ${accessToken}`
+			Authorization: `Bearer ${accessToken}`,
 		},
 		data: {
 			limit: 0,
@@ -1002,7 +1006,7 @@ function initSelect2(elements = null, isInsideModal = true) {
 	let option = {
 		width: "100%",
 		theme: "bootstrap4",
-		dropdownParent: isInsideModal ? $("#crudModal") : '',
+		dropdownParent: isInsideModal ? $("#crudModal") : "",
 	};
 
 	if (elements === null) {
@@ -1053,37 +1057,39 @@ function destroySelect2() {
 
 function showSuccessDialog(statusText = "", message = "") {
 	$("#dialog-success-message").find("p").remove();
-	$("#dialog-success-message").append(`<p> ${statusText} </p><p> ${message} </p>`);
+	$("#dialog-success-message").append(
+		`<p> ${statusText} </p><p> ${message} </p>`
+	);
 	$("#dialog-success-message").dialog({
 		modal: true,
 	});
 }
 function showDialog(statusText = "", message = "") {
 	$("#dialog-message").find("p").remove();
-	$("#dialog-message").append(`<p class="text-dark"> ${statusText} </p><p> ${message} </p>`);
+	$("#dialog-message").append(
+		`<p class="text-dark"> ${statusText} </p><p> ${message} </p>`
+	);
 	$("#dialog-message").dialog({
 		modal: true,
 	});
-	
+
 	$(".ui-dialog-titlebar-close").find("p").remove();
-	$('.ui-dialog-titlebar-close').append(`<p>X</p>`);
-	let css_header =
-	{
-		"background": "#db1f30",
-		"color" : '#fff'
-	}
-	$('.ui-widget-header').css(css_header);
-	let css_property =
-	{
-		"border": "none",
-		"background": "#db1f30",
-		"color" : '#fff'
-	}
-	
-	$('.ui-dialog .ui-dialog-titlebar-close').css(css_property);
+	$(".ui-dialog-titlebar-close").append(`<p>X</p>`);
+	let css_header = {
+		background: "#db1f30",
+		color: "#fff",
+	};
+	$(".ui-widget-header").css(css_header);
+	let css_property = {
+		border: "none",
+		background: "#db1f30",
+		color: "#fff",
+	};
+
+	$(".ui-dialog .ui-dialog-titlebar-close").css(css_property);
 }
 
-function showConfirm(statusText = "", message = "",urlDestination="") {
+function showConfirm(statusText = "", message = "", urlDestination = "") {
 	$("#dialog-confirm").find("p").remove();
 	$("#dialog-confirm").append(`<p> ${statusText} </p><p> ${message} </p>`);
 	$("#dialog-confirm").dialog({
@@ -1091,24 +1097,26 @@ function showConfirm(statusText = "", message = "",urlDestination="") {
 		buttons: [
 			{
 				text: "Ok",
-				open: function() { $(this).addClass('btn btn-success')},
-				click: function() {
-					$( this ).dialog( "close" );
-					processResult(true,urlDestination)
+				open: function () {
+					$(this).addClass("btn btn-success");
+				},
+				click: function () {
+					$(this).dialog("close");
+					processResult(true, urlDestination);
 				},
 			},
 			{
-				text:"Cencel",
-				open: function() { $(this).addClass('btn btn-danger')},
-				click: function() {
-					$( this ).dialog( "close" );
-					processResult(false)
-				}
-			}
+				text: "Cancel",
+				open: function () {
+					$(this).addClass("btn btn-danger");
+				},
+				click: function () {
+					$(this).dialog("close");
+					processResult(false);
+				},
+			},
 		],
 	});
-			
-			
 }
 
 $(document).ready(function () {
