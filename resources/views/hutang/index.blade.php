@@ -123,6 +123,18 @@
             formatter: currencyFormat,
           },
           {
+            label: 'NOMINAL BAYAR',
+            name: 'nominalbayar',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'SISA HUTANG',
+            name: 'sisahutang',
+            align: 'right',
+            formatter: currencyFormat,
+          },          
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
@@ -199,7 +211,7 @@
           triggerClick = true
 
           $('.clearsearchclass').click(function() {
-            clearColumnSearch()
+            clearColumnSearch($(this))
           })
 
           if (indexRow > $(this).getDataIDs().length - 1) {

@@ -24,6 +24,12 @@ class RoleController extends MyController
         return view('role.index', compact('title', 'data'));
     }
 
+
+    public function aclGrid()
+    {
+        return view('role.acl._grid');
+    }
+
     /**
      * @ClassName
      */

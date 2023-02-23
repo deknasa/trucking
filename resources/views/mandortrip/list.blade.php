@@ -385,7 +385,7 @@
           triggerClick = true
 
           $('.clearsearchclass').click(function() {
-            clearColumnSearch()
+            clearColumnSearch($(this))
           })
 
           if (indexRow > $(this).getDataIDs().length - 1) {

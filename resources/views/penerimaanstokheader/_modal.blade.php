@@ -92,6 +92,17 @@
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>coa </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="coa" class="form-control akunpusat-lookup">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
                     <label>trado </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
@@ -125,7 +136,17 @@
                 </div>
               </div>
 
-             
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>gandengan </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="gandengan" class="form-control gandengan-lookup">
+                    <input type="text" id="gandenganId" name="gandengan_id" hidden readonly>
+                  </div>
+                </div>
+              </div>
 
               <div class="form-group col-md-6">
                 <div class="row">
@@ -198,16 +219,7 @@
                 </div>
               </div>
 
-              <div class="form-group col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>coa </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="coa" class="form-control akunpusat-lookup">
-                  </div>
-                </div>
-              </div>
+              
             </div>
 
             <div class="row form-group">
@@ -415,6 +427,12 @@
       case 'PGT':
         tampilanpgt()
         break;
+      case 'KST':
+        tampilankst()
+        break;
+      case 'PST':
+        tampilanpst()
+        break;
     
       default:
         tampilanall()
@@ -515,13 +533,35 @@
     
     $('[name=gudangdari]').parents('.form-group').show()
     $('[name=gudangke]').parents('.form-group').show()
-    $('[name=gandengan]').parents('.form-group').show()
     $('[name=tradodari]').parents('.form-group').show()
     $('[name=tradoke]').parents('.form-group').show()
     $('[name=gandengandari]').parents('.form-group').show()
     $('[name=gandenganke]').parents('.form-group').show()
+  }
+  function tampilankst() {
+    $('[name=gudang]').parents('.form-group').show()
+    $('[name=trado]').parents('.form-group').show()
+    $('[name=gandengan]').parents('.form-group').show()
     
+    $('[name=gudangdari]').parents('.form-group').hide()
+    $('[name=gudangke]').parents('.form-group').hide()
+    $('[name=tradodari]').parents('.form-group').hide()
+    $('[name=tradoke]').parents('.form-group').hide()
+    $('[name=gandengandari]').parents('.form-group').hide()
+    $('[name=gandenganke]').parents('.form-group').hide()
+  }
+  function tampilanpst() {
+    $('[name=gudang]').parents('.form-group').show()
+    $('[name=trado]').parents('.form-group').hide()
+    $('[name=gandengan]').parents('.form-group').hide()
     
+    $('[name=gudangdari]').parents('.form-group').hide()
+    $('[name=gudangke]').parents('.form-group').hide()
+    $('[name=gandengan]').parents('.form-group').hide()
+    $('[name=tradodari]').parents('.form-group').hide()
+    $('[name=tradoke]').parents('.form-group').hide()
+    $('[name=gandengandari]').parents('.form-group').hide()
+    $('[name=gandenganke]').parents('.form-group').hide()
   }
 
   function tampilanall() {
@@ -735,6 +775,73 @@
     gandenganke.attr("disabled", false);
     gandenganke.find(`.lookup-toggler`).attr("disabled", false);
   }
+
+  function lookupSelected(el) {
+    
+    let trado = $('#crudForm').find(`[name="trado"]`).parents('.input-group').children()
+    
+    let gandengan = $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children()
+    
+    let gudang = $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children()
+
+    switch (el) {
+        case 'trado':
+          gandengan.attr('disabled',true)
+          gandengan.find('.lookup-toggler').attr('disabled',true)
+          $('#gandenganId').attr('disabled',true);
+          gudang.attr('disabled',true)
+          gudang.find('.lookup-toggler').attr('disabled',true)
+          $('#gudangId').attr('disabled',true);
+          $('#tradoId').attr('disabled',false);
+
+          break;
+        case 'gandengan':
+          trado.attr('disabled',true)
+          trado.find('.lookup-toggler').attr('disabled',true)
+          $('#tradoId').attr('disabled',true);
+
+          gudang.attr('disabled',true)
+          gudang.find('.lookup-toggler').attr('disabled',true)
+          $('#gudangId').attr('disabled',true);
+          $('#gandenganId').attr('disabled',false);
+
+          break;
+        case 'gudang':
+          trado.attr('disabled',true)
+          trado.find('.lookup-toggler').attr('disabled',true)
+          $('#tradoId').attr('disabled',true);
+
+          gandengan.attr('disabled',true)
+          gandengan.find('.lookup-toggler').attr('disabled',true)
+          $('#gandenganId').attr('disabled',true);
+          $('#gudangId').attr('disabled',false);
+
+          break;
+        default:
+          break;
+        }
+  }
+
+  function enabledLookupSelected(){
+    let trado = $('#crudForm').find(`[name="trado"]`).parents('.input-group').children()
+    let gandengan = $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children()
+    let gudang = $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children()
+    trado.find(`.lookup-toggler`).attr("disabled", false);
+    trado.attr('disabled',false);
+    gandengan.find(`.lookup-toggler`).attr("disabled", false);
+    gandengan.attr('disabled',false);
+    gudang.find(`.lookup-toggler`).attr("disabled", false);
+    gudang.attr('disabled',false);
+    
+    
+    $('#tradoId').attr('disabled',false);
+    $('#tradoId').val('');
+    $('#gandenganId').attr('disabled',false);
+    $('#gandenganId').val('');
+    $('#gudangId').attr('disabled',false);
+    $('#gudangId').val('');
+}
+
 
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -1143,12 +1250,14 @@
         element.val(trado.keterangan)
         $(`#${element[0]['name']}Id`).val(trado.id)
         element.data('currentValue', element.val())
+        lookupSelected(`trado`);
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
         element.val('')
+        enabledLookupSelected()
         element.data('currentValue', element.val())
       }
     })
@@ -1160,12 +1269,14 @@
         element.val(trado.keterangan)
         $(`#${element[0]['name']}Id`).val(trado.id)
         element.data('currentValue', element.val())
+        lookupSelected(`gandengan`);
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
         element.val('')
+        enabledLookupSelected()
         element.data('currentValue', element.val())
       }
     })
@@ -1177,12 +1288,14 @@
         element.val(gudang.gudang)
         $(`#${element[0]['name']}Id`).val(gudang.id)
         element.data('currentValue', element.val())
+        lookupSelected(`gudang`);
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
         element.val('')
+        enabledLookupSelected()
         element.data('currentValue', element.val())
       }
     })

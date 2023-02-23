@@ -31,6 +31,43 @@
             label: 'STATUS',
             name: 'status',
           },
+  
+          {
+            label: 'STATUS TRIP',
+            name: 'statustrip',
+            align: 'left',
+
+            formatter: (value, options, rowData) => {
+              if (value!='') {
+                let statusTrip = JSON.parse(value)
+                if (!statusTrip) {
+                  return ''
+                }
+                let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusTrip.WARNA}; color: #fff;">
+                  <span>${statusTrip.SINGKATAN}</span>
+                </div>
+              `)
+
+                return formattedValue[0].outerHTML
+              } 
+
+              return ''
+            },
+            cellattr: (rowId, value, rowObject) => {
+              try {
+                let statusTrip = JSON.parse(rowObject.statustrip)
+
+                if (!statusTrip) {
+                  return ` title=" "`
+                }
+                
+                return ` title="${statusTrip.MEMO}"`
+              } catch (error) {
+                return ``
+              }
+            }
+          },
           {
             label: 'KETERANGAN',
             name: 'keterangan_detail',
@@ -42,8 +79,21 @@
           {
             label: 'UANG JALAN',
             name: 'uangjalan',
-            formatter: 'number', 
-            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            formatter: 'number',
+            formatoptions: {
+              thousandsSeparator: ",",
+              decimalPlaces: 0
+            },
+            align: "right",
+          },
+          {
+            label: 'JUMLAH TRIP',
+            name: 'jumlahtrip',
+            formatter: 'number',
+            formatoptions: {
+              thousandsSeparator: ",",
+              decimalPlaces: 0
+            },
             align: "right",
           },
         ],
@@ -58,7 +108,7 @@
         sortable: true,
         // pager: pager,
         viewrecords: true,
-        footerrow:true,
+        footerrow: true,
         userDataOnFooter: true,
         postData: {
           absensi_id: id
@@ -82,7 +132,7 @@
         loadComplete: function(data) {
           changeJqGridRowListText()
           initResize($(this))
-          
+
           let nominals = $(this).jqGrid("getCol", "uangjalan")
           let totalNominal = 0
 

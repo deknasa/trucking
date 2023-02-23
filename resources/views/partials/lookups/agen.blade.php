@@ -379,7 +379,7 @@
         postData = $(this).jqGrid('getGridParam', 'postData')
 
         $('.clearsearchclass').click(function() {
-          clearColumnSearch()
+          clearColumnSearch($(this))
         })
 
         $(this).setGridWidth($('#lookupAgen').prev().width())
