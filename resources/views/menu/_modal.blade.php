@@ -64,7 +64,7 @@
             <div class="row form-group sometimes">
               <div class="col-12 col-md-2 col-form-label">
                 <label>
-                  LINK <span class="text-danger">*</span>
+                  LINK <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-md-10">

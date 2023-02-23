@@ -80,7 +80,7 @@
     let autoNumericElements = []
     let rowNum = 10
     let hasDetail = false
-  
+
 
     $(document).ready(function() {
         initLookup()
@@ -118,14 +118,20 @@
             showDialog('ISI SELURUH KOLOM')
         }
     })
-  
-  
+
+
 
     function initLookup() {
 
         $('.coadari-lookup').lookup({
             title: 'Kd. Perkiraan Lookup',
             fileName: 'akunpusat',
+            beforeProcess: function(test) {
+                this.postData = {
+                    levelCoa: '3',
+                    Aktif: 'AKTIF',
+                }
+            },
             onSelectRow: (coa, element) => {
                 $('#crudForm [name=coadari_id]').first().val(coa.id)
                 element.val(coa.keterangancoa)
@@ -143,6 +149,12 @@
         $('.coasampai-lookup').lookup({
             title: 'Kd. Perkiraan Lookup',
             fileName: 'akunpusat',
+            beforeProcess: function(test) {
+                this.postData = {
+                    levelCoa: '3',
+                    Aktif: 'AKTIF',
+                }
+            },
             onSelectRow: (coa, element) => {
                 $('#crudForm [name=coasampai_id]').first().val(coa.id)
                 element.val(coa.keterangancoa)
@@ -158,7 +170,6 @@
             }
         })
     }
-
 </script>
 @endpush()
 @endsection
