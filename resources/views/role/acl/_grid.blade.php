@@ -47,7 +47,7 @@
         height: 350,
         rownumbers: true,
         rownumWidth: 45,
-        rowNum: 0,
+        rowNum: 10,
         rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
@@ -58,7 +58,9 @@
           rows: 'limit'
         },
         jsonReader: {
-          root: 'data'
+          root: 'data',
+          // total: 'attributes.totalPages',
+          // records: 'attributes.totalRows',
         },
         onSelectRow: function(id) {
           activeGrid = $(this)

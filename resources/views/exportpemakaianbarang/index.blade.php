@@ -64,7 +64,7 @@
     let hasDetail = false
 
 
-    $(document).ready(function() { 
+    $(document).ready(function() {
         initSelect2($('#crudForm').find('[name=jenis]'), false)
         setJenisPemakaian($('#crudForm'))
 
@@ -89,6 +89,10 @@
             .addClass("btn btn-primary").html(`
 			<i class="fa fa-calendar-alt"></i>
 		`);
+
+        if (!`{{ $myAuth->hasPermission('exportpemakaianbarang', 'export') }}`) {
+            $('#btnEkspor').attr('disabled', 'disabled')
+        }
     })
 
     $(document).on('click', `#btnEkspor`, function(event) {

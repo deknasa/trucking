@@ -1,11 +1,12 @@
 {
-  "ReportGuid": "79cc4ba5be4125427102541609fe806a",
+  "ReportVersion": "2023.1.1",
+  "ReportGuid": "9cf0102213a73c5d0722d45faee1b0a3",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportLaporanBukuBesar.mrt",
+  "ReportFile": "http://localhost/truck/public/reports/ReportLaporanBukuBesar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1672125165000+0700)/",
+  "ReportChanged": "/Date(1677133185000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -27,46 +28,58 @@
         "Alias": "data",
         "Columns": {
           "0": {
-            "Name": "debet",
-            "Index": -1,
-            "NameInSource": "debet",
-            "Alias": "debet",
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
             "Type": "System.String"
           },
           "1": {
-            "Name": "kredit",
-            "Index": -1,
-            "NameInSource": "kredit",
-            "Alias": "kredit",
+            "Name": "urut",
+            "NameInSource": "urut",
+            "Alias": "urut",
             "Type": "System.String"
           },
           "2": {
-            "Name": "saldo",
-            "Index": -1,
-            "NameInSource": "saldo",
-            "Alias": "saldo",
+            "Name": "coa",
+            "NameInSource": "coa",
+            "Alias": "coa",
             "Type": "System.String"
           },
           "3": {
-            "Name": "keterangan",
-            "Index": -1,
-            "NameInSource": "keterangan",
-            "Alias": "keterangan",
+            "Name": "tglbukti",
+            "NameInSource": "tglbukti",
+            "Alias": "tglbukti",
             "Type": "System.String"
           },
           "4": {
             "Name": "nobukti",
-            "Index": -1,
             "NameInSource": "nobukti",
             "Alias": "nobukti",
             "Type": "System.String"
           },
           "5": {
-            "Name": "tglbukti",
-            "Index": -1,
-            "NameInSource": "tglbukti",
-            "Alias": "tglbukti",
-            "Type": "System.DateTime"
+            "Name": "keterangan",
+            "NameInSource": "keterangan",
+            "Alias": "keterangan",
+            "Type": "System.String"
+          },
+          "6": {
+            "Name": "debet",
+            "NameInSource": "debet",
+            "Alias": "debet",
+            "Type": "System.String"
+          },
+          "7": {
+            "Name": "kredit",
+            "NameInSource": "kredit",
+            "Alias": "kredit",
+            "Type": "System.String"
+          },
+          "8": {
+            "Name": "Saldo",
+            "NameInSource": "Saldo",
+            "Alias": "Saldo",
+            "Type": "System.String"
           }
         },
         "NameInSource": "Data.data"
@@ -78,70 +91,60 @@
         "Columns": {
           "0": {
             "Name": "id",
-            "Index": -1,
             "NameInSource": "id",
             "Alias": "id",
             "Type": "System.Decimal"
           },
           "1": {
             "Name": "user",
-            "Index": -1,
             "NameInSource": "user",
             "Alias": "user",
             "Type": "System.String"
           },
           "2": {
             "Name": "name",
-            "Index": -1,
             "NameInSource": "name",
             "Alias": "name",
             "Type": "System.String"
           },
           "3": {
             "Name": "cabang_id",
-            "Index": -1,
             "NameInSource": "cabang_id",
             "Alias": "cabang_id",
             "Type": "System.String"
           },
           "4": {
             "Name": "karyawan_id",
-            "Index": -1,
             "NameInSource": "karyawan_id",
             "Alias": "karyawan_id",
             "Type": "System.String"
           },
           "5": {
             "Name": "dashboard",
-            "Index": -1,
             "NameInSource": "dashboard",
             "Alias": "dashboard",
             "Type": "System.String"
           },
           "6": {
             "Name": "statusaktif",
-            "Index": -1,
             "NameInSource": "statusaktif",
             "Alias": "statusaktif",
             "Type": "System.String"
           },
           "7": {
             "Name": "modifiedby",
-            "Index": -1,
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
           "8": {
             "Name": "created_at",
-            "Index": -1,
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
           "9": {
             "Name": "updated_at",
-            "Index": -1,
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
@@ -156,49 +159,42 @@
         "Columns": {
           "0": {
             "Name": "coadari",
-            "Index": -1,
             "NameInSource": "coadari",
             "Alias": "coadari",
             "Type": "System.String"
           },
           "1": {
             "Name": "coasampai",
-            "Index": -1,
             "NameInSource": "coasampai",
             "Alias": "coasampai",
             "Type": "System.String"
           },
           "2": {
             "Name": "ketcoadari",
-            "Index": -1,
             "NameInSource": "ketcoadari",
             "Alias": "ketcoadari",
             "Type": "System.String"
           },
           "3": {
             "Name": "ketcoasampai",
-            "Index": -1,
             "NameInSource": "ketcoasampai",
             "Alias": "ketcoasampai",
             "Type": "System.String"
           },
           "4": {
             "Name": "dari",
-            "Index": -1,
             "NameInSource": "dari",
             "Alias": "dari",
             "Type": "System.String"
           },
           "5": {
             "Name": "sampai",
-            "Index": -1,
             "NameInSource": "sampai",
             "Alias": "sampai",
             "Type": "System.String"
           },
           "6": {
             "Name": "cabang",
-            "Index": -1,
             "NameInSource": "cabang",
             "Alias": "cabang",
             "Type": "System.String"
@@ -976,9 +972,6 @@
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "{Sum(data.saldo)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",

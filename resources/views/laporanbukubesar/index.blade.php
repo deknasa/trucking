@@ -48,10 +48,10 @@
                                     <i class="fas fa-sync"></i>
                                     Preview
                                 </a>
-                                <a id="btnExport" class="btn btn-warning mr-2 ">
+                                <!-- <a id="btnExport" class="btn btn-warning mr-2 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
-                                </a>
+                                </a> -->
                             </div>
                         </div>
 
