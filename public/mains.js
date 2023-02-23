@@ -39,6 +39,9 @@ $(document).ready(function () {
 	});
 
 	$("#loader").addClass("d-none");
+	
+	$.fn.modal.Constructor.Default.backdrop = 'static'
+	$.fn.modal.Constructor.Default.keyboard = false
 });
 
 window.onbeforeunload = () => {
