@@ -63,8 +63,10 @@ use App\Http\Controllers\ApprovalBukaCetakController;
 use App\Http\Controllers\ExportLaporanDepositoController;
 use App\Http\Controllers\ExportLaporanKasGantungController;
 use App\Http\Controllers\ExportLaporanStokController;
+use App\Http\Controllers\ExportPemakaianBarangController;
 use App\Http\Controllers\ExportPembelianBarangController;
 use App\Http\Controllers\ExportPengeluaranBarangController;
+use App\Http\Controllers\ExportRincianMingguanController;
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\SubKelompokController;
 use App\Http\Controllers\SupplierController;
@@ -986,6 +988,14 @@ Route::middleware(['auth','authorized'])->group(function () {
 
     Route::get('pemutihansupir/index', [PemutihanSupirController::class, 'index']);
     Route::resource('pemutihansupir', PemutihanSupirController::class);
+
+    Route::get('exportpemakaianbarang/export', [ExportPemakaianBarangController::class, 'export'])->name('exportpemakaianbarang.export');
+    Route::get('exportpemakaianbarang/index', [ExportPemakaianBarangController::class, 'index']);
+    Route::resource('exportpemakaianbarang', ExportPemakaianBarangController::class);
+
+    Route::get('exportrincianmingguan/export', [ExportRincianMingguanController::class, 'export'])->name('exportrincianmingguan.export');
+    Route::get('exportrincianmingguan/index', [ExportRincianMingguanController::class, 'index']);
+    Route::resource('exportrincianmingguan', ExportRincianMingguanController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
