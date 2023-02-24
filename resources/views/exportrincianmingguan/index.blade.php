@@ -45,7 +45,7 @@
                             <div class="col-sm-6 mt-4">
                                 <a id="btnEkspor" class="btn btn-secondary mr-2 ">
                                     <i class="fas fa-sync"></i>
-                                    Ekspor
+                                    Export
                                 </a>
                             </div>
                         </div>
@@ -84,6 +84,18 @@
 
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        
+        let css_property =
+        {
+            "color": "#fff",
+            "background-color": "rgb(173 180 187)",
+            "cursor" : "not-allowed",
+            "border-color": "rgb(173 180 187)"
+        }
+        if (!`{{ $myAuth->hasPermission('exportrincianmingguan', 'export') }}`) {
+            $('#btnEkspor').prop('disabled', true)
+            $('#btnEkspor').css(css_property);
+        }
     })
 
     $(document).on('click', `#btnEkspor`, function(event) {

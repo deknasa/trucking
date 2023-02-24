@@ -32,7 +32,7 @@
                             <div class="col-sm-6 mt-4">
                                 <a id="btnEkspor" class="btn btn-secondary mr-2 ">
                                     <i class="fas fa-sync"></i>
-                                    Ekspor
+                                    Export
                                 </a>
                             </div>
                         </div>
@@ -90,8 +90,16 @@
 			<i class="fa fa-calendar-alt"></i>
 		`);
 
+        let css_property =
+        {
+            "color": "#fff",
+            "background-color": "rgb(173 180 187)",
+            "cursor" : "not-allowed",
+            "border-color": "rgb(173 180 187)"
+        }
         if (!`{{ $myAuth->hasPermission('exportpemakaianbarang', 'export') }}`) {
-            $('#btnEkspor').attr('disabled', 'disabled')
+            $('#btnEkspor').prop('disabled', true)
+            $('#btnEkspor').css(css_property);
         }
     })
 
@@ -134,6 +142,12 @@
                     let option = new Option(statusApproval.text, statusApproval.id)
                     relatedForm.find('[name=jenis]').append(option).trigger('change')
                 });
+
+                relatedForm
+                    .find('[name=jenis]')
+                    .val($(`#crudForm [name=jenis] option:eq(1)`).val())
+                    .trigger('change')
+                    .trigger('select2:selected');
             }
         })
     }

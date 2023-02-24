@@ -78,6 +78,18 @@
             .addClass("btn btn-primary").html(`
 			<i class="fa fa-calendar-alt"></i>
 		`);
+        
+        let css_property =
+        {
+            "color": "#fff",
+            "background-color": "rgb(173 180 187)",
+            "cursor" : "not-allowed",
+            "border-color": "rgb(173 180 187)"
+        }
+        if (!`{{ $myAuth->hasPermission('exportpembelianbarang', 'export') }}`) {
+            $('#btnEkspor').prop('disabled', true)
+            $('#btnEkspor').css(css_property);
+        }
     })
 
     $(document).on('click', `#btnEkspor`, function(event) {

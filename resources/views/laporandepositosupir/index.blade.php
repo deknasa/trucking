@@ -70,6 +70,17 @@
         initDatepicker()
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
+        let css_property =
+        {
+            "color": "#fff",
+            "background-color": "rgb(173 180 187)",
+            "cursor" : "not-allowed",
+            "border-color": "rgb(173 180 187)"
+        }
+        if (!`{{ $myAuth->hasPermission('laporandepositosupir', 'report') }}`) {
+            $('#btnPreview').prop('disabled', true)
+            $('#btnPreview').css(css_property);
+        }
 
     })
 
@@ -118,13 +129,12 @@
                     relatedForm.find('[name=jenis]').append(option).trigger('change')
                 });
 
-                // relatedForm
-                //     .find('[name=approve]')
-                //     .val($(`#crudForm [name=approve] option:eq(1)`).val())
-                //     .trigger('change')
-                //     .trigger('select2:selected');
-
-                // resolve()
+               
+                relatedForm
+                    .find('[name=jenis]')
+                    .val($(`#crudForm [name=jenis] option:eq(1)`).val())
+                    .trigger('change')
+                    .trigger('select2:selected');
             }
         })
         // })

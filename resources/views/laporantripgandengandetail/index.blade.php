@@ -82,6 +82,17 @@
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         initLookup()
+        let css_property =
+        {
+            "color": "#fff",
+            "background-color": "rgb(173 180 187)",
+            "cursor" : "not-allowed",
+            "border-color": "rgb(173 180 187)"
+        }
+        if (!`{{ $myAuth->hasPermission('laporantripgandengandetail', 'report') }}`) {
+            $('#btnEkspor').prop('disabled', true)
+            $('#btnEkspor').css(css_property);
+        }
 
     })
 
