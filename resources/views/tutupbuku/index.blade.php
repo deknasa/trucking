@@ -14,7 +14,7 @@
                             <label class="col-12 col-sm-2 col-form-label mt-2">tgl terakhir tutup buku <span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
-                                    <input type="text" name="tglterakhir" class="form-control datepicker">
+                                    <input type="text" name="tglterakhir" class="form-control datepicker" readonly disabled>
                                 </div>
                             </div>
                         </div>
@@ -62,9 +62,27 @@
     $(document).ready(function() {
         initDatepicker()
         // $('#crudForm').find('[name=tglterakhir]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        tglterakhir()
+        function tglterakhir() {
+            $.ajax({
+                url: `${apiUrl}tutupbuku`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    $('#crudForm').find('[name=tglterakhir]').val($.datepicker.formatDate('dd-mm-yy', new Date(response.data.text))).trigger('change');
+
+                },
+                error: error => {
+                    if (error.status === 422) {
+                        showDialog(error.statusText)
+                    }
+                },
+            })
+        } 
         $('#crudForm').find('[name=tgltutupbuku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
-
     })
 
     $(document).on('click', `#btnSubmit`, function(event) {
