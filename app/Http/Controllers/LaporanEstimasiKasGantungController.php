@@ -13,36 +13,35 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-class LaporanKlaimPJTSupirController extends MyController
+class LaporanEstimasiKasGantungController extends MyController
 {
-    public $title = 'Laporan Klaim PJT Supir';
+    public $title = 'Laporan Estimasi Kas Gantung';
 
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Klaim PJT Supir',
+            'pagename' => 'Menu Utama Laporan Estimasi Kas Gantung',
         ];
 
-        return view('laporanklaimpjtsupir.index', compact('title'));
+        return view('laporanestimasikasgantung.index', compact('title'));
     }
 
     public function report(Request $request)
     {
         $detailParams = [
             'sampai' => $request->sampai,
-            'dari' => $request->dari,
-            'kategori' => $request->kategori,
+            'jenis' => $request->jenis,
         ];
 
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporanklaimpjtsupir/report', $detailParams);
+            ->get(config('app.api_url') . 'laporanestimasikasgantung/report', $detailParams);
 
         $data = $header['data'];
         $user = Auth::user();
-        return view('reports.laporanklaimpjtsupir', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanestimasikasgantung', compact('data', 'user', 'detailParams'));
     }
 
 }

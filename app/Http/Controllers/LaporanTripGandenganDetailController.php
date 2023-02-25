@@ -32,6 +32,10 @@ class LaporanTripGandenganDetailController extends MyController
         $detailParams = [
             'sampai' => $request->sampai,
             'dari' => $request->dari,
+            'gandengandari' => $request->gandengandari,
+            'gandengansampai' => $request->gandengansampai,
+            'gandengandari_id' => $request->gandengandari_id,
+            'gandengansampai_id' => $request->gandengansampai_id,
         ];
 
         $header = Http::withHeaders(request()->header())

@@ -30,7 +30,7 @@ class LaporanKeteranganPinjamanSupirController extends MyController
     public function report(Request $request)
     {
         $detailParams = [
-            'sampai' => $request->sampai,
+            'periode' => $request->periode,
             'jenis' => $request->jenis,
         ];
 

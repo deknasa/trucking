@@ -101,10 +101,12 @@
         let dari = $('#crudForm').find('[name=dari]').val()
         let gandengandari_id = $('#crudForm').find('[name=gandengandari_id]').val()
         let gandengansampai_id = $('#crudForm').find('[name=gandengansampai_id]').val()
+        let gandengandari = $('#crudForm').find('[name=gandengandari]').val()
+        let gandengansampai = $('#crudForm').find('[name=gandengansampai]').val()
 
         if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporantripgandengandetail.report') }}?sampai=${sampai}&dari=${dari}&gandengandari_id=${gandengandari_id}&gandengansampai_id=${gandengansampai_id}`)
+            window.open(`{{ route('laporantripgandengandetail.report') }}?sampai=${sampai}&dari=${dari}&gandengandari_id=${gandengandari_id}&gandengansampai_id=${gandengansampai_id}&gandengandari=${gandengandari}&gandengansampai=${gandengansampai}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -120,8 +122,8 @@
                 }
             },
             onSelectRow: (gandengan, element) => {
-                $('#crudForm [name=gandengandari_id]').first().val(gandengan.id)
-                element.val(gandengan.namagandengan)
+                $('#crudForm [name=gandengandari_id]').first().val(gandengan.kodegandengan)
+                element.val(gandengan.keterangan)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
@@ -142,8 +144,8 @@
                 }
             },
             onSelectRow: (gandengan, element) => {
-                $('#crudForm [name=gandengansampai_id]').first().val(gandengan.id)
-                element.val(gandengan.namagandengan)
+                $('#crudForm [name=gandengansampai_id]').first().val(gandengan.kodegandengan)
+                element.val(gandengan.keterangan)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {

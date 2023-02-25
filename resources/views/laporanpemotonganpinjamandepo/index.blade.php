@@ -85,7 +85,7 @@
             "cursor" : "not-allowed",
             "border-color": "rgb(173 180 187)"
         }
-        if (!`{{ $myAuth->hasPermission('laporanpemotonganpinjdepo', 'report') }}`) {
+        if (!`{{ $myAuth->hasPermission('laporanpemotonganpinjamandepo', 'report') }}`) {
             $('#btnPreview').prop('disabled', true)
             $('#btnPreview').css(css_property);
         }
@@ -94,10 +94,10 @@
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let dari = $('#crudForm').find('[name=dari]').val()
-
+        let type = $('#type').find(':selected').text();
         if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporanpemotonganpinjdepo.report') }}?sampai=${sampai}&dari=${dari}`)
+            window.open(`{{ route('laporanpemotonganpinjamandepo.report') }}?sampai=${sampai}&dari=${dari}&type=${type}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

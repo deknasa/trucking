@@ -84,6 +84,18 @@
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
 
+        let css_property =
+        {
+            "color": "#fff",
+            "background-color": "rgb(173 180 187)",
+            "cursor" : "not-allowed",
+            "border-color": "rgb(173 180 187)"
+        }
+        if (!`{{ $myAuth->hasPermission('laporankasbank', 'report') }}`) {
+            $('#btnPreview').prop('disabled', true)
+            $('#btnPreview').css(css_property);
+        }
+
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
