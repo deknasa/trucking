@@ -11,7 +11,7 @@
 }
 
 @font-face {
-	font-family: 'Open Sans Condensed';
+	font-family: "Open Sans Condensed";
 	src: url("../libraries/font/open-sans-condensed/OpenSans-CondBold.ttf");
 }
 
@@ -228,8 +228,8 @@ html {
 
 .modal.modal-fullscreen .modal-footer {
 	position: sticky;
-    bottom: 0;
-    background: inherit;
+	bottom: 0;
+	background: inherit;
 }
 
 .highlight {
@@ -296,8 +296,8 @@ html {
 	width: 100% !important;
 }
 
-.dropdown-menu{
-	background-color:#95b8e7;
+.dropdown-menu {
+	background-color: #95b8e7;
 }
 
 .select2-results__option {
@@ -326,3 +326,7 @@ html {
     background: #F86379;
     
 } */
+
+.ui-th-div {
+	font-weight: normal !important;
+}
