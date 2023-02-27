@@ -757,6 +757,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('piutangheader/report', [PiutangHeaderController::class, 'report'])->name('piutangheader.report');
     Route::resource('piutangheader', PiutangHeaderController::class);
 
+    Route::get('piutangdetail/history/grid', [PiutangDetailController::class, 'historyGrid']);
+    Route::get('piutangdetail/detail/grid', [PiutangDetailController::class, 'detailGrid']);
     Route::resource('piutangdetail', PiutangDetailController::class);
 
     Route::get('pelunasanpiutangheader/index', [PelunasanPiutangHeaderController::class, 'index']);
