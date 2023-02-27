@@ -92,10 +92,11 @@
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let dari = $('#crudForm').find('[name=dari]').val()
+        let kategori = $('#crudForm').find('[name=kategori_id]').val()
 
-        if (dari != '' && sampai != '') {
+        if (dari != '' && sampai != '' && kategori != '') {
 
-            window.open(`{{ route('laporanklaimpjtsupir.report') }}?sampai=${sampai}&dari=${dari}`)
+            window.open(`{{ route('laporanklaimpjtsupir.report') }}?sampai=${sampai}&dari=${dari}&kategori=${kategori}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

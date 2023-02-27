@@ -13,18 +13,18 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-class LaporanPemotonganPinjamanDepositoController extends MyController
+class LaporanBanGudangSementaraController extends MyController
 {
-    public $title = 'Laporan Pemotongan Pinjaman/Deposito';
+    public $title = 'Laporan Ban di Gudang Sementara';
 
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Pemotongan Pinjaman/Deposito',
+            'pagename' => 'Menu Utama Laporan Ban di Gudang Sementara',
         ];
 
-        return view('laporanpemotonganpinjdepo.index', compact('title'));
+        return view('laporanbangudangsementara.index', compact('title'));
     }
 
     public function report(Request $request)
@@ -32,16 +32,17 @@ class LaporanPemotonganPinjamanDepositoController extends MyController
         $detailParams = [
             'sampai' => $request->sampai,
             'dari' => $request->dari,
+            'type' => $request->type,
         ];
 
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporanpemotonganpinjdepo/report', $detailParams);
+            ->get(config('app.api_url') . 'laporanbangudangsementara/report', $detailParams);
 
         $data = $header['data'];
         $user = Auth::user();
-        return view('reports.laporanpemotonganpinjdepo', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanbangudangsementara', compact('data', 'user', 'detailParams'));
     }
 
 }

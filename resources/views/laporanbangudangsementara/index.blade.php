@@ -10,15 +10,7 @@
                 </div>
                 <form id="crudForm">
                     <div class="card-body">
-                        <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
-                            <div class="col-sm-4 mt-2">
-                                <div class="input-group">
-                                    <input type="text" name="periode" class="form-control datepicker">
-                                </div>
-                            </div>
-                        </div>
-
+                      
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
@@ -57,10 +49,7 @@
 
 
     $(document).ready(function() {
-
-        initDatepicker()
-        $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
+      
         let css_property =
         {
             "color": "#fff",
@@ -68,7 +57,7 @@
             "cursor" : "not-allowed",
             "border-color": "rgb(173 180 187)"
         }
-        if (!`{{ $myAuth->hasPermission('laporankasgantung', 'report') }}`) {
+        if (!`{{ $myAuth->hasPermission('laporanbangudangsementara', 'report') }}`) {
             $('#btnPreview').prop('disabled', true)
             $('#btnPreview').css(css_property);
         }
@@ -76,16 +65,11 @@
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
-        let periode = $('#crudForm').find('[name=periode]').val()
+      
 
-        if (periode != '') {
-
-            window.open(`{{ route('laporankasgantung.report') }}?periode=${periode}`)
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
+            window.open(`{{ route('laporanbangudangsementara.report') }}`)
+        
     })
-
 
 </script>
 @endpush()

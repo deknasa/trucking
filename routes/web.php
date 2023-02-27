@@ -62,10 +62,12 @@ use App\Http\Controllers\NotaDebetHeaderController;
 use App\Http\Controllers\ApprovalBukaCetakController;
 use App\Http\Controllers\ExportLaporanDepositoController;
 use App\Http\Controllers\ExportLaporanKasGantungController;
+use App\Http\Controllers\ExportLaporanKasHarianController;
 use App\Http\Controllers\ExportLaporanStokController;
 use App\Http\Controllers\ExportPemakaianBarangController;
 use App\Http\Controllers\ExportPembelianBarangController;
 use App\Http\Controllers\ExportPengeluaranBarangController;
+use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
 use App\Http\Controllers\ExportRincianMingguanController;
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\SubKelompokController;
@@ -146,14 +148,18 @@ use App\Http\Controllers\JurnalUmumPusatHeaderController;
 use App\Http\Controllers\KartuStokController;
 use App\Http\Controllers\HistoriPenerimaanStokController;
 use App\Http\Controllers\HistoriPengeluaranStokController;
+use App\Http\Controllers\LaporanBanGudangSementaraController;
 use App\Http\Controllers\LaporanBukuBesarController;
 use App\Http\Controllers\LaporanDepositoSupirController;
+use App\Http\Controllers\LaporanEstimasiKasGantungController;
 use App\Http\Controllers\LaporanHistoryPinjamanController;
 use App\Http\Controllers\LaporanHutangBBMController;
 use App\Http\Controllers\LaporanKartuHutangPrediksiController;
 use App\Http\Controllers\LaporanKasBankController;
+use App\Http\Controllers\LaporanKasGantungController;
 use App\Http\Controllers\LaporanKeteranganPinjamanSupirController;
 use App\Http\Controllers\LaporanKlaimPJTSupirController;
+use App\Http\Controllers\LaporanPemotonganPinjamanDepoController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\LaporanPemotonganPinjamanPerEBSController;
 use App\Http\Controllers\LaporanPinjamanSupirController;
@@ -751,6 +757,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('piutangheader/report', [PiutangHeaderController::class, 'report'])->name('piutangheader.report');
     Route::resource('piutangheader', PiutangHeaderController::class);
 
+    Route::get('piutangdetail/history/grid', [PiutangDetailController::class, 'historyGrid']);
+    Route::get('piutangdetail/detail/grid', [PiutangDetailController::class, 'detailGrid']);
     Route::resource('piutangdetail', PiutangDetailController::class);
 
     Route::get('pelunasanpiutangheader/index', [PelunasanPiutangHeaderController::class, 'index']);
@@ -942,9 +950,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporansupirlebihdaritrado/index', [LaporanSupirLebihDariTradoController::class, 'index']);
     Route::resource('laporansupirlebihdaritrado', LaporanSupirLebihDariTradoController::class);
 
-    Route::get('laporanpemotonganpinjdepo/report', [LaporanPemotonganPinjamanDepositoController::class, 'report'])->name('laporanpemotonganpinjdepo.report');
-    Route::get('laporanpemotonganpinjdepo/index', [LaporanPemotonganPinjamanDepositoController::class, 'index']);
-    Route::resource('laporanpemotonganpinjdepo', LaporanPemotonganPinjamanDepositoController::class);
+    Route::get('laporanpemotonganpinjamandepo/report', [LaporanPemotonganPinjamanDepoController::class, 'report'])->name('laporanpemotonganpinjamandepo.report');
+    Route::get('laporanpemotonganpinjamandepo/index', [LaporanPemotonganPinjamanDepoController::class, 'index']);
+    Route::resource('laporanpemotonganpinjamandepo', LaporanPemotonganPinjamanDepoController::class);
 
     Route::get('laporanrekapsumbangan/report', [LaporanRekapSumbanganController::class, 'report'])->name('laporanrekapsumbangan.report');
     Route::get('laporanrekapsumbangan/index', [LaporanRekapSumbanganController::class, 'index']);
@@ -993,9 +1001,30 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('exportpemakaianbarang/index', [ExportPemakaianBarangController::class, 'index']);
     Route::resource('exportpemakaianbarang', ExportPemakaianBarangController::class);
 
+    Route::get('exportrincianmingguanpendapatan/export', [ExportRincianMingguanPendapatanSupirController::class, 'export'])->name('exportrincianmingguanpendapatan.export');
+    Route::get('exportrincianmingguanpendapatan/index', [ExportRincianMingguanPendapatanSupirController::class, 'index']);
+    Route::resource('exportrincianmingguanpendapatan', ExportRincianMingguanPendapatanSupirController::class);
+
+    
+    Route::get('laporankasgantung/report', [LaporanKasGantungController::class, 'report'])->name('laporankasgantung.report');
+    Route::get('laporankasgantung/index', [LaporanKasGantungController::class, 'index']);
+    Route::resource('laporankasgantung', LaporanKasGantungController::class);
+
+    Route::get('laporanbangudangsementara/report', [LaporanBanGudangSementaraController::class, 'report'])->name('laporanbangudangsementara.report');
+    Route::get('laporanbangudangsementara/index', [LaporanBanGudangSementaraController::class, 'index']);
+    Route::resource('laporanbangudangsementara', LaporanBanGudangSementaraController::class);
+    
+    Route::get('laporanestimasikasgantung/report', [LaporanEstimasiKasGantungController::class, 'report'])->name('laporanestimasikasgantung.report');
+    Route::get('laporanestimasikasgantung/index', [LaporanEstimasiKasGantungController::class, 'index']);
+    Route::resource('laporanestimasikasgantung', LaporanEstimasiKasGantungController::class);
+    
     Route::get('exportrincianmingguan/export', [ExportRincianMingguanController::class, 'export'])->name('exportrincianmingguan.export');
     Route::get('exportrincianmingguan/index', [ExportRincianMingguanController::class, 'index']);
     Route::resource('exportrincianmingguan', ExportRincianMingguanController::class);
+    
+    Route::get('exportlaporankasharian/export', [ExportLaporanKasHarianController::class, 'export'])->name('exportlaporankasharian.export');
+    Route::get('exportlaporankasharian/index', [ExportLaporanKasHarianController::class, 'index']);
+    Route::resource('exportlaporankasharian', ExportLaporanKasHarianController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

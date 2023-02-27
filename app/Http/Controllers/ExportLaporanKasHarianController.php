@@ -13,29 +13,25 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-class ExportRincianMingguanController extends MyController
+class ExportLaporanKasHarianController extends MyController
 {
-    public $title = 'Export Rincian Mingguan';
+    public $title = 'Export Laporan Kas Harian';
 
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Export Rincian Mingguan',
+            'pagename' => 'Menu Utama Export Laporan Kas Harian',
         ];
 
-        return view('exportrincianmingguan.index', compact('title'));
+        return view('exportlaporankasharian.index', compact('title'));
     }
 
     public function export(Request $request): void
     {
         $detailParams = [
             'periode' => $request->periode,
-            'minggu' => $request->minggu,
-            'dari' => $request->dari,
-            'sampai' => $request->sampai,
-            'supirdari_id' => $request->supirdari_id,
-            'supirsampai_id' => $request->supirsampai_id,
+            'bank_id' => $request->bank_id,
         ];
         dd($detailParams);
         date_default_timezone_set("Asia/Jakarta");
@@ -47,7 +43,7 @@ class ExportRincianMingguanController extends MyController
         // $responses = Http::withHeaders($request->header())
         //     ->withOptions(['verify' => false])
         //     ->withToken(session('access_token'))
-        //     ->get(config('app.api_url') . 'exportrincianmingguan/export', $detailParams);
+        //     ->get(config('app.api_url') . 'exportlaporankasharian/export', $detailParams);
 
         // $pengeluaran = $responses['data'];
         // $user = Auth::user();
@@ -86,7 +82,7 @@ class ExportRincianMingguanController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'RINCIANMINGGUAN' . date('dmYHis');
+        $filename = 'EXPORTKASHARIAN' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

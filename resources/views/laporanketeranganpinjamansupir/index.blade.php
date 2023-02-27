@@ -14,7 +14,7 @@
                             <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
-                                    <input type="text" name="sampai" class="form-control datepicker">
+                                    <input type="text" name="periode" class="form-control datepicker">
                                 </div>
                             </div>
                         </div>
@@ -68,7 +68,7 @@
         setJenisKaryawanOptions($('#crudForm'))
 
         initDatepicker()
-        $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
 
         let css_property =
@@ -85,12 +85,12 @@
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
-        let sampai = $('#crudForm').find('[name=sampai]').val()
+        let periode = $('#crudForm').find('[name=periode]').val()
         let jenis = $('#crudForm').find('[name=jenis]').val()
 
-        if (jenis != '' && sampai != '') {
+        if (jenis != '' && periode != '') {
 
-            window.open(`{{ route('laporanketeranganpinjamansupir.report') }}?sampai=${sampai}&jenis=${jenis}`)
+            window.open(`{{ route('laporanketeranganpinjamansupir.report') }}?periode=${periode}&jenis=${jenis}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

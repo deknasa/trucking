@@ -28,6 +28,16 @@ class PiutangDetailController extends Controller
 
         return response($data);
     }
+    public function historyGrid()
+    {
+        return view('piutang._history');
+    }
+    public function detailGrid()
+    {
+        return view('piutang._details');
+    }
+
+
 }
 
 
