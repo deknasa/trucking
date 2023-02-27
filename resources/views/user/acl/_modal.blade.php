@@ -1,4 +1,4 @@
-<div class="modal fade modal-fullscreen" id="userAclModal" tabindex="-1" aria-labelledby="userAclModalLabel" aria-hidden="true">
+<div class="modal modal-fullscreen" id="userAclModal" tabindex="-1" aria-labelledby="userAclModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <form action="#" id="userAclForm">
       <div class="modal-content">
