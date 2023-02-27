@@ -13,25 +13,23 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-class ExportRincianMingguanController extends MyController
+class ExportRincianMingguanPendapatanSupirController extends MyController
 {
-    public $title = 'Export Rincian Mingguan';
+    public $title = 'Export Rincian Mingguan (Pendapatan Supir)';
 
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Export Rincian Mingguan',
+            'pagename' => 'Menu Utama Export Rincian Mingguan (Pendapatan Supir)',
         ];
 
-        return view('exportrincianmingguan.index', compact('title'));
+        return view('exportrincianmingguanpendapatan.index', compact('title'));
     }
 
     public function export(Request $request): void
     {
         $detailParams = [
-            'periode' => $request->periode,
-            'minggu' => $request->minggu,
             'dari' => $request->dari,
             'sampai' => $request->sampai,
             'supirdari_id' => $request->supirdari_id,
@@ -47,7 +45,7 @@ class ExportRincianMingguanController extends MyController
         // $responses = Http::withHeaders($request->header())
         //     ->withOptions(['verify' => false])
         //     ->withToken(session('access_token'))
-        //     ->get(config('app.api_url') . 'exportrincianmingguan/export', $detailParams);
+        //     ->get(config('app.api_url') . 'exportrincianmingguanpendapatan/export', $detailParams);
 
         // $pengeluaran = $responses['data'];
         // $user = Auth::user();
@@ -86,7 +84,7 @@ class ExportRincianMingguanController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'RINCIANMINGGUAN' . date('dmYHis');
+        $filename = 'RINCIANMINGGUANPENDAPATANBERSIHSUPIR' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
