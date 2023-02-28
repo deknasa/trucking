@@ -332,7 +332,7 @@
           $('#detailList').append(detailRow)
 
         })
-        // console.log(response.data);
+        console.log(response.data);
 
         $('#modalgrid').setGridParam({
           datatype: "local",
@@ -369,6 +369,7 @@
           $('#detailList').append(detailRow)
 
         })
+        console.log(response.data);
         $('#modalgrid').setGridParam({
           datatype: "local",
           data:response.data
@@ -421,7 +422,7 @@
         loadComplete: function(data) {
           changeJqGridRowListText()
           initResize($(this))
-          
+          console.log(data);
           let nominals = $(this).jqGrid("getCol", "uangjalan")
           let totalNominal = 0
 

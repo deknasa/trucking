@@ -185,17 +185,17 @@ $.fn.customPager = function (option = {}) {
 	let grid = $(this);
 	let pagerHandlerId = `${grid.getGridParam().id}PagerHandler`;
 	let pagerInfoId = `${grid.getGridParam().id}InfoHandler`;
-	let approveBtn ="";
-	if (option.approveBtn) {
-		option.approveBtn.forEach(element => {
-			approveBtn +=`<div class="btn-group dropup  scrollable-menu">`
-			approveBtn +=`<button type="button" class="${element.class}" data-toggle="dropdown" id="${element.id}">
+	let extndBtn ="";
+	if (option.extndBtn) {
+		option.extndBtn.forEach(element => {
+			extndBtn +=`<div class="btn-group dropup  scrollable-menu">`
+			extndBtn +=`<button type="button" class="${element.class}" data-toggle="dropdown" id="${element.id}">
 			${element.innerHTML}
 			</button>`
-			approveBtn +=`<ul class="dropdown-menu" id="menu-approve" aria-labelledby="${element.id}">`
+			extndBtn +=`<ul class="dropdown-menu" id="menu-approve" aria-labelledby="${element.id}">`
 			if (element.dropmenuHTML) {
 				element.dropmenuHTML.forEach(dropmenuHTML => {
-					approveBtn +=`<li><a class="dropdown-item" id='${dropmenuHTML.id}' href="#">${dropmenuHTML.text}</a></li>`
+					extndBtn +=`<li><a class="dropdown-item" id='${dropmenuHTML.id}' href="#">${dropmenuHTML.text}</a></li>`
 					$(document).on("click", `#${dropmenuHTML.id}`, function (event) {
 						event.stopImmediatePropagation();
 
@@ -203,8 +203,8 @@ $.fn.customPager = function (option = {}) {
 					});
 				});	
 			}
-			approveBtn +=`</ul>`
-			approveBtn +="</div>"
+			extndBtn +=`</ul>`
+			extndBtn +="</div>"
 		});
 	}
 
@@ -241,7 +241,7 @@ $.fn.customPager = function (option = {}) {
 					}
 					</div>
 					<div class="d-md-inline d-block">
-						${approveBtn}
+						${extndBtn}
 					</div>
 				</div>
 				<div class="col-12 col-lg-6">

@@ -32,42 +32,42 @@
             name: 'status',
           },
   
-          {
-            label: 'STATUS TRIP',
-            name: 'statustrip',
-            align: 'left',
+          // {
+          //   label: 'STATUS TRIP',
+          //   name: 'statustrip',
+          //   align: 'left',
 
-            formatter: (value, options, rowData) => {
-              if (value!='') {
-                let statusTrip = JSON.parse(value)
-                if (!statusTrip) {
-                  return ''
-                }
-                let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusTrip.WARNA}; color: #fff;">
-                  <span>${statusTrip.SINGKATAN}</span>
-                </div>
-              `)
+          //   formatter: (value, options, rowData) => {
+          //     if (value!='') {
+          //       let statusTrip = JSON.parse(value)
+          //       if (!statusTrip) {
+          //         return ''
+          //       }
+          //       let formattedValue = $(`
+          //       <div class="badge" style="background-color: ${statusTrip.WARNA}; color: #fff;">
+          //         <span>${statusTrip.SINGKATAN}</span>
+          //       </div>
+          //     `)
 
-                return formattedValue[0].outerHTML
-              } 
+          //       return formattedValue[0].outerHTML
+          //     } 
 
-              return ''
-            },
-            cellattr: (rowId, value, rowObject) => {
-              try {
-                let statusTrip = JSON.parse(rowObject.statustrip)
+          //     return ''
+          //   },
+          //   cellattr: (rowId, value, rowObject) => {
+          //     try {
+          //       let statusTrip = JSON.parse(rowObject.statustrip)
 
-                if (!statusTrip) {
-                  return ` title=" "`
-                }
+          //       if (!statusTrip) {
+          //         return ` title=" "`
+          //       }
                 
-                return ` title="${statusTrip.MEMO}"`
-              } catch (error) {
-                return ``
-              }
-            }
-          },
+          //       return ` title="${statusTrip.MEMO}"`
+          //     } catch (error) {
+          //       return ``
+          //     }
+          //   }
+          // },
           {
             label: 'KETERANGAN',
             name: 'keterangan_detail',
