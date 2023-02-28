@@ -297,7 +297,8 @@ html {
 }
 
 .dropdown-menu{
-	background-color:#95b8e7;
+	background: linear-gradient(to bottom, #eff5ff 0, #e0ecff 100%);
+    border-color: var(--jqgrid-border-color);
 }
 
 .select2-results__option {
