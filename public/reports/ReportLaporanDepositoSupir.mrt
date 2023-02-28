@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "de7d55aef55cc53bf802aa7d87c8513f",
+  "ReportGuid": "a50115b84c8d2899c4c2661ffa837561",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/truck/public/reports/ReportLaporanDepositoSupir.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1677208224000+0700)/",
+  "ReportChanged": "/Date(1677550177000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -28,33 +28,33 @@
         "Alias": "data",
         "Columns": {
           "0": {
-            "Name": "nobukti",
-            "NameInSource": "nobukti",
-            "Alias": "nobukti",
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
             "Type": "System.String"
           },
           "1": {
-            "Name": "supir",
-            "NameInSource": "supir",
-            "Alias": "supir",
+            "Name": "supir_id",
+            "NameInSource": "supir_id",
+            "Alias": "supir_id",
             "Type": "System.String"
           },
           "2": {
-            "Name": "keterangan",
-            "NameInSource": "keterangan",
-            "Alias": "keterangan",
+            "Name": "namasupir",
+            "NameInSource": "namasupir",
+            "Alias": "namasupir",
             "Type": "System.String"
           },
           "3": {
-            "Name": "nominal",
-            "NameInSource": "nominal",
-            "Alias": "nominal",
+            "Name": "saldo",
+            "NameInSource": "saldo",
+            "Alias": "saldo",
             "Type": "System.String"
           },
           "4": {
-            "Name": "nominal_deposito",
-            "NameInSource": "nominal_deposito",
-            "Alias": "nominal_deposito",
+            "Name": "deposito",
+            "NameInSource": "deposito",
+            "Alias": "deposito",
             "Type": "System.String"
           },
           "5": {
@@ -70,15 +70,21 @@
             "Type": "System.String"
           },
           "7": {
-            "Name": "mencapai",
-            "NameInSource": "mencapai",
-            "Alias": "mencapai",
+            "Name": "keterangan",
+            "NameInSource": "keterangan",
+            "Alias": "keterangan",
             "Type": "System.String"
           },
           "8": {
-            "Name": "order",
-            "NameInSource": "order",
-            "Alias": "order",
+            "Name": "cicil",
+            "NameInSource": "cicil",
+            "Alias": "cicil",
+            "Type": "System.String"
+          },
+          "9": {
+            "Name": "keterangandeposito",
+            "NameInSource": "keterangandeposito",
+            "Alias": "keterangandeposito",
             "Type": "System.String"
           }
         },
@@ -559,13 +565,31 @@
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand2",
           "ClientRectangle": "0,56,207.9,8",
+          "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
           },
           "Border": ";;;;;;;solid:Black",
           "Brush": "solid:",
+          "Components": {
+            "0": {
+              "Ident": "StiText",
+              "Name": "Text1",
+              "ClientRectangle": "4,2,168,6",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{data.keterangan}"
+              },
+              "Font": ";10;;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black"
+            }
+          },
           "Condition": {
-            "Value": "{data.order}"
+            "Value": "{data.id}"
           }
         },
         "2": {
@@ -589,7 +613,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.nobukti}"
+                "Value": "{data.cicil}"
               },
               "Font": ";9;;",
               "Border": ";;;;;;;solid:Black",
@@ -610,7 +634,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.supir}"
+                "Value": "{data.namasupir}"
               },
               "Font": ";9;;",
               "Border": ";;;;;;;solid:Black",
@@ -631,7 +655,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.keterangan}"
+                "Value": "{data.keterangandeposito}"
               },
               "Font": ";9;;",
               "Border": ";;;;;;;solid:Black",
@@ -652,7 +676,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.nominal}"
+                "Value": "{data.saldo}"
               },
               "HorAlignment": "Right",
               "Font": ";9;;",
@@ -679,7 +703,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.nominal_deposito}"
+                "Value": "{data.deposito}"
               },
               "HorAlignment": "Right",
               "Font": ";9;;",
@@ -757,6 +781,7 @@
           "Ident": "StiGroupFooterBand",
           "Name": "GroupFooterBand2",
           "ClientRectangle": "0,88,207.9,8",
+          "ComponentPlacement": "gf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
           },
@@ -807,7 +832,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{Sum(data.nominal)}"
+                "Value": "{Sum(DataBand1,data.deposito)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
@@ -823,7 +848,7 @@
                 "NegativePattern": 1,
                 "GroupSeparator": ","
               },
-              "Type": "Expression"
+              "Type": "Totals"
             },
             "2": {
               "Ident": "StiText",
@@ -835,7 +860,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{Sum(data.nominal_deposito)}"
+                "Value": "{Sum(DataBand1,data.penarikan)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
@@ -851,7 +876,7 @@
                 "NegativePattern": 1,
                 "GroupSeparator": ","
               },
-              "Type": "Expression"
+              "Type": "Totals"
             },
             "3": {
               "Ident": "StiText",
