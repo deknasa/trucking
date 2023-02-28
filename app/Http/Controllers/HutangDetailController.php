@@ -32,4 +32,12 @@ class HutangDetailController extends Controller
 
         return response($data);
     }
+    public function historyGrid()
+    {
+        return view('hutang._history');
+    }
+    public function detailGrid()
+    {
+        return view('hutang._details');
+    }
 }

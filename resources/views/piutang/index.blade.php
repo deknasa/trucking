@@ -15,7 +15,7 @@
           <div id="tabs">
             <ul>
               <li><a href="#detail-tab">Details</a></li>
-              <li><a href="#history-tab">History</a></li>
+              <li><a href="#history-tab">History pelunasan</a></li>
             </ul>
             <div id="detail-tab">
 
@@ -33,7 +33,6 @@
 
 @include('piutang._modal')
 <!-- Detail -->
-@include('piutang._detail')
 @include('piutang._details')
 @include('piutang._history')
 
@@ -226,16 +225,16 @@
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
-          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/piutangdetail/${currentTab}/grid`, function() {
 
-            loadGrid(id)
-          })
-          // if (!hasDetail) {
-          //   loadDetailGrid(id)
-          //   hasDetail = true
-          // }
+          if (!hasDetail) {
+            $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/piutangdetail/${currentTab}/grid`, function() {
+              console.log('loadgrid')
+              loadGrid(id)
+            })
+            hasDetail = true
+          }
 
-          // loadDetailData(id)
+          loadDetailData(id)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -486,16 +485,6 @@
       }
     })
 
-    $('#tabs').on('shown.bs.tab', function() {
-      let piutangId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-
-      currentTab = $(this).attr('id')
-      console.log(piutangId)
-      console.log(currentTab)
-      $(`#tabs#${currentTab}-tab`).html('').load(`${appUrl}/piutangdetail/${currentTab}/grid`, function() {
-        loadGrid(piutangId)
-      })
-    })
   })
 
   $("#tabs").tabs({

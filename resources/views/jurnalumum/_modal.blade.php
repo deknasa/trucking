@@ -431,10 +431,12 @@
       <tr>
         <td></td>
         <td>
-          <input type="text" name="coadebet_detail[]"  class="form-control coadebet-lookup">
+          <input type="hidden" name="coadebet_detail[]">
+          <input type="text" name="ketcoadebet_detail[]"  class="form-control coadebet-lookup">
         </td>
         <td>
-          <input type="text" name="coakredit_detail[]"  class="form-control coakredit-lookup">
+          <input type="hidden" name="coakredit_detail[]">
+          <input type="text" name="ketcoakredit_detail[]"  class="form-control coakredit-lookup">
         </td>
         <td>
           <input type="text" name="keterangan_detail[]" class="form-control">   
@@ -454,13 +456,15 @@
       title: 'Coa Debet Lookup',
       fileName: 'akunpusat',
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
+        element.parents('td').find(`[name="coadebet_detail[]"]`).val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        element.parents('td').find(`[name="coadebet_detail[]"]`).val('')
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -470,13 +474,15 @@
       title: 'Coa Kredit Lookup',
       fileName: 'akunpusat',
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
+        element.parents('td').find(`[name="coakredit_detail[]"]`).val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        element.parents('td').find(`[name="coakredit_detail[]"]`).val('')
         element.val('')
         element.data('currentValue', element.val())
       }

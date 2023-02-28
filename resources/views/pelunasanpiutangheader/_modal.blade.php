@@ -206,23 +206,35 @@
     });
 
     $(document).on('input', `#table_body [name="bayarppd[]"]`, function(event) {
+      let action = $('#crudForm').data('action')
+      console.log(action)
       setTotal()
       let sisa = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisa[]"]`)[0])
+      let sisaAwal = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisaAwal[]"]`)[0])
       let potonganppd = AutoNumeric.getNumber($(this).closest("tr").find(`[name="potonganppd[]"]`)[0])
       let bayar = $(this).val()
       bayar = parseFloat(bayar.replaceAll(',', ''));
       bayar = Number.isNaN(bayar) ? 0 : bayar
-        let nominal = $(this).closest("tr").find(`[name="nominal[]"]`).val()
+      let nominal = $(this).closest("tr").find(`[name="nominal[]"]`).val()
       if (sisa == 0) {
         nominal = parseFloat(nominal.replaceAll(',', ''));
-        let totalSisa = nominal - bayar - potonganppd
+        if (action == 'add') {
+          totalSisa = sisaAwal - bayar - potonganppd
+        } else {
+          totalSisa = nominal - bayar - potonganppd
+        }
 
         $(this).closest("tr").find(".sisa").html(totalSisa)
         $(this).closest("tr").find(`[name="sisa[]"]`).val(totalSisa)
       } else {
-        
+
         nominal = parseFloat(nominal.replaceAll(',', ''));
-        let totalSisa = nominal - bayar - potonganppd
+        if (action == 'add') {
+          totalSisa = sisaAwal - bayar - potonganppd
+        } else {
+          totalSisa = nominal - bayar - potonganppd
+        }
+
         $(this).closest("tr").find(".sisa").html(totalSisa)
         $(this).closest("tr").find(`[name="sisa[]"]`).val(totalSisa)
       }
@@ -241,27 +253,32 @@
     })
 
     $(document).on('input', `#table_body [name="potonganppd[]"]`, function(event) {
+      let action = $('#crudForm').data('action')
       setPenyesuaian()
       let sisa = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisa[]"]`)[0])
+      let sisaAwal = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisaAwal[]"]`)[0])
       let bayar = AutoNumeric.getNumber($(this).closest("tr").find(`[name="bayarppd[]"]`)[0])
       let potonganppd = $(this).val()
       potonganppd = parseFloat(potonganppd.replaceAll(',', ''));
       potonganppd = Number.isNaN(potonganppd) ? 0 : potonganppd
-        let nominal = $(this).closest("tr").find(`[name="nominal[]"]`).val()
+      let nominal = $(this).closest("tr").find(`[name="nominal[]"]`).val()
+      nominal = parseFloat(nominal.replaceAll(',', ''));
       if (sisa == 0) {
-        nominal = parseFloat(nominal.replaceAll(',', ''));
-        let totalSisa = nominal - bayar - potonganppd
+        if (action == 'add') {
+          totalSisa = sisaAwal - bayar - potonganppd
+        } else {
+          totalSisa = nominal - bayar - potonganppd
+        }
 
-        $(this).closest("tr").find(".sisa").html(totalSisa)
-        $(this).closest("tr").find(`[name="sisa[]"]`).val(totalSisa)
       } else {
-        
-        nominal = parseFloat(nominal.replaceAll(',', ''));
-        let totalSisa = nominal - bayar - potonganppd
-        $(this).closest("tr").find(".sisa").html(totalSisa)
-        $(this).closest("tr").find(`[name="sisa[]"]`).val(totalSisa)
+        if (action == 'add') {
+          totalSisa = sisaAwal - bayar - potonganppd
+        } else {
+          totalSisa = nominal - bayar - potonganppd
+        }
       }
-
+      $(this).closest("tr").find(".sisa").html(totalSisa)
+      $(this).closest("tr").find(`[name="sisa[]"]`).val(totalSisa)
 
       initAutoNumeric($(this).closest("tr").find(".sisa"))
 
@@ -719,11 +736,12 @@
               <td>${detail.tglbukti}</td>
               <td>${detail.invoice_nobukti}</td>
               <td>
-                <p class="text-right">${nominal}</p>
+                <p class="text-right nominal">${nominal}</p>
                 <input type="hidden" name="nominal[]" class="autonumeric" value="${nominal}"></td>
               <td>
                 <p class="text-right sisa autonumeric">${sisa}</p>
                 <input type="hidden" name="sisa[]" class="autonumeric" value="${sisa}">
+                <input type="hidden" name="sisaAwal[]" class="autonumeric" value="${sisa}">
               </td>
               <td>
                 <textarea name="keterangandetailppd[]" rows="1" disabled class="form-control"></textarea>
@@ -746,14 +764,9 @@
             </tr>
           `)
 
-          // detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-          // detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
-
-          // initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
-          // initAutoNumericNoMinus(detailRow.find(`[name="potonganppd[]"]`))
-          // initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
           initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
           initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
+          initAutoNumeric(detailRow.find(`[name="sisaAwal[]"]`))
           initAutoNumeric(detailRow.find('.sisa'))
           initAutoNumeric(detailRow.find('.nominal'))
 
@@ -858,12 +871,13 @@
               <td>${detail.tglbukti}</td>
               <td>${detail.invoice_nobukti}</td>
               <td>
-                <p class="text-right">${nominal}</p>
+                <p class="text-right nominal">${nominal}</p>
                 <input type="hidden" name="nominal[]" class="autonumeric" value="${nominal}">
               </td>
               <td>
                 <p class="sisa text-right">${sisa}</p>
                 <input type="hidden" name="sisa[]" class="autonumeric" value="${sisa}">
+                <input type="hidden" name="sisaAwal[]" class="autonumeric" value="${sisa}">
               </td>
               <td>
                 <textarea name="keterangandetailppd[]" rows="1" class="form-control" ${attribut}>${detail.keterangan || ''}</textarea>
@@ -901,6 +915,7 @@
           }
           initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
           initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
+          initAutoNumeric(detailRow.find(`[name="sisaAwal[]"]`))
           initAutoNumeric(detailRow.find('.sisa'))
           initAutoNumeric(detailRow.find('.nominal'))
 
@@ -982,26 +997,31 @@
 
     } else {
       let id = $(this).val()
+      let action = $('#crudForm').data('action')
       $(this).closest('tr').find(`td [name="keterangandetailppd[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="bayarppd[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="keteranganpotonganppd[]"]`).prop('disabled', true)
-      $(this).closest('tr').find(`td [name="potonganppd[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="potonganppd[]"]`).val('').prop('disabled', true)
       $(this).closest('tr').find(`td [name="coapotonganppd[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="bayarppd[]"]`).val('')
-      let nominalHutang = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="nominal[]"]`)[0])
-      initAutoNumeric($(this).closest('tr').find(`td [name="sisa[]"]`).val(nominalHutang))
-      $(this).closest("tr").find(".sisa").html(nominalHutang)
+      if (action == 'add') {
+        nominal = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="sisaAwal[]"]`)[0])
+      }else{
+        nominal = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="nominal[]"]`)[0])
+      }
+      initAutoNumeric($(this).closest('tr').find(`td [name="sisa[]"]`).val(nominal))
+      $(this).closest("tr").find(".sisa").html(nominal)
       initAutoNumeric($(this).closest("tr").find(".sisa"))
-      
+
       $(this).closest('tr').find(`td [name="bayarppd[]"]`).remove();
       $(this).closest('tr').find(`td [name="potonganppd[]"]`).remove();
       $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).remove();
       let newBayarElement = `<input type="text" name="bayarppd[]" class="form-control bayar text-right" disabled>`
       let newPotonganElement = `<input type="text" name="potonganppd[]" class="form-control text-right" disabled>`
       let newLebihElement = `<input type="text" name="nominallebihbayarppd[]" class="form-control text-right" disabled>`
-              
+
       $(this).closest('tr').find(`#${id}`).append(newBayarElement)
       $(this).closest('tr').find(`#potongan${id}`).append(newPotonganElement)
       $(this).closest('tr').find(`#lebih${id}`).append(newLebihElement)
