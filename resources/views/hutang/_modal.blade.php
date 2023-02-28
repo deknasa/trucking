@@ -205,7 +205,7 @@
           }).trigger('reloadGrid');
 
           if (id == 0) {
-            $('#detail').jqGrid().trigger('reloadGrid')
+            $('#detailGrid').jqGrid().trigger('reloadGrid')
           }
 
           if (response.data.grp == 'FORMAT') {

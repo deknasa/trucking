@@ -745,6 +745,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('hutangheader/report', [HutangHeaderController::class, 'report'])->name('hutangheader.report');
     Route::resource('hutangheader', HutangHeaderController::class);
     
+    Route::get('hutangdetail/history/grid', [HutangDetailController::class, 'historyGrid']);
+    Route::get('hutangdetail/detail/grid', [HutangDetailController::class, 'detailGrid']);
     Route::resource('hutangdetail', HutangDetailController::class);
     
     Route::get('tutupbuku/index', [TutupBukuController::class,'index']);

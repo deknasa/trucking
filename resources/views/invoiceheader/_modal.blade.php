@@ -105,7 +105,7 @@
             </div>
 
             <div class="table-responsive">
-              <table class="table table-bindkeys" id="spList" style="width:1800px">
+              <table class="table table-bordered table-bindkeys" id="spList" style="width:1800px">
                 <thead class="table-secondary">
                   <tr>
                     <th width="1%"></th>

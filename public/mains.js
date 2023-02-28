@@ -1082,7 +1082,7 @@ function showDialog(statusText = "", message = "") {
 		background: "#db1f30",
 		color: "#fff",
 	};
-	$(".ui-widget-header").css(css_header);
+	$(".ui-dialog .ui-widget-header").css(css_header);
 	let css_property = {
 		border: "none",
 		background: "#db1f30",
