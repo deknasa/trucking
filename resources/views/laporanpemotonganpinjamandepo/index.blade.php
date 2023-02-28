@@ -37,7 +37,7 @@
                             <div class="col-sm-6 mt-4">
                                 <a id="btnPreview" class="btn btn-secondary mr-2 ">
                                     <i class="fas fa-sync"></i>
-                                    Preview
+                                    Cetak
                                 </a>
                             </div>
                         </div>
