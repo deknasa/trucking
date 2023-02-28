@@ -8,43 +8,37 @@
         </button>
       </div>
       <div class="modal-body">
-        
-        <div class="row form-group">
-          
-          <div class="col-12 col-sm-3 col-md-2 col-form-label">
-            <label>nobukti </label>
-          </div>
-          <div class="col-12 col-sm-9 col-md-4">
-            <input type="text" readonly name="nobukti" class="form-control">
-          </div>
-          <div class="col-12 col-sm-3 col-md-2 col-form-label">
-            <label>tglbukti </label>
-          </div>
-          <div class="col-12 col-sm-9 col-md-4">  
-            <div class="input-group">
-              <input type="text" name="tglbukti" class="form-control" readonly>
+        <div class="row">
+          <div class="col-md-2">
+
+            <div class="row form-group">
+                <label>NO BUKTI</label>
+                <input type="text" name="nobukti" class="form-control" readonly>
             </div>
+            <div class="row form-group">
+                <label>TGL BUKTI</label>
+                <input type="text" name="tglbukti" class="form-control" readonly>
+            </div>
+
+            {{-- <div class="border p-2" >
+
+              <h5>Status</h5>
+              <hr>
+              <div id="statusAbsen">
+                
+              </div>
+            </div> --}}
+            <table id="gridStatusAbsen"></table>
+            <div id="gridStatusAbsenPager"></div>
+
           </div>
-        </div>
           
-        <div class="row">
-          <table id="gridStatusAbsen"></table>
-          <div id="gridStatusAbsenPager"></div>
-        </div>
-        
-        <div class="row">
-          {{-- <div class=" col-12"> --}}
+          <div class="col-md-10">
             <table id="modalgrid"></table>
             <div id="modalgridPager"></div>
-          {{-- </div> --}}
-        </div>
-          
-
-
-            
-
-          
+          </div>
         
+        </div>
       </div>
     </div>
   </div>
@@ -202,7 +196,7 @@
         rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
-        // pager:"#modalgridPager",
+        pager:"#modalgridPager",
         viewrecords: true,
         footerrow:true,
         
@@ -223,7 +217,7 @@
             uangjalan: totalNominal,
           }, true)
         }
-      }).customPager()
+      })
   }
   function loadGridStatusAbsen(mydata) {
     $("#gridStatusAbsen").jqGrid({
@@ -251,14 +245,14 @@
         ],
         autowidth: true,
         shrinkToFit: false,
-        height: 100,
+        height: 350,
         rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
-        // pager:"#gridStatusAbsenPager",
+        pager:"#gridStatusAbsenPager",
         viewrecords: true,
         footerrow:true,
 
@@ -280,7 +274,7 @@
             jumlah: total,
           }, true)
         }
-      }).customPager()
+      })
   }
 
   function showAbsensiSupirCek(form, absensiId) {
