@@ -121,27 +121,7 @@
             indexRow = $(this).getDataIDs().length - 1;
           }
 
-          setTimeout(function() {
-
-            if (triggerClick) {
-              if (id != '') {
-                indexRow = parseInt($('#detail').jqGrid('getInd', id)) - 1
-                $(`#detail [id="${$('#detail').getDataIDs()[indexRow]}"]`).click()
-                id = ''
-              } else if (indexRow != undefined) {
-                $(`#detail [id="${$('#detail').getDataIDs()[indexRow]}"]`).click()
-              }
-
-              if ($('#detail').getDataIDs()[indexRow] == undefined) {
-                $(`#detail [id="` + $('#detail').getDataIDs()[0] + `"]`).click()
-              }
-
-              triggerClick = false
-            } else {
-              $('#detail').setSelection($('#detail').getDataIDs()[indexRow])
-            }
-          }, 100)
-
+          $('#detail').setSelection($('#detail').getDataIDs()[0])
 
           setHighlight($(this))
 
