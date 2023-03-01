@@ -398,8 +398,11 @@
     if (!`{{ $myAuth->hasPermission('absensisupirheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
     }
-    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`) {
       $('#approvalEdit').attr('disabled', 'disabled')
+    }
+    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'cekabsensi') }}`) {
+      $('#cekAbsenTrado').attr('disabled', 'disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {

@@ -30,7 +30,7 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
-
+  var statusBukanBatalMuat;
   $(document).ready(function() {
     $("#jqGrid").jqGrid({
         url: `${apiUrl}suratpengantar`,
@@ -547,7 +547,26 @@
               }
             }
           },
-        ]
+        ],
+        extndBtn:[{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> APPROVE',
+          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          dropmenuHTML: [
+            {
+              id:'approvalBatalMuat',
+              text:"Batal Muat",
+              onClick: () => {
+                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                approvalBatalMuat(selectedId);
+              }
+            },
+          ],
+        }]
+            
+            
       })
 
     /* Append clear filter button */
@@ -587,6 +606,9 @@
     if (!`{{ $myAuth->hasPermission('suratpengantar', 'destroy') }}`) {
       $('#delete').attr('disabled', 'disabled')
     }
+    if (!`{{ $myAuth->hasPermission('suratpengantar', 'destroy') }}`) {
+      $('#approvalBatalMuat').attr('disabled', 'disabled')
+    }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -610,6 +632,56 @@
         maximumValue: totalRecord
       })
     })
+    function approvalBatalMuat(id) {
+      getBatalMuat()
+      $.ajax({
+        url: `${apiUrl}suratpengantar/${id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let msg = `YAKIN status Berubah jadi BUkan Batal Muat`
+          console.log(statusBukanBatalMuat);
+          if (response.data.statusbatalmuat === statusBukanBatalMuat) {
+            msg = `YAKIN status Berubah jadi Batal Muat`
+          }
+          showConfirm(msg,response.data.nobukti,`suratpengantar/${response.data.id}/batalmuat`)
+        },
+      })
+    }
+    function getBatalMuat() {
+    
+    $.ajax({
+      url: `${apiUrl}parameter`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        filters: JSON.stringify({
+          "groupOp": "AND",
+          "rules": [{
+            "field": "grp",
+            "op": "cn",
+            "data": "STATUS BATAL MUAT"
+          },{
+            "field": "text",
+            "op": "cn",
+            "data": "BUKAN BATAL MUAT"
+          }]
+        })
+      },
+      success: response => {
+        statusBukanBatalMuat =  response.data[0].id;
+      }
+    })
+  }
+
+
 
     $('#formRange').submit(event => {
       event.preventDefault()
