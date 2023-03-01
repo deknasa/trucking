@@ -27,7 +27,7 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'id'
+  let sortname = 'kotasampai_id'
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
