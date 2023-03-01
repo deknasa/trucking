@@ -431,7 +431,6 @@
                     postData = $(this).jqGrid('getGridParam', 'postData')
                     triggerClick = true
 
-                    // if($)
                     if ($(this).getDataIDs().length == 0) {
 
                         // $('#detail').jqGrid().trigger('reloadGrid')

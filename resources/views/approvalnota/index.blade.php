@@ -54,10 +54,6 @@
                                     <i class="fas fa-sync"></i>
                                     Reload
                                 </a>
-                                <button id="btnSubmit" class="btn btn-primary ">
-                                    <i class="fa fa-save"></i>
-                                    Proses
-                                </button>
                             </div>
                         </div>
 
@@ -148,7 +144,7 @@
             loadDetailGrid($('#crudForm').find('[name=tabel]').val())
         })
 
-        $('#btnSubmit').click(function(event) {
+        function approve() {
 
             event.preventDefault()
 
@@ -228,7 +224,7 @@
                 $(this).removeAttr('disabled')
             })
 
-        })
+        }
 
         $("#jqGrid").jqGrid({
                 url: `{{ config('app.api_url') . 'approvalnotaheader' }}`,
@@ -488,7 +484,18 @@
                 },
             })
 
-            .customPager({})
+            .customPager({
+                buttons: [{
+                    id: 'approveun',
+                    innerHTML: '<i class="fas fa-check""></i> APPROVE/UN',
+                    class: 'btn btn-purple btn-sm mr-1',
+                    onClick: () => {
+
+                        approve()
+
+                    }
+                }]
+            })
 
 
 
@@ -498,7 +505,9 @@
         /* Append global search */
         loadGlobalSearch($('#jqGrid'))
 
-
+        if (!`{{ $myAuth->hasPermission('approvalnotaheader', 'store') }}`) {
+            $('#approveun').attr('disabled', 'disabled')
+        }
     })
 
     const setStatusApprovalOptions = function(relatedForm) {
