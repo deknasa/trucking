@@ -45,6 +45,9 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
+        sortname: sortname,
+        sortorder: sortorder,
+        page: page,
         viewrecords: true,
         postData: {
           hutang_id: id
@@ -67,6 +70,31 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
+          
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
+          initResize($(this))
+          
+          /* Set global variables */
+          sortname = $(this).jqGrid("getGridParam", "sortname")
+          sortorder = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecord = $(this).getGridParam("records")
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
+          postData = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = true
+
+          $('.clearsearchclass').click(function() {
+            clearColumnSearch($(this))
+          })
+
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
+          }
+
+          $('#detailGrid').setSelection($('#detailGrid').getDataIDs()[0])
+
+          setHighlight($(this))
+
           if (data.attributes) {
             $(this).jqGrid('footerData', 'set', {
               nobukti: 'Total:',
@@ -75,6 +103,18 @@
           }
         }
       })
+      .jqGrid("setLabel", "rn", "No.")
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          clearGlobalSearch($('#detailGrid'))
+        },
+      })
+
 
       .jqGrid("navGrid", pager, {
         search: false,
@@ -85,10 +125,15 @@
       })
 
       .customPager()
+    /* Append clear filter button */
+    loadClearFilter($('#detailGrid'))
+    
+    /* Append global search */
+    loadGlobalSearch($('#detailGrid'))
   }
 
   function loadDetailData(id) {
-    $('#detail').setGridParam({
+    $('#detailGrid').setGridParam({
       url: `${apiUrl}hutangdetail`,
       datatype: "json",
       postData: {

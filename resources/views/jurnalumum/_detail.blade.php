@@ -9,7 +9,6 @@
 
 @push('scripts')
 <script>
-
   function loadDetailGrid(id) {
     $("#detail").jqGrid({
         url: `${apiUrl}jurnalumumdetail`,
@@ -17,8 +16,7 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        colModel: [
-          {
+        colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
           },
@@ -39,12 +37,14 @@
             name: 'nominaldebet',
             align: 'right',
             formatter: currencyFormat,
+            search: false,
           },
           {
             label: 'KREDIT',
             name: 'nominalkredit',
             align: 'right',
             formatter: currencyFormat,
+            search: false,
           },
           {
             label: 'KETERANGAN',
@@ -64,6 +64,9 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
+        sortname: sortname,
+        sortorder: sortorder,
+        page: page,
         viewrecords: true,
         postData: {
           jurnalumum_id: id
@@ -86,26 +89,52 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
+
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
           initResize($(this))
 
-          let nominaldebet = $(this).jqGrid("getCol", "nominaldebet")
-          let totalNominalDebet = 0
-          let nominalkredit = $(this).jqGrid("getCol", "nominalkredit")
-          let totalNominalKredit = 0
+          /* Set global variables */
+          sortname = $(this).jqGrid("getGridParam", "sortname")
+          sortorder = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecord = $(this).getGridParam("records")
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
+          postData = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = true
 
-          if (nominaldebet.length > 0) {
-            totalNominalDebet = nominaldebet.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
-          }
-          if (nominalkredit.length > 0) {
-            totalNominalKredit = nominalkredit.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          $('.clearsearchclass').click(function() {
+            clearColumnSearch($(this))
+          })
+
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
           }
 
-          $(this).jqGrid('footerData', 'set', {
-            nobukti: 'Total:',
-            nominaldebet: totalNominalDebet,
-            nominalkredit: totalNominalKredit,
-          }, true)
+          $('#detail').setSelection($('#detail').getDataIDs()[0])
+
+          setHighlight($(this))
+
+          if (data.attributes) {
+            $(this).jqGrid('footerData', 'set', {
+              nobukti: 'Total:',
+              nominaldebet: data.attributes.totalNominalDebet,
+              nominalkredit: data.attributes.totalNominalKredit,
+            }, true)
+          }
+
         }
+      })
+
+      .jqGrid("setLabel", "rn", "No.")
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          clearGlobalSearch($('#detail'))
+        },
       })
 
       .jqGrid("navGrid", pager, {
@@ -117,6 +146,12 @@
       })
 
       .customPager()
+
+    /* Append clear filter button */
+    loadClearFilter($('#detail'))
+
+    /* Append global search */
+    loadGlobalSearch($('#detail'))
   }
 
   function loadDetailData(id) {

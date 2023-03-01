@@ -219,22 +219,15 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+            $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/piutangdetail/${currentTab}/grid`, function() {
+               loadGrid(id)
+            })
+          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-
-
-          if (!hasDetail) {
-            $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/piutangdetail/${currentTab}/grid`, function() {
-              console.log('loadgrid')
-              loadGrid(id)
-            })
-            hasDetail = true
-          }
-
-          loadDetailData(id)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
