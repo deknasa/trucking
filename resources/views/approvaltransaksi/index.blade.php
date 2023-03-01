@@ -57,10 +57,6 @@
                                     <i class="fas fa-sync"></i>
                                     Reload
                                 </a>
-                                <button id="btnSubmit" class="btn btn-primary ">
-                                    <i class="fa fa-save"></i>
-                                    Proses
-                                </button>
                             </div>
                         </div>
 
@@ -149,7 +145,7 @@
                     approve: $('#crudForm').find('[name=approve]').val(),
                     transaksi: $('#crudForm').find('[name=transaksi]').val(),
                     year: '',
-                    mounth: ''
+                    month: ''
                 },
             }).trigger('reloadGrid');
         })
@@ -486,17 +482,16 @@
 
             .customPager({
                 buttons: [{
-                    id: 'approve',
+                    id: 'approveun',
                     innerHTML: '<i class="fas fa-check""></i> APPROVE/UN',
                     class: 'btn btn-purple btn-sm mr-1',
                     onClick: () => {
-                       
+
                         approve()
 
                     }
                 }]
             })
-
 
 
         /* Append clear filter button */
@@ -505,7 +500,9 @@
         /* Append global search */
         loadGlobalSearch($('#jqGrid'))
 
-
+        if (!`{{ $myAuth->hasPermission('approvaltransaksiheader', 'store') }}`) {
+            $('#approveun').attr('disabled', 'disabled')
+        }
     })
 
     const setStatusApprovalOptions = function(relatedForm) {

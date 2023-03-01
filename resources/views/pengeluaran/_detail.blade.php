@@ -145,17 +145,12 @@
 
           setHighlight($(this))
 
-          let nominals = $(this).jqGrid("getCol", "nominal")
-          let totalNominal = 0
-
-          if (nominals.length > 0) {
-            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          if (data.attributes) {
+            $(this).jqGrid('footerData', 'set', {
+              nobukti: 'Total:',
+              nominal: data.attributes.totalNominal,
+            }, true)
           }
-
-          $(this).jqGrid('footerData', 'set', {
-            nobukti: 'Total:',
-            nominal: totalNominal,
-          }, true)
         }
       })
       .jqGrid("setLabel", "rn", "No.")

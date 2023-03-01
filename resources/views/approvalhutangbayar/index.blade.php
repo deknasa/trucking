@@ -44,10 +44,6 @@
                                     <i class="fas fa-sync"></i>
                                     Reload
                                 </a>
-                                <button id="btnSubmit" class="btn btn-primary ">
-                                    <i class="fa fa-save"></i>
-                                    Proses
-                                </button>
                             </div>
                         </div>
 
@@ -135,7 +131,7 @@
             }).trigger('reloadGrid');
         })
 
-        $('#btnSubmit').click(function(event) {
+        function approve() {
 
             event.preventDefault()
 
@@ -195,6 +191,8 @@
                     $('#jqGrid').jqGrid().trigger('reloadGrid');
                     let data = $('#jqGrid').jqGrid("getGridParam", "postData");
 
+
+
                     $('#crudForm').find('[name=periode]').val(data.periode)
                     $('#crudForm').find('[name=approve]').val(data.approve)
                     selectedRows = []
@@ -214,7 +212,7 @@
                 $(this).removeAttr('disabled')
             })
 
-        })
+        }
 
         $("#jqGrid").jqGrid({
                 url: `{{ config('app.api_url') . 'approvalhutangbayar' }}`,
@@ -406,6 +404,7 @@
 
                     loadDetailData(id)
 
+
                 },
                 loadComplete: function(data) {
                     changeJqGridRowListText()
@@ -432,6 +431,12 @@
                     postData = $(this).jqGrid('getGridParam', 'postData')
                     triggerClick = true
 
+                    // if($)
+                    if ($(this).getDataIDs().length == 0) {
+
+                        // $('#detail').jqGrid().trigger('reloadGrid')
+
+                    }
                     $('.clearsearchclass').click(function() {
                         clearColumnSearch($(this))
                     })
@@ -478,7 +483,18 @@
                 },
             })
 
-            .customPager({})
+            .customPager({
+                buttons: [{
+                    id: 'approveun',
+                    innerHTML: '<i class="fas fa-check""></i> APPROVE/UN',
+                    class: 'btn btn-purple btn-sm mr-1',
+                    onClick: () => {
+
+                        approve()
+
+                    }
+                }]
+            })
 
 
 
@@ -488,7 +504,9 @@
         /* Append global search */
         loadGlobalSearch($('#jqGrid'))
 
-
+        if (!`{{ $myAuth->hasPermission('approvalhutangbayar', 'store') }}`) {
+            $('#approveun').attr('disabled', 'disabled')
+        }
     })
 
     const setStatusApprovalOptions = function(relatedForm) {
