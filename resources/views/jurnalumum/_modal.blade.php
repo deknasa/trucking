@@ -40,8 +40,8 @@
                 <thead>
                   <tr>
                     <th width="1%">No</th>
-                    <th width="5%">COA DEBET</th>
-                    <th width="5%">COA KREDIT</th>
+                    <th width="5%">NAMA PERKIRAAN (DEBET)</th>
+                    <th width="5%">NAMA PERKIRAAN (KREDIT)</th>
                     <th width="5%">KETERANGAN</th>
                     <th width="6%">NOMINAL</th>
                     <th width="2%">Aksi</th>
@@ -157,6 +157,10 @@
         case 'delete':
           method = 'DELETE'
           url = `${apiUrl}jurnalumumheader/${Id}`
+          break;
+        case 'copy':
+          method = 'POST'
+          url = `${apiUrl}jurnalumumheader/copy`
           break;
         default:
           method = 'POST'
@@ -296,6 +300,25 @@
 
   }
 
+
+  function copyJurnal(id) {
+
+    let form = $('#crudForm')
+
+    form.data('action', 'copy')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Simpan
+    `)
+    $('#crudModalTitle').text('Copy Jurnal Umum')
+    $('#crudModal').modal('show')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+    showJurnalUmum(form, id)
+
+  }
+
   function cekApproval(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}jurnalumumheader/${Id}/cekapproval`,
@@ -316,6 +339,9 @@
             }
             if (Aksi == 'DELETE') {
               deleteJurnalUmumHeader(Id)
+            }
+            if(Aksi == 'COPY') {
+              copyJurnal(Id)
             }
           }
 
@@ -373,8 +399,8 @@
 
           detailRow.find(`[name="coadebet_detail[]"]`).val(detail.coadebet)
           detailRow.find(`[name="coakredit_detail[]"]`).val(detail.coakredit)
-          detailRow.find(`[name="ketcoadebet_detail[]"]`).val(detail.coadebet)
-          detailRow.find(`[name="ketcoakredit_detail[]"]`).val(detail.coakredit)
+          detailRow.find(`[name="ketcoadebet_detail[]"]`).val(detail.ketcoadebet)
+          detailRow.find(`[name="ketcoakredit_detail[]"]`).val(detail.ketcoakredit)
           detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
           detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
 

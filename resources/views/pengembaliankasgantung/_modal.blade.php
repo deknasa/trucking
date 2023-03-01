@@ -124,7 +124,7 @@
 
 
             <div class="col-md-12" style="overflow-x:scroll">
-              <table class="table table-borderd mt-3" id="detailList" style="table-layout:auto">
+              <table class="table table-bordered mt-3" id="detailList" style="table-layout:auto">
                 <thead id="table_body" class="table-secondary">
                   <tr>
                     <th><input type="checkbox" id="checkAll"> </th>

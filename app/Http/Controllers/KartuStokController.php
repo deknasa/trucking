@@ -63,7 +63,7 @@ class KartuStokController extends MyController
         $responses = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'kartustok/report', $detailParams);
+            ->get(config('app.api_url') . 'kartustok/export', $detailParams);
 
         $dataHeader = $responses['dataheader'];
         $kartustok = $responses['data'];

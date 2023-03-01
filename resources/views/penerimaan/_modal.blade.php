@@ -134,7 +134,7 @@
                                 <thead>
                                     <tr>
                                         <th width="1%">No</th>
-                                        <th width="5%">Kode Perk</th>
+                                        <th width="5%">Nama Perkiraan</th>
                                         <th width="4%">Tgl jatuh tempo</th>
                                         <th width="4%">No warkat</th>
                                         <th width="7%">Bank Pelanggan</th>
@@ -718,7 +718,8 @@
                     <tr class="${detail.pelunasanpiutang_nobukti}">
                         <td></td>
                         <td>
-                            <input type="text" name="coakredit[]" data-current-value="${detail.coakredit}" class="form-control akunpusat-lookup">
+                            <input type="hidden" name="coakredit[]">
+                            <input type="text" name="ketcoakredit[]" data-current-value="${detail.ketcoakredit}" class="form-control akunpusat-lookup">
                         </td>
                         <td>
                             <div class="input-group">
@@ -756,6 +757,7 @@
                     `)
 
                     detailRow.find(`[name="coakredit[]"]`).val(detail.coakredit)
+                    detailRow.find(`[name="ketcoakredit[]"]`).val(detail.ketcoakredit)
                     detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
                     detailRow.find(`[name="bankpelanggan_id[]"]`).val(detail.bankpelanggan_id)
                     detailRow.find(`[name="bankpelanggan[]"]`).val(detail.bankpelanggan)
@@ -779,13 +781,15 @@
                             }
                         },
                         onSelectRow: (akunpusat, element) => {
-                            element.val(akunpusat.coa)
+                            $(`#crudForm [name="coakredit[]"]`).last().val(akunpusat.coa)
+                            element.val(akunpusat.keterangancoa)
                             element.data('currentValue', element.val())
                         },
                         onCancel: (element) => {
                             element.val(element.data('currentValue'))
                         },
                         onClear: (element) => {
+                            $(`#crudForm [name="coakredit[]"]`).last().val('')
                             element.val('')
                             element.data('currentValue', element.val())
                         }
@@ -828,7 +832,8 @@
       <tr>
         <td></td>
         <td>
-          <input type="text" name="coakredit[]"  class="form-control akunpusat-lookup">
+            <input type="hidden" name="coakredit[]">
+          <input type="text" name="ketcoakredit[]"  class="form-control akunpusat-lookup">
         </td>
         <td>
           <div class="input-group">
@@ -876,13 +881,15 @@
                 }
             },
             onSelectRow: (akunpusat, element) => {
-                element.val(akunpusat.coa)
+                $(`#crudForm [name="coakredit[]"]`).last().val(akunpusat.coa)
+                element.val(akunpusat.keterangancoa)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+                $(`#crudForm [name="coakredit[]"]`).last().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }

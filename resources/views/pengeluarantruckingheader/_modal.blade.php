@@ -50,10 +50,11 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  COA <span class="text-danger">*</span>
+                  NAMA PERKIRAAN <span class="text-danger">*</span>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="coa" class="form-control akunpusat-lookup">
+                <input type="hidden" name="coa">
+                <input type="text" name="keterangancoa" class="form-control akunpusat-lookup">
               </div>
             </div>
             
@@ -483,7 +484,7 @@
           if (index == 'bank') {
             element.data('current-value', value).prop('readonly', true)
           }
-          if (index == 'coa') {
+          if (index == 'keterangancoa') {
             element.data('current-value', value)
           }
         })
@@ -776,13 +777,15 @@
         }
       },
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
+        $('#crudForm [name=coa]').first().val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        $('#crudForm [name=coa]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
