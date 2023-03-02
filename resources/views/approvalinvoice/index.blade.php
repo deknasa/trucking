@@ -145,6 +145,10 @@
                     mounth: ''
                 },
             }).trigger('reloadGrid');
+
+            $.jgrid.gridUnload("#detail")
+            api = '';
+            loadDetailGrid($('#crudForm').find('[name=invoice]').val())
         })
 
         function approve() {
@@ -408,10 +412,7 @@
                     if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
                     let jenisInvoice = $('#crudForm').find('[name=invoice]').val()
-                    if (!hasDetail) {
-                        loadDetailGrid(id, jenisInvoice)
-                        hasDetail = true
-                    }
+                    
                     loadDetailData(id, jenisInvoice)
 
                 },

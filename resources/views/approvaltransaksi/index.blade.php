@@ -89,6 +89,7 @@
     let rowNum = 10
     let hasDetail = false
     let selectedRows = [];
+    let api
 
     function checkboxHandler(element) {
         let value = $(element).val();
@@ -148,6 +149,10 @@
                     month: ''
                 },
             }).trigger('reloadGrid');
+            
+            $.jgrid.gridUnload("#detail")
+            api = '';
+            loadDetailGrid($('#crudForm').find('[name=transaksi]').val())
         })
 
         function approve() {
@@ -402,10 +407,7 @@
                     if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
                     let jenisTransaksi = $('#crudForm').find('[name=transaksi]').val()
-                    if (!hasDetail) {
-                        loadDetailGrid(id, jenisTransaksi)
-                        hasDetail = true
-                    }
+                    
                     loadDetailData(id, jenisTransaksi)
 
                 },

@@ -84,6 +84,7 @@
     let autoNumericElements = []
     let rowNum = 10
     let selectedRows = [];
+    let api
 
     function checkboxHandler(element) {
         let value = $(element).val();
@@ -141,6 +142,7 @@
             }).trigger('reloadGrid');
 
             $.jgrid.gridUnload("#detail")
+            api = '';
             loadDetailGrid($('#crudForm').find('[name=tabel]').val())
         })
 

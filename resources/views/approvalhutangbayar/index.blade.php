@@ -302,7 +302,7 @@
                         }
                     },
                     {
-                        label: 'COA',
+                        label: 'NAMA PERKIRAAN',
                         name: 'coa',
                         align: 'left'
                     },

@@ -96,8 +96,6 @@
                                         <th width="6%">Bank Pelanggan</th>
                                         <th width="6%">Keterangan</th>
                                         <th width="6%">Nominal</th>
-                                        <th width="5%">No Invoice</th>
-                                        <th width="5%">No Bukti Pelunasan</th>
                                         <th width="4%">Jenis Biaya</th>
                                         <th width="4%">Bulan Beban</th>
                                         <th width="1%">Aksi</th>
@@ -114,7 +112,7 @@
                                         <td>
                                             <p class="text-right font-weight-bold autonumeric" id="total"></p>
                                         </td>
-                                        <td colspan="4"></td>
+                                        <td colspan="2"></td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                                         </td>
@@ -669,13 +667,6 @@
                             <input type="text" name="nominal[]" class="form-control autonumeric" ${readOnly}> 
                         </td>
                         <td>
-                            <input type="text" name="invoice_nobukti[]" class="form-control" ${readOnly}>
-                        </td>
-                        
-                        <td>
-                            <input type="text" name="pelunasanpiutang_nobukti[]" class="form-control" ${readOnly}>
-                        </td>
-                        <td>
                             <input type="text" name="jenisbiaya[]" class="form-control">   
                         </td>
                         <td>
@@ -793,13 +784,6 @@
         </td>
         <td>
         <input type="text" name="nominal[]" class="form-control autonumeric "> 
-        </td>
-        <td>
-            <input type="text" name="invoice_nobukti[]" class="form-control" readonly>
-        </td>
-        
-        <td>
-            <input type="text" name="pelunasanpiutang_nobukti[]" class="form-control" readonly>
         </td>
         <td>
             <input type="text" name="jenisbiaya[]" class="form-control">   
