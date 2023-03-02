@@ -31,6 +31,12 @@
             formatter: currencyFormat,
           },
           {
+            label: 'NOMINAL RETRIBUSI',
+            name: 'nominalretribusi',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
             label: 'NO BUKTI ORDERAN',
             name: 'orderantrucking_nobukti',
           },
@@ -104,6 +110,7 @@
             $(this).jqGrid('footerData', 'set', {
               nobukti: 'Total:',
               nominal: data.attributes.totalNominal,
+              nominalretribusi: data.attributes.totalRetribusi,
             }, true)
           }
         }
