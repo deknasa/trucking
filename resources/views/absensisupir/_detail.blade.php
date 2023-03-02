@@ -80,7 +80,7 @@
               srcformat: "H:i:s",
               newformat: "H:i",
               // userLocalTime : true
-          }
+            }
           },
           {
             label: 'UANG JALAN',
