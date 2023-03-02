@@ -171,6 +171,12 @@
           {
             label: 'JAM',
             name: 'jam',
+            formatter:'date',
+            formatoptions:{
+              srcformat: "H:i:s",
+              newformat: "H:i",
+              // userLocalTime : true
+            }
           },
           {
             label: 'UANG JALAN',
@@ -218,12 +224,39 @@
             totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
           }
 
+          $('.clearsearchclass').click(function() {
+            clearColumnSearch($(this))
+          })
+
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
+          }
+
+          $('#modalgrid').setSelection($('#modalgrid').getDataIDs()[0])
+
+          setHighlight($(this))
           $(this).jqGrid('footerData', 'set', {
             trado: 'Total:',
             uangjalan: totalNominal,
           }, true)
         }
-      }).customPager()
+      })
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          clearGlobalSearch($('#detail'))
+        },
+      })
+      .customPager()
+      /* Append clear filter button */
+    loadClearFilter($('#modalgrid'))
+    
+    /* Append global search */
+    loadGlobalSearch($('#modalgrid'))
   }
   function loadGridStatusAbsen(mydata) {
     $("#gridStatusAbsen").jqGrid({

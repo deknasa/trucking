@@ -429,15 +429,40 @@
           if (nominals.length > 0) {
             totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
           }
+          
+          $('.clearsearchclass').click(function() {
+            clearColumnSearch($(this))
+          })
 
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
+          }
+
+          $('#modalgrid').setSelection($('#modalgrid').getDataIDs()[0])
+
+          setHighlight($(this))
           $(this).jqGrid('footerData', 'set', {
             trado: 'Total:',
             uangjalan: totalNominal,
           }, true)
         }
       })
-      .jqGrid('filterToolbar')
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          clearGlobalSearch($('#modalgrid'))
+        },
+      })
       .customPager()
+      /* Append clear filter button */
+    loadClearFilter($('#modalgrid'))
+    
+    /* Append global search */
+    loadGlobalSearch($('#modalgrid'))
 
   }
   
