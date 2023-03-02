@@ -413,7 +413,7 @@
         rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
-       pager:"#modalgridPager",
+      //  pager:"#modalgridPager",
         viewrecords: true,
         footerrow:true,
         userDataOnFooter: true,
@@ -436,6 +436,8 @@
           }, true)
         }
       })
+      .jqGrid('filterToolbar')
+      .customPager()
 
   }
   

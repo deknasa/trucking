@@ -55,7 +55,7 @@
         sortname: sortname,
         sortorder: sortorder,
         viewrecords: true,
-        footerrow:true,
+        // footerrow:true,
         userDataOnFooter: true,
         postData: {
           absensisupirapproval_id: id
@@ -78,22 +78,60 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
+          
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
           initResize($(this))
           
-          let nominals = $(this).jqGrid("getCol", "uangjalan")
-          let totalNominal = 0
-
-          if (nominals.length > 0) {
-            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          /* Set global variables */
+          sortname = $(this).jqGrid("getGridParam", "sortname")
+          sortorder = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecord = $(this).getGridParam("records")
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
+          postData = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = true
+          
+          $('.clearsearchclass').click(function() {
+            clearColumnSearch($(this))
+          })
+          
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
           }
+          
+          $('#detail').setSelection($('#detail').getDataIDs()[0])
+          
+          setHighlight($(this))
+          
 
-          $(this).jqGrid('footerData', 'set', {
-            trado: 'Total:',
-            uangjalan: totalNominal,
-          }, true)
         }
-      }).customPager()
-  }
+      })
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          clearGlobalSearch($('#detail'))
+        },
+      })
+
+      .jqGrid("navGrid", pager, {
+        search: false,
+        refresh: false,
+        add: false,
+        edit: false,
+        del: false,
+      })
+      .customPager()
+      
+      /* Append clear filter button */
+      loadClearFilter($('#detail'))
+      
+      /* Append global search */
+      loadGlobalSearch($('#detail'))
+    }
 
   function loadDetailData(id) {
     $('#detail').setGridParam({

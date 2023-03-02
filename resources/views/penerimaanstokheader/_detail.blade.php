@@ -9,7 +9,6 @@
 
 @push('scripts')
 <script>
-  let detailIndexUrl = "{{ route('penerimaanstokdetail.index') }}"
   /**
    * Custom Functions
    */
@@ -25,7 +24,7 @@
     let pager = '#detailPager'
     let limit
     $("#detail").jqGrid({
-        url: `{{ config('app.api_url') . 'penerimaanstokdetail' }}`,
+        url: `${apiUrl}penerimaanstokdetail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -129,26 +128,79 @@
           rows: 'limit'
         },
         viewrecords: true,
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
         loadComplete: function(data) {
           changeJqGridRowListText()
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
           initResize($(this))
-          detailsPostData = $(this).jqGrid('getGridParam', 'postData')
-// console.log(detailsPostData);
-          sum = $('#detail').jqGrid("getCol", "total", false, "sum")
-    
-          $(this).jqGrid('footerData', 'set', {
-            vulkanisirke:"Total",
-            total: sum,
-          }, true)
+          
+          /* Set global variables */
+          sortname = $(this).jqGrid("getGridParam", "sortname")
+          sortorder = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecord = $(this).getGridParam("records")
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
+          postData = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = true
+
+          $('.clearsearchclass').click(function() {
+            clearColumnSearch($(this))
+          })
+
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
+          }
+
+          $('#detail').setSelection($('#detail').getDataIDs()[0])
+
+          setHighlight($(this))
+
+          if (data.attributes) {
+            $(this).jqGrid('footerData', 'set', {
+              nobukti: 'Total:',
+              total: data.attributes.totalNominal,
+            }, true)
+          }
           
         }
       })
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          clearGlobalSearch($('#detail'))
+        },
+      })
+
+      .jqGrid("navGrid", pager, {
+        search: false,
+        refresh: false,
+        add: false,
+        edit: false,
+        del: false,
+      })
       .customPager()
+      
+    /* Append clear filter button */
+    loadClearFilter($('#detail'))
+    
+    /* Append global search */
+    loadGlobalSearch($('#detail'))
   }
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: detailIndexUrl,
+      url: `${apiUrl}penerimaanstokdetail`,
       datatype: "json",
       postData: {
         penerimaanstokheader_id: id
