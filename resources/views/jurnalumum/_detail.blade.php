@@ -38,6 +38,7 @@
             align: 'right',
             formatter: currencyFormat,
             search: false,
+            sortable: false
           },
           {
             label: 'KREDIT',
@@ -45,6 +46,7 @@
             align: 'right',
             formatter: currencyFormat,
             search: false,
+            sortable: false
           },
           {
             label: 'KETERANGAN',
