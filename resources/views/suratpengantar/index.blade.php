@@ -435,7 +435,6 @@
         sortname: sortname,
         sortorder: sortorder,
         page: page,
-        pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',

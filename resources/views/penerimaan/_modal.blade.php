@@ -140,8 +140,6 @@
                                         <th width="7%">Bank Pelanggan</th>
                                         <th width="10%">Keterangan</th>
                                         <th width="6%">Nominal</th>
-                                        <th width="5%">No Invoice</th>
-                                        <th width="5%">No Bukti Pelunasan</th>
                                         <th width="4%">Bulan Beban</th>
                                         <th width="1%">Aksi</th>
                                     </tr>
@@ -157,7 +155,7 @@
                                         <td>
                                             <p class="text-right font-weight-bold autonumeric" id="total"></p>
                                         </td>
-                                        <td colspan="3"></td>
+                                        <td></td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                                         </td>
@@ -740,12 +738,6 @@
                             <input type="text" name="nominal_detail[]" class="form-control autonumeric"  ${readOnly}> 
                         </td>
                         <td>
-                            <input type="text" name="invoice_nobukti[]"  class="form-control" ${readOnly}>
-                        </td>
-                        <td>
-                            <input type="text" name="pelunasanpiutang_nobukti[]" class="form-control" ${readOnly}>
-                        </td>
-                        <td>
                             <div class="input-group">
                                 <input type="text" name="bulanbeban[]" class="form-control datepicker">   
                             </div>
@@ -763,8 +755,6 @@
                     detailRow.find(`[name="bankpelanggan[]"]`).val(detail.bankpelanggan)
                     detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
                     detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
-                    detailRow.find(`[name="invoice_nobukti[]"]`).val(detail.invoice_nobukti)
-                    detailRow.find(`[name="pelunasanpiutang_nobukti[]"]`).val(detail.pelunasanpiutang_nobukti)
                     initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
                     detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
                     detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
@@ -852,12 +842,6 @@
         </td>
         <td>
           <input type="text" name="nominal_detail[]" class="form-control autonumeric"> 
-        </td>
-        <td>
-            <input type="text" name="invoice_nobukti[]"  class="form-control" readonly>
-        </td>
-        <td>
-            <input type="text" name="pelunasanpiutang_nobukti[]"  class="form-control" readonly>
         </td>
         <td>
             <div class="input-group">

@@ -127,7 +127,7 @@
               <table class="table table-bordered mt-3" id="detailList" style="table-layout:auto">
                 <thead id="table_body" class="table-secondary">
                   <tr>
-                    <th><input type="checkbox" id="checkAll"> </th>
+                    <th>PILIH</th>
                     <th>NO </th>
                     <th>NO BUKTI</th>
                     <th>TGL BUKTI</th>
@@ -203,9 +203,77 @@
       let userId = form.find('[name=user_id]').val()
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
-      let data = $('#crudForm').serializeArray()
-      $('#crudForm').find(`[name="nominal[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
+      // let data = []
+      // $('#crudForm').find(`[name="nominal[]"]`).each((index, element) => {
+      //   data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
+      // })
+      let data = []
+
+      data.push({
+        name: 'id',
+        value: form.find(`[name="id"]`).val()
+      })
+      data.push({
+        name: 'nobukti',
+        value: form.find(`[name="nobukti"]`).val()
+      })
+      data.push({
+        name: 'tglbukti',
+        value: form.find(`[name="tglbukti"]`).val()
+      })
+      data.push({
+        name: 'bank',
+        value: form.find(`[name="bank"]`).val()
+      })
+      data.push({
+        name: 'bank_id',
+        value: form.find(`[name="bank_id"]`).val()
+      })
+      data.push({
+        name: 'pelanggan',
+        value: form.find(`[name="pelanggan"]`).val()
+      })
+      data.push({
+        name: 'pelanggan_id',
+        value: form.find(`[name="pelanggan_id"]`).val()
+      })
+      data.push({
+        name: 'tgldari',
+        value: form.find(`[name="tgldari"]`).val()
+      })
+      data.push({
+        name: 'tglsampai',
+        value: form.find(`[name="tglsampai"]`).val()
+      })
+      data.push({
+        name: 'penerimaan_nobukti',
+        value: form.find(`[name="penerimaan_nobukti"]`).val()
+      })
+
+
+      $('#table_body tr').each(function(row, tr) {
+
+
+        if ($(this).find(`[name="kasgantungdetail_id[]"]`).is(':checked')) {
+
+          data.push({
+            name: 'keterangandetail[]',
+            value: $(this).find(`[name="keterangandetail[]"]`).val()
+          })
+          data.push({
+            name: 'coadetail[]',
+            value: $(this).find(`[name="coadetail[]"]`).val()
+          })
+          data.push({
+            name: 'ketcoadetail[]',
+            value: $(this).find(`[name="ketcoadetail[]"]`).val()
+          })
+          data.push({
+            name: 'kasgantungdetail_id[]',
+            value: $(this).find(`[name="kasgantungdetail_id[]"]`).val()
+          })
+
+        }
       })
       data.push({
         name: 'sortIndex',
@@ -481,7 +549,10 @@
             <td>${row}</td>
             <td>${detail.nobukti}</td>
             <td>${detail.tglbukti}</td>
-            <td> <input type="text" name="coadetail[]" disabled id="coa_detail_${detail.detail_id}"  class="form-control coa_detail_${detail.detail_id}"></td>
+            <td>
+              <input type="hidden" name="coadetail[]">
+               <input type="text" name="ketcoadetail[]" disabled id="coa_detail_${detail.detail_id}"  class="form-control coa_detail_${detail.detail_id}">
+              </td>
             <td class="text-right" >${nominal}</td>
             <td><input type="text" name="keterangandetail[]" disabled id="keterangan_detail_${detail.detail_id}"  class="form-control keterangan_detail_${detail.detail_id}"></td>
           </tr>`)
@@ -497,13 +568,15 @@
               }
             },
             onSelectRow: (akunpusat, element) => {
-              element.val(akunpusat.coa)
+              element.parents('td').find(`[name="coadetail[]"]`).val(akunpusat.coa)
+              element.val(akunpusat.keterangancoa)
               element.data('currentValue', element.val())
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+              element.parents('td').find(`[name="coadetail[]"]`).val('')
               element.val('')
               element.data('currentValue', element.val())
             }

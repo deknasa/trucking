@@ -35,17 +35,12 @@
             name: 'nominal',
             align: 'right',
             formatter: currencyFormat,
-          },          
-          {
-            label: 'modifiedby',
-            name: 'modifiedby',
-            align: 'left'
-          },
+          },     
         ],
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 0,
+        rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50, 0],
@@ -53,9 +48,12 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
+        sortname: sortname,
+        sortorder: sortorder,
+        page: page,
         viewrecords: true,
         postData: {
-          kasgantung_id: id
+          rekappengeluaran_id: id
         },
         prmNames: {
           sort: 'sortIndex',
@@ -109,6 +107,7 @@
         }
       })
       
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,

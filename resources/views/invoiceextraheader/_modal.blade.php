@@ -104,7 +104,7 @@
       addRow()
     });
 
-    $(document).on('click', '.rmv', function(event) {
+    $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
     })
 
@@ -271,7 +271,6 @@
 
 
   function createInvoiceExtraHeader() {
-    resetRow()
     let form = $('#crudForm')
 
     form.trigger('reset')
@@ -285,6 +284,8 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    
+    $('#table_body').html('')
     addRow()
 
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -358,9 +359,9 @@
   function addRow() {
 
     let detailRow = $(`
-    <tr class="trow">
+    <tr>
                   <td>
-                    <div class="baris">1</div>
+                    <div class="baris"></div>
                   </td> 
                   <td>
                     <input type="text"  name="keterangan_detail[]" style="" class="form-control">                    
@@ -369,7 +370,7 @@
                     <input type="text"  name="nominal_detail[]" id="nominal_detail" text-align:right" class="form-control autonumeric nominal number${rowIndex}">
                   </td>                  
                   <td>
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                    <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
                   </td>
               </tr>
     `)
@@ -385,12 +386,8 @@
     setRowNumbers()
   }
 
-  function resetRow() {
-    $('.trow').remove()
-  }
-
   function setRowNumbers() {
-    let elements = $('#detailList tbody tr td:nth-child(1)')
+    let elements = $('table #table_body tr td:nth-child(1)')
 
     elements.each((index, element) => {
       $(element).text(index + 1)
@@ -416,7 +413,6 @@
   }
 
   function showInvoiceExtraHeader(form, invoiceExtraHeader) {
-    resetRow()
     $.ajax({
       url: `${apiUrl}invoiceextraheader/${invoiceExtraHeader}`,
       method: 'GET',
@@ -437,9 +433,9 @@
         })
         $.each(response.detail, (id, detail) => {
           let detailRow = $(`
-            <tr class="trow">
+            <tr>
                   <td>
-                    <div class="baris">1</div>
+                    <div class="baris"></div>
                   </td>
                   
                   <td>
