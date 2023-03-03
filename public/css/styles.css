@@ -11,7 +11,7 @@
 }
 
 @font-face {
-	font-family: 'Open Sans Condensed';
+	font-family: "Open Sans Condensed";
 	src: url("../libraries/font/open-sans-condensed/OpenSans-CondBold.ttf");
 }
 
@@ -228,8 +228,8 @@ html {
 
 .modal.modal-fullscreen .modal-footer {
 	position: sticky;
-    bottom: 0;
-    background: inherit;
+	bottom: 0;
+	background: inherit;
 }
 
 .highlight {
@@ -296,9 +296,14 @@ html {
 	width: 100% !important;
 }
 
+<<<<<<< HEAD
+.dropdown-menu {
+	background-color: #95b8e7;
+=======
 .dropdown-menu{
 	background: linear-gradient(to bottom, #eff5ff 0, #e0ecff 100%);
     border-color: var(--jqgrid-border-color);
+>>>>>>> 0db86ac86aeccc49d11c968224e2f41511698d7e
 }
 
 .select2-results__option {
@@ -327,3 +332,7 @@ html {
     background: #F86379;
     
 } */
+
+.ui-th-div {
+	font-weight: normal !important;
+}

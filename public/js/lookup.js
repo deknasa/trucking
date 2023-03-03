@@ -88,12 +88,12 @@ $.fn.lookup = function (options) {
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
+              <div class="modal-body" style="min-height: 680px;">
               </div>
               <div class="modal-footer">
                 <div class="mr-auto">
                   <button type="button" class="btn btn-secondary close-button" data-dismiss="modal" aria-label="Close">
-                  BATAL
+                  Tutup
                   </button>
                 </div>
               </div>
