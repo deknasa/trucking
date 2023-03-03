@@ -389,7 +389,7 @@
   function rangeKasgantung() {
     var tgldari = $('#crudForm').find(`[name="tgldari"]`).val()
     var tglsampai = $('#crudForm').find(`[name="tglsampai"]`).val()
-    console.log(tgldari, tglsampai);
+    // console.log(tgldari, tglsampai);
     if (tgldari !== "" && tglsampai !== "") {
       getKasGantung(tgldari, tglsampai)
     }
@@ -404,8 +404,8 @@
       $(`#keterangan_detail_${row}`).prop('disabled', false)
     } else if (check.prop("checked") == false) {
       // console.log('disabale');
-      $(`#coa_detail_${row}`).prop('disabled', false)
-      $(`#keterangan_detail_${row}`).prop('disabled', false)
+      $(`#coa_detail_${row}`).prop('disabled', true)
+      $(`#keterangan_detail_${row}`).prop('disabled', true)
     }
 
   }
@@ -601,7 +601,7 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-        console.log(response);
+        // console.log(response);
         let totalNominal = 0
         let row = 0
         $('#detailList tbody').html('')
@@ -612,13 +612,13 @@
           totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
           let detailRow = $(`
           <tr>
-            <td ><input name='kasgantungdetail_id[]' type="checkbox" checked id="checkItem" class="checkItem" id="kasgantungdetail_${detail.detail_id}" data-id="${detail.detail_id} "  value="${detail.detail_id}"></td>
+            <td ><input name='kasgantungdetail_id[]' type="checkbox" checked class="checkItem" id="kasgantungdetail_${detail.detail_id}" data-id="${detail.detail_id} "  value="${detail.detail_id}"></td>
             <td>${row}</td>
             <td>${detail.nobukti}</td>
             <td>${detail.tglbukti}</td>
-            <td> <input type="text" name="coadetail[]" value="${detail.coadetail}" id="coa_detail_${detail.detail_id} "class="form-control coa-lookup coa_detail_${detail.detail_id}"></td>
+            <td> <input type="text" name="coadetail[]" value="${detail.coadetail}" id="coa_detail_${detail.detail_id}" class="form-control coa-lookup coa_detail_${detail.detail_id}"></td>
             <td class="text-right" >${nominal}</td>
-            <td><input type="text" name="keterangandetail[]" value="${detail.keterangandetail}" id="keterangan_detail_${detail.detail_id} "class="form-control"></td>
+            <td><input type="text" name="keterangandetail[]" value="${detail.keterangandetail}" id="keterangan_detail_${detail.detail_id}" class="form-control"></td>
           </tr>`)
           $('#detailList tbody').append(detailRow)
           $(`.coa_detail_${detail.detail_id}`).lookup({
