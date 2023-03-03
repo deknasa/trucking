@@ -17,30 +17,33 @@
                 <form id="crudForm">
                     <div class="card-body">
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
-                            <div class="col-sm-4 mt-2">
+                            <div class="col-12 col-sm-2 col-md-2 col-form-label">
+                                <label>Periode<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-sm-4 ">
                                 <div class="input-group">
                                     <input type="text" name="periode" class="form-control datepicker">
                                 </div>
                             </div>
-                            <div class="col-sm-4 mt-2">
-                                <a id="btnReload" class="btn btn-secondary mr-2">
-                                    <i class="fas fa-sync"></i>
-                                    Reload
-                                </a>
-                                <button id="btnSubmit" class="btn btn-primary ">
-                                    <i class="fa fa-save"></i>
-                                    Proses
-                                </button>
-                            </div>
                         </div>
                         <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Proses data<span class="text-danger">*</span></label>
-                           
+                            <div class="col-12 col-sm-2 col-md-2 col-form-label">
+                                <label>Proses data<span class="text-danger">*</span></label>
+                            </div>
                             <div class="col-12 col-sm-9 col-md-10">
                                 <select name="approve" id="approve" class="form-select select2bs4" style="width: 100%;">
 
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+
+                            <div class="col-sm-4 ">
+                                <a id="btnReload" class="btn btn-secondary mr-2">
+                                    <i class="fas fa-sync"></i>
+                                    Reload
+                                </a>
                             </div>
                         </div>
 
@@ -128,7 +131,7 @@
             }).trigger('reloadGrid');
         })
 
-        $('#btnSubmit').click(function(event) {
+        function approve() {
 
             event.preventDefault()
 
@@ -188,6 +191,8 @@
                     $('#jqGrid').jqGrid().trigger('reloadGrid');
                     let data = $('#jqGrid').jqGrid("getGridParam", "postData");
 
+
+
                     $('#crudForm').find('[name=periode]').val(data.periode)
                     $('#crudForm').find('[name=approve]').val(data.approve)
                     selectedRows = []
@@ -207,7 +212,7 @@
                 $(this).removeAttr('disabled')
             })
 
-        })
+        }
 
         $("#jqGrid").jqGrid({
                 url: `{{ config('app.api_url') . 'approvalhutangbayar' }}`,
@@ -297,7 +302,7 @@
                         }
                     },
                     {
-                        label: 'COA',
+                        label: 'NAMA PERKIRAAN',
                         name: 'coa',
                         align: 'left'
                     },
@@ -399,9 +404,10 @@
 
                     loadDetailData(id)
 
+
                 },
                 loadComplete: function(data) {
-          changeJqGridRowListText()
+                    changeJqGridRowListText()
 
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
@@ -425,6 +431,11 @@
                     postData = $(this).jqGrid('getGridParam', 'postData')
                     triggerClick = true
 
+                    if ($(this).getDataIDs().length == 0) {
+
+                        // $('#detail').jqGrid().trigger('reloadGrid')
+
+                    }
                     $('.clearsearchclass').click(function() {
                         clearColumnSearch($(this))
                     })
@@ -471,7 +482,18 @@
                 },
             })
 
-            .customPager({})
+            .customPager({
+                buttons: [{
+                    id: 'approveun',
+                    innerHTML: '<i class="fas fa-check""></i> APPROVE/UN',
+                    class: 'btn btn-purple btn-sm mr-1',
+                    onClick: () => {
+
+                        approve()
+
+                    }
+                }]
+            })
 
 
 
@@ -481,7 +503,9 @@
         /* Append global search */
         loadGlobalSearch($('#jqGrid'))
 
-
+        if (!`{{ $myAuth->hasPermission('approvalhutangbayar', 'store') }}`) {
+            $('#approveun').attr('disabled', 'disabled')
+        }
     })
 
     const setStatusApprovalOptions = function(relatedForm) {

@@ -11,6 +11,7 @@
 </div>
 
 @include('absensisupir._modal')
+@include('absensisupir._modalabsesntrado')
 <!-- Detail -->
 @include('absensisupir._detail')
 
@@ -310,7 +311,7 @@
             }
           },
         ],
-        approveBtn:[{
+        extndBtn:[{
           id: 'approve',
           title: 'Approve',
           caption: 'Approve',
@@ -328,7 +329,27 @@
             
             
           ],
-        }]
+        },
+        {
+          id: 'lainnya',
+          title: 'Lainnya',
+          caption: 'Lainnya',
+          innerHTML: '<i class="fa fa-check"></i> LAINNYA',
+          class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
+          dropmenuHTML: [
+            {
+              id:'cekAbsenTrado',
+              text:"Cek Absen Trado",
+              onClick: () => {
+                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                cekAbsenTrado(selectedId)
+              }
+            },
+            
+            
+          ],
+        }
+      ]
 
       })
 
@@ -377,8 +398,11 @@
     if (!`{{ $myAuth->hasPermission('absensisupirheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
     }
-    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`) {
       $('#approvalEdit').attr('disabled', 'disabled')
+    }
+    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'cekabsensi') }}`) {
+      $('#cekAbsenTrado').attr('disabled', 'disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {

@@ -74,22 +74,15 @@
 
                         <div class="row">
                             <div class="col-12">
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="transfer-tab" data-toggle="tab" data-target="#transfer" type="button" role="tab" aria-controls="transfer" aria-selected="true">List Transfer</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="adjust-tab" data-toggle="tab" data-target="#adjust" type="button" role="tab" aria-controls="adjust" aria-selected="false">List Adjust Transfer</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="deposit-tab" data-toggle="tab" data-target="#deposit" type="button" role="tab" aria-controls="deposit" aria-selected="false">List Deposit</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="pengembalian-tab" data-toggle="tab" data-target="#pengembalian" type="button" role="tab" aria-controls="pengembalian" aria-selected="false">List Pengembalian Pinjaman</button>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="transfer" role="tabpanel" aria-labelledby="transfer-tab">
+                                <div id="tabs">
+                                    <ul>
+                                        <li><a href="#tabs-1">List Transfer</a></li>
+                                        <li><a href="#tabs-2">List Adjust Transfer</a></li>
+                                        <li><a href="#tabs-3">List Deposit</a></li>
+                                        <li><a href="#tabs-4">List Pengembalian Pinjaman</a></li>
+                                    </ul>
+
+                                    <div id="tabs-1">
                                         <div class="table-responsive">
                                             <table class="table table-bordered table-bindkeys" id="detailTransfer" style="width:1450px;">
                                                 <thead>
@@ -122,7 +115,9 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="adjust" role="tabpanel" aria-labelledby="adjust-tab">
+
+
+                                    <div id="tabs-2">
                                         <div class="row form-group mt-3">
                                             <div class="col-md-2 col-form-label">
                                                 <label>
@@ -184,7 +179,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="deposit" role="tabpanel" aria-labelledby="deposit-tab">
+
+
+                                    <div id="tabs-3">
 
                                         <div class="row form-group mt-3">
                                             <div class="col-md-2 col-form-label">
@@ -259,7 +256,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="pengembalian" role="tabpanel" aria-labelledby="pengembalian-tab">
+
+                                    <div id="tabs-4">
                                         <div class="row form-group mt-3">
                                             <div class="col-12 col-md-2 col-form-label">
                                                 <label>
@@ -313,6 +311,34 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="transfer-tab" data-toggle="tab" data-target="#transfer" type="button" role="tab" aria-controls="transfer" aria-selected="true">List Transfer</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="adjust-tab" data-toggle="tab" data-target="#adjust" type="button" role="tab" aria-controls="adjust" aria-selected="false">List Adjust Transfer</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="deposit-tab" data-toggle="tab" data-target="#deposit" type="button" role="tab" aria-controls="deposit" aria-selected="false">List Deposit</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="pengembalian-tab" data-toggle="tab" data-target="#pengembalian" type="button" role="tab" aria-controls="pengembalian" aria-selected="false">List Pengembalian Pinjaman</button>
+                                    </li>
+                                </ul> -->
+                                <!-- <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="transfer" role="tabpanel" aria-labelledby="transfer-tab">
+
+                                    </div>
+                                    <div class="tab-pane fade" id="adjust" role="tabpanel" aria-labelledby="adjust-tab">
+
+                                    </div>
+                                    <div class="tab-pane fade" id="deposit" role="tabpanel" aria-labelledby="deposit-tab">
+
+                                    </div>
+                                    <div class="tab-pane fade" id="pengembalian" role="tabpanel" aria-labelledby="pengembalian-tab">
+
+                                    </div>
+                                </div> -->
                             </div>
                         </div>
 
@@ -523,6 +549,7 @@
 
         activeGrid = null
 
+        $("#tabs").tabs();
         getMaxLength(form)
         initLookup()
         initDatepicker()

@@ -8,11 +8,33 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body p-0 border-bottom-0">
+          <div id="tabs">
+            <ul>
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#history-tab">History pelunasan</a></li>
+            </ul>
+            <div id="detail-tab">
+
+            </div>
+
+            <div id="history-tab">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 @include('piutang._modal')
 <!-- Detail -->
-@include('piutang._detail')
+@include('piutang._details')
+@include('piutang._history')
 
 @push('scripts')
 <script>
@@ -31,8 +53,11 @@
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false
+  let currentTab = 'detail'
 
   $(document).ready(function() {
+    $("#tabs").tabs()
+
     $("#jqGrid").jqGrid({
         url: `${apiUrl}piutangheader`,
         mtype: "GET",
@@ -75,8 +100,8 @@
             formatter: (value, options, rowData) => {
               let statusCetak = JSON.parse(value)
               if (!statusCetak) {
-                            return ''
-                          }
+                return ''
+              }
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
                   <span>${statusCetak.SINGKATAN}</span>
@@ -88,8 +113,8 @@
             cellattr: (rowId, value, rowObject) => {
               let statusCetak = JSON.parse(rowObject.statuscetak)
               if (!statusCetak) {
-                            return ''
-                          }
+                return ''
+              }
               return ` title="${statusCetak.MEMO}"`
             }
           },
@@ -194,18 +219,15 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+            $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/piutangdetail/${currentTab}/grid`, function() {
+               loadGrid(id)
+            })
+          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-
-          if (!hasDetail) {
-            loadDetailGrid(id)
-            hasDetail = true
-          }
-
-          loadDetailData(id)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -454,6 +476,23 @@
 
         submitButton.removeAttr('disabled')
       }
+    })
+
+  })
+
+  $("#tabs").tabs({
+    beforeActivate: function(event, ui) {
+
+    }
+  });
+
+  $("#tabs").on('click', 'li.ui-state-active', function() {
+    let href = $(this).find('a').attr('href');
+    currentTab = href.substring(1, href.length - 4);
+    let piutangId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+    $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/piutangdetail/${currentTab}/grid`, function() {
+
+      loadGrid(piutangId)
     })
   })
 </script>

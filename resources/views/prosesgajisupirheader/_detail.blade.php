@@ -16,18 +16,17 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        colModel: [
-          {
+        colModel: [{
             label: 'NO RIC',
             name: 'gajisupir_nobukti',
           },
           {
             label: 'SUPIR',
             name: 'supir_id',
-          },{
+          }, {
             label: 'TRADO',
             name: 'trado_id',
-          },{
+          }, {
             label: 'KETERANGAN',
             name: 'keterangan',
           },
@@ -49,6 +48,9 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
+        sortname: sortname,
+        sortorder: sortorder,
+        page: page,
         viewrecords: true,
         postData: {
           prosesgajisupir_id: id
@@ -71,20 +73,48 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
           initResize($(this))
 
-          let nominal = $(this).jqGrid("getCol", "nominal")
-          let total = 0
-          
-          if (nominal.length > 0) {
-            total = nominal.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          /* Set global variables */
+          sortname = $(this).jqGrid("getGridParam", "sortname")
+          sortorder = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecord = $(this).getGridParam("records")
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
+          postData = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = true
+
+          $('.clearsearchclass').click(function() {
+            clearColumnSearch($(this))
+          })
+
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
           }
 
-          $(this).jqGrid('footerData', 'set', {
-            gajisupir_nobukti: 'Total:',
-            nominal: total,
-          }, true)
+          $('#detail').setSelection($('#detail').getDataIDs()[0])
+
+          setHighlight($(this))
+
+          if (data.attributes) {
+            $(this).jqGrid('footerData', 'set', {
+              nobukti: 'Total:',
+              nominal: data.attributes.totalNominal,
+            }, true)
+          }
         }
+      })
+      .jqGrid("setLabel", "rn", "No.")
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          clearGlobalSearch($('#detail'))
+        },
       })
 
       .jqGrid("navGrid", pager, {
@@ -96,6 +126,12 @@
       })
 
       .customPager()
+
+    /* Append clear filter button */
+    loadClearFilter($('#detail'))
+
+    /* Append global search */
+    loadGlobalSearch($('#detail'))
   }
 
   function loadDetailData(id) {

@@ -27,7 +27,13 @@
           },
           {
             label: 'JAM',
-            name: 'jam',
+            name: 'jam', 
+            formatter:'date',
+            formatoptions:{
+              srcformat: "H:i:s",
+              newformat: "H:i",
+              // userLocalTime : true
+            }
           },
           
 

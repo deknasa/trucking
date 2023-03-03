@@ -25,7 +25,7 @@
 
               <div class="row form-group">
                 <div class="col-12">
-                  <table class="table table-condensed" id="acoList">
+                  <table class="table table-condensed table-bordered" id="acoList">
                     <thead>
                       <tr>
                         <th width="10px">#</th>
@@ -142,6 +142,8 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        console.log(response.role)
+        $(`[name="role"]`).val(response.role)
         response.data.forEach(acl => {
           $(`[name="aco_ids[]"][value=${acl.id}]`).attr('checked', 'checked')
         });

@@ -8,16 +8,37 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body p-0 border-bottom-0">
+          <div id="tabs">
+            <ul>
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#history-tab">History Pembayaran</a></li>
+            </ul>
+            <div id="detail-tab">
+
+            </div>
+
+            <div id="history-tab">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Detail -->
-@include('hutang._detail')
 
 @include('hutang._modal')
+@include('hutang._details')
+@include('hutang._history')
 
 @push('scripts')
 <script>
-
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -31,11 +52,13 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let currentTab = 'detail'
 
   $(document).ready(function() {
+    $("#tabs").tabs()
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'hutangheader' }}`,
+        url: `${apiUrl}hutangheader`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -53,7 +76,7 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-              
+
               value: `<?php
                       $i = 1;
 
@@ -82,15 +105,15 @@
                   <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
               let statusCetak = JSON.parse(rowObject.statuscetak)
-              
+
               return ` title="${statusCetak.MEMO}"`
             }
-          },     
+          },
           {
             label: 'NO. BUKTI',
             name: 'nobukti',
@@ -133,7 +156,7 @@
             name: 'sisahutang',
             align: 'right',
             formatter: currencyFormat,
-          },          
+          },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
@@ -187,7 +210,9 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
-
+          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/hutangdetail/${currentTab}/grid`, function() {
+            loadGrid(id)
+          })
           loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
@@ -303,7 +328,7 @@
                 window.open(`{{ route('hutangheader.export') }}?id=${selectedId}`)
               }
             }
-          },  
+          },
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
@@ -326,8 +351,6 @@
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
 
-    /* Load detail grid */
-    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn btn-sm btn-primary`)
@@ -444,7 +467,22 @@
       }
     })
   })
+  
+  $("#tabs").tabs({
+    beforeActivate: function(event, ui) {
 
+    }
+  });
+
+  $("#tabs").on('click', 'li.ui-state-active', function() {
+    let href = $(this).find('a').attr('href');
+    currentTab = href.substring(1, href.length - 4);
+    let piutangId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+    $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/hutangdetail/${currentTab}/grid`, function() {
+
+      loadGrid(piutangId)
+    })
+  })
 </script>
 @endpush()
 @endsection

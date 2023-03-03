@@ -30,6 +30,8 @@ class ExportRincianMingguanController extends MyController
     public function export(Request $request): void
     {
         $detailParams = [
+            'periode' => $request->periode,
+            'minggu' => $request->minggu,
             'dari' => $request->dari,
             'sampai' => $request->sampai,
             'supirdari_id' => $request->supirdari_id,
@@ -84,7 +86,7 @@ class ExportRincianMingguanController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'RINCIANMINGGUANPENDAPATANBERSIHSUPIR' . date('dmYHis');
+        $filename = 'RINCIANMINGGUAN' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

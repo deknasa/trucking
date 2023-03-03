@@ -56,7 +56,7 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-              
+
               value: `<?php
                       $i = 1;
 
@@ -85,12 +85,12 @@
                   <span>${statusApproval.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
               let statusApproval = JSON.parse(rowObject.statusapproval)
-              
+
               return ` title="${statusApproval.MEMO}"`
             }
           },
@@ -120,7 +120,7 @@
             name: 'nominalkredit',
             align: 'right',
             formatter: currencyFormat,
-          },       
+          },
           {
             label: 'POSTING DARI',
             name: 'postingdari',
@@ -333,8 +333,30 @@
                 window.open(`{{ route('jurnalumumheader.report') }}?id=${selectedId}`)
               }
             }
-          },
-        ]
+          }
+        ],
+        extndBtn: [{
+          id: 'lainnya',
+          title: 'Lainnya',
+          caption: 'Lainnya',
+          innerHTML: '<i class="fa fa-check"></i> LAINNYA',
+          class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
+          dropmenuHTML: [{
+              id: 'copy',
+              text: "COPY",
+              onClick: () => {
+                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                  showDialog('Please select a row')
+                } else {
+                  cekApproval(selectedId, 'COPY')
+                }
+              }
+            },
+
+
+          ],
+        }]
 
       })
 
@@ -385,6 +407,10 @@
       $('#report').attr('disabled', 'disabled')
     }
     
+    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'copy') }}`) {
+      $('#copy').attr('hidden', 'true')
+    }
+
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {

@@ -18,12 +18,6 @@
                                 </select>
                             </div>
 
-                            <div class="col-sm-4 mt-2">
-                                <a id="btnReload" class="btn btn-secondary mr-2">
-                                    <i class="fas fa-sync"></i>
-                                    Reload
-                                </a>
-                            </div>
                         </div>
                         <div class="row" id="gudang">
                             <label class="col-12 col-sm-2 col-form-label mt-2">GUDANG<span class="text-danger">*</span></label>
@@ -50,6 +44,16 @@
                                     <input type="hidden" name="gandengan_id">
                                     <input type="text" name="gandengan" class="form-control gandengan-lookup">
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-sm-4 mt-2">
+                                <a id="btnReload" class="btn btn-secondary mr-2">
+                                    <i class="fas fa-sync"></i>
+                                    Reload
+                                </a>
                             </div>
                         </div>
 
@@ -178,7 +182,7 @@
                     if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
                 },
                 loadComplete: function(data) {
-          changeJqGridRowListText()
+                    changeJqGridRowListText()
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
                     initResize($(this))

@@ -22,26 +22,6 @@
           hidden: true
         },
         {
-          label: 'COA',
-          name: 'coa',
-          align: 'left',
-        },
-        {
-          label: 'KETERANGAN COA',
-          name: 'keterangancoa',
-          align: 'left'
-        },
-        {
-          label: 'TYPE',
-          name: 'type',
-          align: 'left'
-        },
-        {
-          label: 'LEVEL',
-          name: 'level',
-          align: 'left'
-        },
-        {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
           align: 'left',
@@ -106,6 +86,26 @@
 
             return ` title="${statusAktif.MEMO}"`
           }
+        },
+        {
+          label: 'COA',
+          name: 'coa',
+          align: 'left',
+        },
+        {
+          label: 'NAMA',
+          name: 'keterangancoa',
+          align: 'left'
+        },
+        {
+          label: 'TYPE',
+          name: 'type',
+          align: 'left'
+        },
+        {
+          label: 'LEVEL',
+          name: 'level',
+          align: 'left'
         },
         {
           label: 'PARENT',

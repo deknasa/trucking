@@ -674,7 +674,7 @@
             }
           },
         ],
-        approveBtn: [{
+        extndBtn: [{
           id: 'approve',
           title: 'Approve',
           caption: 'Approve',

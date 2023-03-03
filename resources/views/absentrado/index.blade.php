@@ -10,6 +10,7 @@
   </div>
 </div>
 
+@include('absentrado._detail')
 @include('absentrado._modal')
 
 @push('scripts')
@@ -28,7 +29,8 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
-
+  let hasDetail = false
+  
   $(document).ready(function() {
     $("#jqGrid").jqGrid({
         url: `${apiUrl}absentrado`,

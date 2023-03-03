@@ -45,7 +45,9 @@ class Myauth
             'add',
             'delete',
             'approval',
-            'aclgrid'
+            'aclgrid',
+            'detailgrid',
+            'historygrid'
         ],
     ];
 

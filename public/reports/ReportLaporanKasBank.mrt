@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "34302c4bca49cbd314ea034531a7e27b",
+  "ReportGuid": "4d50cb6184659c5d90b7db002f72a1be",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/truck/public/reports/ReportLaporanKasBank.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1677208828000+0700)/",
+  "ReportChanged": "/Date(1677560272000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -28,48 +28,54 @@
         "Alias": "data",
         "Columns": {
           "0": {
+            "Name": "urut",
+            "NameInSource": "urut",
+            "Alias": "urut",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "keterangancoa",
+            "NameInSource": "keterangancoa",
+            "Alias": "keterangancoa",
+            "Type": "System.String"
+          },
+          "2": {
             "Name": "namabank",
             "NameInSource": "namabank",
             "Alias": "namabank",
             "Type": "System.String"
           },
-          "1": {
-            "Name": "saldo_awal",
-            "NameInSource": "saldo_awal",
-            "Alias": "saldo_awal",
+          "3": {
+            "Name": "tglbukti",
+            "NameInSource": "tglbukti",
+            "Alias": "tglbukti",
             "Type": "System.String"
           },
-          "2": {
+          "4": {
             "Name": "nobukti",
             "NameInSource": "nobukti",
             "Alias": "nobukti",
             "Type": "System.String"
           },
-          "3": {
-            "Name": "nama_perkiraan",
-            "NameInSource": "nama_perkiraan",
-            "Alias": "nama_perkiraan",
-            "Type": "System.String"
-          },
-          "4": {
+          "5": {
             "Name": "keterangan",
             "NameInSource": "keterangan",
             "Alias": "keterangan",
             "Type": "System.String"
           },
-          "5": {
+          "6": {
             "Name": "debet",
             "NameInSource": "debet",
             "Alias": "debet",
             "Type": "System.String"
           },
-          "6": {
+          "7": {
             "Name": "kredit",
             "NameInSource": "kredit",
             "Alias": "kredit",
             "Type": "System.String"
           },
-          "7": {
+          "8": {
             "Name": "saldo",
             "NameInSource": "saldo",
             "Alias": "saldo",
@@ -188,7 +194,7 @@
         "0": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand1",
-          "ClientRectangle": "0,4,207.9,56",
+          "ClientRectangle": "0,4,207.9,48",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -518,50 +524,6 @@
               "Type": "DataColumn"
             },
             "17": {
-              "Ident": "StiText",
-              "Name": "Text18",
-              "Guid": "fa5c675d1192c40cb2c3c72926775c8f",
-              "PrintOn": "OnlyFirstPage",
-              "ClientRectangle": "40,48,30,6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "Saldo Awal"
-              },
-              "Font": ";9;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "Type": "Expression"
-            },
-            "18": {
-              "Ident": "StiText",
-              "Name": "Text28",
-              "Guid": "1f3e0ae8ba742b3bf97fba3a8d17ddc5",
-              "PrintOn": "OnlyFirstPage",
-              "ClientRectangle": "182,48,24,6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "{data.saldo_awal}"
-              },
-              "HorAlignment": "Right",
-              "Font": ";9;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "TextFormat": {
-                "Ident": "StiNumberFormatService",
-                "NegativePattern": 1,
-                "GroupSeparator": ","
-              },
-              "Type": "DataColumn"
-            },
-            "19": {
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive1",
               "Guid": "28e023b1d15c626816e66934e26c185d",
@@ -580,7 +542,7 @@
         "1": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,68,207.9,8",
+          "ClientRectangle": "0,60,207.9,8",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -619,7 +581,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.nama_perkiraan}"
+                "Value": "{data.keterangancoa}"
               },
               "Font": ";9;;",
               "Border": ";;;;;;;solid:Black",
@@ -745,7 +707,7 @@
           "Ident": "StiGroupFooterBand",
           "Name": "GroupFooterBand1",
           "PrintOn": "OnlyLastPage",
-          "ClientRectangle": "0,84,207.9,42",
+          "ClientRectangle": "0,76,207.9,42",
           "ComponentPlacement": "gf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -995,7 +957,7 @@
           "Ident": "StiFooterBand",
           "Name": "FooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,134,207.9,2.2",
+          "ClientRectangle": "0,126,207.9,2.2",
           "ComponentPlacement": "f.ap.Page1",
           "Conditions": {
             "0": {

@@ -9,12 +9,11 @@
 
 @push('scripts')
 <script>
-    let api
     let column = []
     let post = {}
 
     function loadDetailGrid(tabel) {
-        if (tabel == 'notakreditheader') {
+        if (tabel == 'NOTA KREDIT') {
             api = `${apiUrl}notakredit_detail`
             column = []
             post = {}
@@ -117,7 +116,6 @@
             }, )
         }
 
-
         $("#detail").jqGrid({
                 url: api,
                 mtype: "GET",
@@ -128,7 +126,7 @@
                 autowidth: true,
                 shrinkToFit: false,
                 height: 350,
-                rowNum: 0,
+                rowNum: 10,
                 rownumbers: true,
                 rownumWidth: 45,
                 rowList: [10, 20, 50, 0],
@@ -136,6 +134,9 @@
                 userDataOnFooter: true,
                 toolbar: [true, "top"],
                 sortable: true,
+                sortname: sortname,
+                sortorder: sortorder,
+                page: page,
                 viewrecords: true,
                 // postData: post,
                 prmNames: {
@@ -155,21 +156,61 @@
                     activeGrid = $(this)
                 },
                 loadComplete: function(data) {
-          changeJqGridRowListText()
+                    changeJqGridRowListText()
+                    $(document).unbind('keydown')
+                    setCustomBindKeys($(this))
                     initResize($(this))
 
-                    let nominals = $(this).jqGrid("getCol", "nominal")
-                    let totalNominal = 0
+                    /* Set global variables */
+                    sortname = $(this).jqGrid("getGridParam", "sortname")
+                    sortorder = $(this).jqGrid("getGridParam", "sortorder")
+                    totalRecord = $(this).getGridParam("records")
+                    limit = $(this).jqGrid('getGridParam', 'postData').limit
+                    postData = $(this).jqGrid('getGridParam', 'postData')
+                    triggerClick = true
 
-                    if (nominals.length > 0) {
-                        totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+                    $('.clearsearchclass').click(function() {
+                        clearColumnSearch($(this))
+                    })
+
+                    if (indexRow > $(this).getDataIDs().length - 1) {
+                        indexRow = $(this).getDataIDs().length - 1;
                     }
 
-                    $(this).jqGrid('footerData', 'set', {
-                        nobukti: 'Total:',
-                        nominal: totalNominal,
-                    }, true)
+                    $('#detail').setSelection($('#detail').getDataIDs()[0])
+
+                    setHighlight($(this))
+
+                    if (data.attributes) {
+                        if (tabel == 'NOTA KREDIT') {
+                            $(this).jqGrid('footerData', 'set', {
+                                nobukti: 'Total:',
+                                nominal: data.attributes.totalNominal,
+                                nominalbayar: data.attributes.totalNominalBayar,
+                                penyesuaian: data.attributes.totalPenyesuaian,
+                            }, true)
+                        } else {
+                            $(this).jqGrid('footerData', 'set', {
+                                nobukti: 'Total:',
+                                nominal: data.attributes.totalNominal,
+                                nominalbayar: data.attributes.totalNominalBayar,
+                                lebihbayar: data.attributes.totalLebihBayar,
+                            }, true)
+                        }
+
+                    }
                 }
+            })
+            .jqGrid("setLabel", "rn", "No.")
+            .jqGrid('filterToolbar', {
+                stringResult: true,
+                searchOnEnter: false,
+                defaultSearch: 'cn',
+                groupOp: 'AND',
+                disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+                beforeSearch: function() {
+                    clearGlobalSearch($('#detail'))
+                },
             })
 
             .jqGrid("navGrid", pager, {
@@ -181,11 +222,17 @@
             })
             .customPager()
 
+        /* Append clear filter button */
+        loadClearFilter($('#detail'))
+
+        /* Append global search */
+        loadGlobalSearch($('#detail'))
+        $('#gbox_detail').siblings('.grid-pager').not(':first').remove()
     }
 
     function loadDetailData(id, tabel) {
 
-        if (tabel == 'notakreditheader') {
+        if (tabel == 'NOTA KREDIT') {
             column = []
             post = {}
             column.push({
@@ -243,7 +290,8 @@
                 datatype: "json",
                 postData: post
             }).trigger('reloadGrid')
-        } else {
+        }
+        if (tabel == 'NOTA DEBET') {
             column = []
             post = {}
             column.push({
@@ -302,7 +350,7 @@
                 postData: post
             }).trigger('reloadGrid')
         }
-        
+
         $('#gbox_detail').siblings('.grid-pager').not(':first').remove()
 
     }

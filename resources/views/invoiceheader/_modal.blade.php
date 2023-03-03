@@ -105,20 +105,21 @@
             </div>
 
             <div class="table-responsive">
-              <table class="table table-bindkeys" id="spList" style="width:1800px">
+              <table class="table table-bordered table-bindkeys" id="spList" style="width:1800px">
                 <thead class="table-secondary">
                   <tr>
-                    <th width="1%"></th>
-                    <th width="4%">JOB TRUCKING</th>
-                    <th width="4%">TGL OTOBON</th>
-                    <th width="4%">NO CONT</th>
-                    <th width="4%">TARIF</th>
-                    <th width="4%">BAGIAN</th>
-                    <th width="4%">EMKL</th>
-                    <th width="4%">LONG TRIP</th>
-                    <th width="4%">PERALIHAN</th>
-                    <th width="5%">KETERANGAN</th>
-                    <th width="6%">OMSET</th>
+                    <th width="2%"></th>
+                    <th width="5%">JOB TRUCKING</th>
+                    <th width="5%">TGL OTOBON</th>
+                    <th width="5%">NO CONT</th>
+                    <th width="8%">TARIF</th>
+                    <th width="8%">OMSET</th>
+                    <th width="10%">RETRIBUSI</th>
+                    <th width="8%">BAGIAN</th>
+                    <th width="15%">EMKL</th>
+                    <th width="5%">LONG TRIP</th>
+                    <th width="5%">PERALIHAN</th>
+                    <th width="15%">KETERANGAN</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -126,12 +127,17 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="10">
+                    <td colspan="5">
                       <p class="font-weight-bold">TOTAL:</p>
                     </td>
                     <td>
                       <p id="omset" class="text-right font-weight-bold"></p>
                     </td>
+                    <td>
+                      <p id="retribusi" class="text-right font-weight-bold"></p>
+                    </td>
+
+                    <td colspan="5"></td>
                   </tr>
                 </tfoot>
               </table>
@@ -167,6 +173,9 @@
     $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {
       setTotal()
     })
+    $(document).on('input', `#spList tbody [name="nominalretribusi[]"]`, function(event) {
+      setNominalRetribusi()
+    })
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -178,6 +187,9 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
+       $('#crudForm').find(`[name="nominalretribusi[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominalretribusi[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalretribusi[]"]`)[index])
+      })
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -243,10 +255,10 @@
             page: response.data.page
           }).trigger('reloadGrid');
 
-          if(id == 0){
+          if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
-          
+
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
           }
@@ -295,6 +307,18 @@
     });
 
     new AutoNumeric('#total').set(total)
+  }
+
+  function setNominalRetribusi() {
+    let nominalDetails = $(`#spList tbody [name="nominalretribusi[]"]:not([disabled])`)
+    let total = 0
+
+    console.log(nominalDetails)
+    $.each(nominalDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#retribusi').set(total)
   }
 
   function createInvoiceHeader() {
@@ -418,17 +442,20 @@
                                   <td>${detail.tglsp}</td>
                                   <td>${detail.nocont}</td>
                                   <td>${detail.tarif_id}</td>
+                                  <td class="omset text-right">${detail.omset}</td>
+                                  <td id="ret${detail.id}"><input type="text" name="nominalretribusi[]" class="form-control text-right"></td>
                                   <td>${detail.jenisorder_id}</td>
                                   <td>${detail.agen_id}</td>
                                   <td><input name='statuslongtrip[]' type="checkbox" value="${detail.statuslongtrip}" ${cekLongtrip} disabled></td>
                                   <td><input name='statusperalihan[]' type="checkbox" value="${detail.statusperalihan}" ${cekPeralihan} disabled></td>
                                   <td>${detail.keterangan}</td>
-                                  <td class="omset text-right">${detail.omset}</td>
                               </tr>
                           `)
 
               $('#spList tbody').append(detailRow)
               initAutoNumeric(detailRow.find('.omset'))
+              initAutoNumeric(detailRow.find(`[name="nominalretribusi[]"]`))
+              setNominalRetribusi()
             })
 
             $('#omset').append(`${omset}`)
@@ -438,14 +465,14 @@
           }
         },
         error: error => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-                setErrorMessages(form, error.responseJSON.errors);
-                showDialog(error.responseJSON.message)
-            } else {
-                showDialog(error.statusText)
-            }
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            setErrorMessages(form, error.responseJSON.errors);
+            showDialog(error.responseJSON.message)
+          } else {
+            showDialog(error.statusText)
+          }
         }
       })
     } else {
@@ -510,7 +537,7 @@
       name: 'limit',
       value: 0
     })
-    
+
     $.ajax({
       url: `${apiUrl}invoiceheader/${invId}/getEdit`,
       method: 'GET',
@@ -535,17 +562,20 @@
                       <td>${detail.tglsp}</td>
                       <td>${detail.nocont}</td>
                       <td>${detail.tarif_id}</td>
+                      <td class="omset text-right">${detail.omset}</td>
+                      <td id="ret${detail.id}"><input type="text" name="nominalretribusi[]" class="form-control text-right" value="${detail.nominalretribusi}"></td>
                       <td>${detail.jenisorder_id}</td>
                       <td>${detail.agen_id}</td>
                       <td><input name='statuslongtrip[]' type="checkbox" value="${detail.statuslongtrip}" ${cekLongtrip} disabled></td>
                       <td><input name='statusperalihan[]' type="checkbox" value="${detail.statusperalihan}" ${cekPeralihan} disabled></td>
                       <td>${detail.keterangan}</td>
-                      <td class="omset text-right">${detail.omset}</td>
                   </tr>
               `)
 
           $('#spList tbody').append(detailRow)
           initAutoNumeric(detailRow.find('.omset'))
+          initAutoNumeric(detailRow.find(`[name="nominalretribusi[]"]`))
+          setNominalRetribusi()
         })
 
         $('#omset').append(`${omset}`)
@@ -568,8 +598,17 @@
 
     if ($(this).prop("checked") == true) {
       allOmset = allOmset + tdOmset
+      $(this).closest('tr').find(`td [name="nominalretribusi[]"]`).prop('disabled', false)
+      setNominalRetribusi()
     } else {
       allOmset = allOmset - tdOmset
+      // $(this).closest('tr').find(`td [name="nominalretribusi[]"]`).prop('disabled', true)
+      $(this).closest('tr').find(`td [name="nominalretribusi[]"]`).remove();
+      let newRetElement = `<input type="text" name="nominalretribusi[]" class="form-control text-right" disabled>`
+      let id = $(this).val()
+      $(this).closest('tr').find(`#ret${id}`).append(newRetElement)
+      initAutoNumeric($(this).closest("tr").find(`td [name="nominalretribusi[]"]`))
+      setNominalRetribusi()
     }
 
     $('#omset').html('')
@@ -610,6 +649,7 @@
       })
     }
   }
+
   function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}invoiceheader/${Id}/cekvalidasi`,
@@ -649,7 +689,7 @@
         this.postData = {
           Aktif: 'AKTIF',
         }
-      },      
+      },
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)
@@ -673,7 +713,7 @@
         this.postData = {
           Aktif: 'AKTIF',
         }
-      },      
+      },
       onSelectRow: (jenisorder, element) => {
         $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
         element.val(jenisorder.keterangan)

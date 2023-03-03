@@ -40,8 +40,8 @@
                 <thead>
                   <tr>
                     <th width="1%">No</th>
-                    <th width="5%">COA DEBET</th>
-                    <th width="5%">COA KREDIT</th>
+                    <th width="5%">NAMA PERKIRAAN (DEBET)</th>
+                    <th width="5%">NAMA PERKIRAAN (KREDIT)</th>
                     <th width="5%">KETERANGAN</th>
                     <th width="6%">NOMINAL</th>
                     <th width="2%">Aksi</th>
@@ -157,6 +157,10 @@
         case 'delete':
           method = 'DELETE'
           url = `${apiUrl}jurnalumumheader/${Id}`
+          break;
+        case 'copy':
+          method = 'POST'
+          url = `${apiUrl}jurnalumumheader/copy`
           break;
         default:
           method = 'POST'
@@ -296,6 +300,25 @@
 
   }
 
+
+  function copyJurnal(id) {
+
+    let form = $('#crudForm')
+
+    form.data('action', 'copy')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Simpan
+    `)
+    $('#crudModalTitle').text('Copy Jurnal Umum')
+    $('#crudModal').modal('show')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+    showJurnalUmum(form, id)
+
+  }
+
   function cekApproval(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}jurnalumumheader/${Id}/cekapproval`,
@@ -316,6 +339,9 @@
             }
             if (Aksi == 'DELETE') {
               deleteJurnalUmumHeader(Id)
+            }
+            if(Aksi == 'COPY') {
+              copyJurnal(Id)
             }
           }
 
@@ -353,10 +379,12 @@
             <tr>
             <td></td>
             <td>
-              <input type="text" name="coadebet_detail[]" data-current-value="${detail.coadebet}" class="form-control coadebet-lookup">
+              <input type="hidden" name="coadebet_detail[]">
+              <input type="text" name="ketcoadebet_detail[]" data-current-value="${detail.coadebet}" class="form-control coadebet-lookup">
             </td>
             <td>
-              <input type="text" name="coakredit_detail[]" data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
+              <input type="hidden" name="coakredit_detail[]">
+              <input type="text" name="ketcoakredit_detail[]" data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
             </td>
             <td>
               <input type="text" name="keterangan_detail[]" class="form-control">   
@@ -371,6 +399,8 @@
 
           detailRow.find(`[name="coadebet_detail[]"]`).val(detail.coadebet)
           detailRow.find(`[name="coakredit_detail[]"]`).val(detail.coakredit)
+          detailRow.find(`[name="ketcoadebet_detail[]"]`).val(detail.ketcoadebet)
+          detailRow.find(`[name="ketcoakredit_detail[]"]`).val(detail.ketcoakredit)
           detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
           detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
 
@@ -388,13 +418,15 @@
               }
             },
             onSelectRow: (akunpusat, element) => {
-              element.val(akunpusat.coa)
+              element.parents('td').find(`[name="coadebet_detail[]"]`).val(akunpusat.coa)
+              element.val(akunpusat.keterangancoa)
               element.data('currentValue', element.val())
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+              element.parents('td').find(`[name="coadebet_detail[]"]`).val('')
               element.val('')
               element.data('currentValue', element.val())
             }
@@ -404,13 +436,15 @@
             title: 'Coa Kredit Lookup',
             fileName: 'akunpusat',
             onSelectRow: (akunpusat, element) => {
-              element.val(akunpusat.coa)
+              element.parents('td').find(`[name="coakredit_detail[]"]`).val(akunpusat.coa)
+              element.val(akunpusat.keterangancoa)
               element.data('currentValue', element.val())
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+              element.parents('td').find(`[name="coakredit_detail[]"]`).val('')
               element.val('')
               element.data('currentValue', element.val())
             }
@@ -431,10 +465,12 @@
       <tr>
         <td></td>
         <td>
-          <input type="text" name="coadebet_detail[]"  class="form-control coadebet-lookup">
+          <input type="hidden" name="coadebet_detail[]">
+          <input type="text" name="ketcoadebet_detail[]"  class="form-control coadebet-lookup">
         </td>
         <td>
-          <input type="text" name="coakredit_detail[]"  class="form-control coakredit-lookup">
+          <input type="hidden" name="coakredit_detail[]">
+          <input type="text" name="ketcoakredit_detail[]"  class="form-control coakredit-lookup">
         </td>
         <td>
           <input type="text" name="keterangan_detail[]" class="form-control">   
@@ -454,13 +490,15 @@
       title: 'Coa Debet Lookup',
       fileName: 'akunpusat',
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
+        element.parents('td').find(`[name="coadebet_detail[]"]`).val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        element.parents('td').find(`[name="coadebet_detail[]"]`).val('')
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -470,13 +508,15 @@
       title: 'Coa Kredit Lookup',
       fileName: 'akunpusat',
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
+        element.parents('td').find(`[name="coakredit_detail[]"]`).val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        element.parents('td').find(`[name="coakredit_detail[]"]`).val('')
         element.val('')
         element.data('currentValue', element.val())
       }

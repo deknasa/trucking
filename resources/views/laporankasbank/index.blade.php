@@ -40,11 +40,7 @@
                             <div class="col-sm-6 mt-4">
                                 <a id="btnPreview" class="btn btn-secondary mr-2 ">
                                     <i class="fas fa-sync"></i>
-                                    Preview
-                                </a>
-                                <a id="btnExport" class="btn btn-warning mr-2 ">
-                                    <i class="fas fa-file-export"></i>
-                                    Export
+                                    Cetak
                                 </a>
                             </div>
                         </div>

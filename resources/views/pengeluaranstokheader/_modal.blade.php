@@ -178,35 +178,52 @@
                 </div>
               </div>
 
-              <div class="form-group col-md-6" style="display: none">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>bank </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="bank" class="form-control bank-lookup">
-                    <input type="text" id="bankId" name="bank_id" readonly hidden>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group col-md-6" style="display: none">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>TANGGAL POST  </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <div class="input-group">
-                      <input type="text" name="tglkasmasuk" class="form-control datepicker">
+            </div>
+
+            <div class="border p-3 potongkas" >
+              <h6>Posting Penerimaan</h6>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <div class="row">
+                    <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                      <label>bank </label>
+                    </div>
+                    <div class="col-12 col-sm-9 col-md-8">
+                      <input type="text" name="bank" class="form-control bank-lookup">
+                      <input type="text" id="bankId" name="bank_id" readonly hidden>
                     </div>
                   </div>
                 </div>
+                <div class="form-group col-md-6">
+                  <div class="row">
+                    <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                      <label>TANGGAL POST  </label>
+                    </div>
+                    <div class="col-12 col-sm-9 col-md-8">
+                      <div class="input-group">
+                        <input type="text" name="tglkasmasuk" class="form-control datepicker">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="form-group col-md-6">
+                  <div class="row">
+                    <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                      <label>penerimaan nobukti  </label>
+                    </div>
+                    <div class="col-12 col-sm-9 col-md-8">
+                      <div class="input-group">
+                        <input type="text" name="penerimaan_nobukti" class="form-control" readonly>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
-              
-
-
+            
             </div>
-
 
             <table class="table table-bordered table-bindkeys">
               <thead>
@@ -274,11 +291,14 @@
       // deleteRow($(this).parents('tr'))
       // console.log();
       if ($(this).val() == 219) {
-        $('[name=bank]').parents('.form-group').show()
+        $('.potongkas').show()
         $('[name=tglkasmasuk]').parents('.form-group').show()
+        // $('[name=bank]').parents('.form-group').show()
+        // $('[name=tglkasmasuk]').parents('.form-group').show()
       }else{
-        $('[name=bank]').parents('.form-group').hide()
-        $('[name=tglkasmasuk]').parents('.form-group').hide()
+        $('.potongkas').hide()
+        // $('[name=bank]').parents('.form-group').hide()
+        // $('[name=tglkasmasuk]').parents('.form-group').hide()
       }
     })
 

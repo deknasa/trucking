@@ -1,12 +1,12 @@
 function loadPagerHandler(element, grid) {
 	$(element).html(`
-		<button id="${
+		<button type="button" id="${
 			grid.getGridParam().id
 		}_firstPageButton" class="btn btn-sm hover-primary mr-2 d-flex">
 			<span class="fas fa-step-backward"></span>
 		</button>
 
-		<button id="${
+		<button type="button" id="${
 			grid.getGridParam().id
 		}_previousPageButton" class="btn btn-sm hover-primary d-flex">
 			<span class="fas fa-backward"></span>
@@ -22,13 +22,13 @@ function loadPagerHandler(element, grid) {
 	}</span>
 		</div>
 
-		<button id="${
+		<button type="button" id="${
 			grid.getGridParam().id
 		}_nextPageButton" class="btn btn-sm hover-primary d-flex">
 			<span class="fas fa-forward"></span>
 		</button>
 
-		<button id="${
+		<button type="button" id="${
 			grid.getGridParam().id
 		}_lastPageButton" class="btn btn-sm hover-primary ml-2 d-flex">
 			<span class="fas fa-step-forward"></span>
@@ -185,17 +185,17 @@ $.fn.customPager = function (option = {}) {
 	let grid = $(this);
 	let pagerHandlerId = `${grid.getGridParam().id}PagerHandler`;
 	let pagerInfoId = `${grid.getGridParam().id}InfoHandler`;
-	let approveBtn ="";
-	if (option.approveBtn) {
-		option.approveBtn.forEach(element => {
-			approveBtn +=`<div class="btn-group dropup  scrollable-menu">`
-			approveBtn +=`<button type="button" class="${element.class}" data-toggle="dropdown" id="${element.id}">
+	let extndBtn ="";
+	if (option.extndBtn) {
+		option.extndBtn.forEach(element => {
+			extndBtn +=`<div class="btn-group dropup  scrollable-menu">`
+			extndBtn +=`<button type="button" class="${element.class}" data-toggle="dropdown" id="${element.id}">
 			${element.innerHTML}
 			</button>`
-			approveBtn +=`<ul class="dropdown-menu" id="menu-approve" aria-labelledby="${element.id}">`
+			extndBtn +=`<ul class="dropdown-menu" id="menu-approve" aria-labelledby="${element.id}">`
 			if (element.dropmenuHTML) {
 				element.dropmenuHTML.forEach(dropmenuHTML => {
-					approveBtn +=`<li><a class="dropdown-item" id='${dropmenuHTML.id}' href="#">${dropmenuHTML.text}</a></li>`
+					extndBtn +=`<li><a class="dropdown-item" id='${dropmenuHTML.id}' href="#">${dropmenuHTML.text}</a></li>`
 					$(document).on("click", `#${dropmenuHTML.id}`, function (event) {
 						event.stopImmediatePropagation();
 
@@ -203,8 +203,8 @@ $.fn.customPager = function (option = {}) {
 					});
 				});	
 			}
-			approveBtn +=`</ul>`
-			approveBtn +="</div>"
+			extndBtn +=`</ul>`
+			extndBtn +="</div>"
 		});
 	}
 
@@ -212,7 +212,7 @@ $.fn.customPager = function (option = {}) {
 		<div class="col-12 bg-white grid-pager overflow-x-hidden">
 			<div class="row d-flex align-items-center text-center text-lg-left">
 				<div class="col-12 col-lg-6">
-					<div class="d-md-inline d-block">
+					<div class="d-lg-inline d-block">
 					${
 						typeof option.buttons !== "undefined"
 						 ? option.buttons
@@ -240,8 +240,8 @@ $.fn.customPager = function (option = {}) {
 						: ''
 					}
 					</div>
-					<div class="d-md-inline d-block">
-						${approveBtn}
+					<div class="d-lg-inline d-block">
+						${extndBtn}
 					</div>
 				</div>
 				<div class="col-12 col-lg-6">

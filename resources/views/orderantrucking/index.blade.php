@@ -30,7 +30,6 @@
   let rowNum = 10
 
   $(document).ready(function() {
-
     $("#jqGrid").jqGrid({
         url: `${apiUrl}orderantrucking`,
         mtype: "GET",
@@ -233,7 +232,6 @@
         sortname: sortname,
         sortorder: sortorder,
         page: page,
-        pager: pager,
         viewrecords: true,
         prmNames: {
           sort: 'sortIndex',
@@ -341,6 +339,7 @@
               } else {
                 cekValidasidelete(selectedId)
               }
+
             }
           },
         ]
@@ -427,9 +426,13 @@
 
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
+
+
+
   })
 
  
+
 </script>
 @endpush()
 @endsection

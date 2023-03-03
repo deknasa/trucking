@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "a713fb842d3a94e5282927cf5e9e0d85",
+  "ReportGuid": "a50115b84c8d2899c4c2661ffa837561",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/truck/public/reports/ReportLaporanDepositoSupir.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1677206055000+0700)/",
+  "ReportChanged": "/Date(1677550177000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -28,33 +28,33 @@
         "Alias": "data",
         "Columns": {
           "0": {
-            "Name": "nobukti",
-            "NameInSource": "nobukti",
-            "Alias": "nobukti",
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
             "Type": "System.String"
           },
           "1": {
-            "Name": "supir",
-            "NameInSource": "supir",
-            "Alias": "supir",
+            "Name": "supir_id",
+            "NameInSource": "supir_id",
+            "Alias": "supir_id",
             "Type": "System.String"
           },
           "2": {
-            "Name": "keterangan",
-            "NameInSource": "keterangan",
-            "Alias": "keterangan",
+            "Name": "namasupir",
+            "NameInSource": "namasupir",
+            "Alias": "namasupir",
             "Type": "System.String"
           },
           "3": {
-            "Name": "nominal",
-            "NameInSource": "nominal",
-            "Alias": "nominal",
+            "Name": "saldo",
+            "NameInSource": "saldo",
+            "Alias": "saldo",
             "Type": "System.String"
           },
           "4": {
-            "Name": "nominal_deposito",
-            "NameInSource": "nominal_deposito",
-            "Alias": "nominal_deposito",
+            "Name": "deposito",
+            "NameInSource": "deposito",
+            "Alias": "deposito",
             "Type": "System.String"
           },
           "5": {
@@ -70,9 +70,21 @@
             "Type": "System.String"
           },
           "7": {
-            "Name": "mencapai",
-            "NameInSource": "mencapai",
-            "Alias": "mencapai",
+            "Name": "keterangan",
+            "NameInSource": "keterangan",
+            "Alias": "keterangan",
+            "Type": "System.String"
+          },
+          "8": {
+            "Name": "cicil",
+            "NameInSource": "cicil",
+            "Alias": "cicil",
+            "Type": "System.String"
+          },
+          "9": {
+            "Name": "keterangandeposito",
+            "NameInSource": "keterangandeposito",
+            "Alias": "keterangandeposito",
             "Type": "System.String"
           }
         },
@@ -292,7 +304,7 @@
         "0": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand1",
-          "ClientRectangle": "0,4,207.9,50",
+          "ClientRectangle": "0,4,207.9,44",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -515,44 +527,6 @@
             },
             "11": {
               "Ident": "StiText",
-              "Name": "Text15",
-              "Guid": "ea645bbfb820ba61e6db07a4cadba7f9",
-              "PrintOn": "OnlyFirstPage",
-              "ClientRectangle": "4,42,64,6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "Keterangan deposito belum mencapai"
-              },
-              "Font": ";10;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "Type": "Expression"
-            },
-            "12": {
-              "Ident": "StiText",
-              "Name": "Text17",
-              "Guid": "9dd9b02912c19ab97746da3da97b741e",
-              "PrintOn": "OnlyFirstPage",
-              "ClientRectangle": "70,42,28,6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "{data.mencapai}"
-              },
-              "Font": ";10;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "Type": "DataColumn"
-            },
-            "13": {
-              "Ident": "StiText",
               "Name": "Text6",
               "Guid": "102fbdd05867cfd3d55c3f05b8a610bc",
               "ClientRectangle": "152,32,28,8",
@@ -571,7 +545,7 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "14": {
+            "12": {
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive1",
               "Guid": "28e023b1d15c626816e66934e26c185d",
@@ -588,9 +562,40 @@
           "PrintOnAllPages": true
         },
         "1": {
+          "Ident": "StiGroupHeaderBand",
+          "Name": "GroupHeaderBand2",
+          "ClientRectangle": "0,56,207.9,8",
+          "ComponentPlacement": "gh.Page1",
+          "Interaction": {
+            "Ident": "StiBandInteraction"
+          },
+          "Border": ";;;;;;;solid:Black",
+          "Brush": "solid:",
+          "Components": {
+            "0": {
+              "Ident": "StiText",
+              "Name": "Text1",
+              "ClientRectangle": "4,2,168,6",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{data.keterangan}"
+              },
+              "Font": ";10;;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black"
+            }
+          },
+          "Condition": {
+            "Value": "{data.id}"
+          }
+        },
+        "2": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,62,207.9,8",
+          "ClientRectangle": "0,72,207.9,8",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -608,7 +613,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.nobukti}"
+                "Value": "{data.cicil}"
               },
               "Font": ";9;;",
               "Border": ";;;;;;;solid:Black",
@@ -629,7 +634,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.supir}"
+                "Value": "{data.namasupir}"
               },
               "Font": ";9;;",
               "Border": ";;;;;;;solid:Black",
@@ -650,7 +655,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.keterangan}"
+                "Value": "{data.keterangandeposito}"
               },
               "Font": ";9;;",
               "Border": ";;;;;;;solid:Black",
@@ -671,7 +676,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.nominal}"
+                "Value": "{data.saldo}"
               },
               "HorAlignment": "Right",
               "Font": ";9;;",
@@ -698,7 +703,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.nominal_deposito}"
+                "Value": "{data.deposito}"
               },
               "HorAlignment": "Right",
               "Font": ";9;;",
@@ -772,11 +777,22 @@
           },
           "DataSourceName": "data"
         },
-        "2": {
+        "3": {
+          "Ident": "StiGroupFooterBand",
+          "Name": "GroupFooterBand2",
+          "ClientRectangle": "0,88,207.9,8",
+          "ComponentPlacement": "gf.Page1",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "Border": ";;;;;;;solid:Black",
+          "Brush": "solid:"
+        },
+        "4": {
           "Ident": "StiGroupFooterBand",
           "Name": "GroupFooterBand1",
           "PrintOn": "OnlyLastPage",
-          "ClientRectangle": "0,78,207.9,42",
+          "ClientRectangle": "0,104,207.9,42",
           "ComponentPlacement": "gf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -816,7 +832,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{Sum(data.nominal)}"
+                "Value": "{Sum(DataBand1,data.deposito)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
@@ -832,7 +848,7 @@
                 "NegativePattern": 1,
                 "GroupSeparator": ","
               },
-              "Type": "Expression"
+              "Type": "Totals"
             },
             "2": {
               "Ident": "StiText",
@@ -844,7 +860,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{Sum(data.nominal_deposito)}"
+                "Value": "{Sum(DataBand1,data.penarikan)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
@@ -860,7 +876,7 @@
                 "NegativePattern": 1,
                 "GroupSeparator": ","
               },
-              "Type": "Expression"
+              "Type": "Totals"
             },
             "3": {
               "Ident": "StiText",
@@ -1050,11 +1066,11 @@
           },
           "KeepGroupFooterTogether": false
         },
-        "3": {
+        "5": {
           "Ident": "StiFooterBand",
           "Name": "FooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,128,207.9,2.2",
+          "ClientRectangle": "0,154,207.9,2.2",
           "ComponentPlacement": "f.ap.Page1",
           "Conditions": {
             "0": {

@@ -51,6 +51,38 @@
                 </select>
               </div>
             </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  MEMO
+                </label>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1300px;">
+                <thead>
+                  <tr>
+                    <th width="3%">KEY</th>
+                    <th width="8%">VALUE</th>
+                    <th width="2%">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body" class="form-group">
+
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="2"></td>
+                    <td>
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -71,11 +103,33 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
+    $(document).on('click', "#addRow", function() {
+      addRow()
+    });
+
+    $(document).on('click', '.delete-row', function(event) {
+      deleteRow($(this).parents('tr'))
+    })
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
+      let cekHex
+      $('#detailList tbody tr').each(function(row, tr) {
+        let key = $(this).find(`[name="key[]"]`).val()
+        let value = $(this).find(`[name="value[]"]`).val()
+        if (key.toLowerCase() == 'warna') {
+          if (value.length < 7) {
+            cekHex = value.length;
+          }
+        }
+      })
 
+      if (cekHex < 7) {
+        showDialog("value warna harus berjumlah 6 digit dan diawali dengan #")
+      } 
       let method
       let url
       let form = $('#crudForm')
@@ -180,6 +234,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createAbsenTrado() {
@@ -196,6 +251,8 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    $('#table_body').html('')
+    addRow()
 
     Promise
     .all([
@@ -337,7 +394,17 @@
       })
     })
   }
+  function isJSON(something) {
+    if (typeof something != 'string')
+      something = JSON.stringify(something);
 
+    try {
+      JSON.parse(something);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
   function showAbsenTrado(form, absenTradoId) {
     $.ajax({
       url: `${apiUrl}absentrado/${absenTradoId}`,
@@ -356,6 +423,56 @@
             element.val(value)
           }
         })
+
+        let memo = response.data.memo
+        let isJson = isJSON(memo);
+
+        console.log(isJSON(memo));
+
+        if (isJson === false) {
+          addRow();
+        } else {
+
+          let memoToArray = JSON.parse(memo)
+          $.each(memoToArray, (index, detail) => {
+
+            let detailRow = $(`
+              <tr>
+                <td>
+                    <input type="text" name="key[]" class="form-control">
+                </td>
+                <td>
+                  <div class="input-group" id="${index}">
+                    <input type="text" name="value[]" class="form-control">
+                  </div>
+                </td>
+                <td>
+                    <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+                </td>
+            </tr>`)
+            let inputColor = $(`<div class="input-group-prepend" style="width:50px; background: #fff">
+                      <span class="input-group-text form-control" id="basic-addon2" style="background: #fff">
+                        <input type="color" name="color[]" style="border:none; background: #fff">
+                      </span>
+                    </div>`)
+
+            detailRow.find(`[name="key[]"]`).val(index)
+            detailRow.find(`[name="value[]"]`).val(detail)
+
+            $('#detailList tbody').append(detailRow)
+            if (index == 'WARNA') {
+              // detailRow.find(`[name="value[]"]`).css({'color':`'${detail}'`});      
+              // detailRow.find(`[name="value[]"]`).prop('disabled', true);      
+              let test = $('#detailList tbody').find(`#${index}`).prepend(inputColor);
+              detailRow.find(`[name="color[]"]`).val(detail)
+              detailRow.find(`[name="key[]"]`).addClass('disabled')
+              initDisabled()
+            }
+           
+          })
+        }
+
+          
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
           initDisabled()
@@ -388,6 +505,97 @@
        
       }
     })
+  }
+
+
+  function addRow() {
+    let detailRow = (`
+        <tr>
+            <td>
+                <input type="text" name="key[]" class="form-control">
+            </td>
+
+            <td>
+                <input type="text" name="value[]" class="form-control">
+            </td>
+
+            <td>
+                <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+            </td>
+        </tr>`)
+
+    $('#detailList tbody').append(detailRow)
+
+    initDatepicker()
+
+  }
+  $(document).on('input', `#detailList tbody [name="color[]"]`, function() {
+    let color = $(this).val()
+    $(this).parents('.input-group').find(`[name="value[]"`).val(color)
+    // $(this).parents('.input-group').find(`[name="value[]"`).css({'color':`'${color}'`});    
+  })
+  $(document).on('input', `#detailList tbody [name="key[]"]`, function(event) {
+    let inputColor = $(`<div class="input-group-prepend" style="width:50px; background: #fff">
+                      <span class="input-group-text form-control" id="basic-addon2" style="background: #fff">
+                        <input type="color" name="color[]" style="border:none; background: #fff">
+                      </span>
+                    </div>`)
+
+    if ($(this).val().toLowerCase() == 'warna') {
+      $(this).parent().siblings().find(`[name="value[]"]`).wrap('<div class="input-group"></div>');
+      $(this).parent().siblings().find(`.input-group`).prepend(inputColor);
+    } else if($(this).val().toLowerCase() == 'jurnal') {
+      // $(this).parent().siblings().removeClass('input-group');
+      $(this).parent().siblings().find(`[name="value[]"]`).addClass("coa-lookup")
+      $('.coa-lookup').last().lookup({
+        title: 'Jurnal Lookup',
+        fileName: 'akunpusat',
+        onSelectRow: (akunpusat, element) => {
+          element.val(akunpusat.coa)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+    }else {
+      console.log($(this))
+      
+      $(this).parent().siblings().find('.input-group-append').remove()
+      $(this).parent().siblings().find('.input-group .btn').remove()
+      $(this).parent().siblings().find(`[name="value[]"]`).removeClass("coa-lookup")
+      $(this).parent().siblings().find(`.input-group-prepend`).remove();
+      $(this).parent().siblings().find('.input-group').children().unwrap();
+    }
+  })
+
+  $(document).on('input', `#detailList tbody [name="value[]"]`, function(event) {
+    let key = $(this).parents('td').siblings().find(`[name="key[]"]`).val();
+    console.log(key);
+
+    if (key.toLowerCase() == 'warna') {
+      $(this).inputmask("#999999", {
+        placeholder: "",
+        definitions: {
+          '#': {
+            validator: "#"
+          },
+          9: {
+            validator: "[0-9A-Fa-f]"
+          },
+        }
+      });
+      let color = $(this).val();
+      $(this).parents('.input-group').find(`[name="color[]"`).val(color)
+    }
+  })
+  function deleteRow(row) {
+    row.remove()
+
   }
 </script>
 @endpush()
