@@ -11,9 +11,9 @@
   <div class="row mt-3">
     <div class="col-12">
       <div class="card card-primary card-outline card-outline-tabs">
-        <div class="card-body p-0 border-bottom-0">
-          <div id="tabs">
-            <ul>
+        <div class="card-body border-bottom-0">
+          <div id="tabs" >
+            <ul class="dejavu">
               <li><a href="#detail-tab">Details</a></li>
               <li><a href="#history-tab">History pelunasan</a></li>
             </ul>

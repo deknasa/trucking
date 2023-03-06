@@ -10,6 +10,15 @@
 
 @push('scripts')
 <script>
+  let sortnamedetail
+  let sortorderdetail
+  let indexRowdetail = 0;
+  let totalRecorddetail
+  let limitdetail
+  let postDatadetail
+  let triggerClickdetail
+  let pageDetail = 0
+
   function loadDetailGrid(id) {
 
     $("#detail").jqGrid({
@@ -18,19 +27,14 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        colModel: [
-          {
+        colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
-          }, 
-          {
-            label: 'ALAT BAYAR',
-            name: 'alatbayar_id',
-          }, 
+          },
           {
             label: 'NO WARKAT',
             name: 'nowarkat',
-          }, 
+          },
           {
             label: 'TGL JATUH TEMPO',
             name: 'tgljatuhtempo',
@@ -39,11 +43,11 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          }, 
+          },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-          }, 
+          },
           {
             label: 'NOMINAL',
             name: 'nominal',
@@ -71,7 +75,7 @@
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 0,
+        rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50, 0],
@@ -79,6 +83,9 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
+        sortname: sortname,
+        sortorder: sortorder,
+        page: pageDetail,
         viewrecords: true,
         postData: {
           pengembaliankasbank_id: id
@@ -100,26 +107,32 @@
           activeGrid = $(this)
         },
         loadComplete: function(data) {
-          
+
+          console.log(data.attributes)
           changeJqGridRowListText()
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
+
+          if(data.attributes != undefined){
+            
+            pageDetail = data.attributes.totalPages
+          }
           
           /* Set global variables */
-          sortname = $(this).jqGrid("getGridParam", "sortname")
-          sortorder = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').limit
-          postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          sortnamedetail = $(this).jqGrid("getGridParam", "sortname")
+          sortorderdetail = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecorddetail = $(this).getGridParam("records")
+          limitdetail = $(this).jqGrid('getGridParam', 'postData').limit
+          postDatadetail = $(this).jqGrid('getGridParam', 'postData')
+          triggerClickdetail = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
+          if (indexRowdetail > $(this).getDataIDs().length - 1) {
+            indexRowdetail = $(this).getDataIDs().length - 1;
           }
 
           $('#detail').setSelection($('#detail').getDataIDs()[0])
@@ -134,6 +147,7 @@
         }
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
@@ -153,10 +167,10 @@
         del: false,
       })
       .customPager()
-      
+
     /* Append clear filter button */
     loadClearFilter($('#detail'))
-    
+
     /* Append global search */
     loadGlobalSearch($('#detail'))
   }

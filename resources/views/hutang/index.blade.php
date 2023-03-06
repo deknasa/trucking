@@ -11,8 +11,8 @@
   <div class="row mt-3">
     <div class="col-12">
       <div class="card card-primary card-outline card-outline-tabs">
-        <div class="card-body p-0 border-bottom-0">
-          <div id="tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs" class="open-sans">
             <ul>
               <li><a href="#detail-tab">Details</a></li>
               <li><a href="#history-tab">History Pembayaran</a></li>

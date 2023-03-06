@@ -38,57 +38,21 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  pengeluaran <span class="text-danger">*</span></label>
+                  CABANG <span class="text-danger">*</span></label>
               </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="pengeluaran_nobukti" class="form-control pengeluaran-lookup">
-              </div>
-
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  KETERANGAN <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="keterangan" class="form-control">
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  CABANG <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
+              <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="cabang_id">
                 <input type="text" name="cabang" class="form-control cabang-lookup">
               </div>
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  STATUS JENIS TRANSAKSI <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <select name="statusjenistransaksi" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS JENIS TRANSAKSI --</option>
-                </select>
-              </div>
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
-                  DIBAYAR KE <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="dibayarke" class="form-control">
-              </div>
 
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   BANK <span class="text-danger">*</span></label>
               </div>
-              <div class="col-12 col-sm-9 col-md-4">
+              <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="bank_id">
                 <input type="text" name="bank" class="form-control bank-lookup">
               </div>
@@ -97,17 +61,40 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
+                  ALAT BAYAR <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="alatbayar_id">
+                <input type="text" name="alatbayar" class="form-control alatbayar-lookup">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  DIBAYAR KE <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="dibayarke" class="form-control">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
                   TRANSFER KE ACC
               </div>
-              <div class="col-12 col-sm-9 col-md-4">
+              <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="transferkeac" class="form-control">
               </div>
+            </div>
 
+            <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
                   TRANSFER KE AN
               </div>
-              <div class="col-12 col-sm-9 col-md-4">
+              <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="transferkean" class="form-control">
               </div>
             </div>
@@ -116,7 +103,7 @@
                 <label>
                   TRANSFER KE BANK
               </div>
-              <div class="col-12 col-sm-9 col-md-4">
+              <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="transferkebank" class="form-control">
               </div>
             </div>
@@ -126,14 +113,13 @@
                 <thead>
                   <tr>
                     <th width="1%">No</th>
-                    <th width="5%">Alat Bayar</th>
-                    <th width="4%">No warkat</th>
-                    <th width="4%">Tgl jatuh tempo</th>
-                    <th width="6%">Keterangan</th>
-                    <th width="6%">Nominal</th>
-                    <th width="5%">Coa Kredit</th>
-                    <th width="5%">Coa Debet</th>
-                    <th width="4%">Bulan beban</th>
+                    <th width="10%">No warkat</th>
+                    <th width="10%">Tgl jatuh tempo</th>
+                    <th width="18%">Keterangan</th>
+                    <th width="10%">Nominal</th>
+                    <th width="20%">Nama perkiraan (Debet)</th>
+                    <th width="20%">Nama Perkiraan (kredit)</th>
+                    <th width="10%">Bulan beban</th>
                     <th width="1%">Aksi</th>
                   </tr>
                 </thead>
@@ -143,13 +129,13 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="5">
+                    <td colspan="4">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
                     <td>
                       <p class="text-right font-weight-bold autonumeric" id="total"></p>
                     </td>
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                     <td>
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
@@ -179,6 +165,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+  let bankId
 
   $(document).ready(function() {
 
@@ -208,6 +195,7 @@
         data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
       })
 
+      console.log(limit)
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -273,6 +261,10 @@
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
+
+          if (id == 0) {
+            $('#detailGrid').jqGrid().trigger('reloadGrid')
+          }
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -343,7 +335,8 @@
 
     $('#table_body').html('')
 
-    setStatusJenisTransaksiOptions(form)
+    $('#crudForm').find(`[name="tglbukti"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    
     addRow()
     setTotal()
   }
@@ -361,13 +354,9 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    Promise
-      .all([
-        setStatusJenisTransaksiOptions(form)
-      ])
-      .then(() => {
-        showPengembalianKasBank(form, id)
-      })
+
+    showPengembalianKasBank(form, id)
+
 
   }
 
@@ -385,13 +374,9 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    Promise
-      .all([
-        setStatusJenisTransaksiOptions(form)
-      ])
-      .then(() => {
-        showPengembalianKasBank(form, id)
-      })
+
+    showPengembalianKasBank(form, id)
+
 
   }
 
@@ -413,7 +398,7 @@
     })
   }
 
-  function cekvalidasi(Id, Aksi) {
+  function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengembaliankasbankheader/${Id}/cekvalidasi`,
       method: 'POST',
@@ -429,7 +414,7 @@
             showDialog(response.message['keterangan'])
           } else {
             if (Aksi == 'EDIT') {
-              
+
               editPengembalianKasBank(Id)
             }
             if (Aksi == 'DELETE') {
@@ -444,43 +429,6 @@
     })
   }
 
-  const setStatusJenisTransaksiOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusjenistransaksi]').empty()
-      relatedForm.find('[name=statusjenistransaksi]').append(
-        new Option('-- PILIH STATUS JENIS TRANSAKSI --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "JENIS TRANSAKSI"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusJenisTransaksi => {
-            let option = new Option(statusJenisTransaksi.text, statusJenisTransaksi.id)
-
-            relatedForm.find('[name=statusjenistransaksi]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
-  }
 
   function showPengembalianKasBank(form, id) {
     $('#detailList tbody').html('')
@@ -494,6 +442,8 @@
       },
       success: response => {
         let tgl = response.data.tglbukti
+        let alatbayar = $('#crudForm [name=alatbayar]')
+        let bank = $('#crudForm [name=bank]')
 
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
@@ -508,14 +458,19 @@
             element.val(value)
           }
 
+
+          if (index == 'alatbayar') {
+            element.data('current-value', value).prop('readonly', true)
+            alatbayar.parents('.input-group').find('.input-group-append').hide()
+            alatbayar.parents('.input-group').find('.button-clear').hide()
+          }
           if (index == 'pelanggan') {
             element.data('current-value', value)
           }
-          if (index == 'cabang') {
-            element.data('current-value', value)
-          }
           if (index == 'bank') {
-            element.data('current-value', value)
+            element.data('current-value', value).prop('readonly', true)
+            bank.parents('.input-group').find('.input-group-append').hide()
+            bank.parents('.input-group').find('.button-clear').hide()
           }
         })
 
@@ -523,10 +478,6 @@
           let detailRow = $(`
             <tr>
                 <td></td>
-                <td>
-                    <input type="hidden" name="alatbayar_id[]">
-                    <input type="text" name="alatbayar[]" data-current-value="${detail.alatbayar}" class="form-control alatbayar-lookup">
-                </td>
                 <td>
                     <input type="text" name="nowarkat[]"  class="form-control">
                 </td>
@@ -542,10 +493,12 @@
                     <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
                 </td>
                 <td>
-                <input type="text" name="coakredit[]" data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
+                <input type="hidden" name="coadebet[]">
+                <input type="text" name="ketcoadebet[]" data-current-value="${detail.ketcoadebet}" class="form-control akunpusat-lookup">
                 </td>
                 <td>
-                <input type="text" name="coadebet[]" data-current-value="${detail.coadebet}" class="form-control akunpusat-lookup">
+                  <input type="hidden" name="coakredit[]">
+                <input type="text" name="ketcoakredit[]" data-current-value="${detail.ketcoakredit}" class="form-control coakredit-lookup">
                 </td>
                 <td>
                     <div class="input-group">
@@ -558,14 +511,14 @@
             </tr>
           `)
 
-          detailRow.find(`[name="alatbayar_id[]"]`).val(detail.alatbayar_id)
-          detailRow.find(`[name="alatbayar[]"]`).val(detail.alatbayar)
           detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
           detailRow.find(`[name="tgljatuhtempo[]"]`).val(detail.tgljatuhtempo)
           detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
           detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
           detailRow.find(`[name="coakredit[]"]`).val(detail.coakredit)
           detailRow.find(`[name="coadebet[]"]`).val(detail.coadebet)
+          detailRow.find(`[name="ketcoakredit[]"]`).val(detail.ketcoakredit)
+          detailRow.find(`[name="ketcoadebet[]"]`).val(detail.ketcoadebet)
           detailRow.find(`[name="bulanbeban[]"]`).val(detail.bulanbeban)
           initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
 
@@ -574,70 +527,52 @@
 
           setTotal();
 
-          $('.alatbayar-lookup').last().lookup({
-            title: 'Coa Kredit Lookup',
-            fileName: 'alatbayar',
-            beforeProcess: function(test) {
-              // var levelcoa = $(`#levelcoa`).val();
-              this.postData = {
-                Aktif: 'AKTIF',
-              }
-            },
-            onSelectRow: (alatbayar, element) => {
-console.log(alatbayar.id);
-              element.parents('td').find(`[name="alatbayar_id[]"]`).val(alatbayar.id)
-              element.val(alatbayar.coa)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="alatbayar_id[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
           $('.akunpusat-lookup').last().lookup({
-            title: 'Kode Perk. Lookup',
+            title: 'Nama Perkiraan (Debet) Lookup',
             fileName: 'akunpusat',
             beforeProcess: function(test) {
               // var levelcoa = $(`#levelcoa`).val();
               this.postData = {
                 Aktif: 'AKTIF',
                 levelCoa: '3',
+
               }
             },
             onSelectRow: (akunpusat, element) => {
-              element.val(akunpusat.coa)
+              element.parents('td').find(`[name="coadebet[]"]`).val(akunpusat.coa)
+              element.val(akunpusat.keterangancoa)
               element.data('currentValue', element.val())
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+              element.parents('td').find(`[name="coadebet[]"]`).val('')
               element.val('')
               element.data('currentValue', element.val())
             }
           })
           $('.coakredit-lookup').last().lookup({
-            title: 'Kode Perk. Lookup',
+            title: 'Nama Perkiraan (Kredit) Lookup',
             fileName: 'akunpusat',
             beforeProcess: function(test) {
               // var levelcoa = $(`#levelcoa`).val();
               this.postData = {
                 Aktif: 'AKTIF',
                 levelCoa: '3',
+
               }
             },
             onSelectRow: (akunpusat, element) => {
-              element.val(akunpusat.coa)
+              element.parents('td').find(`[name="coakredit[]"]`).val(akunpusat.coa)
+              element.val(akunpusat.keterangancoa)
               element.data('currentValue', element.val())
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+              element.parents('td').find(`[name="coakredit[]"]`).val('')
               element.val('')
               element.data('currentValue', element.val())
             }
@@ -661,10 +596,6 @@ console.log(alatbayar.id);
       <tr>
         <td></td>
         <td>
-          <input type="hidden" name="alatbayar_id[]">
-          <input type="text" name="alatbayar[]"  class="form-control alatbayar-lookup">
-        </td>
-        <td>
           <input type="text" name="nowarkat[]"  class="form-control">
         </td>
         <td>
@@ -679,10 +610,12 @@ console.log(alatbayar.id);
           <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
         </td>
         <td>
-            <input type="text" name="coakredit[]"  class="form-control coakredit-lookup">
+            <input type="hidden" name="coadebet[]">
+            <input type="text" name="ketcoadebet[]"  class="form-control akunpusat-lookup">
         </td>
         <td>
-            <input type="text" name="coadebet[]"  class="form-control akunpusat-lookup">
+            <input type="hidden" name="coakredit[]">
+            <input type="text" name="ketcoakredit[]"  class="form-control coakredit-lookup">
         </td>
         <td>
           <div class="input-group">
@@ -697,32 +630,8 @@ console.log(alatbayar.id);
 
     $('#detailList tbody').append(detailRow)
 
-    $('.alatbayar-lookup').last().lookup({
-      title: 'Alat Bayar Lookup',
-      fileName: 'alatbayar',
-      beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        this.postData = {
-          Aktif: 'AKTIF',
-
-        }
-      },
-      onSelectRow: (alatbayar, element) => {
-        $(`#crudForm [name="alatbayar_id[]"]`).last().val(alatbayar.id)
-        element.val(alatbayar.namaalatbayar)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $(`#crudForm [name="alatbayar_id[]"]`).last().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
     $('.akunpusat-lookup').last().lookup({
-      title: 'Kode Perkiraan Lookup',
+      title: 'Nama Perkiraan (Debet) Lookup',
       fileName: 'akunpusat',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
@@ -733,19 +642,21 @@ console.log(alatbayar.id);
         }
       },
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
+        element.parents('td').find(`[name="coadebet[]"]`).val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        element.parents('td').find(`[name="coadebet[]"]`).val('')
         element.val('')
         element.data('currentValue', element.val())
       }
     })
     $('.coakredit-lookup').last().lookup({
-      title: 'Kode Perkiraan Lookup',
+      title: 'Nama Perkiraan (Kredit) Lookup',
       fileName: 'akunpusat',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
@@ -756,20 +667,21 @@ console.log(alatbayar.id);
         }
       },
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
+        element.parents('td').find(`[name="coakredit[]"]`).val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        element.parents('td').find(`[name="coakredit[]"]`).val('')
         element.val('')
         element.data('currentValue', element.val())
       }
     })
     initAutoNumeric(detailRow.find('.autonumeric'))
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
+    $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     initDatepicker()
     setRowNumbers()
   }
@@ -816,29 +728,6 @@ console.log(alatbayar.id);
 
   function initLookup() {
 
-    $('.pengeluaran-lookup').lookup({
-      title: 'pengeluaran Lookup',
-      fileName: 'pengeluaranheader',
-      beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        this.postData = {
-          Aktif: 'AKTIF',
-
-        }
-      },
-      onSelectRow: (pengeluaran, element) => {
-        element.val(pengeluaran.nobukti)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
-
     $('.cabang-lookup').lookup({
       title: 'Cabang Lookup',
       fileName: 'cabang',
@@ -851,6 +740,7 @@ console.log(alatbayar.id);
       },
       onSelectRow: (cabang, element) => {
         $('#crudForm [name=cabang_id]').first().val(cabang.id)
+
         element.val(cabang.namacabang)
         element.data('currentValue', element.val())
       },
@@ -859,6 +749,32 @@ console.log(alatbayar.id);
       },
       onClear: (element) => {
         $('#crudForm [name=cabang_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.alatbayar-lookup').last().lookup({
+      title: 'Alat Bayar Lookup',
+      fileName: 'alatbayar',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          bank_Id: bankId,
+          Aktif: 'AKTIF',
+
+        }
+      },
+      onSelectRow: (alatbayar, element) => {
+        $('#crudForm [name=alatbayar_id]').first().val(alatbayar.id)
+        element.val(alatbayar.namaalatbayar)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=alatbayar_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -876,6 +792,8 @@ console.log(alatbayar.id);
       },
       onSelectRow: (bank, element) => {
         $('#crudForm [name=bank_id]').first().val(bank.id)
+
+        bankId = bank.id
         element.val(bank.namabank)
         element.data('currentValue', element.val())
       },

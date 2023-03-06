@@ -15,6 +15,12 @@
 	src: url("../libraries/font/open-sans-condensed/OpenSans-CondBold.ttf");
 }
 
+.dejavu{
+	font-family: dejavu;
+	src: url("../libraries/font/DejaVuSansMono.ttf");
+	font-weight: normal;
+}
+
 html {
 	font-size: 14px;
 }

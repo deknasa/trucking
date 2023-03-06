@@ -24,6 +24,7 @@
             {
               label: 'KETERANGAN',
               name: 'keterangan',
+              width: 200
             }
           ],
         autowidth: true,

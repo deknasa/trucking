@@ -37,7 +37,6 @@
 
   $(document).ready(function() {
 
-
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'pengembaliankasbankheader' }}`,
         mtype: "GET",
@@ -48,7 +47,95 @@
             label: 'ID',
             name: 'id',
             align: 'right',
-            width: '50px'
+            width: '50px',
+            hidden:true
+          },
+          {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboapproval'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboapproval'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusApproval = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                  <span>${statusApproval.SINGKATAN}</span>
+                </div>
+              `)
+              
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusApproval = JSON.parse(rowObject.statusapproval)
+              
+              return ` title="${statusApproval.MEMO}"`
+            }
+          },
+          {
+            label: 'STATUS CETAK',
+            name: 'statuscetak',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combocetak'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combocetak'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusCetak = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+                  <span>${statusCetak.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusCetak = JSON.parse(rowObject.statuscetak)
+
+              return ` title="${statusCetak.MEMO}"`
+            }
           },
           {
             label: 'NO BUKTI',
@@ -108,48 +195,6 @@
             align: 'left'
           },
           {
-            label: 'STATUS APPROVAL',
-            name: 'statusapproval',
-            align: 'left',
-            stype: 'select',
-              searchoptions: {
-                value: `<?php
-                        $i = 1;
-
-                        foreach ($data['comboapproval'] as $status) :
-                          echo "$status[param]:$status[parameter]";
-                          if ($i !== count($data['comboapproval'])) {
-                            echo ";";
-                          }
-                          $i++;
-                        endforeach
-
-                        ?>
-              `,
-                dataInit: function(element) {
-                  $(element).select2({
-                    width: 'resolve',
-                    theme: "bootstrap4"
-                  });
-                }
-              },
-          },
-          {
-            label: 'TGL APPROVAL',
-            name: 'tglapproval',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'USER APPROVAL',
-            name: 'userapproval',
-            align: 'left'
-          },
-          {
             label: 'DIBAYARKAN KE',
             name: 'dibayarke',
             align: 'left'
@@ -177,6 +222,36 @@
           {
             label: 'TRANSFER NAMA BANK',
             name: 'transferkebank',
+            align: 'left'
+          },
+          {
+            label: 'TGL APPROVAL',
+            name: 'tglapproval',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'USER APPROVAL',
+            name: 'userapproval',
+            align: 'left'
+          },
+          {
+            label: 'TGL CETAK',
+            name: 'tglbukacetak',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'USER CETAK',
+            name: 'userbukacetak',
             align: 'left'
           },
           {
@@ -235,14 +310,13 @@
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
           
           if (!hasDetail) {
             loadDetailGrid(id)
             hasDetail = true
           }
-
           loadDetailData(id)
         },
         loadComplete: function(data) {
@@ -258,8 +332,8 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
-
+          triggerClick = true
+          console.log('complete', limit)
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
@@ -294,6 +368,7 @@
         }
       })
 
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
@@ -323,7 +398,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                cekValidasi(selectedId, 'DELETE')
+                cekValidasi(selectedId, 'EDIT')
               }
             }
           },
@@ -336,7 +411,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                cekvalidasi(selectedId, 'DELETE')
+                cekValidasi(selectedId, 'DELETE')
               }
             }
           },
