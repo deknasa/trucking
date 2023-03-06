@@ -125,7 +125,8 @@
       datatype: "json",
       postData: {
         gajisupir_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

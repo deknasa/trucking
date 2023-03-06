@@ -203,8 +203,9 @@
       url: `${apiUrl}penerimaanstokdetail`,
       datatype: "json",
       postData: {
-        penerimaanstokheader_id: id
-      }
+        penerimaanstokheader_id: id,
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

@@ -169,7 +169,8 @@
       datatype: "json",
       postData: {
         pengeluaran_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

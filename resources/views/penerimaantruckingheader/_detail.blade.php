@@ -141,7 +141,8 @@
       datatype: "json",
       postData: {
         penerimaantruckingheader_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

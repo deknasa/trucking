@@ -139,7 +139,8 @@
       datatype: "json",
       postData: {
         absensisupirapproval_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

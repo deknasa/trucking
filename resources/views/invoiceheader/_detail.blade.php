@@ -149,7 +149,8 @@
       datatype: "json",
       postData: {
         invoice_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

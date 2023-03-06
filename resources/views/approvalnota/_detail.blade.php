@@ -347,7 +347,8 @@
             $('#detail').setGridParam({
                 url: `${apiUrl}notadebet_detail`,
                 datatype: "json",
-                postData: post
+                postData: post,
+                page:1
             }).trigger('reloadGrid')
         }
 

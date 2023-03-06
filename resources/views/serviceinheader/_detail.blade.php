@@ -119,7 +119,8 @@
       datatype: "json",
       postData: {
         servicein_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

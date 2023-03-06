@@ -208,7 +208,8 @@
       datatype: "json",
       postData: {
         pengeluaranstokheader_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

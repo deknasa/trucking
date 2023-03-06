@@ -86,6 +86,7 @@
   function loadDetailData(role_id) {
     $('#detail').setGridParam({
       url: `${apiUrl}acl/detail/${roleId}`,
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

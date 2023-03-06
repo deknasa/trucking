@@ -156,7 +156,8 @@
       datatype: "json",
       postData: {
         jurnalumum_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

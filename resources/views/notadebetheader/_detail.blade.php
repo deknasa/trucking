@@ -180,7 +180,8 @@
       datatype: "json",
       postData: {
         notadebet_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

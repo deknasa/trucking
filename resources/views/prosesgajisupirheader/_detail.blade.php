@@ -140,7 +140,8 @@
       datatype: "json",
       postData: {
         prosesgajisupir_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

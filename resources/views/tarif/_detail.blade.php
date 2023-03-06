@@ -97,7 +97,8 @@
       datatype: "json",
       postData: {
         tarif_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

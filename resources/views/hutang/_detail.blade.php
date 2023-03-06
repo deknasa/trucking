@@ -109,7 +109,8 @@
       datatype: "json",
       postData: {
         hutang_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

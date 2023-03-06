@@ -136,7 +136,8 @@
       datatype: "json",
       postData: {
         invoiceextra_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

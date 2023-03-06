@@ -181,7 +181,8 @@
       datatype: "json",
       postData: {
         pengembaliankasbank_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

@@ -204,7 +204,8 @@
       datatype: "json",
       postData: {
         absensi_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

@@ -87,7 +87,8 @@
       page: 1,
       postData: {
         id: userId
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

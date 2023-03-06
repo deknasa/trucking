@@ -75,7 +75,8 @@
             datatype: "json",
             postData: {
                 id: id
-            }
+            },
+            page:1
         }).trigger('reloadGrid')
     }
 </script>

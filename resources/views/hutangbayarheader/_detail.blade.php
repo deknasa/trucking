@@ -146,7 +146,8 @@
       datatype: "json",
       postData: {
         hutangbayar_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>
