@@ -31,6 +31,7 @@
   let autoNumericElements = []
   let rowNum = 10
   var statusBukanBatalMuat;
+  var statusEditTujuan;
   $(document).ready(function() {
     $("#jqGrid").jqGrid({
         url: `${apiUrl}suratpengantar`,
@@ -562,6 +563,14 @@
                 approvalBatalMuat(selectedId);
               }
             },
+            {
+              id:'approvalEditTujuan',
+              text:"Edit Tujuan",
+              onClick: () => {
+                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                approvalEditTujuan(selectedId);
+              }
+            },
           ],
         }]
             
@@ -605,8 +614,11 @@
     if (!`{{ $myAuth->hasPermission('suratpengantar', 'destroy') }}`) {
       $('#delete').attr('disabled', 'disabled')
     }
-    if (!`{{ $myAuth->hasPermission('suratpengantar', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`) {
       $('#approvalBatalMuat').attr('disabled', 'disabled')
+    }
+    if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`) {
+      $('#approvalEditTujuan').attr('disabled', 'disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -650,35 +662,81 @@
         },
       })
     }
+    function approvalEditTujuan(id) {
+      getEditTujuan()
+      $.ajax({
+        url: `${apiUrl}suratpengantar/${id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let msg = `YAKIN status Berubah jadi Tidak Boleh Edit Tujuan`
+          console.log(statusEditTujuan);
+          if (response.data.statusedittujuan === statusEditTujuan) {
+            msg = `YAKIN status Berubah jadi Edit Tujuan`
+          }
+          showConfirm(msg,response.data.nobukti,`suratpengantar/${response.data.id}/edittujuan`)
+        },
+      })
+    }
     function getBatalMuat() {
-    
-    $.ajax({
-      url: `${apiUrl}parameter`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        limit: 0,
-        filters: JSON.stringify({
-          "groupOp": "AND",
-          "rules": [{
-            "field": "grp",
-            "op": "cn",
-            "data": "STATUS BATAL MUAT"
-          },{
-            "field": "text",
-            "op": "cn",
-            "data": "BUKAN BATAL MUAT"
-          }]
-        })
-      },
-      success: response => {
-        statusBukanBatalMuat =  response.data[0].id;
-      }
-    })
-  }
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          limit: 0,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS BATAL MUAT"
+            },{
+              "field": "text",
+              "op": "cn",
+              "data": "BUKAN BATAL MUAT"
+            }]
+          })
+        },
+        success: response => {
+          statusBukanBatalMuat =  response.data[0].id;
+        }
+      })
+    }
+    function getEditTujuan() {
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          limit: 0,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS BATAL MUAT"
+            },{
+              "field": "text",
+              "op": "cn",
+              "data": "BUKAN BATAL MUAT"
+            }]
+          })
+        },
+        success: response => {
+          statusEditTujuan =  response.data[0].id;
+        }
+      })
+    }
 
 
 
