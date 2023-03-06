@@ -1,4 +1,4 @@
-<div class="modal fade modal-fullscreen" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
+<div class="modal modal-fullscreen" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
@@ -368,7 +368,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
-
+  var isAllowEdited;
   $(document).ready(function() {
 
     $(document).on('input', `#crudForm [name="nominalperalihan"]`, function(event) {
@@ -1082,7 +1082,7 @@
           })
         }
         setRowNumbers()
-
+        editValidasi(isAllowEdited);
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
           initDisabled()
@@ -1482,6 +1482,53 @@
       }
     })
   }
+  function editValidasi(edit) {
+    let pelanggan = $('#crudForm').find(`[name="pelanggan"]`).parents('.input-group').children()
+    let agen = $('#crudForm').find(`[name="agen"]`).parents('.input-group').children()
+    let jenisorder = $('#crudForm').find(`[name="jenisorder"]`).parents('.input-group').children()
+    let tarifrincian = $('#crudForm').find(`[name="tarifrincian"]`).parents('.input-group').children()
+
+    if (!edit) {
+      console.log(edit);
+      pelanggan.attr('disabled',true)
+      pelanggan.find('.lookup-toggler').attr('disabled',true)
+      $('#pelanggan_id').attr('disabled',true);
+  
+      agen.attr('disabled',true)
+      agen.find('.lookup-toggler').attr('disabled',true)
+      $('#agen_id').attr('disabled',true);
+  
+      jenisorder.attr('disabled',true)
+      jenisorder.find('.lookup-toggler').attr('disabled',true)
+      $('#jenisorder_id').attr('disabled',true);
+  
+      tarifrincian.attr('disabled',true)
+      tarifrincian.find('.lookup-toggler').attr('disabled',true)
+      $('#tarifrincian_id').attr('disabled',true);
+      
+    } else {
+      console.log("true");
+      pelanggan.attr('disabled',false)
+      pelanggan.find('.lookup-toggler').attr('disabled',false)
+      $('#pelanggan_id').attr('disabled',false);
+  
+      agen.attr('disabled',false)
+      agen.find('.lookup-toggler').attr('disabled',false)
+      $('#agen_id').attr('disabled',false);
+  
+      jenisorder.attr('disabled',false)
+      jenisorder.find('.lookup-toggler').attr('disabled',false)
+      $('#jenisorder_id').attr('disabled',false);
+  
+      tarifrincian.attr('disabled',false)
+      tarifrincian.find('.lookup-toggler').attr('disabled',false)
+      $('#tarifrincian_id').attr('disabled',false);
+      
+    }
+    
+    
+  }
+
 
   function getTarifOmset(id) {
     $.ajax({
@@ -1511,16 +1558,23 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
+
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-            if(Aksi == 'EDIT'){
-              editSuratPengantar(Id)
-            }else{
-              deleteSuratPengantar(Id)
-            }
+        
+        // if (!response.edit) {
+          isAllowEdited = response.edit;
+          // console.log(isAllowEdited);
+        // }
+        
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          if(Aksi == 'EDIT'){
+            editSuratPengantar(Id)
+          }else{
+            deleteSuratPengantar(Id)
           }
+        }
 
       }
     })

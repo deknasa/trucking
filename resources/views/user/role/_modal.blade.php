@@ -1,4 +1,4 @@
-<div class="modal fade modal-fullscreen" id="userRoleModal" tabindex="-1" aria-labelledby="userRoleModalLabel" aria-hidden="true">
+<div class="modal modal-fullscreen" id="userRoleModal" tabindex="-1" aria-labelledby="userRoleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <form action="#" id="userRoleForm">
       <div class="modal-content">
