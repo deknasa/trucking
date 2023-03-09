@@ -217,7 +217,6 @@ html {
 
 .modal.modal-fullscreen .modal-dialog {
 	width: 95vw;
-	height: 100%;
 	padding: 0;
 	max-width: none;
 }
@@ -336,4 +335,8 @@ html {
 
 .ui-th-div {
 	font-weight: normal !important;
+}
+
+.bg-light-blue {
+	background-color: #eaf1fb;
 }
