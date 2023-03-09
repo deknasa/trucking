@@ -19,17 +19,14 @@
           {
             label: 'ROLE',
             name: 'rolename',
-            align: 'left'
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
-            align: 'center'
           },
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'center',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",

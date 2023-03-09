@@ -10,31 +10,22 @@
         datatype: 'json',
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        colModel: [{
-            label: 'USER',
-            name: 'user',
-            align: 'left',
-            hidden: true
-          },
+        colModel: [
           {
             label: 'CLASS',
             name: 'class',
-            align: 'left'
           },
           {
             label: 'METHOD',
             name: 'method',
-            align: 'left'
           },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
-            align: 'center'
           },
           {
             label: 'UPDATEDAT',
             name: 'updated_at',
-            align: 'center',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -58,19 +49,56 @@
           rows: 'limit'
         },
         jsonReader: {
-          root: 'data'
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
         },
         onSelectRow: function(id) {
           activeGrid = $(this)
+          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
+          page = $(this).jqGrid('getGridParam', 'page')
+          let rows = $(this).jqGrid('getGridParam', 'postData').limit
+          if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         loadBeforeSend: (jqXHR) => {
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
+
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
+          initResize($(this))
+
+          if (triggerClick) {
+            if (id != '') {
+              indexRow = parseInt($('#userAclGrid').jqGrid('getInd', id)) - 1
+              $(`#userAclGrid [id="${$('#userAclGrid').getDataIDs()[indexRow]}"]`).click()
+              id = ''
+            } else if (indexRow != undefined) {
+              $(`#userAclGrid [id="${$('#userAclGrid').getDataIDs()[indexRow]}"]`).click()
+            }
+
+            if ($('#userAclGrid').getDataIDs()[indexRow] == undefined) {
+              $(`#userAclGrid [id="` + $('#userAclGrid').getDataIDs()[0] + `"]`).click()
+            }
+
+            triggerClick = false
+          } else {
+            $('#userAclGrid').setSelection($('#userAclGrid').getDataIDs()[indexRow])
+          }
         }
       })
-
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          clearGlobalSearch($('#acoGrid'))
+        },
+      })
       .customPager({
         buttons: [{
           id: 'editUserAcl',
@@ -83,6 +111,9 @@
           }
         }]
       })
+
+    loadClearFilter($('#userAclGrid'))
+    loadGlobalSearch($('#userAclGrid'))
   }
 
   function loadAclData(userId) {
