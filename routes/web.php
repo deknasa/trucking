@@ -9,6 +9,7 @@ use App\Http\Controllers\ApprovalTransaksiHeaderController;
 use App\Http\Controllers\ApprovalInvoiceHeaderController;
 
 use App\Http\Controllers\BukaAbsensiController;
+use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\TutupBukuController;
 use App\Http\Controllers\AbsenTradoController;
 use App\Http\Controllers\AuthController;
@@ -297,6 +298,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('absensisupir_detail', AbsensiSupirDetailController::class);
     
     Route::resource('bukaabsensi', BukaAbsensiController::class);
+    Route::resource('suratpengantarapprovalinputtrip', SuratPengantarApprovalInputTripController::class);
 
     Route::get('absensisupirapprovalheader/{id}/delete', [AbsensiSupirApprovalHeaderController::class, 'delete'])->name('absensisupirapprovalheader.delete');
     Route::get('absensisupirapprovalheader/index', [AbsensiSupirApprovalHeaderController::class, 'index']);
