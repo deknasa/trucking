@@ -178,7 +178,8 @@
       datatype: "json",
       postData: {
         notakredit_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

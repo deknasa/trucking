@@ -140,7 +140,8 @@
       datatype: "json",
       postData: {
         pendapatansupir_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

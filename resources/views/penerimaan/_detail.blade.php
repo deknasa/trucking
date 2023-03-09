@@ -183,7 +183,8 @@
       datatype: "json",
       postData: {
         penerimaan_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

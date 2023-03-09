@@ -139,7 +139,8 @@
       datatype: "json",
       postData: {
         pengembaliankasgantung_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

@@ -18,6 +18,7 @@ class PengembalianKasBankHeaderController extends MyController
         $title = $this->title;
         $data = [            
             'comboapproval' => $this->comboApproval('list','STATUS APPROVAL','STATUS APPROVAL'),
+            'combocetak' => $this->comboApproval('list','STATUS CETAK','STATUS CETAK'),
             'combojenistransaksi' => $this->comboApproval('list','JENIS TRANSAKSI','JENIS TRANSAKSI'),
         ];
         return view('pengembaliankasbank.index', compact('title','data'));

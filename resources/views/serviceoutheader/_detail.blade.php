@@ -23,6 +23,7 @@
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            width: 200
           }
         ],
         autowidth: true,
@@ -117,7 +118,8 @@
       datatype: "json",
       postData: {
         serviceout_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

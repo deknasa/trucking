@@ -89,7 +89,8 @@
       datatype: "json",
       postData: {
         upahritasi_id: id
-      }
+      },
+      page:1
     }).trigger('reloadGrid')
   }
 </script>

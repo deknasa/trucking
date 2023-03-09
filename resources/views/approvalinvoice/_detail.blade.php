@@ -212,7 +212,8 @@
     $('#detail').setGridParam({
       url: `${apiUrl}${invoice}`,
       datatype: "json",
-      postData: post
+      postData: post,
+      page:1
     }).trigger('reloadGrid')
     
     $('#gbox_detail').siblings('.grid-pager').not(':first').remove()
