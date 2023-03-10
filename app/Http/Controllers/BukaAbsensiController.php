@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class BukaAbsensiController extends Controller
+class BukaAbsensiController extends MyController
 {
     public $title = 'Buka Absensi';
     

@@ -21,7 +21,7 @@
             </li>
           </ul>
         </div>
-        <div class="card-body">
+        <div class="card-body" style="min-height: 529px">
           <div class="tab-content" id="tabContent">
             <div class="tab-pane active" id="role-tab" role="tabpanel" aria-labelledby="role-tab"></div>
             <div class="tab-pane" id="acl-tab" role="tabpanel" aria-labelledby="acl-tab"></div>

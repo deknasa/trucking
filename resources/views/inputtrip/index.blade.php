@@ -15,6 +15,16 @@
             </div>
             <form action="" method="post">
               <div class="card-body">
+
+                <div class="form-group ">
+                  <label class="col-sm-4 col-form-label">TANGGAL TRIP <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <div class="input-group">
+                      <input type="text" name="tglbukti" class="form-control datepicker">
+                    </div>
+                  </div>
+                </div>
+
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">JENIS SURAT PENGANTAR <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
@@ -196,7 +206,6 @@
 
       $(this).attr('disabled', '')
       $('#loader').removeClass('d-none')
-
       if (action == 'add') {
         $.ajax({
           url: `{{ config('app.api_url') }}suratpengantar/cekUpahSupir`,
@@ -219,7 +228,7 @@
               success: response => {
                 console.log(response.message);
                 showSuccessDialog(response.message, response.data.nobukti)
-                $('#crudForm').trigger('reset')
+                createSuratPengantar()
               },
               error: error => {
                 console.log('postdata ', error)
@@ -252,42 +261,44 @@
           $(this).removeAttr('disabled')
         })
       } else {
-        $.ajax({
-          url: url,
-          method: method,
-          dataType: 'JSON',
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
-          data: data,
-          success: response => {
+        console.log(action);
 
-            id = response.data.id
-            $('#crudModal').modal('hide')
-            $('#crudModal').find('#crudForm').trigger('reset')
+        // $.ajax({
+        //   url: url,
+        //   method: method,
+        //   dataType: 'JSON',
+        //   headers: {
+        //     Authorization: `Bearer ${accessToken}`
+        //   },
+        //   data: data,
+        //   success: response => {
 
-            $('#jqGrid').jqGrid('setGridParam', {
-              page: response.data.page
-            }).trigger('reloadGrid');
+        //     id = response.data.id
+        //     $('#crudModal').modal('hide')
+        //     $('#crudModal').find('#crudForm').trigger('reset')
 
-            if (response.data.grp == 'FORMAT') {
-              updateFormat(response.data)
-            }
-          },
-          error: error => {
-            if (error.status === 422) {
-              $('.is-invalid').removeClass('is-invalid')
-              $('.invalid-feedback').remove()
+        //     $('#jqGrid').jqGrid('setGridParam', {
+        //       page: response.data.page
+        //     }).trigger('reloadGrid');
 
-              setErrorMessages(form, error.responseJSON.errors);
-            } else {
-              showDialog(error.statusText)
-            }
-          },
-        }).always(() => {
-          $('#loader').addClass('d-none')
-          $(this).removeAttr('disabled')
-        })
+        //     if (response.data.grp == 'FORMAT') {
+        //       updateFormat(response.data)
+        //     }
+        //   },
+        //   error: error => {
+        //     if (error.status === 422) {
+        //       $('.is-invalid').removeClass('is-invalid')
+        //       $('.invalid-feedback').remove()
+
+        //       setErrorMessages(form, error.responseJSON.errors);
+        //     } else {
+        //       showDialog(error.statusText)
+        //     }
+        //   },
+        // }).always(() => {
+        //   $('#loader').addClass('d-none')
+        //   $(this).removeAttr('disabled')
+        // })
       }
 
     })
@@ -330,7 +341,7 @@
     // form.find(`.sometimes`).show()
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    // $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     // $('#crudForm').find('[name=tglsp]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     Promise
       .all([
@@ -338,6 +349,7 @@
         setStatusGudangSamaOptions(form),
       ])
       .then(() => {
+        setIsDateAvailable(form),
         showDefault(form)
       })
   }
@@ -414,6 +426,29 @@
           resolve()
         }
       })
+    })
+  }
+  
+  function setIsDateAvailable(form) {
+    $.ajax({
+      url: `${apiUrl}suratpengantarapprovalinputtrip/cektanggal`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
+        if (response.data.length) {
+          // $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+          tglbukti.attr('readonly', false);
+          tglbukti.find('.ui-datepicker-trigger').attr('disabled',false)
+        }else{
+          tglbukti.attr('readonly', true);
+          tglbukti.find('.ui-datepicker-trigger').attr('disabled',true)
+        }
+
+      }
     })
   }
 

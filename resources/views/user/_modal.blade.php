@@ -2,11 +2,9 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        <div class="modal-header bg-primary">
+        <div class="modal-header bg-primary align-items-center">
           <h5 class="modal-title" id="crudModalTitle"></h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
         </div>
         <form action="" method="post">
           <div class="modal-body">
@@ -242,14 +240,14 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      setCabangOptions(form),
-      setStatusKaryawanOptions(form),
-      setStatusAktifOptions(form)
-    ])
-    .then(() => {
-      showDefault(form)
-    })
+      .all([
+        setCabangOptions(form),
+        setStatusKaryawanOptions(form),
+        setStatusAktifOptions(form)
+      ])
+      .then(() => {
+        showDefault(form)
+      })
   }
 
   function editUser(userId) {
@@ -451,7 +449,7 @@
       }
     })
   }
-  
+
   function showDefault(form) {
     $.ajax({
       url: `${apiUrl}user/default`,

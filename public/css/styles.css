@@ -218,7 +218,6 @@ html {
 
 .modal.modal-fullscreen .modal-dialog {
 	width: 95vw;
-	height: 100%;
 	padding: 0;
 	max-width: none;
 }
@@ -337,4 +336,15 @@ html {
 
 .ui-th-div {
 	font-weight: normal !important;
+}
+
+.bg-light-blue {
+	background-color: #eaf1fb;
+}
+
+.btn-close {
+	width: 16px;
+	height: 16px;
+	border: none;
+	background: url('/libraries/easyui/themes/default/images/panel_tools.png') no-repeat -16px 0px;
 }

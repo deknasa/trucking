@@ -182,87 +182,89 @@ function loadPagerInfo(element, grid) {
 }
 
 $.fn.customPager = function (option = {}) {
-	let grid = $(this);
-	let pagerHandlerId = `${grid.getGridParam().id}PagerHandler`;
-	let pagerInfoId = `${grid.getGridParam().id}InfoHandler`;
-	let extndBtn ="";
-	if (option.extndBtn) {
-		option.extndBtn.forEach(element => {
-			extndBtn +=`<div class="btn-group dropup  scrollable-menu">`
-			extndBtn +=`<button type="button" class="${element.class}" data-toggle="dropdown" id="${element.id}">
-			${element.innerHTML}
-			</button>`
-			extndBtn +=`<ul class="dropdown-menu" id="menu-approve" aria-labelledby="${element.id}">`
-			if (element.dropmenuHTML) {
-				element.dropmenuHTML.forEach(dropmenuHTML => {
-					extndBtn +=`<li><a class="dropdown-item" id='${dropmenuHTML.id}' href="#">${dropmenuHTML.text}</a></li>`
-					$(document).on("click", `#${dropmenuHTML.id}`, function (event) {
-						event.stopImmediatePropagation();
+	if (!$(`#gbox_${$(this).getGridParam().id}`).siblings('.grid-pager').length) {
+		let grid = $(this);
+		let pagerHandlerId = `${grid.getGridParam().id}PagerHandler`;
+		let pagerInfoId = `${grid.getGridParam().id}InfoHandler`;
+		let extndBtn ="";
+		if (option.extndBtn) {
+			option.extndBtn.forEach(element => {
+				extndBtn +=`<div class="btn-group dropup  scrollable-menu">`
+				extndBtn +=`<button type="button" class="${element.class}" data-toggle="dropdown" id="${element.id}">
+				${element.innerHTML}
+				</button>`
+				extndBtn +=`<ul class="dropdown-menu" id="menu-approve" aria-labelledby="${element.id}">`
+				if (element.dropmenuHTML) {
+					element.dropmenuHTML.forEach(dropmenuHTML => {
+						extndBtn +=`<li><a class="dropdown-item" id='${dropmenuHTML.id}' href="#">${dropmenuHTML.text}</a></li>`
+						$(document).on("click", `#${dropmenuHTML.id}`, function (event) {
+							event.stopImmediatePropagation();
 
-						dropmenuHTML.onClick();
-					});
-				});	
-			}
-			extndBtn +=`</ul>`
-			extndBtn +="</div>"
-		});
-	}
-
-	$(`#gbox_${$(this).getGridParam().id}`).after(`
-		<div class="col-12 bg-white grid-pager overflow-x-hidden">
-			<div class="row d-flex align-items-center text-center text-lg-left">
-				<div class="col-12 col-lg-6">
-					<div class="d-lg-inline d-block">
-					${
-						typeof option.buttons !== "undefined"
-						 ? option.buttons
-							.map((button, index) => {
-								let buttonElement = document.createElement("button");
+							dropmenuHTML.onClick();
+						});
+					});	
+				}
+				extndBtn +=`</ul>`
+				extndBtn +="</div>"
+			});
+		}
 	
-								buttonElement.id =
-									typeof button.id !== "undefined"
-										? button.id
-										: `customButton_${index}`;
-								buttonElement.className = button.class;
-								buttonElement.innerHTML = button.innerHTML;
-	
-								if (button.onClick) {
-									$(document).on("click", `#${buttonElement.id}`, function (event) {
-										event.stopImmediatePropagation();
-	
-										button.onClick();
-									});
-								}
-	
-								return buttonElement.outerHTML;
-							})
-							.join("")
-						: ''
-					}
-					</div>
-					<div class="d-lg-inline d-block">
-						${extndBtn}
-					</div>
-				</div>
-				<div class="col-12 col-lg-6">
-					<div class="row d-flex align-items-center justify-content-center justify-content-lg-end pr-2">
-						<div id="${pagerHandlerId}" class="pager-handler d-flex align-items-center justify-content-center mx-2">
+		$(`#gbox_${$(this).getGridParam().id}`).after(`
+			<div class="col-12 bg-white grid-pager overflow-x-hidden">
+				<div class="row d-flex align-items-center text-center text-lg-left">
+					<div class="col-12 col-lg-6">
+						<div class="d-lg-inline d-block">
+						${
+							typeof option.buttons !== "undefined"
+							? option.buttons
+								.map((button, index) => {
+									let buttonElement = document.createElement("button");
+		
+									buttonElement.id =
+										typeof button.id !== "undefined"
+											? button.id
+											: `customButton_${index}`;
+									buttonElement.className = button.class;
+									buttonElement.innerHTML = button.innerHTML;
+		
+									if (button.onClick) {
+										$(document).on("click", `#${buttonElement.id}`, function (event) {
+											event.stopImmediatePropagation();
+		
+											button.onClick();
+										});
+									}
+		
+									return buttonElement.outerHTML;
+								})
+								.join("")
+							: ''
+						}
 						</div>
-						<div id="${pagerInfoId}" class="pager-info">
+						<div class="d-lg-inline d-block">
+							${extndBtn}
+						</div>
+					</div>
+					<div class="col-12 col-lg-6">
+						<div class="row d-flex align-items-center justify-content-center justify-content-lg-end pr-2">
+							<div id="${pagerHandlerId}" class="pager-handler d-flex align-items-center justify-content-center mx-2">
+							</div>
+							<div id="${pagerInfoId}" class="pager-info">
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		
-	`);
+			
+		`);
 
-	loadPagerHandler(`#${pagerHandlerId}`, grid);
+		loadPagerHandler(`#${pagerHandlerId}`, grid);
 
-	grid.bind("jqGridLoadComplete.jqGrid", function (event, data) {
-		loadPagerHandlerInfo(`#${pagerHandlerId}`, grid);
-		loadPagerInfo(`#${pagerInfoId}`, grid);
-	});
+		grid.bind("jqGridLoadComplete.jqGrid", function (event, data) {
+			loadPagerHandlerInfo(`#${pagerHandlerId}`, grid);
+			loadPagerInfo(`#${pagerInfoId}`, grid);
+		});
+	}
 
 	return this;
 };

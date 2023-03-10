@@ -20,6 +20,13 @@
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
+                <label for="staticEmail" class="col-sm-4 col-form-label">kode trado <span class="text-danger">*</span></label>
+                <div class="col-sm-8">
+                  <input type="text" name="kodetrado" class="form-control">
+                </div>
+              </div>
+              
+              <div class="form-group col-sm-6 row">
                 <label for="staticEmail" class="col-sm-4 col-form-label">STATUS AKTIF <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <select name="statusaktif" class="form-control select2bs4">
