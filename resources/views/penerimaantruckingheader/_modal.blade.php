@@ -86,9 +86,10 @@
                 <thead>
                   <tr>
                     <th width="1%">No</th>
-                    <th width="40%">SUPIR</th>
-                    <th width="30%">NO BUKTI PENGELUARAN TRUCKING</th>
-                    <th width="28%">Nominal</th>
+                    <th width="20%">SUPIR</th>
+                    <th width="20%">NO BUKTI PENGELUARAN TRUCKING</th>
+                    <th width="25%">Keterangan</th>
+                    <th width="20%">Nominal</th>
                     <th width="1%">Aksi</th>
                   </tr>
                 </thead>
@@ -97,7 +98,7 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="3">
+                    <td colspan="4">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
                     <td>
@@ -444,6 +445,9 @@
                     <input type="text" name="pengeluarantruckingheader_nobukti[]" data-current-value="${detail.pengeluarantruckingheader_nobukti}" class="form-control pengeluarantruckingheader-lookup">
                 </td>
                 <td>
+                    <input type="text" name="keterangan[]" class="form-control"> 
+                </td>
+                <td>
                     <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
                 </td>
                 <td>
@@ -455,6 +459,7 @@
           detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
           detailRow.find(`[name="supir[]"]`).val(detail.supir)
           detailRow.find(`[name="pengeluarantruckingheader_nobukti[]"]`).val(detail.pengeluarantruckingheader_nobukti)
+          detailRow.find(`[name="keterangan[]"]`).val(detail.keterangan)
           detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
 
           initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
@@ -530,6 +535,9 @@
         </td>
         <td>
           <input type="text" name="pengeluarantruckingheader_nobukti[]"  class="form-control pengeluarantruckingheader-lookup">
+        </td>
+        <td>
+          <input type="text" name="keterangan[]" class="form-control"> 
         </td>
         <td>
           <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 

@@ -30,6 +30,12 @@
           {
             label: 'NO BUKTI PENERIMAAN TRUCKING',
             name: 'penerimaantruckingheader_nobukti',
+            width: 200
+          },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            width: 250
           },
           {
             label: 'NOMINAL',

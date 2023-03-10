@@ -57,7 +57,7 @@
                 <input type="text" name="keterangancoa" class="form-control akunpusat-lookup">
               </div>
             </div>
-            
+
             <div class="border p-3">
               <h6>Posting Pengeluaran</h6>
 
@@ -87,9 +87,10 @@
                 <thead>
                   <tr>
                     <th width="1%">No</th>
-                    <th width="5%">SUPIR</th>
-                    <th width="5%">NO BUKTI PENERIMAAN TRUCKING</th>
-                    <th width="6%">Nominal</th>
+                    <th width="20%">SUPIR</th>
+                    <th width="20%">NO BUKTI PENERIMAAN TRUCKING</th>
+                    <th width="25%">Keterangan</th>
+                    <th width="20%">Nominal</th>
                     <th width="1%">Aksi</th>
                   </tr>
                 </thead>
@@ -98,7 +99,7 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="3">
+                    <td colspan="4">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
                     <td>
@@ -332,7 +333,7 @@
     //   .then(() => {
     //     showPengeluaranTruckingHeader(form, id)
     //   })
-    
+
     form.find(`[name="bank"]`).removeClass('bank-lookup')
     form.find(`[name="pengeluarantrucking"]`).removeClass('pengeluarantrucking-lookup')
     showPengeluaranTruckingHeader(form, id)
@@ -360,7 +361,7 @@
     //   .then(() => {
     //     showPengeluaranTruckingHeader(form, id)
     //   })
-    
+
     form.find(`[name="bank"]`).removeClass('bank-lookup')
     form.find(`[name="pengeluarantrucking"]`).removeClass('pengeluarantrucking-lookup')
     showPengeluaranTruckingHeader(form, id)
@@ -382,7 +383,7 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            cekValidasiAksi(Id,Aksi)
+            cekValidasiAksi(Id, Aksi)
           }
 
         } else {
@@ -391,8 +392,8 @@
       }
     })
   }
-  
-  function cekValidasiAksi(Id,Aksi){
+
+  function cekValidasiAksi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengeluarantruckingheader/${Id}/cekValidasiAksi`,
       method: 'POST',
@@ -402,16 +403,16 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'EDIT') {
-              editPengeluaranTruckingHeader(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deletePengeluaranTruckingHeader(Id)
-            }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          if (Aksi == 'EDIT') {
+            editPengeluaranTruckingHeader(Id)
           }
+          if (Aksi == 'DELETE') {
+            deletePengeluaranTruckingHeader(Id)
+          }
+        }
 
       }
     })
@@ -501,6 +502,9 @@
                     <input type="text" name="penerimaantruckingheader_nobukti[]" data-current-value="${detail.penerimaantruckingheader_nobukti}" class="form-control penerimaantruckingheader-lookup">
                 </td>
                 <td>
+                    <input type="text" name="keterangan[]" class="form-control"> 
+                </td>
+                <td>
                     <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
                 </td>
                 <td>
@@ -511,6 +515,7 @@
 
           detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
           detailRow.find(`[name="supir[]"]`).val(detail.supir)
+          detailRow.find(`[name="keterangan[]"]`).val(detail.keterangan)
           detailRow.find(`[name="penerimaantruckingheader_nobukti[]"]`).val(detail.penerimaantruckingheader_nobukti)
           detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
 
@@ -590,6 +595,9 @@
           <input type="text" name="penerimaantruckingheader_nobukti[]"  class="form-control penerimaantruckingheader-lookup">
         </td>
         <td>
+          <input type="text" name="keterangan[]" class="form-control"> 
+        </td>
+        <td>
           <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
         </td>
         <td>
@@ -611,7 +619,7 @@
         }
       },
       onSelectRow: (supir, element) => {
-        $(`#crudForm [name="supir_id[]"]`).last().val(supir.id)
+        element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
       },
@@ -619,7 +627,8 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=supir_id]').last().val('')
+
+        element.parents('td').find(`[name="supir_id[]"]`).val('')
         element.val('')
         element.data('currentValue', element.val())
       }

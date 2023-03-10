@@ -33,6 +33,12 @@
           {
             label: 'NO BUKTI PENGELUARAN TRUCKING',
             name: 'pengeluarantruckingheader_nobukti',
+            width: 200
+          },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            width: 250
           },
           {
             label: 'NOMINAL',
@@ -44,7 +50,7 @@
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 0,
+        rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50, 0],
@@ -52,6 +58,9 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
+        sortname: sortname,
+        sortorder: sortorder,
+        page: page,
         viewrecords: true,
         postData: {
           penerimaantruckingheader_id: id

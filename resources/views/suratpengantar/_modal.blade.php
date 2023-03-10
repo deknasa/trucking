@@ -1011,7 +1011,7 @@
           if (element.is('select')) {
             element.val(value).trigger('change')
           } else if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
+            element.val(value)
           } else {
             element.val(value)
           }
@@ -1082,6 +1082,8 @@
           })
         }
         setRowNumbers()
+        
+        initDatepicker()
         editValidasi(isAllowEdited);
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
