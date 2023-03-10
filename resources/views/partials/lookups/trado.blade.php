@@ -23,6 +23,10 @@
           name: 'keterangan',
         },
         {
+          label: 'kodetrado',
+          name: 'KODE TRADO',
+        },
+        {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
           stype: 'select',

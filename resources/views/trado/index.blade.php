@@ -48,6 +48,10 @@
             name: 'keterangan',
           },
           {
+            label: 'KODE TRADO',
+            name: 'kodetrado',
+          },
+          {
             label: 'STATUS AKTIF',
             name: 'statusaktif',
             stype: 'select',

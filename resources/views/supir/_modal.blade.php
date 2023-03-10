@@ -161,7 +161,7 @@
                     <label class="col-form-label">Upload Foto Supir</label>
                   </div>
                 </div>
-                <div class="dropzone" data-field="photosupir">
+                <div class="dropzone dropzoneImg" data-field="photosupir">
                   <div class="fallback">
                     <input name="photosupir" type="file" />
                   </div>
@@ -174,7 +174,7 @@
                     <label class="col-form-label">Upload Foto KTP</label>
                   </div>
                 </div>
-                <div class="dropzone" data-field="photoktp">
+                <div class="dropzone dropzoneImg" data-field="photoktp">
                   <div class="fallback">
                     <input name="photoktp" type="file" />
                   </div>
@@ -187,7 +187,7 @@
                     <label class="col-form-label">Upload Foto SIM</label>
                   </div>
                 </div>
-                <div class="dropzone" data-field="photosim">
+                <div class="dropzone dropzoneImg" data-field="photosim">
                   <div class="fallback">
                     <input name="photosim" type="file" />
                   </div>
@@ -202,7 +202,7 @@
                     <label class="col-form-label">Upload Foto KK</label>
                   </div>
                 </div>
-                <div class="dropzone" data-field="photokk">
+                <div class="dropzone dropzoneImg" data-field="photokk">
                   <div class="fallback">
                     <input name="photokk" type="file" />
                   </div>
@@ -215,7 +215,7 @@
                     <label class="col-form-label">Upload Foto SKCK</label>
                   </div>
                 </div>
-                <div class="dropzone" data-field="photoskck">
+                <div class="dropzone dropzoneImg" data-field="photoskck">
                   <div class="fallback">
                     <input name="photoskck" type="file" />
                   </div>
@@ -228,9 +228,35 @@
                     <label class="col-form-label">Upload Foto Domisili</label>
                   </div>
                 </div>
-                <div class="dropzone" data-field="photodomisili">
+                <div class="dropzone dropzoneImg" data-field="photodomisili">
                   <div class="fallback">
                     <input name="photodomisili" type="file" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="row mb-2">
+                  <div class="col">
+                    <label class="col-form-label">Upload Foto Vaksin</label>
+                  </div>
+                </div>
+                <div class="dropzone dropzoneImg" data-field="photovaksin">
+                  <div class="fallback">
+                    <input name="photovaksin" type="file" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-4">
+                <div class="row mb-2">
+                  <div class="col">
+                    <label class="col-form-label">Upload surat perjanjian</label>
+                  </div>
+                </div>
+                <div class="dropzone dropzonePdf" data-field="pdfsuratperjanjian">
+                  <div class="fallback">
+                    <input name="pdfsuratperjanjian" type="file" />
                   </div>
                 </div>
               </div>
@@ -386,6 +412,7 @@
 
     setFormBindKeys(form)
     initDropzone(form.data('action'))
+    initDropzonePdf(form.data('action'))
     initLookup()
     initDatepicker()
     initSelect2()
@@ -416,6 +443,7 @@
           .then(supir => {
             setFormBindKeys(form)
             initDropzone(form.data('action'), supir)
+            initDropzonePdf(form.data('action'), supir)
             initLookup()
             initDatepicker()
             initSelect2()
@@ -447,6 +475,8 @@
           .then(supir => {
             setFormBindKeys(form)
             initDropzone(form.data('action'), supir)
+            initDropzonePdf(form.data('action'), supir)
+            
 
             form.find('select').each((index, select) => {
               let element = $(select)
@@ -559,7 +589,7 @@
   }
 
   function initDropzone(action, data = null) {
-    $('.dropzone').each((index, element) => {
+    $('.dropzoneImg').each((index, element) => {
       if (!element.dropzone) {
         let newDropzone = new Dropzone(element, {
           url: 'test',
@@ -580,13 +610,38 @@
       }
     })
   }
+  function initDropzonePdf(action, data = null) {
+    $('.dropzonePdf').each((index, element) => {
+      if (!element.dropzone) {
+        let newDropzone = new Dropzone(element, {
+          url: 'test',
+          autoProcessQueue: false,
+          addRemoveLinks: true,
+          acceptedFiles: 'application/pdf',
+          paramName: $(element).data('field'),
+          init: function() {
+            dropzones.push(this)
+          }
+        })
+      }
+      element.dropzone.removeAllFiles()
+      if (action == 'edit' || action == 'delete') {
+        assignAttachmentPdf(element.dropzone, data)
+      }
+      
+    })
+  } 
+      
+
+
+
 
   function assignAttachment(dropzone, data) {
     const paramName = dropzone.options.paramName
     const type = paramName.substring(5)
-
+    // console.log(type);
     if (data[paramName] == '') {
-      $('.dropzone').each((index, element) => {
+      $('.dropzoneImg').each((index, element) => {
         if (!element.dropzone) {
           let newDropzone = new Dropzone(element, {
             url: 'test',
@@ -615,6 +670,45 @@
 
           dropzone.options.addedfile.call(dropzone, imageFile);
           dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}supir/image/${type}/${file}/ori`);
+          dropzone.files.push(imageFile)
+        })
+      })
+    }
+  }
+  function assignAttachmentPdf(dropzone, data) {
+    const paramName = dropzone.options.paramName
+    const type = paramName.substring(3)
+    if (data[paramName] == '') {
+      
+      $('.dropzonePdf').each((index, element) => {
+        if (!element.dropzone) {
+          let newDropzone = new Dropzone(element, {
+            url: 'test',
+            autoProcessQueue: false,
+            addRemoveLinks: true,
+            acceptedFiles: 'application/pdf',
+            paramName: $(element).data('field'),
+            init: function() {
+              dropzones.push(this)
+            }
+          })
+        }
+
+        element.dropzone.removeAllFiles()
+      })
+    } else {
+
+      let files = JSON.parse(data[paramName])
+
+      files.forEach((file) => {
+        getImgURL(`${apiUrl}supir/pdf/${type}/${file}`, (fileBlob) => {
+          let imageFile = new File([fileBlob], file, {
+            type: 'application/pdf',
+            lastModified: new Date().getTime()
+          }, 'utf-8')
+
+          dropzone.options.addedfile.call(dropzone, imageFile);
+          // dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}supir/pdf/${type}/${file}`);
           dropzone.files.push(imageFile)
         })
       })
@@ -687,7 +781,7 @@
   function getImgURL(url, callback) {
     var xhr = new XMLHttpRequest();
     xhr.onload = function() {
-      console.log(xhr.response);
+      // console.log(xhr.response);
       callback(xhr.response);
     };
     xhr.open('GET', url);
