@@ -288,7 +288,10 @@ function setErrorMessages(form, errors) {
 					</div>
 			`).appendTo($(element).parent());
 		} else {
-			return showDialog(error);
+			return $.messager.alert({
+				title: 'Validation Error',
+				msg: error[0].toLowerCase()
+			})
 		}
 	});
 
@@ -1058,67 +1061,53 @@ function destroySelect2() {
 // }
 
 function showSuccessDialog(statusText = "", message = "") {
-	$("#dialog-success-message").find("p").remove();
-	$("#dialog-success-message").append(
-		`<p> ${statusText} </p><p> ${message} </p>`
-	);
-	$("#dialog-success-message").dialog({
-		modal: true,
-	});
+	$.messager.alert({
+		title: statusText,
+		msg: `
+			<div class="text-center text-success">
+				<span class="fa fa-check-circle" style="font-size:25px;"></span>
+				<p>${message}</p>
+			</div>
+		`
+	})
 }
+
 function showDialog(statusText = "", message = "") {
-	$("#dialog-message").find("p").remove();
-	$("#dialog-message").append(
-		`<p class="text-dark"> ${statusText} </p><p> ${message} </p>`
-	);
-	$("#dialog-message").dialog({
-		modal: true,
-	});
-
-	$(".ui-dialog-titlebar-close").find("p").remove();
-	$(".ui-dialog-titlebar-close").append(`<p>X</p>`);
-	let css_header = {
-		background: "#db1f30",
-		color: "#fff",
-	};
-	$(".ui-dialog .ui-widget-header").css(css_header);
-	let css_property = {
-		border: "none",
-		background: "#db1f30",
-		color: "#fff",
-	};
-
-	$(".ui-dialog .ui-dialog-titlebar-close").css(css_property);
+	$.messager.alert({
+		title: statusText,
+		msg: `
+			<div class="text-center text-danger">
+				<span class="fa fa-exclamation-triangle" style="font-size:25px;"></span>
+				<p>${message}</p>
+			</div>
+		`
+	})
 }
 
 function showConfirm(statusText = "", message = "", urlDestination = "") {
-	$("#dialog-confirm").find("p").remove();
-	$("#dialog-confirm").append(`<p> ${statusText} </p><p> ${message} </p>`);
-	$("#dialog-confirm").dialog({
-		modal: true,
+	let messager = $.messager.alert({
+		title: statusText,
+		msg: `
+			<div class="text-center">
+				<span class="fa fa-question-circle text-warning" style="font-size:25px;"></span>
+				<p>${message}</p>
+			</div>
+		`,
 		buttons: [
 			{
-				text: "Ok",
-				open: function () {
-					$(this).addClass("btn btn-success");
-				},
-				click: function () {
-					$(this).dialog("close");
-					processResult(true, urlDestination);
-				},
+				text: 'Ok',
+				onClick: () => {
+					processResult(true, urlDestination)
+				}
 			},
 			{
-				text: "Cancel",
-				open: function () {
-					$(this).addClass("btn btn-danger");
-				},
-				click: function () {
-					$(this).dialog("close");
-					processResult(false);
-				},
+				text: 'Batal',
+				onClick: () => {
+					messager.dialog('close')
+				}
 			},
-		],
-	});
+		]
+	})
 }
 
 $(document).ready(function () {

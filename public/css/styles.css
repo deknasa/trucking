@@ -340,3 +340,10 @@ html {
 .bg-light-blue {
 	background-color: #eaf1fb;
 }
+
+.btn-close {
+	width: 16px;
+	height: 16px;
+	border: none;
+	background: url('/libraries/easyui/themes/default/images/panel_tools.png') no-repeat -16px 0px;
+}

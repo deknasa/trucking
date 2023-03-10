@@ -31,6 +31,10 @@
   <!-- Jquery UI -->
   <link rel="stylesheet" href="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.css') }}">
 
+  <!-- EasyUI -->
+  <link rel="stylesheet" type="text/css" href="{{ asset('libraries/easyui/themes/default/easyui.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('libraries/easyui/themes/icon.css') }}">
+
   <!-- Nestable2 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.css" />
 
@@ -64,11 +68,9 @@
   <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header align-items-center">
           <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
         </div>
         <form id="formRange" target="_blank">
           @csrf
@@ -107,11 +109,9 @@
   <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header align-items-center">
           <h5 class="modal-title" id="importModalLabel">Pilih file</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
         </div>
         <form id="formImport" method="post" enctype="multipart/form-data">
           @csrf
@@ -139,11 +139,9 @@
   <div class="modal fade" id="rangeTglModal" tabindex="-1" aria-labelledby="rangeTglModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header align-items-center">
           <h5 class="modal-title" id="rangeTglModalLabel">Pilih tanggal</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
         </div>
         <form id="formRangeTgl" target="_blank">
           @csrf
@@ -184,11 +182,9 @@
   <div class="modal fade" id="tglModal" tabindex="-1" aria-labelledby="tglModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header align-items-center">
           <h5 class="modal-title" id="tglModalLabel">Pilih tanggal</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
         </div>
         <form id="formTgl" target="_blank">
           @csrf
@@ -205,7 +201,7 @@
                 </div>
               </div>
             </div>
-          
+
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-primary">Report</button>
@@ -247,9 +243,13 @@
 
   <!-- jQuery -->
   <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
+<!-- <script type="text/javascript" src="{{ asset('libraries/easyui/easyloader.js') }}"></script> -->
 
   <!-- jQuery UI -->
   <script src="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.js') }}"></script>
+  
+  <!-- EasyUI -->
+  <script type="text/javascript" src="{{ asset('libraries/easyui/jquery.easyui.min.js') }}"></script>
 
   <!-- Highlight -->
   <script src="{{ asset('js/highlight.js') }}"></script>
@@ -364,7 +364,7 @@
       $('body').addClass('sidebar-open')
     })
 
-    function processResult(result,destination = "") {
+    function processResult(result, destination = "") {
       if (result) {
         // console.log(destination);
         $.ajax({
@@ -381,7 +381,7 @@
             if (error.status === 422) {
               $('.is-invalid').removeClass('is-invalid')
               $('.invalid-feedback').remove()
-  
+
               setErrorMessages(form, error.responseJSON.errors);
             }
           }
