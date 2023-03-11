@@ -144,6 +144,7 @@ use App\Http\Controllers\InvoiceDetailController;
 use App\Http\Controllers\InvoiceHeaderController;
 
 use App\Http\Controllers\InvoiceExtraHeaderController;
+use App\Http\Controllers\InvoiceChargeGandenganHeaderController;
 use App\Http\Controllers\JurnalUmumPusatDetailController;
 use App\Http\Controllers\JurnalUmumPusatHeaderController;
 use App\Http\Controllers\KartuStokController;
@@ -818,6 +819,10 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('invoiceextraheader', InvoiceExtraHeaderController::class);
     Route::resource('invoiceextradetail', InvoiceExtraDetailController::class);
     
+    
+    Route::resource('invoicechargegandenganheader', InvoiceChargeGandenganHeaderController::class);
+
+
     Route::get('approvaltransaksiheader/index', [ApprovalTransaksiHeaderController::class, 'index']);
     Route::resource('approvaltransaksiheader', ApprovalTransaksiHeaderController::class);
 

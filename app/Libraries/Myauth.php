@@ -17,7 +17,7 @@ class Myauth
             'historipengeluaranstok',
             'reportall',
             'reportneraca',
-            'suratpengantarapprovalinputtrip',
+            'invoicechargegandenganheader',
             'pengembaliankasbankheader',
             'laporanbukubesar',
             'laporankasbank',
