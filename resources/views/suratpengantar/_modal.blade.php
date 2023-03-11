@@ -349,7 +349,7 @@
           </div>
 
           <div class="modal-footer justify-content-start">
-            <button id="btnSubmit" class="btn btn-primary">
+            <button type="button" id="btnSubmit" class="btn btn-primary">
               <i class="fa fa-save"></i>
               Simpan
             </button>
@@ -374,10 +374,8 @@
     $(document).on('input', `#crudForm [name="nominalperalihan"]`, function(event) {
       setPersentase()
     })
-    $('#crudForm').autocomplete({
-      disabled: true
-    });
-
+    $("#crudForm [name]").attr("autocomplete", "off");
+    
     $("#addRow").click(function() {
       addRow()
     });
@@ -417,9 +415,8 @@
     })
 
 
-    $('#btnSubmit').click(function(event) {
+    $(document).on('click', `#btnSubmit`, function(event) {
       event.preventDefault()
-
       let method
       let url
       let form = $('#crudForm')

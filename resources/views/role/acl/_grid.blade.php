@@ -10,12 +10,7 @@
         datatype: 'json',
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        colModel: [{
-            label: 'ROLE',
-            name: 'role',
-            align: 'left',
-            hidden: true
-          },
+        colModel: [
           {
             label: 'CLASS',
             name: 'class',
@@ -59,29 +54,72 @@
         },
         jsonReader: {
           root: 'data',
-          // total: 'attributes.totalPages',
-          // records: 'attributes.totalRows',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
         },
         onSelectRow: function(id) {
           activeGrid = $(this)
+          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
+          page = $(this).jqGrid('getGridParam', 'page')
+          let rows = $(this).jqGrid('getGridParam', 'postData').limit
+          if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         loadBeforeSend: (jqXHR) => {
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        }, 
+        loadComplete: function(data) {
+          changeJqGridRowListText()
+
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
+          initResize($(this))
+
+          if (triggerClick) {
+            if (id != '') {
+              indexRow = parseInt($('#roleAclGrid').jqGrid('getInd', id)) - 1
+              $(`#roleAclGrid [id="${$('#roleAclGrid').getDataIDs()[indexRow]}"]`).click()
+              id = ''
+            } else if (indexRow != undefined) {
+              $(`#roleAclGrid [id="${$('#roleAclGrid').getDataIDs()[indexRow]}"]`).click()
+            }
+
+            if ($('#roleAclGrid').getDataIDs()[indexRow] == undefined) {
+              $(`#roleAclGrid [id="` + $('#roleAclGrid').getDataIDs()[0] + `"]`).click()
+            }
+
+            triggerClick = false
+          } else {
+            $('#roleAclGrid').setSelection($('#roleAclGrid').getDataIDs()[indexRow])
+          }
+          setHighlight($(this))
         }
+      })
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          clearGlobalSearch($('#acoGrid'))
+        },
       })
 
       .customPager({
         buttons: [{
-          id: 'editUserAcl',
+          id: 'editRoleAcl',
           innerHTML: '<i class="fa fa-pen"></i> EDIT',
           class: 'btn btn-success btn-sm',
           onClick: () => {
             let roleId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
 
-            editUserAcl(roleId)
+            editRoleAcl(roleId)
           }
         }]
       })
+      
+    loadClearFilter($('#roleAclGrid'))
+    loadGlobalSearch($('#roleAclGrid'))
   }
 
   function loadAclData(roleId) {

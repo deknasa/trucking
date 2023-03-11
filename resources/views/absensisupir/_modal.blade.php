@@ -124,9 +124,7 @@
 
   $(document).ready(function() {
 
-    $('#crudForm').autocomplete({
-      disabled: true
-    });
+    $("#crudForm [name]").attr("autocomplete", "off");
 
     Inputmask("datetime", {
       inputFormat: "HH:MM",

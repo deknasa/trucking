@@ -25,18 +25,9 @@
 
               <div class="row form-group">
                 <div class="col-12">
-                  <table class="table table-condensed table-bordered" id="acoList">
-                    <thead>
-                      <tr>
-                        <th width="10px">#</th>
-                        <th width="10px">CHECK</th>
-                        <th>CLASS</th>
-                        <th>METHOD</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
+
+                  <table id="acoGrid"></table>
+
                 </div>
               </div>
             </div>
@@ -55,6 +46,7 @@
 
 <script>
   hasFormBindKeys = false
+  selectedRows = [];
 
   $(document).ready(function() {
     $('#btnSubmitUserAcl').click(function(event) {
@@ -73,7 +65,9 @@
       url: `${apiUrl}role/${roleId}/acl`,
       method: 'POST',
       dataType: 'JSON',
-      data: form.serializeArray(),
+      data: {
+        aco_ids: selectedRows
+      },
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
@@ -102,14 +96,15 @@
 
     setFormBindKeys(form)
 
-    activeGrid = null
+    activeGrid = $('#acoGrid')
   })
 
   $('#userAclModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#acoGrid').find('tr.bg-light-blue').removeClass('bg-light-blue')
   })
 
-  function editUserAcl(roleId) {
+  async function editRoleAcl(roleId) {
     let form = $('#userAclForm')
 
     form.data('action', 'edit')
@@ -124,14 +119,190 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    getUserAclOptions()
 
-    $('#userAclForm').find(`[name=role_id]`).val(roleId)
+    let userAcls = await getUserAcls(roleId)
 
-    setTimeout(() => {
-      showUserAcls(form, roleId)
-    }, 1000);
+    selectedRows = userAcls.data.map((acl) => {
+      let element = $('#userAclForm').find(`[name="aco_ids[]"][value=${acl.id}]`)
+
+      element.prop('checked', true)
+      element.parents('tr').addClass('bg-light-blue')
+
+      return acl.id
+    })
+
+    showRole(roleId)
+    loadAcoGrid()
   }
+
+  function showRole(roleId) {
+    $.ajax({
+      url: `${apiUrl}role/${roleId}`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: (response) => {
+        $('#userAclForm').find(`[name="role_id"]`).val(response.data.id)
+        $('#userAclForm').find(`[name="role"]`).val(response.data.rolename)
+      }
+    })
+  }
+  function loadAcoGrid() {
+    $('#acoGrid')
+      .jqGrid({
+        styleUI: 'Bootstrap4',
+        datatype: 'json',
+        url: `${apiUrl}acos`,
+        colModel: [{
+            label: '',
+            name: '',
+            width: 30,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                $(element).on('click', function() {
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="aco_ids[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+            },
+          },
+          {
+            label: 'Class',
+            name: 'class'
+          },
+          {
+            label: 'Method',
+            name: 'method'
+          },
+          {
+            label: 'Nama',
+            name: 'nama'
+          },
+        ],
+        autowidth: true,
+        height: 350,
+        rownumbers: true,
+        rownumWidth: 45,
+        rowList: [10, 20, 50, 0],
+        rowNum: 10,
+        page: 1,
+        viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
+        onSelectRow: function(id, status, event) {
+          activeGrid = $(this)
+          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
+          page = $(this).jqGrid('getGridParam', 'page')
+          let rows = $(this).jqGrid('getGridParam', 'postData').limit
+          if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
+        },
+        ondblClickRow: function(id, status, event) {
+          $(this).find(`tr#${id}`).find(`[name="aco_ids[]"]`).click()
+        },
+        loadComplete: function(data) {
+          let grid = $(this)
+
+          changeJqGridRowListText()
+
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
+          initResize($(this))
+
+          $.each(selectedRows, function(key, value) {
+            $(grid).find('tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).addClass('bg-light-blue')
+                $(this).find(`td input:checkbox`).prop('checked', true)
+              }
+            })
+          });
+
+          if (triggerClick) {
+            if (id != '') {
+              indexRow = parseInt($('#acoGrid').jqGrid('getInd', id)) - 1
+              $(`#acoGrid [id="${$('#acoGrid').getDataIDs()[indexRow]}"]`).click()
+              id = ''
+            } else if (indexRow != undefined) {
+              $(`#acoGrid [id="${$('#acoGrid').getDataIDs()[indexRow]}"]`).click()
+            }
+
+            if ($('#acoGrid').getDataIDs()[indexRow] == undefined) {
+              $(`#acoGrid [id="` + $('#acoGrid').getDataIDs()[0] + `"]`).click()
+            }
+
+            triggerClick = false
+          } else {
+            $('#acoGrid').setSelection($('#acoGrid').getDataIDs()[indexRow])
+          }
+          
+          setHighlight($(this))
+        }
+      })
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          clearGlobalSearch($('#acoGrid'))
+        },
+      })
+      .customPager()
+
+    loadClearFilter($('#acoGrid'))
+    loadGlobalSearch($('#acoGrid'))
+  }
+
+  
+  async function getUserAcls(roleId) {
+    return await $.ajax({
+      url: `${apiUrl}role/${roleId}/acl`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0
+      },
+      success: response => {
+        return response
+      },
+      error: (error) => {
+        showDialog(error.responseJSON.message)
+      }
+    })
+  }
+
 
   function showUserAcls(form, roleId) {
     $.ajax({
@@ -181,6 +352,47 @@
     })
   }
 
+  
+  function checkboxHandler(element) {
+    let value = $(element).val();
+
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+    }
+  }
+  
+  function clearSelectedRows() {
+    selectedRows = []
+
+    $('#acoGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}acos`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0
+      },
+      success: (response) => {
+        selectedRows = response.data.map((aco) => aco.id)
+
+        $('#acoGrid').trigger('reloadGrid')
+      }
+    })
+  }
   function getUserAclOptions() {
     $('#acoList tbody').html('')
 

@@ -97,9 +97,7 @@
   let rowIndex = 0;
   $(document).ready(function() {
 
-    $('#crudForm').autocomplete({
-      disabled: true
-    });
+    $("#crudForm [name]").attr("autocomplete", "off");
     $(document).on('click', "#addRow", function() {
       addRow()
     });

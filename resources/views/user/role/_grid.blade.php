@@ -10,12 +10,7 @@
         datatype: 'json',
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        colModel: [{
-            label: 'USER',
-            name: 'user',
-            align: 'left',
-            hidden: true
-          },
+        colModel: [
           {
             label: 'ROLE',
             name: 'rolename',
@@ -54,13 +49,51 @@
         },
         onSelectRow: function(id) {
           activeGrid = $(this)
+          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
+          page = $(this).jqGrid('getGridParam', 'page')
+          let rows = $(this).jqGrid('getGridParam', 'postData').limit
+          if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
         loadBeforeSend: (jqXHR) => {
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
+
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
+          initResize($(this))
+
+          if (triggerClick) {
+            if (id != '') {
+              indexRow = parseInt($('#userRoleGrid').jqGrid('getInd', id)) - 1
+              $(`#userRoleGrid [id="${$('#userRoleGrid').getDataIDs()[indexRow]}"]`).click()
+              id = ''
+            } else if (indexRow != undefined) {
+              $(`#userRoleGrid [id="${$('#userRoleGrid').getDataIDs()[indexRow]}"]`).click()
+            }
+
+            if ($('#userRoleGrid').getDataIDs()[indexRow] == undefined) {
+              $(`#userRoleGrid [id="` + $('#userRoleGrid').getDataIDs()[0] + `"]`).click()
+            }
+
+            triggerClick = false
+          } else {
+            $('#userRoleGrid').setSelection($('#userRoleGrid').getDataIDs()[indexRow])
+          }
+          
+          setHighlight($(this))
         }
+      })
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          clearGlobalSearch($('#acoGrid'))
+        },
       })
 
       .customPager({
@@ -75,6 +108,8 @@
           }
         }]
       })
+    loadClearFilter($('#userRoleGrid'))
+    loadGlobalSearch($('#userRoleGrid'))
   }
 
   function loadRoleData(userId) {

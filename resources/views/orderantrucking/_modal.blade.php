@@ -197,7 +197,7 @@
   var kodecontainer
 
   $(document).ready(function() {
-
+    $("#crudForm [name]").attr("autocomplete", "off");
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 

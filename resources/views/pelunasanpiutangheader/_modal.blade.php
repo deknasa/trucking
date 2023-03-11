@@ -201,9 +201,7 @@
   let bankId
   $(document).ready(function() {
 
-    $('#crudForm').autocomplete({
-      disabled: true
-    });
+    $("#crudForm [name]").attr("autocomplete", "off");
 
     $(document).on('input', `#table_body [name="bayarppd[]"]`, function(event) {
       let action = $('#crudForm').data('action')

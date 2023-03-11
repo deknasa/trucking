@@ -87,6 +87,7 @@
           } else {
             $('#userAclGrid').setSelection($('#userAclGrid').getDataIDs()[indexRow])
           }
+          setHighlight($(this))
         }
       })
       .jqGrid('filterToolbar', {

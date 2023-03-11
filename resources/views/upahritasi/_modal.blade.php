@@ -190,9 +190,7 @@
   $(document).ready(function() {
 
 
-    $('#crudForm').autocomplete({
-      disabled: true
-    });
+    $("#crudForm [name]").attr("autocomplete", "off");
     $(document).on('click', '#addRow', function(event) {
       addRow()
     });
