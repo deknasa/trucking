@@ -184,6 +184,10 @@
       addRow()
     });
 
+    $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
+      $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($(this).val()).trigger('change');
+    });
+
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
     })
@@ -454,7 +458,7 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            cekValidasiAksi(Id,Aksi)
+            cekValidasiAksi(Id, Aksi)
           }
 
         } else {
@@ -465,7 +469,7 @@
   }
 
 
-  function cekValidasiAksi(Id,Aksi){
+  function cekValidasiAksi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengeluaranheader/${Id}/cekValidasiAksi`,
       method: 'POST',
@@ -475,16 +479,16 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'EDIT') {
-              editPengeluaran(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deletePengeluaran(Id)
-            }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          if (Aksi == 'EDIT') {
+            editPengeluaran(Id)
           }
+          if (Aksi == 'DELETE') {
+            deletePengeluaran(Id)
+          }
+        }
 
       }
     })
@@ -604,7 +608,7 @@
           detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
           detailRow.find(`[name="coadebet[]"]`).val(detail.coadebet)
           detailRow.find(`[name="ketcoadebet[]"]`).val(detail.ketcoadebet)
-          
+
           detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
           initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
 
@@ -687,7 +691,7 @@
 
     $('#detailList tbody').append(detailRow)
 
-   
+
     $('.akunpusat-lookup').last().lookup({
       title: 'Kode Perkiraan Lookup',
       fileName: 'akunpusat',
@@ -713,7 +717,8 @@
       }
     })
     initAutoNumeric(detailRow.find('.autonumeric'))
-    $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    tglbukti = $('#crudForm').find(`[name="tglbukti"]`).val()
+    detailRow.find(`[name="tgljatuhtempo[]"]`).val(tglbukti).trigger('change');
 
     initDatepicker()
     setRowNumbers()

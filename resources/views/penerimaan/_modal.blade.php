@@ -201,6 +201,9 @@
         $(document).on('click', "#addRow", function() {
             addRow()
         });
+        $(document).on('change', `#crudForm [name="tgllunas"]`, function() {
+            $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($(this).val()).trigger('change');
+        });
         $(document).on('click', '.delete-row', function(event) {
             deleteRow($(this).parents('tr'))
         })
@@ -900,8 +903,8 @@
             }
         })
         initAutoNumeric(detailRow.find('.autonumeric'))
-        // $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        tgllunas = $('#crudForm').find(`[name="tgllunas"]`).val()
+        detailRow.find(`[name="tgljatuhtempo[]"]`).val(tgllunas).trigger('change');
         initDatepicker()
         setRowNumbers()
     }
