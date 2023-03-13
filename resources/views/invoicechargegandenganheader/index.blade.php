@@ -161,15 +161,20 @@
             }
           },
           {
+            label: 'TANGGAL PROSES',
+            name: 'tglproses',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
             formatter: currencyFormat,
-          },
-          {
-            label: 'pelanggan',
-            name: 'pelanggan',
-            align: 'left'
           },
           {
             label: 'agen',

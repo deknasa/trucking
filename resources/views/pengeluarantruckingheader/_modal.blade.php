@@ -134,7 +134,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
-
+  var KodePengeluaranId
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -257,6 +257,29 @@
     })
   })
 
+  function setKodePengeluaran(kode){
+    KodePengeluaranId = kode;
+    setTampilanForm();
+  }
+  function setTampilanForm(){
+    tampilanall()
+    switch (KodePengeluaranId) {
+      case 'PJT':
+        tampilanPJT()
+        break;
+      default:
+        tampilanall()
+        break;
+    }
+  }
+
+
+  function tampilanPJT() {
+  $('[name=keterangancoa]').parents('.form-group').hide()
+}
+function tampilanall() {
+  $('[name=keterangancoa]').parents('.form-group').hide()
+}
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
 
@@ -712,6 +735,8 @@
         }
       },
       onSelectRow: (pengeluarantrucking, element) => {
+        setKodePengeluaran(pengeluarantrucking.kodepengeluaran)
+        $('#crudForm [name=coa]').first().val(pengeluarantrucking.coapostingdebet)
         $('#crudForm [name=pengeluarantrucking_id]').first().val(pengeluarantrucking.id)
         element.val(pengeluarantrucking.keterangan)
         element.data('currentValue', element.val())
