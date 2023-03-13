@@ -41,11 +41,45 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2 col-form-label">
                 <label>
-                  coa <span class="text-danger">*</span>
+                  coa debet <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="coa" class="form-control akunpusat-lookup">
+                <input type="text" name="coadebet" class="form-control akunpusat-lookup">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  coa kredit<span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="coakredit" class="form-control akunpusat-lookup">
+              </div>
+            </div>
+
+            
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  coa posting debet <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="coapostingdebet" class="form-control akunpusat-lookup">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                <label>
+                  coa posting kredit<span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="coapostingkredit" class="form-control akunpusat-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -341,7 +375,16 @@
             element.val(value)
           }
 
-          if (index == 'coa') {
+          if (index == 'coadebet') {
+            element.data('current-value', value)
+          }
+          if (index == 'coakredit') {
+            element.data('current-value', value)
+          }
+          if (index == 'coapostingdebet') {
+            element.data('current-value', value)
+          }
+          if (index == 'coapostingkredit') {
             element.data('current-value', value)
           }
 

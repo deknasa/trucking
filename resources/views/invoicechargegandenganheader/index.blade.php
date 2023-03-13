@@ -16,8 +16,6 @@
 
 @push('scripts')
 <script>
-  let indexUrl = "{{ route('invoiceextraheader.index') }}"
-  let getUrl = "{{ route('invoiceextraheader.get') }}"
   let indexRow = 0;
   let page = 0;
   let pager = '#jqGridPager'
@@ -41,7 +39,7 @@
      })
 
     $("#jqGrid").jqGrid({
-        url: `{{ config('app.api_url') . 'invoiceextraheader' }}`,
+        url: `${apiUrl}invoicechargegandenganheader`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -365,7 +363,7 @@
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              window.open(`{{url('invoiceextraheader/report/${selectedId}')}}`)
+              window.open(`{{url('invoicechargegandenganheader/report/${selectedId}')}}`)
             }
           },
         ]
@@ -451,7 +449,7 @@
       let submitButton = $(this).find('button:submit')
 
       if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('invoiceextraheader.export') }}`
+        actionUrl = `{{ route('invoicechargegandenganheader.export') }}`
       }
 
       /* Clear validation messages */
@@ -470,7 +468,7 @@
     })
     function handleApproval(id) {
       $.ajax({
-        url: `${apiUrl}invoiceextraheader/${id}/approval`,
+        url: `${apiUrl}invoicechargegandenganheader/${id}/approval`,
         method: 'POST',
         dataType: 'JSON',
         beforeSend: request => {

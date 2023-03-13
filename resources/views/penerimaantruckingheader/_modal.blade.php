@@ -85,12 +85,12 @@
               <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1000px;">
                 <thead>
                   <tr>
-                    <th width="1%">No</th>
-                    <th width="20%">SUPIR</th>
-                    <th width="20%">NO BUKTI PENGELUARAN TRUCKING</th>
-                    <th width="25%">Keterangan</th>
-                    <th width="20%">Nominal</th>
-                    <th width="1%">Aksi</th>
+                    <th width="1%" class="">No</th>
+                    <th width="20%" class="tbl_supir_id">SUPIR</th>
+                    <th width="20%" class="tbl_pengeluarantruckingheader_nobukti">NO BUKTI PENGELUARAN TRUCKING</th>
+                    <th width="25%" class="tbl_keterangan">Keterangan</th>
+                    <th width="20%" class="tbl_nominal">Nominal</th>
+                    <th width="1%" class="">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -98,7 +98,7 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="4">
+                    <td colspan="4" class="colspan">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
                     <td>
@@ -133,6 +133,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+  var KodePenerimaanId
 
   $(document).ready(function() {
 
@@ -255,6 +256,38 @@
       })
     })
   })
+  function setKodePenerimaan(kode) {
+    KodePenerimaanId = kode;
+    console.log(KodePenerimaanId);
+    setTampilanForm();
+  }
+
+  function setTampilanForm(){
+    tampilanall()
+    switch (KodePenerimaanId) {
+      case 'BBM':
+        tampilanBBM()
+        break;
+      default:
+        tampilanall()
+        break;
+    }
+  }
+function tampilanBBM() {
+  $('[name=keterangancoa]').parents('.form-group').hide()
+  $('.tbl_supir_id').hide()
+  $('.tbl_pengeluarantruckingheader_nobukti').hide()
+  $('.colspan').attr('colspan', 2);
+}
+function tampilanall() {
+  $('[name=keterangancoa]').parents('.form-group').show()
+  $('.tbl_supir_id').show()
+  $('.tbl_pengeluarantruckingheader_nobukti').show()
+  $('.colspan').attr('colspan', 4);
+}
+
+  
+
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
@@ -435,17 +468,17 @@
           let detailRow = $(`
             <tr>
                 <td></td>
-                <td>
+                <td class="tbl_supir_id">
                     <input type="hidden" name="supir_id[]">
                     <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
                 </td>
-                <td>
+                <td class="tbl_pengeluarantruckingheader_nobukti">
                     <input type="text" name="pengeluarantruckingheader_nobukti[]" data-current-value="${detail.pengeluarantruckingheader_nobukti}" class="form-control pengeluarantruckingheader-lookup">
                 </td>
-                <td>
+                <td class="tbl_keterangan">
                     <input type="text" name="keterangan[]" class="form-control"> 
                 </td>
-                <td>
+                <td class="tbl_nominal">
                     <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
                 </td>
                 <td>
@@ -519,6 +552,8 @@
           form.find('[name]').addClass('disabled')
           initDisabled()
         }
+        setKodePenerimaan(response.data.penerimaantrucking);
+
       }
     })
   }
@@ -527,17 +562,17 @@
     let detailRow = $(`
       <tr>
         <td></td>
-        <td>
+        <td class="tbl_supir_id">
           <input type="hidden" name="supir_id[]">
           <input type="text" name="supir[]"  class="form-control supir-lookup">
         </td>
-        <td>
+        <td class="tbl_pengeluarantruckingheader_nobukti">
           <input type="text" name="pengeluarantruckingheader_nobukti[]"  class="form-control pengeluarantruckingheader-lookup">
         </td>
-        <td>
+        <td class="tbl_keterangan">
           <input type="text" name="keterangan[]" class="form-control"> 
         </td>
-        <td>
+        <td class="tbl_nominal">
           <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
         </td>
         <td>
@@ -650,6 +685,7 @@
         }
       },
       onSelectRow: (penerimaantrucking, element) => {
+        setKodePenerimaan(penerimaantrucking.kodepenerimaan)
         $('#crudForm [name=penerimaantrucking_id]').first().val(penerimaantrucking.id)
         element.val(penerimaantrucking.keterangan)
         element.data('currentValue', element.val())

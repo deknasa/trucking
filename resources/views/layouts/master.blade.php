@@ -249,7 +249,7 @@
   <script src="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.js') }}"></script>
   
   <!-- EasyUI -->
-  <script type="text/javascript" src="{{ asset('libraries/easyui/jquery.easyui.min.js') }}"></script>
+  {{-- <script type="text/javascript" src="{{ asset('libraries/easyui/jquery.easyui.min.js') }}"></script> --}}
 
   <!-- Highlight -->
   <script src="{{ asset('js/highlight.js') }}"></script>
