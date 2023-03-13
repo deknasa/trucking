@@ -356,7 +356,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm [name=tglbukti]').attr('readonly', true)
-    $('#crudForm [name=tglbukti]').removeClass('datepicker')
+    $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
 
 
     Promise
@@ -507,17 +507,20 @@
           containerId = response.data.container_id
           jenisorderId = response.data.jenisorder_id
 
+          if (index == 'tglbukti') {
+            element.val(dateFormat(value))
+          }
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } else if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
           } else {
             element.val(value)
           }
 
           if (index == 'container') {
             element.data('current-value', value)
+            console.log(containerId)
+              getcont(containerId)
           }
           if (index == 'agen') {
             element.data('current-value', value)
@@ -536,6 +539,7 @@
             getagentas(value)
           }
         })
+
 
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')

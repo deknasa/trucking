@@ -187,9 +187,8 @@
     let modalBody = $('#crudModal').find('.modal-body').html()
     let type
     $(document).ready(function() {
-        $('#crudForm').autocomplete({
-            disabled: true
-        });
+        
+        $("#crudForm [name]").attr("autocomplete", "off");
         $(document).on('change', '[name=statuskas]', function() {
             if ($(this).val() == 116) {
                 type = 'kas'
