@@ -108,6 +108,10 @@
       addRow()
     });
 
+    $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
+      $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($(this).val()).trigger('change');
+    });
+
     $(document).on('input', `#table_body [name="total_detail[]"]`, function(event) {
       setTotal()
     })
@@ -330,7 +334,7 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            cekValidasiAksi(Id,Aksi)
+            cekValidasiAksi(Id, Aksi)
           }
 
         } else {
@@ -340,7 +344,7 @@
     })
   }
 
-  function cekValidasiAksi(Id,Aksi){
+  function cekValidasiAksi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}hutangheader/${Id}/cekValidasiAksi`,
       method: 'POST',
@@ -350,16 +354,16 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'EDIT') {
-              editHutangHeader(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deleteHutangHeader(Id)
-            }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          if (Aksi == 'EDIT') {
+            editHutangHeader(Id)
           }
+          if (Aksi == 'DELETE') {
+            deleteHutangHeader(Id)
+          }
+        }
 
       }
     })
@@ -482,7 +486,8 @@
           </td>
       </tr>`)
 
-    detailRow.find(`[name="tgljatuhtempo[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    tglbukti = $('#crudForm').find(`[name="tglbukti"]`).val()
+    detailRow.find(`[name="tgljatuhtempo[]"]`).val(tglbukti).trigger('change');
 
 
     $('#detailList tbody').append(detailRow)

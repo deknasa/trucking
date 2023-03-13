@@ -637,6 +637,7 @@
         $.each(response.data, (index, detail) => {
 
           let id = detail.id
+          let nobukti = detail.nobukti
           totalNominal = parseFloat(totalNominal) + parseFloat(detail.total)
           totalSisa = totalSisa + parseFloat(detail.sisa);
           let nominal = new Intl.NumberFormat('en-US').format(detail.total);
@@ -644,7 +645,7 @@
 
           let detailRow = $(`
             <tr >
-              <td><input name='hutang_id[]' type="checkbox" id="checkItem" value="${id}"></td>
+              <td><input name='hutang_id[]' type="checkbox" id="checkItem" value="${nobukti}"></td>
               <td></td>
               <td>${detail.nobukti}</td>
               <td>${detail.tglbukti}</td>
@@ -660,7 +661,7 @@
               <td>
                 <textarea name="keterangandetail[]" rows="1" disabled class="form-control"></textarea>
               </td>
-              <td id='${detail.id}'>
+              <td id='${nobukti}'>
                 <input type="text" name="bayar[]" disabled class="form-control bayar text-right">
               </td>
               <td>
@@ -871,7 +872,7 @@
       setSisa()
     } else {
 
-      let id = $(this).val()
+      let nobukti = $(this).val()
       let action = $('#crudForm').data('action')
       $(this).closest('tr').find(`td [name="keterangandetail[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="bayar[]"]`).val('').prop('disabled', true)
@@ -892,7 +893,7 @@
       $(this).closest('tr').find(`td [name="bayar[]"]`).remove();
       let newBayarElement = `<input type="text" name="bayar[]" class="form-control text-right" disabled>`
 
-      $(this).closest('tr').find(`#${id}`).append(newBayarElement)
+      $(this).closest('tr').find(`#${nobukti}`).append(newBayarElement)
       setBayar()
       setPotongan()
       setTotal()
