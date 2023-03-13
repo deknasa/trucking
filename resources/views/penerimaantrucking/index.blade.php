@@ -51,8 +51,20 @@
             name: 'keterangan',
           },
           {
-            label: 'COA',
-            name: 'coa',
+            label: 'coa debet',
+            name: 'coadebet',
+          },
+          {
+            label: 'coa kredit',
+            name: 'coakredit',
+          },
+          {
+            label: 'coa posting debet',
+            name: 'coapostingdebet',
+          },
+          {
+            label: 'coa posting kredit',
+            name: 'coapostingkredit',
           },
           {
             label: 'FORMAT',

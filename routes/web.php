@@ -819,7 +819,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('invoiceextraheader', InvoiceExtraHeaderController::class);
     Route::resource('invoiceextradetail', InvoiceExtraDetailController::class);
     
-    
+    Route::get('invoicechargegandenganheader/index', [InvoiceChargeGandenganHeaderController::class, 'index']);
+    Route::get('invoicechargegandenganheader/export', [InvoiceChargeGandenganHeaderController::class, 'export'])->name('invoicechargegandenganheader.export');
+    Route::get('invoicechargegandenganheader/report/{id}', [InvoiceChargeGandenganHeaderController::class, 'report'])->name('invoicechargegandenganheader.report');
     Route::resource('invoicechargegandenganheader', InvoiceChargeGandenganHeaderController::class);
 
 
