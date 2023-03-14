@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="{{ asset('adminlte/plugins/fontawesome-free/css/all.min.css') }}">
 
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte-customized.min.css') }}">
 
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{ asset('adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
@@ -65,9 +65,9 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="rangeModalLabel">Pilih baris</h5>
+          <p class="modal-title" id="rangeModalLabel">Pilih baris</p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+            
           </button>
         </div>
         <form id="formRange" target="_blank">
@@ -108,9 +108,9 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="importModalLabel">Pilih file</h5>
+          <p class="modal-title" id="importModalLabel">Pilih file</p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+            
           </button>
         </div>
         <form id="formImport" method="post" enctype="multipart/form-data">
@@ -140,9 +140,9 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="rangeTglModalLabel">Pilih tanggal</h5>
+          <p class="modal-title" id="rangeTglModalLabel">Pilih tanggal</p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+            
           </button>
         </div>
         <form id="formRangeTgl" target="_blank">
@@ -185,9 +185,9 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="tglModalLabel">Pilih tanggal</h5>
+          <p class="modal-title" id="tglModalLabel">Pilih tanggal</p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+            
           </button>
         </div>
         <form id="formTgl" target="_blank">
