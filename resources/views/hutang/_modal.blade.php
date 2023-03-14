@@ -14,8 +14,8 @@
             <input type="hidden" name="id">
 
             <div class="row form-group">
-              <div class="col-12 col-sm-2 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-2 col-md-2">
+                <label class="col-form-label">
                   NO BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
@@ -23,8 +23,8 @@
                 <input type="text" name="nobukti" class="form-control" readonly>
               </div>
 
-              <div class="col-12 col-sm-2 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-2 col-md-2">
+                <label class="col-form-label">
                   TANGGAL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
@@ -37,8 +37,8 @@
 
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   SUPPLIER <span class="text-danger">*</span></label>
                 </label>
               </div>

@@ -12,16 +12,16 @@
         <input type="hidden" name="id">
           <div class="modal-body">
             <div class="row">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NO BUKTI
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="nobukti" class="form-control" readonly>
               </div>
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   TANGGAL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
@@ -35,8 +35,8 @@
 
             <div class="row">
 
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   TANGGAL LUNAS <span class="text-danger">*</span>
                 </label>
               </div>
@@ -46,8 +46,8 @@
               </div>
               </div>
               
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>pelunasan piutang <span class="text-danger">*</span> </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">pelunasan piutang <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="pelunasanpiutang_nobukti" class="form-control pelunasanpiutang-lookup">
@@ -57,8 +57,8 @@
             <div class="row">
               
 
-            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-              <label>keterangan <span class="text-danger">*</span> </label>
+            <div class="col-12 col-sm-3 col-md-2">
+              <label class="col-form-label">keterangan <span class="text-danger">*</span> </label>
             </div>
             <div class="col-12 col-sm-9 col-md-4">
               <input type="text" name="keterangan" class="form-control">

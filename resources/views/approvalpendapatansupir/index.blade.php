@@ -17,8 +17,8 @@
                 <form id="crudForm">
                     <div class="card-body">
                         <div class="form-group row">
-                            <div class="col-12 col-sm-2 col-md-2 col-form-label">
-                                <label>Periode<span class="text-danger">*</span></label>
+                            <div class="col-12 col-sm-2 col-md-2">
+                                <label class="col-form-label">Periode<span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
                                 <div class="input-group">
@@ -27,8 +27,8 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 col-sm-2 col-md-2 col-form-label">
-                                <label>Proses data<span class="text-danger">*</span></label>
+                            <div class="col-12 col-sm-2 col-md-2">
+                                <label class="col-form-label">Proses data<span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
                                 <select name="approve" id="approve" class="form-select select2bs4" style="width: 100%;">

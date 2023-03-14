@@ -13,8 +13,8 @@
             <input type="text" name="id" class="form-control"  hidden readonly>
             
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   tgl absensi <span class="text-danger">*</span>
                 </label>
               </div>

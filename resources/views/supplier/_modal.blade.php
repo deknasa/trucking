@@ -11,8 +11,8 @@
         <form action="" method="post">
           <div class="modal-body">
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>ID</label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">ID</label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="id" class="form-control" readonly>
@@ -20,8 +20,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Nama Supplier <span class="text-danger">*</span>
                 </label>
               </div>
@@ -31,8 +31,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Nama Kontak <span class="text-danger">*</span>
                 </label>
               </div>
@@ -42,8 +42,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Alamat <span class="text-danger">*</span>
                 </label>
               </div>
@@ -53,8 +53,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Kota <span class="text-danger">*</span>
                 </label>
               </div>
@@ -64,8 +64,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Kodepos <span class="text-danger">*</span>
                 </label>
               </div>
@@ -75,8 +75,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Notelp1 <span class="text-danger">*</span>
                 </label>
               </div>
@@ -86,8 +86,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Notelp2 
                 </label>
               </div>
@@ -97,8 +97,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Email <span class="text-danger">*</span>
                 </label>
               </div>
@@ -108,8 +108,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Web 
                 </label>
               </div>
@@ -119,8 +119,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Nama Pemilik <span class="text-danger">*</span>
                 </label>
               </div>
@@ -130,8 +130,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Jenis Usaha <span class="text-danger">*</span>
                 </label>
               </div>
@@ -141,8 +141,8 @@
             </div>
 <!-- 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   TOP <span class="text-danger">*</span>
                 </label>
               </div>
@@ -152,8 +152,8 @@
             </div> -->
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Bank <span class="text-danger">*</span>
                 </label>
               </div>
@@ -163,8 +163,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Rekening Bank <span class="text-danger">*</span>
                 </label>
               </div>
@@ -174,8 +174,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Jabatan <span class="text-danger">*</span>
                 </label>
               </div>
@@ -185,7 +185,7 @@
             </div>
 
             <div class="form-group row">
-              <label for="staticEmail" class="col-sm-3 col-md-2 col-form-label">STATUS DAFTAR HARGA<span class="text-danger">*</span></label>
+              <label class="col-sm-3 col-md-2 col-form-label">STATUS DAFTAR HARGA<span class="text-danger">*</span></label>
               <div class="col-sm-9 col-md-10">
                 <select name="statusdaftarharga" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS DAFTAR HARGA --</option>
@@ -194,8 +194,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Kategori Usaha <span class="text-danger">*</span>
                 </label>
               </div>
@@ -205,8 +205,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Nama Rekening <span class="text-danger">*</span>
                 </label>
               </div>
@@ -215,8 +215,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   STATUS AKTIF <span class="text-danger">*</span>
                 </label>
               </div>

@@ -14,8 +14,8 @@
             <input type="hidden" name="id">
 
             <div class="row form-group">
-              <div class="col-12 col-sm-2 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-2 col-md-2">
+                <label class="col-form-label">
                   NO BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
@@ -23,8 +23,8 @@
                 <input type="text" name="nobukti" class="form-control" readonly>
               </div>
 
-              <div class="col-12 col-sm-2 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-2 col-md-2">
+                <label class="col-form-label">
                   TANGGAL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
@@ -36,8 +36,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   PELANGGAN <span class="text-danger"></span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -48,8 +48,8 @@
 
 
             {{--<div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   STATUS JENIS TRANSAKSI <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -60,8 +60,8 @@
             </div>--}}
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   DIBAYAR KE <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -70,8 +70,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   BANK <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -81,8 +81,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   ALAT BAYAR <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -91,8 +91,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   TRANSFER KE ACC
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -100,8 +100,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   TRANSFER KE AN
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -109,8 +109,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   TRANSFER KE BANK
               </div>
               <div class="col-12 col-sm-9 col-md-10">

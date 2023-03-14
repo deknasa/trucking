@@ -11,14 +11,14 @@
         
         <div class="row form-group">
           
-          <div class="col-12 col-sm-3 col-md-2 col-form-label">
-            <label>nobukti </label>
+          <div class="col-12 col-sm-3 col-md-2">
+            <label class="col-form-label">nobukti </label>
           </div>
           <div class="col-12 col-sm-9 col-md-4">
             <input type="text" readonly name="nobukti" class="form-control">
           </div>
-          <div class="col-12 col-sm-3 col-md-2 col-form-label">
-            <label>tglbukti </label>
+          <div class="col-12 col-sm-3 col-md-2">
+            <label class="col-form-label">tglbukti </label>
           </div>
           <div class="col-12 col-sm-9 col-md-4">  
             <div class="input-group">
@@ -344,8 +344,8 @@
           
           row += `
           <div class="row">
-            <div class="col-12 col-md-6 col-form-label">
-              <label>${value.kodeabsen}</label>
+            <div class="col-12 col-md-6">
+              <label class="col-form-label">${value.kodeabsen}</label>
             </div>
             <div class="col-12 col-md-6">
               <input type="text" value="${value.jumlah}" class="form-control" readonly>

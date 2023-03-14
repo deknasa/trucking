@@ -17,7 +17,7 @@
                 <form id="crudForm">
                     <div class="card-body">
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label">Periode<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2">Periode<span class="text-danger">*</span></label>
                             <div class="col-sm-4">
                                 <div class="input-group">
                                     <input type="text" name="periode" class="form-control datepicker">
@@ -25,7 +25,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label">Proses data<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2">Proses data<span class="text-danger">*</span></label>
 
                             <div class="col-12 col-sm-4 col-md-4">
                                 <select name="approve" id="approve" class="form-select select2bs4" style="width: 100%;">

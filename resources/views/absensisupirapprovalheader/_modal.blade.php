@@ -13,15 +13,15 @@
             <div class="row form-group">
                 <input type="hidden" name="id" hidden class="form-control" readonly>
 
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>nobukti </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">nobukti </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" readonly name="nobukti" class="form-control">
               </div>
 
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>tglbukti </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">tglbukti </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">  
                 <div class="input-group">
@@ -31,8 +31,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>absensisupir <span class="text-danger">*</span> </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">absensisupir <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="absensisupir_nobukti" class="form-control absensisupir-lookup">
@@ -41,8 +41,8 @@
             </div>
             
             {{-- <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>keterangan <span class="text-danger">*</span> </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">keterangan <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">

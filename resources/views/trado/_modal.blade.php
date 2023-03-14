@@ -14,20 +14,20 @@
             <input type="hidden" name="id">
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Keterangan <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Keterangan <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" name="keterangan" class="form-control">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">kode trado <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">kode trado <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" name="kodetrado" class="form-control">
                 </div>
               </div>
               
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">STATUS AKTIF <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">STATUS AKTIF <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <select name="statusaktif" class="form-control select2bs4">
                     <option value="">-- PILIH STATUS AKTIF --</option>
@@ -40,13 +40,13 @@
             <div class="row">
               
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Tahun <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Tahun <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input pattern="[0-9.]+" type="text" class="form-control numbernoseparate" name="tahun">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Merek <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Merek <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="merek">
                 </div>
@@ -55,13 +55,13 @@
 
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">No Rangka <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">No Rangka <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="norangka">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">No Mesin <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">No Mesin <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="nomesin">
                 </div>
@@ -70,13 +70,13 @@
 
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Nama <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Nama <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="nama">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">No STNK <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">No STNK <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="nostnk">
                 </div>
@@ -85,13 +85,13 @@
 
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Alamat STNK <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Alamat STNK <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="alamatstnk">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Jenis Plat <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Jenis Plat <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <select name="statusjenisplat" class="form-control select2bs4">
                     <option value="">-- PILIH JENIS PLAT --</option>
@@ -102,7 +102,7 @@
 
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Tgl Pajak STNK <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Tgl Pajak STNK <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <div class="input-group">
                     <input type="text" class="form-control datepicker" name="tglpajakstnk">
@@ -110,7 +110,7 @@
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Tipe <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Tipe <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="tipe">
                 </div>
@@ -120,13 +120,13 @@
 
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Jenis <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Jenis <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="jenis">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Isi Silinder <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Isi Silinder <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control numbernoseparate" name="isisilinder">
                 </div>
@@ -135,13 +135,13 @@
 
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Warna <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Warna <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="warna">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Bahan Bakar <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Bahan Bakar <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="jenisbahanbakar">
                 </div>
@@ -150,13 +150,13 @@
 
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Jumlah Sumbu <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Jumlah Sumbu <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control numbernoseparate" name="jumlahsumbu">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Jumlah Roda <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Jumlah Roda <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control numbernoseparate" name="jumlahroda">
                 </div>
@@ -165,13 +165,13 @@
 
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Model <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Model <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="model">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">No BPKB <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">No BPKB <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="nobpkb">
                 </div>
@@ -180,14 +180,14 @@
 
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Milik Mandor </label>
+                <label class="col-sm-4 col-form-label">Milik Mandor </label>
                 <div class="col-sm-8">
                   <input type="hidden" name="mandor_id">
                   <input type="text" name="mandor" class="form-control mandor-lookup">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Jumlah Ban Serap <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Jumlah Ban Serap <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control numbernoseparate" name="jumlahbanserap">
                 </div>
@@ -196,14 +196,14 @@
 
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">Milik Supir</label>
+                <label class="col-sm-4 col-form-label">Milik Supir</label>
                 <div class="col-sm-8">
                   <input type="hidden" name="supir_id">
                   <input type="text" name="supir" class="form-control supir-lookup">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
-                <label for="staticEmail" class="col-sm-4 col-form-label">STATUS GEROBAK <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">STATUS GEROBAK <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <select name="statusgerobak" class="form-control select2bs4">
                     <option value="">-- PILIH STATUS GEROBAK --</option>

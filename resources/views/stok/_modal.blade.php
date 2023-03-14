@@ -13,8 +13,8 @@
             <div class="row form-group">
               <input type="hidden" name="id" hidden class="form-control" readonly>
 
-                <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                  <label>nama stok <span class="text-danger">*</span> </label>
+                <div class="col-12 col-sm-3 col-md-2">
+                  <label class="col-form-label">nama stok <span class="text-danger">*</span> </label>
                 </div>
                 <div class="col-12 col-sm-9 col-md-10">
                   <input type="text" name="namastok" class="form-control">
@@ -22,8 +22,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>nama terpusat <span class="text-danger">*</span> </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">nama terpusat <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="namaterpusat" class="form-control">
@@ -31,8 +31,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   status aktif <span class="text-danger">*</span>
                 </label>
               </div>
@@ -44,8 +44,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>kelompok <span class="text-danger">*</span> </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">kelompok <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="kelompok" class="form-control kelompok-lookup">
@@ -53,8 +53,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>sub kelompok <span class="text-danger">*</span> </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">sub kelompok <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="subkelompok" class="form-control subkelompok-lookup">
@@ -62,8 +62,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>kategori <span class="text-danger">*</span> </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">kategori <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="kategori" class="form-control kategori-lookup">
@@ -71,8 +71,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>merk </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">merk </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="merk" class="form-control merk-lookup">
@@ -80,8 +80,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>jenistrado </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">jenistrado </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="jenistrado" class="form-control jenistrado-lookup">
@@ -90,8 +90,8 @@
             </div>
             <div class="row form-group">
 
-                <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                  <label>keterangan <span class="text-danger">*</span> </label>
+                <div class="col-12 col-sm-3 col-md-2">
+                  <label class="col-form-label">keterangan <span class="text-danger">*</span> </label>
                 </div>
                 <div class="col-12 col-sm-9 col-md-10">
                   <input type="text" name="keterangan" class="form-control">
@@ -99,16 +99,16 @@
             </div>
             <div class="row form-group">
 
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>qtymin <span class="text-danger">*</span> </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">qtymin <span class="text-danger">*</span> </label>
                 
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="qtymin"  style="text-align:right" class="form-control " > 
               </div>
 
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>qtymax <span class="text-danger">*</span> </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">qtymax <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="qtymax"  style="text-align:right" class="form-control " > 

@@ -13,16 +13,16 @@
             <input type="hidden" name="id">
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>ID</label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">ID</label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="id" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   GROUP <span class="text-danger">*</span>
                 </label>
               </div>
@@ -31,8 +31,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   SUBGROUP <span class="text-danger">*</span>
                 </label>
               </div>
@@ -41,8 +41,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NAMA PARAMETER <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -50,8 +50,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   KELOMPOK
                 </label>
               </div>
@@ -60,8 +60,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   TYPE
                 </label>
               </div>
@@ -72,8 +72,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Default <span class="text-danger">*</span>
                 </label>
               </div>
@@ -88,8 +88,8 @@
 
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   MEMO
                 </label>
               </div>

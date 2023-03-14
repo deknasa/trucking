@@ -14,8 +14,8 @@
             <input type="hidden" name="id">
 
             <div class="row form-group">
-              <div class="col-12 col-sm-2 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-2 col-md-2">
+                <label class="col-form-label">
                   NO BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
@@ -23,8 +23,8 @@
                 <input type="text" name="nobukti" class="form-control" readonly>
               </div>
 
-              <div class="col-12 col-sm-2 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-2 col-md-2">
+                <label class="col-form-label">
                   TANGGAL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
@@ -35,8 +35,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   BANK/KAS <span class="text-danger">*</span>
                 </label>
               </div>
@@ -47,8 +47,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   ALAT BAYAR <span class="text-danger">*</span>
                 </label>
               </div>
@@ -59,8 +59,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NO BUKTI PENERIMAAN
                 </label>
               </div>
@@ -69,8 +69,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NO BUKTI PENERIMAAN GIRO
                 </label>
               </div>
@@ -79,8 +79,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NO BUKTI NOTA KREDIT
                 </label>
               </div>
@@ -89,8 +89,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NO BUKTI NOTA DEBET
                 </label>
               </div>
@@ -99,8 +99,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NO WARKAT
                 </label>
               </div>
@@ -115,7 +115,7 @@
                   <div class="card-body">
                     <div class="row form-group">
                       <div class="col-md-1">
-                        <label>
+                        <label class="col-form-label">
                           AGEN <span class="text-danger">*</span>
                         </label>
                       </div>
