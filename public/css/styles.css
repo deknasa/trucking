@@ -231,11 +231,9 @@ html {
 	overflow-y: auto;
 }
 
-.modal.modal-fullscreen .modal-footer {
-	position: sticky;
-	bottom: 0;
+/* .modal.modal-fullscreen .modal-footer {
 	background: inherit;
-}
+} */
 
 .highlight {
 	background-color: yellow;
@@ -372,6 +370,8 @@ html {
 }
 
 .ui-dialog .ui-dialog-buttonpane {
+	display: flex;
+	justify-content: center;
 	margin: 0 !important;
 	padding: 5px !important;
 	background: #f4f4f4 !important;

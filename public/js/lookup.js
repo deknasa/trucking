@@ -82,11 +82,9 @@ $.fn.lookup = function (options) {
         <div class="modal-dialog">
           <form action="#" id="crudForm">
             <div class="modal-content">
-              <div class="modal-header bg-primary">
-                <h5 class="modal-title" id="lookupModalLabel">${settings.title}</h5>
-                <button type="button" class="close close-button" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
+              <div class="modal-header">
+                <p class="modal-title" id="lookupModalLabel">${settings.title}</p>
+                <button type="button" class="close close-button" data-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body" style="min-height: 680px;">
               </div>

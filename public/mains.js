@@ -742,7 +742,7 @@ function loadGlobalSearch(grid) {
 	/* Append global search textfield */
 	$("#t_" + $.jgrid.jqID(grid[0].id)).html(
 		$(
-			`<form class="form-inline"><div class="form-group w-100 px-2" id="titlesearch"><label for="searchText" style="font-weight: normal !important;">Search : </label><input type="text" class="form-control global-search" id="${$.jgrid.jqID(
+			`<form class="form-inline"><div class="form-group w-100 px-2" id="titlesearch"><label for="searchText" style="font-weight: normal !important;">Search : </label><input type="text" class="form-control form-control-sm global-search" id="${$.jgrid.jqID(
 				grid[0].id
 			)}_searchText" placeholder="Search" autocomplete="off"></div></form>`
 		)

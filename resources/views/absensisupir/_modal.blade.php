@@ -2,10 +2,10 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        <div class="modal-header bg-primary">
+        <div class="modal-header">
           <h5 class="modal-title" id="crudModalTitle">Create Absensi Supir</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+            
           </button>
         </div>
         <form action="" method="post">
