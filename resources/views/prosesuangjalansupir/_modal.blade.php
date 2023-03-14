@@ -15,8 +15,8 @@
                             <input type="hidden" name="id">
 
                             <div class="row form-group">
-                                <div class="col-12 col-md-2 col-form-label">
-                                    <label>
+                                <div class="col-12 col-md-2">
+                                    <label class="col-form-label">
                                         NO BUKTI <span class="text-danger">*</span>
                                     </label>
                                 </div>
@@ -24,8 +24,8 @@
                                     <input type="text" name="nobukti" class="form-control" readonly>
                                 </div>
 
-                                <div class="col-12 col-md-2 col-form-label">
-                                    <label>
+                                <div class="col-12 col-md-2">
+                                    <label class="col-form-label">
                                         TANGGAL BUKTI <span class="text-danger">*</span>
                                     </label>
                                 </div>
@@ -37,8 +37,8 @@
                             </div>
 
                             <div class="row form-group">
-                                <div class="col-12 col-md-2 col-form-label">
-                                    <label>
+                                <div class="col-12 col-md-2">
+                                    <label class="col-form-label">
                                         ABSENSI SUPIR <span class="text-danger">*</span>
                                     </label>
                                 </div>
@@ -48,8 +48,8 @@
                             </div>
 
                             <div class="row form-group">
-                                <div class="col-12 col-md-2 col-form-label">
-                                    <label>
+                                <div class="col-12 col-md-2">
+                                    <label class="col-form-label">
                                         SUPIR <span class="text-danger">*</span>
                                     </label>
                                 </div>
@@ -60,8 +60,8 @@
                             </div>
 
                             <div class="row form-group">
-                                <div class="col-12 col-md-2 col-form-label">
-                                    <label>
+                                <div class="col-12 col-md-2">
+                                    <label class="col-form-label">
                                         NO. POL <span class="text-danger">*</span>
                                     </label>
                                 </div>
@@ -119,8 +119,8 @@
 
                                     <div id="tabs-2">
                                         <div class="row form-group mt-3">
-                                            <div class="col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">
                                                     TGL ADJUST TRANSFER
                                                 </label>
                                             </div>
@@ -131,8 +131,8 @@
                                             </div>
                                         </div>
                                         <div class="row form-group">
-                                            <div class="col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">
                                                     NILAI ADJUST TRANSFER
                                                 </label>
                                             </div>
@@ -143,8 +143,8 @@
                                             </div>
                                         </div>
                                         <div class="row form-group">
-                                            <div class="col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">
                                                     KETERANGAN ADJUST TRANSFER
                                                 </label>
                                             </div>
@@ -159,8 +159,8 @@
                                             <h6>Posting ke Kas/Bank Masuk</h6>
 
                                             <div class="row form-group">
-                                                <div class="col-12 col-md-2 col-form-label">
-                                                    <label>
+                                                <div class="col-12 col-md-2">
+                                                    <label class="col-form-label">
                                                         POSTING
                                                 </div>
                                                 <div class="col-12 col-md-4">
@@ -169,8 +169,8 @@
                                                 </div>
                                             </div>
                                             <div class="row form-group">
-                                                <div class="col-12 col-md-2 col-form-label">
-                                                    <label>
+                                                <div class="col-12 col-md-2">
+                                                    <label class="col-form-label">
                                                         NO BUKTI BARU
                                                 </div>
                                                 <div class="col-12 col-md-4">
@@ -184,8 +184,8 @@
                                     <div id="tabs-3">
 
                                         <div class="row form-group mt-3">
-                                            <div class="col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">
                                                     NO BUKTI
                                                 </label>
                                             </div>
@@ -196,8 +196,8 @@
                                             </div>
                                         </div>
                                         <div class="row form-group">
-                                            <div class="col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">
                                                     TANGGAL
                                                 </label>
                                             </div>
@@ -208,8 +208,8 @@
                                             </div>
                                         </div>
                                         <div class="row form-group">
-                                            <div class="col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">
                                                     NILAI DEPOSIT
                                                 </label>
                                             </div>
@@ -220,8 +220,8 @@
                                             </div>
                                         </div>
                                         <div class="row form-group">
-                                            <div class="col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">
                                                     KETERANGAN
                                                 </label>
                                             </div>
@@ -236,8 +236,8 @@
                                             <h6>Posting ke Kas/Bank Masuk</h6>
 
                                             <div class="row form-group">
-                                                <div class="col-12 col-md-2 col-form-label">
-                                                    <label>
+                                                <div class="col-12 col-md-2">
+                                                    <label class="col-form-label">
                                                         POSTING
                                                 </div>
                                                 <div class="col-12 col-md-4">
@@ -246,8 +246,8 @@
                                                 </div>
                                             </div>
                                             <div class="row form-group">
-                                                <div class="col-12 col-md-2 col-form-label">
-                                                    <label>
+                                                <div class="col-12 col-md-2">
+                                                    <label class="col-form-label">
                                                         NO BUKTI BARU
                                                 </div>
                                                 <div class="col-12 col-md-4">
@@ -259,8 +259,8 @@
 
                                     <div id="tabs-4">
                                         <div class="row form-group mt-3">
-                                            <div class="col-12 col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-12 col-md-2">
+                                                <label class="col-form-label">
                                                     POSTING
                                             </div>
                                             <div class="col-12 col-md-4">

@@ -15,8 +15,8 @@
                         <div class="master">
                             <input type="hidden" name="id">
                             <div class="row form-group">
-                                <div class="col-12 col-md-2 col-form-label">
-                                    <label>
+                                <div class="col-12 col-md-2">
+                                    <label class="col-form-label">
                                         NO BUKTI <span class="text-danger">*</span>
                                     </label>
                                 </div>
@@ -24,8 +24,8 @@
                                     <input type="text" name="nobukti" class="form-control" readonly>
                                 </div>
 
-                                <div class="col-12 col-md-2 col-form-label">
-                                    <label>
+                                <div class="col-12 col-md-2">
+                                    <label class="col-form-label">
                                         TANGGAL BUKTI <span class="text-danger">*</span>
                                     </label>
                                 </div>
@@ -36,8 +36,8 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-12 col-md-2 col-form-label">
-                                    <label>
+                                <div class="col-12 col-md-2">
+                                    <label class="col-form-label">
                                         SUPIR <span class="text-danger">*</span>
                                     </label>
                                 </div>
@@ -48,8 +48,8 @@
                             </div>
 
                             <div class="row form-group">
-                                <div class="col-12 col-md-2 col-form-label">
-                                    <label>
+                                <div class="col-12 col-md-2">
+                                    <label class="col-form-label">
                                         TANGGAL DARI <span class="text-danger">*</span>
                                     </label>
                                 </div>
@@ -62,8 +62,8 @@
                             </div>
 
                             <div class="row form-group">
-                                <div class="col-12 col-md-2 col-form-label">
-                                    <label>
+                                <div class="col-12 col-md-2">
+                                    <label class="col-form-label">
                                         TANGGAL SAMPAI <span class="text-danger">*</span>
                                     </label>
                                 </div>
@@ -161,8 +161,8 @@
                                     </div>
                                     <div id="tabs-4">
                                         <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-12 col-sm-3 col-md-2">
+                                                <label class="col-form-label">
                                                     NO BUKTI</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
@@ -170,8 +170,8 @@
                                             </div>
                                         </div>
                                         <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-12 col-sm-3 col-md-2">
+                                                <label class="col-form-label">
                                                     Tanggal Bukti</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
@@ -179,8 +179,8 @@
                                             </div>
                                         </div>
                                         <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-12 col-sm-3 col-md-2">
+                                                <label class="col-form-label">
                                                     Nominal Deposito</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
@@ -188,8 +188,8 @@
                                             </div>
                                         </div>
                                         <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-12 col-sm-3 col-md-2">
+                                                <label class="col-form-label">
                                                     Keterangan Deposito</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
@@ -199,8 +199,8 @@
                                     </div>
                                     <div id="tabs-5">
                                         <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-12 col-sm-3 col-md-2">
+                                                <label class="col-form-label">
                                                     NO BUKTI</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
@@ -208,8 +208,8 @@
                                             </div>
                                         </div>
                                         <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-12 col-sm-3 col-md-2">
+                                                <label class="col-form-label">
                                                     Tanggal Bukti</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
@@ -217,8 +217,8 @@
                                             </div>
                                         </div>
                                         <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-12 col-sm-3 col-md-2">
+                                                <label class="col-form-label">
                                                     Nominal BBM</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
@@ -226,8 +226,8 @@
                                             </div>
                                         </div>
                                         <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-12 col-sm-3 col-md-2">
+                                                <label class="col-form-label">
                                                     Keterangan BBM</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
@@ -238,8 +238,8 @@
                                     </div>
                                     <div id="tabs-6">
                                         <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-12 col-sm-3 col-md-2">
+                                                <label class="col-form-label">
                                                     NO BUKTI</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
@@ -247,8 +247,8 @@
                                             </div>
                                         </div>
                                         <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-12 col-sm-3 col-md-2">
+                                                <label class="col-form-label">
                                                     Tanggal Bukti</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
@@ -256,8 +256,8 @@
                                             </div>
                                         </div>
                                         <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-12 col-sm-3 col-md-2">
+                                                <label class="col-form-label">
                                                     Nominal Pinjaman</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
@@ -265,8 +265,8 @@
                                             </div>
                                         </div>
                                         <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
+                                            <div class="col-12 col-sm-3 col-md-2">
+                                                <label class="col-form-label">
                                                     Keterangan Pinjaman</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">

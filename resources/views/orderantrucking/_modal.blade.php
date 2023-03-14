@@ -11,16 +11,16 @@
         <form action="" method="post">
           <div class="modal-body">
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>ID</label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">ID</label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="id" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NO BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
@@ -29,8 +29,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   TGL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
@@ -41,8 +41,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   CONTAINER <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
@@ -51,8 +51,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   AGEN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
@@ -61,8 +61,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   JENIS ORDER <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
@@ -71,8 +71,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   PELANGGAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
@@ -81,8 +81,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   TARIF <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
@@ -91,8 +91,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   JOB EMKL </label>
               </div>
               <div class="col-12 col-md-10">
@@ -100,8 +100,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NO CONT <span class="text-danger">*</span>
                 </label>
               </div>
@@ -110,8 +110,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NO SEAL <span class="text-danger">*</span>
                 </label>
               </div>
@@ -120,8 +120,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   JOB EMKL 2 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -129,8 +129,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NO CONT 2
                 </label>
               </div>
@@ -139,8 +139,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NO SEAL 2
                 </label>
               </div>
@@ -149,8 +149,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   STATUS LANGSIR <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
@@ -160,8 +160,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   STATUS PERALIHAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">

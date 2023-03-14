@@ -11,16 +11,16 @@
         <form action="" method="post">
           <div class="modal-body">
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>ID</label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">ID</label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="id" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NO BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
@@ -29,8 +29,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   TGL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
@@ -41,8 +41,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   STATUS RITASI <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
@@ -52,8 +52,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   SURAT PENGANTAR <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
@@ -61,8 +61,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   DARI <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
@@ -71,8 +71,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   SAMPAI <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
@@ -81,8 +81,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   TRADO <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
@@ -91,8 +91,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   SUPIR <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">

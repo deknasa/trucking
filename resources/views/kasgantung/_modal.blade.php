@@ -12,8 +12,8 @@
           <input type="hidden" name="id">
           <div class="modal-body">
             <div class="row">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NO BUKTI
                 </label>
               </div>
@@ -22,8 +22,8 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   TANGGAL <span class="text-danger">*</span>
                 </label>
               </div>
@@ -34,8 +34,8 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   PENERIMA
                 </label>
               </div>
@@ -48,8 +48,8 @@
               <h6>Posting Pengeluaran</h6>
 
               <div class="row form-group">
-                <div class="col-12 col-md-2 col-form-label">
-                  <label>
+                <div class="col-12 col-md-2">
+                  <label class="col-form-label">
                     POSTING </label>
                 </div>
                 <div class="col-12 col-md-4">
@@ -58,8 +58,8 @@
                 </div>
               </div>
               <div class="row form-group">
-                <div class="col-12 col-md-2 col-form-label">
-                  <label>
+                <div class="col-12 col-md-2">
+                  <label class="col-form-label">
                     NO BUKTI KAS KELUAR </label>
                 </div>
                 <div class="col-12 col-md-4">

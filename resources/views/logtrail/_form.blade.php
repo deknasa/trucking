@@ -12,14 +12,14 @@
             <input type="hidden" name="kasgantung_nobukti" value="{{ $absensisupir['kasgantung_nobukti'] ?? $kasGantungNoBukti }}">
 
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>NO BUKTI</label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">NO BUKTI</label>
               </div>
               <div class="col-12 col-md-4">
                 <input type="text" name="nobukti" class="form-control" value="{{ $absensisupir['nobukti'] ?? $noBukti }}" readonly>
               </div>
-              <div class="col-12 col-md-2 col-form-label">
-                <label>TANGGAL</label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">TANGGAL</label>
               </div>
               <div class="col-12 col-md-4">
                 <input type="text" name="tgl" class="form-control datepicker" value="{{ $absensisupir['tgl'] ?? date('d-m-Y') }}">
@@ -27,8 +27,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>KETERANGAN</label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">KETERANGAN</label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="keterangan" class="form-control" value="{{ $absensisupir['keterangan'] ?? '' }}">

@@ -11,8 +11,8 @@
                 <form id="crudForm">
                     <div class="card-body">
                         <div class="form-group row">
-                            <div class="col-12 col-sm-2 col-md-2 col-form-label">
-                                <label>
+                            <div class="col-12 col-sm-2 col-md-2">
+                                <label class="col-form-label">
                                     TANGGAL DARI <span class="text-danger">*</span>
                                 </label>
                             </div>
@@ -24,8 +24,8 @@
                         </div>
                         <div class="form-group row">
 
-                            <div class="col-12 col-sm-2 col-md-2 col-form-label">
-                                <label>
+                            <div class="col-12 col-sm-2 col-md-2">
+                                <label class="col-form-label">
                                     TANGGAL SAMPAI <span class="text-danger">*</span>
                                 </label>
                             </div>

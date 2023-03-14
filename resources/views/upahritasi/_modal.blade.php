@@ -13,8 +13,8 @@
             <input type="hidden" name="id">
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Parent 
                 </label>
               </div>
@@ -24,8 +24,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   DARI <span class="text-danger">*</span>
                 </label>
               </div>
@@ -36,8 +36,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   TUJUAN <span class="text-danger">*</span>
                 </label>
               </div>
@@ -48,8 +48,8 @@
             </div>
 
             <div class="row form-group" style="display: none">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   ZONA <span class="text-danger">*</span>
                 </label>
               </div>
@@ -60,8 +60,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   JARAK <span class="text-danger">*</span>
                 </label>
               </div>
@@ -70,8 +70,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   STATUS AKTIF <span class="text-danger">*</span>
                 </label>
               </div>
@@ -82,8 +82,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   TGL MULAI BERLAKU <span class="text-danger">*</span>
                 </label>
               </div>
@@ -94,8 +94,8 @@
               </div>
             </div>
             <div class="row form-group" style="display: none">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   TGL AKHIR BERLAKU <span class="text-danger">*</span>
                 </label>
               </div>
@@ -106,8 +106,8 @@
               </div>
             </div>
             <div class="row form-group" style="display: none">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   STATUS LUAR KOTA <span class="text-danger">*</span>
                 </label>
               </div>
