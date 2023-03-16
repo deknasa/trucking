@@ -5,7 +5,7 @@
                 <div class="modal-header">
                     <p class="modal-title" id="crudModalTitle"></p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        
+
                     </button>
                 </div>
                 <form action="" method="post">
@@ -76,7 +76,7 @@
 
                             <div class="row form-group">
                                 <div class="col-12 col-md-12">
-                                    <button class="btn btn-secondary" type="button" id="btnTampil">TAMPIL</button>
+                                    <button class="btn btn-secondary" type="button" id="btnTampil">RELOAD</button>
                                 </div>
                             </div>
                         </div>
@@ -314,19 +314,48 @@
     let dari = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     let sampai = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     let selectedRows = [];
+    let selectedNobukti = [];
+    let selectedGajiSupir = [];
+    let selectedGajiKenek = [];
+    let selectedKomisiSupir = [];
+    let selectedUpahRitasi = [];
+    let selectedStatusRitasi = [];
+    let selectedBiayaExtra = [];
+    let selectedKetBiaya = [];
+    let selectedTolSupir = [];
     let subtotal = 0
+    let sortnameRincian = 'nobuktitrip';
 
     function checkboxHandler(element) {
         let value = $(element).val();
         if (element.checked) {
             selectedRows.push($(element).val())
+            selectedNobukti.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_nobuktitrip"]`).text())
+            selectedGajiSupir.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_gajisupir"]`).text())
+            selectedGajiKenek.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_gajikenek"]`).text())
+            selectedKomisiSupir.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text())
+            selectedUpahRitasi.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_upahritasi"]`).text())
+            selectedStatusRitasi.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_statusritasi"]`).text())
+            selectedBiayaExtra.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_biayaextra"]`).text())
+            selectedKetBiaya.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_keteranganbiaya"]`).text())
+            selectedTolSupir.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_tolsupir"]`).text())
         } else {
             for (var i = 0; i < selectedRows.length; i++) {
                 if (selectedRows[i] == value) {
                     selectedRows.splice(i, 1);
+                    selectedNobukti.splice(i, 1);
+                    selectedGajiSupir.splice(i, 1);
+                    selectedGajiKenek.splice(i, 1);
+                    selectedKomisiSupir.splice(i, 1);
+                    selectedUpahRitasi.splice(i, 1);
+                    selectedStatusRitasi.splice(i, 1);
+                    selectedBiayaExtra.splice(i, 1);
+                    selectedKetBiaya.splice(i, 1);
+                    selectedTolSupir.splice(i, 1);
                 }
             }
         }
+
     }
     $(document).ready(function() {
 
@@ -334,11 +363,13 @@
         $(document).on('input', `#crudForm [name="uangmakanharian"]`, function(event) {
             let uangMakan = $(this).val()
             uangMakan = parseFloat(uangMakan.replaceAll(',', ''));
-
+            uangMakan = Number.isNaN(uangMakan) ? 0 : uangMakan
+            
             let subTotal = ($(`#crudForm [name="subtotal"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="subtotal"]`)[0])
 
             let total = subTotal + uangMakan
-
+            console.log(uangMakan)
+            console.log(total)
             // hitung sisa
 
             let uangjalan = AutoNumeric.getNumber($(`#crudForm [name="uangjalan"]`)[0]);
@@ -479,10 +510,74 @@
                     value: item
                 })
             });
+            $.each(selectedNobukti, function(index, item) {
+                data.push({
+                    name: 'rincian_nobukti[]',
+                    value: item
+                })
+            });
+
+            $.each(selectedGajiSupir, function(index, item) {
+                data.push({
+                    name: 'rincian_gajisupir[]',
+                    value: parseFloat(item.replaceAll(',', ''))
+                })
+            });
+            $.each(selectedGajiKenek, function(index, item) {
+                data.push({
+                    name: 'rincian_gajikenek[]',
+                    value: parseFloat(item.replaceAll(',', ''))
+                })
+            });
+            $.each(selectedKomisiSupir, function(index, item) {
+                data.push({
+                    name: 'rincian_komisisupir[]',
+                    value: parseFloat(item.replaceAll(',', ''))
+                })
+            });
+            $.each(selectedTolSupir, function(index, item) {
+                data.push({
+                    name: 'rincian_tolsupir[]',
+                    value: parseFloat(item.replaceAll(',', ''))
+                })
+            });
+            $.each(selectedUpahRitasi, function(index, item) {
+                data.push({
+                    name: 'rincian_upahritasi[]',
+                    value: parseFloat(item.replaceAll(',', ''))
+                })
+            });
+            $.each(selectedStatusRitasi, function(index, item) {
+                data.push({
+                    name: 'rincian_statusritasi[]',
+                    value: item
+                })
+            });
+            $.each(selectedBiayaExtra, function(index, item) {
+                data.push({
+                    name: 'rincian_biayaextra[]',
+                    value: parseFloat(item.replaceAll(',', ''))
+                })
+            });
+            $.each(selectedKetBiaya, function(index, item) {
+                data.push({
+                    name: 'rincian_keteranganbiaya[]',
+                    value: item
+                })
+            });
+
+
+
             $('#crudForm').find(`[name="uangmakanharian"]`).each((index, element) => {
                 data.push({
                     name: 'uangmakanharian',
                     value: AutoNumeric.getNumber($(`#crudForm [name="uangmakanharian"]`)[index])
+                })
+            })
+            $('#crudForm').find(`[name="subtotal"]`).each((index, element) => {
+                data.push({
+                    name: 'subtotal',
+                    value: AutoNumeric.getNumber($(`#crudForm [name="subtotal"]`)[index])
                 })
             })
             $('#crudForm').find(`[name="deposito"]`).each((index, element) => {
@@ -833,6 +928,7 @@
         let pinjamanpribadi = ($(`#crudForm [name="pinjamanpribadi"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="pinjamanpribadi"]`)[0]);
 
         let sisa = total - (uangjalan + deposito + bbm + potonganpinjaman + potonganpinjamansemua + gajiminus + pinjamanpribadi)
+        
         $(`#crudForm [name="sisa"]`).val(sisa)
         new AutoNumeric(`#crudForm [name="sisa"]`)
     }
@@ -1003,11 +1099,10 @@
                     form.find('[name]').addClass('disabled')
                     initDisabled()
                 }
+                hitungSisa()
             }
         })
     }
-
-
 
     function getEditTrip(gajiId, aksi) {
         $('#gajiSupir').html('')
@@ -1096,7 +1191,7 @@
                     {
                         label: 'NO. BUKTI',
                         name: 'nobuktitrip',
-                        align: 'left'
+                        align: 'left',
                     },
                     {
                         label: 'TANGGAL BUKTI',
@@ -1151,6 +1246,34 @@
                         formatter: currencyFormat,
                         align: "right",
                     },
+                    {
+                        label: 'TOL SUPIR',
+                        name: 'tolsupir',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
+                        label: 'UPAH RITASI',
+                        name: 'upahritasi',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
+                        label: 'STATUS RITASI',
+                        name: 'statusritasi',
+                        align: 'left'
+                    },
+                    {
+                        label: 'BIAYA EXTRA',
+                        name: 'biayaextra',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
+                        label: 'KET. BIAYA EXTRA',
+                        name: 'keteranganbiaya',
+                        align: 'left'
+                    },
                 ],
                 autowidth: true,
                 shrinkToFit: false,
@@ -1163,7 +1286,7 @@
                 userDataOnFooter: true,
                 toolbar: [true, "top"],
                 sortable: true,
-                sortname: sortname,
+                sortname: sortnameRincian,
                 sortorder: sortorder,
                 page: page,
                 viewrecords: true,
@@ -1250,18 +1373,34 @@
 
                     if (data.attributes) {
 
-                        $('#rekapRincian tbody tr').find(`td input:checkbox`).prop('checked',false);
+                        $('#rekapRincian tbody tr').find(`td input:checkbox`).prop('checked', false);
                         selectedRows = [];
+                        selectedNobukti = [];
+                        selectedGajiSupir = [];
+                        selectedGajiKenek = [];
+                        selectedKomisiSupir = [];
+                        selectedUpahRitasi = [];
+                        selectedStatusRitasi = [];
+                        selectedBiayaExtra = [];
+                        selectedKetBiaya = [];
+                        selectedTolSupir = [];
                         $('#rekapRincian tbody tr').each(function(row, tr) {
                             $(this).find(`td input:checkbox`).click()
                         })
-                        subtotal = parseFloat(data.attributes.totalGajiSupir) + parseFloat(data.attributes.totalGajiKenek) + parseFloat(data.attributes.totalKomisiSupir)
+                        subtotal = parseFloat(data.attributes.totalGajiSupir) + parseFloat(data.attributes.totalGajiKenek) + parseFloat(data.attributes.totalUpahRitasi) + parseFloat(data.attributes.totalBiayaExtra) + parseFloat(data.attributes.totalTolSupir)
+                        uangmakan = AutoNumeric.getNumber($(`#crudForm [name="uangmakanharian"]`)[0])
+                        total = subtotal + uangmakan
                         initAutoNumeric($('#crudForm').find(`[name="subtotal"]`).val(subtotal))
-                        initAutoNumeric($('#crudForm').find(`[name="total"]`).val(subtotal))
+                        initAutoNumeric($('#crudForm').find(`[name="total"]`).val(total))
+
+                        hitungSisa()
                         $(this).jqGrid('footerData', 'set', {
                             gajisupir: data.attributes.totalGajiSupir,
                             gajikenek: data.attributes.totalGajiKenek,
                             komisisupir: data.attributes.totalKomisiSupir,
+                            upahritasi: data.attributes.totalUpahRitasi,
+                            biayaextra: data.attributes.totalBiayaExtra,
+                            tolsupir: data.attributes.totalTolSupir,
                         }, true)
                     }
                 }

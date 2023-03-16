@@ -118,8 +118,8 @@
             align: 'left',
           },
           {
-            label: 'NOMINAL',
-            name: 'nominal',
+            label: 'Total',
+            name: 'total',
             formatter: 'number', 
             formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
             align: "right",
@@ -144,10 +144,52 @@
               newformat: "d-m-Y"
             }
           },
+          {
+            label: 'U. Jalan',
+            name: 'uangjalan',
+            formatter: 'number', 
+            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            align: "right",
+          },
+          {
+            label: 'U. BBM',
+            name: 'bbm',
+            formatter: 'number', 
+            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            align: "right",
+          },
+          {
+            label: 'Pot. pinjaman',
+            name: 'potonganpinjaman',
+            formatter: 'number', 
+            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            align: "right",
+          },
+          {
+            label: 'POT. PINJAMAN (SEMUA)',
+            name: 'potonganpinjamansemua',
+            formatter: 'number', 
+            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            align: "right",
+          },
+          {
+            label: 'DEPOSITO',
+            name: 'deposito',
+            formatter: 'number', 
+            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            align: "right",
+          },
+          {
+            label: 'U. MAKAN HARIAN',
+            name: 'uangmakanharian',
+            formatter: 'number', 
+            formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+            align: "right",
+          },
           
           {
-            label: 'TOTAL',
-            name: 'total',
+            label: 'NOMINAL',
+            name: 'nominal',
             formatter: 'number', 
             formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
             align: "right",

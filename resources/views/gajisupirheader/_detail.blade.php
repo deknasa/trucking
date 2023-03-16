@@ -65,6 +65,39 @@
             align: 'right',
             formatter: currencyFormat,
           },
+          {
+            label: 'TOL SUPIR',
+            name: 'tolsupir',
+            formatter: currencyFormat,
+            align: "right",
+          },
+          {
+            label: 'NO. BUKTI RITASI',
+            name: 'ritasi_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'UPAH RITASI',
+            name: 'upahritasi',
+            formatter: currencyFormat,
+            align: "right",
+          },
+          {
+            label: 'STATUS RITASI',
+            name: 'statusritasi',
+            align: 'left'
+          },
+          {
+            label: 'BIAYA EXTRA',
+            name: 'biayaextra',
+            formatter: currencyFormat,
+            align: "right",
+          },
+          {
+            label: 'KET. BIAYA EXTRA',
+            name: 'keteranganbiayatambahan',
+            align: 'left'
+          },
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -133,6 +166,9 @@
               gajisupir: data.attributes.totalGajiSupir,
               gajikenek: data.attributes.totalGajiKenek,
               komisisupir: data.attributes.totalKomisiSupir,
+              upahritasi: data.attributes.totalUpahRitasi,
+              tolsupir: data.attributes.totalTolSupir,
+              biayaextra: data.attributes.totalBiayaExtra,
             }, true)
           }
         }
