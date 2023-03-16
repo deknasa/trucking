@@ -111,7 +111,7 @@
 
             <div class="row mt-5">
               <div class="col-md-12">
-                <div class="card">
+                <div class="card" style="max-height:500px; overflow-y: scroll;">
                   <div class="card-body">
                     <div class="row form-group">
                       <div class="col-md-1">
