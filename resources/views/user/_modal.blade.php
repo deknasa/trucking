@@ -9,16 +9,16 @@
         <form action="" method="post">
           <div class="modal-body">
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>ID</label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">ID</label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="id" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   User <span class="text-danger">*</span>
                 </label>
               </div>
@@ -27,8 +27,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Nama User <span class="text-danger">*</span>
                 </label>
               </div>
@@ -37,8 +37,8 @@
               </div>
             </div>
             <div class="row form-group sometimes">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Password <span class="text-danger">*</span>
                 </label>
               </div>
@@ -47,8 +47,8 @@
               </div>
             </div>
             <!-- <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Cabang <span class="text-danger">*</span>
                 </label>
               </div>
@@ -59,8 +59,8 @@
               </div>
             </div> -->
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Status Karyawan <span class="text-danger">*</span>
                 </label>
               </div>
@@ -71,8 +71,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Dashboard <span class="text-danger">*</span>
                 </label>
               </div>
@@ -81,8 +81,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Status Aktif <span class="text-danger">*</span>
                 </label>
               </div>

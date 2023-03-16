@@ -11,8 +11,8 @@
         <form action="" method="post">
           <div class="modal-body">
             <div class="row">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   USER <span class="text-danger">*</span>
                 </label>
               </div>

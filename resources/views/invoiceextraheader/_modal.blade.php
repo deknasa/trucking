@@ -13,15 +13,15 @@
             <div class="row form-group">
               <input type="hidden" name="id" hidden class="form-control" readonly>
 
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>nobukti <span class="text-danger">*</span> </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">nobukti <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" readonly name="nobukti" class="form-control">
               </div>
 
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>tglbukti <span class="text-danger">*</span> </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">tglbukti <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <div class="input-group">
@@ -33,8 +33,8 @@
 
             <div class="row form-group">
 
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>agen <span class="text-danger">*</span> </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">agen <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="agen" class="form-control agen-lookup">

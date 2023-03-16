@@ -81,8 +81,8 @@
             <input type="hidden" name="sord">
 
             <div class="form-group row">
-              <div class="col-sm-2 col-form-label">
-                <label for="">Dari</label>
+              <div class="col-sm-2">
+                <label class="col-form-label">Dari</label>
               </div>
               <div class="col-sm-10">
                 <input type="text" name="dari" class="form-control autonumeric-report" autofocus>
@@ -90,8 +90,8 @@
             </div>
 
             <div class="form-group row">
-              <div class="col-sm-2 col-form-label">
-                <label for="">Sampai</label>
+              <div class="col-sm-2">
+                <label class="col-form-label">Sampai</label>
               </div>
               <div class="col-sm-10">
                 <input type="text" name="sampai" class="form-control autonumeric-report">
@@ -122,8 +122,8 @@
           <div class="modal-body">
 
             <div class="form-group row" id="file">
-              <div class="col-sm-2 col-form-label">
-                <label for="">File</label>
+              <div class="col-sm-2">
+                <label class="col-form-label">File</label>
               </div>
               <div class="col-sm-10">
                 <input type="file" name="fileImport">
@@ -154,8 +154,8 @@
           <div class="modal-body">
 
             <div class="form-group row">
-              <div class="col-sm-2 col-form-label">
-                <label for="">Dari</label>
+              <div class="col-sm-2">
+                <label class="col-form-label">Dari</label>
               </div>
               <div class="col-sm-10">
                 <div class="input-group">
@@ -165,8 +165,8 @@
             </div>
 
             <div class="form-group row">
-              <div class="col-sm-2 col-form-label">
-                <label for="">Sampai</label>
+              <div class="col-sm-2">
+                <label class="col-form-label">Sampai</label>
               </div>
               <div class="col-sm-10">
                 <div class="input-group">
@@ -199,8 +199,8 @@
           <div class="modal-body">
 
             <div class="form-group row">
-              <div class="col-sm-2 col-form-label">
-                <label for="">Tgl</label>
+              <div class="col-sm-2">
+                <label class="col-form-label">Tgl</label>
               </div>
               <input type="text" name="id" class="" hidden autofocus>
               <div class="col-sm-10">

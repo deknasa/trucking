@@ -17,6 +17,8 @@ $modal-header-font-weight: 700;
 $modal-scale-transform: none;
 $modal-footer-color: #f4f4f4;
 
+$enable-validation-icons: false;
+
 // Bootstrap
 // ---------------------------------------------------
 @import "../../../bootstrap/scss/functions";
@@ -57,7 +59,7 @@ $modal-footer-color: #f4f4f4;
 }
 
 .modal-content {
-    padding: 10px;
+    padding: 5px;
     border: 1px solid #95B8E7;
     background: linear-gradient(to bottom, #EFF5FF 0, #e0ecff 100%);
 }
@@ -70,6 +72,18 @@ $modal-footer-color: #f4f4f4;
 
 .modal-footer {
     background-color: $modal-footer-color;
-    border: 1px solid #95B8E7;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #dddddd #95b8e7 #95b8e7 #95b8e7 !important;
     padding: $modal-inner-padding - $modal-footer-margin-between * 1.5;
+}
+
+@media screen and (max-width: 576px) {
+    .col-form-label {
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: 0; // Override the `<label>/<legend>` default
+        @include font-size(inherit); // Override the `<legend>` default
+        line-height: $input-line-height;
+    }
 }

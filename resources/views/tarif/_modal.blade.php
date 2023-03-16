@@ -11,8 +11,8 @@
         <form action="" method="post">
           <div class="modal-body">
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>ID</label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">ID</label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="id" class="form-control" readonly>
@@ -20,8 +20,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   PARENT
                 </label>
               </div>
@@ -32,8 +32,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   UPAH SUPIR
                 </label>
               </div>
@@ -44,8 +44,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   TUJUAN <span class="text-danger">*</span>
                 </label>
               </div>
@@ -54,8 +54,8 @@
               </div>
             </div>
             {{-- <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   CONTAINER <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
@@ -64,8 +64,8 @@
               </div>
             </div>
              <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NOMINAL <span class="text-danger">*</span>
                 </label>
               </div>
@@ -74,8 +74,8 @@
               </div>
             </div>--}}
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   STATUS AKTIF <span class="text-danger">*</span>
                 </label>
               </div>
@@ -86,8 +86,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   SISTEM TON <span class="text-danger">*</span>
                 </label>
               </div>
@@ -98,8 +98,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   KOTA <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
@@ -108,8 +108,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   ZONA </label>
               </div>
               <div class="col-12 col-md-10">
@@ -118,8 +118,8 @@
               </div>
             </div>
             {{-- <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NOMINAL TON
                 </label>
               </div>
@@ -128,8 +128,8 @@
               </div>
             </div>--}}
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   TGL MULAI BERLAKU <span class="text-danger">*</span>
                 </label>
               </div>
@@ -140,8 +140,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   STATUS PENYESUAIAN HARGA <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">

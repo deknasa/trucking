@@ -278,8 +278,8 @@
               </div>
               <div class="card-body">
                 <div class="row form-group">
-                  <div class="col-12 col-md-2 col-form-label">
-                    <label>
+                  <div class="col-12 col-md-2">
+                    <label class="col-form-label">
                       GAJI SUPIR </label>
                   </div>
                   <div class="col-12 col-md-4">
@@ -287,8 +287,8 @@
                   </div>
                 </div>
                 <div class="row form-group">
-                  <div class="col-12 col-md-2 col-form-label">
-                    <label>
+                  <div class="col-12 col-md-2">
+                    <label class="col-form-label">
                       GAJI KENEK </label>
                   </div>
                   <div class="col-12 col-md-4">
@@ -296,8 +296,8 @@
                   </div>
                 </div>
                 <div class="row form-group">
-                  <div class="col-12 col-md-2 col-form-label">
-                    <label>
+                  <div class="col-12 col-md-2">
+                    <label class="col-form-label">
                       KOMISI SUPIR </label>
                   </div>
                   <div class="col-12 col-md-4">

@@ -15,8 +15,8 @@
 
               <div class="col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">
                       NO BUKTI
                     </label>
                   </div>
@@ -28,8 +28,8 @@
 
               <div class="col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">
                       TANGGAL BUKTI <span class="text-danger">*</span>
                     </label>
                   </div>
@@ -43,8 +43,8 @@
 
               {{-- <div class="col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>COA KAS MASUK </label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">COA KAS MASUK </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="coa" class="form-control akunpusat-lookup">
@@ -54,8 +54,8 @@
 
               <div class="col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>PELANGGAN</label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">PELANGGAN</label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
@@ -68,8 +68,8 @@
 
               <div class="col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">
                       DARI TANGGAL
                     </label>
                   </div>
@@ -83,8 +83,8 @@
 
               <div class="col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">
                       SAMPAI TANGGAL
                     </label>
                   </div>
@@ -102,8 +102,8 @@
               <h6>Posting Penerimaan</h6>
               
               <div class="row form-group">
-                <div class="col-12 col-md-2 col-form-label">
-                  <label>
+                <div class="col-12 col-md-2">
+                  <label class="col-form-label">
                     POSTING </label>
                 </div>
                 <div class="col-12 col-md-4">
@@ -112,8 +112,8 @@
                 </div>
               </div>
               <div class="row form-group">
-                <div class="col-12 col-md-2 col-form-label">
-                  <label>
+                <div class="col-12 col-md-2">
+                  <label class="col-form-label">
                     NO BUKTI KAS KELUAR </label>
                 </div>
                 <div class="col-12 col-md-4">

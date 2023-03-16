@@ -13,24 +13,24 @@
             <input type="hidden" name="id">
 
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>NO BUKTI</label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">NO BUKTI</label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="nobukti" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>NO BUKTI KGT</label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">NO BUKTI KGT</label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="kasgantung_nobukti" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>TANGGAL</label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">TANGGAL</label>
               </div>
               <div class="col-12 col-md-10">
                 <div class="input-group">

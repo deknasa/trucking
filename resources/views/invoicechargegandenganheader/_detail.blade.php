@@ -11,26 +11,43 @@
 <script>
   function loadDetailGrid(id) {
     $("#detail").jqGrid({
-        url: `${apiUrl}invoiceextradetail`,
+        url: `${apiUrl}invoicechargegandengandetail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
         colModel: [{
-            label: 'NO BUKTI',
-            name: 'nobukti',
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            width: 200
-          },
-          {
+          label: 'NO. BUKTI',
+          name: 'jobtrucking',
+        },
+        {
+          label: 'TGL BUKTI',
+          name: 'tgltrip',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'jumlah Hari',
+          name: 'jumlahhari',
+          align: 'right',
+        },
+        {
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
             formatter: currencyFormat,
           },
+        {
+          label: 'No Polisi',
+          name: 'nopolisi',
+        },
+        {
+          label: 'keterangan',
+          name: 'keterangan',
+        },
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -48,7 +65,7 @@
         page: page,
         viewrecords: true,
         postData: {
-          invoiceextra_id: id
+          invoicechargegandengan_id: id
         },
         prmNames: {
           sort: 'sortIndex',
@@ -132,10 +149,10 @@
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: `${apiUrl}invoiceextradetail`,
+      url: `${apiUrl}invoicechargegandengandetail`,
       datatype: "json",
       postData: {
-        invoiceextra_id: id
+        invoicechargegandengan_id: id
       },
       page:1
     }).trigger('reloadGrid')

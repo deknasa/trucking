@@ -52,19 +52,19 @@
           },
           {
             label: 'coa debet',
-            name: 'coadebet',
+            name: 'coadebet_keterangan',
           },
           {
             label: 'coa kredit',
-            name: 'coakredit',
+            name: 'coakredit_keterangan',
           },
           {
             label: 'coa posting debet',
-            name: 'coapostingdebet',
+            name: 'coapostingdebet_keterangan',
           },
           {
             label: 'coa posting kredit',
-            name: 'coapostingkredit',
+            name: 'coapostingkredit_keterangan',
           },
           {
             label: 'FORMAT',

@@ -14,15 +14,15 @@
             <div class="row form-group">
               <input type="hidden" name="id" hidden class="form-control" readonly>
 
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>nobukti <span class="text-danger">*</span> </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">nobukti <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" readonly name="nobukti" class="form-control">
               </div>
 
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>tglbukti <span class="text-danger">*</span> </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">tglbukti <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <div class="input-group">
@@ -34,8 +34,8 @@
 
               <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>penerimaan stok <span class="text-danger">*</span> </label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">penerimaan stok <span class="text-danger">*</span> </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="penerimaanstok" class="form-control penerimaanstok-lookup">
@@ -47,8 +47,8 @@
 
               <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>penerimaan stok nobukti </label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">penerimaan stok nobukti </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="penerimaanstok_nobukti" class="form-control penerimaanstokheader-lookup">
@@ -58,8 +58,8 @@
 
               <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>pengeluaran stok nobukti </label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">pengeluaran stok nobukti </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="pengeluaranstok_nobukti" class="form-control pengeluaranstokheader-lookup">
@@ -69,8 +69,8 @@
 
               <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>nobon </label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">nobon </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="nobon" class="form-control">
@@ -80,8 +80,8 @@
 
               <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>hutang no bukti </label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">hutang no bukti </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="hutang_nobukti" class="form-control" readonly>
@@ -91,8 +91,8 @@
 
               <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>coa </label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">coa </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="coa" class="form-control akunpusat-lookup">
@@ -102,8 +102,8 @@
 
               <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>trado </label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">trado </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="trado" class="form-control trado-lookup">
@@ -114,8 +114,8 @@
 
               <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>supplier </label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">supplier </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="supplier" class="form-control supplier-lookup">
@@ -126,8 +126,8 @@
 
               <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>gudang </label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">gudang </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="gudang" class="form-control gudang-lookup">
@@ -138,8 +138,8 @@
 
               <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>gandengan </label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">gandengan </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="gandengan" class="form-control gandengan-lookup">
@@ -150,8 +150,8 @@
 
               <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>gudangdari </label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">gudangdari </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="gudangdari" class="form-control gudangdari-lookup">
@@ -161,8 +161,8 @@
               </div>
               <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>gudangke </label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">gudangke </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="gudangke" class="form-control gudangke-lookup">
@@ -173,8 +173,8 @@
 
               <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>trado dari</label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">trado dari</label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="tradodari" class="form-control tradodari-lookup">
@@ -185,8 +185,8 @@
 
               <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>trado ke </label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">trado ke </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="tradoke" class="form-control tradoke-lookup">
@@ -197,8 +197,8 @@
 
               <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>gandengan dari</label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">gandengan dari</label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="gandengandari" class="form-control gandengandari-lookup">
@@ -209,8 +209,8 @@
 
               <div class="form-group col-md-6">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>gandengan ke </label>
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">gandengan ke </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="gandenganke" class="form-control gandenganke-lookup">
@@ -223,8 +223,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>keterangan <span class="text-danger">*</span> </label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">keterangan <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">

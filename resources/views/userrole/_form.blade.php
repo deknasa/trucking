@@ -26,8 +26,8 @@ $indexRow = $_GET['indexRow'] ?? '';
 
 
               <div class="row form-group py-0 my-0">
-                <div class="col-12 col-md-1 col-form-label">
-                  <label>USER</label>
+                <div class="col-12 col-md-1">
+                  <label class="col-form-label">USER</label>
                 </div>
                 <div class="col-12 col-md-5">
                   <div class="input-group mb-0 pb-0">

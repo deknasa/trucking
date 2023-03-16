@@ -15,8 +15,8 @@
               <input type="hidden" name="id">
 
               <div class="row form-group">
-                <div class="col-12 col-md-2 col-form-label">
-                  <label>
+                <div class="col-12 col-md-2">
+                  <label class="col-form-label">
                     NO BUKTI <span class="text-danger">*</span>
                   </label>
                 </div>
@@ -24,8 +24,8 @@
                   <input type="text" name="nobukti" class="form-control" readonly>
                 </div>
 
-                <div class="col-12 col-md-2 col-form-label">
-                  <label>
+                <div class="col-12 col-md-2">
+                  <label class="col-form-label">
                     TANGGAL BUKTI <span class="text-danger">*</span>
                   </label>
                 </div>
@@ -37,8 +37,8 @@
               </div>
 
               <div class="row form-group">
-                <div class="col-12 col-md-2 col-form-label">
-                  <label>
+                <div class="col-12 col-md-2">
+                  <label class="col-form-label">
                     TGL TERIMA <span class="text-danger">*</span>
                   </label>
                 </div>
@@ -51,8 +51,8 @@
               </div>
 
               <div class="row form-group">
-                <div class="col-12 col-md-2 col-form-label">
-                  <label>
+                <div class="col-12 col-md-2">
+                  <label class="col-form-label">
                     AGEN <span class="text-danger">*</span>
                   </label>
                 </div>
@@ -62,7 +62,7 @@
                 </div>
 
                 <div class="col-12 col-md-2 col-form-label text-right">
-                  <label>
+                  <label class="col-form-label">
                     Jenis Order <span class="text-danger">*</span>
                   </label>
                 </div>
@@ -73,8 +73,8 @@
               </div>
 
               <div class="row form-group">
-                <div class="col-12 col-md-2 col-form-label">
-                  <label>
+                <div class="col-12 col-md-2">
+                  <label class="col-form-label">
                     TGL DARI <span class="text-danger">*</span>
                   </label>
                 </div>
@@ -85,7 +85,7 @@
                 </div>
 
                 <div class="col-12 col-md-2 col-form-label text-right">
-                  <label>
+                  <label class="col-form-label">
                     TGL SAMPAI <span class="text-danger">*</span>
                   </label>
                 </div>

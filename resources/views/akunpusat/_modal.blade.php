@@ -11,16 +11,16 @@
         <form action="" method="post">
           <div class="modal-body">
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>ID</label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">ID</label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="id" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   coa <span class="text-danger">*</span>
                 </label>
               </div>
@@ -29,8 +29,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   keterangan coa <span class="text-danger">*</span>
                 </label>
               </div>
@@ -39,8 +39,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   type <span class="text-danger">*</span>
                 </label>
               </div>
@@ -49,8 +49,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   level <span class="text-danger">*</span>
                 </label>
               </div>
@@ -59,8 +59,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   parent <span class="text-danger">*</span>
                 </label>
               </div>
@@ -69,7 +69,7 @@
               </div>
             </div>
             <div class="row form-group">
-              <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS COA<span class="text-danger">*</span></label>
+              <label class="col-12 col-md-2 col-form-label">STATUS COA<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
                 <select name="statuscoa" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS COA --</option>
@@ -77,7 +77,7 @@
               </div>
             </div>
             <div class="row form-group">
-              <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS ACCOUNT PAYABLE<span class="text-danger">*</span></label>
+              <label class="col-12 col-md-2 col-form-label">STATUS ACCOUNT PAYABLE<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
                 <select name="statusaccountpayable" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS ACCOUNT PAYABLE --</option>
@@ -85,7 +85,7 @@
               </div>
             </div>
             <div class="row form-group">
-              <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS NERACA<span class="text-danger">*</span></label>
+              <label class="col-12 col-md-2 col-form-label">STATUS NERACA<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
                 <select name="statusneraca" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS NERACA --</option>
@@ -93,7 +93,7 @@
               </div>
             </div>
             <div class="row form-group">
-              <label for="staticEmail" class="col-12 col-md-2 col-form-label">STATUS LABA RUGI<span class="text-danger">*</span></label>
+              <label class="col-12 col-md-2 col-form-label">STATUS LABA RUGI<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
                 <select name="statuslabarugi" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS LABA RUGI --</option>
@@ -101,8 +101,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
                   coamain <span class="text-danger">*</span>
                 </label>
               </div>
@@ -111,8 +111,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   STATUS AKTIF <span class="text-danger">*</span>
                 </label>
               </div>

@@ -12,16 +12,16 @@
           <div class="modal-body">
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>ID</label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">ID</label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="id" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   kode pelanggan <span class="text-danger">*</span>
                 </label>
               </div>
@@ -30,8 +30,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   nama pelanggan <span class="text-danger">*</span>
                 </label>
               </div>
@@ -40,8 +40,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   telp <span class="text-danger">*</span>
                 </label>
               </div>
@@ -50,8 +50,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   alamat <span class="text-danger">*</span>
                 </label>
               </div>
@@ -60,8 +60,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   alamat2 <span class="text-danger"></span>
                 </label>
               </div>
@@ -70,8 +70,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   kota <span class="text-danger">*</span>
                 </label>
               </div>
@@ -80,8 +80,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   kode pos <span class="text-danger">*</span>
                 </label>
               </div>
@@ -90,8 +90,8 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   keterangan <span class="text-danger">*</span>
                 </label>
               </div>
@@ -101,8 +101,8 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                <label>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Status Aktif <span class="text-danger">*</span>
                 </label>
               </div>
