@@ -83,7 +83,7 @@
 
                         <div class="row">
                             <div class="col-12">
-                                <div id="tabs" class="dejavu">
+                                <div id="tabs" class="dejavu" style="max-height:700px; overflow-y: scroll; overflow-x: scroll; font-size:12px">
                                     <ul>
                                         <li><a href="#tabs-1">Rekap Rincian</a></li>
                                         <li><a href="#tabs-2">Pot. pinjaman (semua)</a></li>
@@ -98,15 +98,15 @@
 
                                     <div id="tabs-2">
                                         <div class="table-responsive">
-                                            <table class="table table-bordered mt-3" id="potonganSemua" style="width:1000px;">
+                                            <table class="table table-bordered mt-3" id="potonganSemua" style="width:1200px;">
                                                 <thead class="table-secondary">
                                                     <tr>
                                                         <th width="1%">pilih</th>
                                                         <th width="12%">SUPIR</th>
                                                         <th width="24%">NOMINAL</th>
                                                         <th width="22%">NO PINJAMAN</th>
-                                                        <th width="14%">SISA</th>
-                                                        <th width="28%">KETERANGAN</th>
+                                                        <th width="11%">SISA</th>
+                                                        <th width="30%">KETERANGAN</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbodyPotSemua">
@@ -131,14 +131,14 @@
 
                                     <div id="tabs-3">
                                         <div class="table-responsive">
-                                            <table class="table table-bordered mt-3" id="pinjamanPribadi" style="width:800px;">
+                                            <table class="table table-bordered mt-3" id="pinjamanPribadi" style="width:900px;">
                                                 <thead class="table-secondary">
                                                     <tr>
                                                         <th width="1%">pilih</th>
                                                         <th width="20%">NO PINJAMAN</th>
-                                                        <th width="20%">SISA</th>
+                                                        <th width="19%">SISA</th>
                                                         <th width="20%">NOMINAL</th>
-                                                        <th width="30%">KETERANGAN</th>
+                                                        <th width="40%">KETERANGAN</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbodyPinjPribadi">
@@ -339,6 +339,7 @@
             selectedBiayaExtra.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_biayaextra"]`).text())
             selectedKetBiaya.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_keteranganbiaya"]`).text())
             selectedTolSupir.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_tolsupir"]`).text())
+            hitungNominal()
         } else {
             for (var i = 0; i < selectedRows.length; i++) {
                 if (selectedRows[i] == value) {
@@ -354,9 +355,54 @@
                     selectedTolSupir.splice(i, 1);
                 }
             }
+            hitungNominal()
         }
 
     }
+
+    function hitungNominal() {
+        gajiSupir = 0;
+        gajiKenek = 0;
+        komisi = 0;
+        tol = 0;
+        upahRitasi = 0;
+        biayaExtra = 0;
+        $.each(selectedGajiSupir, function(index, item) {
+           gajiSupir = gajiSupir + parseFloat(item.replace(/,/g, ''))
+        });
+        $.each(selectedGajiKenek, function(index, item) {
+           gajiKenek = gajiKenek + parseFloat(item.replace(/,/g, ''))
+        });
+        $.each(selectedKomisiSupir, function(index, item) {
+           komisi = komisi + parseFloat(item.replace(/,/g, ''))
+        });
+        $.each(selectedUpahRitasi, function(index, item) {
+           upahRitasi = upahRitasi + parseFloat(item.replace(/,/g, ''))
+        });
+        $.each(selectedBiayaExtra, function(index, item) {
+           biayaExtra = biayaExtra + parseFloat(item.replace(/,/g, ''))
+        });
+        $.each(selectedTolSupir, function(index, item) {
+           tol = tol + parseFloat(item.replace(/,/g, ''))
+        });
+        subtotal = gajiSupir + gajiKenek + tol + upahRitasi + biayaExtra
+
+        uangmakan = $(`#crudForm [name="uangmakanharian"]`).val()
+        uangmakan = parseFloat(uangmakan.replace(/,/g, ''));
+        uangmakan = Number.isNaN(uangmakan) ? 0 : uangmakan
+        total = subtotal + uangmakan
+
+        initAutoNumeric($('#crudForm').find(`[name="subtotal"]`).val(subtotal))
+        initAutoNumeric($('#crudForm').find(`[name="total"]`).val(total))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajisupir"]`).text(gajiSupir))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajikenek"]`).text(gajiKenek))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text(komisi))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_upahritasi"]`).text(upahRitasi))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_biayaextra"]`).text(biayaExtra))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_tolsupir"]`).text(tol))
+        hitungSisa()
+    }
+
     $(document).ready(function() {
 
 
@@ -364,7 +410,7 @@
             let uangMakan = $(this).val()
             uangMakan = parseFloat(uangMakan.replaceAll(',', ''));
             uangMakan = Number.isNaN(uangMakan) ? 0 : uangMakan
-            
+
             let subTotal = ($(`#crudForm [name="subtotal"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="subtotal"]`)[0])
 
             let total = subTotal + uangMakan
@@ -928,7 +974,7 @@
         let pinjamanpribadi = ($(`#crudForm [name="pinjamanpribadi"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="pinjamanpribadi"]`)[0]);
 
         let sisa = total - (uangjalan + deposito + bbm + potonganpinjaman + potonganpinjamansemua + gajiminus + pinjamanpribadi)
-        
+        console.log(total)
         $(`#crudForm [name="sisa"]`).val(sisa)
         new AutoNumeric(`#crudForm [name="sisa"]`)
     }
@@ -1277,7 +1323,7 @@
                 ],
                 autowidth: true,
                 shrinkToFit: false,
-                height: 350,
+                height: 400,
                 rowNum: 10,
                 rownumbers: true,
                 rownumWidth: 45,
