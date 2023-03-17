@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -108,22 +108,22 @@
                 <input type="text" name="nowarkat" class="form-control">
               </div>
             </div>
-
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  AGEN <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <input type="hidden" name="agen_id" class="form-control">
+                <input type="text" name="agen" class="form-control agen-lookup">
+              </div>
+            </div>
             <div class="row mt-5">
               <div class="col-md-12">
-                <div class="card" style="max-height:500px; overflow-y: scroll;">
+                <div class="card card-scroll">
                   <div class="card-body">
-                    <div class="row form-group">
-                      <div class="col-md-1">
-                        <label class="col-form-label">
-                          AGEN <span class="text-danger">*</span>
-                        </label>
-                      </div>
-                      <div class="col-md-4">
-                        <input type="hidden" name="agen_id" class="form-control">
-                        <input type="text" name="agen" class="form-control agen-lookup">
-                      </div>
-                    </div>
+
 
                     <div class="table-responsive">
                       <table class="table table-bordered mt-3" id="detailList" style="width:2000px;">
