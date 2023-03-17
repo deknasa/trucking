@@ -95,6 +95,10 @@
         {
           label: 'TANGGAL BUKTI',
           name: 'tglbukti',
+          formatter: 'date',
+            formatoptions: {
+              newformat: 'd-m-Y'
+            }
         },
         {
           label: 'PELANGGAN',

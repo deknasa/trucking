@@ -213,7 +213,6 @@ $.fn.customPager = function (option = {}) {
 			<div class="col-12 bg-white grid-pager overflow-x-hidden">
 				<div class="row d-flex align-items-center text-center text-lg-left">
 					<div class="col-12 col-lg-6">
-						<div class="d-lg-inline d-block">
 						${
 							typeof option.buttons !== "undefined"
 							? option.buttons
@@ -240,10 +239,7 @@ $.fn.customPager = function (option = {}) {
 								.join("")
 							: ''
 						}
-						</div>
-						<div class="d-lg-inline d-block">
 							${extndBtn}
-						</div>
 					</div>
 					<div class="col-12 col-lg-6">
 						<div class="row d-flex align-items-center justify-content-center justify-content-lg-end pr-2">

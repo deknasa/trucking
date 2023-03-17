@@ -30,50 +30,53 @@
               </div>
             </div>
 
+            <div class="row">
 
-            <div class="row form-group">
-
-              <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">agen <span class="text-danger">*</span> </label>
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>agen <span class="text-danger">*</span> </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="agen" class="form-control agen-lookup">
+                    <input type="text" id="agenId" name="agen_id" readonly hidden>
+                  </div>
+                </div>
               </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="agen" class="form-control agen-lookup">
-                <input type="text" id="agenId" name="agen_id" readonly hidden>
+              
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>tglproses <span class="text-danger">*</span> </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <div class="input-group">
+                      <input type="text" name="tglproses" class="form-control datepicker">
+                    </div>
+                  </div>
+                </div>
               </div>
-
             </div>
-            <input type="text" name="nominal" readonly hidden id="nominal">
 
+            <div class="row mt-3">
+              <div class="col-sm-4">
+                  <a id="btnReload" class="btn btn-secondary mr-2 mb-2">
+                      <i class="fas fa-sync"></i>
+                      Reload
+                  </a>
+              </div>
+            </div>
 
-
-
-            <table class="table table-bordered table-bindkeys" style="width: 1000px;">
-              <thead>
-                <tr>
-                  <th width="2%">No</th>
-                  <th width="70%">keterangan</th>
-                  <th width="26%">harga</th>
-                  <th width="2%">Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="table_body" class="form-group">
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan=""></td>
-
-                  <td class="font-weight-bold"> Total : </td>
-                  <td id="sumary" class="text-right font-weight-bold"> </td>
-                  <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-
-
-
+          
+            <input type="text" name="nominal_header" readonly hidden id="nominal_header">
+            
+            <table id="modalgrid"></table>
+            <div id="modalgridPager"></div>
+            <div id="detailList" style="display:none"></div>
           </div>
+
+
+
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
               <i class="fa fa-save"></i>
@@ -100,17 +103,22 @@
     $('#crudForm').autocomplete({
       disabled: true
     });
-    $(document).on('click', "#addRow", function() {
-      addRow()
-    });
-
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
     })
 
-    $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {
-      setTotal()
+
+    $(document).on('click','#btnReload', function(event) {
+      console.log('reloaad');
+      let agen_id = $('#crudForm').find(`[name=agen_id]`).val()
+      let tglproses = $('#crudForm').find(`[name=tglproses]`).val()
+      if ((agen_id != '') && (tglproses != '' )) {
+        console.log(agen_id,tglproses);
+        getOrderanTrucking(agen_id,tglproses)
+      }
+        
     })
+          
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -118,17 +126,17 @@
       let method
       let url
       let form = $('#crudForm')
-      let invoiceExtraHeader = form.find('[name=id]').val()
+      let invoiceChargeGandenganHeader = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
-      $('#crudForm').find(`[name="nominal_detail[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
-      })
+      // $('#crudForm').find(`[name="nominal_detail[]"]`).each((index, element) => {
+      //   data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
+      // })
 
-      $('#crudForm').find(`[name="detail_persentasediscount[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_persentasediscount[]"]`)[index])
-      })
+      // $('#crudForm').find(`[name="detail_persentasediscount[]"]`).each((index, element) => {
+      //   data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_persentasediscount[]"]`)[index])
+      // })
 
 
       data.push({
@@ -159,19 +167,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}invoiceextraheader`
+          url = `${apiUrl}invoicechargegandenganheader`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}invoiceextraheader/${invoiceExtraHeader}`
+          url = `${apiUrl}invoicechargegandenganheader/${invoiceChargeGandenganHeader}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}invoiceextraheader/${invoiceExtraHeader}`
+          url = `${apiUrl}invoicechargegandenganheader/${invoiceChargeGandenganHeader}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}invoiceextraheader`
+          url = `${apiUrl}invoicechargegandenganheader`
           break;
       }
 
@@ -228,7 +236,7 @@
     activeGrid = null
     initLookup()
     initDatepicker()
-
+    loadModalGrid()
     // getMaxLength(form)
   })
 
@@ -240,7 +248,7 @@
 
   function cekValidasi(Id, Aksi) {
     $.ajax({
-      url: `{{ config('app.api_url') }}invoiceextraheader/${Id}/cekvalidasi`,
+      url: `{{ config('app.api_url') }}invoicechargegandenganheader/${Id}/cekvalidasi`,
       method: 'POST',
       dataType: 'JSON',
       beforeSend: request => {
@@ -254,10 +262,10 @@
             showDialog(response.message['keterangan'])
           } else {
             if (Aksi == 'EDIT') {
-              editInvoiceExtraHeader(Id)
+              editInvoiceChargeGandenganHeader(Id)
             }
             if (Aksi == 'DELETE') {
-              deleteInvoiceExtraHeader(Id)
+              deleteInvoiceChargeGandenganHeader(Id)
             }
           }
 
@@ -270,7 +278,7 @@
 
 
 
-  function createInvoiceExtraHeader() {
+  function createInvoiceChargeGandenganHeader() {
     let form = $('#crudForm')
 
     form.trigger('reset')
@@ -286,12 +294,11 @@
     $('.invalid-feedback').remove()
     
     $('#table_body').html('')
-    addRow()
 
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
   }
 
-  function editInvoiceExtraHeader(invoiceExtraHeader) {
+  function editInvoiceChargeGandenganHeader(invoiceChargeGandenganHeader) {
     let form = $('#crudForm')
 
     form.data('action', 'edit')
@@ -306,11 +313,11 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showInvoiceExtraHeader(form, invoiceExtraHeader)
+    showInvoiceChargeGandenganHeader(form, invoiceChargeGandenganHeader)
 
   }
 
-  function deleteInvoiceExtraHeader(invoiceExtraHeader) {
+  function deleteInvoiceChargeGandenganHeader(invoiceChargeGandenganHeader) {
     let form = $('#crudForm')
 
     form.data('action', 'delete')
@@ -325,14 +332,14 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showInvoiceExtraHeader(form, invoiceExtraHeader)
+    showInvoiceChargeGandenganHeader(form, invoiceChargeGandenganHeader)
 
   }
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
-        url: `${apiUrl}invoiceextraheader/field_length`,
+        url: `${apiUrl}invoicechargegandenganheader/field_length`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -355,52 +362,238 @@
   }
 
 
-
-  function addRow() {
-
-    let detailRow = $(`
-    <tr>
-                  <td>
-                    <div class="baris"></div>
-                  </td> 
-                  <td>
-                    <input type="text"  name="keterangan_detail[]" style="" class="form-control">                    
-                  </td>                  
-                  <td>
-                    <input type="text"  name="nominal_detail[]" id="nominal_detail" text-align:right" class="form-control autonumeric nominal number${rowIndex}">
-                  </td>                  
-                  <td>
-                    <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                  </td>
-              </tr>
-    `)
-
-    $('table #table_body').append(detailRow)
-    initAutoNumeric(detailRow.find('.autonumeric'))
-    setRowNumbers()
+  function loadModalGrid() {
+    
+    $("#modalgrid").jqGrid({
+      
+      styleUI: 'Bootstrap4',
+      iconSet: 'fontAwesome',
+      datatype: "local",
+      colModel: [
+        {
+          label: 'ID',
+          name: 'id',
+          width: '50px',
+          hidden: true
+        },
+        {
+          label: 'Pilih',
+          name: 'id',
+          index: 'Pilih',
+          formatter: (value) => {
+              return `<input type="checkbox" class="checkBoxgrid" value="${value}" onchange="checkboxHandler(this)">`
+          },
+          editable: true,
+          edittype: 'checkbox',
+          search: false,
+          width: 60,
+          align: 'center',
+          formatoptions: {
+            disabled: false
+          },
+        },
+          
+        {
+          label: 'NO. BUKTI',
+          name: 'jobtrucking',
+        },
+        {
+          label: 'TGL BUKTI',
+          name: 'tgltrip',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'jumlah Hari',
+          name: 'jumlahhari',
+          align: 'right',
+        },
+        {
+          label: 'NOMINAL',
+          name: 'nominal_detail',
+          align: 'right',
+          formatter: currencyFormat,
+        },
+        {
+          label: 'No Polisi',
+          name: 'nopolisi',
+        },
+        {
+          label: 'keterangan',
+          name: 'keterangan',
+        },
+      ],
+      autowidth: true,
+      shrinkToFit: false,
+      height: 350,
+      rowNum: 10,
+      rownumbers: true,
+      rownumWidth: 45,
+      rowList: [10, 20, 50, 0],
+      toolbar: [true, "top"],
+      sortable: true,
+      viewrecords: true,
+      footerrow:true,
+      userDataOnFooter: true,
+      
+      
+      loadComplete: function(data) {
+        changeJqGridRowListText()
+        initResize($(this))
+        console.log(data);
+        let nominals = $(this).jqGrid("getCol", "nominal")
+        let totalNominal = 0
+        if (nominals.length > 0) {
+          totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+        }
+        $('.clearsearchclass').click(function() {
+          clearColumnSearch($(this))
+        })
+        if (indexRow > $(this).getDataIDs().length - 1) {
+          indexRow = $(this).getDataIDs().length - 1;
+        }
+        $('#modalgrid').setSelection($('#modalgrid').getDataIDs()[0])
+        setHighlight($(this))
+        $(this).jqGrid('footerData', 'set', {
+          nobukti: 'Total:',
+          nominal: totalNominal,
+        }, true)
+      }
+    })
+    .jqGrid('filterToolbar', {
+      stringResult: true,
+      searchOnEnter: false,
+      defaultSearch: 'cn',
+      groupOp: 'AND',
+      disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+      beforeSearch: function() {
+        clearGlobalSearch($('#modalgrid'))
+      },
+    })
+    .customPager()
+    /* Append clear filter button */
+    loadClearFilter($('#modalgrid'))
+    
+    /* Append global search */
+    loadGlobalSearch($('#modalgrid'))
   }
-
-  function deleteRow(row) {
-    row.remove()
-    setTotal()
-    setRowNumbers()
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    console.log(value);
+        if (element.checked) {
+          $(`#detail_row_${value}`).find(`[name="id_detail[]"]`).attr('disabled',false)
+          $(`#detail_row_${value}`).find(`[name="jobtrucking_detail[]"]`).attr('disabled',false)
+          $(`#detail_row_${value}`).find(`[name="tgltrip_detail[]"]`).attr('disabled',false)
+          $(`#detail_row_${value}`).find(`[name="jumlahhari_detail[]"]`).attr('disabled',false)
+          $(`#detail_row_${value}`).find(`[name="nominal_detail[]"]`).attr('disabled',false)
+          $(`#detail_row_${value}`).find(`[name="nopolisi_detail[]"]`).attr('disabled',false)
+          $(`#detail_row_${value}`).find(`[name="keterangan_detail[]"]`).attr('disabled',false)
+        } else {
+          $(`#detail_row_${value}`).find(`[name="id_detail[]"]`).attr('disabled',true)
+          $(`#detail_row_${value}`).find(`[name="jobtrucking_detail[]"]`).attr('disabled',true)
+          $(`#detail_row_${value}`).find(`[name="tgltrip_detail[]"]`).attr('disabled',true)
+          $(`#detail_row_${value}`).find(`[name="jumlahhari_detail[]"]`).attr('disabled',true)
+          $(`#detail_row_${value}`).find(`[name="nominal_detail[]"]`).attr('disabled',true)
+          $(`#detail_row_${value}`).find(`[name="nopolisi_detail[]"]`).attr('disabled',true)
+          $(`#detail_row_${value}`).find(`[name="keterangan_detail[]"]`).attr('disabled',true)
+        }
   }
+  function getOrderanTrucking(agen_id,tglproses){
+    $('#detailList').html('')
+    
 
-  function setRowNumbers() {
-    let elements = $('table #table_body tr td:nth-child(1)')
+    $.ajax({
+      url: `${apiUrl}orderantrucking/getorderantrip`,
+      method: 'GET',
+      dataType: 'JSON',
+      data: {
+        limit: 0,
+        tglbukti: tglproses,
+        agen: agen_id,
+      },
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        console.log(response.data);
+        let totalNominal = 0
+        $.each(response.data, (index, detail) => {
+          let id = detail.id
+          let detailRow = $(`
+          
+          
+          
+          
+          <div id="detail_row_${detail.id}">
+          <input type="text" value="${detail.id}"  name="id_detail[]"  readonly disabled  >
+          <input type="text" value="${detail.jobtrucking}"  name="jobtrucking_detail[]"  readonly disabled  >
+          <input type="text" value="${detail.tgltrip}"  name="tgltrip_detail[]"  readonly disabled  >
+          <input type="text" value="${detail.jumlahhari}"  name="jumlahhari_detail[]"  readonly disabled  >
+          <input type="text" value="${detail.nominal_detail}"  name="nominal_detail[]"  readonly disabled  >
+          <input type="text" value="${detail.nopolisi}"  name="nopolisi_detail[]"  readonly disabled  >
+          <input type="text" value="${detail.keterangan}"  name="keterangan_detail[]"  readonly disabled  >
+          </div>
+          `)
+          $('#detailList').append(detailRow)
 
-    elements.each((index, element) => {
-      $(element).text(index + 1)
+        })
+        // console.log(response.data);
+
+        $('#modalgrid').setGridParam({
+          datatype: "local",
+          data:response.data
+        }).trigger('reloadGrid')
+      }
     })
   }
 
-  function cal(id) {
-    harga = $(`#nominal_detail${id}`)[0];
-    harga = AutoNumeric.getNumber(harga);
+  function getInvoiceChargeGandenganHeader(id) {
+    $('#detailList').html('')
+    
+    $.ajax({
+      url: `${apiUrl}invoicechargegandenganheader/${id}/getinvoicegandengan`,
+      method: 'GET',
+      dataType: 'JSON',
+      
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
 
+        console.log(response.data);
+        let totalNominal = 0
+        
+        $.each(response.data, (index, detail) => {
+          
+          let id = detail.id
+          let detailRow = $(`
+          <div id="detail_row_${detail.id}">
+          <input type="text" value="${detail.id}"  name="id_detail[]"  readonly>
+          <input type="text" value="${detail.jobtrucking}"  name="jobtrucking_detail[]"  readonly>
+          <input type="text" value="${detail.tgltrip}"  name="tgltrip_detail[]"  readonly>
+          <input type="text" value="${detail.jumlahhari}"  name="jumlahhari_detail[]"  readonly>
+          <input type="text" value="${detail.nominal_detail}"  name="nominal_detail[]"  readonly>
+          <input type="text" value="${detail.nopolisi}"  name="nopolisi_detail[]"  readonly>
+          <input type="text" value="${detail.keterangan}"  name="keterangan_detail[]"  readonly>
+          </div>
+          `)
 
+         
+          $('#detailList').append(detailRow)
+        })
+
+        $('#modalgrid').setGridParam({
+          datatype: "local",
+          data:response.data
+        }).trigger('reloadGrid')
+        $('.checkBoxgrid').attr("checked",true);
+      }
+    })
   }
-
+  
   function setTotal() {
     let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
     let total = 0
@@ -408,13 +601,12 @@
     $.each(nominalDetails, (index, nominalDetail) => {
       total += AutoNumeric.getNumber(nominalDetail)
     });
-    $(`#nominal`).val(total);
-    new AutoNumeric('#sumary').set(total)
+    // $(`#nominal_header`).val(total);
   }
 
-  function showInvoiceExtraHeader(form, invoiceExtraHeader) {
+  function showInvoiceChargeGandenganHeader(form, invoiceChargeGandenganHeader) {
     $.ajax({
-      url: `${apiUrl}invoiceextraheader/${invoiceExtraHeader}`,
+      url: `${apiUrl}invoicechargegandenganheader/${invoiceChargeGandenganHeader}`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -427,39 +619,15 @@
           if (element.attr("name") == 'tglbukti') {
             var result = value.split('-');
             element.val(result[2] + '-' + result[1] + '-' + result[0]);
+          }else if (element.attr("name") == 'tglproses') {
+            var result = value.split('-');
+            element.val(result[2] + '-' + result[1] + '-' + result[0]);
           } else {
             element.val(value)
           }
         })
-        $.each(response.detail, (id, detail) => {
-          let detailRow = $(`
-            <tr>
-                  <td>
-                    <div class="baris"></div>
-                  </td>
-                  
-                  <td>
-                    <input type="text"  name="keterangan_detail[]" style="" class="form-control">                    
-                  </td>
-                  <td>
-                    <input type="text"  name="nominal_detail[]" id="nominal_detail${id}"  style="text-align:right" class="autonumeric nominal form-control">                    
-                  </td>  
-                  <td>
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                  </td>
-              </tr>
-          `)
-          detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
-          detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-          $('table #table_body').append(detailRow)
-          initAutoNumeric(detailRow.find('.autonumeric'))
 
-          setRowNumbers()
-
-          id++;
-        })
-
-
+        getInvoiceChargeGandenganHeader(response.data.id)
       }
     })
   }

@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -108,22 +108,22 @@
                 <input type="text" name="nowarkat" class="form-control">
               </div>
             </div>
-
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  AGEN <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <input type="hidden" name="agen_id" class="form-control">
+                <input type="text" name="agen" class="form-control agen-lookup">
+              </div>
+            </div>
             <div class="row mt-5">
               <div class="col-md-12">
-                <div class="card">
+                <div class="card card-scroll">
                   <div class="card-body">
-                    <div class="row form-group">
-                      <div class="col-md-1">
-                        <label class="col-form-label">
-                          AGEN <span class="text-danger">*</span>
-                        </label>
-                      </div>
-                      <div class="col-md-4">
-                        <input type="hidden" name="agen_id" class="form-control">
-                        <input type="text" name="agen" class="form-control agen-lookup">
-                      </div>
-                    </div>
+
 
                     <div class="table-responsive">
                       <table class="table table-bordered mt-3" id="detailList" style="width:2000px;">
@@ -579,7 +579,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
+    showDefault(form)
     setTotal()
     setPenyesuaian()
     setNominalLebih()
@@ -610,6 +610,7 @@
 
         let tgl = response.data.tglbukti
         $.each(response.data, (index, value) => {
+          bankId = response.data.bank_id
           let element = form.find(`[name="${index}"]`)
 
           form.find(`[name="${index}"]`).val(value).attr('disabled', false)
@@ -1119,6 +1120,31 @@
     }
   }
 
+
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}pelunasanpiutangheader/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        bankId = response.data.bank_id
+
+        $.each(response.data, (index, value) => {
+          let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } else {
+            element.val(value)
+          }
+        })
+      }
+    })
+  }
 
   function initLookup() {
 

@@ -11,16 +11,16 @@
   <div class="row">
     <div class="col-12">
       <div class="card card-primary card-outline card-outline-tabs">
-        <div class="card-header p-0 border-bottom-0">
-          <ul class="nav nav-tabs" id="tab" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" id="acl" data-toggle="pill" href="#acl" role="tab" aria-controls="acl" aria-selected="true">Acl</a>
-            </li>
-          </ul>
-        </div>
+
         <div class="card-body">
-          <div class="tab-content" id="tabContent">
-            <div class="tab-pane active" id="acl-tab" role="tabpanel" aria-labelledby="acl-tab"></div>
+          <div id="tabs" style="font-size:12px">
+            <ul class="dejavu">
+              <li><a href="#acl-tab">Acl</a></li>
+            </ul>
+
+            <div id="acl-tab">
+
+            </div>
           </div>
         </div>
       </div>
@@ -29,6 +29,7 @@
 </div>
 
 @include('role._modal')
+@include('role.acl._grid')
 
 @push('scripts')
 <script>
@@ -48,6 +49,7 @@
   let currentTab = 'acl'
 
   $(document).ready(function() {
+    $("#tabs").tabs()
     $("#jqGrid").jqGrid({
         url: `${apiUrl}role`,
         mtype: "GET",
@@ -119,8 +121,9 @@
           let rows = $(this).jqGrid('getGridParam', 'postData').limit
           let roleId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
-          $(`.tab-pane#${currentTab}-tab`).html('').load(`${appUrl}/role/${currentTab}/grid`, function() {
-            loadGrid(roleId)
+
+          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/role/${currentTab}/grid`, function() {
+            loadGrid(id)
           })
         },
         loadComplete: function(data) {
@@ -351,15 +354,14 @@
         submitButton.removeAttr('disabled')
       }
     })
+
     
-    $('#tab').find('.nav-link').on('shown.bs.tab', function() {
-      let roleId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+    $("#tabs").on('click', 'li.ui-state-active', function() {
+      let href = $(this).find('a').attr('href');
+      currentTab = href.substring(1, href.length - 4);
+      roleId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/role/${currentTab}/grid`, function() {
 
-      currentTab = $(this).attr('id')
-
-      $('.tab-pane').removeClass('active')
-      $(`.tab-pane#${currentTab}-tab`).addClass('active')
-      $(`.tab-pane#${currentTab}-tab`).html('').load(`${appUrl}/role/${currentTab}/grid`, function() {
         loadGrid(roleId)
       })
     })

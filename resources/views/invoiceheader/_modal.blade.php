@@ -98,7 +98,7 @@
 
               <div class="row form-group">
                 <div class="col-md-2">
-                  <button class="btn btn-secondary" id="btnTampil">TAMPIL</button>
+                  <button class="btn btn-secondary" id="btnTampil">Reload</button>
                 </div>
               </div>
 

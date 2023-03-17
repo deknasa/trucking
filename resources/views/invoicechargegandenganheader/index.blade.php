@@ -10,9 +10,9 @@
   </div>
 </div>
 
-@include('invoiceextraheader._modal')
+@include('invoicechargegandenganheader._modal')
 <!-- Detail -->
-@include('invoiceextraheader._detail')
+@include('invoicechargegandenganheader._detail')
 
 @push('scripts')
 <script>
@@ -311,7 +311,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
-              createInvoiceExtraHeader()
+              createInvoiceChargeGandenganHeader()
             }
           },
           {
@@ -404,23 +404,23 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'update') }}`) {
+    if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'update') }}`) {
       $('#edit').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'destroy') }}`) {
+    if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'destroy') }}`) {
       $('#delete').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'export') }}`) {
       $('#export').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
     }
 
