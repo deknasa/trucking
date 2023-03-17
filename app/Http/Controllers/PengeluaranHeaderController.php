@@ -24,9 +24,8 @@ class PengeluaranHeaderController extends MyController
         $data = [            
             'comboapproval' => $this->comboApproval('list','STATUS APPROVAL','STATUS APPROVAL'),
             'combocetak' => $this->comboCetak('list','STATUSCETAK','STATUSCETAK'),
-            'combojenistransaksi' => $this->comboApproval('list','JENIS TRANSAKSI','JENIS TRANSAKSI'),
+            'combobank' => $this->comboBank(),
         ];
-
         return view('pengeluaran.index', compact('title', 'data'));
     }
 
@@ -106,6 +105,15 @@ class PengeluaranHeaderController extends MyController
         return $response['data'];
     }
 
+    public function comboBank()
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'bank');
+
+        return $response['data'];
+    }
 
     public function comboCetak($aksi, $grp, $subgrp)
     {

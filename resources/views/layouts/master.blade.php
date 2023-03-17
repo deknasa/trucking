@@ -421,16 +421,18 @@
   }
   
 
-  function loadDataHeader(url) {
+  function loadDataHeader(url,addtional = null) {
     clearGlobalSearch($('#jqGrid'))
+    let data = {
+      tgldari:$('#tgldariheader').val() ,
+      tglsampai:$('#tglsampaiheader').val() 
+    }
+    data = {...data,...addtional}
 
     $('#jqGrid').setGridParam({
       url: `${apiUrl}${url}`,
       datatype: "json",
-        postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val() 
-        },
+      postData: data,
 
       page:1
     }).trigger('reloadGrid')
