@@ -168,9 +168,7 @@
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
-    $(document).on('input', `#table_body [name="nominal_detail[]"]`, function(event) {
-      setTotal()
-    })
+    
     $(document).on('input', `#spList tbody [name="nominalretribusi[]"]`, function(event) {
       setNominalRetribusi()
     })
@@ -297,14 +295,14 @@
   })
 
   function setTotal() {
-    let nominalDetails = $(`#table_body [name="omset[]"]`)
+    let nominalDetails = $(`#spList tbody .omset`)
     let total = 0
 
     $.each(nominalDetails, (index, nominalDetail) => {
       total += AutoNumeric.getNumber(nominalDetail)
     });
 
-    new AutoNumeric('#total').set(total)
+    new AutoNumeric('#omset').set(total)
   }
 
   function setNominalRetribusi() {
@@ -430,7 +428,7 @@
             let omset = 0
             $.each(response.data, (index, detail) => {
 
-              omset = parseFloat(omset) + parseFloat(detail.omset)
+              // omset = parseFloat(omset) + parseFloat(detail.omset)
               let cekLongtrip = detail.statuslongtrip == 65 ? "checked" : "";
               let cekPeralihan = detail.statusperalihan == 67 ? "checked" : "";
               let detailRow = $(`
@@ -456,10 +454,10 @@
               setNominalRetribusi()
             })
 
-            $('#omset').append(`${omset}`)
+            // $('#omset').append(`${omset}`)
 
-            initAutoNumeric($('#spList tfoot').find('#omset'))
-
+            // initAutoNumeric($('#spList tfoot').find('#omset'))
+            setTotal()
           }
         },
         error: error => {
