@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -104,44 +104,53 @@
 
             </div>
 
-            <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys" id="spList" style="width:1800px">
-                <thead class="table-secondary">
-                  <tr>
-                    <th width="2%"></th>
-                    <th width="5%">JOB TRUCKING</th>
-                    <th width="5%">TGL OTOBON</th>
-                    <th width="5%">NO CONT</th>
-                    <th width="8%">TARIF</th>
-                    <th width="8%">OMSET</th>
-                    <th width="10%">RETRIBUSI</th>
-                    <th width="8%">BAGIAN</th>
-                    <th width="15%">EMKL</th>
-                    <th width="5%">LONG TRIP</th>
-                    <th width="5%">PERALIHAN</th>
-                    <th width="15%">KETERANGAN</th>
-                  </tr>
-                </thead>
-                <tbody>
+            <div class="row mt-5">
+              <div class="col-md-12">
+                <div class="card card-scroll">
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-bindkeys" id="spList" style="width:1800px">
+                        <thead class="table-secondary">
+                          <tr>
+                            <th width="2%"></th>
+                            <th width="5%">JOB TRUCKING</th>
+                            <th width="5%">TGL OTOBON</th>
+                            <th width="5%">NO CONT</th>
+                            <th width="8%">TARIF</th>
+                            <th width="8%">OMSET</th>
+                            <th width="10%">RETRIBUSI</th>
+                            <th width="8%">BAGIAN</th>
+                            <th width="15%">EMKL</th>
+                            <th width="5%">LONG TRIP</th>
+                            <th width="5%">PERALIHAN</th>
+                            <th width="15%">KETERANGAN</th>
+                          </tr>
+                        </thead>
+                        <tbody id="tbody_list">
 
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="5">
-                      <p class="font-weight-bold">TOTAL:</p>
-                    </td>
-                    <td>
-                      <p id="omset" class="text-right font-weight-bold"></p>
-                    </td>
-                    <td>
-                      <p id="retribusi" class="text-right font-weight-bold"></p>
-                    </td>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <td colspan="5">
+                              <p class="font-weight-bold">TOTAL:</p>
+                            </td>
+                            <td>
+                              <p id="omset" class="text-right font-weight-bold"></p>
+                            </td>
+                            <td>
+                              <p id="retribusi" class="text-right font-weight-bold"></p>
+                            </td>
 
-                    <td colspan="5"></td>
-                  </tr>
-                </tfoot>
-              </table>
+                            <td colspan="5"></td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+
 
           </div>
           <div class="modal-footer justify-content-start">
@@ -168,7 +177,7 @@
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
-    
+
     $(document).on('input', `#spList tbody [name="nominalretribusi[]"]`, function(event) {
       setNominalRetribusi()
     })
@@ -181,11 +190,67 @@
       let form = $('#crudForm')
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
-      let data = $('#crudForm').serializeArray()
+      let data = []
 
-       $('#crudForm').find(`[name="nominalretribusi[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominalretribusi[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalretribusi[]"]`)[index])
+      data.push({
+        name: 'id',
+        value: form.find(`[name="id"]`).val()
       })
+      data.push({
+        name: 'nobukti',
+        value: form.find(`[name="nobukti"]`).val()
+      })
+      data.push({
+        name: 'tglbukti',
+        value: form.find(`[name="tglbukti"]`).val()
+      })
+      data.push({
+        name: 'tglterima',
+        value: form.find(`[name="tglterima"]`).val()
+      })
+      data.push({
+        name: 'jenisorder',
+        value: form.find(`[name="jenisorder"]`).val()
+      })
+      data.push({
+        name: 'jenisorder_id',
+        value: form.find(`[name="jenisorder_id"]`).val()
+      })
+      data.push({
+        name: 'agen',
+        value: form.find(`[name="agen"]`).val()
+      })
+      data.push({
+        name: 'agen_id',
+        value: form.find(`[name="agen_id"]`).val()
+      })
+
+      data.push({
+        name: 'tgldari',
+        value: form.find(`[name="tgldari"]`).val()
+      })
+      data.push({
+        name: 'tglsampai',
+        value: form.find(`[name="tglsampai"]`).val()
+      })
+      $('#tbody_list tr').each(function(row, tr) {
+
+
+        if ($(this).find(`[name="sp_id[]"]`).is(':checked')) {
+
+
+          data.push({
+            name: 'nominalretribusi[]',
+            value: AutoNumeric.getNumber($(`#crudForm [name="nominalretribusi[]"]`)[row])
+          })
+          data.push({
+            name: 'sp_id[]',
+            value: $(this).find(`[name="sp_id[]"]`).val()
+          })
+
+        }
+      })
+
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname

@@ -318,16 +318,35 @@
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
     let selectedRows = [];
+    let selectedPP = [];
+    let selectedPS = [];
+    let selectedDeposito = [];
+    let selectedBBM = [];
+    let selectedPinjaman = [];
+    let selectedRIC = [];
 
     function checkboxHandler(element) {
         let value = $(element).val();
         if (element.checked) {
-            selectedRows.push($(element).val())
+            selectedRows.push($(element).val());
+            selectedRIC.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_nobuktiric"]`).text());
+            selectedPP.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_potonganpinjaman"]`).text());
+            selectedPS.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_potonganpinjamansemua"]`).text());
+            selectedDeposito.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_deposito"]`).text());
+            selectedBBM.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_bbm"]`).text());
+            selectedPinjaman.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_pinjamanpribadi"]`).text());
+
             countNominal()
         } else {
             for (var i = 0; i < selectedRows.length; i++) {
                 if (selectedRows[i] == value) {
                     selectedRows.splice(i, 1);
+                    selectedRIC.splice(i, 1);
+                    selectedPP.splice(i, 1);
+                    selectedPS.splice(i, 1);
+                    selectedDeposito.splice(i, 1);
+                    selectedBBM.splice(i, 1);
+                    selectedPinjaman.splice(i, 1);
                 }
             }
 
@@ -336,43 +355,35 @@
     }
 
     function countNominal() {
-        let data = [];
-        $.each(selectedRows, function(index, item) {
-            data.push({
-                name: 'rincianId[]',
-                value: item
-            })
+        potPribadi = 0;
+        potSemua = 0;
+        deposito = 0;
+        bbm = 0;
+        pinjaman = 0;
+        $.each(selectedPP, function(index, item) {
+            potPribadi = potPribadi + parseFloat(item.replace(/,/g, ''))
+        });
+        $.each(selectedPS, function(index, item) {
+            potSemua = potSemua + parseFloat(item.replace(/,/g, ''))
+        });
+        $.each(selectedDeposito, function(index, item) {
+            deposito = deposito + parseFloat(item.replace(/,/g, ''))
+        });
+        $.each(selectedBBM, function(index, item) {
+            bbm = bbm + parseFloat(item.replace(/,/g, ''))
+        });
+        $.each(selectedPinjaman, function(index, item) {
+            pinjaman = pinjaman + parseFloat(item.replace(/,/g, ''))
         });
 
-        $.ajax({
-            url: `${apiUrl}prosesgajisupirheader/hitungNominal`,
-            method: 'POST',
-            data: data,
-            dataType: 'JSON',
-            beforeSend: request => {
-                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-            },
-            success: response => {
-                var kodenobukti = response.kodenobukti
-                if (kodenobukti == '1') {
-                    var kodestatus = response.kodestatus
-                    if (kodestatus == '1') {
-                        showDialog(response.message['keterangan'])
-                    } else {
-                        if (Aksi == 'EDIT') {
-                            editProsesGajiSupirHeader(Id)
-                        }
-                        if (Aksi == 'DELETE') {
-                            deleteProsesGajiSupirHeader(Id)
-                        }
-                    }
 
-                } else {
-                    showDialog(response.message['keterangan'])
-                }
-            }
-        })
+        initAutoNumeric($('#crudForm').find(`[name="nomPS"]`).val(potSemua))
+        initAutoNumeric($('#crudForm').find(`[name="nomPP"]`).val(potPribadi))
+        initAutoNumeric($('#crudForm').find(`[name="nomDeposito"]`).val(deposito))
+        initAutoNumeric($('#crudForm').find(`[name="nomBBM"]`).val(bbm))
+        initAutoNumeric($('#crudForm').find(`[name="nomPinjaman"]`).val(pinjaman))
     }
+
     $(document).ready(function() {
 
         $('#btnSubmit').click(function(event) {
@@ -416,6 +427,13 @@
             $.each(selectedRows, function(index, item) {
                 data.push({
                     name: 'rincianId[]',
+                    value: item
+                })
+            });
+            
+            $.each(selectedRIC, function(index, item) {
+                data.push({
+                    name: 'nobuktiRIC[]',
                     value: item
                 })
             });
@@ -666,10 +684,63 @@
                         align: 'left'
                     },
                     {
-                        label: 'NOMINAL',
-                        name: 'nominal',
+                        label: 'BORONGAN SUPIR',
+                        name: 'borongan',
                         formatter: currencyFormat,
                         align: "right",
+                    },
+                    {
+                        label: 'U. JALAN',
+                        name: 'uangjalan',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
+                        label: 'U. BBM',
+                        name: 'bbm',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
+                        label: 'UANG MAKAN',
+                        name: 'uangmakanharian',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
+                        label: 'POT. PINJAMAN',
+                        name: 'potonganpinjaman',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
+                        label: 'POT. PINJAMAN (SEMUA)',
+                        name: 'potonganpinjamansemua',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
+                        label: 'DEPOSITO',
+                        name: 'deposito',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
+                        label: 'KOMISI SUPIR',
+                        name: 'komisisupir',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
+                        label: 'TOL',
+                        name: 'tolsupir',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
+                        label: 'pinjaman pribadi',
+                        name: 'pinjamanpribadi',
+                        hidden: true
                     },
                 ],
                 autowidth: true,
@@ -776,7 +847,15 @@
                             $(this).find(`td input:checkbox`).click()
                         })
                         $(this).jqGrid('footerData', 'set', {
-                            nominal: data.attributes.totalNominal,
+                            borongan: data.attributes.totalBorongan,
+                            uangjalan: data.attributes.totalUangJalan,
+                            bbm: data.attributes.totalUangBBM,
+                            uangmakanharian: data.attributes.totalUangMakan,
+                            potonganpinjaman: data.attributes.totalPotPinjaman,
+                            potonganpinjamansemua: data.attributes.totalPotPinjSemua,
+                            deposito: data.attributes.totalDeposito,
+                            komisisupir: data.attributes.totalKomisi,
+                            tolsupir: data.attributes.totalTol,
                         }, true)
                     }
                 }
@@ -832,6 +911,8 @@
         $('#crudForm').find('[name=tglbuktiPinjaman]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         rekapRincian('getRic')
         initDatepicker()
+
+        showDefault(form)
         // form.find(`[name="subnominal"]`).addClass('disabled')
     }
 
@@ -932,10 +1013,15 @@
                         let element = form.find(`[name="${index}"]`)
 
                         form.find(`[name="${index}"]`).val(value)
+                        if (index == 'bankPS') {
+                            element.data('current-value', value).prop('readonly', true)
+                            element.parent('.input-group').find('.button-clear').remove()
+                            element.parent('.input-group').find('.input-group-append').remove()
+                        }
 
                     })
                     form.find(`[name="tglbuktiPS"]`).val(dateFormat(response.data.tglbukti))
-                   
+
                 }
                 if (response.potpribadi != null) {
                     $.each(response.potpribadi, (index, value) => {
@@ -943,9 +1029,14 @@
 
                         form.find(`[name="${index}"]`).val(value)
 
+                        if (index == 'bankPP') {
+                            element.data('current-value', value).prop('readonly', true)
+                            element.parent('.input-group').find('.button-clear').remove()
+                            element.parent('.input-group').find('.input-group-append').remove()
+                        }
                     })
                     form.find(`[name="tglbuktiPP"]`).val(dateFormat(response.data.tglbukti))
-                    
+
                 }
 
                 if (response.deposito != null) {
@@ -954,9 +1045,14 @@
 
                         form.find(`[name="${index}"]`).val(value)
 
+                        if (index == 'bankDeposito') {
+                            element.data('current-value', value).prop('readonly', true)
+                            element.parent('.input-group').find('.button-clear').remove()
+                            element.parent('.input-group').find('.input-group-append').remove()
+                        }
                     })
                     form.find(`[name="tglbuktiDeposito"]`).val(dateFormat(response.data.tglbukti))
-                    
+
                 }
 
                 if (response.bbm != null) {
@@ -964,10 +1060,14 @@
                         let element = form.find(`[name="${index}"]`)
 
                         form.find(`[name="${index}"]`).val(value)
-
+                        if (index == 'bankBBM') {
+                            element.data('current-value', value).prop('readonly', true)
+                            element.parent('.input-group').find('.button-clear').remove()
+                            element.parent('.input-group').find('.input-group-append').remove()
+                        }
                     })
                     form.find(`[name="tglbuktiBBM"]`).val(dateFormat(response.data.tglbukti))
-                    
+
                 }
 
                 if (response.pinjaman != null) {
@@ -975,10 +1075,14 @@
                         let element = form.find(`[name="${index}"]`)
 
                         form.find(`[name="${index}"]`).val(value)
-
+                        if (index == 'bankPinjaman') {
+                            element.data('current-value', value).prop('readonly', true)
+                            element.parent('.input-group').find('.button-clear').remove()
+                            element.parent('.input-group').find('.input-group-append').remove()
+                        }
                     })
                     form.find(`[name="tglbuktiPinjaman"]`).val(dateFormat(response.data.tglbukti))
-                    
+
                 }
 
                 initAutoNumeric(form.find(`[name="nomPS"]`))
@@ -1169,6 +1273,31 @@
                 }
             })
         }
+    }
+
+
+    function showDefault(form) {
+        $.ajax({
+            url: `${apiUrl}prosesgajisupirheader/default`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            success: response => {
+                bankId = response.data.bank_id
+                form.find(`[name="bank_idPS"]`).val(response.data.bank_id)
+                form.find(`[name="bankPS"]`).val(response.data.bank)
+                form.find(`[name="bank_idPP"]`).val(response.data.bank_id)
+                form.find(`[name="bankPP"]`).val(response.data.bank)
+                form.find(`[name="bank_idDeposito"]`).val(response.data.bank_id)
+                form.find(`[name="bankDeposito"]`).val(response.data.bank)
+                form.find(`[name="bank_idBBM"]`).val(response.data.bank_id)
+                form.find(`[name="bankBBM"]`).val(response.data.bank)
+                form.find(`[name="bank_idPinjaman"]`).val(response.data.bank_id)
+                form.find(`[name="bankPinjaman"]`).val(response.data.bank)
+            }
+        })
     }
 
     function initLookup() {
