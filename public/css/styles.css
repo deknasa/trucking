@@ -349,8 +349,12 @@ html {
 .ui-dialog .ui-dialog-titlebar {
 	background: transparent !important;
 	border: none !important;
-	padding: 3px 0 !important;
+	padding: .25rem 0 !important;
 	color: #0e2d5f;
+}
+
+.ui-dialog .ui-dialog-title {
+	margin: 0 !important;
 }
 
 .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close {
