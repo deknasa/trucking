@@ -1064,6 +1064,14 @@ function showSuccessDialog(statusText = "", message = "") {
 	);
 	$("#dialog-success-message").dialog({
 		modal: true,
+		buttons: [
+			{
+				text: "Ok",
+				click: function () {
+					$(this).dialog("close");
+				},
+			},
+		]
 	});
 }
 function showDialog(statusText = "", message = "") {
@@ -1073,6 +1081,14 @@ function showDialog(statusText = "", message = "") {
 	);
 	$("#dialog-message").dialog({
 		modal: true,
+		buttons: [
+			{
+				text: "Ok",
+				click: function () {
+					$(this).dialog("close");
+				},
+			},
+		]
 	});
 
 	$(".ui-dialog-titlebar-close").find("p").remove();
