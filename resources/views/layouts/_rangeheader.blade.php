@@ -19,6 +19,7 @@
                     </div>
                 </div>
             </div>
+            @stack('addtional-field')
             <div class="row">
 
                 <div class="col-sm-6 mt-4">

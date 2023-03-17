@@ -84,42 +84,55 @@
                                 </tbody>
                             </table>
                         </div> -->
-
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-bindkeys" id="detailList" style="width:2000px;">
-                                <thead>
-                                    <tr>
-                                        <th width="1%">No</th>
-                                        <th width="4%">Tgl jatuh tempo</th>
-                                        <th width="4%">No warkat</th>
-                                        <th width="6%">Bank</th>
-                                        <th width="6%">Bank Pelanggan</th>
-                                        <th width="6%">Keterangan</th>
-                                        <th width="6%">Nominal</th>
-                                        <th width="4%">Jenis Biaya</th>
-                                        <th width="4%">Bulan Beban</th>
-                                        <th width="1%">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="table_body" class="form-group">
-
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="6">
-                                            <p class="text-right font-weight-bold">TOTAL :</p>
-                                        </td>
-                                        <td>
-                                            <p class="text-right font-weight-bold autonumeric" id="total"></p>
-                                        </td>
-                                        <td colspan="2"></td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                        <div class="row mt-5">
+                            <div class="col-md-12">
+                                <div class="card" style="max-height:500px; overflow-y: scroll;">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-bindkeys" id="detailList" style="width:2000px;">
+                                                <thead>
+                                            
+                                                    <tr>
+                                                        <th width="1%">No</th>
+                                                        <th width="4%">Tgl jatuh tempo</th>
+                                                        <th width="4%">No warkat</th>
+                                                        <th width="6%">Bank</th>
+                                                        <th width="6%">Bank Pelanggan</th>
+                                                        <th width="6%">Keterangan</th>
+                                                        <th width="6%">Nominal</th>
+                                                        <th width="4%">Jenis Biaya</th>
+                                                        <th width="4%">Bulan Beban</th>
+                                                        <th width="1%">Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="table_body" class="form-group">
+                                                </tbody>
+                                                <tfoot>
+                                                
+                                                    <tr>
+                                                        <td colspan="6">
+                                                            <p class="text-right font-weight-bold">TOTAL :</p>
+                                                        </td>
+                                                        <td>
+                                                            <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                                                        </td>
+                                                        <td colspan="2"></td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                                    
+                            
+                                    
+                        
+
 
                     </div>
                     <div class="modal-footer justify-content-start">
