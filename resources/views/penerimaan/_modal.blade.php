@@ -709,9 +709,12 @@
                         element.data('current-value', value)
                     }
                     if (index == 'bank') {
-                        element.data('current-value', value)
+                        element.data('current-value', value).prop('readonly', true)
+                        element.parent('.input-group').find('.button-clear').remove()
+                        element.parent('.input-group').find('.input-group-append').remove()
                     }
                 })
+
                 $.each(response.detail, (index, detail) => {
                     let readOnly = (detail.pelunasanpiutang_nobukti != '-') ? 'readonly' : '';
                     let detailRow = $(`

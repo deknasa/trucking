@@ -11,20 +11,21 @@
   <div class="row">
     <div class="col-12">
       <div class="card card-primary card-outline card-outline-tabs">
-        <div class="card-header p-0 border-bottom-0">
-          <ul class="nav nav-tabs" id="tab" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" id="role" data-toggle="pill" href="#role" role="tab" aria-controls="role" aria-selected="true">Role</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="acl" data-toggle="pill" href="#acl" role="tab" aria-controls="acl" aria-selected="false">Acl</a>
-            </li>
-          </ul>
-        </div>
+        
         <div class="card-body" style="min-height: 529px">
-          <div class="tab-content" id="tabContent">
-            <div class="tab-pane active" id="role-tab" role="tabpanel" aria-labelledby="role-tab"></div>
-            <div class="tab-pane" id="acl-tab" role="tabpanel" aria-labelledby="acl-tab"></div>
+          
+          <div id="tabs" style="font-size:12px">
+            <ul class="dejavu">
+              <li><a href="#role-tab">Role</a></li>
+              <li><a href="#acl-tab">Acl</a></li>
+            </ul>
+            <div id="role-tab">
+
+            </div>
+
+            <div id="acl-tab">
+
+            </div>
           </div>
         </div>
       </div>
@@ -33,6 +34,8 @@
 </div>
 
 @include('user._modal')
+@include('user.acl._grid')
+@include('user.role._grid')
 
 @push('scripts')
 <script>
@@ -50,6 +53,7 @@
   let currentTab = 'role'
 
   $(document).ready(function() {
+    $("#tabs").tabs()
     jqGrid = $("#jqGrid")
       .jqGrid({
         url: `${apiUrl}user`,
@@ -200,9 +204,9 @@
           let userId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
-          $(`.tab-pane#${currentTab}-tab`).html('').load(`${appUrl}/user/${currentTab}/grid`, function() {
-            loadGrid(userId)
-          })
+          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/user/${currentTab}/grid`, function() {
+               loadGrid(id)
+            })
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -432,15 +436,12 @@
         submitButton.removeAttr('disabled')
       }
     })
+    $("#tabs").on('click', 'li.ui-state-active', function() {
+      let href = $(this).find('a').attr('href');
+      currentTab = href.substring(1, href.length - 4);
+      userId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/user/${currentTab}/grid`, function() {
 
-    $('#tab').find('.nav-link').on('shown.bs.tab', function() {
-      let userId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-
-      currentTab = $(this).attr('id')
-
-      $('.tab-pane').removeClass('active')
-      $(`.tab-pane#${currentTab}-tab`).addClass('active')
-      $(`.tab-pane#${currentTab}-tab`).html('').load(`${appUrl}/user/${currentTab}/grid`, function() {
         loadGrid(userId)
       })
     })

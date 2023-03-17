@@ -43,6 +43,7 @@
           {
             label: 'NO BUKTI SP',
             name: 'suratpengantar_nobukti',
+            width: 300
           },
         ],
         autowidth: true,

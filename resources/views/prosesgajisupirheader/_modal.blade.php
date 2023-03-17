@@ -5,7 +5,7 @@
                 <div class="modal-header">
                     <p class="modal-title" id="crudModalTitle"></p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        
+
                     </button>
                 </div>
                 <form action="" method="post">
@@ -119,15 +119,7 @@
                                                 <input type="text" name="nomPS" class="form-control text-right" readonly>
                                             </div>
                                         </div>
-                                        <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
-                                                    Keterangan</label>
-                                            </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="text" name="ketPS" class="form-control">
-                                            </div>
-                                        </div>
+
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                                 <label>
@@ -167,15 +159,7 @@
                                                 <input type="text" name="nomPP" class="form-control text-right" readonly>
                                             </div>
                                         </div>
-                                        <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
-                                                    Keterangan</label>
-                                            </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="text" name="ketPP" class="form-control">
-                                            </div>
-                                        </div>
+
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                                 <label>
@@ -215,15 +199,7 @@
                                                 <input type="text" name="nomDeposito" class="form-control text-right" readonly>
                                             </div>
                                         </div>
-                                        <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
-                                                    Keterangan</label>
-                                            </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="text" name="ketDeposito" class="form-control">
-                                            </div>
-                                        </div>
+
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                                 <label>
@@ -263,15 +239,7 @@
                                                 <input type="text" name="nomBBM" class="form-control text-right" readonly>
                                             </div>
                                         </div>
-                                        <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
-                                                    Keterangan</label>
-                                            </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="text" name="ketBBM" class="form-control">
-                                            </div>
-                                        </div>
+
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                                 <label>
@@ -311,15 +279,7 @@
                                                 <input type="text" name="nomPinjaman" class="form-control text-right" readonly>
                                             </div>
                                         </div>
-                                        <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
-                                                    Keterangan</label>
-                                            </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="text" name="ketPinjaman" class="form-control">
-                                            </div>
-                                        </div>
+
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                                 <label>
@@ -363,13 +323,55 @@
         let value = $(element).val();
         if (element.checked) {
             selectedRows.push($(element).val())
+            countNominal()
         } else {
             for (var i = 0; i < selectedRows.length; i++) {
                 if (selectedRows[i] == value) {
                     selectedRows.splice(i, 1);
                 }
             }
+
+            countNominal()
         }
+    }
+
+    function countNominal() {
+        let data = [];
+        $.each(selectedRows, function(index, item) {
+            data.push({
+                name: 'rincianId[]',
+                value: item
+            })
+        });
+
+        $.ajax({
+            url: `${apiUrl}prosesgajisupirheader/hitungNominal`,
+            method: 'POST',
+            data: data,
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var kodenobukti = response.kodenobukti
+                if (kodenobukti == '1') {
+                    var kodestatus = response.kodestatus
+                    if (kodestatus == '1') {
+                        showDialog(response.message['keterangan'])
+                    } else {
+                        if (Aksi == 'EDIT') {
+                            editProsesGajiSupirHeader(Id)
+                        }
+                        if (Aksi == 'DELETE') {
+                            deleteProsesGajiSupirHeader(Id)
+                        }
+                    }
+
+                } else {
+                    showDialog(response.message['keterangan'])
+                }
+            }
+        })
     }
     $(document).ready(function() {
 
@@ -417,28 +419,84 @@
                     value: item
                 })
             });
-            
+
             data.push({
                 name: 'bank_idPS',
                 value: form.find(`[name="bank_idPS"]`).val()
             })
-            
+            data.push({
+                name: 'bankPS',
+                value: form.find(`[name="bankPS"]`).val()
+            })
+            $('#crudForm').find(`[name="nomPS"]`).each((index, element) => {
+                data.push({
+                    name: 'nomPS',
+                    value: AutoNumeric.getNumber($(`#crudForm [name="nomPS"]`)[index])
+                })
+            })
+
             data.push({
                 name: 'bank_idPP',
                 value: form.find(`[name="bank_idPP"]`).val()
             })
+            $('#crudForm').find(`[name="nomPP"]`).each((index, element) => {
+                data.push({
+                    name: 'nomPP',
+                    value: AutoNumeric.getNumber($(`#crudForm [name="nomPP"]`)[index])
+                })
+            })
+            data.push({
+                name: 'bankPP',
+                value: form.find(`[name="bankPP"]`).val()
+            })
+
+
             data.push({
                 name: 'bank_idDeposito',
                 value: form.find(`[name="bank_idDeposito"]`).val()
             })
+            $('#crudForm').find(`[name="nomDeposito"]`).each((index, element) => {
+                data.push({
+                    name: 'nomDeposito',
+                    value: AutoNumeric.getNumber($(`#crudForm [name="nomDeposito"]`)[index])
+                })
+            })
+            data.push({
+                name: 'bankDeposito',
+                value: form.find(`[name="bankDeposito"]`).val()
+            })
+
             data.push({
                 name: 'bank_idBBM',
                 value: form.find(`[name="bank_idBBM"]`).val()
             })
+            $('#crudForm').find(`[name="nomBBM"]`).each((index, element) => {
+                data.push({
+                    name: 'nomBBM',
+                    value: AutoNumeric.getNumber($(`#crudForm [name="nomBBM"]`)[index])
+                })
+            })
+            data.push({
+                name: 'bankBBM',
+                value: form.find(`[name="bankBBM"]`).val()
+            })
+
             data.push({
                 name: 'bank_idPinjaman',
                 value: form.find(`[name="bank_idPinjaman"]`).val()
             })
+            $('#crudForm').find(`[name="nomPinjaman"]`).each((index, element) => {
+                data.push({
+                    name: 'nomPinjaman',
+                    value: AutoNumeric.getNumber($(`#crudForm [name="nomPinjaman"]`)[index])
+                })
+            })
+            data.push({
+                name: 'bankPinjaman',
+                value: form.find(`[name="bankPinjaman"]`).val()
+            })
+
+
             data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
@@ -471,10 +529,10 @@
                     method = 'POST'
                     url = `${apiUrl}prosesgajisupirheader`
                     break;
-                    // case 'edit':
-                    //     method = 'PATCH'
-                    //     url = `${apiUrl}prosesgajisupirheader/${Id}`
-                    //     break;
+                case 'edit':
+                    method = 'PATCH'
+                    url = `${apiUrl}prosesgajisupirheader/${Id}`
+                    break;
                 case 'delete':
                     method = 'DELETE'
                     url = `${apiUrl}prosesgajisupirheader/${Id}`
@@ -485,66 +543,44 @@
                     break;
             }
 
-            $(this).attr('disabled', '')
-            $('#loader').removeClass('d-none')
 
-            if (action == 'edit') {
-                $.ajax({
-                    url: `${apiUrl}prosesgajisupirheader/noEdit`,
-                    method: 'POST',
-                    dataType: 'JSON',
-                    beforeSend: request => {
-                        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-                    },
-                    success: response => {
+            $.ajax({
+                url: url,
+                method: method,
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
 
-                        showDialog(response.message)
+                    id = response.data.id
+                    $('#crudModal').find('#crudForm').trigger('reset')
+                    $('#crudModal').modal('hide')
+                    $('#jqGrid').jqGrid('setGridParam', {
+                        page: response.data.page
+                    }).trigger('reloadGrid');
+                    selectedRows = []
+                    if (id == 0) {
+                        $('#detail').jqGrid().trigger('reloadGrid')
                     }
-                }).always(() => {
-                    $('#loader').addClass('d-none')
-                    $(this).removeAttr('disabled')
-                })
-
-            } else {
-                $.ajax({
-                    url: url,
-                    method: method,
-                    dataType: 'JSON',
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    },
-                    data: data,
-                    success: response => {
-
-                        id = response.data.id
-                        $('#crudModal').find('#crudForm').trigger('reset')
-                        $('#crudModal').modal('hide')
-                        $('#jqGrid').jqGrid('setGridParam', {
-                            page: response.data.page
-                        }).trigger('reloadGrid');
-                        selectedRows = []
-                        if (id == 0) {
-                            $('#detail').jqGrid().trigger('reloadGrid')
-                        }
-                        if (response.data.grp == 'FORMAT') {
-                            updateFormat(response.data)
-                        }
-                    },
-                    error: error => {
-                        if (error.status === 422) {
-                            $('.is-invalid').removeClass('is-invalid')
-                            $('.invalid-feedback').remove()
-                            setErrorMessages(form, error.responseJSON.errors);
-                        } else {
-                            showDialog(error.statusText)
-                        }
-                    },
-                }).always(() => {
-                    $('#loader').addClass('d-none')
-                    $(this).removeAttr('disabled')
-                })
-
-            }
+                    if (response.data.grp == 'FORMAT') {
+                        updateFormat(response.data)
+                    }
+                },
+                error: error => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        setErrorMessages(form, error.responseJSON.errors);
+                    } else {
+                        showDialog(error.statusText)
+                    }
+                },
+            }).always(() => {
+                $('#loader').addClass('d-none')
+                $(this).removeAttr('disabled')
+            })
 
         })
     })
@@ -887,10 +923,75 @@
 
                 })
 
+                url = `${gajiId}/getEdit`
+                rekapRincian(url)
 
-                form.find('[name]').addClass('disabled')
-                initDisabled()
-                getEdit(gajiId, aksi)
+
+                if (response.potsemua != null) {
+                    $.each(response.potsemua, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
+
+                        form.find(`[name="${index}"]`).val(value)
+
+                    })
+                    form.find(`[name="tglbuktiPS"]`).val(dateFormat(response.data.tglbukti))
+                   
+                }
+                if (response.potpribadi != null) {
+                    $.each(response.potpribadi, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
+
+                        form.find(`[name="${index}"]`).val(value)
+
+                    })
+                    form.find(`[name="tglbuktiPP"]`).val(dateFormat(response.data.tglbukti))
+                    
+                }
+
+                if (response.deposito != null) {
+                    $.each(response.deposito, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
+
+                        form.find(`[name="${index}"]`).val(value)
+
+                    })
+                    form.find(`[name="tglbuktiDeposito"]`).val(dateFormat(response.data.tglbukti))
+                    
+                }
+
+                if (response.bbm != null) {
+                    $.each(response.bbm, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
+
+                        form.find(`[name="${index}"]`).val(value)
+
+                    })
+                    form.find(`[name="tglbuktiBBM"]`).val(dateFormat(response.data.tglbukti))
+                    
+                }
+
+                if (response.pinjaman != null) {
+                    $.each(response.pinjaman, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
+
+                        form.find(`[name="${index}"]`).val(value)
+
+                    })
+                    form.find(`[name="tglbuktiPinjaman"]`).val(dateFormat(response.data.tglbukti))
+                    
+                }
+
+                initAutoNumeric(form.find(`[name="nomPS"]`))
+                initAutoNumeric(form.find(`[name="nomPP"]`))
+                initAutoNumeric(form.find(`[name="nomDeposito"]`))
+                initAutoNumeric(form.find(`[name="nomBBM"]`))
+                initAutoNumeric(form.find(`[name="nomPinjaman"]`))
+
+                if (aksi == 'delete') {
+
+                    form.find('[name]').addClass('disabled')
+                    initDisabled()
+                }
             }
         })
     }
@@ -909,11 +1010,10 @@
                 aksi: action
             },
         }).trigger('reloadGrid');
-        getAllData(tglDari,tglSampai);
+        getAllData(tglDari, tglSampai);
     })
 
-    function getAllData(dari,sampai)
-    {
+    function getAllData(dari, sampai) {
         $.ajax({
             url: `${apiUrl}prosesgajisupirheader/${dari}/${sampai}/getAllData`,
             method: 'GET',
@@ -934,8 +1034,7 @@
         })
     }
 
-    function getPotPinjaman(dari,sampai)
-    {
+    function getPotPinjaman(dari, sampai) {
         $.ajax({
             url: `${apiUrl}prosesgajisupirheader/${dari}/${sampai}/getPotPinjaman`,
             method: 'GET',
@@ -952,8 +1051,7 @@
         })
     }
 
-    function getDepo(dari,sampai)
-    {
+    function getDepo(dari, sampai) {
         $.ajax({
             url: `${apiUrl}prosesgajisupirheader/${dari}/${sampai}/getDepo`,
             method: 'GET',

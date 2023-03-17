@@ -579,7 +579,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
+    showDefault(form)
     setTotal()
     setPenyesuaian()
     setNominalLebih()
@@ -610,6 +610,7 @@
 
         let tgl = response.data.tglbukti
         $.each(response.data, (index, value) => {
+          bankId = response.data.bank_id
           let element = form.find(`[name="${index}"]`)
 
           form.find(`[name="${index}"]`).val(value).attr('disabled', false)
@@ -1119,6 +1120,31 @@
     }
   }
 
+
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}pelunasanpiutangheader/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        bankId = response.data.bank_id
+
+        $.each(response.data, (index, value) => {
+          let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } else {
+            element.val(value)
+          }
+        })
+      }
+    })
+  }
 
   function initLookup() {
 
