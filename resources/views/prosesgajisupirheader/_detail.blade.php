@@ -17,22 +17,68 @@
         iconSet: 'fontAwesome',
         datatype: "local",
         colModel: [{
-            label: 'NO RIC',
+            label: 'NO RINCIAN',
             name: 'gajisupir_nobukti',
+          },
+          {
+            label: 'NO BK',
+            name: 'trado_id',
           },
           {
             label: 'SUPIR',
             name: 'supir_id',
-          }, {
-            label: 'TRADO',
-            name: 'trado_id',
-          }, {
-            label: 'KETERANGAN',
-            name: 'keterangan',
+          }, 
+          {
+            label: 'BORONGAN',
+            name: 'total',
+            align: 'right',
+            formatter: currencyFormat,
           },
           {
-            label: 'NOMINAL',
-            name: 'nominal',
+            label: 'U. JALAN',
+            name: 'uangjalan',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'U. BBM',
+            name: 'bbm',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'U. Makan',
+            name: 'uangmakanharian',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Pot. Pinjaman',
+            name: 'potonganpinjaman',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Pot. Pinjaman (semua)',
+            name: 'potonganpinjamansemua',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'DEPOSITO',
+            name: 'deposito',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Komisi Supir',
+            name: 'komisisupir',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'TOL',
+            name: 'tolsupir',
             align: 'right',
             formatter: currencyFormat,
           },
@@ -100,7 +146,15 @@
           if (data.attributes) {
             $(this).jqGrid('footerData', 'set', {
               nobukti: 'Total:',
-              nominal: data.attributes.totalNominal,
+              total: data.attributes.totalNominal,
+              uangjalan: data.attributes.totalUangJalan,
+              bbm: data.attributes.totalBBM,
+              uangmakanharian: data.attributes.totalUangMakan,
+              potonganpinjaman: data.attributes.totalPinjaman,
+              potonganpinjamansemua: data.attributes.totalPinjamanSemua,
+              deposito: data.attributes.totalDeposito,
+              komisisupir: data.attributes.totalKomisi,
+              tolsupir: data.attributes.totalTol
             }, true)
           }
         }

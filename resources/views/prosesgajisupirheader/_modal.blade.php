@@ -318,12 +318,17 @@
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
     let selectedRows = [];
+    let selectedBorongan = [];
+    let selectedJalan = [];
+    let selectedKomisi = [];
+    let selectedMakan = [];
     let selectedPP = [];
     let selectedPS = [];
     let selectedDeposito = [];
     let selectedBBM = [];
     let selectedPinjaman = [];
     let selectedRIC = [];
+    let sortnameRincian = 'nobuktiric'
 
     function checkboxHandler(element) {
         let value = $(element).val();
@@ -335,6 +340,10 @@
             selectedDeposito.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_deposito"]`).text());
             selectedBBM.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_bbm"]`).text());
             selectedPinjaman.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_pinjamanpribadi"]`).text());
+            selectedBorongan.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_borongan"]`).text());
+            selectedJalan.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_uangjalan"]`).text());
+            selectedKomisi.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text());
+            selectedMakan.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_uangmakanharian"]`).text());
 
             countNominal()
         } else {
@@ -347,6 +356,10 @@
                     selectedDeposito.splice(i, 1);
                     selectedBBM.splice(i, 1);
                     selectedPinjaman.splice(i, 1);
+                    selectedBorongan.splice(i, 1);
+                    selectedJalan.splice(i, 1);
+                    selectedKomisi.splice(i, 1);
+                    selectedMakan.splice(i, 1);
                 }
             }
 
@@ -360,6 +373,10 @@
         deposito = 0;
         bbm = 0;
         pinjaman = 0;
+        borongan = 0;
+        jalan = 0;
+        komisi = 0;
+        makan = 0;
         $.each(selectedPP, function(index, item) {
             potPribadi = potPribadi + parseFloat(item.replace(/,/g, ''))
         });
@@ -375,13 +392,36 @@
         $.each(selectedPinjaman, function(index, item) {
             pinjaman = pinjaman + parseFloat(item.replace(/,/g, ''))
         });
+        $.each(selectedBorongan, function(index, item) {
+            borongan = borongan + parseFloat(item.replace(/,/g, ''))
+        });
+        $.each(selectedJalan, function(index, item) {
+            jalan = jalan + parseFloat(item.replace(/,/g, ''))
+        });
+        $.each(selectedKomisi, function(index, item) {
+            komisi = komisi + parseFloat(item.replace(/,/g, ''))
+        });
+        $.each(selectedMakan, function(index, item) {
+            makan = makan + parseFloat(item.replace(/,/g, ''))
+        });
 
+        console.log(potSemua)
 
         initAutoNumeric($('#crudForm').find(`[name="nomPS"]`).val(potSemua))
         initAutoNumeric($('#crudForm').find(`[name="nomPP"]`).val(potPribadi))
         initAutoNumeric($('#crudForm').find(`[name="nomDeposito"]`).val(deposito))
         initAutoNumeric($('#crudForm').find(`[name="nomBBM"]`).val(bbm))
         initAutoNumeric($('#crudForm').find(`[name="nomPinjaman"]`).val(pinjaman))
+
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_potonganpinjaman"]`).text(potPribadi))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_potonganpinjamansemua"]`).text(potSemua))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_deposito"]`).text(deposito))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_bbm"]`).text(bbm))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_pinjamanpribadi"]`).text(pinjaman))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_borongan"]`).text(borongan))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangjalan"]`).text(jalan))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text(komisi))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangmakanharian"]`).text(makan))
     }
 
     $(document).ready(function() {
@@ -430,7 +470,7 @@
                     value: item
                 })
             });
-            
+
             $.each(selectedRIC, function(index, item) {
                 data.push({
                     name: 'nobuktiRIC[]',
@@ -579,6 +619,16 @@
                         page: response.data.page
                     }).trigger('reloadGrid');
                     selectedRows = []
+                    selectedPP = [];
+                    selectedPS = [];
+                    selectedDeposito = [];
+                    selectedBBM = [];
+                    selectedPinjaman = [];
+                    selectedRIC = [];
+                    selectedBorongan = [];
+                    selectedKomisi = [];
+                    selectedJalan = [];
+                    selectedMakan = [];
                     if (id == 0) {
                         $('#detail').jqGrid().trigger('reloadGrid')
                     }
@@ -754,7 +804,7 @@
                 userDataOnFooter: true,
                 toolbar: [true, "top"],
                 sortable: true,
-                sortname: sortname,
+                sortname: sortnameRincian,
                 sortorder: sortorder,
                 page: page,
                 viewrecords: true,
@@ -931,7 +981,6 @@
         $('.invalid-feedback').remove()
 
         showProsesGajiSupir(form, Id, 'edit')
-        form.find('#btnTampil').prop('disabled', true)
     }
 
     function deleteProsesGajiSupirHeader(Id) {
@@ -949,8 +998,6 @@
         $('.invalid-feedback').remove()
 
         showProsesGajiSupir(form, Id, 'delete')
-        form.find('#btnTampil').prop('disabled', true)
-
     }
 
     function cekValidasi(Id, Aksi) {
@@ -1107,6 +1154,18 @@
         let tglDari = form.find(`[name="tgldari"]`).val()
         let tglSampai = form.find(`[name="tglsampai"]`).val()
         let action = form.data('action')
+        selectedRows = []
+        selectedPP = [];
+        selectedPS = [];
+        selectedDeposito = [];
+        selectedBBM = [];
+        selectedPinjaman = [];
+        selectedRIC = [];
+        selectedBorongan = [];
+        selectedKomisi = [];
+        selectedJalan = [];
+        selectedMakan = [];
+        
         $('#rekapRincian').jqGrid('setGridParam', {
             postData: {
                 dari: $('#crudForm').find('[name=tgldari]').val(),
@@ -1114,29 +1173,29 @@
                 aksi: action
             },
         }).trigger('reloadGrid');
-        getAllData(tglDari, tglSampai);
+        // getAllData(tglDari, tglSampai);
     })
 
-    function getAllData(dari, sampai) {
-        $.ajax({
-            url: `${apiUrl}prosesgajisupirheader/${dari}/${sampai}/getAllData`,
-            method: 'GET',
-            dataType: 'JSON',
-            data: {
-                limit: 0
-            },
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-                initAutoNumeric($('#crudForm').find(`[name="nomPS"]`).val(response.potsemua))
-                initAutoNumeric($('#crudForm').find(`[name="nomPP"]`).val(response.potpribadi))
-                initAutoNumeric($('#crudForm').find(`[name="nomDeposito"]`).val(response.deposito))
-                initAutoNumeric($('#crudForm').find(`[name="nomBBM"]`).val(response.bbm))
-                initAutoNumeric($('#crudForm').find(`[name="nomPinjaman"]`).val(response.pinjaman))
-            }
-        })
-    }
+    // function getAllData(dari, sampai) {
+    //     $.ajax({
+    //         url: `${apiUrl}prosesgajisupirheader/${dari}/${sampai}/getAllData`,
+    //         method: 'GET',
+    //         dataType: 'JSON',
+    //         data: {
+    //             limit: 0
+    //         },
+    //         headers: {
+    //             Authorization: `Bearer ${accessToken}`
+    //         },
+    //         success: response => {
+    //             initAutoNumeric($('#crudForm').find(`[name="nomPS"]`).val(response.potsemua))
+    //             initAutoNumeric($('#crudForm').find(`[name="nomPP"]`).val(response.potpribadi))
+    //             initAutoNumeric($('#crudForm').find(`[name="nomDeposito"]`).val(response.deposito))
+    //             initAutoNumeric($('#crudForm').find(`[name="nomBBM"]`).val(response.bbm))
+    //             initAutoNumeric($('#crudForm').find(`[name="nomPinjaman"]`).val(response.pinjaman))
+    //         }
+    //     })
+    // }
 
     function getPotPinjaman(dari, sampai) {
         $.ajax({

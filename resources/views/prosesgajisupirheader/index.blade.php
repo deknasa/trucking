@@ -5,6 +5,8 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
+      @include('layouts._rangeheader')
+
       <table id="jqGrid"></table>
     </div>
   </div>
@@ -33,12 +35,21 @@
   let hasDetail = false
 
   $(document).ready(function() {
+    setRange()
+    initDatepicker()
+    $(document).on('click', '#btnReload', function(event) {
+      loadDataHeader('prosesgajisupirheader')
+    })
     $("#jqGrid").jqGrid({
         url: `${apiUrl}prosesgajisupirheader`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
+        postData: {
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val()
+        },
         colModel: [{
             label: 'ID',
             name: 'id',
@@ -52,7 +63,7 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-              
+
               value: `<?php
                       $i = 1;
 
@@ -83,7 +94,7 @@
                   <span>${statusApproval.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
@@ -100,7 +111,7 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-              
+
               value: `<?php
                       $i = 1;
 
@@ -131,7 +142,7 @@
                   <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
@@ -141,7 +152,7 @@
               }
               return ` title="${statusCetak.MEMO}"`
             }
-          },  
+          },
           {
             label: 'NO. BUKTI',
             name: 'nobukti',
@@ -156,7 +167,60 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },          
+          },
+          {
+            label: 'U. borongan (posting)',
+            name: 'total',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'U. JALAN',
+            name: 'uangjalan',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'U. BBM',
+            name: 'bbm',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'U. MAKAN',
+            name: 'uangmakanharian',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'POT. PINJAMAN',
+            name: 'potonganpinjaman',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'POT. PINJAMAN (SEMUA)',
+            name: 'potonganpinjamansemua',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'DEPOSITO',
+            name: 'deposito',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+
+          {
+            label: 'PERIODE',
+            name: 'periode',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
           {
             label: 'TANGGAL DARI',
             name: 'tgldari',
@@ -182,7 +246,7 @@
             name: 'userapproval',
             align: 'left'
           },
-          
+
           {
             label: 'TANGGAL APPROVAL',
             name: 'tglapproval',
@@ -201,16 +265,6 @@
           {
             label: 'TANGGAL CETAK',
             name: 'tglbukacetak',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'PERIODE',
-            name: 'periode',
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -276,7 +330,7 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
+
           if (!hasDetail) {
             loadDetailGrid(id)
             hasDetail = true
@@ -286,6 +340,14 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
+
+          if (data.data.length == 0) {
+            $('#detail').jqGrid('setGridParam', {
+              postData: {
+                prosesgajisupir_id: 0,
+              },
+            }).trigger('reloadGrid');
+          }
 
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -297,7 +359,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
@@ -363,7 +425,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                cekValidasi(selectedId,'EDIT')
+                cekValidasi(selectedId, 'EDIT')
               }
             }
           },
@@ -376,7 +438,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                cekValidasi(selectedId,'DELETE')
+                cekValidasi(selectedId, 'DELETE')
               }
             }
           },
@@ -394,7 +456,7 @@
                 window.open(`{{ route('prosesgajisupirheader.export') }}?id=${selectedId}`)
               }
             }
-          },  
+          },
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
@@ -533,7 +595,6 @@
       }
     })
   })
-
 </script>
 @endpush()
 @endsection
