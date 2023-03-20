@@ -298,6 +298,7 @@ Route::middleware(['auth','authorized'])->group(function () {
 
     Route::resource('absensisupir_detail', AbsensiSupirDetailController::class);
     
+    Route::get('bukaabsensi/index', [BukaAbsensiController::class,'index']);
     Route::resource('bukaabsensi', BukaAbsensiController::class);
     Route::resource('suratpengantarapprovalinputtrip', SuratPengantarApprovalInputTripController::class);
 

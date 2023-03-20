@@ -5,6 +5,8 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
+      @include('layouts._rangeheader')
+
       <table id="jqGrid"></table>
     </div>
   </div>
@@ -34,7 +36,11 @@
   let hasDetail = false
 
   $(document).ready(function() {
-
+    setRange()
+    initDatepicker()
+    $(document).on('click','#btnReload', function(event) {
+      loadDataHeader('pengeluarantruckingheader')
+    })
 
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'pengeluarantruckingheader' }}`,
@@ -42,6 +48,11 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
+         postData: {
+          tgldari:$('#tgldariheader').val() ,
+          tglsampai:$('#tglsampaiheader').val(),
+          
+        },
         colModel: [{
             label: 'ID',
             name: 'id',

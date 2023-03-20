@@ -5,6 +5,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
+      @include('layouts._rangeheader')
       <table id="jqGrid"></table>
     </div>
   </div>
@@ -38,14 +39,24 @@
     $('#crudModal').on('hidden.bs.modal', function() {
        activeGrid = '#jqGrid'
      })
-
+setRange()
+    initDatepicker()
+    $(document).on('click','#btnReload', function(event) {
+      loadDataHeader('pengeluaranstokheader')
+    })
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'pengeluaranstokheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
+         postData: {
+          tgldari:$('#tgldariheader').val() ,
+          tglsampai:$('#tglsampaiheader').val(),
+          
+        },
         datatype: "json",
-        colModel: [{
+        colModel: [
+          {
             label: 'ID',
             name: 'id',
             align: 'right',
