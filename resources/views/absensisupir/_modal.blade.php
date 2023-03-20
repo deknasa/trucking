@@ -41,6 +41,10 @@
             </div>
 
             <hr>
+            <div class="row mt-5">
+              <div class="col-md-12">
+                  <div class="card" style="max-height:500px; overflow-y: scroll;">
+                      <div class="card-body">
             <div class="table-responsive">
               <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1800;">
                 <thead>
@@ -100,6 +104,11 @@
                 </tfoot>
               </table>
             </div>
+          </div>
+        </div>
+    </div>
+</div>
+
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">

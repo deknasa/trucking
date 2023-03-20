@@ -231,39 +231,45 @@
               </div>
             </div>
 
+            <div class="row mt-5">
+              <div class="col-md-12">
+                  <div class="card" style="max-height:500px; overflow-y: scroll;">
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-bordered table-bindkeys" style="width: 950;">
+                            <thead>
+                              <tr>
+                                <th style="width: 10px">No</th>
+                                <th style="width: 100px">stok</th>
+                                <th class="data_tbl tbl_vulkanisirke" style="width: 10px">vulkanisir ke</th>
+                                <th style="width:100px">keterangan</th>
+                                <th class="data_tbl tbl_qty" style="width: 10px">qty</th>
+                                <th class="data_tbl tbl_harga" style="width:100px">harga</th>
+                                <th class="data_tbl tbl_persentase" style="width :10px">persentase discount</th>
+                                <th class="data_tbl tbl_total" style="width: 100px">Total</th>
+                                <th style="width: 10px">Aksi</th>
+                              </tr>
+                            </thead>
+                            <tbody id="table_body" class="form-group">
+            
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <td colspan="6" class="colspan"></td>
+            
+                                <td class="font-weight-bold data_tbl sumrow"> Total : </td>
+                                <td id="sumary" class="text-right font-weight-bold data_tbl sumrow"> </td>
+                                <td>
+                                  <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                                </td>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
 
-
-
-            <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys" style="width: 950;">
-                <thead>
-                  <tr>
-                    <th style="width: 10px">No</th>
-                    <th style="width: 100px">stok</th>
-                    <th class="data_tbl tbl_vulkanisirke" style="width: 10px">vulkanisir ke</th>
-                    <th style="width:100px">keterangan</th>
-                    <th class="data_tbl tbl_qty" style="width: 10px">qty</th>
-                    <th class="data_tbl tbl_harga" style="width:100px">harga</th>
-                    <th class="data_tbl tbl_persentase" style="width :10px">persentase discount</th>
-                    <th class="data_tbl tbl_total" style="width: 100px">Total</th>
-                    <th style="width: 10px">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody id="table_body" class="form-group">
-
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="6" class="colspan"></td>
-
-                    <td class="font-weight-bold data_tbl sumrow"> Total : </td>
-                    <td id="sumary" class="text-right font-weight-bold data_tbl sumrow"> </td>
-                    <td>
-                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
+                      </div>
+                    </div>
+                </div>
             </div>
 
           </div>
