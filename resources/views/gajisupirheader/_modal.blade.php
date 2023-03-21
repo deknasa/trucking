@@ -308,6 +308,7 @@
 <script>
     var today = new Date();
 
+    let idRic
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
     let supirId = 0
@@ -323,6 +324,7 @@
     let selectedBiayaExtra = [];
     let selectedKetBiaya = [];
     let selectedTolSupir = [];
+    let selectedRitasi = [];
     let subtotal = 0
     let sortnameRincian = 'nobuktitrip';
 
@@ -339,8 +341,12 @@
             selectedBiayaExtra.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_biayaextra"]`).text())
             selectedKetBiaya.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_keteranganbiaya"]`).text())
             selectedTolSupir.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_tolsupir"]`).text())
+            selectedRitasi.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_ritasi_nobukti"]`).text())
             hitungNominal()
+
+            $(element).parents('tr').addClass('bg-light-blue')
         } else {
+            $(element).parents('tr').removeClass('bg-light-blue')
             for (var i = 0; i < selectedRows.length; i++) {
                 if (selectedRows[i] == value) {
                     selectedRows.splice(i, 1);
@@ -353,6 +359,7 @@
                     selectedBiayaExtra.splice(i, 1);
                     selectedKetBiaya.splice(i, 1);
                     selectedTolSupir.splice(i, 1);
+                    selectedRitasi.splice(i, 1);
                 }
             }
             hitungNominal()
@@ -368,22 +375,22 @@
         upahRitasi = 0;
         biayaExtra = 0;
         $.each(selectedGajiSupir, function(index, item) {
-           gajiSupir = gajiSupir + parseFloat(item.replace(/,/g, ''))
+            gajiSupir = gajiSupir + parseFloat(item.replace(/,/g, ''))
         });
         $.each(selectedGajiKenek, function(index, item) {
-           gajiKenek = gajiKenek + parseFloat(item.replace(/,/g, ''))
+            gajiKenek = gajiKenek + parseFloat(item.replace(/,/g, ''))
         });
         $.each(selectedKomisiSupir, function(index, item) {
-           komisi = komisi + parseFloat(item.replace(/,/g, ''))
+            komisi = komisi + parseFloat(item.replace(/,/g, ''))
         });
         $.each(selectedUpahRitasi, function(index, item) {
-           upahRitasi = upahRitasi + parseFloat(item.replace(/,/g, ''))
+            upahRitasi = upahRitasi + parseFloat(item.replace(/,/g, ''))
         });
         $.each(selectedBiayaExtra, function(index, item) {
-           biayaExtra = biayaExtra + parseFloat(item.replace(/,/g, ''))
+            biayaExtra = biayaExtra + parseFloat(item.replace(/,/g, ''))
         });
         $.each(selectedTolSupir, function(index, item) {
-           tol = tol + parseFloat(item.replace(/,/g, ''))
+            tol = tol + parseFloat(item.replace(/,/g, ''))
         });
         subtotal = gajiSupir + gajiKenek + tol + upahRitasi + biayaExtra
 
@@ -471,19 +478,20 @@
             dari = form.find(`[name="tgldari"]`).val()
             sampai = form.find(`[name="tglsampai"]`).val()
             tglbukti = form.find(`[name="tglbukti"]`).val()
-            let action = form.data('action')
+            let aksi = form.data('action')
             $('#tripList tbody').html('')
             $('#gajiSupir').html('')
             $('#gajiKenek').html('')
-            $('#rekapRincian').jqGrid('setGridParam', {
-                postData: {
-                    supirId: $('#crudForm').find('[name=supir_id]').val(),
-                    dari: $('#crudForm').find('[name=tgldari]').val(),
-                    sampai: $('#crudForm').find('[name=tglsampai]').val(),
-                    aksi: action
-                },
-            }).trigger('reloadGrid');
+            // $('#rekapRincian').jqGrid('setGridParam', {
+            //     postData: {
+            //         supirId: $('#crudForm').find('[name=supir_id]').val(),
+            //         dari: $('#crudForm').find('[name=tgldari]').val(),
+            //         sampai: $('#crudForm').find('[name=tglsampai]').val(),
+            //         aksi: aksi
+            //     },
+            // }).trigger('reloadGrid');
 
+            selectAllRows(supirId, dari, sampai, aksi)
             $.ajax({
                 url: `${apiUrl}gajisupirheader/getuangjalan`,
                 method: 'POST',
@@ -596,6 +604,12 @@
             $.each(selectedStatusRitasi, function(index, item) {
                 data.push({
                     name: 'rincian_statusritasi[]',
+                    value: item
+                })
+            });
+            $.each(selectedRitasi, function(index, item) {
+                data.push({
+                    name: 'rincian_ritasi[]',
                     value: item
                 })
             });
@@ -867,6 +881,7 @@
         $('#detailLainnya').html('')
         getPotSemua($('#crudForm'))
         rekapRincian('getTrip')
+        selectAllRows()
         detailLainnya()
         initDatepicker()
         form.find(`[name="subtotal"]`).addClass('disabled')
@@ -877,7 +892,7 @@
         initAutoNumeric($('#crudForm').find('[name=gajiminus]'))
     }
 
-    function editGajiSupirHeader(Id) {
+    async function editGajiSupirHeader(Id) {
         let form = $('#crudForm')
 
         form.data('action', 'edit')
@@ -890,10 +905,32 @@
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
+
         showGajiSupir(form, Id, 'edit')
+        let ricList = await getEditTrip(Id)
+        rekapRincian(`${Id}/getEditTrip`)
+        selectedRows = ricList.data.map((data) => {
+            let element = $('#crudForm').find(`[name="rincianId[]"][value=${data.id}]`)
+
+            element.prop('checked', true)
+            element.parents('tr').addClass('bg-light-blue')
+
+            return data.id
+        })
+        selectedNobukti = ricList.data.map((data) => data.nobuktitrip)
+        selectedGajiSupir = ricList.data.map((data) => data.gajisupir)
+        selectedGajiKenek = ricList.data.map((data) => data.gajikenek)
+        selectedKomisiSupir = ricList.data.map((data) => data.komisisupir)
+        selectedUpahRitasi = ricList.data.map((data) => data.upahritasi)
+        selectedStatusRitasi = ricList.data.map((data) => data.statusritasi)
+        selectedBiayaExtra = ricList.data.map((data) => data.biayaextra)
+        selectedKetBiaya = ricList.data.map((data) => data.keteranganbiaya)
+        selectedTolSupir = ricList.data.map((data) => data.tolsupir)
+        selectedRitasi = ricList.data.map((data) => data.ritasi_nobukti)
+        hitungNominal()
     }
 
-    function deleteGajiSupirHeader(Id) {
+    async function deleteGajiSupirHeader(Id) {
         let form = $('#crudForm')
 
         form.data('action', 'delete')
@@ -906,9 +943,19 @@
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-
+        form.find('#btnTampil').prop('disabled', true)
         showGajiSupir(form, Id, 'delete')
+        let ricList = await getEditTrip(Id)
+        rekapRincian(`${Id}/getEditTrip`)
+        selectedRows = ricList.data.map((data) => {
+            let element = $('#crudForm').find(`[name="rincianId[]"][value=${data.id}]`)
 
+            element.prop('checked', true)
+            element.parents('tr').addClass('bg-light-blue')
+
+            return data.id
+        })
+        hitungNominal()
     }
 
     function cekValidasi(Id, Aksi) {
@@ -1010,16 +1057,16 @@
                 initAutoNumeric(form.find(`[name="bbm"]`))
                 initAutoNumeric(form.find(`[name="gajiminus"]`))
                 initAutoNumeric(form.find(`[name="total"]`))
-                url = `${gajiId}/getEditTrip`
-                rekapRincian(url)
+                // url = `${gajiId}/getEditTrip`
+                // rekapRincian(url)
 
-                $('#rekapRincian').jqGrid('setGridParam', {
-                    postData: {
-                        supirId: response.data.supir_id,
-                        dari: response.data.tgldari,
-                        sampai: response.data.tglsampai,
-                    },
-                }).trigger('reloadGrid');
+                // $('#rekapRincian').jqGrid('setGridParam', {
+                //     postData: {
+                //         supirId: response.data.supir_id,
+                //         dari: response.data.tgldari,
+                //         sampai: response.data.tglsampai,
+                //     },
+                // }).trigger('reloadGrid');
 
                 if (response.pinjamanpribadi != null) {
 
@@ -1150,59 +1197,59 @@
         })
     }
 
-    function getEditTrip(gajiId, aksi) {
-        $('#gajiSupir').html('')
-        $('#gajiKenek').html('')
-        $.ajax({
-            url: `${apiUrl}gajisupirheader/${gajiId}/getEditTrip`,
-            method: 'GET',
-            dataType: 'JSON',
-            data: {
-                limit: 0
-            },
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
+    // function getEditTrip(gajiId, aksi) {
+    //     $('#gajiSupir').html('')
+    //     $('#gajiKenek').html('')
+    //     $.ajax({
+    //         url: `${apiUrl}gajisupirheader/${gajiId}/getEditTrip`,
+    //         method: 'GET',
+    //         dataType: 'JSON',
+    //         data: {
+    //             limit: 0
+    //         },
+    //         headers: {
+    //             Authorization: `Bearer ${accessToken}`
+    //         },
+    //         success: response => {
 
-                let gajiSupir = 0
-                let gajiKenek = 0
-                $.each(response.data, (index, detail) => {
-                    gajiSupir = parseFloat(gajiSupir) + parseFloat(detail.gajisupir)
-                    gajiKenek = parseFloat(gajiKenek) + parseFloat(detail.gajikenek)
+    //             let gajiSupir = 0
+    //             let gajiKenek = 0
+    //             $.each(response.data, (index, detail) => {
+    //                 gajiSupir = parseFloat(gajiSupir) + parseFloat(detail.gajisupir)
+    //                 gajiKenek = parseFloat(gajiKenek) + parseFloat(detail.gajikenek)
 
-                    let detailRow = $(`
-                        <tr >
-                            <td><input name='sp_id[]' type="checkbox" id="checkItem" value="${detail.id}" checked disabled></td>
-                            <td>${detail.nobukti}</td>
-                            <td>${detail.tglbukti}</td>
-                            <td>${detail.trado}</td>
-                            <td>${detail.dari}</td>
-                            <td>${detail.sampai}</td>
-                            <td>${detail.nocont}</td>
-                            <td>${detail.nosp}</td>
-                            <td class="gajiSupir text-right">${detail.gajisupir}</td>
-                            <td class="gajiKenek text-right">${detail.gajikenek}</td>
-                        </tr>
-                    `)
+    //                 let detailRow = $(`
+    //                     <tr >
+    //                         <td><input name='sp_id[]' type="checkbox" id="checkItem" value="${detail.id}" checked disabled></td>
+    //                         <td>${detail.nobukti}</td>
+    //                         <td>${detail.tglbukti}</td>
+    //                         <td>${detail.trado}</td>
+    //                         <td>${detail.dari}</td>
+    //                         <td>${detail.sampai}</td>
+    //                         <td>${detail.nocont}</td>
+    //                         <td>${detail.nosp}</td>
+    //                         <td class="gajiSupir text-right">${detail.gajisupir}</td>
+    //                         <td class="gajiKenek text-right">${detail.gajikenek}</td>
+    //                     </tr>
+    //                 `)
 
-                    $('#tripList tbody').append(detailRow)
-                    initAutoNumeric(detailRow.find('.gajiSupir'))
-                    initAutoNumeric(detailRow.find('.gajiKenek'))
-                })
-                $('#gajiSupir').append(`${gajiSupir}`)
-                $('#gajiKenek').append(`${gajiKenek}`)
+    //                 $('#tripList tbody').append(detailRow)
+    //                 initAutoNumeric(detailRow.find('.gajiSupir'))
+    //                 initAutoNumeric(detailRow.find('.gajiKenek'))
+    //             })
+    //             $('#gajiSupir').append(`${gajiSupir}`)
+    //             $('#gajiKenek').append(`${gajiKenek}`)
 
-                let subTotal = gajiSupir + gajiKenek
-                $('#crudForm').find(`[name="subtotal"]`).val(subTotal)
-                initAutoNumeric($('#crudForm').find(`[name="subtotal"]`))
+    //             let subTotal = gajiSupir + gajiKenek
+    //             $('#crudForm').find(`[name="subtotal"]`).val(subTotal)
+    //             initAutoNumeric($('#crudForm').find(`[name="subtotal"]`))
 
-                initAutoNumeric($('#tripList tfoot').find('#gajiSupir'))
-                initAutoNumeric($('#tripList tfoot').find('#gajiKenek'))
+    //             initAutoNumeric($('#tripList tfoot').find('#gajiSupir'))
+    //             initAutoNumeric($('#tripList tfoot').find('#gajiKenek'))
 
-            }
-        })
-    }
+    //         }
+    //     })
+    // }
 
     function rekapRincian(url) {
         $("#rekapRincian").jqGrid({
@@ -1212,19 +1259,36 @@
                 iconSet: 'fontAwesome',
                 datatype: "json",
                 colModel: [{
-                        label: 'Pilih',
-                        name: 'id',
-                        index: 'Pilih',
-                        formatter: (value) => {
-                            return `<input type="checkbox" value="${value}" onchange="checkboxHandler(this)">`
-                        },
-                        editable: true,
-                        edittype: 'checkbox',
-                        search: false,
-                        width: 60,
+                        label: '',
+                        name: '',
+                        width: 30,
                         align: 'center',
-                        formatoptions: {
-                            disabled: false
+                        sortable: false,
+                        clear: false,
+                        stype: 'input',
+                        searchable: false,
+                        searchoptions: {
+                            type: 'checkbox',
+                            clearSearch: false,
+                            dataInit: function(element) {
+                                supirId = $('#crudForm').find(`[name="supir_id"]`).val()
+                                dari = $('#crudForm').find(`[name="tgldari"]`).val()
+                                sampai = $('#crudForm').find(`[name="tglsampai"]`).val()
+                                let aksi = $('#crudForm').data('action')
+
+                                $(element).removeClass('form-control')
+                                $(element).parent().addClass('text-center')
+                                $(element).on('click', function() {
+                                    if ($(this).is(':checked')) {
+                                        selectAllRows(supirId, dari, sampai, aksi)
+                                    } else {
+                                        clearSelectedRows()
+                                    }
+                                })
+                            }
+                        },
+                        formatter: (value, rowOptions, rowData) => {
+                            return `<input type="checkbox" name="rincianId[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
                         },
                     },
                     {
@@ -1299,6 +1363,11 @@
                         align: "right",
                     },
                     {
+                        label: 'NO BUKTI RITASI',
+                        name: 'ritasi_nobukti',
+                        align: 'left'
+                    },
+                    {
                         label: 'UPAH RITASI',
                         name: 'upahritasi',
                         formatter: currencyFormat,
@@ -1361,6 +1430,7 @@
 
                 },
                 loadComplete: function(data) {
+                    let grid = $(this)
                     changeJqGridRowListText()
 
                     $(document).unbind('keydown')
@@ -1417,22 +1487,24 @@
 
                     setHighlight($(this))
 
+                    $.each(selectedRows, function(key, value) {
+                        $(grid).find('tbody tr').each(function(row, tr) {
+                            if ($(this).find(`td input:checkbox`).val() == value) {
+                                $(this).addClass('bg-light-blue')
+                                $(this).find(`td input:checkbox`).prop('checked', true)
+                            }
+                        })
+                    });
+
                     if (data.attributes) {
 
-                        $('#rekapRincian tbody tr').find(`td input:checkbox`).prop('checked', false);
-                        selectedRows = [];
-                        selectedNobukti = [];
-                        selectedGajiSupir = [];
-                        selectedGajiKenek = [];
-                        selectedKomisiSupir = [];
-                        selectedUpahRitasi = [];
-                        selectedStatusRitasi = [];
-                        selectedBiayaExtra = [];
-                        selectedKetBiaya = [];
-                        selectedTolSupir = [];
-                        $('#rekapRincian tbody tr').each(function(row, tr) {
-                            $(this).find(`td input:checkbox`).click()
-                        })
+                        // $('#rekapRincian tbody tr').find(`td input:checkbox`).prop('checked', false);
+                        // selectedRows = [];
+
+                        // $('#rekapRincian tbody tr').each(function(row, tr) {
+                        //     $(this).find(`td input:checkbox`).click()
+                        // })
+
                         subtotal = parseFloat(data.attributes.totalGajiSupir) + parseFloat(data.attributes.totalGajiKenek) + parseFloat(data.attributes.totalUpahRitasi) + parseFloat(data.attributes.totalBiayaExtra) + parseFloat(data.attributes.totalTolSupir)
                         uangmakan = AutoNumeric.getNumber($(`#crudForm [name="uangmakanharian"]`)[0])
                         total = subtotal + uangmakan
@@ -2003,6 +2075,92 @@
                 element.data('currentValue', element.val())
             }
         })
+    }
+
+    async function getEditTrip(gajiId) {
+        return await $.ajax({
+            url: `${apiUrl}gajisupirheader/${gajiId}/getEditTrip`,
+            method: 'GET',
+            dataType: 'JSON',
+            data: {
+                limit: 0,
+                supirId: supirId,
+                dari: dari,
+                sampai: sampai,
+            },
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            success: (response) => {
+                return response
+            },
+            error: (error) => {
+                showDialog(error.responseJSON.message)
+            }
+        })
+    }
+
+    function clearSelectedRows() {
+        selectedRows = []
+        selectedNobukti = [];
+        selectedGajiSupir = [];
+        selectedGajiKenek = [];
+        selectedKomisiSupir = [];
+        selectedUpahRitasi = [];
+        selectedStatusRitasi = [];
+        selectedBiayaExtra = [];
+        selectedKetBiaya = [];
+        selectedTolSupir = [];
+        selectedRitasi = [];
+        $('#rekapRincian').trigger('reloadGrid')
+    }
+
+    function selectAllRows(supirId, dari, sampai, aksi) {
+        if (aksi == 'edit') {
+            ricId = $(`#crudForm`).find(`[name="id"]`).val()
+            url = `${ricId}/getEditTrip`
+        } else {
+            url = 'getTrip'
+        }
+        $.ajax({
+            url: `${apiUrl}gajisupirheader/${url}`,
+            method: 'GET',
+            dataType: 'JSON',
+            data: {
+                limit: 0,
+                supirId: supirId,
+                dari: dari,
+                sampai: sampai,
+                aksi: aksi
+            },
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            success: (response) => {
+                selectedRows = response.data.map((data) => data.id)
+                selectedNobukti = response.data.map((data) => data.nobuktitrip)
+                selectedGajiSupir = response.data.map((data) => data.gajisupir)
+                selectedGajiKenek = response.data.map((data) => data.gajikenek)
+                selectedKomisiSupir = response.data.map((data) => data.komisisupir)
+                selectedUpahRitasi = response.data.map((data) => data.upahritasi)
+                selectedStatusRitasi = response.data.map((data) => data.statusritasi)
+                selectedBiayaExtra = response.data.map((data) => data.biayaextra)
+                selectedKetBiaya = response.data.map((data) => data.keteranganbiaya)
+                selectedTolSupir = response.data.map((data) => data.tolsupir)
+                selectedRitasi = response.data.map((data) => data.ritasi_nobukti)
+
+                $('#rekapRincian').jqGrid('setGridParam', {
+                    url: `${apiUrl}gajisupirheader/${url}`,
+                    postData: {
+                        supirId: $('#crudForm').find('[name=supir_id]').val(),
+                        dari: $('#crudForm').find('[name=tgldari]').val(),
+                        sampai: $('#crudForm').find('[name=tglsampai]').val(),
+                        aksi: aksi
+                    },
+                }).trigger('reloadGrid');
+            }
+        })
+
     }
 </script>
 @endpush()
