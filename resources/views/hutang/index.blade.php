@@ -234,7 +234,18 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-
+          if (data.data.length == 0) {
+            $('#historyGrid').jqGrid('setGridParam', {
+              postData: {
+                hutang_id: 0,
+              },
+            }).trigger('reloadGrid'); 
+            $('#detailGrid').jqGrid('setGridParam', {
+              postData: {
+                hutang_id: 0,
+              },
+            }).trigger('reloadGrid');
+          }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))

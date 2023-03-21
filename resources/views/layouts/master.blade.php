@@ -32,8 +32,8 @@
   <link rel="stylesheet" href="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.css') }}">
 
   <!-- EasyUI -->
-  <link rel="stylesheet" type="text/css" href="{{ asset('libraries/easyui/themes/default/easyui.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('libraries/easyui/themes/icon.css') }}">
+  <!-- <link rel="stylesheet" type="text/css" href="{{ asset('libraries/easyui/themes/default/easyui.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('libraries/easyui/themes/icon.css') }}"> -->
 
   <!-- Nestable2 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.css" />

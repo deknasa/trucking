@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -35,49 +35,71 @@
               </div>
             </div>
 
-
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  SUPPLIER <span class="text-danger">*</span></label>
+                  supplier <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-8 col-md-10">
+              <div class="col-12 col-md-10">
                 <input type="hidden" name="supplier_id">
                 <input type="text" name="supplier" class="form-control supplier-lookup">
               </div>
             </div>
 
-            <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1000px;">
-                <thead>
-                  <tr>
-                    <th width="1%">No</th>
-                    <th width="60%">Keterangan</th>
-                    <th width="18%">Tgl Jatuh Tempo</th>
-                    <th width="20%">Total</th>
-                    <th width="1%">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody id="table_body">
+            <div class="row mt-5">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="table-responsive table-scroll">
+                      <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1100px;">
+                        <thead>
+                          <tr>
+                            <th scope="col" width="1%">No</th>
+                            <th scope="col" width="55%">Keterangan</th>
+                            <th scope="col" width="18%">Tgl Jatuh Tempo</th>
+                            <th scope="col" width="25%">Total</th>
+                            <th scope="col" width="1%">Aksi</th>
+                          </tr>
+                        </thead>
+                        <tbody id="table_body">
 
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="3">
-                      <h5 class="text-right font-weight-bold">TOTAL:</h5>
-                    </td>
-                    <td>
-                      <h5 id="total" class="text-right font-weight-bold"></h5>
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+
+                            <td colspan="3">
+                              <h5 class="font-weight-bold">TOTAL :</h5>
+                            </td>
+                            <td>
+                              <h5 id="total" class="text-right font-weight-bold"></h5>
+                            </td>
+                            <td>
+                              <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                            </td>
+                          </tr>
+                        </tfoot>
+
+                      </table>
+                    </div>
+                  </div>
+                  <!-- <div class="card-footer">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h5 class="font-weight-bold">TOTAL:</h5>
+                      </div>
+                      <div class="col-md-3">
+                        
+                      </div>
+                      <div class="col-md-1"></div>
+                    </div>
+                    
+                   
+
+                  </div> -->
+                </div>
+              </div>
             </div>
-
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -496,6 +518,8 @@
     initAutoNumeric(detailRow.find('.autonumeric'))
 
     setRowNumbers()
+
+
   }
 
 

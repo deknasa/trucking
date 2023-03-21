@@ -404,3 +404,37 @@ html {
 	max-height:500px; 
 	overflow-y: scroll;
 }
+
+.table-scroll {
+  position: relative;
+  z-index: 1;
+  margin: auto;
+  overflow: auto;
+  max-height: 400px;
+}
+.table-scroll table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-scroll th,
+.table-scroll td {
+  padding: 0.75rem;
+  vertical-align: top;
+}
+/* .table-scroll thead th {
+  position: -webkit-sticky;
+  position: sticky;
+  background: #fff;
+  top: 0;
+} */
+/* safari and ios need the tfoot itself to be position:sticky also */
+.table-scroll tfoot,
+.table-scroll tfoot th,
+.table-scroll tfoot td {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  z-index: 2;
+}
