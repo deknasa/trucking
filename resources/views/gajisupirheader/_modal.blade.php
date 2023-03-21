@@ -412,6 +412,11 @@
 
     $(document).ready(function() {
 
+        $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
+            $('#crudForm').find(`[name="tglbuktiDeposito"]`).val($(this).val()).trigger('change');
+            $('#crudForm').find(`[name="tglbuktiBBM"]`).val($(this).val()).trigger('change');
+            $('#crudForm').find(`[name="tglbuktiPinjaman"]`).val($(this).val()).trigger('change');
+        });
 
         $(document).on('input', `#crudForm [name="uangmakanharian"]`, function(event) {
             let uangMakan = $(this).val()
@@ -2107,6 +2112,7 @@
                 supirId: supirId,
                 dari: dari,
                 sampai: sampai,
+                sortIndex: sortnameRincian,
             },
             headers: {
                 Authorization: `Bearer ${accessToken}`
@@ -2151,6 +2157,7 @@
                 supirId: supirId,
                 dari: dari,
                 sampai: sampai,
+                sortIndex: sortnameRincian,
                 aksi: aksi
             },
             headers: {

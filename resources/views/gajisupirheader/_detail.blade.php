@@ -9,6 +9,7 @@
 
 @push('scripts')
 <script>
+  let sortnamedetail = 'suratpengantar_nobukti'
   function loadDetailGrid(id) {
     $("#detail").jqGrid({
         url: `${apiUrl}gajisupirdetail`,
@@ -110,7 +111,7 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortname,
+        sortname: sortnamedetail,
         sortorder: sortorder,
         page: page,
         viewrecords: true,
