@@ -811,6 +811,16 @@
                         page: response.data.page
                     }).trigger('reloadGrid');
                     selectedRows = []
+                    selectedNobukti = [];
+                    selectedGajiSupir = [];
+                    selectedGajiKenek = [];
+                    selectedKomisiSupir = [];
+                    selectedUpahRitasi = [];
+                    selectedStatusRitasi = [];
+                    selectedBiayaExtra = [];
+                    selectedKetBiaya = [];
+                    selectedTolSupir = [];
+                    selectedRitasi = [];
                     if (id == 0) {
                         $('#detail').jqGrid().trigger('reloadGrid')
                     }
@@ -853,7 +863,17 @@
 
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
-
+        selectedRows = []
+        selectedNobukti = [];
+        selectedGajiSupir = [];
+        selectedGajiKenek = [];
+        selectedKomisiSupir = [];
+        selectedUpahRitasi = [];
+        selectedStatusRitasi = [];
+        selectedBiayaExtra = [];
+        selectedKetBiaya = [];
+        selectedTolSupir = [];
+        selectedRitasi = [];
         $('#crudModal').find('.modal-body').html(modalBody)
     })
 
