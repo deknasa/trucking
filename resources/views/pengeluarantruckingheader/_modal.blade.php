@@ -81,36 +81,44 @@
                 </div>
               </div>
             </div>
-
-            <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1350px;">
-                <thead>
-                  <tr>
-                    <th width="1%">No</th>
-                    <th width="20%">SUPIR</th>
-                    <th width="20%">NO BUKTI PENERIMAAN TRUCKING</th>
-                    <th width="25%">Keterangan</th>
-                    <th width="20%">Nominal</th>
-                    <th width="1%">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody id="table_body" class="form-group">
-
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="4">
-                      <p class="text-right font-weight-bold">TOTAL :</p>
-                    </td>
-                    <td>
-                      <p class="text-right font-weight-bold autonumeric" id="total"></p>
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
+            
+            <div class="row mt-5">
+              <div class="col-md-12">
+                  <div class="card" style="max-height:500px; overflow-y: scroll;">
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1350px;">
+                            <thead>
+                              <tr>
+                                <th width="1%">No</th>
+                                <th width="20%">SUPIR</th>
+                                <th width="20%">NO BUKTI PENERIMAAN TRUCKING</th>
+                                <th width="25%">Keterangan</th>
+                                <th width="20%">Nominal</th>
+                                <th width="1%">Aksi</th>
+                              </tr>
+                            </thead>
+                            <tbody id="table_body" class="form-group">
+            
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <td colspan="4">
+                                  <p class="text-right font-weight-bold">TOTAL :</p>
+                                </td>
+                                <td>
+                                  <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                                </td>
+                                <td>
+                                  <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                                </td>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                </div>
             </div>
 
           </div>

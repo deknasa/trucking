@@ -57,11 +57,7 @@
     setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
-      
       loadDataHeader('pengeluaranheader', {bank_id:$('#bankheader').val()})
-
-      
-
     })
 
     $("#jqGrid").jqGrid({

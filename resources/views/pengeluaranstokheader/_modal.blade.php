@@ -224,7 +224,10 @@
 
             
             </div>
-
+            <div class="row mt-5">
+              <div class="col-md-12">
+                  <div class="card" style="max-height:500px; overflow-y: scroll;">
+                      <div class="card-body">
             <table class="table table-bordered table-bindkeys">
               <thead>
                 <tr>
@@ -253,7 +256,10 @@
                 </tr>
               </tfoot>
             </table>
-
+          </div>
+        </div>
+    </div>
+</div>
 
 
           </div>

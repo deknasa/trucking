@@ -107,9 +107,9 @@
                 <input type="text" name="transferkebank" class="form-control">
               </div>
             </div>
-
+            
             <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 2000px ;">
+              <table class="table table-bordered table-bindkeys table-fixed" id="detailList" style="width: 2000px ;">
                 <thead>
                   <tr>
                     <th width="1%">No</th>
@@ -143,7 +143,21 @@
                 </tfoot>
               </table>
             </div>
-
+            
+            {{-- <div class="row">
+              <div class="col-md-9">
+                <h6 class="text-right font-weight-bold ">
+                  Total : 
+                </h6>
+              </div>
+              <div class="col-md-3 ">
+                <h6 class="text-right font-weight-bold autonumeric" id="total">
+                  
+                </h6>
+              </div>
+            </div> --}}
+            
+            
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
