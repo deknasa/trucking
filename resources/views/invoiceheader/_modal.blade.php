@@ -98,57 +98,49 @@
 
               <div class="row form-group">
                 <div class="col-md-2">
-                  <button class="btn btn-secondary" id="btnTampil">Reload</button>
+                  <button class="btn btn-secondary" id="btnTampil"><i class="fas fa-sync"></i> RELOAD</button>
                 </div>
               </div>
 
             </div>
 
-            <div class="row mt-5">
-              <div class="col-md-12">
-                <div class="card card-scroll">
-                  <div class="card-body">
-                    <div class="table-responsive">
-                      <table class="table table-bordered table-bindkeys" id="spList" style="width:1800px">
-                        <thead class="table-secondary">
-                          <tr>
-                            <th width="2%"></th>
-                            <th width="5%">JOB TRUCKING</th>
-                            <th width="5%">TGL OTOBON</th>
-                            <th width="5%">NO CONT</th>
-                            <th width="8%">TARIF</th>
-                            <th width="8%">OMSET</th>
-                            <th width="10%">RETRIBUSI</th>
-                            <th width="8%">BAGIAN</th>
-                            <th width="15%">EMKL</th>
-                            <th width="5%">LONG TRIP</th>
-                            <th width="5%">PERALIHAN</th>
-                            <th width="15%">KETERANGAN</th>
-                          </tr>
-                        </thead>
-                        <tbody id="tbody_list">
+            <div class="table-responsive table-scroll">
+              <table class="table table-bordered table-bindkeys" id="spList" style="width:1800px">
+                <thead class="table-secondary">
+                  <tr>
+                    <th width="2%"></th>
+                    <th width="5%">JOB TRUCKING</th>
+                    <th width="5%">TGL OTOBON</th>
+                    <th width="5%">NO CONT</th>
+                    <th width="8%">TARIF</th>
+                    <th width="8%">OMSET</th>
+                    <th width="10%">RETRIBUSI</th>
+                    <th width="8%">BAGIAN</th>
+                    <th width="15%">EMKL</th>
+                    <th width="5%">LONG TRIP</th>
+                    <th width="5%">PERALIHAN</th>
+                    <th width="15%">KETERANGAN</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody_list">
 
-                        </tbody>
-                        <tfoot>
-                          <tr>
-                            <td colspan="5">
-                              <p class="font-weight-bold">TOTAL:</p>
-                            </td>
-                            <td>
-                              <p id="omset" class="text-right font-weight-bold"></p>
-                            </td>
-                            <td>
-                              <p id="retribusi" class="text-right font-weight-bold"></p>
-                            </td>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="5">
+                      <p class="font-weight-bold">TOTAL:</p>
+                    </td>
+                    <td>
+                      <p id="omset" class="text-right font-weight-bold"></p>
+                    </td>
+                    <td>
+                      <p id="retribusi" class="text-right font-weight-bold"></p>
+                    </td>
 
-                            <td colspan="5"></td>
-                          </tr>
-                        </tfoot>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                    <td colspan="5"></td>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
 
 

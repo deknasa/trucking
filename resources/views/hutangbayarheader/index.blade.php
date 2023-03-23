@@ -46,6 +46,10 @@
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
+        postData: {
+          tgldari:$('#tgldariheader').val() ,
+          tglsampai:$('#tglsampaiheader').val() 
+        },
         datatype: "json",
         colModel: [{
             label: 'ID',

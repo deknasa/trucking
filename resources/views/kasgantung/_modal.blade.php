@@ -44,7 +44,7 @@
                 <input type="text" name="penerima" class="form-control penerima-lookup">
               </div>
             </div>
-            <div class="border p-3">
+            <div class="border p-3 mt-3">
               <h6>Posting Pengeluaran</h6>
 
               <div class="row form-group">
@@ -69,7 +69,7 @@
             </div>
 
 
-            <div class="table-responsive">
+            <div class="table-responsive table-scroll mt-3">
               <table class="table table-bordered mt-3" id="detailList" style="width: 1000px;">
                 <thead class="table-secondary">
                   <tr>

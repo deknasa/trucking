@@ -1,10 +1,25 @@
 @extends('layouts.master')
 
+@push('addtional-field')
+<div class="form-group row">
+  <label class="col-12 col-sm-2 col-form-label mt-2">Bank<span class="text-danger">*</span></label>
+  <div class="col-sm-4 mt-2">
+    <select name="bankheader" id="bankheader" class="form-select select2" style="width: 100%;">
+      <option value="">-- PILIH BANK --</option>
+      @foreach ($data['combobank'] as $bank)
+      <option @if ($bank['statusdefault_text']==="YA" ) selected @endif value="{{$bank['id']}}"> {{$bank['namabank']}} </option>
+      @endforeach
+    </select>
+  </div>
+</div>
+@endpush
+
 @section('content')
 <!-- Grid Master-->
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
+      @include('layouts._rangeheader')
       <table id="jqGrid"></table>
     </div>
   </div>
@@ -34,13 +49,30 @@
   let hasDetail = false
 
   $(document).ready(function() {
+    $('.select2').select2({
+      width: 'resolve',
+      theme: "bootstrap4"
+    });
 
+    setRange()
+    initDatepicker()
+    $(document).on('click', '#btnReload', function(event) {
+      loadDataHeader('penerimaanheader', {
+        bank_id: $('#bankheader').val()
+      })
+    })
 
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'penerimaanheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
+        postData: {
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+          bank: $('#bankheader').val(),
+
+        },
         datatype: "json",
         colModel: [{
             label: 'ID',
@@ -133,10 +165,10 @@
                   <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
-            
+
             cellattr: (rowId, value, rowObject) => {
               let statusCetak = JSON.parse(rowObject.statuscetak)
               if (!statusCetak) {
@@ -293,7 +325,13 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-
+          if (data.data.length == 0) {
+            $('#detail').jqGrid('setGridParam', {
+              postData: {
+                penerimaan_id: 0,
+              },
+            }).trigger('reloadGrid');
+          }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))

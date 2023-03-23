@@ -288,7 +288,7 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Invoice Extra')
+    $('#crudModalTitle').text('Create Invoice Charge Gandengan')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -308,7 +308,7 @@
     Simpan
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Invoice Extra')
+    $('#crudModalTitle').text('Edit Invoice Charge Gandengan')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -327,7 +327,7 @@
     Hapus
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Invoice Extra')
+    $('#crudModalTitle').text('Delete Invoice Charge Gandengan')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()

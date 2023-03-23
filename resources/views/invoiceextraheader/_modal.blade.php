@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -46,31 +46,31 @@
 
 
 
+            <div class="table-responsive table-scroll">
+              <table class="table table-bordered table-bindkeys" style="width: 1000px;">
+                <thead>
+                  <tr>
+                    <th width="2%">No</th>
+                    <th width="70%">keterangan</th>
+                    <th width="26%">harga</th>
+                    <th width="2%">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body" class="form-group">
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan=""></td>
 
-            <table class="table table-bordered table-bindkeys" style="width: 1000px;">
-              <thead>
-                <tr>
-                  <th width="2%">No</th>
-                  <th width="70%">keterangan</th>
-                  <th width="26%">harga</th>
-                  <th width="2%">Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="table_body" class="form-group">
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan=""></td>
-
-                  <td class="font-weight-bold"> Total : </td>
-                  <td id="sumary" class="text-right font-weight-bold"> </td>
-                  <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-
+                    <td class="font-weight-bold"> Total : </td>
+                    <td id="sumary" class="text-right font-weight-bold"> </td>
+                    <td>
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
 
 
           </div>
@@ -193,7 +193,7 @@
           $('#jqGrid').trigger('reloadGrid', {
             page: response.data.page
           })
-          if(id == 0){
+          if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
 
@@ -282,7 +282,7 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    
+
     $('#table_body').html('')
     addRow()
 

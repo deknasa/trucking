@@ -2,6 +2,14 @@
 
 <script>
   function loadGrid(id) {
+    let sortnameDetail = 'nobukti'
+    let sortorderDetail = 'asc'
+    let totalRecordDetail
+    let limitDetail
+    let postDataDetail
+    let triggerClickDetail
+    let indexRowDetail
+
     $('#detailGrid')
       .jqGrid({
         url: `${apiUrl}piutangdetail`,
@@ -39,8 +47,8 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortname,
-        sortorder: sortorder,
+        sortname: sortnameDetail,
+        sortorder: sortorderDetail,
         page: page,
         viewrecords: true,
         postData: {
@@ -67,24 +75,22 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-          
+
           /* Set global variables */
-          sortname = $(this).jqGrid("getGridParam", "sortname")
-          sortorder = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').limit
-          postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
+          sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordDetail = $(this).getGridParam("records")
+          limitDetail = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataDetail = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
+          if (indexRowDetail > $(this).getDataIDs().length - 1) {
+            indexRowDetail = $(this).getDataIDs().length - 1;
           }
-
-          $('#detailGrid').setSelection($('#detailGrid').getDataIDs()[0])
 
           setHighlight($(this))
 
@@ -119,7 +125,7 @@
       .customPager()
     /* Append clear filter button */
     loadClearFilter($('#detailGrid'))
-    
+
     /* Append global search */
     loadGlobalSearch($('#detailGrid'))
   }
@@ -131,7 +137,7 @@
       postData: {
         piutang_id: id
       },
-      page:1
+      page: 1
     }).trigger('reloadGrid')
   }
 </script>

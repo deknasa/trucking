@@ -70,6 +70,10 @@
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
+        postData: {
+          tgldari:$('#tgldariheader').val() ,
+          tglsampai:$('#tglsampaiheader').val() 
+        },
         datatype: "json",
         colModel: [{
             label: 'ID',
@@ -234,7 +238,8 @@
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
-          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+          if (indexRow >= limit) {indexRow = (indexRow - limit * (page - 1))}
+          console.log('onselect', indexRow)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -269,7 +274,7 @@
           if (indexRow > $(this).getDataIDs().length - 1) {
             indexRow = $(this).getDataIDs().length - 1;
           }
-
+          console.log('loadcomplete',indexRow)
           setTimeout(function() {
 
             if (triggerClick) {
@@ -284,7 +289,7 @@
               if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
                 $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
               }
-
+              console.log('trigger click', indexRow)
               triggerClick = false
             } else {
               $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
@@ -339,6 +344,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
+                
                 cekValidasi(selectedId, 'DELETE')
               }
             }

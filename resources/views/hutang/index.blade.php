@@ -7,7 +7,7 @@
     <div class="col-12">
       @include('layouts._rangeheader')
       <table id="jqGrid"></table>
-      
+
     </div>
   </div>
   <div class="row mt-3">
@@ -35,10 +35,10 @@
 
 <!-- Detail -->
 
-@include('hutang._modal')
 @include('hutang._details')
 @include('hutang._history')
 
+@include('hutang._modal')
 @push('scripts')
 <script>
   let indexRow = 0;
@@ -58,10 +58,10 @@
 
   $(document).ready(function() {
     $("#tabs").tabs()
-    
+
     setRange()
     initDatepicker()
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('hutangheader')
     })
 
@@ -71,8 +71,8 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val() 
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val()
         },
         datatype: "json",
         colModel: [{
@@ -230,7 +230,9 @@
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
-          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+          if (indexRow >= limit) {
+            indexRow = (indexRow - limit * (page - 1))
+          }
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -239,7 +241,7 @@
               postData: {
                 hutang_id: 0,
               },
-            }).trigger('reloadGrid'); 
+            }).trigger('reloadGrid');
             $('#detailGrid').jqGrid('setGridParam', {
               postData: {
                 hutang_id: 0,
@@ -287,7 +289,6 @@
             }
           }, 100)
 
-
           setHighlight($(this))
         }
       })
@@ -334,6 +335,12 @@
                 showDialog('Please select a row')
               } else {
                 cekValidasi(selectedId, 'DELETE')
+                indexRow = $("#jqGrid").jqGrid('getCell', selectedId, 'rn') - 1
+                page = $("#jqGrid").jqGrid('getGridParam', 'page')
+                limit = $("#jqGrid").jqGrid('getGridParam', 'postData').limit
+                if (indexRow >= limit) {
+                  indexRow = (indexRow - limit * (page - 1))
+                }
               }
             }
           },
@@ -490,7 +497,7 @@
       }
     })
   })
-  
+
   $("#tabs").tabs({
     beforeActivate: function(event, ui) {
 

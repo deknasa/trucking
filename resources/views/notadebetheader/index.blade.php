@@ -6,6 +6,7 @@
   {{-- {{ route('notadebetheader.report', ['id' => '1']) }} --}}
   <div class="row">
     <div class="col-12">
+      @include('layouts._rangeheader')
       <table id="jqGrid"></table>
     </div>
   </div>
@@ -35,19 +36,22 @@
 
   $(document).ready(function() {
 
-    $('#lookup').hide()
-    
+    setRange()
+    initDatepicker()
+    $(document).on('click','#btnReload', function(event) {
+      loadDataHeader('notadebetheader')
+    })
 
-
-    $('#crudModal').on('hidden.bs.modal', function() {
-       activeGrid = '#jqGrid'
-     })
 
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'notadebetheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
+        postData: {
+          tgldari:$('#tgldariheader').val() ,
+          tglsampai:$('#tglsampaiheader').val() 
+        },
         datatype: "json",
         colModel: [{
             label: 'ID',
@@ -266,7 +270,13 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-
+          if (data.data.length == 0) {
+            $('#detail').jqGrid('setGridParam', {
+              postData: {
+                notadebet_id: 0,
+              },
+            }).trigger('reloadGrid'); 
+          }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))

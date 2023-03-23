@@ -26,6 +26,7 @@ class PenerimaanHeaderController extends MyController
             'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'combokas' => $this->comboList('list', 'STATUS KAS', 'STATUS KAS'),
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'combobank' => $this->comboBank(),
         ];
 
         return view('penerimaan.index', compact('title', 'data'));
@@ -97,6 +98,16 @@ class PenerimaanHeaderController extends MyController
         return $noBukti;
     }
 
+    public function comboBank()
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'bank');
+
+        return $response['data'];
+    }
+    
     public function comboList($aksi, $grp, $subgrp)
     {
 

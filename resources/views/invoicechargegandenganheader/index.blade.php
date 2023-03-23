@@ -5,6 +5,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
+      @include('layouts._rangeheader')
       <table id="jqGrid"></table>
     </div>
   </div>
@@ -32,17 +33,25 @@
 
   $(document).ready(function() {
 
-    $('#lookup').hide()
-    
+    setRange()
+    initDatepicker()
+    $(document).on('click', '#btnReload', function(event) {
+      loadDataHeader('invoicechargegandenganheader')
+    })
+
     $('#crudModal').on('hidden.bs.modal', function() {
-       activeGrid = '#jqGrid'
-     })
+      activeGrid = '#jqGrid'
+    })
 
     $("#jqGrid").jqGrid({
         url: `${apiUrl}invoicechargegandenganheader`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
+        postData: {
+          tgldari:$('#tgldariheader').val() ,
+          tglsampai:$('#tglsampaiheader').val() 
+        },
         datatype: "json",
         colModel: [{
             label: 'ID',
@@ -87,7 +96,7 @@
                   <span>${statusApproval.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
@@ -134,7 +143,7 @@
                   <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
@@ -181,7 +190,7 @@
             name: 'agen',
             align: 'left'
           },
-          
+
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
@@ -246,7 +255,13 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-
+          if (data.data.length == 0) {
+            $('#detail').jqGrid('setGridParam', {
+              postData: {
+                invoicechargegandengan_id: 0,
+              },
+            }).trigger('reloadGrid');
+          }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -257,7 +272,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
@@ -471,6 +486,7 @@
 
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
+
     function handleApproval(id) {
       $.ajax({
         url: `${apiUrl}invoicechargegandenganheader/${id}/approval`,
@@ -487,7 +503,7 @@
       })
     }
 
-      
+
 
 
   })

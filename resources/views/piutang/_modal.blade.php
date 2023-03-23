@@ -148,6 +148,14 @@
       })
 
       data.push({
+        name: 'tgldariheader',
+        value: $('#tgldariheader').val()
+      })
+      data.push({
+        name: 'tglsampaiheader',
+        value: $('#tglsampaiheader').val()
+      })
+      data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
       })
@@ -172,6 +180,9 @@
         value: limit
       })
 
+      let tgldariheader = $('#tgldariheader').val();
+      let tglsampaiheader = $('#tglsampaiheader').val()
+
       switch (action) {
         case 'add':
           method = 'POST'
@@ -183,7 +194,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}piutangheader/${Id}`
+          url = `${apiUrl}piutangheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
