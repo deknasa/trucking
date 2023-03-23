@@ -5,6 +5,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
+      @include('layouts._rangeheader')
       <table id="jqGrid"></table>
     </div>
   </div>
@@ -12,7 +13,7 @@
     <div class="col-12">
       <div class="card card-primary card-outline card-outline-tabs">
         <div class="card-body border-bottom-0">
-          <div id="tabs" >
+          <div id="tabs">
             <ul class="dejavu">
               <li><a href="#detail-tab">Details</a></li>
               <li><a href="#history-tab">History pelunasan</a></li>
@@ -57,6 +58,12 @@
 
   $(document).ready(function() {
     $("#tabs").tabs()
+
+    setRange()
+    initDatepicker()
+    $(document).on('click','#btnReload', function(event) {
+      loadDataHeader('piutangheader')
+    })
 
     $("#jqGrid").jqGrid({
         url: `${apiUrl}piutangheader`,
@@ -219,9 +226,9 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
-            $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/piutangdetail/${currentTab}/grid`, function() {
-               loadGrid(id)
-            })
+          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/piutangdetail/${currentTab}/grid`, function() {
+            loadGrid(id)
+          })
           loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
@@ -231,7 +238,18 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-
+          if (data.data.length == 0) {
+            $('#historyGrid').jqGrid('setGridParam', {
+              postData: {
+                piutang_id: 0,
+              },
+            }).trigger('reloadGrid'); 
+            $('#detailGrid').jqGrid('setGridParam', {
+              postData: {
+                piutang_id: 0,
+              },
+            }).trigger('reloadGrid');
+          }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))

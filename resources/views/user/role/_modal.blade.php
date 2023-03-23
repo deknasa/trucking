@@ -46,6 +46,7 @@
   </div>
 </div>
 
+@push('scripts')
 <script>
   hasFormBindKeys = false
 
@@ -181,3 +182,4 @@
     })
   }
 </script>
+@endpush()

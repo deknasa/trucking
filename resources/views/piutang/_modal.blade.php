@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -49,7 +49,7 @@
               </div>
             </div>
 
-            <div class="table-responsive">
+            <div class="table-scroll table-responsive">
               <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1000px;">
                 <thead>
                   <tr>
@@ -340,8 +340,8 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            
-            cekValidasiAksi(Id,Aksi)
+
+            cekValidasiAksi(Id, Aksi)
           }
 
         } else {
@@ -351,7 +351,7 @@
     })
   }
 
-  function cekValidasiAksi(Id,Aksi){
+  function cekValidasiAksi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}piutangheader/${Id}/cekValidasiAksi`,
       method: 'POST',
@@ -361,16 +361,16 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              if (Aksi == 'EDIT') {
-              editPiutangHeader(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deletePiutangHeader(Id)
-            }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          if (Aksi == 'EDIT') {
+            editPiutangHeader(Id)
           }
+          if (Aksi == 'DELETE') {
+            deletePiutangHeader(Id)
+          }
+        }
 
       }
     })

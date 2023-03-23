@@ -42,6 +42,7 @@
   </div>
 </div>
 
+@push('scripts')
 <script>
   hasFormBindKeys = false
   selectedRows = [];
@@ -360,3 +361,4 @@
     })
   }
 </script>
+@endpush()

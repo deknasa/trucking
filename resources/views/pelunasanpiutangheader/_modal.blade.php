@@ -119,63 +119,55 @@
                 <input type="text" name="agen" class="form-control agen-lookup">
               </div>
             </div>
-            <div class="row mt-5">
-              <div class="col-md-12">
-                <div class="card card-scroll">
-                  <div class="card-body">
 
 
-                    <div class="table-responsive">
-                      <table class="table table-bordered mt-3" id="detailList" style="width:2000px;">
-                        <thead class="table-secondary">
-                          <tr>
-                            <th width="1%">pilih</th>
-                            <th width="1%">NO</th>
-                            <th width="5%">NO BUKTI</th>
-                            <th width="4%">TGL BUKTI</th>
-                            <th width="5%">NO BUKTI INVOICE</th>
-                            <th width="5%">NOMINAL PIUTANG</th>
-                            <th width="5%">SISA</th>
-                            <th width="11%">KETERANGAN</th>
-                            <th width="6%">BAYAR</th>
-                            <th width="6%">POTONGAN</th>
-                            <th width="6%">COA POTONGAN</th>
-                            <th width="5%">KETERANGAN POTONGAN</th>
-                            <th width="6%">NOMINAL LEBIH BAYAR</th>
-                          </tr>
-                        </thead>
-                        <tbody id="table_body">
+            <div class="table-responsive table-scroll">
+              <table class="table table-bordered mt-3" id="detailList" style="width:2000px;">
+                <thead class="table-secondary">
+                  <tr>
+                    <th width="1%">pilih</th>
+                    <th width="1%">NO</th>
+                    <th width="5%">NO BUKTI</th>
+                    <th width="4%">TGL BUKTI</th>
+                    <th width="5%">NO BUKTI INVOICE</th>
+                    <th width="5%">NOMINAL PIUTANG</th>
+                    <th width="5%">SISA</th>
+                    <th width="11%">KETERANGAN</th>
+                    <th width="6%">BAYAR</th>
+                    <th width="6%">POTONGAN</th>
+                    <th width="6%">COA POTONGAN</th>
+                    <th width="5%">KETERANGAN POTONGAN</th>
+                    <th width="6%">NOMINAL LEBIH BAYAR</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body">
 
-                        </tbody>
-                        <tfoot>
-                          <tr>
-                            <td colspan="5"></td>
-                            <td>
-                              <p id="nominalPiutang" class="text-right font-weight-bold"></p>
-                            </td>
-                            <td>
-                              <p id="sisaPiutang" class="text-right font-weight-bold"></p>
-                            </td>
-                            <td></td>
-                            <td>
-                              <p id="bayarPiutang" class="text-right font-weight-bold"></p>
-                            </td>
-                            <td>
-                              <p id="bayarPotongan" class="text-right font-weight-bold"></p>
-                            </td>
-                            <td colspan="2"></td>
-                            <td>
-                              <p id="bayarNominalLebih" class="text-right font-weight-bold"></p>
-                            </td>
-                          </tr>
-                        </tfoot>
-                      </table>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="5"></td>
+                    <td>
+                      <p id="nominalPiutang" class="text-right font-weight-bold"></p>
+                    </td>
+                    <td>
+                      <p id="sisaPiutang" class="text-right font-weight-bold"></p>
+                    </td>
+                    <td></td>
+                    <td>
+                      <p id="bayarPiutang" class="text-right font-weight-bold"></p>
+                    </td>
+                    <td>
+                      <p id="bayarPotongan" class="text-right font-weight-bold"></p>
+                    </td>
+                    <td colspan="2"></td>
+                    <td>
+                      <p id="bayarNominalLebih" class="text-right font-weight-bold"></p>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
+
 
           </div>
           <div class="modal-footer justify-content-start">
