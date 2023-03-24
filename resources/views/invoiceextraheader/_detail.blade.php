@@ -9,16 +9,16 @@
 
 @push('scripts')
 <script>
-  function loadDetailGrid(id) {
-    let sortnameDetail = 'nobukti'
-    let sortorderDetail = 'asc'
-    let totalRecordDetail
-    let limitDetail
-    let postDataDetail
-    let triggerClickDetail
-    let indexRowDetail
-    let pageDetail = 0
+  let sortnameDetail = 'nobukti'
+  let sortorderDetail = 'asc'
+  let totalRecordDetail
+  let limitDetail
+  let postDataDetail
+  let triggerClickDetail
+  let indexRowDetail
+  let pageDetail = 0
 
+  function loadDetailGrid(id) {
     $("#detail").jqGrid({
         url: `${apiUrl}invoiceextradetail`,
         mtype: "GET",
@@ -82,7 +82,7 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-         
+
           /* Set global variables */
           sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
           sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
@@ -133,7 +133,7 @@
       .customPager()
     /* Append clear filter button */
     loadClearFilter($('#detail'))
-    
+
     /* Append global search */
     loadGlobalSearch($('#detail'))
   }
@@ -145,7 +145,7 @@
       postData: {
         invoiceextra_id: id
       },
-      page:1
+      page: 1
     }).trigger('reloadGrid')
   }
 </script>

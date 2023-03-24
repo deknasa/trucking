@@ -9,6 +9,15 @@
 
 @push('scripts')
 <script>
+  let sortnameDetail = 'nobukti'
+  let sortorderDetail = 'asc'
+  let totalRecordDetail
+  let limitDetail
+  let postDataDetail
+  let triggerClickDetail
+  let indexRowDetail
+  let pageDetail = 0;
+
   function loadDetailGrid(id) {
     $("#detail").jqGrid({
         url: `${apiUrl}invoicechargegandengandetail`,
@@ -17,37 +26,37 @@
         iconSet: 'fontAwesome',
         datatype: "local",
         colModel: [{
-          label: 'NO. BUKTI',
-          name: 'jobtrucking',
-        },
-        {
-          label: 'TGL BUKTI',
-          name: 'tgltrip',
-          formatter: "date",
-          formatoptions: {
-            srcformat: "ISO8601Long",
-            newformat: "d-m-Y"
-          }
-        },
-        {
-          label: 'jumlah Hari',
-          name: 'jumlahhari',
-          align: 'right',
-        },
-        {
+            label: 'NO. BUKTI',
+            name: 'jobtrucking',
+          },
+          {
+            label: 'TGL BUKTI',
+            name: 'tgltrip',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'jumlah Hari',
+            name: 'jumlahhari',
+            align: 'right',
+          },
+          {
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
             formatter: currencyFormat,
           },
-        {
-          label: 'No Polisi',
-          name: 'nopolisi',
-        },
-        {
-          label: 'keterangan',
-          name: 'keterangan',
-        },
+          {
+            label: 'No Polisi',
+            name: 'nopolisi',
+          },
+          {
+            label: 'keterangan',
+            name: 'keterangan',
+          },
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -60,9 +69,9 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortname,
-        sortorder: sortorder,
-        page: page,
+        sortname: sortnameDetail,
+        sortorder: sortorderDetail,
+        page: pageDetail,
         viewrecords: true,
         postData: {
           invoicechargegandengan_id: id
@@ -89,24 +98,23 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-
+          
           /* Set global variables */
-          sortname = $(this).jqGrid("getGridParam", "sortname")
-          sortorder = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').limit
-          postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
+          sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordDetail = $(this).getGridParam("records")
+          limitDetail = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataDetail = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
+          if (indexRowDetail > $(this).getDataIDs().length - 1) {
+            indexRowDetail = $(this).getDataIDs().length - 1;
           }
 
-          $('#detail').setSelection($('#detail').getDataIDs()[0])
 
           setHighlight($(this))
 
@@ -142,7 +150,7 @@
       .customPager()
     /* Append clear filter button */
     loadClearFilter($('#detail'))
-    
+
     /* Append global search */
     loadGlobalSearch($('#detail'))
   }
@@ -154,7 +162,7 @@
       postData: {
         invoicechargegandengan_id: id
       },
-      page:1
+      page: 1
     }).trigger('reloadGrid')
   }
 </script>
