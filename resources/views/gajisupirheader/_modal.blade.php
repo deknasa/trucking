@@ -997,6 +997,7 @@
                 console.log(response.data.supir_id)
 
                 initAutoNumeric(form.find(`[name="subtotal"]`))
+                initAutoNumeric(form.find(`[name="uangjalan"]`))
                 initAutoNumeric(form.find(`[name="uangjalantidakterhitung"]`))
                 initAutoNumeric(form.find(`[name="uangmakanharian"]`))
                 initAutoNumeric(form.find(`[name="deposito"]`))
@@ -1679,7 +1680,7 @@
             <div class="row form-group">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
-                   Borongan Supir
+                   total uang borongan
                   </label>
                 </div>
                 <div class="col-12 col-md-9">
@@ -1689,7 +1690,7 @@
             <div class="row form-group">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
-                   U. Makan harian
+                   uang makan
                   </label>
                 </div>
                 <div class="col-12 col-md-9">
@@ -1700,7 +1701,7 @@
             <div class="row form-group">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
-                   U. Jalan Tidak Terhitung
+                   total pot U.J. Tidak Terhitung
                   </label>
                 </div>
                 <div class="col-12 col-md-9">
@@ -1711,7 +1712,7 @@
             <div class="row form-group">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
-                   U. Jalan 
+                   total pot. u.J.
                   </label>
                 </div>
                 <div class="col-12 col-md-9">
@@ -1722,7 +1723,7 @@
             <div class="row form-group">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
-                   Pot. Pinjaman 
+                   total Pot. Pinjaman 
                   </label>
                 </div>
                 <div class="col-12 col-md-9">
@@ -1733,7 +1734,7 @@
             <div class="row form-group">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
-                   Pot. Pinjaman (SEMUA)
+                   total Pot. Pinjaman (SEMUA)
                   </label>
                 </div>
                 <div class="col-12 col-md-9">
@@ -1744,7 +1745,7 @@
             <div class="row form-group">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
-                   Deposito
+                   total Deposito
                   </label>
                 </div>
                 <div class="col-12 col-md-9">
@@ -1755,7 +1756,7 @@
             <div class="row form-group">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
-                   U. BBM
+                   total U. BBM
                   </label>
                 </div>
                 <div class="col-12 col-md-9">
@@ -1763,6 +1764,8 @@
                 </div>
             </div>
             
+            <hr style="border: 1px solid rgb(0 0 0 / 58%);">
+
             <div class="row form-group">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
