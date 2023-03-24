@@ -9,7 +9,8 @@
     let postDataDetail
     let triggerClickDetail
     let indexRowDetail
-
+    let pageDetail = 0
+    
   function loadGrid(id) {
     $('#detailGrid')
       .jqGrid({
@@ -56,7 +57,7 @@
         sortable: true,
         sortname: sortnameDetail,
         sortorder: sortorderDetail,
-        page: page,
+        page: pageDetail,
         viewrecords: true,
         postData: {
           hutang_id: id

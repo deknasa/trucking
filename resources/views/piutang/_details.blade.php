@@ -9,6 +9,7 @@
     let postDataDetail
     let triggerClickDetail
     let indexRowDetail
+    let pageDetail = 0;
 
     $('#detailGrid')
       .jqGrid({
@@ -49,7 +50,7 @@
         sortable: true,
         sortname: sortnameDetail,
         sortorder: sortorderDetail,
-        page: page,
+        page: pageDetail,
         viewrecords: true,
         postData: {
           piutang_id: id

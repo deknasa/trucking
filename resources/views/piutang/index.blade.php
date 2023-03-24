@@ -239,7 +239,6 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) {indexRow = (indexRow - limit * (page - 1))}
-          console.log('onselect', indexRow)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -288,7 +287,6 @@
               if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
                 $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
               }
-              console.log('trigger click', indexRow)
               triggerClick = false
             } else {
               $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])

@@ -16,6 +16,7 @@
   let postDataDetail
   let triggerClickDetail
   let indexRowDetail
+  let pageDetail = 0
 
   function loadDetailGrid(id) {
     $("#detail").jqGrid({
@@ -67,7 +68,7 @@
         sortable: true,
         sortname: sortname,
         sortorder: sortorder,
-        page: page,
+        page: pageDetail,
         viewrecords: true,
         postData: {
           invoice_id: id
