@@ -87,7 +87,6 @@
                                         <li><a href="#tabs-3">Pot. pinjaman (pribadi)</a></li>
                                         <li><a href="#tabs-4">deposito</a></li>
                                         <li><a href="#tabs-5">bbm</a></li>
-                                        <li><a href="#tabs-6">pinjaman pribadi</a></li>
                                     </ul>
                                     <div id="tabs-1">
                                         <table id="rekapRincian"></table>
@@ -252,46 +251,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="tabs-6">
-                                        <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
-                                                    NO BUKTI</label>
-                                            </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="text" name="nobuktiPinjaman" class="form-control" disabled>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
-                                                    Tanggal Bukti</label>
-                                            </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="text" name="tglbuktiPinjaman" class="form-control" disabled>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
-                                                    Nominal</label>
-                                            </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="text" name="nomPinjaman" class="form-control text-right" readonly>
-                                            </div>
-                                        </div>
-
-                                        <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
-                                                    KAS/BANK</label>
-                                            </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="hidden" name="bank_idPinjaman">
-                                                <input type="text" name="bankPinjaman" class="form-control bankPinjaman-lookup">
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -327,7 +286,6 @@
     let selectedPS = [];
     let selectedDeposito = [];
     let selectedBBM = [];
-    let selectedPinjaman = [];
     let selectedRIC = [];
     let sortnameRincian = 'nobuktiric'
 
@@ -340,7 +298,6 @@
             selectedPS.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_potonganpinjamansemua"]`).text());
             selectedDeposito.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_deposito"]`).text());
             selectedBBM.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_bbm"]`).text());
-            selectedPinjaman.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_pinjamanpribadi"]`).text());
             selectedBorongan.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_borongan"]`).text());
             selectedJalan.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_uangjalan"]`).text());
             selectedKomisi.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text());
@@ -356,7 +313,6 @@
                     selectedPS.splice(i, 1);
                     selectedDeposito.splice(i, 1);
                     selectedBBM.splice(i, 1);
-                    selectedPinjaman.splice(i, 1);
                     selectedBorongan.splice(i, 1);
                     selectedJalan.splice(i, 1);
                     selectedKomisi.splice(i, 1);
@@ -373,7 +329,6 @@
         potSemua = 0;
         deposito = 0;
         bbm = 0;
-        pinjaman = 0;
         borongan = 0;
         jalan = 0;
         komisi = 0;
@@ -390,9 +345,6 @@
         $.each(selectedBBM, function(index, item) {
             bbm = bbm + parseFloat(item.replace(/,/g, ''))
         });
-        $.each(selectedPinjaman, function(index, item) {
-            pinjaman = pinjaman + parseFloat(item.replace(/,/g, ''))
-        });
         $.each(selectedBorongan, function(index, item) {
             borongan = borongan + parseFloat(item.replace(/,/g, ''))
         });
@@ -406,19 +358,16 @@
             makan = makan + parseFloat(item.replace(/,/g, ''))
         });
 
-        console.log(potSemua)
 
         initAutoNumeric($('#crudForm').find(`[name="nomPS"]`).val(potSemua))
         initAutoNumeric($('#crudForm').find(`[name="nomPP"]`).val(potPribadi))
         initAutoNumeric($('#crudForm').find(`[name="nomDeposito"]`).val(deposito))
         initAutoNumeric($('#crudForm').find(`[name="nomBBM"]`).val(bbm))
-        initAutoNumeric($('#crudForm').find(`[name="nomPinjaman"]`).val(pinjaman))
 
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_potonganpinjaman"]`).text(potPribadi))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_potonganpinjamansemua"]`).text(potSemua))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_deposito"]`).text(deposito))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_bbm"]`).text(bbm))
-        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_pinjamanpribadi"]`).text(pinjaman))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_borongan"]`).text(borongan))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangjalan"]`).text(jalan))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text(komisi))
@@ -540,21 +489,6 @@
                 value: form.find(`[name="bankBBM"]`).val()
             })
 
-            data.push({
-                name: 'bank_idPinjaman',
-                value: form.find(`[name="bank_idPinjaman"]`).val()
-            })
-            $('#crudForm').find(`[name="nomPinjaman"]`).each((index, element) => {
-                data.push({
-                    name: 'nomPinjaman',
-                    value: AutoNumeric.getNumber($(`#crudForm [name="nomPinjaman"]`)[index])
-                })
-            })
-            data.push({
-                name: 'bankPinjaman',
-                value: form.find(`[name="bankPinjaman"]`).val()
-            })
-
 
             data.push({
                 name: 'sortIndex',
@@ -624,7 +558,6 @@
                     selectedPS = [];
                     selectedDeposito = [];
                     selectedBBM = [];
-                    selectedPinjaman = [];
                     selectedRIC = [];
                     selectedBorongan = [];
                     selectedKomisi = [];
@@ -674,7 +607,6 @@
         selectedPS = [];
         selectedDeposito = [];
         selectedBBM = [];
-        selectedPinjaman = [];
         selectedRIC = [];
         selectedBorongan = [];
         selectedKomisi = [];
@@ -815,11 +747,6 @@
                         formatter: currencyFormat,
                         align: "right",
                     },
-                    {
-                        label: 'pinjaman pribadi',
-                        name: 'pinjamanpribadi',
-                        hidden: true
-                    },
                 ],
                 autowidth: true,
                 shrinkToFit: false,
@@ -917,22 +844,6 @@
 
                     setHighlight($(this))
 
-
-                    if (data.attributes) {
-
-
-                        $(this).jqGrid('footerData', 'set', {
-                            borongan: data.attributes.totalBorongan,
-                            uangjalan: data.attributes.totalUangJalan,
-                            bbm: data.attributes.totalUangBBM,
-                            uangmakanharian: data.attributes.totalUangMakan,
-                            potonganpinjaman: data.attributes.totalPotPinjaman,
-                            potonganpinjamansemua: data.attributes.totalPotPinjSemua,
-                            deposito: data.attributes.totalDeposito,
-                            komisisupir: data.attributes.totalKomisi,
-                            tolsupir: data.attributes.totalTol,
-                        }, true)
-                    }
                 }
             })
 
@@ -983,7 +894,6 @@
         $('#crudForm').find('[name=tglbuktiPP]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tglbuktiDeposito]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tglbuktiBBM]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find('[name=tglbuktiPinjaman]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         rekapRincian('getRic')
         initDatepicker()
         selectAllRows()
@@ -1024,7 +934,6 @@
         selectedPS = ricList.data.map((data) => data.potonganpinjamansemua)
         selectedDeposito = ricList.data.map((data) => data.deposito)
         selectedBBM = ricList.data.map((data) => data.bbm)
-        selectedPinjaman = ricList.data.map((data) => data.pinjamanpribadi)
         selectedRIC = ricList.data.map((data) => data.nobuktiric)
 
         countNominal()
@@ -1177,26 +1086,11 @@
 
                 }
 
-                if (response.pinjaman != null) {
-                    $.each(response.pinjaman, (index, value) => {
-                        let element = form.find(`[name="${index}"]`)
-
-                        form.find(`[name="${index}"]`).val(value)
-                        if (index == 'bankPinjaman') {
-                            element.data('current-value', value).prop('readonly', true)
-                            element.parent('.input-group').find('.button-clear').remove()
-                            element.parent('.input-group').find('.input-group-append').remove()
-                        }
-                    })
-                    form.find(`[name="tglbuktiPinjaman"]`).val(dateFormat(response.data.tglbukti))
-
-                }
 
                 initAutoNumeric(form.find(`[name="nomPS"]`))
                 initAutoNumeric(form.find(`[name="nomPP"]`))
                 initAutoNumeric(form.find(`[name="nomDeposito"]`))
                 initAutoNumeric(form.find(`[name="nomBBM"]`))
-                initAutoNumeric(form.find(`[name="nomPinjaman"]`))
 
                 if (aksi == 'delete') {
 
@@ -1213,14 +1107,6 @@
         let tglDari = form.find(`[name="tgldari"]`).val()
         let tglSampai = form.find(`[name="tglsampai"]`).val()
         let aksi = form.data('action')
-        // $('#rekapRincian').jqGrid('setGridParam', {
-        //     postData: {
-        //         dari: $('#crudForm').find('[name=tgldari]').val(),
-        //         sampai: $('#crudForm').find('[name=tglsampai]').val(),
-        //         aksi: action
-        //     },
-        // }).trigger('reloadGrid');
-
         selectAllRows(tglDari, tglSampai, aksi)
     })
 
@@ -1280,28 +1166,6 @@
     }
 
 
-
-    $(document).on('click', `#ricList tbody [name="ric_id[]"]`, function() {
-            let tdNominal = $(this).closest('tr').find('td.nominal').text()
-            tdNominal = parseFloat(tdNominal.replaceAll(',', ''));
-
-            console.log(tdNominal)
-            let allNominal = $('#nominal').text()
-            allNominal = parseFloat(allNominal.replaceAll(',', ''));
-            let nominal = 0
-
-            if ($(this).prop("checked") == true) {
-                allNominal = allNominal + tdNominal
-            } else {
-                allNominal = allNominal - tdNominal
-            }
-            $('#nominal').html('')
-            $('#nominal').append(`${allNominal}`)
-            initAutoNumeric($('#ricList tfoot').find('#nominal'))
-        }
-
-    )
-
     function setRowNumbers() {
         let elements = $('#detailList tbody tr td:nth-child(2)')
 
@@ -1354,8 +1218,6 @@
                 form.find(`[name="bankDeposito"]`).val(response.data.bank)
                 form.find(`[name="bank_idBBM"]`).val(response.data.bank_id)
                 form.find(`[name="bankBBM"]`).val(response.data.bank)
-                form.find(`[name="bank_idPinjaman"]`).val(response.data.bank_id)
-                form.find(`[name="bankPinjaman"]`).val(response.data.bank)
             }
         })
     }
@@ -1454,29 +1316,6 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.bankPinjaman-lookup').lookup({
-            title: 'Bank Lookup',
-            fileName: 'bank',
-            beforeProcess: function(test) {
-                this.postData = {
-                    Aktif: 'AKTIF',
-
-                }
-            },
-            onSelectRow: (bank, element) => {
-                $('#crudForm [name=bank_idPinjaman]').first().val(bank.id)
-                element.val(bank.namabank)
-                element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-                element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-                $('#crudForm [name=bank_idPinjaman]').first().val('')
-                element.val('')
-                element.data('currentValue', element.val())
-            }
-        })
     }
 
     function clearSelectedRows() {
@@ -1489,7 +1328,6 @@
         selectedPS = [];
         selectedDeposito = [];
         selectedBBM = [];
-        selectedPinjaman = [];
         selectedRIC = [];
         $('#rekapRincian').trigger('reloadGrid')
     }
@@ -1510,7 +1348,7 @@
                 dari: $('#crudForm').find('[name=tgldari]').val(),
                 sampai: $('#crudForm').find('[name=tglsampai]').val(),
                 aksi: aksi,
-                sortIndex: sortname,
+                sortIndex: sortnameRincian,
             },
             headers: {
                 Authorization: `Bearer ${accessToken}`
@@ -1525,7 +1363,6 @@
                 selectedPS = response.data.map((data) => data.potonganpinjamansemua)
                 selectedDeposito = response.data.map((data) => data.deposito)
                 selectedBBM = response.data.map((data) => data.bbm)
-                selectedPinjaman = response.data.map((data) => data.pinjamanpribadi)
                 selectedRIC = response.data.map((data) => data.nobuktiric)
 
                 $('#rekapRincian').jqGrid('setGridParam', {

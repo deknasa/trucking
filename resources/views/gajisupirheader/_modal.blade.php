@@ -288,6 +288,13 @@
     let selectedRitasi = [];
     let subtotal = 0
     let sortnameRincian = 'nobuktitrip';
+    let sortorderRincian = 'asc';
+    let pageRincian = 0;
+    let totalRecordRincian
+    let limitRincian
+    let postDataRincian
+    let triggerClickRincian
+    let indexRowRincian
 
     function checkboxHandler(element) {
         let value = $(element).val();
@@ -1271,8 +1278,8 @@
                 toolbar: [true, "top"],
                 sortable: true,
                 sortname: sortnameRincian,
-                sortorder: sortorder,
-                page: page,
+                sortorder: sortorderRincian,
+                page: pageRincian,
                 viewrecords: true,
                 prmNames: {
                     sort: 'sortIndex',
@@ -1289,14 +1296,7 @@
                 },
 
                 onSelectRow: function(id) {
-
                     activeGrid = $(this)
-                    indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-                    page = $(this).jqGrid('getGridParam', 'page')
-                    let limit = $(this).jqGrid('getGridParam', 'postData').limit
-                    if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-
-
                 },
                 loadComplete: function(data) {
                     let grid = $(this)
@@ -1317,42 +1317,20 @@
                     });
 
                     /* Set global variables */
-                    sortname = $(this).jqGrid("getGridParam", "sortname")
-                    sortorder = $(this).jqGrid("getGridParam", "sortorder")
-                    totalRecord = $(this).getGridParam("records")
-                    limit = $(this).jqGrid('getGridParam', 'postData').limit
-                    postData = $(this).jqGrid('getGridParam', 'postData')
-                    triggerClick = true
+                    sortnameRincian = $(this).jqGrid("getGridParam", "sortname")
+                    sortorderRincian = $(this).jqGrid("getGridParam", "sortorder")
+                    totalRecordRincian = $(this).getGridParam("records")
+                    limitRincian = $(this).jqGrid('getGridParam', 'postData').limit
+                    postDataRincian = $(this).jqGrid('getGridParam', 'postData')
+                    triggerClickRincian = true
 
                     $('.clearsearchclass').click(function() {
                         clearColumnSearch($(this))
                     })
 
-                    if (indexRow > $(this).getDataIDs().length - 1) {
-                        indexRow = $(this).getDataIDs().length - 1;
+                    if (indexRowRincian > $(this).getDataIDs().length - 1) {
+                        indexRowRincian = $(this).getDataIDs().length - 1;
                     }
-
-                    setTimeout(function() {
-
-                        if (triggerClick) {
-                            if (id != '') {
-                                indexRow = parseInt($('#rekapRincian').jqGrid('getInd', id)) - 1
-                                $(`#rekapRincian [id="${$('#rekapRincian').getDataIDs()[indexRow]}"]`).click()
-                                id = ''
-                            } else if (indexRow != undefined) {
-                                $(`#rekapRincian [id="${$('#rekapRincian').getDataIDs()[indexRow]}"]`).click()
-                            }
-
-                            if ($('#rekapRincian').getDataIDs()[indexRow] == undefined) {
-                                $(`#rekapRincian [id="` + $('#rekapRincian').getDataIDs()[0] + `"]`).click()
-                            }
-
-                            triggerClick = false
-                        } else {
-                            $('#rekapRincian').setSelection($('#rekapRincian').getDataIDs()[indexRow])
-                        }
-                    }, 100)
-
 
                     setHighlight($(this))
 
