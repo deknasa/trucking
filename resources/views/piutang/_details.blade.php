@@ -1,15 +1,16 @@
 <table id="detailGrid"></table>
 
 <script>
+  let sortnameDetail = 'nobukti'
+  let sortorderDetail = 'asc'
+  let totalRecordDetail
+  let limitDetail
+  let postDataDetail
+  let triggerClickDetail
+  let indexRowDetail
+  let pageDetail = 0;
+
   function loadGrid(id) {
-    let sortnameDetail = 'nobukti'
-    let sortorderDetail = 'asc'
-    let totalRecordDetail
-    let limitDetail
-    let postDataDetail
-    let triggerClickDetail
-    let indexRowDetail
-    let pageDetail = 0;
 
     $('#detailGrid')
       .jqGrid({
