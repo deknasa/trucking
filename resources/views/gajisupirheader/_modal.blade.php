@@ -399,7 +399,8 @@
         uangmakan = parseFloat(uangmakan.replace(/,/g, ''));
         uangmakan = Number.isNaN(uangmakan) ? 0 : uangmakan
         total = subtotal + uangmakan
-
+        console.log('gajisupir ',gajiSupir)
+        console.log('sub ',subtotal)
         initAutoNumeric($('#crudForm').find(`[name="subtotal"]`).val(subtotal))
         initAutoNumeric($('#crudForm').find(`[name="total"]`).val(total))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajisupir"]`).text(gajiSupir))
@@ -1522,31 +1523,7 @@
                         })
                     });
 
-                    if (data.attributes) {
-
-                        // $('#rekapRincian tbody tr').find(`td input:checkbox`).prop('checked', false);
-                        // selectedRows = [];
-
-                        // $('#rekapRincian tbody tr').each(function(row, tr) {
-                        //     $(this).find(`td input:checkbox`).click()
-                        // })
-
-                        subtotal = parseFloat(data.attributes.totalGajiSupir) + parseFloat(data.attributes.totalGajiKenek) + parseFloat(data.attributes.totalUpahRitasi) + parseFloat(data.attributes.totalBiayaExtra) + parseFloat(data.attributes.totalTolSupir)
-                        uangmakan = AutoNumeric.getNumber($(`#crudForm [name="uangmakanharian"]`)[0])
-                        total = subtotal + uangmakan
-                        initAutoNumeric($('#crudForm').find(`[name="subtotal"]`).val(subtotal))
-                        initAutoNumeric($('#crudForm').find(`[name="total"]`).val(total))
-
-                        hitungSisa()
-                        $(this).jqGrid('footerData', 'set', {
-                            gajisupir: data.attributes.totalGajiSupir,
-                            gajikenek: data.attributes.totalGajiKenek,
-                            komisisupir: data.attributes.totalKomisiSupir,
-                            upahritasi: data.attributes.totalUpahRitasi,
-                            biayaextra: data.attributes.totalBiayaExtra,
-                            tolsupir: data.attributes.totalTolSupir,
-                        }, true)
-                    }
+                    
                 }
             })
 
@@ -2186,6 +2163,8 @@
                         aksi: aksi
                     },
                 }).trigger('reloadGrid');
+                hitungNominal()
+
             }
         })
 

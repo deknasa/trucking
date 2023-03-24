@@ -274,7 +274,6 @@
           if (indexRow > $(this).getDataIDs().length - 1) {
             indexRow = $(this).getDataIDs().length - 1;
           }
-          console.log('loadcomplete',indexRow)
           setTimeout(function() {
 
             if (triggerClick) {
