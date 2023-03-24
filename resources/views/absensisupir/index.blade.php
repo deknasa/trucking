@@ -514,10 +514,10 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          let msg = `YAKIN Approve Status Edit `
+          let msg = `YAKIN UnApprove Status Edit `
           console.log(statusTidakBisaEdit);
           if (response.data.statusapprovaleditabsensi === statusTidakBisaEdit) {
-            msg = `YAKIN UnApprove Status Edit `
+            msg = `YAKIN Approve Status Edit `
           }
           showConfirm(msg,response.data.nobukti,`absensisupirheader/${response.data.id}/approvalEditAbsensi`)
         },

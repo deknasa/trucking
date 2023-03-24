@@ -5,6 +5,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
+      @include('layouts._rangeheader')
       <table id="jqGrid"></table>
     </div>
   </div>
@@ -30,13 +31,22 @@
   let rowNum = 10
 
   $(document).ready(function() {
-
+    setRange()
+    initDatepicker()
+    $(document).on('click','#btnReload', function(event) {
+      loadDataHeader('ritasi')
+    })
     $("#jqGrid").jqGrid({
         url: `${apiUrl}ritasi`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
+        postData: {
+          tgldari:$('#tgldariheader').val() ,
+          tglsampai:$('#tglsampaiheader').val(),
+          
+        },
         colModel: [{
             label: 'ID',
             name: 'id',

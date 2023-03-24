@@ -628,7 +628,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#supirLookupPager'),
+      // pager: $('#supirLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -707,7 +707,7 @@
       beforeSearch: function() {
         clearGlobalSearch($('#supirLookup'))
       },
-    })
+    }).customPager()
 
   loadGlobalSearch($('#supirLookup'))
   loadClearFilter($('#supirLookup'))

@@ -52,30 +52,31 @@
                 <input type="text" id="bankId" name="bank_id" readonly hidden >
               </div>  
             </div>
-
-            <table class="table table-bordered table-bindkeys " id="detailList">
-              <thead>
-                <tr>                  
-                  <th width="50">No</th>
-                  <th>nobukti</th>
-                  <th>tgltransaksi</th>
-                  <th>keterangan</th>
-                  <th>nominal</th>
-                </tr>
-              </thead>
-              <tbody id="table_body" class="form-group">
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="3"></td>
-                  
-                  <td class="font-weight-bold"> Total : </td>
-                  <td id="sumary" class="text-right font-weight-bold">  </td>
-                  
-                </tr>
-              </tfoot>
-            </table>
-
+            <div class="table-scroll table-responsive">
+              <table class="table table-bordered table-bindkeys " id="detailList">
+                <thead>
+                  <tr>                  
+                    <th width="50">No</th>
+                    <th>nobukti</th>
+                    <th>tgltransaksi</th>
+                    <th>keterangan</th>
+                    <th>nominal</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body" class="form-group">
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="3"></td>
+                    
+                    <td class="font-weight-bold"> Total : </td>
+                    <td id="sumary" class="text-right font-weight-bold">  </td>
+                    
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+              
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">

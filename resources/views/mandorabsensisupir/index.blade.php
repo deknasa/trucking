@@ -15,7 +15,7 @@
 @push('scripts')
 <script>
   let indexRow = 0;
-  let page = 0;
+  let page = 1;
   let pager = '#jqGridPager'
   let popup = "";
   let id = "";
@@ -24,18 +24,21 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'supir_id'
+  let sortname = 'trado_id'
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
 
   $(document).ready(function() {
+
+    loadGrid()
+
     $("#jqGrid").jqGrid({
-        url: `${apiUrl}mandorabsensisupir`,
-        mtype: "GET",
+        // url: `${apiUrl}mandorabsensisupir`,
+        // mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        datatype: "local",
         colModel: [{
             label: 'ID',
             name: 'id',
@@ -47,12 +50,22 @@
             name: 'trado_id',
           },
           {
-            label: 'status',
-            name: 'absen_id',
-          },
-          {
             label: 'Supir',
             name: 'supir_id',
+          },
+          {
+            label: 'JAM',
+            name: 'jam',
+            formatter:'date',
+            formatoptions:{
+              srcformat: "H:i:s",
+              newformat: "H:i",
+              // userLocalTime : true
+            }
+          },
+          {
+            label: 'status',
+            name: 'absen_id',
           },
           {
             label: 'keterangan',
@@ -65,7 +78,7 @@
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
+              newformat: "d-m-Y"
             }
           },
           
@@ -83,16 +96,8 @@
         // sortorder: sortorder,
         page: page,
         viewrecords: true,
-        prmNames: {
-          // sort: 'sortIndex',
-          // order: 'sortOrder',
-          rows: 'limit'
-        },
-        jsonReader: {
-          root: 'data',
-          total: 'attributes.totalPages',
-          records: 'attributes.totalRows',
-        },
+       
+        
         loadBeforeSend: (jqXHR) => {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
         },
@@ -254,6 +259,28 @@
 
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
+    function loadGrid() {
+      console.log('asd');
+      $.ajax({
+          url: `${apiUrl}mandorabsensisupir`,
+          method: 'GET',
+        dataType: 'JSON',
+        data: {
+          limit: 0,
+          sortIndex:'trado_id',
+          sortOrder:'asc',
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $('#jqGrid').setGridParam({
+            datatype: "local",
+            data:response.data
+          }).trigger('reloadGrid')
+        }
+      })
+    }
   })
 </script>
 @endpush()

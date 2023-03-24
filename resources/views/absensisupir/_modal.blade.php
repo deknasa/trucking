@@ -229,7 +229,6 @@
         },
         data: data,
         success: response => {
-          console.log(response.data)
           id = response.data.id
           $('#crudModal').modal('hide')
           $('#crudForm').trigger('reset')
@@ -335,7 +334,7 @@
               <td></td>
                     <td>
                       <input type="hidden" name="trado_id[]">
-                      <input type="text" name="trado[]"  data-current-value="${detail.trado}" class="form-control readonly">
+                      <input type="text" name="trado[]"  data-current-value="${detail.trado}" class="form-control" readonly>
                     </td>
                     <td>
                       <input type="hidden" name="supir_id[]">
@@ -368,7 +367,6 @@
             max: 24
           }).mask(".inputmask-time");
 
-          console.log($(document).find('.supir-lookup').last());
 
           $(document).find('.supir-lookup').last().lookup({
             title: 'Supir Lookup',
@@ -508,21 +506,21 @@
             <td></td>
             <td>
               <input type="hidden" name="trado_id[]" value="${detail.trado_id}">
-              <input type="text" name="trado[]" data-current-value="${detail.trado}" class="form-control" readonly value="${detail.trado}">
+              <input type="text" name="trado[]" data-current-value="${detail.trado}" class="form-control" value="${detail.trado}">
             </td>
             <td>
               <input type="hidden" name="supir_id[]">
-              <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control" readonly value="${detail.supir}">
+              <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup" value="${detail.supir}">
             </td>
             <td>
-              <input type="text" name="keterangan_detail[]" class="form-control" readonly value="${detail.keterangan}">
+              <input type="text" name="keterangan_detail[]" class="form-control" value="${detail.keterangan}">
             </td>
             <td>
               <input type="hidden" name="absen_id[]" value="${detail.absen_id}">
-              <input type="text" name="absen"  data-current-value="${detail.absen}" readonly class="form-control" value="${detail.absen}">
+              <input type="text" name="absen"  data-current-value="${detail.absen}" class="form-control absentrado-lookup" value="${detail.absen}">
             </td>
             <td>
-              <input type="text" class="form-control inputmask-time" name="jam[]" readonly value="${detail.jam}"></input>
+              <input type="text" class="form-control inputmask-time" name="jam[]" value="${detail.jam}"></input>
             </td>
             <td>
               <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}">
@@ -540,7 +538,6 @@
             max: 24
           }).mask(".inputmask-time");
 
-          console.log($(document).find('.supir-lookup').last());
 
           $(document).find('.supir-lookup').last().lookup({
             title: 'Supir Lookup',

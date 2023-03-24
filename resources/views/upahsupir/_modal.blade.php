@@ -26,6 +26,17 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
+                  Tarif <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="tarif_id">
+                <input type="text" name="tarif" class="form-control tarif-lookup">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   DARI <span class="text-danger">*</span>
                 </label>
               </div>
@@ -133,7 +144,7 @@
               </div>
             </div>
                   
-            <div class="table-responsive">
+            <div class="table-responsive table-scroll ">
               <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="width:1500px">
                 <thead class="table-secondary">
                   <tr>
@@ -1112,6 +1123,31 @@
 
     $('.kotasampai-lookup').lookup({
       title: 'Kota Tujuan Lookup',
+      fileName: 'kota',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+      
+          Aktif: 'AKTIF',
+        }
+      },        
+      onSelectRow: (kota, element) => {
+        $('#crudForm [name=kotasampai_id]').first().val(kota.id)
+        element.val(kota.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=kotasampai_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.tarif-lookup').lookup({
+      title: 'Tarif Lookup',
       fileName: 'tarif',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
@@ -1134,7 +1170,7 @@
         element.data('currentValue', element.val())
       }
     })
-
+    
     $('.zona-lookup').lookup({
       title: 'Zona Lookup',
       fileName: 'zona',

@@ -13,7 +13,7 @@
           <div class="modal-body">
             <div class="row">
 
-              <div class="col-md-6">
+              <div class="col-md-6 mb-3">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
                     <label class="col-form-label">
@@ -26,7 +26,7 @@
                 </div>
               </div>
 
-              <div class="col-md-6">
+              <div class="col-md-6 mb-3">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
                     <label class="col-form-label">
@@ -41,7 +41,7 @@
                 </div>
               </div>
 
-              {{-- <div class="col-md-6">
+              {{-- <div class="col-md-6 mb-3">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
                     <label class="col-form-label">COA KAS MASUK </label>
@@ -51,22 +51,7 @@
                   </div>
                 </div>
               </div> --}}
-
-              <div class="col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">PELANGGAN</label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
-                    <input type="text" id="pelangganId" name="pelanggan_id" readonly hidden>
-                  </div>
-                </div>
-              </div>
-
-
-
-              <div class="col-md-6">
+              <div class="col-md-6 mb-3">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
                     <label class="col-form-label">
@@ -81,7 +66,7 @@
                 </div>
               </div>
 
-              <div class="col-md-6">
+              <div class="col-md-6 mb-3">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
                     <label class="col-form-label">
@@ -92,6 +77,18 @@
                     <div class="input-group">
                       <input type="text" name="tglsampai" class="form-control datepicker">
                     </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">PELANGGAN</label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
+                    <input type="text" id="pelangganId" name="pelanggan_id" readonly hidden>
                   </div>
                 </div>
               </div>
@@ -123,8 +120,8 @@
             </div>
 
 
-            <div class="col-md-12" style="overflow-x:scroll">
-              <table class="table table-bordered mt-3" id="detailList" style="table-layout:auto">
+            <div class="table-scroll table-responsive">
+              <table class="table table-bordered table-bindkeys table-fixed" id="detailList" style="table-layout:auto">
                 <thead id="table_body" class="table-secondary">
                   <tr>
                     <th>PILIH</th>
@@ -431,7 +428,7 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Kas Gantung')
+    $('#crudModalTitle').text('Create Pengembalian Kas Gantung')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -452,7 +449,7 @@
     Simpan
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Kas Gantung')
+    $('#crudModalTitle').text('Edit Pengembalian Kas Gantung')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -472,7 +469,7 @@
     Hapus
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Kas Gantung')
+    $('#crudModalTitle').text('Delete Pengembalian Kas Gantung')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()

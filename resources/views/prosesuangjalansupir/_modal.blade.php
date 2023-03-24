@@ -83,7 +83,7 @@
                                     </ul>
 
                                     <div id="tabs-1">
-                                        <div class="table-responsive">
+                                        <div class="table-scroll table-responsive">
                                             <table class="table table-bordered table-bindkeys" id="detailTransfer" style="width:1450px;">
                                                 <thead>
                                                     <tr>
@@ -268,7 +268,7 @@
                                                 <input type="text" name="bankpengembalian" class="form-control bankpengembalian-lookup">
                                             </div>
                                         </div>
-                                        <div class="table-responsive">
+                                        <div class="table-scroll table-responsive">
                                             <table class="table table-bordered table-bindkeys" id="detailPengembalian" style="width:1450px;">
                                                 <thead>
                                                     <tr>

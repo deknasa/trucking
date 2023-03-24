@@ -108,7 +108,7 @@
               </div>
             </div>
             
-            <div class="table-responsive">
+            <div class="table-scroll table-responsive">
               <table class="table table-bordered table-bindkeys table-fixed" id="detailList" style="width: 2000px ;">
                 <thead>
                   <tr>

@@ -164,16 +164,34 @@
         success: response => {
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
+          $.ajax({
+          url: `${apiUrl}mandorabsensisupir`,
+          method: 'GET',
+        dataType: 'JSON',
+        data: {
+          limit: 0,
+          sortIndex:'trado_id',
+          sortOrder:'asc',
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $('#jqGrid').setGridParam({
+            datatype: "local",
+            data:response.data
+          }).trigger('reloadGrid')
+        }
+      })
+          // id = response.data.id
 
-          id = response.data.id
-
-          $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
-          }).trigger('reloadGrid');
-
-          if (response.data.grp == 'FORMAT') {
-            updateFormat(response.data)
-          }
+          // $('#jqGrid').jqGrid('setGridParam', {
+          //   page: response.data.page
+          // }).trigger('reloadGrid');
+          
+          // if (response.data.grp == 'FORMAT') {
+          //   updateFormat(response.data)
+          // }
         },
         error: error => {
           if (error.status === 422) {
@@ -207,6 +225,7 @@
         $('#loader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
+      
     })
   })
 
