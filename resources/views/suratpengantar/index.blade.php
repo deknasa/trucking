@@ -5,6 +5,8 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
+      @include('layouts._rangeheader')
+
       <table id="jqGrid"></table>
     </div>
   </div>
@@ -33,11 +35,23 @@
   var statusBukanBatalMuat;
   var statusEditTujuan;
   $(document).ready(function() {
+
+    setRange()
+    initDatepicker()
+    $(document).on('click','#btnReload', function(event) {
+      loadDataHeader('suratpengantar')
+    })
+
     $("#jqGrid").jqGrid({
         url: `${apiUrl}suratpengantar`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
+        postData: {
+          tgldari:$('#tgldariheader').val() ,
+          tglsampai:$('#tglsampaiheader').val(),
+          
+        },
         datatype: "json",
         colModel: [{
             label: 'ID',

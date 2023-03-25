@@ -80,44 +80,38 @@
                 </div>
               </div>
             </div>
-            <div class="row mt-5">
-              <div class="col-md-12">
-                  <div class="card" style="max-height:500px; overflow-y: scroll;">
-                      <div class="card-body">
-                        <div class="table-responsive">
-                          <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1000px;">
-                            <thead>
-                              <tr>
-                                <th width="1%" class="">No</th>
-                                <th width="20%" class="tbl_supir_id">SUPIR</th>
-                                <th width="20%" class="tbl_pengeluarantruckingheader_nobukti">NO BUKTI PENGELUARAN TRUCKING</th>
-                                <th width="25%" class="tbl_keterangan">Keterangan</th>
-                                <th width="20%" class="tbl_nominal">Nominal</th>
-                                <th width="1%" class="">Aksi</th>
-                              </tr>
-                            </thead>
-                            <tbody id="table_body" class="form-group">
             
-                            </tbody>
-                            <tfoot>
-                              <tr>
-                                <td colspan="4" class="colspan">
-                                  <p class="text-right font-weight-bold">TOTAL :</p>
-                                </td>
-                                <td>
-                                  <p class="text-right font-weight-bold autonumeric" id="total"></p>
-                                </td>
-                                <td>
-                                  <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                                </td>
-                              </tr>
-                            </tfoot>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                </div>
+            <div class="table-scroll table-responsive">
+              <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1000px;">
+                <thead>
+                  <tr>
+                    <th width="1%" class="">No</th>
+                    <th width="20%" class="tbl_supir_id">SUPIR</th>
+                    <th width="20%" class="tbl_pengeluarantruckingheader_nobukti">NO BUKTI PENGELUARAN TRUCKING</th>
+                    <th width="25%" class="tbl_keterangan">Keterangan</th>
+                    <th width="20%" class="tbl_nominal">Nominal</th>
+                    <th width="1%" class="">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body" class="form-group">
+
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="4" class="colspan">
+                      <p class="text-right font-weight-bold">TOTAL :</p>
+                    </td>
+                    <td>
+                      <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
+            
             
           </div>
                                       

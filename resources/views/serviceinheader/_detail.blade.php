@@ -10,6 +10,14 @@
 @push('scripts')
 <script>
   function loadDetailGrid(id) {
+    let sortnameDetail = 'nobukti'
+    let sortorderDetail = 'asc'
+    let totalRecordDetail
+    let limitDetail
+    let postDataDetail
+    let triggerClickDetail
+    let indexRowDetail
+    let pageDetail = 0;
     $("#detail").jqGrid({
         url: `${apiUrl}serviceindetail`,
         mtype: "GET",
@@ -38,6 +46,9 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
+        sortname: sortnameDetail,
+        sortorder: sortorderDetail,
+        page: pageDetail,
         viewrecords: true,
         postData: {
           servicein_id: id
@@ -65,11 +76,11 @@
           initResize($(this))
           
           /* Set global variables */
-          sortname = $(this).jqGrid("getGridParam", "sortname")
-          sortorder = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').limit
-          postData = $(this).jqGrid('getGridParam', 'postData')
+          sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
+          sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordDetail = $(this).getGridParam("records")
+          limitDetail = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataDetail = $(this).jqGrid('getGridParam', 'postData')
           triggerClick = true
 
           $('.clearsearchclass').click(function() {

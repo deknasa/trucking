@@ -286,7 +286,7 @@
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=absensisupir_nobukti]').empty()
       relatedForm.find('[name=absensisupir_nobukti]').append(
-        new Option('-- PILIH STATUS AKTIF --', '', false, true)
+        new Option('-- PILIH ABSENSI --', '', false, true)
       ).trigger('change')
 
       $.ajax({

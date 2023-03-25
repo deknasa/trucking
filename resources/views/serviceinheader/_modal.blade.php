@@ -61,7 +61,7 @@
                         </div>
 
 
-                        <div class="table-responsive">
+                        <div class="table-responsive table-scroll ">
                             <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1350px;">
                                 <thead>
                                     <tr>
@@ -152,6 +152,9 @@
                 value: limit
             })
 
+            let tgldariheader = $('#tgldariheader').val();
+            let tglsampaiheader = $('#tglsampaiheader').val()
+
             switch (action) {
                 case 'add':
                     method = 'POST'
@@ -163,7 +166,7 @@
                     break;
                 case 'delete':
                     method = 'DELETE'
-                    url = `${apiUrl}serviceinheader/${Id}`
+                    url = `${apiUrl}serviceinheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
                     break;
                 default:
                     method = 'POST'

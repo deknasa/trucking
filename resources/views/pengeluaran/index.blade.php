@@ -65,11 +65,10 @@
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-         postData: {
+        postData: {
           tgldari:$('#tgldariheader').val() ,
           tglsampai:$('#tglsampaiheader').val(),
-          bank:$('#bankheader').val(),
-          
+          bank_id:$('#bankheader').val(),
         },
         datatype: "json",
         colModel: [{
