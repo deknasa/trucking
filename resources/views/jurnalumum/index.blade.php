@@ -5,6 +5,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
+      @include('layouts._rangeheader')
       <table id="jqGrid"></table>
     </div>
   </div>
@@ -36,12 +37,22 @@
 
   $(document).ready(function() {
 
+    setRange()
+    initDatepicker()
+    $(document).on('click','#btnReload', function(event) {
+      loadDataHeader('jurnalumumheader')
+    })
+
 
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'jurnalumumheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
+        postData: {
+          tgldari:$('#tgldariheader').val() ,
+          tglsampai:$('#tglsampaiheader').val() 
+        },
         datatype: "json",
         colModel: [{
             label: 'ID',
@@ -211,7 +222,13 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-
+          if (data.data.length == 0) {
+            $('#detail').jqGrid('setGridParam', {
+              postData: {
+                jurnalumum_id: 0,
+              },
+            }).trigger('reloadGrid'); 
+          }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))

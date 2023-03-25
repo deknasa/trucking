@@ -103,9 +103,9 @@
                                                     <tr>
                                                         <th width="1%">pilih</th>
                                                         <th width="10%">SUPIR</th>
-                                                        <th width="20%">NOMINAL</th>
                                                         <th width="20%">NO PINJAMAN</th>
                                                         <th width="9%">SISA</th>
+                                                        <th width="20%">NOMINAL</th>
                                                         <th width="40%">KETERANGAN</th>
                                                     </tr>
                                                 </thead>
@@ -992,6 +992,16 @@
                     if (element.hasClass('datepicker')) {
                         element.val(dateFormat(value))
                     }
+                    
+                    if (index == 'supir') {
+                        element.data('current-value', value).prop('readonly', true)
+                        element.parent('.input-group').find('.button-clear').remove()
+                        element.parent('.input-group').find('.input-group-append').remove()
+                    }
+                    if (index == 'tglbukti') {
+                        element.prop('readonly', true)
+                        element.parent('.input-group').find('.input-group-append').remove()
+                    }
 
                 })
                 console.log(response.data.supir_id)
@@ -1069,14 +1079,14 @@
                         <tr >
                         <td><input name='pinjSemua[]' type="checkbox" id="checkItem" value="${detail.id}" ${checked}></td>
                         <td>SEMUA</td>
-                        <td id=${detail.id}>
-                            <input type="text" name="nominalPS[]" value="${nominal}" ${disabled} class="form-control text-right">
-                        </td>
                         <td>${detail.nobukti}</td>
                         <td>
                             <p class="text-right sisaPS autonumeric">${sisa}</p>
                             <input type="hidden" name="sisaPS[]" class="autonumeric" value="${sisa}">
                             <input type="hidden" name="sisaAwalPS[]" class="autonumeric" value="${detail.sisaawal}">
+                        </td>
+                        <td id=${detail.id}>
+                            <input type="text" name="nominalPS[]" value="${nominal}" ${disabled} class="form-control text-right">
                         </td>
                         <td>${detail.keterangan}</td>
                         </tr>
@@ -1431,14 +1441,14 @@
                         <tr >
                         <td><input name='pinjSemua[]' type="checkbox" id="checkItem" value="${id}"></td>
                         <td>${supir}</td>
-                        <td id=${id}>
-                            <input type="text" name="nominalPS[]" disabled class="form-control bayar text-right">
-                        </td>
                         <td>${detail.nobukti}</td>
                         <td>
                             <p class="text-right sisaPS autonumeric">${sisa}</p>
                             <input type="hidden" name="sisaPS[]" class="autonumeric" value="${sisa}">
                             <input type="hidden" name="sisaAwalPS[]" class="autonumeric" value="${sisa}">
+                        </td>
+                        <td id=${id}>
+                            <input type="text" name="nominalPS[]" disabled class="form-control bayar text-right">
                         </td>
                         <td>${detail.keterangan}</td>
                         </tr>
@@ -1701,7 +1711,7 @@
             <div class="row form-group">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
-                   total pot U.J. Tidak Terhitung
+                   total potongan uang jalan Tidak Terhitung
                   </label>
                 </div>
                 <div class="col-12 col-md-9">
@@ -1712,7 +1722,7 @@
             <div class="row form-group">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
-                   total pot. u.J.
+                   total potongan uang jalan
                   </label>
                 </div>
                 <div class="col-12 col-md-9">
@@ -1723,7 +1733,7 @@
             <div class="row form-group">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
-                   total Pot. Pinjaman 
+                   total Potongan Pinjaman 
                   </label>
                 </div>
                 <div class="col-12 col-md-9">
@@ -1734,7 +1744,7 @@
             <div class="row form-group">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
-                   total Pot. Pinjaman (SEMUA)
+                   total Potongan Pinjaman (SEMUA)
                   </label>
                 </div>
                 <div class="col-12 col-md-9">
@@ -1756,7 +1766,7 @@
             <div class="row form-group">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
-                   total U. BBM
+                   total Potongan BBM
                   </label>
                 </div>
                 <div class="col-12 col-md-9">
@@ -1769,7 +1779,7 @@
             <div class="row form-group">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">
-                   Sisa
+                   Sisa yang diterima supir
                   </label>
                 </div>
                 <div class="col-12 col-md-9">

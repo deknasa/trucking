@@ -348,6 +348,16 @@
         name: 'limit',
         value: limit
       })
+      data.push({
+        name: 'tgldariheader',
+        value: $('#tgldariheader').val()
+      })
+      data.push({
+        name: 'tglsampaiheader',
+        value: $('#tglsampaiheader').val()
+      })
+      let tgldariheader = $('#tgldariheader').val();
+      let tglsampaiheader = $('#tglsampaiheader').val()
 
       switch (action) {
         case 'add':
@@ -360,7 +370,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}hutangbayarheader/${Id}`
+          url = `${apiUrl}hutangbayarheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -635,7 +645,7 @@
 
           let detailRow = $(`
             <tr >
-              <td><input name='hutang_id[]' type="checkbox" id="checkItem" value="${nobukti}"></td>
+              <td><input name='hutang_id[]' type="checkbox" id="checkItem" value="${id}"></td>
               <td></td>
               <td>${detail.nobukti}</td>
               <td>${detail.tglbukti}</td>
@@ -651,7 +661,7 @@
               <td>
                 <textarea name="keterangandetail[]" rows="1" disabled class="form-control"></textarea>
               </td>
-              <td id='${nobukti}'>
+              <td id='${id}'>
                 <input type="text" name="bayar[]" disabled class="form-control bayar text-right">
               </td>
               <td>
@@ -862,7 +872,7 @@
       setSisa()
     } else {
 
-      let nobukti = $(this).val()
+      let id = $(this).val()
       let action = $('#crudForm').data('action')
       $(this).closest('tr').find(`td [name="keterangandetail[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="bayar[]"]`).val('').prop('disabled', true)
@@ -883,7 +893,7 @@
       $(this).closest('tr').find(`td [name="bayar[]"]`).remove();
       let newBayarElement = `<input type="text" name="bayar[]" class="form-control text-right" disabled>`
 
-      $(this).closest('tr').find(`#${nobukti}`).append(newBayarElement)
+      $(this).closest('tr').find(`#${id}`).append(newBayarElement)
       setBayar()
       setPotongan()
       setTotal()

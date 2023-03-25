@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -191,6 +191,17 @@
         name: 'limit',
         value: limit
       })
+      data.push({
+        name: 'tgldariheader',
+        value: $('#tgldariheader').val()
+      })
+      data.push({
+        name: 'tglsampaiheader',
+        value: $('#tglsampaiheader').val()
+      })
+
+      let tgldariheader = $('#tgldariheader').val();
+      let tglsampaiheader = $('#tglsampaiheader').val()
 
       switch (action) {
         case 'add':
@@ -203,7 +214,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}kasgantungheader/${Id}`
+          url = `${apiUrl}kasgantungheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -232,7 +243,7 @@
             page: response.data.page
           }).trigger('reloadGrid');
 
-          if(id == 0){
+          if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
           if (response.data.grp == 'FORMAT') {
@@ -304,7 +315,7 @@
     $('#table_body').html('')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglkaskeluar]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    
+
     showDefault(form)
     addRow()
     setTotal()
@@ -348,7 +359,7 @@
     showKasGantung(form, userId)
 
   }
-  
+
   function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}kasgantungheader/${Id}/cekvalidasi`,
@@ -364,7 +375,7 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            cekValidasiAksi(Id,Aksi)
+            cekValidasiAksi(Id, Aksi)
           }
 
         } else {
@@ -384,18 +395,18 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-       
+
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'EDIT') {
-              editKasGantung(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deleteKasGantung(Id)
-            }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          if (Aksi == 'EDIT') {
+            editKasGantung(Id)
           }
+          if (Aksi == 'DELETE') {
+            deleteKasGantung(Id)
+          }
+        }
       }
     })
   }
@@ -514,7 +525,7 @@
     $('#detailList tbody').append(detailRow)
 
     initAutoNumeric(detailRow.find('.autonumeric'))
-   
+
     setRowNumbers()
   }
 
@@ -596,7 +607,7 @@
         this.postData = {
           Aktif: 'AKTIF',
         }
-      },      
+      },
       onSelectRow: (penerima, element) => {
         $('#crudForm [name=penerima_id]').first().val(penerima.id)
         element.val(penerima.namapenerima)
@@ -620,7 +631,7 @@
           Aktif: 'AKTIF',
           // tipe: 'KAS',
         }
-      },          
+      },
       onSelectRow: (bank, element) => {
         $('#crudForm [name=bank_id]').first().val(bank.id)
         element.val(bank.namabank)

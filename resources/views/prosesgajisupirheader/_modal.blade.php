@@ -83,15 +83,56 @@
                                 <div id="tabs" class="dejavu">
                                     <ul>
                                         <li><a href="#tabs-1">Rekap Rincian</a></li>
-                                        <li><a href="#tabs-2">Pot. pinjaman (semua)</a></li>
-                                        <li><a href="#tabs-3">Pot. pinjaman (pribadi)</a></li>
-                                        <li><a href="#tabs-4">deposito</a></li>
-                                        <li><a href="#tabs-5">bbm</a></li>
+                                        <li><a href="#tabs-2">Posting Rincian</a></li>
+                                        <li><a href="#tabs-3">Pot. pinjaman (semua)</a></li>
+                                        <li><a href="#tabs-4">Pot. pinjaman (pribadi)</a></li>
+                                        <li><a href="#tabs-5">deposito</a></li>
+                                        <li><a href="#tabs-6">bbm</a></li>
                                     </ul>
                                     <div id="tabs-1">
                                         <table id="rekapRincian"></table>
                                     </div>
                                     <div id="tabs-2">
+                                        <div class="row form-group">
+                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                                                <label>
+                                                    NO BUKTI</label>
+                                            </div>
+                                            <div class="col-12 col-sm-9 col-md-10">
+                                                <input type="text" name="nobuktiPR" class="form-control" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                                                <label>
+                                                    Tanggal Bukti</label>
+                                            </div>
+                                            <div class="col-12 col-sm-9 col-md-10">
+                                                <input type="text" name="tglbuktiPR" class="form-control" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                                                <label>
+                                                    Nominal</label>
+                                            </div>
+                                            <div class="col-12 col-sm-9 col-md-10">
+                                                <input type="text" name="nomPR" class="form-control text-right" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="row form-group">
+                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                                                <label>
+                                                    KAS/BANK</label>
+                                            </div>
+                                            <div class="col-12 col-sm-9 col-md-10">
+                                                <input type="hidden" name="bank_idPR">
+                                                <input type="text" name="bankPR" class="form-control bankPR-lookup">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="tabs-3">
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                                 <label>
@@ -131,7 +172,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="tabs-3">
+                                    <div id="tabs-4">
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                                 <label>
@@ -171,7 +212,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="tabs-4">
+                                    <div id="tabs-5">
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                                 <label>
@@ -211,7 +252,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="tabs-5">
+                                    <div id="tabs-6">
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                                 <label>
@@ -287,6 +328,7 @@
     let selectedDeposito = [];
     let selectedBBM = [];
     let selectedRIC = [];
+    let selectedSupir = [];
     let sortnameRincian = 'nobuktiric'
 
     function checkboxHandler(element) {
@@ -294,6 +336,7 @@
         if (element.checked) {
             selectedRows.push($(element).val());
             selectedRIC.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_nobuktiric"]`).text());
+            selectedSupir.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_supir_id"]`).text());
             selectedPP.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_potonganpinjaman"]`).text());
             selectedPS.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_potonganpinjamansemua"]`).text());
             selectedDeposito.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_deposito"]`).text());
@@ -309,6 +352,7 @@
                 if (selectedRows[i] == value) {
                     selectedRows.splice(i, 1);
                     selectedRIC.splice(i, 1);
+                    selectedSupir.splice(i, 1);
                     selectedPP.splice(i, 1);
                     selectedPS.splice(i, 1);
                     selectedDeposito.splice(i, 1);
@@ -358,7 +402,8 @@
             makan = makan + parseFloat(item.replace(/,/g, ''))
         });
 
-
+        postingRincian = borongan + makan
+        initAutoNumeric($('#crudForm').find(`[name="nomPR"]`).val(postingRincian))
         initAutoNumeric($('#crudForm').find(`[name="nomPS"]`).val(potSemua))
         initAutoNumeric($('#crudForm').find(`[name="nomPP"]`).val(potPribadi))
         initAutoNumeric($('#crudForm').find(`[name="nomDeposito"]`).val(deposito))
@@ -427,6 +472,35 @@
                     value: item
                 })
             });
+
+            $.each(selectedSupir, function(index, item) {
+                data.push({
+                    name: 'supir_id[]',
+                    value: item
+                })
+            });
+
+            $.each(selectedBorongan, function(index, item) {
+                data.push({
+                    name: 'totalborongan[]',
+                    value: item
+                })
+            });
+            
+            data.push({
+                name: 'bank_idPR',
+                value: form.find(`[name="bank_idPR"]`).val()
+            })
+            data.push({
+                name: 'bankPR',
+                value: form.find(`[name="bankPR"]`).val()
+            })
+            $('#crudForm').find(`[name="nomPR"]`).each((index, element) => {
+                data.push({
+                    name: 'nomPR',
+                    value: AutoNumeric.getNumber($(`#crudForm [name="nomPR"]`)[index])
+                })
+            })
 
             data.push({
                 name: 'bank_idPS',
@@ -559,6 +633,7 @@
                     selectedDeposito = [];
                     selectedBBM = [];
                     selectedRIC = [];
+                    selectedSupir = [];
                     selectedBorongan = [];
                     selectedKomisi = [];
                     selectedJalan = [];
@@ -679,8 +754,14 @@
                         }
                     },
                     {
-                        label: 'SUPIR',
+                        label: 'SUPIR ID',
                         name: 'supir_id',
+                        align: 'left',
+                        hidden: true
+                    },
+                    {
+                        label: 'SUPIR',
+                        name: 'supir',
                         align: 'left'
                     },
                     {
@@ -890,6 +971,7 @@
         $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=tglbuktiPR]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tglbuktiPS]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tglbuktiPP]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tglbuktiDeposito]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -935,6 +1017,7 @@
         selectedDeposito = ricList.data.map((data) => data.deposito)
         selectedBBM = ricList.data.map((data) => data.bbm)
         selectedRIC = ricList.data.map((data) => data.nobuktiric)
+        selectedSupir = ricList.data.map((data) => data.supir_id)
 
         countNominal()
     }
@@ -965,7 +1048,7 @@
 
             return data.idric
         })
-        
+
         countNominal()
     }
 
@@ -1017,7 +1100,14 @@
                     if (element.hasClass('datepicker')) {
                         element.val(dateFormat(value))
                     }
+                    if (index == 'bankPR') {
+                        element.data('current-value', value).prop('readonly', true)
+                        element.parent('.input-group').find('.button-clear').remove()
+                        element.parent('.input-group').find('.input-group-append').remove()
+                    }
+                    
 
+                    form.find(`[name="tglbuktiPR"]`).val(dateFormat(response.data.tglbukti))
                 })
 
                 // url = `${gajiId}/getEdit`
@@ -1087,6 +1177,7 @@
                 }
 
 
+                initAutoNumeric(form.find(`[name="nomPR"]`))
                 initAutoNumeric(form.find(`[name="nomPS"]`))
                 initAutoNumeric(form.find(`[name="nomPP"]`))
                 initAutoNumeric(form.find(`[name="nomDeposito"]`))
@@ -1210,6 +1301,8 @@
             },
             success: response => {
                 bankId = response.data.bank_id
+                form.find(`[name="bank_idPR"]`).val(response.data.bank_id)
+                form.find(`[name="bankPR"]`).val(response.data.bank)
                 form.find(`[name="bank_idPS"]`).val(response.data.bank_id)
                 form.find(`[name="bankPS"]`).val(response.data.bank)
                 form.find(`[name="bank_idPP"]`).val(response.data.bank_id)
@@ -1224,6 +1317,29 @@
 
     function initLookup() {
 
+        $('.bankPR-lookup').lookup({
+            title: 'Bank Lookup',
+            fileName: 'bank',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+
+                }
+            },
+            onSelectRow: (bank, element) => {
+                $('#crudForm [name=bank_idPR]').first().val(bank.id)
+                element.val(bank.namabank)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=bank_idPR]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
         $('.bankPS-lookup').lookup({
             title: 'Bank Lookup',
             fileName: 'bank',
@@ -1329,6 +1445,7 @@
         selectedDeposito = [];
         selectedBBM = [];
         selectedRIC = [];
+        selectedSupir = [];
         $('#rekapRincian').trigger('reloadGrid')
     }
 
@@ -1364,6 +1481,7 @@
                 selectedDeposito = response.data.map((data) => data.deposito)
                 selectedBBM = response.data.map((data) => data.bbm)
                 selectedRIC = response.data.map((data) => data.nobuktiric)
+                selectedSupir = response.data.map((data) => data.supir_id)
 
                 $('#rekapRincian').jqGrid('setGridParam', {
                     url: `${apiUrl}prosesgajisupirheader/${url}`,

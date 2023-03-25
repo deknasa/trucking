@@ -5,7 +5,7 @@
                 <div class="modal-header">
                     <p class="modal-title" id="crudModalTitle"></p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        
+
                     </button>
                 </div>
                 <form action="" method="post">
@@ -187,7 +187,7 @@
     let modalBody = $('#crudModal').find('.modal-body').html()
     let type
     $(document).ready(function() {
-        
+
         $("#crudForm [name]").attr("autocomplete", "off");
         $(document).on('change', '[name=statuskas]', function() {
             if ($(this).val() == 116) {
@@ -368,6 +368,24 @@
                 name: 'limit',
                 value: limit
             })
+
+            data.push({
+                name: 'tgldariheader',
+                value: $('#tgldariheader').val()
+            })
+            data.push({
+                name: 'tglsampaiheader',
+                value: $('#tglsampaiheader').val()
+            })
+            
+            data.push({
+                name: 'bankheader',
+                value: $('#bankheader').val()
+            })
+            let tgldariheader = $('#tgldariheader').val();
+            let tglsampaiheader = $('#tglsampaiheader').val()
+            let bankheader = $('#bankheader').val()
+
             switch (action) {
                 case 'add':
                     method = 'POST'
@@ -379,7 +397,7 @@
                     break;
                 case 'delete':
                     method = 'DELETE'
-                    url = `${apiUrl}penerimaanheader/${Id}`
+                    url = `${apiUrl}penerimaanheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&bankheader=${bankheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
                     break;
                 default:
                     method = 'POST'

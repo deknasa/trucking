@@ -86,6 +86,15 @@
                 }
             }
         }
+        
+        $.each(selectedRows, function(key, value) {
+                        $('#jqGrid').find('tbody tr').each(function(row, tr) {
+                            if ($(this).find(`td input:checkbox`).val() == value) {
+                                $(this).addClass('bg-light-blue')
+                                $(this).find(`td input:checkbox`).prop('checked', true)
+                            }
+                        })
+                    });
     }
 
     $(document).ready(function() {
@@ -114,10 +123,6 @@
             .addClass("btn btn-primary").html(`
 			<i class="fa fa-calendar-alt"></i>
 		`);
-
-        $('#approve').on('select2:selected', function() {
-            console.log(tesData);
-        })
 
         $(document).on('click', '#btnReload', function(event) {
 
@@ -216,6 +221,10 @@
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
+                postData: {
+                    periode: $('#crudForm').find('[name=periode]').val(),
+                    approve: $('#crudForm [name=approve] option').filter(':selected').val()
+                },
                 datatype: "json",
                 colModel: [{
                         label: 'Pilih',
@@ -396,6 +405,7 @@
 
                 },
                 loadComplete: function(data) {
+                    let grid = $(this)
                     changeJqGridRowListText()
 
                     $(document).unbind('keydown')
@@ -523,13 +533,12 @@
                     relatedForm.find('[name=approve]').append(option).trigger('change')
                 });
 
-                // relatedForm
-                //     .find('[name=approve]')
-                //     .val($(`#crudForm [name=approve] option:eq(1)`).val())
-                //     .trigger('change')
-                //     .trigger('select2:selected');
+                relatedForm
+                    .find('[name=approve]')
+                    .val($(`#crudForm [name=approve] option:eq(1)`).val())
+                    .trigger('change')
+                    .trigger('select2:selected');
 
-                // resolve()
             }
         })
         // })

@@ -424,6 +424,17 @@
         value: limit
       })
 
+      data.push({
+        name: 'tgldariheader',
+        value: $('#tgldariheader').val()
+      })
+      data.push({
+        name: 'tglsampaiheader',
+        value: $('#tglsampaiheader').val()
+      })
+      
+      let tgldariheader = $('#tgldariheader').val();
+      let tglsampaiheader = $('#tglsampaiheader').val()
 
       switch (action) {
         case 'add':
@@ -436,7 +447,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}pelunasanpiutangheader/${Id}`
+          url = `${apiUrl}pelunasanpiutangheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'

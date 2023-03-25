@@ -5,7 +5,7 @@
                 <div class="modal-header">
                     <p class="modal-title" id="crudModalTitle"></p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        
+
                     </button>
                 </div>
                 <form action="" method="post">
@@ -82,7 +82,7 @@
                             </div>
                         </div>
 
-                        <div class="table-responsive">
+                        <div class="table-responsive table-scroll">
                             <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1200px;">
                                 <thead>
                                     <tr>
@@ -190,7 +190,19 @@
                 name: 'limit',
                 value: limit
             })
-            console.log(data)
+
+            data.push({
+                name: 'tgldariheader',
+                value: $('#tgldariheader').val()
+            })
+            data.push({
+                name: 'tglsampaiheader',
+                value: $('#tglsampaiheader').val()
+            })
+
+            let tgldariheader = $('#tgldariheader').val();
+            let tglsampaiheader = $('#tglsampaiheader').val()
+
             switch (action) {
                 case 'add':
                     method = 'POST'
@@ -202,7 +214,7 @@
                     break;
                 case 'delete':
                     method = 'DELETE'
-                    url = `${apiUrl}pendapatansupirheader/${Id}`
+                    url = `${apiUrl}pendapatansupirheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
                     break;
                 default:
                     method = 'POST'

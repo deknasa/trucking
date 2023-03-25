@@ -16,7 +16,8 @@ class JurnalUmumPusatHeaderController extends MyController
     {
         $title = $this->title;
         $data = [            
-            'comboapproval' => $this->comboApproval('list')
+            'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
+            'approval' => $this->combo('STATUS APPROVAL', 'STATUS APPROVAL'),
         ];
         return view('jurnalumumpusat.index', compact('title','data'));
     }
@@ -69,29 +70,33 @@ class JurnalUmumPusatHeaderController extends MyController
         return $noBukti;
     }
 
-    private function combo()
+    private function combo($grp, $subgrp)
     {
+        $status = [
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
         $response = Http::withHeaders($this->httpHeaders)
         ->withToken(session('access_token'))
         ->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'jurnalumumheader/combo');
+            ->get(config('app.api_url') . 'parameter/combo', $status);
 
         return $response['data'];
     }
 
-    public function comboApproval($aksi)
+    public function comboList($aksi, $grp, $subgrp)
     {
 
         $status = [
             'status' => $aksi,
-            'grp' => 'STATUS APPROVAL',
-            'subgrp' => 'STATUS APPROVAL',
+            'grp' => $grp,
+            'subgrp' => $subgrp,
         ];
 
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'hutangbayarheader/comboapproval', $status);
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
 
         return $response['data'];
     }

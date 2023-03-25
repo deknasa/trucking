@@ -10,6 +10,15 @@
 
 @push('scripts')
 <script>
+  let sortnameDetail = 'nobukti'
+  let sortorderDetail = 'asc'
+  let totalRecordDetail
+  let limitDetail
+  let postDataDetail
+  let triggerClickDetail
+  let indexRowDetail
+  let pageDetail = 0;
+
   function loadDetailGrid(id) {
     let pager = '#detailPager'
 
@@ -72,9 +81,9 @@
         rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortname,
-        sortorder: sortorder,
-        page: page,
+        sortname: sortnameDetail,
+        sortorder: sortorderDetail,
+        page: pageDetail,
         footerrow: true,
         userDataOnFooter: true,
         viewrecords: true,
@@ -105,22 +114,20 @@
           initResize($(this))
 
           /* Set global variables */
-          sortname = $(this).jqGrid("getGridParam", "sortname")
-          sortorder = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').limit
-          postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
+          sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordDetail = $(this).getGridParam("records")
+          limitDetail = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataDetail = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
+          if (indexRowDetail > $(this).getDataIDs().length - 1) {
+            indexRowDetail = $(this).getDataIDs().length - 1;
           }
-
-          $('#detail').setSelection($('#detail').getDataIDs()[0])
 
           setHighlight($(this))
 
@@ -158,7 +165,7 @@
       .customPager()
     /* Append clear filter button */
     loadClearFilter($('#detail'))
-    
+
     /* Append global search */
     loadGlobalSearch($('#detail'))
   }
@@ -170,7 +177,7 @@
       postData: {
         pelunasanpiutang_id: id
       },
-      page:1
+      page: 1
     }).trigger('reloadGrid')
   }
 

@@ -169,8 +169,14 @@
             }
           },
           {
-            label: 'U. borongan (posting)',
+            label: 'U. borongan',
             name: 'total',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'U. borongan (post kas keluar)',
+            name: 'totalposting',
             align: 'right',
             formatter: currencyFormat,
           },
