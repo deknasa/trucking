@@ -32,11 +32,11 @@
   </div>
 </div>
 
-@include('piutang._modal')
 <!-- Detail -->
 @include('piutang._details')
 @include('piutang._history')
 
+@include('piutang._modal')
 @push('scripts')
 <script>
   let indexRow = 0;

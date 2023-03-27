@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -35,7 +35,7 @@
               </div>
             </div>
 
-            <div class="table-responsive">
+            <div class="table-responsive table-scroll">
               <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
                 <thead>
                   <tr>
@@ -150,7 +150,7 @@
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
       })
-      
+
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
 
@@ -287,6 +287,7 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+
     showJurnalUmum(form, id)
 
   }
@@ -349,7 +350,7 @@
             if (Aksi == 'DELETE') {
               deleteJurnalUmumHeader(Id)
             }
-            if(Aksi == 'COPY') {
+            if (Aksi == 'COPY') {
               copyJurnal(Id)
             }
           }
@@ -364,6 +365,9 @@
   function showJurnalUmum(form, id) {
     $('#detailList tbody').html('')
 
+    form.find(`[name="tglbukti"]`).prop('readonly', true)
+    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+
     $.ajax({
       url: `${apiUrl}jurnalumumheader/${id}`,
       method: 'GET',
@@ -373,6 +377,8 @@
       },
       success: response => {
         let tgl = response.data.tglbukti
+
+
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
 

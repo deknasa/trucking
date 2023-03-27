@@ -347,7 +347,9 @@
             selectedMakan.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_uangmakanharian"]`).text());
 
             countNominal()
+            $(element).parents('tr').addClass('bg-light-blue')
         } else {
+            $(element).parents('tr').removeClass('bg-light-blue')
             for (var i = 0; i < selectedRows.length; i++) {
                 if (selectedRows[i] == value) {
                     selectedRows.splice(i, 1);
@@ -486,7 +488,7 @@
                     value: item
                 })
             });
-            
+
             data.push({
                 name: 'bank_idPR',
                 value: form.find(`[name="bank_idPR"]`).val()
@@ -610,6 +612,8 @@
                     break;
             }
 
+            $(this).attr('disabled', '')
+            $('#loader').removeClass('d-none')
 
             $.ajax({
                 url: url,
@@ -692,6 +696,10 @@
 
 
     function rekapRincian(url) {
+        let disabled = '';
+        if ($('#crudForm').data('action') == 'delete') {
+            disabled = 'disabled'
+        }
         $("#rekapRincian").jqGrid({
                 url: `${apiUrl}prosesgajisupirheader/${url}`,
                 mtype: "GET",
@@ -718,17 +726,19 @@
 
                                 $(element).removeClass('form-control')
                                 $(element).parent().addClass('text-center')
-                                $(element).on('click', function() {
-                                    if ($(this).is(':checked')) {
-                                        selectAllRows(tglDari, tglSampai, aksi)
-                                    } else {
-                                        clearSelectedRows()
-                                    }
-                                })
+                                if (disabled == '') {
+                                    $(element).on('click', function() {
+                                        if ($(this).is(':checked')) {
+                                            selectAllRows(tglDari, tglSampai, aksi)
+                                        } else {
+                                            clearSelectedRows()
+                                        }
+                                    })
+                                }
                             }
                         },
                         formatter: (value, rowOptions, rowData) => {
-                            return `<input type="checkbox" name="rincianId[]" value="${rowData.idric}" onchange="checkboxHandler(this)">`
+                            return `<input type="checkbox" name="rincianId[]" value="${rowData.idric}" ${disabled} onchange="checkboxHandler(this)">`
                         },
                     },
                     {
@@ -1094,6 +1104,9 @@
 
     function showProsesGajiSupir(form, gajiId, aksi) {
 
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+
         $.ajax({
             url: `${apiUrl}prosesgajisupirheader/${gajiId}`,
             method: 'GET',
@@ -1102,6 +1115,7 @@
                 Authorization: `Bearer ${accessToken}`
             },
             success: response => {
+
                 $.each(response.data, (index, value) => {
                     let element = form.find(`[name="${index}"]`)
 
@@ -1115,11 +1129,7 @@
                         element.parent('.input-group').find('.button-clear').remove()
                         element.parent('.input-group').find('.input-group-append').remove()
                     }
-                    
-                    if (index == 'tglbukti') {
-                        element.prop('readonly', true)
-                        element.parent('.input-group').find('.input-group-append').remove()
-                    }
+
                     form.find(`[name="tglbuktiPR"]`).val(dateFormat(response.data.tglbukti))
                 })
 

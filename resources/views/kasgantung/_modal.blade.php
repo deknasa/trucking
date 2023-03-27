@@ -70,8 +70,8 @@
 
 
             <div class="table-responsive table-scroll mt-3">
-              <table class="table table-bordered mt-3" id="detailList" style="width: 1000px;">
-                <thead class="table-secondary">
+              <table class="table table-bordered" id="detailList" style="width: 1000px;">
+                <thead>
                   <tr>
                     <th width="1%">NO</th>
                     <th width="70%">KETERANGAN</th>
@@ -439,6 +439,8 @@
 
   function showKasGantung(form, userId) {
     $('#detailList tbody').html('')
+    form.find(`[name="tglbukti"]`).prop('readonly', true)
+    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
     $.ajax({
       url: `${apiUrl}kasgantungheader/${userId}`,

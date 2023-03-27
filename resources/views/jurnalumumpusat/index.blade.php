@@ -86,15 +86,15 @@
                 }
             }
         }
-        
+
         $.each(selectedRows, function(key, value) {
-                        $('#jqGrid').find('tbody tr').each(function(row, tr) {
-                            if ($(this).find(`td input:checkbox`).val() == value) {
-                                $(this).addClass('bg-light-blue')
-                                $(this).find(`td input:checkbox`).prop('checked', true)
-                            }
-                        })
-                    });
+            $('#jqGrid').find('tbody tr').each(function(row, tr) {
+                if ($(this).find(`td input:checkbox`).val() == value) {
+                    $(this).addClass('bg-light-blue')
+                    $(this).find(`td input:checkbox`).prop('checked', true)
+                }
+            })
+        });
     }
 
     $(document).ready(function() {
@@ -407,7 +407,13 @@
                 loadComplete: function(data) {
                     let grid = $(this)
                     changeJqGridRowListText()
-
+                    if (data.data.length == 0) {
+                        $('#detail').jqGrid('setGridParam', {
+                            postData: {
+                                jurnalumum_id: 0,
+                            },
+                        }).trigger('reloadGrid');
+                    }
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
                     initResize($(this))

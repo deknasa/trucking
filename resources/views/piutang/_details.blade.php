@@ -1,5 +1,6 @@
 <table id="detailGrid"></table>
 
+@push('scripts')
 <script>
   let sortnameDetail = 'nobukti'
   let sortorderDetail = 'asc'
@@ -143,3 +144,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush()

@@ -397,10 +397,8 @@
             let sisa = total - (uangjalan + deposito + bbm + potonganpinjaman + potonganpinjamansemua)
 
             $(`#crudForm [name="sisa"]`).val(sisa)
-            $(`#crudForm [name="total"]`).val(total)
 
             new AutoNumeric(`#crudForm [name="sisa"]`)
-            new AutoNumeric(`#crudForm [name="total"]`)
         })
         $(document).on('input', `#crudForm [name="nomDeposito"]`, function(event) {
             let nomDepo = AutoNumeric.getNumber($(this)[0]);
@@ -604,12 +602,6 @@
                 })
             })
 
-            $('#crudForm').find(`[name="total"]`).each((index, element) => {
-                data.push({
-                    name: 'total',
-                    value: AutoNumeric.getNumber($(`#crudForm [name="total"]`)[index])
-                })
-            })
             $('#crudForm').find(`[name="uangjalan"]`).each((index, element) => {
                 data.push({
                     name: 'uangjalan',
@@ -721,6 +713,10 @@
                     url = `${apiUrl}gajisupirheader`
                     break;
             }
+
+            $(this).attr('disabled', '')
+            $('#loader').removeClass('d-none')
+            
             $.ajax({
                 url: url,
                 method: method,
@@ -756,7 +752,6 @@
                     }
                 },
                 error: error => {
-                    console.log(error)
                     if (error.status === 422) {
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
@@ -769,9 +764,6 @@
                 $('#loader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
-
-
-
         })
     })
 
@@ -975,7 +967,10 @@
     }
 
     function showGajiSupir(form, gajiId, aksi) {
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
         detailLainnya()
+
         $.ajax({
             url: `${apiUrl}gajisupirheader/${gajiId}`,
             method: 'GET',
@@ -992,16 +987,13 @@
                     if (element.hasClass('datepicker')) {
                         element.val(dateFormat(value))
                     }
-                    
+
                     if (index == 'supir') {
                         element.data('current-value', value).prop('readonly', true)
                         element.parent('.input-group').find('.button-clear').remove()
                         element.parent('.input-group').find('.input-group-append').remove()
                     }
-                    if (index == 'tglbukti') {
-                        element.prop('readonly', true)
-                        element.parent('.input-group').find('.input-group-append').remove()
-                    }
+
 
                 })
                 console.log(response.data.supir_id)
@@ -1014,7 +1006,6 @@
                 initAutoNumeric(form.find(`[name="potonganpinjaman"]`))
                 initAutoNumeric(form.find(`[name="potonganpinjamansemua"]`))
                 initAutoNumeric(form.find(`[name="bbm"]`))
-                initAutoNumeric(form.find(`[name="total"]`))
 
 
                 if (response.pinjamanpribadi != null) {
@@ -1139,6 +1130,10 @@
     }
 
     function rekapRincian(url) {
+        let disabled = '';
+        if ($('#crudForm').data('action') == 'delete') {
+            disabled = 'disabled'
+        }
         $("#rekapRincian").jqGrid({
                 url: `${apiUrl}gajisupirheader/${url}`,
                 mtype: "GET",
@@ -1165,17 +1160,19 @@
 
                                 $(element).removeClass('form-control')
                                 $(element).parent().addClass('text-center')
-                                $(element).on('click', function() {
-                                    if ($(this).is(':checked')) {
-                                        selectAllRows(supirId, dari, sampai, aksi)
-                                    } else {
-                                        clearSelectedRows()
-                                    }
-                                })
+                                if (disabled == '') {
+                                    $(element).on('click', function() {
+                                        if ($(this).is(':checked')) {
+                                            selectAllRows(tglDari, tglSampai, aksi)
+                                        } else {
+                                            clearSelectedRows()
+                                        }
+                                    })
+                                }
                             }
                         },
                         formatter: (value, rowOptions, rowData) => {
-                            return `<input type="checkbox" name="rincianId[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+                            return `<input type="checkbox" name="rincianId[]" value="${rowData.id}" ${disabled} onchange="checkboxHandler(this)">`
                         },
                     },
                     {
