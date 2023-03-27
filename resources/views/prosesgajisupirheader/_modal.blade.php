@@ -1049,6 +1049,16 @@
             return data.idric
         })
 
+        selectedBorongan = ricList.data.map((data) => data.borongan)
+        selectedJalan = ricList.data.map((data) => data.uangjalan)
+        selectedKomisi = ricList.data.map((data) => data.komisisupir)
+        selectedMakan = ricList.data.map((data) => data.uangmakanharian)
+        selectedPP = ricList.data.map((data) => data.potonganpinjaman)
+        selectedPS = ricList.data.map((data) => data.potonganpinjamansemua)
+        selectedDeposito = ricList.data.map((data) => data.deposito)
+        selectedBBM = ricList.data.map((data) => data.bbm)
+        selectedRIC = ricList.data.map((data) => data.nobuktiric)
+        selectedSupir = ricList.data.map((data) => data.supir_id)
         countNominal()
     }
 
