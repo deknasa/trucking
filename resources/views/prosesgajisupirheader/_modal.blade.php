@@ -1116,7 +1116,10 @@
                         element.parent('.input-group').find('.input-group-append').remove()
                     }
                     
-
+                    if (index == 'tglbukti') {
+                        element.prop('readonly', true)
+                        element.parent('.input-group').find('.input-group-append').remove()
+                    }
                     form.find(`[name="tglbuktiPR"]`).val(dateFormat(response.data.tglbukti))
                 })
 
