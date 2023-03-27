@@ -121,8 +121,19 @@
         setFilterOptions($('#crudForm'))
         initDatepicker()
 
-        $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        // mendapatkan tanggal hari ini
+        let today = new Date();
+
+        // mendapatkan tanggal pertama di bulan ini
+        let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+        let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
+
+        // mendapatkan tanggal terakhir di bulan ini
+        let lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        let formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
+
+        $('#crudForm').find('[name=dari]').val(formattedFirstDay).trigger('change');
+        $('#crudForm').find('[name=sampai]').val(formattedLastDay).trigger('change');
 
         $('#btnPreview').click(function(event) {
 
@@ -421,7 +432,6 @@
         loadGlobalSearch($('#jqGrid'))
 
 
-
         if (!`{{ $myAuth->hasPermission('kartustok', 'export') }}`) {
             $('#export').attr('disabled', 'disabled')
         }
@@ -429,16 +439,67 @@
         if (!`{{ $myAuth->hasPermission('kartustok', 'report') }}`) {
             $('#report').attr('disabled', 'disabled')
         }
+        
+        showDefault($('#crudForm'))
     })
+
+    function showDefault(form) {
+        $.ajax({
+            url: `${apiUrl}kartustok/default`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            success: response => {
+                $.each(response.data.stokdari, (index, value) => {
+                    let element = form.find(`[name="${index}"]`)
+                    element.val(value)
+                })
+                $.each(response.data.stoksampai, (index, value) => {
+                    let element = form.find(`[name="${index}"]`)
+                    element.val(value)
+                })
+                $.each(response.data.gudang, (index, value) => {
+                    let element = form.find(`[name="${index}"]`)
+                    element.val(value)
+                })
+                $.each(response.data.filter, (index, value) => {
+                    let element = form.find(`[name="${index}"]`)
+                    element.val(value).trigger('change')
+                })
+                $.each(response.data.trado, (index, value) => {
+                    let element = form.find(`[name="${index}"]`)
+                    element.val(value)
+                })
+                $.each(response.data.gandengan, (index, value) => {
+                    let element = form.find(`[name="${index}"]`)
+                    element.val(value)
+                })
+
+                $('#jqGrid').jqGrid('setGridParam', {
+                    postData: {
+                        stokdari_id: response.data.stokdari.stokdari_id,
+                        stoksampai_id: $('#crudForm').find('[name=stoksampai_id]').val(),
+                        dari: $('#crudForm').find('[name=dari]').val(),
+                        sampai: $('#crudForm').find('[name=sampai]').val(),
+                        filter: $('#crudForm').find('[name=filter]').val(),
+                        datafilter: $('#crudForm').find('[name=gudang_id]').val()
+                    },
+
+                }).trigger('reloadGrid');
+            }
+        })
+    }
 
     $(document).on('change', `#crudForm [name="filter"]`, function(event) {
         let filter = $(this).val();
-        $('#crudForm').find('[name=trado_id]').val('')
-        $('#crudForm').find('[name=trado]').val('')
-        $('#crudForm').find('[name=gudang_id]').val('')
-        $('#crudForm').find('[name=gudang]').val('')
-        $('#crudForm').find('[name=gandengan_id]').val('')
-        $('#crudForm').find('[name=gandengan]').val('')
+        // $('#crudForm').find('[name=trado_id]').val('')
+        // $('#crudForm').find('[name=trado]').val('')
+        // $('#crudForm').find('[name=gudang_id]').val('')
+        // $('#crudForm').find('[name=gudang]').val('')
+        // $('#crudForm').find('[name=gandengan_id]').val('')
+        // $('#crudForm').find('[name=gandengan]').val('')
 
         if (filter == '186') {
             $('#gudang').show()
@@ -454,7 +515,6 @@
             $('#trado').hide()
         } else {
             $('#trado').hide()
-            $('#gudang').hide()
             $('#gandengan').hide()
         }
     })
@@ -517,7 +577,7 @@
             fileName: 'trado',
             onSelectRow: (trado, element) => {
                 $('#crudForm [name=trado_id]').first().val(trado.id)
-                element.val(trado.keterangan)
+                element.val(trado.kodetrado)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {

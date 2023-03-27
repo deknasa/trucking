@@ -395,6 +395,8 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    $('#crudForm [name=tglbukti]').attr('readonly', true)
+    $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
 
     Promise
       .all([

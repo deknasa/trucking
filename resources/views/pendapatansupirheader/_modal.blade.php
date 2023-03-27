@@ -391,6 +391,9 @@
     function showPendapatanSupir(form, pendapatanId) {
         $('#detailList tbody').html('')
 
+        $('#crudForm [name=tglbukti]').attr('readonly', true)
+        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+
         $.ajax({
             url: `${apiUrl}pendapatansupirheader/${pendapatanId}`,
             method: 'GET',

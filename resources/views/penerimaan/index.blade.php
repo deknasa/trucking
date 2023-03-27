@@ -58,7 +58,7 @@
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('penerimaanheader', {
-        bank_id: $('#bankheader').val()
+        bank: $('#bankheader').val()
       })
     })
 

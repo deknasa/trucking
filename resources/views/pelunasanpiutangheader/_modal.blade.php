@@ -602,6 +602,9 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
+    form.find(`[name="tglbukti"]`).prop('readonly', true)
+    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+
     $.ajax({
       url: `${apiUrl}pelunasanpiutangheader/${Id}`,
       method: 'GET',
@@ -668,6 +671,9 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
+    form.find(`[name="tglbukti"]`).prop('readonly', true)
+    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+    
     $.ajax({
       url: `${apiUrl}pelunasanpiutangheader/${Id}`,
       method: 'GET',

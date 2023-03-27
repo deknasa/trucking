@@ -11,23 +11,22 @@
         <form action="" method="post">
           <input type="hidden" name="id">
           <div class="modal-body">
-            <div class="row">
-              <div class="col-12 col-sm-3 col-md-2">
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  NO BUKTI
+                  NO BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-md-4">
                 <input type="text" name="nobukti" class="form-control" readonly>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-12 col-sm-3 col-md-2">
+
+              <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  TANGGAL <span class="text-danger">*</span>
+                  TANGGAL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-md-4">
                 <div class="input-group">
                   <input type="text" name="tglbukti" class="form-control datepicker">
                 </div>

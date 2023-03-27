@@ -168,6 +168,11 @@
             formatter: currencyFormat,
           },
           {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            align: 'left'
+          },
+          {
             label: 'NO. BUKTI INVOICE',
             name: 'invoice_nobukti',
             align: 'left'

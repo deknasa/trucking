@@ -377,7 +377,7 @@
                 name: 'tglsampaiheader',
                 value: $('#tglsampaiheader').val()
             })
-            
+
             data.push({
                 name: 'bankheader',
                 value: $('#bankheader').val()
@@ -702,6 +702,10 @@
 
     function showPenerimaan(form, id) {
         $('#detailList tbody').html('')
+
+        $('#crudForm [name=tglbukti]').attr('readonly', true)
+        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+
         $.ajax({
             url: `${apiUrl}penerimaanheader/${id}`,
             method: 'GET',

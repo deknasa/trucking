@@ -547,6 +547,9 @@
   function showInvoiceHeader(form, invId, aksi) {
     $('#spList tbody').html('')
 
+    form.find(`[name="tglbukti"]`).prop('readonly', true)
+    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+
     $.ajax({
       url: `${apiUrl}invoiceheader/${invId}`,
       method: 'GET',
@@ -620,13 +623,13 @@
           let cekPeralihan = detail.statusperalihan == 67 ? "checked" : "";
           let detailRow = $(`
                   <tr >
-                      <td><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
+                      <td><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked ${disabled}></td>
                       <td>${detail.jobtrucking}</td>
                       <td>${detail.tglsp}</td>
                       <td>${detail.nocont}</td>
                       <td>${detail.tarif_id}</td>
                       <td class="omset text-right">${detail.omset}</td>
-                      <td id="ret${detail.id}"><input type="text" name="nominalretribusi[]" class="form-control text-right" value="${detail.nominalretribusi}"></td>
+                      <td id="ret${detail.id}"><input type="text" name="nominalretribusi[]" class="form-control text-right" value="${detail.nominalretribusi}" ${disabled}></td>
                       <td>${detail.jenisorder_id}</td>
                       <td>${detail.agen_id}</td>
                       <td><input name='statuslongtrip[]' type="checkbox" value="${detail.statuslongtrip}" ${cekLongtrip} disabled></td>

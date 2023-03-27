@@ -408,6 +408,9 @@
   function showHutangHeader(form, userId) {
     $('#detailList tbody').html('')
 
+    form.find(`[name="tglbukti"]`).prop('readonly', true)
+    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+    
     $.ajax({
       url: `${apiUrl}hutangheader/${userId}`,
       method: 'GET',
