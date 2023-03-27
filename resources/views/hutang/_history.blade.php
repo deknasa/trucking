@@ -2,6 +2,14 @@
 
 <script>
   function loadGrid(id) {
+    let sortnameHistory = 'hutang_nobukti'
+    let sortorderHistory = 'asc'
+    let totalRecordHistory
+    let limitHistory
+    let postDataHistory
+    let triggerClickHistory
+    let indexRowHistory
+    let pageHistory = 0;
     $('#historyGrid')
       .jqGrid({
         url: `${apiUrl}hutangdetail/history`,
@@ -15,7 +23,7 @@
           },
           {
             label: 'KETERANGAN',
-            name: 'keterangan',
+            name: 'keterangan_bayar',
           },
           {
             label: 'NO BUKTI PEMBAYARAN',
@@ -23,7 +31,7 @@
           },
           {
             label: 'NOMINAL',
-            name: 'nominal',
+            name: 'nominal_bayar',
             align: 'right',
             formatter: currencyFormat,
           },
@@ -45,9 +53,9 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortname,
-        sortorder: sortorder,
-        page: page,
+        sortname: sortnameHistory,
+        sortorder: sortorderHistory,
+        page: pageHistory,
         viewrecords: true,
         postData: {
           hutang_id: id
@@ -75,22 +83,20 @@
           initResize($(this))
 
           /* Set global variables */
-          sortname = $(this).jqGrid("getGridParam", "sortname")
-          sortorder = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').limit
-          postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          sortnameHistory = $(this).jqGrid("getGridParam", "sortname")
+          sortorderHistory = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordHistory = $(this).getGridParam("records")
+          limitHistory = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataHistory = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
+          if (indexRowHistory > $(this).getDataIDs().length - 1) {
+            indexRowHistory = $(this).getDataIDs().length - 1;
           }
-
-          $('#historyGrid').setSelection($('#historyGrid').getDataIDs()[0])
 
           setHighlight($(this))
 

@@ -2,6 +2,14 @@
 
 <script>
   function loadGrid(id) {
+    let sortnameHistory = 'piutang_nobukti'
+    let sortorderHistory = 'asc'
+    let totalRecordHistory
+    let limitHistory
+    let postDataHistory
+    let triggerClickHistory
+    let indexRowHistory
+    let pageHistory = 0;
     $('#historyGrid')
       .jqGrid({
         url: `${apiUrl}piutangdetail/history`,
@@ -15,11 +23,11 @@
           },
           {
             label: 'KETERANGAN',
-            name: 'keterangan',
+            name: 'keterangan_pelunasan',
           },
           {
             label: 'NO BUKTI INVOICE',
-            name: 'invoice_nobukti',
+            name: 'invoice_pelunasan',
           },
           {
             label: 'NO BUKTI PELUNASAN',
@@ -27,7 +35,7 @@
           },
           {
             label: 'NOMINAL',
-            name: 'nominal',
+            name: 'nominal_pelunasan',
             align: 'right',
             formatter: currencyFormat,
           },
@@ -55,9 +63,9 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortname,
-        sortorder: sortorder,
-        page: page,
+        sortname: sortnameHistory,
+        sortorder: sortorderHistory,
+        page: pageHistory,
         viewrecords: true,
         postData: {
           piutang_id: id
@@ -85,31 +93,28 @@
           initResize($(this))
 
           /* Set global variables */
-          sortname = $(this).jqGrid("getGridParam", "sortname")
-          sortorder = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').limit
-          postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          sortnameHistory = $(this).jqGrid("getGridParam", "sortname")
+          sortorderHistory = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordHistory = $(this).getGridParam("records")
+          limitHistory = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataHistory = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
+          if (indexRowHistory > $(this).getDataIDs().length - 1) {
+            indexRowHistory = $(this).getDataIDs().length - 1;
           }
-
-          $('#historyGrid').setSelection($('#historyGrid').getDataIDs()[0])
-
           setHighlight($(this))
 
           if (data.attributes) {
             $(this).jqGrid('footerData', 'set', {
-                piutang_nobukti: 'Total:',
-                nominal: data.attributes.totalNominal,
-                potongan: data.attributes.totalPotongan,
-                nominallebihbayar: data.attributes.totalNominalLebih,
+              piutang_nobukti: 'Total:',
+              nominal: data.attributes.totalNominal,
+              potongan: data.attributes.totalPotongan,
+              nominallebihbayar: data.attributes.totalNominalLebih,
             }, true)
           }
         }
@@ -135,7 +140,7 @@
       })
 
       .customPager()
-      /* Append clear filter button */
+    /* Append clear filter button */
     loadClearFilter($('#historyGrid'))
 
     /* Append global search */
@@ -149,7 +154,7 @@
       postData: {
         piutang_id: id
       },
-      page:1
+      page: 1
     }).trigger('reloadGrid')
   }
 </script>

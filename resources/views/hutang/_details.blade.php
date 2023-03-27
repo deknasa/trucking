@@ -1,17 +1,16 @@
 <table id="detailGrid"></table>
 
-@push('scripts')
 <script>
+
+  function loadGrid(id) {
   let sortnameDetail = 'nobukti'
   let sortorderDetail = 'asc'
-    let totalRecordDetail
-    let limitDetail
-    let postDataDetail
-    let triggerClickDetail
-    let indexRowDetail
-    let pageDetail = 0
-    
-  function loadGrid(id) {
+  let totalRecordDetail
+  let limitDetail
+  let postDataDetail
+  let triggerClickDetail
+  let indexRowDetail
+  let pageDetail = 0
     $('#detailGrid')
       .jqGrid({
         url: `${apiUrl}hutangdetail`,
@@ -22,8 +21,8 @@
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
-          }, 
-        
+          },
+
           {
             label: 'KETERANGAN',
             name: 'keterangan',
@@ -36,7 +35,7 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          }, 
+          },
           {
             label: 'TOTAL',
             name: 'total',
@@ -80,11 +79,11 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-          
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-          
+
           /* Set global variables */
           sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
           sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
@@ -136,7 +135,7 @@
       .customPager()
     /* Append clear filter button */
     loadClearFilter($('#detailGrid'))
-    
+
     /* Append global search */
     loadGlobalSearch($('#detailGrid'))
   }
@@ -148,8 +147,7 @@
       postData: {
         hutang_id: id
       },
-      page:1
+      page: 1
     }).trigger('reloadGrid')
   }
 </script>
-@endpush()

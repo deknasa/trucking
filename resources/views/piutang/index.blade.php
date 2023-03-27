@@ -33,10 +33,10 @@
 </div>
 
 <!-- Detail -->
+@include('piutang._modal')
 @include('piutang._details')
 @include('piutang._history')
 
-@include('piutang._modal')
 @push('scripts')
 <script>
   let indexRow = 0;
@@ -61,7 +61,7 @@
 
     setRange()
     initDatepicker()
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('piutangheader')
     })
 
@@ -71,8 +71,8 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val() 
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val()
         },
         datatype: "json",
         colModel: [{
@@ -183,6 +183,18 @@
             align: 'left'
           },
           {
+            label: 'NAMA PERKIRAAN (DEBET)',
+            name: 'coadebet',
+            align: 'left',
+            width: 200
+          },
+          {
+            label: 'NAMA PERKIRAAN (KREDIT)',
+            name: 'coakredit',
+            align: 'left',
+            width: 200
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
@@ -243,7 +255,9 @@
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
-          if (indexRow >= limit) {indexRow = (indexRow - limit * (page - 1))}
+          if (indexRow >= limit) {
+            indexRow = (indexRow - limit * (page - 1))
+          }
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -252,7 +266,7 @@
               postData: {
                 piutang_id: 0,
               },
-            }).trigger('reloadGrid'); 
+            }).trigger('reloadGrid');
             $('#detailGrid').jqGrid('setGridParam', {
               postData: {
                 piutang_id: 0,
@@ -346,7 +360,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                
+
                 cekValidasi(selectedId, 'DELETE')
               }
             }
@@ -504,21 +518,15 @@
       }
     })
 
-  })
 
-  $("#tabs").tabs({
-    beforeActivate: function(event, ui) {
+    $("#tabs").on('click', 'li.ui-state-active', function() {
+      let href = $(this).find('a').attr('href');
+      currentTab = href.substring(1, href.length - 4);
+      let piutangId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/piutangdetail/${currentTab}/grid`, function() {
 
-    }
-  });
-
-  $("#tabs").on('click', 'li.ui-state-active', function() {
-    let href = $(this).find('a').attr('href');
-    currentTab = href.substring(1, href.length - 4);
-    let piutangId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-    $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/piutangdetail/${currentTab}/grid`, function() {
-
-      loadGrid(piutangId)
+        loadGrid(piutangId)
+      })
     })
   })
 </script>

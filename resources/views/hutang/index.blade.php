@@ -496,21 +496,16 @@
         submitButton.removeAttr('disabled')
       }
     })
-  })
 
-  $("#tabs").tabs({
-    beforeActivate: function(event, ui) {
 
-    }
-  });
+    $("#tabs").on('click', 'li.ui-state-active', function() {
+      let href = $(this).find('a').attr('href');
+      currentTab = href.substring(1, href.length - 4);
+      let piutangId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/hutangdetail/${currentTab}/grid`, function() {
 
-  $("#tabs").on('click', 'li.ui-state-active', function() {
-    let href = $(this).find('a').attr('href');
-    currentTab = href.substring(1, href.length - 4);
-    let piutangId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-    $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/hutangdetail/${currentTab}/grid`, function() {
-
-      loadGrid(piutangId)
+        loadGrid(piutangId)
+      })
     })
   })
 </script>
