@@ -392,6 +392,10 @@
             value: AutoNumeric.getNumber($(`#crudForm [name="nominallebihbayarppd[]"]`)[row])
           })
           data.push({
+            name: 'piutang_nobukti[]',
+            value: $(this).find(`[name="piutang_nobukti[]"]`).val()
+          })
+          data.push({
             name: 'piutang_id[]',
             value: $(this).find(`[name="piutang_id[]"]`).val()
           })
@@ -432,7 +436,7 @@
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
       })
-      
+
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
 
@@ -489,12 +493,42 @@
           }
         },
         error: error => {
-          console.log(error)
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
+            piutangid = []
+            $('#table_body tr').each(function(row, tr) {
+              if ($(this).find(`[name="piutang_id[]"]`).is(':checked')) {
+                piutangid.push($(this).find(`[name="piutang_id[]"]`).val())
+              }
+            })
+            errors = error.responseJSON.errors
 
-            setErrorMessages(form, error.responseJSON.errors);
+            $.each(errors, (index, error) => {
+              let indexes = index.split(".");
+              let angka = indexes[1]
+              
+              row = piutangid[angka] - 1;
+              let element;
+
+              if (indexes.length > 1) {
+                element = form.find(`[name="${indexes[0]}[]"]`)[row];
+              } else {
+                element = form.find(`[name="${indexes[0]}"]`)[0];
+              }
+
+              if ($(element).length > 0 && !$(element).is(":hidden")) {
+                $(element).addClass("is-invalid");
+                $(`
+                  <div class="invalid-feedback">
+                  ${error[0].toLowerCase()}
+                  </div>
+              `).appendTo($(element).parent());
+              } else {
+                return showDialog(error);
+              }
+            });
+            // setErrorMessages(form, error.responseJSON.errors);
           } else {
             showDialog(error.statusText)
           }
@@ -673,7 +707,7 @@
 
     form.find(`[name="tglbukti"]`).prop('readonly', true)
     form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-    
+
     $.ajax({
       url: `${apiUrl}pelunasanpiutangheader/${Id}`,
       method: 'GET',
@@ -739,7 +773,11 @@
 
           let detailRow = $(`
             <tr >
-              <td><input name='piutang_id[]' type="checkbox" id="checkItem" value="${nobukti}"></td>
+              <td>
+                <input name='piutang_id[]' type="checkbox" id="checkItem" value="${id}">
+                <input name='piutang_nobukti[]' type="hidden" value="${nobukti}">
+              
+              </td>
               <td></td>
               <td>${detail.nobukti}</td>
               <td>${dateFormat(detail.tglbukti)}</td>
@@ -755,10 +793,10 @@
               <td>
                 <textarea name="keterangandetailppd[]" rows="1" disabled class="form-control"></textarea>
               </td>
-              <td id=${nobukti}>
+              <td id=${id}>
                 <input type="text" name="bayarppd[]" disabled class="form-control bayar text-right">
               </td>
-              <td id="potongan${nobukti}">
+              <td id="potongan${id}">
                 <input type="text" name="potonganppd[]" disabled class="form-control text-right">
               </td>
               <td>
@@ -767,7 +805,7 @@
               <td>
                 <textarea name="keteranganpotonganppd[]" rows="1" disabled class="form-control"></textarea>
               </td>
-              <td id="lebih${nobukti}">
+              <td id="lebih${id}">
                 <input type="text" name="nominallebihbayarppd[]" disabled class="form-control text-right">
               </td>
             </tr>
@@ -869,13 +907,17 @@
           let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
           if (pelunasanPiutangId != null) {
             checked = 'checked'
+            attribut = 'enable'
           } else {
             attribut = 'disabled'
           }
 
           let detailRow = $(`
             <tr>
-              <td><input name='piutang_id[]' type="checkbox" class="checkItem" value="${nobukti}" ${checked} ${forCheckbox}></td>
+              <td>
+                <input name='piutang_id[]' type="checkbox" class="checkItem" value="${id}" ${checked} ${forCheckbox}>
+                <input name='piutang_nobukti[]' type="hidden" value="${nobukti}">
+              </td>
               <td></td>
               <td>${detail.piutang_nobukti}</td>
               <td>${dateFormat(detail.tglbukti)}</td>
@@ -892,10 +934,10 @@
               <td>
                 <textarea name="keterangandetailppd[]" rows="1" class="form-control" ${attribut}>${detail.keterangan || ''}</textarea>
               </td>
-              <td id=${nobukti}>
+              <td id=${id}>
                 <input type="text" name="bayarppd[]" class="form-control bayar text-right" value="${detail.nominal || ''}" ${attribut}>
               </td>
-              <td id="potongan${nobukti}">
+              <td id="potongan${id}">
                 <input type="text" name="potonganppd[]" class="form-control text-right" value="${detail.potongan || ''}" ${attribut}>
               </td>
               <td>
@@ -904,7 +946,7 @@
               <td>
                 <textarea name="keteranganpotonganppd[]" rows="1" class="form-control" ${attribut}>${detail.keteranganpotongan || ''}</textarea>
               </td>
-              <td id="lebih${nobukti}">
+              <td id="lebih${id}">
                 <input type="text" name="nominallebihbayarppd[]" class="form-control autonumeric" value="${detail.nominallebihbayar || ''}" ${attribut}>
               </td>
             </tr>
@@ -922,7 +964,7 @@
             initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
             initAutoNumericNoMinus(detailRow.find(`[name="potonganppd[]"]`))
             initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
-
+            
           }
           initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
           initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
@@ -984,8 +1026,6 @@
             });
 
             new AutoNumeric('#bayarNominalLebih').set(totalNominalLebih)
-
-
           } else {
             setTotal()
             setPenyesuaian()
@@ -1040,7 +1080,7 @@
       setSisa()
 
     } else {
-      let nobukti = $(this).val()
+      let id = $(this).val()
       let action = $('#crudForm').data('action')
       $(this).closest('tr').find(`td [name="keterangandetailppd[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="nominallebihbayarppd[]"]`).prop('disabled', true)
@@ -1066,9 +1106,9 @@
       let newPotonganElement = `<input type="text" name="potonganppd[]" class="form-control text-right" disabled>`
       let newLebihElement = `<input type="text" name="nominallebihbayarppd[]" class="form-control text-right" disabled>`
 
-      $(this).closest('tr').find(`#${nobukti}`).append(newBayarElement)
-      $(this).closest('tr').find(`#potongan${nobukti}`).append(newPotonganElement)
-      $(this).closest('tr').find(`#lebih${nobukti}`).append(newLebihElement)
+      $(this).closest('tr').find(`#${id}`).append(newBayarElement)
+      $(this).closest('tr').find(`#potongan${id}`).append(newPotonganElement)
+      $(this).closest('tr').find(`#lebih${id}`).append(newLebihElement)
 
       setTotal()
       setPenyesuaian()

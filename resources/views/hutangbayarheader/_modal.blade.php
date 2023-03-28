@@ -313,6 +313,11 @@
             })
 
             data.push({
+              name: 'hutang_nobukti[]',
+              value: $(this).find(`[name="hutang_nobukti[]"]`).val()
+            })
+
+            data.push({
               name: 'hutang_id[]',
               value: $(this).find(`[name="hutang_id[]"]`).val()
             })
@@ -409,11 +414,41 @@
           }
         },
         error: error => {
-          console.log(error)
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-            setErrorMessages(form, error.responseJSON.errors);
+            hutangid = []
+            $('#table_body tr').each(function(row, tr) {
+              if ($(this).find(`[name="hutang_id[]"]`).is(':checked')) {
+                hutangid.push($(this).find(`[name="hutang_id[]"]`).val())
+              }
+            })
+            errors = error.responseJSON.errors
+
+            $.each(errors, (index, error) => {
+              let indexes = index.split(".");
+              let angka = indexes[1]
+              
+              row = hutangid[angka] - 1;
+              let element;
+
+              if (indexes.length > 1) {
+                element = form.find(`[name="${indexes[0]}[]"]`)[row];
+              } else {
+                element = form.find(`[name="${indexes[0]}"]`)[0];
+              }
+
+              if ($(element).length > 0 && !$(element).is(":hidden")) {
+                $(element).addClass("is-invalid");
+                $(`
+                  <div class="invalid-feedback">
+                  ${error[0].toLowerCase()}
+                  </div>
+              `).appendTo($(element).parent());
+              } else {
+                return showDialog(error);
+              }
+            });
           } else {
             showDialog(error.statusText)
           }
@@ -651,7 +686,10 @@
 
           let detailRow = $(`
             <tr >
-              <td><input name='hutang_id[]' type="checkbox" id="checkItem" value="${id}"></td>
+              <td>
+                <input name='hutang_id[]' type="checkbox" id="checkItem" value="${id}">
+                <input name='hutang_nobukti[]' type="hidden" value="${nobukti}">              
+              </td>
               <td></td>
               <td>${detail.nobukti}</td>
               <td>${detail.tglbukti}</td>
@@ -754,6 +792,7 @@
     // if(aksi == 'edit'){
     url = `${apiUrl}hutangbayarheader/${id}/${supplierId}/getPembayaran`
     // }
+    console.log(aksi)
     if (aksi == 'delete') {
       attribut = 'disabled'
       forCheckbox = 'disabled'
@@ -789,13 +828,18 @@
 
           if (hutangbayarId != null) {
             checked = 'checked'
+            attribut = 'enable'
           } else {
             attribut = 'disabled'
           }
 
           let detailRow = $(`
             <tr>
-              <td><input name='hutang_id[]' type="checkbox" class="checkItem" value="${id}" ${checked} ${forCheckbox}></td>
+              <td>
+                <input name='hutang_id[]' type="checkbox" class="checkItem" value="${id}" ${checked} ${forCheckbox}>
+                <input name='hutang_nobukti[]' type="hidden" value="${detail.hutang_nobukti}">
+              
+              </td>
               <td></td>
               <td>${detail.hutang_nobukti}</td>
               <td>${detail.tglbukti}</td>
