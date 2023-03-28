@@ -650,6 +650,14 @@
                         name: 'pinjSemua[]',
                         value: $(this).find(`[name="pinjSemua[]"]`).val()
                     })
+                    data.push({
+                        name: 'pinjSemua_nobukti[]',
+                        value: $(this).find(`[name="pinjSemua_nobukti[]"]`).val()
+                    })
+                    data.push({
+                        name: 'pinjSemua_keterangan[]',
+                        value: $(this).find(`[name="pinjSemua_keterangan[]"]`).val()
+                    })
                 }
             })
 
@@ -665,6 +673,14 @@
                     data.push({
                         name: 'pinjPribadi[]',
                         value: $(this).find(`[name="pinjPribadi[]"]`).val()
+                    })
+                    data.push({
+                        name: 'pinjPribadi_nobukti[]',
+                        value: $(this).find(`[name="pinjPribadi_nobukti[]"]`).val()
+                    })
+                    data.push({
+                        name: 'pinjPribadi_keterangan[]',
+                        value: $(this).find(`[name="pinjPribadi_keterangan[]"]`).val()
                     })
                 }
             })
@@ -716,7 +732,7 @@
 
             $(this).attr('disabled', '')
             $('#loader').removeClass('d-none')
-            
+
             $.ajax({
                 url: url,
                 method: method,
@@ -755,7 +771,61 @@
                     if (error.status === 422) {
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
-                        setErrorMessages(form, error.responseJSON.errors);
+
+                        errors = error.responseJSON.errors
+                        keys = Object.keys(errors)
+                        keyError = keys[0]
+                        textError = keyError.substr(0, 9);
+                        console.log(errors)
+                        if (textError == 'nominalPS') {
+                            pinjSemua = []
+                            $('#tbodyPotSemua tr').each(function(row, tr) {
+                                if ($(this).find(`[name="pinjSemua[]"]`).is(':checked')) {
+                                    pinjSemua.push($(this).find(`[name="pinjSemua[]"]`).val())
+                                }
+                            })
+                        } else if (textError == 'nominalPP') {
+                            pinjPribadi = []
+                            $('#tbodyPinjPribadi tr').each(function(row, tr) {
+                                if ($(this).find(`[name="pinjPribadi[]"]`).is(':checked')) {
+                                    pinjPribadi.push($(this).find(`[name="pinjPribadi[]"]`).val())
+                                }
+                            })
+                        }
+
+                        $.each(errors, (index, error) => {
+                            let indexes = index.split(".");
+                            let angka = indexes[1]
+
+                            if (textError == 'nominalPS') {
+                                row = pinjSemua[angka] - 1;
+                            } else if (textError == 'nominalPP') {
+                                row = pinjPribadi[angka] - 1;
+                            }
+                            let element;
+
+                            if (indexes.length > 1) {
+                                element = form.find(`[name="${indexes[0]}[]"]`)[row];
+                            } else {
+                                element = form.find(`[name="${indexes[0]}"]`)[0];
+                            }
+
+                            $(element).addClass("is-invalid");
+                            $(`
+                                <div class="invalid-feedback">
+                                ${error[0].toLowerCase()}
+                                </div>
+                            `).appendTo($(element).parent());
+
+                            if ($(element).length > 0 && $(element).is(":hidden")) {
+                                return showDialog(error);
+                            }
+                            if (keyError == 'rincian') {
+                                return showDialog(error);
+                            }
+
+                        });
+                        // setErrorMessagesCheckForm(form, error.responseJSON.errors);
                     } else {
                         showDialog(error.statusText)
                     }
@@ -1008,7 +1078,16 @@
                 initAutoNumeric(form.find(`[name="bbm"]`))
 
 
-                if (response.pinjamanpribadi != null) {
+                if (response.pinjamanpribadi.length === 0) {
+                    let detailRow = $(`
+                        <tr>
+                            <td colspan='5' class="text-center">TIDAK ADA DATA</td>
+                        </tr>
+                        `)
+
+                    $('#pinjamanPribadi tbody').append(detailRow)
+
+                } else {
 
                     let totalSisa = 0
                     let saldoAwal = 0;
@@ -1023,7 +1102,10 @@
                         nominal = (detail.nominal == null) ? '' : detail.nominal;
                         let detailRow = $(`
                         <tr >
-                        <td><input name='pinjPribadi[]' type="checkbox" id="checkItem" value="${detail.id}" ${checked}></td>
+                        <td>
+                            <input name='pinjPribadi[]' type="checkbox" id="checkItem" value="${detail.id}" ${checked}>
+                            <input name='pinjPribadi_nobukti[]' type="hidden" value="${detail.nobukti}">
+                        </td>
                         <td>${detail.nobukti}</td>
                         <td>
                             <p class="text-right sisaPP autonumeric">${sisa}</p>
@@ -1033,7 +1115,8 @@
                         <td id=${detail.id}>
                             <input type="text" name="nominalPP[]" class="form-control bayar text-right" ${disabled} value="${nominal}">
                         </td>
-                        <td>${detail.keterangan}</td>
+                        <td>${detail.keterangan}
+                            <input name='pinjPribadi_keterangan[]' type="hidden" value="${detail.keterangan}"></td>
                         </tr>
                     `)
 
@@ -1068,18 +1151,24 @@
                         let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
                         let detailRow = $(`
                         <tr >
-                        <td><input name='pinjSemua[]' type="checkbox" id="checkItem" value="${detail.id}" ${checked}></td>
+                        <td>
+                            <input name='pinjSemua[]' type="checkbox" id="checkItem" value="${detail.id}" ${checked}>
+                            <input name='pinjSemua_nobukti[]' type="hidden" value="${detail.nobukti}">
+                        </td>
                         <td>SEMUA</td>
                         <td>${detail.nobukti}</td>
                         <td>
                             <p class="text-right sisaPS autonumeric">${sisa}</p>
                             <input type="hidden" name="sisaPS[]" class="autonumeric" value="${sisa}">
-                            <input type="hidden" name="sisaAwalPS[]" class="autonumeric" value="${detail.sisaawal}">
+                            <input type="hidden" name="sisaAwalPS[]" class="autonumeric" value="${detail.sisa}">
                         </td>
                         <td id=${detail.id}>
                             <input type="text" name="nominalPS[]" value="${nominal}" ${disabled} class="form-control text-right">
                         </td>
-                        <td>${detail.keterangan}</td>
+                        <td>
+                            ${detail.keterangan}
+                            <input name='pinjSemua_keterangan[]' type="hidden" value="${detail.keterangan}">
+                        </td>
                         </tr>
                     `)
 
@@ -1435,8 +1524,11 @@
                     let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
                     let supir = (detail.supir_id == 0) ? 'SEMUA' : '';
                     let detailRow = $(`
-                        <tr >
-                        <td><input name='pinjSemua[]' type="checkbox" id="checkItem" value="${id}"></td>
+                        <tr>
+                        <td>
+                            <input name='pinjSemua[]' type="checkbox" id="checkItem" value="${id}">
+                            <input name='pinjSemua_nobukti[]' type="hidden" value="${detail.nobukti}">
+                        </td>
                         <td>${supir}</td>
                         <td>${detail.nobukti}</td>
                         <td>
@@ -1447,7 +1539,9 @@
                         <td id=${id}>
                             <input type="text" name="nominalPS[]" disabled class="form-control bayar text-right">
                         </td>
-                        <td>${detail.keterangan}</td>
+                        <td>
+                            ${detail.keterangan}
+                            <input name='pinjSemua_keterangan[]' type="hidden" value="${detail.keterangan}"></td>
                         </tr>
                     `)
 
@@ -1565,7 +1659,10 @@
                     let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
                     let detailRow = $(`
                         <tr >
-                        <td><input name='pinjPribadi[]' type="checkbox" id="checkItem" value="${id}"></td>
+                        <td>
+                            <input name='pinjPribadi[]' type="checkbox" id="checkItem" value="${id}">
+                            <input name='pinjPribadi_nobukti[]' type="hidden" value="${detail.nobukti}">
+                        </td>
                         <td>${detail.nobukti}</td>
                         <td>
                             <p class="text-right sisaPP autonumeric">${sisa}</p>
@@ -1575,7 +1672,10 @@
                         <td id=${id}>
                             <input type="text" name="nominalPP[]" disabled class="form-control bayar text-right">
                         </td>
-                        <td>${detail.keterangan}</td>
+                        <td>
+                            ${detail.keterangan}
+                            <input name='pinjPribadi_keterangan[]' type="hidden" value="${detail.keterangan}">
+                        </td>
                         </tr>
                     `)
 
