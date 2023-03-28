@@ -41,11 +41,13 @@ $.fn.lookup = function (options) {
 		element.wrap('<div class="input-group"></div>').after(`
 			${
 				settings.onClear
-					? `<button type="button" class="btn position-absolute button-clear text-secondary" style="right: 30px; z-index: 99;"><i class="fa fa-times"></i></button>`
+					? `<button type="button" class="btn position-absolute button-clear text-secondary" style="right: 34px; z-index: 99;"><i class="fa fa-times"></i></button>`
 					: ``
 			}
 			<div class="input-group-append">
-				<button class="btn btn-primary lookup-toggler" type="button">...</button>
+				<button class="btn btn-primary lookup-toggler" type="button">
+					<i class="far fa-window-maximize" style="font-size: 12.25px"></i>
+				</button>
 			</div>
 		`);
 
