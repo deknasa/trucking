@@ -84,10 +84,10 @@
                                     <ul>
                                         <li><a href="#tabs-1">Rekap Rincian</a></li>
                                         <li><a href="#tabs-2">Posting Rincian</a></li>
-                                        <li><a href="#tabs-3">Pot. pinjaman (semua)</a></li>
-                                        <li><a href="#tabs-4">Pot. pinjaman (pribadi)</a></li>
-                                        <li><a href="#tabs-5">deposito</a></li>
-                                        <li><a href="#tabs-6">bbm</a></li>
+                                        <li><a href="#tabs-3">Posting Pot. pinjaman (semua)</a></li>
+                                        <li><a href="#tabs-4">Posting Pot. pinjaman (pribadi)</a></li>
+                                        <li><a href="#tabs-5">Posting deposito</a></li>
+                                        <li><a href="#tabs-6">Posting bbm</a></li>
                                     </ul>
                                     <div id="tabs-1">
                                         <table id="rekapRincian"></table>

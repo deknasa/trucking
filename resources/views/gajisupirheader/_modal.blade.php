@@ -114,13 +114,12 @@
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
-                                                        <td colspan="2"></td>
-                                                        <td>
-                                                            <p id="nominalPotSemua" class="text-right font-weight-bold"></p>
-                                                        </td>
-                                                        <td></td>
+                                                        <td colspan="3"></td>
                                                         <td>
                                                             <p id="sisaPotSemua" class="text-right font-weight-bold"></p>
+                                                        </td>
+                                                        <td>
+                                                            <p id="nominalPotSemua" class="text-right font-weight-bold"></p>
                                                         </td>
                                                         <td></td>
                                                     </tr>
@@ -710,6 +709,17 @@
                 value: limit
             })
 
+            data.push({
+                name: 'tgldariheader',
+                value: $('#tgldariheader').val()
+            })
+            data.push({
+                name: 'tglsampaiheader',
+                value: $('#tglsampaiheader').val()
+            })
+
+            let tgldariheader = $('#tgldariheader').val();
+            let tglsampaiheader = $('#tglsampaiheader').val()
 
             switch (action) {
                 case 'add':
@@ -722,7 +732,7 @@
                     break;
                 case 'delete':
                     method = 'DELETE'
-                    url = `${apiUrl}gajisupirheader/${Id}`
+                    url = `${apiUrl}gajisupirheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
                     break;
                 default:
                     method = 'POST'
