@@ -50,6 +50,18 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
+                  supir <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" id="supirHaeaderId" name="supirheader_id">
+                <input type="text" name="supir" class="form-control supirheader-lookup">
+              </div>
+            </div>
+
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NAMA PERKIRAAN <span class="text-danger">*</span>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -82,36 +94,37 @@
               </div>
             </div>
             
-                        <div class="table-scroll table-responsive">
-                          <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1350px;">
-                            <thead>
-                              <tr>
-                                <th width="1%">No</th>
-                                <th width="20%">SUPIR</th>
-                                <th width="20%">NO BUKTI PENERIMAAN TRUCKING</th>
-                                <th width="25%">Keterangan</th>
-                                <th width="20%">Nominal</th>
-                                <th width="1%">Aksi</th>
-                              </tr>
-                            </thead>
-                            <tbody id="table_body" class="form-group">
-            
-                            </tbody>
-                            <tfoot>
-                              <tr>
-                                <td colspan="4">
-                                  <p class="text-right font-weight-bold">TOTAL :</p>
-                                </td>
-                                <td>
-                                  <p class="text-right font-weight-bold autonumeric" id="total"></p>
-                                </td>
-                                <td>
-                                  <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                                </td>
-                              </tr>
-                            </tfoot>
-                          </table>
-                        </div>
+            <div class="table-scroll table-responsive">
+              <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="">
+                <thead>
+                  <tr>
+                    <th width="1%">No</th>
+                    <th class="data_tbl tbl_checkbox" style="display:none" width="1%">Pilih</th>
+                    <th class="data_tbl tbl_supir" width="20%">SUPIR</th>
+                    <th class="data_tbl tbl_penerimaantruckingheader" width="20%">NO BUKTI PENERIMAAN TRUCKING</th>
+                    <th class="data_tbl tbl_keterangan" width="25%">Keterangan</th>
+                    <th width="20%">Nominal</th>
+                    <th width="1%" class="tbl_aksi">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="table_body" class="form-group">
+
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="4" class="colspan">
+                      <p class="text-right font-weight-bold">TOTAL :</p>
+                    </td>
+                    <td>
+                      <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                    </td>
+                    <td id="tbl_addRow">
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
                       
 
           </div>
@@ -160,12 +173,92 @@
       let form = $('#crudForm')
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
-      let data = $('#crudForm').serializeArray()
-
-      $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
-        data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
-      })
-
+      let data
+      if (KodePengeluaranId == "TDE") {
+        data = []
+  
+        data.push({
+          name: 'id', 
+          value: form.find(`[name="id"]`).val()
+        })
+        data.push({
+          name: 'nobukti', 
+          value: form.find(`[name="nobukti"]`).val()
+        })
+        data.push({
+          name: 'tglbukti', 
+          value: form.find(`[name="tglbukti"]`).val()
+        })
+        data.push({
+          name: 'pengeluarantrucking_id', 
+          value: form.find(`[name="pengeluarantrucking_id"]`).val()
+        })
+        data.push({
+          name: 'pengeluarantrucking', 
+          value: form.find(`[name="pengeluarantrucking"]`).val()
+        })
+        data.push({
+          name: 'supirheader_id', 
+          value: form.find(`[name="supirheader_id"]`).val()
+        })
+        data.push({
+          name: 'supir', 
+          value: form.find(`[name="supir"]`).val()
+        })
+        data.push({
+          name: 'coa', 
+          value: form.find(`[name="coa"]`).val()
+        })
+        data.push({
+          name: 'keterangancoa', 
+          value: form.find(`[name="keterangancoa"]`).val()
+        })
+        data.push({
+          name: 'bank_id', 
+          value: form.find(`[name="bank_id"]`).val()
+        })
+        data.push({
+          name: 'bank', 
+          value: form.find(`[name="bank"]`).val()
+        })
+        data.push({
+          name: 'pengeluaran_nobukti', 
+          value: form.find(`[name="pengeluaran_nobukti"]`).val()
+        })
+        $('#table_body tr').each(function(row, tr) {
+          
+          if ($(this).find('[name="penerimaantruckingheader_id[]"]').is(':checked')) {
+            console.log(form);
+            // console.log(form.find(`[name="penerimaantruckingheader_nobukti[]"]`).val())
+            console.log(form.find(`[name="keterangan[]"]`).val())
+            data.push({
+              name: 'penerimaantruckingheader_nobukti[]',
+              value: $(this).find(`[name="penerimaantruckingheader_nobukti[]"]`).val()
+            })
+            data.push({
+              name: 'keterangan[]',
+              value: $(this).find(`[name="keterangan[]"]`).val()
+            })
+            data.push({
+              name: 'nominal[]',
+              value: AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[row])
+            })
+            
+          }
+          
+        })
+        
+      }else{
+        data = $('#crudForm').serializeArray()
+        $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
+          data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
+        })
+        // data.push({
+        //   name: 'nominal[]',
+        //   value: AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[row])
+        // })
+      }
+        
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -190,7 +283,7 @@
         name: 'limit',
         value: limit
       })
-      console.log(data)
+      // console.log(data)
       switch (action) {
         case 'add':
           method = 'POST'
@@ -245,8 +338,42 @@
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-
-            setErrorMessages(form, error.responseJSON.errors);
+            if (KodePengeluaranId =="TDE") {
+              penerimaantruckingheaderid = []
+              $('#table_body tr').each(function(row, tr) {
+                if ($(this).find(`[name="penerimaantruckingheader_id[]"]`).is(':checked')) {
+                  penerimaantruckingheaderid.push($(this).find(`[name="penerimaantruckingheader_id[]"]`).val())
+                }
+              })
+              errors = error.responseJSON.errors
+  
+              $.each(errors, (index, error) => {
+                let indexes = index.split(".");
+                let angka = indexes[1]
+                
+                row = penerimaantruckingheaderid[angka] - 1;
+                let element;
+  
+                if (indexes.length > 1) {
+                  element = form.find(`[name="${indexes[0]}[]"]`)[row];
+                } else {
+                  element = form.find(`[name="${indexes[0]}"]`)[0];
+                }
+  
+                if ($(element).length > 0 && !$(element).is(":hidden")) {
+                  $(element).addClass("is-invalid");
+                  $(`
+                    <div class="invalid-feedback">
+                    ${error[0].toLowerCase()}
+                    </div>
+                `).appendTo($(element).parent());
+                } else {
+                  return showDialog(error);
+                }
+              });
+            }else{
+              setErrorMessages(form, error.responseJSON.errors);
+            }
           } else {
             showDialog(error.statusText)
           }
@@ -260,7 +387,9 @@
 
   function setKodePengeluaran(kode){
     KodePengeluaranId = kode;
+    $('#detailList tbody').html('')
     setTampilanForm();
+    addRow()
   }
   function setTampilanForm(){
     tampilanall()
@@ -268,19 +397,64 @@
       case 'PJT':
         tampilanPJT()
         break;
+      case 'TDE':
+        tampilanTDE()
+        break;
       default:
         tampilanall()
         break;
     }
   }
 
-
   function tampilanPJT() {
-  $('[name=keterangancoa]').parents('.form-group').hide()
-}
-function tampilanall() {
-  $('[name=keterangancoa]').parents('.form-group').hide()
-}
+    
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=supirheader_id]').parents('.form-group').hide()
+    $('.tbl_checkbox').hide()
+    $('.tbl_aksi').show()
+    $('#tbl_addRow').show()
+  }
+  function tampilanTDE() {
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=supirheader_id]').parents('.form-group').show()
+    $('.tbl_supir').hide()
+    $('.tbl_checkbox').show()
+    
+    $('.tbl_aksi').hide()
+    $('#tbl_addRow').hide()
+
+    $('.colspan').attr('colspan', 4);
+    
+  }
+  function tampilanall() {
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=supirheader_id]').parents('.form-group').hide()
+    $('.tbl_checkbox').hide()
+    $('.tbl_aksi').show()
+    $('#tbl_addRow').show()
+  }
+    
+  $(document).on('click', '.checkItem', function(event) {
+    enabledRow($(this).data("id"))
+  })
+    
+  function enabledRow(row) {
+    let check = $(`#penerimaantruckingheader_id${row}`)
+    if (check.prop("checked") == true) {
+      console.log(row);
+      $(`#nominal_${row}`).prop('disabled', false)
+      $(`#penerimaantruckingheader_nobukti_detail${row}`).prop('disabled', false)
+      $(`#keterangan_detail${row}`).prop('disabled', false)
+    } else if (check.prop("checked") == false) {
+      // console.log('disabale');
+      $(`#nominal_${row}`).prop('disabled', true)
+      $(`#penerimaantruckingheader_nobukti_detail${row}`).prop('disabled', true)
+      $(`#keterangan_detail${row}`).prop('disabled', true)
+    }
+    setTotal()
+
+  }
+
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
 
@@ -301,13 +475,13 @@ function tampilanall() {
   })
 
   function setTotal() {
-    let nominalDetails = $(`#table_body [name="nominal[]"]`)
+    let nominalDetails = $(`#table_body [name="nominal[]"]:not([disabled])`)
     let total = 0
 
     $.each(nominalDetails, (index, nominalDetail) => {
       total += AutoNumeric.getNumber(nominalDetail)
     });
-
+console.log(total);
     new AutoNumeric('#total').set(total)
   }
 
@@ -516,17 +690,17 @@ function tampilanall() {
           let detailRow = $(`
             <tr>
                 <td></td>
-                <td>
+                <td class="data_tbl tbl_supir">
                     <input type="hidden" name="supir_id[]">
                     <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
                 </td>
-                <td>
+                <td class="data_tbl tbl_penerimaantruckingheader">
                     <input type="text" name="penerimaantruckingheader_nobukti[]" data-current-value="${detail.penerimaantruckingheader_nobukti}" class="form-control penerimaantruckingheader-lookup">
                 </td>
-                <td>
+                <td class="data_tbl tbl_keterangan">
                     <input type="text" name="keterangan[]" class="form-control"> 
                 </td>
-                <td>
+                <td class="data_tbl tbl_nominal">
                     <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
                 </td>
                 <td>
@@ -595,6 +769,7 @@ function tampilanall() {
 
 
         })
+        setTampilanForm()
 
         setRowNumbers()
         if (form.data('action') === 'delete') {
@@ -604,22 +779,88 @@ function tampilanall() {
       }
     })
   }
+  function getDeposito(){
+    let supir_id = $('#supirHaeaderId').val();
+    KodePengeluaranId
+
+    let data = {
+      "supir":supir_id,
+    }
+    if ((KodePengeluaranId == "TDE") && (supir_id != "")) {
+      $.ajax({
+        url: `${apiUrl}pengeluarantruckingheader/getdeposito`,
+        method: 'POST',
+        dataType: 'JSON',
+        data: data,
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let totalNominal = 0
+          let row = 0
+          let form = $('#crudform')
+          $('#detailList tbody').html('')
+          
+          $.each(response, (index, detail) => {
+            let id = detail.id
+            row++
+            let nominal = new Intl.NumberFormat('en-US').format(detail.nominal);
+            totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
+            let detailRow = $(`
+            <tr>
+              <td>
+                ${row}
+              </td>
+              <td class="data_tbl tbl_checkbox">
+                <input name='penerimaantruckingheader_id[]' type="checkbox" class="checkItem" id="penerimaantruckingheader_id${detail.id}" data-id="${detail.id}"  value="${detail.id}">
+              </td>
+              <td class="data_tbl tbl_penerimaantruckingheader">
+                ${detail.nobukti}
+                <input name="penerimaantruckingheader_nobukti[]" id="penerimaantruckingheader_nobukti_detail${row}" disabled value="${detail.nobukti}" type="">
+              </td>
+              <td class="data_tbl tbl_keterangan">
+                ${detail.keterangan}
+                <input name="keterangan[]" id="keterangan_detail${row}" disabled value="${detail.keterangan}" type="">
+              </td>
+              <td class="data_tbl tbl_nominal">
+                <input type="text" name="nominal[]" disabled id="nominal_${detail.id}" value="${detail.nominal}"  class="form-control nominal_${detail.id} numeric_${detail.id} form-control autonumeric nominal text-right">
+              </td>
+              
+            </tr>`)
+            $('#detailList tbody').append(detailRow)
+            initAutoNumeric(detailRow.find('.autonumeric'))
+          })
+            
+
+          setTampilanForm()
+          setTotal()
+          setRowNumbers()
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
+          }
+        }
+      })
+    }
+  }
+
+
 
   function addRow() {
     let detailRow = $(`
       <tr>
         <td></td>
-        <td>
+        <td class="data_tbl tbl_supir">
           <input type="hidden" name="supir_id[]">
           <input type="text" name="supir[]"  class="form-control supir-lookup">
         </td>
-        <td>
+        <td class="data_tbl tbl_penerimaantruckingheader">
           <input type="text" name="penerimaantruckingheader_nobukti[]"  class="form-control penerimaantruckingheader-lookup">
         </td>
-        <td>
+        <td class="data_tbl tbl_keterangan">
           <input type="text" name="keterangan[]" class="form-control"> 
         </td>
-        <td>
+        <td class="data_tbl tbl_nominal">
           <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
         </td>
         <td>
@@ -679,7 +920,7 @@ function tampilanall() {
     })
 
     initAutoNumeric(detailRow.find('.autonumeric'))
-
+    setTampilanForm()
     setRowNumbers()
   }
 
@@ -741,11 +982,13 @@ function tampilanall() {
         $('#crudForm [name=pengeluarantrucking_id]').first().val(pengeluarantrucking.id)
         element.val(pengeluarantrucking.keterangan)
         element.data('currentValue', element.val())
+        getDeposito()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        KodePengeluaranId=""
         $('#crudForm [name=pengeluarantrucking_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
@@ -775,7 +1018,31 @@ function tampilanall() {
         element.data('currentValue', element.val())
       }
     })
+    $('.supirheader-lookup').last().lookup({
+      title: 'Supir Lookup',
+      fileName: 'supir',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
 
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (supir, element) => {
+        $(`#supirHaeaderId`).val(supir.id)
+        element.val(supir.namasupir)
+        element.data('currentValue', element.val())
+        getDeposito()
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#supirHaeaderId`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
     $('.pengeluaran-lookup').lookup({
       title: 'Pengeluaran Lookup',
       fileName: 'pengeluaranheader',
