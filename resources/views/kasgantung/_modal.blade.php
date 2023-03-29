@@ -158,14 +158,14 @@
       let method
       let url
       let form = $('#crudForm')
-      let userId = form.find('[name=user_id]').val()
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+      
       $('#crudForm').find(`[name="nominal[]"]`).each((index, element) => {
-        console.log(element);
         data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
       })
+      
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -465,11 +465,6 @@
           }
           if (index == 'bank') {
             element.data('current-value', value)
-          }
-          if (index == 'penerima' || index == 'penerima_id') {
-            element.prop('disabled', false)
-          } else {
-            element.prop("disabled", true)
           }
         })
 

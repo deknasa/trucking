@@ -38,7 +38,7 @@
     setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
-      loadDataHeader('pengeluarantruckingheader')
+      loadDataHeader('pengembaliankasgantungheader')
     })
 
     $('#crudModal').on('hidden.bs.modal', function() {

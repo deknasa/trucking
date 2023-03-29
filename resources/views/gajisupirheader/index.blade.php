@@ -1,18 +1,16 @@
 @extends('layouts.master')
 
 @section('content')
-<!-- Grid Master-->
+<!-- Grid -->
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
       @include('layouts._rangeheader')
-
       <table id="jqGrid"></table>
     </div>
   </div>
 </div>
 
-<!-- Modal -->
 @include('gajisupirheader._modal')
 <!-- Detail -->
 @include('gajisupirheader._detail')
@@ -28,6 +26,7 @@
   let highlightSearch;
   let totalRecord
   let limit
+  let activeGrid
   let postData
   let sortname = 'nobukti'
   let sortorder = 'asc'
@@ -42,16 +41,18 @@
     $(document).on('click','#btnReload', function(event) {
       loadDataHeader('gajisupirheader')
     })
+
+
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'gajisupirheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
         postData: {
           tgldari:$('#tgldariheader').val() ,
           tglsampai:$('#tglsampaiheader').val() 
         },
+        datatype: "json",
         colModel: [{
             label: 'ID',
             name: 'id',
@@ -269,20 +270,24 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
-          if(id != '') {
-            if (!hasDetail) {
-              loadDetailGrid(id)
-              hasDetail = true
-            }
 
-            loadDetailData(id)
+          if (!hasDetail) {
+            loadDetailGrid(id)
+            hasDetail = true
           }
-          
+
+          loadDetailData(id)
+
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-
+          if (data.data.length == 0) {
+            $('#detail').jqGrid('setGridParam', {
+              postData: {
+                gajisupir_id: 0,
+              },
+            }).trigger('reloadGrid'); 
+          }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -293,7 +298,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
@@ -337,6 +342,11 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
+          $(this).setGridParam({
+          postData: {
+            tgldari:$('#tgldariheader').val() ,
+            tglsampai:$('#tglsampaiheader').val() 
+          },})
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -358,7 +368,7 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
-              }else {
+              } else {
                 cekValidasi(selectedId, 'EDIT')
               }
             }
@@ -376,6 +386,7 @@
               }
             }
           },
+
           {
             id: 'export',
             title: 'Export',
@@ -390,7 +401,7 @@
                 window.open(`{{ route('gajisupirheader.export') }}?id=${selectedId}`)
               }
             }
-          },  
+          },
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
@@ -403,9 +414,8 @@
                 window.open(`{{ route('gajisupirheader.report') }}?id=${selectedId}`)
               }
             }
-          },
+          }
         ]
-
       })
 
     /* Append clear filter button */
@@ -454,12 +464,8 @@
     if (!`{{ $myAuth->hasPermission('gajisupirheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
     }
-
-
     
   })
-
-  
 </script>
 @endpush()
 @endsection
