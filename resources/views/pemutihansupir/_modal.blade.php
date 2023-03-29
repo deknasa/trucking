@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -47,26 +47,24 @@
                   <input type="text" name="supir" class="form-control supir-lookup">
                 </div>
               </div>
-              <div class="row form-group">
-                <div class="col-12 col-md-2">
-                  <label class="col-form-label">
-                    PENGELUARAN SUPIR
-                  </label>
-                </div>
-                <div class="col-12 col-md-10">
-                  <input type="text" name="pengeluaransupir" class="form-control text-right" readonly>
-                </div>
-              </div>
-              <div class="row form-group">
-                <div class="col-12 col-md-2">
-                  <label class="col-form-label">
-                    PENERIMAAN SUPIR
-                  </label>
-                </div>
-                <div class="col-12 col-md-10">
-                  <input type="text" name="penerimaansupir" class="form-control text-right" readonly>
+
+              <div class="row">
+                <div class="col-12">
+                  <div id="tabs" class="dejavu" style="font-size:12px">
+                    <ul>
+                      <li><a href="#tabs-1">Posting</a></li>
+                      <li><a href="#tabs-2">Non Posting</a></li>
+                    </ul>
+                    <div id="tabs-1">
+                      <table id="posting"></table>
+                    </div>
+                    <div id="tabs-2">
+                      <table id="nonposting"></table>
+                    </div>
+                  </div>
                 </div>
               </div>
+
             </div>
 
           </div>
@@ -93,14 +91,10 @@
 
   $(document).ready(function() {
 
-    $("#crudForm [name]").attr("autocomplete", "off");
-    $(document).on('click', "#addRow", function() {
-      addRow()
-    });
+    $('#tabs').tabs();
 
-    $(document).on('click', '.delete-row', function(event) {
-      deleteRow($(this).parents('tr'))
-    })
+    $("#crudForm [name]").attr("autocomplete", "off");
+   
 
 
     $('#btnSubmit').click(function(event) {
@@ -244,7 +238,7 @@
     $('.invalid-feedback').remove()
 
     $('#table_body').html('')
-    
+
     initDatepicker()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 

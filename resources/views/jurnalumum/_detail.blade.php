@@ -51,16 +51,12 @@
             name: 'nominaldebet',
             align: 'right',
             formatter: currencyFormat,
-            search: false,
-            sortable: false
           },
           {
             label: 'KREDIT',
             name: 'nominalkredit',
             align: 'right',
             formatter: currencyFormat,
-            search: false,
-            sortable: false
           },
           {
             label: 'KETERANGAN',
