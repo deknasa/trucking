@@ -228,9 +228,10 @@
         $('#table_body tr').each(function(row, tr) {
           
           if ($(this).find('[name="penerimaantruckingheader_id[]"]').is(':checked')) {
-            console.log(form);
-            // console.log(form.find(`[name="penerimaantruckingheader_nobukti[]"]`).val())
-            console.log(form.find(`[name="keterangan[]"]`).val())
+            data.push({
+              name: 'supir_id[]',
+              value: form.find(`[name="supirheader_id"]`).val()
+            })
             data.push({
               name: 'penerimaantruckingheader_nobukti[]',
               value: $(this).find(`[name="penerimaantruckingheader_nobukti[]"]`).val()
@@ -283,7 +284,18 @@
         name: 'limit',
         value: limit
       })
-      // console.log(data)
+
+      data.push({
+        name: 'tgldariheader',
+        value: $('#tgldariheader').val()
+      })
+      data.push({
+        name: 'tglsampaiheader',
+        value: $('#tglsampaiheader').val()
+      })
+      let tgldariheader = $('#tgldariheader').val();
+      let tglsampaiheader = $('#tglsampaiheader').val()
+
       switch (action) {
         case 'add':
           method = 'POST'
@@ -295,7 +307,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}pengeluarantruckingheader/${Id}`
+          url = `${apiUrl}pengeluarantruckingheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -318,7 +330,6 @@
 
 
           id = response.data.id
-          console.log(id)
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
 
@@ -441,12 +452,10 @@
   function enabledRow(row) {
     let check = $(`#penerimaantruckingheader_id${row}`)
     if (check.prop("checked") == true) {
-      console.log(row);
       $(`#nominal_${row}`).prop('disabled', false)
       $(`#penerimaantruckingheader_nobukti_detail${row}`).prop('disabled', false)
       $(`#keterangan_detail${row}`).prop('disabled', false)
     } else if (check.prop("checked") == false) {
-      // console.log('disabale');
       $(`#nominal_${row}`).prop('disabled', true)
       $(`#penerimaantruckingheader_nobukti_detail${row}`).prop('disabled', true)
       $(`#keterangan_detail${row}`).prop('disabled', true)
@@ -481,7 +490,6 @@
     $.each(nominalDetails, (index, nominalDetail) => {
       total += AutoNumeric.getNumber(nominalDetail)
     });
-console.log(total);
     new AutoNumeric('#total').set(total)
   }
 
@@ -664,6 +672,7 @@ console.log(total);
       },
       success: response => {
         let tgl = response.data.tglbukti
+        let kodepengeluaran = response.data.kodepengeluaran
 
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
@@ -686,89 +695,96 @@ console.log(total);
           }
         })
 
-        $.each(response.detail, (index, detail) => {
-          let detailRow = $(`
-            <tr>
-                <td></td>
-                <td class="data_tbl tbl_supir">
-                    <input type="hidden" name="supir_id[]">
-                    <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
-                </td>
-                <td class="data_tbl tbl_penerimaantruckingheader">
-                    <input type="text" name="penerimaantruckingheader_nobukti[]" data-current-value="${detail.penerimaantruckingheader_nobukti}" class="form-control penerimaantruckingheader-lookup">
-                </td>
-                <td class="data_tbl tbl_keterangan">
-                    <input type="text" name="keterangan[]" class="form-control"> 
-                </td>
-                <td class="data_tbl tbl_nominal">
-                    <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                </td>
-            </tr>
-          `)
-
-          detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
-          detailRow.find(`[name="supir[]"]`).val(detail.supir)
-          detailRow.find(`[name="keterangan[]"]`).val(detail.keterangan)
-          detailRow.find(`[name="penerimaantruckingheader_nobukti[]"]`).val(detail.penerimaantruckingheader_nobukti)
-          detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
-
-          initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
-          $('#detailList tbody').append(detailRow)
-
-          setTotal();
-
-          $('.supir-lookup').last().lookup({
-            title: 'Supir Lookup',
-            fileName: 'supir',
-            beforeProcess: function(test) {
-              // var levelcoa = $(`#levelcoa`).val();
-              this.postData = {
-                Aktif: 'AKTIF',
+        if (kodepengeluaran === "TDE") {
+          getTarikDeposito(id)
+        }else{
+          $.each(response.detail, (index, detail) => {
+            let detailRow = $(`
+              <tr>
+                  <td></td>
+                  <td class="data_tbl tbl_supir">
+                      <input type="hidden" name="supir_id[]">
+                      <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
+                  </td>
+                  <td class="data_tbl tbl_penerimaantruckingheader">
+                      <input type="text" name="penerimaantruckingheader_nobukti[]" data-current-value="${detail.penerimaantruckingheader_nobukti}" class="form-control penerimaantruckingheader-lookup">
+                  </td>
+                  <td class="data_tbl tbl_keterangan">
+                      <input type="text" name="keterangan[]" class="form-control"> 
+                  </td>
+                  <td class="data_tbl tbl_nominal">
+                      <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+                  </td>
+                  <td>
+                      <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                  </td>
+              </tr>
+            `)
+  
+            detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
+            detailRow.find(`[name="supir[]"]`).val(detail.supir)
+            detailRow.find(`[name="keterangan[]"]`).val(detail.keterangan)
+            detailRow.find(`[name="penerimaantruckingheader_nobukti[]"]`).val(detail.penerimaantruckingheader_nobukti)
+            detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+  
+            initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
+            $('#detailList tbody').append(detailRow)
+  
+            setTotal();
+  
+            $('.supir-lookup').last().lookup({
+              title: 'Supir Lookup',
+              fileName: 'supir',
+              beforeProcess: function(test) {
+                // var levelcoa = $(`#levelcoa`).val();
+                this.postData = {
+                  Aktif: 'AKTIF',
+                }
+              },
+              onSelectRow: (supir, element) => {
+                element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+                element.val(supir.namasupir)
+                element.data('currentValue', element.val())
+              },
+              onCancel: (element) => {
+                element.val(element.data('currentValue'))
+              },
+              onClear: (element) => {
+                element.parents('td').find(`[name="supir_id[]"]`).val('')
+                element.val('')
+                element.data('currentValue', element.val())
               }
-            },
-            onSelectRow: (supir, element) => {
-              element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
-              element.val(supir.namasupir)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="supir_id[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
+            })
+  
+            $('.penerimaantruckingheader-lookup').last().lookup({
+              title: 'Penerimaan Trucking Lookup',
+              fileName: 'penerimaantruckingheader',
+              beforeProcess: function(test) {
+                // var levelcoa = $(`#levelcoa`).val();
+                this.postData = {
+  
+                  Aktif: 'AKTIF',
+                }
+              },
+              onSelectRow: (penerimaantruckingheader, element) => {
+                element.val(penerimaantruckingheader.nobukti)
+                element.data('currentValue', element.val())
+              },
+              onCancel: (element) => {
+                element.val(element.data('currentValue'))
+              },
+              onClear: (element) => {
+                element.val('')
+                element.data('currentValue', element.val())
+              }
+            })
+  
+  
           })
 
-          $('.penerimaantruckingheader-lookup').last().lookup({
-            title: 'Penerimaan Trucking Lookup',
-            fileName: 'penerimaantruckingheader',
-            beforeProcess: function(test) {
-              // var levelcoa = $(`#levelcoa`).val();
-              this.postData = {
+        }
+        KodePengeluaranId = kodepengeluaran
 
-                Aktif: 'AKTIF',
-              }
-            },
-            onSelectRow: (penerimaantruckingheader, element) => {
-              element.val(penerimaantruckingheader.nobukti)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
-
-
-        })
         setTampilanForm()
 
         setRowNumbers()
@@ -816,11 +832,11 @@ console.log(total);
               </td>
               <td class="data_tbl tbl_penerimaantruckingheader">
                 ${detail.nobukti}
-                <input name="penerimaantruckingheader_nobukti[]" id="penerimaantruckingheader_nobukti_detail${row}" disabled value="${detail.nobukti}" type="">
+                <input name="penerimaantruckingheader_nobukti[]" id="penerimaantruckingheader_nobukti_detail${row}" disabled value="${detail.nobukti}" type="hidden">
               </td>
               <td class="data_tbl tbl_keterangan">
                 ${detail.keterangan}
-                <input name="keterangan[]" id="keterangan_detail${row}" disabled value="${detail.keterangan}" type="">
+                <input name="keterangan[]" id="keterangan_detail${row}" disabled value="${detail.keterangan}" type="hidden">
               </td>
               <td class="data_tbl tbl_nominal">
                 <input type="text" name="nominal[]" disabled id="nominal_${detail.id}" value="${detail.nominal}"  class="form-control nominal_${detail.id} numeric_${detail.id} form-control autonumeric nominal text-right">
@@ -844,7 +860,54 @@ console.log(total);
     }
   }
 
-
+  function getTarikDeposito(id){
+    $.ajax({
+        url: `${apiUrl}pengeluarantruckingheader/${id}/gettarikdeposito`,
+        method: 'POST',
+        dataType: 'JSON',
+        // data: data,
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let totalNominal = 0
+          let row = 0
+          let form = $('#crudform')
+          $('#detailList tbody').html('')
+          
+          $.each(response, (index, detail) => {
+            let id = detail.id
+            row++
+            let nominal = new Intl.NumberFormat('en-US').format(detail.nominal);
+            totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
+            let detailRow = $(`
+            <tr>
+              <td>
+                ${row}
+              </td>
+              <td class="data_tbl tbl_checkbox">
+                <input name='penerimaantruckingheader_id[]' type="checkbox" checked class="checkItem" id="penerimaantruckingheader_id${detail.id}" data-id="${detail.id}"  value="${detail.id}">
+              </td>
+              <td class="data_tbl tbl_penerimaantruckingheader">
+                ${detail.nobukti}
+                <input name="penerimaantruckingheader_nobukti[]" id="penerimaantruckingheader_nobukti_detail${row}" disabled value="${detail.nobukti}" type="hidden">
+              </td>
+              <td class="data_tbl tbl_keterangan">
+                ${detail.keterangan}
+                <input name="keterangan[]" id="keterangan_detail${row}" disabled value="${detail.keterangan}" type="hidden">
+              </td>
+              <td class="data_tbl tbl_nominal">
+                <input type="text" name="nominal[]"  id="nominal_${detail.id}" value="${detail.nominal}"  class="form-control nominal_${detail.id} numeric_${detail.id} form-control autonumeric nominal text-right">
+              </td>
+              
+            </tr>`)
+            $('#detailList tbody').append(detailRow)
+            initAutoNumeric(detailRow.find('.autonumeric'))
+          })
+          setTotal()
+        }
+      })
+  }
 
   function addRow() {
     let detailRow = $(`
