@@ -9,7 +9,7 @@
 
 @push('scripts')
 <script>
-  let sortnameDetail = 'nobukti'
+  let sortnameDetail = 'orderantrucking_nobukti'
   let sortorderDetail = 'asc'
   let totalRecordDetail
   let limitDetail
@@ -66,8 +66,8 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortname,
-        sortorder: sortorder,
+        sortname: sortnameDetail,
+        sortorder: sortorderDetail,
         page: pageDetail,
         viewrecords: true,
         postData: {

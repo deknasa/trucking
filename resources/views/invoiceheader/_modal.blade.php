@@ -468,10 +468,21 @@
       name: 'limit',
       value: 0
     })
+    data.push({
+      name: 'aksi',
+      value: form.data('action')
+    })
+
+    if (form.data('action') == 'add') {
+      url = `getSP`
+    } else if (form.data('action') == 'edit') {
+      invId = $(`#crudForm`).find(`[name="id"]`).val()
+      url = `${invId}/getAllEdit`
+    }
 
     let tgldari = form.find(`[name="tgldari"]`).val()
     let tglsampai = form.find(`[name="tglsampai"]`).val()
-    console.log()
+
     if (data[0].value != '' && data[1].value != '' && data[2].value != '' && data[3].value != '') {
 
       if (tgldari > tglsampai) {
@@ -480,7 +491,7 @@
       $('#spList tbody').html('')
       $('#omset').html('')
       $.ajax({
-        url: `${apiUrl}invoiceheader/getSP`,
+        url: `${apiUrl}invoiceheader/${url}`,
         method: 'GET',
         dataType: 'JSON',
         data: data,
@@ -495,6 +506,7 @@
             let omset = 0
             $.each(response.data, (index, detail) => {
 
+              nominalRetribusi = (detail.nominalretribusi != null) ? detail.nominalretribusi : 0;
               // omset = parseFloat(omset) + parseFloat(detail.omset)
               let cekLongtrip = detail.statuslongtrip == 65 ? "checked" : "";
               let cekPeralihan = detail.statusperalihan == 67 ? "checked" : "";
@@ -506,7 +518,7 @@
                                   <td>${detail.nocont}</td>
                                   <td>${detail.tarif_id}</td>
                                   <td class="omset text-right">${detail.omset}</td>
-                                  <td id="ret${detail.id}"><input type="text" name="nominalretribusi[]" class="form-control text-right"></td>
+                                  <td id="ret${detail.id}"><input type="text" name="nominalretribusi[]" value=${nominalRetribusi} class="form-control text-right"></td>
                                   <td>${detail.jenisorder_id}</td>
                                   <td>${detail.agen_id}</td>
                                   <td><input name='statuslongtrip[]' type="checkbox" value="${detail.statuslongtrip}" ${cekLongtrip} disabled></td>
