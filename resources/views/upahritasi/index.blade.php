@@ -65,11 +65,6 @@
             formatter: currencyFormat
           },
           {
-            label: 'ZONA',
-            name: 'zona_id',
-            align: 'left'
-          },
-          {
             label: 'STATUS',
             name: 'statusaktif',
             stype: 'select',
