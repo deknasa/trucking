@@ -20,7 +20,7 @@
 
   function loadDetailGrid(id) {
     $("#detail").jqGrid({
-        url: `${apiUrl}jurnalumumpusatdetail`,
+        url: `${apiUrl}pemutihansupirdetail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -30,34 +30,21 @@
             name: 'nobukti',
           },
           {
-            label: 'TGL BUKTI',
-            name: 'tglbukti',
+            label: 'NO BUKTI PENGELUARAN TRUCKING',
+            name: 'pengeluarantrucking_nobukti',
+            width: 200
           },
           {
-            label: 'KODE PERKIRAAN',
-            name: 'coa',
-          },
-          {
-            label: 'NAMA PERKIRAAN',
-            name: 'keterangancoa',
-          },
-          {
-            label: 'DEBET',
-            name: 'nominaldebet',
+            label: 'NOMINAL',
+            name: 'nominal',
             align: 'right',
             formatter: currencyFormat,
           },
           {
-            label: 'KREDIT',
-            name: 'nominalkredit',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            width: '500px'
+            label: 'Status POSTING',
+            name: 'statusposting',
           }
+
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -75,7 +62,7 @@
         page: pageDetail,
         viewrecords: true,
         postData: {
-          jurnalumum_id: id
+          pemutihansupir_id: id
         },
         prmNames: {
           sort: 'sortIndex',
@@ -95,6 +82,7 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -123,8 +111,10 @@
               nominal: data.attributes.totalNominal,
             }, true)
           }
+
         }
       })
+
       .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
@@ -146,6 +136,7 @@
       })
 
       .customPager()
+
     /* Append clear filter button */
     loadClearFilter($('#detail'))
 
@@ -155,10 +146,10 @@
 
   function loadDetailData(id) {
     $('#detail').setGridParam({
-      url: `${apiUrl}jurnalumumpusatdetail`,
+      url: `${apiUrl}pemutihansupirdetail`,
       datatype: "json",
       postData: {
-        jurnalumum_id: id
+        pemutihansupir_id: id
       },
       page: 1
     }).trigger('reloadGrid')

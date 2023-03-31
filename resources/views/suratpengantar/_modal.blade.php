@@ -14,13 +14,13 @@
             <div class="row">
               <div class="col-md-4">
                 <div class="form-group ">
-                  <label class="col-sm-4 col-form-label">NO TRANSAKSI </label>
+                  <label class="col-sm-12 col-form-label">NO TRANSAKSI </label>
                   <div class="col-sm-12">
                     <input type="text" name="nobukti" class="form-control" readonly>
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-4 col-form-label">TANGGAL TRIP <span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">TANGGAL TRIP <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <div class="input-group">
                       <input type="text" name="tglbukti" class="form-control datepicker">
@@ -42,27 +42,27 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-4 col-form-label">NO SP<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">NO SP<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="text" name="nosp" class="form-control">
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-4 col-form-label">NO POLISI<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">NO POLISI<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="trado_id">
                     <input type="text" name="trado" class="form-control trado-lookup">
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-4 col-form-label">SUPIR<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">SUPIR<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="supir_id">
                     <input type="text" name="supir" class="form-control supir-lookup">
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-4 col-form-label">DARI<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">DARI<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="dari_id">
                     <input type="text" name="dari" class="form-control kotadari-lookup">
@@ -76,14 +76,14 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-4 col-form-label">CONTAINER<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">CONTAINER<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="container_id">
                     <input type="text" name="container" class="form-control container-lookup">
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-4 col-form-label">NOMOR CONTAINER</label>
+                  <label class="col-sm-12 col-form-label">NOMOR CONTAINER</label>
                   <div class="col-sm-12">
                     <input type="text" name="nocont" class="form-control" readonly>
                   </div>
@@ -111,7 +111,7 @@
                       </div>
                       <div id="peralihan">
                         <div class="form-group">
-                          <label class="col-sm-4 col-form-label">Nominal Peralihan</label>
+                          <label class="col-sm-12 col-form-label">Nominal Peralihan</label>
                           <div class="col-md-12">
                             <input type="text" name="nominalperalihan" class="form-control text-right" disabled>
                             <input type="hidden" name="omset">

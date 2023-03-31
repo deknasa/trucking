@@ -175,6 +175,7 @@ use App\Http\Controllers\LaporanTripTradoController;
 use App\Http\Controllers\LaporanUangJalanController;
 use App\Http\Controllers\LookupController;
 use App\Http\Controllers\PemutihanSupirController;
+use App\Http\Controllers\PemutihanSupirDetailController;
 use App\Http\Controllers\PencairanGiroPengeluaranDetailController;
 use App\Http\Controllers\PencairanGiroPengeluaranHeaderController;
 use App\Http\Controllers\PendapatanSupirDetailController;
@@ -1008,6 +1009,7 @@ Route::middleware(['auth','authorized'])->group(function () {
 
     Route::get('pemutihansupir/index', [PemutihanSupirController::class, 'index']);
     Route::resource('pemutihansupir', PemutihanSupirController::class);
+    Route::resource('pemutihansupirdetail', PemutihanSupirDetailController::class);
 
     Route::get('exportpemakaianbarang/export', [ExportPemakaianBarangController::class, 'export'])->name('exportpemakaianbarang.export');
     Route::get('exportpemakaianbarang/index', [ExportPemakaianBarangController::class, 'index']);

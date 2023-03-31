@@ -5,12 +5,15 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
+      @include('layouts._rangeheader')
       <table id="jqGrid"></table>
     </div>
   </div>
 </div>
 
 @include('pemutihansupir._modal')
+
+@include('pemutihansupir._detail')
 
 @push('scripts')
 <script>
@@ -28,13 +31,25 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
+  let hasDetail = false
+
 
   $(document).ready(function() {
+    setRange()
+    initDatepicker()
+    $(document).on('click','#btnReload', function(event) {
+      loadDataHeader('pemutihansupir')
+    })
+
     $("#jqGrid").jqGrid({
         url: `${apiUrl}pemutihansupir`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
+        postData: {
+          tgldari:$('#tgldariheader').val() ,
+          tglsampai:$('#tglsampaiheader').val() 
+        },
         datatype: "json",
         colModel: [{
             label: 'ID',
@@ -61,10 +76,17 @@
             name: 'supir',
           },
           {
-            label: 'PENERIMAAN SUPIR',
-            name: 'penerimaansupir',
-            align: 'right',
-            formatter: currencyFormat
+            label: 'BANK',
+            name: 'bank',
+          },
+          {
+            label: 'NO. BUKTI PENERIMAAN',
+            name: 'penerimaan_nobukti',
+          },
+          {
+            label: 'NAMA PERKIRAAN',
+            name: 'coa',
+            width: 250
           },
           {
             label: 'PENGELUARAN SUPIR',
@@ -129,6 +151,13 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+          
+          if (!hasDetail) {
+            loadDetailGrid(id)
+            hasDetail = true
+          }
+
+          loadDetailData(id)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
