@@ -417,19 +417,19 @@
       case 'DOT':
         tampilandot()
         break;
-      case 'POT':
+      case 'PO':
         tampilanpo()
         break;
-      case 'PBT':
+      case 'SPB':
         tampilanpbt()
         break;
-      case 'PGT':
+      case 'PG':
         tampilanpgt()
         break;
-      case 'KST':
+      case 'KOR':
         tampilankst()
         break;
-      case 'PST':
+      case 'SPBS':
         tampilanpst()
         break;
     

@@ -95,7 +95,7 @@
             </div>
             
             <div class="table-scroll table-responsive">
-              <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="">
+              <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1000px;">
                 <thead>
                   <tr>
                     <th width="1%">No</th>

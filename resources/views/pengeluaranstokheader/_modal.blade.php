@@ -428,7 +428,7 @@
       case 'SPK':
         tampilanspk()
         break;
-      case 'RBT':
+      case 'RTR':
         tampilanrbt()
         break;
       case 'KOR':
