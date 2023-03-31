@@ -812,6 +812,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('invoiceheader/export', [InvoiceHeaderController::class, 'export'])->name('invoiceheader.export');
     Route::get('invoiceheader/report', [InvoiceHeaderController::class, 'report'])->name('invoiceheader.report');
     Route::resource('invoiceheader', InvoiceHeaderController::class);
+    Route::get('invoicedetail/jurnal/grid', [InvoiceDetailController::class, 'jurnalGrid']);
+    Route::get('invoicedetail/piutang/grid', [InvoiceDetailController::class, 'piutangGrid']);
+    Route::get('invoicedetail/detail/grid', [InvoiceDetailController::class, 'detailGrid']);
     Route::resource('invoicedetail', InvoiceDetailController::class);
     
     Route::get('invoiceextraheader/index', [InvoiceExtraHeaderController::class, 'index']);

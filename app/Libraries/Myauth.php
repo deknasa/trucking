@@ -47,7 +47,9 @@ class Myauth
             'approval',
             'aclgrid',
             'detailgrid',
-            'historygrid'
+            'historygrid',
+            'piutanggrid',
+            'jurnalgrid'
         ],
     ];
 

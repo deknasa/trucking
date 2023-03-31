@@ -1,19 +1,19 @@
-<table id="detailGrid"></table>
+<table id="jurnalGrid"></table>
 
 <script>
-  function loadGrid(id) {
-    let sortnameDetail = 'orderantrucking_nobukti'
-    let sortorderDetail = 'asc'
-    let totalRecordDetail
-    let limitDetail
-    let postDataDetail
-    let triggerClickDetail
-    let indexRowDetail
-    let pageDetail = 0
+  function loadGrid(invoiceId, nobukti) {
+    let sortnameJurnal = 'nobukti'
+    let sortorderJurnal = 'asc'
+    let totalRecordJurnal
+    let limitJurnal
+    let postDataJurnal
+    let triggerClickJurnal
+    let indexRowJurnal
+    let pageJurnal = 0
 
-    $("#detailGrid")
+    $("#jurnalGrid")
       .jqGrid({
-        url: `${apiUrl}invoicedetail`,
+        url: `${apiUrl}invoicedetail/jurnal`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -21,32 +21,40 @@
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
+          },{
+            label: 'TGL BUKTI',
+            name: 'tglbukti',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'KODE PERKIRAAN',
+            name: 'coa',
+          },
+          {
+            label: 'NAMA PERKIRAAN',
+            name: 'keterangancoa',
+          },
+          {
+            label: 'DEBET',
+            name: 'nominaldebet',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'KREDIT',
+            name: 'nominalkredit',
+            align: 'right',
+            formatter: currencyFormat,
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
-            label: 'NOMINAL RETRIBUSI',
-            name: 'nominalretribusi',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
-            label: 'NO BUKTI ORDERAN',
-            name: 'orderantrucking_nobukti',
-          },
-          {
-            label: 'NO BUKTI SP',
-            name: 'suratpengantar_nobukti',
-            width: 300
-          },
+            width: '500px'
+          }
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -59,12 +67,12 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortnameDetail,
-        sortorder: sortorderDetail,
-        page: pageDetail,
+        sortname: sortnameJurnal,
+        sortorder: sortorderJurnal,
+        page: pageJurnal,
         viewrecords: true,
         postData: {
-          invoice_id: id
+          nobukti: nobukti
         },
         prmNames: {
           sort: 'sortIndex',
@@ -90,19 +98,19 @@
           initResize($(this))
 
           /* Set global variables */
-          sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
-          sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecordDetail = $(this).getGridParam("records")
-          limitDetail = $(this).jqGrid('getGridParam', 'postData').limit
-          postDataDetail = $(this).jqGrid('getGridParam', 'postData')
+          sortnameJurnal = $(this).jqGrid("getGridParam", "sortname")
+          sortorderJurnal = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordJurnal = $(this).getGridParam("records")
+          limitJurnal = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataJurnal = $(this).jqGrid('getGridParam', 'postData')
           triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRowDetail > $(this).getDataIDs().length - 1) {
-            indexRowDetail = $(this).getDataIDs().length - 1;
+          if (indexRowJurnal > $(this).getDataIDs().length - 1) {
+            indexRowJurnal = $(this).getDataIDs().length - 1;
           }
 
           setHighlight($(this))
@@ -110,8 +118,8 @@
           if (data.attributes) {
             $(this).jqGrid('footerData', 'set', {
               nobukti: 'Total:',
-              nominal: data.attributes.totalNominal,
-              nominalretribusi: data.attributes.totalRetribusi,
+              nominaldebet: data.attributes.totalNominalDebet,
+              nominalkredit: data.attributes.totalNominalKredit,
             }, true)
           }
         }
@@ -125,7 +133,11 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
-          clearGlobalSearch($('#detailGrid'))
+          $(this).setGridParam({
+          postData: {
+            nobukti: nobukti
+          },})
+          clearGlobalSearch($('#jurnalGrid'))
         },
       })
       .jqGrid("navGrid", pager, {
@@ -138,18 +150,18 @@
 
       .customPager()
     /* Append clear filter button */
-    loadClearFilter($('#detailGrid'))
+    loadClearFilter($('#jurnalGrid'))
 
     /* Append global search */
-    loadGlobalSearch($('#detailGrid'))
+    loadGlobalSearch($('#jurnalGrid'))
   }
 
-  function loadDetailData(id) {
-    $('#detailGrid').setGridParam({
-      url: `${apiUrl}invoicedetail`,
+  function loadDetailData(id, nobukti) {
+    $('#jurnalGrid').setGridParam({
+      url: `${apiUrl}invoicedetail/jurnal`,
       datatype: "json",
       postData: {
-        invoice_id: id
+        nobukti: nobukti
       },
       page: 1
     }).trigger('reloadGrid')

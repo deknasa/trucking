@@ -9,11 +9,38 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs">
+            <ul class="dejavu">
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#piutang-tab">Piutang</a></li>
+              <li><a href="#jurnal-tab">Jurnal</a></li>
+            </ul>
+            <div id="detail-tab">
+
+            </div>
+
+            <div id="piutang-tab">
+
+            </div>
+            <div id="jurnal-tab">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 @include('invoiceheader._modal')
 <!-- Detail -->
 @include('invoiceheader._detail')
+@include('invoiceheader._piutang')
+@include('invoiceheader._jurnal')
 
 @push('scripts')
 <script>
@@ -32,12 +59,14 @@
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false
+  let currentTab = 'detail'
 
   $(document).ready(function() {
-    
+    $("#tabs").tabs()
+
     setRange()
     initDatepicker()
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('invoiceheader')
     })
 
@@ -45,10 +74,10 @@
         url: `${apiUrl}invoiceheader`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
-        iconSet: 'fontAwesome', 
+        iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val() 
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val()
         },
         datatype: "json",
         colModel: [{
@@ -94,7 +123,7 @@
                   <span>${statusApproval.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
@@ -141,7 +170,7 @@
                   <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
@@ -173,7 +202,7 @@
             align: 'right',
             formatter: currencyFormat,
           },
-          
+
           {
             label: 'TANGGAL TERIMA',
             name: 'tglterima',
@@ -184,7 +213,7 @@
               newformat: "d-m-Y"
             }
           },
-          
+
           {
             label: 'TANGGAL JATUH TEMPO',
             name: 'tgljatuhtempo',
@@ -219,7 +248,7 @@
             label: 'USER APPROVAL',
             name: 'userapproval',
             align: 'left'
-          },          
+          },
           {
             label: 'TANGGAL APPROVAL',
             name: 'tglapproval',
@@ -234,7 +263,7 @@
             label: 'USER BUKA CETAK',
             name: 'userbukacetak',
             align: 'left'
-          },          
+          },
           {
             label: 'TANGGAL CETAK',
             name: 'tglbukacetak',
@@ -298,18 +327,18 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'piutang_nobukti')
+          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/invoicedetail/${currentTab}/grid`, function() {
+            loadGrid(id,nobukti)
+          })
+          loadDetailData(id,nobukti)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
-          if (!hasDetail) {
-            loadDetailGrid(id)
-            hasDetail = true
-          }
 
-          loadDetailData(id)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -318,7 +347,7 @@
               postData: {
                 invoice_id: 0,
               },
-            }).trigger('reloadGrid'); 
+            }).trigger('reloadGrid');
           }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -330,7 +359,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
@@ -413,7 +442,7 @@
               }
             }
           },
-          
+
           {
             id: 'export',
             title: 'Export',
@@ -428,7 +457,7 @@
                 window.open(`{{ route('invoiceheader.export') }}?id=${selectedId}`)
               }
             }
-          },  
+          },
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
@@ -473,12 +502,12 @@
       .parent().addClass('px-1')
 
     $('#approval .ui-pg-div')
-       .addClass('btn btn-purple btn-sm')
-       .css({
+      .addClass('btn btn-purple btn-sm')
+      .css({
         'background': '#6619ff',
         'color': '#fff'
-       })
-       .parent().addClass('px-1')
+      })
+      .parent().addClass('px-1')
 
     if (!`{{ $myAuth->hasPermission('invoiceheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
@@ -552,8 +581,18 @@
         submitButton.removeAttr('disabled')
       }
     })
-  })
 
+    $("#tabs").on('click', 'li.ui-state-active', function() {
+      let href = $(this).find('a').attr('href');
+      currentTab = href.substring(1, href.length - 4);
+      let invoiceId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      let nobukti = $('#jqGrid').jqGrid('getCell', invoiceId, 'piutang_nobukti')
+      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/invoicedetail/${currentTab}/grid`, function() {
+
+        loadGrid(invoiceId, nobukti)
+      })
+    })
+  })
 </script>
 @endpush()
 @endsection

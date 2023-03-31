@@ -29,6 +29,19 @@ class InvoiceDetailController extends Controller
 
         return response($data);
     }
+    
+    public function jurnalGrid()
+    {
+        return view('invoiceheader._jurnal');
+    }
+    public function piutangGrid()
+    {
+        return view('invoiceheader._piutang');
+    }
+    public function detailGrid()
+    {
+        return view('invoiceheader._detail');
+    }
 }
 
 

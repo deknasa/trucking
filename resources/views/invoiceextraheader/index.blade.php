@@ -175,11 +175,6 @@
             formatter: currencyFormat,
           },
           {
-            label: 'pelanggan',
-            name: 'pelanggan',
-            align: 'left'
-          },
-          {
             label: 'agen',
             name: 'agen',
             align: 'left'
