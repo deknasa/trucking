@@ -33,7 +33,7 @@
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false
-
+  let activeGrid 
   $(document).ready(function() {
     setRange()
     initDatepicker()
