@@ -461,9 +461,9 @@
     $('.sumrow').hide();
     $('[name=gudang]').val('').attr('readonly', false);
     $('[name=gudang_id]').val('')
-    $('[name=supplier]').val('').attr('readonly', false);
-    $('[name=supplier]').data('currentValue', '')
-    $('[name=supplier_id]').val('')
+    // $('[name=supplier]').val('').attr('readonly', false);
+    // $('[name=supplier]').data('currentValue', '')
+    // $('[name=supplier_id]').val('')
   }
 
   function tampilanpo() {
@@ -488,9 +488,9 @@
     $('.sumrow').hide();
     $('[name=gudang]').val('').attr('readonly', false);
     $('[name=gudang_id]').val('')
-    $('[name=supplier]').val('').attr('readonly', false);
-    $('[name=supplier]').data('currentValue', '')
-    $('[name=supplier_id]').val('')
+    // $('[name=supplier]').val('').attr('readonly', false);
+    // $('[name=supplier]').data('currentValue', '')
+    // $('[name=supplier_id]').val('')
   }
 
   function tampilanpbt() {
@@ -574,14 +574,14 @@
     $('[name=gudangdari]').parents('.form-group').show()
     $('[name=gudangke]').parents('.form-group').show()
     $('[name=coa]').parents('.form-group').show()
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    // $('[name=gudang]').val('').attr('readonly', false);
+    // $('[name=gudang_id]').val('')
     $('.sumrow').show();
     $('.data_tbl').show();
     $('.colspan').attr('colspan', 6);
     // $('[name=nobon]').val('')
-    $('[name=supplier]').attr('readonly', false);
-    $('[name=supplier]').data('currentValue', '')
+    // $('[name=supplier]').attr('readonly', false);
+    // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
   }
 

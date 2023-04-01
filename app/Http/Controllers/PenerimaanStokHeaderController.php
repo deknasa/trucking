@@ -16,8 +16,9 @@ class PenerimaanStokHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-
-        return view('penerimaanstokheader.index', compact('title'));
+        $comboKodepenerimaan = $this->comboKodepenerimaan();
+        
+        return view('penerimaanstokheader.index', compact('title','comboKodepenerimaan'));
     }
 
     public function create()
@@ -186,7 +187,15 @@ class PenerimaanStokHeaderController extends MyController
 
         return $response['data'];
     }
+    public function comboKodepenerimaan()
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'penerimaanstok');
 
+        return $response['data'];
+    }
     public function find($params,$id)
     {
         $params = [
