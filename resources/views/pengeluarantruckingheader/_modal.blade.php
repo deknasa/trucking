@@ -98,12 +98,13 @@
               <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1000px;">
                 <thead>
                   <tr>
-                    <th width="1%">No</th>
+                    <th width="1%" class="">No</th>
                     <th class="data_tbl tbl_checkbox" style="display:none" width="1%">Pilih</th>
-                    <th class="data_tbl tbl_supir" width="20%">SUPIR</th>
-                    <th class="data_tbl tbl_penerimaantruckingheader" width="20%">NO BUKTI PENERIMAAN TRUCKING</th>
+                    <th width="20%" class="data_tbl tbl_supir_id">SUPIR</th>
+                    <th class="data_tbl tbl_penerimaantruckingheader_nobukti" width="20%">NO BUKTI PENERIMAAN TRUCKING</th>
+                    <th width="14%" class="tbl_sisa">Sisa</th>
+                    <th width="20%" class="tbl_nominal">Nominal</th>
                     <th class="data_tbl tbl_keterangan" width="25%">Keterangan</th>
-                    <th width="20%">Nominal</th>
                     <th width="1%" class="tbl_aksi">Aksi</th>
                   </tr>
                 </thead>
@@ -111,13 +112,17 @@
 
                 </tbody>
                 <tfoot>
-                  <tr>
-                    <td colspan="4" class="colspan">
+                   <tr>
+                    <td colspan="3" class="colspan">
                       <p class="text-right font-weight-bold">TOTAL :</p>
+                    </td>
+                    <td id="sisaColFoot" style="display: none">
+                      <p class="text-right font-weight-bold autonumeric" id="sisaFoot"></p>
                     </td>
                     <td>
                       <p class="text-right font-weight-bold autonumeric" id="total"></p>
                     </td>
+                    <td class="colmn-offset"></td>
                     <td id="tbl_addRow">
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
@@ -227,22 +232,22 @@
         })
         $('#table_body tr').each(function(row, tr) {
           
-          if ($(this).find('[name="penerimaantruckingheader_id[]"]').is(':checked')) {
+          if ($(this).find('[name="pinjPribadi[]"]').is(':checked')) {
             data.push({
               name: 'supir_id[]',
               value: form.find(`[name="supirheader_id"]`).val()
             })
             data.push({
               name: 'penerimaantruckingheader_nobukti[]',
-              value: $(this).find(`[name="penerimaantruckingheader_nobukti[]"]`).val()
+              value: $(this).find(`[name="pinjPribadi_nobukti[]"]`).val()
             })
             data.push({
               name: 'keterangan[]',
-              value: $(this).find(`[name="keterangan[]"]`).val()
+              value: $(this).find(`[name="pinjPribadi_keterangan[]"]`).val()
             })
             data.push({
               name: 'nominal[]',
-              value: AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[row])
+              value: AutoNumeric.getNumber($(`#crudForm [name="nominalDP[]"]`)[row])
             })
             
           }
@@ -422,27 +427,38 @@
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('.tbl_checkbox').hide()
+    $('.tbl_supir_id').show()
     $('.tbl_aksi').show()
+    $('.colspan').attr('colspan', 3);
     $('#tbl_addRow').show()
+    // $('.colmn-offset').hide()
   }
   function tampilanTDE() {
     $('[name=keterangancoa]').parents('.form-group').hide()
+    $('.tbl_supir_id').hide()
     $('[name=supirheader_id]').parents('.form-group').show()
-    $('.tbl_supir').hide()
     $('.tbl_checkbox').show()
+    $('.tbl_sisa').show()
+  
+    $('.colspan').attr('colspan', 3);
+    $('#sisaColFoot').show()
+    $('#sisaFoot').show()
     
     $('.tbl_aksi').hide()
     $('#tbl_addRow').hide()
-
-    $('.colspan').attr('colspan', 4);
     
   }
   function tampilanall() {
-    $('[name=keterangancoa]').parents('.form-group').hide()
-    $('[name=supirheader_id]').parents('.form-group').hide()
-    $('.tbl_checkbox').hide()
-    $('.tbl_aksi').show()
-    $('#tbl_addRow').show()
+    $('[name=keterangancoa]').parents('.form-group').show()
+  $('.tbl_supir_id').show()
+  $('.tbl_sisa').hide()
+  $('.tbl_penerimaantruckingheader_nobukti').show()
+  $('[name=supirheader_id]').parents('.form-group').hide()
+  $('.colspan').attr('colspan', 3);
+  $('#sisaColFoot').hide()
+  $('#sisaFoot').hide()
+  $('.colmn-offset').show()
+
   }
     
   $(document).on('click', '.checkItem', function(event) {
@@ -709,11 +725,11 @@
                   <td class="data_tbl tbl_penerimaantruckingheader">
                       <input type="text" name="penerimaantruckingheader_nobukti[]" data-current-value="${detail.penerimaantruckingheader_nobukti}" class="form-control penerimaantruckingheader-lookup">
                   </td>
-                  <td class="data_tbl tbl_keterangan">
-                      <input type="text" name="keterangan[]" class="form-control"> 
-                  </td>
                   <td class="data_tbl tbl_nominal">
                       <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+                  </td>
+                  <td class="data_tbl tbl_keterangan">
+                      <input type="text" name="keterangan[]" class="form-control"> 
                   </td>
                   <td>
                       <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
@@ -812,101 +828,201 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          let totalNominal = 0
-          let row = 0
-          let form = $('#crudform')
           $('#detailList tbody').html('')
-          
-          $.each(response, (index, detail) => {
+          let totalSisa = 0
+          $.each(response.data, (index, detail) => {
             let id = detail.id
-            row++
-            let nominal = new Intl.NumberFormat('en-US').format(detail.nominal);
-            totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
+            totalSisa = totalSisa + parseFloat(detail.sisa);
+            let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
             let detailRow = $(`
-            <tr>
-              <td>
-                ${row}
-              </td>
-              <td class="data_tbl tbl_checkbox">
-                <input name='penerimaantruckingheader_id[]' type="checkbox" class="checkItem" id="penerimaantruckingheader_id${detail.id}" data-id="${detail.id}"  value="${detail.id}">
-              </td>
-              <td class="data_tbl tbl_penerimaantruckingheader">
-                ${detail.nobukti}
-                <input name="penerimaantruckingheader_nobukti[]" id="penerimaantruckingheader_nobukti_detail${row}" disabled value="${detail.nobukti}" type="hidden">
-              </td>
-              <td class="data_tbl tbl_keterangan">
-                ${detail.keterangan}
-                <input name="keterangan[]" id="keterangan_detail${row}" disabled value="${detail.keterangan}" type="hidden">
-              </td>
-              <td class="data_tbl tbl_nominal">
-                <input type="text" name="nominal[]" disabled id="nominal_${detail.id}" value="${detail.nominal}"  class="form-control nominal_${detail.id} numeric_${detail.id} form-control autonumeric nominal text-right">
-              </td>
-              
-            </tr>`)
-            $('#detailList tbody').append(detailRow)
-            initAutoNumeric(detailRow.find('.autonumeric'))
-          })
-            
+                <tr >
+                <td>
+                  ${id}
+                </td>
+                <td>
+                    <input name='pinjPribadi[]' type="checkbox" id="checkItem" value="${id}">
+                    <input name='pinjPribadi_nobukti[]' type="hidden" value="${detail.nobukti}">
+                </td>
+                <td>${detail.nobukti}</td>
+                <td>
+                    <p class="text-right sisaDP autonumeric">${sisa}</p>
+                    <input type="hidden" name="sisaDP[]" class="autonumeric" value="${sisa}">
+                    <input type="hidden" name="sisaAwalDP[]" class="autonumeric" value="${sisa}">
+                </td>
+                <td id=${id}>
+                    <input type="text" name="nominalDP[]" disabled class="form-control bayar text-right">
+                </td>
+                <td>
+                    ${detail.keterangan}
+                    <input name='pinjPribadi_keterangan[]' type="hidden" value="${detail.keterangan}">
+                </td>
+                </tr>
+            `)
 
+            initAutoNumeric(detailRow.find(`[name="sisaDP[]"]`))
+            initAutoNumeric(detailRow.find(`[name="sisaAwalDP[]"]`))
+            initAutoNumeric(detailRow.find(`.sisaDP`))
+
+            $('#detailList tbody').append(detailRow)
+            setTotalDP()
+          })
           setTampilanForm()
-          setTotal()
-          setRowNumbers()
-          if (form.data('action') === 'delete') {
-            form.find('[name]').addClass('disabled')
-            initDisabled()
-          }
+          $(`#detailList tfoot`).show()
+
         }
       })
     }
   }
 
+  function setTotalDP() {
+    let nominalDetails = $(`#table_body [name="nominalDP[]"]:not([disabled])`)
+    let total = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+        total += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#total').set(total)
+    
+  }
+    
+  $(document).on('click', `#detailList tbody [name="pinjPribadi[]"]`, function() {
+
+    if ($(this).prop("checked") == true) {
+      $(this).closest('tr').find(`td [name="nominalDP[]"]`).prop('disabled', false)
+      let sisa = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="sisaDP[]"]`)[0])
+      initAutoNumeric($(this).closest('tr').find(`td [name="nominalDP[]"]`))
+
+      // initAutoNumeric($(this).closest('tr').find(`td [name="nominalDP[]"]`).val(sisa))
+      // let bayar = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="nominalDP[]"]`)[0])
+      // let totalSisa = sisa - bayar
+
+      // $(this).closest("tr").find(".sisaDP").html(totalSisa)
+      // $(this).closest("tr").find(`[name="sisaDP[]"]`).val(totalSisa)
+      // initAutoNumeric($(this).closest("tr").find(".sisaDP"))
+      setTotalDP()
+      setSisaDP()
+    } else {
+      let id = $(this).val()
+      $(this).closest('tr').find(`td [name="nominalDP[]"]`).remove();
+      let newBayarElement = `<input type="text" name="nominalDP[]" class="form-control text-right" disabled>`
+      $(this).closest('tr').find(`#${id}`).append(newBayarElement)
+      
+      let sisa = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="sisaAwalDP[]"]`)[0])
+
+      initAutoNumeric($(this).closest('tr').find(`td [name="sisaDP[]"]`).val(sisa))
+      $(this).closest("tr").find(".sisaDP").html(sisa)
+      initAutoNumeric($(this).closest("tr").find(".sisaDP"))
+
+      setTotalDP()
+      setSisaDP()
+    }
+  })
+      
+  $(document).on('input', `#table_body [name="nominalDP[]"]`, function(event) {
+    setTotalDP()
+    setSisaDetail(this)
+  })
+
+  function setSisaDetail(el){
+    let sisa = AutoNumeric.getNumber($(el).closest("tr").find(`[name="sisaDP[]"]`)[0])
+    let sisaAwal = AutoNumeric.getNumber($(el).closest("tr").find(`[name="sisaAwalDP[]"]`)[0])
+    let bayar = $(el).val()
+    bayar = parseFloat(bayar.replaceAll(',', ''));
+    console.log( sisaAwal , bayar );
+    bayar = Number.isNaN(bayar) ? 0 : bayar
+    totalSisa = sisaAwal - bayar
+    $(el).closest("tr").find(".sisaDP").html(totalSisa)
+    $(el).closest("tr").find(`[name="sisaDP[]"]`).val(totalSisa)
+    initAutoNumeric($(el).closest("tr").find(".sisaDP"))
+    let Sisa = $(`#table_body .sisaDP`)
+    let total = 0
+  
+    $.each(Sisa, (index, SISA) => {
+        total += AutoNumeric.getNumber(SISA)
+    });
+    new AutoNumeric('#sisaFoot').set(total)
+  }
+
+  function setSisaDP() {
+    let nominalDetails = $(`.sisaDP`)
+    let bayar = 0
+    $.each(nominalDetails, (index, nominalDetail) => {
+        bayar += AutoNumeric.getNumber(nominalDetail)
+    });
+  
+    new AutoNumeric('#sisaFoot').set(bayar)
+  }
+
   function getTarikDeposito(id){
     $.ajax({
-        url: `${apiUrl}pengeluarantruckingheader/${id}/gettarikdeposito`,
-        method: 'POST',
-        dataType: 'JSON',
-        // data: data,
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          let totalNominal = 0
-          let row = 0
-          let form = $('#crudform')
-          $('#detailList tbody').html('')
+      url: `${apiUrl}pengeluarantruckingheader/${id}/gettarikdeposito`,
+      method: 'POST',
+      dataType: 'JSON',
+      // data: data,
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      
+      success: response => {
+        $('#detailList tbody').html('')
+
+        let totalSisa = 0
+        $.each(response.data, (index, detail) => {
+          let check =""
+          let disbaled ="disabled"
+          // let awal = new Intl.NumberFormat('en-US').format(detail.sisa);
+          if (detail.bayar !== null) {
+            check = "checked"
+            disbaled = ""
+            detail.sisa = parseFloat(detail.sisa) + parseFloat(detail.bayar)
+            console.log(detail.sisa)
+          }
+          let id = detail.id
+          totalSisa = totalSisa + parseFloat(detail.sisa);
+          let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
           
-          $.each(response, (index, detail) => {
-            let id = detail.id
-            row++
-            let nominal = new Intl.NumberFormat('en-US').format(detail.nominal);
-            totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
-            let detailRow = $(`
-            <tr>
+          let detailRow = $(`
+              <tr >
               <td>
-                ${row}
+                ${id}
               </td>
-              <td class="data_tbl tbl_checkbox">
-                <input name='penerimaantruckingheader_id[]' type="checkbox" checked class="checkItem" id="penerimaantruckingheader_id${detail.id}" data-id="${detail.id}"  value="${detail.id}">
+              <td>
+                  <input name='pinjPribadi[]' type="checkbox" ${check} id="checkItem" value="${id}">
+                  <input name='pinjPribadi_nobukti[]' type="hidden" value="${detail.nobukti}">
               </td>
-              <td class="data_tbl tbl_penerimaantruckingheader">
-                ${detail.nobukti}
-                <input name="penerimaantruckingheader_nobukti[]" id="penerimaantruckingheader_nobukti_detail${row}" disabled value="${detail.nobukti}" type="hidden">
+              <td>${detail.nobukti}</td>
+              <td>
+                  <p class="text-right sisaPP autonumeric">${sisa}</p>
+                  <input type="hidden" name="sisaPP[]" class="autonumeric" value="${sisa}">
+                  <input type="hidden" name="sisaAwalPP[]" class="autonumeric" value="${sisa}">
               </td>
-              <td class="data_tbl tbl_keterangan">
-                ${detail.keterangan}
-                <input name="keterangan[]" id="keterangan_detail${row}" disabled value="${detail.keterangan}" type="hidden">
+              <td id=${id}>
+                  <input type="text" name="nominalPP[]" ${disbaled} value="${detail.bayar}" class="form-control bayar text-right">
               </td>
-              <td class="data_tbl tbl_nominal">
-                <input type="text" name="nominal[]"  id="nominal_${detail.id}" value="${detail.nominal}"  class="form-control nominal_${detail.id} numeric_${detail.id} form-control autonumeric nominal text-right">
+              <td>
+                  ${detail.keterangan}
+                  <input name='pinjPribadi_keterangan[]' type="hidden" value="${detail.keterangan}">
               </td>
-              
-            </tr>`)
-            $('#detailList tbody').append(detailRow)
-            initAutoNumeric(detailRow.find('.autonumeric'))
-          })
-          setTotal()
-        }
-      })
+              </tr>
+          `)
+
+          initAutoNumeric(detailRow.find(`[name="sisaPP[]"]`))
+          initAutoNumeric(detailRow.find(`[name="sisaAwalPP[]"]`))
+          initAutoNumeric(detailRow.find(`.sisaPP`))
+          initAutoNumeric(detailRow.find(`.bayar`))
+          setSisaDetail(detailRow.find(`[name="nominalPP[]"]`))
+          $('#detailList tbody').append(detailRow)
+          setTotalPP()
+          setSisaPP()
+        })
+        setTampilanForm()
+        $(`#detailList tfoot`).show()
+      
+      }
+
+    })
+      
   }
 
   function addRow() {
@@ -920,11 +1036,11 @@
         <td class="data_tbl tbl_penerimaantruckingheader">
           <input type="text" name="penerimaantruckingheader_nobukti[]"  class="form-control penerimaantruckingheader-lookup">
         </td>
-        <td class="data_tbl tbl_keterangan">
-          <input type="text" name="keterangan[]" class="form-control"> 
-        </td>
         <td class="data_tbl tbl_nominal">
           <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+        </td>
+        <td class="data_tbl tbl_keterangan">
+          <input type="text" name="keterangan[]" class="form-control"> 
         </td>
         <td>
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>

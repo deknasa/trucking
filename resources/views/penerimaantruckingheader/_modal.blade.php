@@ -101,8 +101,8 @@
                     <th width="20%" class="tbl_supir_id">SUPIR</th>
                     <th width="15%" class="tbl_pengeluarantruckingheader_nobukti">NO BUKTI PENGELUARAN TRUCKING</th>
                     <th width="14%" class="tbl_sisa">Sisa</th>
-                    <th width="25%" class="tbl_keterangan">Keterangan</th>
                     <th width="20%" class="tbl_nominal">Nominal</th>
+                    <th width="25%" class="tbl_keterangan">Keterangan</th>
                     <th width="1%" class="tbl_aksi">Aksi</th>
                   </tr>
                 </thead>
@@ -168,24 +168,6 @@
 
     $(document).on('input', `#table_body [name="nominal[]"]`, function(event) {
       setTotal()
-      // let sisa = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisaPP[]"]`)[0])
-      // let sisaAwal = AutoNumeric.getNumber($(this).closest("tr").find(`[name="sisaAwalPP[]"]`)[0])
-      // let bayar = $(this).val()
-      // bayar = parseFloat(bayar.replaceAll(',', ''));
-      // bayar = Number.isNaN(bayar) ? 0 : bayar
-      // totalSisa = sisaAwal - bayar
-      // $(this).closest("tr").find(".sisaPP").html(totalSisa)
-      // $(this).closest("tr").find(`[name="sisaPP[]"]`).val(totalSisa)
-     
-      // initAutoNumeric($(this).closest("tr").find(".sisaPP"))
-      // let Sisa = $(`#table_body .sisaPP`)
-      // let total = 0
-      // $.each(Sisa, (index, SISA) => {
-      //     total += AutoNumeric.getNumber(SISA)
-      // });
-      // new AutoNumeric('#sisaFoot').set(total)
-
-
     })
       
 

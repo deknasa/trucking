@@ -1,5 +1,18 @@
 @extends('layouts.master')
-
+@push('addtional-field')
+<div class="form-group row">
+  <label class="col-12 col-sm-2 col-form-label mt-2">penerimaan stok<span class="text-danger">*</span></label>
+  <div class="col-sm-4 mt-2">
+    <select name="kodepenerimaanheader" id="kodepenerimaanheader" class="form-select select2" style="width: 100%;">
+      <option value="">-- PILIH Penerimaan stok --</option>
+      @foreach ($comboKodepenerimaan as $kodepenerimaan)
+        <option @if ($kodepenerimaan['id'] ==="1") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} </option>
+        {{-- <option @if ($kodepenerimaan['statusdefault_text'] ==="YA") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['namakodepenerimaan']}} </option> --}}
+      @endforeach
+    </select>
+  </div>
+</div>
+@endpush
 @section('content')
 <!-- Grid -->
 <div class="container-fluid">
@@ -36,7 +49,10 @@
 
 
   $(document).ready(function() {
-
+    $('.select2').select2({
+      width: 'resolve',
+      theme: "bootstrap4"
+    });
     setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
@@ -54,7 +70,8 @@
         iconSet: 'fontAwesome',
         postData: {
           tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val()
+          tglsampai:$('#tglsampaiheader').val(),
+          bank_id:$('#kodepenerimaanheader').val(),
         },
         datatype: "json",        
         colModel: [{
