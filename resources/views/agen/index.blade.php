@@ -170,9 +170,14 @@
             name: 'userapproval',
           },
           {
-            label: 'TGL APPROVAL',
+            label: 'TANGGAL APPROVAL',
             name: 'tglapproval',
-            formatter: dateFormat
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'STATUS TAS',
