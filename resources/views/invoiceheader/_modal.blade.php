@@ -105,7 +105,7 @@
             </div>
 
             <div class="table-responsive table-scroll">
-              <table class="table table-bordered table-bindkeys" id="spList" style="width:1800px">
+              <table class="table table-bordered table-bindkeys" id="spList" style="width:1900px">
                 <thead class="table-secondary">
                   <tr>
                     <th width="2%"></th>
@@ -114,6 +114,7 @@
                     <th width="5%">NO CONT</th>
                     <th width="8%">TARIF</th>
                     <th width="8%">OMSET</th>
+                    <th width="8%">BIAYA TAMBAHAN</th>
                     <th width="10%">RETRIBUSI</th>
                     <th width="8%">BAGIAN</th>
                     <th width="15%">EMKL</th>
@@ -132,6 +133,9 @@
                     </td>
                     <td>
                       <p id="omset" class="text-right font-weight-bold"></p>
+                    </td>
+                    <td>
+                      <p id="tambahan" class="text-right font-weight-bold"></p>
                     </td>
                     <td>
                       <p id="retribusi" class="text-right font-weight-bold"></p>
@@ -231,6 +235,10 @@
         if ($(this).find(`[name="sp_id[]"]`).is(':checked')) {
 
 
+          data.push({
+            name: 'nominalextra[]',
+            value: AutoNumeric.getNumber($(`#crudForm [name="nominalextra[]"]`)[row])
+          })
           data.push({
             name: 'nominalretribusi[]',
             value: AutoNumeric.getNumber($(`#crudForm [name="nominalretribusi[]"]`)[row])
@@ -372,6 +380,17 @@
     new AutoNumeric('#omset').set(total)
   }
 
+  function setTambahan() {
+    let nominalDetails = $(`#spList tbody .tambahan`)
+    let total = 0
+
+    $.each(nominalDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#tambahan').set(total)
+  }
+
   function setNominalRetribusi() {
     let nominalDetails = $(`#spList tbody [name="nominalretribusi[]"]:not([disabled])`)
     let total = 0
@@ -507,17 +526,22 @@
             $.each(response.data, (index, detail) => {
 
               nominalRetribusi = (detail.nominalretribusi != null) ? detail.nominalretribusi : 0;
+              nominalextra = (detail.nominalextra != null) ? detail.nominalextra : 0;
               // omset = parseFloat(omset) + parseFloat(detail.omset)
               let cekLongtrip = detail.statuslongtrip == 65 ? "checked" : "";
               let cekPeralihan = detail.statusperalihan == 67 ? "checked" : "";
               let detailRow = $(`
                               <tr >
-                                  <td><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked></td>
+                                  <td>
+                                    <input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked>
+                                    <input type="hidden" name="nominalextra[]" value="${nominalextra}">
+                                  </td>
                                   <td>${detail.jobtrucking}</td>
                                   <td>${detail.tglsp}</td>
                                   <td>${detail.nocont}</td>
                                   <td>${detail.tarif_id}</td>
                                   <td class="omset text-right">${detail.omset}</td>
+                                  <td class="tambahan text-right">${nominalextra}</td>
                                   <td id="ret${detail.id}"><input type="text" name="nominalretribusi[]" value=${nominalRetribusi} class="form-control text-right"></td>
                                   <td>${detail.jenisorder_id}</td>
                                   <td>${detail.agen_id}</td>
@@ -529,7 +553,9 @@
 
               $('#spList tbody').append(detailRow)
               initAutoNumeric(detailRow.find('.omset'))
+              initAutoNumeric(detailRow.find('.tambahan'))
               initAutoNumeric(detailRow.find(`[name="nominalretribusi[]"]`))
+              initAutoNumeric(detailRow.find(`[name="nominalextra[]"]`))
               setNominalRetribusi()
             })
 
@@ -537,6 +563,7 @@
 
             // initAutoNumeric($('#spList tfoot').find('#omset'))
             setTotal()
+            setTambahan()
           }
         },
         error: error => {
@@ -631,16 +658,21 @@
         $.each(response.data, (index, detail) => {
           omset = parseFloat(omset) + parseFloat(detail.omset)
 
+          nominalextra = (detail.nominalextra != null) ? detail.nominalextra : 0;
           let cekLongtrip = detail.statuslongtrip == 65 ? "checked" : "";
           let cekPeralihan = detail.statusperalihan == 67 ? "checked" : "";
           let detailRow = $(`
                   <tr >
-                      <td><input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked ${disabled}></td>
+                      <td>
+                        <input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked ${disabled}>
+                        <input type="hidden" name="nominalextra[]" value="${nominalextra}">
+                      </td>
                       <td>${detail.jobtrucking}</td>
                       <td>${detail.tglsp}</td>
                       <td>${detail.nocont}</td>
                       <td>${detail.tarif_id}</td>
                       <td class="omset text-right">${detail.omset}</td>
+                      <td class="tambahan text-right">${nominalextra}</td>
                       <td id="ret${detail.id}"><input type="text" name="nominalretribusi[]" class="form-control text-right" value="${detail.nominalretribusi}" ${disabled}></td>
                       <td>${detail.jenisorder_id}</td>
                       <td>${detail.agen_id}</td>
@@ -652,14 +684,17 @@
 
           $('#spList tbody').append(detailRow)
           initAutoNumeric(detailRow.find('.omset'))
+          initAutoNumeric(detailRow.find('.tambahan'))
           initAutoNumeric(detailRow.find(`[name="nominalretribusi[]"]`))
+          initAutoNumeric(detailRow.find(`[name="nominalextra[]"]`))
           setNominalRetribusi()
         })
 
-        $('#omset').append(`${omset}`)
+        setTotal()
+        // $('#omset').append(`${omset}`)
 
-        initAutoNumeric($('#spList tfoot').find('#omset'))
-
+        // initAutoNumeric($('#spList tfoot').find('#omset'))
+        setTambahan()
 
       }
     })
@@ -669,17 +704,25 @@
   $(document).on('click', `#spList tbody [name="sp_id[]"]`, function() {
     let tdOmset = $(this).closest('tr').find('td.omset').text()
     tdOmset = parseFloat(tdOmset.replaceAll(',', ''));
+    let tdTambahan = $(this).closest('tr').find('td.tambahan').text()
+    tdTambahan = parseFloat(tdTambahan.replaceAll(',', ''));
 
     let allOmset = $('#omset').text()
     allOmset = parseFloat(allOmset.replaceAll(',', ''));
+
+    let allTambahan = $('#tambahan').text()
+    allTambahan = parseFloat(allTambahan.replaceAll(',', ''));
     let nominal = 0
 
     if ($(this).prop("checked") == true) {
       allOmset = allOmset + tdOmset
+      allTambahan = allTambahan + tdTambahan
+
       $(this).closest('tr').find(`td [name="nominalretribusi[]"]`).prop('disabled', false)
       setNominalRetribusi()
     } else {
       allOmset = allOmset - tdOmset
+      allTambahan = allTambahan - tdTambahan
       // $(this).closest('tr').find(`td [name="nominalretribusi[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="nominalretribusi[]"]`).remove();
       let newRetElement = `<input type="text" name="nominalretribusi[]" class="form-control text-right" disabled>`
@@ -692,6 +735,9 @@
     $('#omset').html('')
     $('#omset').append(`${allOmset}`)
     initAutoNumeric($('#spList tfoot').find('#omset'))
+    $('#tambahan').html('')
+    $('#tambahan').append(`${allTambahan}`)
+    initAutoNumeric($('#spList tfoot').find('#tambahan'))
   })
 
 

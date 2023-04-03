@@ -33,6 +33,12 @@
             formatter: currencyFormat,
           },
           {
+            label: 'NOMINAL EXTRA',
+            name: 'nominalextra',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
             label: 'NOMINAL RETRIBUSI',
             name: 'nominalretribusi',
             align: 'right',
@@ -119,6 +125,7 @@
               nominal: data.attributes.totalNominal,
               total: data.attributes.totalTotal,
               nominalretribusi: data.attributes.totalRetribusi,
+              nominalextra: data.attributes.totalExtra,
             }, true)
           }
         }

@@ -25,6 +25,7 @@
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            width: '500px'
           },
           {
             label: 'NO BUKTI INVOICE',
