@@ -293,7 +293,16 @@
         name: 'limit',
         value: limit
       })
-      console.log(data)
+      data.push({
+        name: 'tgldariheader',
+        value: $('#tgldariheader').val()
+      })
+      data.push({
+        name: 'tglsampaiheader',
+        value: $('#tglsampaiheader').val()
+      })
+      let tgldariheader = $('#tgldariheader').val();
+      let tglsampaiheader = $('#tglsampaiheader').val()
       switch (action) {
         case 'add':
           method = 'POST'
@@ -305,7 +314,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}penerimaantruckingheader/${Id}`
+          url = `${apiUrl}penerimaantruckingheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -328,7 +337,6 @@
 
 
           id = response.data.id
-          console.log(id)
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
 
@@ -853,11 +861,11 @@ function tampilanall() {
         <td class="tbl_pengeluarantruckingheader_nobukti">
           <input type="text" name="pengeluarantruckingheader_nobukti[]"  class="form-control pengeluarantruckingheader-lookup">
         </td>
-        <td class="tbl_keterangan">
-          <input type="text" name="keterangan[]" class="form-control"> 
-        </td>
         <td class="tbl_nominal">
           <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+        </td>
+        <td class="tbl_keterangan">
+          <input type="text" name="keterangan[]" class="form-control"> 
         </td>
         <td>
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>

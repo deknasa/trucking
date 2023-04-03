@@ -450,15 +450,15 @@
   }
   function tampilanall() {
     $('[name=keterangancoa]').parents('.form-group').show()
-  $('.tbl_supir_id').show()
-  $('.tbl_sisa').hide()
-  $('.tbl_penerimaantruckingheader_nobukti').show()
-  $('[name=supirheader_id]').parents('.form-group').hide()
-  $('.colspan').attr('colspan', 3);
-  $('#sisaColFoot').hide()
-  $('#sisaFoot').hide()
-  $('.colmn-offset').show()
-
+    $('.tbl_supir_id').show()
+    $('.tbl_sisa').hide()
+    $('.tbl_penerimaantruckingheader_nobukti').show()
+    $('[name=supirheader_id]').parents('.form-group').hide()
+    $('.colspan').attr('colspan', 3);
+    $('#sisaColFoot').hide()
+    $('#sisaFoot').hide()
+    $('.colmn-offset').show()
+    
   }
     
   $(document).on('click', '.checkItem', function(event) {
@@ -966,23 +966,22 @@
       
       success: response => {
         $('#detailList tbody').html('')
-
-        let totalSisa = 0
-        $.each(response.data, (index, detail) => {
-          let check =""
-          let disbaled ="disabled"
-          // let awal = new Intl.NumberFormat('en-US').format(detail.sisa);
-          if (detail.bayar !== null) {
-            check = "checked"
-            disbaled = ""
-            detail.sisa = parseFloat(detail.sisa) + parseFloat(detail.bayar)
-            console.log(detail.sisa)
-          }
-          let id = detail.id
-          totalSisa = totalSisa + parseFloat(detail.sisa);
-          let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
-          
-          let detailRow = $(`
+          let totalSisa = 0
+          $.each(response.data, (index, detail) => {
+            let check =""
+            let disbaled ="disabled"
+            // let awal = new Intl.NumberFormat('en-US').format(detail.sisa);
+            if (detail.bayar !== null) {
+              check = "checked"
+              disbaled = ""
+              detail.sisa = parseFloat(detail.sisa) + parseFloat(detail.bayar)
+              console.log(detail.sisa)
+            }
+            let id = detail.id
+            totalSisa = totalSisa + parseFloat(detail.sisa);
+            let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
+            
+            let detailRow = $(`
               <tr >
               <td>
                 ${id}
@@ -993,12 +992,12 @@
               </td>
               <td>${detail.nobukti}</td>
               <td>
-                  <p class="text-right sisaPP autonumeric">${sisa}</p>
-                  <input type="hidden" name="sisaPP[]" class="autonumeric" value="${sisa}">
-                  <input type="hidden" name="sisaAwalPP[]" class="autonumeric" value="${sisa}">
+                  <p class="text-right sisaDP autonumeric">${sisa}</p>
+                  <input type="hidden" name="sisaDP[]" class="autonumeric" value="${sisa}">
+                  <input type="hidden" name="sisaAwalDP[]" class="autonumeric" value="${sisa}">
               </td>
               <td id=${id}>
-                  <input type="text" name="nominalPP[]" ${disbaled} value="${detail.bayar}" class="form-control bayar text-right">
+                  <input type="text" name="nominalDP[]" ${disbaled} value="${detail.bayar}" class="form-control bayar text-right">
               </td>
               <td>
                   ${detail.keterangan}
@@ -1007,19 +1006,19 @@
               </tr>
           `)
 
-          initAutoNumeric(detailRow.find(`[name="sisaPP[]"]`))
-          initAutoNumeric(detailRow.find(`[name="sisaAwalPP[]"]`))
-          initAutoNumeric(detailRow.find(`.sisaPP`))
-          initAutoNumeric(detailRow.find(`.bayar`))
-          setSisaDetail(detailRow.find(`[name="nominalPP[]"]`))
-          $('#detailList tbody').append(detailRow)
-          setTotalPP()
-          setSisaPP()
-        })
-        setTampilanForm()
-        $(`#detailList tfoot`).show()
-      
-      }
+            initAutoNumeric(detailRow.find(`[name="sisaDP[]"]`))
+            initAutoNumeric(detailRow.find(`[name="sisaAwalDP[]"]`))
+            initAutoNumeric(detailRow.find(`.sisaDP`))
+            initAutoNumeric(detailRow.find(`.bayar`))
+          setSisaDetail(detailRow.find(`[name="nominalDP[]"]`))
+            $('#detailList tbody').append(detailRow)
+            setTotalDP()
+          setSisaDP()
+          })
+          setTampilanForm()
+          $(`#detailList tfoot`).show()
+
+        }
 
     })
       
