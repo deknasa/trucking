@@ -11,7 +11,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card card-primary">
+            <div class="card card-easyui bordered mb-4">
                 <div class="card-header">
                 </div>
                 <form id="crudForm">
@@ -23,15 +23,14 @@
                                     <input type="text" name="periode" class="form-control datepicker">
                                 </div>
                             </div>
+
+                        </div>
+                        <div class="row">
                             <div class="col-sm-4 mt-2">
                                 <a id="btnReload" class="btn btn-secondary mr-2">
                                     <i class="fas fa-sync"></i>
                                     Reload
                                 </a>
-                                <button id="btnSubmit" class="btn btn-primary ">
-                                    <i class="fa fa-save"></i>
-                                    Proses
-                                </button>
                             </div>
                         </div>
 
@@ -71,7 +70,9 @@
         let value = $(element).val();
         if (element.checked) {
             selectedRows.push($(element).val())
+            $(element).parents('tr').addClass('bg-light-blue')
         } else {
+            $(element).parents('tr').removeClass('bg-light-blue')
             for (var i = 0; i < selectedRows.length; i++) {
                 if (selectedRows[i] == value) {
                     selectedRows.splice(i, 1);
@@ -110,7 +111,7 @@
             }).trigger('reloadGrid');
         })
 
-        $('#btnSubmit').click(function(event) {
+        function approve() {
 
             event.preventDefault()
 
@@ -189,7 +190,7 @@
                 $(this).removeAttr('disabled')
             })
 
-        })
+        }
 
 
         // $(document).on('click', '#jqGrid_nextPageButton', function(event) {
@@ -284,7 +285,7 @@
                         },
                         cellattr: (rowId, value, rowObject) => {
                             let statusApproval = JSON.parse(rowObject.statusapproval)
-                            if(statusApproval != null){
+                            if (statusApproval != null) {
                                 return ` title="${statusApproval.MEMO}"`
                             }
                         }
@@ -401,7 +402,7 @@
 
                 },
                 loadComplete: function(data) {
-          changeJqGridRowListText()
+                    changeJqGridRowListText()
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
                     initResize($(this))
@@ -471,7 +472,18 @@
                 },
             })
 
-            .customPager({})
+            .customPager({
+                buttons: [{
+                    id: 'approveun',
+                    innerHTML: '<i class="fa fa-plus"></i> ADD',
+                    class: 'btn btn-primary btn-sm mr-1',
+                    onClick: () => {
+
+                        approve()
+
+                    }
+                }]
+            })
 
 
 
@@ -480,6 +492,9 @@
 
         /* Append global search */
         loadGlobalSearch($('#jqGrid'))
+        if (!`{{ $myAuth->hasPermission('pencairangiropengeluaranheader', 'store') }}`) {
+            $('#add').attr('disabled', 'disabled')
+        }
 
 
     })

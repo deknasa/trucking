@@ -11,7 +11,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card card-primary">
+            <div class="card card-easyui bordered mb-4">
                 <div class="card-header">
                 </div>
                 <form id="crudForm">
@@ -38,7 +38,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
                                     Transaksi <span class="text-danger">*</span></label>
@@ -89,13 +89,14 @@
     let rowNum = 10
     let hasDetail = false
     let selectedRows = [];
-    let api
 
     function checkboxHandler(element) {
         let value = $(element).val();
         if (element.checked) {
             selectedRows.push($(element).val())
+            $(element).parents('tr').addClass('bg-light-blue')
         } else {
+            $(element).parents('tr').removeClass('bg-light-blue')
             for (var i = 0; i < selectedRows.length; i++) {
                 if (selectedRows[i] == value) {
                     selectedRows.splice(i, 1);
@@ -133,9 +134,7 @@
 			<i class="fa fa-calendar-alt"></i>
 		`);
 
-        $('#approve').on('select2:selected', function() {
-            console.log(tesData);
-        })
+        showDefault($('#crudForm'))
 
         $(document).on('click', '#btnReload', function(event) {
 
@@ -149,99 +148,109 @@
                     month: ''
                 },
             }).trigger('reloadGrid');
-            
+
             $.jgrid.gridUnload("#detail")
             api = '';
             loadDetailGrid($('#crudForm').find('[name=transaksi]').val())
         })
+       
+    })
 
-        function approve() {
+    function approve() {
 
-            event.preventDefault()
+        event.preventDefault()
 
-            let method
-            let url
-            let form = $('#crudForm')
-            let data = $('#crudForm').serializeArray()
+        let method
+        let url
+        let form = $('#crudForm')
+        let data = $('#crudForm').serializeArray()
 
-            $.each(selectedRows, function(index, item) {
-                data.push({
-                    name: 'transaksiId[]',
-                    value: item
-                })
-            });
-            console.log(data);
+        $.each(selectedRows, function(index, item) {
             data.push({
-                name: 'sortIndex',
-                value: $('#jqGrid').getGridParam().sortname
+                name: 'transaksiId[]',
+                value: item
             })
-            data.push({
-                name: 'sortOrder',
-                value: $('#jqGrid').getGridParam().sortorder
-            })
-            data.push({
-                name: 'filters',
-                value: $('#jqGrid').getGridParam('postData').filters
-            })
-            data.push({
-                name: 'indexRow',
-                value: indexRow
-            })
-            data.push({
-                name: 'page',
-                value: page
-            })
-            data.push({
-                name: 'limit',
-                value: limit
-            })
+        });
+        console.log(data);
+        data.push({
+            name: 'sortIndex',
+            value: $('#jqGrid').getGridParam().sortname
+        })
+        data.push({
+            name: 'sortOrder',
+            value: $('#jqGrid').getGridParam().sortorder
+        })
+        data.push({
+            name: 'filters',
+            value: $('#jqGrid').getGridParam('postData').filters
+        })
+        data.push({
+            name: 'indexRow',
+            value: indexRow
+        })
+        data.push({
+            name: 'page',
+            value: page
+        })
+        data.push({
+            name: 'limit',
+            value: limit
+        })
 
 
-            $(this).attr('disabled', '')
-            $('#loader').removeClass('d-none')
+        $(this).attr('disabled', '')
+        $('#loader').removeClass('d-none')
 
-            $.ajax({
-                url: `${apiUrl}approvaltransaksiheader`,
-                method: 'POST',
-                dataType: 'JSON',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: data,
-                success: response => {
-                    $('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
+        $.ajax({
+            url: `${apiUrl}approvaltransaksiheader`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: data,
+            success: response => {
+                $('#crudForm').trigger('reset')
+                $('#crudModal').modal('hide')
 
-                    $('#jqGrid').jqGrid().trigger('reloadGrid');
-                    let data = $('#jqGrid').jqGrid("getGridParam", "postData");
+                $('#jqGrid').jqGrid().trigger('reloadGrid');
+                let data = $('#jqGrid').jqGrid("getGridParam", "postData");
 
-                    $('#crudForm').find('[name=periode]').val(data.periode)
-                    $('#crudForm').find('[name=approve]').val(data.approve)
-                    $('#crudForm').find('[name=transaksi]').val(data.transaksi)
-                    selectedRows = []
-                },
-                error: error => {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid')
-                        $('.invalid-feedback').remove()
+                $('#crudForm').find('[name=periode]').val(data.periode)
+                $('#crudForm').find('[name=approve]').val(data.approve)
+                $('#crudForm').find('[name=transaksi]').val(data.transaksi)
+                selectedRows = []
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
 
-                        setErrorMessages(form, error.responseJSON.errors);
-                    } else {
-                        showDialog(error.statusText)
-                    }
-                },
-            }).always(() => {
-                $('#loader').addClass('d-none')
-                $(this).removeAttr('disabled')
-            })
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.statusText)
+                }
+            },
+        }).always(() => {
+            $('#loader').addClass('d-none')
+            $(this).removeAttr('disabled')
+        })
 
-        }
+    }
 
+    function grid() {
         $("#jqGrid").jqGrid({
                 url: `{{ config('app.api_url') . 'approvaltransaksiheader' }}`,
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
+                postData: {
+                    periode: $('#crudForm').find('[name=periode]').val(),
+                    approve: $('#crudForm').find('[name=approve]').val(),
+                    transaksi: $('#crudForm').find('[name=transaksi]').val(),
+                    year: '',
+                    month: ''
+                },
                 datatype: "json",
                 colModel: [{
                         label: 'Pilih',
@@ -407,7 +416,6 @@
                     if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
                     let jenisTransaksi = $('#crudForm').find('[name=transaksi]').val()
-                    
                     loadDetailData(id, jenisTransaksi)
 
                 },
@@ -505,8 +513,34 @@
         if (!`{{ $myAuth->hasPermission('approvaltransaksiheader', 'store') }}`) {
             $('#approveun').attr('disabled', 'disabled')
         }
-    })
+    }
 
+    function showDefault(form) {
+        $.ajax({
+            url: `${apiUrl}approvaltransaksiheader/default`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            success: response => {
+
+                $.each(response.data, (index, value) => {
+                    console.log(value)
+                    let element = form.find(`[name="${index}"]`)
+
+                    if (element.is('select')) {
+                        element.val(value).trigger('change')
+                    } else {
+                        element.val(value)
+                    }
+                })
+
+                grid()
+                loadDetailGrid($('#crudForm').find('[name=transaksi]').val())
+            }
+        })
+    }
     const setStatusApprovalOptions = function(relatedForm) {
         // return new Promise((resolve, reject) => {
         // relatedForm.find('[name=approve]').empty()

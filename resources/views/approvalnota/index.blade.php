@@ -11,7 +11,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card card-primary">
+            <div class="card card-easyui bordered mb-4">
                 <div class="card-header">
                 </div>
                 <form id="crudForm">
@@ -26,7 +26,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="form-group row">
                             <div class="col-12 col-sm-2 col-md-2">
                                 <label class="col-form-label">Proses data <span class="text-danger">*</span></label>
                             </div>
@@ -37,7 +37,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="form-group row">
                             <div class="col-12 col-sm-2 col-md-2">
                                 <label class="col-form-label">Tabel <span class="text-danger">*</span></label>
                             </div>
@@ -90,7 +90,9 @@
         let value = $(element).val();
         if (element.checked) {
             selectedRows.push($(element).val())
+            $(element).parents('tr').addClass('bg-light-blue')
         } else {
+            $(element).parents('tr').removeClass('bg-light-blue')
             for (var i = 0; i < selectedRows.length; i++) {
                 if (selectedRows[i] == value) {
                     selectedRows.splice(i, 1);
@@ -128,10 +130,8 @@
 			<i class="fa fa-calendar-alt"></i>
 		`);
 
-        $('#approve').on('select2:selected', function() {
-            console.log(tesData);
-        })
 
+        showDefault($('#crudForm'))
         $(document).on('click', '#btnReload', function(event) {
             $('#jqGrid').jqGrid('setGridParam', {
                 postData: {
@@ -146,93 +146,103 @@
             loadDetailGrid($('#crudForm').find('[name=tabel]').val())
         })
 
-        function approve() {
 
-            event.preventDefault()
 
-            let method
-            let url
-            let form = $('#crudForm')
-            let data = $('#crudForm').serializeArray()
+    })
 
-            $.each(selectedRows, function(index, item) {
-                data.push({
-                    name: 'notaId[]',
-                    value: item
-                })
-            });
+    function approve() {
 
+        event.preventDefault()
+
+        let method
+        let url
+        let form = $('#crudForm')
+        let data = $('#crudForm').serializeArray()
+
+        $.each(selectedRows, function(index, item) {
             data.push({
-                name: 'sortIndex',
-                value: $('#jqGrid').getGridParam().sortname
+                name: 'notaId[]',
+                value: item
             })
-            data.push({
-                name: 'sortOrder',
-                value: $('#jqGrid').getGridParam().sortorder
-            })
-            data.push({
-                name: 'filters',
-                value: $('#jqGrid').getGridParam('postData').filters
-            })
-            data.push({
-                name: 'indexRow',
-                value: indexRow
-            })
-            data.push({
-                name: 'page',
-                value: page
-            })
-            data.push({
-                name: 'limit',
-                value: limit
-            })
+        });
+
+        data.push({
+            name: 'sortIndex',
+            value: $('#jqGrid').getGridParam().sortname
+        })
+        data.push({
+            name: 'sortOrder',
+            value: $('#jqGrid').getGridParam().sortorder
+        })
+        data.push({
+            name: 'filters',
+            value: $('#jqGrid').getGridParam('postData').filters
+        })
+        data.push({
+            name: 'indexRow',
+            value: indexRow
+        })
+        data.push({
+            name: 'page',
+            value: page
+        })
+        data.push({
+            name: 'limit',
+            value: limit
+        })
 
 
-            $(this).attr('disabled', '')
-            $('#loader').removeClass('d-none')
+        $(this).attr('disabled', '')
+        $('#loader').removeClass('d-none')
 
-            $.ajax({
-                url: `${apiUrl}approvalnotaheader`,
-                method: 'POST',
-                dataType: 'JSON',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: data,
-                success: response => {
-                    $('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
+        $.ajax({
+            url: `${apiUrl}approvalnotaheader`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: data,
+            success: response => {
+                $('#crudForm').trigger('reset')
+                $('#crudModal').modal('hide')
 
-                    $('#jqGrid').jqGrid().trigger('reloadGrid');
-                    let data = $('#jqGrid').jqGrid("getGridParam", "postData");
+                $('#jqGrid').jqGrid().trigger('reloadGrid');
+                let data = $('#jqGrid').jqGrid("getGridParam", "postData");
 
-                    $('#crudForm').find('[name=periode]').val(data.periode)
-                    $('#crudForm').find('[name=approve]').val(data.approve)
-                    $('#crudForm').find('[name=tabel]').val(data.tabel)
-                    selectedRows = []
-                },
-                error: error => {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid')
-                        $('.invalid-feedback').remove()
+                $('#crudForm').find('[name=periode]').val(data.periode)
+                $('#crudForm').find('[name=approve]').val(data.approve)
+                $('#crudForm').find('[name=tabel]').val(data.tabel)
+                selectedRows = []
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
 
-                        setErrorMessages(form, error.responseJSON.errors);
-                    } else {
-                        showDialog(error.statusText)
-                    }
-                },
-            }).always(() => {
-                $('#loader').addClass('d-none')
-                $(this).removeAttr('disabled')
-            })
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.statusText)
+                }
+            },
+        }).always(() => {
+            $('#loader').addClass('d-none')
+            $(this).removeAttr('disabled')
+        })
 
-        }
+    }
 
+    function grid() {
         $("#jqGrid").jqGrid({
                 url: `{{ config('app.api_url') . 'approvalnotaheader' }}`,
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
+                postData: {
+                    periode: $('#crudForm').find('[name=periode]').val(),
+                    approve: $('#crudForm').find('[name=approve]').val(),
+                    tabel: $('#crudForm').find('[name=tabel]').val(),
+                },
                 datatype: "json",
                 colModel: [{
                         label: 'Pilih',
@@ -510,8 +520,35 @@
         if (!`{{ $myAuth->hasPermission('approvalnotaheader', 'store') }}`) {
             $('#approveun').attr('disabled', 'disabled')
         }
-    })
+    }
 
+    function showDefault(form) {
+        $.ajax({
+            url: `${apiUrl}approvalnotaheader/default`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            success: response => {
+
+                $.each(response.data, (index, value) => {
+                    console.log(value)
+                    let element = form.find(`[name="${index}"]`)
+
+                    if (element.is('select')) {
+                        element.val(value).trigger('change')
+                    } else {
+                        element.val(value)
+                    }
+                })
+
+                grid()
+                loadDetailGrid($('#crudForm').find('[name=tabel]').val())
+
+            }
+        })
+    }
     const setStatusApprovalOptions = function(relatedForm) {
         // return new Promise((resolve, reject) => {
         // relatedForm.find('[name=approve]').empty()
@@ -543,13 +580,6 @@
                     relatedForm.find('[name=approve]').append(option).trigger('change')
                 });
 
-                // relatedForm
-                //     .find('[name=approve]')
-                //     .val($(`#crudForm [name=approve] option:eq(1)`).val())
-                //     .trigger('change')
-                //     .trigger('select2:selected');
-
-                // resolve()
             }
         })
         // })
@@ -565,10 +595,6 @@
             name: 'grp',
             value: 'NOTA DEBET'
         })
-        // data.push({
-        //     name: 'subgrp',
-        //     value: 'STATUS APPROVAL'
-        // })
         $.ajax({
             url: `${apiUrl}approvalnotaheader/combo`,
             method: 'GET',
@@ -584,16 +610,8 @@
                     relatedForm.find('[name=tabel]').append(option).trigger('change')
                 });
 
-                // relatedForm
-                //     .find('[name=transaksi]')
-                //     .val($(`#crudForm [name=transaksi] option:eq(1)`).val())
-                //     .trigger('change')
-                //     .trigger('select2:selected');
-
-                // resolve()
             }
         })
-        // })
     }
 </script>
 @endpush()

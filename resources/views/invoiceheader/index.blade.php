@@ -226,7 +226,7 @@
           },
           {
             label: 'AGEN',
-            name: 'agen_id',
+            name: 'agen',
             align: 'left'
           },
           {
