@@ -6,7 +6,7 @@
     <select name="kodepenerimaanheader" id="kodepenerimaanheader" class="form-select select2" style="width: 100%;">
       <option value="">-- PILIH Penerimaan stok --</option>
       @foreach ($comboKodepenerimaan as $kodepenerimaan)
-        <option @if ($kodepenerimaan['id'] ==="1") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} </option>
+        <option @if ($kodepenerimaan['id'] === "1") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} </option>
         {{-- <option @if ($kodepenerimaan['statusdefault_text'] ==="YA") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['namakodepenerimaan']}} </option> --}}
       @endforeach
     </select>
@@ -56,7 +56,7 @@
     setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
-      loadDataHeader('penerimaanstokheader')
+      loadDataHeader('penerimaanstokheader',{penerimaanheader_id:$('#kodepenerimaanheader').val()})
     })
 
     $('#crudModal').on('hidden.bs.modal', function() {
@@ -71,7 +71,7 @@
         postData: {
           tgldari:$('#tgldariheader').val() ,
           tglsampai:$('#tglsampaiheader').val(),
-          bank_id:$('#kodepenerimaanheader').val(),
+          penerimaanheader_id:$('#kodepenerimaanheader').val(),
         },
         datatype: "json",        
         colModel: [{
