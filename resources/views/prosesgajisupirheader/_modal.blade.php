@@ -931,6 +931,14 @@
                 groupOp: 'AND',
                 disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
                 beforeSearch: function() {
+                    $(this).setGridParam({
+                        postData: {
+                            dari: $('#crudForm').find('[name=tgldari]').val(),
+                            sampai: $('#crudForm').find('[name=tglsampai]').val(),
+                            aksi: $('#crudForm').data('action'),
+                        },
+                    })
+
                     clearGlobalSearch($('#rekapRincian'))
                 },
             })

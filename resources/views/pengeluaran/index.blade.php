@@ -6,7 +6,7 @@
     <select name="bankheader" id="bankheader" class="form-select select2" style="width: 100%;">
       <option value="">-- PILIH BANK --</option>
       @foreach ($data['combobank'] as $bank)
-        <option @if ($bank['statusdefault_text'] ==="YA") selected @endif value="{{$bank['id']}}"> {{$bank['namabank']}} </option>
+      <option @if ($bank['statusdefault_text']==="YA" ) selected @endif value="{{$bank['id']}}"> {{$bank['namabank']}} </option>
       @endforeach
     </select>
   </div>
@@ -17,7 +17,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
-@include('layouts._rangeheader')
+      @include('layouts._rangeheader')
       <table id="jqGrid"></table>
     </div>
   </div>
@@ -53,11 +53,13 @@
       width: 'resolve',
       theme: "bootstrap4"
     });
-      
+
     setRange()
     initDatepicker()
-    $(document).on('click','#btnReload', function(event) {
-      loadDataHeader('pengeluaranheader', {bank_id:$('#bankheader').val()})
+    $(document).on('click', '#btnReload', function(event) {
+      loadDataHeader('pengeluaranheader', {
+        bank_id: $('#bankheader').val()
+      })
     })
 
     $("#jqGrid").jqGrid({
@@ -66,9 +68,9 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val(),
-          bank_id:$('#bankheader').val(),
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+          bank_id: $('#bankheader').val(),
         },
         datatype: "json",
         colModel: [{
@@ -379,6 +381,13 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
+          $(this).setGridParam({
+            postData: {
+              tgldari: $('#tgldariheader').val(),
+              tglsampai: $('#tglsampaiheader').val(),
+              bank_id: $('#bankheader').val(),
+            },
+          })
           clearGlobalSearch($('#jqGrid'))
         },
       })

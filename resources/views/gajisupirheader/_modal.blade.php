@@ -1450,7 +1450,7 @@
                         })
                     });
 
-
+                    
                 }
             })
 
@@ -1462,6 +1462,13 @@
                 groupOp: 'AND',
                 disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
                 beforeSearch: function() {
+                    $(this).setGridParam({
+                        postData: {
+                            supirId: $('#crudForm [name=supir_id]').val(),
+                            dari: $('#crudForm [name=tgldari]').val(),
+                            sampai: $('#crudForm [name=tglsampai]').val(),
+                        },
+                    })
                     clearGlobalSearch($('#rekapRincian'))
                 },
             })
@@ -1941,7 +1948,7 @@
             dataType: 'JSON',
             data: {
                 limit: 0,
-                supirId: supirId,
+                supirId: $('#crudForm [name=supir_id]').val(),
                 dari: dari,
                 sampai: sampai,
                 sortIndex: sortnameRincian,
