@@ -480,7 +480,7 @@
       $('#lainnya').attr('disabled', 'disabled')
       $('#copy').attr('hidden', 'true')
     }
-    if (!`{{ $myAuth->hasPermission('jurnalumumpusatheader', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) {
       $('#approveun').attr('disabled', 'disabled')
     }
 

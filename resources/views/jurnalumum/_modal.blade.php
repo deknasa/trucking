@@ -356,7 +356,7 @@
     $('#loader').removeClass('d-none')
 
     $.ajax({
-      url: `${apiUrl}jurnalumumpusatheader`,
+      url: `${apiUrl}jurnalumumheader/approval`,
       method: 'POST',
       dataType: 'JSON',
       headers: {
