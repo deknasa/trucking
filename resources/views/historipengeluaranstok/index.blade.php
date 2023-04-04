@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card card-primary">
+            <div class="card card-easyui bordered mb-4">
                 <div class="card-header">
                 </div>
                 <form id="crudForm">
@@ -56,7 +56,7 @@
                             <div class="col-sm-6 mt-4">
                                 <a id="btnPreview" class="btn btn-secondary mr-2 ">
                                     <i class="fas fa-sync"></i>
-                                    Preview
+                                    Reload
                                 </a>
                             </div>
                         </div>
@@ -93,10 +93,21 @@
         initLookup()
         setFilterOptions($('#crudForm'))
         initDatepicker()
+        // mendapatkan tanggal hari ini
+        let today = new Date();
 
-        $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        // mendapatkan tanggal pertama di bulan ini
+        let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+        let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
 
+        // mendapatkan tanggal terakhir di bulan ini
+        let lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        let formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
+
+        $('#crudForm').find('[name=dari]').val(formattedFirstDay).trigger('change');
+        $('#crudForm').find('[name=sampai]').val(formattedLastDay).trigger('change');
+
+        showDefault($('#crudForm'))
         $('#btnPreview').click(function(event) {
 
             let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
@@ -124,11 +135,23 @@
             // window.open(`{{ route('reportall.report') }}?tgl=${tanggal}&data=${data}`)
         })
 
+
+
+    })
+
+    function grid() {
         $("#jqGrid").jqGrid({
                 url: `${apiUrl}historipengeluaranstok`,
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
+                postData: {
+                    stokdari_id: $('#crudForm').find('[name=stokdari_id]').val(),
+                    stoksampai_id: $('#crudForm').find('[name=stoksampai_id]').val(),
+                    dari: $('#crudForm').find('[name=dari]').val(),
+                    sampai: $('#crudForm').find('[name=sampai]').val(),
+                    filter: $('#crudForm').find('[name=filter]').val()
+                },
                 datatype: "json",
                 colModel: [{
                         label: 'NO BUKTI',
@@ -338,11 +361,34 @@
         if (!`{{ $myAuth->hasPermission('historipengeluaranstok', 'report') }}`) {
             $('#report').attr('disabled', 'disabled')
         }
+    }
 
-    })
+    function showDefault(form) {
+        $.ajax({
+            url: `${apiUrl}historipengeluaranstok/default`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            success: response => {
 
+                $.each(response.data, (index, value) => {
+                    console.log(value)
+                    let element = form.find(`[name="${index}"]`)
 
+                    if (element.is('select')) {
+                        element.val(value).trigger('change')
+                    } else {
+                        element.val(value)
+                    }
+                })
 
+                grid()
+                // loadDetailGrid($('#crudForm').find('[name=invoice]').val())
+            }
+        })
+    }
     $(document).on('change', `#crudForm [name="filter"]`, function(event) {
         let filter = $(this).val();
         $('#crudForm').find('[name=trado_id]').val('')

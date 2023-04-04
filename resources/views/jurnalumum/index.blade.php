@@ -34,12 +34,29 @@
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false
+  let selectedRows = [];
+
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+    }
+
+  }
 
   $(document).ready(function() {
 
     setRange()
     initDatepicker()
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('jurnalumumheader')
     })
 
@@ -50,11 +67,27 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val() 
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val()
         },
         datatype: "json",
         colModel: [{
+            label: 'Pilih',
+            name: 'id',
+            index: 'Pilih',
+            formatter: (value) => {
+              return `<input type="checkbox" value="${value}" onchange="checkboxHandler(this)">`
+            },
+            editable: true,
+            edittype: 'checkbox',
+            search: false,
+            width: 60,
+            align: 'center',
+            formatoptions: {
+              disabled: false
+            },
+          },
+          {
             label: 'ID',
             name: 'id',
             align: 'right',
@@ -227,11 +260,21 @@
               postData: {
                 jurnalumum_id: 0,
               },
-            }).trigger('reloadGrid'); 
+            }).trigger('reloadGrid');
           }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
+          $.each(selectedRows, function(key, value) {
+
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -350,7 +393,16 @@
                 window.open(`{{ route('jurnalumumheader.report') }}?id=${selectedId}`)
               }
             }
-          }
+          }, {
+            id: 'approveun',
+            innerHTML: '<i class="fas fa-check""></i> APPROVE/UN',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+
+              approve()
+
+            }
+          },
         ],
         extndBtn: [{
           id: 'lainnya',
@@ -423,9 +475,13 @@
     if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
     }
-    
+
     if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'copy') }}`) {
+      $('#lainnya').attr('disabled', 'disabled')
       $('#copy').attr('hidden', 'true')
+    }
+    if (!`{{ $myAuth->hasPermission('jurnalumumpusatheader', 'store') }}`) {
+      $('#approveun').attr('disabled', 'disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {

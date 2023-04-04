@@ -310,6 +310,87 @@
 
   }
 
+  function approve() {
+
+    event.preventDefault()
+
+    let method
+    let url
+    let form = $('#crudForm')
+    let data = $('#crudForm').serializeArray()
+
+    $.each(selectedRows, function(index, item) {
+      data.push({
+        name: 'jurnalId[]',
+        value: item
+      })
+    });
+
+    data.push({
+      name: 'sortIndex',
+      value: $('#jqGrid').getGridParam().sortname
+    })
+    data.push({
+      name: 'sortOrder',
+      value: $('#jqGrid').getGridParam().sortorder
+    })
+    data.push({
+      name: 'filters',
+      value: $('#jqGrid').getGridParam('postData').filters
+    })
+    data.push({
+      name: 'indexRow',
+      value: indexRow
+    })
+    data.push({
+      name: 'page',
+      value: page
+    })
+    data.push({
+      name: 'limit',
+      value: limit
+    })
+
+
+    $(this).attr('disabled', '')
+    $('#loader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}jurnalumumpusatheader`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: data,
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        let data = $('#jqGrid').jqGrid("getGridParam", "postData");
+
+        $('#crudForm').find('[name=periode]').val(data.periode)
+        $('#crudForm').find('[name=approve]').val(data.approve)
+        selectedRows = []
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
+      },
+    }).always(() => {
+      $('#loader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+
+  }
+
 
   function copyJurnal(id) {
 

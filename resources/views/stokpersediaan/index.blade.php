@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card card-primary">
+            <div class="card card-easyui bordered mb-4">
                 <div class="card-header">
                 </div>
                 <form id="crudForm">
@@ -90,31 +90,38 @@
         initLookup()
         setKeteranganOptions($('#crudForm'))
 
-        let data = []
-        data.push({
-            name: 'grp',
-            value: 'GUDANG KANTOR'
-        })
-        data.push({
-            name: 'subgrp',
-            value: 'GUDANG KANTOR'
-        })
+        showDefault($('#crudForm'))
+
+
+    })
+
+    function showDefault(form) {
         $.ajax({
-            url: `${apiUrl}parameter/combo`,
+            url: `${apiUrl}stokpersediaan/default`,
             method: 'GET',
             dataType: 'JSON',
             headers: {
                 Authorization: `Bearer ${accessToken}`
             },
-            data: data,
             success: response => {
-                response.data.forEach(gudangKantor => {
-                    $('#crudForm').find('[name=gudang_id]').val(gudangKantor.text)
-                    $('#crudForm').find('[name=gudang]').val(gudangKantor.grp)
-                });
+
+                $.each(response.data, (index, value) => {
+                    console.log(value)
+                    let element = form.find(`[name="${index}"]`)
+
+                    if (element.is('select')) {
+                        element.val(value).trigger('change')
+                    } else {
+                        element.val(value)
+                    }
+                })
+
+                grid()
             }
         })
+    }
 
+    function grid() {
         $("#jqGrid").jqGrid({
                 url: `${apiUrl}stokpersediaan`,
                 mtype: "GET",
@@ -244,8 +251,7 @@
 
         /* Append global search */
         loadGlobalSearch($('#jqGrid'))
-
-    })
+    }
 
     $(document).on('click', '#btnReload', function(event) {
 
@@ -253,70 +259,29 @@
         if (keterangan == '') {
             showDialog('pilih proses data')
         } else {
+            let dataFilter = ''
             if (keterangan == '186') {
-                if ($('#crudForm').find('[name=gudang_id]').val() == '') {
-                    showDialog('pilih gudang')
-                } else {
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        postData: {
-                            keterangan: $('#crudForm').find('[name=keterangan]').val(),
-                            data: $('#crudForm').find('[name=gudang_id]').val(),
-                        },
-                    }).trigger('reloadGrid');
-                    $('#crudForm').find('[name=trado_id]').val('')
-                    $('#crudForm').find('[name=trado]').val('')
-                    $('#crudForm').find('[name=gandengan_id]').val('')
-                    $('#crudForm').find('[name=gandengan]').val('')
-                }
+                dataFilter = $('#crudForm').find('[name=gudang_id]').val()
             }
-
             if (keterangan == '187') {
-                if ($('#crudForm').find('[name=trado_id]').val() == '') {
-                    showDialog('pilih trado')
-                } else {
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        postData: {
-                            keterangan: $('#crudForm').find('[name=keterangan]').val(),
-                            data: $('#crudForm').find('[name=trado_id]').val(),
-                        },
-                    }).trigger('reloadGrid');
-
-                    $('#crudForm').find('[name=gudang_id]').val('')
-                    $('#crudForm').find('[name=gudang]').val('')
-                    $('#crudForm').find('[name=gandengan_id]').val('')
-                    $('#crudForm').find('[name=gandengan]').val('')
-                }
+                dataFilter = $('#crudForm').find('[name=trado_id]').val()
             }
-
             if (keterangan == '188') {
-                if ($('#crudForm').find('[name=gandengan_id]').val() == '') {
-                    showDialog('pilih gandengan')
-                } else {
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        postData: {
-                            keterangan: $('#crudForm').find('[name=keterangan]').val(),
-                            data: $('#crudForm').find('[name=gandengan_id]').val(),
-                        },
-                    }).trigger('reloadGrid');
-
-                    $('#crudForm').find('[name=trado_id]').val('')
-                    $('#crudForm').find('[name=trado]').val('')
-                    $('#crudForm').find('[name=gudang_id]').val('')
-                    $('#crudForm').find('[name=gudang]').val('')
-                }
+                dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
             }
+            $('#jqGrid').jqGrid('setGridParam', {
+                postData: {
+                    keterangan: $('#crudForm').find('[name=keterangan]').val(),
+                    data: dataFilter,
+                },
+            }).trigger('reloadGrid');
+
         }
 
     })
 
     $(document).on('change', `#crudForm [name="keterangan"]`, function(event) {
         let keterangan = $(this).val();
-        $('#crudForm').find('[name=trado_id]').val('')
-        $('#crudForm').find('[name=trado]').val('')
-        $('#crudForm').find('[name=gudang_id]').val('')
-        $('#crudForm').find('[name=gudang]').val('')
-        $('#crudForm').find('[name=gandengan_id]').val('')
-        $('#crudForm').find('[name=gandengan]').val('')
 
         if (keterangan == '186') {
             $('#gudang').show()
