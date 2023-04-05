@@ -1,26 +1,16 @@
-<!-- Grid -->
-<div class="container-fluid my-4">
-  <div class="row">
-    <div class="col-12">
-      <table id="detail"></table>
-      <div id="detailPager"></div>
-    </div>
-  </div>
-</div>
+<table id="detail"></table>
 
-@push('scripts')
 <script>
-  let sortnameDetail = 'nobukti'
-  let sortorderDetail = 'asc'
-  let totalRecordDetail
-  let limitDetail
-  let postDataDetail
-  let triggerClickDetail
-  let indexRowDetail
-  let pageDetail = 0;
+  function loadGrid(id) {
 
-  function loadDetailGrid(id) {
-
+    let sortnameDetail = 'nobukti'
+    let sortorderDetail = 'asc'
+    let totalRecordDetail
+    let limitDetail
+    let postDataDetail
+    let triggerClickDetail
+    let indexRowDetail
+    let pageDetail = 0;
     $("#detail").jqGrid({
         url: `${apiUrl}penerimaandetail`,
         mtype: "GET",
@@ -197,4 +187,3 @@
     }).trigger('reloadGrid')
   }
 </script>
-@endpush()

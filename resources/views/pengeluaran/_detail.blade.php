@@ -1,23 +1,21 @@
-<!-- Grid -->
-<div class="container-fluid my-4">
-  <div class="row">
-    <div class="col-12">
-      <table id="detail"></table>
-      <div id="detailPager"></div>
-    </div>
-  </div>
-</div>
-
-@push('scripts')
+<table id="detail"></table>
 <script>
-  function loadDetailGrid(id) {
+  function loadGrid(id) {
+    let sortnameDetail = 'nobukti'
+    let sortorderDetail = 'asc'
+    let totalRecordDetail
+    let limitDetail
+    let postDataDetail
+    let triggerClickDetail
+    let indexRowDetail
+    let pageDetail = 0;
 
     $("#detail").jqGrid({
         url: `${apiUrl}pengeluarandetail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "local",
+        datatype: "json",
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -75,9 +73,9 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortname,
-        sortorder: sortorder,
-        page: page,
+        sortname: sortnameDetail,
+        sortorder: sortorderDetail,
+        page: pageDetail,
         viewrecords: true,
         postData: {
           pengeluaran_id: id
@@ -104,24 +102,22 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-          
+
           /* Set global variables */
-          sortname = $(this).jqGrid("getGridParam", "sortname")
-          sortorder = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').limit
-          postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
+          sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordDetail = $(this).getGridParam("records")
+          limitDetail = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataDetail = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
+          if (indexRowDetail > $(this).getDataIDs().length - 1) {
+            indexRowDetail = $(this).getDataIDs().length - 1;
           }
-
-          $('#detail').setSelection($('#detail').getDataIDs()[0])
 
           setHighlight($(this))
 
@@ -158,7 +154,7 @@
 
     /* Append clear filter button */
     loadClearFilter($('#detail'))
-    
+
     /* Append global search */
     loadGlobalSearch($('#detail'))
   }
@@ -170,8 +166,7 @@
       postData: {
         pengeluaran_id: id
       },
-      page:1
+      page: 1
     }).trigger('reloadGrid')
   }
 </script>
-@endpush()

@@ -36,7 +36,7 @@ class PelunasanPiutangDetailController extends Controller
     }
     public function penerimaanGrid()
     {
-        return view('pelunasanpiutangheader._penerimaan');
+        return view('penerimaan._penerimaan');
     }
     public function detailGrid()
     {

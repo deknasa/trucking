@@ -40,7 +40,7 @@
 @include('pelunasanpiutangheader._modal')
 <!-- Detail -->
 @include('pelunasanpiutangheader._detail')
-@include('pelunasanpiutangheader._penerimaan')
+@include('penerimaan._penerimaan')
 @include('jurnalumum._jurnal')
 
 @push('scripts')

@@ -1,7 +1,7 @@
 <table id="pengeluaranGrid"></table>
 
 <script>
-  function loadGrid(pelunasanId, nobukti) {
+  function loadGrid(id, nobukti) {
     let sortnamePengeluaran = 'nobukti'
     let sortorderPengeluaran = 'asc'
     let totalRecordPengeluaran
@@ -23,6 +23,25 @@
             name: 'nobukti',
           },
           {
+            label: 'COA DEBET',
+            name: 'coadebet',
+          },
+          {
+            label: 'COA KREDIT',
+            name: 'coakredit',
+          },
+
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+          },
+          {
+            label: 'NOMINAL',
+            name: 'nominal',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
             label: 'NO WARKAT',
             name: 'nowarkat',
           },
@@ -36,44 +55,14 @@
             }
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'right',
-            formatter: currencyFormat
-          },
-          {
-            label: 'COA DEBET',
-            name: 'coadebet',
-          },
-          {
-            label: 'COA KREDIT',
-            name: 'coakredit',
-          },
-
-          {
-            label: 'BANK',
-            name: 'bank_id',
-          },
-          {
-            label: 'INVOICE NO BUKTI',
-            name: 'invoice_nobukti',
-          },
-          {
-            label: 'PELUNASAN PIUTANG NO BUKTI',
-            name: 'pelunasanpiutang_nobukti',
-          },
-          {
-            label: 'BANK PELANGGAN',
-            name: 'bankpelanggan_id',
-          },
-          {
             label: 'BULAN BEBAN',
             name: 'bulanbeban',
-          },
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          }
         ],
         autowidth: true,
         shrinkToFit: false,

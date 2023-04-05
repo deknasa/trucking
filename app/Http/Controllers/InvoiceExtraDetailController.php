@@ -5,38 +5,43 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class HutangBayarDetailController extends Controller
+
+class InvoiceExtraDetailController extends Controller
 {
-    public $title = 'Pembayaran Hutang Detail';
+    public $title = 'Invoice Extra Detail';
 
     public function index(Request $request)
     {
+        
         $params = [
-            'hutangbayar_id' => $request->hutangbayar_id,
+            'invoiceextra_id' => $request->invoiceextra_id,
             'whereIn' => $request->whereIn
         ];
 
         $response = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'hutangbayardetail', $params);
-
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') .'invoiceextradetail', $params);
+            
         $data = [
             'rows' => $response['data'] ?? []
         ];
 
         return response($data);
     }
+    
     public function jurnalGrid()
     {
         return view('jurnalumum._jurnal');
     }
-    public function pengeluaranGrid()
+    public function piutangGrid()
     {
-        return view('pengeluaran._pengeluaran');
+        return view('invoiceextraheader._piutang');
     }
     public function detailGrid()
     {
-        return view('hutangbayarheader._detail');
+        return view('invoiceextraheader._detail');
     }
 }
+
+

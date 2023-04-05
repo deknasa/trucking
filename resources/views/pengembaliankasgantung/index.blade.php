@@ -10,11 +10,38 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs">
+            <ul class="dejavu">
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#penerimaan-tab">Penerimaan Kas/bank</a></li>
+              <li><a href="#jurnal-tab">Jurnal</a></li>
+            </ul>
+            <div id="detail-tab">
+
+            </div>
+
+            <div id="penerimaan-tab">
+
+            </div>
+            <div id="jurnal-tab">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 @include('pengembaliankasgantung._modal')
 <!-- Detail -->
 @include('pengembaliankasgantung._detail')
+@include('penerimaan._penerimaan')
+@include('jurnalumum._jurnal')
 
 @push('scripts')
 <script>
@@ -33,8 +60,10 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let currentTab = 'detail'
 
   $(document).ready(function() {
+    $("#tabs").tabs()
     setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
@@ -236,7 +265,10 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
-
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'penerimaan_nobukti')
+          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/pengembaliankasgantungdetail/${currentTab}/grid`, function() {
+            loadGrid(id,nobukti)
+          })
           loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
@@ -246,7 +278,23 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-
+          if (data.data.length == 0) {
+            $('#detail').jqGrid('setGridParam', {
+              postData: {
+                pelunasanpiutang_id: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#jurnalGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#penerimaanGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+          }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -378,8 +426,6 @@
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
 
-    /* Load detail grid */
-    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn btn-sm btn-primary`)
@@ -497,6 +543,16 @@
     })
 
 
+    $("#tabs").on('click', 'li.ui-state-active', function() {
+      let href = $(this).find('a').attr('href');
+      currentTab = href.substring(1, href.length - 4);
+      let pengembalianId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      let nobukti = $('#jqGrid').jqGrid('getCell', pengembalianId, 'penerimaan_nobukti')
+      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/pengembaliankasgantungdetail/${currentTab}/grid`, function() {
+
+        loadGrid(pengembalianId, nobukti)
+      })
+    })
 
   })
 </script>

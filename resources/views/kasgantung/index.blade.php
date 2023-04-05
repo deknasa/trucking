@@ -9,10 +9,39 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs">
+            <ul class="dejavu">
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#pengeluaran-tab">Pengeluaran Kas/bank</a></li>
+              <li><a href="#jurnal-tab">Jurnal</a></li>
+            </ul>
+            <div id="detail-tab">
+
+            </div>
+
+            <div id="pengeluaran-tab">
+
+            </div>
+            <div id="jurnal-tab">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Detail -->
 @include('kasgantung._detail')
+@include('pengeluaran._pengeluaran')
+@include('jurnalumum._jurnal')
+
 
 @include('kasgantung._modal')
 
@@ -33,8 +62,11 @@
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false
+  let currentTab = 'detail'
+
 
   $(document).ready(function() {
+    $("#tabs").tabs()
 
     setRange()
     initDatepicker()
@@ -206,18 +238,17 @@
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
         },
         onSelectRow: function(id) {
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
+          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/kasgantungdetail/${currentTab}/grid`, function() {
+            loadGrid(id,nobukti)
+          })
+          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
-          if (!hasDetail) {
-            loadDetailGrid(id)
-            hasDetail = true
-          }
-
-          loadDetailData(id)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -227,6 +258,16 @@
                 kasgantung_id: 0,
               },
             }).trigger('reloadGrid'); 
+            $('#jurnalGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#pengeluaranGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
           }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -427,6 +468,17 @@
       }
 
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+    })
+    
+    $("#tabs").on('click', 'li.ui-state-active', function() {
+      let href = $(this).find('a').attr('href');
+      currentTab = href.substring(1, href.length - 4);
+      let pelunasanId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      let nobukti = $('#jqGrid').jqGrid('getCell', pelunasanId, 'pengeluaran_nobukti')
+      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/kasgantungdetail/${currentTab}/grid`, function() {
+
+        loadGrid(pelunasanId, nobukti)
+      })
     })
   })
 </script>

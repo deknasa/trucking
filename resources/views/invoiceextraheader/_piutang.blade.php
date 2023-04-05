@@ -1,16 +1,19 @@
-<table id="detail"></table>
+<table id="piutangGrid"></table>
+
 <script>
-  function loadGrid(id) {
-    let sortnameDetail = 'nobukti'
-    let sortorderDetail = 'asc'
-    let totalRecordDetail
-    let limitDetail
-    let postDataDetail
-    let triggerClickDetail
-    let indexRowDetail
-    let pageDetail = 0;
-    $("#detail").jqGrid({
-        url: `${apiUrl}kasgantungdetail`,
+  function loadGrid(invoiceId, nobukti) {
+    let sortnamePiutang = 'nobukti'
+    let sortorderPiutang = 'asc'
+    let totalRecordPiutang
+    let limitPiutang
+    let postDataPiutang
+    let triggerClickPiutang
+    let indexRowPiutang
+    let pagePiutang = 0
+
+    $("#piutangGrid")
+      .jqGrid({
+        url: `${apiUrl}invoicedetail/piutang`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -22,17 +25,18 @@
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            width: '500px'
           },
           {
-            label: 'COA',
-            name: 'coa',
+            label: 'NO BUKTI INVOICE',
+            name: 'invoice_nobukti',
           },
           {
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
             formatter: currencyFormat,
-          }
+          },
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -45,12 +49,12 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortnameDetail,
-        sortorder: sortorderDetail,
-        page: pageDetail,
+        sortname: sortnamePiutang,
+        sortorder: sortorderPiutang,
+        page: pagePiutang,
         viewrecords: true,
         postData: {
-          kasgantung_id: id
+          nobukti_piutang: nobukti
         },
         prmNames: {
           sort: 'sortIndex',
@@ -76,19 +80,19 @@
           initResize($(this))
 
           /* Set global variables */
-          sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
-          sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecordDetail = $(this).getGridParam("records")
-          limitDetail = $(this).jqGrid('getGridParam', 'postData').limit
-          postDataDetail = $(this).jqGrid('getGridParam', 'postData')
+          sortnamePiutang = $(this).jqGrid("getGridParam", "sortname")
+          sortorderPiutang = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordPiutang = $(this).getGridParam("records")
+          limitPiutang = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataPiutang = $(this).jqGrid('getGridParam', 'postData')
           triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRowDetail > $(this).getDataIDs().length - 1) {
-            indexRowDetail = $(this).getDataIDs().length - 1;
+          if (indexRowPiutang > $(this).getDataIDs().length - 1) {
+            indexRowPiutang = $(this).getDataIDs().length - 1;
           }
 
           setHighlight($(this))
@@ -102,13 +106,7 @@
         }
       })
 
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
@@ -116,10 +114,9 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
-          clearGlobalSearch($('#detail'))
+          clearGlobalSearch($('#piutangGrid'))
         },
       })
-
       .jqGrid("navGrid", pager, {
         search: false,
         refresh: false,
@@ -127,21 +124,21 @@
         edit: false,
         del: false,
       })
-      .customPager()
 
+      .customPager()
     /* Append clear filter button */
-    loadClearFilter($('#detail'))
+    loadClearFilter($('#piutangGrid'))
 
     /* Append global search */
-    loadGlobalSearch($('#detail'))
+    loadGlobalSearch($('#piutangGrid'))
   }
 
-  function loadDetailData(id) {
-    $('#detail').setGridParam({
-      url: `${apiUrl}kasgantungdetail`,
+  function loadDetailData(id, nobukti) {
+    $('#piutangGrid').setGridParam({
+      url: `${apiUrl}invoicedetail/piutang`,
       datatype: "json",
       postData: {
-        kasgantung_id: id
+        nobukti_piutang: nobukti
       },
       page: 1
     }).trigger('reloadGrid')

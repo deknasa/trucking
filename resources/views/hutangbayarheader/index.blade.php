@@ -40,7 +40,7 @@
 @include('hutangbayarheader._modal')
 <!-- Detail -->
 @include('hutangbayarheader._detail')
-@include('hutangbayarheader._pengeluaran')
+@include('pengeluaran._pengeluaran')
 @include('jurnalumum._jurnal')
 
 @push('scripts')

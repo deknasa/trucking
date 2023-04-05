@@ -31,4 +31,13 @@ class PenerimaanDetailController extends Controller
 
         return response($data);
     }
+    
+    public function jurnalGrid()
+    {
+        return view('jurnalumum._jurnal');
+    }
+    public function detailGrid()
+    {
+        return view('penerimaan._detail');
+    }
 }

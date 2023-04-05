@@ -31,4 +31,17 @@ class KasGantungDetailController extends Controller
 
         return response($data);
     }
+    
+    public function jurnalGrid()
+    {
+        return view('jurnalumum._jurnal');
+    }
+    public function pengeluaranGrid()
+    {
+        return view('pengeluaran._pengeluaran');
+    }
+    public function detailGrid()
+    {
+        return view('kasgantung._detail');
+    }
 }

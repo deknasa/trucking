@@ -9,11 +9,38 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs">
+            <ul class="dejavu">
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#piutang-tab">Piutang</a></li>
+              <li><a href="#jurnal-tab">Jurnal</a></li>
+            </ul>
+            <div id="detail-tab">
+
+            </div>
+
+            <div id="piutang-tab">
+
+            </div>
+            <div id="jurnal-tab">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 @include('invoiceextraheader._modal')
 <!-- Detail -->
 @include('invoiceextraheader._detail')
+@include('invoiceextraheader._piutang')
+@include('jurnalumum._jurnal')
 
 @push('scripts')
 <script>
@@ -32,6 +59,7 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let currentTab = 'detail'
   let selectedRows = [];
 
   function checkboxHandler(element) {
@@ -51,6 +79,7 @@
   }
 
   $(document).ready(function() {
+    $("#tabs").tabs()
 
     setRange()
     initDatepicker()
@@ -230,6 +259,11 @@
           },
 
           {
+            label: 'NO. BUKTI PIUTANG',
+            name: 'piutang_nobukti',
+            align: 'left'
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
@@ -284,7 +318,11 @@
         },
         onSelectRow: function(id) {
 
-          loadDetailData(id)
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'piutang_nobukti')
+          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/invoiceextradetail/${currentTab}/grid`, function() {
+            loadGrid(id, nobukti)
+          })
+          loadDetailData(id, nobukti)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
@@ -297,6 +335,16 @@
             $('#detail').jqGrid('setGridParam', {
               postData: {
                 invoiceextra_id: 0,
+              },
+            }).trigger('reloadGrid'); 
+            $('#piutangGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti_piutang: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#jurnalGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
               },
             }).trigger('reloadGrid');
           }
@@ -460,8 +508,6 @@
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
 
-    /* Load detail grid */
-    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn btn-sm btn-primary`)
@@ -574,6 +620,16 @@
 
 
 
+    $("#tabs").on('click', 'li.ui-state-active', function() {
+      let href = $(this).find('a').attr('href');
+      currentTab = href.substring(1, href.length - 4);
+      let invoiceId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      let nobukti = $('#jqGrid').jqGrid('getCell', invoiceId, 'piutang_nobukti')
+      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/invoiceextradetail/${currentTab}/grid`, function() {
+
+        loadGrid(invoiceId, nobukti)
+      })
+    })
 
   })
 

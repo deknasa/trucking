@@ -150,6 +150,7 @@ use App\Http\Controllers\JurnalUmumPusatHeaderController;
 use App\Http\Controllers\KartuStokController;
 use App\Http\Controllers\HistoriPenerimaanStokController;
 use App\Http\Controllers\HistoriPengeluaranStokController;
+use App\Http\Controllers\InvoiceExtraDetailController;
 use App\Http\Controllers\LaporanBanGudangSementaraController;
 use App\Http\Controllers\LaporanBukuBesarController;
 use App\Http\Controllers\LaporanDepositoSupirController;
@@ -450,6 +451,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('kasgantungheader/report', [KasGantungHeaderController::class, 'report'])->name('kasgantungheader.report');
     Route::resource('kasgantungheader', KasGantungHeaderController::class);
 
+    Route::get('kasgantungdetail/jurnal/grid', [KasGantungDetailController::class, 'jurnalGrid']);
+    Route::get('kasgantungdetail/pengeluaran/grid', [KasGantungDetailController::class, 'pengeluaranGrid']);
+    Route::get('kasgantungdetail/detail/grid', [KasGantungDetailController::class, 'detailGrid']);
     Route::resource('kasgantungdetail', KasGantungDetailController::class);
 
     Route::get('pengembaliankasgantungheader/get', [PengembalianKasGantungHeaderController::class, 'get'])->name('pengembaliankasgantungheader.get');
@@ -458,6 +462,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('pengembaliankasgantungheader/index', [PengembalianKasGantungHeaderController::class, 'index']);
     Route::resource('pengembaliankasgantungheader', PengembalianKasGantungHeaderController::class);
     
+    Route::get('pengembaliankasgantungdetail/jurnal/grid', [PengembalianKasGantungDetailController::class, 'jurnalGrid']);
+    Route::get('pengembaliankasgantungdetail/penerimaan/grid', [PengembalianKasGantungDetailController::class, 'penerimaanGrid']);
+    Route::get('pengembaliankasgantungdetail/detail/grid', [PengembalianKasGantungDetailController::class, 'detailGrid']);
+    Route::resource('pengembaliankasgantungdetail', PengembalianKasGantungDetailController::class);
+
     Route::get('pengembaliankasbankheader/get', [PengembalianKasbankHeaderController::class, 'get'])->name('pengembaliankasbankheader.get');
     Route::get('pengembaliankasbankheader/export', [PengembalianKasbankHeaderController::class, 'export'])->name('pengembaliankasbankheader.export');
     Route::get('pengembaliankasbankheader/report', [PengembalianKasbankHeaderController::class, 'report'])->name('pengembaliankasbankheader.report');
@@ -668,6 +677,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('penerimaanheader/report', [PenerimaanHeaderController::class, 'report'])->name('penerimaanheader.report');
     Route::resource('penerimaanheader', PenerimaanHeaderController::class);
 
+    Route::get('penerimaandetail/jurnal/grid', [PenerimaanDetailController::class, 'jurnalGrid']);
+    Route::get('penerimaandetail/detail/grid', [PenerimaanDetailController::class, 'detailGrid']);
     Route::resource('penerimaandetail', PenerimaanDetailController::class);
 
     //pengeluaran
@@ -678,6 +689,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('pengeluaranheader/report', [PengeluaranHeaderController::class, 'report'])->name('pengeluaranheader.report');
     Route::resource('pengeluaranheader', PengeluaranHeaderController::class);
 
+    Route::get('pengeluarandetail/jurnal/grid', [PengeluaranDetailController::class, 'jurnalGrid']);
+    Route::get('pengeluarandetail/detail/grid', [PengeluaranDetailController::class, 'detailGrid']);
     Route::resource('pengeluarandetail', PengeluaranDetailController::class);
     
     Route::get('rekappengeluaranheader/{id}/delete', [RekapPengeluaranHeaderController::class, 'delete'])->name('rekappengeluaranheader.delete');
@@ -830,6 +843,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('invoiceextraheader/export', [InvoiceExtraHeaderController::class, 'export'])->name('invoiceextraheader.export');
     Route::get('invoiceextraheader/report/{id}', [InvoiceExtraHeaderController::class, 'report'])->name('invoiceextraheader.report');
     Route::resource('invoiceextraheader', InvoiceExtraHeaderController::class);
+    Route::get('invoiceextradetail/jurnal/grid', [InvoiceExtraDetailController::class, 'jurnalGrid']);
+    Route::get('invoiceextradetail/piutang/grid', [InvoiceExtraDetailController::class, 'piutangGrid']);
+    Route::get('invoiceextradetail/detail/grid', [InvoiceExtraDetailController::class, 'detailGrid']);
     Route::resource('invoiceextradetail', InvoiceExtraDetailController::class);
     
     Route::get('invoicechargegandenganheader/index', [InvoiceChargeGandenganHeaderController::class, 'index']);
@@ -853,6 +869,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('penerimaangiroheader/export', [PenerimaanGiroHeaderController::class, 'export'])->name('penerimaangiroheader.export');
     Route::get('penerimaangiroheader/report', [PenerimaanGiroHeaderController::class, 'report'])->name('penerimaangiroheader.report');
     Route::resource('penerimaangiroheader', PenerimaanGiroHeaderController::class);
+    Route::get('penerimaangirodetail/jurnal/grid', [PenerimaanGiroDetailController::class, 'jurnalGrid']);
+    Route::get('penerimaangirodetail/detail/grid', [PenerimaanGiroDetailController::class, 'detailGrid']);
     Route::resource('penerimaangirodetail', PenerimaanGiroDetailController::class);
 
     Route::get('jurnalumumpusatheader/index', [JurnalUmumPusatHeaderController::class, 'index']);

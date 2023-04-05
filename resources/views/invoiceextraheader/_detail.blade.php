@@ -1,30 +1,21 @@
-<!-- Grid -->
-<div class="container-fluid my-4">
-  <div class="row">
-    <div class="col-12">
-      <table id="detail"></table>
-    </div>
-  </div>
-</div>
+<table id="detail"></table>
 
-@push('scripts')
 <script>
-  let sortnameDetail = 'nobukti'
-  let sortorderDetail = 'asc'
-  let totalRecordDetail
-  let limitDetail
-  let postDataDetail
-  let triggerClickDetail
-  let indexRowDetail
-  let pageDetail = 0
-
-  function loadDetailGrid(id) {
+  function loadGrid(id) {
+    let sortnameDetail = 'nobukti'
+    let sortorderDetail = 'asc'
+    let totalRecordDetail
+    let limitDetail
+    let postDataDetail
+    let triggerClickDetail
+    let indexRowDetail
+    let pageDetail = 0
     $("#detail").jqGrid({
         url: `${apiUrl}invoiceextradetail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "local",
+        datatype: "json",
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -149,4 +140,3 @@
     }).trigger('reloadGrid')
   }
 </script>
-@endpush()

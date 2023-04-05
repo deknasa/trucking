@@ -1,7 +1,7 @@
 <table id="penerimaanGrid"></table>
 
 <script>
-  function loadGrid(pelunasanId, nobukti) {
+  function loadGrid(id, nobukti) {
     let sortnamePenerimaan = 'nobukti'
     let sortorderPenerimaan = 'asc'
     let totalRecordPenerimaan
