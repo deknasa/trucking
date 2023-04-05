@@ -29,6 +29,19 @@ class PelunasanPiutangDetailController extends Controller
 
         return response($data);
     }
+    
+    public function jurnalGrid()
+    {
+        return view('jurnalumum._jurnal');
+    }
+    public function penerimaanGrid()
+    {
+        return view('pelunasanpiutangheader._penerimaan');
+    }
+    public function detailGrid()
+    {
+        return view('pelunasanpiutangheader._detail');
+    }
 }
 
 

@@ -750,6 +750,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('hutangheader/report', [HutangHeaderController::class, 'report'])->name('hutangheader.report');
     Route::resource('hutangheader', HutangHeaderController::class);
     
+    Route::get('hutangdetail/jurnal/grid', [HutangDetailController::class, 'jurnalGrid']);
     Route::get('hutangdetail/history/grid', [HutangDetailController::class, 'historyGrid']);
     Route::get('hutangdetail/detail/grid', [HutangDetailController::class, 'detailGrid']);
     Route::resource('hutangdetail', HutangDetailController::class);
@@ -764,6 +765,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('piutangheader/report', [PiutangHeaderController::class, 'report'])->name('piutangheader.report');
     Route::resource('piutangheader', PiutangHeaderController::class);
 
+    Route::get('piutangdetail/jurnal/grid', [PiutangDetailController::class, 'jurnalGrid']);
     Route::get('piutangdetail/history/grid', [PiutangDetailController::class, 'historyGrid']);
     Route::get('piutangdetail/detail/grid', [PiutangDetailController::class, 'detailGrid']);
     Route::resource('piutangdetail', PiutangDetailController::class);
@@ -776,6 +778,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('pelunasanpiutangheader/report', [PelunasanPiutangHeaderController::class, 'report'])->name('pelunasanpiutangheader.report');
     Route::resource('pelunasanpiutangheader', PelunasanPiutangHeaderController::class);
 
+    Route::get('pelunasanpiutangdetail/jurnal/grid', [PelunasanPiutangDetailController::class, 'jurnalGrid']);
+    Route::get('pelunasanpiutangdetail/penerimaan/grid', [PelunasanPiutangDetailController::class, 'penerimaanGrid']);
+    Route::get('pelunasanpiutangdetail/detail/grid', [PelunasanPiutangDetailController::class, 'detailGrid']);
     Route::resource('pelunasanpiutangdetail', PelunasanPiutangDetailController::class);
 
     Route::get('hutangbayarheader/index', [HutangBayarHeaderController::class, 'index']);
@@ -785,6 +790,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('hutangbayarheader/report', [HutangBayarHeaderController::class, 'report'])->name('hutangbayarheader.report');
     Route::resource('hutangbayarheader', HutangBayarHeaderController::class);
 
+    Route::get('hutangbayardetail/jurnal/grid', [HutangBayarDetailController::class, 'jurnalGrid']);
+    Route::get('hutangbayardetail/pengeluaran/grid', [HutangBayarDetailController::class, 'pengeluaranGrid']);
+    Route::get('hutangbayardetail/detail/grid', [HutangBayarDetailController::class, 'detailGrid']);
     Route::resource('hutangbayardetail', HutangBayarDetailController::class);
 
     

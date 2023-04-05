@@ -32,7 +32,7 @@ class InvoiceDetailController extends Controller
     
     public function jurnalGrid()
     {
-        return view('invoiceheader._jurnal');
+        return view('jurnalumum._jurnal');
     }
     public function piutangGrid()
     {

@@ -27,4 +27,16 @@ class HutangBayarDetailController extends Controller
 
         return response($data);
     }
+    public function jurnalGrid()
+    {
+        return view('jurnalumum._jurnal');
+    }
+    public function pengeluaranGrid()
+    {
+        return view('hutangbayarheader._pengeluaran');
+    }
+    public function detailGrid()
+    {
+        return view('hutangbayarheader._detail');
+    }
 }

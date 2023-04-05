@@ -436,12 +436,12 @@
             innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
 
               $('#rangeModal').data('action', 'export')
               $('#rangeModal').find('button:submit').html(`Export`)
               $('#rangeModal').modal('show')
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
             }
           },
           {
@@ -449,12 +449,12 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
 
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               window.open(`{{url('notadebetheader/report/${selectedId}')}}`)
               // reportNotaDebet(selectedId)
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
             }
           },
           {

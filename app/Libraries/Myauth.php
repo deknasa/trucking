@@ -49,7 +49,9 @@ class Myauth
             'detailgrid',
             'historygrid',
             'piutanggrid',
-            'jurnalgrid'
+            'jurnalgrid',
+            'penerimaangrid',
+            'pengeluarangrid',
         ],
     ];
 

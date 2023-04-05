@@ -1,7 +1,7 @@
 <table id="jurnalGrid"></table>
 
 <script>
-  function loadGrid(invoiceId, nobukti) {
+  function loadGrid(id, nobukti) {
     let sortnameJurnal = 'nobukti'
     let sortorderJurnal = 'asc'
     let totalRecordJurnal
@@ -13,7 +13,7 @@
 
     $("#jurnalGrid")
       .jqGrid({
-        url: `${apiUrl}invoicedetail/jurnal`,
+        url: `${apiUrl}jurnalumumdetail/jurnal`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -158,7 +158,7 @@
 
   function loadDetailData(id, nobukti) {
     $('#jurnalGrid').setGridParam({
-      url: `${apiUrl}invoicedetail/jurnal`,
+      url: `${apiUrl}jurnalumumdetail/jurnal`,
       datatype: "json",
       postData: {
         nobukti: nobukti

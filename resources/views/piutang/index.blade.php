@@ -17,12 +17,16 @@
             <ul class="dejavu">
               <li><a href="#detail-tab">Details</a></li>
               <li><a href="#history-tab">History pelunasan</a></li>
+              <li><a href="#jurnal-tab">Jurnal</a></li>
             </ul>
             <div id="detail-tab">
 
             </div>
 
             <div id="history-tab">
+
+            </div>
+            <div id="jurnal-tab">
 
             </div>
           </div>
@@ -36,6 +40,7 @@
 @include('piutang._modal')
 @include('piutang._details')
 @include('piutang._history')
+@include('jurnalumum._jurnal')
 
 @push('scripts')
 <script>
@@ -247,8 +252,10 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+          
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
           $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/piutangdetail/${currentTab}/grid`, function() {
-            loadGrid(id)
+            loadGrid(id,nobukti)
           })
           loadDetailData(id)
           activeGrid = $(this)
@@ -270,6 +277,11 @@
             $('#detailGrid').jqGrid('setGridParam', {
               postData: {
                 piutang_id: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#jurnalGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
               },
             }).trigger('reloadGrid');
           }
@@ -523,9 +535,10 @@
       let href = $(this).find('a').attr('href');
       currentTab = href.substring(1, href.length - 4);
       let piutangId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      let nobukti = $('#jqGrid').jqGrid('getCell', piutangId, 'nobukti')
       $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/piutangdetail/${currentTab}/grid`, function() {
 
-        loadGrid(piutangId)
+        loadGrid(piutangId, nobukti)
       })
     })
   })

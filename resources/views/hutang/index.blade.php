@@ -18,12 +18,16 @@
             <ul>
               <li><a href="#detail-tab">Details</a></li>
               <li><a href="#history-tab">History Pembayaran</a></li>
+              <li><a href="#jurnal-tab">Jurnal</a></li>
             </ul>
             <div id="detail-tab">
 
             </div>
 
             <div id="history-tab">
+
+            </div>
+            <div id="jurnal-tab">
 
             </div>
           </div>
@@ -37,6 +41,7 @@
 
 @include('hutang._details')
 @include('hutang._history')
+@include('jurnalumum._jurnal')
 
 @include('hutang._modal')
 @push('scripts')
@@ -142,6 +147,11 @@
             }
           },
           {
+            label: 'POSTING DARI',
+            name: 'postingdari',
+            align: 'left'
+          },
+          {
             label: 'COA',
             name: 'coa',
             align: 'left'
@@ -222,8 +232,9 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
           $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/hutangdetail/${currentTab}/grid`, function() {
-            loadGrid(id)
+            loadGrid(id, nobukti)
           })
           loadDetailData(id)
           activeGrid = $(this)
@@ -245,6 +256,11 @@
             $('#detailGrid').jqGrid('setGridParam', {
               postData: {
                 hutang_id: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#jurnalGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
               },
             }).trigger('reloadGrid');
           }
@@ -501,10 +517,11 @@
     $("#tabs").on('click', 'li.ui-state-active', function() {
       let href = $(this).find('a').attr('href');
       currentTab = href.substring(1, href.length - 4);
-      let piutangId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      let hutangId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      let nobukti = $('#jqGrid').jqGrid('getCell', hutangId, 'nobukti')
       $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/hutangdetail/${currentTab}/grid`, function() {
 
-        loadGrid(piutangId)
+        loadGrid(hutangId,nobukti)
       })
     })
   })

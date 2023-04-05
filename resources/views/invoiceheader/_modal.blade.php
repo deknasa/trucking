@@ -116,6 +116,7 @@
                     <th width="8%">OMSET</th>
                     <th width="8%">BIAYA TAMBAHAN</th>
                     <th width="10%">RETRIBUSI</th>
+                    <th width="8%">TOTAL</th>
                     <th width="8%">BAGIAN</th>
                     <th width="15%">EMKL</th>
                     <th width="5%">LONG TRIP</th>
@@ -139,6 +140,9 @@
                     </td>
                     <td>
                       <p id="retribusi" class="text-right font-weight-bold"></p>
+                    </td>
+                    <td>
+                      <p id="total" class="text-right font-weight-bold"></p>
                     </td>
 
                     <td colspan="5"></td>
@@ -176,6 +180,31 @@
 
     $(document).on('input', `#spList tbody [name="nominalretribusi[]"]`, function(event) {
       setNominalRetribusi()
+
+      let Omset = AutoNumeric.getNumber($(this).closest("tr").find(`td.omset`)[0])
+      let Tambahan = AutoNumeric.getNumber($(this).closest("tr").find(`td.tambahan`)[0])
+      let Retribusi = $(this).val()
+      Retribusi = parseFloat(Retribusi.replaceAll(',', ''));
+      Retribusi = Number.isNaN(Retribusi) ? 0 : Retribusi
+
+      let Total = Omset + Tambahan + Retribusi
+
+      $(this).closest("tr").find("td.total").html(Total)
+
+      initAutoNumeric($(this).closest("tr").find("td.total"))
+
+      let getOmset = $('#omset').text()
+      getOmset = parseFloat(getOmset.replaceAll(',', ''));
+
+      let getTambahan = $('#tambahan').text()
+      getTambahan = parseFloat(getTambahan.replaceAll(',', ''));
+      let getRetribusi = $('#retribusi').text()
+      getRetribusi = parseFloat(getRetribusi.replaceAll(',', ''));
+
+      let setTotal = getOmset + getTambahan + getRetribusi
+      $('#total').html('')
+      $('#total').append(`${setTotal}`)
+      initAutoNumeric($('#spList tfoot').find('#total'))
     })
 
     $('#btnSubmit').click(function(event) {
@@ -369,7 +398,7 @@
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
-  function setTotal() {
+  function setOmset() {
     let nominalDetails = $(`#spList tbody .omset`)
     let total = 0
 
@@ -378,6 +407,17 @@
     });
 
     new AutoNumeric('#omset').set(total)
+  }
+
+  function setTotal() {
+    let omsetDetails = $(`#spList tbody .total`)
+    let total = 0
+
+    $.each(omsetDetails, (index, nominalDetail) => {
+      total += AutoNumeric.getNumber(nominalDetail)
+    });
+
+    new AutoNumeric('#total').set(total)
   }
 
   function setTambahan() {
@@ -527,13 +567,14 @@
 
               nominalRetribusi = (detail.nominalretribusi != null) ? detail.nominalretribusi : 0;
               nominalextra = (detail.nominalextra != null) ? detail.nominalextra : 0;
+              total = parseFloat(detail.omset) + parseFloat(nominalRetribusi) + parseFloat(nominalextra);
               // omset = parseFloat(omset) + parseFloat(detail.omset)
               let cekLongtrip = detail.statuslongtrip == 65 ? "checked" : "";
               let cekPeralihan = detail.statusperalihan == 67 ? "checked" : "";
               let detailRow = $(`
                               <tr >
                                   <td>
-                                    <input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked>
+                                    <input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}">
                                     <input type="hidden" name="nominalextra[]" value="${nominalextra}">
                                   </td>
                                   <td>${detail.jobtrucking}</td>
@@ -542,7 +583,8 @@
                                   <td>${detail.tarif_id}</td>
                                   <td class="omset text-right">${detail.omset}</td>
                                   <td class="tambahan text-right">${nominalextra}</td>
-                                  <td id="ret${detail.id}"><input type="text" name="nominalretribusi[]" value=${nominalRetribusi} class="form-control text-right"></td>
+                                  <td id="ret${detail.id}"><input type="text" name="nominalretribusi[]" class="form-control text-right" disabled></td>
+                                  <td class="total text-right">${total}</td>
                                   <td>${detail.jenisorder_id}</td>
                                   <td>${detail.agen_id}</td>
                                   <td><input name='statuslongtrip[]' type="checkbox" value="${detail.statuslongtrip}" ${cekLongtrip} disabled></td>
@@ -554,6 +596,7 @@
               $('#spList tbody').append(detailRow)
               initAutoNumeric(detailRow.find('.omset'))
               initAutoNumeric(detailRow.find('.tambahan'))
+              initAutoNumeric(detailRow.find('.total'))
               initAutoNumeric(detailRow.find(`[name="nominalretribusi[]"]`))
               initAutoNumeric(detailRow.find(`[name="nominalextra[]"]`))
               setNominalRetribusi()
@@ -562,8 +605,9 @@
             // $('#omset').append(`${omset}`)
 
             // initAutoNumeric($('#spList tfoot').find('#omset'))
-            setTotal()
+            setOmset()
             setTambahan()
+            setTotal()
           }
         },
         error: error => {
@@ -659,6 +703,7 @@
           omset = parseFloat(omset) + parseFloat(detail.omset)
 
           nominalextra = (detail.nominalextra != null) ? detail.nominalextra : 0;
+          total = parseFloat(detail.omset) + parseFloat(detail.nominalretribusi) + parseFloat(nominalextra);
           let cekLongtrip = detail.statuslongtrip == 65 ? "checked" : "";
           let cekPeralihan = detail.statusperalihan == 67 ? "checked" : "";
           let detailRow = $(`
@@ -674,6 +719,7 @@
                       <td class="omset text-right">${detail.omset}</td>
                       <td class="tambahan text-right">${nominalextra}</td>
                       <td id="ret${detail.id}"><input type="text" name="nominalretribusi[]" class="form-control text-right" value="${detail.nominalretribusi}" ${disabled}></td>
+                      <td class="total text-right">${total}</td>
                       <td>${detail.jenisorder_id}</td>
                       <td>${detail.agen_id}</td>
                       <td><input name='statuslongtrip[]' type="checkbox" value="${detail.statuslongtrip}" ${cekLongtrip} disabled></td>
@@ -685,16 +731,18 @@
           $('#spList tbody').append(detailRow)
           initAutoNumeric(detailRow.find('.omset'))
           initAutoNumeric(detailRow.find('.tambahan'))
+          initAutoNumeric(detailRow.find('.total'))
           initAutoNumeric(detailRow.find(`[name="nominalretribusi[]"]`))
           initAutoNumeric(detailRow.find(`[name="nominalextra[]"]`))
           setNominalRetribusi()
         })
 
-        setTotal()
+        setOmset()
         // $('#omset').append(`${omset}`)
 
         // initAutoNumeric($('#spList tfoot').find('#omset'))
         setTambahan()
+        setTotal()
 
       }
     })
@@ -706,23 +754,31 @@
     tdOmset = parseFloat(tdOmset.replaceAll(',', ''));
     let tdTambahan = $(this).closest('tr').find('td.tambahan').text()
     tdTambahan = parseFloat(tdTambahan.replaceAll(',', ''));
+    let tdTotal = $(this).closest('tr').find('td.total').text()
+    tdTotal = parseFloat(tdTotal.replaceAll(',', ''));
 
     let allOmset = $('#omset').text()
     allOmset = parseFloat(allOmset.replaceAll(',', ''));
 
     let allTambahan = $('#tambahan').text()
     allTambahan = parseFloat(allTambahan.replaceAll(',', ''));
+    let allTotal = $('#total').text()
+    allTotal = parseFloat(allTotal.replaceAll(',', ''));
     let nominal = 0
 
     if ($(this).prop("checked") == true) {
       allOmset = allOmset + tdOmset
       allTambahan = allTambahan + tdTambahan
+      allTotal = allTotal + tdTotal
 
       $(this).closest('tr').find(`td [name="nominalretribusi[]"]`).prop('disabled', false)
       setNominalRetribusi()
+
     } else {
       allOmset = allOmset - tdOmset
       allTambahan = allTambahan - tdTambahan
+      allTotal = allTotal - tdTotal
+      let updTotal = tdOmset + tdTambahan
       // $(this).closest('tr').find(`td [name="nominalretribusi[]"]`).prop('disabled', true)
       $(this).closest('tr').find(`td [name="nominalretribusi[]"]`).remove();
       let newRetElement = `<input type="text" name="nominalretribusi[]" class="form-control text-right" disabled>`
@@ -730,6 +786,10 @@
       $(this).closest('tr').find(`#ret${id}`).append(newRetElement)
       initAutoNumeric($(this).closest("tr").find(`td [name="nominalretribusi[]"]`))
       setNominalRetribusi()
+
+      $(this).closest("tr").find("td.total").html(updTotal)
+      initAutoNumeric($(this).closest("tr").find("td.total"))
+
     }
 
     $('#omset').html('')
@@ -738,6 +798,10 @@
     $('#tambahan').html('')
     $('#tambahan').append(`${allTambahan}`)
     initAutoNumeric($('#spList tfoot').find('#tambahan'))
+    $('#total').html('')
+    $('#total').append(`${allTotal}`)
+    initAutoNumeric($('#spList tfoot').find('#total'))
+
   })
 
 

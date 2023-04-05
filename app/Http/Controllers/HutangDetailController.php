@@ -32,6 +32,10 @@ class HutangDetailController extends Controller
 
         return response($data);
     }
+    public function jurnalGrid()
+    {
+        return view('jurnalumum._jurnal');
+    }
     public function historyGrid()
     {
         return view('hutang._history');

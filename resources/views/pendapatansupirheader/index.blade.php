@@ -443,8 +443,6 @@
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
 
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -452,6 +450,8 @@
               } else {
                 cekValidasi(selectedId, 'EDIT')
               }
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
             }
           },
           {
@@ -459,8 +459,6 @@
             innerHTML: '<i class="fa fa-trash"></i> DELETE',
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
 
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -468,6 +466,8 @@
               } else {
                 cekValidasi(selectedId, 'DELETE')
               }
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
             }
           },
 
@@ -478,8 +478,6 @@
             innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
 
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -487,6 +485,8 @@
               } else {
                 window.open(`{{ route('pendapatansupirheader.export') }}?id=${selectedId}`)
               }
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
             }
           },
           {
@@ -494,8 +494,6 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
 
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -503,6 +501,8 @@
               } else {
                 window.open(`{{ route('pendapatansupirheader.report') }}?id=${selectedId}`)
               }
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
             }
           },
           {

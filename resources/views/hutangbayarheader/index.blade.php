@@ -9,12 +9,39 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs">
+            <ul class="dejavu">
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#pengeluaran-tab">Pengeluaran Kas/bank</a></li>
+              <li><a href="#jurnal-tab">Jurnal</a></li>
+            </ul>
+            <div id="detail-tab">
+
+            </div>
+
+            <div id="pengeluaran-tab">
+
+            </div>
+            <div id="jurnal-tab">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Modal -->
 @include('hutangbayarheader._modal')
 <!-- Detail -->
 @include('hutangbayarheader._detail')
+@include('hutangbayarheader._pengeluaran')
+@include('jurnalumum._jurnal')
 
 @push('scripts')
 <script>
@@ -33,6 +60,7 @@
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false
+  let currentTab = 'detail'
   let selectedRows = [];
 
   function checkboxHandler(element) {
@@ -52,6 +80,7 @@
   }
 
   $(document).ready(function() {
+    $("#tabs").tabs()
     setRange()
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
@@ -312,18 +341,17 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
+          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/hutangbayardetail/${currentTab}/grid`, function() {
+            loadGrid(id,nobukti)
+          })
+          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
-          if (!hasDetail) {
-            loadDetailGrid(id)
-            hasDetail = true
-          }
-
-          loadDetailData(id)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -331,6 +359,16 @@
             $('#detail').jqGrid('setGridParam', {
               postData: {
                 hutangbayar_id: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#jurnalGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#pengeluaranGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
               },
             }).trigger('reloadGrid');
           }
@@ -420,8 +458,6 @@
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
 
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -429,6 +465,8 @@
               } else {
                 cekValidasi(selectedId, 'EDIT')
               }
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
             }
           },
           {
@@ -436,8 +474,6 @@
             innerHTML: '<i class="fa fa-trash"></i> DELETE',
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
 
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -445,6 +481,8 @@
               } else {
                 cekValidasi(selectedId, 'DELETE')
               }
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
             }
           },
           {
@@ -454,8 +492,6 @@
             innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
 
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -463,6 +499,8 @@
               } else {
                 window.open(`{{ route('hutangbayarheader.export') }}?id=${selectedId}`)
               }
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
             }
           },
           {
@@ -470,8 +508,6 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
 
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -479,6 +515,8 @@
               } else {
                 window.open(`{{ route('hutangbayarheader.report') }}?id=${selectedId}`)
               }
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
             }
           },
           {
@@ -547,6 +585,17 @@
       $("#jqGrid").hideCol("");
     }
 
+    
+    $("#tabs").on('click', 'li.ui-state-active', function() {
+      let href = $(this).find('a').attr('href');
+      currentTab = href.substring(1, href.length - 4);
+      let hutangBayarId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      let nobukti = $('#jqGrid').jqGrid('getCell', hutangBayarId, 'pengeluaran_nobukti')
+      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/hutangbayardetail/${currentTab}/grid`, function() {
+
+        loadGrid(hutangBayarId, nobukti)
+      })
+    })
   })
   
   function clearSelectedRows() {

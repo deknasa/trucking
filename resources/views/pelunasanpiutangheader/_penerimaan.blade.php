@@ -1,18 +1,19 @@
-<table id="detail"></table>
+<table id="penerimaanGrid"></table>
 
 <script>
-  function loadGrid(id) {
-    let sortnameDetail = 'nobukti'
-    let sortorderDetail = 'asc'
-    let totalRecordDetail
-    let limitDetail
-    let postDataDetail
-    let triggerClickDetail
-    let indexRowDetail
-    let pageDetail = 0;
+  function loadGrid(pelunasanId, nobukti) {
+    let sortnamePenerimaan = 'nobukti'
+    let sortorderPenerimaan = 'asc'
+    let totalRecordPenerimaan
+    let limitPenerimaan
+    let postDataPenerimaan
+    let triggerClickPenerimaan
+    let indexRowPenerimaan
+    let pagePenerimaan = 0
 
-    $("#detail").jqGrid({
-        url: `${apiUrl}pelunasanpiutangdetail`,
+    $("#penerimaanGrid")
+      .jqGrid({
+        url: `${apiUrl}penerimaandetail/getPenerimaan`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -22,12 +23,17 @@
             name: 'nobukti',
           },
           {
-            label: 'NO BUKTI PIUTANG',
-            name: 'piutang_nobukti',
+            label: 'NO WARKAT',
+            name: 'nowarkat',
           },
           {
-            label: 'NO BUKTI INVOICE',
-            name: 'invoice_nobukti',
+            label: 'TGL JATUH TEMPO',
+            name: 'tgljatuhtempo',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'KETERANGAN',
@@ -37,28 +43,36 @@
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
-            formatter: currencyFormat,
+            formatter: currencyFormat
           },
           {
-            label: 'KET. POTONGAN',
-            name: 'keteranganpotongan',
+            label: 'COA DEBET',
+            name: 'coadebet',
           },
           {
-            label: 'COA POTONGAN',
-            name: 'coapotongan',
-            width: 220
+            label: 'COA KREDIT',
+            name: 'coakredit',
+          },
+
+          {
+            label: 'BANK',
+            name: 'bank_id',
           },
           {
-            label: 'POTONGAN',
-            name: 'potongan',
-            align: 'right',
-            formatter: currencyFormat,
+            label: 'INVOICE NO BUKTI',
+            name: 'invoice_nobukti',
           },
           {
-            label: 'NOMINAL LEBIH BAYAR',
-            name: 'nominallebihbayar',
-            align: 'right',
-            formatter: currencyFormat,
+            label: 'PELUNASAN PIUTANG NO BUKTI',
+            name: 'pelunasanpiutang_nobukti',
+          },
+          {
+            label: 'BANK PELANGGAN',
+            name: 'bankpelanggan_id',
+          },
+          {
+            label: 'BULAN BEBAN',
+            name: 'bulanbeban',
           },
         ],
         autowidth: true,
@@ -68,16 +82,16 @@
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50, 0],
-        toolbar: [true, "top"],
-        sortable: true,
-        sortname: sortnameDetail,
-        sortorder: sortorderDetail,
-        page: pageDetail,
         footerrow: true,
         userDataOnFooter: true,
+        toolbar: [true, "top"],
+        sortable: true,
+        sortname: sortnamePenerimaan,
+        sortorder: sortorderPenerimaan,
+        page: pagePenerimaan,
         viewrecords: true,
         postData: {
-          pelunasanpiutang_id: id
+          nobukti: nobukti
         },
         prmNames: {
           sort: 'sortIndex',
@@ -103,19 +117,19 @@
           initResize($(this))
 
           /* Set global variables */
-          sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
-          sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecordDetail = $(this).getGridParam("records")
-          limitDetail = $(this).jqGrid('getGridParam', 'postData').limit
-          postDataDetail = $(this).jqGrid('getGridParam', 'postData')
+          sortnamePenerimaan = $(this).jqGrid("getGridParam", "sortname")
+          sortorderPenerimaan = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordPenerimaan = $(this).getGridParam("records")
+          limitPenerimaan = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataPenerimaan = $(this).jqGrid('getGridParam', 'postData')
           triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRowDetail > $(this).getDataIDs().length - 1) {
-            indexRowDetail = $(this).getDataIDs().length - 1;
+          if (indexRowPenerimaan > $(this).getDataIDs().length - 1) {
+            indexRowPenerimaan = $(this).getDataIDs().length - 1;
           }
 
           setHighlight($(this))
@@ -124,13 +138,11 @@
             $(this).jqGrid('footerData', 'set', {
               nobukti: 'Total:',
               nominal: data.attributes.totalNominal,
-              potongan: data.attributes.totalPotongan,
-              nominallebihbayar: data.attributes.totalNominalLebih,
             }, true)
           }
-
         }
       })
+
       .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
@@ -139,10 +151,13 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
-          clearGlobalSearch($('#detail'))
+          $(this).setGridParam({
+          postData: {
+            nobukti: nobukti
+          },})
+          clearGlobalSearch($('#penerimaanGrid'))
         },
       })
-
       .jqGrid("navGrid", pager, {
         search: false,
         refresh: false,
@@ -153,27 +168,20 @@
 
       .customPager()
     /* Append clear filter button */
-    loadClearFilter($('#detail'))
+    loadClearFilter($('#penerimaanGrid'))
 
     /* Append global search */
-    loadGlobalSearch($('#detail'))
+    loadGlobalSearch($('#penerimaanGrid'))
   }
 
-  function loadDetailData(id) {
-    $('#detail').setGridParam({
-      url: `${apiUrl}pelunasanpiutangdetail`,
+  function loadDetailData(id, nobukti) {
+    $('#penerimaanGrid').setGridParam({
+      url: `${apiUrl}penerimaandetail/getPenerimaan`,
       datatype: "json",
       postData: {
-        pelunasanpiutang_id: id
+        nobukti: nobukti
       },
       page: 1
     }).trigger('reloadGrid')
   }
-
-  // var $footRow = $("#detail").closest(".ui-jqgrid-bdiv")
-  //   .next(".ui-jqgrid-sdiv")
-  //   .find(".footrow");
-
-  // $footRow.find('>td[aria-describedby="detail_nobukti"]')
-  //   .css("border-right-color", "transparent");
 </script>

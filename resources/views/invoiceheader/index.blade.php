@@ -40,7 +40,7 @@
 <!-- Detail -->
 @include('invoiceheader._detail')
 @include('invoiceheader._piutang')
-@include('invoiceheader._jurnal')
+@include('jurnalumum._jurnal')
 
 @push('scripts')
 <script>
@@ -397,6 +397,16 @@
                 invoice_id: 0,
               },
             }).trigger('reloadGrid');
+            $('#piutangGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti_piutang: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#jurnalGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
           }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -484,31 +494,31 @@
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
-              
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
                 cekValidasi(selectedId, 'EDIT')
               }
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
             }
           },
           {
             id: 'delete',
             innerHTML: '<i class="fa fa-trash"></i> DELETE',
             class: 'btn btn-danger btn-sm mr-1',
-            onClick: () => {
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
-              
+            onClick: () => {              
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
                 cekValidasi(selectedId, 'DELETE')
               }
+
+              
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
             }
           },
 
@@ -519,15 +529,16 @@
             innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
-
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
                 window.open(`{{ route('invoiceheader.export') }}?id=${selectedId}`)
               }
+              
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
+
             }
           },
           {
@@ -535,15 +546,15 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
-
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
                 window.open(`{{ route('invoiceheader.report') }}?id=${selectedId}`)
               }
+              
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
             }
           },
           {
