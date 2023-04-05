@@ -1,5 +1,18 @@
 @extends('layouts.master')
-
+@push('addtional-field')
+<div class="form-group row">
+  <label class="col-12 col-sm-2 col-form-label mt-2">pengeluaran stok<span class="text-danger">*</span></label>
+  <div class="col-sm-4 mt-2">
+    <select name="kodepengeluaranheader" id="kodepengeluaranheader" class="form-select select2" style="width: 100%;">
+      <option value="">-- PILIH Pengeluaran stok --</option>
+      @foreach ($comboKodepengeluaran as $kodepengeluaran)
+        <option @if ($kodepengeluaran['id'] === "1") selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['keterangan']}} </option>
+        {{-- <option @if ($kodepengeluaran['statusdefault_text'] ==="YA") selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['namakodepengeluaran']}} </option> --}}
+      @endforeach
+    </select>
+  </div>
+</div>
+@endpush
 @section('content')
 <!-- Grid -->
 <div class="container-fluid">
@@ -34,7 +47,10 @@
   let autoNumericElements = []
 
   $(document).ready(function() {
-
+    $('.select2').select2({
+      width: 'resolve',
+      theme: "bootstrap4"
+    });
 
     $('#crudModal').on('hidden.bs.modal', function() {
        activeGrid = '#jqGrid'
@@ -42,17 +58,17 @@
 setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
-      loadDataHeader('pengeluaranstokheader')
+      loadDataHeader('pengeluaranstokheader',{pengeluaranheader_id:$('#kodepengeluaranheader').val()})
     })
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'pengeluaranstokheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-         postData: {
+        postData: {
           tgldari:$('#tgldariheader').val() ,
           tglsampai:$('#tglsampaiheader').val(),
-          
+          pengeluaranheader_id:$('#kodepengeluaranheader').val(),
         },
         datatype: "json",
         colModel: [

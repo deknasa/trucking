@@ -1,5 +1,18 @@
 @extends('layouts.master')
-
+@push('addtional-field')
+<div class="form-group row">
+  <label class="col-12 col-sm-2 col-form-label mt-2">pengeluaran trucking<span class="text-danger">*</span></label>
+  <div class="col-sm-4 mt-2">
+    <select name="kodepengeluaranheader" id="kodepengeluaranheader" class="form-select select2" style="width: 100%;">
+      <option value="">-- PILIH Pengeluaran trucking --</option>
+      @foreach ($comboKodepengeluaran as $kodepengeluaran)
+        <option @if ($kodepengeluaran['id'] == "1") selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['keterangan']}} </option>
+        {{-- <option @if ($kodepengeluaran['statusdefault_text'] ==="YA") selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['namakodepengeluaran']}} </option> --}}
+      @endforeach
+    </select>
+  </div>
+</div>
+@endpush
 @section('content')
 <!-- Grid Master-->
 <div class="container-fluid">
@@ -36,10 +49,15 @@
   let hasDetail = false
   let activeGrid
   $(document).ready(function() {
+    $('.select2').select2({
+      width: 'resolve',
+      theme: "bootstrap4"
+    });
     setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
-      loadDataHeader('pengeluarantruckingheader')
+      console.log($('#kodepengeluaranheader').val());
+      loadDataHeader('pengeluarantruckingheader',{pengeluaranheader_id:$('#kodepengeluaranheader').val()})
     })
 
     $("#jqGrid").jqGrid({
@@ -51,7 +69,8 @@
          postData: {
           tgldari:$('#tgldariheader').val() ,
           tglsampai:$('#tglsampaiheader').val(),
-          
+          pengeluaranheader_id:$('#kodepengeluaranheader').val(),
+
         },
         colModel: [{
             label: 'ID',

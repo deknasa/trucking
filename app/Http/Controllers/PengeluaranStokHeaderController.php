@@ -15,8 +15,9 @@ class PengeluaranStokHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $comboKodepengeluaran = $this->comboKodepengeluaran();
 
-        return view('pengeluaranstokheader.index', compact('title'));
+        return view('pengeluaranstokheader.index', compact('title','comboKodepengeluaran'));
     }
 
     public function create()
@@ -26,6 +27,16 @@ class PengeluaranStokHeaderController extends MyController
         $combo = $this->combo();
 
         return view('pengeluaranstokheader.add', compact('title','combo'));
+    }
+    
+    public function comboKodepengeluaran()
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'pengeluaranstok');
+
+        return $response['data'];
     }
 
     public function store(Request $request)

@@ -49,10 +49,11 @@
 
 
   $(document).ready(function() {
-    $('.select2').select2({
-      width: 'resolve',
-      theme: "bootstrap4"
-    });
+    initSelect2($(`#kodepenerimaanheader`),false)
+    // $('#kodepenerimaanheader').select2({
+    //   width: 'resolve',
+    //   theme: "bootstrap4"
+    // });
     setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {

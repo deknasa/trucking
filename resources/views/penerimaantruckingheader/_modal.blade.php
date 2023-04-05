@@ -301,6 +301,11 @@
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
       })
+      data.push({
+        name: 'penerimaanheader_id',
+        value: $('#kodepenerimaanheader').val()
+      })
+      let penerimaanheader_id = $('#kodepenerimaanheader').val();
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
       switch (action) {
@@ -314,7 +319,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}penerimaantruckingheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
+          url = `${apiUrl}penerimaantruckingheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&penerimaanheader_id=${penerimaanheader_id}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -477,7 +482,7 @@ function tampilanall() {
 
     $('#table_body').html('')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
+    setDefaultBank()
     addRow()
     setTotal()
   }
@@ -520,6 +525,28 @@ function tampilanall() {
     form.find(`[name="penerimaantrucking"]`).removeClass('penerimaantrucking-lookup')
     showPenerimaanTruckingHeader(form, id)
 
+  }
+
+  function setDefaultBank(){
+    $.ajax({
+      url: `${apiUrl}bank`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, bank) => {
+          // console.log(index);
+          console.log(bank);
+          if (bank.id == 1) {
+            $('#crudForm [name=bank_id]').first().val(bank.id)
+            $('#crudForm [name=bank]').first().val(bank.namabank)
+            $('#crudForm [name=bank]').first().data('currentValue', $('#crudForm [name=bank]').first().val())
+          }
+        })
+      }
+    })
   }
 
   function cekValidasi(Id, Aksi) {

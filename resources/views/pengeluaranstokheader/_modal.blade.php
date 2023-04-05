@@ -171,7 +171,7 @@
                     <label class="col-form-label">STATUS POTONG RETUR <span class="text-danger">*</span> </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
-                    <select name="statuspotongretur" id="statuspotongretur" class="form-select select2bs4" style="width: 100%;">
+                    <select name="statuspotongretur" id="statuspotongretur" class="form-select select2" style="width: 100%;">
                       <option value="">-- PILIH STATUS POTONG RETUR --</option>
                     </select>
                   </div>
@@ -355,6 +355,22 @@
         value: limit
       })
 
+      data.push({
+        name: 'tgldariheader',
+        value: $('#tgldariheader').val()
+      })
+      data.push({
+        name: 'tglsampaiheader',
+        value: $('#tglsampaiheader').val()
+      })
+      data.push({
+        name: 'pengeluaranheader_id',
+        value: $('#kodepengeluaranheader').val()
+      })
+      let pengeluaranheader_id = $('#kodepengeluaranheader').val();
+      let tgldariheader = $('#tgldariheader').val();
+      let tglsampaiheader = $('#tglsampaiheader').val()
+      
       switch (action) {
         case 'add':
           method = 'POST'
@@ -366,7 +382,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}pengeluaranstokheader/${pengeluaranStokHeaderId}`
+          url = `${apiUrl}pengeluaranstokheader/${pengeluaranStokHeaderId}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&pengeluaranheader_id=${kodepenerimaanheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
