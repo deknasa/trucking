@@ -345,6 +345,21 @@
         value: limit
       })
 
+      data.push({
+        name: 'tgldariheader',
+        value: $('#tgldariheader').val()
+      })
+      data.push({
+        name: 'tglsampaiheader',
+        value: $('#tglsampaiheader').val()
+      })
+      data.push({
+        name: 'penerimaanheader_id',
+        value: $('#kodepenerimaanheader').val()
+      })
+      let penerimaanheader_id = $('#kodepenerimaanheader').val();
+      let tgldariheader = $('#tgldariheader').val();
+      let tglsampaiheader = $('#tglsampaiheader').val()
       switch (action) {
         case 'add':
           method = 'POST'
@@ -356,7 +371,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}penerimaanstokheader/${penerimaanStokHeaderId}`
+          url = `${apiUrl}penerimaanstokheader/${penerimaanStokHeaderId}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&penerimaanheader_id=${penerimaanheader_id}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'

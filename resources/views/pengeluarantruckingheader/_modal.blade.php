@@ -298,6 +298,12 @@
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
       })
+      data.push({
+        name: 'penerimaanheader_id',
+        value: $('#kodepenerimaanheader').val()
+      })
+      let kodepenerimaanheader = $('#kodepenerimaanheader').val();
+
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
 
@@ -312,7 +318,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}pengeluarantruckingheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
+          url = `${apiUrl}pengeluarantruckingheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&penerimaanheader_id=${kodepenerimaanheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -489,7 +495,6 @@
 
     getMaxLength(form)
     initLookup()
-    initSelect2()
     initDatepicker()
   })
 
@@ -527,8 +532,8 @@
 
     $('#table_body').html('')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
-    setStatusPostingOptions(form)
+    setDefaultBank()
+    // setStatusPostingOptions(form)
     addRow()
     setTotal()
   }
@@ -637,42 +642,25 @@
       }
     })
   }
-
-  const setStatusPostingOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusposting]').empty()
-      relatedForm.find('[name=statusposting]').append(
-        new Option('-- PILIH STATUS POSTING --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS POSTING"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusPosting => {
-            let option = new Option(statusPosting.text, statusPosting.id)
-
-            relatedForm.find('[name=statusposting]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
+  function setDefaultBank(){
+    $.ajax({
+      url: `${apiUrl}bank`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.data, (index, bank) => {
+          // console.log(index);
+          console.log(bank);
+          if (bank.id == 1) {
+            $('#crudForm [name=bank_id]').first().val(bank.id)
+            $('#crudForm [name=bank]').first().val(bank.namabank)
+            $('#crudForm [name=bank]').first().data('currentValue', $('#crudForm [name=bank]').first().val())
+          }
+        })
+      }
     })
   }
 

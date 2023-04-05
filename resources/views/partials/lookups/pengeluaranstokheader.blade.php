@@ -1,3 +1,5 @@
+
+@include('layouts._rangeheader')
 <table id="pengeluaranStokHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
 <div id="pengeluaranStokHeaderLookupPager"></div>
 

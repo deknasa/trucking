@@ -1,3 +1,5 @@
+
+@include('layouts._rangeheader')
 <table id="penerimaanStokHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
 <div id="penerimaanStokHeaderLookupPager"></div>
 
@@ -245,5 +247,7 @@
   // additionalRulesGlobalSearch(sendedFilters)
 
   loadClearFilter($('#penerimaanStokHeaderLookup'))
+
+  
 </script>
 

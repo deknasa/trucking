@@ -18,7 +18,9 @@ class PenerimaanTruckingHeaderController extends MyController
         $data = [
             'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK')
         ];
-        return view('penerimaantruckingheader.index', compact('title','data'));
+        $comboKodepenerimaan = $this->comboKodepenerimaan();
+
+        return view('penerimaantruckingheader.index', compact('title','data','comboKodepenerimaan'));
     }
 
     public function get($params = [])
@@ -77,6 +79,15 @@ class PenerimaanTruckingHeaderController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
+    }
+    public function comboKodepenerimaan()
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'penerimaantrucking');
 
         return $response['data'];
     }

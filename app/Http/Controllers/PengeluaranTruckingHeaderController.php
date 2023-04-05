@@ -19,7 +19,8 @@ class PengeluaranTruckingHeaderController extends MyController
             'combostatusposting' => $this->comboList('list','STATUS POSTING','STATUS POSTING'),
             'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK'),
         ];
-        return view('pengeluarantruckingheader.index', compact('title','data'));
+        $comboKodepengeluaran  = $this->comboKodepengeluaran();
+        return view('pengeluarantruckingheader.index', compact('title','data','comboKodepengeluaran'));
     }
 
     public function get($params = [])
@@ -65,7 +66,15 @@ class PengeluaranTruckingHeaderController extends MyController
 
         return view('pengeluarantruckingheader.edit', compact('title', 'pengeluarantruckingheader','combo'));
     }
+    public function comboKodepengeluaran()
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'pengeluarantrucking');
 
+        return $response['data'];
+    }
     public function comboList($aksi, $grp, $subgrp)
     {
 
