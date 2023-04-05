@@ -47,7 +47,23 @@
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false
+  let selectedRows = [];
 
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+    }
+
+  }
   $(document).ready(function() {
     $('.select2').select2({
       width: 'resolve',
@@ -60,6 +76,8 @@
       loadDataHeader('pengeluaranheader', {
         bank_id: $('#bankheader').val()
       })
+      selectedRows = []
+      $('#gs_').prop('checked', false)
     })
 
     $("#jqGrid").jqGrid({
@@ -74,6 +92,36 @@
         },
         datatype: "json",
         colModel: [{
+            label: '',
+            name: '',
+            width: 30,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+
+                $(element).on('click', function() {
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="pengeluaranId[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+            },
+          },
+          {
             label: 'ID',
             name: 'id',
             align: 'right',
@@ -337,6 +385,17 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
+          $.each(selectedRows, function(key, value) {
+
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
+
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -404,6 +463,8 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
               createPengeluaran()
             }
           },
@@ -412,6 +473,9 @@
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
+
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
@@ -425,6 +489,9 @@
             innerHTML: '<i class="fa fa-trash"></i> DELETE',
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
+
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
@@ -440,6 +507,9 @@
             innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
+
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
@@ -453,12 +523,25 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
+
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
                 window.open(`{{ route('pengeluaranheader.report') }}?id=${selectedId}`)
               }
+            }
+          },
+          {
+            id: 'approveun',
+            innerHTML: '<i class="fas fa-check""></i> APPROVE/UN',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+
+              approve()
+
             }
           },
 
@@ -521,9 +604,40 @@
       $('#report').attr('disabled', 'disabled')
     }
 
+    if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'approval') }}`) {
+      $('#approveun').attr('disabled', 'disabled')
+      $("#jqGrid").hideCol("");
+    }
 
 
   })
+
+  function clearSelectedRows() {
+    selectedRows = []
+
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}pengeluaranheader`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        tgldari: $('#tgldariheader').val(),
+        tglsampai: $('#tglsampaiheader').val(),
+        bank_id: $('#bankheader').val(),
+      },
+      success: (response) => {
+        selectedRows = response.data.map((pengeluaran) => pengeluaran.id)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
 </script>
 @endpush()
 @endsection

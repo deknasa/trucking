@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -117,7 +117,7 @@
                 <input type="text" name="transferkebank" class="form-control">
               </div>
             </div>
-            
+
             <div class="table-scroll table-responsive">
               <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
                 <thead>
@@ -152,7 +152,7 @@
                 </tfoot>
               </table>
             </div>
-            
+
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -234,7 +234,24 @@
         name: 'limit',
         value: limit
       })
-      console.log(data)
+
+      data.push({
+        name: 'tgldariheader',
+        value: $('#tgldariheader').val()
+      })
+      data.push({
+        name: 'tglsampaiheader',
+        value: $('#tglsampaiheader').val()
+      })
+
+      data.push({
+        name: 'bankheader',
+        value: $('#bankheader').val()
+      })
+      let tgldariheader = $('#tgldariheader').val();
+      let tglsampaiheader = $('#tglsampaiheader').val()
+      let bankheader = $('#bankheader').val()
+
       switch (action) {
         case 'add':
           method = 'POST'
@@ -246,7 +263,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}pengeluaranheader/${Id}`
+          url = `${apiUrl}pengeluaranheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&bankheader=${bankheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -276,6 +293,7 @@
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
+
 
           if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
@@ -737,6 +755,49 @@
     elements.each((index, element) => {
       $(element).text(index + 1)
     })
+  }
+
+  function approve() {
+
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#loader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}pengeluaranheader/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        pengeluaranId: selectedRows
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
+      },
+    }).always(() => {
+      $('#loader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+
   }
 
   function getMaxLength(form) {

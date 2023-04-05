@@ -542,6 +542,49 @@
         })
     }
 
+    function approve() {
+
+        event.preventDefault()
+
+        let form = $('#crudForm')
+        $(this).attr('disabled', '')
+        $('#loader').removeClass('d-none')
+
+        $.ajax({
+            url: `${apiUrl}pendapatansupirheader/approval`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                pendapatanId: selectedRows
+            },
+            success: response => {
+                $('#crudForm').trigger('reset')
+                $('#crudModal').modal('hide')
+
+                $('#jqGrid').jqGrid().trigger('reloadGrid');
+                selectedRows = []
+                $('#gs_').prop('checked', false)
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.statusText)
+                }
+            },
+        }).always(() => {
+            $('#loader').addClass('d-none')
+            $(this).removeAttr('disabled')
+        })
+
+    }
+
     function getMaxLength(form) {
         if (!form.attr('has-maxlength')) {
             $.ajax({

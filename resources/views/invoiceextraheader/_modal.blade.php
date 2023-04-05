@@ -152,7 +152,7 @@
       data.push({
         name: 'limit',
         value: limit
-      }) 
+      })
       data.push({
         name: 'tgldariheader',
         value: $('#tgldariheader').val()
@@ -162,7 +162,7 @@
         value: $('#tglsampaiheader').val()
       })
 
-      
+
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
 
@@ -423,10 +423,10 @@
   }
 
   function showInvoiceExtraHeader(form, invoiceExtraHeader) {
-    
+
     form.find(`[name="tglbukti"]`).prop('readonly', true)
     form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-    
+
     $.ajax({
       url: `${apiUrl}invoiceextraheader/${invoiceExtraHeader}`,
       method: 'GET',
@@ -477,6 +477,50 @@
 
       }
     })
+  }
+
+
+  function approve() {
+
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#loader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}invoiceextraheader/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        extraId: selectedRows
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
+      },
+    }).always(() => {
+      $('#loader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+
   }
 
   function initLookup() {

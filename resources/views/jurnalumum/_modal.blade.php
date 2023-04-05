@@ -198,7 +198,7 @@
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
-
+          
           if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
@@ -314,44 +314,7 @@
 
     event.preventDefault()
 
-    let method
-    let url
     let form = $('#crudForm')
-    let data = $('#crudForm').serializeArray()
-
-    $.each(selectedRows, function(index, item) {
-      data.push({
-        name: 'jurnalId[]',
-        value: item
-      })
-    });
-
-    data.push({
-      name: 'sortIndex',
-      value: $('#jqGrid').getGridParam().sortname
-    })
-    data.push({
-      name: 'sortOrder',
-      value: $('#jqGrid').getGridParam().sortorder
-    })
-    data.push({
-      name: 'filters',
-      value: $('#jqGrid').getGridParam('postData').filters
-    })
-    data.push({
-      name: 'indexRow',
-      value: indexRow
-    })
-    data.push({
-      name: 'page',
-      value: page
-    })
-    data.push({
-      name: 'limit',
-      value: limit
-    })
-
-
     $(this).attr('disabled', '')
     $('#loader').removeClass('d-none')
 
@@ -362,17 +325,16 @@
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
-      data: data,
+      data: {
+        jurnalId: selectedRows
+      },
       success: response => {
         $('#crudForm').trigger('reset')
         $('#crudModal').modal('hide')
 
         $('#jqGrid').jqGrid().trigger('reloadGrid');
-        let data = $('#jqGrid').jqGrid("getGridParam", "postData");
-
-        $('#crudForm').find('[name=periode]').val(data.periode)
-        $('#crudForm').find('[name=approve]').val(data.approve)
         selectedRows = []
+        $('#gs_').prop('checked', false)
       },
       error: error => {
         if (error.status === 422) {

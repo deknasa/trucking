@@ -58,6 +58,9 @@
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('jurnalumumheader')
+
+      selectedRows = []
+      $('#gs_').prop('checked', false)
     })
 
 
@@ -72,19 +75,33 @@
         },
         datatype: "json",
         colModel: [{
-            label: 'Pilih',
-            name: 'id',
-            index: 'Pilih',
-            formatter: (value) => {
-              return `<input type="checkbox" value="${value}" onchange="checkboxHandler(this)">`
-            },
-            editable: true,
-            edittype: 'checkbox',
-            search: false,
-            width: 60,
+            label: '',
+            name: '',
+            width: 30,
             align: 'center',
-            formatoptions: {
-              disabled: false
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+
+                $(element).on('click', function() {
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="jurnalId[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
             },
           },
           {
@@ -336,6 +353,9 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
+
               createJurnalUmumHeader()
             }
           },
@@ -344,6 +364,9 @@
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
+
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
@@ -357,6 +380,9 @@
             innerHTML: '<i class="fa fa-trash"></i> DELETE',
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
+
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
@@ -373,6 +399,9 @@
             innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
+
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
@@ -386,6 +415,9 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
+
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
@@ -414,6 +446,9 @@
               id: 'copy',
               text: "COPY",
               onClick: () => {
+                clearSelectedRows()
+                $('#gs_').prop('checked', false)
+
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 if (selectedId == null || selectedId == '' || selectedId == undefined) {
                   showDialog('Please select a row')
@@ -482,6 +517,7 @@
     }
     if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) {
       $('#approveun').attr('disabled', 'disabled')
+      $("#jqGrid").hideCol("");
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -559,6 +595,32 @@
       }
     })
   })
+
+  function clearSelectedRows() {
+    selectedRows = []
+
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}jurnalumumheader`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        tgldari: $('#tgldariheader').val(),
+        tglsampai: $('#tglsampaiheader').val()
+      },
+      success: (response) => {
+        selectedRows = response.data.map((jurnal) => jurnal.id)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
 </script>
 @endpush()
 @endsection

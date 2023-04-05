@@ -60,10 +60,10 @@
             label: 'BANK',
             name: 'bank_id',
           },
-          {
-            label: 'INVOICE NO BUKTI',
-            name: 'invoice_nobukti',
-          },
+          // {
+          //   label: 'INVOICE NO BUKTI',
+          //   name: 'invoice_nobukti',
+          // },
           {
             label: 'BANK PELANGGAN',
             name: 'bankpelanggan_id',
@@ -72,10 +72,10 @@
             label: 'JENIS BIAYA',
             name: 'jenisbiaya',
           },
-          {
-            label: 'PELUNASAN PIUTANG NO BUKTI',
-            name: 'pelunasanpiutang_nobukti',
-          },
+          // {
+          //   label: 'PELUNASAN PIUTANG NO BUKTI',
+          //   name: 'pelunasanpiutang_nobukti',
+          // },
           {
             label: 'BULAN BEBAN',
             name: 'bulanbeban',

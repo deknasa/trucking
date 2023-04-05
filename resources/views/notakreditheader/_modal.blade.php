@@ -5,11 +5,11 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
-        <input type="hidden" name="id">
+          <input type="hidden" name="id">
           <div class="modal-body">
             <div class="row">
               <div class="col-12 col-sm-3 col-md-2">
@@ -27,8 +27,8 @@
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <div class="input-group">
-                <input type="text" name="tglbukti" class="form-control datepicker">
-              </div>
+                  <input type="text" name="tglbukti" class="form-control datepicker">
+                </div>
               </div>
             </div>
 
@@ -66,10 +66,10 @@
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <div class="input-group">
-                <input type="text" name="tgllunas" class="form-control datepicker">
+                  <input type="text" name="tgllunas" class="form-control datepicker">
+                </div>
               </div>
-              </div>
-              
+
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">pelunasan piutang <span class="text-danger">*</span> </label>
               </div>
@@ -79,15 +79,15 @@
             </div>
 
             <div class="row">
-              
 
-            <div class="col-12 col-sm-3 col-md-2">
-              <label class="col-form-label">keterangan <span class="text-danger">*</span> </label>
+
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">keterangan <span class="text-danger">*</span> </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-4">
+                <input type="text" name="keterangan" class="form-control">
+              </div>
             </div>
-            <div class="col-12 col-sm-9 col-md-4">
-              <input type="text" name="keterangan" class="form-control">
-            </div>
-          </div>
             <div class="col-md-12" style="overflow-x:scroll">
               <table class="table table-borderd mt-3" id="detailList" style="table-layout:auto">
                 <thead id="table_body" class="table-secondary">
@@ -103,16 +103,18 @@
                     <th>keterangan</th>
                   </tr>
                 </thead>
-                  <tbody id="table_body">
+                <tbody id="table_body">
 
-                  </tbody>
+                </tbody>
                 <tfoot>
                   <tr>
                     <td colspan="6"></td>
-                    <td><p id="nominalPiutang" class="text-right font-weight-bold"></p></td>
+                    <td>
+                      <p id="nominalPiutang" class="text-right font-weight-bold"></p>
+                    </td>
                     <th></th>
-                  
-                   
+
+
                   </tr>
                 </tfoot>
               </table>
@@ -144,7 +146,7 @@
     $(document).on('click', "#addRow", function() {
       addRow()
     });
-    
+
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
     })
@@ -162,7 +164,7 @@
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
-      
+
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -198,44 +200,44 @@
       //       name: 'deatail_nobukti_pelunasan[]',
       //       value: $(this).find(`[name="deatail_nobukti_pelunasan[]"]`).val()
       //     })
-          
+
       //     data.push({
       //       name: 'deatail_tglcair_pelunasan[]',
       //       value: $(this).find(`[name="deatail_tglcair_pelunasan[]"]`).val()
       //     })
-          
+
       //     data.push({
       //       name: 'deatail_coapenyesuaian_pelunasan[]',
       //       value: $(this).find(`[name="deatail_coapenyesuaian_pelunasan[]"]`).val()
       //     })
-          
+
       //     data.push({
       //       name: 'deatail_nominal_pelunasan[]',
       //       value: $(this).find(`[name="deatail_nominal_pelunasan[]"]`).val()
       //     })
-          
+
       //     data.push({
       //       name: 'deatail_nominalbayar_pelunasan[]',
       //       value: $(this).find(`[name="deatail_nominalbayar_pelunasan[]"]`).val()
       //     })
-          
+
       //     data.push({
       //       name: 'deatail_penyesuaian_pelunasan[]',
       //       value: $(this).find(`[name="deatail_penyesuaian_pelunasan[]"]`).val()
       //     })
-          
+
       //     data.push({
       //       name: 'deatail_invoice_nobukti_pelunasan[]',
       //       value: $(this).find(`[name="deatail_invoice_nobukti_pelunasan[]"]`).val()
       //     })
-          
+
       //     data.push({
       //       name: 'keterangandetail[]',
       //       value: $(this).find(`[name="keterangandetail[]"]`).val()
       //     })
-          
-          
-          
+
+
+
       //   }
       // })
 
@@ -274,7 +276,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -312,7 +316,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    
+
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -365,7 +369,7 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    
+
     Promise
       .all([
         // setStatusFormatListOptions(form),
@@ -374,7 +378,7 @@
       .then(() => {
         showNotaKredit(form, userId)
       })
-    
+
   }
 
   function deleteNotaKredit(userId) {
@@ -392,7 +396,7 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    
+
     Promise
       .all([
         // setStatusFormatListOptions(form),
@@ -402,33 +406,34 @@
         showNotaKredit(form, userId)
       })
   }
+
   function cekValidasi(Id, Aksi) {
     $.ajax({
-        url: `{{ config('app.api_url') }}notakreditheader/${Id}/cekvalidasi`,
-        method: 'POST',
-        dataType: 'JSON',
-        beforeSend: request => {
-            request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-        },
-        success: response => {
-            var kodenobukti = response.kodenobukti
-            if (kodenobukti == '1') {
-                var kodestatus = response.kodestatus
-                if (kodestatus == '1') {
-                    showDialog(response.message['keterangan'])
-                } else {
-                    if (Aksi == 'EDIT') {
-                        editNotaKredit(Id)
-                    }
-                    if (Aksi == 'DELETE') {
-                        deleteNotaKredit(Id)
-                    }
-                }
-
-            } else {
-                showDialog(response.message['keterangan'])
+      url: `{{ config('app.api_url') }}notakreditheader/${Id}/cekvalidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kodenobukti = response.kodenobukti
+        if (kodenobukti == '1') {
+          var kodestatus = response.kodestatus
+          if (kodestatus == '1') {
+            showDialog(response.message['keterangan'])
+          } else {
+            if (Aksi == 'EDIT') {
+              editNotaKredit(Id)
             }
+            if (Aksi == 'DELETE') {
+              deleteNotaKredit(Id)
+            }
+          }
+
+        } else {
+          showDialog(response.message['keterangan'])
         }
+      }
     })
   }
 
@@ -443,21 +448,21 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-        sum =0;
+        sum = 0;
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
-          if(element.attr("name") == 'tglbukti'){
+          if (element.attr("name") == 'tglbukti') {
             var result = value.split('-');
-            element.val(result[2]+'-'+result[1]+'-'+result[0]);
-          } else if(element.attr("name") == 'tglapproval'){
+            element.val(result[2] + '-' + result[1] + '-' + result[0]);
+          } else if (element.attr("name") == 'tglapproval') {
             var result = value.split('-');
-            element.val(result[2]+'-'+result[1]+'-'+result[0]);
-          } else if(element.attr("name") == 'tgllunas'){
+            element.val(result[2] + '-' + result[1] + '-' + result[0]);
+          } else if (element.attr("name") == 'tgllunas') {
             var result = value.split('-');
-            element.val(result[2]+'-'+result[1]+'-'+result[0]);
-          }else if (element.is('select')) {
+            element.val(result[2] + '-' + result[1] + '-' + result[0]);
+          } else if (element.is('select')) {
             element.val(value).trigger('change')
-          }else  {
+          } else {
             element.val(value)
           }
         })
@@ -475,7 +480,7 @@
   }
 
   function getPelunasan(id) {
-    
+
     $('#detailList tbody').html('')
 
     $.ajax({
@@ -498,7 +503,7 @@
           let nominalbayar = new Intl.NumberFormat('en-US').format(detail.nominalbayar);
           let penyesuaian = new Intl.NumberFormat('en-US').format(detail.penyesuaian);
           totalNominal = parseFloat(totalNominal) + parseFloat(detail.nominal)
-          
+
           let detailRow = $(`
           <tr>
             <td onclick="select(this)"><input name='pelunasanpiutangdetail_id[]' type="checkbox" id="checkItem" value="${detail.detail_id}"></td>
@@ -535,18 +540,18 @@
               <input type="hidden" value="${detail.invoice_nobukti}" disabled name="deatail_invoice_nobukti_pelunasan[]" readonly>
           </tr>`)
           $('#detailList tbody').append(detailRow)
-          })
-           totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
-           $('#nominalPiutang').html(`${totalNominal}`)           
+        })
+        totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
+        $('#nominalPiutang').html(`${totalNominal}`)
       }
     })
   }
-  
+
   function select(element) {
     var is_checked = $(element).find(`[name="pelunasanpiutangdetail_id[]"]`).is(":checked");
     console.log(is_checked);
-    
-    if(!is_checked) {      
+
+    if (!is_checked) {
       $(element).siblings('td').find(`[name="deatail_nobukti_pelunasan[]"]`).prop('disabled', true)
       $(element).siblings('td').find(`[name="deatail_tglcair_pelunasan[]"]`).prop('disabled', true)
       $(element).siblings('td').find(`[name="deatail_coapenyesuaian_pelunasan[]"]`).prop('disabled', true)
@@ -555,8 +560,8 @@
       $(element).siblings('td').find(`[name="deatail_penyesuaian_pelunasan[]"]`).prop('disabled', true)
       $(element).siblings('td').find(`[name="deatail_invoice_nobukti_pelunasan[]"]`).prop('disabled', true)
       $(element).siblings('td').find(`[name="keterangandetail[]"]`).prop('disabled', true)
-    }else{
-      
+    } else {
+
       $(element).siblings('td').find(`[name="deatail_nobukti_pelunasan[]"]`).prop('disabled', false)
       $(element).siblings('td').find(`[name="deatail_tglcair_pelunasan[]"]`).prop('disabled', false)
       $(element).siblings('td').find(`[name="deatail_coapenyesuaian_pelunasan[]"]`).prop('disabled', false)
@@ -568,9 +573,9 @@
 
     }
   }
-    
+
   function getNotaKredit(id) {
-    
+
     $('#detailList tbody').html('')
 
     $.ajax({
@@ -626,13 +631,13 @@
             <td><textarea name="keterangandetail[]" class="form-control" id=""  rows="1">${detail.keterangan}</textarea></td>
           </tr>`)
           $('#detailList tbody').append(detailRow)
-          })
-           totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
-           $('#nominalPiutang').html(`${totalNominal}`)           
+        })
+        totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
+        $('#nominalPiutang').html(`${totalNominal}`)
       }
     })
   }
-  
+
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
@@ -659,7 +664,51 @@
       })
     }
   }
- 
+
+
+  function approve() {
+
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#loader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}notakreditheader/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        kreditId: selectedRows
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
+      },
+    }).always(() => {
+      $('#loader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+
+  }
+
   function initLookup() {
     $('.pelunasanpiutang-lookup').lookup({
       title: 'pelunasan piutang Lookup',
@@ -673,7 +722,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-      
+
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -706,7 +755,7 @@
         },
         success: response => {
           response.data.forEach(statusApprovalList => {
-            
+
             let option = new Option(statusApprovalList.text, statusApprovalList.id)
 
             relatedForm.find('[name=statusapproval]').append(option).trigger('change')
@@ -745,7 +794,7 @@
   //       },
   //       success: response => {
   //         response.data.forEach(statusFormatList => {
-            
+
   //           let option = new Option(statusFormatList.text, statusFormatList.id)
 
   //           relatedForm.find('[name=statusformat]').append(option).trigger('change')
@@ -756,10 +805,5 @@
   //     })
   //   })
   // }
-    
-    
-    
-
-  
 </script>
 @endpush()

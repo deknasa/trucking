@@ -33,13 +33,32 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let selectedRows = [];
+
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+    }
+
+  }
 
   $(document).ready(function() {
 
     setRange()
     initDatepicker()
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('notadebetheader')
+      selectedRows = []
+      $('#gs_').prop('checked', false)
     })
 
 
@@ -49,11 +68,41 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val() 
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val()
         },
         datatype: "json",
         colModel: [{
+            label: '',
+            name: '',
+            width: 30,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+
+                $(element).on('click', function() {
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="hutangbayarId[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+            },
+          },
+          {
             label: 'ID',
             name: 'id',
             align: 'right',
@@ -175,7 +224,7 @@
             label: 'TANGGAL lunas',
             name: 'tgllunas',
             align: 'left',
-             formatter: "date",
+            formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -190,7 +239,7 @@
             label: 'TANGGAL APPROVAL',
             name: 'tglapproval',
             align: 'left',
-             formatter: "date",
+            formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -275,11 +324,22 @@
               postData: {
                 notadebet_id: 0,
               },
-            }).trigger('reloadGrid'); 
+            }).trigger('reloadGrid');
           }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
+
+          $.each(selectedRows, function(key, value) {
+
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -287,7 +347,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
@@ -376,6 +436,9 @@
             innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
+
               $('#rangeModal').data('action', 'export')
               $('#rangeModal').find('button:submit').html(`Export`)
               $('#rangeModal').modal('show')
@@ -386,9 +449,22 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
+
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               window.open(`{{url('notadebetheader/report/${selectedId}')}}`)
               // reportNotaDebet(selectedId)
+            }
+          },
+          {
+            id: 'approveun',
+            innerHTML: '<i class="fas fa-check""></i> APPROVE/UN',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+
+              approve()
+
             }
           },
         ]
@@ -437,14 +513,15 @@
     }
 
     if (!`{{ $myAuth->hasPermission('notadebetheader', 'export') }}`) {
-      $('#export').addClass('ui-disabled')
+      $('#export').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('notadebetheader', 'report') }}`) {
-      $('#report').addClass('ui-disabled')
+      $('#report').attr('disabled', 'disabled')
     }
     if (!`{{ $myAuth->hasPermission('notadebetheader', 'approval') }}`) {
-      $('#report').addClass('ui-disabled')
+      $('#approveun').attr('disabled', 'disabled')
+      $("#jqGrid").hideCol("");
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -495,38 +572,66 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
 
-  function handleApproval(id) {
-    $.ajax({
-      url: `${apiUrl}notadebetheader/${id}/approval`,
-      method: 'POST',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-      },
-      success: response => {
-        $('#jqGrid').trigger('reloadGrid')
-      }
-    }).always(() => {
-      $('#loader').addClass('d-none')
-    })
-  }
-  function reportNotaDebet(id) {
-    $.ajax({
-      url: `{{url('notadebetheader/report/${id}')}}`,
-      method: 'get',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-      },
-      success: response => {
-        $('#jqGrid').trigger('reloadGrid')
-      }
-    }).always(() => {
-      $('#loader').addClass('d-none')
-    })
-  }
+    function handleApproval(id) {
+      $.ajax({
+        url: `${apiUrl}notadebetheader/${id}/approval`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
+        success: response => {
+          $('#jqGrid').trigger('reloadGrid')
+        }
+      }).always(() => {
+        $('#loader').addClass('d-none')
+      })
+    }
+
+    function reportNotaDebet(id) {
+      $.ajax({
+        url: `{{url('notadebetheader/report/${id}')}}`,
+        method: 'get',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
+        success: response => {
+          $('#jqGrid').trigger('reloadGrid')
+        }
+      }).always(() => {
+        $('#loader').addClass('d-none')
+      })
+    }
 
   })
+
+
+  function clearSelectedRows() {
+    selectedRows = []
+
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}notadebetheader`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        tgldari: $('#tgldariheader').val(),
+        tglsampai: $('#tglsampaiheader').val(),
+      },
+      success: (response) => {
+        selectedRows = response.data.map((row) => row.id)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
 </script>
 @endpush()
 @endsection

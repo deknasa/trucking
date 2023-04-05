@@ -428,7 +428,7 @@
             $.each(errors, (index, error) => {
               let indexes = index.split(".");
               let angka = indexes[1]
-              
+
               row = hutangid[angka] - 1;
               let element;
 
@@ -562,7 +562,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    
+
     form.find(`[name="tglbukti"]`).prop('readonly', true)
     form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
@@ -960,6 +960,51 @@
       $(element).text(index + 1)
     })
   }
+
+
+  function approve() {
+
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#loader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}hutangbayarheader/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        bayarId: selectedRows
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
+      },
+    }).always(() => {
+      $('#loader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+
+  }
+
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
