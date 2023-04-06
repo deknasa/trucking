@@ -621,6 +621,94 @@
     })
   }
 
+  function setDetail(penerimaan_id){
+    $.ajax({
+      url: `${apiUrl}penerimaanstokheader/${penerimaan_id}`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      success: response => {
+        resetRow()
+        $.each(response.detail, (id, detail) => {
+          let detailRow = $(`
+            <tr class="trow">
+                  <td>
+                    <div class="baris">1</div>
+                  </td>
+                  
+                  <td>
+                    <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
+                    <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                  </td>
+                  <td class="data_tbl tbl_vulkanisirke">
+                    <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                  </td>  
+                  <td>
+                    <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                  </td>
+                  <td class="data_tbl tbl_qty">
+                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                  </td>  
+                  
+                  <td class="data_tbl tbl_harga">
+                    <input type="text"  name="detail_harga[]" id="detail_harga${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                  </td>  
+                  
+                  <td class="data_tbl tbl_persentase">
+                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                  </td>  
+                  <td class="data_tbl tbl_total">
+                    <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
+                  </td>  
+                  <td>
+                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                  </td>
+              </tr>
+          `)
+          detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
+          detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
+          detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
+          detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
+          detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
+          detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
+          detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
+          detailRow.find(`[name="totalItem[]"]`).val(detail.total)
+          detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
+          $('table #table_body').append(detailRow)
+          initAutoNumeric($(`.number${id}`))
+          setRowNumbers()
+          $(`#detail_stok_${id}`).lookup({
+            title: 'stok Lookup',
+            fileName: 'stok',
+            beforeProcess: function(test) {
+              this.postData = {
+                Aktif: 'AKTIF',
+
+              }
+            },
+            onSelectRow: (stok, element) => {
+              element.val(stok.namastok)
+              parent = element.closest('td');
+              parent.children('.detailstokId').val(stok.id)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            }
+          })
+          id++;
+        })
+        sumary()
+        setTampilanForm()
+
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
+  }
 
   function lookupSelectedDari(el) {
     let trado = $('#crudForm').find(`[name="trado"]`).parents('.input-group').children()
@@ -1355,6 +1443,7 @@
         if (penerimaanstokId == 3) {
           setSuplier(penerimaan.id);
           $('[name=nobon]').val(penerimaan.nobon)
+          setDetail(penerimaan.id);
           // console.log(penerimaan.supplier,
           // penerimaan.nobon);
         }
