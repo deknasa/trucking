@@ -183,6 +183,7 @@ use App\Http\Controllers\PendapatanSupirDetailController;
 use App\Http\Controllers\PendapatanSupirHeaderController;
 use App\Http\Controllers\PenerimaanGiroDetailController;
 use App\Http\Controllers\PenerimaanGiroHeaderController;
+use App\Http\Controllers\PindahBukuController;
 use App\Http\Controllers\ProsesGajiSupirHeaderController;
 use App\Http\Controllers\ProsesGajiSupirDetailController;
 use App\Http\Controllers\ProsesUangJalanSupirDetailController;
@@ -1070,6 +1071,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('exportlaporankasharian/export', [ExportLaporanKasHarianController::class, 'export'])->name('exportlaporankasharian.export');
     Route::get('exportlaporankasharian/index', [ExportLaporanKasHarianController::class, 'index']);
     Route::resource('exportlaporankasharian', ExportLaporanKasHarianController::class);
+    
+    Route::get('pindahbuku/index', [PindahBukuController::class, 'index']);
+    Route::resource('pindahbuku', PindahBukuController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
