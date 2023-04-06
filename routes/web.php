@@ -298,6 +298,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('absensisupirheader/report', [AbsensiSupirHeaderController::class, 'report'])->name('absensisupirheader.report');
     Route::resource('absensisupirheader', AbsensiSupirHeaderController::class);
 
+    Route::get('absensisupir_detail/kasgantung/grid', [AbsensiSupirDetailController::class, 'kasgantungGrid']);
+    Route::get('absensisupir_detail/detail/grid', [AbsensiSupirDetailController::class, 'detailGrid']);
     Route::resource('absensisupir_detail', AbsensiSupirDetailController::class);
     
     Route::get('bukaabsensi/index', [BukaAbsensiController::class,'index']);

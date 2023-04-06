@@ -9,12 +9,33 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs">
+            <ul class="dejavu">
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#kasgantung-tab">KAS GANTUNG</a></li>
+            </ul>
+            <div id="detail-tab">
+
+            </div>
+            <div id="kasgantung-tab">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 @include('absensisupir._modal')
 @include('absensisupir._modalabsesntrado')
 <!-- Detail -->
 @include('absensisupir._detail')
+@include('absensisupir._kasgantung')
 
 @push('scripts')
 <script>
@@ -33,9 +54,11 @@
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false
+  let currentTab = 'detail'
   var statusTidakBisaEdit;
   $(document).ready(function() {
     
+    $("#tabs").tabs()
     setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
@@ -184,22 +207,32 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'kasgantung_nobukti')
+          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/absensisupir_detail/${currentTab}/grid`, function() {
+            loadGrid(id,nobukti)
+          })
+          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
           
-          if (!hasDetail) {
-            loadDetailGrid(id)
-            hasDetail = true
-          }
-
-          loadDetailData(id)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-
+          if (data.data.length == 0) {
+            $('#detailGrid').jqGrid('setGridParam', {
+              postData: {
+                absensi_id: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#kasgantungGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+          }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -489,6 +522,17 @@
 
         submitButton.removeAttr('disabled')
       }
+    })
+    
+    $("#tabs").on('click', 'li.ui-state-active', function() {
+      let href = $(this).find('a').attr('href');
+      currentTab = href.substring(1, href.length - 4);
+      let absenId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      let nobukti = $('#jqGrid').jqGrid('getCell', absenId, 'kasgantung_nobukti')
+      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/absensisupir_detail/${currentTab}/grid`, function() {
+
+        loadGrid(absenId, nobukti)
+      })
     })
 
     function approve(id) {

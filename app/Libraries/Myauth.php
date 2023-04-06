@@ -52,6 +52,7 @@ class Myauth
             'jurnalgrid',
             'penerimaangrid',
             'pengeluarangrid',
+            'kasgantunggrid',
         ],
     ];
 

@@ -31,4 +31,13 @@ class AbsensiSupirDetailController extends Controller
 
         return response($data);
     }
+    
+    public function kasgantungGrid()
+    {
+        return view('absensisupir._kasgantung');
+    }
+    public function detailGrid()
+    {
+        return view('absensisupir._detail');
+    }
 }

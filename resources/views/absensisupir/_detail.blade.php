@@ -1,17 +1,15 @@
-<!-- Grid -->
-<div class="container-fluid my-4">
-  <div class="row">
-    <div class="col-12">
-      <table id="detail"></table>
-      <div id="detailPager"></div>
-    </div>
-  </div>
-</div>
+<table id="detail"></table>
 
-@push('scripts')
 <script>
-  function loadDetailGrid(id) {
-    let pager = '#detailPager'
+  function loadGrid(id) {
+    let sortnameDetail = 'nobukti'
+    let sortorderDetail = 'asc'
+    let totalRecordDetail
+    let limitDetail
+    let postDataDetail
+    let triggerClickDetail
+    let indexRowDetail
+    let pageDetail = 0;
 
     $("#detail").jqGrid({
         url: `${apiUrl}absensisupirdetail`,
@@ -31,7 +29,7 @@
             label: 'STATUS',
             name: 'status',
           },
-  
+
           // {
           //   label: 'STATUS TRIP',
           //   name: 'statustrip',
@@ -61,7 +59,7 @@
           //       if (!statusTrip) {
           //         return ` title=" "`
           //       }
-                
+
           //       return ` title="${statusTrip.MEMO}"`
           //     } catch (error) {
           //       return ``
@@ -75,8 +73,8 @@
           {
             label: 'JAM',
             name: 'jam',
-            formatter:'date',
-            formatoptions:{
+            formatter: 'date',
+            formatoptions: {
               srcformat: "H:i:s",
               newformat: "H:i",
               // userLocalTime : true
@@ -112,6 +110,8 @@
         rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
+        sortname: sortnameDetail,
+        sortorder: sortorderDetail,
         // pager: pager,
         viewrecords: true,
         footerrow: true,
@@ -141,24 +141,22 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-          
+
           /* Set global variables */
-          sortname = $(this).jqGrid("getGridParam", "sortname")
-          sortorder = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').limit
-          postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
+          sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordDetail = $(this).getGridParam("records")
+          limitDetail = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataDetail = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
+          if (indexRowDetail > $(this).getDataIDs().length - 1) {
+            indexRowDetail = $(this).getDataIDs().length - 1;
           }
-
-          $('#detail').setSelection($('#detail').getDataIDs()[0])
 
           setHighlight($(this))
 
@@ -168,7 +166,7 @@
               uangjalan: data.totalNominal,
             }, true)
           }
-           
+
         }
       })
       .jqGrid('filterToolbar', {
@@ -190,10 +188,10 @@
         del: false,
       })
       .customPager()
-      
+
     /* Append clear filter button */
     loadClearFilter($('#detail'))
-    
+
     /* Append global search */
     loadGlobalSearch($('#detail'))
   }
@@ -205,8 +203,7 @@
       postData: {
         absensi_id: id
       },
-      page:1
+      page: 1
     }).trigger('reloadGrid')
   }
 </script>
-@endpush()
