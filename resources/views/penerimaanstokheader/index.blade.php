@@ -338,7 +338,7 @@
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-orange btn-sm mr-1',
+            class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {

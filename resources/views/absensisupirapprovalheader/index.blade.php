@@ -10,11 +10,38 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs">
+            <ul class="dejavu">
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#pengeluaran-tab">Pengeluaran Kas/bank</a></li>
+              <li><a href="#jurnal-tab">Jurnal</a></li>
+            </ul>
+            <div id="detail-tab">
+
+            </div>
+
+            <div id="pengeluaran-tab">
+
+            </div>
+            <div id="jurnal-tab">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 @include('absensisupirapprovalheader._modal')
 <!-- Detail -->
 @include('absensisupirapprovalheader._detail')
+@include('pengeluaran._pengeluaran')
+@include('jurnalumum._jurnal')
 
 @push('scripts')
 <script>
@@ -33,12 +60,12 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let currentTab = 'detail'
 
   $(document).ready(function() {
+    $("#tabs").tabs()
 
     $('#lookup').hide()
-
-
     setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
@@ -291,8 +318,10 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
-
-          loadDetailData(id)
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
+          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/absensisupirapprovaldetail/${currentTab}/grid`, function() {
+            loadGrid(id,nobukti)
+          })
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
@@ -301,6 +330,23 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
+          if (data.data.length == 0) {
+            $('#detail').jqGrid('setGridParam', {
+              postData: {
+                absensisupirapproval_id: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#jurnalGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#pengeluaranGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+          }
 
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -412,8 +458,6 @@
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
 
-    /* Load detail grid */
-    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn btn-sm btn-primary`)
@@ -519,8 +563,16 @@
       })
     }
 
+    $("#tabs").on('click', 'li.ui-state-active', function() {
+      let href = $(this).find('a').attr('href');
+      currentTab = href.substring(1, href.length - 4);
+      let approvalId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      let nobukti = $('#jqGrid').jqGrid('getCell', approvalId, 'pengeluaran_nobukti')
+      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/absensisupirapprovaldetail/${currentTab}/grid`, function() {
 
-
+        loadGrid(approvalId, nobukti)
+      })
+    })
   })
 </script>
 @endpush()

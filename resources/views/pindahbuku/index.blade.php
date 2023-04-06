@@ -224,6 +224,7 @@
         searchOnEnter: false,
         defaultSearch: 'cn',
         groupOp: 'AND',
+        formatter: currencyFormat,
         beforeSearch: function() {
           clearGlobalSearch($('#jqGrid'))
         }

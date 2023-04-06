@@ -134,6 +134,8 @@
 <script>
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
+    let bankDariId
+    let bankKeId
 
     $(document).ready(function() {
 
@@ -354,6 +356,8 @@
 
                 })
 
+                bankDariId = response.data.bankdari_id
+                bankKeId = response.data.bankke_id
                 form.find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))
                 form.find(`[name="tgljatuhtempo"]`).val(dateFormat(response.data.tgljatuhtempo))
 
@@ -402,11 +406,12 @@
             fileName: 'bank',
             beforeProcess: function(test) {
                 this.postData = {
-
+                    bankExclude: bankKeId,
                     Aktif: 'AKTIF',
                 }
             },
             onSelectRow: (bank, element) => {
+                bankDariId = bank.id
                 $('#crudForm [name=bankdari_id]').first().val(bank.id)
                 element.val(bank.namabank)
                 element.data('currentValue', element.val())
@@ -426,11 +431,13 @@
             fileName: 'bank',
             beforeProcess: function(test) {
                 this.postData = {
-
+                    bankExclude: bankDariId,
                     Aktif: 'AKTIF',
                 }
             },
             onSelectRow: (bank, element) => {
+                
+                bankKeId = bank.id
                 $('#crudForm [name=bankke_id]').first().val(bank.id)
                 element.val(bank.namabank)
                 element.data('currentValue', element.val())

@@ -314,6 +314,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('absensisupirapprovalheader/report/{id}', [AbsensiSupirApprovalHeaderController::class, 'report'])->name('absensisupirapprovalheader.report');
     Route::resource('absensisupirapprovalheader', AbsensiSupirApprovalHeaderController::class);
     
+    Route::get('absensisupirapprovaldetail/jurnal/grid', [AbsensiSupirApprovalDetailController::class, 'jurnalGrid']);
+    Route::get('absensisupirapprovaldetail/pengeluaran/grid', [AbsensiSupirApprovalDetailController::class, 'pengeluaranGrid']);
+    Route::get('absensisupirapprovaldetail/detail/grid', [AbsensiSupirApprovalDetailController::class, 'detailGrid']);
+    Route::resource('absensisupirapprovaldetail', AbsensiSupirApprovalDetailController::class);
+
     Route::get('mandorabsensisupir/index', [MandorAbsensiSupirController::class, 'index']);
     Route::resource('mandorabsensisupir', MandorAbsensiSupirController::class);
 
@@ -722,6 +727,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('penerimaantruckingheader/report', [PenerimaanTruckingHeaderController::class, 'report'])->name('penerimaantruckingheader.report');
     Route::resource('penerimaantruckingheader', PenerimaanTruckingHeaderController::class);
 
+    Route::get('penerimaantruckingdetail/jurnal/grid', [PenerimaanTruckingDetailController::class, 'jurnalGrid']);
+    Route::get('penerimaantruckingdetail/penerimaan/grid', [PenerimaanTruckingDetailController::class, 'penerimaanGrid']);
+    Route::get('penerimaantruckingdetail/detail/grid', [PenerimaanTruckingDetailController::class, 'detailGrid']);
     Route::resource('penerimaantruckingdetail', PenerimaanTruckingDetailController::class);
 
     Route::get('penerimaanstokheader/get', [PenerimaanStokHeaderController::class, 'get'])->name('penerimaanstokheader.get');
@@ -757,6 +765,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('pengeluarantruckingheader/report', [PengeluaranTruckingHeaderController::class, 'report'])->name('pengeluarantruckingheader.report');
     Route::resource('pengeluarantruckingheader', PengeluaranTruckingHeaderController::class);
 
+    Route::get('pengeluarantruckingdetail/jurnal/grid', [PengeluaranTruckingDetailController::class, 'jurnalGrid']);
+    Route::get('pengeluarantruckingdetail/pengeluaran/grid', [PengeluaranTruckingDetailController::class, 'pengeluaranGrid']);
+    Route::get('pengeluarantruckingdetail/detail/grid', [PengeluaranTruckingDetailController::class, 'detailGrid']);
     Route::resource('pengeluarantruckingdetail', PengeluaranTruckingDetailController::class);
 
     Route::get('hutangheader/index', [HutangHeaderController::class, 'index']);

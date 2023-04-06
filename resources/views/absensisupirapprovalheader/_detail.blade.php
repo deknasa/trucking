@@ -1,16 +1,15 @@
-<!-- Grid -->
-<div class="container-fluid my-4">
-  <div class="row">
-    <div class="col-12">
-      <table id="detail"></table>
-    </div>
-  </div>
-</div>
+<table id="detail"></table>
 
-@push('scripts')
 <script>
-  function loadDetailGrid(id) {
-    let pager = '#detailPager'
+  function loadGrid(id) {
+    let sortnameDetail = 'nobukti'
+    let sortorderDetail = 'asc'
+    let totalRecordDetail
+    let limitDetail
+    let postDataDetail
+    let triggerClickDetail
+    let indexRowDetail
+    let pageDetail = 0;
 
     $("#detail").jqGrid({
         url: `${apiUrl}absensisupirapprovaldetail`,
@@ -51,9 +50,9 @@
         rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
-        pager: pager,
-        sortname: sortname,
-        sortorder: sortorder,
+        sortname: sortnameDetail,
+        sortorder: sortorderDetail,
+        page: pageDetail,
         viewrecords: true,
         // footerrow:true,
         userDataOnFooter: true,
@@ -84,22 +83,20 @@
           initResize($(this))
           
           /* Set global variables */
-          sortname = $(this).jqGrid("getGridParam", "sortname")
-          sortorder = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').limit
-          postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
-          
+          sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
+          sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordDetail = $(this).getGridParam("records")
+          limitDetail = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataDetail = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = false
+
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
-          
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
+
+          if (indexRowDetail > $(this).getDataIDs().length - 1) {
+            indexRowDetail = $(this).getDataIDs().length - 1;
           }
-          
-          $('#detail').setSelection($('#detail').getDataIDs()[0])
           
           setHighlight($(this))
           
@@ -144,4 +141,3 @@
     }).trigger('reloadGrid')
   }
 </script>
-@endpush()

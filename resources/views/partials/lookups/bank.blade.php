@@ -14,6 +14,7 @@
         aktif: `{!! $Aktif ?? '' !!}`,
         tipe: `{!! $tipe ?? '' !!}`,
         bankId: `{!! $bankId ?? '' !!}`,
+        bankExclude: `{!! $bankExclude ?? '' !!}`,
       },
       colModel: [{
           label: 'ID',
