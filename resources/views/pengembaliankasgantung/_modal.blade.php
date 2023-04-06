@@ -266,6 +266,10 @@
             value: $(this).find(`[name="ketcoadetail[]"]`).val()
           })
           data.push({
+            name: 'nominal[]',
+            value: $(this).find(`[name="nominal[]"]`).val()
+          })
+          data.push({
             name: 'kasgantungdetail_id[]',
             value: $(this).find(`[name="kasgantungdetail_id[]"]`).val()
           })
@@ -398,10 +402,12 @@
     if (check.prop("checked") == true) {
       // console.log(row);
       $(`#coa_detail_${row}`).prop('disabled', false)
+      $(`#nominal_detail_${row}`).prop('disabled', false)
       $(`#keterangan_detail_${row}`).prop('disabled', false)
     } else if (check.prop("checked") == false) {
       // console.log('disabale');
       $(`#coa_detail_${row}`).prop('disabled', true)
+      $(`#nominal_detail_${row}`).prop('disabled', true)
       $(`#keterangan_detail_${row}`).prop('disabled', true)
     }
 
@@ -550,7 +556,10 @@
               <input type="hidden" name="coadetail[]">
                <input type="text" name="ketcoadetail[]" disabled id="coa_detail_${detail.detail_id}"  class="form-control coa_detail_${detail.detail_id}">
               </td>
-            <td class="text-right" >${nominal}</td>
+              <td class="text-right" >
+                ${nominal}
+                <input type="text" name="nominal[]" disabled id="nominal_detail_${detail.detail_id}"  class="form-control nominal_detail_${detail.detail_id}" value="${detail.nominal}">
+              </td>
             <td><input type="text" name="keterangandetail[]" disabled id="keterangan_detail_${detail.detail_id}"  class="form-control keterangan_detail_${detail.detail_id}"></td>
           </tr>`)
           $('#detailList tbody').append(detailRow)
@@ -614,7 +623,10 @@
             <td>${detail.nobukti}</td>
             <td>${detail.tglbukti}</td>
             <td> <input type="text" name="coadetail[]" value="${detail.coadetail}" id="coa_detail_${detail.detail_id}" class="form-control coa-lookup coa_detail_${detail.detail_id}"></td>
-            <td class="text-right" >${nominal}</td>
+            <td class="text-right" >
+                ${nominal}
+                <input type="text" name="nominal[]" disabled id="nominal_detail_${detail.detail_id}"  class="form-control nominal_detail_${detail.detail_id}" value="${detail.nominal}">
+              </td>
             <td><input type="text" name="keterangandetail[]" value="${detail.keterangandetail}" id="keterangan_detail_${detail.detail_id}" class="form-control"></td>
           </tr>`)
           $('#detailList tbody').append(detailRow)
