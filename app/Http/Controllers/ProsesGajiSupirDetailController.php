@@ -29,6 +29,31 @@ class ProsesGajiSupirDetailController extends Controller
 
         return response($data);
     }
+    
+    public function jurnalGrid()
+    {
+        return view('prosesgajisupirheader._bbm');
+    }
+    public function potsemuaGrid()
+    {
+        return view('prosesgajisupirheader._potsemua');
+    }
+    public function potpribadiGrid()
+    {
+        return view('prosesgajisupirheader._potpribadi');
+    }
+    public function depositoGrid()
+    {
+        return view('prosesgajisupirheader._deposito');
+    }
+    public function pengeluaranGrid()
+    {
+        return view('pengeluaran._pengeluaran');
+    }
+    public function detailGrid()
+    {
+        return view('prosesgajisupirheader._detail');
+    }
 }
 
 

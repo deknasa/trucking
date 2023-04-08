@@ -37,4 +37,17 @@ class PenerimaanStokDetailController extends Controller
         return response($data);
     }
 
+    
+    public function jurnalGrid()
+    {
+        return view('jurnalumum._jurnal');
+    }
+    public function hutangGrid()
+    {
+        return view('penerimaanstokheader._hutang');
+    }
+    public function detailGrid()
+    {
+        return view('penerimaanstokheader._detail');
+    }
 }

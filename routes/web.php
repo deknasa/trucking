@@ -738,6 +738,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('penerimaanstokheader/index', [PenerimaanStokHeaderController::class, 'index']);
     Route::resource('penerimaanstokheader', PenerimaanStokHeaderController::class);
     
+    Route::get('penerimaanstokdetail/jurnal/grid', [PenerimaanStokDetailController::class, 'jurnalGrid']);
+    Route::get('penerimaanstokdetail/hutang/grid', [PenerimaanStokDetailController::class, 'hutangGrid']);
+    Route::get('penerimaanstokdetail/detail/grid', [PenerimaanStokDetailController::class, 'detailGrid']);
     Route::resource('penerimaanstokdetail', PenerimaanStokDetailController::class);
     
     Route::get('pengeluaranstokheader/get', [PengeluaranStokHeaderController::class, 'get'])->name('pengeluaranstokheader.get');
@@ -830,6 +833,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('gajisupirheader/report', [GajiSupirHeaderController::class, 'report'])->name('gajisupirheader.report');
     Route::resource('gajisupirheader', GajiSupirHeaderController::class);
 
+    Route::get('gajisupirdetail/jurnal/grid', [GajiSupirDetailController::class, 'jurnalGrid']);
+    Route::get('gajisupirdetail/potsemua/grid', [GajiSupirDetailController::class, 'potsemuaGrid']);
+    Route::get('gajisupirdetail/potpribadi/grid', [GajiSupirDetailController::class, 'potpribadiGrid']);
+    Route::get('gajisupirdetail/deposito/grid', [GajiSupirDetailController::class, 'depositoGrid']);
+    Route::get('gajisupirdetail/detail/grid', [GajiSupirDetailController::class, 'detailGrid']);
     Route::resource('gajisupirdetail', GajiSupirDetailController::class);
     
     Route::get('prosesgajisupirheader/index', [ProsesGajiSupirHeaderController::class, 'index']);
@@ -838,6 +846,13 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('prosesgajisupirheader/export', [ProsesGajiSupirHeaderController::class, 'export'])->name('prosesgajisupirheader.export');
     Route::get('prosesgajisupirheader/report', [ProsesGajiSupirHeaderController::class, 'report'])->name('prosesgajisupirheader.report');
     Route::resource('prosesgajisupirheader', ProsesGajiSupirHeaderController::class);
+    
+    Route::get('prosesgajisupirdetail/jurnal/grid', [ProsesGajiSupirDetailController::class, 'jurnalGrid']);
+    Route::get('prosesgajisupirdetail/potsemua/grid', [ProsesGajiSupirDetailController::class, 'potsemuaGrid']);
+    Route::get('prosesgajisupirdetail/potpribadi/grid', [ProsesGajiSupirDetailController::class, 'potpribadiGrid']);
+    Route::get('prosesgajisupirdetail/deposito/grid', [ProsesGajiSupirDetailController::class, 'depositoGrid']);
+    Route::get('prosesgajisupirdetail/pengeluaran/grid', [ProsesGajiSupirDetailController::class, 'pengeluaranGrid']);
+    Route::get('prosesgajisupirdetail/detail/grid', [ProsesGajiSupirDetailController::class, 'detailGrid']);
     Route::resource('prosesgajisupirdetail', ProsesGajiSupirDetailController::class);
 
     

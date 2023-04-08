@@ -22,11 +22,38 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs">
+            <ul class="dejavu">
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#hutang-tab">Hutang</a></li>
+              <li><a href="#jurnal-tab">Jurnal</a></li>
+            </ul>
+            <div id="detail-tab">
+
+            </div>
+
+            <div id="hutang-tab">
+
+            </div>
+            <div id="jurnal-tab">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 @include('penerimaanstokheader._modal')
 <!-- Detail -->
 @include('penerimaanstokheader._detail')
+@include('penerimaanstokheader._hutang')
+@include('jurnalumum._jurnal')
 
 @push('scripts')
 <script>
@@ -45,10 +72,12 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let currentTab = 'detail'
   let parampostok
 
 
   $(document).ready(function() {
+    $("#tabs").tabs()
     initSelect2($(`#kodepenerimaanheader`),false)
     // $('#kodepenerimaanheader').select2({
     //   width: 'resolve',
@@ -217,6 +246,10 @@
         },
         onSelectRow: function(id) {
 
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'hutang_nobukti')
+          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/penerimaanstokdetail/${currentTab}/grid`, function() {
+            loadGrid(id,nobukti)
+          })
           loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
@@ -226,11 +259,27 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-
+          if (data.data.length == 0) {
+            $('#hutangGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#detail').jqGrid('setGridParam', {
+              postData: {
+                penerimaanstokheader_id: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#jurnalGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+          }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-
+         
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -358,8 +407,6 @@
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
 
-    /* Load detail grid */
-    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn btn-sm btn-primary`)
@@ -476,7 +523,16 @@
       }
     })
 
+    $("#tabs").on('click', 'li.ui-state-active', function() {
+      let href = $(this).find('a').attr('href');
+      currentTab = href.substring(1, href.length - 4);
+      let penerimaanstokId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      let nobukti = $('#jqGrid').jqGrid('getCell', penerimaanstokId, 'hutang_nobukti')
+      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/penerimaanstokdetail/${currentTab}/grid`, function() {
 
+        loadGrid(penerimaanstokId, nobukti)
+      })
+    })
 
   })
 </script>

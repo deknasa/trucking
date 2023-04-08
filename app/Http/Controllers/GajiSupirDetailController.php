@@ -29,6 +29,27 @@ class GajiSupirDetailController extends Controller
 
         return response($data);
     }
+    
+    public function jurnalGrid()
+    {
+        return view('gajisupirheader._jurnal');
+    }
+    public function potsemuaGrid()
+    {
+        return view('gajisupirheader._potsemua');
+    }
+    public function potpribadiGrid()
+    {
+        return view('gajisupirheader._potpribadi');
+    }
+    public function depositoGrid()
+    {
+        return view('gajisupirheader._deposito');
+    }
+    public function detailGrid()
+    {
+        return view('gajisupirheader._detail');
+    }
 }
 
 

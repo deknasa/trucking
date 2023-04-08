@@ -23,8 +23,8 @@
           name: 'keterangan',
         },
         {
-          label: 'kodetrado',
-          name: 'KODE TRADO',
+          label: 'KODE TRADO',
+          name: 'kodetrado',
         },
         {
           label: 'STATUS AKTIF',

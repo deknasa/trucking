@@ -10,11 +10,41 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs-detail">
+            <ul class="dejavu">
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#pengeluaran-tab">Pengeluaran Kas/bank</a></li>
+              <li><a href="#potsemua-tab">Jurnal Pot. Semua</a></li>
+              <li><a href="#potpribadi-tab">Jurnal Pot. Pribadi</a></li>
+              <li><a href="#deposito-tab">Jurnal Deposito</a></li>
+              <li><a href="#jurnal-tab">Jurnal BBM</a></li>
+            </ul>
+            <div id="detail-tab"></div>
+            <div id="pengeluaran-tab"></div>
+            <div id="potsemua-tab"></div>
+            <div id="potpribadi-tab"></div>
+            <div id="deposito-tab"></div>
+            <div id="jurnal-tab"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 @include('prosesgajisupirheader._modal')
 <!-- Detail -->
 @include('prosesgajisupirheader._detail')
+@include('pengeluaran._pengeluaran')
+@include('prosesgajisupirheader._potsemua')
+@include('prosesgajisupirheader._potpribadi')
+@include('prosesgajisupirheader._deposito')
+@include('prosesgajisupirheader._bbm')
 
 @push('scripts')
 <script>
@@ -32,9 +62,11 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
+  let currentTab = 'detail'
   let hasDetail = false
 
   $(document).ready(function() {
+    $("#tabs-detail").tabs()
     setRange()
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
@@ -279,6 +311,11 @@
             }
           },
           {
+            label: 'NOBUKTI PENGELUARAN',
+            name: 'pengeluaran_nobukti',
+            align: 'left'
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
@@ -331,18 +368,17 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+          let pengeluaran = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
+          $(`#tabs-detail #${currentTab}-tab`).html('').load(`${appUrl}/prosesgajisupirdetail/${currentTab}/grid`, function() {
+            loadGrid(id, pengeluaran, nobukti)
+          })
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
-          if (!hasDetail) {
-            loadDetailGrid(id)
-            hasDetail = true
-          }
-
-          loadDetailData(id)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -351,6 +387,31 @@
             $('#detail').jqGrid('setGridParam', {
               postData: {
                 prosesgajisupir_id: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#potsemuaGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#potpribadiGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#depositoGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#bbmGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#pengeluaranGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
               },
             }).trigger('reloadGrid');
           }
@@ -600,6 +661,19 @@
         submitButton.removeAttr('disabled')
       }
     })
+
+    $("#tabs-detail").on('click', 'li.ui-state-active', function() {
+      let href = $(this).find('a').attr('href');
+      currentTab = href.substring(1, href.length - 4);
+      let prosesgajisupirId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      let nobukti = $('#jqGrid').jqGrid('getCell', prosesgajisupirId, 'nobukti')
+      let pengeluaran = $('#jqGrid').jqGrid('getCell', prosesgajisupirId, 'pengeluaran_nobukti')
+      $(`#tabs-detail #${currentTab}-tab`).html('').load(`${appUrl}/prosesgajisupirdetail/${currentTab}/grid`, function() {
+
+        loadGrid(prosesgajisupirId,pengeluaran, nobukti)
+      })
+    })
+
   })
 </script>
 @endpush()

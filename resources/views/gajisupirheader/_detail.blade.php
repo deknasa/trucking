@@ -1,31 +1,22 @@
-<!-- Grid -->
-<div class="container-fluid my-4">
-  <div class="row">
-    <div class="col-12">
-      <table id="detail"></table>
-    </div>
-  </div>
-</div>
+<table id="detail"></table>
 
-@push('scripts')
 <script>
-  let sortnameDetail = 'suratpengantar_nobukti'
-  let sortorderDetail = 'asc'
-  let totalRecordDetail
-  let limitDetail
-  let postDataDetail
-  let triggerClickDetail
-  let indexRowDetail
-  let pageDetail = 0;
-
-  function loadDetailGrid(id) {
+  function loadGrid(id) {
+    let sortnameDetail = 'suratpengantar_nobukti'
+    let sortorderDetail = 'asc'
+    let totalRecordDetail
+    let limitDetail
+    let postDataDetail
+    let triggerClickDetail
+    let indexRowDetail
+    let pageDetail = 0;
 
     $("#detail").jqGrid({
         url: `${apiUrl}gajisupirdetail`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "local",
+        datatype: "json",
         colModel: [{
             label: 'NO TRIP',
             name: 'suratpengantar_nobukti',
@@ -222,4 +213,3 @@
     }).trigger('reloadGrid')
   }
 </script>
-@endpush()

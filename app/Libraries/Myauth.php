@@ -53,6 +53,10 @@ class Myauth
             'penerimaangrid',
             'pengeluarangrid',
             'kasgantunggrid',
+            'hutanggrid',
+            'potsemuagrid',
+            'potpribadigrid',
+            'depositogrid',
         ],
     ];
 
