@@ -16,6 +16,7 @@ $('#stokLookup').jqGrid({
         name: 'id',
         align: 'right',
         width: '70px',
+            search: false,
         hidden: true
         
       },

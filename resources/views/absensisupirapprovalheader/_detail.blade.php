@@ -35,11 +35,11 @@
             label: 'SUPIR SERAP',
             name: 'supirserap',
           },
-          {
-            label: 'MODIFIEDBY',
-            name: 'modifiedby',
-            align: 'left'
-          },
+          // {
+          //   label: 'MODIFIEDBY',
+          //   name: 'modifiedby',
+          //   align: 'left'
+          // },
         ],
         autowidth: true,
         shrinkToFit: false,

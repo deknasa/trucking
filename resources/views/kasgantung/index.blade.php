@@ -88,6 +88,7 @@
             label: 'ID',
             name: 'id',
             width: '50px',
+            search: false,
             hidden: true
           },
           {

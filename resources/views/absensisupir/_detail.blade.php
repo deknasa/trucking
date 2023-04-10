@@ -2,7 +2,7 @@
 
 <script>
   function loadGrid(id) {
-    let sortnameDetail = 'nobukti'
+    let sortnameDetail = 'trado'
     let sortorderDetail = 'asc'
     let totalRecordDetail
     let limitDetail
@@ -83,22 +83,14 @@
           {
             label: 'UANG JALAN',
             name: 'uangjalan',
-            formatter: 'number',
-            formatoptions: {
-              thousandsSeparator: ",",
-              decimalPlaces: 0
-            },
-            align: "right",
+            align: 'right',
+            formatter: currencyFormat,
           },
           {
             label: 'JUMLAH TRIP',
             name: 'jumlahtrip',
-            formatter: 'number',
-            formatoptions: {
-              thousandsSeparator: ",",
-              decimalPlaces: 0
-            },
-            align: "right",
+            align: 'right',
+            formatter: currencyFormat,
           },
         ],
         autowidth: true,

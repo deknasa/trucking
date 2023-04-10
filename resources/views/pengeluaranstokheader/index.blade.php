@@ -77,6 +77,7 @@ setRange()
             name: 'id',
             align: 'right',
             width: '50px',
+            search: false,
             hidden: true
           },
           {
