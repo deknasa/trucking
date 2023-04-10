@@ -50,12 +50,8 @@
           {
             label: 'NOMINAL',
             name: 'nominal',
-            formatter: 'number',
-            formatoptions: {
-              thousandsSeparator: ",",
-              decimalPlaces: 0
-            },
-            align: "right",
+            align: 'right',
+            formatter: currencyFormat,
           },
           {
             label: 'COA DEBET',

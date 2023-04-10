@@ -9,7 +9,7 @@
 
 @push('scripts')
 <script>
-  let sortnameDetail = 'nobukti'
+  let sortnameDetail = 'jobtrucking'
   let sortorderDetail = 'asc'
   let totalRecordDetail
   let limitDetail

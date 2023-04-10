@@ -193,6 +193,36 @@
           },
 
           {
+            label: 'USER APPROVAL',
+            name: 'userapproval',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL APPROVAL',
+            name: 'tglapproval',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'USER BUKA CETAK',
+            name: 'userbukacetak',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL CETAK',
+            name: 'tglbukacetak',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'

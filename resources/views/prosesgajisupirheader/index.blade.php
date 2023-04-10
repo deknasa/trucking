@@ -471,6 +471,11 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
+          $(this).setGridParam({
+          postData: {
+            tgldari:$('#tgldariheader').val() ,
+            tglsampai:$('#tglsampaiheader').val() 
+          },})
           clearGlobalSearch($('#jqGrid'))
         },
       })

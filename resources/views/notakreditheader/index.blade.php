@@ -197,7 +197,6 @@
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
-              console.log(rowObject)
               let statusCetak = JSON.parse(rowObject.statuscetak_memo)
               if (!statusCetak) {
                 return ` title=""`
@@ -236,6 +235,11 @@
             align: 'left'
           },
           {
+            label: 'user approval',
+            name: 'userapproval',
+            align: 'left'
+          },
+          {
             label: 'TANGGAL APPROVAL',
             name: 'tglapproval',
             align: 'left',
@@ -246,9 +250,19 @@
             }
           },
           {
-            label: 'user approval',
-            name: 'userapproval',
+            label: 'user buka cetak',
+            name: 'userbukacetak',
             align: 'left'
+          },
+          {
+            label: 'TANGGAL buka cetak',
+            name: 'tglbukacetak',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'postingdari',
