@@ -91,8 +91,6 @@
             indexRow = $(this).getDataIDs().length - 1;
           }
 
-          $('#detail').setSelection($('#detail').getDataIDs()[0])
-
           setHighlight($(this))
 
         }

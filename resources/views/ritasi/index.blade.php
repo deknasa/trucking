@@ -61,6 +61,12 @@
           {
             label: 'TANGGAL BUKTI',
             name: 'tglbukti',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'STATUS RITASI',
@@ -89,16 +95,14 @@
           {
             label: 'JARAK',
             name: 'jarak',
+            align: 'right',
+            formatter: currencyFormat,
           },
           {
             label: 'GAJI',
             name: 'gaji',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
+            formatter: currencyFormat,
           },
           {
             label: 'MODIFIEDBY',

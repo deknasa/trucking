@@ -276,7 +276,7 @@
           if (data.data.length == 0) {
             $('#detail').jqGrid('setGridParam', {
               postData: {
-                hutangbayar_id: 0,
+                penerimaantruckingheader_id: 0,
               },
             }).trigger('reloadGrid');
             $('#jurnalGrid').jqGrid('setGridParam', {

@@ -173,11 +173,6 @@
             align: 'left'
           },
           {
-            label: 'Status format',
-            name: 'statusformat',
-            align: 'left'
-          },
-          {
             label: 'gudang dari',
             name: 'gudangdari',
             align: 'left'
