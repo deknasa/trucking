@@ -1170,7 +1170,7 @@
                         <td>
                             <p class="text-right sisaPS autonumeric">${sisa}</p>
                             <input type="hidden" name="sisaPS[]" class="autonumeric" value="${sisa}">
-                            <input type="hidden" name="sisaAwalPS[]" class="autonumeric" value="${detail.sisa}">
+                            <input type="hidden" name="sisaAwalPS[]" class="autonumeric" value="${detail.sisaawal}">
                         </td>
                         <td id=${detail.id}>
                             <input type="text" name="nominalPS[]" value="${nominal}" ${disabled} class="form-control text-right">
