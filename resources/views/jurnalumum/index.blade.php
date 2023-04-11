@@ -445,8 +445,6 @@
               id: 'copy',
               text: "COPY",
               onClick: () => {
-                clearSelectedRows()
-                $('#gs_').prop('checked', false)
 
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -454,6 +452,8 @@
                 } else {
                   cekApproval(selectedId, 'COPY')
                 }
+                clearSelectedRows()
+                $('#gs_').prop('checked', false)
               }
             },
 
