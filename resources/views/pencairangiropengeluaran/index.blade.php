@@ -40,9 +40,32 @@
             <table id="jqGrid"></table>
         </div>
     </div>
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="card card-primary card-outline card-outline-tabs">
+                <div class="card-body border-bottom-0">
+                    <div id="tabs">
+                        <ul class="dejavu">
+                            <li><a href="#detail-tab">Details</a></li>
+                            <li><a href="#jurnal-tab">Jurnal</a></li>
+                        </ul>
+                        <div id="detail-tab">
+
+                        </div>
+
+                        <div id="jurnal-tab">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- Detail -->
 @include('pencairangiropengeluaran._detail')
+@include('jurnalumum._jurnal')
 
 @push('scripts')
 <script>
@@ -63,7 +86,7 @@
     let autoNumericElements = []
     let rowNum = 10
     let hasDetail = false
-
+    let currentTab = 'detail'
     let selectedRows = [];
 
     function checkboxHandler(element) {
@@ -82,7 +105,7 @@
     }
 
     $(document).ready(function() {
-
+        $('#tabs').tabs();
         $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
 
         $('.datepicker').datepicker({
@@ -388,22 +411,31 @@
                     jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
                 },
                 onSelectRow: function(id, status) {
-
+                    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
+                    $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/pencairangiropengeluarandetail/${currentTab}/grid`, function() {
+                        loadGrid(id, nobukti)
+                    })
                     activeGrid = $(this)
                     indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
                     page = $(this).jqGrid('getGridParam', 'page')
                     let limit = $(this).jqGrid('getGridParam', 'postData').limit
                     if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
-                    if (!hasDetail) {
-                        loadDetailGrid(id)
-                        hasDetail = true
-                    }
-                    loadDetailData(id)
-
                 },
                 loadComplete: function(data) {
                     changeJqGridRowListText()
+                    if (data.data.length == 0) {
+                        $('#detail').jqGrid('setGridParam', {
+                            postData: {
+                                pengeluaran_id: 0,
+                            },
+                        }).trigger('reloadGrid');
+                        $('#jurnalGrid').jqGrid('setGridParam', {
+                            postData: {
+                                nobukti: 0,
+                            },
+                        }).trigger('reloadGrid');
+                    }
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
                     initResize($(this))
@@ -498,6 +530,16 @@
         }
 
 
+        $("#tabs").on('click', 'li.ui-state-active', function() {
+            let href = $(this).find('a').attr('href');
+            currentTab = href.substring(1, href.length - 4);
+            let pengeluaranId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+            let nobukti = $('#jqGrid').jqGrid('getCell', pengeluaranId, 'pengeluaran_nobukti')
+            $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/pencairangiropengeluarandetail/${currentTab}/grid`, function() {
+
+                loadGrid(pengeluaranId, nobukti)
+            })
+        })
     })
 </script>
 @endpush()

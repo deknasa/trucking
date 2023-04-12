@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -32,17 +32,6 @@
                 <div class="input-group">
                   <input type="text" name="tglbukti" class="form-control datepicker">
                 </div>
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">
-                  CABANG <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="hidden" name="cabang_id">
-                <input type="text" name="cabang" class="form-control cabang-lookup">
               </div>
             </div>
 
@@ -107,20 +96,21 @@
                 <input type="text" name="transferkebank" class="form-control">
               </div>
             </div>
-            
+
             <div class="table-scroll table-responsive">
-              <table class="table table-bordered table-bindkeys table-fixed" id="detailList" style="width: 2000px ;">
+              <table class="table table-bordered table-bindkeys table-fixed" id="detailList" style="width: 1500px ;">
                 <thead>
                   <tr>
+
                     <th width="1%">No</th>
+                    <th width="15%">Nama Perkiraan</th>
+                    <th width="25%">Keterangan</th>
+                    <th width="10%">Nominal</th>
                     <th width="10%">No warkat</th>
                     <th width="10%">Tgl jatuh tempo</th>
-                    <th width="18%">Keterangan</th>
-                    <th width="10%">Nominal</th>
-                    <th width="20%">Nama perkiraan (Debet)</th>
-                    <th width="20%">Nama Perkiraan (kredit)</th>
                     <th width="10%">Bulan beban</th>
                     <th width="1%">Aksi</th>
+
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -129,7 +119,7 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="4">
+                    <td colspan="3">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
                     <td>
@@ -143,21 +133,6 @@
                 </tfoot>
               </table>
             </div>
-            
-            {{-- <div class="row">
-              <div class="col-md-9">
-                <h6 class="text-right font-weight-bold ">
-                  Total : 
-                </h6>
-              </div>
-              <div class="col-md-3 ">
-                <h6 class="text-right font-weight-bold autonumeric" id="total">
-                  
-                </h6>
-              </div>
-            </div> --}}
-            
-            
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -183,8 +158,14 @@
 
   $(document).ready(function() {
 
+    $("#crudForm [name]").attr("autocomplete", "off");
+
     $(document).on('click', "#addRow", function() {
       addRow()
+    });
+
+    $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
+      $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($(this).val()).trigger('change');
     });
 
     $(document).on('click', '.delete-row', function(event) {
@@ -234,6 +215,24 @@
         name: 'limit',
         value: limit
       })
+
+      data.push({
+        name: 'tgldariheader',
+        value: $('#tgldariheader').val()
+      })
+      data.push({
+        name: 'tglsampaiheader',
+        value: $('#tglsampaiheader').val()
+      })
+      data.push({
+        name: 'bankheader',
+        value: $('#bankheader').val()
+      })
+
+      let tgldariheader = $('#tgldariheader').val();
+      let tglsampaiheader = $('#tglsampaiheader').val()
+      let bankheader = $('#bankheader').val()
+
       switch (action) {
         case 'add':
           method = 'POST'
@@ -245,7 +244,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}pengembaliankasbankheader/${Id}`
+          url = `${apiUrl}pengembaliankasbankheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&bankheader=${bankheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -272,6 +271,10 @@
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
 
+          $('.select2').select2({
+            width: 'resolve',
+            theme: "bootstrap4"
+          });
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
@@ -350,9 +353,41 @@
     $('#table_body').html('')
 
     $('#crudForm').find(`[name="tglbukti"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    
+
+    showDefault(form)
     addRow()
     setTotal()
+  }
+
+  function showDefault(form) {
+    $.ajax({
+      url: `${apiUrl}pengembaliankasbankheader/default`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        bankId = response.data.bank_id
+
+        $.each(response.data, (index, value) => {
+          let element = form.find(`[name="${index}"]`)
+          // let element = form.find(`[name="statusaktif"]`)
+
+          if (index == 'alatbayar') {
+            element.data('current-value', value)
+          }
+          if (index == 'bank') {
+            element.data('current-value', value)
+          }
+          if (element.is('select')) {
+            element.val(value).trigger('change')
+          } else {
+            element.val(value)
+          }
+        })
+      }
+    })
   }
 
   function editPengembalianKasBank(id) {
@@ -447,6 +482,9 @@
   function showPengembalianKasBank(form, id) {
     $('#detailList tbody').html('')
 
+    $('#crudForm [name=tglbukti]').attr('readonly', true)
+    $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+
     $.ajax({
       url: `${apiUrl}pengembaliankasbankheader/${id}`,
       method: 'GET',
@@ -478,9 +516,6 @@
             alatbayar.parents('.input-group').find('.input-group-append').hide()
             alatbayar.parents('.input-group').find('.button-clear').hide()
           }
-          if (index == 'pelanggan') {
-            element.data('current-value', value)
-          }
           if (index == 'bank') {
             element.data('current-value', value).prop('readonly', true)
             bank.parents('.input-group').find('.input-group-append').hide()
@@ -493,26 +528,23 @@
             <tr>
                 <td></td>
                 <td>
-                    <input type="text" name="nowarkat[]"  class="form-control">
-                </td>
-                <td>
-                    <div class="input-group">
-                        <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
-                    </div>
-                </td>
+                  <input type="hidden" name="coadebet[]">
+                  <input type="text" name="ketcoadebet[]" data-current-value="${detail.ketcoadebet}" class="form-control akunpusat-lookup">
+                </td>                
                 <td>
                     <input type="text" name="keterangan_detail[]"  class="form-control">
                 </td>
                 <td>
                     <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
                 </td>
+
                 <td>
-                <input type="hidden" name="coadebet[]">
-                <input type="text" name="ketcoadebet[]" data-current-value="${detail.ketcoadebet}" class="form-control akunpusat-lookup">
+                    <input type="text" name="nowarkat[]"  class="form-control">
                 </td>
                 <td>
-                  <input type="hidden" name="coakredit[]">
-                <input type="text" name="ketcoakredit[]" data-current-value="${detail.ketcoakredit}" class="form-control coakredit-lookup">
+                    <div class="input-group">
+                        <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
+                    </div>
                 </td>
                 <td>
                     <div class="input-group">
@@ -529,15 +561,15 @@
           detailRow.find(`[name="tgljatuhtempo[]"]`).val(detail.tgljatuhtempo)
           detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
           detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
-          detailRow.find(`[name="coakredit[]"]`).val(detail.coakredit)
           detailRow.find(`[name="coadebet[]"]`).val(detail.coadebet)
-          detailRow.find(`[name="ketcoakredit[]"]`).val(detail.ketcoakredit)
           detailRow.find(`[name="ketcoadebet[]"]`).val(detail.ketcoadebet)
-          detailRow.find(`[name="bulanbeban[]"]`).val(detail.bulanbeban)
+
+          detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
           initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
 
           detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
           $('#detailList tbody').append(detailRow)
+
 
           setTotal();
 
@@ -566,32 +598,6 @@
               element.data('currentValue', element.val())
             }
           })
-          $('.coakredit-lookup').last().lookup({
-            title: 'Nama Perkiraan (Kredit) Lookup',
-            fileName: 'akunpusat',
-            beforeProcess: function(test) {
-              // var levelcoa = $(`#levelcoa`).val();
-              this.postData = {
-                Aktif: 'AKTIF',
-                levelCoa: '3',
-
-              }
-            },
-            onSelectRow: (akunpusat, element) => {
-              element.parents('td').find(`[name="coakredit[]"]`).val(akunpusat.coa)
-              element.val(akunpusat.keterangancoa)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="coakredit[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
-
 
         })
 
@@ -610,13 +616,10 @@
       <tr>
         <td></td>
         <td>
-          <input type="text" name="nowarkat[]"  class="form-control">
+            <input type="hidden" name="coadebet[]">
+            <input type="text" name="ketcoadebet[]"  class="form-control akunpusat-lookup">
         </td>
-        <td>
-          <div class="input-group">
-            <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
-          </div>
-        </td>
+       
         <td>
           <input type="text" name="keterangan_detail[]"  class="form-control">
         </td>
@@ -624,12 +627,12 @@
           <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
         </td>
         <td>
-            <input type="hidden" name="coadebet[]">
-            <input type="text" name="ketcoadebet[]"  class="form-control akunpusat-lookup">
+          <input type="text" name="nowarkat[]"  class="form-control">
         </td>
         <td>
-            <input type="hidden" name="coakredit[]">
-            <input type="text" name="ketcoakredit[]"  class="form-control coakredit-lookup">
+          <div class="input-group">
+            <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
+          </div>
         </td>
         <td>
           <div class="input-group">
@@ -641,6 +644,7 @@
         </td>
       </tr>
     `)
+
 
     $('#detailList tbody').append(detailRow)
 
@@ -669,33 +673,9 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.coakredit-lookup').last().lookup({
-      title: 'Nama Perkiraan (Kredit) Lookup',
-      fileName: 'akunpusat',
-      beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        this.postData = {
-          Aktif: 'AKTIF',
-          levelCoa: '3',
-
-        }
-      },
-      onSelectRow: (akunpusat, element) => {
-        element.parents('td').find(`[name="coakredit[]"]`).val(akunpusat.coa)
-        element.val(akunpusat.keterangancoa)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.parents('td').find(`[name="coakredit[]"]`).val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
     initAutoNumeric(detailRow.find('.autonumeric'))
-    $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    tglbukti = $('#crudForm').find(`[name="tglbukti"]`).val()
+    detailRow.find(`[name="tgljatuhtempo[]"]`).val(tglbukti).trigger('change');
     initDatepicker()
     setRowNumbers()
   }
@@ -742,32 +722,6 @@
 
   function initLookup() {
 
-    $('.cabang-lookup').lookup({
-      title: 'Cabang Lookup',
-      fileName: 'cabang',
-      beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        this.postData = {
-          Aktif: 'AKTIF',
-
-        }
-      },
-      onSelectRow: (cabang, element) => {
-        $('#crudForm [name=cabang_id]').first().val(cabang.id)
-
-        element.val(cabang.namacabang)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $('#crudForm [name=cabang_id]').first().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
-
     $('.alatbayar-lookup').last().lookup({
       title: 'Alat Bayar Lookup',
       fileName: 'alatbayar',
@@ -801,6 +755,7 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           Aktif: 'AKTIF',
+          tipe: 'BANK'
 
         }
       },

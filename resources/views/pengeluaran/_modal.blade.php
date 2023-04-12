@@ -290,6 +290,11 @@
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
 
+          $('.select2').select2({
+            width: 'resolve',
+            theme: "bootstrap4"
+          });
+          
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
@@ -552,6 +557,9 @@
 
   function showPengeluaran(form, id) {
     $('#detailList tbody').html('')
+
+    $('#crudForm [name=tglbukti]').attr('readonly', true)
+    $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
 
     $.ajax({
       url: `${apiUrl}pengeluaranheader/${id}`,

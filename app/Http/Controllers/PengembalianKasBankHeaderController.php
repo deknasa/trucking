@@ -20,6 +20,7 @@ class PengembalianKasBankHeaderController extends MyController
             'comboapproval' => $this->comboList('list','STATUS APPROVAL','STATUS APPROVAL'),
             'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK'), 
             'combojenistransaksi' => $this->comboList('list','JENIS TRANSAKSI','JENIS TRANSAKSI'),
+            'combobank' => $this->comboBank(),
         ];
         return view('pengembaliankasbank.index', compact('title','data'));
 
@@ -41,6 +42,19 @@ class PengembalianKasBankHeaderController extends MyController
         return $response['data'];
     }
     
+    public function comboBank()
+    {
+        $data = [
+            'tipe' => 'BANK'
+        ];
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'bank', $data);
+
+        return $response['data'];
+    }
+
     public function get($params = [])
     {
         $params = [

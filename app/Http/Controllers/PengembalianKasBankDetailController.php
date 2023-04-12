@@ -5,23 +5,22 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-
-class PencairanGiroPengeluaranDetailController extends Controller
+class PengembalianKasBankDetailController extends Controller
 {
-    public $title = 'Pencairan Giro Pengeluaran Detail';
+    public $title = 'Pengembalian Kas Bank';
 
     public function index(Request $request)
     {
         $params = [
-            'pengeluaran_id' => $request->pengeluaran_id,
+            'hutangbayar_id' => $request->hutangbayar_id,
             'whereIn' => $request->whereIn
         ];
 
         $response = Http::withHeaders($request->header())
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'pencairangiropengeluarandetail', $params);
-            
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') .'pengembaliankasbankdetail', $params);
+
         $data = [
             'rows' => $response['data'] ?? []
         ];
@@ -32,10 +31,12 @@ class PencairanGiroPengeluaranDetailController extends Controller
     {
         return view('jurnalumum._jurnal');
     }
+    public function pengeluaranGrid()
+    {
+        return view('pengeluaran._pengeluaran');
+    }
     public function detailGrid()
     {
-        return view('pencairangiropengeluaran._detail');
+        return view('pengembaliankasbank._detail');
     }
 }
-
-

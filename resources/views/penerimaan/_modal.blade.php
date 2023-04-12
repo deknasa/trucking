@@ -418,10 +418,15 @@
                     id = response.data.id
                     $('#crudModal').modal('hide')
                     $('#crudModal').find('#crudForm').trigger('reset')
+
+                    $('.select2').select2({
+                        width: 'resolve',
+                        theme: "bootstrap4"
+                    });
                     $('#jqGrid').jqGrid('setGridParam', {
                         page: response.data.page
                     }).trigger('reloadGrid');
-                    
+
                     if (id == 0) {
                         $('#detail').jqGrid().trigger('reloadGrid')
                     }

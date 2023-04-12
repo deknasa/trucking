@@ -481,6 +481,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('pengembaliankasbankheader/index', [PengembalianKasbankHeaderController::class, 'index']);
     Route::resource('pengembaliankasbankheader', PengembalianKasbankHeaderController::class);
     
+    Route::get('pengembaliankasbankdetail/jurnal/grid', [PengembalianKasBankDetailController::class, 'jurnalGrid']);
+    Route::get('pengembaliankasbankdetail/pengeluaran/grid', [PengembalianKasBankDetailController::class, 'pengeluaranGrid']);
+    Route::get('pengembaliankasbankdetail/detail/grid', [PengembalianKasBankDetailController::class, 'detailGrid']);
+    Route::resource('pengembaliankasbankdetail', PengembalianKasBankDetailController::class);
+
     Route::get('notakreditheader/get', [NotaKreditHeaderController::class, 'get'])->name('notakreditheader.get');
     Route::get('notakreditheader/export', [NotaKreditHeaderController::class, 'export'])->name('notakreditheader.export');
     Route::get('notakreditheader/report', [NotaKreditHeaderController::class, 'report'])->name('notakreditheader.report');
@@ -922,6 +927,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('pencairangiropengeluaranheader/export', [PencairanGiroPengeluaranHeaderController::class, 'export'])->name('pencairangiropengeluaranheader.export');
     Route::get('pencairangiropengeluaranheader/report', [PencairanGiroPengeluaranHeaderController::class, 'report'])->name('pencairangiropengeluaranheader.report');
     Route::resource('pencairangiropengeluaranheader', PencairanGiroPengeluaranHeaderController::class);
+    Route::get('pencairangiropengeluarandetail/jurnal/grid', [PencairanGiroPengeluaranDetailController::class, 'jurnalGrid']);
+    Route::get('pencairangiropengeluarandetail/detail/grid', [PencairanGiroPengeluaranDetailController::class, 'detailGrid']);
     Route::resource('pencairangiropengeluarandetail', PencairanGiroPengeluaranDetailController::class);
     Route::get('reportneraca/report', [ReportNeracaController::class, 'report'])->name('reportneraca.report');
     Route::get('reportneraca/index', [ReportNeracaController::class, 'index']);

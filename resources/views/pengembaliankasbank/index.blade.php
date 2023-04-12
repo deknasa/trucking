@@ -1,5 +1,17 @@
 @extends('layouts.master')
-
+@push('addtional-field')
+<div class="form-group row">
+  <label class="col-12 col-sm-2 col-form-label mt-2">Bank<span class="text-danger">*</span></label>
+  <div class="col-sm-4 mt-2">
+    <select name="bankheader" id="bankheader" class="form-select select2" style="width: 100%;">
+      <option value="">-- PILIH BANK --</option>
+      @foreach ($data['combobank'] as $bank)
+      <option @if ($bank['namabank']==="BANK TRUCKING" ) selected @endif value="{{$bank['id']}}"> {{$bank['namabank']}} </option>
+      @endforeach
+    </select>
+  </div>
+</div>
+@endpush
 @section('content')
 <!-- Grid Master-->
 <div class="container-fluid">
@@ -9,12 +21,39 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs">
+            <ul class="dejavu">
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#pengeluaran-tab">Pengeluaran Kas/bank</a></li>
+              <li><a href="#jurnal-tab">Jurnal</a></li>
+            </ul>
+            <div id="detail-tab">
+
+            </div>
+
+            <div id="pengeluaran-tab">
+
+            </div>
+            <div id="jurnal-tab">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Modal -->
 @include('pengembaliankasbank._modal')
 <!-- Detail -->
 @include('pengembaliankasbank._detail')
+@include('pengeluaran._pengeluaran')
+@include('jurnalumum._jurnal')
 
 @push('scripts')
 <script>
@@ -35,12 +74,22 @@
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false
+  let currentTab = 'detail'
 
   $(document).ready(function() {
+    $("#tabs").tabs()
+    
+    $('.select2').select2({
+      width: 'resolve',
+      theme: "bootstrap4"
+    });
+
     setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
-      loadDataHeader('pengeluarantruckingheader')
+      loadDataHeader('pengembaliankasbankheader', {
+        bank_id: $('#bankheader').val()
+      })
     })
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'pengembaliankasbankheader' }}`,
@@ -51,7 +100,7 @@
         postData: {
           tgldari:$('#tgldariheader').val() ,
           tglsampai:$('#tglsampaiheader').val(),
-          
+          bank_id: $('#bankheader').val(),          
         },
         colModel: [{
             label: 'ID',
@@ -169,6 +218,11 @@
             align: 'left'
           },
           {
+            label: 'BANK',
+            name: 'bank_id',
+            align: 'left'
+          },
+          {
             label: 'STATUS JNS TRANSAKSI',
             name: 'statusjenistransaksi',
             align: 'left',
@@ -203,16 +257,6 @@
           {
             label: 'DIBAYARKAN KE',
             name: 'dibayarke',
-            align: 'left'
-          },
-          {
-            label: 'CABANG',
-            name: 'cabang_id',
-            align: 'left'
-          },
-          {
-            label: 'BANK',
-            name: 'bank_id',
             align: 'left'
           },
           {
@@ -313,20 +357,37 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
+          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/pengembaliankasbankdetail/${currentTab}/grid`, function() {
+            loadGrid(id,nobukti)
+          })
+          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
           
-          if (!hasDetail) {
-            loadDetailGrid(id)
-            hasDetail = true
-          }
-          loadDetailData(id)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
+          if (data.data.length == 0) {
+            $('#detail').jqGrid('setGridParam', {
+              postData: {
+                pengembaliankasbank_id: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#jurnalGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#pengeluaranGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+          }
 
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -544,6 +605,17 @@
     }
 
 
+    
+    $("#tabs").on('click', 'li.ui-state-active', function() {
+      let href = $(this).find('a').attr('href');
+      currentTab = href.substring(1, href.length - 4);
+      let hutangBayarId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      let nobukti = $('#jqGrid').jqGrid('getCell', hutangBayarId, 'pengeluaran_nobukti')
+      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/pengembaliankasbankdetail/${currentTab}/grid`, function() {
+
+        loadGrid(hutangBayarId, nobukti)
+      })
+    })
     
   })
 
