@@ -157,11 +157,6 @@
             }
           },
           {
-            label: 'keterangan',
-            name: 'keterangan',
-            align: 'left'
-          },
-          {
             label: 'TANGGAL dari',
             name: 'tgldari',
             align: 'left',
@@ -216,6 +211,21 @@
             label: 'coa',
             name: 'coa',
             align: 'left'
+          },
+          {
+            label: 'USER BUKA CETAK',
+            name: 'userbukacetak',
+            align: 'left'
+          },
+          {
+            label: 'TANGGAL CETAK',
+            name: 'tglbukacetak',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'CREATEDAT',
@@ -350,6 +360,11 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
+          $(this).setGridParam({
+          postData: {
+            tgldari:$('#tgldariheader').val() ,
+            tglsampai:$('#tglsampaiheader').val() 
+          },})
           clearGlobalSearch($('#jqGrid'))
         },
       })

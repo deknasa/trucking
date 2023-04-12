@@ -28,6 +28,7 @@
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            width: 300
           },
           {
             label: 'COA',

@@ -9,7 +9,15 @@
 
 @push('scripts')
 <script>
- 
+  let sortnameDetail = 'nobukti'
+  let sortorderDetail = 'asc'
+  let totalRecordDetail
+  let limitDetail
+  let postDataDetail
+  let triggerClickDetail
+  let indexRowDetail
+  let pageDetail = 0;
+
   function loadDetailGrid(id) {
     $("#detail").jqGrid({
         url: `${apiUrl}rekappenerimaandetail`,
@@ -17,14 +25,14 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        colModel: [
-          {
+        colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            width: 300
           },
           {
             label: 'penerimaan nobukti',
@@ -35,7 +43,7 @@
             name: 'nominal',
             align: 'right',
             formatter: currencyFormat,
-          },    
+          },
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -48,9 +56,9 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortname,
-        sortorder: sortorder,
-        page: page,
+        sortname: sortnameDetail,
+        sortorder: sortorderDetail,
+        page: pageDetail,
         viewrecords: true,
         postData: {
           rekappenerimaan_id: id
@@ -77,24 +85,22 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-          
+
           /* Set global variables */
-          sortname = $(this).jqGrid("getGridParam", "sortname")
-          sortorder = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').limit
-          postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
+          sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordDetail = $(this).getGridParam("records")
+          limitDetail = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataDetail = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
+          if (indexRowDetail > $(this).getDataIDs().length - 1) {
+            indexRowDetail = $(this).getDataIDs().length - 1;
           }
-
-          $('#detail').setSelection($('#detail').getDataIDs()[0])
 
           setHighlight($(this))
 
@@ -106,7 +112,7 @@
           }
         }
       })
-      
+
       .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
@@ -127,10 +133,10 @@
         del: false,
       })
       .customPager()
-      
+
     /* Append clear filter button */
     loadClearFilter($('#detail'))
-    
+
     /* Append global search */
     loadGlobalSearch($('#detail'))
   }
@@ -142,7 +148,7 @@
       postData: {
         rekappenerimaan_id: id
       },
-      page:1
+      page: 1
     }).trigger('reloadGrid')
   }
 </script>

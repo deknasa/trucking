@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -97,7 +97,7 @@
 
             <div class="border p-3">
               <h6>Posting Penerimaan</h6>
-              
+
               <div class="row form-group">
                 <div class="col-12 col-md-2">
                   <label class="col-form-label">
@@ -105,7 +105,7 @@
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="text" name="bank" class="form-control" readonly>
-                  <input type="text" id="bankId" name="bank_id"  hidden>
+                  <input type="text" id="bankId" name="bank_id" hidden>
                 </div>
               </div>
               <div class="row form-group">
@@ -114,7 +114,7 @@
                     NO BUKTI KAS KELUAR </label>
                 </div>
                 <div class="col-12 col-md-4">
-                <input type="text" name="penerimaan_nobukti" class="form-control" readonly>
+                  <input type="text" name="penerimaan_nobukti" class="form-control" readonly>
                 </div>
               </div>
             </div>
@@ -300,6 +300,19 @@
         name: 'limit',
         value: limit
       })
+
+      data.push({
+        name: 'tgldariheader',
+        value: $('#tgldariheader').val()
+      })
+      data.push({
+        name: 'tglsampaiheader',
+        value: $('#tglsampaiheader').val()
+      })
+
+      let tgldariheader = $('#tgldariheader').val();
+      let tglsampaiheader = $('#tglsampaiheader').val()
+
       switch (action) {
         case 'add':
           method = 'POST'
@@ -311,7 +324,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}pengembaliankasgantungheader/${Id}`
+          url = `${apiUrl}pengembaliankasgantungheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -588,7 +601,7 @@
             }
           })
         })
-         totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
+        totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
         $('#nominalPiutang').html(`${totalNominal}`)
       }
     })
@@ -703,7 +716,7 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            cekValidasiAksi(Id,Aksi)
+            cekValidasiAksi(Id, Aksi)
           }
 
         } else {
@@ -713,8 +726,8 @@
     })
   }
 
-   
-  function cekValidasiAksi(Id,Aksi){
+
+  function cekValidasiAksi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengembaliankasgantungheader/${Id}/cekValidasiAksi`,
       method: 'POST',
@@ -724,21 +737,21 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'EDIT') {
-              editPengembalianKasGantung(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deletePengembalianKasGantung(Id)
-            }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          if (Aksi == 'EDIT') {
+            editPengembalianKasGantung(Id)
           }
+          if (Aksi == 'DELETE') {
+            deletePengembalianKasGantung(Id)
+          }
+        }
 
       }
     })
   }
-  
+
 
   function showDefault(form) {
     $.ajax({

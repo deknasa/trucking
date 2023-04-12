@@ -10,14 +10,14 @@
 
 @push('scripts')
 <script>
-  let sortnamedetail
-  let sortorderdetail
-  let indexRowdetail = 0;
-  let totalRecorddetail
-  let limitdetail
-  let postDatadetail
-  let triggerClickdetail
-  let pageDetail = 0
+  let sortnameDetail = 'nobukti'
+  let sortorderDetail = 'asc'
+  let totalRecordDetail
+  let limitDetail
+  let postDataDetail
+  let triggerClickDetail
+  let indexRowDetail
+  let pageDetail = 0;
 
   function loadDetailGrid(id) {
 
@@ -55,11 +55,11 @@
             formatter: currencyFormat,
           },
           {
-            label: 'COA DEBET',
+            label: 'NAMA PERKIRAAN (DEBET)',
             name: 'coadebet',
           },
           {
-            label: 'COA KREDIT',
+            label: 'NAMA PERKIRAAN (KREDIT)',
             name: 'coakredit',
           },
           {
@@ -83,8 +83,8 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortname,
-        sortorder: sortorder,
+        sortname: sortnameDetail,
+        sortorder: sortorderDetail,
         page: pageDetail,
         viewrecords: true,
         postData: {
@@ -114,28 +114,26 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if(data.attributes != undefined){
-            
+          if (data.attributes != undefined) {
+
             pageDetail = data.attributes.totalPages
           }
-          
+
           /* Set global variables */
-          sortnamedetail = $(this).jqGrid("getGridParam", "sortname")
-          sortorderdetail = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecorddetail = $(this).getGridParam("records")
-          limitdetail = $(this).jqGrid('getGridParam', 'postData').limit
-          postDatadetail = $(this).jqGrid('getGridParam', 'postData')
-          triggerClickdetail = true
+          sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
+          sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordDetail = $(this).getGridParam("records")
+          limitDetail = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataDetail = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRowdetail > $(this).getDataIDs().length - 1) {
-            indexRowdetail = $(this).getDataIDs().length - 1;
+          if (indexRowDetail > $(this).getDataIDs().length - 1) {
+            indexRowDetail = $(this).getDataIDs().length - 1;
           }
-
-          $('#detail').setSelection($('#detail').getDataIDs()[0])
 
           setHighlight($(this))
           if (data.attributes) {
@@ -182,7 +180,7 @@
       postData: {
         pengembaliankasbank_id: id
       },
-      page:1
+      page: 1
     }).trigger('reloadGrid')
   }
 </script>

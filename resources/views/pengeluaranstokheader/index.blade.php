@@ -160,11 +160,6 @@ setRange()
             align: 'left'
           },
           {
-            label: 'Status format',
-            name: 'statusformat',
-            align: 'left'
-          },
-          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'

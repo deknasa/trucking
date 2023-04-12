@@ -136,57 +136,34 @@
           //   name: 'nojob2',
           // },
           {
-            label: 'STATUSLONGTRIP',
+            label: 'LONGTRIP',
             name: 'statuslongtrip',
             stype: 'select',
             searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combolongtrip'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combolongtrip'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
-                  theme: "bootstrap4",
-                  ajax: {
-                    url: `${apiUrl}parameter/combo`,
-                    dataType: 'JSON',
-                    headers: {
-                      Authorization: `Bearer ${accessToken}`
-                    },
-                    data: {
-                      grp: 'STATUS LONGTRIP',
-                      subgrp: 'STATUS LONGTRIP'
-                    },
-                    beforeSend: () => {
-                      // clear options
-                      $(element).data('select2').$results.children().filter((index, element) => {
-                        // clear options except index 0, which
-                        // is the "searching..." label
-                        if (index > 0) {
-                          element.remove()
-                        }
-                      })
-                    },
-                    processResults: (response) => {
-                      let formattedResponse = response.data.map(row => ({
-                        id: row.text,
-                        text: row.text
-                      }));
-
-                      formattedResponse.unshift({
-                        id: '',
-                        text: 'ALL'
-                      });
-
-                      return {
-                        results: formattedResponse
-                      };
-                    },
-                  }
+                  theme: "bootstrap4"
                 });
               }
             },
             formatter: (value, options, rowData) => {
               let statusLongTrip = JSON.parse(value)
               if (!statusLongTrip) {
-                return '';
+                return ''
               }
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusLongTrip.WARNA}; color: #fff;">
@@ -199,7 +176,7 @@
             cellattr: (rowId, value, rowObject) => {
               let statusLongTrip = JSON.parse(rowObject.statuslongtrip)
               if (!statusLongTrip) {
-                return '';
+                return ` title=""`
               }
               return ` title="${statusLongTrip.MEMO}"`
             }

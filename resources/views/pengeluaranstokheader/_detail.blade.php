@@ -3,23 +3,20 @@
   <div class="row">
     <div class="col-12">
       <table id="detail"></table>
-      <div id="detailPager"></div>
     </div>
   </div>
 </div>
 
 @push('scripts')
 <script>
-  /**
-   * Custom Functions
-   */
-  var delay = (function() {
-    var timer = 0;
-    return function(callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })()
+  let sortnameDetail = 'nobukti'
+  let sortorderDetail = 'asc'
+  let totalRecordDetail
+  let limitDetail
+  let postDataDetail
+  let triggerClickDetail
+  let indexRowDetail
+  let pageDetail = 0;
 
   function loadDetailGrid() {
     let pager = '#detailPager'
@@ -30,60 +27,39 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        colModel: [
-          {
+        colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
-          }, 
+          },
           {
             label: 'stok',
             name: 'stok',
-          },         
-          
+          },
+
           {
             label: 'qty',
             name: 'qty',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: '.',
-              thousandsSeparator: ',',
-              decimalPlaces:0              
-            }
+            formatter: currencyFormat,
           },
           {
             label: 'harga',
             name: 'harga',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: '.',
-              thousandsSeparator: ',',
-              decimalPlaces:0              
-            }
+            formatter: currencyFormat,
           },
-          
+
           {
             label: 'persentasediscount',
             name: 'persentasediscount',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: '.',
-              thousandsSeparator: ',',
-              decimalPlaces:0              
-            }
+            formatter: currencyFormat,
           },
           {
             label: 'nominaldiscount',
             name: 'nominaldiscount',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: '.',
-              thousandsSeparator: ',',
-              decimalPlaces:0              
-            }
+            formatter: currencyFormat,
           },
           {
             label: 'vulkanisirke',
@@ -93,12 +69,7 @@
             label: 'TOTAL',
             name: 'total',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: '.',
-              thousandsSeparator: ',',
-              decimalPlaces:0              
-            }
+            formatter: currencyFormat,
           },
           {
             label: 'KETERANGAN',
@@ -108,8 +79,8 @@
             label: 'modifiedby',
             name: 'modifiedby',
           },
-         
-        
+
+
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -117,11 +88,14 @@
         rowNum: 0,
         rownumbers: true,
         footerrow: true,
-		    userDataOnFooter: true,
+        userDataOnFooter: true,
         rownumWidth: 45,
         rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
+        sortname: sortnameDetail,
+        sortorder: sortorderDetail,
+        page: pageDetail,
         // pager: pager,
         viewrecords: true,
         postData: {
@@ -146,24 +120,22 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-          
+
           /* Set global variables */
-          sortname = $(this).jqGrid("getGridParam", "sortname")
-          sortorder = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').limit
-          postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+          sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
+          sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordDetail = $(this).getGridParam("records")
+          limitDetail = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataDetail = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
+          if (indexRowDetail > $(this).getDataIDs().length - 1) {
+            indexRowDetail = $(this).getDataIDs().length - 1;
           }
-
-          $('#detail').setSelection($('#detail').getDataIDs()[0])
 
           setHighlight($(this))
 
@@ -194,10 +166,10 @@
         del: false,
       })
       .customPager()
-      
+
     /* Append clear filter button */
     loadClearFilter($('#detail'))
-    
+
     /* Append global search */
     loadGlobalSearch($('#detail'))
   }
@@ -209,7 +181,7 @@
       postData: {
         pengeluaranstokheader_id: id
       },
-      page:1
+      page: 1
     }).trigger('reloadGrid')
   }
 </script>

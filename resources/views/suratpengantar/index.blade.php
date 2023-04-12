@@ -116,21 +116,13 @@
             label: 'GAJI SUPIR',
             name: 'gajisupir',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
+            formatter: currencyFormat,
           },
           {
             label: 'JARAK',
             name: 'jarak',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-            }
+            formatter: currencyFormat,
           },
           {
             label: 'AGEN',
@@ -199,6 +191,7 @@
             },
             formatter: (value, options, rowData) => {
               let statusLongTrip = JSON.parse(value)
+              console.log(statusLongTrip)
               if (!statusLongTrip) {
                 return ''
               }

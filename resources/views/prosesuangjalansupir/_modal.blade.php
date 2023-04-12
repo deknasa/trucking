@@ -74,7 +74,7 @@
 
                         <div class="row">
                             <div class="col-12">
-                                <div id="tabs">
+                                <div id="tabs" class="dejavu" style="font-size:12px">
                                     <ul>
                                         <li><a href="#tabs-1">List Transfer</a></li>
                                         <li><a href="#tabs-2">List Adjust Transfer</a></li>
@@ -1228,7 +1228,7 @@
             fileName: 'trado',
             onSelectRow: (trado, element) => {
                 $('#crudForm [name=trado_id]').first().val(trado.id)
-                element.val(trado.keterangan)
+                element.val(trado.kodetrado)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {

@@ -69,14 +69,34 @@
             hidden: true
           },
           {
-            label: 'status approval',
+            label: 'STATUS APPROVAL',
             name: 'statusapproval',
             align: 'left',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboapproval'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboapproval'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
             formatter: (value, options, rowData) => {
               let statusApproval = JSON.parse(value)
-              if (!statusApproval) {
-                return ``
-              }
+
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
                   <span>${statusApproval.SINGKATAN}</span>
@@ -87,35 +107,51 @@
             },
             cellattr: (rowId, value, rowObject) => {
               let statusApproval = JSON.parse(rowObject.statusapproval)
-              if (!statusApproval) {
-                return ` title=""`
-              }
+
               return ` title="${statusApproval.MEMO}"`
             }
           },
           {
-            label: 'status cetak',
+            label: 'STATUS CETAK',
             name: 'statuscetak',
             align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combocetak'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combocetak'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
             formatter: (value, options, rowData) => {
               let statusCetak = JSON.parse(value)
-              if (!statusCetak) {
-                return ''
-              }
+
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
                   <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
-            
             cellattr: (rowId, value, rowObject) => {
               let statusCetak = JSON.parse(rowObject.statuscetak)
-              if (!statusCetak) {
-                return ` title=" "`
-              }
+
               return ` title="${statusCetak.MEMO}"`
             }
           },
@@ -148,7 +184,12 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },        
+          },   
+          {
+            label: 'user approval',
+            name: 'userapproval',
+            align: 'left'
+          },     
           {
             label: 'tgl approval',
             name: 'tglapproval',
@@ -160,9 +201,19 @@
             }
           },
           {
-            label: 'user approval',
-            name: 'userapproval',
+            label: 'user buka cetak',
+            name: 'userbukacetak',
             align: 'left'
+          },     
+          {
+            label: 'tgl buka cetak',
+            name: 'tglbukacetak',
+            align: 'left',
+             formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'modifiedby',
