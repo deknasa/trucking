@@ -14,7 +14,7 @@
           name: 'id',
           align: 'right',
           width: '70px',
-            search: false,
+          search: false,
           hidden: true
         },
         {
@@ -28,9 +28,20 @@
           align: 'left'
         },
         {
-          label: 'COA',
-          name: 'coa',
-          align: 'left'
+          label: 'coa debet',
+          name: 'coadebet_keterangan',
+        },
+        {
+          label: 'coa kredit',
+          name: 'coakredit_keterangan',
+        },
+        {
+          label: 'coa posting debet',
+          name: 'coapostingdebet_keterangan',
+        },
+        {
+          label: 'coa posting kredit',
+          name: 'coapostingkredit_keterangan',
         },
         {
           label: 'FORMAT BUKTI',
@@ -116,7 +127,7 @@
         jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

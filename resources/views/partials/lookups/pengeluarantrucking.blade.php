@@ -27,26 +27,26 @@
           name: 'keterangan',
           align: 'left'
         },
-        {
-          label: 'coa debet',
-          name: 'coadebet',
-          hidden: true
-        },
-        {
-          label: 'coa kredit',
-          name: 'coakredit',
-          hidden: true
-        },
-        {
-          label: 'coa posting debet',
-          name: 'coapostingdebet',
-          hidden: true
-        },
-        {
-          label: 'coa posting kredit',
-          name: 'coapostingkredit',
-          hidden: true
-        },
+        // {
+        //   label: 'coa debet',
+        //   name: 'coadebet',
+        //   hidden: true
+        // },
+        // {
+        //   label: 'coa kredit',
+        //   name: 'coakredit',
+        //   hidden: true
+        // },
+        // {
+        //   label: 'coa posting debet',
+        //   name: 'coapostingdebet',
+        //   hidden: true
+        // },
+        // {
+        //   label: 'coa posting kredit',
+        //   name: 'coapostingkredit',
+        //   hidden: true
+        // },
         {
           label: 'coa debet',
           name: 'coadebet_keterangan',

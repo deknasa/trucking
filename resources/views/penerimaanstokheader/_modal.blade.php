@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -43,7 +43,7 @@
                   </div>
                 </div>
               </div>
-              
+
 
               <div class="form-group col-md-6">
                 <div class="row">
@@ -219,7 +219,7 @@
                 </div>
               </div>
 
-              
+
             </div>
 
             <div class="row form-group">
@@ -231,7 +231,7 @@
               </div>
             </div>
 
-            
+
             <div class="table-scroll table-responsive">
               <table class="table table-bordered table-bindkeys" style="width: 950;">
                 <thead>
@@ -290,7 +290,7 @@
 
   $(document).ready(function() {
     addRow()
-    $(document).on('click', '#addRow', function(event){
+    $(document).on('click', '#addRow', function(event) {
       addRow()
     });
 
@@ -426,7 +426,7 @@
     setTampilanForm();
   }
 
-  function setTampilanForm(){
+  function setTampilanForm() {
     tampilanall()
     switch (KodePenerimaanId) {
       case 'DOT':
@@ -447,7 +447,7 @@
       case 'SPBS':
         tampilanpst()
         break;
-    
+
       default:
         tampilanall()
         break;
@@ -540,11 +540,12 @@
       }
     })
   }
+
   function tampilanpgt() {
     $('[name=gudang]').parents('.form-group').hide()
     $('[name=trado]').parents('.form-group').hide()
     $('[name=gandengan]').parents('.form-group').hide()
-    
+
     $('[name=gudangdari]').parents('.form-group').show()
     $('[name=gudangke]').parents('.form-group').show()
     $('[name=tradodari]').parents('.form-group').show()
@@ -552,11 +553,12 @@
     $('[name=gandengandari]').parents('.form-group').show()
     $('[name=gandenganke]').parents('.form-group').show()
   }
+
   function tampilankst() {
     $('[name=gudang]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').show()
     $('[name=gandengan]').parents('.form-group').show()
-    
+
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
     $('[name=tradodari]').parents('.form-group').hide()
@@ -564,11 +566,12 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
   }
+
   function tampilanpst() {
     $('[name=gudang]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').hide()
     $('[name=gandengan]').parents('.form-group').hide()
-    
+
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
     $('[name=gandengan]').parents('.form-group').hide()
@@ -621,7 +624,7 @@
     })
   }
 
-  function setDetail(penerimaan_id){
+  function setDetail(penerimaan_id) {
     $.ajax({
       url: `${apiUrl}penerimaanstokheader/${penerimaan_id}`,
       method: 'GET',
@@ -720,109 +723,109 @@
 
 
     switch (el) {
-        case 'tradodari':
-          gandengan.attr('disabled',true)
-          gandengan.find('.lookup-toggler').attr('disabled',true)
-          $('#gandenganId').attr('disabled',true);
-          gandengandari.attr('disabled',true)
-          gandengandari.find('.lookup-toggler').attr('disabled',true)
-          $('#gandengandariId').attr('disabled',true);
+      case 'tradodari':
+        gandengan.attr('disabled', true)
+        gandengan.find('.lookup-toggler').attr('disabled', true)
+        $('#gandenganId').attr('disabled', true);
+        gandengandari.attr('disabled', true)
+        gandengandari.find('.lookup-toggler').attr('disabled', true)
+        $('#gandengandariId').attr('disabled', true);
 
-          gudang.attr('disabled',true)
-          gudang.find('.lookup-toggler').attr('disabled',true)
-          $('#gudangId').attr('disabled',true);
-          gudangdari.attr('disabled',true)
-          gudangdari.find('.lookup-toggler').attr('disabled',true)
-          $('#gudangdariId').attr('disabled',true);
-          $('#tradodariId').attr('disabled',false);
+        gudang.attr('disabled', true)
+        gudang.find('.lookup-toggler').attr('disabled', true)
+        $('#gudangId').attr('disabled', true);
+        gudangdari.attr('disabled', true)
+        gudangdari.find('.lookup-toggler').attr('disabled', true)
+        $('#gudangdariId').attr('disabled', true);
+        $('#tradodariId').attr('disabled', false);
 
-          break;
-        case 'gandengandari':
-         trado.attr('disabled',true)
-         trado.find('.lookup-toggler').attr('disabled',true)
-          $('#tradoId').attr('disabled',true);
-          tradodari.attr('disabled',true)
-          tradodari.find('.lookup-toggler').attr('disabled',true)
-          $('#tradodariId').attr('disabled',true);
+        break;
+      case 'gandengandari':
+        trado.attr('disabled', true)
+        trado.find('.lookup-toggler').attr('disabled', true)
+        $('#tradoId').attr('disabled', true);
+        tradodari.attr('disabled', true)
+        tradodari.find('.lookup-toggler').attr('disabled', true)
+        $('#tradodariId').attr('disabled', true);
 
-          gudang.attr('disabled',true)
-          gudang.find('.lookup-toggler').attr('disabled',true)
-          $('#gudangId').attr('disabled',true);
-          gudangdari.attr('disabled',true)
-          gudangdari.find('.lookup-toggler').attr('disabled',true)
-          $('#gudangdariId').attr('disabled',true);
-          $('#gandengandariId').attr('disabled',false);
+        gudang.attr('disabled', true)
+        gudang.find('.lookup-toggler').attr('disabled', true)
+        $('#gudangId').attr('disabled', true);
+        gudangdari.attr('disabled', true)
+        gudangdari.find('.lookup-toggler').attr('disabled', true)
+        $('#gudangdariId').attr('disabled', true);
+        $('#gandengandariId').attr('disabled', false);
 
-          break;
-        case 'gudangdari':
-          trado.attr('disabled',true)
-          trado.find('.lookup-toggler').attr('disabled',true)
-          $('#tradoId').attr('disabled',true);
-          tradodari.attr('disabled',true)
-          tradodari.find('.lookup-toggler').attr('disabled',true)
-          $('#tradodariId').attr('disabled',true);
+        break;
+      case 'gudangdari':
+        trado.attr('disabled', true)
+        trado.find('.lookup-toggler').attr('disabled', true)
+        $('#tradoId').attr('disabled', true);
+        tradodari.attr('disabled', true)
+        tradodari.find('.lookup-toggler').attr('disabled', true)
+        $('#tradodariId').attr('disabled', true);
 
-          gandengan.attr('disabled',true)
-          gandengan.find('.lookup-toggler').attr('disabled',true)
-          $('#gandenganId').attr('disabled',true);
-          gandengandari.attr('disabled',true)
-          gandengandari.find('.lookup-toggler').attr('disabled',true)
-          $('#gandengandariId').attr('disabled',true);
-          $('#gudangdariId').attr('disabled',false);
+        gandengan.attr('disabled', true)
+        gandengan.find('.lookup-toggler').attr('disabled', true)
+        $('#gandenganId').attr('disabled', true);
+        gandengandari.attr('disabled', true)
+        gandengandari.find('.lookup-toggler').attr('disabled', true)
+        $('#gandengandariId').attr('disabled', true);
+        $('#gudangdariId').attr('disabled', false);
 
-          break;
-        default:
-          break;
-        }
+        break;
+      default:
+        break;
+    }
   }
 
   function lookupSelectedKe(el) {
-    
+
     let tradoke = $('#crudForm').find(`[name="tradoke"]`).parents('.input-group').children()
-    
+
     let gandenganke = $('#crudForm').find(`[name="gandenganke"]`).parents('.input-group').children()
-    
+
     let gudangke = $('#crudForm').find(`[name="gudangke"]`).parents('.input-group').children()
 
     switch (el) {
-        case 'tradoke':
-          gandenganke.attr('disabled',true)
-          gandenganke.find('.lookup-toggler').attr('disabled',true)
-          $('#gandengankeId').attr('disabled',true);
-          gudangke.attr('disabled',true)
-          gudangke.find('.lookup-toggler').attr('disabled',true)
-          $('#gudangkeId').attr('disabled',true);
-          $('#tradokeId').attr('disabled',false);
+      case 'tradoke':
+        gandenganke.attr('disabled', true)
+        gandenganke.find('.lookup-toggler').attr('disabled', true)
+        $('#gandengankeId').attr('disabled', true);
+        gudangke.attr('disabled', true)
+        gudangke.find('.lookup-toggler').attr('disabled', true)
+        $('#gudangkeId').attr('disabled', true);
+        $('#tradokeId').attr('disabled', false);
 
-          break;
-        case 'gandenganke':
-          tradoke.attr('disabled',true)
-          tradoke.find('.lookup-toggler').attr('disabled',true)
-          $('#tradokeId').attr('disabled',true);
+        break;
+      case 'gandenganke':
+        tradoke.attr('disabled', true)
+        tradoke.find('.lookup-toggler').attr('disabled', true)
+        $('#tradokeId').attr('disabled', true);
 
-          gudangke.attr('disabled',true)
-          gudangke.find('.lookup-toggler').attr('disabled',true)
-          $('#gudangkeId').attr('disabled',true);
-          $('#gandengankeId').attr('disabled',false);
+        gudangke.attr('disabled', true)
+        gudangke.find('.lookup-toggler').attr('disabled', true)
+        $('#gudangkeId').attr('disabled', true);
+        $('#gandengankeId').attr('disabled', false);
 
-          break;
-        case 'gudangke':
-          tradoke.attr('disabled',true)
-          tradoke.find('.lookup-toggler').attr('disabled',true)
-          $('#tradokeId').attr('disabled',true);
+        break;
+      case 'gudangke':
+        tradoke.attr('disabled', true)
+        tradoke.find('.lookup-toggler').attr('disabled', true)
+        $('#tradokeId').attr('disabled', true);
 
-          gandenganke.attr('disabled',true)
-          gandenganke.find('.lookup-toggler').attr('disabled',true)
-          $('#gandengankeId').attr('disabled',true);
-          $('#gudangkeId').attr('disabled',false);
+        gandenganke.attr('disabled', true)
+        gandenganke.find('.lookup-toggler').attr('disabled', true)
+        $('#gandengankeId').attr('disabled', true);
+        $('#gudangkeId').attr('disabled', false);
 
-          break;
-        default:
-          break;
-        }
+        break;
+      default:
+        break;
+    }
   }
 
-  function enabledLookupSelected(){
+  function enabledLookupSelected() {
 
     let trado = $('#crudForm').find(`[name="trado"]`).parents('.input-group').children()
     let tradodari = $('#crudForm').find(`[name="tradodari"]`).parents('.input-group').children()
@@ -830,23 +833,23 @@
     let gandengandari = $('#crudForm').find(`[name="gandengandari"]`).parents('.input-group').children()
     let gudang = $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children()
     let gudangdari = $('#crudForm').find(`[name="gudangdari"]`).parents('.input-group').children()
-    $('#tradodariId').attr('disabled',false);
-    $('#gandengandariId').attr('disabled',false);
-    $('#gudangdariId').attr('disabled',false);
+    $('#tradodariId').attr('disabled', false);
+    $('#gandengandariId').attr('disabled', false);
+    $('#gudangdariId').attr('disabled', false);
     $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
     $('#crudForm').find(`[name="gudangdari"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="gudangdari"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
     $('#crudForm').find(`[name="gudangke"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="gudangke"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
-    
+
     $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
     $('#crudForm').find(`[name="tradodari"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="tradodari"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
     $('#crudForm').find(`[name="tradoke"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="tradoke"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
-    
+
     $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
     $('#crudForm').find(`[name="gandengandari"]`).parents('.input-group').children().attr("disabled", false);
@@ -854,7 +857,8 @@
     $('#crudForm').find(`[name="gandenganke"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="gandenganke"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
   }
-  function enabledLookupSelectedKe(){
+
+  function enabledLookupSelectedKe() {
 
     let trado = $('#crudForm').find(`[name="trado"]`).parents('.input-group').children()
     let tradoke = $('#crudForm').find(`[name="tradoke"]`).parents('.input-group').children()
@@ -862,87 +866,87 @@
     let gandenganke = $('#crudForm').find(`[name="gandenganke"]`).parents('.input-group').children()
     let gudang = $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children()
     let gudangke = $('#crudForm').find(`[name="gudangke"]`).parents('.input-group').children()
-    $('#tradokeId').attr('disabled',false);
+    $('#tradokeId').attr('disabled', false);
     $('#tradokeId').val('');
-    $('#gandengankeId').attr('disabled',false);
+    $('#gandengankeId').attr('disabled', false);
     $('#gandengankeId').val('');
-    $('#gudangkeId').attr('disabled',false);
+    $('#gudangkeId').attr('disabled', false);
     $('#gudangkeId').val('');
     gudangke.attr("disabled", false);
     gudangke.find(`.lookup-toggler`).attr("disabled", false);
-    
+
     tradoke.attr("disabled", false);
     tradoke.find(`.lookup-toggler`).attr("disabled", false);
-    
+
     gandenganke.attr("disabled", false);
     gandenganke.find(`.lookup-toggler`).attr("disabled", false);
   }
 
   function lookupSelected(el) {
-    
+
     let trado = $('#crudForm').find(`[name="trado"]`).parents('.input-group').children()
-    
+
     let gandengan = $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children()
-    
+
     let gudang = $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children()
 
     switch (el) {
-        case 'trado':
-          gandengan.attr('disabled',true)
-          gandengan.find('.lookup-toggler').attr('disabled',true)
-          $('#gandenganId').attr('disabled',true);
-          gudang.attr('disabled',true)
-          gudang.find('.lookup-toggler').attr('disabled',true)
-          $('#gudangId').attr('disabled',true);
-          $('#tradoId').attr('disabled',false);
+      case 'trado':
+        gandengan.attr('disabled', true)
+        gandengan.find('.lookup-toggler').attr('disabled', true)
+        $('#gandenganId').attr('disabled', true);
+        gudang.attr('disabled', true)
+        gudang.find('.lookup-toggler').attr('disabled', true)
+        $('#gudangId').attr('disabled', true);
+        $('#tradoId').attr('disabled', false);
 
-          break;
-        case 'gandengan':
-          trado.attr('disabled',true)
-          trado.find('.lookup-toggler').attr('disabled',true)
-          $('#tradoId').attr('disabled',true);
+        break;
+      case 'gandengan':
+        trado.attr('disabled', true)
+        trado.find('.lookup-toggler').attr('disabled', true)
+        $('#tradoId').attr('disabled', true);
 
-          gudang.attr('disabled',true)
-          gudang.find('.lookup-toggler').attr('disabled',true)
-          $('#gudangId').attr('disabled',true);
-          $('#gandenganId').attr('disabled',false);
+        gudang.attr('disabled', true)
+        gudang.find('.lookup-toggler').attr('disabled', true)
+        $('#gudangId').attr('disabled', true);
+        $('#gandenganId').attr('disabled', false);
 
-          break;
-        case 'gudang':
-          trado.attr('disabled',true)
-          trado.find('.lookup-toggler').attr('disabled',true)
-          $('#tradoId').attr('disabled',true);
+        break;
+      case 'gudang':
+        trado.attr('disabled', true)
+        trado.find('.lookup-toggler').attr('disabled', true)
+        $('#tradoId').attr('disabled', true);
 
-          gandengan.attr('disabled',true)
-          gandengan.find('.lookup-toggler').attr('disabled',true)
-          $('#gandenganId').attr('disabled',true);
-          $('#gudangId').attr('disabled',false);
+        gandengan.attr('disabled', true)
+        gandengan.find('.lookup-toggler').attr('disabled', true)
+        $('#gandenganId').attr('disabled', true);
+        $('#gudangId').attr('disabled', false);
 
-          break;
-        default:
-          break;
-        }
+        break;
+      default:
+        break;
+    }
   }
 
-  function enabledLookupSelected(){
+  function enabledLookupSelected() {
     let trado = $('#crudForm').find(`[name="trado"]`).parents('.input-group').children()
     let gandengan = $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children()
     let gudang = $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children()
     trado.find(`.lookup-toggler`).attr("disabled", false);
-    trado.attr('disabled',false);
+    trado.attr('disabled', false);
     gandengan.find(`.lookup-toggler`).attr("disabled", false);
-    gandengan.attr('disabled',false);
+    gandengan.attr('disabled', false);
     gudang.find(`.lookup-toggler`).attr("disabled", false);
-    gudang.attr('disabled',false);
-    
-    
-    $('#tradoId').attr('disabled',false);
+    gudang.attr('disabled', false);
+
+
+    $('#tradoId').attr('disabled', false);
     $('#tradoId').val('');
-    $('#gandenganId').attr('disabled',false);
+    $('#gandenganId').attr('disabled', false);
     $('#gandenganId').val('');
-    $('#gudangId').attr('disabled',false);
+    $('#gudangId').attr('disabled', false);
     $('#gudangId').val('');
-}
+  }
 
 
 
@@ -1020,7 +1024,7 @@
     $('.invalid-feedback').remove()
     showPenerimaanstokHeader(form, penerimaanStokHeaderId)
 
-     
+
   }
 
   function getMaxLength(form) {
@@ -1048,7 +1052,7 @@
     }
   }
 
-  
+
   index = 0;
 
   function addRow() {
@@ -1166,30 +1170,30 @@
 
   function cekValidasi(Id, Aksi) {
     $.ajax({
-        url: `{{ config('app.api_url') }}penerimaanstokheader/${Id}/cekvalidasi`,
-        method: 'POST',
-        dataType: 'JSON',
-        beforeSend: request => {
-            request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-        },
-        success: response => {
-            var kodenobukti = response.kodenobukti
-            if (kodenobukti == '1') {
-                var kodestatus = response.kodestatus
-                if (kodestatus == '1') {
-                    showDialog(response.message['keterangan'])
-                } else {
-                    if (Aksi == 'EDIT') {
-                        editPenerimaanstokHeader(Id)
-                    }
-                    if (Aksi == 'DELETE') {
-                        deletePenerimaanstokHeader(Id)
-                    }
-                }
-            } else {
-                showDialog(response.message['keterangan'])
+      url: `{{ config('app.api_url') }}penerimaanstokheader/${Id}/cekvalidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kodenobukti = response.kodenobukti
+        if (kodenobukti == '1') {
+          var kodestatus = response.kodestatus
+          if (kodestatus == '1') {
+            showDialog(response.message['keterangan'])
+          } else {
+            if (Aksi == 'EDIT') {
+              editPenerimaanstokHeader(Id)
             }
+            if (Aksi == 'DELETE') {
+              deletePenerimaanstokHeader(Id)
+            }
+          }
+        } else {
+          showDialog(response.message['keterangan'])
         }
+      }
     })
   }
 
@@ -1331,6 +1335,11 @@
     $('.supplier-lookup').lookup({
       title: 'supplier Lookup',
       fileName: 'supplier',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (supplier, element) => {
         element.val(supplier.namasupplier)
         $(`#${element[0]['name']}Id`).val(supplier.id)
@@ -1405,41 +1414,41 @@
       title: 'penerimaan stok header Lookup',
       fileName: 'penerimaanstokheader',
       beforeProcess: function(test) {
-        var penerimaanstokId= $(`#penerimaanstokId`).val();
+        var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
-            penerimaanstok_id:penerimaanstokId,
-          }
-          /**
-           if (penerimaanstokId == 3) {
-             this.postData = {
-               // $(`#penerimaanstokId`).val()
-               penerimaanstok_id:penerimaanstokId,
-               filters: JSON.stringify({
-                 "groupOp": "AND",
-                 "rules": [{
-                     "field": "penerimaanstok_id_not_null",
-                     "op": "cn",
-                     "data": 2 //id POT
-                 }]
-               })
-             }
+          penerimaanstok_id: penerimaanstokId,
+        }
+        /**
+         if (penerimaanstokId == 3) {
+           this.postData = {
+             // $(`#penerimaanstokId`).val()
+             penerimaanstok_id:penerimaanstokId,
+             filters: JSON.stringify({
+               "groupOp": "AND",
+               "rules": [{
+                   "field": "penerimaanstok_id_not_null",
+                   "op": "cn",
+                   "data": 2 //id POT
+               }]
+             })
            }
-           else{
-             this.postData = {
-               // $(`#penerimaanstokId`).val()
-               filters: JSON.stringify({
-                 "groupOp": "or",
-                 "rules": [ ]
-               })
-             }
+         }
+         else{
+           this.postData = {
+             // $(`#penerimaanstokId`).val()
+             filters: JSON.stringify({
+               "groupOp": "or",
+               "rules": [ ]
+             })
            }
-           
-           **/
-      
-      
+         }
+         
+         **/
+
+
       },
       onSelectRow: (penerimaan, element) => {
-        var penerimaanstokId= $(`#penerimaanstokId`).val();
+        var penerimaanstokId = $(`#penerimaanstokId`).val();
         if (penerimaanstokId == 3) {
           setSuplier(penerimaan.id);
           $('[name=nobon]').val(penerimaan.nobon)
@@ -1457,8 +1466,8 @@
         element.data('currentValue', element.val())
       }
     })
-           
-          
+
+
     $('.pengeluaranstokheader-lookup').lookup({
       title: 'pengeluaran stok header Lookup',
       fileName: 'pengeluaranstokheader',
@@ -1607,6 +1616,5 @@
       }
     })
   }
-  
 </script>
 @endpush()
