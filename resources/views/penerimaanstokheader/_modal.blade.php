@@ -958,7 +958,6 @@
     activeGrid = null
     initDatepicker()
     initLookup()
-    initSelect2()
 
     getMaxLength(form)
   })

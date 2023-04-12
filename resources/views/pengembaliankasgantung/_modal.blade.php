@@ -571,7 +571,7 @@
               </td>
               <td class="text-right" >
                 ${nominal}
-                <input type="text" name="nominal[]" disabled id="nominal_detail_${detail.detail_id}"  class="form-control nominal_detail_${detail.detail_id}" value="${detail.nominal}">
+                <input type="text" name="nominal[]" disabled id="nominal_detail_${detail.detail_id}" hidden class="form-control nominal_detail_${detail.detail_id}" value="${detail.nominal}">
               </td>
             <td><input type="text" name="keterangandetail[]" disabled id="keterangan_detail_${detail.detail_id}"  class="form-control keterangan_detail_${detail.detail_id}"></td>
           </tr>`)
@@ -638,7 +638,7 @@
             <td> <input type="text" name="coadetail[]" value="${detail.coadetail}" id="coa_detail_${detail.detail_id}" class="form-control coa-lookup coa_detail_${detail.detail_id}"></td>
             <td class="text-right" >
                 ${nominal}
-                <input type="text" name="nominal[]" disabled id="nominal_detail_${detail.detail_id}"  class="form-control nominal_detail_${detail.detail_id}" value="${detail.nominal}">
+                <input type="text" name="nominal[]" disabled id="nominal_detail_${detail.detail_id}" hidden class="form-control nominal_detail_${detail.detail_id}" value="${detail.nominal}">
               </td>
             <td><input type="text" name="keterangandetail[]" value="${detail.keterangandetail}" id="keterangan_detail_${detail.detail_id}" class="form-control"></td>
           </tr>`)

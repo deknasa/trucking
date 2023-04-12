@@ -46,7 +46,31 @@
               </div>
             </div>
 
+            
+            <div class="row form-group">
+              <div class="col-12 col-sm-2 col-md-2">
+                <label class="col-form-label">
+                  TANGGAL dari <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4">
+                <div class="input-group">
+                  <input type="text" name="tgldari" class="form-control datepicker">
+                </div>
+              </div>
 
+              <div class="col-12 col-sm-2 col-md-2">
+                <label class="col-form-label">
+                  TANGGAL sampai <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4">
+                <div class="input-group">
+                  <input type="text" name="tglsampai" class="form-control datepicker">
+                </div>
+              </div>
+            </div>
+            
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -93,15 +117,19 @@
                 </div>
               </div>
             </div>
-            
-            <div class="table-scroll table-responsive">
+            <div id="detail-bst-section">
+              <table id="modalgrid"></table>
+              <div id="modalgridPager"></div>
+              <div id="detail-list-grid" style="display:none"></div>
+            </div>
+            <div id="detail-default-section" class="table-scroll table-responsive">
               <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1000px;">
                 <thead>
                   <tr>
                     <th width="1%" class="">No</th>
                     <th class="data_tbl tbl_checkbox" style="display:none" width="1%">Pilih</th>
                     <th width="20%" class="data_tbl tbl_supir_id">SUPIR</th>
-                    <th class="data_tbl tbl_penerimaantruckingheader_nobukti" width="20%">NO BUKTI PENERIMAAN TRUCKING</th>
+                    <th class="data_tbl tbl_penerimaantruckingheader" width="20%">NO BUKTI PENERIMAAN TRUCKING</th>
                     <th width="14%" class="tbl_sisa">Sisa</th>
                     <th width="20%" class="tbl_nominal">Nominal</th>
                     <th class="data_tbl tbl_keterangan" width="25%">Keterangan</th>
@@ -154,6 +182,7 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   var KodePengeluaranId
+  let selectedRows = [];
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -169,6 +198,19 @@
     $(document).on('input', `#table_body [name="nominal[]"]`, function(event) {
       setTotal()
     })
+
+    function rangeInvoice() {
+      var tgldari = $('#crudForm').find(`[name="tgldari"]`).val()
+      var tglsampai = $('#crudForm').find(`[name="tglsampai"]`).val()
+      // console.log(tgldari, tglsampai);
+      if (tgldari !== "" && tglsampai !== "") {
+        getInvoice(tgldari, tglsampai)
+      }
+    }
+      
+    $(document).on("change",`[name=tgldari], [name=tglsampai]`,function(event) {
+        rangeInvoice();
+      })
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -256,13 +298,13 @@
         
       }else{
         data = $('#crudForm').serializeArray()
-        $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
-          data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
-        })
-        // data.push({
-        //   name: 'nominal[]',
-        //   value: AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[row])
-        // })
+       
+          $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
+            if (KodePengeluaranId != "BST") {
+              data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
+            }
+
+          })
       }
         
       data.push({
@@ -410,6 +452,7 @@
   function setKodePengeluaran(kode){
     KodePengeluaranId = kode;
     $('#detailList tbody').html('')
+    $('#detail-list-grid').html('')
     setTampilanForm();
     addRow()
   }
@@ -422,6 +465,12 @@
       case 'TDE':
         tampilanTDE()
         break;
+      case 'BST':
+        tampilanBST()
+        break;
+      case 'BSB':
+        tampilanBSB()
+        break;
       default:
         tampilanall()
         break;
@@ -432,6 +481,9 @@
     
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=tgldari]').parents('.form-group').hide()
+    $('#detail-bst-section').hide()
+    $('#detail-default-section').show()
     $('.tbl_checkbox').hide()
     $('.tbl_supir_id').show()
     $('.tbl_aksi').show()
@@ -443,6 +495,9 @@
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
     $('[name=supirheader_id]').parents('.form-group').show()
+    $('[name=tgldari]').parents('.form-group').hide()
+    $('#detail-bst-section').hide()
+    $('#detail-default-section').show()
     $('.tbl_checkbox').show()
     $('.tbl_sisa').show()
   
@@ -454,12 +509,47 @@
     $('#tbl_addRow').hide()
     
   }
+
+  function tampilanBST() {
+    $('#detailList tbody').html('')
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=tgldari]').parents('.form-group').show()
+    $('#detail-bst-section').show()
+    $('#detail-default-section').hide()
+    $('.tbl_checkbox').hide()
+    $('.tbl_penerimaantruckingheader').hide()
+    $('.tbl_supir_id').show()
+    $('.tbl_aksi').show()
+    $('.colspan').attr('colspan', 2);
+    $('#tbl_addRow').show()
+    // $('.colmn-offset').hide()
+    loadModalGrid()
+  }
+  function tampilanBSB() {
+    
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=tgldari]').parents('.form-group').hide()
+    $('#detail-bst-section').hide()
+    $('#detail-default-section').show()
+    $('.tbl_checkbox').hide()
+    $('.tbl_penerimaantruckingheader').hide()
+    $('.tbl_supir_id').show()
+    $('.tbl_aksi').show()
+    $('.colspan').attr('colspan', 2);
+    $('#tbl_addRow').show()
+    // $('.colmn-offset').hide()
+  }
   function tampilanall() {
     $('[name=keterangancoa]').parents('.form-group').show()
     $('.tbl_supir_id').show()
     $('.tbl_sisa').hide()
-    $('.tbl_penerimaantruckingheader_nobukti').show()
+    $('.tbl_penerimaantruckingheader').show()
     $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=tgldari]').parents('.form-group').hide()
+    $('#detail-bst-section').hide()
+    $('#detail-default-section').show()
     $('.colspan').attr('colspan', 3);
     $('#sisaColFoot').hide()
     $('#sisaFoot').hide()
@@ -500,6 +590,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    selectedRows = []
 
     $('#crudModal').find('.modal-body').html(modalBody)
   })
@@ -652,8 +743,7 @@
       },
       success: response => {
         $.each(response.data, (index, bank) => {
-          // console.log(index);
-          console.log(bank);
+          // console.log(index); 
           if (bank.id == 1) {
             $('#crudForm [name=bank_id]').first().val(bank.id)
             $('#crudForm [name=bank]').first().val(bank.namabank)
@@ -686,6 +776,13 @@
             element.val(dateFormat(value))
           } else {
             element.val(value)
+          }
+
+          if (index == 'periodedari') {
+            form.find(`[name="tgldari"]`).val(dateFormat(value))
+          }
+          if (index == 'periodesampai') {
+            form.find(`[name="tglsampai"]`).val(dateFormat(value))
           }
 
           if (index == 'pengeluarantrucking') {
@@ -791,6 +888,36 @@
 
         setTampilanForm()
 
+
+        if(kodepengeluaran === "BST"){
+          let detailRow =""
+          $.each(response.detail, (index, detail) => {
+            resetGrid()
+            
+            let id = detail.id_detail
+            detailRow += `
+            <div id="detail_row_${id}">
+            <input type="text" value="${id}"  id="id_detail${id}" class="" name="id_detail[]"  readonly   >
+            <input type="text" value="${detail.container_detail}"  id="container_detail${id}" class="" name="container_detail[]"  readonly   >
+            <input type="text" value="${detail.noinvoice_detail}"  id="noinvoice_detail${id}" class="" name="noinvoice_detail[]"  readonly   >
+            <input type="text" value="${detail.nominal_detail}"  id="nominal${id}" class="" name="nominal[]"  readonly   >
+            <input type="text" value="${detail.nojobtrucking_detail}"  id="nojobtrucking_detail${id}" class="" name="nojobtrucking_detail[]"  readonly   >
+            </div>
+            `
+            selectedRows.push(id);
+          })
+          $('#detail-list-grid').html(detailRow)
+          $('#modalgrid').setGridParam({
+            datatype: "local",
+            data:response.detail
+          }).trigger('reloadGrid')
+          // // console.log('dsfgdfg');
+          // $('#modalgrid').jqGrid('setGridParam',{
+          //   data:response.detail
+          // }).trigger('reloadGrid')
+            
+          $('.checkBoxgrid').prop('checked', true);
+        }
         setRowNumbers()
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
@@ -917,7 +1044,7 @@
     let sisaAwal = AutoNumeric.getNumber($(el).closest("tr").find(`[name="sisaAwalDP[]"]`)[0])
     let bayar = $(el).val()
     bayar = parseFloat(bayar.replaceAll(',', ''));
-    console.log( sisaAwal , bayar );
+    // console.log( sisaAwal , bayar );
     bayar = Number.isNaN(bayar) ? 0 : bayar
     totalSisa = sisaAwal - bayar
     $(el).closest("tr").find(".sisaDP").html(totalSisa)
@@ -963,7 +1090,7 @@
               check = "checked"
               disbaled = ""
               detail.sisa = parseFloat(detail.sisa) + parseFloat(detail.bayar)
-              console.log(detail.sisa)
+              // console.log(detail.sisa)
             }
             let id = detail.id
             totalSisa = totalSisa + parseFloat(detail.sisa);
@@ -985,7 +1112,7 @@
                   <input type="hidden" name="sisaAwalDP[]" class="autonumeric" value="${sisa}">
               </td>
               <td id=${id}>
-                  <input type="text" name="nominalDP[]" ${disbaled} value="${detail.bayar}" class="form-control bayar text-right">
+                  <input type="text" name="nominalDP[]" ${disbaled} value="${detail.bayar}" id="bayar_${id}" class="form-control bayar text-right">
               </td>
               <td>
                   ${detail.keterangan}
@@ -997,7 +1124,7 @@
             initAutoNumeric(detailRow.find(`[name="sisaDP[]"]`))
             initAutoNumeric(detailRow.find(`[name="sisaAwalDP[]"]`))
             initAutoNumeric(detailRow.find(`.sisaDP`))
-            initAutoNumeric(detailRow.find(`.bayar`))
+            initAutoNumeric(detailRow.find(`#bayar_${id}`))
           setSisaDetail(detailRow.find(`[name="nominalDP[]"]`))
             $('#detailList tbody').append(detailRow)
             setTotalDP()
@@ -1090,6 +1217,185 @@
     setRowNumbers()
   }
 
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    // console.log(value);
+        if (element.checked) {
+          selectedRows.push($(element).val());
+          $(`#detail_row_${value}`).find(`[name="id_detail[]"]`).attr('disabled',false)
+          $(`#detail_row_${value}`).find(`[name="container_detail[]"]`).attr('disabled',false)
+          $(`#detail_row_${value}`).find(`[name="noinvoice_detail[]"]`).attr('disabled',false)
+          $(`#detail_row_${value}`).find(`[name="nominal[]"]`).attr('disabled',false)
+          $(`#detail_row_${value}`).find(`[name="nojobtrucking_detail[]"]`).attr('disabled',false)
+        } else {
+          for (var i = 0; i < selectedRows.length; i++) {
+            if (selectedRows[i] == value) {
+              selectedRows.splice(i, 1);
+            }
+          }
+          $(`#detail_row_${value}`).find(`[name="id_detail[]"]`).attr('disabled',true)
+          $(`#detail_row_${value}`).find(`[name="container_detail[]"]`).attr('disabled',true)
+          $(`#detail_row_${value}`).find(`[name="noinvoice_detail[]"]`).attr('disabled',true)
+          $(`#detail_row_${value}`).find(`[name="nominal[]"]`).attr('disabled',true)
+          $(`#detail_row_${value}`).find(`[name="nojobtrucking_detail[]"]`).attr('disabled',true)
+        }
+  }
+
+  function loadModalGrid() {
+    $("#modalgrid").jqGrid({
+      styleUI: 'Bootstrap4',
+      iconSet: 'fontAwesome',
+      datatype: "local",
+      colModel: [
+        {
+          editable: true,
+          edittype: 'checkbox',
+          search: false,
+          width: 60,
+          align: 'center',
+          formatoptions: {
+            disabled: false
+          },
+          label: 'Pilih',
+          name: 'id_detail',
+          index: 'Pilih',
+          // key:true,
+          formatter: (value) => {
+              return `<input type="checkbox" class="checkBoxgrid"  id="${value}_checkBoxgrid" value="${value}" onchange="checkboxHandler(this)">`
+          },
+         
+        },
+        {
+          label: 'no invoice',
+          name: 'noinvoice_detail',
+        },
+        {
+          label: 'no job',
+          name: 'nojobtrucking_detail',
+        },
+        {
+          label: 'container',
+          name: 'container_detail',
+        },
+        {
+          label: 'nominal',
+          name: 'nominal_detail',
+          align: 'right',
+          formatter: currencyFormat,
+        },
+      ],
+      autowidth: true,
+      shrinkToFit: false,
+      height: 350,
+      rowNum: 10,
+      rownumbers: true,
+      rownumWidth: 45,
+      rowList: [10, 20, 50, 0],
+      toolbar: [true, "top"],
+      sortable: true,
+      viewrecords: true,
+      footerrow:true,
+      userDataOnFooter: true,
+      loadComplete: function(data) {
+        let grid = $(this)
+        changeJqGridRowListText()
+        initResize($(this))
+        // console.log(data);
+        $.each(selectedRows, function(key, value) {
+          $(grid).find('tbody tr').each(function(row, tr) {
+            if ($(this).find(`td input:checkbox`).val() == value) {
+              // console.log(value);
+              $(this).addClass('bg-light-blue')
+              $(this).find(`td input:checkbox`).prop('checked', true)
+            }
+          })
+        });
+        
+        $('.clearsearchclass').click(function() {
+          clearColumnSearch($(this))
+        })
+  
+        if (indexRow > $(this).getDataIDs().length - 1) {
+          indexRow = $(this).getDataIDs().length - 1;
+        }
+  
+        $('#modalgrid').setSelection($('#modalgrid').getDataIDs()[0])
+  
+        setHighlight($(this))
+      },
+      onSelectRow: function(id) {
+        activeGrid = $(this)
+        indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
+        page = $(this).jqGrid('getGridParam', 'page')
+        let limit = $(this).jqGrid('getGridParam', 'postData').limit
+        if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+        
+
+},
+    })
+    .jqGrid('filterToolbar', {
+      stringResult: true,
+      searchOnEnter: false,
+      defaultSearch: 'cn',
+      groupOp: 'AND',
+      disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+      beforeSearch: function() {
+        clearGlobalSearch($('#modalgrid'))
+      },
+    })
+    .customPager()
+    /* Append clear filter button */
+    loadClearFilter($('#modalgrid'))
+    
+    /* Append global search */
+    loadGlobalSearch($('#modalgrid'))
+  }
+
+  function getInvoice(dari,sampai){
+    $.ajax({
+      url: `${apiUrl}pengeluarantruckingheader/getinvoice`,
+      method: 'GET',
+      dataType: 'JSON',
+      data: {
+        tgldari : dari,
+        tglsampai : sampai,
+        limit: 0
+      },
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        resetGrid()
+        let totalNominal = 0
+        $.each(response.data, (index, detail) => {
+          let id = detail.id
+          let detailRow = $(`
+          <div id="detail_row_${detail.id_detail}">
+          <input type="text" value="${detail.id_detail}"  id="id_detail${detail.id_detail}" class="" name="id_detail[]"  readonly disabled  >
+          <input type="text" value="${detail.container_detail}"  id="container_detail${detail.id_detail}" class="" name="container_detail[]"  readonly disabled  >
+          <input type="text" value="${detail.noinvoice_detail}"  id="noinvoice_detail${detail.id_detail}" class="" name="noinvoice_detail[]"  readonly disabled  >
+          <input type="text" value="${detail.nominal_detail}"  id="nominal${detail.id_detail}" class="" name="nominal[]"  readonly disabled  >
+          <input type="text" value="${detail.nojobtrucking_detail}"  id="nojobtrucking_detail${detail.id_detail}" class="" name="nojobtrucking_detail[]"  readonly disabled  >
+          </div>
+          
+          `)
+          $('#detail-list-grid').append(detailRow)
+
+        })
+
+        $('#modalgrid').setGridParam({
+          datatype: "local",
+          data:response.data
+        }).trigger('reloadGrid')
+        // console.log(response.data);
+      }
+    })
+    // console.log(dari, sampai);
+  }
+  function resetGrid() {
+    $('#detail-list-grid').html('');
+    $('#modalgrid').jqGrid('clearGridData')
+  }
   function deleteRow(row) {
     row.remove()
 

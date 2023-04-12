@@ -26,21 +26,27 @@
             name: 'supir_id',
           },
           {
-            label: 'NO BUKTI PENERIMAAN TRUCKING',
-            name: 'penerimaantruckingheader_nobukti',
-            width: 200
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            width: 250
-          },
-          {
             label: 'NOMINAL',
             name: 'nominal',
             formatter: currencyFormat,
             align: "right",
-          }
+          },
+          {
+            label: 'NO BUKTI PENERIMAAN TRUCKING',
+            name: 'penerimaantruckingheader_nobukti',
+          },
+          {
+            label: 'NO orderan TRUCKING',
+            name: 'orderantrucking_nobukti',
+          },
+          {
+            label: 'NO invoice',
+            name: 'invoice_nobukti',
+          },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+          },
         ],
         autowidth: true,
         shrinkToFit: false,

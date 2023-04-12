@@ -74,7 +74,7 @@
   let autoNumericElements = []
   let currentTab = 'detail'
   let parampostok
-
+  let activeGrid
 
   $(document).ready(function() {
     $("#tabs").tabs()
