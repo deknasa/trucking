@@ -1,10 +1,14 @@
-
-{{-- @include('layouts._rangeheader') --}}
+@include('layouts._rangeheaderlookup')
 <table id="penerimaanStokHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
 <div id="penerimaanStokHeaderLookupPager"></div>
 
 <script>
   // var sendedFilters = `{!! $filters ?? '' !!}`
+  setRangeLookup()
+  initDatepicker()
+  $(document).on('click', '#btnReloadLookup', function(event) {
+    loadDataHeaderLookup('penerimaanstokheader', 'penerimaanStokHeaderLookup')
+  })
 
   $('#penerimaanStokHeaderLookup').jqGrid({
       url: `{{ config('app.api_url') . 'penerimaanstokheader' }}`,
@@ -17,6 +21,8 @@
         // filters: `{!! $filters ?? '' !!}`
         supplier_id: `{!! $supplier_id ?? '' !!}`,
         pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
+        tgldari: $('#tgldariheaderlookup').val(),
+        tglsampai: $('#tglsampaiheaderlookup').val(),
       },
       colModel: [{
             label: 'ID',

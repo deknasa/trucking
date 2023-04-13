@@ -1,16 +1,25 @@
 
-@include('layouts._rangeheader')
+@include('layouts._rangeheaderlookup')
 <table id="pengeluaranStokHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
 <div id="pengeluaranStokHeaderLookupPager"></div>
 
 
-
 <script>
+  setRangeLookup()
+  initDatepicker()
+  $(document).on('click', '#btnReloadLookup', function(event) {
+    loadDataHeaderLookup('pengeluaranstokheader', 'pengeluaranStokHeaderLookup')
+  })
+
   $('#pengeluaranStokHeaderLookup').jqGrid({
       url: `{{ config('app.api_url') . 'pengeluaranstokheader' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
+      postData: {
+        tgldari: $('#tgldariheaderlookup').val(),
+        tglsampai: $('#tglsampaiheaderlookup').val(),
+      },
       datatype: "json",
       colModel: [{
             label: 'ID',

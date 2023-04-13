@@ -1,13 +1,25 @@
+@include('layouts._rangeheaderlookup')
 <table id="penerimaanTruckingHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
 <div id="penerimaanTruckingHeaderLookupPager"></div>
 
 @push('scripts')
 <script>
+  
+  setRangeLookup()
+  initDatepicker()
+  $(document).on('click', '#btnReloadLookup', function(event) {
+    loadDataHeaderLookup('penerimaantruckingheader', 'penerimaanTruckingHeaderLookup')
+  })
+
   $('#penerimaanTruckingHeaderLookup').jqGrid({
       url: `{{ config('app.api_url') . 'penerimaantruckingheader' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
+      postData: {
+        tgldari: $('#tgldariheaderlookup').val(),
+        tglsampai: $('#tglsampaiheaderlookup').val(),
+      },
       datatype: "json",
       colModel: [{
           label: 'ID',

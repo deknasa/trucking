@@ -1,14 +1,24 @@
+@include('layouts._rangeheaderlookup')
 <table id="piutangHeaderLookup" style="width: 100%;"></table>
 <div id="piutangHeaderLookupPager"></div>
 
 @push('scripts')
 <script>
+  setRangeLookup()
+  initDatepicker()
+  $(document).on('click', '#btnReloadLookup', function(event) {
+    loadDataHeaderLookup('piutangheader', 'piutangHeaderLookupPager')
+  })
   let piutangHeaderLookup = $('#piutangHeaderLookup').jqGrid({
       url: `{{ config('app.api_url') . 'piutangheader' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
+      postData: {
+        tgldari: $('#tgldariheaderlookup').val(),
+        tglsampai: $('#tglsampaiheaderlookup').val(),
+      },
       colModel: [{
           label: 'ID',
           name: 'id',
