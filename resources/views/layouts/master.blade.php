@@ -437,6 +437,41 @@
       page:1
     }).trigger('reloadGrid')
   }
+
+  function setRangeLookup() {
+    // mendapatkan tanggal hari ini
+    let today = new Date();
+    
+    // mendapatkan tanggal pertama di bulan ini
+    let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
+    
+    // mendapatkan tanggal terakhir di bulan ini
+    let lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    let formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
+
+    $('#rangeHeaderLookup').find('[name=tgldariheaderlookup]').val(formattedFirstDay).trigger('change');
+    $('#rangeHeaderLookup').find('[name=tglsampaiheaderlookup]').val(formattedLastDay).trigger('change');
+
+  }
+  
+
+  function loadDataHeaderLookup(url,grid,addtional = null) {
+    clearGlobalSearch($('#jqGrid'))
+    let data = {
+      tgldari:$('#tgldariheaderlookup').val() ,
+      tglsampai:$('#tglsampaiheaderlookup').val() 
+    }
+    data = {...data,...addtional}
+
+    $(`#${grid}`).setGridParam({
+      url: `${apiUrl}${url}`,
+      datatype: "json",
+      postData: data,
+
+      page:1
+    }).trigger('reloadGrid')
+  }
   </script>
 </body>
 
