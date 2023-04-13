@@ -45,7 +45,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="coadebet" class="form-control akunpusat-lookup">
+                <input type="hidden" name="coadebet">
+                <input type="text" name="coadebetKeterangan" class="form-control coadebet-lookup">
               </div>
             </div>
 
@@ -56,7 +57,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="coakredit" class="form-control akunpusat-lookup">
+                <input type="hidden" name="coakredit">
+                <input type="text" name="coakreditKeterangan" class="form-control coakredit-lookup">
               </div>
             </div>
 
@@ -68,7 +70,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="coapostingdebet" class="form-control akunpusat-lookup">
+                <input type="hidden" name="coapostingdebet">
+                <input type="text" name="coapostingdebetKeterangan" class="form-control coapostingdebet-lookup">
               </div>
             </div>
 
@@ -79,7 +82,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="coapostingkredit" class="form-control akunpusat-lookup">
+                <input type="hidden" name="coapostingkredit">
+                <input type="text" name="coapostingkreditKeterangan" class="form-control coapostingkredit-lookup">
               </div>
             </div>
 
@@ -378,16 +382,16 @@
             element.val(value)
           }
 
-          if (index == 'coadebet') {
+          if (index == 'coadebetKeterangan') {
             element.data('current-value', value)
           }
-          if (index == 'coakredit') {
+          if (index == 'coakreditKeterangan') {
             element.data('current-value', value)
           }
-          if (index == 'coapostingdebet') {
+          if (index == 'coapostingdebetKeterangan') {
             element.data('current-value', value)
           }
-          if (index == 'coapostingkredit') {
+          if (index == 'coapostingkreditKeterangan') {
             element.data('current-value', value)
           }
           
@@ -402,8 +406,8 @@
   }
 
   function initLookup() {
-    $('.akunpusat-lookup').lookup({
-      title: 'COA Lookup',
+    $('.coadebet-lookup').lookup({
+      title: 'Nama Perkiraan (Debet) Lookup',
       fileName: 'akunpusat',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
@@ -413,7 +417,80 @@
         }
       },      
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
+        $('#crudForm [name=coadebet]').first().val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.coakredit-lookup').lookup({
+      title: 'Nama Perkiraan (Kredit) Lookup',
+      fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          levelCoa: '3',
+          Aktif: 'AKTIF',          
+        }
+      },      
+      onSelectRow: (akunpusat, element) => {
+        $('#crudForm [name=coakredit]').first().val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    
+    $('.coapostingdebet-lookup').lookup({
+      title: 'Nama Perkiraan (Posting Debet) Lookup',
+      fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          levelCoa: '3',
+          Aktif: 'AKTIF',          
+        }
+      },      
+      onSelectRow: (akunpusat, element) => {
+        $('#crudForm [name=coapostingdebet]').first().val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.coapostingkredit-lookup').lookup({
+      title: 'Nama Perkiraan (Posting Kredit) Lookup',
+      fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          levelCoa: '3',
+          Aktif: 'AKTIF',          
+        }
+      },      
+      onSelectRow: (akunpusat, element) => {
+        $('#crudForm [name=coapostingkredit]').first().val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
