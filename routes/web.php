@@ -175,6 +175,8 @@ use App\Http\Controllers\LaporanTripGandenganDetailController;
 use App\Http\Controllers\LaporanTripTradoController;
 use App\Http\Controllers\LaporanUangJalanController;
 use App\Http\Controllers\LookupController;
+use App\Http\Controllers\NotaDebetDetailController;
+use App\Http\Controllers\NotaKreditDetailController;
 use App\Http\Controllers\PemutihanSupirController;
 use App\Http\Controllers\PemutihanSupirDetailController;
 use App\Http\Controllers\PencairanGiroPengeluaranDetailController;
@@ -492,11 +494,23 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('notakreditheader/index', [NotaKreditHeaderController::class, 'index']);
     Route::resource('notakreditheader', NotaKreditHeaderController::class);
     
+    Route::get('notakreditdetail/jurnal/grid', [NotaKreditDetailController::class, 'jurnalGrid']);
+    Route::get('notakreditdetail/penerimaan/grid', [NotaKreditDetailController::class, 'penerimaanGrid']);
+    Route::get('notakreditdetail/pelunasan/grid', [NotaKreditDetailController::class, 'pelunasanGrid']);
+    Route::get('notakreditdetail/detail/grid', [NotaKreditDetailController::class, 'detailGrid']);
+    Route::resource('notakreditdetail', NotaKreditDetailController::class);
+    
     Route::get('notadebetheader/get', [NotaDebetHeaderController::class, 'get'])->name('notadebetheader.get');
     Route::get('notadebetheader/export', [NotaDebetHeaderController::class, 'export'])->name('notadebetheader.export');
     Route::get('notadebetheader/report/{id}', [NotaDebetHeaderController::class, 'report'])->name('notadebetheader.report');
     Route::get('notadebetheader/index', [NotaDebetHeaderController::class, 'index']);
     Route::resource('notadebetheader', NotaDebetHeaderController::class);
+    
+    Route::get('notadebetdetail/jurnal/grid', [NotaDebetDetailController::class, 'jurnalGrid']);
+    Route::get('notadebetdetail/penerimaan/grid', [NotaDebetDetailController::class, 'penerimaanGrid']);
+    Route::get('notadebetdetail/pelunasan/grid', [NotaDebetDetailController::class, 'pelunasanGrid']);
+    Route::get('notadebetdetail/detail/grid', [NotaDebetDetailController::class, 'detailGrid']);
+    Route::resource('notadebetdetail', NotaDebetDetailController::class);
 
     Route::get('gudang/field_length', [GudangController::class, 'fieldLength'])->name('gudang.field_length');
     Route::get('gudang/{id}/delete', [GudangController::class, 'delete'])->name('gudang.delete');

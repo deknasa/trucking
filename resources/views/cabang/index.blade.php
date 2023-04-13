@@ -101,6 +101,14 @@
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
+          },{
+            label: 'CREATEDAT',
+            name: 'created_at',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
           {
             label: 'UPDATEDAT',
@@ -110,15 +118,7 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y H:i:s"
             }
-          }, {
-            label: 'CREATEDAT',
-            name: 'created_at',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
+          }, 
         ],
         autowidth: true,
         shrinkToFit: false,

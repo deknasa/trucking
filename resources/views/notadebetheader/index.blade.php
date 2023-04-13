@@ -10,6 +10,26 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs">
+            <ul class="dejavu">
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#pelunasan-tab">Pelunasan piutang</a></li>
+              <li><a href="#penerimaan-tab">Penerimaan Kas/bank</a></li>
+              <li><a href="#jurnal-tab">Jurnal</a></li>
+            </ul>
+            <div id="detail-tab"></div>
+            <div id="pelunasan-tab"></div>
+            <div id="penerimaan-tab"></div>
+            <div id="jurnal-tab"> </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 @include('notadebetheader._modal')
@@ -34,6 +54,7 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let selectedRows = [];
+  let currentTab = 'detail'
 
   function checkboxHandler(element) {
     let value = $(element).val();
@@ -52,6 +73,7 @@
   }
 
   $(document).ready(function() {
+    $("#tabs").tabs()
 
     setRange()
     initDatepicker()
@@ -231,7 +253,7 @@
             }
           },
           {
-            label: 'pelunasanpiutang_nobukti',
+            label: 'NO BUKTI PELUNASAN PIUTANG',
             name: 'pelunasanpiutang_nobukti',
             align: 'left'
           },
@@ -269,6 +291,13 @@
             label: 'postingdari',
             name: 'postingdari',
             align: 'left'
+          },
+          {
+            label: 'penerimaan_nobukti',
+            name: 'penerimaan_nobukti',
+            align: 'left',
+            hidden: true,
+            search: false
           },
           {
             label: 'modifiedby',
@@ -324,7 +353,16 @@
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+          let nobukti_pelunasan = $('#jqGrid').jqGrid('getCell', id, 'pelunasanpiutang_nobukti')
+          let nobukti_penerimaan = $('#jqGrid').jqGrid('getCell', id, 'penerimaan_nobukti')
 
+          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/notadebetdetail/${currentTab}/grid`, function() {
+            if (currentTab == 'detail' || currentTab == 'pelunasan') {
+              loadGrid(id, nobukti_pelunasan)
+            } else {
+              loadGrid(id, nobukti_penerimaan)
+            }
+          })
           loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
@@ -338,6 +376,21 @@
             $('#detail').jqGrid('setGridParam', {
               postData: {
                 notadebet_id: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#jurnalGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#penerimaanGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#pelunasanGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
               },
             }).trigger('reloadGrid');
           }
@@ -492,8 +545,6 @@
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
 
-    /* Load detail grid */
-    loadDetailGrid()
 
     $('#add .ui-pg-div')
       .addClass(`btn btn-sm btn-primary`)
@@ -618,6 +669,22 @@
         $('#loader').addClass('d-none')
       })
     }
+
+
+    $("#tabs").on('click', 'li.ui-state-active', function() {
+      let href = $(this).find('a').attr('href');
+      currentTab = href.substring(1, href.length - 4);
+      let notaId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+      let nobukti_pelunasan = $('#jqGrid').jqGrid('getCell', notaId, 'pelunasanpiutang_nobukti')
+      let nobukti_penerimaan = $('#jqGrid').jqGrid('getCell', notaId, 'penerimaan_nobukti')
+      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/notadebetdetail/${currentTab}/grid`, function() {
+        if (currentTab == 'detail' || currentTab == 'pelunasan') {
+          loadGrid(notaId, nobukti_pelunasan)
+        } else {
+          loadGrid(notaId, nobukti_penerimaan)
+        }
+      })
+    })
 
   })
 
