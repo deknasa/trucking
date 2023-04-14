@@ -99,11 +99,11 @@ class PiutangHeaderController extends MyController
         $piutang_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/piutangdetail', $detailParams);
-
+            ->get(config('app.api_url') .'piutangdetail', $detailParams);
 
         $data = $header['data'];
         $piutang_details = $piutang_detail['data'];
+       
         $user = Auth::user();
         return view('reports.piutang', compact('data','piutang_details', 'user'));
     }

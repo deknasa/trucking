@@ -128,7 +128,7 @@ class InvoiceHeaderController extends MyController
         $invoice_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/invoicedetail', $detailParams);
+            ->get(config('app.api_url') . 'invoicedetail', $detailParams);
 
         $data = $header['data'];
         $invoice_details = $invoice_detail['data'];
