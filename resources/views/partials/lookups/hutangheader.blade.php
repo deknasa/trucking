@@ -1,12 +1,22 @@
+@include('layouts._rangeheaderlookup')
 <table id="hutangHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
 <div id="hutangHeaderLookupPager"></div>
 
 <script>
+  setRangeLookup()
+  initDatepicker()
+  $(document).on('click', '#btnReloadLookup', function(event) {
+    loadDataHeaderLookup('hutangheader', 'hutangHeaderLookup')
+  })
   $('#hutangHeaderLookup').jqGrid({
       url: `{{ config('app.api_url') . 'hutangheader' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
+      postData: {
+        tgldari: $('#tgldariheaderlookup').val(),
+        tglsampai: $('#tglsampaiheaderlookup').val(),
+      },
       datatype: "json",
       colModel: [{
           label: 'ID',

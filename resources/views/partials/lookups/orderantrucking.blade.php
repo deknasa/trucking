@@ -18,7 +18,6 @@
       postData: {
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
-
       },
       colModel: [{
           label: 'ID',
