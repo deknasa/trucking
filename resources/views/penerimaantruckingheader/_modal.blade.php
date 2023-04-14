@@ -303,9 +303,11 @@
       })
       data.push({
         name: 'penerimaanheader_id',
-        value: $('#kodepenerimaanheader').val()
+        value: data.find(item => item.name === "penerimaantrucking_id").value
       })
-      let penerimaanheader_id = $('#kodepenerimaanheader').val();
+      // let penerimaanheader_id = $('#kodepenerimaanheader').val();
+      let penerimaanheader_id = data.find(item => item.name === "penerimaantrucking_id").value;
+
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
       switch (action) {
@@ -345,7 +347,10 @@
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
 
+          $('#kodepenerimaanheader').val(response.data.penerimaantrucking_id).trigger('change')
+
           $('#jqGrid').jqGrid('setGridParam', {
+            postData: {penerimaanheader_id: response.data.penerimaantrucking_id},
             page: response.data.page
           }).trigger('reloadGrid');
 

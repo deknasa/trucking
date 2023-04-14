@@ -365,9 +365,9 @@
       })
       data.push({
         name: 'pengeluaranheader_id',
-        value: $('#kodepengeluaranheader').val()
+        value: data.find(item => item.name === "pengeluaranstok_id").value
       })
-      let pengeluaranheader_id = $('#kodepengeluaranheader').val();
+      let pengeluaranheader_id = data.find(item => item.name === "pengeluaranstok_id").value
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
       
@@ -382,7 +382,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}pengeluaranstokheader/${pengeluaranStokHeaderId}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&pengeluaranheader_id=${kodepenerimaanheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
+          url = `${apiUrl}pengeluaranstokheader/${pengeluaranStokHeaderId}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&pengeluaranheader_id=${pengeluaranheader_id}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -406,8 +406,10 @@
           $('#crudModal').modal('hide')
 
           id = response.data.id
+          $('#kodepengeluaranheader').val(response.data.pengeluaranstok_id).trigger('change')
 
-          $('#jqGrid').trigger('reloadGrid', {
+          $('#jqGrid').jqGrid('setGridParam', {
+            postData: {pengeluaranheader_id: response.data.pengeluaranstok_id},
             page: response.data.page
           })
 

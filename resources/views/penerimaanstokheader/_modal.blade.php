@@ -355,9 +355,9 @@
       })
       data.push({
         name: 'penerimaanheader_id',
-        value: $('#kodepenerimaanheader').val()
+        value: data.find(item => item.name === "penerimaanstok_id").value
       })
-      let penerimaanheader_id = $('#kodepenerimaanheader').val();
+      let penerimaanheader_id = data.find(item => item.name === "penerimaanstok_id").value
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
       switch (action) {
@@ -395,10 +395,12 @@
           $('#crudModal').modal('hide')
 
           id = response.data.id
+          $('#kodepenerimaanheader').val(response.data.penerimaanstok_id).trigger('change')
 
-          $('#jqGrid').trigger('reloadGrid', {
+          $('#jqGrid').jqGrid('setGridParam', {
+            postData: {penerimaanheader_id: response.data.penerimaanstok_id},
             page: response.data.page
-          })
+          }).trigger('reloadGrid')
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)

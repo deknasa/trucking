@@ -341,10 +341,12 @@
         value: $('#tglsampaiheader').val()
       })
       data.push({
-        name: 'penerimaanheader_id',
-        value: $('#kodepenerimaanheader').val()
+        name: 'pengeluaranheader_id',
+        value: data.find(item => item.name === "pengeluarantrucking_id").value
       })
-      let kodepenerimaanheader = $('#kodepenerimaanheader').val();
+
+
+      let kodepengeluaranheader = data.find(item => item.name === "pengeluarantrucking_id").value;
 
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
@@ -360,7 +362,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}pengeluarantruckingheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&penerimaanheader_id=${kodepenerimaanheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
+          url = `${apiUrl}pengeluarantruckingheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&pengeluaranheader_id=${kodepenerimaanheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -385,8 +387,11 @@
           id = response.data.id
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
+          
+          $('#kodepengeluaranheader').val(response.data.pengeluarantrucking_id).trigger('change')
 
           $('#jqGrid').jqGrid('setGridParam', {
+            postData: {pengeluaranheader_id: response.data.pengeluarantrucking_id},
             page: response.data.page
           }).trigger('reloadGrid');
 
@@ -1450,6 +1455,9 @@
       },
       onSelectRow: (pengeluarantrucking, element) => {
         setKodePengeluaran(pengeluarantrucking.kodepengeluaran)
+        if (pengeluarantrucking.kodepengeluaran == "TDE") {
+          deleteRow($('#table_body tr')[0]);
+        }
         $('#crudForm [name=coa]').first().val(pengeluarantrucking.coapostingdebet)
         $('#crudForm [name=pengeluarantrucking_id]').first().val(pengeluarantrucking.id)
         element.val(pengeluarantrucking.keterangan)
