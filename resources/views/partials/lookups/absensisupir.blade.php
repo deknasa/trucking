@@ -1,14 +1,25 @@
+@include('layouts._rangeheaderlookup')
 <table id="absensiSupirLookup" class="lookup-grid"></table>
 <div id="absensiSupirLookupPager"></div>
 
 @push('scripts')
 <script>
+  setRangeLookup()
+  initDatepicker()
+  $(document).on('click', '#btnReloadLookup', function(event) {
+    loadDataHeaderLookup('absensisupirheader', 'absensiSupirLookup')
+  })
   $('#absensiSupirLookup').jqGrid({
       url: `{{ config('app.api_url') . 'absensisupirheader' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
+      postData: {
+        tgldari: $('#tgldariheaderlookup').val(),
+        tglsampai: $('#tglsampaiheaderlookup').val(),
+
+      },
       colModel: [{
             label: 'ID',
             name: 'id',

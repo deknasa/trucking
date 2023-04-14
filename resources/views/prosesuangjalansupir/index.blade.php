@@ -9,12 +9,34 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <!-- <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs">
+            <ul class="dejavu">
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#transfer-tab">Jurnal Transfer</a></li>
+            </ul>
+            <div id="detail-tab">
+
+            </div>
+
+            <div id="transfer-tab">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
 </div>
 
 <!-- Modal -->
 @include('prosesuangjalansupir._modal')
 <!-- Detail -->
 @include('prosesuangjalansupir._detail')
+@include('prosesuangjalansupir._transfer')
 
 @push('scripts')
 <script>
@@ -33,8 +55,11 @@
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false
+  let currentTab = 'detail'
 
   $(document).ready(function() {
+    $("#tabs").tabs()
+
     setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
@@ -209,10 +234,15 @@
           total: 'attributes.totalPages',
           records: 'attributes.totalRows',
         },
+
         loadBeforeSend: (jqXHR) => {
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
         },
         onSelectRow: function(id) {
+          // let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+          // $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/prosesuangjalansupirdetail/${currentTab}/grid`, function() {
+          //   loadGrid(id,nobukti)
+          // })
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
@@ -228,7 +258,18 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-
+          if (data.data.length == 0) {
+            $('#detail').jqGrid('setGridParam', {
+              postData: {
+                prosesuangjalansupir_id: 0,
+              },
+            }).trigger('reloadGrid');
+            // $('#transferGrid').jqGrid('setGridParam', {
+            //   postData: {
+            //     nobukti: 0,
+            //   },
+            // }).trigger('reloadGrid');
+          }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -402,6 +443,17 @@
       $('#report').attr('disabled', 'disabled')
     }
 
+    
+    // $("#tabs").on('click', 'li.ui-state-active', function() {
+    //   let href = $(this).find('a').attr('href');
+    //   currentTab = href.substring(1, href.length - 4);
+    //   let prosesId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+    //   let nobukti = $('#jqGrid').jqGrid('getCell', prosesId, 'nobukti')
+    //   $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/prosesuangjalansupirdetail/${currentTab}/grid`, function() {
+
+    //     loadGrid(prosesId, nobukti)
+    //   })
+    // })
 
   })
 </script>

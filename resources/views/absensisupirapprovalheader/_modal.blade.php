@@ -5,13 +5,13 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
           <div class="modal-body">
             <div class="row form-group">
-                <input type="hidden" name="id" hidden class="form-control" readonly>
+              <input type="hidden" name="id" hidden class="form-control" readonly>
 
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">nobukti </label>
@@ -23,7 +23,7 @@
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">tglbukti </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-4">  
+              <div class="col-12 col-sm-9 col-md-4">
                 <div class="input-group">
                   <input type="text" name="tglbukti" class="form-control" readonly>
                 </div>
@@ -39,7 +39,7 @@
                 <input type="text" id="absensisupir_kasgantung" readonly hidden name="kasgantung_nobukti">
               </div>
             </div>
-            
+
             {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">keterangan <span class="text-danger">*</span> </label>
@@ -48,11 +48,11 @@
                 <input type="text" name="keterangan" class="form-control">
               </div>
             </div> --}}
-            
+
             <table id="modalgrid"></table>
             <div id="modalgridPager"></div>
             <div id="detailList"></div>
-                
+
 
           </div>
           <div class="modal-footer justify-content-start">
@@ -76,38 +76,38 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
 
-  
+
   function initLookup() {
-      $('.absensisupir-lookup').lookup({
-        title: 'absensisupir Lookup',
-        fileName: 'absensisupir',
-        beforeProcess: function(test) {
-              this.postData = {
-                Aktif: 'AKTIF',
-              }
-            },        
-        onSelectRow: (absensisupir, element) => {
-          element.val(absensisupir.nobukti)
-          $(`#absensisupir_kasgantung`).val(absensisupir.kasgantung_nobukti)
-          $(`#crudForm [name="tglbukti"]`).val(absensisupir.tglbukti)
-          getAbsensi(absensisupir.id)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'))
-        },
-        onClear: (element) => {
-          $(`#${element[0]['name']}Id`).val('')
+    $('.absensisupir-lookup').lookup({
+      title: 'absensisupir Lookup',
+      fileName: 'absensisupir',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (absensisupir, element) => {
+        element.val(absensisupir.nobukti)
+        $(`#absensisupir_kasgantung`).val(absensisupir.kasgantung_nobukti)
+        $(`#crudForm [name="tglbukti"]`).val(absensisupir.tglbukti)
+        getAbsensi(absensisupir.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#${element[0]['name']}Id`).val('')
         element.val('')
         $(`#crudForm [name="tglbukti"]`).val('')
         element.data('currentValue', element.val())
-        }
-      })
-    }
+      }
+    })
+  }
   $(document).ready(function() {
 
-    
-      
+
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -206,7 +206,7 @@
     })
   })
 
-  
+
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
 
@@ -222,11 +222,11 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    
+
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
-  
+
 
 
   function createAbsensiSupirApprovalHeader() {
@@ -277,12 +277,12 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    
+
     ShowAbsensiSupirApproval(form, absensiSupirApproval)
   }
-  
+
   function ShowAbsensiSupirApproval(form, userId) {
-  
+
     $('#detailList tbody').html('')
     $.ajax({
       url: `${apiUrl}absensisupirapprovalheader/${userId}`,
@@ -295,9 +295,9 @@
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
           element.val(value)
-          if(element.attr("name") == 'tglbukti'){
+          if (element.attr("name") == 'tglbukti') {
             var result = value.split('-');
-            element.val(result[2]+'-'+result[1]+'-'+result[0]);
+            element.val(result[2] + '-' + result[1] + '-' + result[0]);
           }
         })
         getApprovalAbsensi(userId)
@@ -308,7 +308,7 @@
 
   function getAbsensi(id) {
     $('#detailList').html('')
-    
+
 
     $.ajax({
       url: `${apiUrl}absensisupirapprovalheader/${id}/getabsensi`,
@@ -334,15 +334,17 @@
         })
         console.log(response.data);
 
+        initAutoNumeric($('#gbox_modalgrid .footrow').find(`td[aria-describedby="modalgrid_uangjalan"]`).text(response.attributes.totalUangJalan))
         $('#modalgrid').setGridParam({
           datatype: "local",
-          data:response.data
+          data: response.data
         }).trigger('reloadGrid')
       }
     })
-      
+
 
   }
+
   function getApprovalAbsensi(id) {
     $('#detailList').html('')
 
@@ -369,10 +371,9 @@
           $('#detailList').append(detailRow)
 
         })
-        console.log(response.data);
         $('#modalgrid').setGridParam({
           datatype: "local",
-          data:response.data
+          data: response.data
         }).trigger('reloadGrid')
       }
     })
@@ -382,6 +383,7 @@
 
     $("#modalgrid").jqGrid({
 
+        mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
@@ -413,12 +415,12 @@
         rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
-      //  pager:"#modalgridPager",
+        //  pager:"#modalgridPager",
         viewrecords: true,
-        footerrow:true,
+        footerrow: true,
         userDataOnFooter: true,
-        
-       
+
+
         loadComplete: function(data) {
           changeJqGridRowListText()
           initResize($(this))
@@ -429,7 +431,7 @@
           if (nominals.length > 0) {
             totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
           }
-          
+
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
@@ -441,10 +443,9 @@
           $('#modalgrid').setSelection($('#modalgrid').getDataIDs()[0])
 
           setHighlight($(this))
-          $(this).jqGrid('footerData', 'set', {
-            trado: 'Total:',
-            uangjalan: totalNominal,
-          }, true)
+            $(this).jqGrid('footerData', 'set', {
+              trado: 'Total:',
+            }, true)
         }
       })
       .jqGrid('filterToolbar', {
@@ -458,14 +459,14 @@
         },
       })
       .customPager()
-      /* Append clear filter button */
+    /* Append clear filter button */
     loadClearFilter($('#modalgrid'))
-    
+
     /* Append global search */
     loadGlobalSearch($('#modalgrid'))
 
   }
-  
+
   function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}absensisupirapprovalheader/${Id}/cekvalidasi`,
@@ -520,6 +521,5 @@
       })
     }
   }
-  
 </script>
 @endpush()

@@ -31,4 +31,12 @@ class ProsesUangJalanSupirDetailController extends Controller
 
         return response($data);
     }
+    public function transferGrid()
+    {
+        return view('prosesuangjalansupir._transfer');
+    }
+    public function detailGrid()
+    {
+        return view('prosesuangjalansupir._detail');
+    }
 }

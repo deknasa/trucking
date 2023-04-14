@@ -58,6 +58,7 @@ class Myauth
             'potpribadigrid',
             'depositogrid',
             'pelunasangrid',
+            'transfergrid',
         ],
     ];
 

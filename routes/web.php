@@ -996,6 +996,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('prosesuangjalansupirheader/export', [ProsesUangJalanSupirHeaderController::class, 'export'])->name('prosesuangjalansupirheader.export');
     Route::get('prosesuangjalansupirheader/report', [ProsesUangJalanSupirHeaderController::class, 'report'])->name('prosesuangjalansupirheader.report');
     Route::resource('prosesuangjalansupirheader', ProsesUangJalanSupirHeaderController::class);
+    
+    Route::get('prosesuangjalansupirdetail/transfer/grid', [ProsesUangJalanSupirDetailController::class, 'transferGrid']);
+    Route::get('prosesuangjalansupirdetail/detail/grid', [ProsesUangJalanSupirDetailController::class, 'detailGrid']);
     Route::resource('prosesuangjalansupirdetail', ProsesUangJalanSupirDetailController::class);
     
     Route::get('laporandepositosupir/report', [LaporanDepositoSupirController::class, 'report'])->name('laporandepositosupir.report');

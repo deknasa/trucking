@@ -1,14 +1,25 @@
+@include('layouts._rangeheaderlookup')
 <table id="orderanTruckingLookup" class="lookup-grid"></table>
 <div id="orderanTruckingLookupPager"></div>
 
 @push('scripts')
 <script>
+  setRangeLookup()
+  initDatepicker()
+  $(document).on('click', '#btnReloadLookup', function(event) {
+    loadDataHeaderLookup('orderantrucking', 'orderanTruckingLookup')
+  })
   $('#orderanTruckingLookup').jqGrid({
       url: `{{ config('app.api_url') . 'orderantrucking' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
+      postData: {
+        tgldari: $('#tgldariheaderlookup').val(),
+        tglsampai: $('#tglsampaiheaderlookup').val(),
+
+      },
       colModel: [{
           label: 'ID',
           name: 'id',

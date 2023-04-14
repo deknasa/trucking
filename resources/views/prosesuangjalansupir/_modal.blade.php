@@ -450,6 +450,10 @@
             }
 
             data.push({
+                name: 'tglbukti',
+                value: $('#crudForm').find(`[name="tglbukti"]`).val()
+            })
+            data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
             })
@@ -721,6 +725,8 @@
     function showProsesUangJalanSupir(form, userId) {
         $('#detailList tbody').html('')
 
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`.datepicker`).parent('.input-group').find('.input-group-append').remove()
         $.ajax({
             url: `${apiUrl}prosesuangjalansupirheader/${userId}`,
             method: 'GET',
@@ -755,9 +761,7 @@
                         <td>
                             <div class="row form-group">
                                 <div class="col-12 col-md-12">
-                                    <div class="input-group">
-                                        <input type="text" name="tgltransfer[]" disabled class="form-control datepicker">
-                                    </div>
+                                    <input type="text" name="tgltransfer[]" disabled class="form-control"
                                 </div>
                             </div>
                         </td>
@@ -779,7 +783,7 @@
                             <div class="row form-group">
                                 <div class="col-12 col-md-12">
                                     <input type="hidden" name="bank_idtransfer[]">
-                                    <input type="text" name="banktransfer[]" disabled class="form-control bank-lookup">
+                                    <input type="text" name="banktransfer[]" disabled class="form-control">
                                 </div>
                             </div>
                         </td>
@@ -806,29 +810,6 @@
                     initDatepicker()
                     setTotalTransfer()
 
-                    $('.bank-lookup').last().lookup({
-                        title: 'Bank Lookup',
-                        fileName: 'bank',
-                        beforeProcess: function(test) {
-                            this.postData = {
-                                Aktif: 'AKTIF',
-                            }
-                        },
-                        onSelectRow: (bank, element) => {
-                            element.parents('td').find(`[name="bank_idtransfer[]"]`).val(bank.id)
-                            element.val(bank.namabank)
-                            element.data('currentValue', element.val())
-                        },
-                        onCancel: (element) => {
-                            element.val(element.data('currentValue'))
-                        },
-                        onClear: (element) => {
-                            element.parents('td').find(`[name="bank_idtransfer[]"]`).val('')
-                            element.val('')
-                            element.data('currentValue', element.val())
-                        }
-                    })
-
                 })
 
                 setRowNumbers('#detailTransfer #tbodyTransfer')
@@ -848,9 +829,8 @@
                 })
 
                 if (response.detail.deposito == null) {
-                    form.find('#deposit [name]').prop('disabled', true)
+                    form.find('#tabs-3 [name]').prop('disabled', true)
                 } else {
-
                     $.each(response.detail.deposito, (index, value) => {
                         let element = form.find(`[name="${index}"]`)
                         if (element.is('select')) {
@@ -953,8 +933,16 @@
                     form.find(`[name="bankpengembalian"]`).data('currentValue', response.detail.pengembalian.bank.bankpengembalian)
 
                 } else {
-                    form.find('#pengembalian [name]').prop('disabled', true)
+                    form.find('#tabs-4 [name]').prop('disabled', true)
                 }
+
+                form.find(`[name="bankdeposit"]`).siblings('.button-clear').remove()
+                form.find(`[name="bankdeposit"]`).siblings('.input-group-append').remove()
+
+                form.find(`[name="bankadjust"]`).siblings('.button-clear').remove()
+                form.find(`[name="bankadjust"]`).siblings('.input-group-append').remove()
+                form.find(`[name="bankpengembalian"]`).siblings('.button-clear').remove()
+                form.find(`[name="bankpengembalian"]`).siblings('.input-group-append').remove()
 
 
 
@@ -1235,6 +1223,11 @@
         $('.trado-lookup').lookup({
             title: 'Trado Lookup',
             fileName: 'trado',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
             onSelectRow: (trado, element) => {
                 $('#crudForm [name=trado_id]').first().val(trado.id)
                 element.val(trado.kodetrado)
@@ -1253,6 +1246,11 @@
         $('.supir-lookup').lookup({
             title: 'Supir Lookup',
             fileName: 'supir',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
             onSelectRow: (supir, element) => {
                 $('#crudForm [name=supir_id]').first().val(supir.id)
                 getPinjaman(supir.id)
