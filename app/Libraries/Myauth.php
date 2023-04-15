@@ -45,6 +45,8 @@ class Myauth
             'add',
             'delete',
             // 'approval',
+            'export',
+            'report',
             'aclgrid',
             'detailgrid',
             'historygrid',

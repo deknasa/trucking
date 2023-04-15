@@ -35,6 +35,63 @@
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
+      var myFunc = function (value) {
+        if (!Stimulsoft.Data.Extensions.ListExt.isList(value))
+        return Stimulsoft.Base.Helpers.StiValueHelper.tryToNumber(value);
+        return Stimulsoft.Data.Functions.Funcs.skipNulls(Stimulsoft.Data.Extensions.ListExt.toList(value)).tryCastToNumber().sum();
+      };
+      var terbilang = function (number) {
+
+        // Array kosong untuk menampung kata terbilang
+        
+        let words = [];
+        
+        // Array untuk menampung angka terbilang
+        const units = [
+        "", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas"
+        ];
+        
+        // Konversi angka menjadi terbilang
+        if (number < 12) {
+        words.push(units[number]);
+        } else if (number < 20) {
+        words.push(terbilang(number - 10) + " belas");
+        } else if (number < 100) {
+        words.push(terbilang(Math.floor(number / 10)) + " puluh");
+        if (number % 10 !== 0) {
+          words.push(terbilang(number % 10));
+        }
+        } else if (number < 200) {
+        words.push("seratus", terbilang(number - 100));
+        } else if (number < 1000) {
+        words.push(terbilang(Math.floor(number / 100)) + " ratus");
+        if (number % 100 !== 0) {
+          words.push(terbilang(number % 100));
+        }
+        } else if (number < 2000) {
+        words.push("seribu", terbilang(number - 1000));
+        } else if (number < 1000000) {
+        words.push(terbilang(Math.floor(number / 1000)) + " ribu");
+        if (number % 1000 !== 0) {
+          words.push(terbilang(number % 1000));
+        }
+        } else if (number < 1000000000) {
+        words.push(terbilang(Math.floor(number / 1000000)) + " juta");
+        if (number % 1000000 !== 0) {
+          words.push(terbilang(number % 1000000));
+        }
+        } else {
+        words.push("Angka terlalu besar");
+        }
+        
+        // Menggabungkan semua kata terbilang menjadi satu string
+        return words.join(" ");
+
+      };
+        
+      Stimulsoft.Report.Dictionary.StiFunctions.addFunction("MyCategory", "MySum", "MySum", "MySum", "", Number, "Return Description", [Object], ["value"], ["Descriptions"], myFunc);
+      Stimulsoft.Report.Dictionary.StiFunctions.addFunction("MyCategory", "Terbilang", "Terbilang", "Terbilang", "", String, "Return Description", [Object], ["value"], ["Descriptions"], terbilang);
+
       var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
 
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
@@ -65,8 +122,8 @@
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
-      // designer.report = report;
-      // designer.renderHtml('content');
+      designer.report = report;
+      designer.renderHtml('content');
       viewer.report = report
       
       viewer.onPrintReport = function (event) {
