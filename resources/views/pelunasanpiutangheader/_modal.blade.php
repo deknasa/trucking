@@ -800,6 +800,7 @@
                   onSelectRow: (akunpusat, el) => {
                     el.val(akunpusat.coa)
                     el.data('currentValue', el.val())
+                    console.log()
                   },
                   onCancel: (el) => {
                     el.val(el.data('currentValue'))
