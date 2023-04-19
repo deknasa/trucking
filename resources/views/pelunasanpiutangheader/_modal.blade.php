@@ -120,8 +120,8 @@
               </div>
             </div>
 
-
-            <div class="table-responsive table-scroll">
+            <table id="tablePelunasan"></table>
+            <!-- <div class="table-responsive table-scroll">
               <table class="table table-bordered mt-3" id="detailList" style="width:2000px;">
                 <thead class="table-secondary">
                   <tr>
@@ -166,7 +166,7 @@
                   </tr>
                 </tfoot>
               </table>
-            </div>
+            </div> -->
 
 
           </div>
@@ -507,7 +507,7 @@
             $.each(errors, (index, error) => {
               let indexes = index.split(".");
               let angka = indexes[1]
-              
+
               row = piutangid[angka] - 1;
               let element;
 
@@ -617,9 +617,400 @@
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     showDefault(form)
-    setTotal()
-    setPenyesuaian()
-    setNominalLebih()
+    loadPelunasanGrid();
+
+
+    // setTotal()
+    // setPenyesuaian()
+    // setNominalLebih()
+  }
+
+  function elementCoaPemotongan(value) {
+    let detailRow = $(`<input type="text" name="coapotonganppd[]" disabled class="form-control coapotongan-lookup">`)
+    $('.coapotongan-lookup').last().lookup({
+      title: 'Coa Potongan Lookup',
+      fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          potongan: '1',
+          levelCoa: '2',
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    return detailRow;
+  }
+
+  function loadPelunasanGrid() {
+    $("#tablePelunasan")
+      .jqGrid({
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        colModel: [{
+            label: "",
+            name: "",
+            formatter: "checkbox",
+            width: 30,
+            search: false,
+            editable: false,
+            formatter: function(value, rowOptions, rowData) {
+              return `<input type="checkbox" value="${rowData.id}" onChange="checkboxHandler(this, ${rowData.id})">`;
+            },
+          },
+          {
+            label: "id",
+            name: "id",
+            hidden: true,
+            search: false,
+          },
+          {
+            label: "Nobukti Piutang",
+            name: "nobukti",
+            sortable: true,
+          },
+          {
+            label: "TGL BUKTI",
+            name: "tglbukti",
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: "Nobukti INVOICE",
+            name: "invoice_nobukti",
+            sortable: true,
+          },
+          {
+            label: "NOMINAL PIUTANG",
+            name: "nominal",
+            align: "right",
+            formatter: currencyFormat,
+          },
+          {
+            label: "SISA PIUTANG",
+            name: "sisa",
+            align: "right",
+            formatter: currencyFormat,
+          },
+          {
+            label: "KETERANGAN",
+            name: "keterangan",
+            editable: true,
+          },
+          {
+            label: "BAYAR",
+            name: "bayar",
+            align: "right",
+            editable: true,
+            editoptions: {
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+                  let originalGridData = $("#tablePelunasan")
+                    .jqGrid("getGridParam", "originalData")
+                    .find((row) => row.id == rowObject.rowId);
+
+                  let localRow = $("#tablePelunasan").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+
+                  localRow.bayar = event.target.value;
+
+                  $("#tablePelunasan").jqGrid(
+                    "setCell",
+                    rowObject.rowId,
+                    "sisa",
+                    originalGridData.sisa - localRow.bayar
+                  );
+                },
+              }, ],
+            },
+            sortable: true,
+            sorttype: "int",
+          },
+          {
+            label: "Potongan",
+            name: "potongan",
+            align: "right",
+            editable: true,
+            editoptions: {
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+                  let originalGridData = $("#tablePelunasan")
+                    .jqGrid("getGridParam", "originalData")
+                    .find((row) => row.id == rowObject.rowId);
+
+                  let localRow = $("#tablePelunasan").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+
+                  localRow.potongan = event.target.value;
+
+                  $("#tablePelunasan").jqGrid(
+                    "setCell",
+                    rowObject.rowId,
+                    "sisa",
+                    originalGridData.sisa - localRow.bayar - localRow.potongan
+                  );
+                },
+              }, ],
+            },
+
+            sortable: true,
+            sorttype: "int",
+          },
+
+          {
+            label: "COA POTONGAN",
+            name: "coapotongan",
+            width: 250,
+            editable: true,
+            editoptions: {
+              dataInit: function(element) {
+                element.addClass('coapotongan-lookup')
+                $('.coapotongan-lookup').last().lookup({
+                  title: 'Coa Potongan Lookup',
+                  fileName: 'akunpusat',
+                  beforeProcess: function(test) {
+                    // var levelcoa = $(`#levelcoa`).val();
+                    this.postData = {
+                      potongan: '1',
+                      levelCoa: '2',
+                      Aktif: 'AKTIF',
+                    }
+                  },
+                  onSelectRow: (akunpusat, el) => {
+                    el.val(akunpusat.coa)
+                    el.data('currentValue', el.val())
+                  },
+                  onCancel: (el) => {
+                    el.val(el.data('currentValue'))
+                  },
+                  onClear: (el) => {
+                    el.val('')
+                    el.data('currentValue', el.val())
+                  }
+                })
+              }
+            }
+          },
+          {
+            label: "KETERANGAN POTONGAN",
+            name: "keteranganpotongan",
+            editable: true,
+          },
+          {
+            label: "NOMINAL LEBIH BAYAR",
+            name: "nominallebihbayar",
+            align: "right",
+            editable: true,
+            editoptions: {
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+                  let originalGridData = $("#tablePelunasan")
+                    .jqGrid("getGridParam", "originalData")
+                    .find((row) => row.id == rowObject.rowId);
+
+                  let localRow = $("#tablePelunasan").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+
+                  localRow.nominallebihbayar = event.target.value;
+
+                  $("#tablePelunasan").jqGrid(
+                    "setCell",
+                    rowObject.rowId,
+                    "sisa",
+                    originalGridData.sisa - localRow.bayar - localRow.potongan - localRow.nominallebihbayar
+                  );
+                },
+              }, ],
+            },
+
+            sortable: true,
+            sorttype: "int",
+          },
+        ],
+        autowidth: true,
+        shrinkToFit: false,
+        height: 400,
+        rowNum: 10,
+        rownumbers: true,
+        rownumWidth: 45,
+        rowList: [10, 20, 50, 0],
+        footerrow: true,
+        userDataOnFooter: true,
+        toolbar: [true, "top"],
+        sortable: true,
+        pgbuttons: false,
+        pginput: false,
+        cellEdit: true,
+        cellsubmit: "clientArray",
+        editableColumns: ["bayar"],
+        selectedRowIds: [],
+        afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
+          let originalGridData = $("#tablePelunasan")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
+
+          let localRow = $("#tablePelunasan").jqGrid("getLocalRow", rowId);
+
+          $("#tablePelunasan").jqGrid(
+            "setCell",
+            rowId,
+            "sisa",
+            originalGridData.sisa - localRow.bayar
+          );
+        },
+        isCellEditable: function(cellname, iRow, iCol) {
+          let rowData = $(this).jqGrid("getRowData")[iRow - 1];
+
+          return $(this)
+            .find(`tr input[value=${rowData.id}]`)
+            .is(":checked");
+        },
+        validationCell: function(cellobject, errormsg, iRow, iCol) {
+          console.log(cellobject);
+          console.log(errormsg);
+          console.log(iRow);
+          console.log(iCol);
+        },
+        loadComplete: function() {
+          setTimeout(() => {
+            $(this)
+              .getGridParam("selectedRowIds")
+              .forEach((selectedRowId) => {
+                $(this)
+                  .find(`tr input[value=${selectedRowId}]`)
+                  .prop("checked", true);
+              });
+          }, 100);
+          setHighlight($(this))
+        },
+      })
+      .jqGrid("setLabel", "rn", "No.")
+      .jqGrid("navGrid", "#tablePager", {
+        add: false,
+        edit: false,
+        del: false,
+        refresh: false,
+        search: false,
+      })
+      .jqGrid("filterToolbar", {
+        searchOnEnter: false,
+      })
+      .jqGrid("excelLikeGrid", {
+        beforeDeleteCell: function(rowId, iRow, iCol, event) {
+          let localRow = $("#tablePelunasan").jqGrid("getLocalRow", rowId);
+
+          $("#tablePelunasan").jqGrid(
+            "setCell",
+            rowId,
+            "sisa",
+            parseInt(localRow.sisa) + parseInt(localRow.bayar)
+          );
+
+          return true;
+        },
+      });
+    /* Append clear filter button */
+    loadClearFilter($('#tablePelunasan'))
+
+    /* Append global search */
+    loadGlobalSearch($('#tablePelunasan'))
+  }
+
+  function getDataPelunasan(id) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}pelunasanpiutangheader/${id}/getpiutang`,
+        dataType: "JSON",
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: (response) => {
+          resolve(response);
+        },
+      });
+    });
+  }
+
+  function checkboxHandler(element, rowId) {
+    let isChecked = $(element).is(":checked");
+    let editableColumns = $("#tablePelunasan").getGridParam("editableColumns");
+    let selectedRowIds = $("#tablePelunasan").getGridParam("selectedRowIds");
+
+    $("#tablePelunasan").jqGrid("setGridParam", {
+      selectedRowIds: selectedRowIds,
+    });
+
+    let originalGridData = $("#tablePelunasan")
+      .jqGrid("getGridParam", "originalData")
+      .find((row) => row.id == rowId);
+
+    let localRow = $("#tablePelunasan").jqGrid("getLocalRow", rowId);
+
+    localRow.bayar = originalGridData.sisa;
+
+    $("#tablePelunasan").jqGrid(
+      "setCell",
+      rowId,
+      "sisa",
+      originalGridData.sisa - localRow.bayar
+    );
+
+    $("#tablePelunasan").jqGrid(
+      "setCell",
+      rowId,
+      "bayar",
+      localRow.bayar
+    );
+
+    editableColumns.forEach((editableColumn) => {
+      if (!isChecked) {
+        let selectedRowIdIndex = selectedRowIds.indexOf(rowId);
+
+        if (selectedRowIdIndex !== -1) {
+          selectedRowIds.splice(selectedRowIdIndex, 1);
+        }
+
+        $("#tablePelunasan").jqGrid(
+          "setCell",
+          rowId,
+          "sisa",
+          originalGridData.sisa
+        );
+
+        $("#tablePelunasan").jqGrid(
+          "setCell",
+          rowId,
+          "bayar",
+          originalGridData.bayar
+        );
+      } else {
+        selectedRowIds.push(rowId);
+      }
+    });
   }
 
   function editPelunasanPiutangHeader(Id) {
@@ -964,7 +1355,7 @@
             initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
             initAutoNumericNoMinus(detailRow.find(`[name="potonganppd[]"]`))
             initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
-            
+
           }
           initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
           initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
@@ -1259,7 +1650,19 @@
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)
-        getPiutang(agen.id)
+        // getPiutang(agen.id)
+        getDataPelunasan(agen.id).then((response) => {
+          setTimeout(() => {
+
+            $("#tablePelunasan")
+              .jqGrid("setGridParam", {
+                datatype: "local",
+                data: response.data,
+                originalData: response.data
+              })
+              .trigger("reloadGrid");
+          }, 1000);
+        });
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
