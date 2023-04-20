@@ -12,7 +12,7 @@ class Myauth
             'dashboard',
             'logtrail',
             'tutupbuku',
-            'mandorabsensisupir',
+            'approvalbukacetak',
             'historipenerimaanstok',
             'historipengeluaranstok',
             'reportall',

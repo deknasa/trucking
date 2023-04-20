@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "4c25cd2bb6bb9e1efa7e563811830c71",
+  "ReportGuid": "4d0a5a00a374e02c9ba3727685ea4647",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/truck/public/reports/ReportPenerimaan.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1681781348000+0700)/",
+  "ReportChanged": "/Date(1681979361000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -97,7 +97,7 @@
             "Name": "bulanbeban",
             "NameInSource": "bulanbeban",
             "Alias": "bulanbeban",
-            "Type": "System.DateTime"
+            "Type": "System.String"
           },
           "12": {
             "Name": "coakredit",
@@ -308,7 +308,7 @@
         "0": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand1",
-          "ClientRectangle": "0,4,200.9,54",
+          "ClientRectangle": "0,4,196.1,54",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -392,7 +392,7 @@
               "Ident": "StiText",
               "Name": "Text27",
               "Guid": "3ade6587466407a7d43e4fb9b4e79565",
-              "ClientRectangle": "124,8,20,6",
+              "ClientRectangle": "117.86,7.94,20,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -412,7 +412,7 @@
               "Ident": "StiText",
               "Name": "Text28",
               "Guid": "f9b75a118c1b873cb41072be038369f1",
-              "ClientRectangle": "146,8,26,6",
+              "ClientRectangle": "139.95,7.94,26,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -435,7 +435,7 @@
               "Ident": "StiText",
               "Name": "Text32",
               "Guid": "f7e68f8a1c58d0c5c348a855d877c93a",
-              "ClientRectangle": "174,8,24,6",
+              "ClientRectangle": "167.89,7.94,24,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -897,7 +897,7 @@
         "1": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,66,200.9,8",
+          "ClientRectangle": "0,66,196.1,8",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -1259,7 +1259,7 @@
           "Ident": "StiGroupFooterBand",
           "Name": "GroupFooterBand1",
           "PrintOn": "OnlyLastPage",
-          "ClientRectangle": "0,82,200.9,42",
+          "ClientRectangle": "0,82,196.1,42",
           "ComponentPlacement": "gf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1375,7 +1375,7 @@
               "Name": "Text21",
               "Guid": "6191605755e9e4318820ec208b2b9f73",
               "ClientRectangle": "4,0,132,6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1523,7 +1523,7 @@
           "Ident": "StiFooterBand",
           "Name": "FooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,132,200.9,2.2",
+          "ClientRectangle": "0,132,196.1,2.2",
           "ComponentPlacement": "f.ap.Page1",
           "Conditions": {
             "0": {
@@ -1722,10 +1722,10 @@
         "TextBrush": "solid:50,0,0,0"
       },
       "Margins": {
-        "Left": 5,
-        "Right": 10,
-        "Top": 10,
-        "Bottom": 5
+        "Left": 9.9,
+        "Right": 9.9,
+        "Top": 9.9,
+        "Bottom": 9.9
       }
     }
   }
