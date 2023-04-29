@@ -96,7 +96,7 @@
                 </div>
               </div>
 
-              <div class="row form-group">
+              <div class="row form-group mb-5">
                 <div class="col-md-2">
                   <button class="btn btn-secondary" id="btnTampil"><i class="fas fa-sync"></i> RELOAD</button>
                 </div>
@@ -104,53 +104,7 @@
 
             </div>
 
-            <div class="table-responsive table-scroll">
-              <table class="table table-bordered table-bindkeys" id="spList" style="width:1900px">
-                <thead class="table-secondary">
-                  <tr>
-                    <th width="2%"></th>
-                    <th width="5%">JOB TRUCKING</th>
-                    <th width="5%">TGL OTOBON</th>
-                    <th width="5%">NO CONT</th>
-                    <th width="8%">TARIF</th>
-                    <th width="8%">OMSET</th>
-                    <th width="8%">BIAYA TAMBAHAN</th>
-                    <th width="10%">RETRIBUSI</th>
-                    <th width="8%">TOTAL</th>
-                    <th width="8%">BAGIAN</th>
-                    <th width="15%">EMKL</th>
-                    <th width="5%">LONG TRIP</th>
-                    <th width="5%">PERALIHAN</th>
-                    <th width="15%">KETERANGAN</th>
-                  </tr>
-                </thead>
-                <tbody id="tbody_list">
-
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="5">
-                      <p class="font-weight-bold">TOTAL:</p>
-                    </td>
-                    <td>
-                      <p id="omset" class="text-right font-weight-bold"></p>
-                    </td>
-                    <td>
-                      <p id="tambahan" class="text-right font-weight-bold"></p>
-                    </td>
-                    <td>
-                      <p id="retribusi" class="text-right font-weight-bold"></p>
-                    </td>
-                    <td>
-                      <p id="total" class="text-right font-weight-bold"></p>
-                    </td>
-
-                    <td colspan="5"></td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-
+            <table id="tableInvoice"></table>
 
           </div>
           <div class="modal-footer justify-content-start">
@@ -258,27 +212,25 @@
         name: 'tglsampai',
         value: form.find(`[name="tglsampai"]`).val()
       })
-      $('#tbody_list tr').each(function(row, tr) {
+      let selectedRowsInvoice = $("#tableInvoice").getGridParam("selectedRowIds");
 
+      $.each(selectedRowsInvoice, function(index, value) {
+        let selectedExtra = $("#tableInvoice").jqGrid("getCell", value, "nominalextra")
+        let selectedRetribusi = $("#tableInvoice").jqGrid("getCell", value, "nominalretribusi")
 
-        if ($(this).find(`[name="sp_id[]"]`).is(':checked')) {
-
-
-          data.push({
-            name: 'nominalextra[]',
-            value: AutoNumeric.getNumber($(`#crudForm [name="nominalextra[]"]`)[row])
-          })
-          data.push({
-            name: 'nominalretribusi[]',
-            value: AutoNumeric.getNumber($(`#crudForm [name="nominalretribusi[]"]`)[row])
-          })
-          data.push({
-            name: 'sp_id[]',
-            value: $(this).find(`[name="sp_id[]"]`).val()
-          })
-
-        }
-      })
+        data.push({
+          name: 'nominalextra[]',
+          value: (selectedExtra != '') ? parseFloat(selectedExtra.replaceAll(',', '')) : 0
+        })
+        data.push({
+          name: 'nominalretribusi[]',
+          value: (selectedRetribusi != '') ? parseFloat(selectedRetribusi.replaceAll(',', '')) : 0
+        })
+        data.push({
+          name: 'sp_id[]',
+          value: $("#tableInvoice").jqGrid("getCell", value, "id")
+        })
+      });
 
       data.push({
         name: 'sortIndex',
@@ -398,51 +350,6 @@
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
-  function setOmset() {
-    let nominalDetails = $(`#spList tbody .omset`)
-    let total = 0
-
-    $.each(nominalDetails, (index, nominalDetail) => {
-      total += AutoNumeric.getNumber(nominalDetail)
-    });
-
-    new AutoNumeric('#omset').set(total)
-  }
-
-  function setTotal() {
-    let omsetDetails = $(`#spList tbody .total`)
-    let total = 0
-
-    $.each(omsetDetails, (index, nominalDetail) => {
-      total += AutoNumeric.getNumber(nominalDetail)
-    });
-
-    new AutoNumeric('#total').set(total)
-  }
-
-  function setTambahan() {
-    let nominalDetails = $(`#spList tbody .tambahan`)
-    let total = 0
-
-    $.each(nominalDetails, (index, nominalDetail) => {
-      total += AutoNumeric.getNumber(nominalDetail)
-    });
-
-    new AutoNumeric('#tambahan').set(total)
-  }
-
-  function setNominalRetribusi() {
-    let nominalDetails = $(`#spList tbody [name="nominalretribusi[]"]:not([disabled])`)
-    let total = 0
-
-    console.log(nominalDetails)
-    $.each(nominalDetails, (index, nominalDetail) => {
-      total += AutoNumeric.getNumber(nominalDetail)
-    });
-
-    new AutoNumeric('#retribusi').set(total)
-  }
-
   function createInvoiceHeader() {
     let form = $('#crudForm')
 
@@ -462,6 +369,8 @@
     $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     initDatepicker()
+
+    loadInvoiceGrid();
   }
 
   function editInvoiceHeader(invId) {
@@ -498,12 +407,331 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    form.find('#btnTampil').prop('disabled', true)
 
     showInvoiceHeader(form, invId, 'delete')
   }
 
   $(document).on('click', '#btnTampil', function(event) {
     event.preventDefault()
+
+    if ($('#crudForm').data('action') == 'add') {
+      url = `getSP`
+    } else if ($('#crudForm').data('action') == 'edit') {
+      invId = $(`#crudForm`).find(`[name="id"]`).val()
+      url = `${invId}/getAllEdit`
+    }
+
+    if ($('#crudForm').find(`[name="agen_id"]`).val() != '' && $('#crudForm').find(`[name="jenisorder_id"]`).val() != '') {
+
+      getDataInvoice(url).then((response) => {
+        setTimeout(() => {
+
+          $("#tableInvoice")
+            .jqGrid("setGridParam", {
+              datatype: "local",
+              data: response.data,
+              originalData: response.data,
+              rowNum: response.data.length,
+              selectedRowIds: []
+            })
+            .trigger("reloadGrid");
+        }, 100);
+
+      });
+    } else {
+      showDialog('Harap memilih agen, jenis order, tgl dari serta tgl sampai')
+    }
+  })
+
+
+  function loadInvoiceGrid() {
+    $("#tableInvoice")
+      .jqGrid({
+        datatype: 'local',
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        colModel: [{
+            label: "",
+            name: "",
+            width: 30,
+            formatter: 'checkbox',
+            search: false,
+            editable: false,
+            formatter: function(value, rowOptions, rowData) {
+              let disabled = '';
+              if ($('#crudForm').data('action') == 'delete') {
+                disabled = 'disabled'
+              }
+              return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxHandlerInvoice(this, ${rowData.id})">`;
+            },
+          },
+          {
+            label: "id",
+            name: "id",
+            hidden: true,
+            search: false,
+          },
+          {
+            label: "JOB TRUCKING",
+            name: "jobtrucking",
+            sortable: true,
+          },
+          {
+            label: "TGL OTOBON",
+            name: "tglsp",
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: "NO CONT",
+            name: "nocont",
+            sortable: true,
+          },
+          {
+            label: "TARIF",
+            name: "tarif_id",
+            sortable: true,
+          },
+          {
+            label: "OMSET",
+            name: "omset",
+            sortable: true,
+            align: "right",
+            formatter: currencyFormat,
+          },
+          {
+            label: "BIAYA TAMBAHAN",
+            name: "nominalextra",
+            sortable: true,
+            align: "right",
+            formatter: currencyFormat,
+          },
+          {
+            label: "RETRIBUSI",
+            name: "nominalretribusi",
+            align: "right",
+            editable: true,
+            editoptions: {
+              dataInit: function(element, id) {
+                initAutoNumeric($('#crudForm').find(`[id="${id.id}"]`))
+              },
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+                  let originalGridData = $("#tableInvoice")
+                    .jqGrid("getGridParam", "originalData")
+                    .find((row) => row.id == rowObject.rowId);
+
+                  let localRow = $("#tableInvoice").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  let total
+
+                  let retribusi = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
+                  let getOmset = $("#tableInvoice").jqGrid("getCell", rowObject.rowId, "omset")
+                  let omset = (getOmset != '') ? parseFloat(getOmset.replaceAll(',', '')) : 0
+                  let getExtra = $("#tableInvoice").jqGrid("getCell", rowObject.rowId, "nominalextra")
+                  let extra = (getExtra != '') ? parseFloat(getExtra.replaceAll(',', '')) : 0
+
+                  total = omset + extra + retribusi
+
+                  console.log(total)
+                  $("#tableInvoice").jqGrid(
+                    "setCell",
+                    rowObject.rowId,
+                    "total",
+                    total
+                  );
+
+                  retribusiDetails = $(`#tableInvoice tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableInvoice_nominalretribusi"]`)
+                  ttlRetribusi = 0
+                  $.each(retribusiDetails, (index, retribusiDetail) => {
+                    ttlRetribusiDetail = parseFloat($(retribusiDetail).attr('title').replaceAll(',', ''))
+                    ttlRetribusis = (isNaN(ttlRetribusiDetail)) ? 0 : ttlRetribusiDetail;
+                    ttlRetribusi += ttlRetribusis
+                  });
+                  ttlRetribusi += retribusi
+                  initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominalretribusi"]`).text(ttlRetribusi))
+                  setTotalAll()
+                },
+              }, ],
+            },
+            sortable: false,
+            sorttype: "int",
+          },
+          {
+            label: "TOTAL",
+            name: "total",
+            sortable: true,
+            align: "right",
+            formatter: currencyFormat,
+          },
+          {
+            label: "BAGIAN",
+            name: "jenisorder_id",
+            sortable: true,
+          },
+          {
+            label: "EMKL",
+            name: "agen_id",
+            sortable: true,
+          },
+          {
+            label: "LONG TRIP",
+            name: "statuslongtrip",
+            align: "center",
+            sortable: false,
+            search: false,
+            formatter: 'checkbox',
+            width: 100,
+            editable: false,
+            cb: {
+              check: "TRUE", //check the checkbox when cell value is "YES".
+              uncheck: "FALSE" //uncheck when "NO".
+            },
+          },
+          {
+            label: "PERALIHAN",
+            name: "statusperalihan",
+            align: "center",
+            sortable: false,
+            search: false,
+            formatter: 'checkbox',
+            width: 100,
+            editable: false,
+            cb: {
+              check: "TRUE", //check the checkbox when cell value is "YES".
+              uncheck: "FALSE" //uncheck when "NO".
+            },
+          },
+          {
+            label: "KETERANGAN",
+            name: "keterangan",
+            sortable: true,
+          },
+        ],
+        autowidth: true,
+        shrinkToFit: false,
+        height: 400,
+        rownumbers: true,
+        rownumWidth: 45,
+        footerrow: true,
+        userDataOnFooter: true,
+        toolbar: [true, "top"],
+        pgbuttons: false,
+        pginput: false,
+        cellEdit: true,
+        cellsubmit: "clientArray",
+        editableColumns: ["retribusi"],
+        selectedRowIds: [],
+        afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
+          let originalGridData = $("#tableInvoice")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
+
+          let localRow = $("#tableInvoice").jqGrid("getLocalRow", rowId);
+
+          let getRetribusi = $("#tableInvoice").jqGrid("getCell", rowId, "nominalretribusi")
+          let retribusi = (getRetribusi != '') ? parseFloat(getRetribusi.replaceAll(',', '')) : 0
+
+          let getOmset = $("#tableInvoice").jqGrid("getCell", rowId, "omset")
+          let omset = (getOmset != '') ? parseFloat(getOmset.replaceAll(',', '')) : 0
+
+          let getExtra = $("#tableInvoice").jqGrid("getCell", rowId, "nominalextra")
+          let extra = (getExtra != '') ? parseFloat(getExtra.replaceAll(',', '')) : 0
+
+          total = omset + extra + retribusi
+
+          if (indexColumn == 9) {
+            $("#tableInvoice").jqGrid(
+              "setCell",
+              rowId,
+              "total",
+              total
+              // sisa - bayar - potongan
+            );
+          }
+          setTotalAll()
+        },
+        isCellEditable: function(cellname, iRow, iCol) {
+          let rowData = $(this).jqGrid("getRowData")[iRow - 1];
+
+          return $(this)
+            .find(`tr input[value=${rowData.id}]`)
+            .is(":checked");
+        },
+        validationCell: function(cellobject, errormsg, iRow, iCol) {
+          console.log(cellobject);
+          console.log(errormsg);
+          console.log(iRow);
+          console.log(iCol);
+        },
+        loadComplete: function() {
+          setTimeout(() => {
+            $(this)
+              .getGridParam("selectedRowIds")
+              .forEach((selectedRowId) => {
+                $(this)
+                  .find(`tr input[value=${selectedRowId}]`)
+                  .prop("checked", true);
+                initAutoNumeric($(this).find(`td[aria-describedby="tableInvoice_nominalretribusi"]`))
+              });
+          }, 100);
+          setTotalOmset()
+          setTotalExtra()
+          setTotalAll()
+          setTotalRetribusi()
+          setHighlight($(this))
+        },
+      })
+      .jqGrid("setLabel", "rn", "No.")
+      .jqGrid("navGrid", "#tablePager", {
+        add: false,
+        edit: false,
+        del: false,
+        refresh: false,
+        search: false,
+      })
+      .jqGrid("filterToolbar", {
+        searchOnEnter: false,
+        beforeSearch: function() {
+          postData = $.parseJSON($('#tableInvoice').jqGrid('getGridParam', 'postData').filters)
+          $.each(postData.rules, function(key, val) {
+            if (val.field == 'omset') {
+              return initAutoNumeric($('#gsh_tableInvoice_omset').find('#gs_omset'))
+            }
+          })
+        },
+      })
+      .jqGrid("excelLikeGrid", {
+        beforeDeleteCell: function(rowId, iRow, iCol, event) {
+          let localRow = $("#tableInvoice").jqGrid("getLocalRow", rowId);
+
+          $("#tableInvoice").jqGrid(
+            "setCell",
+            rowId,
+            "sisa",
+            parseInt(localRow.sisa) + parseInt(localRow.bayar)
+          );
+
+          return true;
+        },
+      });
+    /* Append clear filter button */
+    loadClearFilter($('#tableInvoice'))
+
+    /* Append global search */
+    // loadGlobalSearch($('#tableInvoice'))
+  }
+
+  function getDataInvoice(url, id) {
+
     let form = $('#crudForm')
     let data = []
 
@@ -532,103 +760,115 @@
       value: form.data('action')
     })
 
-    if (form.data('action') == 'add') {
-      url = `getSP`
-    } else if (form.data('action') == 'edit') {
-      invId = $(`#crudForm`).find(`[name="id"]`).val()
-      url = `${invId}/getAllEdit`
-    }
-
-    let tgldari = form.find(`[name="tgldari"]`).val()
-    let tglsampai = form.find(`[name="tglsampai"]`).val()
-
-    if (data[0].value != '' && data[1].value != '' && data[2].value != '' && data[3].value != '') {
-
-      if (tgldari > tglsampai) {
-        showDialog('Tanggal dari tidak boleh melebihi tanggal sampai')
-      }
-      $('#spList tbody').html('')
-      $('#omset').html('')
+    return new Promise((resolve, reject) => {
       $.ajax({
         url: `${apiUrl}invoiceheader/${url}`,
-        method: 'GET',
-        dataType: 'JSON',
+        dataType: "JSON",
         data: data,
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
-        success: response => {
-
-          if (response.errors == true) {
-            showDialog(response.message)
-          } else {
-            let omset = 0
-            $.each(response.data, (index, detail) => {
-
-              nominalRetribusi = (detail.nominalretribusi != null) ? detail.nominalretribusi : 0;
-              nominalextra = (detail.nominalextra != null) ? detail.nominalextra : 0;
-              total = parseFloat(detail.omset) + parseFloat(nominalRetribusi) + parseFloat(nominalextra);
-              // omset = parseFloat(omset) + parseFloat(detail.omset)
-              let cekLongtrip = detail.statuslongtrip == 65 ? "checked" : "";
-              let cekPeralihan = detail.statusperalihan == 67 ? "checked" : "";
-              let detailRow = $(`
-                              <tr >
-                                  <td>
-                                    <input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}">
-                                    <input type="hidden" name="nominalextra[]" value="${nominalextra}">
-                                  </td>
-                                  <td>${detail.jobtrucking}</td>
-                                  <td>${detail.tglsp}</td>
-                                  <td>${detail.nocont}</td>
-                                  <td>${detail.tarif_id}</td>
-                                  <td class="omset text-right">${detail.omset}</td>
-                                  <td class="tambahan text-right">${nominalextra}</td>
-                                  <td id="ret${detail.id}"><input type="text" name="nominalretribusi[]" class="form-control text-right" disabled></td>
-                                  <td class="total text-right">${total}</td>
-                                  <td>${detail.jenisorder_id}</td>
-                                  <td>${detail.agen_id}</td>
-                                  <td><input name='statuslongtrip[]' type="checkbox" value="${detail.statuslongtrip}" ${cekLongtrip} disabled></td>
-                                  <td><input name='statusperalihan[]' type="checkbox" value="${detail.statusperalihan}" ${cekPeralihan} disabled></td>
-                                  <td>${detail.keterangan}</td>
-                              </tr>
-                          `)
-
-              $('#spList tbody').append(detailRow)
-              initAutoNumeric(detailRow.find('.omset'))
-              initAutoNumeric(detailRow.find('.tambahan'))
-              initAutoNumeric(detailRow.find('.total'))
-              initAutoNumeric(detailRow.find(`[name="nominalretribusi[]"]`))
-              initAutoNumeric(detailRow.find(`[name="nominalextra[]"]`))
-              setNominalRetribusi()
-            })
-
-            // $('#omset').append(`${omset}`)
-
-            // initAutoNumeric($('#spList tfoot').find('#omset'))
-            setOmset()
-            setTambahan()
-            setTotal()
-          }
+        success: (response) => {
+          resolve(response);
         },
-        error: error => {
-          if (error.status === 422) {
-            $('.is-invalid').removeClass('is-invalid')
-            $('.invalid-feedback').remove()
-            setErrorMessages(form, error.responseJSON.errors);
-            showDialog(error.responseJSON.message)
-          } else {
-            showDialog(error.statusText)
+      });
+    });
+  }
+
+
+  function checkboxHandlerInvoice(element, rowId) {
+
+    let isChecked = $(element).is(":checked");
+    let editableColumns = $("#tableInvoice").getGridParam("editableColumns");
+    let selectedRowIds = $("#tableInvoice").getGridParam("selectedRowIds");
+    let originalGridData = $("#tableInvoice")
+      .jqGrid("getGridParam", "originalData")
+      .find((row) => row.id == rowId);
+
+    editableColumns.forEach((editableColumn) => {
+
+      if (!isChecked) {
+        for (var i = 0; i < selectedRowIds.length; i++) {
+          if (selectedRowIds[i] == rowId) {
+            selectedRowIds.splice(i, 1);
           }
         }
-      })
-    } else {
-      showDialog('Harap memilih agen, jenis order, tgl dari serta tgl sampai')
-    }
-  })
+        total = 0
+        if ($('#crudForm').data('action') == 'edit') {
+          total = parseFloat(originalGridData.omset) + parseFloat(originalGridData.nominalextra) + parseFloat(originalGridData.nominalretribusi)
+        } else {
+          total = parseFloat(originalGridData.omset) + parseFloat(originalGridData.nominalextra)
+        }
 
+        $("#tableInvoice").jqGrid(
+          "setCell",
+          rowId,
+          "total",
+          total
+        );
+
+        $("#tableInvoice").jqGrid("setCell", rowId, "nominalretribusi", 0);
+        $(`#tableInvoice tr#${rowId}`).find(`td[aria-describedby="tableInvoice_nominalretribusi"]`).attr("value", 0)
+      } else {
+        selectedRowIds.push(rowId);
+      }
+    });
+
+    $("#tableInvoice").jqGrid("setGridParam", {
+      selectedRowIds: selectedRowIds,
+    });
+
+
+    // initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_potongan"]`).text(totalPotongan))
+    // initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominallebihbayar"]`).text(totalNominalLebih))
+
+  }
+
+  function setTotalOmset() {
+    let omsetDetails = $(`#tableInvoice`).find(`td[aria-describedby="tableInvoice_omset"]`)
+    let omset = 0
+    $.each(omsetDetails, (index, omsetDetail) => {
+      omsetdetail = parseFloat($(omsetDetail).text().replaceAll(',', ''))
+      omsets = (isNaN(omsetdetail)) ? 0 : omsetdetail;
+      omset += omsets
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_omset"]`).text(omset))
+  }
+
+  function setTotalExtra() {
+    let extraDetails = $(`#tableInvoice`).find(`td[aria-describedby="tableInvoice_nominalextra"]`)
+    let extra = 0
+    $.each(extraDetails, (index, extraDetail) => {
+      extradetail = parseFloat($(extraDetail).text().replaceAll(',', ''))
+      extras = (isNaN(extradetail)) ? 0 : extradetail;
+      extra += extras
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominalextra"]`).text(extra))
+  }
+
+  function setTotalRetribusi() {
+    let retribusiDetails = $(`#tableInvoice`).find(`td[aria-describedby="tableInvoice_nominalretribusi"]`)
+    let retribusi = 0
+    $.each(retribusiDetails, (index, retribusiDetail) => {
+      retribusidetail = parseFloat($(retribusiDetail).text().replaceAll(',', ''))
+      retribusis = (isNaN(retribusidetail)) ? 0 : retribusidetail;
+      retribusi += retribusis
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominalretribusi"]`).text(retribusi))
+  }
+
+  function setTotalAll() {
+    let totalDetails = $(`#tableInvoice`).find(`td[aria-describedby="tableInvoice_total"]`)
+    let total = 0
+    $.each(totalDetails, (index, totalDetail) => {
+      totaldetail = parseFloat($(totalDetail).text().replaceAll(',', ''))
+      totals = (isNaN(totaldetail)) ? 0 : totaldetail;
+      total += totals
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_total"]`).text(total))
+  }
 
   function showInvoiceHeader(form, invId, aksi) {
-    $('#spList tbody').html('')
 
     form.find(`[name="tglbukti"]`).prop('readonly', true)
     form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
@@ -657,93 +897,30 @@
           form.find('[name]').addClass('disabled')
           initDisabled()
         }
-        getEdit(invId, aksi)
-      }
-    })
-  }
+        // getEdit(invId, aksi)
 
-  function getEdit(invId, aksi) {
-    let form = $('#crudForm')
-    let data = []
+        loadInvoiceGrid();
 
-    data.push({
-      name: 'agen_id',
-      value: form.find(`[name="agen_id"]`).val()
-    })
-    data.push({
-      name: 'jenisorder_id',
-      value: form.find(`[name="jenisorder_id"]`).val()
-    })
-    data.push({
-      name: 'tgldari',
-      value: form.find(`[name="tgldari"]`).val()
-    })
-    data.push({
-      name: 'tglsampai',
-      value: form.find(`[name="tglsampai"]`).val()
-    })
-    data.push({
-      name: 'limit',
-      value: 0
-    })
+        getDataInvoice(`${invId}/getEdit`).then((response) => {
+          console.log(response)
+          let selectedIdInv = []
+          let totalRetribusi = 0
+          $.each(response.data, (index, value) => {
+            selectedIdInv.push(value.id)
+            totalRetribusi += parseFloat(value.nominalretribusi)
+          })
 
-    $.ajax({
-      url: `${apiUrl}invoiceheader/${invId}/getEdit`,
-      method: 'GET',
-      dataType: 'JSON',
-      data: data,
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-
-        let omset = 0
-        let disabled = aksi == 'delete' ? "disabled" : "";
-        $.each(response.data, (index, detail) => {
-          omset = parseFloat(omset) + parseFloat(detail.omset)
-
-          nominalextra = (detail.nominalextra != null) ? detail.nominalextra : 0;
-          total = parseFloat(detail.omset) + parseFloat(detail.nominalretribusi) + parseFloat(nominalextra);
-          let cekLongtrip = detail.statuslongtrip == 65 ? "checked" : "";
-          let cekPeralihan = detail.statusperalihan == 67 ? "checked" : "";
-          let detailRow = $(`
-                  <tr >
-                      <td>
-                        <input name='sp_id[]' type="checkbox" class="checkItem" value="${detail.id}" checked ${disabled}>
-                        <input type="hidden" name="nominalextra[]" value="${nominalextra}">
-                      </td>
-                      <td>${detail.jobtrucking}</td>
-                      <td>${detail.tglsp}</td>
-                      <td>${detail.nocont}</td>
-                      <td>${detail.tarif_id}</td>
-                      <td class="omset text-right">${detail.omset}</td>
-                      <td class="tambahan text-right">${nominalextra}</td>
-                      <td id="ret${detail.id}"><input type="text" name="nominalretribusi[]" class="form-control text-right" value="${detail.nominalretribusi}" ${disabled}></td>
-                      <td class="total text-right">${total}</td>
-                      <td>${detail.jenisorder_id}</td>
-                      <td>${detail.agen_id}</td>
-                      <td><input name='statuslongtrip[]' type="checkbox" value="${detail.statuslongtrip}" ${cekLongtrip} disabled></td>
-                      <td><input name='statusperalihan[]' type="checkbox" value="${detail.statusperalihan}" ${cekPeralihan} disabled></td>
-                      <td>${detail.keterangan}</td>
-                  </tr>
-              `)
-
-          $('#spList tbody').append(detailRow)
-          initAutoNumeric(detailRow.find('.omset'))
-          initAutoNumeric(detailRow.find('.tambahan'))
-          initAutoNumeric(detailRow.find('.total'))
-          initAutoNumeric(detailRow.find(`[name="nominalretribusi[]"]`))
-          initAutoNumeric(detailRow.find(`[name="nominalextra[]"]`))
-          setNominalRetribusi()
-        })
-
-        setOmset()
-        // $('#omset').append(`${omset}`)
-
-        // initAutoNumeric($('#spList tfoot').find('#omset'))
-        setTambahan()
-        setTotal()
-
+          $("#tableInvoice")
+            .jqGrid("setGridParam", {
+              datatype: "local",
+              data: response.data,
+              originalData: response.data,
+              rowNum: response.data.length,
+              selectedRowIds: selectedIdInv
+            })
+            .trigger("reloadGrid");
+          initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominalretribusi"]`).text(totalRetribusi))
+        });
       }
     })
   }
