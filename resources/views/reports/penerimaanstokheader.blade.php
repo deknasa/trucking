@@ -42,7 +42,7 @@
       switch (penerimaanstokheaders.statusformat) {
         case '132':
         //DOT
-        report.loadFile(`{{ asset('public/reports/ReportpenerimaanStokDOT.mrt') }}`)
+        report.loadFile(`{{ asset('public/reports/ReportpenerimaanStokDO.mrt') }}`)
         
         break;
       case '133':
@@ -52,9 +52,13 @@
         break;
       case '134':
         //PBT
-        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPBT.mrt') }}`)
-        
+        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokSPB.mrt') }}`)
         break;
+      case '137':
+        //PG
+        report.loadFile(`{{ asset('public/reports/ReportpenerimaanStokPG.mrt') }}`)
+        break;
+        
     
       default:
         report.loadFile(`{{ asset('public/reports/ReportPenerimaanStok.mrt') }}`)
