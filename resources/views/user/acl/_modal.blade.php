@@ -5,7 +5,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="userAclLabel"></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <div class="modal-body" style="min-height: 627px;">
@@ -48,7 +48,7 @@
   selectedRows = [];
 
   $(document).ready(function() {
-    $('#btnSubmitUserAcl').click(function(event) {
+    $(document).on('click', `#btnSubmitUserAcl`, function(event) {
       event.preventDefault()
 
       let userId = $('#userAclForm').find(`[name=user_id]`).val()
@@ -60,6 +60,9 @@
   function updateUserAcl(userId) {
     let form = $('#userAclForm')
 
+    $(this).attr('disabled', '')
+    $('#loader').removeClass('d-none')
+    
     $.ajax({
       url: `${apiUrl}user/${userId}/acl`,
       method: 'POST',
@@ -122,11 +125,11 @@
       return acl.id
     })
 
-    showUser(userId)
+    showUserAcl(userId)
     loadAcoGrid()
   }
 
-  function showUser(userId) {
+  function showUserAcl(userId) {
     $.ajax({
       url: `${apiUrl}user/${userId}`,
       method: 'GET',

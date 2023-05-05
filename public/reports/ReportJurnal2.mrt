@@ -1,0 +1,682 @@
+{
+  "ReportVersion": "2023.1.1",
+  "ReportGuid": "9043e1825461e0e12adf8839d9af660a",
+  "ReportName": "Report",
+  "ReportAlias": "Report",
+  "ReportFile": "http://localhost/truck/public/reports/ReportJurnal.mrt",
+  "ReportDescription": "14-10-2019",
+  "ReportCreated": "/Date(0+0700)/",
+  "ReportChanged": "/Date(1682325493000+0700)/",
+  "EngineVersion": "EngineV2",
+  "CalculationMode": "Interpretation",
+  "ReportUnit": "Millimeters",
+  "ScriptLanguage": "CSharp",
+  "PreviewSettings": 268435455,
+  "Dictionary": {
+    "DataSources": {
+      "0": {
+        "Ident": "StiDataTableSource",
+        "Name": "jurnal",
+        "Alias": "jurnal",
+        "Columns": {
+          "0": {
+            "Name": "nobukti",
+            "NameInSource": "nobukti",
+            "Alias": "nobukti",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "tglbukti",
+            "NameInSource": "tglbukti",
+            "Alias": "tglbukti",
+            "Type": "System.DateTime"
+          },
+          "2": {
+            "Name": "coa",
+            "NameInSource": "coa",
+            "Alias": "coa",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "keterangancoa",
+            "NameInSource": "keterangancoa",
+            "Alias": "keterangancoa",
+            "Type": "System.String"
+          },
+          "4": {
+            "Name": "nominaldebet",
+            "NameInSource": "nominaldebet",
+            "Alias": "nominaldebet",
+            "Type": "System.String"
+          },
+          "5": {
+            "Name": "nominalkredit",
+            "NameInSource": "nominalkredit",
+            "Alias": "nominalkredit",
+            "Type": "System.String"
+          },
+          "6": {
+            "Name": "keterangan",
+            "NameInSource": "keterangan",
+            "Alias": "keterangan",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.jurnal"
+      },
+      "1": {
+        "Ident": "StiDataTableSource",
+        "Name": "user_roles_pivot",
+        "Alias": "user_roles_pivot",
+        "Columns": {
+          "0": {
+            "Name": "user_id",
+            "NameInSource": "user_id",
+            "Alias": "user_id",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "role_id",
+            "NameInSource": "role_id",
+            "Alias": "role_id",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.user_roles_pivot"
+      },
+      "2": {
+        "Ident": "StiDataTableSource",
+        "Name": "user_roles",
+        "Alias": "user_roles",
+        "Columns": {
+          "0": {
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
+            "Type": "System.Decimal"
+          },
+          "1": {
+            "Name": "rolename",
+            "NameInSource": "rolename",
+            "Alias": "rolename",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "modifiedby",
+            "NameInSource": "modifiedby",
+            "Alias": "modifiedby",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "created_at",
+            "NameInSource": "created_at",
+            "Alias": "created_at",
+            "Type": "System.DateTime"
+          },
+          "4": {
+            "Name": "updated_at",
+            "NameInSource": "updated_at",
+            "Alias": "updated_at",
+            "Type": "System.DateTime"
+          },
+          "5": {
+            "Name": "pivot",
+            "NameInSource": "pivot",
+            "Alias": "pivot",
+            "Type": "System.String"
+          },
+          "6": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.user_roles"
+      },
+      "3": {
+        "Ident": "StiDataTableSource",
+        "Name": "user",
+        "Alias": "user",
+        "Columns": {
+          "0": {
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
+            "Type": "System.Decimal"
+          },
+          "1": {
+            "Name": "user",
+            "NameInSource": "user",
+            "Alias": "user",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "name",
+            "NameInSource": "name",
+            "Alias": "name",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "cabang_id",
+            "NameInSource": "cabang_id",
+            "Alias": "cabang_id",
+            "Type": "System.String"
+          },
+          "4": {
+            "Name": "karyawan_id",
+            "NameInSource": "karyawan_id",
+            "Alias": "karyawan_id",
+            "Type": "System.String"
+          },
+          "5": {
+            "Name": "dashboard",
+            "NameInSource": "dashboard",
+            "Alias": "dashboard",
+            "Type": "System.String"
+          },
+          "6": {
+            "Name": "statusaktif",
+            "NameInSource": "statusaktif",
+            "Alias": "statusaktif",
+            "Type": "System.String"
+          },
+          "7": {
+            "Name": "modifiedby",
+            "NameInSource": "modifiedby",
+            "Alias": "modifiedby",
+            "Type": "System.String"
+          },
+          "8": {
+            "Name": "created_at",
+            "NameInSource": "created_at",
+            "Alias": "created_at",
+            "Type": "System.DateTime"
+          },
+          "9": {
+            "Name": "updated_at",
+            "NameInSource": "updated_at",
+            "Alias": "updated_at",
+            "Type": "System.DateTime"
+          },
+          "10": {
+            "Name": "roles",
+            "NameInSource": "roles",
+            "Alias": "roles",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.user"
+      }
+    },
+    "Relations": {
+      "0": {
+        "Name": "user_roles",
+        "ChildColumns": {
+          "0": "relationId"
+        },
+        "ParentColumns": {
+          "0": "pivot"
+        },
+        "NameInSource": "user_roles_pivot",
+        "Alias": "user_roles",
+        "ParentSource": "user_roles",
+        "ChildSource": "user_roles_pivot"
+      },
+      "1": {
+        "Name": "user",
+        "ChildColumns": {
+          "0": "relationId"
+        },
+        "ParentColumns": {
+          "0": "roles"
+        },
+        "NameInSource": "user_roles",
+        "Alias": "user",
+        "ParentSource": "user",
+        "ChildSource": "user_roles"
+      }
+    }
+  },
+  "Pages": {
+    "0": {
+      "Ident": "StiPage",
+      "Name": "Page1",
+      "Guid": "49c519741dad4a89981d644d00fedc94",
+      "Interaction": {
+        "Ident": "StiInteraction"
+      },
+      "Border": ";;2;;;;;solid:Black",
+      "Brush": "solid:",
+      "Components": {
+        "0": {
+          "Ident": "StiReportTitleBand",
+          "Name": "ReportTitleBand1",
+          "ClientRectangle": "0,4,208,10",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "Border": ";;;;;;;solid:Black",
+          "Brush": "solid:",
+          "Components": {
+            "0": {
+              "Ident": "StiText",
+              "Name": "Text2",
+              "Guid": "2544863fd6d06f3bc9e0cfe076721b57",
+              "ClientRectangle": "0,2,208,8",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "TAS {user.cabang_id}"
+              },
+              "HorAlignment": "Center",
+              "Font": ";16;Bold;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "Expression"
+            }
+          }
+        },
+        "1": {
+          "Ident": "StiGroupHeaderBand",
+          "Name": "GroupHeaderBand1",
+          "ClientRectangle": "0,22,208,28",
+          "Interaction": {
+            "Ident": "StiBandInteraction"
+          },
+          "Border": ";;;;;;;solid:Black",
+          "Brush": "solid:",
+          "Components": {
+            "0": {
+              "Ident": "StiText",
+              "Name": "Text3",
+              "Guid": "bbfc3745a234368a19ca2a4995391b77",
+              "ClientRectangle": "0,6.03,28,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "Tanggal"
+              },
+              "Font": ";10;;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "Expression"
+            },
+            "1": {
+              "Ident": "StiText",
+              "Name": "Text4",
+              "Guid": "781dee3130e20970c8c8f47774898320",
+              "ClientRectangle": "0,11.88,28,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "Keterangan"
+              },
+              "Font": ";10;;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "Expression"
+            },
+            "2": {
+              "Ident": "StiText",
+              "Name": "Text8",
+              "Guid": "319a3480b55a328efa4e66f11b679beb",
+              "ClientRectangle": "27.94,6.03,2,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": ":"
+              },
+              "Font": ";9;;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black"
+            },
+            "3": {
+              "Ident": "StiText",
+              "Name": "Text9",
+              "Guid": "a80ec33d67ef6c6303c90c87e5185f20",
+              "ClientRectangle": "27.94,11.88,2,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": ":"
+              },
+              "Font": ";9;;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black"
+            },
+            "4": {
+              "Ident": "StiText",
+              "Name": "Text15",
+              "Guid": "9a7a69a4434b6a88b77f1f51da73349f",
+              "ClientRectangle": "29.97,6.03,78,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{jurnal.tglbukti}"
+              },
+              "Font": ";10;;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiCustomFormatService",
+                "StringFormat": "dd-MM-yyyy"
+              },
+              "Type": "DataColumn"
+            },
+            "5": {
+              "Ident": "StiText",
+              "Name": "Text16",
+              "Guid": "a4cdaf614248c43db8516a6acaa4632a",
+              "ClientRectangle": "29.97,11.88,78,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{jurnal.keterangan}"
+              },
+              "Font": ";10;;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "DataColumn"
+            },
+            "6": {
+              "Ident": "StiText",
+              "Name": "Text1",
+              "Guid": "06cc1ce05952299c93dd2a3d66170ea2",
+              "ClientRectangle": "0,-0.06,28,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "No Jurnal Umum"
+              },
+              "Font": ";10;;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "Expression"
+            },
+            "7": {
+              "Ident": "StiText",
+              "Name": "Text7",
+              "Guid": "262d9d578ca6384de1cd89550502e1dd",
+              "ClientRectangle": "27.94,-0.06,2,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": ":"
+              },
+              "Font": ";9;;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black"
+            },
+            "8": {
+              "Ident": "StiText",
+              "Name": "Text14",
+              "Guid": "22241db4eb3bc7e64fa730b9aa6857c8",
+              "ClientRectangle": "29.97,-0.06,78,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{jurnal.nobukti}"
+              },
+              "Font": ";10;;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "DataColumn"
+            },
+            "9": {
+              "Ident": "StiText",
+              "Name": "Text34",
+              "Guid": "59451a9209d9818eaac997b94054a2ec",
+              "ClientRectangle": "142.02,-0.03,40,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Time}"
+              },
+              "Font": ";;Italic;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiCustomFormatService",
+                "StringFormat": "dd/MM/yyyy HH:m:s"
+              },
+              "Type": "SystemVariables"
+            },
+            "10": {
+              "Ident": "StiText",
+              "Name": "Text35",
+              "Guid": "4a8d42f767b3609c944e522aca5536f1",
+              "ClientRectangle": "118.14,-0.03,22,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "Tanggal cetak :"
+              },
+              "Font": ";;Italic;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "Expression"
+            },
+            "11": {
+              "Ident": "StiText",
+              "Name": "Text36",
+              "Guid": "1ff468f25a52e2d64d7b621c50726459",
+              "ClientRectangle": "186.21,-0.03,22,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{user.name}"
+              },
+              "Font": ";;Italic;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "DataColumn"
+            }
+          }
+        },
+        "2": {
+          "Ident": "StiDataBand",
+          "Name": "DataBand1",
+          "ClientRectangle": "0,58,208,14",
+          "Interaction": {
+            "Ident": "StiBandInteraction"
+          },
+          "Border": ";;;;;;;solid:Black",
+          "Brush": "solid:",
+          "Components": {
+            "0": {
+              "Ident": "StiTable",
+              "Name": "Table1",
+              "ClientRectangle": "0,4,208,8",
+              "Interaction": {
+                "Ident": "StiBandInteraction"
+              },
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "Components": {
+                "0": {
+                  "Ident": "StiTableCell",
+                  "Name": "Table1_Cell1",
+                  "GrowToHeight": true,
+                  "ClientRectangle": "0,0,9.65,8",
+                  "Restrictions": "AllowMove, AllowSelect, AllowChange",
+                  "Interaction": {
+                    "Ident": "StiInteraction"
+                  },
+                  "Text": {
+                    "Value": "{Line}"
+                  },
+                  "HorAlignment": "Center",
+                  "VertAlignment": "Center",
+                  "Font": ";9;;",
+                  "Border": ";;;;;;;solid:0,0,0",
+                  "Brush": "solid:",
+                  "TextBrush": "solid:0,0,0",
+                  "TextQuality": "Wysiwyg",
+                  "Type": "SystemVariables",
+                  "ID": 0
+                },
+                "1": {
+                  "Ident": "StiTableCell",
+                  "Name": "Table1_Cell2",
+                  "CanShrink": true,
+                  "CanGrow": true,
+                  "GrowToHeight": true,
+                  "ClientRectangle": "9.65,0,32,8",
+                  "Restrictions": "AllowMove, AllowSelect, AllowChange",
+                  "Interaction": {
+                    "Ident": "StiInteraction"
+                  },
+                  "Text": {
+                    "Value": "{jurnal.coa}"
+                  },
+                  "CanBreak": true,
+                  "HorAlignment": "Center",
+                  "VertAlignment": "Center",
+                  "Border": ";;;;;;;solid:0,0,0",
+                  "Brush": "solid:",
+                  "TextBrush": "solid:Black",
+                  "Type": "DataColumn",
+                  "ID": 1
+                },
+                "2": {
+                  "Ident": "StiTableCell",
+                  "Name": "Table1_Cell3",
+                  "GrowToHeight": true,
+                  "ClientRectangle": "41.66,0,71.12,8",
+                  "Restrictions": "AllowMove, AllowSelect, AllowChange",
+                  "Interaction": {
+                    "Ident": "StiInteraction"
+                  },
+                  "Text": {
+                    "Value": "{jurnal.keterangancoa}"
+                  },
+                  "CanBreak": true,
+                  "HorAlignment": "Center",
+                  "VertAlignment": "Center",
+                  "Border": ";;;;;;;solid:0,0,0",
+                  "Brush": "solid:",
+                  "TextBrush": "solid:Black",
+                  "Type": "DataColumn",
+                  "ID": 2
+                },
+                "3": {
+                  "Ident": "StiTableCell",
+                  "Name": "Table1_Cell4",
+                  "GrowToHeight": true,
+                  "ClientRectangle": "112.78,0,47.5,8",
+                  "Restrictions": "AllowMove, AllowSelect, AllowChange",
+                  "Interaction": {
+                    "Ident": "StiInteraction"
+                  },
+                  "Editable": true,
+                  "Text": {
+                    "Value": "{jurnal.nominaldebet}"
+                  },
+                  "HorAlignment": "Center",
+                  "VertAlignment": "Center",
+                  "Border": ";;;;;;;solid:0,0,0",
+                  "Brush": "solid:",
+                  "TextBrush": "solid:Black",
+                  "TextOptions": {
+                    "WordWrap": true
+                  },
+                  "Type": "DataColumn",
+                  "ID": 3
+                },
+                "4": {
+                  "Ident": "StiTableCell",
+                  "Name": "Table1_Cell5",
+                  "GrowToHeight": true,
+                  "ClientRectangle": "160.27,0,47.75,8",
+                  "Restrictions": "AllowMove, AllowSelect, AllowChange",
+                  "Interaction": {
+                    "Ident": "StiInteraction"
+                  },
+                  "Text": {
+                    "Value": "{jurnal.nominalkredit}"
+                  },
+                  "HorAlignment": "Center",
+                  "VertAlignment": "Center",
+                  "Border": ";;;;;;;solid:0,0,0",
+                  "Brush": "solid:",
+                  "TextBrush": "solid:Black",
+                  "TextFormat": {
+                    "Ident": "StiCurrencyFormatService",
+                    "GroupSeparator": ",",
+                    "UseLocalSetting": false,
+                    "Symbol": "Rp "
+                  },
+                  "Type": "DataColumn",
+                  "ID": 4
+                }
+              },
+              "MinHeight": 2,
+              "DataSourceName": "jurnal",
+              "RowCount": 1,
+              "HeaderCanGrow": false,
+              "HeaderPrintIfEmpty": false,
+              "NumberID": 30
+            }
+          }
+        }
+      },
+      "PageWidth": 220,
+      "PageHeight": 190,
+      "Watermark": {
+        "TextBrush": "solid:50,0,0,0"
+      },
+      "Margins": {
+        "Left": 7,
+        "Right": 5,
+        "Top": 5,
+        "Bottom": 5
+      }
+    }
+  }
+}

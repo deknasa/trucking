@@ -907,6 +907,7 @@
             <input type="text" value="${detail.noinvoice_detail}"  id="noinvoice_detail${id}" class="" name="noinvoice_detail[]"  readonly   >
             <input type="text" value="${detail.nominal_detail}"  id="nominal${id}" class="" name="nominal[]"  readonly   >
             <input type="text" value="${detail.nojobtrucking_detail}"  id="nojobtrucking_detail${id}" class="" name="nojobtrucking_detail[]"  readonly   >
+            <input type="text" value="SUMBANGAN SOSIAL"  id="keterangan${id}" class="" name="keterangan[]"  readonly   >
             </div>
             `
             selectedRows.push(id);
@@ -1232,6 +1233,7 @@
           $(`#detail_row_${value}`).find(`[name="noinvoice_detail[]"]`).attr('disabled',false)
           $(`#detail_row_${value}`).find(`[name="nominal[]"]`).attr('disabled',false)
           $(`#detail_row_${value}`).find(`[name="nojobtrucking_detail[]"]`).attr('disabled',false)
+          $(`#detail_row_${value}`).find(`[name="keterangan[]"]`).attr('disabled',false)
         } else {
           for (var i = 0; i < selectedRows.length; i++) {
             if (selectedRows[i] == value) {
@@ -1243,6 +1245,7 @@
           $(`#detail_row_${value}`).find(`[name="noinvoice_detail[]"]`).attr('disabled',true)
           $(`#detail_row_${value}`).find(`[name="nominal[]"]`).attr('disabled',true)
           $(`#detail_row_${value}`).find(`[name="nojobtrucking_detail[]"]`).attr('disabled',true)
+          $(`#detail_row_${value}`).find(`[name="keterangan[]"]`).attr('disabled',true)
         }
   }
 
@@ -1381,6 +1384,7 @@
           <input type="text" value="${detail.noinvoice_detail}"  id="noinvoice_detail${detail.id_detail}" class="" name="noinvoice_detail[]"  readonly disabled  >
           <input type="text" value="${detail.nominal_detail}"  id="nominal${detail.id_detail}" class="" name="nominal[]"  readonly disabled  >
           <input type="text" value="${detail.nojobtrucking_detail}"  id="nojobtrucking_detail${detail.id_detail}" class="" name="nojobtrucking_detail[]"  readonly disabled  >
+          <input type="text" value="SUMBANGAN SOSIAL"  id="keterangan${id}" class="" name="keterangan[]"  readonly   >
           </div>
           
           `)
