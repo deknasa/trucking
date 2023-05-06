@@ -97,7 +97,8 @@
               </div>
             </div>
 
-            <div class="table-responsive table-scroll mt-3">
+            <table id="tableHutang"></table>
+            <!-- <div class="table-responsive table-scroll mt-3">
               <table class="table table-bordered mt-3" id="detailList" style="width:2000px;">
                 <thead class="table-secondary">
                   <tr>
@@ -138,7 +139,7 @@
                   </tr>
                 </tfoot>
               </table>
-            </div>
+            </div> -->
 
 
           </div>
@@ -288,46 +289,33 @@
         value: form.find(`[name="tglcair"]`).val()
       })
 
-      if (action != 'delete') {
+      let selectedRowsHutang = $("#tableHutang").getGridParam("selectedRowIds");
+      $.each(selectedRowsHutang, function(index, value) {
+        let selectedBayar = $("#tableHutang").jqGrid("getCell", value, "bayar")
+        let selectedPotongan = $("#tableHutang").jqGrid("getCell", value, "potongan")
 
-        $('#table_body tr').each(function(row, tr) {
-          // console.log(row);
-
-          if ($(this).find(`[name="hutang_id[]"]`).is(':checked')) {
-
-            data.push({
-              name: 'keterangandetail[]',
-              value: $(this).find(`[name="keterangandetail[]"]`).val()
-            })
-            data.push({
-              name: 'bayar[]',
-              value: AutoNumeric.getNumber($(`#crudForm [name="bayar[]"]`)[row])
-            })
-            data.push({
-              name: 'potongan[]',
-              value: AutoNumeric.getNumber($(`#crudForm [name="potongan[]"]`)[row])
-            })
-            data.push({
-              name: 'total[]',
-              value: AutoNumeric.getNumber($(`#crudForm [name="total[]"]`)[row])
-            })
-
-            data.push({
-              name: 'hutang_nobukti[]',
-              value: $(this).find(`[name="hutang_nobukti[]"]`).val()
-            })
-
-            data.push({
-              name: 'hutang_id[]',
-              value: $(this).find(`[name="hutang_id[]"]`).val()
-            })
-
-          }
+        data.push({
+          name: 'bayar[]',
+          value: (selectedBayar != '') ? parseFloat(selectedBayar.replaceAll(',', '')) : 0
         })
-      }
-      // console.log(typeof(data))
+        data.push({
+          name: 'potongan[]',
+          value: (selectedPotongan != '') ? parseFloat(selectedPotongan.replaceAll(',', '')) : 0
+        })
+        data.push({
+          name: 'keterangan[]',
+          value: $("#tableHutang").jqGrid("getCell", value, "keterangan")
+        })
+        data.push({
+          name: 'hutang_nobukti[]',
+          value: $("#tableHutang").jqGrid("getCell", value, "nobukti")
+        })
+        data.push({
+          name: 'hutang_id[]',
+          value: $("#tableHutang").jqGrid("getCell", value, "id")
+        })
+      });
 
-      // console.log(detailData);
 
       data.push({
         name: 'sortIndex',
@@ -417,36 +405,37 @@
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-            hutangid = []
-            $('#table_body tr').each(function(row, tr) {
-              if ($(this).find(`[name="hutang_id[]"]`).is(':checked')) {
-                hutangid.push($(this).find(`[name="hutang_id[]"]`).val())
-              }
-            })
-            errors = error.responseJSON.errors
 
+            errors = error.responseJSON.errors
+            $(".ui-state-error").removeClass("ui-state-error");
             $.each(errors, (index, error) => {
               let indexes = index.split(".");
               let angka = indexes[1]
-
-              row = hutangid[angka] - 1;
+              row = parseInt(selectedRowsHutang[angka]) - 1;
               let element;
 
-              if (indexes.length > 1) {
-                element = form.find(`[name="${indexes[0]}[]"]`)[row];
-              } else {
-                element = form.find(`[name="${indexes[0]}"]`)[0];
-              }
+              if (indexes[0] == 'bank' || indexes[0] == 'alatbayar' || indexes[0] == 'tglcair' || indexes[0] == 'supplier') {
+                if (indexes.length > 1) {
+                  element = form.find(`[name="${indexes[0]}[]"]`)[row];
+                } else {
+                  element = form.find(`[name="${indexes[0]}"]`)[0];
+                }
 
-              if ($(element).length > 0 && !$(element).is(":hidden")) {
-                $(element).addClass("is-invalid");
-                $(`
+                if ($(element).length > 0 && !$(element).is(":hidden")) {
+                  $(element).addClass("is-invalid");
+                  $(`
                   <div class="invalid-feedback">
                   ${error[0].toLowerCase()}
                   </div>
-              `).appendTo($(element).parent());
+                  `).appendTo($(element).parent());
+                } else {
+                  return showDialog(error);
+                }
               } else {
-                return showDialog(error);
+
+                element = $(`#tableHutang tr#${parseInt(selectedRowsHutang[angka])}`).find(`td[aria-describedby="tableHutang_${indexes[0]}"]`)
+                $(element).addClass("ui-state-error");
+                $(element).attr("title", error[0].toLowerCase())
               }
             });
           } else {
@@ -543,9 +532,10 @@
     $('#crudForm').find('[name=tglcair]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     initDatepicker()
-    setBayar()
-    setPotongan()
-    setTotal()
+    loadHutangGrid()
+    // setBayar()
+    // setPotongan()
+    // setTotal()
   }
 
   function editHutangBayarHeader(Id) {
@@ -562,6 +552,27 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
+    showHutangBayar(form, Id)
+
+  }
+
+  function deleteHutangBayarHeader(Id) {
+    let form = $('#crudForm')
+
+    form.data('action', 'delete')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+    <i class="fa fa-save"></i>
+    Hapus
+  `)
+    $('#crudModalTitle').text('Delete Pembayaran Hutang')
+    $('#crudModal').modal('show')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+    showHutangBayar(form, Id)
+  }
+
+  function showHutangBayar(form, Id) {
 
     form.find(`[name="tglbukti"]`).prop('readonly', true)
     form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
@@ -587,73 +598,569 @@
 
           if (index == 'bank') {
             element.data('current-value', value)
+            element.parent('.input-group').find('.button-clear').remove()
+            element.parent('.input-group').find('.input-group-append').remove()
           }
           if (index == 'supplier') {
             element.data('current-value', value)
+            element.parent('.input-group').find('.button-clear').remove()
+            element.parent('.input-group').find('.input-group-append').remove()
           }
           if (index == 'alatbayar') {
             element.data('current-value', value)
+            element.parent('.input-group').find('.button-clear').remove()
+            element.parent('.input-group').find('.input-group-append').remove()
           }
 
-          if (index == 'tglbukti' || index == 'supplier_id' || index == 'supplier' || index == 'tglcair') {
-            element.prop('disabled', false)
+          if (index != 'tglcair') {
+            element.prop("readonly", true)
+          }
+        })
+
+        loadHutangGrid();
+        getDataHutang(response.data.supplier_id, Id).then((response) => {
+
+          let selectedId = []
+          let totalBayar = 0
+          let totalPotongan = 0
+
+          $.each(response.data, (index, value) => {
+            if (value.hutangbayar_id != null) {
+              selectedId.push(value.id)
+              totalBayar += parseFloat(value.bayar)
+              totalPotongan += parseFloat(value.potongan)
+            }
+          })
+          $('#tableHutang').jqGrid("clearGridData");
+          setTimeout(() => {
+
+            $("#tableHutang")
+              .jqGrid("setGridParam", {
+                datatype: "local",
+                data: response.data,
+                originalData: response.data,
+                selectedRowIds: selectedId
+              })
+              .trigger("reloadGrid");
+          }, 100);
+
+          initAutoNumeric($('.footrow').find(`td[aria-describedby="tableHutang_bayar"]`).text(totalBayar))
+          initAutoNumeric($('.footrow').find(`td[aria-describedby="tableHutang_potongan"]`).text(totalPotongan))
+
+        });
+      }
+    })
+  }
+
+  function loadHutangGrid() {
+    $("#tableHutang")
+      .jqGrid({
+        datatype: 'local',
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        colModel: [{
+            label: "",
+            name: "",
+            width: 30,
+            formatter: 'checkbox',
+            search: false,
+            editable: false,
+            formatter: function(value, rowOptions, rowData) {
+              let disabled = '';
+              if ($('#crudForm').data('action') == 'delete') {
+                disabled = 'disabled'
+              }
+              return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxHutangHandler(this, ${rowData.id})">`;
+            },
+          },
+          {
+            label: "id",
+            name: "id",
+            hidden: true,
+            search: false,
+          },
+          {
+            label: "Nobukti HUTANG",
+            name: "nobukti",
+            sortable: true,
+          },
+          {
+            label: "TGL BUKTI",
+            name: "tglbukti",
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: "NOMINAL HUTANG",
+            name: "nominal",
+            sortable: true,
+            align: "right",
+            formatter: currencyFormat,
+          },
+          {
+            label: "SISA HUTANG",
+            name: "sisa",
+            sortable: true,
+            align: "right",
+            formatter: currencyFormat,
+          },
+          {
+            label: "KETERANGAN",
+            name: "keterangan",
+            sortable: false,
+            editable: true,
+          },
+          {
+            label: "BAYAR",
+            name: "bayar",
+            align: "right",
+            editable: true,
+            editoptions: {
+              dataInit: function(element, id) {
+                initAutoNumeric($('#crudForm').find(`[id="${id.id}"]`))
+              },
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+                  let originalGridData = $("#tableHutang")
+                    .jqGrid("getGridParam", "originalData")
+                    .find((row) => row.id == rowObject.rowId);
+
+                  let localRow = $("#tableHutang").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  let totalSisa
+
+                  let bayar = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
+                  let getPotongan = $("#tableHutang").jqGrid(
+                    "getCell",
+                    rowObject.rowId,
+                    "potongan")
+                  let potongan = (getPotongan != '') ? parseFloat(getPotongan.replaceAll(',', '')) : 0
+                  if ($('#crudForm').data('action') == 'edit') {
+                    totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)) - bayar - potongan
+                  } else {
+                    totalSisa = originalGridData.sisa - bayar - potongan
+                  }
+
+                  grandTotal = bayar + potongan;
+
+                  $("#tableHutang").jqGrid(
+                    "setCell",
+                    rowObject.rowId,
+                    "sisa",
+                    totalSisa
+                  );
+
+                  $("#tableHutang").jqGrid(
+                    "setCell",
+                    rowObject.rowId,
+                    "total",
+                    grandTotal
+                  );
+
+                  bayarDetails = $(`#tableHutang tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableHutang_bayar"]`)
+                  ttlBayar = 0
+                  $.each(bayarDetails, (index, bayarDetail) => {
+                    ttlBayarDetail = parseFloat($(bayarDetail).attr('title').replaceAll(',', ''))
+                    ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
+                    ttlBayar += ttlBayars
+                  });
+                  ttlBayar += bayar
+                  initAutoNumeric($('.footrow').find(`td[aria-describedby="tableHutang_bayar"]`).text(ttlBayar))
+
+                  setAllTotal()
+                  setTotalSisa()
+                },
+              }, ],
+            },
+            sortable: false,
+            sorttype: "int",
+          },
+          {
+            label: "Potongan",
+            name: "potongan",
+            align: "right",
+            editable: true,
+            editoptions: {
+              dataInit: function(element, id) {
+                initAutoNumeric($('#crudForm').find(`[id="${id.id}"]`))
+              },
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+                  let originalGridData = $("#tableHutang")
+                    .jqGrid("getGridParam", "originalData")
+                    .find((row) => row.id == rowObject.rowId);
+
+                  let localRow = $("#tableHutang").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  let totalSisa
+                  localRow.potongan = event.target.value;
+                  let potongan = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
+                  let getBayar = $("#tableHutang").jqGrid(
+                    "getCell",
+                    rowObject.rowId,
+                    "bayar")
+                  let bayar = (getBayar != '') ? parseFloat(getBayar.replaceAll(',', '')) : 0
+
+                  if ($('#crudForm').data('action') == 'edit') {
+                    totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)) - bayar - potongan
+                  } else {
+                    totalSisa = originalGridData.sisa - bayar - potongan
+                  }
+
+                  grandTotal = bayar + potongan;
+
+                  $("#tableHutang").jqGrid(
+                    "setCell",
+                    rowObject.rowId,
+                    "sisa",
+                    totalSisa
+                  );
+
+                  $("#tableHutang").jqGrid(
+                    "setCell",
+                    rowObject.rowId,
+                    "total",
+                    grandTotal
+                  );
+
+                  let potonganDetails = $(`#tableHutang tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableHutang_potongan"]`)
+                  let ttlPotongan = 0
+                  $.each(potonganDetails, (index, potonganDetail) => {
+                    ttlPotDetail = parseFloat($(potonganDetail).attr('title').replaceAll(',', ''))
+                    ttlPotongans = (isNaN(ttlPotDetail)) ? 0 : ttlPotDetail;
+                    ttlPotongan += ttlPotongans
+                  });
+                  ttlPotongan += potongan
+                  initAutoNumeric($('.footrow').find(`td[aria-describedby="tableHutang_potongan"]`).text(ttlPotongan))
+
+                  setTotalSisa()
+                  setAllTotal()
+                },
+              }, ],
+            },
+
+            sortable: false,
+            sorttype: "int",
+          },
+          {
+            label: "TOTAL",
+            name: "total",
+            sortable: true,
+            align: "right",
+            formatter: currencyFormat,
+          },
+        ],
+        autowidth: true,
+        shrinkToFit: false,
+        height: 400,
+        rownumbers: true,
+        rownumWidth: 45,
+        footerrow: true,
+        userDataOnFooter: true,
+        toolbar: [true, "top"],
+        pgbuttons: false,
+        pginput: false,
+        cellEdit: true,
+        cellsubmit: "clientArray",
+        editableColumns: ["bayar"],
+        selectedRowIds: [],
+        afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
+          let originalGridData = $("#tableHutang")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
+
+          let localRow = $("#tableHutang").jqGrid("getLocalRow", rowId);
+
+          let getBayar = $("#tableHutang").jqGrid("getCell", rowId, "bayar")
+          let bayar = (getBayar != '') ? parseFloat(getBayar.replaceAll(',', '')) : 0
+
+          let getPotongan = $("#tableHutang").jqGrid("getCell", rowId, "potongan")
+          let potongan = (getPotongan != '') ? parseFloat(getPotongan.replaceAll(',', '')) : 0
+
+          sisa = 0
+          if ($('#crudForm').data('action') == 'edit') {
+            sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)) - bayar - potongan
           } else {
-            element.prop("disabled", true)
-          }
-        })
-
-
-        getPembayaran(Id, response.data.supplier_id, 'edit')
-      }
-    })
-  }
-
-  function deleteHutangBayarHeader(Id) {
-    let form = $('#crudForm')
-
-    form.data('action', 'delete')
-    form.trigger('reset')
-    form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Hapus
-  `)
-    $('#crudModalTitle').text('Delete Pembayaran Hutang')
-    $('#crudModal').modal('show')
-    $('.is-invalid').removeClass('is-invalid')
-    $('.invalid-feedback').remove()
-
-    form.find(`[name="tglbukti"]`).prop('readonly', true)
-    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-    $.ajax({
-      url: `${apiUrl}hutangbayarheader/${Id}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-
-          form.find(`[name="${index}"]`).val(value)
-
-          if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
+            sisa = originalGridData.sisa - bayar - potongan
           }
 
-        })
+          // console.log('sisa', originalGridData.sisa)
+          // console.log('bayar', bayar)
+          // console.log('potongan', potongan)
+          // console.log(originalGridData.sisa - bayar - potongan)
+          console.log('indexc', indexColumn)
+          if (indexColumn == 9 || indexColumn == 10) {
+            console.log('here')
+            $("#tableHutang").jqGrid(
+              "setCell",
+              rowId,
+              "sisa",
+              sisa
+              // sisa - bayar - potongan
+            );
+          }
+        },
+        isCellEditable: function(cellname, iRow, iCol) {
+          let rowData = $(this).jqGrid("getRowData")[iRow - 1];
 
-        getPembayaran(Id, response.data.supplier_id, 'delete')
+          return $(this)
+            .find(`tr input[value=${rowData.id}]`)
+            .is(":checked");
+        },
+        validationCell: function(cellobject, errormsg, iRow, iCol) {
+          console.log(cellobject);
+          console.log(errormsg);
+          console.log(iRow);
+          console.log(iCol);
+        },
+        loadComplete: function() {
+          setTimeout(() => {
+            $(this)
+              .getGridParam("selectedRowIds")
+              .forEach((selectedRowId) => {
+                $(this)
+                  .find(`tr input[value=${selectedRowId}]`)
+                  .prop("checked", true);
+                initAutoNumeric($(this).find(`td[aria-describedby="tableHutang_bayar"]`))
+                initAutoNumeric($(this).find(`td[aria-describedby="tableHutang_potongan"]`))
+                initAutoNumeric($(this).find(`td[aria-describedby="tableHutang_nominallebihbayar"]`))
+              });
+          }, 100);
+          setTotalNominal()
+          setTotalSisa()
+          setAllTotal()
+          setHighlight($(this))
+        },
+      })
+      .jqGrid("setLabel", "rn", "No.")
+      .jqGrid("navGrid", "#tablePager", {
+        add: false,
+        edit: false,
+        del: false,
+        refresh: false,
+        search: false,
+      })
+      .jqGrid("filterToolbar", {
+        searchOnEnter: false,
+      })
+      .jqGrid("excelLikeGrid", {
+        beforeDeleteCell: function(rowId, iRow, iCol, event) {
+          let localRow = $("#tableHutang").jqGrid("getLocalRow", rowId);
 
-      }
-    })
+          $("#tableHutang").jqGrid(
+            "setCell",
+            rowId,
+            "sisa",
+            parseInt(localRow.sisa) + parseInt(localRow.bayar)
+          );
+
+          return true;
+        },
+      });
+    /* Append clear filter button */
+    loadClearFilter($('#tableHutang'))
+
+    /* Append global search */
+    // loadGlobalSearch($('#tableHutang'))
   }
 
-  // $(window).on("load", function() {
-  //   var $grid = $("#gridPiutang"),
-  //     newWidth = $grid.closest(".ui-jqgrid").parent().width();
-  //   $grid.jqGrid("setGridWidth", newWidth, true);
-  // });
+  function getDataHutang(supplierId, id) {
+    aksi = $('#crudForm').data('action')
+
+    if (aksi == 'edit') {
+      console.log(id)
+      if (id != undefined) {
+        url = `${apiUrl}hutangbayarheader/${id}/${supplierId}/getPembayaran`
+      } else {
+        url = `${apiUrl}hutangbayarheader/${supplierId}/getHutang`
+      }
+    } else if (aksi == 'delete') {
+      url = `${apiUrl}hutangbayarheader/${id}/${supplierId}/getPembayaran`
+      attribut = 'disabled'
+      forCheckbox = 'disabled'
+    } else if (aksi == 'add') {
+      url = `${apiUrl}hutangbayarheader/${supplierId}/getHutang`
+    }
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: url,
+        dataType: "JSON",
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: (response) => {
+          resolve(response);
+        },
+      });
+    });
+  }
+
+
+  function checkboxHutangHandler(element, rowId) {
+
+    let isChecked = $(element).is(":checked");
+    let editableColumns = $("#tableHutang").getGridParam("editableColumns");
+    let selectedRowIds = $("#tableHutang").getGridParam("selectedRowIds");
+    let originalGridData = $("#tableHutang")
+      .jqGrid("getGridParam", "originalData")
+      .find((row) => row.id == rowId);
+
+    editableColumns.forEach((editableColumn) => {
+
+      if (!isChecked) {
+        for (var i = 0; i < selectedRowIds.length; i++) {
+          if (selectedRowIds[i] == rowId) {
+            selectedRowIds.splice(i, 1);
+          }
+        }
+        sisa = 0
+        if ($('#crudForm').data('action') == 'edit') {
+          sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar) + parseFloat(originalGridData.potongan))
+        } else {
+          sisa = originalGridData.sisa
+        }
+
+        $("#tableHutang").jqGrid(
+          "setCell",
+          rowId,
+          "sisa",
+          sisa
+        );
+
+        $("#tableHutang").jqGrid("setCell", rowId, "total", 0);
+        $("#tableHutang").jqGrid("setCell", rowId, "bayar", 0);
+        $(`#tableHutang tr#${rowId}`).find(`td[aria-describedby="tableHutang_bayar"]`).attr("value", 0)
+        $("#tableHutang").jqGrid("setCell", rowId, "potongan", 0);
+        $(`#tableHutang tr#${rowId}`).find(`td[aria-describedby="tableHutang_potongan"]`).attr("value", 0)
+        $("#tableHutang").jqGrid("setCell", rowId, "keterangan", null);
+        setTotalBayar()
+        setTotalPotongan()
+
+        setTotalSisa()
+        setAllTotal()
+      } else {
+        selectedRowIds.push(rowId);
+
+        let localRow = $("#tableHutang").jqGrid("getLocalRow", rowId);
+        console.log(rowId)
+        if ($('#crudForm').data('action') == 'edit') {
+          // if (originalGridData.sisa == 0) {
+
+          //   let getNominal = $("#tableHutang").jqGrid("getCell", rowId, "nominal")
+          //   localRow.bayar = (getNominal != '') ? parseFloat(getNominal.replaceAll(',', '')) : 0
+          // } else {
+          //   localRow.bayar = originalGridData.sisa
+          // }
+          localRow.bayar = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar) + parseFloat(originalGridData.potongan))
+        } else {
+          localRow.bayar = originalGridData.sisa
+        }
+
+        $("#tableHutang").jqGrid(
+          "setCell",
+          rowId,
+          "sisa",
+          0
+        );
+        $("#tableHutang").jqGrid(
+          "setCell",
+          rowId,
+          "bayar",
+          localRow.bayar
+        );
+        $("#tableHutang").jqGrid(
+          "setCell",
+          rowId,
+          "total",
+          localRow.bayar
+        );
+
+        initAutoNumeric($(`#tableHutang tr#${rowId}`).find(`td[aria-describedby="tableHutang_bayar"]`))
+        initAutoNumeric($(`#tableHutang tr#${rowId}`).find(`td[aria-describedby="tableHutang_potongan"]`))
+        setTotalBayar()
+        setTotalPotongan()
+
+        setTotalSisa()
+        setAllTotal()
+      }
+    });
+
+    $("#tableHutang").jqGrid("setGridParam", {
+      selectedRowIds: selectedRowIds,
+    });
+
+
+    // initAutoNumeric($('.footrow').find(`td[aria-describedby="tableHutang_potongan"]`).text(totalPotongan))
+    // initAutoNumeric($('.footrow').find(`td[aria-describedby="tableHutang_nominallebihbayar"]`).text(totalNominalLebih))
+
+  }
+
+
+  function setTotalNominal() {
+    let nominalDetails = $(`#tableHutang`).find(`td[aria-describedby="tableHutang_nominal"]`)
+    let nominal = 0
+    $.each(nominalDetails, (index, nominalDetail) => {
+      nominaldetail = parseFloat($(nominalDetail).text().replaceAll(',', ''))
+      nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
+      nominal += nominals
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableHutang_nominal"]`).text(nominal))
+  }
+
+  function setTotalSisa() {
+    let sisaDetails = $(`#tableHutang`).find(`td[aria-describedby="tableHutang_sisa"]`)
+    let sisa = 0
+    $.each(sisaDetails, (index, sisaDetail) => {
+      sisadetail = parseFloat($(sisaDetail).text().replaceAll(',', ''))
+      sisas = (isNaN(sisadetail)) ? 0 : sisadetail;
+      sisa += sisas
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableHutang_sisa"]`).text(sisa))
+  }
+
+  function setAllTotal() {
+    let totalDetails = $(`#tableHutang`).find(`td[aria-describedby="tableHutang_total"]`)
+    let total = 0
+    $.each(totalDetails, (index, totalDetail) => {
+      totaldetail = parseFloat($(totalDetail).text().replaceAll(',', ''))
+      totals = (isNaN(totaldetail)) ? 0 : totaldetail;
+      total += totals
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableHutang_total"]`).text(total))
+  }
+
+  function setTotalBayar() {
+    let bayarDetails = $(`#tableHutang`).find(`td[aria-describedby="tableHutang_bayar"]`)
+    let bayar = 0
+    $.each(bayarDetails, (index, bayarDetail) => {
+      bayardetail = parseFloat($(bayarDetail).text().replaceAll(',', ''))
+      bayars = (isNaN(bayardetail)) ? 0 : bayardetail;
+      bayar += bayars
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableHutang_bayar"]`).text(bayar))
+  }
+
+  function setTotalPotongan() {
+    let potonganDetails = $(`#tableHutang`).find(`td[aria-describedby="tableHutang_potongan"]`)
+    let potongan = 0
+    $.each(potonganDetails, (index, potonganDetail) => {
+      potongandetail = parseFloat($(potonganDetail).text().replaceAll(',', ''))
+      potongans = (isNaN(potongandetail)) ? 0 : potongandetail;
+      potongan += potongans
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableHutang_potongan"]`).text(potongan))
+  }
 
   function getHutang(id, field) {
 
@@ -1163,8 +1670,31 @@
       onSelectRow: (supplier, element) => {
         $('#crudForm [name=supplier_id]').first().val(supplier.id)
         element.val(supplier.namasupplier)
-        getHutang(supplier.id, 'supplier_id')
         element.data('currentValue', element.val())
+
+        $('#tableHutang').jqGrid("clearGridData");
+        $("#tableHutang")
+          .jqGrid("setGridParam", {
+            selectedRowIds: []
+          })
+          .trigger("reloadGrid");
+        getDataHutang(supplier.id).then((response) => {
+
+          console.log('before', $("#tableHutang").jqGrid('getGridParam', 'selectedRowIds'))
+          setTimeout(() => {
+
+            $("#tableHutang")
+              .jqGrid("setGridParam", {
+                datatype: "local",
+                data: response.data,
+                originalData: response.data,
+                rowNum: response.data.length,
+                selectedRowIds: []
+              })
+              .trigger("reloadGrid");
+          }, 100);
+
+        });
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
