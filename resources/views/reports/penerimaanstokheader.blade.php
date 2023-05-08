@@ -56,17 +56,25 @@
         
         break;
       case '134':
-        //PBT
+        //SPB
         report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokSPB.mrt') }}`)
+        break;
+      case '136':
+        //KOR
+        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokKOR.mrt') }}`)
         break;
       case '137':
         //PG
         report.loadFile(`{{ asset('public/reports/ReportpenerimaanStokPG.mrt') }}`)
         break;
+      case '138':
+        //SPBS
+        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokSPBS.mrt') }}`)
+        break;
         
     
       default:
-        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStok.mrt') }}`)
+        report.loadFile(`{{ asset('public/reports/ReportPenerimaanSPB.mrt') }}`)
         
         break;
       }
@@ -81,8 +89,8 @@
       report.dictionary.synchronize()
 
       viewer.report = report
-      // designer.renderHtml("content")
-      // designer.report = report
+      designer.renderHtml("content")
+      designer.report = report
       
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');
