@@ -151,6 +151,7 @@ use App\Http\Controllers\KartuStokController;
 use App\Http\Controllers\HistoriPenerimaanStokController;
 use App\Http\Controllers\HistoriPengeluaranStokController;
 use App\Http\Controllers\InvoiceExtraDetailController;
+use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\LaporanBanGudangSementaraController;
 use App\Http\Controllers\LaporanBukuBesarController;
 use App\Http\Controllers\LaporanDepositoSupirController;
@@ -1124,6 +1125,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     
     Route::get('pindahbuku/index', [PindahBukuController::class, 'index']);
     Route::resource('pindahbuku', PindahBukuController::class);
+    
+    Route::get('karyawan/index', [KaryawanController::class, 'index']);
+    Route::resource('karyawan', KaryawanController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
