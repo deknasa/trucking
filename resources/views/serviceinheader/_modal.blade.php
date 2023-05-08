@@ -5,7 +5,7 @@
                 <div class="modal-header">
                     <p class="modal-title" id="crudModalTitle"></p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        
+
                     </button>
                 </div>
                 <form action="" method="post">
@@ -293,6 +293,9 @@
     function showServicein(form, id) {
         $('#detailList tbody').html('')
 
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        
         $.ajax({
             url: `${apiUrl}serviceinheader/${id}`,
             method: 'GET',
@@ -323,8 +326,8 @@
                     <tr>
                         <td></td>
                         <td>
-                            <input type="hidden" name="mekanik_id[]" class="form-control">
-                            <input type="text" name="mekanik[]" data-current-value="${detail.mekanik}" class="form-control mekanik-lookup">
+                            <input type="hidden" name="karyawan_id[]" class="form-control">
+                            <input type="text" name="karyawan[]" data-current-value="${detail.karyawan}" class="form-control karyawan-lookup">
                         </td>
 
                         <td>
@@ -336,33 +339,34 @@
                         </td>
                     </tr>`)
 
-                    detailRow.find(`[name="mekanik[]"]`).val(detail.mekanik)
-                    detailRow.find(`[name="mekanik_id[]"]`).val(detail.mekanik_id)
+                    detailRow.find(`[name="karyawan[]"]`).val(detail.karyawan)
+                    detailRow.find(`[name="karyawan_id[]"]`).val(detail.karyawan_id)
 
                     detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
 
                     $('#detailList tbody').append(detailRow)
 
-                    $('.mekanik-lookup').last().lookup({
-                        title: 'Mekanik Lookup',
-                        fileName: 'mekanik',
+                    $('.karyawan-lookup').last().lookup({
+                        title: 'Karyawan Lookup',
+                        fileName: 'karyawan',
                         beforeProcess: function(test) {
                             // var levelcoa = $(`#levelcoa`).val();
                             this.postData = {
 
                                 Aktif: 'AKTIF',
+                                staff: 'MEKANIK'
                             }
                         },
-                        onSelectRow: (mekanik, element) => {
-                            element.parents('td').find(`[name="mekanik_id[]"]`).val(mekanik.id)
-                            element.val(mekanik.namamekanik)
+                        onSelectRow: (karyawan, element) => {
+                            element.parents('td').find(`[name="karyawan_id[]"]`).val(karyawan.id)
+                            element.val(karyawan.namakaryawan)
                             element.data('currentValue', element.val())
                         },
                         onCancel: (element) => {
                             element.val(element.data('currentValue'))
                         },
                         onClear: (element) => {
-                            element.parents('td').find(`[name="mekanik_id[]"]`).val('')
+                            element.parents('td').find(`[name="karyawan_id[]"]`).val('')
                             element.val('')
                             element.data('currentValue', element.val())
                         }
@@ -384,8 +388,8 @@
         <tr>
             <td></td>
             <td>
-                <input type="hidden" name="mekanik_id[]" class="form-control">
-                <input type="text" name="mekanik[]" class="form-control mekanik-lookup">
+                <input type="hidden" name="karyawan_id[]" class="form-control">
+                <input type="text" name="karyawan[]" class="form-control karyawan-lookup">
             </td>
 
             <td>
@@ -399,63 +403,63 @@
 
         $('#detailList tbody').append(detailRow)
 
-        $('.mekanik-lookup').last().lookup({
-            title: 'mekanik Lookup',
-            fileName: 'mekanik',
+        $('.karyawan-lookup').last().lookup({
+            title: 'karyawan Lookup',
+            fileName: 'karyawan',
             beforeProcess: function(test) {
                 // var levelcoa = $(`#levelcoa`).val();
                 this.postData = {
 
                     Aktif: 'AKTIF',
+                    staff: 'MEKANIK'
                 }
             },
-            onSelectRow: (mekanik, element) => {
-                $(`#crudForm [name="mekanik_id[]"]`).last().val(mekanik.id)
-                element.val(mekanik.namamekanik)
+            onSelectRow: (karyawan, element) => {
+                $(`#crudForm [name="karyawan_id[]"]`).last().val(karyawan.id)
+                element.val(karyawan.namakaryawan)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
-                $(`#crudForm [name="mekanik_id[]"]`).last().val('')
+                $(`#crudForm [name="karyawan_id[]"]`).last().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }
         })
-        initDatepicker()
-
         setRowNumbers()
     }
-    function cekValidasi(Id, Aksi) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}serviceinheader/${Id}/cekvalidasi`,
-      method: 'POST',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-      },
-      success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'EDIT') {
-                editServicein(Id)
-            }
-            if (Aksi == 'DELETE') {
-                deleteServicein(Id)
-            }
-          }
 
-        } else {
-          showDialog(response.message['keterangan'])
-        }
-      }
-    })
-  }
+    function cekValidasi(Id, Aksi) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}serviceinheader/${Id}/cekvalidasi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var kodenobukti = response.kodenobukti
+                if (kodenobukti == '1') {
+                    var kodestatus = response.kodestatus
+                    if (kodestatus == '1') {
+                        showDialog(response.message['keterangan'])
+                    } else {
+                        if (Aksi == 'EDIT') {
+                            editServicein(Id)
+                        }
+                        if (Aksi == 'DELETE') {
+                            deleteServicein(Id)
+                        }
+                    }
+
+                } else {
+                    showDialog(response.message['keterangan'])
+                }
+            }
+        })
+    }
 
     function deleteRow(row) {
         row.remove()
