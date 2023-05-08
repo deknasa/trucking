@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "269eff2f732c4b7c370e16f9451c49a5",
+  "ReportGuid": "80e0579d7bcca1ace15ae503cfbb9ab7",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/truck/public/reports/ReportPenerimaanStokSPB.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1683189057000+0700)/",
+  "ReportChanged": "/Date(1683528260000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -650,7 +650,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,174.14,200.1,8",
+          "ClientRectangle": "0,168.47,200.1,8",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -706,7 +706,7 @@
         "2": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand1",
-          "ClientRectangle": "0,18,200.1,34",
+          "ClientRectangle": "0,18,200.1,32",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -727,7 +727,6 @@
                 "Value": "No Bukti"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -746,7 +745,6 @@
                 "Value": "Tanggal"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -765,7 +763,6 @@
                 "Value": "Supplier"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -784,7 +781,6 @@
                 "Value": ":"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black"
@@ -802,7 +798,6 @@
                 "Value": ":"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black"
@@ -821,7 +816,6 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -841,7 +835,6 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -864,7 +857,6 @@
                 "Value": ":"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black"
@@ -883,7 +875,6 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -902,7 +893,6 @@
                 "Value": "Keterangan"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -921,7 +911,6 @@
                 "Value": ":"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black"
@@ -940,7 +929,6 @@
               "Text": {
                 "Value": "{penerimaanstokheader.keterangan}"
               },
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -968,7 +956,6 @@
                 "Value": "No. PO"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -987,7 +974,6 @@
                 "Value": ":"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black"
@@ -1006,7 +992,6 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1025,7 +1010,6 @@
                 "Value": "Tanggal PO"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1044,7 +1028,6 @@
                 "Value": ":"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black"
@@ -1063,7 +1046,6 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1072,13 +1054,66 @@
                 "StringFormat": "dd-MM-yyyy"
               },
               "Type": "DataColumn"
+            },
+            "18": {
+              "Ident": "StiText",
+              "Name": "Text35",
+              "Guid": "50153d916dcc4cde9fa9484a5c83c0a8",
+              "ClientRectangle": "0,23.91,28,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "No. Bon"
+              },
+              "VertAlignment": "Center",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "Expression"
+            },
+            "19": {
+              "Ident": "StiText",
+              "Name": "Text39",
+              "Guid": "166d1833865aade2aa47fdabda51da25",
+              "ClientRectangle": "27.94,23.91,2,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": ":"
+              },
+              "VertAlignment": "Center",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black"
+            },
+            "20": {
+              "Ident": "StiText",
+              "Name": "Text40",
+              "Guid": "7bb7f7b14cc35ba97339673167b64389",
+              "ClientRectangle": "29.97,23.91,44,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{penerimaanstokheader.nobon}"
+              },
+              "VertAlignment": "Center",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "DataColumn"
             }
           }
         },
         "3": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand2",
-          "ClientRectangle": "0,60,200.1,6",
+          "ClientRectangle": "0,58,200.1,6",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -1276,7 +1311,7 @@
           "Ident": "StiDataBand",
           "Name": "DataBand1",
           "CanShrink": true,
-          "ClientRectangle": "0,74,200.1,6",
+          "ClientRectangle": "0,72,200.1,6",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -1300,7 +1335,6 @@
                 "Value": "{penerimaanstokheader_details.stok}"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1331,7 +1365,6 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1368,7 +1401,6 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1397,7 +1429,7 @@
               "Text": {
                 "Value": "{penerimaanstokheader_details.keterangan}"
               },
-              "Font": ";10;;",
+              "VertAlignment": "Center",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1411,6 +1443,7 @@
                 "Top": 3,
                 "Bottom": 0
               },
+              "LineSpacing": 1.15,
               "Type": "DataColumn"
             },
             "4": {
@@ -1429,7 +1462,6 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1457,7 +1489,7 @@
         "5": {
           "Ident": "StiGroupFooterBand",
           "Name": "GroupFooterBand2",
-          "ClientRectangle": "0,88,200.1,50",
+          "ClientRectangle": "0,86,200.1,50",
           "ComponentPlacement": "gf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1535,7 +1567,7 @@
                 "Value": "{Terbilang(Sum(penerimaanstokheader_details.total))}"
               },
               "VertAlignment": "Center",
-              "Font": ";10;Italic;",
+              "Font": ";;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1592,7 +1624,7 @@
                 "Value": "Terbilang # "
               },
               "VertAlignment": "Center",
-              "Font": ";10;Italic;",
+              "Font": ";;Italic;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1612,7 +1644,6 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -2004,7 +2035,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive9",
           "Guid": "fef80b2783657564c3aaed04aa66b0f3",
-          "ClientRectangle": "80,60,0.254,28.04",
+          "ClientRectangle": "80,58,0.254,28.04",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2016,7 +2047,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive10",
           "Guid": "314937707e0b0c6426360898269c9964",
-          "ClientRectangle": "152,60,0.254,34.04",
+          "ClientRectangle": "152,58,0.254,34.04",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2028,7 +2059,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive11",
           "Guid": "2935a04080b205d24300b21bf6f7840c",
-          "ClientRectangle": "200,60,0.254,34.04",
+          "ClientRectangle": "200,58,0.254,34.04",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2040,7 +2071,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive6",
           "Guid": "2aa96cb52bfe3bd87e343fc85db094e7",
-          "ClientRectangle": "0,60,0.254,34.04",
+          "ClientRectangle": "0,58,0.254,34.04",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2052,7 +2083,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive1",
           "Guid": "99892ec4933941a0440a49c3a8a5d314",
-          "ClientRectangle": "0,106.92,0.254,22",
+          "ClientRectangle": "0,104.92,0.254,22",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2064,7 +2095,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive2",
           "Guid": "612ae8950bf2031778c4d9a947aafe93",
-          "ClientRectangle": "52.04,106.92,0.254,22",
+          "ClientRectangle": "52.04,104.92,0.254,22",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2076,7 +2107,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive3",
           "Guid": "af4a116e0bec4e89c2ac1954807927dc",
-          "ClientRectangle": "78.04,106.92,0.254,22",
+          "ClientRectangle": "78.04,104.92,0.254,22",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2088,7 +2119,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive4",
           "Guid": "7dfcb6d65420b7336841e014ca0d6e6a",
-          "ClientRectangle": "26.04,106.92,0.254,22",
+          "ClientRectangle": "26.04,104.92,0.254,22",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2100,7 +2131,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive5",
           "Guid": "aa2a0b149bab1da93dc5ece6245ccf7f",
-          "ClientRectangle": "104,106.65,0.254,22",
+          "ClientRectangle": "104,104.65,0.254,22",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2112,7 +2143,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive7",
           "Guid": "6d7a9dcace2f49a60ab7e90269e4d167",
-          "ClientRectangle": "130,106.92,0.254,22",
+          "ClientRectangle": "130,104.92,0.254,22",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2124,7 +2155,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive8",
           "Guid": "08926b8155f5c0df71a4ab989a22cf04",
-          "ClientRectangle": "60,60,0.254,28.04",
+          "ClientRectangle": "60,58,0.254,28.04",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2136,7 +2167,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive12",
           "Guid": "cae3baab02c3d278590e440996503377",
-          "ClientRectangle": "116,60,0.254,34.04",
+          "ClientRectangle": "116,58,0.254,34.04",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2146,14 +2177,14 @@
         }
       },
       "PageWidth": 210,
-      "PageHeight": 140,
+      "PageHeight": 139,
       "Watermark": {
         "TextBrush": "solid:50,0,0,0"
       },
       "Margins": {
         "Left": 4.95,
         "Right": 4.95,
-        "Top": 4.95,
+        "Top": 8,
         "Bottom": 4.95
       },
       "MirrorMargins": true

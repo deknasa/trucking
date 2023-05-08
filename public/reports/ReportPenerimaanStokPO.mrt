@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "6234ec036af8d2a2f2719e1117be22a4",
+  "ReportGuid": "bfe74179538cf2105b4a5f8b3dba8254",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/truck/public/reports/ReportPenerimaanStokPO.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1683175789000+0700)/",
+  "ReportChanged": "/Date(1683346612000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -512,24 +512,30 @@
             "Type": "System.String"
           },
           "35": {
+            "Name": "parrenttglbukti",
+            "NameInSource": "parrenttglbukti",
+            "Alias": "parrenttglbukti",
+            "Type": "System.String"
+          },
+          "36": {
             "Name": "statuscetak_id",
             "NameInSource": "statuscetak_id",
             "Alias": "statuscetak_id",
             "Type": "System.String"
           },
-          "36": {
+          "37": {
             "Name": "details",
             "NameInSource": "details",
             "Alias": "details",
             "Type": "System.String"
           },
-          "37": {
+          "38": {
             "Name": "user",
             "NameInSource": "user",
             "Alias": "user",
             "Type": "System.String"
           },
-          "38": {
+          "39": {
             "Name": "combo",
             "NameInSource": "combo",
             "Alias": "combo",
@@ -644,7 +650,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,174.14,200.1,8",
+          "ClientRectangle": "0,168.47,200.1,8",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -721,7 +727,6 @@
                 "Value": "No Bukti"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -740,7 +745,6 @@
                 "Value": "Tanggal"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -759,7 +763,6 @@
                 "Value": "Bank/Kas"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -778,7 +781,6 @@
                 "Value": ":"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black"
@@ -796,7 +798,6 @@
                 "Value": ":"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black"
@@ -813,8 +814,8 @@
               "Text": {
                 "Value": "{penerimaanstokheader.nobukti}"
               },
+              "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -832,8 +833,8 @@
               "Text": {
                 "Value": "{penerimaanstokheader.tglbukti}"
               },
+              "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -856,7 +857,6 @@
                 "Value": ":"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black"
@@ -873,8 +873,8 @@
               "Text": {
                 "Value": "{penerimaanstokheader.supplier}"
               },
+              "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -931,7 +931,6 @@
               "Text": {
                 "Value": "{penerimaanstokheader.keterangan}"
               },
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -944,6 +943,7 @@
                 "Top": 3,
                 "Bottom": 3
               },
+              "LineSpacing": 1.15,
               "Type": "DataColumn"
             }
           }
@@ -1173,7 +1173,6 @@
                 "Value": "{penerimaanstokheader_details.stok}"
               },
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1186,6 +1185,7 @@
                 "Top": 3,
                 "Bottom": 0
               },
+              "LineSpacing": 1.15,
               "Type": "DataColumn"
             },
             "1": {
@@ -1204,7 +1204,6 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1217,6 +1216,7 @@
                 "Top": 3,
                 "Bottom": 0
               },
+              "LineSpacing": 1.15,
               "TextFormat": {
                 "Ident": "StiCurrencyFormatService",
                 "GroupSeparator": ",",
@@ -1241,7 +1241,6 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1254,6 +1253,7 @@
                 "Top": 3,
                 "Bottom": 0
               },
+              "LineSpacing": 1.15,
               "Type": "DataColumn"
             },
             "3": {
@@ -1270,7 +1270,6 @@
               "Text": {
                 "Value": "{penerimaanstokheader_details.keterangan}"
               },
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1284,6 +1283,7 @@
                 "Top": 3,
                 "Bottom": 0
               },
+              "LineSpacing": 1.15,
               "Type": "DataColumn"
             },
             "4": {
@@ -1302,7 +1302,6 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1315,6 +1314,7 @@
                 "Top": 3,
                 "Bottom": 0
               },
+              "LineSpacing": 1.15,
               "TextFormat": {
                 "Ident": "StiCurrencyFormatService",
                 "GroupSeparator": ",",
@@ -1485,7 +1485,6 @@
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -1586,7 +1585,6 @@
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
-              "Font": ";10;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1617,7 +1615,7 @@
                 "Value": "Total"
               },
               "VertAlignment": "Center",
-              "Font": ";10;Bold;",
+              "Font": ";;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -2019,14 +2017,14 @@
         }
       },
       "PageWidth": 210,
-      "PageHeight": 140,
+      "PageHeight": 139,
       "Watermark": {
         "TextBrush": "solid:50,0,0,0"
       },
       "Margins": {
         "Left": 4.95,
         "Right": 4.95,
-        "Top": 4.95,
+        "Top": 8,
         "Bottom": 4.95
       },
       "MirrorMargins": true
