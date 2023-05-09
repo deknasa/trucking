@@ -237,10 +237,15 @@
         let selectedRowsHutang = $("#tablePinjaman").getGridParam("selectedRowIds");
         $.each(selectedRowsHutang, function(index, value) {
           let selectedNominal = $("#tablePinjaman").jqGrid("getCell", value, "nominal")
+          let selectedSisa = $("#tablePinjaman").jqGrid("getCell", value, "sisa")
 
           data.push({
             name: 'nominal[]',
             value: (selectedNominal != '') ? parseFloat(selectedNominal.replaceAll(',', '')) : 0
+          })
+          data.push({
+            name: 'sisa[]',
+            value: (selectedSisa != '') ? parseFloat(selectedSisa.replaceAll(',', '')) : 0
           })
           data.push({
             name: 'keterangan[]',
@@ -253,6 +258,10 @@
           data.push({
             name: 'supir_id[]',
             value: form.find(`[name="supirheader_id"]`).val()
+          })
+          data.push({
+            name: 'pjp_id[]',
+            value: $("#tablePinjaman").jqGrid("getCell", value, "id")
           })
         });
 
@@ -370,7 +379,49 @@
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
 
-            setErrorMessages(form, error.responseJSON.errors);
+            if (KodePenerimaanId == "PJP") {
+              console.log(error)
+              errors = error.responseJSON.errors
+              $(".ui-state-error").removeClass("ui-state-error");
+              $.each(errors, (index, error) => {
+                let indexes = index.split(".");
+                let angka = indexes[1]
+                if (index == 'pjp') {
+                  return showDialog(error);
+                } else {
+
+                  selectedRowsHutang = $("#tablePinjaman").getGridParam("selectedRowIds");
+                  row = parseInt(selectedRowsHutang[angka]) - 1;
+                  let element;
+                  if (indexes[0] == 'bank' || indexes[0] == 'pengeluarantrucking' || indexes[0] == 'supir') {
+                    if (indexes.length > 1) {
+                      element = form.find(`[name="${indexes[0]}[]"]`)[row];
+                    } else {
+                      element = form.find(`[name="${indexes[0]}"]`)[0];
+                    }
+
+                    if ($(element).length > 0 && !$(element).is(":hidden")) {
+                      $(element).addClass("is-invalid");
+                      $(`
+                      <div class="invalid-feedback">
+                      ${error[0].toLowerCase()}
+                      </div>
+                      `).appendTo($(element).parent());
+                    } else {
+                      return showDialog(error);
+                    }
+                  } else {
+
+                    element = $(`#tablePinjaman tr#${parseInt(selectedRowsHutang[angka])}`).find(`td[aria-describedby="tablePinjaman_${indexes[0]}"]`)
+                    $(element).addClass("ui-state-error");
+                    console.log(error)
+                    $(element).attr("title", error[0].toLowerCase())
+                  }
+                }
+              });
+            } else {
+              setErrorMessages(form, error.responseJSON.errors);
+            }
           } else {
             showDialog(error.statusText)
           }
@@ -741,6 +792,7 @@
           } else {
             sisa = originalGridData.sisa
           }
+          console.log(indexColumn)
           if (indexColumn == 5) {
 
             $("#tablePinjaman").jqGrid(
