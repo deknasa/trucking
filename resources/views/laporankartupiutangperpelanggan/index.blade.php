@@ -10,6 +10,22 @@
                 </div>
                 <form id="crudForm">
                     <div class="card-body">
+                    <div class="form-group row">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Pelanggan<span class="text-danger">*</span></label>
+                            <div class="col-sm-4 mt-2">
+                                <div class="input-group">
+                                    <input type="hidden" name="pelanggandari_id">
+                                    <input type="text" name="pelanggandari" class="form-control pelanggandari-lookup">
+                                </div>
+                            </div>
+                            <h5 class="mt-3">s/d</h5>
+                            <div class="col-sm-4 mt-2">
+                                <div class="input-group">
+                                    <input type="hidden" name="pelanggansampai_id">
+                                    <input type="text" name="pelanggansampai" class="form-control pelanggansampai-lookup">
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
@@ -66,7 +82,8 @@
         initDatepicker()
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
+        initLookup()
+        
         let css_property =
         {
             "color": "#fff",
@@ -84,17 +101,65 @@
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let dari = $('#crudForm').find('[name=dari]').val()
+        let pelanggandari_id = $('#crudForm').find('[name=pelanggandari_id]').val()
+        let pelanggansampai_id = $('#crudForm').find('[name=pelanggansampai_id]').val()
+        let pelanggandari = $('#crudForm').find('[name=pelanggandari]').val()
+        let pelanggansampai = $('#crudForm').find('[name=pelanggansampai]').val()
 
         if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporankartupiutangperpelanggan.report') }}?sampai=${sampai}&dari=${dari}`)
+            window.open(`{{ route('laporankartupiutangperpelanggan.report') }}?sampai=${sampai}&dari=${dari}&pelanggandari_id=${pelanggandari_id}&pelanggansampai_id=${pelanggansampai_id}&pelanggandari=${pelanggandari}&pelanggansampai=${pelanggansampai}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
     })
 
-
-
+    function initLookup() {
+        $('.pelanggandari-lookup').lookup({
+            title: 'Pelanggan Lookup',
+            fileName: 'pelanggan',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (pelanggan, element) => {
+                $('#crudForm [name=pelanggandari_id]').first().val(pelanggan.kodepelanggan)
+                element.val(pelanggan.namapelanggan)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                element.val('')
+                $(`#crudForm [name="pelanggandari_id"]`).first().val('')
+                element.data('currentValue', element.val())
+            }
+        })
+        $('.pelanggansampai-lookup').lookup({
+            title: 'Pelanggan Lookup',
+            fileName: 'pelanggan',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (pelanggan, element) => {
+                $('#crudForm [name=pelanggansampai_id]').first().val(pelanggan.kodepelanggan)
+                element.val(pelanggan.namapelanggan)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                element.val('')
+                $(`#crudForm [name="pelanggansampai_id"]`).first().val('')
+                element.data('currentValue', element.val())
+            }
+        })
+    }
 </script>
 @endpush()
 @endsection

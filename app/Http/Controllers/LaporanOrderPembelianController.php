@@ -31,6 +31,12 @@ class LaporanOrderPembelianController extends MyController
         $detailParams = [
             'sampai' => $request->sampai,
             'dari' => $request->dari,
+            'supplierdari' => $request->supplierdari,
+            'suppliersampai' => $request->suppliersampai,
+            'supplierdari_id' => $request->supplierdari_id,
+            'suppliersampai_id' => $request->suppliersampai_id,
+            'text_id' => $request -> text_id,
+            'text' => $request -> text
         ];
 
         $header = Http::withHeaders(request()->header())

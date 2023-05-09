@@ -31,6 +31,10 @@ class LaporanKartuPiutangPerPelangganController extends MyController
         $detailParams = [
             'sampai' => $request->sampai,
             'dari' => $request->dari,
+            'pelanggandari' => $request->pelanggandari,
+            'pelanggansampai' => $request->pelanggansampai,
+            'pelanggandari_id' => $request->pelanggandari_id,
+            'pelanggansampai_id' => $request->pelanggansampai_id,
         ];
 
         $header = Http::withHeaders(request()->header())

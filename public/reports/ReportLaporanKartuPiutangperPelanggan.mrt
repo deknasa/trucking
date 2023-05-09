@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "db05e91a834438f40de731adde98501a",
+  "ReportGuid": "fb2a237753ff7356378b0dfa5a1ecc9d",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuPiutangperPelanggan.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1683602843000+0700)/",
+  "ReportChanged": "/Date(1683620857000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -28,75 +28,75 @@
         "Alias": "data",
         "Columns": {
           "0": {
+            "Name": "judul",
+            "NameInSource": "judul",
+            "Alias": "judul",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "subjudul",
+            "NameInSource": "subjudul",
+            "Alias": "subjudul",
+            "Type": "System.String"
+          },
+          "2": {
             "Name": "kodepelanggan",
             "NameInSource": "kodepelanggan",
             "Alias": "kodepelanggan",
             "Type": "System.String"
           },
-          "1": {
+          "3": {
             "Name": "namapelanggan",
             "NameInSource": "namapelanggan",
             "Alias": "namapelanggan",
             "Type": "System.String"
           },
-          "2": {
+          "4": {
             "Name": "memoheader",
             "NameInSource": "memoheader",
             "Alias": "memoheader",
             "Type": "System.String"
           },
-          "3": {
+          "5": {
             "Name": "nobukti",
             "NameInSource": "nobukti",
             "Alias": "nobukti",
             "Type": "System.String"
           },
-          "4": {
+          "6": {
             "Name": "tgl",
             "NameInSource": "tgl",
             "Alias": "tgl",
             "Type": "System.String"
           },
-          "5": {
+          "7": {
             "Name": "tgljt",
             "NameInSource": "tgljt",
             "Alias": "tgljt",
             "Type": "System.String"
           },
-          "6": {
+          "8": {
             "Name": "cicilanke",
             "NameInSource": "cicilanke",
             "Alias": "cicilanke",
             "Type": "System.String"
           },
-          "7": {
+          "9": {
             "Name": "nominal",
             "NameInSource": "nominal",
             "Alias": "nominal",
             "Type": "System.String"
           },
-          "8": {
+          "10": {
             "Name": "terima",
             "NameInSource": "terima",
             "Alias": "terima",
             "Type": "System.String"
           },
-          "9": {
+          "11": {
             "Name": "saldo",
             "NameInSource": "saldo",
             "Alias": "saldo",
-            "Type": "System.String"
-          },
-          "10": {
-            "Name": "pelanggandari",
-            "NameInSource": "pelanggandari",
-            "Alias": "pelanggandari",
-            "Type": "System.String"
-          },
-          "11": {
-            "Name": "pelanggansampai",
-            "NameInSource": "pelanggansampai",
-            "Alias": "pelanggansampai",
             "Type": "System.String"
           }
         },
@@ -268,6 +268,30 @@
             "NameInSource": "dari",
             "Alias": "dari",
             "Type": "System.String"
+          },
+          "2": {
+            "Name": "pelanggandari",
+            "NameInSource": "pelanggandari",
+            "Alias": "pelanggandari",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "pelanggansampai",
+            "NameInSource": "pelanggansampai",
+            "Alias": "pelanggansampai",
+            "Type": "System.String"
+          },
+          "4": {
+            "Name": "pelanggandari_id",
+            "NameInSource": "pelanggandari_id",
+            "Alias": "pelanggandari_id",
+            "Type": "System.String"
+          },
+          "5": {
+            "Name": "pelanggansampai_id",
+            "NameInSource": "pelanggansampai_id",
+            "Alias": "pelanggansampai_id",
+            "Type": "System.String"
           }
         },
         "NameInSource": "Data.parameter"
@@ -333,14 +357,14 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "TAS PUSAT"
+                "Value": "{data.judul}"
               },
               "HorAlignment": "Center",
               "Font": ";14;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "1": {
               "Ident": "StiText",
@@ -382,7 +406,7 @@
               "Ident": "StiText",
               "Name": "Text7",
               "Guid": "dad79547fd78795ac3a6c1887a746546",
-              "ClientRectangle": "36,22,30,6",
+              "ClientRectangle": "36,22,56,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -418,7 +442,7 @@
               "Ident": "StiText",
               "Name": "Text16",
               "Guid": "39b02a53118b776860d851ef4f7da607",
-              "ClientRectangle": "72,22,8,6",
+              "ClientRectangle": "100,22,8,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -436,7 +460,7 @@
               "Ident": "StiText",
               "Name": "Text17",
               "Guid": "74d4dd6796827441c6103aa4d53c1d9f",
-              "ClientRectangle": "80,22,4,6",
+              "ClientRectangle": "108,22,4,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -472,7 +496,7 @@
               "Ident": "StiText",
               "Name": "Text21",
               "Guid": "0a1477486de66420147a3676d7464d05",
-              "ClientRectangle": "72,30,8,6",
+              "ClientRectangle": "100,30,8,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -490,7 +514,7 @@
               "Ident": "StiText",
               "Name": "Text25",
               "Guid": "56540f1d3fff4565c253e8fb98612acc",
-              "ClientRectangle": "80,30,4,6",
+              "ClientRectangle": "108,30,4,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -508,13 +532,13 @@
               "Ident": "StiText",
               "Name": "Text26",
               "Guid": "9445bf13850762c03924eb1edaf9fa9a",
-              "ClientRectangle": "36,30,30,6",
+              "ClientRectangle": "36,30,56,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.pelanggandari}"
+                "Value": "{parameter.pelanggandari}"
               },
               "Font": ";11;Bold;",
               "Border": ";;;;;;;solid:Black",
@@ -526,7 +550,7 @@
               "Ident": "StiText",
               "Name": "Text28",
               "Guid": "39deaac34ff1cea51f276d0ccbafdc43",
-              "ClientRectangle": "84,22,30,6",
+              "ClientRectangle": "112,22,60,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -544,13 +568,13 @@
               "Ident": "StiText",
               "Name": "Text29",
               "Guid": "6fc1ab7070ebe99d2993bf0364e93d5b",
-              "ClientRectangle": "84,30,30,6",
+              "ClientRectangle": "112,30,60,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.pelanggansampai}"
+                "Value": "{parameter.pelanggansampai}"
               },
               "Font": ";11;Bold;",
               "Border": ";;;;;;;solid:Black",
@@ -562,20 +586,20 @@
               "Ident": "StiText",
               "Name": "Text15",
               "Guid": "18d8884f1a582c30d8d1ed30e6465f95",
-              "ClientRectangle": "58,10,90,6",
+              "ClientRectangle": "58,8,90,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Laporan Kartu Piutang Per Pelanggan"
+                "Value": "{data.subjudul}"
               },
               "HorAlignment": "Center",
               "Font": ";12;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "14": {
               "Ident": "StiText",
