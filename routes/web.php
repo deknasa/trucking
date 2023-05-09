@@ -194,6 +194,9 @@ use App\Http\Controllers\ProsesUangJalanSupirHeaderController;
 use App\Http\Controllers\ReportAllController;
 use App\Http\Controllers\ReportNeracaController;
 use App\Http\Controllers\StokPersediaanController;
+use App\Http\Controllers\LapKartuHutangPerVendorDetailController;
+use App\Http\Controllers\LaporanWarkatBelumCairController;
+use App\Http\Controllers\LaporanPenyesuaianBarangController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1013,6 +1016,24 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanketeranganpinjamansupir/report', [LaporanKeteranganPinjamanSupirController::class, 'report'])->name('laporanketeranganpinjamansupir.report');
     Route::get('laporanketeranganpinjamansupir/index', [LaporanKeteranganPinjamanSupirController::class, 'index']);
     Route::resource('laporanketeranganpinjamansupir', LaporanKeteranganPinjamanSupirController::class);
+
+    Route::get('laporanketeranganpinjamansupir/report', [LaporanKeteranganPinjamanSupirController::class, 'report'])->name('laporanketeranganpinjamansupir.report');
+    Route::get('laporanketeranganpinjamansupir/index', [LaporanKeteranganPinjamanSupirController::class, 'index']);
+    Route::resource('laporanketeranganpinjamansupir', LaporanKeteranganPinjamanSupirController::class);
+
+
+    // LaporanKartuHutangPerVendorDetailController
+    Route::get('lapkartuhutangpervendordetail/report', [LapKartuHutangPerVendorDetailController::class, 'report'])->name('lapkartuhutangpervendordetail.report');
+    Route::get('lapkartuhutangpervendordetail/index', [LapKartuHutangPerVendorDetailController::class, 'index']);
+    Route::resource('lapkartuhutangpervendordetail', LapKartuHutangPerVendorDetailController::class);
+    // Laporan warkat belum cair
+    Route::get('laporanwarkatbelumcair/report', [LaporanWarkatBelumCairController::class, 'report'])->name('laporanwarkatbelumcair.report');
+    Route::get('laporanwarkatbelumcair/index', [LaporanWarkatBelumCairController::class, 'index']);
+    Route::resource('laporanwarkatbelumcair', LaporanWarkatBelumCairController::class);
+
+    Route::get('laporanpenyesuaianbarang/report', [LaporanPenyesuaianBarangController::class, 'report'])->name('laporanpenyesuaianbarang.report');
+    Route::get('laporanpenyesuaianbarang/index', [LaporanPenyesuaianBarangController::class, 'index']);
+    Route::resource('laporanpenyesuaianbarang', LaporanPenyesuaianBarangController::class);
     
     Route::get('laporanhutangbbm/report', [LaporanHutangBBMController::class, 'report'])->name('laporanhutangbbm.report');
     Route::get('laporanhutangbbm/index', [LaporanHutangBBMController::class, 'index']);
