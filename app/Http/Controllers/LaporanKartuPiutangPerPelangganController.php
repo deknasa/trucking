@@ -2,29 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Menu;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-
-class LaporanTripGandenganDetailController extends MyController
+class LaporanKartuPiutangPerPelangganController extends MyController
 {
-    public $title = 'Laporan Trip Gandengan Detail';
-
+    public $title = 'Laporan Kartu Piutang Per Pelanggan';
+    
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Trip Gandengan Detail',
+            'pagename' => 'Menu Utama Laporan Kartu Piutang Per Pelanggan',
         ];
 
-        return view('laporantripgandengandetail.index', compact('title'));
+        return view('laporankartupiutangperpelanggan.index', compact('title'));
     }
 
     public function report(Request $request)
@@ -32,19 +31,19 @@ class LaporanTripGandenganDetailController extends MyController
         $detailParams = [
             'sampai' => $request->sampai,
             'dari' => $request->dari,
-            'gandengandari' => $request->gandengandari,
-            'gandengansampai' => $request->gandengansampai,
-            'gandengandari_id' => $request->gandengandari_id,
-            'gandengansampai_id' => $request->gandengansampai_id,
+            'pelanggandari' => $request->pelanggandari,
+            'pelanggansampai' => $request->pelanggansampai,
+            'pelanggandari_id' => $request->pelanggandari_id,
+            'pelanggansampai_id' => $request->pelanggansampai_id,
         ];
 
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporantripgandengandetail/report', $detailParams);
+            ->get(config('app.api_url') . 'laporankartupiutangperpelanggan/report', $detailParams);
 
         $data = $header['data'];
         $user = Auth::user();
-        return view('reports.laporantripgandengandetail', compact('data', 'user', 'detailParams'));
+        return view('reports.laporankartupiutangperpelanggan', compact('data', 'user', 'detailParams'));
     }
 }
