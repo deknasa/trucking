@@ -899,7 +899,7 @@
           // console.log('potongan', potongan)
           // console.log(originalGridData.sisa - bayar - potongan)
           console.log('indexc', indexColumn)
-          if (indexColumn == 9 || indexColumn == 10) {
+          if (indexColumn == 8 || indexColumn == 9) {
             console.log('here')
             $("#tableHutang").jqGrid(
               "setCell",
