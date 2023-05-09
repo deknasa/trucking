@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -37,6 +37,16 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="keterangan" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  NOMINAL SUMBANGAN <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="nominalsumbangan" class="form-control text-right">
               </div>
             </div>
             <div class="row form-group">
@@ -83,7 +93,9 @@
       let mekanikId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
-
+      $('#crudForm').find(`[name="nominalsumbangan"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominalsumbangan')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalsumbangan"]`)[index])
+      })
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -144,8 +156,8 @@
           $('#crudModal').modal('hide')
 
           id = response.data.id
-          
-          $('#jqGrid').jqGrid('setGridParam', { 
+
+          $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
 
@@ -197,11 +209,11 @@
       success: response => {
         var kondisi = response.kondisi
         console.log(kondisi)
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-            deleteContainer(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteContainer(Id)
+        }
 
       }
     })
@@ -223,13 +235,14 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
+    initAutoNumeric(form.find(`[name="nominalsumbangan"]`))
     Promise
-    .all([
-      setStatusAktifOptions(form)
-    ])
-    .then(() => {
-      showDefault(form)
-    })
+      .all([
+        setStatusAktifOptions(form)
+      ])
+      .then(() => {
+        showDefault(form)
+      })
   }
 
   function editContainer(mekanikId) {
@@ -360,14 +373,17 @@
             element.val(value)
           }
         })
-        
+
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
           initDisabled()
         }
+
+        initAutoNumeric(form.find(`[name="nominalsumbangan"]`))
       }
     })
   }
+
   function showDefault(form) {
     $.ajax({
       url: `${apiUrl}container/default`,
@@ -379,18 +395,17 @@
       success: response => {
         $.each(response.data, (index, value) => {
           console.log(value)
-           let element = form.find(`[name="${index}"]`)
+          let element = form.find(`[name="${index}"]`)
           // let element = form.find(`[name="statusaktif"]`)
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } 
-          else {
+          } else {
             element.val(value)
           }
         })
-        
-       
+
+
       }
     })
   }
