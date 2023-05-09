@@ -1,6 +1,6 @@
 @include('layouts._rangeheaderlookup')
 <table id="penerimaanStokHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="penerimaanStokHeaderLookupPager"></div>
+{{-- <div id="penerimaanStokHeaderLookupPager"></div> --}}
 
 <script>
   // var sendedFilters = `{!! $filters ?? '' !!}`
@@ -157,7 +157,7 @@
       sortorder: 'asc',
       toolbar: [true, "top"],
       page: 1,
-      pager: $('#penerimaanStokHeaderLookupPager'),
+      // pager: $('#penerimaanStokHeaderLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -250,6 +250,14 @@
         // })
       },
     })
+    .jqGrid("navGrid", pager, {
+        search: false,
+        refresh: false,
+        add: false,
+        edit: false,
+        del: false,
+      })
+    .customPager()
   loadGlobalSearch($('#penerimaanStokHeaderLookup'))
   // additionalRulesGlobalSearch(sendedFilters)
 
