@@ -809,11 +809,13 @@
                   bayarDetails = $(`#tablePelunasan tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePelunasan_bayar"]`)
                   ttlBayar = 0
                   $.each(bayarDetails, (index, bayarDetail) => {
-                    ttlBayar += parseFloat($(bayarDetail).attr('title').replaceAll(',', ''))
+                    ttlBayarDetail = parseFloat($(bayarDetail).attr('title').replaceAll(',', ''))
+                    ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
+                    ttlBayar += ttlBayars
                   });
                   ttlBayar += bayar
                   initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_bayar"]`).text(ttlBayar))
-
+                  setTotalSisa()
                 },
               }, ],
             },
@@ -864,11 +866,13 @@
                   let potonganDetails = $(`#tablePelunasan tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePelunasan_potongan"]`)
                   let ttlPotongan = 0
                   $.each(potonganDetails, (index, potonganDetail) => {
-                    ttlPotongan += parseFloat($(potonganDetail).attr('title').replaceAll(',', ''))
+                    ttlPotDetail = parseFloat($(potonganDetail).attr('title').replaceAll(',', ''))
+                    ttlPotongans = (isNaN(ttlPotDetail)) ? 0 : ttlPotDetail;
+                    ttlPotongan += ttlPotongans
                   });
                   ttlPotongan += potongan
                   initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_potongan"]`).text(ttlPotongan))
-
+                  setTotalSisa()
                 },
               }, ],
             },
@@ -941,8 +945,9 @@
                   let lebihBayarDetails = $(`#tablePelunasan tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePelunasan_nominallebihbayar"]`)
                   let ttlLebihBayar = 0
                   $.each(lebihBayarDetails, (index, lebihBayarDetail) => {
-                    ttlLebihBayar += parseFloat($(lebihBayarDetail).attr('title').replaceAll(',', ''))
-                    console.log(ttlLebihBayar)
+                    ttlLBayar = parseFloat($(lebihBayarDetail).attr('title').replaceAll(',', ''))
+                    ttlLBayars = (isNaN(ttlLBayar)) ? 0 : ttlLBayar;
+                    ttlLebihBayar += ttlLBayars
                   });
                   ttlLebihBayar += lebihBayar
                   initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_nominallebihbayar"]`).text(ttlLebihBayar))
@@ -1004,6 +1009,10 @@
               // sisa - bayar - potongan
             );
           }
+          setTotalSisa()
+          setTotalBayar()
+          setTotalPotongan()
+          setTotalLebihBayar()
         },
         isCellEditable: function(cellname, iRow, iCol) {
           let rowData = $(this).jqGrid("getRowData")[iRow - 1];
@@ -1031,6 +1040,9 @@
                 initAutoNumeric($(this).find(`td[aria-describedby="tablePelunasan_nominallebihbayar"]`))
               });
           }, 100);
+
+          setTotalNominal()
+          setTotalSisa()
           setHighlight($(this))
         },
       })
@@ -1140,6 +1152,8 @@
         setTotalBayar()
         setTotalPotongan()
         setTotalLebihBayar()
+        setTotalNominal()
+        setTotalSisa()
       } else {
         if (!selectAll) {
           selectedRowIds.push(rowId);
@@ -1178,6 +1192,8 @@
         setTotalBayar()
         setTotalPotongan()
         setTotalLebihBayar()
+        setTotalNominal()
+        setTotalSisa()
       }
     });
 
@@ -1224,6 +1240,29 @@
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_nominallebihbayar"]`).text(lebihBayar))
   }
 
+
+  function setTotalNominal() {
+    let nominalDetails = $(`#tablePelunasan`).find(`td[aria-describedby="tablePelunasan_nominal"]`)
+    let nominal = 0
+    $.each(nominalDetails, (index, nominalDetail) => {
+      nominaldetail = parseFloat($(nominalDetail).text().replaceAll(',', ''))
+      nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
+      nominal += nominals
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_nominal"]`).text(nominal))
+  }
+
+  function setTotalSisa() {
+    let sisaDetails = $(`#tablePelunasan`).find(`td[aria-describedby="tablePelunasan_sisa"]`)
+    let sisa = 0
+    $.each(sisaDetails, (index, sisaDetail) => {
+      sisadetail = parseFloat($(sisaDetail).text().replaceAll(',', ''))
+      sisas = (isNaN(sisadetail)) ? 0 : sisadetail;
+      sisa += sisas
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_sisa"]`).text(sisa))
+  }
+
   function editPelunasanPiutangHeader(Id) {
     let form = $('#crudForm')
 
@@ -1238,12 +1277,12 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showPelunasanPiutang(form,Id)
-    
+    showPelunasanPiutang(form, Id)
+
   }
 
-  function showPelunasanPiutang(form,Id){
-    
+  function showPelunasanPiutang(form, Id) {
+
     form.find(`[name="tglbukti"]`).prop('readonly', true)
     form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
     $.ajax({
@@ -1316,6 +1355,7 @@
                 datatype: "local",
                 data: response.data,
                 originalData: response.data,
+                rowNum: response.data.length,
                 selectedRowIds: selectedId
               })
               .trigger("reloadGrid");
@@ -1396,7 +1436,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-   showPelunasanPiutang(form,Id)
+    showPelunasanPiutang(form, Id)
   }
 
   // $(window).on("load", function() {
@@ -1938,7 +1978,7 @@
                 datatype: "local",
                 data: response.data,
                 originalData: response.data,
-                rowNum : response.data.length,
+                rowNum: response.data.length,
                 selectedRowIds: []
               })
               .trigger("reloadGrid");
