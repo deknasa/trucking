@@ -747,7 +747,7 @@
                   initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_nominal"]`).text(ttlBayar))
 
                   // setAllTotal()
-                  // setTotalSisa()
+                  setTotalSisa()
                 },
               }, ],
             },
@@ -803,6 +803,8 @@
               // sisa - nominal - potongan
             );
           }
+          setTotalNominal()
+          setTotalSisa()
         },
         isCellEditable: function(cellname, iRow, iCol) {
           let rowData = $(this).jqGrid("getRowData")[iRow - 1];
@@ -829,6 +831,7 @@
               });
           }, 100);
           setTotalNominal()
+          setTotalSisa()
           setHighlight($(this))
         },
       })
@@ -929,6 +932,7 @@
 
         $("#tablePinjaman").jqGrid("setCell", rowId, "nominal", 0);
         setTotalNominal()
+        setTotalSisa()
       } else {
         selectedRowIds.push(rowId);
 
@@ -947,6 +951,7 @@
 
         initAutoNumeric($(`#tablePinjaman tr#${rowId}`).find(`td[aria-describedby="tablePinjaman_nominal"]`))
         setTotalNominal()
+        setTotalSisa()
       }
     });
 
@@ -955,6 +960,17 @@
     });
 
   }
+  
+  function setTotalSisa() {
+        let sisaDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_sisa"]`)
+        let sisa = 0
+        $.each(sisaDetails, (index, sisaDetail) => {
+            sisadetail = parseFloat($(sisaDetail).text().replaceAll(',', ''))
+            sisas = (isNaN(sisadetail)) ? 0 : sisadetail;
+            sisa += sisas
+        });
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_sisa"]`).text(sisa))
+    }
 
 
   function showPenerimaanTruckingHeader(form, id) {

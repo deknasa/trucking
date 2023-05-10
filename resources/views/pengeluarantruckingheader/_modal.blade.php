@@ -854,6 +854,9 @@
               // sisa - nominal - potongan
             );
           }
+          
+          setTotalSisaDeposito()
+          setTotalNominalDeposito()
         },
         isCellEditable: function(cellname, iRow, iCol) {
           let rowData = $(this).jqGrid("getRowData")[iRow - 1];
@@ -1747,7 +1750,6 @@
         $('#crudForm [name=pengeluarantrucking_id]').first().val(pengeluarantrucking.id)
         element.val(pengeluarantrucking.keterangan)
         element.data('currentValue', element.val())
-        getDeposito()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
