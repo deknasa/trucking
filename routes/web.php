@@ -160,6 +160,7 @@ use App\Http\Controllers\LaporanHistoryPinjamanController;
 use App\Http\Controllers\LaporanHutangBBMController;
 use App\Http\Controllers\LaporanKartuHutangPrediksiController;
 use App\Http\Controllers\LaporanKartuPiutangPerPelangganController;
+use App\Http\Controllers\LaporanKartuPiutangPerPlgDetailController;
 use App\Http\Controllers\LaporanOrderPembelianController;
 use App\Http\Controllers\LaporanKasBankController;
 use App\Http\Controllers\LaporanKasGantungController;
@@ -1084,6 +1085,10 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporankartupiutangperpelanggan/report', [LaporanKartuPiutangPerPelangganController::class, 'report'])->name('laporankartupiutangperpelanggan.report');
     Route::get('laporankartupiutangperpelanggan/index', [LaporanKartuPiutangPerPelangganController::class, 'index']);
     Route::resource('laporankartupiutangperpelanggan', LaporanKartuPiutangPerPelangganController::class);
+
+    Route::get('laporankartupiutangperplgdetail/report', [LaporanKartuPiutangPerPlgDetailController::class, 'report'])->name('laporankartupiutangperplgdetail.report');
+    Route::get('laporankartupiutangperplgdetail/index', [LaporanKartuPiutangPerPlgDetailController::class, 'index']);
+    Route::resource('laporankartupiutangperplgdetail', LaporanKartuPiutangPerPlgDetailController::class);
 
     Route::get('laporanorderpembelian/report', [LaporanOrderPembelianController::class, 'report'])->name('laporanorderpembelian.report');
     Route::get('laporanorderpembelian/index', [LaporanOrderPembelianController::class, 'index']);
