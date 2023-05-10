@@ -854,7 +854,7 @@
               // sisa - nominal - potongan
             );
           }
-          
+
           setTotalSisaDeposito()
           setTotalNominalDeposito()
         },
@@ -1128,7 +1128,7 @@
         let kodepengeluaran = response.data.kodepengeluaran
 
         KodePengeluaranId = kodepengeluaran
-
+        console.log(kodepengeluaran)
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
           if (element.is('select')) {
@@ -1191,6 +1191,7 @@
                   datatype: "local",
                   data: response.data,
                   originalData: response.data,
+                  rowNum: response.data.length,
                   selectedRowIds: selectedId
                 })
                 .trigger("reloadGrid");
@@ -1204,39 +1205,28 @@
 
           resetGrid()
           $.each(response.detail, (index, detail) => {
-
             let id = detail.id_detail
-            let detailRow = $(`
-            <div id="detail_row_${id}">
-            <input type="text" value="${id}"  id="id_detail${id}" class="" name="id_detail[]"  disabled   >
-            <input type="text" value="${detail.container_detail}"  id="container_detail${id}" class="" name="container_detail[]"  disabled   >
-            <input type="text" value="${detail.noinvoice_detail}"  id="noinvoice_detail${id}" class="" name="noinvoice_detail[]"  disabled   >
-            <input type="text" value="${detail.nominal_detail}"  id="nominal${id}" class="" name="nominal[]"  disabled   >
-            <input type="text" value="${detail.nojobtrucking_detail}"  id="nojobtrucking_detail${id}" class="" name="nojobtrucking_detail[]"  disabled   >
-            <input type="text" value="SUMBANGAN SOSIAL"  id="keterangan${id}" class="" name="keterangan[]"  disabled   >
-            </div>
-            `)
             if (detail.pengeluarantrucking_id != null) {
               selectedRows.push(detail.id_detail)
-              detailRow.find(`[name="id_detail[]"]`).attr('disabled', false)
-              detailRow.find(`[name="container_detail[]"]`).attr('disabled', false)
-              detailRow.find(`[name="noinvoice_detail[]"]`).attr('disabled', false)
-              detailRow.find(`[name="nominal[]"]`).attr('disabled', false)
-              detailRow.find(`[name="nojobtrucking_detail[]"]`).attr('disabled', false)
-              detailRow.find(`[name="keterangan[]"]`).attr('disabled', false)
             }
+            detailRow += `
+              <div id="detail_row_${id}">
+              <input type="text" value="${id}"  id="id_detail${id}" class="" name="id_detail[]"  disabled   >
+              <input type="text" value='${detail.container_detail}'  id="container_detail${id}" class="" name="container_detail[]"  disabled   >
+              <input type="text" value="${detail.noinvoice_detail}"  id="noinvoice_detail${id}" class="" name="noinvoice_detail[]"  disabled   >
+              <input type="text" value="${detail.nominal_detail}"  id="nominal${id}" class="" name="nominal[]"  disabled   >
+              <input type="text" value="${detail.nojobtrucking_detail}"  id="nojobtrucking_detail${id}" class="" name="nojobtrucking_detail[]"  disabled   >
+              <input type="text" value="SUMBANGAN SOSIAL"  id="keterangan${id}" class="" name="keterangan[]"  disabled   >
+              </div>
+              `
           })
           $('#detail-list-grid').append(detailRow)
+          
           $('#modalgrid').setGridParam({
             datatype: "local",
             data: response.detail
           }).trigger('reloadGrid')
-          // // console.log('dsfgdfg');
-          // $('#modalgrid').jqGrid('setGridParam',{
-          //   data:response.detail
-          // }).trigger('reloadGrid')
 
-          // $('.checkBoxgrid').prop('checked', true);
         } else {
           $.each(response.detail, (index, detail) => {
             let detailRow = $(`
@@ -1586,6 +1576,14 @@
                 $(this).find(`td input:checkbox`).prop('checked', true)
               }
             })
+
+            $(`#detail-list-grid #detail_row_${value}`).find(`#id_detail${value}`).prop('disabled', false)
+            $(`#detail-list-grid #detail_row_${value}`).find(`#container_detail${value}`).prop('disabled', false)
+            $(`#detail-list-grid #detail_row_${value}`).find(`#noinvoice_detail${value}`).prop('disabled', false)
+            $(`#detail-list-grid #detail_row_${value}`).find(`#nominal${value}`).prop('disabled', false)
+            $(`#detail-list-grid #detail_row_${value}`).find(`#nojobtrucking_detail${value}`).prop('disabled', false)
+            $(`#detail-list-grid #detail_row_${value}`).find(`#keterangan${value}`).prop('disabled', false)
+
           });
 
           $('.clearsearchclass').click(function() {

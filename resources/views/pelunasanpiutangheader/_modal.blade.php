@@ -1355,6 +1355,7 @@
                 datatype: "local",
                 data: response.data,
                 originalData: response.data,
+                rowNum: response.data.length,
                 selectedRowIds: selectedId
               })
               .trigger("reloadGrid");
