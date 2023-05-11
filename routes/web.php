@@ -1009,6 +1009,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('prosesuangjalansupirdetail', ProsesUangJalanSupirDetailController::class);
     
     Route::get('laporandepositosupir/report', [LaporanDepositoSupirController::class, 'report'])->name('laporandepositosupir.report');
+    Route::get('laporandepositosupir/export', [LaporanDepositoSupirController::class, 'export'])->name('laporandepositosupir.export');
     Route::get('laporandepositosupir/index', [LaporanDepositoSupirController::class, 'index']);
     Route::resource('laporandepositosupir', LaporanDepositoSupirController::class);
 
@@ -1102,9 +1103,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('exportpembelianbarang/index', [ExportPembelianBarangController::class, 'index']);
     Route::resource('exportpembelianbarang', ExportPembelianBarangController::class);
 
-    Route::get('exportlaporandeposito/export', [ExportLaporanDepositoController::class, 'export'])->name('exportlaporandeposito.export');
-    Route::get('exportlaporandeposito/index', [ExportLaporanDepositoController::class, 'index']);
-    Route::resource('exportlaporandeposito', ExportLaporanDepositoController::class);
+    // Route::get('exportlaporandeposito/export', [ExportLaporanDepositoController::class, 'export'])->name('exportlaporandeposito.export');
+    // Route::get('exportlaporandeposito/index', [ExportLaporanDepositoController::class, 'index']);
+    // Route::resource('exportlaporandeposito', ExportLaporanDepositoController::class);
 
     Route::get('exportlaporankasgantung/export', [ExportLaporanKasGantungController::class, 'export'])->name('exportlaporankasgantung.export');
     Route::get('exportlaporankasgantung/index', [ExportLaporanKasGantungController::class, 'index']);

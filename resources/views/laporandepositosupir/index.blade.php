@@ -22,12 +22,10 @@
                             <label class="col-12 col-sm-2 col-form-label mt-2">JENIS<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <select name="jenis" id="jenis" class="form-select select2bs4" style="width: 100%;">
-
                                 </select>
                             </div>
                         </div>
                         <div class="row">
-
                             <div class="col-sm-6 mt-4">
                                 <a id="btnPreview" class="btn btn-secondary mr-2 ">
                                     <i class="fas fa-sync"></i>
@@ -35,7 +33,14 @@
                                 </a>
                             </div>
                         </div>
-
+                        <div class="row">
+                            <div class="col-sm-6 mt-4">
+                                <a id="btnEkspor" class="btn btn-secondary mr-2 ">
+                                    <i class="fas fa-sync"></i>
+                                    Ekspor
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -81,6 +86,10 @@
             $('#btnPreview').prop('disabled', true)
             $('#btnPreview').css(css_property);
         }
+        if (!`{{ $myAuth->hasPermission('laporandepositosupir', 'export') }}`) {
+            $('#btnEkspor').prop('disabled', true)
+            $('#btnEkspor').css(css_property);
+        }
 
     })
 
@@ -96,7 +105,16 @@
         }
     })
 
+    $(document).on('click', `#btnEkspor`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
 
+        if (sampai != '') {
+
+            window.open(`{{ route('laporandepositosupir.export') }}?sampai=${sampai}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
 
     const setJenisKaryawanOptions = function(relatedForm) {
         // return new Promise((resolve, reject) => {
