@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -143,7 +143,14 @@
           method = 'POST'
           url = `${apiUrl}mandorabsensisupir`
           break;
-
+        case 'edit':
+          method = 'POST'
+          url = `${apiUrl}mandorabsensisupir/${mandorId}/update`
+          break;
+        case 'delete':
+          method = 'POST'
+          url = `${apiUrl}mandorabsensisupir/${mandorId}/delete`
+          break;
         default:
           method = 'POST'
           url = `${apiUrl}mandorabsensisupir`
@@ -165,30 +172,30 @@
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
           $.ajax({
-          url: `${apiUrl}mandorabsensisupir`,
-          method: 'GET',
-        dataType: 'JSON',
-        data: {
-          limit: 0,
-          sortIndex:'trado_id',
-          sortOrder:'asc',
-        },
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          $('#jqGrid').setGridParam({
-            datatype: "local",
-            data:response.data
-          }).trigger('reloadGrid')
-        }
-      })
+            url: `${apiUrl}mandorabsensisupir`,
+            method: 'GET',
+            dataType: 'JSON',
+            data: {
+              limit: 0,
+              sortIndex: 'trado_id',
+              sortOrder: 'asc',
+            },
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            },
+            success: response => {
+              $('#jqGrid').setGridParam({
+                datatype: "local",
+                data: response.data
+              }).trigger('reloadGrid')
+            }
+          })
           // id = response.data.id
 
           // $('#jqGrid').jqGrid('setGridParam', {
           //   page: response.data.page
           // }).trigger('reloadGrid');
-          
+
           // if (response.data.grp == 'FORMAT') {
           //   updateFormat(response.data)
           // }
@@ -225,7 +232,7 @@
         $('#loader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-      
+
     })
   })
 
@@ -296,6 +303,43 @@
     }
   }
 
+  function editAbsensi(tradoId) {
+    let form = $('#crudForm')
+
+    form.data('action', 'edit')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+    <i class="fa fa-save"></i>
+    Simpan
+  `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('Edit Absen')
+    $('#crudModal').modal('show')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    showAbsensi(form, tradoId)
+
+  }
+
+  function deleteAbsensi(tradoId) {
+    let form = $('#crudForm')
+
+    form.data('action', 'delete')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+    <i class="fa fa-save"></i>
+    Hapus
+  `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('Delete Absen')
+    $('#crudModal').modal('show')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    showAbsensi(form, tradoId)
+
+  }
 
 
   function showAbsensi(form, tradoId) {
@@ -327,6 +371,46 @@
       }
     })
   }
+
+  function cekValidasi(tradoId, aksi) {
+    $.ajax({
+      url: `${apiUrl}mandorabsensisupir/${tradoId}/cekvalidasi`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        if (response.errors) {
+          showDialog(response.message)
+        } else {
+          if (aksi == 'edit') {
+            editAbsensi(tradoId)
+          } else {
+            deleteAbsensi(tradoId)
+          }
+        }
+      }
+    })
+  }
+
+function cekValidasiAdd(tradoId) {
+  $.ajax({
+    url: `${apiUrl}mandorabsensisupir/${tradoId}/cekvalidasiadd`,
+    method: 'GET',
+    dataType: 'JSON',
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    },
+    success: response => {
+      if(response.errors){
+        showDialog(response.message)
+      }else{
+        createAbsensi(tradoId)
+      }
+    }
+  })
+}
 
   function showDefault(form) {
     $.ajax({
