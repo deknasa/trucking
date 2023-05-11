@@ -199,6 +199,7 @@ use App\Http\Controllers\StokPersediaanController;
 use App\Http\Controllers\LapKartuHutangPerVendorDetailController;
 use App\Http\Controllers\LaporanWarkatBelumCairController;
 use App\Http\Controllers\LaporanPenyesuaianBarangController;
+use App\Http\Controllers\LaporanPemakaianBanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1024,14 +1025,17 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporanketeranganpinjamansupir', LaporanKeteranganPinjamanSupirController::class);
 
 
-    // LaporanKartuHutangPerVendorDetailController
     Route::get('lapkartuhutangpervendordetail/report', [LapKartuHutangPerVendorDetailController::class, 'report'])->name('lapkartuhutangpervendordetail.report');
     Route::get('lapkartuhutangpervendordetail/index', [LapKartuHutangPerVendorDetailController::class, 'index']);
     Route::resource('lapkartuhutangpervendordetail', LapKartuHutangPerVendorDetailController::class);
-    // Laporan warkat belum cair
+
     Route::get('laporanwarkatbelumcair/report', [LaporanWarkatBelumCairController::class, 'report'])->name('laporanwarkatbelumcair.report');
     Route::get('laporanwarkatbelumcair/index', [LaporanWarkatBelumCairController::class, 'index']);
     Route::resource('laporanwarkatbelumcair', LaporanWarkatBelumCairController::class);
+
+    Route::get('laporanpemakaianban/report', [LaporanPemakaianBanController::class, 'report'])->name('laporanpemakaianban.report');
+    Route::get('laporanpemakaianban/index', [LaporanPemakaianBanController::class, 'index']);
+    Route::resource('laporanpemakaianban', LaporanPemakaianBanController::class);
 
     Route::get('laporanpenyesuaianbarang/report', [LaporanPenyesuaianBarangController::class, 'report'])->name('laporanpenyesuaianbarang.report');
     Route::get('laporanpenyesuaianbarang/index', [LaporanPenyesuaianBarangController::class, 'index']);
