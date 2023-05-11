@@ -31,9 +31,12 @@
                                     <i class="fas fa-sync"></i>
                                     Cetak
                                 </a>
+                                <a id="btnEkspor" class="btn btn-secondary mr-2 ">
+                                    <i class="fas fa-sync"></i>
+                                    Ekspor
+                                </a>
                             </div>
                         </div>
-
                     </div>
                 </form>
             </div>
@@ -80,6 +83,10 @@
             $('#btnPreview').prop('disabled', true)
             $('#btnPreview').css(css_property);
         }
+        if (!`{{ $myAuth->hasPermission('laporanpenyesuaianbarang', 'export') }}`) {
+            $('#btnEkspor').prop('disabled', true)
+            $('#btnEkspor').css(css_property);
+        }
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
@@ -89,6 +96,15 @@
         if (dari != '' && sampai != '') {
 
             window.open(`{{ route('laporanpenyesuaianbarang.report') }}?sampai=${sampai}&dari=${dari}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
+
+    $(document).on('click', `#btnEkspor`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+        if (sampai != '') {
+            window.open(`{{ route('laporanpenyesuaianbarang.export') }}?sampai=${sampai}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
