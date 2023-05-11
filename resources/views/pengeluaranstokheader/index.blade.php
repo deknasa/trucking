@@ -47,19 +47,17 @@
   let autoNumericElements = []
 
   $(document).ready(function() {
-    $('.sss').select2({
-      width: 'resolve',
-      theme: "bootstrap4"
-    });
+    initSelect2($(`#kodepengeluaranheader`),false);
 
     $('#crudModal').on('hidden.bs.modal', function() {
        activeGrid = '#jqGrid'
      })
-setRange()
+    setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
       loadDataHeader('pengeluaranstokheader',{pengeluaranheader_id:$('#kodepengeluaranheader').val()})
     })
+
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'pengeluaranstokheader' }}`,
         mtype: "GET",

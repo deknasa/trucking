@@ -1,0 +1,646 @@
+{
+  "ReportVersion": "2023.1.1",
+  "ReportGuid": "52b8d31b5ed7469b05ec8eec94458f83",
+  "ReportName": "Report",
+  "ReportAlias": "Report",
+  "ReportCreated": "/Date(1683689807000+0700)/",
+  "ReportChanged": "/Date(1683690086000+0700)/",
+  "EngineVersion": "EngineV2",
+  "CalculationMode": "Interpretation",
+  "ReportUnit": "Centimeters",
+  "Dictionary": {
+    "DataSources": {
+      "0": {
+        "Ident": "StiDataTableSource",
+        "Name": "penerimaanstokheader_details",
+        "Alias": "penerimaanstokheader_details",
+        "Columns": {
+          "0": {
+            "Name": "penerimaanstokheader_id",
+            "NameInSource": "penerimaanstokheader_id",
+            "Alias": "penerimaanstokheader_id",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "nobukti",
+            "NameInSource": "nobukti",
+            "Alias": "nobukti",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "stok_id",
+            "NameInSource": "stok_id",
+            "Alias": "stok_id",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "stok",
+            "NameInSource": "stok",
+            "Alias": "stok",
+            "Type": "System.String"
+          },
+          "4": {
+            "Name": "qty",
+            "NameInSource": "qty",
+            "Alias": "qty",
+            "Type": "System.String"
+          },
+          "5": {
+            "Name": "harga",
+            "NameInSource": "harga",
+            "Alias": "harga",
+            "Type": "System.String"
+          },
+          "6": {
+            "Name": "persentasediscount",
+            "NameInSource": "persentasediscount",
+            "Alias": "persentasediscount",
+            "Type": "System.String"
+          },
+          "7": {
+            "Name": "nominaldiscount",
+            "NameInSource": "nominaldiscount",
+            "Alias": "nominaldiscount",
+            "Type": "System.String"
+          },
+          "8": {
+            "Name": "total",
+            "NameInSource": "total",
+            "Alias": "total",
+            "Type": "System.String"
+          },
+          "9": {
+            "Name": "keterangan",
+            "NameInSource": "keterangan",
+            "Alias": "keterangan",
+            "Type": "System.String"
+          },
+          "10": {
+            "Name": "vulkanisirke",
+            "NameInSource": "vulkanisirke",
+            "Alias": "vulkanisirke",
+            "Type": "System.String"
+          },
+          "11": {
+            "Name": "modifiedby",
+            "NameInSource": "modifiedby",
+            "Alias": "modifiedby",
+            "Type": "System.String"
+          },
+          "12": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.penerimaanstokheader_details"
+      },
+      "1": {
+        "Ident": "StiDataTableSource",
+        "Name": "penerimaanstokheader_user_roles_pivot",
+        "Alias": "penerimaanstokheader_user_roles_pivot",
+        "Columns": {
+          "0": {
+            "Name": "user_id",
+            "NameInSource": "user_id",
+            "Alias": "user_id",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "role_id",
+            "NameInSource": "role_id",
+            "Alias": "role_id",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.penerimaanstokheader_user_roles_pivot"
+      },
+      "2": {
+        "Ident": "StiDataTableSource",
+        "Name": "penerimaanstokheader_user_roles",
+        "Alias": "penerimaanstokheader_user_roles",
+        "Columns": {
+          "0": {
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
+            "Type": "System.Decimal"
+          },
+          "1": {
+            "Name": "rolename",
+            "NameInSource": "rolename",
+            "Alias": "rolename",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "modifiedby",
+            "NameInSource": "modifiedby",
+            "Alias": "modifiedby",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "created_at",
+            "NameInSource": "created_at",
+            "Alias": "created_at",
+            "Type": "System.DateTime"
+          },
+          "4": {
+            "Name": "updated_at",
+            "NameInSource": "updated_at",
+            "Alias": "updated_at",
+            "Type": "System.DateTime"
+          },
+          "5": {
+            "Name": "pivot",
+            "NameInSource": "pivot",
+            "Alias": "pivot",
+            "Type": "System.String"
+          },
+          "6": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.penerimaanstokheader_user_roles"
+      },
+      "3": {
+        "Ident": "StiDataTableSource",
+        "Name": "penerimaanstokheader_user",
+        "Alias": "penerimaanstokheader_user",
+        "Columns": {
+          "0": {
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
+            "Type": "System.Decimal"
+          },
+          "1": {
+            "Name": "user",
+            "NameInSource": "user",
+            "Alias": "user",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "name",
+            "NameInSource": "name",
+            "Alias": "name",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "cabang_id",
+            "NameInSource": "cabang_id",
+            "Alias": "cabang_id",
+            "Type": "System.String"
+          },
+          "4": {
+            "Name": "karyawan_id",
+            "NameInSource": "karyawan_id",
+            "Alias": "karyawan_id",
+            "Type": "System.String"
+          },
+          "5": {
+            "Name": "dashboard",
+            "NameInSource": "dashboard",
+            "Alias": "dashboard",
+            "Type": "System.String"
+          },
+          "6": {
+            "Name": "statusaktif",
+            "NameInSource": "statusaktif",
+            "Alias": "statusaktif",
+            "Type": "System.String"
+          },
+          "7": {
+            "Name": "modifiedby",
+            "NameInSource": "modifiedby",
+            "Alias": "modifiedby",
+            "Type": "System.String"
+          },
+          "8": {
+            "Name": "created_at",
+            "NameInSource": "created_at",
+            "Alias": "created_at",
+            "Type": "System.DateTime"
+          },
+          "9": {
+            "Name": "updated_at",
+            "NameInSource": "updated_at",
+            "Alias": "updated_at",
+            "Type": "System.DateTime"
+          },
+          "10": {
+            "Name": "roles",
+            "NameInSource": "roles",
+            "Alias": "roles",
+            "Type": "System.String"
+          },
+          "11": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.penerimaanstokheader_user"
+      },
+      "4": {
+        "Ident": "StiDataTableSource",
+        "Name": "penerimaanstokheader_combo",
+        "Alias": "penerimaanstokheader_combo",
+        "Columns": {
+          "0": {
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "parameter",
+            "NameInSource": "parameter",
+            "Alias": "parameter",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "param",
+            "NameInSource": "param",
+            "Alias": "param",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.penerimaanstokheader_combo"
+      },
+      "5": {
+        "Ident": "StiDataTableSource",
+        "Name": "penerimaanstokheader",
+        "Alias": "penerimaanstokheader",
+        "Columns": {
+          "0": {
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "nobukti",
+            "NameInSource": "nobukti",
+            "Alias": "nobukti",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "tglbukti",
+            "NameInSource": "tglbukti",
+            "Alias": "tglbukti",
+            "Type": "System.DateTime"
+          },
+          "3": {
+            "Name": "penerimaanstok",
+            "NameInSource": "penerimaanstok",
+            "Alias": "penerimaanstok",
+            "Type": "System.String"
+          },
+          "4": {
+            "Name": "penerimaanstok_nobukti",
+            "NameInSource": "penerimaanstok_nobukti",
+            "Alias": "penerimaanstok_nobukti",
+            "Type": "System.String"
+          },
+          "5": {
+            "Name": "pengeluaranstok_nobukti",
+            "NameInSource": "pengeluaranstok_nobukti",
+            "Alias": "pengeluaranstok_nobukti",
+            "Type": "System.String"
+          },
+          "6": {
+            "Name": "gudang",
+            "NameInSource": "gudang",
+            "Alias": "gudang",
+            "Type": "System.String"
+          },
+          "7": {
+            "Name": "trado",
+            "NameInSource": "trado",
+            "Alias": "trado",
+            "Type": "System.String"
+          },
+          "8": {
+            "Name": "tradodari",
+            "NameInSource": "tradodari",
+            "Alias": "tradodari",
+            "Type": "System.String"
+          },
+          "9": {
+            "Name": "tradoke",
+            "NameInSource": "tradoke",
+            "Alias": "tradoke",
+            "Type": "System.String"
+          },
+          "10": {
+            "Name": "gandengandari",
+            "NameInSource": "gandengandari",
+            "Alias": "gandengandari",
+            "Type": "System.String"
+          },
+          "11": {
+            "Name": "gandenganke",
+            "NameInSource": "gandenganke",
+            "Alias": "gandenganke",
+            "Type": "System.String"
+          },
+          "12": {
+            "Name": "supplier",
+            "NameInSource": "supplier",
+            "Alias": "supplier",
+            "Type": "System.String"
+          },
+          "13": {
+            "Name": "nobon",
+            "NameInSource": "nobon",
+            "Alias": "nobon",
+            "Type": "System.String"
+          },
+          "14": {
+            "Name": "hutang_nobukti",
+            "NameInSource": "hutang_nobukti",
+            "Alias": "hutang_nobukti",
+            "Type": "System.String"
+          },
+          "15": {
+            "Name": "gudangdari",
+            "NameInSource": "gudangdari",
+            "Alias": "gudangdari",
+            "Type": "System.String"
+          },
+          "16": {
+            "Name": "gudangke",
+            "NameInSource": "gudangke",
+            "Alias": "gudangke",
+            "Type": "System.String"
+          },
+          "17": {
+            "Name": "statusformat",
+            "NameInSource": "statusformat",
+            "Alias": "statusformat",
+            "Type": "System.String"
+          },
+          "18": {
+            "Name": "coa",
+            "NameInSource": "coa",
+            "Alias": "coa",
+            "Type": "System.String"
+          },
+          "19": {
+            "Name": "keterangan",
+            "NameInSource": "keterangan",
+            "Alias": "keterangan",
+            "Type": "System.String"
+          },
+          "20": {
+            "Name": "modifiedby",
+            "NameInSource": "modifiedby",
+            "Alias": "modifiedby",
+            "Type": "System.String"
+          },
+          "21": {
+            "Name": "created_at",
+            "NameInSource": "created_at",
+            "Alias": "created_at",
+            "Type": "System.String"
+          },
+          "22": {
+            "Name": "updated_at",
+            "NameInSource": "updated_at",
+            "Alias": "updated_at",
+            "Type": "System.String"
+          },
+          "23": {
+            "Name": "gudang_id",
+            "NameInSource": "gudang_id",
+            "Alias": "gudang_id",
+            "Type": "System.String"
+          },
+          "24": {
+            "Name": "gudangdari_id",
+            "NameInSource": "gudangdari_id",
+            "Alias": "gudangdari_id",
+            "Type": "System.String"
+          },
+          "25": {
+            "Name": "gudangke_id",
+            "NameInSource": "gudangke_id",
+            "Alias": "gudangke_id",
+            "Type": "System.String"
+          },
+          "26": {
+            "Name": "penerimaanstok_id",
+            "NameInSource": "penerimaanstok_id",
+            "Alias": "penerimaanstok_id",
+            "Type": "System.String"
+          },
+          "27": {
+            "Name": "trado_id",
+            "NameInSource": "trado_id",
+            "Alias": "trado_id",
+            "Type": "System.String"
+          },
+          "28": {
+            "Name": "tradoke_id",
+            "NameInSource": "tradoke_id",
+            "Alias": "tradoke_id",
+            "Type": "System.String"
+          },
+          "29": {
+            "Name": "tradodari_id",
+            "NameInSource": "tradodari_id",
+            "Alias": "tradodari_id",
+            "Type": "System.String"
+          },
+          "30": {
+            "Name": "gandenganke_id",
+            "NameInSource": "gandenganke_id",
+            "Alias": "gandenganke_id",
+            "Type": "System.String"
+          },
+          "31": {
+            "Name": "gandengandari_id",
+            "NameInSource": "gandengandari_id",
+            "Alias": "gandengandari_id",
+            "Type": "System.String"
+          },
+          "32": {
+            "Name": "gandengan_id",
+            "NameInSource": "gandengan_id",
+            "Alias": "gandengan_id",
+            "Type": "System.String"
+          },
+          "33": {
+            "Name": "supplier_id",
+            "NameInSource": "supplier_id",
+            "Alias": "supplier_id",
+            "Type": "System.String"
+          },
+          "34": {
+            "Name": "statuscetak",
+            "NameInSource": "statuscetak",
+            "Alias": "statuscetak",
+            "Type": "System.String"
+          },
+          "35": {
+            "Name": "parrenttglbukti",
+            "NameInSource": "parrenttglbukti",
+            "Alias": "parrenttglbukti",
+            "Type": "System.String"
+          },
+          "36": {
+            "Name": "statuscetak_id",
+            "NameInSource": "statuscetak_id",
+            "Alias": "statuscetak_id",
+            "Type": "System.String"
+          },
+          "37": {
+            "Name": "details",
+            "NameInSource": "details",
+            "Alias": "details",
+            "Type": "System.String"
+          },
+          "38": {
+            "Name": "user",
+            "NameInSource": "user",
+            "Alias": "user",
+            "Type": "System.String"
+          },
+          "39": {
+            "Name": "combo",
+            "NameInSource": "combo",
+            "Alias": "combo",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.penerimaanstokheader"
+      }
+    },
+    "Relations": {
+      "0": {
+        "Name": "penerimaanstokheader",
+        "ChildColumns": {
+          "0": "relationId"
+        },
+        "ParentColumns": {
+          "0": "details"
+        },
+        "NameInSource": "penerimaanstokheader_details",
+        "Alias": "penerimaanstokheader",
+        "ParentSource": "penerimaanstokheader",
+        "ChildSource": "penerimaanstokheader_details"
+      },
+      "1": {
+        "Name": "penerimaanstokheader_user_roles",
+        "ChildColumns": {
+          "0": "relationId"
+        },
+        "ParentColumns": {
+          "0": "pivot"
+        },
+        "NameInSource": "penerimaanstokheader_user_roles_pivot",
+        "Alias": "penerimaanstokheader_user_roles",
+        "ParentSource": "penerimaanstokheader_user_roles",
+        "ChildSource": "penerimaanstokheader_user_roles_pivot"
+      },
+      "2": {
+        "Name": "penerimaanstokheader_user",
+        "ChildColumns": {
+          "0": "relationId"
+        },
+        "ParentColumns": {
+          "0": "roles"
+        },
+        "NameInSource": "penerimaanstokheader_user_roles",
+        "Alias": "penerimaanstokheader_user",
+        "ParentSource": "penerimaanstokheader_user",
+        "ChildSource": "penerimaanstokheader_user_roles"
+      },
+      "3": {
+        "Name": "penerimaanstokheader",
+        "ChildColumns": {
+          "0": "relationId"
+        },
+        "ParentColumns": {
+          "0": "user"
+        },
+        "NameInSource": "penerimaanstokheader_user",
+        "Alias": "penerimaanstokheader",
+        "ParentSource": "penerimaanstokheader",
+        "ChildSource": "penerimaanstokheader_user"
+      },
+      "4": {
+        "Name": "penerimaanstokheader",
+        "ChildColumns": {
+          "0": "relationId"
+        },
+        "ParentColumns": {
+          "0": "combo"
+        },
+        "NameInSource": "penerimaanstokheader_combo",
+        "Alias": "penerimaanstokheader",
+        "ParentSource": "penerimaanstokheader",
+        "ChildSource": "penerimaanstokheader_combo"
+      }
+    }
+  },
+  "Pages": {
+    "0": {
+      "Ident": "StiPage",
+      "Name": "Page1",
+      "Guid": "f0b05d459bf19917e059d61400abbe44",
+      "Interaction": {
+        "Ident": "StiInteraction"
+      },
+      "Border": ";;2;;;;;solid:Black",
+      "Brush": "solid:",
+      "Components": {
+        "0": {
+          "Ident": "StiText",
+          "Name": "Text1",
+          "ClientRectangle": "2,0.2,15.6,2.6",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "Text": {
+            "Value": "CETAKAN A4"
+          },
+          "Font": ";72;;",
+          "Border": ";;;;;;;solid:Black",
+          "Brush": "solid:",
+          "TextBrush": "solid:Black",
+          "Type": "Expression"
+        }
+      },
+      "PaperSize": "A4",
+      "PageWidth": 21,
+      "PageHeight": 29.7,
+      "Watermark": {
+        "TextBrush": "solid:50,0,0,0"
+      },
+      "Margins": {
+        "Left": 1,
+        "Right": 1,
+        "Top": 1,
+        "Bottom": 1
+      }
+    }
+  }
+}
