@@ -103,8 +103,8 @@
                     <th width="20%" class="tbl_supir_id">SUPIR</th>
                     <th width="15%" class="tbl_pengeluarantruckingheader_nobukti">NO BUKTI PENGELUARAN TRUCKING</th>
                     <th width="14%" class="tbl_sisa">Sisa</th>
-                    <th width="20%" class="tbl_nominal">Nominal</th>
                     <th width="25%" class="tbl_keterangan">Keterangan</th>
+                    <th width="20%" class="tbl_nominal">Nominal</th>
                     <th width="1%" class="tbl_aksi">Aksi</th>
                   </tr>
                 </thead>
@@ -487,10 +487,10 @@
     $('.tbl_sisa').hide()
     $('.tbl_pengeluarantruckingheader_nobukti').show()
     $('[name=supirheader_id]').parents('.form-group').hide()
-    $('.colspan').attr('colspan', 3);
+    $('.colspan').attr('colspan', 4);
     $('#sisaColFoot').hide()
     $('#sisaFoot').hide()
-    $('.colmn-offset').show()
+    $('.colmn-offset').hide()
 
   }
 
@@ -747,7 +747,7 @@
                   initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_nominal"]`).text(ttlBayar))
 
                   // setAllTotal()
-                  // setTotalSisa()
+                  setTotalSisa()
                 },
               }, ],
             },
@@ -803,6 +803,8 @@
               // sisa - nominal - potongan
             );
           }
+          setTotalNominal()
+          setTotalSisa()
         },
         isCellEditable: function(cellname, iRow, iCol) {
           let rowData = $(this).jqGrid("getRowData")[iRow - 1];
@@ -829,6 +831,7 @@
               });
           }, 100);
           setTotalNominal()
+          setTotalSisa()
           setHighlight($(this))
         },
       })
@@ -872,10 +875,10 @@
       if (id != undefined) {
         url = `${apiUrl}penerimaantruckingheader/${id}/edit/getpengembalianpinjaman`
       } else {
-        url =  `${apiUrl}gajisupirheader/${supirId}/getpinjpribadi`
+        url = `${apiUrl}gajisupirheader/${supirId}/getpinjpribadi`
       }
     } else if (aksi == 'delete') {
-      url =`${apiUrl}penerimaantruckingheader/${id}/delete/getpengembalianpinjaman`
+      url = `${apiUrl}penerimaantruckingheader/${id}/delete/getpengembalianpinjaman`
       attribut = 'disabled'
       forCheckbox = 'disabled'
     } else if (aksi == 'add') {
@@ -929,6 +932,7 @@
 
         $("#tablePinjaman").jqGrid("setCell", rowId, "nominal", 0);
         setTotalNominal()
+        setTotalSisa()
       } else {
         selectedRowIds.push(rowId);
 
@@ -947,6 +951,7 @@
 
         initAutoNumeric($(`#tablePinjaman tr#${rowId}`).find(`td[aria-describedby="tablePinjaman_nominal"]`))
         setTotalNominal()
+        setTotalSisa()
       }
     });
 
@@ -956,10 +961,21 @@
 
   }
 
+  function setTotalSisa() {
+    let sisaDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_sisa"]`)
+    let sisa = 0
+    $.each(sisaDetails, (index, sisaDetail) => {
+      sisadetail = parseFloat($(sisaDetail).text().replaceAll(',', ''))
+      sisas = (isNaN(sisadetail)) ? 0 : sisadetail;
+      sisa += sisas
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_sisa"]`).text(sisa))
+  }
+
 
   function showPenerimaanTruckingHeader(form, id) {
     $('#detailList tbody').html('')
-    
+
     form.find(`[name="tglbukti"]`).prop('readonly', true)
     form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
@@ -1026,6 +1042,7 @@
                   datatype: "local",
                   data: response.data,
                   originalData: response.data,
+                  rowNum: response.data.length,
                   selectedRowIds: selectedId
                 })
                 .trigger("reloadGrid");
@@ -1299,11 +1316,11 @@
         <td class="tbl_pengeluarantruckingheader_nobukti">
           <input type="text" name="pengeluarantruckingheader_nobukti[]"  class="form-control pengeluarantruckingheader-lookup">
         </td>
-        <td class="tbl_nominal">
-          <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
-        </td>
         <td class="tbl_keterangan">
           <input type="text" name="keterangan[]" class="form-control"> 
+        </td>
+        <td class="tbl_nominal">
+          <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
         </td>
         <td>
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
