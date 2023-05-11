@@ -61,10 +61,10 @@ class LaporanPenyesuaianBarangController extends MyController
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'LAPORAN PENYESUAIAN SUPIR');
-        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
-        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:G3');
+        $sheet->setCellValue('b1', 'LAPORAN PENYESUAIAN BARANG');
+        $sheet->getStyle("B1")->getFont()->setSize(20)->setBold(true);
+        $sheet->getStyle('B1')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('B1:I3');
 
         $header_start_row = 4;
         $detail_start_row = $header_start_row + 1;
@@ -73,32 +73,44 @@ class LaporanPenyesuaianBarangController extends MyController
 
         $header_columns = [
             [
-                'label' => 'Deposito Ke',
-                'index' => 'cicil',
+                'label' => 'No Polisi',
+                'index' => 'nopolisi',
             ],
             [
-                'label' => 'Supir',
-                'index' => 'namasupir',
+                'label' => 'No Bukti',
+                'index' => 'nobukti',
+            ],
+            [
+                'label' => 'Tanggal Bukti',
+                'index' => 'tglbukti',
             ],
             [
                 'label' => 'Keterangan',
-                'index' => 'keterangandeposito',
+                'index' => 'keterangan',
+            ],
+            [
+                'label' => 'Kode Stok',
+                'index' => 'stok_id',
+            ],
+            [
+                'label' => 'Nama Stok',
+                'index' => 'namastok',
+            ],
+            [
+                'label' => 'Gudang',
+                'index' => 'gudang',
+            ],
+            [
+                'label' => 'QTY',
+                'index' => 'qty',
+            ],
+            [
+                'label' => 'Harga',
+                'index' => 'harga',
             ],
             [
                 'label' => 'Nominal',
-                'index' => 'saldo',
-            ],
-            [
-                'label' => 'Nominal Deposito',
-                'index' => 'deposito',
-            ],
-            [
-                'label' => 'Penarikan',
-                'index' => 'penarikan',
-            ],
-            [
-                'label' => 'Total',
-                'index' => 'total',
+                'index' => 'nominal',
             ],
         ];
 
@@ -144,6 +156,7 @@ class LaporanPenyesuaianBarangController extends MyController
             ]
         ];
 
+
         // set header
         foreach ($header_columns as $data_columns_index => $data_column) {
             $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, $data_column['label']);
@@ -170,25 +183,16 @@ class LaporanPenyesuaianBarangController extends MyController
             $detail_start_row += count($rows) + 2;
         }
 
-        //format decimal
-        $sheet->getStyle("A6:A$detail_start_row")->applyFromArray($styleArray)->getNumberFormat()->setFormatCode("0.0");
-
         //total
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray2)->getFont()->setBold(true);
+        $sheet->mergeCells('A' . $total_start_row . ':I' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':J' . $total_start_row)->applyFromArray($styleArray2)->getFont()->setBold(true);
 
-        $totalnomdeposito = "=SUM(E6:E" . ($detail_start_row-2) . ")";
-        $sheet->setCellValue("E$total_start_row", $totalnomdeposito)->getStyle("E$total_start_row")->applyFromArray($style_number);
-
-        $totalpenarikan = "=SUM(F6:F" . ($detail_start_row-2) . ")";
-        $sheet->setCellValue("F$total_start_row", $totalpenarikan)->getStyle("F$total_start_row")->applyFromArray($style_number);
-
-        $total = "=SUM(G6:G" . ($detail_start_row-2) . ")";
-        $sheet->setCellValue("G$total_start_row", $total)->getStyle("G$total_start_row")->applyFromArray($style_number);
+        $totalnomdeposito = "=SUM(J6:J" . ($detail_start_row-2) . ")";
+        $sheet->setCellValue("J$total_start_row", $totalnomdeposito)->getStyle("J$total_start_row")->applyFromArray($style_number);
 
         //format currency
-        $currency_columns = ['D', 'E', 'F', 'G'];
+        $currency_columns = ['I', 'J'];
         foreach ($currency_columns as $column) {
             $column_start = $header_start_row + 1;
             $column_end = $detail_start_row - 1;
@@ -197,23 +201,27 @@ class LaporanPenyesuaianBarangController extends MyController
                 $sheet->getStyle($cell)->getNumberFormat()->setFormatCode("#,##0.00");
             }
         }
-        $sheet->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-        $sheet->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-        $sheet->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $currency_columns = ['C'];
+        foreach ($currency_columns as $column) {
+            $column_start = $header_start_row + 1;
+            $column_end = $detail_start_row - 1;
+            for ($i = $column_start; $i <= $column_end; $i++) {
+                $cell = $column . $i;
+                $sheet->getStyle($cell)->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+            }
+        }
+        $sheet->getStyle("I$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("J$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
         // set diketahui dibuat
-        $ttd_start_row = $total_start_row + 2;
-        $sheet->setCellValue("B$ttd_start_row", 'Disetujui');
-        $sheet->setCellValue("C$ttd_start_row", 'Diketahui');
-        $sheet->setCellValue("D$ttd_start_row", 'Dibuat');
-        $sheet->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
+        $ttd_start_row = $detail_start_row + 2;
+        $sheet->setCellValue("C$ttd_start_row", 'Disetujui Oleh,');
+        $sheet->setCellValue("E$ttd_start_row", 'Diperiksa Oleh,');
+        $sheet->setCellValue("G$ttd_start_row", 'Disusun Oleh,');
 
-        $sheet->mergeCells("B" . ($ttd_start_row + 1) . ":B" . ($ttd_start_row + 3));
-        $sheet->mergeCells("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3));
-        $sheet->mergeCells("D" . ($ttd_start_row + 1) . ":D" . ($ttd_start_row + 3));
-        $sheet->getStyle("B" . ($ttd_start_row + 1) . ":B" . ($ttd_start_row + 3))->applyFromArray($styleArray);
-        $sheet->getStyle("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3))->applyFromArray($styleArray);
-        $sheet->getStyle("D" . ($ttd_start_row + 1) . ":D" . ($ttd_start_row + 3))->applyFromArray($styleArray);
+        $sheet->setCellValue("C" . ($ttd_start_row + 3), '( Bpk. Hasan )');
+        $sheet->setCellValue("E" . ($ttd_start_row + 3), '( Rina )');
+        $sheet->setCellValue("G" . ($ttd_start_row + 3), '(                )');
 
 
         //style header
@@ -224,6 +232,9 @@ class LaporanPenyesuaianBarangController extends MyController
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
+        $sheet->getColumnDimension('H')->setAutoSize(true);
+        $sheet->getColumnDimension('I')->setAutoSize(true);
+        $sheet->getColumnDimension('J')->setAutoSize(true);
 
         $sheet->getStyle("A4")->applyFromArray($styleArray3);
         $sheet->getStyle("B4")->applyFromArray($styleArray3);
@@ -232,9 +243,15 @@ class LaporanPenyesuaianBarangController extends MyController
         $sheet->getStyle("E4")->applyFromArray($styleArray3);
         $sheet->getStyle("F4")->applyFromArray($styleArray3);
         $sheet->getStyle("G4")->applyFromArray($styleArray3);
+        $sheet->getStyle("H4")->applyFromArray($styleArray3);
+        $sheet->getStyle("I4")->applyFromArray($styleArray3);
+        $sheet->getStyle("J4")->applyFromArray($styleArray3);
+        $sheet->getStyle("A")->applyFromArray($styleArray);
+        $sheet->getStyle("E")->applyFromArray($styleArray);
+
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORANDEPOSITO' . date('dmYHis');
+        $filename = 'LAPORAN PENYESUAIAN BARANG' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
