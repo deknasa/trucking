@@ -13,38 +13,44 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-class LaporanTripGandenganDetailController extends MyController
+class LaporanPemakaianBanController extends MyController
 {
-    public $title = 'Laporan Trip Gandengan Detail';
+    public $title = 'Laporan Pemakaian Ban';
 
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Trip Gandengan Detail',
+            'pagename' => 'Menu Utama Laporan Pemakaian Ban',
         ];
 
-        return view('laporantripgandengandetail.index', compact('title'));
+        return view('laporanpemakaianban.index', compact('title'));
     }
 
     public function report(Request $request)
     {
+        if ($request->posisiakhirtrado != null) {
+
+            $parameter = $request->posisiakhirtrado;
+        }else{
+            $parameter = $request->posisiakhirgandengan;
+        }
+      
         $detailParams = [
-            'sampai' => $request->sampai,
             'dari' => $request->dari,
-            'gandengandari' => $request->gandengandari,
-            'gandengansampai' => $request->gandengansampai,
-            'gandengandari_id' => $request->gandengandari_id,
-            'gandengansampai_id' => $request->gandengansampai_id,
+            'sampai' => $request->sampai,
+            'posisiakhir' => $parameter,
+            'jenislaporan' =>$request->jenislaporan
         ];
 
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporantripgandengandetail/report', $detailParams);
+            ->get(config('app.api_url') . 'laporanpemakaianban/report', $detailParams);
 
         $data = $header['data'];
         $user = Auth::user();
-        return view('reports.laporantripgandengandetail', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanpemakaianban', compact('data', 'user', 'detailParams'));
     }
+
 }

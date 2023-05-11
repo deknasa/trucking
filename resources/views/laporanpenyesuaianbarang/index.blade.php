@@ -14,27 +14,23 @@
                             <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
+                                    <input type="text" name="dari" class="form-control datepicker">
+                                </div>
+                            </div>
+                            <h5 class="mt-3">s/d</h5>
+                            <div class="col-sm-4 mt-2">
+                                <div class="input-group">
                                     <input type="text" name="sampai" class="form-control datepicker">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">JENIS<span class="text-danger">*</span></label>
-                            <div class="col-sm-4 mt-2">
-                                <select name="jenis" id="jenis" class="form-select select2bs4" style="width: 100%;">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
+
                             <div class="col-sm-6 mt-4">
                                 <a id="btnPreview" class="btn btn-secondary mr-2 ">
                                     <i class="fas fa-sync"></i>
                                     Cetak
                                 </a>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6 mt-4">
                                 <a id="btnEkspor" class="btn btn-secondary mr-2 ">
                                     <i class="fas fa-sync"></i>
                                     Ekspor
@@ -69,11 +65,12 @@
 
 
     $(document).ready(function() {
-        initSelect2($('#crudForm').find('[name=jenis]'), false)
-        setJenisKaryawanOptions($('#crudForm'))
+        initLookup()
 
         initDatepicker()
+        $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
 
         let css_property =
         {
@@ -82,24 +79,23 @@
             "cursor" : "not-allowed",
             "border-color": "rgb(173 180 187)"
         }
-        if (!`{{ $myAuth->hasPermission('laporandepositosupir', 'report') }}`) {
+        if (!`{{ $myAuth->hasPermission('laporanpenyesuaianbarang', 'report') }}`) {
             $('#btnPreview').prop('disabled', true)
             $('#btnPreview').css(css_property);
         }
-        if (!`{{ $myAuth->hasPermission('laporandepositosupir', 'export') }}`) {
+        if (!`{{ $myAuth->hasPermission('laporanpenyesuaianbarang', 'export') }}`) {
             $('#btnEkspor').prop('disabled', true)
             $('#btnEkspor').css(css_property);
         }
-
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        let jenis = $('#crudForm').find('[name=jenis]').val()
+        let dari = $('#crudForm').find('[name=dari]').val()
 
-        if (jenis != '' && sampai != '') {
+        if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporandepositosupir.report') }}?sampai=${sampai}&jenis=${jenis}`)
+            window.open(`{{ route('laporanpenyesuaianbarang.report') }}?sampai=${sampai}&dari=${dari}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -107,55 +103,61 @@
 
     $(document).on('click', `#btnEkspor`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
-
         if (sampai != '') {
-
-            window.open(`{{ route('laporandepositosupir.export') }}?sampai=${sampai}`)
+            window.open(`{{ route('laporanpenyesuaianbarang.export') }}?sampai=${sampai}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
     })
 
-    const setJenisKaryawanOptions = function(relatedForm) {
-        // return new Promise((resolve, reject) => {
-        // relatedForm.find('[name=approve]').empty()
-        relatedForm.find('[name=jenis]').append(
-            new Option('-- PILIH JENIS KARYAWAN --', '', false, true)
-        ).trigger('change')
 
-        let data = [];
-        data.push({
-            name: 'grp',
-            value: 'JENIS KARYAWAN'
-        })
-        data.push({
-            name: 'subgrp',
-            value: 'JENIS KARYAWAN'
-        })
-        $.ajax({
-            url: `${apiUrl}parameter/combo`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
+    function initLookup()
+    {
+        $('.supplierdari-lookup').lookup({
+            title: 'supplier dari Lookup',
+            fileName: 'supplier',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
             },
-            data: data,
-            success: response => {
-
-                response.data.forEach(statusApproval => {
-                    let option = new Option(statusApproval.text, statusApproval.id)
-                    relatedForm.find('[name=jenis]').append(option).trigger('change')
-                });
-
-               
-                relatedForm
-                    .find('[name=jenis]')
-                    .val($(`#crudForm [name=jenis] option:eq(1)`).val())
-                    .trigger('change')
-                    .trigger('select2:selected');
+            onSelectRow: (supplier, element) => {
+                $('#crudForm [name=supplierdari_id]').first().val(supplier.id)
+                element.val(supplier.namasupplier)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                element.val('')
+                $(`#crudForm [name="supplierdari_id"]`).first().val('')
+                element.data('currentValue', element.val())
             }
         })
-        // })
+
+        $('.suppliersampai-lookup').lookup({
+            title: 'supplier sampai Lookup',
+            fileName: 'supplier',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (supplier, element) => {
+                $('#crudForm [name=suppliersampai_id]').first().val(supplier.id)
+                element.val(supplier.namasupplier)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                element.val('')
+                $(`#crudForm [name="suppliersampai_id"]`).first().val('')
+                element.data('currentValue', element.val())
+            }
+        })
     }
 </script>
 @endpush()

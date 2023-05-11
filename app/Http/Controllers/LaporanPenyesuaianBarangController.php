@@ -13,53 +13,55 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-class LaporanDepositoSupirController extends MyController
+class LaporanPenyesuaianBarangController extends MyController
 {
-    public $title = 'Laporan Deposito Supir';
+    public $title = 'Laporan Penyesuaian Barang';
 
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Deposito Supir',
+            'pagename' => 'Menu Utama Laporan Penyesuaian Barang',
         ];
 
-        return view('laporandepositosupir.index', compact('title'));
+        return view('laporanpenyesuaianbarang.index', compact('title'));
     }
 
     public function report(Request $request)
     {
+      
         $detailParams = [
+            'dari' => $request->dari,
             'sampai' => $request->sampai,
-            'jenis' => $request->jenis,
         ];
 
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporandepositosupir/report', $detailParams);
+            ->get(config('app.api_url') . 'laporanpenyesuaianbarang/report', $detailParams);
 
         $data = $header['data'];
         $user = Auth::user();
-        return view('reports.laporandepositosupir', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanpenyesuaianbarang', compact('data', 'user', 'detailParams'));
     }
 
     public function export(Request $request): void
     {
         $detailParams = [
+            'dari' => $request->dari,
             'sampai' => $request->sampai,
         ];
 
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporandepositosupir/report', $detailParams);
+            ->get(config('app.api_url') . 'laporanpenyesuaianbarang/export', $detailParams);
 
         $data = $header['data'];
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'LAPORAN DEPOSITO SUPIR');
+        $sheet->setCellValue('A1', 'LAPORAN PENYESUAIAN SUPIR');
         $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G3');
@@ -167,15 +169,15 @@ class LaporanDepositoSupirController extends MyController
             }
             $detail_start_row += count($rows) + 2;
         }
-        
+
         //format decimal
         $sheet->getStyle("A6:A$detail_start_row")->applyFromArray($styleArray)->getNumberFormat()->setFormatCode("0.0");
-        
+
         //total
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray2)->getFont()->setBold(true);
-        
+
         $totalnomdeposito = "=SUM(E6:E" . ($detail_start_row-2) . ")";
         $sheet->setCellValue("E$total_start_row", $totalnomdeposito)->getStyle("E$total_start_row")->applyFromArray($style_number);
 
@@ -184,7 +186,7 @@ class LaporanDepositoSupirController extends MyController
 
         $total = "=SUM(G6:G" . ($detail_start_row-2) . ")";
         $sheet->setCellValue("G$total_start_row", $total)->getStyle("G$total_start_row")->applyFromArray($style_number);
-        
+
         //format currency
         $currency_columns = ['D', 'E', 'F', 'G'];
         foreach ($currency_columns as $column) {
@@ -240,3 +242,5 @@ class LaporanDepositoSupirController extends MyController
         $writer->save('php://output');
     }
 }
+
+

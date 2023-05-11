@@ -19,7 +19,6 @@
                             </div>
                         </div>
                         <div class="row">
-
                             <div class="col-sm-6 mt-4">
                                 <a id="btnEkspor" class="btn btn-secondary mr-2 ">
                                     <i class="fas fa-sync"></i>

@@ -2657,6 +2657,7 @@
         },
         {
             "name": "nyholm/psr7",
+<<<<<<< HEAD
             "version": "1.7.0",
             "source": {
                 "type": "git",
@@ -2667,11 +2668,26 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/Nyholm/psr7/zipball/ed7cf98f6562831dbc3c962406b5e49dc8179c8c",
                 "reference": "ed7cf98f6562831dbc3c962406b5e49dc8179c8c",
+=======
+            "version": "1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Nyholm/psr7.git",
+                "reference": "3cb4d163b58589e47b35103e8e5e6a6a475b47be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Nyholm/psr7/zipball/3cb4d163b58589e47b35103e8e5e6a6a475b47be",
+                "reference": "3cb4d163b58589e47b35103e8e5e6a6a475b47be",
+>>>>>>> 3c37d82d48a55f1d0bf862468ab9f3ce38a63a4d
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2",
+<<<<<<< HEAD
                 "php-http/message-factory": "^1.0",
+=======
+>>>>>>> 3c37d82d48a55f1d0bf862468ab9f3ce38a63a4d
                 "psr/http-factory": "^1.0",
                 "psr/http-message": "^1.1 || ^2.0"
             },
@@ -2682,14 +2698,24 @@
             },
             "require-dev": {
                 "http-interop/http-factory-tests": "^0.9",
+<<<<<<< HEAD
                 "php-http/psr7-integration-tests": "^1.0@dev",
                 "phpunit/phpunit": "^7.5 || 8.5 || 9.4",
+=======
+                "php-http/message-factory": "^1.0",
+                "php-http/psr7-integration-tests": "^1.0",
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.4",
+>>>>>>> 3c37d82d48a55f1d0bf862468ab9f3ce38a63a4d
                 "symfony/error-handler": "^4.4"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
+<<<<<<< HEAD
                     "dev-master": "1.7-dev"
+=======
+                    "dev-master": "1.8-dev"
+>>>>>>> 3c37d82d48a55f1d0bf862468ab9f3ce38a63a4d
                 }
             },
             "autoload": {
@@ -2719,7 +2745,11 @@
             ],
             "support": {
                 "issues": "https://github.com/Nyholm/psr7/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/Nyholm/psr7/tree/1.7.0"
+=======
+                "source": "https://github.com/Nyholm/psr7/tree/1.8.0"
+>>>>>>> 3c37d82d48a55f1d0bf862468ab9f3ce38a63a4d
             },
             "funding": [
                 {
@@ -2731,7 +2761,11 @@
                     "type": "github"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-04-20T08:38:48+00:00"
+=======
+            "time": "2023-05-02T11:26:24+00:00"
+>>>>>>> 3c37d82d48a55f1d0bf862468ab9f3ce38a63a4d
         },
         {
             "name": "opis/closure",
@@ -2916,6 +2950,7 @@
             "time": "2020-10-15T08:29:30+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "php-http/message-factory",
             "version": "1.1.0",
             "source": {
@@ -2970,6 +3005,8 @@
             "time": "2023-04-14T14:16:17+00:00"
         },
         {
+=======
+>>>>>>> 3c37d82d48a55f1d0bf862468ab9f3ce38a63a4d
             "name": "phpoffice/phpspreadsheet",
             "version": "1.25.2",
             "source": {
@@ -3620,6 +3657,7 @@
         },
         {
             "name": "psy/psysh",
+<<<<<<< HEAD
             "version": "v0.11.16",
             "source": {
                 "type": "git",
@@ -3630,6 +3668,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/bobthecow/psysh/zipball/151b145906804eea8e5d71fea23bfb470c904bfb",
                 "reference": "151b145906804eea8e5d71fea23bfb470c904bfb",
+=======
+            "version": "v0.11.17",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bobthecow/psysh.git",
+                "reference": "3dc5d4018dabd80bceb8fe1e3191ba8460569f0a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/3dc5d4018dabd80bceb8fe1e3191ba8460569f0a",
+                "reference": "3dc5d4018dabd80bceb8fe1e3191ba8460569f0a",
+>>>>>>> 3c37d82d48a55f1d0bf862468ab9f3ce38a63a4d
                 "shasum": ""
             },
             "require": {
@@ -3690,9 +3740,15 @@
             ],
             "support": {
                 "issues": "https://github.com/bobthecow/psysh/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/bobthecow/psysh/tree/v0.11.16"
             },
             "time": "2023-04-26T12:53:57+00:00"
+=======
+                "source": "https://github.com/bobthecow/psysh/tree/v0.11.17"
+            },
+            "time": "2023-05-05T20:02:42+00:00"
+>>>>>>> 3c37d82d48a55f1d0bf862468ab9f3ce38a63a4d
         },
         {
             "name": "ralouphie/getallheaders",

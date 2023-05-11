@@ -20,7 +20,7 @@
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">kode trado <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">No Polisi <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" name="kodetrado" class="form-control">
                 </div>
