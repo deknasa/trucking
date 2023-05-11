@@ -12,18 +12,18 @@ use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class LaporanWarkatController extends MyController
+class LaporanPiutangGiroController extends MyController
 {
-    public $title = 'Laporan Warkat';
+    public $title = 'Laporan Piutang Giro';
 
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Warkat',
+            'pagename' => 'Menu Utama Laporan Piutang Giro',
         ];
 
-        return view('laporanwarkat.index', compact('title'));
+        return view('laporanpiutanggiro.index', compact('title'));
     }
 
     public function report(Request $request)
@@ -36,10 +36,10 @@ class LaporanWarkatController extends MyController
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporanwarkat/report', $detailParams);
+            ->get(config('app.api_url') . 'laporanpiutanggiro/report', $detailParams);
 
         $data = $header['data'];
         $user = Auth::user();
-        return view('reports.laporanwarkat', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanpiutanggiro', compact('data', 'user', 'detailParams'));
     }
 }

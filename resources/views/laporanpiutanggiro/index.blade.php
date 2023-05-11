@@ -25,7 +25,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Warkat<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Jenis Warkat<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <select name="text" id="text" class="form-select select2bs4" style="width: 100%;">
                                 </select>
@@ -82,7 +82,7 @@
             "cursor" : "not-allowed",
             "border-color": "rgb(173 180 187)"
         }
-        if (!`{{ $myAuth->hasPermission('laporanwarkat', 'report') }}`) {
+        if (!`{{ $myAuth->hasPermission('laporanpiutanggiro', 'report') }}`) {
             $('#btnEkspor').prop('disabled', true)
             $('#btnEkspor').css(css_property);
         }
@@ -95,7 +95,7 @@
 
         if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporanwarkat.report') }}?sampai=${sampai}&dari=${dari}`)    
+            window.open(`{{ route('laporanpiutanggiro.report') }}?sampai=${sampai}&dari=${dari}`)    
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

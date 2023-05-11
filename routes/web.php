@@ -178,7 +178,7 @@ use App\Http\Controllers\LaporanSupirLebihDariTradoController;
 use App\Http\Controllers\LaporanTripGandenganDetailController;
 use App\Http\Controllers\LaporanTripTradoController;
 use App\Http\Controllers\LaporanUangJalanController;
-use App\Http\Controllers\LaporanWarkatController;
+use App\Http\Controllers\LaporanPiutangGiroController;
 use App\Http\Controllers\LookupController;
 use App\Http\Controllers\NotaDebetDetailController;
 use App\Http\Controllers\NotaKreditDetailController;
@@ -1150,9 +1150,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporankasgantung/index', [LaporanKasGantungController::class, 'index']);
     Route::resource('laporankasgantung', LaporanKasGantungController::class);
 
-    Route::get('laporanwarkat/report', [LaporanWarkatController::class, 'report'])->name('laporanwarkat.report');
-    Route::get('laporanwarkat/index', [LaporanWarkatController::class, 'index']);
-    Route::resource('laporanwarkat', LaporanWarkatController::class);
+    Route::get('laporanpiutanggiro/report', [LaporanPiutangGiroController::class, 'report'])->name('laporanpiutanggiro.report');
+    Route::get('laporanpiutanggiro/index', [LaporanPiutangGiroController::class, 'index']);
+    Route::resource('laporanpiutanggiro', LaporanPiutangGiroController::class);
 
     Route::get('laporanbangudangsementara/report', [LaporanBanGudangSementaraController::class, 'report'])->name('laporanbangudangsementara.report');
     Route::get('laporanbangudangsementara/index', [LaporanBanGudangSementaraController::class, 'index']);
