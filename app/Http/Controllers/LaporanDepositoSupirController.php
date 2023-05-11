@@ -53,7 +53,7 @@ class LaporanDepositoSupirController extends MyController
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporandepositosupir/report', $detailParams);
+            ->get(config('app.api_url') . 'laporandepositosupir/export', $detailParams);
 
         $data = $header['data'];
 
