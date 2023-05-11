@@ -629,7 +629,7 @@ class PenerimaanStokHeaderController extends MyController
 
         //set diketahui dibuat
         $ttd_start_row = $total_start_row+2;
-        $sheet->setCellValue("A$ttd_start_row", 'Disetujui');
+        $sheet->setCellValue("A$ttd_start_row", 'Disetujui');+
         $sheet->setCellValue("B$ttd_start_row", 'Diketahui');
         $sheet->setCellValue("C$ttd_start_row", 'Dibuat');
         $sheet ->getStyle("A$ttd_start_row:C$ttd_start_row")->applyFromArray($styleArray);
