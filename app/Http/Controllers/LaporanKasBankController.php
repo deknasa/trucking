@@ -53,17 +53,19 @@ class LaporanKasBankController extends MyController
             'bankid' => $request->bankid,
         ];
 
-        $responses = Http::withHeaders($request->header())
+        $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporankasbank/report', $detailParams);
+            ->get(config('app.api_url') . 'laporankasbank/export', $detailParams);
 
-        $kartustok = $responses['data'];
-        $user = Auth::user();
+        $data = $header['data'];
+        
+        // echo json_encode($data);
+        // die;
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'TAS');
+        $sheet->setCellValue('A1', 'Transporindo Agung Sejahtera');
         $sheet->getStyle("A1")->getFont()->setSize(20);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');
@@ -115,7 +117,7 @@ class LaporanKasBankController extends MyController
             ],
             [
                 'label' => 'Nama Perkiraan',
-                'index' => 'nama_perkiraan',
+                'index' => 'keterangancoa',
             ],
             [
                 'label' => 'Keterangan',
@@ -145,14 +147,14 @@ class LaporanKasBankController extends MyController
         $totalDebet = 0;
         $totalKredit = 0;
         $totalSaldo = 0;
-        foreach ($kartustok as $response_index => $response_detail) {
+        foreach ($data as $response_index => $response_detail) {
 
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
 
             $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['nama_perkiraan']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['keterangancoa']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['debet']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['kredit']);
@@ -189,8 +191,6 @@ class LaporanKasBankController extends MyController
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
-
-
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Kas/Bank' . date('dmYHis');

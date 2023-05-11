@@ -989,8 +989,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('historipengeluaranstok/index', [HistoriPengeluaranStokController::class, 'index']);
     Route::resource('historipengeluaranstok', HistoriPengeluaranStokController::class);
 
-    Route::get('laporankasbank/export', [LaporanKasBankController::class, 'export'])->name('laporankasbank.export');
     Route::get('laporankasbank/report', [LaporanKasBankController::class, 'report'])->name('laporankasbank.report');
+    Route::get('laporankasbank/export', [LaporanKasBankController::class, 'export'])->name('laporankasbank.export');
     Route::get('laporankasbank/index', [LaporanKasBankController::class, 'index']);
     Route::resource('laporankasbank', LaporanKasBankController::class);
 
