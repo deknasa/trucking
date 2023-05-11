@@ -82,6 +82,10 @@
             $('#btnPreview').prop('disabled', true)
             $('#btnPreview').css(css_property);
         }
+        if (!`{{ $myAuth->hasPermission('laporanketeranganpinjamansupir', 'export') }}`) {
+            $('#btnEkspor').prop('disabled', true)
+            $('#btnEkspor').css(css_property);
+        }
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
@@ -95,6 +99,7 @@
             showDialog('ISI SELURUH KOLOM')
         }
     })
+  
 
 
 
