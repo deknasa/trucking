@@ -1523,7 +1523,7 @@
       },
       onSelectRow: (penerimaan, element) => {
         var penerimaanstokId = $(`#penerimaanstokId`).val();
-        if (penerimaanstokId === (3||6)) {//spb beli /reuse
+        if (penerimaanstokId == (3||6)) {//spb beli /reuse
           setSuplier(penerimaan.id);
           $('[name=nobon]').val(penerimaan.nobon)
           setDetail(penerimaan.id);
