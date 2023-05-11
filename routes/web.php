@@ -1040,6 +1040,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporanpemakaianban', LaporanPemakaianBanController::class);
 
     Route::get('laporanpenyesuaianbarang/report', [LaporanPenyesuaianBarangController::class, 'report'])->name('laporanpenyesuaianbarang.report');
+    Route::get('laporanpenyesuaianbarang/export', [LaporanPenyesuaianBarangController::class, 'export'])->name('laporanpenyesuaianbarang.export');
     Route::get('laporanpenyesuaianbarang/index', [LaporanPenyesuaianBarangController::class, 'index']);
     Route::resource('laporanpenyesuaianbarang', LaporanPenyesuaianBarangController::class);
     
