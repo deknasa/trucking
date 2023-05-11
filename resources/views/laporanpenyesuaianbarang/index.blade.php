@@ -103,8 +103,11 @@
 
     $(document).on('click', `#btnEkspor`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        if (sampai != '') {
-            window.open(`{{ route('laporanpenyesuaianbarang.export') }}?sampai=${sampai}`)
+        let dari = $('#crudForm').find('[name=dari]').val()
+
+        if (dari != '' && sampai != '') {
+
+            window.open(`{{ route('laporanpenyesuaianbarang.export') }}?sampai=${sampai}&dari=${dari}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
