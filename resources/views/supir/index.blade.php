@@ -331,10 +331,13 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
                   let image = new Image()
                   image.width = 25
                   image.height = 25
-                  image.src = `${apiUrl}supir/image/supir/${file}/small`
+                  image.src = `${apiUrl}supir/image/supir/${encodeURI(file)}/small`
 
                   images.push(image.outerHTML)
                 });
@@ -355,6 +358,9 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
                   let image = new Image()
                   image.width = 25
                   image.height = 25
@@ -379,6 +385,9 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
                   let image = new Image()
                   image.width = 25
                   image.height = 25
@@ -403,6 +412,9 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
                   let image = new Image()
                   image.width = 25
                   image.height = 25
@@ -427,6 +439,9 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
                   let image = new Image()
                   image.width = 25
                   image.height = 25
@@ -451,6 +466,9 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
                   let image = new Image()
                   image.width = 25
                   image.height = 25
