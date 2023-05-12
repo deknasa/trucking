@@ -155,6 +155,7 @@ use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\LaporanBanGudangSementaraController;
 use App\Http\Controllers\LaporanBukuBesarController;
 use App\Http\Controllers\LaporanDepositoSupirController;
+use App\Http\Controllers\LaporanLabaRugiController;
 use App\Http\Controllers\LaporanEstimasiKasGantungController;
 use App\Http\Controllers\LaporanHistoryPinjamanController;
 use App\Http\Controllers\LaporanHutangBBMController;
@@ -1014,6 +1015,10 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporandepositosupir/export', [LaporanDepositoSupirController::class, 'export'])->name('laporandepositosupir.export');
     Route::get('laporandepositosupir/index', [LaporanDepositoSupirController::class, 'index']);
     Route::resource('laporandepositosupir', LaporanDepositoSupirController::class);
+
+    Route::get('laporanlabarugi/report', [LaporanLabaRugiController::class, 'report'])->name('laporanlabarugi.report');
+    Route::get('laporanlabarugi/index', [LaporanLabaRugiController::class, 'index']);
+    Route::resource('laporanlabarugi', LaporanLabaRugiController::class);
 
     Route::get('laporanpinjamansupir/report', [LaporanPinjamanSupirController::class, 'report'])->name('laporanpinjamansupir.report');
     Route::get('laporanpinjamansupir/index', [LaporanPinjamanSupirController::class, 'index']);
