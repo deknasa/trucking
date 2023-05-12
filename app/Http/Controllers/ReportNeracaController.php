@@ -34,8 +34,9 @@ class ReportNeracaController extends MyController
             ->withToken(session('access_token'))
             ->get('http://localhost/trucking-laravel/public/api/reportneraca/report', $detailParams);
            
-dd($reports);
         $reports = $report['data']['original']['data'];
+        echo json_encode($reports);
+        die;
         $user = $report['data']['original']['user'];
         return view('reports.reportneraca', compact('reports','user'));
 

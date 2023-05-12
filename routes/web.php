@@ -163,6 +163,7 @@ use App\Http\Controllers\LaporanKartuHutangPrediksiController;
 use App\Http\Controllers\LaporanKartuPiutangPerPelangganController;
 use App\Http\Controllers\LaporanKartuPiutangPerPlgDetailController;
 use App\Http\Controllers\LaporanOrderPembelianController;
+use App\Http\Controllers\LaporanNeracaController;
 use App\Http\Controllers\LaporanKasBankController;
 use App\Http\Controllers\LaporanKasGantungController;
 use App\Http\Controllers\LaporanKeteranganPinjamanSupirController;
@@ -1105,6 +1106,10 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanorderpembelian/report', [LaporanOrderPembelianController::class, 'report'])->name('laporanorderpembelian.report');
     Route::get('laporanorderpembelian/index', [LaporanOrderPembelianController::class, 'index']);
     Route::resource('laporanorderpembelian', LaporanOrderPembelianController::class);
+
+    Route::get('laporanneraca/report', [LaporanNeracaController::class, 'report'])->name('laporanneraca.report');
+    Route::get('laporanneraca/index', [LaporanNeracaController::class, 'index']);
+    Route::resource('laporanneraca', LaporanNeracaController::class);
     
     Route::get('exportpengeluaranbarang/export', [ExportPengeluaranBarangController::class, 'export'])->name('exportpengeluaranbarang.export');
     Route::get('exportpengeluaranbarang/index', [ExportPengeluaranBarangController::class, 'index']);
