@@ -1016,10 +1016,11 @@
         },
         isCellEditable: function(cellname, iRow, iCol) {
           let rowData = $(this).jqGrid("getRowData")[iRow - 1];
-
-          return $(this)
-            .find(`tr input[value=${rowData.id}]`)
-            .is(":checked");
+          if ($('#crudForm').data('action') != 'delete') {
+            return $(this)
+              .find(`tr input[value=${rowData.id}]`)
+              .is(":checked");
+          }
         },
         validationCell: function(cellobject, errormsg, iRow, iCol) {
           console.log(cellobject);
