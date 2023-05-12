@@ -24,7 +24,7 @@
           name: 'keterangan',
         },
         {
-          label: 'KODE TRADO',
+          label: 'NO POLISI',
           name: 'kodetrado',
         },
         {

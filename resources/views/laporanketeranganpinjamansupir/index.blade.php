@@ -103,6 +103,7 @@
             showDialog('ISI SELURUH KOLOM')
         }
     })
+
     $(document).on('click', `#btnEkspor`, function(event) {
         let periode = $('#crudForm').find('[name=periode]').val()
         let jenis = $('#crudForm').find('[name=jenis]').val()
@@ -114,6 +115,7 @@
             showDialog('ISI SELURUH KOLOM')
         }
     })
+
 
 
 

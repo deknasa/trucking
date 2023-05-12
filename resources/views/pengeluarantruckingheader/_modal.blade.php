@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -46,7 +46,7 @@
               </div>
             </div>
 
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-2 col-md-2">
                 <label class="col-form-label">
@@ -70,7 +70,7 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -94,7 +94,7 @@
               </div>
             </div>
 
-            <div class="border p-3">
+            <div class="border p-3 mb-3">
               <h6>Posting Pengeluaran</h6>
 
               <div class="row form-group">
@@ -117,6 +117,11 @@
                 </div>
               </div>
             </div>
+
+            <div id="detail-tde-section">
+              <table id="tableDeposito"></table>
+            </div>
+
             <div id="detail-bst-section">
               <table id="modalgrid"></table>
               <div id="modalgridPager"></div>
@@ -140,7 +145,7 @@
 
                 </tbody>
                 <tfoot>
-                   <tr>
+                  <tr>
                     <td colspan="3" class="colspan">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
@@ -158,7 +163,7 @@
                 </tfoot>
               </table>
             </div>
-                      
+
 
           </div>
           <div class="modal-footer justify-content-start">
@@ -207,10 +212,10 @@
         getInvoice(tgldari, tglsampai)
       }
     }
-      
-    $(document).on("change",`[name=tgldari], [name=tglsampai]`,function(event) {
-        rangeInvoice();
-      })
+
+    $(document).on("change", `[name=tgldari], [name=tglsampai]`, function(event) {
+      rangeInvoice();
+    })
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -223,90 +228,97 @@
       let data
       if (KodePengeluaranId == "TDE") {
         data = []
-  
+
         data.push({
-          name: 'id', 
+          name: 'id',
           value: form.find(`[name="id"]`).val()
         })
         data.push({
-          name: 'nobukti', 
+          name: 'nobukti',
           value: form.find(`[name="nobukti"]`).val()
         })
         data.push({
-          name: 'tglbukti', 
+          name: 'tglbukti',
           value: form.find(`[name="tglbukti"]`).val()
         })
         data.push({
-          name: 'pengeluarantrucking_id', 
+          name: 'pengeluarantrucking_id',
           value: form.find(`[name="pengeluarantrucking_id"]`).val()
         })
         data.push({
-          name: 'pengeluarantrucking', 
+          name: 'pengeluarantrucking',
           value: form.find(`[name="pengeluarantrucking"]`).val()
         })
         data.push({
-          name: 'supirheader_id', 
+          name: 'supirheader_id',
           value: form.find(`[name="supirheader_id"]`).val()
         })
         data.push({
-          name: 'supir', 
+          name: 'supir',
           value: form.find(`[name="supir"]`).val()
         })
         data.push({
-          name: 'coa', 
+          name: 'coa',
           value: form.find(`[name="coa"]`).val()
         })
         data.push({
-          name: 'keterangancoa', 
+          name: 'keterangancoa',
           value: form.find(`[name="keterangancoa"]`).val()
         })
         data.push({
-          name: 'bank_id', 
+          name: 'bank_id',
           value: form.find(`[name="bank_id"]`).val()
         })
         data.push({
-          name: 'bank', 
+          name: 'bank',
           value: form.find(`[name="bank"]`).val()
         })
         data.push({
-          name: 'pengeluaran_nobukti', 
+          name: 'pengeluaran_nobukti',
           value: form.find(`[name="pengeluaran_nobukti"]`).val()
         })
-        $('#table_body tr').each(function(row, tr) {
-          
-          if ($(this).find('[name="pinjPribadi[]"]').is(':checked')) {
-            data.push({
-              name: 'supir_id[]',
-              value: form.find(`[name="supirheader_id"]`).val()
-            })
-            data.push({
-              name: 'penerimaantruckingheader_nobukti[]',
-              value: $(this).find(`[name="pinjPribadi_nobukti[]"]`).val()
-            })
-            data.push({
-              name: 'keterangan[]',
-              value: $(this).find(`[name="pinjPribadi_keterangan[]"]`).val()
-            })
-            data.push({
-              name: 'nominal[]',
-              value: AutoNumeric.getNumber($(`#crudForm [name="nominalDP[]"]`)[row])
-            })
-            
-          }
-          
-        })
-        
-      }else{
-        data = $('#crudForm').serializeArray()
-       
-          $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
-            if (KodePengeluaranId != "BST") {
-              data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
-            }
+        let selectedRowsDeposito = $("#tableDeposito").getGridParam("selectedRowIds");
+        $.each(selectedRowsDeposito, function(index, value) {
+          let selectedNominal = $("#tableDeposito").jqGrid("getCell", value, "nominal")
+          let selectedSisa = $("#tableDeposito").jqGrid("getCell", value, "sisa")
 
+          data.push({
+            name: 'nominal[]',
+            value: (selectedNominal != '') ? parseFloat(selectedNominal.replaceAll(',', '')) : 0
           })
+          data.push({
+            name: 'sisa[]',
+            value: (selectedSisa != '') ? parseFloat(selectedSisa.replaceAll(',', '')) : 0
+          })
+          data.push({
+            name: 'keterangan[]',
+            value: $("#tableDeposito").jqGrid("getCell", value, "keterangan")
+          })
+          data.push({
+            name: 'penerimaantruckingheader_nobukti[]',
+            value: $("#tableDeposito").jqGrid("getCell", value, "nobukti")
+          })
+          data.push({
+            name: 'supir_id[]',
+            value: form.find(`[name="supirheader_id"]`).val()
+          })
+          data.push({
+            name: 'tde_id[]',
+            value: $("#tableDeposito").jqGrid("getCell", value, "id")
+          })
+        });
+
+      } else {
+        data = $('#crudForm').serializeArray()
+
+        $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
+          if (KodePengeluaranId != "BST") {
+            data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
+          }
+
+        })
       }
-        
+
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -362,7 +374,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}pengeluarantruckingheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&pengeluaranheader_id=${kodepenerimaanheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
+          url = `${apiUrl}pengeluarantruckingheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&pengeluaranheader_id=${kodepengeluaranheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -387,14 +399,17 @@
           id = response.data.id
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
-          
+
           $('#kodepengeluaranheader').val(response.data.pengeluarantrucking_id).trigger('change')
 
           $('#jqGrid').jqGrid('setGridParam', {
-            postData: {pengeluaranheader_id: response.data.pengeluarantrucking_id},
+            postData: {
+              pengeluaranheader_id: response.data.pengeluarantrucking_id
+            },
             page: response.data.page
           }).trigger('reloadGrid');
 
+          selectedRows = []
           if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
@@ -407,40 +422,48 @@
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-            if (KodePengeluaranId =="TDE") {
-              penerimaantruckingheaderid = []
-              $('#table_body tr').each(function(row, tr) {
-                if ($(this).find(`[name="penerimaantruckingheader_id[]"]`).is(':checked')) {
-                  penerimaantruckingheaderid.push($(this).find(`[name="penerimaantruckingheader_id[]"]`).val())
-                }
-              })
+
+            if (KodePengeluaranId == "TDE") {
+              console.log(error)
               errors = error.responseJSON.errors
-  
+              $(".ui-state-error").removeClass("ui-state-error");
               $.each(errors, (index, error) => {
                 let indexes = index.split(".");
                 let angka = indexes[1]
-                
-                row = penerimaantruckingheaderid[angka] - 1;
-                let element;
-  
-                if (indexes.length > 1) {
-                  element = form.find(`[name="${indexes[0]}[]"]`)[row];
-                } else {
-                  element = form.find(`[name="${indexes[0]}"]`)[0];
-                }
-  
-                if ($(element).length > 0 && !$(element).is(":hidden")) {
-                  $(element).addClass("is-invalid");
-                  $(`
-                    <div class="invalid-feedback">
-                    ${error[0].toLowerCase()}
-                    </div>
-                `).appendTo($(element).parent());
-                } else {
+                if (index == 'tde') {
                   return showDialog(error);
+                } else {
+
+                  selectedRowsDeposito = $("#tableDeposito").getGridParam("selectedRowIds");
+                  row = parseInt(selectedRowsDeposito[angka]) - 1;
+                  let element;
+                  if (indexes[0] == 'bank' || indexes[0] == 'pengeluarantrucking') {
+                    if (indexes.length > 1) {
+                      element = form.find(`[name="${indexes[0]}[]"]`)[row];
+                    } else {
+                      element = form.find(`[name="${indexes[0]}"]`)[0];
+                    }
+
+                    if ($(element).length > 0 && !$(element).is(":hidden")) {
+                      $(element).addClass("is-invalid");
+                      $(`
+                      <div class="invalid-feedback">
+                      ${error[0].toLowerCase()}
+                      </div>
+                      `).appendTo($(element).parent());
+                    } else {
+                      return showDialog(error);
+                    }
+                  } else {
+
+                    element = $(`#tableDeposito tr#${parseInt(selectedRowsDeposito[angka])}`).find(`td[aria-describedby="tableDeposito_${indexes[0]}"]`)
+                    $(element).addClass("ui-state-error");
+                    console.log(error)
+                    $(element).attr("title", error[0].toLowerCase())
+                  }
                 }
               });
-            }else{
+            } else {
               setErrorMessages(form, error.responseJSON.errors);
             }
           } else {
@@ -454,14 +477,15 @@
     })
   })
 
-  function setKodePengeluaran(kode){
+  function setKodePengeluaran(kode) {
     KodePengeluaranId = kode;
     $('#detailList tbody').html('')
     $('#detail-list-grid').html('')
     setTampilanForm();
     addRow()
   }
-  function setTampilanForm(){
+
+  function setTampilanForm() {
     tampilanall()
     switch (KodePengeluaranId) {
       case 'PJT':
@@ -483,11 +507,12 @@
   }
 
   function tampilanPJT() {
-    
+
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('#detail-bst-section').hide()
+    $('#detail-tde-section').hide()
     $('#detail-default-section').show()
     $('.tbl_checkbox').hide()
     $('.tbl_supir_id').show()
@@ -496,23 +521,17 @@
     $('#tbl_addRow').show()
     // $('.colmn-offset').hide()
   }
+
   function tampilanTDE() {
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
     $('[name=supirheader_id]').parents('.form-group').show()
     $('[name=tgldari]').parents('.form-group').hide()
+
+    $('#detail-tde-section').show()
     $('#detail-bst-section').hide()
-    $('#detail-default-section').show()
-    $('.tbl_checkbox').show()
-    $('.tbl_sisa').show()
-  
-    $('.colspan').attr('colspan', 3);
-    $('#sisaColFoot').show()
-    $('#sisaFoot').show()
-    
-    $('.tbl_aksi').hide()
-    $('#tbl_addRow').hide()
-    
+    $('#detail-default-section').hide()
+    loadDepositoGrid()
   }
 
   function tampilanBST() {
@@ -522,6 +541,7 @@
     $('[name=tgldari]').parents('.form-group').show()
     $('#detail-bst-section').show()
     $('#detail-default-section').hide()
+    $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
     $('.tbl_penerimaantruckingheader').hide()
     $('.tbl_supir_id').show()
@@ -531,12 +551,14 @@
     // $('.colmn-offset').hide()
     loadModalGrid()
   }
+
   function tampilanBSB() {
-    
+
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('#detail-bst-section').hide()
+    $('#detail-tde-section').hide()
     $('#detail-default-section').show()
     $('.tbl_checkbox').hide()
     $('.tbl_penerimaantruckingheader').hide()
@@ -546,6 +568,7 @@
     $('#tbl_addRow').show()
     // $('.colmn-offset').hide()
   }
+
   function tampilanall() {
     $('[name=keterangancoa]').parents('.form-group').show()
     $('.tbl_supir_id').show()
@@ -554,18 +577,19 @@
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('#detail-bst-section').hide()
+    $('#detail-tde-section').hide()
     $('#detail-default-section').show()
     $('.colspan').attr('colspan', 3);
     $('#sisaColFoot').hide()
     $('#sisaFoot').hide()
     $('.colmn-offset').show()
-    
+
   }
-    
+
   $(document).on('click', '.checkItem', function(event) {
     enabledRow($(this).data("id"))
   })
-    
+
   function enabledRow(row) {
     let check = $(`#penerimaantruckingheader_id${row}`)
     if (check.prop("checked") == true) {
@@ -689,6 +713,332 @@
 
   }
 
+  function loadDepositoGrid() {
+    $("#tableDeposito")
+      .jqGrid({
+        datatype: 'local',
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        colModel: [{
+            label: "",
+            name: "",
+            width: 30,
+            formatter: 'checkbox',
+            search: false,
+            editable: false,
+            formatter: function(value, rowOptions, rowData) {
+              let disabled = '';
+              if ($('#crudForm').data('action') == 'delete') {
+                disabled = 'disabled'
+              }
+              return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxDepositoHandler(this, ${rowData.id})">`;
+            },
+          },
+          {
+            label: "id",
+            name: "id",
+            hidden: true,
+            search: false,
+          },
+          {
+            label: "Nobukti PENERIMAAN TRUCKING",
+            name: "nobukti",
+            sortable: true,
+          },
+          {
+            label: "SISA",
+            name: "sisa",
+            sortable: true,
+            align: "right",
+            formatter: currencyFormat,
+          },
+          {
+            label: "NOMINAL",
+            name: "nominal",
+            align: "right",
+            editable: true,
+            editoptions: {
+              dataInit: function(element, id) {
+                initAutoNumeric($('#crudForm').find(`[id="${id.id}"]`))
+              },
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+                  let originalGridData = $("#tableDeposito")
+                    .jqGrid("getGridParam", "originalData")
+                    .find((row) => row.id == rowObject.rowId);
+
+                  let localRow = $("#tableDeposito").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  let totalSisa
+
+                  let nominal = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
+                  if ($('#crudForm').data('action') == 'edit') {
+                    totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)) - nominal
+                  } else {
+                    totalSisa = originalGridData.sisa - nominal
+                  }
+
+                  $("#tableDeposito").jqGrid(
+                    "setCell",
+                    rowObject.rowId,
+                    "sisa",
+                    totalSisa
+                  );
+
+                  nominalDetails = $(`#tableDeposito tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableDeposito_nominal"]`)
+                  ttlBayar = 0
+                  $.each(nominalDetails, (index, nominalDetail) => {
+                    ttlBayarDetail = parseFloat($(nominalDetail).attr('title').replaceAll(',', ''))
+                    ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
+                    ttlBayar += ttlBayars
+                  });
+                  ttlBayar += nominal
+                  initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(ttlBayar))
+
+                  // setAllTotal()
+                  setTotalSisaDeposito()
+                },
+              }, ],
+            },
+            sortable: false,
+            sorttype: "int",
+          },
+          {
+            label: "KETERANGAN",
+            name: "keterangan",
+            sortable: false,
+            editable: false,
+            width: 500
+          },
+        ],
+        autowidth: true,
+        shrinkToFit: false,
+        height: 400,
+        rownumbers: true,
+        rownumWidth: 45,
+        footerrow: true,
+        userDataOnFooter: true,
+        toolbar: [true, "top"],
+        pgbuttons: false,
+        pginput: false,
+        cellEdit: true,
+        cellsubmit: "clientArray",
+        editableColumns: ["nominal"],
+        selectedRowIds: [],
+        afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
+          let originalGridData = $("#tableDeposito")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
+
+          let localRow = $("#tableDeposito").jqGrid("getLocalRow", rowId);
+
+          let getBayar = $("#tableDeposito").jqGrid("getCell", rowId, "nominal")
+          let nominal = (getBayar != '') ? parseFloat(getBayar.replaceAll(',', '')) : 0
+
+          sisa = 0
+          if ($('#crudForm').data('action') == 'edit') {
+            sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)) - nominal
+          } else {
+            sisa = originalGridData.sisa
+          }
+          if (indexColumn == 5) {
+
+            $("#tableDeposito").jqGrid(
+              "setCell",
+              rowId,
+              "sisa",
+              sisa
+              // sisa - nominal - potongan
+            );
+          }
+
+          setTotalSisaDeposito()
+          setTotalNominalDeposito()
+        },
+        isCellEditable: function(cellname, iRow, iCol) {
+          let rowData = $(this).jqGrid("getRowData")[iRow - 1];
+
+          return $(this)
+            .find(`tr input[value=${rowData.id}]`)
+            .is(":checked");
+        },
+        validationCell: function(cellobject, errormsg, iRow, iCol) {
+          console.log(cellobject);
+          console.log(errormsg);
+          console.log(iRow);
+          console.log(iCol);
+        },
+        loadComplete: function() {
+          setTimeout(() => {
+            $(this)
+              .getGridParam("selectedRowIds")
+              .forEach((selectedRowId) => {
+                $(this)
+                  .find(`tr input[value=${selectedRowId}]`)
+                  .prop("checked", true);
+                initAutoNumeric($(this).find(`td[aria-describedby="tableDeposito_nominal"]`))
+              });
+          }, 100);
+          setTotalNominalDeposito()
+          setTotalSisaDeposito()
+          setHighlight($(this))
+        },
+      })
+      .jqGrid("setLabel", "rn", "No.")
+      .jqGrid("navGrid", "#tablePager", {
+        add: false,
+        edit: false,
+        del: false,
+        refresh: false,
+        search: false,
+      })
+      .jqGrid("filterToolbar", {
+        searchOnEnter: false,
+      })
+      .jqGrid("excelLikeGrid", {
+        beforeDeleteCell: function(rowId, iRow, iCol, event) {
+          let localRow = $("#tableDeposito").jqGrid("getLocalRow", rowId);
+
+          $("#tableDeposito").jqGrid(
+            "setCell",
+            rowId,
+            "sisa",
+            parseInt(localRow.sisa) + parseInt(localRow.nominal)
+          );
+
+          return true;
+        },
+      });
+    /* Append clear filter button */
+    loadClearFilter($('#tableDeposito'))
+
+    /* Append global search */
+    // loadGlobalSearch($('#tableDeposito'))
+  }
+
+  function getDataDeposito(supirId, id) {
+    aksi = $('#crudForm').data('action')
+    data = {}
+    if (aksi == 'edit') {
+      console.log(id)
+      if (id != undefined) {
+        url = `${apiUrl}pengeluarantruckingheader/${id}/edit/gettarikdeposito`
+      } else {
+        url = `${apiUrl}pengeluarantruckingheader/getdeposito`
+      }
+    } else if (aksi == 'delete') {
+      url = `${apiUrl}pengeluarantruckingheader/${id}/delete/gettarikdeposito`
+      attribut = 'disabled'
+      forCheckbox = 'disabled'
+    } else if (aksi == 'add') {
+      url = `${apiUrl}pengeluarantruckingheader/getdeposito`
+      data = {
+        "supir": supirId,
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: url,
+        dataType: "JSON",
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: (response) => {
+          resolve(response);
+        },
+      });
+    });
+  }
+
+  function checkboxDepositoHandler(element, rowId) {
+
+    let isChecked = $(element).is(":checked");
+    let editableColumns = $("#tableDeposito").getGridParam("editableColumns");
+    let selectedRowIds = $("#tableDeposito").getGridParam("selectedRowIds");
+    let originalGridData = $("#tableDeposito")
+      .jqGrid("getGridParam", "originalData")
+      .find((row) => row.id == rowId);
+
+    editableColumns.forEach((editableColumn) => {
+
+      if (!isChecked) {
+        for (var i = 0; i < selectedRowIds.length; i++) {
+          if (selectedRowIds[i] == rowId) {
+            selectedRowIds.splice(i, 1);
+          }
+        }
+        sisa = 0
+        if ($('#crudForm').data('action') == 'edit') {
+          sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal))
+        } else {
+          sisa = originalGridData.sisa
+        }
+
+        $("#tableDeposito").jqGrid(
+          "setCell",
+          rowId,
+          "sisa",
+          sisa
+        );
+
+        $("#tableDeposito").jqGrid("setCell", rowId, "nominal", 0);
+        setTotalNominalDeposito()
+        setTotalSisaDeposito()
+      } else {
+        selectedRowIds.push(rowId);
+
+        let localRow = $("#tableDeposito").jqGrid("getLocalRow", rowId);
+
+        if ($('#crudForm').data('action') == 'edit') {
+          // if (originalGridData.sisa == 0) {
+
+          //   let getNominal = $("#tableDeposito").jqGrid("getCell", rowId, "nominal")
+          //   localRow.nominal = (getNominal != '') ? parseFloat(getNominal.replaceAll(',', '')) : 0
+          // } else {
+          //   localRow.nominal = originalGridData.sisa
+          // }
+          localRow.nominal = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal) + parseFloat(originalGridData.potongan))
+        }
+
+        initAutoNumeric($(`#tableDeposito tr#${rowId}`).find(`td[aria-describedby="tableDeposito_nominal"]`))
+        setTotalNominalDeposito()
+        setTotalSisaDeposito()
+      }
+    });
+
+    $("#tableDeposito").jqGrid("setGridParam", {
+      selectedRowIds: selectedRowIds,
+    });
+
+  }
+
+  function setTotalNominalDeposito() {
+    let nominalDetails = $(`#tableDeposito`).find(`td[aria-describedby="tableDeposito_nominal"]`)
+    let nominal = 0
+    $.each(nominalDetails, (index, nominalDetail) => {
+      nominaldetail = parseFloat($(nominalDetail).text().replaceAll(',', ''))
+      nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
+      nominal += nominals
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(nominal))
+  }
+
+  function setTotalSisaDeposito() {
+    let sisaDetails = $(`#tableDeposito`).find(`td[aria-describedby="tableDeposito_sisa"]`)
+    let sisa = 0
+    $.each(sisaDetails, (index, sisaDetail) => {
+      sisadetail = parseFloat($(sisaDetail).text().replaceAll(',', ''))
+      sisas = (isNaN(sisadetail)) ? 0 : sisadetail;
+      sisa += sisas
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_sisa"]`).text(sisa))
+  }
+
   function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengeluarantruckingheader/${Id}/cekvalidasi`,
@@ -738,7 +1088,8 @@
       }
     })
   }
-  function setDefaultBank(){
+
+  function setDefaultBank() {
     $.ajax({
       url: `${apiUrl}bank`,
       method: 'GET',
@@ -762,6 +1113,9 @@
   function showPengeluaranTruckingHeader(form, id) {
     $('#detailList tbody').html('')
 
+    form.find(`[name="tglbukti"]`).prop('readonly', true)
+    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+
     $.ajax({
       url: `${apiUrl}pengeluarantruckingheader/${id}`,
       method: 'GET',
@@ -773,6 +1127,8 @@
         let tgl = response.data.tglbukti
         let kodepengeluaran = response.data.kodepengeluaran
 
+        KodePengeluaranId = kodepengeluaran
+        console.log(kodepengeluaran)
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
           if (element.is('select')) {
@@ -781,6 +1137,14 @@
             element.val(dateFormat(value))
           } else {
             element.val(value)
+          }
+
+          if (kodepengeluaran === "TDE") {
+            if (index == 'supir') {
+              element.data('current-value', value).prop('readonly', true)
+              element.parent('.input-group').find('.button-clear').remove()
+              element.parent('.input-group').find('.input-group-append').remove()
+            }
           }
 
           if (index == 'periodedari') {
@@ -792,18 +1156,78 @@
 
           if (index == 'pengeluarantrucking') {
             element.data('current-value', value).prop('readonly', true)
+            element.parent('.input-group').find('.button-clear').remove()
+            element.parent('.input-group').find('.input-group-append').remove()
           }
           if (index == 'bank') {
             element.data('current-value', value).prop('readonly', true)
+            element.parent('.input-group').find('.button-clear').remove()
+            element.parent('.input-group').find('.input-group-append').remove()
           }
           if (index == 'keterangancoa') {
             element.data('current-value', value)
           }
         })
 
+        setTampilanForm()
+
         if (kodepengeluaran === "TDE") {
-          getTarikDeposito(id)
-        }else{
+          getDataDeposito(response.data.supirheader_id, id).then((response) => {
+
+            let selectedId = []
+            let totalBayar = 0
+
+            $.each(response.data, (index, value) => {
+              if (value.pengeluarantruckingheader_id != null) {
+                selectedId.push(value.id)
+                totalBayar += parseFloat(value.nominal)
+              }
+            })
+            $('#tableDeposito').jqGrid("clearGridData");
+            setTimeout(() => {
+
+              $("#tableDeposito")
+                .jqGrid("setGridParam", {
+                  datatype: "local",
+                  data: response.data,
+                  originalData: response.data,
+                  rowNum: response.data.length,
+                  selectedRowIds: selectedId
+                })
+                .trigger("reloadGrid");
+            }, 100);
+            console.log(response.data)
+            initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(totalBayar))
+
+          });
+        } else if (kodepengeluaran === "BST") {
+          let detailRow = ""
+
+          resetGrid()
+          $.each(response.detail, (index, detail) => {
+            let id = detail.id_detail
+            if (detail.pengeluarantrucking_id != null) {
+              selectedRows.push(detail.id_detail)
+            }
+            detailRow += `
+              <div id="detail_row_${id}">
+              <input type="text" value="${id}"  id="id_detail${id}" class="" name="id_detail[]"  disabled   >
+              <input type="text" value='${detail.container_detail}'  id="container_detail${id}" class="" name="container_detail[]"  disabled   >
+              <input type="text" value="${detail.noinvoice_detail}"  id="noinvoice_detail${id}" class="" name="noinvoice_detail[]"  disabled   >
+              <input type="text" value="${detail.nominal_detail}"  id="nominal${id}" class="" name="nominal[]"  disabled   >
+              <input type="text" value="${detail.nojobtrucking_detail}"  id="nojobtrucking_detail${id}" class="" name="nojobtrucking_detail[]"  disabled   >
+              <input type="text" value="SUMBANGAN SOSIAL"  id="keterangan${id}" class="" name="keterangan[]"  disabled   >
+              </div>
+              `
+          })
+          $('#detail-list-grid').append(detailRow)
+          
+          $('#modalgrid').setGridParam({
+            datatype: "local",
+            data: response.detail
+          }).trigger('reloadGrid')
+
+        } else {
           $.each(response.detail, (index, detail) => {
             let detailRow = $(`
               <tr>
@@ -826,18 +1250,18 @@
                   </td>
               </tr>
             `)
-  
+
             detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
             detailRow.find(`[name="supir[]"]`).val(detail.supir)
             detailRow.find(`[name="keterangan[]"]`).val(detail.keterangan)
             detailRow.find(`[name="penerimaantruckingheader_nobukti[]"]`).val(detail.penerimaantruckingheader_nobukti)
             detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
-  
+
             initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
             $('#detailList tbody').append(detailRow)
-  
+
             setTotal();
-  
+
             $('.supir-lookup').last().lookup({
               title: 'Supir Lookup',
               fileName: 'supir',
@@ -861,14 +1285,14 @@
                 element.data('currentValue', element.val())
               }
             })
-  
+
             $('.penerimaantruckingheader-lookup').last().lookup({
               title: 'Penerimaan Trucking Lookup',
               fileName: 'penerimaantruckingheader',
               beforeProcess: function(test) {
                 // var levelcoa = $(`#levelcoa`).val();
                 this.postData = {
-  
+
                   Aktif: 'AKTIF',
                 }
               },
@@ -884,46 +1308,12 @@
                 element.data('currentValue', element.val())
               }
             })
-  
-  
+
+
           })
 
         }
-        KodePengeluaranId = kodepengeluaran
 
-        setTampilanForm()
-
-
-        if(kodepengeluaran === "BST"){
-          let detailRow =""
-          $.each(response.detail, (index, detail) => {
-            resetGrid()
-            
-            let id = detail.id_detail
-            detailRow += `
-            <div id="detail_row_${id}">
-            <input type="text" value="${id}"  id="id_detail${id}" class="" name="id_detail[]"  readonly   >
-            <input type="text" value="${detail.container_detail}"  id="container_detail${id}" class="" name="container_detail[]"  readonly   >
-            <input type="text" value="${detail.noinvoice_detail}"  id="noinvoice_detail${id}" class="" name="noinvoice_detail[]"  readonly   >
-            <input type="text" value="${detail.nominal_detail}"  id="nominal${id}" class="" name="nominal[]"  readonly   >
-            <input type="text" value="${detail.nojobtrucking_detail}"  id="nojobtrucking_detail${id}" class="" name="nojobtrucking_detail[]"  readonly   >
-            <input type="text" value="SUMBANGAN SOSIAL"  id="keterangan${id}" class="" name="keterangan[]"  readonly   >
-            </div>
-            `
-            selectedRows.push(id);
-          })
-          $('#detail-list-grid').html(detailRow)
-          $('#modalgrid').setGridParam({
-            datatype: "local",
-            data:response.detail
-          }).trigger('reloadGrid')
-          // // console.log('dsfgdfg');
-          // $('#modalgrid').jqGrid('setGridParam',{
-          //   data:response.detail
-          // }).trigger('reloadGrid')
-            
-          $('.checkBoxgrid').prop('checked', true);
-        }
         setRowNumbers()
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
@@ -932,81 +1322,19 @@
       }
     })
   }
-  function getDeposito(){
-    let supir_id = $('#supirHaeaderId').val();
-    KodePengeluaranId
-
-    let data = {
-      "supir":supir_id,
-    }
-    if ((KodePengeluaranId == "TDE") && (supir_id != "")) {
-      $.ajax({
-        url: `${apiUrl}pengeluarantruckingheader/getdeposito`,
-        method: 'POST',
-        dataType: 'JSON',
-        data: data,
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          $('#detailList tbody').html('')
-          let totalSisa = 0
-          $.each(response.data, (index, detail) => {
-            let id = detail.id
-            totalSisa = totalSisa + parseFloat(detail.sisa);
-            let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
-            let detailRow = $(`
-                <tr >
-                <td>
-                  ${id}
-                </td>
-                <td>
-                    <input name='pinjPribadi[]' type="checkbox" id="checkItem" value="${id}">
-                    <input name='pinjPribadi_nobukti[]' type="hidden" value="${detail.nobukti}">
-                </td>
-                <td>${detail.nobukti}</td>
-                <td>
-                    <p class="text-right sisaDP autonumeric">${sisa}</p>
-                    <input type="hidden" name="sisaDP[]" class="autonumeric" value="${sisa}">
-                    <input type="hidden" name="sisaAwalDP[]" class="autonumeric" value="${sisa}">
-                </td>
-                <td id=${id}>
-                    <input type="text" name="nominalDP[]" disabled class="form-control bayar text-right">
-                </td>
-                <td>
-                    ${detail.keterangan}
-                    <input name='pinjPribadi_keterangan[]' type="hidden" value="${detail.keterangan}">
-                </td>
-                </tr>
-            `)
-
-            initAutoNumeric(detailRow.find(`[name="sisaDP[]"]`))
-            initAutoNumeric(detailRow.find(`[name="sisaAwalDP[]"]`))
-            initAutoNumeric(detailRow.find(`.sisaDP`))
-
-            $('#detailList tbody').append(detailRow)
-            setTotalDP()
-          })
-          setTampilanForm()
-          $(`#detailList tfoot`).show()
-
-        }
-      })
-    }
-  }
 
   function setTotalDP() {
     let nominalDetails = $(`#table_body [name="nominalDP[]"]:not([disabled])`)
     let total = 0
 
     $.each(nominalDetails, (index, nominalDetail) => {
-        total += AutoNumeric.getNumber(nominalDetail)
+      total += AutoNumeric.getNumber(nominalDetail)
     });
 
     new AutoNumeric('#total').set(total)
-    
+
   }
-    
+
   $(document).on('click', `#detailList tbody [name="pinjPribadi[]"]`, function() {
 
     if ($(this).prop("checked") == true) {
@@ -1028,7 +1356,7 @@
       $(this).closest('tr').find(`td [name="nominalDP[]"]`).remove();
       let newBayarElement = `<input type="text" name="nominalDP[]" class="form-control text-right" disabled>`
       $(this).closest('tr').find(`#${id}`).append(newBayarElement)
-      
+
       let sisa = AutoNumeric.getNumber($(this).closest('tr').find(`td [name="sisaAwalDP[]"]`)[0])
 
       initAutoNumeric($(this).closest('tr').find(`td [name="sisaDP[]"]`).val(sisa))
@@ -1039,13 +1367,13 @@
       setSisaDP()
     }
   })
-      
+
   $(document).on('input', `#table_body [name="nominalDP[]"]`, function(event) {
     setTotalDP()
     setSisaDetail(this)
   })
 
-  function setSisaDetail(el){
+  function setSisaDetail(el) {
     let sisa = AutoNumeric.getNumber($(el).closest("tr").find(`[name="sisaDP[]"]`)[0])
     let sisaAwal = AutoNumeric.getNumber($(el).closest("tr").find(`[name="sisaAwalDP[]"]`)[0])
     let bayar = $(el).val()
@@ -1058,9 +1386,9 @@
     initAutoNumeric($(el).closest("tr").find(".sisaDP"))
     let Sisa = $(`#table_body .sisaDP`)
     let total = 0
-  
+
     $.each(Sisa, (index, SISA) => {
-        total += AutoNumeric.getNumber(SISA)
+      total += AutoNumeric.getNumber(SISA)
     });
     new AutoNumeric('#sisaFoot').set(total)
   }
@@ -1069,81 +1397,12 @@
     let nominalDetails = $(`.sisaDP`)
     let bayar = 0
     $.each(nominalDetails, (index, nominalDetail) => {
-        bayar += AutoNumeric.getNumber(nominalDetail)
+      bayar += AutoNumeric.getNumber(nominalDetail)
     });
-  
+
     new AutoNumeric('#sisaFoot').set(bayar)
   }
 
-  function getTarikDeposito(id){
-    $.ajax({
-      url: `${apiUrl}pengeluarantruckingheader/${id}/gettarikdeposito`,
-      method: 'POST',
-      dataType: 'JSON',
-      // data: data,
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      
-      success: response => {
-        $('#detailList tbody').html('')
-          let totalSisa = 0
-          $.each(response.data, (index, detail) => {
-            let check =""
-            let disbaled ="disabled"
-            // let awal = new Intl.NumberFormat('en-US').format(detail.sisa);
-            if (detail.bayar !== null) {
-              check = "checked"
-              disbaled = ""
-              detail.sisa = parseFloat(detail.sisa) + parseFloat(detail.bayar)
-              // console.log(detail.sisa)
-            }
-            let id = detail.id
-            totalSisa = totalSisa + parseFloat(detail.sisa);
-            let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
-            
-            let detailRow = $(`
-              <tr >
-              <td>
-                ${id}
-              </td>
-              <td>
-                  <input name='pinjPribadi[]' type="checkbox" ${check} id="checkItem" value="${id}">
-                  <input name='pinjPribadi_nobukti[]' type="hidden" value="${detail.nobukti}">
-              </td>
-              <td>${detail.nobukti}</td>
-              <td>
-                  <p class="text-right sisaDP autonumeric">${sisa}</p>
-                  <input type="hidden" name="sisaDP[]" class="autonumeric" value="${sisa}">
-                  <input type="hidden" name="sisaAwalDP[]" class="autonumeric" value="${sisa}">
-              </td>
-              <td id=${id}>
-                  <input type="text" name="nominalDP[]" ${disbaled} value="${detail.bayar}" id="bayar_${id}" class="form-control bayar text-right">
-              </td>
-              <td>
-                  ${detail.keterangan}
-                  <input name='pinjPribadi_keterangan[]' type="hidden" value="${detail.keterangan}">
-              </td>
-              </tr>
-          `)
-
-            initAutoNumeric(detailRow.find(`[name="sisaDP[]"]`))
-            initAutoNumeric(detailRow.find(`[name="sisaAwalDP[]"]`))
-            initAutoNumeric(detailRow.find(`.sisaDP`))
-            initAutoNumeric(detailRow.find(`#bayar_${id}`))
-          setSisaDetail(detailRow.find(`[name="nominalDP[]"]`))
-            $('#detailList tbody').append(detailRow)
-            setTotalDP()
-          setSisaDP()
-          })
-          setTampilanForm()
-          $(`#detailList tfoot`).show()
-
-        }
-
-    })
-      
-  }
 
   function addRow() {
     let detailRow = $(`
@@ -1226,147 +1485,159 @@
   function checkboxHandler(element) {
     let value = $(element).val();
     // console.log(value);
-        if (element.checked) {
-          selectedRows.push($(element).val());
-          $(`#detail_row_${value}`).find(`[name="id_detail[]"]`).attr('disabled',false)
-          $(`#detail_row_${value}`).find(`[name="container_detail[]"]`).attr('disabled',false)
-          $(`#detail_row_${value}`).find(`[name="noinvoice_detail[]"]`).attr('disabled',false)
-          $(`#detail_row_${value}`).find(`[name="nominal[]"]`).attr('disabled',false)
-          $(`#detail_row_${value}`).find(`[name="nojobtrucking_detail[]"]`).attr('disabled',false)
-          $(`#detail_row_${value}`).find(`[name="keterangan[]"]`).attr('disabled',false)
-        } else {
-          for (var i = 0; i < selectedRows.length; i++) {
-            if (selectedRows[i] == value) {
-              selectedRows.splice(i, 1);
-            }
-          }
-          $(`#detail_row_${value}`).find(`[name="id_detail[]"]`).attr('disabled',true)
-          $(`#detail_row_${value}`).find(`[name="container_detail[]"]`).attr('disabled',true)
-          $(`#detail_row_${value}`).find(`[name="noinvoice_detail[]"]`).attr('disabled',true)
-          $(`#detail_row_${value}`).find(`[name="nominal[]"]`).attr('disabled',true)
-          $(`#detail_row_${value}`).find(`[name="nojobtrucking_detail[]"]`).attr('disabled',true)
-          $(`#detail_row_${value}`).find(`[name="keterangan[]"]`).attr('disabled',true)
+    if (element.checked) {
+      selectedRows.push($(element).val());
+      $(`#detail_row_${value}`).find(`[name="id_detail[]"]`).attr('disabled', false)
+      $(`#detail_row_${value}`).find(`[name="container_detail[]"]`).attr('disabled', false)
+      $(`#detail_row_${value}`).find(`[name="noinvoice_detail[]"]`).attr('disabled', false)
+      $(`#detail_row_${value}`).find(`[name="nominal[]"]`).attr('disabled', false)
+      $(`#detail_row_${value}`).find(`[name="nojobtrucking_detail[]"]`).attr('disabled', false)
+      $(`#detail_row_${value}`).find(`[name="keterangan[]"]`).attr('disabled', false)
+    } else {
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
         }
+      }
+      $(`#detail_row_${value}`).find(`[name="id_detail[]"]`).attr('disabled', true)
+      $(`#detail_row_${value}`).find(`[name="container_detail[]"]`).attr('disabled', true)
+      $(`#detail_row_${value}`).find(`[name="noinvoice_detail[]"]`).attr('disabled', true)
+      $(`#detail_row_${value}`).find(`[name="nominal[]"]`).attr('disabled', true)
+      $(`#detail_row_${value}`).find(`[name="nojobtrucking_detail[]"]`).attr('disabled', true)
+      $(`#detail_row_${value}`).find(`[name="keterangan[]"]`).attr('disabled', true)
+    }
   }
 
   function loadModalGrid() {
     $("#modalgrid").jqGrid({
-      styleUI: 'Bootstrap4',
-      iconSet: 'fontAwesome',
-      datatype: "local",
-      colModel: [
-        {
-          editable: true,
-          edittype: 'checkbox',
-          search: false,
-          width: 60,
-          align: 'center',
-          formatoptions: {
-            disabled: false
-          },
-          label: 'Pilih',
-          name: 'id_detail',
-          index: 'Pilih',
-          // key:true,
-          formatter: (value) => {
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        datatype: "local",
+        colModel: [{
+            editable: true,
+            edittype: 'checkbox',
+            search: false,
+            width: 60,
+            align: 'center',
+            formatoptions: {
+              disabled: false
+            },
+            label: 'Pilih',
+            name: 'id_detail',
+            index: 'Pilih',
+            // key:true,
+            formatter: (value) => {
               return `<input type="checkbox" class="checkBoxgrid"  id="${value}_checkBoxgrid" value="${value}" onchange="checkboxHandler(this)">`
-          },
-         
-        },
-        {
-          label: 'no invoice',
-          name: 'noinvoice_detail',
-        },
-        {
-          label: 'no job',
-          name: 'nojobtrucking_detail',
-        },
-        {
-          label: 'container',
-          name: 'container_detail',
-        },
-        {
-          label: 'nominal',
-          name: 'nominal_detail',
-          align: 'right',
-          formatter: currencyFormat,
-        },
-      ],
-      autowidth: true,
-      shrinkToFit: false,
-      height: 350,
-      rowNum: 10,
-      rownumbers: true,
-      rownumWidth: 45,
-      rowList: [10, 20, 50, 0],
-      toolbar: [true, "top"],
-      sortable: true,
-      viewrecords: true,
-      footerrow:true,
-      userDataOnFooter: true,
-      loadComplete: function(data) {
-        let grid = $(this)
-        changeJqGridRowListText()
-        initResize($(this))
-        // console.log(data);
-        $.each(selectedRows, function(key, value) {
-          $(grid).find('tbody tr').each(function(row, tr) {
-            if ($(this).find(`td input:checkbox`).val() == value) {
-              // console.log(value);
-              $(this).addClass('bg-light-blue')
-              $(this).find(`td input:checkbox`).prop('checked', true)
-            }
-          })
-        });
-        
-        $('.clearsearchclass').click(function() {
-          clearColumnSearch($(this))
-        })
-  
-        if (indexRow > $(this).getDataIDs().length - 1) {
-          indexRow = $(this).getDataIDs().length - 1;
-        }
-  
-        $('#modalgrid').setSelection($('#modalgrid').getDataIDs()[0])
-  
-        setHighlight($(this))
-      },
-      onSelectRow: function(id) {
-        activeGrid = $(this)
-        indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-        page = $(this).jqGrid('getGridParam', 'page')
-        let limit = $(this).jqGrid('getGridParam', 'postData').limit
-        if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-        
+            },
 
-},
-    })
-    .jqGrid('filterToolbar', {
-      stringResult: true,
-      searchOnEnter: false,
-      defaultSearch: 'cn',
-      groupOp: 'AND',
-      disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
-      beforeSearch: function() {
-        clearGlobalSearch($('#modalgrid'))
-      },
-    })
-    .customPager()
+          },
+          {
+            label: 'no invoice',
+            name: 'noinvoice_detail',
+          },
+          {
+            label: 'no job',
+            name: 'nojobtrucking_detail',
+          },
+          {
+            label: 'container',
+            name: 'container_detail',
+          },
+          {
+            label: 'nominal',
+            name: 'nominal_detail',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+        ],
+        autowidth: true,
+        shrinkToFit: false,
+        height: 350,
+        rowNum: 10,
+        rownumbers: true,
+        rownumWidth: 45,
+        rowList: [10, 20, 50, 0],
+        toolbar: [true, "top"],
+        sortable: true,
+        viewrecords: true,
+        footerrow: true,
+        userDataOnFooter: true,
+        loadComplete: function(data) {
+          let grid = $(this)
+          changeJqGridRowListText()
+          initResize($(this))
+          // console.log(data);
+          $.each(selectedRows, function(key, value) {
+            $('#modalgrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                console.log(value);
+                $(this).addClass('bg-light-blue')
+                console.log($(this).find(`td input:checkbox`).prop('checked', true))
+                $(this).find(`td input:checkbox`).prop('checked', true)
+              }
+            })
+
+            $(`#detail-list-grid #detail_row_${value}`).find(`#id_detail${value}`).prop('disabled', false)
+            $(`#detail-list-grid #detail_row_${value}`).find(`#container_detail${value}`).prop('disabled', false)
+            $(`#detail-list-grid #detail_row_${value}`).find(`#noinvoice_detail${value}`).prop('disabled', false)
+            $(`#detail-list-grid #detail_row_${value}`).find(`#nominal${value}`).prop('disabled', false)
+            $(`#detail-list-grid #detail_row_${value}`).find(`#nojobtrucking_detail${value}`).prop('disabled', false)
+            $(`#detail-list-grid #detail_row_${value}`).find(`#keterangan${value}`).prop('disabled', false)
+
+          });
+
+          $('.clearsearchclass').click(function() {
+            clearColumnSearch($(this))
+          })
+
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
+          }
+
+          setHighlight($(this))
+        },
+        onSelectRow: function(id) {
+          activeGrid = $(this)
+          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
+          page = $(this).jqGrid('getGridParam', 'page')
+          let limit = $(this).jqGrid('getGridParam', 'postData').limit
+          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+
+
+        },
+      })
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          clearGlobalSearch($('#modalgrid'))
+        },
+      })
+      .customPager()
     /* Append clear filter button */
     loadClearFilter($('#modalgrid'))
-    
+
     /* Append global search */
     loadGlobalSearch($('#modalgrid'))
   }
 
-  function getInvoice(dari,sampai){
+  function getInvoice(dari, sampai) {
+    if ($('#crudForm').data('action') == 'edit') {
+      bstId = $(`#crudForm`).find(`[name="id"]`).val()
+      url = `${bstId}/geteditinvoice`
+    } else {
+      url = 'getinvoice'
+    }
     $.ajax({
-      url: `${apiUrl}pengeluarantruckingheader/getinvoice`,
+      url: `${apiUrl}pengeluarantruckingheader/${url}`,
       method: 'GET',
       dataType: 'JSON',
       data: {
-        tgldari : dari,
-        tglsampai : sampai,
+        tgldari: dari,
+        tglsampai: sampai,
         limit: 0
       },
       headers: {
@@ -1375,36 +1646,47 @@
       success: response => {
         resetGrid()
         let totalNominal = 0
+        selectedRows = []
         $.each(response.data, (index, detail) => {
           let id = detail.id
           let detailRow = $(`
           <div id="detail_row_${detail.id_detail}">
-          <input type="text" value="${detail.id_detail}"  id="id_detail${detail.id_detail}" class="" name="id_detail[]"  readonly disabled  >
-          <input type="text" value="${detail.container_detail}"  id="container_detail${detail.id_detail}" class="" name="container_detail[]"  readonly disabled  >
-          <input type="text" value="${detail.noinvoice_detail}"  id="noinvoice_detail${detail.id_detail}" class="" name="noinvoice_detail[]"  readonly disabled  >
-          <input type="text" value="${detail.nominal_detail}"  id="nominal${detail.id_detail}" class="" name="nominal[]"  readonly disabled  >
-          <input type="text" value="${detail.nojobtrucking_detail}"  id="nojobtrucking_detail${detail.id_detail}" class="" name="nojobtrucking_detail[]"  readonly disabled  >
-          <input type="text" value="SUMBANGAN SOSIAL"  id="keterangan${id}" class="" name="keterangan[]"  readonly   >
+          <input type="text" value="${detail.id_detail}"  id="id_detail${detail.id_detail}" class="" name="id_detail[]"  disabled  >
+          <input type="text" value="${detail.container_detail}"  id="container_detail${detail.id_detail}" class="" name="container_detail[]"  disabled  >
+          <input type="text" value="${detail.noinvoice_detail}"  id="noinvoice_detail${detail.id_detail}" class="" name="noinvoice_detail[]"  disabled  >
+          <input type="text" value="${detail.nominal_detail}"  id="nominal${detail.id_detail}" class="" name="nominal[]"  disabled  >
+          <input type="text" value="${detail.nojobtrucking_detail}"  id="nojobtrucking_detail${detail.id_detail}" class="" name="nojobtrucking_detail[]"  disabled  >
+          <input type="text" value="SUMBANGAN SOSIAL"  id="keterangan${id}" class="" name="keterangan[]"    >
           </div>
           
           `)
           $('#detail-list-grid').append(detailRow)
-
+          if (detail.pengeluarantrucking_id != null) {
+            selectedRows.push(detail.id_detail)
+            detailRow.find(`[name="id_detail[]"]`).attr('disabled', false)
+            detailRow.find(`[name="container_detail[]"]`).attr('disabled', false)
+            detailRow.find(`[name="noinvoice_detail[]"]`).attr('disabled', false)
+            detailRow.find(`[name="nominal[]"]`).attr('disabled', false)
+            detailRow.find(`[name="nojobtrucking_detail[]"]`).attr('disabled', false)
+            detailRow.find(`[name="keterangan[]"]`).attr('disabled', false)
+          }
         })
 
         $('#modalgrid').setGridParam({
           datatype: "local",
-          data:response.data
+          data: response.data
         }).trigger('reloadGrid')
         // console.log(response.data);
       }
     })
     // console.log(dari, sampai);
   }
+
   function resetGrid() {
     $('#detail-list-grid').html('');
     $('#modalgrid').jqGrid('clearGridData')
   }
+
   function deleteRow(row) {
     row.remove()
 
@@ -1466,13 +1748,12 @@
         $('#crudForm [name=pengeluarantrucking_id]').first().val(pengeluarantrucking.id)
         element.val(pengeluarantrucking.keterangan)
         element.data('currentValue', element.val())
-        getDeposito()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        KodePengeluaranId=""
+        KodePengeluaranId = ""
         $('#crudForm [name=pengeluarantrucking_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
@@ -1516,7 +1797,31 @@
         $(`#supirHaeaderId`).val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
-        getDeposito()
+
+        $('#tableDeposito').jqGrid("clearGridData");
+        $("#tableDeposito")
+          .jqGrid("setGridParam", {
+            selectedRowIds: []
+          })
+          .trigger("reloadGrid");
+
+        getDataDeposito(supir.id).then((response) => {
+
+          console.log('before', $("#tableDeposito").jqGrid('getGridParam', 'selectedRowIds'))
+          setTimeout(() => {
+
+            $("#tableDeposito")
+              .jqGrid("setGridParam", {
+                datatype: "local",
+                data: response.data,
+                originalData: response.data,
+                rowNum: response.data.length,
+                selectedRowIds: []
+              })
+              .trigger("reloadGrid");
+          }, 100);
+
+        });
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))

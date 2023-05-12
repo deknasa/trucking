@@ -51,6 +51,7 @@ class LaporanPenyesuaianBarangController extends MyController
             'dari' => $request->dari,
             'sampai' => $request->sampai,
         ];
+       
 
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])

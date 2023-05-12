@@ -36,7 +36,6 @@
                             </div>
                         </div>
                         <div class="row">
-
                             <div class="col-sm-6 mt-4">
                                 <a id="btnPreview" class="btn btn-secondary mr-2 ">
                                     <i class="fas fa-sync"></i>
@@ -44,7 +43,14 @@
                                 </a>
                             </div>
                         </div>
-
+                        <div class="row">
+                            <div class="col-sm-6 mt-4">
+                                <a id="btnEkspor" class="btn btn-secondary mr-2 ">
+                                    <i class="fas fa-sync"></i>
+                                    Ekspor
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -91,7 +97,10 @@
             $('#btnPreview').prop('disabled', true)
             $('#btnPreview').css(css_property);
         }
-
+        if (!`{{ $myAuth->hasPermission('laporankasbank', 'export') }}`) {
+            $('#btnEkspor').prop('disabled', true)
+            $('#btnEkspor').css(css_property);
+        }
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
@@ -107,7 +116,7 @@
         }
     })
 
-    $(document).on('click', `#btnExport`, function(event) {
+    $(document).on('click', `#btnEkspor`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let bank_id = $('#crudForm').find('[name=bank_id]').val()
@@ -120,8 +129,6 @@
         }
     })
   
-  
-
     function initLookup() {
 
         $('.bank-lookup').lookup({

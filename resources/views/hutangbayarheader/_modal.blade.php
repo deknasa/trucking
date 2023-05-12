@@ -639,6 +639,7 @@
                 datatype: "local",
                 data: response.data,
                 originalData: response.data,
+                rowNum: response.data.length,
                 selectedRowIds: selectedId
               })
               .trigger("reloadGrid");
@@ -899,8 +900,8 @@
           // console.log('potongan', potongan)
           // console.log(originalGridData.sisa - bayar - potongan)
           console.log('indexc', indexColumn)
-          if (indexColumn == 9 || indexColumn == 10) {
-            console.log('here')
+          if (indexColumn == 8 || indexColumn == 9) {
+            
             $("#tableHutang").jqGrid(
               "setCell",
               rowId,
@@ -908,7 +909,18 @@
               sisa
               // sisa - bayar - potongan
             );
+            $("#tableHutang").jqGrid(
+              "setCell",
+              rowId,
+              "total",
+              bayar+potongan
+              // sisa - bayar - potongan
+            );
           }
+          setTotalSisa()
+          setTotalBayar()
+          setTotalPotongan()
+          setAllTotal()
         },
         isCellEditable: function(cellname, iRow, iCol) {
           let rowData = $(this).jqGrid("getRowData")[iRow - 1];

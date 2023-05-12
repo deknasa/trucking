@@ -11,19 +11,25 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
-      },    
+      },
       colModel: [{
           label: 'ID',
           name: 'id',
           align: 'right',
           width: '50px',
-            search: false,
+          search: false,
           hidden: true
         },
         {
           label: 'KODE CONTAINER',
           name: 'kodecontainer',
           align: 'left'
+        },
+        {
+          label: 'NOMINAL SUMBANGAN',
+          name: 'nominalsumbangan',
+          align: "right",
+          formatter: currencyFormat,
         },
         {
           label: 'KETERANGAN',
@@ -100,26 +106,26 @@
           name: 'modifiedby',
           align: 'left'
         },
-          {
-            label: 'CREATEDAT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
+        {
+          label: 'CREATEDAT',
+          name: 'created_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATEDAT',
+          name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
       ],
       autowidth: true,
       responsive: true,
@@ -158,7 +164,7 @@
         jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -201,7 +207,7 @@
         setHighlight($(this))
       }
     })
-    
+
     .jqGrid("setLabel", "rn", "No.")
     .jqGrid('filterToolbar', {
       stringResult: true,
@@ -214,6 +220,6 @@
       },
     })
 
-    loadGlobalSearch($('#containerLookup'))
-    loadClearFilter($('#containerLookup'))
+  loadGlobalSearch($('#containerLookup'))
+  loadClearFilter($('#containerLookup'))
 </script>
