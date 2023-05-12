@@ -808,10 +808,11 @@
         },
         isCellEditable: function(cellname, iRow, iCol) {
           let rowData = $(this).jqGrid("getRowData")[iRow - 1];
-
-          return $(this)
-            .find(`tr input[value=${rowData.id}]`)
-            .is(":checked");
+          if ($('#crudForm').data('action') != 'delete') {
+            return $(this)
+              .find(`tr input[value=${rowData.id}]`)
+              .is(":checked");
+          }
         },
         validationCell: function(cellobject, errormsg, iRow, iCol) {
           console.log(cellobject);
@@ -875,14 +876,14 @@
       if (id != undefined) {
         url = `${apiUrl}penerimaantruckingheader/${id}/edit/getpengembalianpinjaman`
       } else {
-        url = `${apiUrl}gajisupirheader/${supirId}/getpinjpribadi`
+        url = `${apiUrl}penerimaantruckingheader/${supirId}/getpinjaman`
       }
     } else if (aksi == 'delete') {
       url = `${apiUrl}penerimaantruckingheader/${id}/delete/getpengembalianpinjaman`
       attribut = 'disabled'
       forCheckbox = 'disabled'
     } else if (aksi == 'add') {
-      url = `${apiUrl}gajisupirheader/${supirId}/getpinjpribadi`
+      url = `${apiUrl}penerimaantruckingheader/${supirId}/getpinjaman`
     }
 
     return new Promise((resolve, reject) => {

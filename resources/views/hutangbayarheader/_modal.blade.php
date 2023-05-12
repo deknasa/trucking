@@ -414,7 +414,7 @@
               row = parseInt(selectedRowsHutang[angka]) - 1;
               let element;
 
-              if (indexes[0] == 'bank' || indexes[0] == 'alatbayar' || indexes[0] == 'tglcair' || indexes[0] == 'supplier') {
+              if (indexes[0] == 'bank' || indexes[0] == 'alatbayar' || indexes[0] == 'tglcair' || indexes[0] == 'supplier' || indexes[0] == 'tglbukti') {
                 if (indexes.length > 1) {
                   element = form.find(`[name="${indexes[0]}[]"]`)[row];
                 } else {
@@ -901,7 +901,7 @@
           // console.log(originalGridData.sisa - bayar - potongan)
           console.log('indexc', indexColumn)
           if (indexColumn == 8 || indexColumn == 9) {
-            
+
             $("#tableHutang").jqGrid(
               "setCell",
               rowId,
@@ -913,7 +913,7 @@
               "setCell",
               rowId,
               "total",
-              bayar+potongan
+              bayar + potongan
               // sisa - bayar - potongan
             );
           }
@@ -924,10 +924,11 @@
         },
         isCellEditable: function(cellname, iRow, iCol) {
           let rowData = $(this).jqGrid("getRowData")[iRow - 1];
-
-          return $(this)
-            .find(`tr input[value=${rowData.id}]`)
-            .is(":checked");
+          if ($('#crudForm').data('action') != 'delete') {
+            return $(this)
+              .find(`tr input[value=${rowData.id}]`)
+              .is(":checked");
+          }
         },
         validationCell: function(cellobject, errormsg, iRow, iCol) {
           console.log(cellobject);

@@ -1026,10 +1026,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporanpinjamansupir', LaporanPinjamanSupirController::class);
     
     Route::get('laporanketeranganpinjamansupir/report', [LaporanKeteranganPinjamanSupirController::class, 'report'])->name('laporanketeranganpinjamansupir.report');
-    Route::get('laporanketeranganpinjamansupir/index', [LaporanKeteranganPinjamanSupirController::class, 'index']);
-    Route::resource('laporanketeranganpinjamansupir', LaporanKeteranganPinjamanSupirController::class);
-
-    Route::get('laporanketeranganpinjamansupir/report', [LaporanKeteranganPinjamanSupirController::class, 'report'])->name('laporanketeranganpinjamansupir.report');
+    Route::get('laporanketeranganpinjamansupir/export', [LaporanKeteranganPinjamanSupirController::class, 'export'])->name('laporanketeranganpinjamansupir.export');
     Route::get('laporanketeranganpinjamansupir/index', [LaporanKeteranganPinjamanSupirController::class, 'index']);
     Route::resource('laporanketeranganpinjamansupir', LaporanKeteranganPinjamanSupirController::class);
 

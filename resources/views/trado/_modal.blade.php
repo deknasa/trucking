@@ -604,7 +604,7 @@
   function assignAttachment(dropzone, data) {
     const paramName = dropzone.options.paramName
     const type = paramName.substring(5)
-
+    
     if (data[paramName] == '') {
       $('.dropzone').each((index, element) => {
         if (!element.dropzone) {

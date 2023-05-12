@@ -63,18 +63,6 @@
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">supplier </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="supplier" class="form-control supplier-lookup">
-                    <input type="text" id="supplierId" name="supplier_id" readonly hidden>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4">
                     <label class="col-form-label">servicein no bukti </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
@@ -103,7 +91,19 @@
                     <input type="text" name="pengeluaranstok_nobukti" class="form-control pengeluaranstokheader-lookup">
                   </div>
                 </div>
-              </div>              
+              </div>
+                   
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">supplier </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="supplier" class="form-control supplier-lookup">
+                    <input type="text" id="supplierId" name="supplier_id" readonly hidden>
+                  </div>
+                </div>
+              </div>
 
               <div class="form-group col-md-6">
                 <div class="row">
@@ -556,6 +556,7 @@
     $('[name=servicein_nobukti]').parents('.form-group').hide()
     $('[name=kerusakan]').parents('.form-group').hide()
     $('[name=supir]').parents('.form-group').hide()
+    $('[name=gandengan]').parents('.form-group').hide()
     $('[name=trado]').parents('.form-group').hide()
    $('.tbl_qty').show()
     $('.tbl_harga').show()
@@ -888,7 +889,7 @@ $('.tbl_qty').show()
 
 
   function lookupSelected(el){
-    if (kodePengeluaranStok =="KOR") {
+    // if (kodePengeluaranStok =="KOR") {
       // console.log(kodepengeluaranstok);
       // console.log(el);
       switch (el) {
@@ -921,7 +922,7 @@ $('.tbl_qty').show()
         default:
           break;
         }
-    }
+    // }
     
   }
 
@@ -932,6 +933,27 @@ $('.tbl_qty').show()
     $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
     $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+  }
+
+  function setSuplier(penerimaan_id) {
+    $.ajax({
+      url: `${apiUrl}penerimaanstokheader/${penerimaan_id}`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      success: response => {
+        var data = response.data;
+        $('[name=supplier]').val(data.supplier).attr('readonly', true);
+        $('[name=supplier]').data('currentValue', data.supplier)
+
+        $('[name=supplier_id]').val(data.supplier_id)
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
   }
   
   function sumary() {
@@ -1334,6 +1356,7 @@ $('.tbl_qty').show()
         title: 'penerimaan stok header Lookup',
         fileName: 'penerimaanstokheader',
         onSelectRow: (penerimaan, element) => {
+          setSuplier(penerimaan.id);
           element.val(penerimaan.nobukti)
           element.data('currentValue', element.val())
           if (kodePengeluaranStok == "RBT") {
