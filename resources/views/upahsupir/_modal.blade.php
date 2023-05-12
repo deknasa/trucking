@@ -19,7 +19,8 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="parent_id" class="form-control upahsupir-lookup">
+                <input type="hidden" name="parent_id">
+                <input type="text" name="parent" class="form-control upahsupir-lookup">
               </div>
             </div>
 
@@ -1078,6 +1079,7 @@
         // console.log(upahsupir.id);
 
         $('#crudForm [name=parent_id]').first().val(upahsupir.id)
+        $('#crudForm [name=parent]').first().val(upahsupir.kotasampai_id)
         element.data('currentValue', element.val())
         
         let form = $('#crudForm')
