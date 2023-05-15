@@ -11,12 +11,12 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
-      },      
+      },
       colModel: [{
           label: 'ID',
           name: 'id',
           width: '50px',
-            search: false,
+          search: false,
           hidden: true
         },
         {
@@ -24,7 +24,7 @@
           name: 'keterangan',
         },
         {
-          label: 'KODE TRADO',
+          label: 'NO POLISI',
           name: 'kodetrado',
         },
         {
@@ -694,6 +694,9 @@
               let files = JSON.parse(value)
 
               files.forEach(file => {
+                if (file == '') {
+                  file = 'no-image'
+                }
                 let image = new Image()
                 image.width = 25
                 image.height = 25
@@ -720,6 +723,9 @@
               let files = JSON.parse(value)
 
               files.forEach(file => {
+                if (file == '') {
+                  file = 'no-image'
+                }
                 let image = new Image()
                 image.width = 25
                 image.height = 25
@@ -746,6 +752,9 @@
               let files = JSON.parse(value)
 
               files.forEach(file => {
+                if (file == '') {
+                  file = 'no-image'
+                }
                 let image = new Image()
                 image.width = 25
                 image.height = 25
@@ -799,7 +808,7 @@
         jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

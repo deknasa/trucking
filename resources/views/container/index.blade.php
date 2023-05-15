@@ -50,6 +50,12 @@
             align: 'left'
           },
           {
+            label: 'NOMINAL SUMBANGAN',
+            name: 'nominalsumbangan',
+            align: "right",
+            formatter: currencyFormat,
+          },
+          {
             label: 'KETERANGAN',
             name: 'keterangan',
             align: 'left'

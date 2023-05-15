@@ -294,7 +294,7 @@
             width: 'resolve',
             theme: "bootstrap4"
           });
-          
+
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
@@ -481,7 +481,12 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            cekValidasiAksi(Id, Aksi)
+            if (Aksi == 'EDIT') {
+              editPengeluaran(Id)
+            }
+            if (Aksi == 'DELETE') {
+              deletePengeluaran(Id)
+            }
           }
 
         } else {

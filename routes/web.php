@@ -151,13 +151,19 @@ use App\Http\Controllers\KartuStokController;
 use App\Http\Controllers\HistoriPenerimaanStokController;
 use App\Http\Controllers\HistoriPengeluaranStokController;
 use App\Http\Controllers\InvoiceExtraDetailController;
+use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\LaporanBanGudangSementaraController;
 use App\Http\Controllers\LaporanBukuBesarController;
 use App\Http\Controllers\LaporanDepositoSupirController;
+use App\Http\Controllers\LaporanLabaRugiController;
 use App\Http\Controllers\LaporanEstimasiKasGantungController;
 use App\Http\Controllers\LaporanHistoryPinjamanController;
 use App\Http\Controllers\LaporanHutangBBMController;
 use App\Http\Controllers\LaporanKartuHutangPrediksiController;
+use App\Http\Controllers\LaporanKartuPiutangPerPelangganController;
+use App\Http\Controllers\LaporanKartuPiutangPerPlgDetailController;
+use App\Http\Controllers\LaporanOrderPembelianController;
+use App\Http\Controllers\LaporanNeracaController;
 use App\Http\Controllers\LaporanKasBankController;
 use App\Http\Controllers\LaporanKasGantungController;
 use App\Http\Controllers\LaporanKeteranganPinjamanSupirController;
@@ -174,6 +180,7 @@ use App\Http\Controllers\LaporanSupirLebihDariTradoController;
 use App\Http\Controllers\LaporanTripGandenganDetailController;
 use App\Http\Controllers\LaporanTripTradoController;
 use App\Http\Controllers\LaporanUangJalanController;
+use App\Http\Controllers\LaporanPiutangGiroController;
 use App\Http\Controllers\LookupController;
 use App\Http\Controllers\NotaDebetDetailController;
 use App\Http\Controllers\NotaKreditDetailController;
@@ -197,6 +204,14 @@ use App\Http\Controllers\LaporanKartuHutangPerVendorController;
 use App\Http\Controllers\LaporanMutasiKasBankController;
 use App\Http\Controllers\LaporanKartuStokController;
 use App\Http\Controllers\LaporanArusKasController;
+use App\Http\Controllers\LapKartuHutangPerVendorDetailController;
+use App\Http\Controllers\LaporanWarkatBelumCairController;
+use App\Http\Controllers\LaporanPenyesuaianBarangController;
+use App\Http\Controllers\LaporanPemakaianBanController;
+use App\Http\Controllers\LaporanTransaksiHarianController;
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -984,8 +999,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('historipengeluaranstok/index', [HistoriPengeluaranStokController::class, 'index']);
     Route::resource('historipengeluaranstok', HistoriPengeluaranStokController::class);
 
-    Route::get('laporankasbank/export', [LaporanKasBankController::class, 'export'])->name('laporankasbank.export');
     Route::get('laporankasbank/report', [LaporanKasBankController::class, 'report'])->name('laporankasbank.report');
+    Route::get('laporankasbank/export', [LaporanKasBankController::class, 'export'])->name('laporankasbank.export');
     Route::get('laporankasbank/index', [LaporanKasBankController::class, 'index']);
     Route::resource('laporankasbank', LaporanKasBankController::class);
 
@@ -1005,16 +1020,45 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('prosesuangjalansupirdetail', ProsesUangJalanSupirDetailController::class);
     
     Route::get('laporandepositosupir/report', [LaporanDepositoSupirController::class, 'report'])->name('laporandepositosupir.report');
+    Route::get('laporandepositosupir/export', [LaporanDepositoSupirController::class, 'export'])->name('laporandepositosupir.export');
     Route::get('laporandepositosupir/index', [LaporanDepositoSupirController::class, 'index']);
     Route::resource('laporandepositosupir', LaporanDepositoSupirController::class);
+
+    Route::get('laporanlabarugi/report', [LaporanLabaRugiController::class, 'report'])->name('laporanlabarugi.report');
+    Route::get('laporanlabarugi/index', [LaporanLabaRugiController::class, 'index']);
+    Route::resource('laporanlabarugi', LaporanLabaRugiController::class);
+
+    Route::get('laporantransaksiharian/report', [LaporanTransaksiHarianController::class, 'report'])->name('laporantransaksiharian.report');
+    Route::get('laporantransaksiharian/export', [LaporanTransaksiHarianController::class, 'export'])->name('laporantransaksiharian.export');
+    Route::get('laporantransaksiharian/index', [LaporanTransaksiHarianController::class, 'index']);
+    Route::resource('laporantransaksiharian', LaporanTransaksiHarianController::class);
 
     Route::get('laporanpinjamansupir/report', [LaporanPinjamanSupirController::class, 'report'])->name('laporanpinjamansupir.report');
     Route::get('laporanpinjamansupir/index', [LaporanPinjamanSupirController::class, 'index']);
     Route::resource('laporanpinjamansupir', LaporanPinjamanSupirController::class);
     
     Route::get('laporanketeranganpinjamansupir/report', [LaporanKeteranganPinjamanSupirController::class, 'report'])->name('laporanketeranganpinjamansupir.report');
+    Route::get('laporanketeranganpinjamansupir/export', [LaporanKeteranganPinjamanSupirController::class, 'export'])->name('laporanketeranganpinjamansupir.export');
     Route::get('laporanketeranganpinjamansupir/index', [LaporanKeteranganPinjamanSupirController::class, 'index']);
     Route::resource('laporanketeranganpinjamansupir', LaporanKeteranganPinjamanSupirController::class);
+
+
+    Route::get('lapkartuhutangpervendordetail/report', [LapKartuHutangPerVendorDetailController::class, 'report'])->name('lapkartuhutangpervendordetail.report');
+    Route::get('lapkartuhutangpervendordetail/index', [LapKartuHutangPerVendorDetailController::class, 'index']);
+    Route::resource('lapkartuhutangpervendordetail', LapKartuHutangPerVendorDetailController::class);
+
+    Route::get('laporanwarkatbelumcair/report', [LaporanWarkatBelumCairController::class, 'report'])->name('laporanwarkatbelumcair.report');
+    Route::get('laporanwarkatbelumcair/index', [LaporanWarkatBelumCairController::class, 'index']);
+    Route::resource('laporanwarkatbelumcair', LaporanWarkatBelumCairController::class);
+
+    Route::get('laporanpemakaianban/report', [LaporanPemakaianBanController::class, 'report'])->name('laporanpemakaianban.report');
+    Route::get('laporanpemakaianban/index', [LaporanPemakaianBanController::class, 'index']);
+    Route::resource('laporanpemakaianban', LaporanPemakaianBanController::class);
+
+    Route::get('laporanpenyesuaianbarang/report', [LaporanPenyesuaianBarangController::class, 'report'])->name('laporanpenyesuaianbarang.report');
+    Route::get('laporanpenyesuaianbarang/export', [LaporanPenyesuaianBarangController::class, 'export'])->name('laporanpenyesuaianbarang.export');
+    Route::get('laporanpenyesuaianbarang/index', [LaporanPenyesuaianBarangController::class, 'index']);
+    Route::resource('laporanpenyesuaianbarang', LaporanPenyesuaianBarangController::class);
     
     Route::get('laporanhutangbbm/report', [LaporanHutangBBMController::class, 'report'])->name('laporanhutangbbm.report');
     Route::get('laporanhutangbbm/index', [LaporanHutangBBMController::class, 'index']);
@@ -1053,12 +1097,29 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporanpemotonganpinjamandepo', LaporanPemotonganPinjamanDepoController::class);
 
     Route::get('laporanrekapsumbangan/report', [LaporanRekapSumbanganController::class, 'report'])->name('laporanrekapsumbangan.report');
+    Route::get('laporanrekapsumbangan/export', [LaporanRekapSumbanganController::class, 'export'])->name('laporanrekapsumbangan.export');
     Route::get('laporanrekapsumbangan/index', [LaporanRekapSumbanganController::class, 'index']);
     Route::resource('laporanrekapsumbangan', LaporanRekapSumbanganController::class);
 
     Route::get('laporanklaimpjtsupir/report', [LaporanKlaimPJTSupirController::class, 'report'])->name('laporanklaimpjtsupir.report');
     Route::get('laporanklaimpjtsupir/index', [LaporanKlaimPJTSupirController::class, 'index']);
     Route::resource('laporanklaimpjtsupir', LaporanKlaimPJTSupirController::class);
+
+    Route::get('laporankartupiutangperpelanggan/report', [LaporanKartuPiutangPerPelangganController::class, 'report'])->name('laporankartupiutangperpelanggan.report');
+    Route::get('laporankartupiutangperpelanggan/index', [LaporanKartuPiutangPerPelangganController::class, 'index']);
+    Route::resource('laporankartupiutangperpelanggan', LaporanKartuPiutangPerPelangganController::class);
+
+    Route::get('laporankartupiutangperplgdetail/report', [LaporanKartuPiutangPerPlgDetailController::class, 'report'])->name('laporankartupiutangperplgdetail.report');
+    Route::get('laporankartupiutangperplgdetail/index', [LaporanKartuPiutangPerPlgDetailController::class, 'index']);
+    Route::resource('laporankartupiutangperplgdetail', LaporanKartuPiutangPerPlgDetailController::class);
+
+    Route::get('laporanorderpembelian/report', [LaporanOrderPembelianController::class, 'report'])->name('laporanorderpembelian.report');
+    Route::get('laporanorderpembelian/index', [LaporanOrderPembelianController::class, 'index']);
+    Route::resource('laporanorderpembelian', LaporanOrderPembelianController::class);
+
+    Route::get('laporanneraca/report', [LaporanNeracaController::class, 'report'])->name('laporanneraca.report');
+    Route::get('laporanneraca/index', [LaporanNeracaController::class, 'index']);
+    Route::resource('laporanneraca', LaporanNeracaController::class);
     
     Route::get('exportpengeluaranbarang/export', [ExportPengeluaranBarangController::class, 'export'])->name('exportpengeluaranbarang.export');
     Route::get('exportpengeluaranbarang/index', [ExportPengeluaranBarangController::class, 'index']);
@@ -1068,9 +1129,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('exportpembelianbarang/index', [ExportPembelianBarangController::class, 'index']);
     Route::resource('exportpembelianbarang', ExportPembelianBarangController::class);
 
-    Route::get('exportlaporandeposito/export', [ExportLaporanDepositoController::class, 'export'])->name('exportlaporandeposito.export');
-    Route::get('exportlaporandeposito/index', [ExportLaporanDepositoController::class, 'index']);
-    Route::resource('exportlaporandeposito', ExportLaporanDepositoController::class);
+    // Route::get('exportlaporandeposito/export', [ExportLaporanDepositoController::class, 'export'])->name('exportlaporandeposito.export');
+    // Route::get('exportlaporandeposito/index', [ExportLaporanDepositoController::class, 'index']);
+    // Route::resource('exportlaporandeposito', ExportLaporanDepositoController::class);
 
     Route::get('exportlaporankasgantung/export', [ExportLaporanKasGantungController::class, 'export'])->name('exportlaporankasgantung.export');
     Route::get('exportlaporankasgantung/index', [ExportLaporanKasGantungController::class, 'index']);
@@ -1112,6 +1173,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporankasgantung/index', [LaporanKasGantungController::class, 'index']);
     Route::resource('laporankasgantung', LaporanKasGantungController::class);
 
+    Route::get('laporanpiutanggiro/report', [LaporanPiutangGiroController::class, 'report'])->name('laporanpiutanggiro.report');
+    Route::get('laporanpiutanggiro/index', [LaporanPiutangGiroController::class, 'index']);
+    Route::resource('laporanpiutanggiro', LaporanPiutangGiroController::class);
 
     Route::get('laporanbangudangsementara/report', [LaporanBanGudangSementaraController::class, 'report'])->name('laporanbangudangsementara.report');
     Route::get('laporanbangudangsementara/index', [LaporanBanGudangSementaraController::class, 'index']);
@@ -1152,6 +1216,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanaruskas/index', [LaporanArusKasController::class, 'index']);
     Route::resource('laporanaruskas', LaporanArusKasController::class);
 
+    
+    Route::get('karyawan/index', [KaryawanController::class, 'index']);
+    Route::resource('karyawan', KaryawanController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

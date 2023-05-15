@@ -17,7 +17,7 @@
           name: 'id',
           align: 'right',
           width: '70px',
-            search: false,
+          search: false,
           hidden: true
         },
         {
@@ -369,149 +369,167 @@
           name: 'plafondeposito',
         },
         {
-          label: 'PHOTO SUPIR',
-          name: 'photosupir',
-          search: false,
-          align: 'center',
-          formatter: (value, row) => {
-            let images = []
-            if (value) {
-              let files = JSON.parse(value)
+            label: 'PHOTO SUPIR',
+            name: 'photosupir',
+            search: false,
+            align: 'center',
+            formatter: (value, row) => {
+              let images = []
+              if (value) {
+                let files = JSON.parse(value)
 
-              files.forEach(file => {
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/supir/${file}/small`
+                files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}supir/image/supir/${encodeURI(file)}/small`
 
-                images.push(image.outerHTML)
-              });
+                  images.push(image.outerHTML)
+                });
 
-              return images.join(' ')
+                return images.join(' ')
+              }
+              return 'NO PHOTOS'
             }
-            return 'NO PHOTOS'
-          }
-        },
-        {
-          label: 'PHOTO KTP',
-          name: 'photoktp',
-          align: 'center',
-          search: false,
-          formatter: (value, row) => {
-            let images = []
-            if (value) {
-              let files = JSON.parse(value)
+          },
+          {
+            label: 'PHOTO KTP',
+            name: 'photoktp',
+            align: 'center',
+            search: false,
+            formatter: (value, row) => {
+              let images = []
+              if (value) {
+                let files = JSON.parse(value)
 
-              files.forEach(file => {
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/ktp/${file}/small`
+                files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}supir/image/ktp/${file}/small`
 
-                images.push(image.outerHTML)
-              });
+                  images.push(image.outerHTML)
+                });
 
-              return images.join(' ')
+                return images.join(' ')
+              }
+              return 'NO PHOTOS'
             }
-            return 'NO PHOTOS'
-          }
-        },
-        {
-          label: 'PHOTO SIM',
-          name: 'photosim',
-          align: 'center',
-          search: false,
-          formatter: (value, row) => {
-            let images = []
-            if (value) {
-              let files = JSON.parse(value)
+          },
+          {
+            label: 'PHOTO SIM',
+            name: 'photosim',
+            align: 'center',
+            search: false,
+            formatter: (value, row) => {
+              let images = []
+              if (value) {
+                let files = JSON.parse(value)
 
-              files.forEach(file => {
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/sim/${file}/small`
+                files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}supir/image/sim/${file}/small`
 
-                images.push(image.outerHTML)
-              });
+                  images.push(image.outerHTML)
+                });
 
-              return images.join(' ')
+                return images.join(' ')
+              }
+              return 'NO PHOTOS'
             }
-            return 'NO PHOTOS'
-          }
-        },
-        {
-          label: 'PHOTO KK',
-          name: 'photokk',
-          align: 'center',
-          search: false,
-          formatter: (value, row) => {
-            let images = []
-            if (value) {
-              let files = JSON.parse(value)
+          },
+          {
+            label: 'PHOTO KK',
+            name: 'photokk',
+            align: 'center',
+            search: false,
+            formatter: (value, row) => {
+              let images = []
+              if (value) {
+                let files = JSON.parse(value)
 
-              files.forEach(file => {
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/kk/${file}/small`
+                files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}supir/image/kk/${file}/small`
 
-                images.push(image.outerHTML)
-              });
+                  images.push(image.outerHTML)
+                });
 
-              return images.join(' ')
+                return images.join(' ')
+              }
+              return 'NO PHOTOS'
             }
-            return 'NO PHOTOS'
-          }
-        },
-        {
-          label: 'PHOTO SKCK',
-          name: 'photoskck',
-          search: false,
-          align: 'center',
-          formatter: (value, row) => {
-            let images = []
-            if (value) {
-              let files = JSON.parse(value)
+          },
+          {
+            label: 'PHOTO SKCK',
+            name: 'photoskck',
+            search: false,
+            align: 'center',
+            formatter: (value, row) => {
+              let images = []
+              if (value) {
+                let files = JSON.parse(value)
 
-              files.forEach(file => {
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/skck/${file}/small`
+                files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}supir/image/skck/${file}/small`
 
-                images.push(image.outerHTML)
-              });
+                  images.push(image.outerHTML)
+                });
 
-              return images.join(' ')
+                return images.join(' ')
+              }
+              return 'NO PHOTOS'
             }
-            return 'NO PHOTOS'
-          }
-        },
-        {
-          label: 'PHOTO DOMISILI',
-          name: 'photodomisili',
-          search: false,
-          align: 'center',
-          formatter: (value, row) => {
-            let images = []
-            if (value) {
-              let files = JSON.parse(value)
+          },
+          {
+            label: 'PHOTO DOMISILI',
+            name: 'photodomisili',
+            search: false,
+            align: 'center',
+            formatter: (value, row) => {
+              let images = []
+              if (value) {
+                let files = JSON.parse(value)
 
-              files.forEach(file => {
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/domisili/${file}/small`
+                files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}supir/image/domisili/${file}/small`
 
-                images.push(image.outerHTML)
-              });
+                  images.push(image.outerHTML)
+                });
 
-              return images.join(' ')
+                return images.join(' ')
+              }
+              return 'NO PHOTOS'
             }
-            return 'NO PHOTOS'
-          }
-        },
+          },
         {
           label: 'TGL BERHENTI SUPIR',
           name: 'tglberhentisupir',
@@ -653,7 +671,7 @@
         jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

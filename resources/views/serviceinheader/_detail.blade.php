@@ -27,7 +27,7 @@
         colModel: [
             {
               label: 'MEKANIK',
-              name: 'mekanik_id',
+              name: 'karyawan_id',
             },
             {
               label: 'KETERANGAN',
