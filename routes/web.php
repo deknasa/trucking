@@ -1085,6 +1085,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporanpemotonganpinjamandepo', LaporanPemotonganPinjamanDepoController::class);
 
     Route::get('laporanrekapsumbangan/report', [LaporanRekapSumbanganController::class, 'report'])->name('laporanrekapsumbangan.report');
+    Route::get('laporanrekapsumbangan/export', [LaporanRekapSumbanganController::class, 'export'])->name('laporanrekapsumbangan.export');
     Route::get('laporanrekapsumbangan/index', [LaporanRekapSumbanganController::class, 'index']);
     Route::resource('laporanrekapsumbangan', LaporanRekapSumbanganController::class);
 
