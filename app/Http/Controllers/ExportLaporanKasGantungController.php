@@ -33,11 +33,13 @@ class ExportLaporanKasGantungController extends MyController
             'periode' => $request->periode,
         ];
         date_default_timezone_set("Asia/Jakarta");
+        
 
         $monthNum  = intval(substr($request->periode, 0, 2));
+       
         $yearNum  = substr($request->periode,3);
         $monthName = $this->getBulan($monthNum);
-        
+      
         // $responses = Http::withHeaders($request->header())
         //     ->withOptions(['verify' => false])
         //     ->withToken(session('access_token'))
@@ -48,11 +50,14 @@ class ExportLaporanKasGantungController extends MyController
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
+        
         $sheet->setCellValue('A1', 'LAPORAN KAS GANTUNG DIVISI ');
+        
         $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+    
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:J3');
-
+       
         $header_start_row = 4;
         $detail_start_row = 5;
 
@@ -134,6 +139,7 @@ class ExportLaporanKasGantungController extends MyController
         //     $totalNominal += $response_detail['nominal'];
         //     $detail_start_row++;
         // }
+     
        
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);

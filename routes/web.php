@@ -193,7 +193,10 @@ use App\Http\Controllers\ProsesUangJalanSupirHeaderController;
 use App\Http\Controllers\ReportAllController;
 use App\Http\Controllers\ReportNeracaController;
 use App\Http\Controllers\StokPersediaanController;
-
+use App\Http\Controllers\LaporanKartuHutangPerVendorController;
+use App\Http\Controllers\LaporanMutasiKasBankController;
+use App\Http\Controllers\LaporanKartuStokController;
+use App\Http\Controllers\LaporanArusKasController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -1073,6 +1076,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('exportlaporankasgantung/index', [ExportLaporanKasGantungController::class, 'index']);
     Route::resource('exportlaporankasgantung', ExportLaporanKasGantungController::class);
 
+    
+
     Route::get('exportlaporanstok/export', [ExportLaporanStokController::class, 'export'])->name('exportlaporanstok.export');
     Route::get('exportlaporanstok/index', [ExportLaporanStokController::class, 'index']);
     Route::resource('exportlaporanstok', ExportLaporanStokController::class);
@@ -1103,8 +1108,10 @@ Route::middleware(['auth','authorized'])->group(function () {
 
     
     Route::get('laporankasgantung/report', [LaporanKasGantungController::class, 'report'])->name('laporankasgantung.report');
+    Route::get('laporankasgantung/export', [LaporanKasGantungController::class, 'export'])->name('laporankasgantung.export');
     Route::get('laporankasgantung/index', [LaporanKasGantungController::class, 'index']);
     Route::resource('laporankasgantung', LaporanKasGantungController::class);
+
 
     Route::get('laporanbangudangsementara/report', [LaporanBanGudangSementaraController::class, 'report'])->name('laporanbangudangsementara.report');
     Route::get('laporanbangudangsementara/index', [LaporanBanGudangSementaraController::class, 'index']);
@@ -1124,6 +1131,27 @@ Route::middleware(['auth','authorized'])->group(function () {
     
     Route::get('pindahbuku/index', [PindahBukuController::class, 'index']);
     Route::resource('pindahbuku', PindahBukuController::class);
+
+    Route::get('laporankartuhutangpervendor/report', [LaporanKartuHutangPerVendorController::class, 'report'])->name('laporankartuhutangpervendor.report');
+    Route::get('laporankartuhutangpervendor/index', [LaporanKartuHutangPerVendorController::class, 'index']);
+    Route::resource('laporankartuhutangpervendor', LaporanKartuHutangPerVendorController::class);
+
+    Route::get('laporanmutasikasbank/report', [LaporanMutasiKasBankController::class, 'report'])->name('laporanmutasikasbank.report');
+    Route::get('laporanmutasikasbank/index', [LaporanMutasiKasBankController::class, 'index']);
+    Route::resource('laporanmutasikasbank', LaporanMutasiKasBankController::class);
+
+    Route::get('laporanmutasikasbank/export', [LaporanMutasiKasBankController::class, 'export'])->name('laporanmutasikasbank.export');
+    Route::get('laporanmutasikasbank/index', [LaporanMutasiKasBankController::class, 'index']);
+    Route::resource('laporanmutasikasbank', LaporanMutasiKasBankController::class);
+
+    Route::get('laporankartustok/report', [LaporanKartuStokController::class, 'report'])->name('laporankartustok.report');
+    Route::get('laporankartustok/index', [LaporanKartuStokController::class, 'index']);
+    Route::resource('laporankartustok', LaporanKartuStokController::class);
+    
+    Route::get('laporanaruskas/report', [LaporanArusKasController::class, 'report'])->name('laporanaruskas.report');
+    Route::get('laporanaruskas/index', [LaporanArusKasController::class, 'index']);
+    Route::resource('laporanaruskas', LaporanArusKasController::class);
+
 });
 
 Route::patch('format', [FormatController::class, 'update']);
