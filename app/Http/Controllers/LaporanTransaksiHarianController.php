@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Models\Menu;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -11,70 +9,63 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-
-
-class LaporanKeteranganPinjamanSupirController extends MyController
+class LaporanTransaksiHarianController extends MyController
 {
-    public $title = 'Laporan Keterangan Pinjaman Supir';
-
+    public $title = 'Laporan Transaksi Harian';
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Keterangan Pinjaman Supir',
+            'pagename' => 'Menu Utama Laporan Transaksi Harian',
         ];
-
-        return view('laporanketeranganpinjamansupir.index', compact('title'));
+        return view('laporantransaksiharian.index', compact('title'));
     }
-
     public function report(Request $request)
     {
         $detailParams = [
-            'periode' => $request->periode,
-            'jenis' => $request->jenis,
+            'dari' => $request->dari,
+            'sampai' => $request->sampai,
         ];
-
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporanketeranganpinjamansupir/report', $detailParams);
-
+            ->get(config('app.api_url') . 'laporantransaksiharian/report', $detailParams);
         $data = $header['data'];
         $user = Auth::user();
-        return view('reports.laporanketeranganpinjamansupir', compact('data', 'user', 'detailParams'));
+        return view('reports.laporantransaksiharian', compact('data', 'user', 'detailParams'));
     }
     public function export(Request $request): void
     {
         $detailParams = [
-            'periode' => $request->periode,
-            'jenis' => $request->jenis,
+            'dari' => $request->dari,
+            'sampai' => $request->sampai,
         ];
-
+      
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporanketeranganpinjamansupir/export', $detailParams);
+            ->get(config('app.api_url') . 'laporantransaksiharian/export', $detailParams);
 
         $data = $header['data'];
 
-      
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('b1', 'LAPORAN KETERANGAN PINJAMAN SUPIR');
-        $sheet->getStyle("B1")->getFont()->setSize(20)->setBold(true);
-        $sheet->getStyle('B1')->getAlignment()->setHorizontal('center');
+        $sheet->setCellValue('A1', 'LAPORAN TRANSAKSI HARIAN');
+        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
 
         $sheet->setCellValue('A4', 'PERIODE');
         $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
-
-        $sheet->setCellValue('B4', $request->periode);
-        $sheet->setCellValue('B4', ':'." ".$request->periode);
         $sheet->getStyle("B4")->getFont()->setSize(12)->setBold(true);
 
-        $sheet->mergeCells('B1:I3');
+        $sheet->setCellValue('B4',': '. $request->dari." S/D"." ".$request->sampai);
+        $sheet->getStyle("C4")->getFont()->setSize(12)->setBold(true);
+
+
+        $sheet->mergeCells('A1:F3');
 
         $detail_table_header_row = 6;
         $detail_start_row = $detail_table_header_row + 1;
@@ -105,12 +96,16 @@ class LaporanKeteranganPinjamanSupirController extends MyController
 
         $header_columns = [
             [
+                'label' => 'No Bukti',
+                'index' => 'nobukti',
+            ],
+            [
                 'label' => 'Tanggal',
                 'index' => 'tanggal',
             ],
             [
-                'label' => 'No Bukti',
-                'index' => 'nobukti',
+                'label' => 'Akun Pusat',
+                'index' => 'akunpusat',
             ],
             [
                 'label' => 'Keterangan',
@@ -124,11 +119,7 @@ class LaporanKeteranganPinjamanSupirController extends MyController
                 'label' => 'Kredit',
                 'index' => 'kredit',
             ],
-            [
-                'label' => 'Saldo',
-                'index' => 'Saldo',
-            ],
-           
+
         ];
 
         foreach ($header_columns as $detail_columns_index => $detail_column) {
@@ -146,21 +137,20 @@ class LaporanKeteranganPinjamanSupirController extends MyController
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
 
-            $sheet->setCellValue("A$detail_start_row", $response_detail['tanggal']);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['debet']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['kredit']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['Saldo']);
+            $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['tanggal']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['akunpusat']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['debet']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['kredit']);
 
             $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
              $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-             $sheet->getStyle("A$detail_start_row:A$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
-           
+             $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+
 
            $totalKredit += $response_detail['kredit'];
             $totalDebet += $response_detail['debet'];
-            $totalSaldo += $response_detail['Saldo'];
             $detail_start_row++;
         }
 
@@ -168,12 +158,9 @@ class LaporanKeteranganPinjamanSupirController extends MyController
 
        //total
        $total_start_row = $detail_start_row;
-       $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
-       $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':C' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+       $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
+       $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-       $totalDebet = "=SUM(D6:D" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
        $totalKredit = "=SUM(E6:E" . ($detail_start_row-1) . ")";
        $sheet->setCellValue("E$total_start_row", $totalKredit)->getStyle("E$total_start_row")->applyFromArray($style_number);
@@ -202,7 +189,7 @@ class LaporanKeteranganPinjamanSupirController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORAN KETERANGAN PINJAMAN SUPIR' . date('dmYHis');
+        $filename = 'LAPORAN TRANSAKSI HARIAN' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
