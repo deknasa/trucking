@@ -577,7 +577,9 @@
     $('[name=gudang]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').show()
     $('[name=gandengan]').parents('.form-group').show()
-
+    $('[name=gudang]').val('').attr('readonly', false);
+    $('[name=gudang_id]').val('')
+    
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
     $('[name=tradodari]').parents('.form-group').hide()
