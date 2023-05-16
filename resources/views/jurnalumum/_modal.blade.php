@@ -350,9 +350,7 @@
       $('#loader').addClass('d-none')
       $(this).removeAttr('disabled')
     })
-
   }
-
 
   function copyJurnal(id) {
 
