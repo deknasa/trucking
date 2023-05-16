@@ -1,6 +1,11 @@
 @extends('layouts.master')
 
 @section('content')
+<style>
+    .ui-datepicker-calendar {
+        display: none;
+    }
+</style>
 <!-- Grid -->
 <div class="container-fluid">
     <div class="row">
@@ -11,29 +16,27 @@
                 <form id="crudForm">
                     <div class="card-body">
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Bulan<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
-                                    <input type="text" name="dari" class="form-control datepicker">
+                                    <input type="text" name="bulan" class="form-control datepicker">
                                 </div>
                             </div>
-                            <h5 class="mt-3">s/d</h5>
+                        </div>
+                        {{-- <div class="form-group row">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Tahun<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="text" name="sampai" class="form-control datepicker">
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
                                 <a id="btnPreview" class="btn btn-secondary mr-2 ">
                                     <i class="fas fa-sync"></i>
                                     Cetak
-                                </a>
-                                <a id="btnEkspor" class="btn btn-secondary mr-2 ">
-                                    <i class="fas fa-sync"></i>
-                                    Ekspor
                                 </a>
                             </div>
                         </div>
@@ -66,10 +69,43 @@
 
 
     $(document).ready(function() {
+        $('#crudForm').find('[name=bulan]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
+        $(".datepicker").datepicker({
+    dateFormat: "mm-yy",
+    changeMonth: true,
+    changeYear: true,
+    showButtonPanel: true,
+    onClose: function(dateText, inst) {
+      $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+    }
+  });
+//   $('.datepicker').focus(function() {
+//     $(".ui-datepicker-calendar").hide();
+//     $("#ui-datepicker-div").position({
+//       my: "center top",
+//       at: "center bottom",
+//       of: $(this)
+//     });
+//   });
 
-        initDatepicker()
-        $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+  $('.datepicker').on('change', function() {
+    var month = $(this).datepicker('getDate').getMonth() + 1;
+    var year = $(this).datepicker('getDate').getFullYear();
+  });
+
+  $('#crudForm').on('submit', function(e) {
+    e.preventDefault();
+  bulan = $('[name=bulan]').val();
+  
+   
+  });
+  
+        // initSelect2($('#crudForm').find('[name=bulan]'), false)
+        // initSelect2($('#crudForm').find('[name=sampai]'), false)
+
+        // setStatusApprovalOptions($('#crudForm'))
+        // setTabelOptions($('#crudForm'))
+        // $('#crudForm').find('[name=bulan]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
 
         let css_property =
         {
@@ -78,11 +114,7 @@
             "cursor" : "not-allowed",
             "border-color": "rgb(173 180 187)"
         }
-        if (!`{{ $myAuth->hasPermission('laporanrekapsumbangan', 'report') }}`) {
-            $('#btnPreview').prop('disabled', true)
-            $('#btnPreview').css(css_property);
-        }
-        if (!`{{ $myAuth->hasPermission('laporanrekapsumbangan', 'export') }}`) {
+        if (!`{{ $myAuth->hasPermission('laporanaruskas', 'report') }}`) {
             $('#btnPreview').prop('disabled', true)
             $('#btnPreview').css(css_property);
         }
@@ -91,23 +123,11 @@
 
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        let dari = $('#crudForm').find('[name=dari]').val()
+        let bulan = $('#crudForm').find('[name=bulan]').val()
 
-        if (dari != '' && sampai != '') {
+        if (bulan != '' && sampai != '') {
 
-            window.open(`{{ route('laporanrekapsumbangan.report') }}?sampai=${sampai}&dari=${dari}`)
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
-    })
-
-    $(document).on('click', `#btnEkspor`, function(event) {
-        let sampai = $('#crudForm').find('[name=sampai]').val()
-        let dari = $('#crudForm').find('[name=dari]').val()
-
-        if (dari != '' && sampai != '') {
-
-            window.open(`{{ route('laporanrekapsumbangan.export') }}?sampai=${sampai}&dari=${dari}`)
+            window.open(`{{ route('laporanaruskas.report') }}?sampai=${sampai}&bulan=${bulan}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

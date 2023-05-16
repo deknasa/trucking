@@ -20,14 +20,23 @@
                         </div>
 
                         <div class="row">
-
                             <div class="col-sm-6 mt-4">
                                 <a id="btnPreview" class="btn btn-secondary mr-2 ">
                                     <i class="fas fa-sync"></i>
                                     Cetak
                                 </a>
+                                <a id="btnExport" class="btn btn-secondary mr-2 ">
+                                    <i class="fas fa-sync"></i>
+                                    Export
+                                </a>
                             </div>
+                           
+                               
                         </div>
+
+                    
+                         
+                       
 
                     </div>
                 </form>
@@ -73,6 +82,11 @@
             $('#btnPreview').css(css_property);
         }
 
+        if (!`{{ $myAuth->hasPermission('laporankasgantung', 'export') }}`) {
+            $('#btnExport').prop('disabled', true)
+            $('#btnExport').css(css_property);
+        }
+
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
@@ -86,6 +100,16 @@
         }
     })
 
+    $(document).on('click', `#btnExport`, function(event) {
+        let periode = $('#crudForm').find('[name=periode]').val()
+
+        if (periode != '') {
+
+            window.open(`{{ route('laporankasgantung.export') }}?periode=${periode}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
 
 </script>
 @endpush()

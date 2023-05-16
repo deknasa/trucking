@@ -66,6 +66,14 @@ class LaporanKeteranganPinjamanSupirController extends MyController
         $sheet->setCellValue('b1', 'LAPORAN KETERANGAN PINJAMAN SUPIR');
         $sheet->getStyle("B1")->getFont()->setSize(20)->setBold(true);
         $sheet->getStyle('B1')->getAlignment()->setHorizontal('center');
+
+        $sheet->setCellValue('A4', 'PERIODE');
+        $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
+
+        $sheet->setCellValue('B4', $request->periode);
+        $sheet->setCellValue('B4', ':'." ".$request->periode);
+        $sheet->getStyle("B4")->getFont()->setSize(12)->setBold(true);
+
         $sheet->mergeCells('B1:I3');
 
         $detail_table_header_row = 6;

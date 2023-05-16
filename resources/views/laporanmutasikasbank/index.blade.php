@@ -31,10 +31,6 @@
                                     <i class="fas fa-sync"></i>
                                     Cetak
                                 </a>
-                                <a id="btnEkspor" class="btn btn-secondary mr-2 ">
-                                    <i class="fas fa-sync"></i>
-                                    Ekspor
-                                </a>
                             </div>
                         </div>
 
@@ -78,11 +74,7 @@
             "cursor" : "not-allowed",
             "border-color": "rgb(173 180 187)"
         }
-        if (!`{{ $myAuth->hasPermission('laporanrekapsumbangan', 'report') }}`) {
-            $('#btnPreview').prop('disabled', true)
-            $('#btnPreview').css(css_property);
-        }
-        if (!`{{ $myAuth->hasPermission('laporanrekapsumbangan', 'export') }}`) {
+        if (!`{{ $myAuth->hasPermission('laporanmutasikasbank', 'report') }}`) {
             $('#btnPreview').prop('disabled', true)
             $('#btnPreview').css(css_property);
         }
@@ -95,19 +87,7 @@
 
         if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporanrekapsumbangan.report') }}?sampai=${sampai}&dari=${dari}`)
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
-    })
-
-    $(document).on('click', `#btnEkspor`, function(event) {
-        let sampai = $('#crudForm').find('[name=sampai]').val()
-        let dari = $('#crudForm').find('[name=dari]').val()
-
-        if (dari != '' && sampai != '') {
-
-            window.open(`{{ route('laporanrekapsumbangan.export') }}?sampai=${sampai}&dari=${dari}`)
+            window.open(`{{ route('laporanmutasikasbank.report') }}?sampai=${sampai}&dari=${dari}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

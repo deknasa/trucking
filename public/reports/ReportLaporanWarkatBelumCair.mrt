@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "370aaa493f04d9516661536f28c04542",
+  "ReportGuid": "7081db79507a0fcdc02f309914ee5401",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuHutangPerVendorDetail.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanWarkatBelumCair.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1683601815000+0700)/",
+  "ReportChanged": "/Date(1683885825000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -279,13 +279,13 @@
             "0": {
               "Ident": "StiText",
               "Name": "Text2",
-              "ClientRectangle": "88,0,34,6",
+              "ClientRectangle": "62,0,90,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "TAS PUSAT"
+                "Value": "PT.Transporindo Agung Sejahtera"
               },
               "HorAlignment": "Center",
               "Font": ";14;Bold;",
@@ -298,13 +298,13 @@
               "Ident": "StiText",
               "Name": "Text3",
               "Guid": "829fd5107935fade3f2d14b62b8287de",
-              "ClientRectangle": "78,8,62,6",
+              "ClientRectangle": "84,8,48,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Laporan Warkat Belum Cair"
+                "Value": "Laporan Hutang Giro"
               },
               "Font": ";13;Bold;",
               "Border": ";;;;;;;solid:Black",
@@ -497,6 +497,7 @@
               "Ident": "StiText",
               "Name": "Text1",
               "ClientRectangle": "6,2,22,6",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -511,6 +512,7 @@
               "Ident": "StiText",
               "Name": "Text8",
               "ClientRectangle": "32,2,30,6",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -525,6 +527,7 @@
               "Ident": "StiText",
               "Name": "Text9",
               "ClientRectangle": "62,2,24,6",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -545,6 +548,7 @@
               "Ident": "StiText",
               "Name": "Text10",
               "ClientRectangle": "90,2,26,6",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -559,6 +563,7 @@
               "Ident": "StiText",
               "Name": "Text15",
               "ClientRectangle": "114,2,88,6",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -639,7 +644,7 @@
               "Name": "Text31",
               "Guid": "8e350908862fabcd15455b2e742aeffb",
               "ClientRectangle": "16,34,30,6",
-              "ComponentPlacement": "gf.GroupFooterBand2",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -661,7 +666,7 @@
               "Name": "Text32",
               "Guid": "fbdeba3acc2635b2b1c373286ae6fe6d",
               "ClientRectangle": "82.04,18,30,6",
-              "ComponentPlacement": "gf.GroupFooterBand2",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -683,7 +688,7 @@
               "Name": "Text33",
               "Guid": "1cc17ed88f87820fbb9e3cf1ca75173a",
               "ClientRectangle": "80,34,30,6",
-              "ComponentPlacement": "gf.GroupFooterBand2",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -706,7 +711,7 @@
               "Name": "Text34",
               "Guid": "40d5eba6b98b74cd05d8b144c6ab9682",
               "ClientRectangle": "149.85,18,30,6",
-              "ComponentPlacement": "gf.GroupFooterBand2",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -728,7 +733,7 @@
               "Name": "Text35",
               "Guid": "8c8bc4fe1f2e73eb948ff5c01abc762d",
               "ClientRectangle": "144.01,34,44,6",
-              "ComponentPlacement": "gf.GroupFooterBand2",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -750,7 +755,7 @@
               "Name": "Text30",
               "Guid": "6b95275e9be2c611826596ea3a65a11b",
               "ClientRectangle": "16,16,30,6",
-              "ComponentPlacement": "gf.GroupFooterBand2",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },

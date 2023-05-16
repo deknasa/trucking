@@ -37,7 +37,6 @@
                                 </a>
                             </div>
                         </div>
-
                     </div>
                 </form>
             </div>
@@ -66,10 +65,12 @@
 
 
     $(document).ready(function() {
+        initLookup()
 
         initDatepicker()
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
 
         let css_property =
         {
@@ -78,15 +79,14 @@
             "cursor" : "not-allowed",
             "border-color": "rgb(173 180 187)"
         }
-        if (!`{{ $myAuth->hasPermission('laporanrekapsumbangan', 'report') }}`) {
+        if (!`{{ $myAuth->hasPermission('laporantransaksiharian', 'report') }}`) {
             $('#btnPreview').prop('disabled', true)
             $('#btnPreview').css(css_property);
         }
-        if (!`{{ $myAuth->hasPermission('laporanrekapsumbangan', 'export') }}`) {
-            $('#btnPreview').prop('disabled', true)
-            $('#btnPreview').css(css_property);
+        if (!`{{ $myAuth->hasPermission('laporantransaksiharian', 'export') }}`) {
+            $('#btnEkspor').prop('disabled', true)
+            $('#btnEkspor').css(css_property);
         }
-
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
@@ -95,7 +95,7 @@
 
         if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporanrekapsumbangan.report') }}?sampai=${sampai}&dari=${dari}`)
+            window.open(`{{ route('laporantransaksiharian.report') }}?sampai=${sampai}&dari=${dari}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -107,14 +107,61 @@
 
         if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporanrekapsumbangan.export') }}?sampai=${sampai}&dari=${dari}`)
+            window.open(`{{ route('laporantransaksiharian.export') }}?sampai=${sampai}&dari=${dari}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
     })
 
 
+    function initLookup()
+    {
+        $('.supplierdari-lookup').lookup({
+            title: 'supplier dari Lookup',
+            fileName: 'supplier',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (supplier, element) => {
+                $('#crudForm [name=supplierdari_id]').first().val(supplier.id)
+                element.val(supplier.namasupplier)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                element.val('')
+                $(`#crudForm [name="supplierdari_id"]`).first().val('')
+                element.data('currentValue', element.val())
+            }
+        })
 
+        $('.suppliersampai-lookup').lookup({
+            title: 'supplier sampai Lookup',
+            fileName: 'supplier',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (supplier, element) => {
+                $('#crudForm [name=suppliersampai_id]').first().val(supplier.id)
+                element.val(supplier.namasupplier)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                element.val('')
+                $(`#crudForm [name="suppliersampai_id"]`).first().val('')
+                element.data('currentValue', element.val())
+            }
+        })
+    }
 </script>
 @endpush()
 @endsection

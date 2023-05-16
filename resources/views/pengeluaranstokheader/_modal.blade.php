@@ -411,7 +411,7 @@
           $('#jqGrid').jqGrid('setGridParam', {
             postData: {pengeluaranheader_id: response.data.pengeluaranstok_id},
             page: response.data.page
-          })
+          }).trigger('reloadGrid')
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
