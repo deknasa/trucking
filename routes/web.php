@@ -1065,6 +1065,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporanhutangbbm', LaporanHutangBBMController::class);
 
     Route::get('laporantriptrado/report', [LaporanTripTradoController::class, 'report'])->name('laporantriptrado.report');
+    Route::get('laporantriptrado/export', [LaporanTripTradoController::class, 'export'])->name('laporantriptrado.export');
     Route::get('laporantriptrado/index', [LaporanTripTradoController::class, 'index']);
     Route::resource('laporantriptrado', LaporanTripTradoController::class);
 
