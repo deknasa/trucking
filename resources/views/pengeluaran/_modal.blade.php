@@ -517,7 +517,6 @@
             deletePengeluaran(Id)
           }
         }
-
       }
     })
   }

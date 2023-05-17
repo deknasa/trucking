@@ -116,9 +116,6 @@
         }
     })
 
-
-
-
     const setJenisKaryawanOptions = function(relatedForm) {
         // return new Promise((resolve, reject) => {
         // relatedForm.find('[name=approve]').empty()

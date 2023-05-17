@@ -560,6 +560,46 @@
                   }
                 }
               });
+            } else if (KodePengeluaranId == "KBBM") {
+              console.log(error)
+              errors = error.responseJSON.errors
+              $(".ui-state-error").removeClass("ui-state-error");
+              $.each(errors, (index, error) => {
+                let indexes = index.split(".");
+                let angka = indexes[1]
+                if (index == 'tde') {
+                  return showDialog(error);
+                } else {
+
+                  selectedRowsDeposito = $("#tablePelunasanbbm").getGridParam("selectedRowIds");
+                  row = parseInt(selectedRowsDeposito[angka]) - 1;
+                  let element;
+                  if (indexes[0] == 'bank' || indexes[0] == 'pengeluarantrucking') {
+                    if (indexes.length > 1) {
+                      element = form.find(`[name="${indexes[0]}[]"]`)[row];
+                    } else {
+                      element = form.find(`[name="${indexes[0]}"]`)[0];
+                    }
+
+                    if ($(element).length > 0 && !$(element).is(":hidden")) {
+                      $(element).addClass("is-invalid");
+                      $(`
+                      <div class="invalid-feedback">
+                      ${error[0].toLowerCase()}
+                      </div>
+                      `).appendTo($(element).parent());
+                    } else {
+                      return showDialog(error);
+                    }
+                  } else {
+
+                    element = $(`#tablePelunasanbbm tr#${parseInt(selectedRowsDeposito[angka])}`).find(`td[aria-describedby="tablePelunasanbbm_${indexes[0]}"]`)
+                    $(element).addClass("ui-state-error");
+                    console.log(error)
+                    $(element).attr("title", error[0].toLowerCase())
+                  }
+                }
+              });
             } else {
               setErrorMessages(form, error.responseJSON.errors);
             }
