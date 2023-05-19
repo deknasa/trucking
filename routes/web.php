@@ -1062,6 +1062,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporanpenyesuaianbarang', LaporanPenyesuaianBarangController::class);
     
     Route::get('laporanhutangbbm/report', [LaporanHutangBBMController::class, 'report'])->name('laporanhutangbbm.report');
+    Route::get('laporanhutangbbm/export', [LaporanHutangBBMController::class, 'export'])->name('laporanhutangbbm.export');
     Route::get('laporanhutangbbm/index', [LaporanHutangBBMController::class, 'index']);
     Route::resource('laporanhutangbbm', LaporanHutangBBMController::class);
 
