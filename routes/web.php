@@ -863,6 +863,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('gajisupirheader/report', [GajiSupirHeaderController::class, 'report'])->name('gajisupirheader.report');
     Route::resource('gajisupirheader', GajiSupirHeaderController::class);
 
+    Route::get('gajisupirdetail/absensi/grid', [GajiSupirDetailController::class, 'absensiGrid']);
     Route::get('gajisupirdetail/jurnal/grid', [GajiSupirDetailController::class, 'jurnalGrid']);
     Route::get('gajisupirdetail/potsemua/grid', [GajiSupirDetailController::class, 'potsemuaGrid']);
     Route::get('gajisupirdetail/potpribadi/grid', [GajiSupirDetailController::class, 'potpribadiGrid']);

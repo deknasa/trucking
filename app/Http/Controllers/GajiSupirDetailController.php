@@ -46,6 +46,10 @@ class GajiSupirDetailController extends Controller
     {
         return view('gajisupirheader._deposito');
     }
+    public function absensiGrid()
+    {
+        return view('gajisupirheader._absensi');
+    }
     public function detailGrid()
     {
         return view('gajisupirheader._detail');
