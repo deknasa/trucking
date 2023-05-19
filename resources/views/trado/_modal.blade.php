@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -25,7 +25,7 @@
                   <input type="text" name="kodetrado" class="form-control">
                 </div>
               </div>
-              
+
               <div class="form-group col-sm-6 row">
                 <label class="col-sm-4 col-form-label">STATUS AKTIF <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
@@ -38,7 +38,7 @@
 
 
             <div class="row">
-              
+
               <div class="form-group col-sm-6 row">
                 <label class="col-sm-4 col-form-label">Tahun <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
@@ -368,11 +368,11 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deleteTrado(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteTrado(Id)
+        }
 
       }
     })
@@ -381,6 +381,8 @@
 
   function createTrado() {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.find('[name]').removeAttr('disabled')
     form.trigger('reset')
@@ -391,9 +393,10 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Trado')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+
+
 
 
     Promise
@@ -401,9 +404,17 @@
         setStatusAktifOptions(form),
         setStatusJenisPlatOptions(form),
         setStatusGerobak(form)
+
       ])
       .then(() => {
         showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+
       })
 
     setFormBindKeys(form)
@@ -417,6 +428,8 @@
   function editTrado(id) {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.find('[name]').removeAttr('disabled')
     form.data('action', 'edit')
     form.trigger('reset')
@@ -425,15 +438,17 @@
     Simpan
   `)
     $('#crudModalTitle').text('Edit Trado')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+
+
 
     Promise
       .all([
         setStatusAktifOptions(form),
         setStatusJenisPlatOptions(form),
         setStatusGerobak(form)
+
       ])
       .then(() => {
         showTrado(form, id)
@@ -445,11 +460,21 @@
             initSelect2()
             form.find('[name]').removeAttr('disabled')
           })
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
+
+
   }
 
   function deleteTrado(id) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -458,21 +483,27 @@
     Hapus
   `)
     $('#crudModalTitle').text('Delete Trado')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+
+
 
     Promise
       .all([
         setStatusAktifOptions(form),
         setStatusJenisPlatOptions(form),
         setStatusGerobak(form)
+
       ])
       .then(() => {
         showTrado(form, id)
           .then(trado => {
             setFormBindKeys(form)
             initDropzone(form.data('action'), trado)
+            initLookup()
+            initDatepicker()
+            initSelect2()
+            form.find('[name]').removeAttr('disabled')
 
             form.find('select').each((index, select) => {
               let element = $(select)
@@ -485,6 +516,13 @@
             form.find('[name]').attr('disabled', 'disabled').css({
               background: '#fff'
             })
+
+          })
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
           })
       })
   }
@@ -604,7 +642,7 @@
   function assignAttachment(dropzone, data) {
     const paramName = dropzone.options.paramName
     const type = paramName.substring(5)
-    
+
     if (data[paramName] == '') {
       $('.dropzone').each((index, element) => {
         if (!element.dropzone) {
@@ -768,28 +806,29 @@
   }
 
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}trado/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          console.log(value)
-          let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}trado/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            console.log(value)
+            let element = form.find(`[name="${index}"]`)
+            // let element = form.find(`[name="statusaktif"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-
-
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 </script>
