@@ -20,12 +20,14 @@
               <li><a href="#potpribadi-tab">Pot. Pribadi</a></li>
               <li><a href="#deposito-tab">Deposito</a></li>
               <li><a href="#jurnal-tab">Jurnal BBM</a></li>
+              <li><a href="#absensi-tab">Absensi</a></li>
             </ul>
             <div id="detail-tab"></div>
             <div id="potsemua-tab"></div>
             <div id="potpribadi-tab"></div>
             <div id="deposito-tab"></div>
             <div id="jurnal-tab"></div>
+            <div id="absensi-tab"></div>
           </div>
         </div>
       </div>
@@ -40,6 +42,7 @@
 @include('gajisupirheader._potpribadi')
 @include('gajisupirheader._deposito')
 @include('gajisupirheader._jurnal')
+@include('gajisupirheader._absensi')
 
 @push('scripts')
 <script>
@@ -329,6 +332,11 @@
               },
             }).trigger('reloadGrid');
             $('#jurnalGrid').jqGrid('setGridParam', {
+              postData: {
+                nobukti: 0,
+              },
+            }).trigger('reloadGrid');
+            $('#absensiGrid').jqGrid('setGridParam', {
               postData: {
                 nobukti: 0,
               },
