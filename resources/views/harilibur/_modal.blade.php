@@ -5,7 +5,7 @@
                 <div class="modal-header">
                     <p class="modal-title" id="crudModalTitle"></p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        
+
                     </button>
                 </div>
                 <form action="" method="post">
@@ -192,6 +192,8 @@
     function createHariLibur() {
         let form = $('#crudForm')
 
+        $('.modal-loader').removeClass('d-none')
+
         form.trigger('reset')
         form.find('#btnSubmit').html(`
             <i class="fa fa-save"></i>
@@ -200,22 +202,32 @@
         form.data('action', 'add')
         form.find(`.sometimes`).show()
         $('#crudModalTitle').text('Create Hari Libur')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         $('#crudForm').find('[name=tgl]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
+
         Promise
             .all([
                 setStatusAktifOptions(form)
+
             ])
             .then(() => {
                 showDefault(form)
+                    .then(() => {
+                        $('#crudModal').modal('show')
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
             })
     }
 
     function editHariLibur(id) {
         let form = $('#crudForm')
+
+        $('.modal-loader').removeClass('d-none')
+
 
         form.data('action', 'edit')
         form.trigger('reset')
@@ -224,21 +236,32 @@
             Simpan
         `)
         $('#crudModalTitle').text('Edit Hari Libur')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
+
+
 
         Promise
             .all([
                 setStatusAktifOptions(form)
+
             ])
             .then(() => {
                 showHariLibur(form, id)
+                    .then(() => {
+                        $('#crudModal').modal('show')
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
             })
     }
 
     function deleteHariLibur(id) {
         let form = $('#crudForm')
+
+        $('.modal-loader').removeClass('d-none')
+
 
         form.data('action', 'delete')
         form.trigger('reset')
@@ -247,16 +270,22 @@
             Hapus
         `)
         $('#crudModalTitle').text('Delete Hari Libur')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
         Promise
             .all([
                 setStatusAktifOptions(form)
+
             ])
             .then(() => {
                 showHariLibur(form, id)
+                    .then(() => {
+                        $('#crudModal').modal('show')
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
             })
     }
 
@@ -323,59 +352,62 @@
     }
 
     function showHariLibur(form, id) {
-        $.ajax({
-            url: `${apiUrl}harilibur/${id}`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-                $.each(response.data, (index, value) => {
-                    let element = form.find(`[name="${index}"]`)
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}harilibur/${id}`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    $.each(response.data, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
 
-                    if (element.is('select')) {
-                        element.val(value).trigger('change')
-                    } else if (element.hasClass('datepicker')) {
-                        element.val(dateFormat(value))
-                    } else {
-                        element.val(value)
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else if (element.hasClass('datepicker')) {
+                            element.val(dateFormat(value))
+                        } else {
+                            element.val(value)
+                        }
+                    })
+                    console.log(form.data('action'))
+                    if (form.data('action') === 'delete') {
+                        form.find('[name]').addClass('disabled')
+                        initDisabled()
                     }
-                })
-                console.log(form.data('action'))
-                if (form.data('action') === 'delete') {
-                    form.find('[name]').addClass('disabled')
-                    initDisabled()
+                    resolve()
                 }
-            }
+            })
         })
     }
 
     function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}harilibur/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          console.log(value)
-           let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}harilibur/default`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    $.each(response.data, (index, value) => {
+                        console.log(value)
+                        let element = form.find(`[name="${index}"]`)
+                        // let element = form.find(`[name="statusaktif"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } 
-          else {
-            element.val(value)
-          }
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else {
+                            element.val(value)
+                        }
+                    })
+                    resolve()
+                }
+            })
         })
-        
-       
-      }
-    })
-  }
+    }
 </script>
 @endpush()

@@ -205,14 +205,18 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        showDefault(form)
+        setStatusAktifOptions(form)
+
       ])
       .then(() => {
-        $('#crudModal').modal('show')
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
+        showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+
       })
   }
 
@@ -234,15 +238,19 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        showCabang(form, cabangId)
+        setStatusAktifOptions(form)
+
       ])
       .then(() => {
-        $('#crudModal').modal('show')
+        showCabang(form, cabangId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
-      })
+
   }
 
   function deleteCabang(cabangId) {
@@ -263,14 +271,17 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        showCabang(form, cabangId)
+        setStatusAktifOptions(form)
+
       ])
       .then(() => {
-        $('#crudModal').modal('show')
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
+        showCabang(form, cabangId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -368,28 +379,29 @@
   }
 
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}cabang/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          console.log(value)
-          let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}cabang/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            console.log(value)
+            let element = form.find(`[name="${index}"]`)
+            // let element = form.find(`[name="statusaktif"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-
-
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 </script>
