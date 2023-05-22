@@ -223,6 +223,7 @@
 
       $.each(selectedRows, function(index, value) {
         let selectedNominal = $("#tablePengembalian").jqGrid("getCell", value, "nominal")
+      
         data.push({
           name: 'nominal[]',
           value: (selectedNominal != '') ? parseFloat(selectedNominal.replaceAll(',', '')) : 0

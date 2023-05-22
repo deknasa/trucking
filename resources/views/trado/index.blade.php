@@ -551,8 +551,7 @@
             search: false,
             formatter: (value, row) => {
               let images = []
-
-              if (value) {
+              if (value.length) {
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
@@ -562,12 +561,11 @@
                   let image = new Image()
                   image.width = 25
                   image.height = 25
-                  image.src = `${apiUrl}trado/image/stnk/${encodeURI(file)}/small`
-
+                  image.src = `${apiUrl}trado/image/stnk/${encodeURI(file)}/small/show`
                   images.push(image.outerHTML)
                 });
 
-                return 'NO PHOTOS'
+                return images.join(' ')
               }
 
               return 'NO PHOTOS'
@@ -588,10 +586,11 @@
                   if(file == ''){
                     file = 'no-image'
                   }
+                  
                   let image = new Image()
                   image.width = 25
                   image.height = 25
-                  image.src = `${apiUrl}trado/image/bpkb/${encodeURI(file)}/small`
+                  image.src = `${apiUrl}trado/image/bpkb/${encodeURI(file)}/small/show`
 
                   images.push(image.outerHTML)
                 });
@@ -620,7 +619,7 @@
                   let image = new Image()
                   image.width = 25
                   image.height = 25
-                  image.src = `${apiUrl}trado/image/trado/${encodeURI(file)}/small`
+                  image.src = `${apiUrl}trado/image/trado/${encodeURI(file)}/small/show`
 
                   images.push(image.outerHTML)
                 });

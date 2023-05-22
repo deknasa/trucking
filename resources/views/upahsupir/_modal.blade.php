@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -15,7 +15,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Parent 
+                  Parent
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -27,7 +27,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Tarif <span class="text-danger">*</span>
+                  Tarif
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -144,7 +144,7 @@
                 </div>
               </div>
             </div>
-                  
+
             <div class="table-responsive table-scroll ">
               <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="width:1500px">
                 <thead class="table-secondary">
@@ -240,9 +240,9 @@
   let dropzones = []
 
   $(document).ready(function() {
-    
+
     $("#crudForm [name]").attr("autocomplete", "off");
-    
+
     $(document).on('click', '#addRow', function(event) {
       addRow()
     });
@@ -288,7 +288,7 @@
           formData.append(`${paramName}[${index}]`, file)
         })
       })
-      
+
       formData.delete(`nominalsupir[]`);
       $('#crudForm').find(`[name="nominalsupir[]"]`).each((index, element) => {
         formData.append(`nominalsupir[]`, AutoNumeric.getNumber($(`#crudForm [name="nominalsupir[]"]`)[index]))
@@ -296,30 +296,30 @@
 
       formData.delete(`nominalkenek[]`);
       $('#crudForm').find(`[name="nominalkenek[]"]`).each((index, element) => {
-        formData.append('nominalkenek[]',AutoNumeric.getNumber($(`#crudForm [name="nominalkenek[]"]`)[index]))
+        formData.append('nominalkenek[]', AutoNumeric.getNumber($(`#crudForm [name="nominalkenek[]"]`)[index]))
       })
 
       formData.delete(`nominalkomisi[]`);
       $('#crudForm').find(`[name="nominalkomisi[]"]`).each((index, element) => {
         // data.filter((row) => row.name === 'nominalkomisi[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalkomisi[]"]`)[index])
-        formData.append('nominalkomisi[]',AutoNumeric.getNumber($(`#crudForm [name="nominalkomisi[]"]`)[index]))
+        formData.append('nominalkomisi[]', AutoNumeric.getNumber($(`#crudForm [name="nominalkomisi[]"]`)[index]))
       })
 
       formData.delete(`nominaltol[]`);
       $('#crudForm').find(`[name="nominaltol[]"]`).each((index, element) => {
         // data.filter((row) => row.name === 'nominaltol[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaltol[]"]`)[index])
-        formData.append('nominaltol[]',AutoNumeric.getNumber($(`#crudForm [name="nominaltol[]"]`)[index]))
+        formData.append('nominaltol[]', AutoNumeric.getNumber($(`#crudForm [name="nominaltol[]"]`)[index]))
       })
 
       formData.delete(`liter[]`);
       $('#crudForm').find(`[name="liter[]"]`).each((index, element) => {
         // data.filter((row) => row.name === 'liter[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="liter[]"]`)[index])
-        formData.append('liter[]',AutoNumeric.getNumber($(`#crudForm [name="liter[]"]`)[index]))
+        formData.append('liter[]', AutoNumeric.getNumber($(`#crudForm [name="liter[]"]`)[index]))
       })
 
       $('#crudForm').find(`[name="jarak"]`).each((index, element) => {
         // data.filter((row) => row.name === 'jarak')[index].value = AutoNumeric.getNumber($(`#crudForm [name="jarak`)[index])
-        formData.append('jarak',AutoNumeric.getNumber($(`#crudForm [name="jarak`)[index]))
+        formData.append('jarak', AutoNumeric.getNumber($(`#crudForm [name="jarak`)[index]))
       })
 
       formData.append('sortIndex', $('#jqGrid').getGridParam().sortname)
@@ -328,7 +328,7 @@
       formData.append('indexRow', indexRow)
       formData.append('page', page)
       formData.append('limit', limit)
-      
+
       switch (action) {
         case 'add':
           method = 'POST'
@@ -371,10 +371,10 @@
             page: response.data.page
           }).trigger('reloadGrid');
 
-          if(id == 0){
+          if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
-          
+
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
           }
@@ -483,16 +483,16 @@
 
     $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglakhirberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    
+
     Promise
       .all([
         setStatusAktifOptions(form),
         setStatusLuarKotaOptions(form)
       ])
       .then(() => {
-          showDefault(form)
-          initDropzone(form.data('action'))
-          initAutoNumeric(form.find(`[name="jarak"]`))
+        showDefault(form)
+        initDropzone(form.data('action'))
+        initAutoNumeric(form.find(`[name="jarak"]`))
 
       })
   }
@@ -519,9 +519,9 @@
       ])
       .then(() => {
         showUpahSupir(form, id)
-        .then((upahsupir) => {
-          initDropzone(form.data('action'), upahsupir)
-        })
+          .then((upahsupir) => {
+            initDropzone(form.data('action'), upahsupir)
+          })
       })
   }
 
@@ -547,9 +547,9 @@
       ])
       .then(() => {
         showUpahSupir(form, id)
-        .then((upahsupir) => {
-          initDropzone(form.data('action'), upahsupir)
-        })
+          .then((upahsupir) => {
+            initDropzone(form.data('action'), upahsupir)
+          })
       })
   }
 
@@ -603,21 +603,40 @@
   function assignAttachment(dropzone, data) {
     const paramName = dropzone.options.paramName
     const type = paramName.substring(5)
+    if (data[paramName] == '') {
+      $('.dropzone').each((index, element) => {
+        if (!element.dropzone) {
+          let newDropzone = new Dropzone(element, {
+            url: 'test',
+            autoProcessQueue: false,
+            addRemoveLinks: true,
+            acceptedFiles: 'image/*',
+            paramName: $(element).data('field'),
+            init: function() {
+              dropzones.push(this)
+            }
+          })
+        }
 
-    let files = JSON.parse(data[paramName])
-
-    files.forEach((file) => {
-      getImgURL(`${apiUrl}upahsupir/${file}/ori`, (fileBlob) => {
-        let imageFile = new File([fileBlob], file, {
-          type: 'image/jpeg',
-          lastModified: new Date().getTime()
-        }, 'utf-8')
-
-        dropzone.options.addedfile.call(dropzone, imageFile);
-        dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}upahsupir/${file}/ori`);
-        dropzone.files.push(imageFile)
+        element.dropzone.removeAllFiles()
       })
-    })
+    } else {
+      let files = JSON.parse(data[paramName])
+
+      files.forEach((file) => {
+        getImgURL(`${apiUrl}upahsupir/${file}/ori`, (fileBlob) => {
+          let imageFile = new File([fileBlob], file, {
+            type: 'image/jpeg',
+            lastModified: new Date().getTime()
+          }, 'utf-8')
+          if (fileBlob.type != 'text/html') {
+            dropzone.options.addedfile.call(dropzone, imageFile);
+            dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}upahsupir/${file}/ori`);
+            dropzone.files.push(imageFile)
+          }
+        })
+      })
+    }
   }
 
   const setStatusLuarKotaOptions = function(relatedForm) {
@@ -695,7 +714,7 @@
       })
     })
   }
-  
+
   function showUpahSupir(form, userId, parrent = null) {
     $('#detailList tbody').html('')
     return new Promise((resolve, reject) => {
@@ -711,15 +730,15 @@
             let element = form.find(`[name="${index}"]`).not(':file')
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } else if ((index == 'parent_id') && parrent || (index == 'id') && parrent ) {
+            } else if ((index == 'parent_id') && parrent || (index == 'id') && parrent) {
               console.log('parrent');
             } else if (element.hasClass('datepicker')) {
               element.val(dateFormat(value))
             } else {
               element.val(value)
             }
-            
-    
+
+
             if (index == 'kotadari') {
               element.data('current-value', value)
             }
@@ -729,7 +748,13 @@
             if (index == 'zona') {
               element.data('current-value', value)
             }
-    
+            if (index == 'parent') {
+              element.data('current-value', value)
+            }
+            if (index == 'tarif') {
+              element.data('current-value', value)
+            }
+
           })
           initAutoNumeric(form.find(`[name="jarak"]`))
           $.each(response.detail, (index, detail) => {
@@ -763,7 +788,7 @@
                 
               </tr>
             `)
-    
+
             detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
             detailRow.find(`[name="container[]"]`).val(detail.container)
             detailRow.find(`[name="statuscontainer_id[]"]`).val(detail.statuscontainer_id)
@@ -773,9 +798,9 @@
             detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
             detailRow.find(`[name="nominaltol[]"]`).val(detail.nominaltol)
             detailRow.find(`[name="liter[]"]`).val(detail.liter);
-    
+
             $('#detailList tbody').append(detailRow)
-    
+
             initAutoNumeric(detailRow.find('.autonumeric'))
             setNominalSupir()
             setNominalKenek()
@@ -785,7 +810,7 @@
           setuprowshow(userId);
 
           setRowNumbers()
-          
+
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
@@ -796,6 +821,7 @@
       })
     })
   }
+
   function getImgURL(url, callback) {
     var xhr = new XMLHttpRequest();
     xhr.onload = function() {
@@ -817,22 +843,21 @@
       },
       success: response => {
         $.each(response.data, (index, value) => {
-           let element = form.find(`[name="${index}"]`)
+          let element = form.find(`[name="${index}"]`)
           // let element = form.find(`[name="statusaktif"]`)
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } 
-          else {
+          } else {
             element.val(value)
           }
         })
-        
-       
+
+
       }
     })
   }
-  
+
   function addRow() {
     let detailRow = $(`
       <tr>
@@ -873,10 +898,10 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (container, element) => {
         $(`#crudForm [name="container_id[]"]`).last().val(container.id)
         element.val(container.keterangan)
@@ -898,10 +923,10 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (statuscontainer, element) => {
         $(`#crudForm [name="statuscontainer_id[]"]`).last().val(statuscontainer.id)
         element.val(statuscontainer.keterangan)
@@ -924,16 +949,16 @@
 
   function setUpRow() {
     $.ajax({
-        url: `${apiUrl}upahsupirrincian/setuprow`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.detail, (index, detail) => {
-            
-            let detailRow = $(`
+      url: `${apiUrl}upahsupirrincian/setuprow`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.detail, (index, detail) => {
+
+          let detailRow = $(`
             <tr>
               <td></td>
               <td>
@@ -962,46 +987,47 @@
               
             </tr>
             `)
-            detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
-            detailRow.find(`[name="container[]"]`).val(detail.container)
-            detailRow.find(`[name="statuscontainer_id[]"]`).val(detail.statuscontainer_id)
-            detailRow.find(`[name="statuscontainer[]"]`).val(detail.statuscontainer)
-            detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
-            detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
-            detailRow.find(`[name="nominalkenek[]"]`).val(detail.nominalkenek)
-            detailRow.find(`[name="nominalkenek[]"]`).val(detail.nominalkenek)
-            detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
-            detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
-            detailRow.find(`[name="nominaltol[]"]`).val(detail.nominaltol)
-            detailRow.find(`[name="nominaltol[]"]`).val(detail.nominaltol)
-            detailRow.find(`[name="liter[]"]`).val(detail.liter)
-            detailRow.find(`[name="liter[]"]`).val(detail.liter)
+          detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+          detailRow.find(`[name="container[]"]`).val(detail.container)
+          detailRow.find(`[name="statuscontainer_id[]"]`).val(detail.statuscontainer_id)
+          detailRow.find(`[name="statuscontainer[]"]`).val(detail.statuscontainer)
+          detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
+          detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
+          detailRow.find(`[name="nominalkenek[]"]`).val(detail.nominalkenek)
+          detailRow.find(`[name="nominalkenek[]"]`).val(detail.nominalkenek)
+          detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
+          detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
+          detailRow.find(`[name="nominaltol[]"]`).val(detail.nominaltol)
+          detailRow.find(`[name="nominaltol[]"]`).val(detail.nominaltol)
+          detailRow.find(`[name="liter[]"]`).val(detail.liter)
+          detailRow.find(`[name="liter[]"]`).val(detail.liter)
 
-            initAutoNumeric(detailRow.find('.autonumeric'))
-            setNominalSupir()
-            setNominalKenek()
-            setNominalKomisi()
-            setNominalTol()
-            $('#detailList tbody').append(detailRow)
-            
-          })
-          setRowNumbers()
-        }
-      })
-   
+          initAutoNumeric(detailRow.find('.autonumeric'))
+          setNominalSupir()
+          setNominalKenek()
+          setNominalKomisi()
+          setNominalTol()
+          $('#detailList tbody').append(detailRow)
+
+        })
+        setRowNumbers()
+      }
+    })
+
   }
+
   function setuprowshow(id) {
     $.ajax({
-        url: `${apiUrl}upahsupirrincian/setuprowshow/${id}`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.detail, (index, detail) => {
-            
-            let detailRow = $(`
+      url: `${apiUrl}upahsupirrincian/setuprowshow/${id}`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.detail, (index, detail) => {
+
+          let detailRow = $(`
             <tr>
               <td></td>
               <td>
@@ -1030,22 +1056,22 @@
               
             </tr>
             `)
-            detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
-            detailRow.find(`[name="container[]"]`).val(detail.container)
-            detailRow.find(`[name="statuscontainer_id[]"]`).val(detail.statuscontainer_id)
-            detailRow.find(`[name="statuscontainer[]"]`).val(detail.statuscontainer)
-            initAutoNumeric(detailRow.find('.autonumeric'))
-            setNominalSupir()
-            setNominalKenek()
-            setNominalKomisi()
-            setNominalTol()
-            $('#detailList tbody').append(detailRow)
-            
-          })
-          setRowNumbers()
-        }
-      })
-   
+          detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+          detailRow.find(`[name="container[]"]`).val(detail.container)
+          detailRow.find(`[name="statuscontainer_id[]"]`).val(detail.statuscontainer_id)
+          detailRow.find(`[name="statuscontainer[]"]`).val(detail.statuscontainer)
+          initAutoNumeric(detailRow.find('.autonumeric'))
+          setNominalSupir()
+          setNominalKenek()
+          setNominalKomisi()
+          setNominalTol()
+          $('#detailList tbody').append(detailRow)
+
+        })
+        setRowNumbers()
+      }
+    })
+
   }
 
   function deleteRow(row) {
@@ -1081,9 +1107,9 @@
         $('#crudForm [name=parent_id]').first().val(upahsupir.id)
         $('#crudForm [name=parent]').first().val(upahsupir.kotasampai_id)
         element.data('currentValue', element.val())
-        
+
         let form = $('#crudForm')
-        showUpahSupir(form,upahsupir.id,true).then((upahsupir) => {
+        showUpahSupir(form, upahsupir.id, true).then((upahsupir) => {
           initDropzone('edit', upahsupir)
         })
 
@@ -1104,10 +1130,10 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kotadari_id]').first().val(kota.id)
         element.val(kota.keterangan)
@@ -1129,10 +1155,10 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kotasampai_id]').first().val(kota.id)
         element.val(kota.keterangan)
@@ -1154,10 +1180,10 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kotasampai_id]').first().val(kota.id)
         element.val(kota.tujuan)
@@ -1172,17 +1198,17 @@
         element.data('currentValue', element.val())
       }
     })
-    
+
     $('.zona-lookup').lookup({
       title: 'Zona Lookup',
       fileName: 'zona',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (zona, element) => {
         $('#crudForm [name=zona_id]').first().val(zona.id)
         element.val(zona.zona)

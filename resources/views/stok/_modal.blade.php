@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -13,12 +13,12 @@
             <div class="row form-group">
               <input type="hidden" name="id" hidden class="form-control" readonly>
 
-                <div class="col-12 col-sm-3 col-md-2">
-                  <label class="col-form-label">nama stok <span class="text-danger">*</span> </label>
-                </div>
-                <div class="col-12 col-sm-9 col-md-10">
-                  <input type="text" name="namastok" class="form-control">
-                </div>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">nama stok <span class="text-danger">*</span> </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="namastok" class="form-control">
+              </div>
             </div>
 
             <div class="row form-group">
@@ -90,44 +90,44 @@
             </div>
             <div class="row form-group">
 
-                <div class="col-12 col-sm-3 col-md-2">
-                  <label class="col-form-label">keterangan <span class="text-danger">*</span> </label>
-                </div>
-                <div class="col-12 col-sm-9 col-md-10">
-                  <input type="text" name="keterangan" class="form-control">
-                </div>
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">keterangan <span class="text-danger">*</span> </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="keterangan" class="form-control">
+              </div>
             </div>
             <div class="row form-group">
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">qtymin <span class="text-danger">*</span> </label>
-                
+                <label class="col-form-label">qtymin </label>
+
               </div>
               <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="qtymin"  style="text-align:right" class="form-control " > 
+                <input type="text" name="qtymin" style="text-align:right" class="form-control ">
               </div>
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">qtymax <span class="text-danger">*</span> </label>
+                <label class="col-form-label">qtymax </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="qtymax"  style="text-align:right" class="form-control " > 
+                <input type="text" name="qtymax" style="text-align:right" class="form-control ">
               </div>
             </div>
 
             <div class="row form-group">
-                <div class="col">
-                  <div class="row mb-2">
-                    <div class="col">
-                      <label class="col-form-label">Upload Foto Stok</label>
-                    </div>
-                  </div>
-                  <div class="dropzone" data-field="gambar">
-                    <div class="fallback">
-                      <input name="gambar" type="file" />
-                    </div>
+              <div class="col">
+                <div class="row mb-2">
+                  <div class="col">
+                    <label class="col-form-label">Upload Foto Stok</label>
                   </div>
                 </div>
+                <div class="dropzone" data-field="gambar">
+                  <div class="fallback">
+                    <input name="gambar" type="file" />
+                  </div>
+                </div>
+              </div>
             </div>
 
           </div>
@@ -149,26 +149,26 @@
 
 @push('scripts')
 <script>
-    Dropzone.autoDiscover = false;
+  Dropzone.autoDiscover = false;
 
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   let dropzones = []
 
   $(document).ready(function() {
-    
-    
-    
+
+
+
     $(document).on('click', '.rmv', function(event) {
       deleteRow($(this).parents('tr'))
     })
-    
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
       let url
       let form = $('#crudForm')
-      
+
       let formData = new FormData(form[0])
       let Id = form.find('[name=id]').val()
 
@@ -257,20 +257,21 @@
       })
     })
   })
-  function kodepengeluaran(kodepengeluaran){
+
+  function kodepengeluaran(kodepengeluaran) {
     $('#crudForm').find('[name=statusaktif]').val(kodepengeluaran).trigger('change');
     $('#crudForm').find('[name=statusaktif_id]').val(kodepengeluaran);
   }
-    
-    $('#crudModal').on('shown.bs.modal', () => {
-      let form = $('#crudForm')
-      
-      setFormBindKeys(form)
-      
-      activeGrid = null
-      initDatepicker()
-      initLookup()
-      initSelect2()
+
+  $('#crudModal').on('shown.bs.modal', () => {
+    let form = $('#crudForm')
+
+    setFormBindKeys(form)
+
+    activeGrid = null
+    initDatepicker()
+    initLookup()
+    initSelect2()
     // getMaxLength(form)
   })
 
@@ -282,7 +283,7 @@
 
 
   function createStok() {
-    
+
     let form = $('#crudForm')
 
     form.trigger('reset')
@@ -292,19 +293,19 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     $('#crudModalTitle').text('Create Stok')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise
-    .all([
-      setStatusAktifOptions(form)
-    ])
-    .then(() => {
-      showDefault(form)
-    })
+      .all([
+        setStatusAktifOptions(form)
+      ])
+      .then(() => {
+        showDefault(form)
+      })
 
     initDropzone(form.data('action'))
     initAutoNumeric(form.find(`[name="qtymin"]`))
@@ -332,9 +333,9 @@
       ])
       .then(() => {
         showStok(form, stokId)
-        .then((stok) => {
-          initDropzone(form.data('action'), stok)
-        })
+          .then((stok) => {
+            initDropzone(form.data('action'), stok)
+          })
       })
   }
 
@@ -359,9 +360,9 @@
       ])
       .then(() => {
         showStok(form, stokId)
-        .then((stok) => {
-          initDropzone(form.data('action'), stok)
-        })
+          .then((stok) => {
+            initDropzone(form.data('action'), stok)
+          })
       })
   }
 
@@ -438,18 +439,17 @@
       success: response => {
         $.each(response.data, (index, value) => {
           console.log(value)
-           let element = form.find(`[name="${index}"]`)
+          let element = form.find(`[name="${index}"]`)
           // let element = form.find(`[name="statusaktif"]`)
 
           if (element.is('select')) {
             element.val(value).trigger('change')
-          } 
-          else {
+          } else {
             element.val(value)
           }
         })
-        
-       
+
+
       }
     })
   }
@@ -484,7 +484,7 @@
         }
       })
     })
-      
+
   }
 
   function initDropzone(action, data = null) {
@@ -514,21 +514,42 @@
     const paramName = dropzone.options.paramName
     const type = paramName.substring(5)
 
-    let files = JSON.parse(data[paramName])
+    if (data[paramName] == '') {
+      $('.dropzone').each((index, element) => {
+        if (!element.dropzone) {
+          let newDropzone = new Dropzone(element, {
+            url: 'test',
+            autoProcessQueue: false,
+            addRemoveLinks: true,
+            acceptedFiles: 'image/*',
+            paramName: $(element).data('field'),
+            init: function() {
+              dropzones.push(this)
+            }
+          })
+        }
 
-    files.forEach((file) => {
-      getImgURL(`${apiUrl}stok/${file}/ori`, (fileBlob) => {
-        let imageFile = new File([fileBlob], file, {
-          type: 'image/jpeg',
-          lastModified: new Date().getTime()
-        }, 'utf-8')
-
-        dropzone.options.addedfile.call(dropzone, imageFile);
-        dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}stok/${file}/ori`);
-        dropzone.files.push(imageFile)
+        element.dropzone.removeAllFiles()
       })
-    })
+    } else {
+
+      let files = JSON.parse(data[paramName])
+
+      files.forEach((file) => {
+        getImgURL(`${apiUrl}stok/${file}/ori`, (fileBlob) => {
+          let imageFile = new File([fileBlob], file, {
+            type: 'image/jpeg',
+            lastModified: new Date().getTime()
+          }, 'utf-8')
+
+          dropzone.options.addedfile.call(dropzone, imageFile);
+          dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}stok/${file}/ori`);
+          dropzone.files.push(imageFile)
+        })
+      })
+    }
   }
+
   function initLookup() {
 
     $('.jenistrado-lookup').lookup({
@@ -543,7 +564,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-      
+
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -560,7 +581,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-      
+
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -577,7 +598,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-      
+
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -590,9 +611,9 @@
           filters: JSON.stringify({
             "groupOp": "AND",
             "rules": [{
-                "field": "kelompok_id",
-                "op": "cn",
-                "data": $(`#kelompokId`).val()
+              "field": "kelompok_id",
+              "op": "cn",
+              "data": $(`#kelompokId`).val()
             }]
           })
         }
@@ -606,7 +627,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-      
+
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -619,9 +640,9 @@
           filters: JSON.stringify({
             "groupOp": "AND",
             "rules": [{
-                "field": "subkelompok_id",
-                "op": "cn",
-                "data": $(`#subkelompokId`).val()
+              "field": "subkelompok_id",
+              "op": "cn",
+              "data": $(`#subkelompokId`).val()
             }]
           })
         }
@@ -635,12 +656,13 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-      
+
         element.val('')
         element.data('currentValue', element.val())
       }
     })
   }
+
   function getImgURL(url, callback) {
     var xhr = new XMLHttpRequest();
     xhr.onload = function() {
@@ -651,6 +673,7 @@
     xhr.responseType = 'blob';
     xhr.send();
   }
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}stok/${Id}/cekValidasi`,
@@ -661,11 +684,11 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deleteStok(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteStok(Id)
+        }
 
       }
     })

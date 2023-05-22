@@ -911,7 +911,7 @@ function initDatepicker() {
 				if (offDay) {
 					return [
 						true,
-						"ui-state-disabled datepicker-offday",
+						"datepicker-offday",
 						offDay.description,
 					];
 				} else {
