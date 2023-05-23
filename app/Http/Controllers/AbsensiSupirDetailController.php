@@ -23,7 +23,7 @@ class AbsensiSupirDetailController extends Controller
         $response = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/absensi_detail', $params);
+            ->get(config('app.api_url') . 'absensi_detail', $params);
 
         $data = [
             'rows' => $response['data']

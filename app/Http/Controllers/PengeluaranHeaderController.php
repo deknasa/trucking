@@ -167,7 +167,7 @@ class PengeluaranHeaderController extends MyController
         $pengeluaran_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/pengeluarandetail', $detailParams);
+            ->get(config('app.api_url') . 'pengeluarandetail', $detailParams);
 
         $data = $header['data'];
         $pengeluaran_details = $pengeluaran_detail['data'];
