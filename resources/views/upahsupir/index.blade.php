@@ -74,7 +74,6 @@
             label: 'JARAK',
             name: 'jarak',
             align: 'right',
-            formatter: currencyFormat
           },
           {
             label: 'ZONA',
@@ -177,7 +176,7 @@
             }
           },
           {
-            label: 'Keterangan',
+            label: 'KETERANGAN',
             name: 'keterangan',
           },
           {
