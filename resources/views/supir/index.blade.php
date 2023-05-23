@@ -51,6 +51,10 @@
             name: 'namasupir',
           },
           {
+            label: 'ALIAS',
+            name: 'namaalias',
+          },
+          {
             label: 'TGL LAHIR',
             name: 'tgllahir',
             formatter: "date",
