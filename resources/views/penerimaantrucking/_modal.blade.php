@@ -248,7 +248,13 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setStatusFormatOptions(form)
+    Promise
+      .all([
+        setStatusFormatOptions(form),
+      ])
+      .then(() => {
+        showPenerimaanTrucking(form, penerimaanTruckingId)
+      })
   }
 
   function editPenerimaanTrucking(penerimaanTruckingId) {
@@ -268,7 +274,7 @@
 
     Promise
       .all([
-        setStatusFormatOptions(form)
+        setStatusFormatOptions(form),
       ])
       .then(() => {
         showPenerimaanTrucking(form, penerimaanTruckingId)
@@ -292,7 +298,7 @@
 
     Promise
       .all([
-        setStatusFormatOptions(form)
+        setStatusFormatOptions(form),
       ])
       .then(() => {
         showPenerimaanTrucking(form, penerimaanTruckingId)

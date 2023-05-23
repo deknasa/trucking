@@ -230,7 +230,7 @@
     Promise
     .all([
       setStatusFormatListOptions(form),
-      setStatusHitungListOptions(form)
+      setStatusHitungListOptions(form),
     ])
     .then(() => {
       showDefault(form)
@@ -255,7 +255,7 @@
     Promise
       .all([
         setStatusFormatListOptions(form),
-        setStatusHitungListOptions(form)
+        setStatusHitungListOptions(form),
       ])
       .then(() => {
         showPengeluaranStok(form, pengeluaranstokId)
@@ -280,7 +280,7 @@
     Promise
       .all([
         setStatusFormatListOptions(form),
-        setStatusHitungListOptions(form)
+        setStatusHitungListOptions(form),
       ])
       .then(() => {
         showPengeluaranStok(form, pengeluaranstokId)

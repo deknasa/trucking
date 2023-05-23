@@ -193,7 +193,7 @@
 
     Promise
     .all([
-      setStatusAktifOptions(form)
+      setStatusAktifOptions(form),
     ])
     .then(() => {
       showDefault(form)
@@ -217,7 +217,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showGudang(form, gudangId)
@@ -241,7 +241,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showGudang(form, gudangId)
@@ -336,6 +336,7 @@
       }
     })
   }
+
   function showDefault(form) {
     $.ajax({
       url: `${apiUrl}gudang/default`,
@@ -362,6 +363,7 @@
       }
     })
   }
+  
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}gudang/${Id}/cekValidasi`,

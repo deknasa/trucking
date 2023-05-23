@@ -300,7 +300,7 @@
     $('.invalid-feedback').remove()
     Promise
     .all([
-      setStatusAktifOptions(form)
+      setStatusAktifOptions(form),
     ])
     .then(() => {
       showDefault(form)
@@ -328,7 +328,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showStok(form, stokId)
@@ -355,7 +355,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showStok(form, stokId)

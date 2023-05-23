@@ -296,7 +296,14 @@
     $('#table_body').html('')
     addRow()
 
-      setDefaultOptions(form)
+    Promise
+      .all([
+        setDefaultOptions(form)
+      ])
+      // console.log('c')
+      .then(() => {
+        showParameter(form, parameterId)
+      })
   }
 
   const setDefaultOptions = function(relatedForm) {
@@ -350,7 +357,6 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-
     Promise
       .all([
         setDefaultOptions(form)
@@ -358,8 +364,6 @@
       .then(() => {
         showParameter(form, parameterId)
       })
-
-
   }
 
   function deleteParameter(parameterId) {
@@ -384,7 +388,6 @@
       .then(() => {
         showParameter(form, parameterId)
       })
-
   }
 
   function isJSON(something) {

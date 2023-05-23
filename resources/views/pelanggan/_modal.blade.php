@@ -263,9 +263,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
-      // console.log('c')
       .then(() => {
         showDefault(form)
       })
@@ -322,7 +321,6 @@
         $.each(response.data, (index, value) => {
           console.log(value)
           let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
 
           if (element.is('select')) {
             element.val(value).trigger('change')
@@ -354,9 +352,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
-      // console.log('c')
       .then(() => {
         showPelanggan(form, pelangganId)
       })
@@ -380,9 +377,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
-      // console.log('c')
       .then(() => {
         showPelanggan(form, pelangganId)
       })

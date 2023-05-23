@@ -379,7 +379,7 @@
     Promise
     .all([
       setStatusDaftarHargaOptions(form),
-      setStatusAktifOptions(form)
+      setStatusAktifOptions(form),
     ])
     .then(() => {
       showDefault(form)
@@ -404,7 +404,7 @@
     Promise
       .all([
         setStatusDaftarHargaOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showSupplier(form, supplierId)
@@ -429,7 +429,7 @@
     Promise
       .all([
         setStatusDaftarHargaOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showSupplier(form, supplierId)

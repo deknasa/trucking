@@ -207,7 +207,7 @@
 
         Promise
             .all([
-                setStatusAktifOptions(form)
+                setStatusAktifOptions(form),
             ])
             .then(() => {
                 showDefault(form)
@@ -230,7 +230,7 @@
 
         Promise
             .all([
-                setStatusAktifOptions(form)
+                setStatusAktifOptions(form),
             ])
             .then(() => {
                 showHariLibur(form, id)
@@ -253,7 +253,7 @@
 
         Promise
             .all([
-                setStatusAktifOptions(form)
+                setStatusAktifOptions(form),
             ])
             .then(() => {
                 showHariLibur(form, id)

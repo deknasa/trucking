@@ -300,7 +300,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusTasOptions(form)
+        setStatusTasOptions(form),
       ])
       .then(() => {
         showDefault(form)
@@ -325,7 +325,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusTasOptions(form)
+        setStatusTasOptions(form),
       ])
       .then(() => {
         showAgen(form, agenId)
@@ -350,7 +350,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusTasOptions(form)
+        setStatusTasOptions(form),
       ])
       .then(() => {
         showAgen(form, agenId)

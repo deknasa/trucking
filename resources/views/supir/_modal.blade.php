@@ -410,7 +410,7 @@
     $('#crudForm').find('[name=tglterbitsim]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglexpsim]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    setFormBindKeys(form)
+    
     initDropzone(form.data('action'))
     initDropzonePdf(form.data('action'))
     initLookup()

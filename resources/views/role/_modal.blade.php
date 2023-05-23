@@ -171,6 +171,7 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+
   }
 
   function editRole(roleId) {
@@ -187,7 +188,10 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showRole(form, roleId)
+    //showRole(form, roleId)
+    .then(() => {
+      showRole(form, roleId)
+    })
   }
 
   function deleteRole(roleId) {

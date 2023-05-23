@@ -197,7 +197,7 @@
     $('.invalid-feedback').remove()
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showDefault(form)
@@ -221,7 +221,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showMerk(form, merkId)
@@ -245,7 +245,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showMerk(form, merkId)
@@ -339,6 +339,7 @@
       }
     })
   }
+
   function showDefault(form) {
     $.ajax({
       url: `${apiUrl}merk/default`,
@@ -365,6 +366,7 @@
       }
     })
   }
+  
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}merk/${Id}/cekValidasi`,

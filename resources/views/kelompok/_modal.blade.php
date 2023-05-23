@@ -201,7 +201,7 @@
 
     Promise
     .all([
-      setStatusAktifOptions(form)
+      setStatusAktifOptions(form),
     ])
     .then(() => {
       showDefault(form)
@@ -225,7 +225,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showKelompok(form, kelompokId)
@@ -249,7 +249,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showKelompok(form, kelompokId)
@@ -344,6 +344,7 @@
       }
     })
   }
+
   function showDefault(form) {
     $.ajax({
       url: `${apiUrl}kelompok/default`,
@@ -370,6 +371,7 @@
       }
     })
   }
+  
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}kelompok/${Id}/cekValidasi`,

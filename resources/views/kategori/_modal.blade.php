@@ -217,7 +217,7 @@
 
     Promise
     .all([
-      setStatusAktifOptions(form)
+      setStatusAktifOptions(form),
     ])
     .then(() => {
       showDefault(form)
@@ -241,8 +241,7 @@
 
     Promise
       .all([
-        // setSubKelompokOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showKategori(form, kategoriId)
@@ -266,8 +265,7 @@
 
     Promise
       .all([
-        // setSubKelompokOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showKategori(form, kategoriId)
@@ -298,6 +296,7 @@
       })
     }
   }
+
   const setStatusAktifOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusaktif]').empty()
@@ -386,6 +385,7 @@
       }
     })
   }
+
   function showDefault(form) {
     $.ajax({
       url: `${apiUrl}kategori/default`,
@@ -412,6 +412,7 @@
       }
     })
   }
+  
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}kategori/${Id}/cekValidasi`,

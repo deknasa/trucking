@@ -231,8 +231,16 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setMenuParentOptions(form)
-    setControllerOptions(form)
+    // setMenuParentOptions(form)
+    // setControllerOptions(form)
+    Promise
+      .all([
+        setMenuParentOptions(form),
+        setControllerOptions(form)
+      ])
+      .then(() => {
+        showMenu(form, menuId)
+      })
   }
 
   function editMenu(menuId) {
@@ -250,7 +258,15 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showMenu(form, menuId)
+    Promise
+      .all([
+        setMenuParentOptions(form),
+        setControllerOptions(form)
+      ])
+      .then(() => {
+        showMenu(form, menuId)
+      })
+    //showMenu(form, menuId)
   }
 
   function deleteMenu(menuId) {
@@ -268,7 +284,15 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showMenu(form, menuId)
+    //showMenu(form, menuId)
+    Promise
+      .all([
+        setMenuParentOptions(form),
+        setControllerOptions(form)
+      ])
+      .then(() => {
+        showMenu(form, menuId)
+      })
   }
 
   function getMaxLength(form) {

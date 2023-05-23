@@ -270,7 +270,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusKaryawanOptions(form)
+        setStatusKaryawanOptions(form),
       ])
       .then(() => {
         showDefault(form)
@@ -312,7 +312,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusKaryawanOptions(form)
+        setStatusKaryawanOptions(form),
       ])
       .then(() => {
         showPenerima(form, penerimaId)
@@ -337,7 +337,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusKaryawanOptions(form)
+        setStatusKaryawanOptions(form),
       ])
       .then(() => {
         showPenerima(form, penerimaId)

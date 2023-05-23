@@ -276,7 +276,7 @@
         setStatusAccountPayableOptions(form),
         setStatusLabaRugiOptions(form),
         setStatusNeracaOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showDefault(form)
@@ -309,6 +309,7 @@
       }
     })
   }
+
   function editAkunPusat(akunPusatId) {
     let form = $('#crudForm')
 
@@ -330,7 +331,7 @@
         setStatusAccountPayableOptions(form),
         setStatusLabaRugiOptions(form),
         setStatusNeracaOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showAkunPusat(form, akunPusatId)
@@ -358,7 +359,7 @@
         setStatusAccountPayableOptions(form),
         setStatusLabaRugiOptions(form),
         setStatusNeracaOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showAkunPusat(form, akunPusatId)

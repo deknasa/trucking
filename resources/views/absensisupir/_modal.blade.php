@@ -310,10 +310,6 @@
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     setUpRow()
-
-
-
-
     setTotal()
   }
 
@@ -461,7 +457,6 @@
     $('.invalid-feedback').remove()
 
     showAbsensiSupir(form, absensiId)
-
   }
 
   function deleteAbsensiSupir(absensiId) {

@@ -201,13 +201,11 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     
-    // setStatusAktifOptions(form)
 
     Promise
       .all([
         setStatusAktifOptions(form)
       ])
-      // console.log('c')
       .then(() => {
         showDefault(form)
       })

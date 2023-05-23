@@ -251,7 +251,13 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setStatusFormatOptions(form)
+    Promise
+      .all([
+        setStatusFormatOptions(form),
+      ])
+      .then(() => {
+        showPengeluaranTrucking(form, pengeluaranTruckingId)
+      })
   }
 
   function editPengeluaranTrucking(pengeluaranTruckingId) {

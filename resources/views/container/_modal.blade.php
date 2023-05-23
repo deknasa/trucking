@@ -236,6 +236,7 @@
     $('.invalid-feedback').remove()
 
     initAutoNumeric(form.find(`[name="nominalsumbangan"]`))
+    
     Promise
       .all([
         setStatusAktifOptions(form)

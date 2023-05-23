@@ -244,11 +244,11 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setStatusFormatPenerimaanOptions(form)
-    setStatusFormatPengeluaranOptions(form)
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusFormatPenerimaanOptions(form),
+        setStatusFormatPengeluaranOptions(form),
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showDefault(form)
@@ -274,7 +274,7 @@
       .all([
         setStatusFormatPenerimaanOptions(form),
         setStatusFormatPengeluaranOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showBank(form, bankId)
@@ -300,7 +300,7 @@
       .all([
         setStatusFormatPenerimaanOptions(form),
         setStatusFormatPengeluaranOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showBank(form, bankId)

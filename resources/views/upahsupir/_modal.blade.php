@@ -478,7 +478,6 @@
 
 
     $('#table_body').html('')
-    // addRow()
     setUpRow()
 
     $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -487,7 +486,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusLuarKotaOptions(form)
+        setStatusLuarKotaOptions(form),
       ])
       .then(() => {
           showDefault(form)
@@ -515,7 +514,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusLuarKotaOptions(form)
+        setStatusLuarKotaOptions(form),
       ])
       .then(() => {
         showUpahSupir(form, id)
@@ -543,7 +542,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusLuarKotaOptions(form)
+        setStatusLuarKotaOptions(form),
       ])
       .then(() => {
         showUpahSupir(form, id)

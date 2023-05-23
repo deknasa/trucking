@@ -386,7 +386,6 @@
         setStatusPenyesuaianHargaOptions(form),
         setStatusSistemTonOptions(form)
       ])
-      // console.log('c')
       .then(() => {
         showDefault(form)
       })

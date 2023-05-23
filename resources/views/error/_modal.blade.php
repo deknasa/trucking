@@ -185,6 +185,8 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+
+    
   }
 
   function editError(errorId) {

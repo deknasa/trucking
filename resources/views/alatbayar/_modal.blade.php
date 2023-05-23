@@ -259,7 +259,7 @@
       .all([
         setLangsungCairOptions(form),
         setDefaultOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showDefault(form)
@@ -286,7 +286,7 @@
       .all([
         setLangsungCairOptions(form),
         setDefaultOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
 
       ])
       .then(() => {
@@ -313,7 +313,7 @@
       .all([
         setLangsungCairOptions(form),
         setDefaultOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
 
       ])
       .then(() => {

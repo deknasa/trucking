@@ -256,7 +256,7 @@
 
     Promise
     .all([
-      setStatusAktifOptions(form)
+      setStatusAktifOptions(form),
     ])
     .then(() => {
       showDefault(form)
@@ -302,7 +302,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showAbsenTrado(form, absenTradoId)
@@ -326,7 +326,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showAbsenTrado(form, absenTradoId)
@@ -394,6 +394,7 @@
       })
     })
   }
+  
   function isJSON(something) {
     if (typeof something != 'string')
       something = JSON.stringify(something);

@@ -192,7 +192,7 @@
 
     Promise
     .all([
-      setStatusAktifOptions(form)
+      setStatusAktifOptions(form),
     ])
     .then(() => {
       showDefault(form)
@@ -216,7 +216,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showSatuan(form, satuanId)
@@ -240,7 +240,7 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showSatuan(form, satuanId)
@@ -334,6 +334,7 @@
       }
     })
   }
+  
   function showDefault(form) {
     $.ajax({
       url: `${apiUrl}satuan/default`,

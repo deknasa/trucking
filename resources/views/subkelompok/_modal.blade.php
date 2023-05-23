@@ -213,7 +213,7 @@
 
     Promise
     .all([
-      setStatusAktifOptions(form)
+      setStatusAktifOptions(form),
     ])
     .then(() => {
       showDefault(form)
@@ -238,7 +238,7 @@
     Promise
       .all([
   
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showSubKelompok(form, subKelompokId)
@@ -263,7 +263,7 @@
     Promise
       .all([
   
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showSubKelompok(form, subKelompokId)
