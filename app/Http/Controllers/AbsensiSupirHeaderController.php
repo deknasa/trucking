@@ -126,7 +126,7 @@ class AbsensiSupirHeaderController extends MyController
         $absensi_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/absensisupirdetail', $detailParams);
+            ->get(config('app.api_url') . 'absensisupirdetail', $detailParams);
         
         
         $absensi_details = $absensi_detail['data'];

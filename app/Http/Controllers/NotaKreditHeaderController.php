@@ -121,7 +121,7 @@ class NotaKreditHeaderController extends MyController
         $nota_kredit = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/notakredit_detail', $detailParams);
+            ->get(config('app.api_url') . 'notakredit_detail', $detailParams);
 
         $data = $header['data'];
         $nota_kredits = $nota_kredit['data'];

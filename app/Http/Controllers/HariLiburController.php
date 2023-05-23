@@ -64,4 +64,52 @@ class HariLiburController extends MyController
 
         return $response['data'];
     }
+    public function export(Request $request)
+    {
+        $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
+        ];
+
+        $parameters = $this->get($params)['rows'];
+
+        $columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'ID',
+                'index' => 'id',
+            ],
+            [
+                'label' => 'Group',
+                'index' => 'grp',
+            ],
+            [
+                'label' => 'Subgroup',
+                'index' => 'subgrp',
+            ],
+            [
+                'label' => 'Text',
+                'index' => 'text',
+            ],
+            [
+                'label' => 'Memo',
+                'index' => 'memo',
+            ],
+        ];
+
+        $this->toExcel($this->title, $parameters, $columns);
+    }
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'harilibur', $request->all());
+
+        $hariliburs = $response['data'];
+
+        return view('reports.harilibur', compact('hariliburs'));
+    }
 }

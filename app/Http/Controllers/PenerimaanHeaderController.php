@@ -140,7 +140,7 @@ class PenerimaanHeaderController extends MyController
         $penerimaan_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/penerimaandetail', $detailParams);
+            ->get(config('app.api_url') . 'penerimaandetail', $detailParams);
 
         $data = $header['data'];
         $penerimaan_details = $penerimaan_detail['data'];
