@@ -23,7 +23,7 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">nama terpusat <span class="text-danger">*</span> </label>
+                <label class="col-form-label">nama terpusat </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="namaterpusat" class="form-control">
@@ -611,7 +611,7 @@
           filters: JSON.stringify({
             "groupOp": "AND",
             "rules": [{
-              "field": "kelompok_id",
+              "field": "kelompokid",
               "op": "cn",
               "data": $(`#kelompokId`).val()
             }]

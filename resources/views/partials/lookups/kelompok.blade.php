@@ -1,5 +1,5 @@
 <table id="kelompokLookup" class="lookup-grid"></table>
-<div id="kelompokLookupPager"></div>
+{{-- <div id="kelompokLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -130,7 +130,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#kelompokLookupPager'),
+      // pager: $('#kelompokLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -209,6 +209,16 @@
           clearGlobalSearch($('#kelompokLookup'))
       },
     })
+    .jqGrid("navGrid", pager, {
+      search: false,
+      refresh: false,
+      add: false,
+      edit: false,
+      del: false,
+    })
+    .customPager()
+      
+      
     loadGlobalSearch($('#kelompokLookup'))
     loadClearFilter($('#kelompokLookup'))
 </script>
