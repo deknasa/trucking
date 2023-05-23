@@ -1,5 +1,5 @@
 <table id="subKelompokLookup" class="lookup-grid"></table>
-<div id="subKelompokLookupPager"></div>
+{{-- <div id="subKelompokLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -137,7 +137,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#subKelompokLookupPager'),
+      // pager: $('#subKelompokLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -216,6 +216,15 @@
         clearGlobalSearch($('#subKelompokLookup'))
       },
     })
+    .jqGrid("navGrid", pager, {
+      search: false,
+      refresh: false,
+      add: false,
+      edit: false,
+      del: false,
+    })
+    .customPager()
+      
   loadGlobalSearch($('#subKelompokLookup'))
   loadClearFilter($('#subKelompokLookup'))
 </script>

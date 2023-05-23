@@ -1,5 +1,5 @@
 <table id="kategoriLookup" class="lookup-grid"></table>
-<div id="kategoriLookupPager"></div>
+{{-- <div id="kategoriLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -135,7 +135,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#kategoriLookupPager'),
+      // pager: $('#kategoriLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -215,6 +215,15 @@
         clearGlobalSearch($('#kategoriLookup'))
       },
     })
+    .jqGrid("navGrid", pager, {
+      search: false,
+      refresh: false,
+      add: false,
+      edit: false,
+      del: false,
+    })
+    .customPager()
+      
 
   loadGlobalSearch($('#kategoriLookup'))
   loadClearFilter($('#kategoriLookup'))

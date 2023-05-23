@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "ace4eac68984bd351f327d85109c5e5e",
+  "ReportGuid": "93b2379401ae8c42541d742b373c12db",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/truck/public/reports/ReportLaporanHutangBBM.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanHutangBBM.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1677207969000+0700)/",
+  "ReportChanged": "/Date(1684472420000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -46,9 +46,9 @@
             "Type": "System.String"
           },
           "3": {
-            "Name": "saldo",
-            "NameInSource": "saldo",
-            "Alias": "saldo",
+            "Name": "Saldo",
+            "NameInSource": "Saldo",
+            "Alias": "Saldo",
             "Type": "System.String"
           }
         },
@@ -279,13 +279,13 @@
             "0": {
               "Ident": "StiText",
               "Name": "Text2",
-              "ClientRectangle": "82,0,52,6",
+              "ClientRectangle": "68,0,80,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "TAS PUSAT"
+                "Value": "PT.Transporindo Agung Sejahtera"
               },
               "HorAlignment": "Center",
               "Font": ";14;Bold;",
@@ -298,7 +298,7 @@
               "Ident": "StiText",
               "Name": "Text3",
               "Guid": "829fd5107935fade3f2d14b62b8287de",
-              "ClientRectangle": "4,12,66,6",
+              "ClientRectangle": "82,6,66,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"

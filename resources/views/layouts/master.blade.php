@@ -46,6 +46,13 @@
 </head>
 
 <body class="hold-transition sidebar-collapse layout-fixed">
+  <div class="modal-loader d-none">
+    <div class="modal-loader-content d-flex align-items-center justify-content-center">
+      <img src="{{ asset('images/loading-red.gif') }}" rel="preload">
+      <span>Loading</span>
+    </div>
+  </div>
+
   <div class="loader" id="loader">
     <img src="{{ asset('images/hour-glass.gif') }}" rel="preload">
     <span>Loading</span>
@@ -71,7 +78,7 @@
         <div class="modal-header">
           <p class="modal-title" id="rangeModalLabel">Pilih baris</p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form id="formRange" target="_blank">
@@ -114,7 +121,7 @@
         <div class="modal-header">
           <p class="modal-title" id="importModalLabel">Pilih file</p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form id="formImport" method="post" enctype="multipart/form-data">
@@ -146,7 +153,7 @@
         <div class="modal-header">
           <p class="modal-title" id="rangeTglModalLabel">Pilih tanggal</p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form id="formRangeTgl" target="_blank">
@@ -191,7 +198,7 @@
         <div class="modal-header">
           <p class="modal-title" id="tglModalLabel">Pilih tanggal</p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form id="formTgl" target="_blank">
@@ -251,11 +258,11 @@
 
   <!-- jQuery -->
   <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
-<!-- <script type="text/javascript" src="{{ asset('libraries/easyui/easyloader.js') }}"></script> -->
+  <!-- <script type="text/javascript" src="{{ asset('libraries/easyui/easyloader.js') }}"></script> -->
 
   <!-- jQuery UI -->
   <script src="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.js') }}"></script>
-  
+
   <!-- EasyUI -->
   {{-- <script type="text/javascript" src="{{ asset('libraries/easyui/jquery.easyui.min.js') }}"></script> --}}
 
@@ -312,6 +319,7 @@
 
   <script type="text/javascript">
     let accessToken = `{{ session('access_token') }}`
+    let accessTokenEmkl = `{{ session('access_token_emkl') }}`
     let appUrl = `{{ url()->to('/') }}`
     let apiUrl = `{{ config('app.api_url') }}`
     let apiEmklUrl = `{{ config('app.emkl_api_url') }}`
@@ -400,78 +408,84 @@
       }
     }
 
-    
-  
-  
-  function setRange() {
-    // mendapatkan tanggal hari ini
-    let today = new Date();
-    
-    // mendapatkan tanggal pertama di bulan ini
-    let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-    let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
-    
-    // mendapatkan tanggal terakhir di bulan ini
-    let lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-    let formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
 
-    $('#rangeHeader').find('[name=tgldariheader]').val(formattedFirstDay).trigger('change');
-    $('#rangeHeader').find('[name=tglsampaiheader]').val(formattedLastDay).trigger('change');
 
-  }
-  
 
-  function loadDataHeader(url,addtional = null) {
-    clearGlobalSearch($('#jqGrid'))
-    let data = {
-      tgldari:$('#tgldariheader').val() ,
-      tglsampai:$('#tglsampaiheader').val() 
+    function setRange() {
+      // mendapatkan tanggal hari ini
+      let today = new Date();
+
+      // mendapatkan tanggal pertama di bulan ini
+      let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+      let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
+
+      // mendapatkan tanggal terakhir di bulan ini
+      let lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      let formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
+
+      $('#rangeHeader').find('[name=tgldariheader]').val(formattedFirstDay).trigger('change');
+      $('#rangeHeader').find('[name=tglsampaiheader]').val(formattedLastDay).trigger('change');
+
     }
-    data = {...data,...addtional}
 
-    $('#jqGrid').setGridParam({
-      url: `${apiUrl}${url}`,
-      datatype: "json",
-      postData: data,
 
-      page:1
-    }).trigger('reloadGrid')
-  }
+    function loadDataHeader(url, addtional = null) {
+      clearGlobalSearch($('#jqGrid'))
+      let data = {
+        tgldari: $('#tgldariheader').val(),
+        tglsampai: $('#tglsampaiheader').val()
+      }
+      data = {
+        ...data,
+        ...addtional
+      }
 
-  function setRangeLookup() {
-    // mendapatkan tanggal hari ini
-    let today = new Date();
-    
-    // mendapatkan tanggal pertama di bulan ini
-    let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-    let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
-    
-    // mendapatkan tanggal terakhir di bulan ini
-    let lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-    let formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
+      $('#jqGrid').setGridParam({
+        url: `${apiUrl}${url}`,
+        datatype: "json",
+        postData: data,
 
-    $('#rangeHeaderLookup').find('[name=tgldariheaderlookup]').val(formattedFirstDay).trigger('change');
-    $('#rangeHeaderLookup').find('[name=tglsampaiheaderlookup]').val(formattedLastDay).trigger('change');
-
-  }
-  
-
-  function loadDataHeaderLookup(url,grid,addtional = null) {
-    clearGlobalSearch($('#jqGrid'))
-    let data = {
-      tgldari:$('#tgldariheaderlookup').val() ,
-      tglsampai:$('#tglsampaiheaderlookup').val() 
+        page: 1
+      }).trigger('reloadGrid')
     }
-    data = {...data,...addtional}
 
-    $(`#${grid}`).setGridParam({
-      url: `${apiUrl}${url}`,
-      datatype: "json",
-      postData: data,
+    function setRangeLookup() {
+      // mendapatkan tanggal hari ini
+      let today = new Date();
 
-      page:1
-    }).trigger('reloadGrid')
-  }
+      // mendapatkan tanggal pertama di bulan ini
+      let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+      let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
+
+      // mendapatkan tanggal terakhir di bulan ini
+      let lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      let formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
+
+      $('#rangeHeaderLookup').find('[name=tgldariheaderlookup]').val(formattedFirstDay).trigger('change');
+      $('#rangeHeaderLookup').find('[name=tglsampaiheaderlookup]').val(formattedLastDay).trigger('change');
+
+    }
+
+
+    function loadDataHeaderLookup(url, grid, addtional = null) {
+      clearGlobalSearch($('#jqGrid'))
+      let data = {
+        tgldari: $('#tgldariheaderlookup').val(),
+        tglsampai: $('#tglsampaiheaderlookup').val()
+      }
+      data = {
+        ...data,
+        ...addtional
+      }
+
+      $(`#${grid}`).setGridParam({
+        url: `${apiUrl}${url}`,
+        datatype: "json",
+        postData: data,
+
+        page: 1
+      }).trigger('reloadGrid')
+    }
   </script>
 </body>
 

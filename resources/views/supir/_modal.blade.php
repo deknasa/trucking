@@ -640,7 +640,6 @@
   function assignAttachment(dropzone, data) {
     const paramName = dropzone.options.paramName
     const type = paramName.substring(5)
-    // console.log(type);
     if (data[paramName] == '') {
       $('.dropzoneImg').each((index, element) => {
         if (!element.dropzone) {
@@ -666,15 +665,17 @@
         if (file == '') {
           file = 'no-image'
         }
-        getImgURL(`${apiUrl}supir/image/${type}/${file}/ori`, (fileBlob) => {
+        getImgURL(`${apiUrl}supir/image/${type}/${file}/ori/edit`, (fileBlob) => {
           let imageFile = new File([fileBlob], file, {
             type: 'image/jpeg',
             lastModified: new Date().getTime()
           }, 'utf-8')
 
-          dropzone.options.addedfile.call(dropzone, imageFile);
-          dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}supir/image/${type}/${file}/ori`);
-          dropzone.files.push(imageFile)
+          if (fileBlob.type != 'text/html') {
+            dropzone.options.addedfile.call(dropzone, imageFile);
+            dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}supir/image/${type}/${file}/ori/edit`);
+            dropzone.files.push(imageFile)
+          }
         })
       })
     }

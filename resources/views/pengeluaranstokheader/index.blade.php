@@ -3,7 +3,7 @@
 <div class="form-group row">
   <label class="col-12 col-sm-2 col-form-label mt-2">pengeluaran stok<span class="text-danger">*</span></label>
   <div class="col-sm-4 mt-2">
-    <select name="kodepengeluaranheader" id="kodepengeluaranheader" class="form-select sss" style="width: 100%;">
+    <select name="kodepengeluaranheader" id="kodepengeluaranheader" class="form-select select2" style="width: 100%;">
       <option value="">-- PILIH Pengeluaran stok --</option>
       @foreach ($comboKodepengeluaran as $kodepengeluaran)
         <option @if ($kodepengeluaran['id'] === "1") selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['keterangan']}} </option>
@@ -128,7 +128,7 @@
          
           
           {
-            label: 'PENerimaan nobukti',
+            label: 'PENerimaan stok nobukti',
             name: 'penerimaanstok_nobukti',
             align: 'left'
           },
@@ -140,6 +140,11 @@
           {
             label: 'penerimaan nobukti',
             name: 'penerimaan_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'hutang bayar nobukti',
+            name: 'hutangbayar_nobukti',
             align: 'left'
           },
           {

@@ -19,11 +19,14 @@
                             </div>
                         </div>
                         <div class="row">
-
                             <div class="col-sm-6 mt-4">
                                 <a id="btnPreview" class="btn btn-secondary mr-2 ">
                                     <i class="fas fa-sync"></i>
                                     Cetak
+                                </a>
+                                <a id="btnEkspor" class="btn btn-secondary mr-2 ">
+                                    <i class="fas fa-sync"></i>
+                                    Ekspor
                                 </a>
                             </div>
                         </div>
@@ -70,6 +73,10 @@
             $('#btnPreview').prop('disabled', true)
             $('#btnPreview').css(css_property);
         }
+        if (!`{{ $myAuth->hasPermission('laporanhutangbbm', 'export') }}`) {
+            $('#btnEkspor').prop('disabled', true)
+            $('#btnEkspor').css(css_property);
+        }
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
@@ -78,6 +85,16 @@
         if (sampai != '') {
 
             window.open(`{{ route('laporanhutangbbm.report') }}?sampai=${sampai}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
+    $(document).on('click', `#btnEkspor`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+
+        if (sampai != '') {
+
+            window.open(`{{ route('laporanhutangbbm.export') }}?sampai=${sampai}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

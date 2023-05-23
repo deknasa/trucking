@@ -88,6 +88,7 @@
                                         <li><a href="#tabs-4">Posting Pot. pinjaman (pribadi)</a></li>
                                         <li><a href="#tabs-5">Posting deposito</a></li>
                                         <li><a href="#tabs-6">Posting bbm</a></li>
+                                        <li><a href="#tabs-7">Posting Uang jalan</a></li>
                                     </ul>
                                     <div id="tabs-1">
                                         <table id="rekapRincian"></table>
@@ -292,6 +293,46 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div id="tabs-7">
+                                        <div class="row form-group">
+                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                                                <label>
+                                                    NO BUKTI</label>
+                                            </div>
+                                            <div class="col-12 col-sm-9 col-md-10">
+                                                <input type="text" name="nobuktiUangjalan" class="form-control" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                                                <label>
+                                                    Tanggal Bukti</label>
+                                            </div>
+                                            <div class="col-12 col-sm-9 col-md-10">
+                                                <input type="text" name="tglbuktiUangjalan" class="form-control" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                                                <label>
+                                                    Nominal</label>
+                                            </div>
+                                            <div class="col-12 col-sm-9 col-md-10">
+                                                <input type="text" name="nomUangjalan" class="form-control text-right" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="row form-group">
+                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
+                                                <label>
+                                                    KAS/BANK</label>
+                                            </div>
+                                            <div class="col-12 col-sm-9 col-md-10">
+                                                <input type="hidden" name="bank_idUangjalan">
+                                                <input type="text" name="bankUangjalan" class="form-control bankUangjalan-lookup">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -417,6 +458,7 @@
         initAutoNumeric($('#crudForm').find(`[name="nomPP"]`).val(potPribadi))
         initAutoNumeric($('#crudForm').find(`[name="nomDeposito"]`).val(deposito))
         initAutoNumeric($('#crudForm').find(`[name="nomBBM"]`).val(bbm))
+        initAutoNumeric($('#crudForm').find(`[name="nomUangjalan"]`).val(jalan))
 
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_potonganpinjaman"]`).text(potPribadi))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_potonganpinjamansemua"]`).text(potSemua))
@@ -572,6 +614,25 @@
                 value: form.find(`[name="bankBBM"]`).val()
             })
 
+            data.push({
+                name: 'bank_idUangjalan',
+                value: form.find(`[name="bank_idUangjalan"]`).val()
+            })
+            $('#crudForm').find(`[name="nomUangjalan"]`).each((index, element) => {
+                data.push({
+                    name: 'nomUangjalan',
+                    value: AutoNumeric.getNumber($(`#crudForm [name="nomUangjalan"]`)[index])
+                })
+            })
+            data.push({
+                name: 'bankUangjalan',
+                value: form.find(`[name="bankUangjalan"]`).val()
+            })
+            
+            data.push({
+                name: 'nobuktiUangjalan',
+                value: form.find(`[name="nobuktiUangjalan"]`).val()
+            })
 
             data.push({
                 name: 'sortIndex',
@@ -702,17 +763,16 @@
     })
 
 
-    function rekapRincian(url) {
+    function rekapRincian() {
         let disabled = '';
         if ($('#crudForm').data('action') == 'delete') {
             disabled = 'disabled'
         }
         $("#rekapRincian").jqGrid({
-                url: `${apiUrl}prosesgajisupirheader/${url}`,
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
-                datatype: "json",
+                datatype: "local",
                 colModel: [{
                         label: '',
                         name: '',
@@ -741,6 +801,8 @@
                                             clearSelectedRows()
                                         }
                                     })
+                                }else{
+                                    $(element).attr('disabled', true)
                                 }
                             }
                         },
@@ -979,9 +1041,9 @@
         $('#crudForm').find('[name=tglbuktiPP]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tglbuktiDeposito]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tglbuktiBBM]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        rekapRincian('getRic')
+        $('#crudForm').find('[name=tglbuktiUangjalan]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        rekapRincian()
         initDatepicker()
-        selectAllRows()
         showDefault(form)
         // form.find(`[name="subnominal"]`).addClass('disabled')
     }
@@ -1002,7 +1064,14 @@
 
         showProsesGajiSupir(form, Id, 'edit')
         let ricList = await getEdit(Id)
-        rekapRincian(`${Id}/getEdit`)
+        $('#rekapRincian').jqGrid('setGridParam', {
+            url: `${apiUrl}prosesgajisupirheader/${Id}/getEdit`,
+            postData: {
+                dari: $('#crudForm').find('[name=tgldari]').val(),
+                sampai: $('#crudForm').find('[name=tglsampai]').val(),
+            },
+            datatype: "json"
+        }).trigger('reloadGrid');
         selectedRows = ricList.data.map((data) => {
             let element = $('#crudForm').find(`[name="rincianId[]"][value=${data.idric}]`)
 
@@ -1042,7 +1111,14 @@
         form.find('#btnTampil').prop('disabled', true)
         showProsesGajiSupir(form, Id, 'delete')
         let ricList = await getEdit(Id)
-        rekapRincian(`${Id}/getEdit`)
+        $('#rekapRincian').jqGrid('setGridParam', {
+            url: `${apiUrl}prosesgajisupirheader/${Id}/getEdit`,
+            postData: {
+                dari: $('#crudForm').find('[name=tgldari]').val(),
+                sampai: $('#crudForm').find('[name=tglsampai]').val(),
+            },
+            datatype: "json"
+        }).trigger('reloadGrid');
         selectedRows = ricList.data.map((data) => {
             let element = $('#crudForm').find(`[name="rincianId[]"][value=${data.idric}]`)
 
@@ -1127,7 +1203,7 @@
                 })
 
                 // url = `${gajiId}/getEdit`
-                // rekapRincian(url)
+                rekapRincian()
 
 
                 if (response.potsemua != null) {
@@ -1192,6 +1268,21 @@
 
                 }
 
+                if (response.uangjalan != null) {
+                    $.each(response.uangjalan, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
+
+                        form.find(`[name="${index}"]`).val(value)
+                        if (index == 'bankUangjalan') {
+                            element.data('current-value', value).prop('readonly', true)
+                            element.parent('.input-group').find('.button-clear').remove()
+                            element.parent('.input-group').find('.input-group-append').remove()
+                        }
+                    })
+                    form.find(`[name="tglbuktiUangjalan"]`).val(dateFormat(response.data.tglbukti))
+
+                }
+
 
                 initAutoNumeric(form.find(`[name="nomPR"]`))
                 initAutoNumeric(form.find(`[name="nomPS"]`))
@@ -1234,40 +1325,6 @@
             },
             error: (error) => {
                 showDialog(error.responseJSON.message)
-            }
-        })
-    }
-
-    function getPotPinjaman(dari, sampai) {
-        $.ajax({
-            url: `${apiUrl}prosesgajisupirheader/${dari}/${sampai}/getPotPinjaman`,
-            method: 'GET',
-            dataType: 'JSON',
-            data: {
-                limit: 0
-            },
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-
-            }
-        })
-    }
-
-    function getDepo(dari, sampai) {
-        $.ajax({
-            url: `${apiUrl}prosesgajisupirheader/${dari}/${sampai}/getDepo`,
-            method: 'GET',
-            dataType: 'JSON',
-            data: {
-                limit: 0
-            },
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-
             }
         })
     }
@@ -1318,15 +1375,17 @@
             success: response => {
                 bankId = response.data.bank_id
                 form.find(`[name="bank_idPR"]`).val(response.data.bank_id)
-                form.find(`[name="bankPR"]`).val(response.data.bank)
+                form.find(`[name="bankPR"]`).val(response.data.bank).data('current-value', response.data.bank)
                 form.find(`[name="bank_idPS"]`).val(response.data.bank_id)
-                form.find(`[name="bankPS"]`).val(response.data.bank)
+                form.find(`[name="bankPS"]`).val(response.data.bank).data('current-value', response.data.bank)
                 form.find(`[name="bank_idPP"]`).val(response.data.bank_id)
-                form.find(`[name="bankPP"]`).val(response.data.bank)
+                form.find(`[name="bankPP"]`).val(response.data.bank).data('current-value', response.data.bank)
                 form.find(`[name="bank_idDeposito"]`).val(response.data.bank_id)
-                form.find(`[name="bankDeposito"]`).val(response.data.bank)
+                form.find(`[name="bankDeposito"]`).val(response.data.bank).data('current-value', response.data.bank)
                 form.find(`[name="bank_idBBM"]`).val(response.data.bank_id)
-                form.find(`[name="bankBBM"]`).val(response.data.bank)
+                form.find(`[name="bankBBM"]`).val(response.data.bank).data('current-value', response.data.bank)
+                form.find(`[name="bank_idUangjalan"]`).val(response.data.bank_id)
+                form.find(`[name="bankUangjalan"]`).val(response.data.bank).data('current-value', response.data.bank)
             }
         })
     }
@@ -1448,6 +1507,30 @@
                 element.data('currentValue', element.val())
             }
         })
+        
+        $('.bankUangjalan-lookup').lookup({
+            title: 'Bank Lookup',
+            fileName: 'bank',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+
+                }
+            },
+            onSelectRow: (bank, element) => {
+                $('#crudForm [name=bank_idUangjalan]').first().val(bank.id)
+                element.val(bank.namabank)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=bank_idUangjalan]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
     }
 
     function clearSelectedRows() {
@@ -1506,6 +1589,7 @@
                         sampai: $('#crudForm').find('[name=tglsampai]').val(),
                         aksi: aksi
                     },
+                    datatype: "json"
                 }).trigger('reloadGrid');
                 countNominal()
             }
