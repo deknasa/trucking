@@ -205,6 +205,10 @@
             }
           },
           {
+            label: 'Keterangan',
+            name: 'keterangan',
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
           },

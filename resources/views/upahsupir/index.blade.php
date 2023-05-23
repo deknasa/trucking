@@ -177,6 +177,10 @@
             }
           },
           {
+            label: 'Keterangan',
+            name: 'keterangan',
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
