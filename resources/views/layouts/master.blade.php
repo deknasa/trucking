@@ -319,6 +319,7 @@
 
   <script type="text/javascript">
     let accessToken = `{{ session('access_token') }}`
+    let accessTokenEmkl = `{{ session('access_token_emkl') }}`
     let appUrl = `{{ url()->to('/') }}`
     let apiUrl = `{{ config('app.api_url') }}`
     let apiEmklUrl = `{{ config('app.emkl_api_url') }}`
