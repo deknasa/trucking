@@ -471,16 +471,11 @@ html {
 }
 
 .ui-datepicker {
-	background-color: #e0ecff;
-	border-color: var(--jqgrid-border-color) !important;
+	font-family: dejavu !important;
+	font-size: 1rem;
 }
 
-.ui-datepicker-header {
-	border: none;
-	background-color: transparent;
-}
-
-.ui-datepicker-calendar {
-	background-color: #fff;
-	border: 1px solid var(--jqgrid-border-color);
+.ui-tabs {
+	font-size: 1rem;
+	background: #fff;
 }
