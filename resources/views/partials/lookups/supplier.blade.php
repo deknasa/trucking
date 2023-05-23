@@ -1,5 +1,5 @@
 <table id="supplierLookup" class="lookup-grid"></table>
-<div id="supplierLookupPager"></div>
+{{-- <div id="supplierLookupPager"></div> --}}
 
 <script>
   $('#supplierLookup').jqGrid({
@@ -270,7 +270,7 @@
       sortorder: 'asc',
       page: 1,
       toolbar: [true, "top"],
-      pager: $('#supplierLookupPager'),
+      // pager: $('#supplierLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -340,15 +340,24 @@
 
     .jqGrid("setLabel", "rn", "No.")
     .jqGrid('filterToolbar', {
-      stringResult: true,
-      searchOnEnter: false,
-      defaultSearch: 'cn',
-      groupOp: 'AND',
-      disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
-      beforeSearch: function() {
-        clearGlobalSearch($('#supplierLookup'))
-      },
-    })
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          clearGlobalSearch($('#detail'))
+        },
+      })
+
+      .jqGrid("navGrid", pager, {
+        search: false,
+        refresh: false,
+        add: false,
+        edit: false,
+        del: false,
+      })
+      .customPager()
 
   loadGlobalSearch($('#supplierLookup'))
   loadClearFilter($('#supplierLookup'))
