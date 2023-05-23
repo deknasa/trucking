@@ -43,7 +43,8 @@ class LaporanTripGandenganDetailController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'laporantripgandengandetail/report', $detailParams);
 
-        $data = $header['data'];
+            $data = $header['data'];
+            // dd($data);
         $user = Auth::user();
         return view('reports.laporantripgandengandetail', compact('data', 'user', 'detailParams'));
     }
