@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="{{ asset('plugins/select2/themes/select2-bootstrap4.min.css') }}">
 
   <!-- Jquery UI -->
-  <link rel="stylesheet" href="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('libraries/jquery-ui/cupertino/jquery-ui.min.css') }}">
 
   <!-- EasyUI -->
   <!-- <link rel="stylesheet" type="text/css" href="{{ asset('libraries/easyui/themes/default/easyui.css') }}">
