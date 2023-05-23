@@ -117,15 +117,19 @@ class LaporanKasGantungController extends MyController
             ],
         ];
 
+        
         foreach ($header_columns as $data_columns_index => $data_column) {
             $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, $data_column['label'] ?? $data_columns_index + 1);
         }
-        
+
         $lastColumn = $alphabets[$data_columns_index];
         $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
         $totalDebet = 0;
         $totalKredit = 0;
         $totalSaldo = 0;
+        // if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
+
+        // }
         foreach ($pengeluaran as $response_index => $response_detail) {
 
             foreach ($header_columns as $detail_columns_index => $detail_column) {
