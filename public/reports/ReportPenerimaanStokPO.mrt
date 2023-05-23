@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "bfe74179538cf2105b4a5f8b3dba8254",
+  "ReportGuid": "78dded1852f597a2b5ac0e25e84c5a2e",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/truck/public/reports/ReportPenerimaanStokPO.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1683346612000+0700)/",
+  "ReportChanged": "/Date(1684562904000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1248,9 +1248,9 @@
                 "WordWrap": true
               },
               "Margins": {
-                "Left": 5,
-                "Right": 5,
-                "Top": 3,
+                "Left": 0,
+                "Right": 3,
+                "Top": 0,
                 "Bottom": 0
               },
               "LineSpacing": 1.15,
@@ -1280,10 +1280,10 @@
               "Margins": {
                 "Left": 5,
                 "Right": 5,
-                "Top": 3,
+                "Top": 0,
                 "Bottom": 0
               },
-              "LineSpacing": 1.15,
+              "LineSpacing": 1.5,
               "Type": "DataColumn"
             },
             "4": {
