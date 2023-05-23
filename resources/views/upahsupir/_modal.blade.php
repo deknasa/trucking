@@ -131,6 +131,17 @@
             </div>
 
             <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  Keterangan </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="keterangan">
+                <input type="text" name="keterangan" class="form-control keterangan">
+              </div>
+            </div>
+
+            <div class="row form-group">
               <div class="col">
                 <div class="row mb-2">
                   <div class="col">
@@ -321,6 +332,8 @@
         // data.filter((row) => row.name === 'jarak')[index].value = AutoNumeric.getNumber($(`#crudForm [name="jarak`)[index])
         formData.append('jarak', AutoNumeric.getNumber($(`#crudForm [name="jarak`)[index]))
       })
+
+     
 
       formData.append('sortIndex', $('#jqGrid').getGridParam().sortname)
       formData.append('sortOrder', $('#jqGrid').getGridParam().sortorder)
