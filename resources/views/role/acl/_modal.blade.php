@@ -131,11 +131,11 @@
       return acl.id
     })
 
-    showRole(roleId)
+    showRoleAcl(roleId)
     loadAcoGrid()
   }
 
-  function showRole(roleId) {
+  function showRoleAcl(roleId) {
     $.ajax({
       url: `${apiUrl}role/${roleId}`,
       method: 'GET',

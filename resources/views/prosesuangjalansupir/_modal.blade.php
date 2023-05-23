@@ -268,7 +268,8 @@
                                                 <input type="text" name="bankpengembalian" class="form-control bankpengembalian-lookup">
                                             </div>
                                         </div>
-                                        <div class="table-scroll table-responsive">
+                                        <table id="tablePengembalian"></table>
+                                        <!-- <div class="table-scroll table-responsive">
                                             <table class="table table-bordered table-bindkeys" id="detailPengembalian" style="width:1450px;">
                                                 <thead>
                                                     <tr>
@@ -308,37 +309,9 @@
                                                     </tr>
                                                 </tfoot>
                                             </table>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
-                                <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="transfer-tab" data-toggle="tab" data-target="#transfer" type="button" role="tab" aria-controls="transfer" aria-selected="true">List Transfer</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="adjust-tab" data-toggle="tab" data-target="#adjust" type="button" role="tab" aria-controls="adjust" aria-selected="false">List Adjust Transfer</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="deposit-tab" data-toggle="tab" data-target="#deposit" type="button" role="tab" aria-controls="deposit" aria-selected="false">List Deposit</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="pengembalian-tab" data-toggle="tab" data-target="#pengembalian" type="button" role="tab" aria-controls="pengembalian" aria-selected="false">List Pengembalian Pinjaman</button>
-                                    </li>
-                                </ul> -->
-                                <!-- <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="transfer" role="tabpanel" aria-labelledby="transfer-tab">
-
-                                    </div>
-                                    <div class="tab-pane fade" id="adjust" role="tabpanel" aria-labelledby="adjust-tab">
-
-                                    </div>
-                                    <div class="tab-pane fade" id="deposit" role="tabpanel" aria-labelledby="deposit-tab">
-
-                                    </div>
-                                    <div class="tab-pane fade" id="pengembalian" role="tabpanel" aria-labelledby="pengembalian-tab">
-
-                                    </div>
-                                </div> -->
                             </div>
                         </div>
 
@@ -432,21 +405,33 @@
                 })
                 data.filter((row) => row.name === 'nilaiadjust')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nilaiadjust"]`)[0])
                 data.filter((row) => row.name === 'nilaideposit')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nilaideposit"]`)[0])
-                $('#tbodyPengembalian tr').each(function(index, tr) {
 
+                let selectedRowsPengembalian = $("#tablePengembalian").getGridParam("selectedRowIds");
+                $.each(selectedRowsPengembalian, function(index, value) {
+                    let selectedBayar = $("#tablePengembalian").jqGrid("getCell", value, "nombayar")
+                    let selectedSisa = $("#tablePengembalian").jqGrid("getCell", value, "sisa")
 
-                    if ($(this).find(`[name="pjt_id[]"]`).is(':checked')) {
-
-                        data.filter((row) => row.name === 'keteranganpinjaman[]')[index].value = $(this).find(`[name="keteranganpinjaman[]"]`).val()
-                        data.filter((row) => row.name === 'pjt_id[]')[index].value = $(this).find(`[name="pjt_id[]"]`).val()
-                        data.filter((row) => row.name === 'nombayar[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nombayar[]"]`)[index])
-                        data.filter((row) => row.name === 'pengeluarantruckingheader_nobukti[]')[index].value = $(this).find(`[name="pengeluarantruckingheader_nobukti[]"]`).val()
-
-
-                    }
-                })
-
-
+                    data.push({
+                        name: 'nombayar[]',
+                        value: (selectedBayar != '') ? parseFloat(selectedBayar.replaceAll(',', '')) : 0
+                    })
+                    data.push({
+                        name: 'sisa[]',
+                        value: (selectedSisa != '') ? parseFloat(selectedSisa.replaceAll(',', '')) : 0
+                    })
+                    data.push({
+                        name: 'keteranganpinjaman[]',
+                        value: $("#tablePengembalian").jqGrid("getCell", value, "keteranganpinjaman")
+                    })
+                    data.push({
+                        name: 'pengeluarantruckingheader_nobukti[]',
+                        value: $("#tablePengembalian").jqGrid("getCell", value, "nobukti")
+                    })
+                    data.push({
+                        name: 'pjt_id[]',
+                        value: $("#tablePengembalian").jqGrid("getCell", value, "id")
+                    })
+                });
             }
 
             data.push({
@@ -543,7 +528,39 @@
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
 
-                        setErrorMessages(form, error.responseJSON.errors);
+                        errors = error.responseJSON.errors
+                        $(".ui-state-error").removeClass("ui-state-error");
+                        $.each(errors, (index, error) => {
+                            let indexes = index.split(".");
+                            let angka = indexes[1]
+                            selectedRowsPengembalian = $("#tablePengembalian").getGridParam("selectedRowIds");
+                            row = parseInt(selectedRowsPengembalian[angka]) - 1;
+                            let element;
+                            console.log(indexes[0])
+                            if (indexes[0] == 'nombayar' || indexes[0] == 'keteranganpinjaman') {
+
+                                element = $(`#tablePengembalian tr#${parseInt(selectedRowsPengembalian[angka])}`).find(`td[aria-describedby="tablePengembalian_${indexes[0]}"]`)
+                                $(element).addClass("ui-state-error");
+                                $(element).attr("title", error[0].toLowerCase())
+                            } else {
+                                if (indexes.length > 1) {
+                                    element = form.find(`[name="${indexes[0]}[]"]`)[row];
+                                } else {
+                                    element = form.find(`[name="${indexes[0]}"]`)[0];
+                                }
+
+                                if ($(element).length > 0 && !$(element).is(":hidden")) {
+                                    $(element).addClass("is-invalid");
+                                    $(`
+                                        <div class="invalid-feedback">
+                                        ${error[0].toLowerCase()}
+                                        </div>
+                                        `).appendTo($(element).parent());
+                                } else {
+                                    return showDialog(error);
+                                }
+                            }
+                        });
                     } else {
                         showDialog(error.responseJSON.message)
                     }
@@ -651,6 +668,7 @@
         $('#addRowTransfer').show()
         initAutoNumeric(form.find(`[name="nilaideposit"]`))
 
+        loadPengembalianGrid()
     }
 
     function editProsesUangJalanSupir(userId) {
@@ -690,6 +708,326 @@
         $('.invalid-feedback').remove()
 
         showProsesUangJalanSupir(form, userId)
+    }
+
+    function loadPengembalianGrid() {
+        $("#tablePengembalian")
+            .jqGrid({
+                datatype: 'local',
+                styleUI: 'Bootstrap4',
+                iconSet: 'fontAwesome',
+                colModel: [{
+                        label: "",
+                        name: "",
+                        width: 30,
+                        formatter: 'checkbox',
+                        search: false,
+                        editable: false,
+                        formatter: function(value, rowOptions, rowData) {
+                            let disabled = '';
+                            if ($('#crudForm').data('action') == 'delete' || $('#crudForm').data('action') == 'edit') {
+                                disabled = 'disabled'
+                            }
+                            return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxPengembalianHandler(this, ${rowData.id})">`;
+                        },
+                    },
+                    {
+                        label: "id",
+                        name: "id",
+                        hidden: true,
+                        search: false,
+                    },
+                    {
+                        label: "Nobukti PENGELUARAN TRUCKING",
+                        name: "nobukti",
+                        sortable: true,
+                    },
+                    {
+                        label: "SISA",
+                        name: "sisa",
+                        sortable: true,
+                        align: "right",
+                        formatter: currencyFormat,
+                    },
+                    {
+                        label: "NOMINAL",
+                        name: "nombayar",
+                        align: "right",
+                        editable: true,
+                        editoptions: {
+                            dataInit: function(element, id) {
+                                initAutoNumeric($('#crudForm').find(`[id="${id.id}"]`))
+                            },
+                            dataEvents: [{
+                                type: "keyup",
+                                fn: function(event, rowObject) {
+                                    let originalGridData = $("#tablePengembalian")
+                                        .jqGrid("getGridParam", "originalData")
+                                        .find((row) => row.id == rowObject.rowId);
+
+                                    let localRow = $("#tablePengembalian").jqGrid(
+                                        "getLocalRow",
+                                        rowObject.rowId
+                                    );
+                                    let totalSisa
+
+                                    let nombayar = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
+                                    if ($('#crudForm').data('action') == 'edit') {
+                                        totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nombayar)) - nombayar
+                                    } else {
+                                        totalSisa = originalGridData.sisa - nombayar
+                                    }
+
+                                    $("#tablePengembalian").jqGrid(
+                                        "setCell",
+                                        rowObject.rowId,
+                                        "sisa",
+                                        totalSisa
+                                    );
+
+                                    nombayarDetails = $(`#tablePengembalian tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePengembalian_nombayar"]`)
+                                    ttlBayar = 0
+                                    $.each(nombayarDetails, (index, nombayarDetail) => {
+                                        ttlBayarDetail = parseFloat($(nombayarDetail).attr('title').replaceAll(',', ''))
+                                        ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
+                                        ttlBayar += ttlBayars
+                                    });
+                                    ttlBayar += nombayar
+                                    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_nombayar"]`).text(ttlBayar))
+
+                                    // setAllTotal()
+                                    setTotalSisa()
+                                },
+                            }, ],
+                        },
+                        sortable: false,
+                        sorttype: "int",
+                    },
+                    {
+                        label: "KETERANGAN",
+                        name: "keteranganpinjaman",
+                        sortable: false,
+                        editable: false,
+                        width: 500
+                    },
+                ],
+                autowidth: true,
+                shrinkToFit: false,
+                height: 400,
+                rownumbers: true,
+                rownumWidth: 45,
+                footerrow: true,
+                userDataOnFooter: true,
+                toolbar: [true, "top"],
+                pgbuttons: false,
+                pginput: false,
+                cellEdit: true,
+                cellsubmit: "clientArray",
+                editableColumns: ["nombayar"],
+                selectedRowIds: [],
+                afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
+                    let originalGridData = $("#tablePengembalian")
+                        .jqGrid("getGridParam", "originalData")
+                        .find((row) => row.id == rowId);
+
+                    let localRow = $("#tablePengembalian").jqGrid("getLocalRow", rowId);
+
+                    let getBayar = $("#tablePengembalian").jqGrid("getCell", rowId, "nombayar")
+                    let nombayar = (getBayar != '') ? parseFloat(getBayar.replaceAll(',', '')) : 0
+
+                    sisa = 0
+                    if ($('#crudForm').data('action') == 'edit') {
+                        sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nombayar)) - nombayar
+                    } else {
+                        sisa = originalGridData.sisa
+                    }
+                    console.log(indexColumn)
+                    if (indexColumn == 5) {
+
+                        $("#tablePengembalian").jqGrid(
+                            "setCell",
+                            rowId,
+                            "sisa",
+                            sisa
+                            // sisa - nombayar - potongan
+                        );
+                    }
+                    setTotalNominal()
+                    setTotalSisa()
+                },
+                isCellEditable: function(cellname, iRow, iCol) {
+                    let rowData = $(this).jqGrid("getRowData")[iRow - 1];
+                    if ($('#crudForm').data('action') == 'add') {
+                        return $(this)
+                            .find(`tr input[value=${rowData.id}]`)
+                            .is(":checked");
+                    }
+                },
+                validationCell: function(cellobject, errormsg, iRow, iCol) {
+                    console.log(cellobject);
+                    console.log(errormsg);
+                    console.log(iRow);
+                    console.log(iCol);
+                },
+                loadComplete: function() {
+                    setTimeout(() => {
+                        $(this)
+                            .getGridParam("selectedRowIds")
+                            .forEach((selectedRowId) => {
+                                console.log(selectedRowId)
+                                $(this)
+                                    .find(`tr input[value=${selectedRowId}]`)
+                                    .prop("checked", true);
+                                initAutoNumeric($(this).find(`td[aria-describedby="tablePengembalian_nombayar"]`))
+                            });
+                    }, 100);
+                    setTotalNominal()
+                    setTotalSisa()
+                    setHighlight($(this))
+                },
+            })
+            .jqGrid("setLabel", "rn", "No.")
+            .jqGrid("navGrid", "#tablePager", {
+                add: false,
+                edit: false,
+                del: false,
+                refresh: false,
+                search: false,
+            })
+            .jqGrid("filterToolbar", {
+                searchOnEnter: false,
+            })
+            .jqGrid("excelLikeGrid", {
+                beforeDeleteCell: function(rowId, iRow, iCol, event) {
+                    let localRow = $("#tablePengembalian").jqGrid("getLocalRow", rowId);
+
+                    $("#tablePengembalian").jqGrid(
+                        "setCell",
+                        rowId,
+                        "sisa",
+                        parseInt(localRow.sisa) + parseInt(localRow.nominal)
+                    );
+
+                    return true;
+                },
+            });
+        /* Append clear filter button */
+        loadClearFilter($('#tablePengembalian'))
+
+        /* Append global search */
+        // loadGlobalSearch($('#tablePengembalian'))
+    }
+
+
+    function getDataPengembalian(supirId, id) {
+        aksi = $('#crudForm').data('action')
+
+        if (aksi == 'edit') {
+            url = `${apiUrl}prosesuangjalansupirheader/${id}/getPengembalian`
+        } else if (aksi == 'delete') {
+            url = `${apiUrl}prosesuangjalansupirheader/${id}/getPengembalian`
+            attribut = 'disabled'
+            forCheckbox = 'disabled'
+        } else if (aksi == 'add') {
+            url = `${apiUrl}prosesuangjalansupirheader/${supirId}/getPinjaman`
+        }
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: url,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+            });
+        });
+    }
+
+    function checkboxPengembalianHandler(element, rowId) {
+
+        let isChecked = $(element).is(":checked");
+        let editableColumns = $("#tablePengembalian").getGridParam("editableColumns");
+        let selectedRowIds = $("#tablePengembalian").getGridParam("selectedRowIds");
+        let originalGridData = $("#tablePengembalian")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
+
+        editableColumns.forEach((editableColumn) => {
+
+            if (!isChecked) {
+                for (var i = 0; i < selectedRowIds.length; i++) {
+                    if (selectedRowIds[i] == rowId) {
+                        selectedRowIds.splice(i, 1);
+                    }
+                }
+                sisa = 0
+                if ($('#crudForm').data('action') == 'edit') {
+                    sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nombayar))
+                } else {
+                    sisa = originalGridData.sisa
+                }
+
+                $("#tablePengembalian").jqGrid(
+                    "setCell",
+                    rowId,
+                    "sisa",
+                    sisa
+                );
+
+                $("#tablePengembalian").jqGrid("setCell", rowId, "nombayar", 0);
+                setTotalNominal()
+                setTotalSisa()
+            } else {
+                selectedRowIds.push(rowId);
+
+                let localRow = $("#tablePengembalian").jqGrid("getLocalRow", rowId);
+
+                if ($('#crudForm').data('action') == 'edit') {
+                    // if (originalGridData.sisa == 0) {
+
+                    //   let getNominal = $("#tablePengembalian").jqGrid("getCell", rowId, "nominal")
+                    //   localRow.nominal = (getNominal != '') ? parseFloat(getNominal.replaceAll(',', '')) : 0
+                    // } else {
+                    //   localRow.nominal = originalGridData.sisa
+                    // }
+                    localRow.nominal = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nombayar))
+                }
+
+                initAutoNumeric($(`#tablePengembalian tr#${rowId}`).find(`td[aria-describedby="tablePengembalian_nombayar"]`))
+                setTotalNominal()
+                setTotalSisa()
+            }
+        });
+
+        $("#tablePengembalian").jqGrid("setGridParam", {
+            selectedRowIds: selectedRowIds,
+        });
+
+    }
+
+    function setTotalNominal() {
+        let nominalDetails = $(`#tablePengembalian`).find(`td[aria-describedby="tablePengembalian_nombayar"]`)
+        let nominal = 0
+        $.each(nominalDetails, (index, nominalDetail) => {
+            nominaldetail = parseFloat($(nominalDetail).text().replaceAll(',', ''))
+            nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
+            nominal += nominals
+        });
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_nombayar"]`).text(nominal))
+    }
+
+    function setTotalSisa() {
+        let sisaDetails = $(`#tablePengembalian`).find(`td[aria-describedby="tablePengembalian_sisa"]`)
+        let sisa = 0
+        $.each(sisaDetails, (index, sisaDetail) => {
+            sisadetail = parseFloat($(sisaDetail).text().replaceAll(',', ''))
+            sisas = (isNaN(sisadetail)) ? 0 : sisadetail;
+            sisa += sisas
+        });
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_sisa"]`).text(sisa))
     }
 
     function cekValidasi(Id, Aksi) {
@@ -854,84 +1192,42 @@
                 let totaljlhPinjaman = 0
                 let totalttlBayar = 0
                 let totalSisa = 0
-                $.each(response.detail.pengembalian.detail, (index, detail) => {
-                    totaljlhPinjaman = parseFloat(totaljlhPinjaman) + parseFloat(detail.jlhpinjaman)
-                    totalttlBayar = parseFloat(totalttlBayar) + parseFloat(detail.totalbayar)
-                    totalSisa = parseFloat(totalSisa) + parseFloat(detail.sisa)
-                    let jlhpinjaman = new Intl.NumberFormat('en-US').format(detail.jlhpinjaman);
-                    let totalbayar = new Intl.NumberFormat('en-US').format(detail.totalbayar);
-                    let sisa = new Intl.NumberFormat('en-US').format(detail.sisa);
-                    let checked
-                    let disabled
-                    // if (detail.pengeluarantruckingheader_nobukti != null) {
-                    //     checked = 'checked'
-                    // } else {
-                    //     disabled = 'disabled'
-                    // }
 
-                    let detailRow = $(`
-                    <tr >
-                        <td><input name='pjt_id[]' type="checkbox" id="checkItem" value="${detail.id}" checked disabled></td>
-                    
-                        <td>${detail.nobukti}</td>
-                        <td>${detail.tglbukti}</td>
-                        <td>${detail.namasupir}</td>
-                        <td>
-                            <p class="text-right">${jlhpinjaman}</p>
-                            <input type="hidden" name="jlhpinjaman[]" class="autonumeric" value="${detail.jlhpinjaman}">
-                        </td>
-                        <td>
-                            <p class="text-right">${totalbayar}</p>
-                            <input type="hidden" name="totalbayar[]" class="autonumeric" value="${totalbayar}">
-                        </td>
-                        <td>
-                            <p class="text-right sisa autonumeric">${sisa}</p>
-                            <input type="hidden" name="sisa[]" class="autonumeric" value="${sisa}">
-                        </td>
-                        <td>
-                            <input type="hidden" name="pengeluarantruckingheader_nobukti[]" value="${detail.nobukti}">
-                            <input type="text" name="nombayar[]" disabled class="form-control text-right" value="${detail.nominal}">
-                        </td>
-                        <td>
-                            <input type="text" name="sisapinjaman[]" disabled class="form-control text-right" value="${detail.sisa}">
-                        </td>
-                        <td>
-                            <textarea name="keteranganpinjaman[]" rows="1" disabled class="form-control">${(detail.keterangan == null) ? '' : detail.keterangan}</textarea>
-                        </td>
-                    </tr>
-                    `)
-
-                    initAutoNumeric(detailRow.find(`[name="jlhpinjaman[]"]`))
-                    initAutoNumeric(detailRow.find(`[name="totalbayar[]"]`))
-                    initAutoNumeric(detailRow.find(`[name="nombayar[]"]`))
-                    initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
-                    initAutoNumeric(detailRow.find(`[name="sisapinjaman[]"]`))
-                    initAutoNumeric(detailRow.find('.sisa'))
-                    initAutoNumeric(detailRow.find('.totalbayar'))
-                    initAutoNumeric(detailRow.find('.jlhpinjaman'))
-
-                    $('#detailPengembalian #tbodyPengembalian').append(detailRow)
-
-                    setNomBayars()
-                    setSisaPinjaman()
-                })
-
-
-                $('#jlhPinjaman').append(`${totaljlhPinjaman}`)
-                initAutoNumeric($('#detailPengembalian tfoot').find('#jlhPinjaman'))
-                $('#ttlBayar').append(`${totalttlBayar}`)
-                initAutoNumeric($('#detailPengembalian tfoot').find('#ttlBayar'))
-                $('#sisa').append(`${totalSisa}`)
-                initAutoNumeric($('#detailPengembalian tfoot').find('#sisa'))
                 initAutoNumeric(form.find(`[name="nilaiadjust"]`))
                 form.find(`[name="tgladjust"]`).val(dateFormat(response.detail.adjust.tgladjust))
                 form.find(`[name="bankadjust"]`).data('currentValue', response.detail.adjust.bankadjust)
 
+                loadPengembalianGrid()
                 if (response.detail.pengembalian.bank != null) {
                     form.find(`[name="bank_idpengembalian"]`).val(response.detail.pengembalian.bank.bank_idpengembalian)
                     form.find(`[name="bankpengembalian"]`).val(response.detail.pengembalian.bank.bankpengembalian).prop('disabled', true)
                     form.find(`[name="bankpengembalian"]`).data('currentValue', response.detail.pengembalian.bank.bankpengembalian)
+                    getDataPengembalian(response.data.supir_id, userId).then((response) => {
 
+                        let selectedId = []
+                        let totalBayar = 0
+
+                        $.each(response.data, (index, value) => {
+                            selectedId.push(value.id)
+                            totalBayar += parseFloat(value.nominal)
+                        })
+                        $('#tablePengembalian').jqGrid("clearGridData");
+                        setTimeout(() => {
+
+                            $("#tablePengembalian")
+                                .jqGrid("setGridParam", {
+                                    datatype: "local",
+                                    data: response.data,
+                                    originalData: response.data,
+                                    rowNum: response.data.length,
+                                    selectedRowIds: selectedId
+                                })
+                                .trigger("reloadGrid");
+                        }, 100);
+
+                        initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_nombayar"]`).text(totalBayar))
+
+                    });
                 } else {
                     form.find('#tabs-4 [name]').prop('disabled', true)
                 }
@@ -1253,9 +1549,31 @@
             },
             onSelectRow: (supir, element) => {
                 $('#crudForm [name=supir_id]').first().val(supir.id)
-                getPinjaman(supir.id)
                 element.val(supir.namasupir)
                 element.data('currentValue', element.val())
+                $('#tablePengembalian').jqGrid("clearGridData");
+                $("#tablePengembalian")
+                    .jqGrid("setGridParam", {
+                        selectedRowIds: []
+                    })
+                    .trigger("reloadGrid");
+                getDataPengembalian(supir.id).then((response) => {
+
+                    console.log('before', $("#tablePengembalian").jqGrid('getGridParam', 'selectedRowIds'))
+                    setTimeout(() => {
+
+                        $("#tablePengembalian")
+                            .jqGrid("setGridParam", {
+                                datatype: "local",
+                                data: response.data,
+                                originalData: response.data,
+                                rowNum: response.data.length,
+                                selectedRowIds: []
+                            })
+                            .trigger("reloadGrid");
+                    }, 100);
+
+                });
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))

@@ -13,12 +13,17 @@
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.viewer.js') }}"></script>
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <script src="{{ asset('terbilang.js?version='. config('app.version')) }}"></script>
+
   <script type="text/javascript">
     var penerimaanstokheaders = {!! json_encode($penerimaanstokheaders); !!}
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
       var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
+
+      Stimulsoft.Report.Dictionary.StiFunctions.addFunction("MyCategory", "Terbilang", "Terbilang", "Terbilang", "", String, "Return Description", [Object], ["value"], ["Descriptions"], terbilang);      
+      viewerOptions.toolbar.viewMode = Stimulsoft.Viewer.StiWebViewMode.Continuous;
 
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
       var report = new Stimulsoft.Report.StiReport()
@@ -42,7 +47,7 @@
       switch (penerimaanstokheaders.statusformat) {
         case '132':
         //DOT
-        report.loadFile(`{{ asset('public/reports/ReportpenerimaanStokDOT.mrt') }}`)
+        report.loadFile(`{{ asset('public/reports/ReportpenerimaanStokDO.mrt') }}`)
         
         break;
       case '133':
@@ -51,13 +56,25 @@
         
         break;
       case '134':
-        //PBT
-        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPBT.mrt') }}`)
-        
+        //SPB
+        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokSPB.mrt') }}`)
         break;
+      case '136':
+        //KOR
+        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokKOR.mrt') }}`)
+        break;
+      case '137':
+        //PG
+        report.loadFile(`{{ asset('public/reports/ReportpenerimaanStokPG.mrt') }}`)
+        break;
+      case '138':
+        //SPBS
+        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokSPBS.mrt') }}`)
+        break;
+        
     
       default:
-        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStok.mrt') }}`)
+        report.loadFile(`{{ asset('public/reports/ReportPenerimaanSPB.mrt') }}`)
         
         break;
       }
@@ -72,8 +89,8 @@
       report.dictionary.synchronize()
 
       viewer.report = report
-      // designer.renderHtml("content")
-      // designer.report = report
+      designer.renderHtml("content")
+      designer.report = report
       
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');

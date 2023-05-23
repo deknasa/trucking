@@ -230,9 +230,9 @@ class JurnalUmumHeaderController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get('http://localhost/trucking-laravel/public/api/jurnalumumdetail', $detailParams);
-        
+        // return $jurnal_detail;
         $jurnal_details = $jurnal_detail['data'];
-        $user = $jurnal_detail['user'];
+        $user = Auth::user();
         return view('reports.jurnalumum', compact('jurnal_details','user'));
     }
 

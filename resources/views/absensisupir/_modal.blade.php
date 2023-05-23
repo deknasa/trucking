@@ -801,30 +801,29 @@
     })
   }
   
-  // function cekValidasiAksi(Id,Aksi){
-  //   $.ajax({
-  //     url: `{{ config('app.api_url') }}absensisupirheader/${Id}/cekValidasiAksi`,
-  //     method: 'POST',
-  //     dataType: 'JSON',
-  //     beforeSend: request => {
-  //       request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-  //     },
-  //     success: response => {
-  //       var kondisi = response.kondisi
-  //         if (kondisi == true) {
-  //           showDialog(response.message['keterangan'])
-  //         } else {
-  //           if (Aksi == 'EDIT') {
-  //             editAbsensiSupir(Id)
-  //           }
-  //           if (Aksi == 'DELETE') {
-  //             deleteAbsensiSupir(Id)
-  //           }
-  //         }
-
-  //     }
-  //   })
-  // }
+  function cekValidasiAksi(Id,Aksi){
+    $.ajax({ 
+      url: `{{ config('app.api_url') }}absensisupirheader/${Id}/cekValidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+          if (kondisi == true) {
+            showDialog(response.message['keterangan'])
+          } else {
+            if (Aksi == 'EDIT') {
+              editAbsensiSupir(Id)
+            }
+            if (Aksi == 'DELETE') {
+              deleteAbsensiSupir(Id)
+            }
+          }
+      }
+    })
+  }
 
   function initLookup() {
     $('.supir-lookup').lookup({

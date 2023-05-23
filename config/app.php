@@ -241,9 +241,13 @@ return [
      */
     'api_url' => env('API_URL', 'http://localhost/trucking-laravel/public/api/'),
 
-    'emkl_api_url' => env('EMKL_API_URL', 'http://localhost/emkl-api/public/api/'),
+    'emkl_api_url' => env('EMKL_API_URL', 'https://tasmdn.kozow.com:8074/emkl-api/public/api/'),
 
     'trucking_forwarder_url' => env('TRUCKING_FORWARDER_URL'),
+
+    'emkl_client_id' => env('EMKL_CLIENT_ID','99154cfb-c7ba-4ef2-b6bc-83bc17288698'),
+
+    'emkl_client_secret' => env('EMKL_CLIENT_SECRET','vRtUKBhzTuffsEyh5ymWTIkL9CSvW2icWCgZMXYr'),
 
     'apppath' => 'c:/xampp/htdocs/truck/app/http/',
 

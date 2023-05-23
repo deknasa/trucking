@@ -36,6 +36,8 @@ class ReportNeracaController extends MyController
            
 
         $reports = $report['data']['original']['data'];
+        echo json_encode($reports);
+
         $user = $report['data']['original']['user'];
         return view('reports.reportneraca', compact('reports','user'));
 

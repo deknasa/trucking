@@ -153,6 +153,12 @@ class PengeluaranHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'pengeluaranheader/' . $request->id);
 
+        $bank = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'bank/' . $header['data']['bank_id']);
+        $tipeBank = $bank['data']['tipe'];
+
         $detailParams = [
             'forReport' => true,
             'pengeluaran_id' => $request->id
@@ -165,7 +171,11 @@ class PengeluaranHeaderController extends MyController
 
         $data = $header['data'];
         $pengeluaran_details = $pengeluaran_detail['data'];
+        // return $pengeluaran_details;
         $user = Auth::user();
+        if ($tipeBank === 'KAS') {
+            return view('reports.pengeluaranKAS', compact('data','pengeluaran_details', 'user'));
+        }
         return view('reports.pengeluaran', compact('data','pengeluaran_details', 'user'));
     }
 

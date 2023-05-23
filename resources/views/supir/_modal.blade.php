@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -247,7 +247,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="col-md-4">
                 <div class="row mb-2">
                   <div class="col">
@@ -365,7 +365,7 @@
     })
   })
 
-  
+
   // $('#crudModal').on('shown.bs.modal', () => {
   //   let form = $('#crudForm')
 
@@ -476,7 +476,7 @@
             setFormBindKeys(form)
             initDropzone(form.data('action'), supir)
             initDropzonePdf(form.data('action'), supir)
-            
+
 
             form.find('select').each((index, select) => {
               let element = $(select)
@@ -610,6 +610,7 @@
       }
     })
   }
+
   function initDropzonePdf(action, data = null) {
     $('.dropzonePdf').each((index, element) => {
       if (!element.dropzone) {
@@ -628,10 +629,10 @@
       if (action == 'edit' || action == 'delete') {
         assignAttachmentPdf(element.dropzone, data)
       }
-      
+
     })
-  } 
-      
+  }
+
 
 
 
@@ -639,7 +640,6 @@
   function assignAttachment(dropzone, data) {
     const paramName = dropzone.options.paramName
     const type = paramName.substring(5)
-    // console.log(type);
     if (data[paramName] == '') {
       $('.dropzoneImg').each((index, element) => {
         if (!element.dropzone) {
@@ -662,24 +662,30 @@
       let files = JSON.parse(data[paramName])
 
       files.forEach((file) => {
-        getImgURL(`${apiUrl}supir/image/${type}/${file}/ori`, (fileBlob) => {
+        if (file == '') {
+          file = 'no-image'
+        }
+        getImgURL(`${apiUrl}supir/image/${type}/${file}/ori/edit`, (fileBlob) => {
           let imageFile = new File([fileBlob], file, {
             type: 'image/jpeg',
             lastModified: new Date().getTime()
           }, 'utf-8')
 
-          dropzone.options.addedfile.call(dropzone, imageFile);
-          dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}supir/image/${type}/${file}/ori`);
-          dropzone.files.push(imageFile)
+          if (fileBlob.type != 'text/html') {
+            dropzone.options.addedfile.call(dropzone, imageFile);
+            dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}supir/image/${type}/${file}/ori/edit`);
+            dropzone.files.push(imageFile)
+          }
         })
       })
     }
   }
+
   function assignAttachmentPdf(dropzone, data) {
     const paramName = dropzone.options.paramName
     const type = paramName.substring(3)
     if (data[paramName] == '') {
-      
+
       $('.dropzonePdf').each((index, element) => {
         if (!element.dropzone) {
           let newDropzone = new Dropzone(element, {
@@ -701,15 +707,21 @@
       let files = JSON.parse(data[paramName])
 
       files.forEach((file) => {
+        if (file == '') {
+          file = 'no file'
+        }
         getImgURL(`${apiUrl}supir/pdf/${type}/${file}`, (fileBlob) => {
-          let imageFile = new File([fileBlob], file, {
-            type: 'application/pdf',
-            lastModified: new Date().getTime()
-          }, 'utf-8')
+          console.log('file', file)
+          if (file != 'no file') {
+            let imageFile = new File([fileBlob], file, {
+              type: 'application/pdf',
+              lastModified: new Date().getTime()
+            }, 'utf-8')
 
-          dropzone.options.addedfile.call(dropzone, imageFile);
-          // dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}supir/pdf/${type}/${file}`);
-          dropzone.files.push(imageFile)
+            dropzone.options.addedfile.call(dropzone, imageFile);
+            // dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}supir/pdf/${type}/${file}`);
+            dropzone.files.push(imageFile)
+          }
         })
       })
     }

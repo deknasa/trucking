@@ -331,10 +331,13 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
                   let image = new Image()
                   image.width = 25
                   image.height = 25
-                  image.src = `${apiUrl}supir/image/supir/${file}/small`
+                  image.src = `${apiUrl}supir/image/profil/${encodeURI(file)}/small/show`
 
                   images.push(image.outerHTML)
                 });
@@ -355,11 +358,14 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
                   let image = new Image()
                   image.width = 25
                   image.height = 25
-                  image.src = `${apiUrl}supir/image/ktp/${file}/small`
-
+                  image.src = `${apiUrl}supir/image/ktp/${file}/small/show`
+                  console.log(`${apiUrl}supir/image/ktp/${file}/small/show`)
                   images.push(image.outerHTML)
                 });
 
@@ -379,10 +385,13 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
                   let image = new Image()
                   image.width = 25
                   image.height = 25
-                  image.src = `${apiUrl}supir/image/sim/${file}/small`
+                  image.src = `${apiUrl}supir/image/sim/${file}/small/show`
 
                   images.push(image.outerHTML)
                 });
@@ -403,10 +412,13 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
                   let image = new Image()
                   image.width = 25
                   image.height = 25
-                  image.src = `${apiUrl}supir/image/kk/${file}/small`
+                  image.src = `${apiUrl}supir/image/kk/${file}/small/show`
 
                   images.push(image.outerHTML)
                 });
@@ -427,10 +439,13 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
                   let image = new Image()
                   image.width = 25
                   image.height = 25
-                  image.src = `${apiUrl}supir/image/skck/${file}/small`
+                  image.src = `${apiUrl}supir/image/skck/${file}/small/show`
 
                   images.push(image.outerHTML)
                 });
@@ -451,10 +466,13 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
                   let image = new Image()
                   image.width = 25
                   image.height = 25
-                  image.src = `${apiUrl}supir/image/domisili/${file}/small`
+                  image.src = `${apiUrl}supir/image/domisili/${file}/small/show`
 
                   images.push(image.outerHTML)
                 });

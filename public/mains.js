@@ -911,7 +911,7 @@ function initDatepicker() {
 				if (offDay) {
 					return [
 						true,
-						"ui-state-disabled datepicker-offday",
+						"datepicker-offday",
 						offDay.description,
 					];
 				} else {
@@ -946,7 +946,7 @@ function initDatepicker() {
 			</div>
 		`
 		)
-		.addClass("btn btn-primary").html(`
+		.addClass("btn btn-easyui text-easyui-dark").html(`
 			<i class="fa fa-calendar-alt"></i>
 		`);
 

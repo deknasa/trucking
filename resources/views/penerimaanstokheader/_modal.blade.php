@@ -147,74 +147,76 @@
                   </div>
                 </div>
               </div>
+              <div class="row">
 
-              <div class="form-group col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">gudangdari </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="gudangdari" class="form-control gudangdari-lookup">
-                    <input type="text" id="gudangdariId" name="gudangdari_id" hidden readonly>
+                <div class="form-group col-md-6">
+                  <div class="row">
+                    <div class="col-12 col-sm-3 col-md-4">
+                      <label class="col-form-label">gudangdari </label>
+                    </div>
+                    <div class="col-12 col-sm-9 col-md-8">
+                      <input type="text" name="gudangdari" class="form-control gudangdari-lookup">
+                      <input type="text" id="gudangdariId" name="gudangdari_id" hidden readonly>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="form-group col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">gudangke </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="gudangke" class="form-control gudangke-lookup">
-                    <input type="text" id="gudangkeId" name="gudangke_id" hidden readonly>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">trado dari</label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="tradodari" class="form-control tradodari-lookup">
-                    <input type="text" id="tradodariId" name="tradodari_id" hidden readonly>
+                <div class="form-group col-md-6">
+                  <div class="row">
+                    <div class="col-12 col-sm-3 col-md-4">
+                      <label class="col-form-label">gudangke </label>
+                    </div>
+                    <div class="col-12 col-sm-9 col-md-8">
+                      <input type="text" name="gudangke" class="form-control gudangke-lookup">
+                      <input type="text" id="gudangkeId" name="gudangke_id" hidden readonly>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              <div class="form-group col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">trado ke </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="tradoke" class="form-control tradoke-lookup">
-                    <input type="text" id="tradokeId" name="tradoke_id" hidden readonly>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">gandengan dari</label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="gandengandari" class="form-control gandengandari-lookup">
-                    <input type="text" id="gandengandariId" name="gandengandari_id" hidden readonly>
+  
+                <div class="form-group col-md-6">
+                  <div class="row">
+                    <div class="col-12 col-sm-3 col-md-4">
+                      <label class="col-form-label">trado dari</label>
+                    </div>
+                    <div class="col-12 col-sm-9 col-md-8">
+                      <input type="text" name="tradodari" class="form-control tradodari-lookup">
+                      <input type="text" id="tradodariId" name="tradodari_id" hidden readonly>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              <div class="form-group col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">gandengan ke </label>
+  
+                <div class="form-group col-md-6">
+                  <div class="row">
+                    <div class="col-12 col-sm-3 col-md-4">
+                      <label class="col-form-label">trado ke </label>
+                    </div>
+                    <div class="col-12 col-sm-9 col-md-8">
+                      <input type="text" name="tradoke" class="form-control tradoke-lookup">
+                      <input type="text" id="tradokeId" name="tradoke_id" hidden readonly>
+                    </div>
                   </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="gandenganke" class="form-control gandenganke-lookup">
-                    <input type="text" id="gandengankeId" name="gandenganke_id" hidden readonly>
+                </div>
+  
+                <div class="form-group col-md-6">
+                  <div class="row">
+                    <div class="col-12 col-sm-3 col-md-4">
+                      <label class="col-form-label">gandengan dari</label>
+                    </div>
+                    <div class="col-12 col-sm-9 col-md-8">
+                      <input type="text" name="gandengandari" class="form-control gandengandari-lookup">
+                      <input type="text" id="gandengandariId" name="gandengandari_id" hidden readonly>
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="form-group col-md-6">
+                  <div class="row">
+                    <div class="col-12 col-sm-3 col-md-4">
+                      <label class="col-form-label">gandengan ke </label>
+                    </div>
+                    <div class="col-12 col-sm-9 col-md-8">
+                      <input type="text" name="gandenganke" class="form-control gandenganke-lookup">
+                      <input type="text" id="gandengankeId" name="gandenganke_id" hidden readonly>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -242,6 +244,7 @@
                     <th style="width:100px">keterangan</th>
                     <th class="data_tbl tbl_qty" style="width: 10px">qty</th>
                     <th class="data_tbl tbl_harga" style="width:100px">harga</th>
+                    <th class="data_tbl tbl_penerimaanstok_nobukti" style="width:100px">Penerimaanstoknobukti</th>
                     <th class="data_tbl tbl_persentase" style="width :10px">persentase discount</th>
                     <th class="data_tbl tbl_total" style="width: 100px">Total</th>
                     <th style="width: 10px">Aksi</th>
@@ -474,7 +477,9 @@
     $('.tbl_vulkanisirke').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
-    $('.colspan').attr('colspan', 5);
+    $('.tbl_harga').hide();
+    $('.tbl_penerimaanstok_nobukti').hide();
+    $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
     $('[name=gudang]').val('').attr('readonly', false);
     $('[name=gudang_id]').val('')
@@ -501,6 +506,8 @@
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
+    $('.tbl_penerimaanstok_nobukti').hide();
+
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
     $('[name=gudang]').val('').attr('readonly', false);
@@ -524,6 +531,8 @@
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
     $('.colspan').attr('colspan', 5);
+    $('.tbl_penerimaanstok_nobukti').hide();
+
     $('.sumrow').show();
     $.ajax({
       url: `${apiUrl}gudang/1`,
@@ -547,6 +556,12 @@
     $('[name=gudang]').parents('.form-group').hide()
     $('[name=trado]').parents('.form-group').hide()
     $('[name=gandengan]').parents('.form-group').hide()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=hutang_nobukti]').parents('.form-group').hide()
+    $('[name=coa]').parents('.form-group').hide()
+    $('[name=supplier_id]').parents('.form-group').hide()
+    $('[name=nobon]').parents('.form-group').hide()
 
     $('[name=gudangdari]').parents('.form-group').show()
     $('[name=gudangke]').parents('.form-group').show()
@@ -554,25 +569,34 @@
     $('[name=tradoke]').parents('.form-group').show()
     $('[name=gandengandari]').parents('.form-group').show()
     $('[name=gandenganke]').parents('.form-group').show()
+    $('.tbl_penerimaanstok_nobukti').hide();
+
   }
 
   function tampilankst() {
     $('[name=gudang]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').show()
     $('[name=gandengan]').parents('.form-group').show()
-
+    $('[name=gudang]').val('').attr('readonly', false);
+    $('[name=gudang_id]').val('')
+    
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
     $('[name=tradodari]').parents('.form-group').hide()
     $('[name=tradoke]').parents('.form-group').hide()
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
+    $('.tbl_penerimaanstok_nobukti').hide();
   }
 
   function tampilanpst() {
     $('[name=gudang]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').hide()
     $('[name=gandengan]').parents('.form-group').hide()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=coa]').parents('.form-group').hide()
+    $('[name=gudang]').parents('.form-group').hide()
 
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
@@ -581,6 +605,9 @@
     $('[name=tradoke]').parents('.form-group').hide()
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
+
+    $('.tbl_penerimaanstok_nobukti').show();
+    $('.colspan').attr('colspan', 7);
   }
 
   function tampilanall() {
@@ -596,6 +623,7 @@
     $('[name=coa]').parents('.form-group').show()
     // $('[name=gudang]').val('').attr('readonly', false);
     // $('[name=gudang_id]').val('')
+    $('.tbl_penerimaanstok_nobukti').hide();
     $('.sumrow').show();
     $('.data_tbl').show();
     $('.colspan').attr('colspan', 6);
@@ -661,6 +689,11 @@
                     <input type="text"  name="detail_harga[]" id="detail_harga${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
                   
+                  <td class="data_tbl tbl_penerimaanstok_nobukti">
+                    <input type="text"  name="detail_penerimaanstoknobukti[]" id="detail_penerimaanstoknobukti_${id}" class="form-control ">
+                    <input type="text" id="detailpenerimaanstoknobuktiId_${id}" readonly hidden class="detailpenerimaanstoknobuktiId" name="detail_penerimaanstoknobukti_id[]">
+                  </td>  
+                  
                   <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
@@ -701,6 +734,30 @@
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            }
+          })
+          $(`#detail_penerimaanstoknobukti_${id}`).lookup({
+            title: 'penerimaan stok header Lookup',
+            fileName: 'penerimaanstokheader',
+            beforeProcess: function(test) {
+              var penerimaanstokId = $(`#penerimaanstokId`).val();
+              this.postData = {
+                penerimaanstok_id: penerimaanstokId,
+              }
+            },
+            onSelectRow: (penerimaan, element) => {
+              parent = element.closest('td');
+              parent.children('.detailpenerimaanstoknobuktiId').val(penerimaan.id)
+              element.val(penerimaan.nobukti)
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.val('')
+              parent = element.closest('td');
+              parent.children('.detailpenerimaanstoknobuktiId').val('')
+              element.data('currentValue', element.val())
             }
           })
           id++;
@@ -827,61 +884,45 @@
     }
   }
 
-  function enabledLookupSelected() {
+  function enabledLookupSelectedDari() {
 
-    let trado = $('#crudForm').find(`[name="trado"]`).parents('.input-group').children()
     let tradodari = $('#crudForm').find(`[name="tradodari"]`).parents('.input-group').children()
-    let gandengan = $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children()
     let gandengandari = $('#crudForm').find(`[name="gandengandari"]`).parents('.input-group').children()
-    let gudang = $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children()
     let gudangdari = $('#crudForm').find(`[name="gudangdari"]`).parents('.input-group').children()
+
+    tradodari.attr('disabled', false)
+    tradodari.find('.lookup-toggler').attr('disabled', false)
     $('#tradodariId').attr('disabled', false);
-    $('#gandengandariId').attr('disabled', false);
+    $('#tradodariId').val('');
+    gudangdari.attr('disabled', false)
+    gudangdari.find('.lookup-toggler').attr('disabled', false)
     $('#gudangdariId').attr('disabled', false);
-    $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().attr("disabled", false);
-    $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
-    $('#crudForm').find(`[name="gudangdari"]`).parents('.input-group').children().attr("disabled", false);
-    $('#crudForm').find(`[name="gudangdari"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
-    $('#crudForm').find(`[name="gudangke"]`).parents('.input-group').children().attr("disabled", false);
-    $('#crudForm').find(`[name="gudangke"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
-
-    $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr("disabled", false);
-    $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
-    $('#crudForm').find(`[name="tradodari"]`).parents('.input-group').children().attr("disabled", false);
-    $('#crudForm').find(`[name="tradodari"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
-    $('#crudForm').find(`[name="tradoke"]`).parents('.input-group').children().attr("disabled", false);
-    $('#crudForm').find(`[name="tradoke"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
-
-    $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr("disabled", false);
-    $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
-    $('#crudForm').find(`[name="gandengandari"]`).parents('.input-group').children().attr("disabled", false);
-    $('#crudForm').find(`[name="gandengandari"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
-    $('#crudForm').find(`[name="gandenganke"]`).parents('.input-group').children().attr("disabled", false);
-    $('#crudForm').find(`[name="gandenganke"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    $('#gudangdariId').val('');
+    gandengandari.attr('disabled', false)
+    gandengandari.find('.lookup-toggler').attr('disabled', false)
+    $('#gandengandariId').attr('disabled', false);
+    $('#gandengandariId').val('');
   }
 
   function enabledLookupSelectedKe() {
 
-    let trado = $('#crudForm').find(`[name="trado"]`).parents('.input-group').children()
     let tradoke = $('#crudForm').find(`[name="tradoke"]`).parents('.input-group').children()
-    let gandengan = $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children()
     let gandenganke = $('#crudForm').find(`[name="gandenganke"]`).parents('.input-group').children()
-    let gudang = $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children()
     let gudangke = $('#crudForm').find(`[name="gudangke"]`).parents('.input-group').children()
+
+    tradoke.attr('disabled', false)
+    tradoke.find('.lookup-toggler').attr('disabled', false)
     $('#tradokeId').attr('disabled', false);
     $('#tradokeId').val('');
-    $('#gandengankeId').attr('disabled', false);
-    $('#gandengankeId').val('');
+    gudangke.attr('disabled', false)
+    gudangke.find('.lookup-toggler').attr('disabled', false)
     $('#gudangkeId').attr('disabled', false);
     $('#gudangkeId').val('');
-    gudangke.attr("disabled", false);
-    gudangke.find(`.lookup-toggler`).attr("disabled", false);
-
-    tradoke.attr("disabled", false);
-    tradoke.find(`.lookup-toggler`).attr("disabled", false);
-
-    gandenganke.attr("disabled", false);
-    gandenganke.find(`.lookup-toggler`).attr("disabled", false);
+    gandenganke.attr('disabled', false)
+    gandenganke.find('.lookup-toggler').attr('disabled', false)
+    $('#gandengankeId').attr('disabled', false);
+    $('#gandengankeId').val('');
+    
   }
 
   function lookupSelected(el) {
@@ -1081,6 +1122,11 @@
                     <input type="text"  name="detail_harga[]" id="detail_harga${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
                   </td>  
                   
+                  <td class="data_tbl tbl_penerimaanstok_nobukti">
+                    <input type="text"  name="detail_penerimaanstoknobukti[]" id="detail_penerimaanstoknobukti_${index}" class="form-control ">
+                    <input type="text" id="detailpenerimaanstoknobuktiId_${index}" readonly hidden class="detailpenerimaanstoknobuktiId" name="detail_penerimaanstoknobukti_id[]">
+                  </td>  
+                  
                   <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
                   </td>  
@@ -1120,6 +1166,31 @@
       }
 
     })
+    $(`#detail_penerimaanstoknobukti_${index}`).lookup({
+      title: 'penerimaan stok header Lookup',
+      fileName: 'penerimaanstokheader',
+      beforeProcess: function(test) {
+        var penerimaanstokId = $(`#penerimaanstokId`).val();
+        this.postData = {
+          penerimaanstok_id: penerimaanstokId,
+        }
+      },
+      onSelectRow: (penerimaan, element) => {
+        parent = element.closest('td');
+        parent.children('.detailpenerimaanstoknobuktiId').val(penerimaan.id)
+        element.val(penerimaan.nobukti)
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        parent = element.closest('td');
+        parent.children('.detailpenerimaanstoknobuktiId').val('')
+        element.data('currentValue', element.val())
+      }
+    })
+      
     initAutoNumeric($(`.number${index}`))
     setTampilanForm()
     setRowNumbers()
@@ -1244,6 +1315,11 @@
                     <input type="text"  name="detail_harga[]" id="detail_harga${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
                   
+                  <td class="data_tbl tbl_penerimaanstok_nobukti">
+                    <input type="text"  name="detail_penerimaanstoknobukti[]" id="detail_penerimaanstoknobukti_${id}" class="form-control ">
+                    <input type="text" id="detailpenerimaanstoknobuktiId_${id}" readonly hidden class="detailpenerimaanstoknobuktiId" name="detail_penerimaanstoknobukti_id[]">
+                  </td>
+                  
                   <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
@@ -1284,6 +1360,30 @@
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            }
+          })
+          $(`#detail_penerimaanstoknobukti_${id}`).lookup({
+            title: 'penerimaan stok header Lookup',
+            fileName: 'penerimaanstokheader',
+            beforeProcess: function(test) {
+              var penerimaanstokId = $(`#penerimaanstokId`).val();
+              this.postData = {
+                penerimaanstok_id: penerimaanstokId,
+              }
+            },
+            onSelectRow: (penerimaan, element) => {
+              parent = element.closest('td');
+              parent.children('.detailpenerimaanstoknobuktiId').val(penerimaan.id)
+              element.val(penerimaan.nobukti)
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.val('')
+              parent = element.closest('td');
+              parent.children('.detailpenerimaanstoknobuktiId').val('')
+              element.data('currentValue', element.val())
             }
           })
           id++;
@@ -1419,44 +1519,26 @@
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
         }
-        /**
-         if (penerimaanstokId == 3) {
-           this.postData = {
-             // $(`#penerimaanstokId`).val()
-             penerimaanstok_id:penerimaanstokId,
-             filters: JSON.stringify({
-               "groupOp": "AND",
-               "rules": [{
-                   "field": "penerimaanstok_id_not_null",
-                   "op": "cn",
-                   "data": 2 //id POT
-               }]
-             })
-           }
-         }
-         else{
-           this.postData = {
-             // $(`#penerimaanstokId`).val()
-             filters: JSON.stringify({
-               "groupOp": "or",
-               "rules": [ ]
-             })
-           }
-         }
-         
-         **/
+        
 
 
       },
       onSelectRow: (penerimaan, element) => {
         var penerimaanstokId = $(`#penerimaanstokId`).val();
-        if (penerimaanstokId == 3) {
+        if (penerimaanstokId == (3||6)) {//spb beli /reuse
           setSuplier(penerimaan.id);
           $('[name=nobon]').val(penerimaan.nobon)
           setDetail(penerimaan.id);
           // console.log(penerimaan.supplier,
           // penerimaan.nobon);
         }
+        // if (penerimaanstokId == 6) {//spbs /reuse
+        //   setSuplier(penerimaan.id);
+        //   $('[name=nobon]').val(penerimaan.nobon)
+        //   setDetail(penerimaan.id);
+        //   // console.log(penerimaan.supplier,
+        //   // penerimaan.nobon);
+        // }
         element.val(penerimaan.nobukti)
       },
       onCancel: (element) => {
@@ -1570,7 +1652,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        enabledLookupSelected()
+        enabledLookupSelectedDari()
         element.val('')
         $(`#${element[0]['name']}Id`).val('')
         element.data('currentValue', element.val())
@@ -1590,7 +1672,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        enabledLookupSelected()
+        enabledLookupSelectedDari()
         element.val('')
         $(`#${element[0]['name']}Id`).val('')
         element.data('currentValue', element.val())
@@ -1610,7 +1692,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        enabledLookupSelected()
+        enabledLookupSelectedDari()
         element.val('')
         $(`#${element[0]['name']}Id`).val('')
         element.data('currentValue', element.val())

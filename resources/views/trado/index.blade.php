@@ -49,7 +49,7 @@
             name: 'keterangan',
           },
           {
-            label: 'KODE TRADO',
+            label: 'NO POLISI',
             name: 'kodetrado',
           },
           {
@@ -551,16 +551,17 @@
             search: false,
             formatter: (value, row) => {
               let images = []
-
-              if (value) {
+              if (value.length) {
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
                   let image = new Image()
                   image.width = 25
                   image.height = 25
-                  image.src = `${apiUrl}trado/image/stnk/${file}/small`
-
+                  image.src = `${apiUrl}trado/image/stnk/${encodeURI(file)}/small/show`
                   images.push(image.outerHTML)
                 });
 
@@ -582,10 +583,14 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
+                  
                   let image = new Image()
                   image.width = 25
                   image.height = 25
-                  image.src = `${apiUrl}trado/image/bpkb/${file}/small`
+                  image.src = `${apiUrl}trado/image/bpkb/${encodeURI(file)}/small/show`
 
                   images.push(image.outerHTML)
                 });
@@ -608,10 +613,13 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
+                  if(file == ''){
+                    file = 'no-image'
+                  }
                   let image = new Image()
                   image.width = 25
                   image.height = 25
-                  image.src = `${apiUrl}trado/image/trado/${file}/small`
+                  image.src = `${apiUrl}trado/image/trado/${encodeURI(file)}/small/show`
 
                   images.push(image.outerHTML)
                 });

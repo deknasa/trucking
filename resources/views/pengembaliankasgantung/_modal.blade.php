@@ -119,36 +119,8 @@
               </div>
             </div>
 
+            <table id="tablePengembalian"></table>
 
-            <div class="table-scroll table-responsive">
-              <table class="table table-bordered table-bindkeys table-fixed" id="detailList" style="table-layout:auto">
-                <thead id="table_body" class="table-secondary">
-                  <tr>
-                    <th>PILIH</th>
-                    <th>NO </th>
-                    <th>NO BUKTI</th>
-                    <th>TGL BUKTI</th>
-                    <th>coa</th>
-                    <th>NOMINAL</th>
-                    <th>KETERANGAN</th>
-                  </tr>
-                </thead>
-                <tbody id="table_body">
-
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="5"></td>
-                    <td>
-                      <p id="nominalPiutang" class="text-right font-weight-bold"></p>
-                    </td>
-                    <th></th>
-
-
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -247,35 +219,29 @@
         value: form.find(`[name="penerimaan_nobukti"]`).val()
       })
 
+      let selectedRows = $("#tablePengembalian").getGridParam("selectedRowIds");
 
-      $('#table_body tr').each(function(row, tr) {
+      $.each(selectedRows, function(index, value) {
+        let selectedNominal = $("#tablePengembalian").jqGrid("getCell", value, "nominal")
+      
+        data.push({
+          name: 'nominal[]',
+          value: (selectedNominal != '') ? parseFloat(selectedNominal.replaceAll(',', '')) : 0
+        })
+        data.push({
+          name: 'keterangandetail[]',
+          value: $("#tablePengembalian").jqGrid("getCell", value, "keterangandetail")
+        })
+        data.push({
+          name: 'coadetail[]',
+          value: $("#tablePengembalian").jqGrid("getCell", value, "coadetail")
+        })
+        data.push({
+          name: 'kasgantungdetail_id[]',
+          value: $("#tablePengembalian").jqGrid("getCell", value, "id")
+        })
+      });
 
-
-        if ($(this).find(`[name="kasgantungdetail_id[]"]`).is(':checked')) {
-
-          data.push({
-            name: 'keterangandetail[]',
-            value: $(this).find(`[name="keterangandetail[]"]`).val()
-          })
-          data.push({
-            name: 'coadetail[]',
-            value: $(this).find(`[name="coadetail[]"]`).val()
-          })
-          data.push({
-            name: 'ketcoadetail[]',
-            value: $(this).find(`[name="ketcoadetail[]"]`).val()
-          })
-          data.push({
-            name: 'nominal[]',
-            value: $(this).find(`[name="nominal[]"]`).val()
-          })
-          data.push({
-            name: 'kasgantungdetail_id[]',
-            value: $(this).find(`[name="kasgantungdetail_id[]"]`).val()
-          })
-
-        }
-      })
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -362,7 +328,40 @@
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
 
-            setErrorMessages(form, error.responseJSON.errors);
+
+            errors = error.responseJSON.errors
+
+            $(".ui-state-error").removeClass("ui-state-error");
+            $.each(errors, (index, error) => {
+              let indexes = index.split(".");
+              let angka = indexes[1]
+              row = parseInt(selectedRows[angka]) - 1;
+              let element;
+
+              if (indexes[0] == 'bank' || indexes[0] == 'tgldari' || indexes[0] == 'tglsampai') {
+                if (indexes.length > 1) {
+                  element = form.find(`[name="${indexes[0]}[]"]`)[row];
+                } else {
+                  element = form.find(`[name="${indexes[0]}"]`)[0];
+                }
+
+                if ($(element).length > 0 && !$(element).is(":hidden")) {
+                  $(element).addClass("is-invalid");
+                  $(`
+                  <div class="invalid-feedback">
+                  ${error[0].toLowerCase()}
+                  </div>
+                  `).appendTo($(element).parent());
+                } else {
+                  return showDialog(error);
+                }
+              } else {
+                console.log(selectedRows[angka])
+                element = $(`#tablePengembalian tr#${parseInt(selectedRows[angka])}`).find(`td[aria-describedby="tablePengembalian_${indexes[0]}"]`)
+                $(element).addClass("ui-state-error");
+                $(element).attr("title", error[0].toLowerCase())
+              }
+            });
           } else {
             showDialog(error.statusText)
           }
@@ -385,6 +384,7 @@
 
     // getMaxLength(form)
 
+    initLookup()
     initDatepicker()
 
     $(`[name=tgldari], [name=tglsampai]`)
@@ -405,7 +405,21 @@
     var tglsampai = $('#crudForm').find(`[name="tglsampai"]`).val()
     // console.log(tgldari, tglsampai);
     if (tgldari !== "" && tglsampai !== "") {
-      getKasGantung(tgldari, tglsampai)
+
+      getDataPengembalian(tgldari, tglsampai).then((response) => {
+        $('#tablePengembalian').jqGrid("clearGridData");
+        setTimeout(() => {
+
+          $("#tablePengembalian")
+            .jqGrid("setGridParam", {
+              datatype: "local",
+              data: response.data,
+              originalData: response.data,
+              selectedRowIds: []
+            })
+            .trigger("reloadGrid");
+        }, 100);
+      });
     }
 
   }
@@ -451,11 +465,12 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    initLookup()
 
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     showDefault(form)
+
+    loadPengembalianGrid();
   }
 
   function editPengembalianKasGantung(userId) {
@@ -472,9 +487,8 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    initLookup()
     showpengembalianKasGantung(form, userId)
-    getPengembalian(userId)
+    // getPengembalian(userId)
 
   }
 
@@ -498,10 +512,258 @@
     getPengembalian(userId)
   }
 
+  function loadPengembalianGrid() {
+    $("#tablePengembalian")
+      .jqGrid({
+        datatype: 'local',
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        colModel: [{
+            label: "",
+            name: "",
+            width: 30,
+            formatter: 'checkbox',
+            search: false,
+            editable: false,
+            formatter: function(value, rowOptions, rowData) {
+              let disabled = '';
+              if ($('#crudForm').data('action') == 'delete') {
+                disabled = 'disabled'
+              }
+              return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxHandler(this, ${rowData.id})">`;
+            },
+          },
+          {
+            label: "id",
+            name: "id",
+            hidden: true,
+            search: false,
+          },
+          {
+            label: "NO BUKTI",
+            name: "nobukti",
+            sortable: true,
+          },
+          {
+            label: "TGL BUKTI",
+            name: "tglbukti",
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: "NOMINAL",
+            name: "nominal",
+            sortable: true,
+            align: "right",
+            formatter: currencyFormat,
+          },
+          {
+            label: "KETERANGAN",
+            name: "keterangandetail",
+            sortable: false,
+            editable: true,
+          },
+          {
+            label: "KODE PERKIRAAN",
+            name: "coadetail",
+            sortable: false,
+            editable: true,
+            editoptions: {
+              class: 'coadetail-lookup',
+              dataInit: function(element) {
+                console.log(element)
+                $('.coadetail-lookup').last().lookup({
+                  title: 'Coa Potongan Lookup',
+                  fileName: 'akunpusat',
+                  beforeProcess: function(test) {
+                    // var levelcoa = $(`#levelcoa`).val();
+                    this.postData = {
+                      levelCoa: '3',
+                      Aktif: 'AKTIF',
+                    }
+                  },
+                  onSelectRow: (akunpusat, el) => {
+                    el.val(akunpusat.coa)
+                    el.data('currentValue', el.val())
+                    console.log()
+                  },
+                  onCancel: (el) => {
+                    el.val(el.data('currentValue'))
+                  },
+                  onClear: (el) => {
+                    el.val('')
+                    el.data('currentValue', el.val())
+                  }
+                })
+              }
+            },
+          },
+        ],
+        autowidth: true,
+        shrinkToFit: false,
+        height: 400,
+        rownumbers: true,
+        rownumWidth: 45,
+        footerrow: true,
+        userDataOnFooter: true,
+        toolbar: [true, "top"],
+        pgbuttons: false,
+        pginput: false,
+        cellEdit: true,
+        cellsubmit: "clientArray",
+        editableColumns: ["keterangandetail"],
+        selectedRowIds: [],
+        afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
+          let originalGridData = $("#tablePengembalian")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
 
+          let localRow = $("#tablePengembalian").jqGrid("getLocalRow", rowId);
+
+        },
+        isCellEditable: function(cellname, iRow, iCol) {
+          let rowData = $(this).jqGrid("getRowData")[iRow - 1];
+
+          return $(this)
+            .find(`tr input[value=${rowData.id}]`)
+            .is(":checked");
+        },
+        validationCell: function(cellobject, errormsg, iRow, iCol) {
+          console.log(cellobject);
+          console.log(errormsg);
+          console.log(iRow);
+          console.log(iCol);
+        },
+        loadComplete: function() {
+          setTimeout(() => {
+            $(this)
+              .getGridParam("selectedRowIds")
+              .forEach((selectedRowId) => {
+                $(this)
+                  .find(`tr input[value=${selectedRowId}]`)
+                  .prop("checked", true);
+              });
+          }, 100);
+
+          setHighlight($(this))
+        },
+      })
+      .jqGrid("setLabel", "rn", "No.")
+      .jqGrid("navGrid", "#tablePager", {
+        add: false,
+        edit: false,
+        del: false,
+        refresh: false,
+        search: false,
+      })
+      .jqGrid("filterToolbar", {
+        searchOnEnter: false,
+      })
+      .jqGrid("excelLikeGrid", {
+        beforeDeleteCell: function(rowId, iRow, iCol, event) {
+          let localRow = $("#tablePengembalian").jqGrid("getLocalRow", rowId);
+
+          $("#tablePengembalian").jqGrid(
+            "setCell",
+            rowId,
+            "sisa",
+            parseInt(localRow.sisa) + parseInt(localRow.bayar)
+          );
+
+          return true;
+        },
+      });
+    /* Append clear filter button */
+    loadClearFilter($('#tablePengembalian'))
+
+    /* Append global search */
+    // loadGlobalSearch($('#tablePengembalian'))
+  }
+
+
+  function getDataPengembalian(dari, sampai, id) {
+    aksi = $('#crudForm').data('action')
+    data = {}
+    if (aksi == 'edit') {
+      console.log(id)
+      if (id != undefined) {
+        url = `${apiUrl}pengembaliankasgantungheader/getpengembalian/${id}`
+      } else {
+        url = `${apiUrl}pengembaliankasgantungheader/getkasgantung`
+        data = {
+          limit: 0,
+          tgldari: dari,
+          tglsampai: sampai
+        }
+      }
+    } else if (aksi == 'delete') {
+      url = `${apiUrl}pengembaliankasgantungheader/getpengembalian/${id}`
+      attribut = 'disabled'
+      forCheckbox = 'disabled'
+    } else if (aksi == 'add') {
+      url = `${apiUrl}pengembaliankasgantungheader/getkasgantung`
+      data = {
+        limit: 0,
+        tgldari: dari,
+        tglsampai: sampai
+      }
+    }
+
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: url,
+        dataType: "JSON",
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: (response) => {
+          resolve(response);
+        },
+      });
+    });
+  }
+
+  function checkboxHandler(element, rowId) {
+
+    let isChecked = $(element).is(":checked");
+    let editableColumns = $("#tablePengembalian").getGridParam("editableColumns");
+    let selectedRowIds = $("#tablePengembalian").getGridParam("selectedRowIds");
+    let originalGridData = $("#tablePengembalian")
+      .jqGrid("getGridParam", "originalData")
+      .find((row) => row.id == rowId);
+
+    editableColumns.forEach((editableColumn) => {
+
+      if (!isChecked) {
+        for (var i = 0; i < selectedRowIds.length; i++) {
+          if (selectedRowIds[i] == rowId) {
+            selectedRowIds.splice(i, 1);
+          }
+        }
+
+        $("#tablePengembalian").jqGrid("setCell", rowId, "keterangandetail", null);
+        $("#tablePengembalian").jqGrid("setCell", rowId, "coadetail", null);
+      } else {
+        selectedRowIds.push(rowId);
+      }
+    });
+
+    $("#tablePengembalian").jqGrid("setGridParam", {
+      selectedRowIds: selectedRowIds,
+    });
+
+  }
 
   function showpengembalianKasGantung(form, userId) {
-    $('#detailList tbody').html('')
+
+    form.find(`[name="tglbukti"]`).prop('readonly', true)
+    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
     $.ajax({
       url: `${apiUrl}pengembaliankasgantungheader/${userId}`,
@@ -521,8 +783,33 @@
           } else {
             element.val(value)
           }
+          if (index == 'pelanggan') {
+            element.data('current-value', value)
+          }
         })
+        loadPengembalianGrid();
+        getDataPengembalian(response.data.tgldari, response.data.tglsampai, userId).then((response) => {
+          console.log(userId)
+          let selectedId = []
 
+          $.each(response.data, (index, value) => {
+            if (value.pengembaliankasgantungheader_id != null) {
+              selectedId.push(value.id)
+            }
+          })
+          $('#tablePengembalian').jqGrid("clearGridData");
+          setTimeout(() => {
+
+            $("#tablePengembalian")
+              .jqGrid("setGridParam", {
+                datatype: "local",
+                data: response.data,
+                originalData: response.data,
+                selectedRowIds: selectedId
+              })
+              .trigger("reloadGrid");
+          }, 100);
+        });
       }
     })
   }

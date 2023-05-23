@@ -12,7 +12,7 @@ class Myauth
             'dashboard',
             'logtrail',
             'tutupbuku',
-            'mandorabsensisupir',
+            'approvalbukacetak',
             'historipenerimaanstok',
             'historipengeluaranstok',
             'reportall',
@@ -61,6 +61,7 @@ class Myauth
             'depositogrid',
             'pelunasangrid',
             'transfergrid',
+            'absensigrid',
         ],
     ];
 

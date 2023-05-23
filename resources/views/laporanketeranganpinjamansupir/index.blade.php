@@ -33,6 +33,10 @@
                                     <i class="fas fa-sync"></i>
                                     Cetak
                                 </a>
+                                <a id="btnEkspor" class="btn btn-secondary mr-2 ">
+                                    <i class="fas fa-sync"></i>
+                                    Ekspor
+                                </a>
                             </div>
                         </div>
 
@@ -82,6 +86,10 @@
             $('#btnPreview').prop('disabled', true)
             $('#btnPreview').css(css_property);
         }
+        if (!`{{ $myAuth->hasPermission('laporanketeranganpinjamansupir', 'export') }}`) {
+            $('#btnEkspor').prop('disabled', true)
+            $('#btnEkspor').css(css_property);
+        }
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
@@ -96,7 +104,17 @@
         }
     })
 
+    $(document).on('click', `#btnEkspor`, function(event) {
+        let periode = $('#crudForm').find('[name=periode]').val()
+        let jenis = $('#crudForm').find('[name=jenis]').val()
 
+        if (jenis != '' && periode != '') {
+
+            window.open(`{{ route('laporanketeranganpinjamansupir.export') }}?periode=${periode}&jenis=${jenis}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
 
     const setJenisKaryawanOptions = function(relatedForm) {
         // return new Promise((resolve, reject) => {

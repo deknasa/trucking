@@ -320,7 +320,39 @@
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
 
-            setErrorMessages(form, error.responseJSON.errors);
+            errors = error.responseJSON.errors
+            $(".ui-state-error").removeClass("ui-state-error");
+            $.each(errors, (index, error) => {
+              let indexes = index.split(".");
+              let angka = indexes[1]
+
+              let element;
+              if (indexes[0] == 'sp') {
+                return showDialog(error);
+              } else if (indexes[0] == 'nominalretribusi') {
+                selectedRowsInvoice = $("#tableInvoice").getGridParam("selectedRowIds");
+                row = parseInt(selectedRowsInvoice[angka]) - 1;
+
+                element = $(`#tableInvoice tr#${parseInt(selectedRowsInvoice[angka])}`).find(`td[aria-describedby="tableInvoice_${indexes[0]}"]`)
+                $(element).addClass("ui-state-error");
+                $(element).attr("title", error[0].toLowerCase())
+
+              } else {
+
+                element = form.find(`[name="${indexes[0]}"]`)[0];
+
+                if ($(element).length > 0 && !$(element).is(":hidden")) {
+                  $(element).addClass("is-invalid");
+                  $(`
+                      <div class="invalid-feedback">
+                      ${error[0].toLowerCase()}
+                      </div>
+                      `).appendTo($(element).parent());
+                } else {
+                  return showDialog(error);
+                }
+              }
+            });
           } else {
             showDialog(error.statusText)
           }
@@ -661,10 +693,11 @@
         },
         isCellEditable: function(cellname, iRow, iCol) {
           let rowData = $(this).jqGrid("getRowData")[iRow - 1];
-
-          return $(this)
-            .find(`tr input[value=${rowData.id}]`)
-            .is(":checked");
+          if ($('#crudForm').data('action') != 'delete') {
+            return $(this)
+              .find(`tr input[value=${rowData.id}]`)
+              .is(":checked");
+          }
         },
         validationCell: function(cellobject, errormsg, iRow, iCol) {
           console.log(cellobject);

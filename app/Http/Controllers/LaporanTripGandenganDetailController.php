@@ -48,5 +48,4 @@ class LaporanTripGandenganDetailController extends MyController
         $user = Auth::user();
         return view('reports.laporantripgandengandetail', compact('data', 'user', 'detailParams'));
     }
-
 }

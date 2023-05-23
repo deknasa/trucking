@@ -440,3 +440,47 @@ html {
   background: #fff;
   z-index: 100;
 }
+
+.modal-loader {
+	position: fixed;
+	z-index: 1035;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	justify-content: center;
+}
+
+.modal-loader-content {
+	background: #d9edf7;
+	border: 1px solid #ddd;
+}
+
+.modal-loader-content img {
+	width: 50px;
+	height: auto;
+}
+
+.modal-loader-content span {
+	font-size: 1.5rem;
+}
+
+.table tr > th,
+.table tr > td {
+	border-color: #bad5ff;
+}
+
+.ui-datepicker {
+	background-color: #e0ecff;
+	border-color: var(--jqgrid-border-color) !important;
+}
+
+.ui-datepicker-header {
+	border: none;
+	background-color: transparent;
+}
+
+.ui-datepicker-calendar {
+	background-color: #fff;
+	border: 1px solid var(--jqgrid-border-color);
+}

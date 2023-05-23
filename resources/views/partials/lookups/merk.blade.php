@@ -1,5 +1,5 @@
 <table id="merkLookup" class="lookup-grid"></table>
-<div id="merkLookupPager"></div>
+{{-- <div id="merkLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -135,7 +135,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#merkLookupPager'),
+      // pager: $('#merkLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -215,6 +215,14 @@
         clearGlobalSearch($('#merkLookup'))
       },
     })
+    .jqGrid("navGrid", pager, {
+      search: false,
+      refresh: false,
+      add: false,
+      edit: false,
+      del: false,
+    })
+    .customPager()
 
   loadGlobalSearch($('#merkLookup'))
   loadClearFilter($('#merkLookup'))

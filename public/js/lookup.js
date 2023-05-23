@@ -45,8 +45,8 @@ $.fn.lookup = function (options) {
 					: ``
 			}
 			<div class="input-group-append">
-				<button class="btn btn-primary lookup-toggler" type="button">
-					<i class="far fa-window-maximize" style="font-size: 12.25px"></i>
+				<button class="btn btn-easyui lookup-toggler" type="button">
+					<i class="far fa-window-maximize text-easyui-dark" style="font-size: 12.25px"></i>
 				</button>
 			</div>
 		`);
