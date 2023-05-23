@@ -142,11 +142,6 @@
         let rows = $(this).jqGrid('getGridParam', 'postData').limit
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
       },
-      loadBeforeSend: (jqXHR, settings) => {
-        settings.xhrFields = {
-          withCredentials: true
-        }
-      },
       loadComplete: function(data) {
           changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
@@ -209,7 +204,7 @@
         method: 'GET',
         dataType: 'JSON',
         headers: {
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer ${accessTokenEmkl}`
         },
         success: response => {
           response.data.forEach(bulanJob => {
@@ -241,14 +236,11 @@
   function getTglJob(job) {
     return new Promise(function(resolve, reject) {
       $.ajax({
-        url: `{{ config('app.trucking_forwarder_url') }}/getTglJob.php`,
+        url: `${apiEmklUrl}orderanemkl/getTglJob`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        xhrFields: {
-          withCredentials: true
+          Authorization: `Bearer ${accessTokenEmkl}`
         },
         crossDomain: true,
         data: {
@@ -271,9 +263,10 @@
     })
   }
   function loadOrderanEmkl() {
+   
     $('#orderanemklLookup')
       .jqGrid('setGridParam', {
-        url: `{{ config('app.trucking_forwarder_url') }}/orderanemkl.php`,
+        url: `${apiEmklUrl}orderanemkl`,
         mtype: "GET",
         datatype: "json",
         postData: {
@@ -281,6 +274,9 @@
           jenisorder_id: `{!! $jenisorder_Id ?? '' !!}`,
           aktif: `{!! $Aktif ?? '' !!}`,
           bulanjob: $('[name=bulanjob]').val(),
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenEmkl}`)
         },
       }).trigger('reloadGrid');
   }
