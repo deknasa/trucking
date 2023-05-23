@@ -1,3 +1,8 @@
+<style>
+  #crudModal{
+    padding: 5px;
+  }
+</style>
 <div class="modal modal-fullscreen" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <form action="#" id="crudForm">
@@ -78,9 +83,17 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="jarak" class="form-control" style="text-align: right">
+                <div class="input-group">
+                  <input type="text" name="jarak" class="form-control" style="text-align: right">
+                  <div class="input-group-append">
+                    <span class="input-group-text" style="font-weight: bold;">KM</span>
+                  </div>
+                </div>
               </div>
             </div>
+            
+            
+
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -249,7 +262,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   Dropzone.autoDiscover = false;
   let dropzones = []
-
+ 
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
