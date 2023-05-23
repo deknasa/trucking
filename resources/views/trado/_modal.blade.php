@@ -14,7 +14,7 @@
             <input type="hidden" name="id">
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Keterangan <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Keterangan</label>
                 <div class="col-sm-8">
                   <input type="text" name="keterangan" class="form-control">
                 </div>
@@ -662,17 +662,17 @@
       })
     } else {
       let files = JSON.parse(data[paramName])
-
       files.forEach((file) => {
-        getImgURL(`${apiUrl}trado/image/${type}/${file}/ori`, (fileBlob) => {
+        getImgURL(`${apiUrl}trado/image/${type}/${file}/ori/edit`, (fileBlob) => {
           let imageFile = new File([fileBlob], file, {
             type: 'image/jpeg',
             lastModified: new Date().getTime()
           }, 'utf-8')
-
-          dropzone.options.addedfile.call(dropzone, imageFile);
-          dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}trado/image/${type}/${file}/ori`);
-          dropzone.files.push(imageFile)
+          if (fileBlob.type != 'text/html') {
+            dropzone.options.addedfile.call(dropzone, imageFile);
+            dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}trado/image/${type}/${file}/ori/edit`);
+            dropzone.files.push(imageFile)
+          }
         })
       })
 
