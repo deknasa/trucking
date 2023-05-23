@@ -567,7 +567,7 @@
                   images.push(image.outerHTML)
                 });
 
-                return 'NO PHOTOS'
+                return images.join(' ')
               }
 
               return 'NO PHOTOS'
