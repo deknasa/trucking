@@ -61,6 +61,7 @@ use App\Http\Controllers\NotaKreditHeaderController;
 use App\Http\Controllers\NotaDebetHeaderController;
 
 use App\Http\Controllers\ApprovalBukaCetakController;
+use App\Http\Controllers\ApprovalTradoGambarController;
 use App\Http\Controllers\ExportLaporanDepositoController;
 use App\Http\Controllers\ExportLaporanKasGantungController;
 use App\Http\Controllers\ExportLaporanKasHarianController;
@@ -1225,6 +1226,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('karyawan/report', [KaryawanController::class, 'report'])->name('karyawan.report');
     Route::get('karyawan/export', [KaryawanController::class, 'export'])->name('karyawan.export');
     Route::resource('karyawan', KaryawanController::class);
+
+    Route::get('approvaltradogambar/index', [ApprovalTradoGambarController::class, 'index']);
+    Route::resource('approvaltradogambar', ApprovalTradoGambarController::class);
     
 });
 
