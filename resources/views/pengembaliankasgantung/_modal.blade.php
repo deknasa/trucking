@@ -81,7 +81,7 @@
                 </div>
               </div>
 
-              <div class="col-md-6 mb-3">
+              <!-- <div class="col-md-6 mb-3">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
                     <label class="col-form-label">PELANGGAN</label>
@@ -91,7 +91,7 @@
                     <input type="text" id="pelangganId" name="pelanggan_id" readonly hidden>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
             </div>
 
@@ -111,7 +111,7 @@
               <div class="row form-group">
                 <div class="col-12 col-md-2">
                   <label class="col-form-label">
-                    NO BUKTI KAS KELUAR </label>
+                    NO BUKTI KAS MASUK </label>
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="text" name="penerimaan_nobukti" class="form-control" readonly>
@@ -172,10 +172,6 @@
       let userId = form.find('[name=user_id]').val()
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
-      // let data = []
-      // $('#crudForm').find(`[name="nominal[]"]`).each((index, element) => {
-      //   data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
-      // })
       let data = []
 
       data.push({
@@ -198,14 +194,14 @@
         name: 'bank_id',
         value: form.find(`[name="bank_id"]`).val()
       })
-      data.push({
-        name: 'pelanggan',
-        value: form.find(`[name="pelanggan"]`).val()
-      })
-      data.push({
-        name: 'pelanggan_id',
-        value: form.find(`[name="pelanggan_id"]`).val()
-      })
+      // data.push({
+      //   name: 'pelanggan',
+      //   value: form.find(`[name="pelanggan"]`).val()
+      // })
+      // data.push({
+      //   name: 'pelanggan_id',
+      //   value: form.find(`[name="pelanggan_id"]`).val()
+      // })
       data.push({
         name: 'tgldari',
         value: form.find(`[name="tgldari"]`).val()
@@ -807,9 +803,9 @@
             } else {
               element.val(value)
             }
-            if (index == 'pelanggan') {
-              element.data('current-value', value)
-            }
+            // if (index == 'pelanggan') {
+            //   element.data('current-value', value)
+            // }
           })
           loadPengembalianGrid();
           getDataPengembalian(response.data.tgldari, response.data.tglsampai, userId).then((response) => {
@@ -1143,30 +1139,30 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.pelanggan-lookup').lookup({
-      title: 'pelanggan Lookup',
-      fileName: 'pelanggan',
-      beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        this.postData = {
+    // $('.pelanggan-lookup').lookup({
+    //   title: 'pelanggan Lookup',
+    //   fileName: 'pelanggan',
+    //   beforeProcess: function(test) {
+    //     // var levelcoa = $(`#levelcoa`).val();
+    //     this.postData = {
 
-          Aktif: 'AKTIF',
-        }
-      },
-      onSelectRow: (pelanggan, element) => {
-        element.val(pelanggan.namapelanggan)
-        $(`#${element[0]['name']}Id`).val(pelanggan.id)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.val('')
-        $(`#${element[0]['name']}Id`).val('')
-        element.data('currentValue', element.val())
-      }
-    })
+    //       Aktif: 'AKTIF',
+    //     }
+    //   },
+    //   onSelectRow: (pelanggan, element) => {
+    //     element.val(pelanggan.namapelanggan)
+    //     $(`#${element[0]['name']}Id`).val(pelanggan.id)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     element.val('')
+    //     $(`#${element[0]['name']}Id`).val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
     $('.bank-lookup').lookup({
       title: 'bank Lookup',
       fileName: 'bank',

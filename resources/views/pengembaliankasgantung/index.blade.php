@@ -192,11 +192,11 @@
               newformat: "d-m-Y"
             }
           },
-          {
-            label: 'pelanggan',
-            name: 'pelanggan',
-            align: 'left'
-          },
+          // {
+          //   label: 'pelanggan',
+          //   name: 'pelanggan',
+          //   align: 'left'
+          // },
           {
             label: 'bank',
             name: 'bank',
