@@ -425,6 +425,8 @@
         showInvoiceHeader(form, invId, 'edit')
       ])
       .then(() => {
+        clearSelectedRows()
+        $('#gs_').prop('checked', false)
         $('#crudModal').modal('show')
       })
       .finally(() => {
@@ -454,6 +456,8 @@
         showInvoiceHeader(form, invId, 'edit')
       ])
       .then(() => {
+        clearSelectedRows()
+        $('#gs_').prop('checked', false)
         $('#crudModal').modal('show')
       })
       .finally(() => {

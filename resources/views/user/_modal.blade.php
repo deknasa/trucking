@@ -292,6 +292,7 @@
 
   function deleteUser(userId) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')

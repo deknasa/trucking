@@ -471,8 +471,7 @@
 
     Promise
       .all([
-        showDefault(form),
-
+        showDefault(form)
       ])
       .then(() => {
         loadPengembalianGrid()

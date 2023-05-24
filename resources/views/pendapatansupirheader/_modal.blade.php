@@ -342,6 +342,8 @@
                 showPendapatanSupir(form, pendapatanId)
             ])
             .then(() => {
+                clearSelectedRows()
+                $('#gs_').prop('checked', false)
                 $('#crudModal').modal('show')
             })
             .finally(() => {
@@ -370,6 +372,8 @@
                 showPendapatanSupir(form, pendapatanId)
             ])
             .then(() => {
+                clearSelectedRows()
+                $('#gs_').prop('checked', false)
                 $('#crudModal').modal('show')
             })
             .finally(() => {
@@ -502,7 +506,7 @@
     function addRow() {
         let detailRow = $(`
       <tr>
-      
+
         <td></td>
         <td>
             <input type="hidden" name="supir_id[]">

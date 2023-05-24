@@ -604,6 +604,8 @@
             .then(() => {
                 showPenerimaan(form, id)
                 .then(() => {
+                    clearSelectedRows()
+                    $('#gs_').prop('checked', false)
                     $('#crudModal').modal('show')
                 })
                 .finally(() => {
@@ -631,6 +633,8 @@
             .then(() => {
                 showPenerimaan(form, id)
                 .then(() => {
+                    clearSelectedRows()
+                    $('#gs_').prop('checked', false)
                     $('#crudModal').modal('show')
                 })
                 .finally(() => {
