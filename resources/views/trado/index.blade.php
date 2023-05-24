@@ -465,6 +465,12 @@
             name: 'jumlahbanserap',
           },
           {
+            label: 'PLUS BORONGAN',
+            name: 'nominalplusborongan',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
             label: 'STATUS BAN EDIT',
             name: 'statusappeditban',
             stype: 'select',
