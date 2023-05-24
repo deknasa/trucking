@@ -605,6 +605,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('mandor/{id}/delete', [MandorController::class, 'delete'])->name('mandor.delete');
     Route::get('mandor/get', [MandorController::class, 'get'])->name('mandor.get');
     Route::get('mandor/index', [MandorController::class, 'index']);
+    Route::get('mandor/export', [MandorController::class, 'export'])->name('mandor.export');
+    Route::get('mandor/report', [MandorController::class, 'report'])->name('mandor.report');
     Route::resource('mandor', MandorController::class);
 
     Route::get('merk/field_length', [MerkController::class, 'fieldLength'])->name('merk.field_length');
