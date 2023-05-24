@@ -75,6 +75,13 @@
                   <input type="text" class="form-control" name="nama">
                 </div>
               </div>
+              {{-- //NOTE - nominal borongan --}}
+              <div class="form-group col-sm-6 row">
+                <label class="col-sm-4 col-form-label">PLUS BORONGAN <span class="text-danger">*</span></label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" name="nominalplusborongan">
+                </div>
+              </div>
               <div class="form-group col-sm-6 row">
                 <label class="col-sm-4 col-form-label">No STNK <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
