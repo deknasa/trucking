@@ -477,6 +477,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('jenistrado/{id}/delete', [JenisTradoController::class, 'delete'])->name('jenistrado.delete');
     Route::get('jenistrado/get', [JenisTradoController::class, 'get'])->name('jenistrado.get');
     Route::get('jenistrado/index', [JenisTradoController::class, 'index']);
+    Route::get('jenistrado/export', [JenisTradoController::class, 'export'])->name('jenistrado.export');
+    Route::get('jenistrado/report', [JenisTradoController::class, 'report'])->name('jenistrado.report');
     Route::resource('jenistrado', JenisTradoController::class);
 
     Route::get('kasgantungheader/{id}/delete', [KasGantungHeaderController::class, 'delete'])->name('kasgantungheader.delete');
@@ -571,6 +573,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('kerusakan/{id}/delete', [KerusakanController::class, 'delete'])->name('kerusakan.delete');
     Route::get('kerusakan/get', [KerusakanController::class, 'get'])->name('kerusakan.get');
     Route::get('kerusakan/index', [KerusakanController::class, 'index']);
+    Route::get('kerusakan/export', [KerusakanController::class, 'export'])->name('kerusakan.export');
+    Route::get('kerusakan/report', [KerusakanController::class, 'report'])->name('kerusakan.report');
     Route::resource('kerusakan', KerusakanController::class);
 
     Route::get('penerima/report', [PenerimaController::class, 'report'])->name('penerima.report');
