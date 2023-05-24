@@ -8,6 +8,7 @@ use App\Http\Controllers\AbsensiSupirApprovalHeaderController;
 use App\Http\Controllers\ApprovalTransaksiHeaderController;
 use App\Http\Controllers\ApprovalInvoiceHeaderController;
 
+use App\Http\Controllers\ApprovalSupirGambarController;
 use App\Http\Controllers\BukaAbsensiController;
 use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\TutupBukuController;
@@ -324,6 +325,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('absensisupir_detail/detail/grid', [AbsensiSupirDetailController::class, 'detailGrid']);
     Route::resource('absensisupir_detail', AbsensiSupirDetailController::class);
     
+    Route::get('approvalsupirgambar/index', [ApprovalSupirGambarController::class,'index']);
+    Route::resource('approvalsupirgambar', ApprovalSupirGambarController::class);
+
     Route::get('bukaabsensi/index', [BukaAbsensiController::class,'index']);
     Route::resource('bukaabsensi', BukaAbsensiController::class);
     Route::resource('suratpengantarapprovalinputtrip', SuratPengantarApprovalInputTripController::class);
