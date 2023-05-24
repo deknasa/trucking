@@ -304,7 +304,7 @@
     if (!`{{ $myAuth->hasPermission('harilibur', 'export') }}`) {
       $('#export').attr('disabled', 'disabled')
     }
-    if (!`{{ $myAuth->hasPermission('parameter', 'report') }}`) {
+    if (!`{{ $myAuth->hasPermission('harilibur', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
     }
 
