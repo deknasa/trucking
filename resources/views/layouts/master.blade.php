@@ -43,6 +43,7 @@
   <link rel="stylesheet" href="{{ asset('css/pager.css?version='. config('app.version')) }}">
 
   <link rel="stylesheet" href="{{ asset('plugins/dropzone/dropzone.css') }}">
+
 </head>
 
 <body class="hold-transition sidebar-collapse layout-fixed">

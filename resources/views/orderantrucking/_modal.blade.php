@@ -83,7 +83,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  TARIF <span class="text-danger">*</span></label>
+                  TUJUAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="tarifrincian_id">
