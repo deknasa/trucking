@@ -555,7 +555,7 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
-                  if(file == ''){
+                  if (file == '') {
                     file = 'no-image'
                   }
                   let image = new Image()
@@ -566,9 +566,13 @@
                 });
 
                 return images.join(' ')
+              } else {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}trado/image/stnk/no-image/small/show`
+                return image.outerHTML
               }
-
-              return 'NO PHOTOS'
             }
           },
           {
@@ -583,10 +587,10 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
-                  if(file == ''){
+                  if (file == '') {
                     file = 'no-image'
                   }
-                  
+
                   let image = new Image()
                   image.width = 25
                   image.height = 25
@@ -596,9 +600,13 @@
                 });
 
                 return images.join(' ')
+              } else {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}trado/image/bpkb/no-image/small/show`
+                return image.outerHTML
               }
-
-              return 'NO PHOTOS'
             }
           },
           {
@@ -613,7 +621,7 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
-                  if(file == ''){
+                  if (file == '') {
                     file = 'no-image'
                   }
                   let image = new Image()
@@ -625,9 +633,13 @@
                 });
 
                 return images.join(' ')
+              } else {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}trado/image/trado/no-image/small/show`
+                return image.outerHTML
               }
-
-              return 'NO PHOTOS'
             }
           },
         ],
