@@ -123,7 +123,7 @@
                       <p class="text-right font-weight-bold autonumeric" id="total"></p>
                     </td>
                     <td class="colmn-offset"></td>
-                    <td id="tbl_addRow">
+                    <td id="tbl_addRow" class="tbl_aksi">
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
                   </tr>
@@ -448,6 +448,9 @@
       case 'PJP':
         tampilanPJP()
         break;
+      case 'DPO':
+        tampilanDPO()
+        break;
       default:
         tampilanall()
         break;
@@ -477,6 +480,21 @@
     $('#gbox_tablePinjaman').show()
     $('#detailList').hide()
     loadPinjamanGrid()
+  }
+
+  function tampilanDPO() {
+    $('#detailList').show()
+    $('#gbox_tablePinjaman').hide()
+    $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    $('.tbl_supir_id').show()
+    $('.tbl_pengeluarantruckingheader_nobukti').hide()
+    $('.tbl_sisa').hide()
+    $('.tbl_aksi').hide()
+    $('.colmn-offset').hide()
+    $('.colspan').attr('colspan', 3);
+    $('#sisaColFoot').hide()
+    $('#sisaFoot').hide()
   }
 
   function tampilanall() {
@@ -1102,7 +1120,7 @@
                     <td class="tbl_nominal">
                         <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
                     </td>
-                    <td>
+                    <td  class="tbl_aksi">
                         <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
                     </td>
                 </tr>
@@ -1357,7 +1375,7 @@
         <td class="tbl_nominal">
           <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
         </td>
-        <td>
+        <td  class="tbl_aksi">
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
         </td>
       </tr>
