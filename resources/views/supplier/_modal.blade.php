@@ -176,6 +176,19 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
+                  COA <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <div class="input-group">
+                  <input type="text" name="coa" class="form-control akunpusat-lookup">
+                </div>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Jabatan <span class="text-danger">*</span>
                 </label>
               </div>
@@ -354,6 +367,7 @@
 
     getMaxLength(form)
     initSelect2()
+    initLookup()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -603,6 +617,31 @@
               deleteSupplier(Id)
           }
 
+      }
+    })
+  }
+
+  function initLookup() {
+    $('.akunpusat-lookup').lookup({
+      title: 'Akun Pusat Lookup',
+      fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          levelCoa: '3',
+          Aktif: 'AKTIF',          
+        }
+      },      
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
   }
