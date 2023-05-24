@@ -380,6 +380,8 @@ Route::middleware(['auth','authorized'])->group(function () {
 
     Route::get('trado/field_length', [TradoController::class, 'fieldLength'])->name('trado.field_length');
     Route::get('trado/{id}/delete', [TradoController::class, 'delete'])->name('trado.delete');
+    Route::get('trado/report', [TradoController::class, 'report'])->name('trado.report');
+    Route::get('trado/export', [TradoController::class, 'export'])->name('trado.export');
     Route::get('trado/get', [TradoController::class, 'get'])->name('trado.get');
     Route::get('trado/index', [TradoController::class, 'index']);
     Route::resource('trado', TradoController::class);

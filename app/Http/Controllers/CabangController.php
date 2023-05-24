@@ -152,6 +152,25 @@ class CabangController extends MyController
 
         $cabangs = $response['data'];
 
+        $i = 0;
+        foreach ($cabangs as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+
+            $result = json_decode($statusaktif, true);
+
+            $statusaktif = $result['MEMO'];
+
+
+            $cabangs[$i]['statusaktif'] = $statusaktif;
+
+        
+            $i++;
+
+
+        }
+
+
         return view('reports.cabang', compact('cabangs'));
     }
 

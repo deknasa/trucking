@@ -126,6 +126,27 @@ class KaryawanController extends MyController
 
         $karyawans = $response['data'];
 
+        $i = 0;
+        foreach ($karyawans as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+            $statustaff = $params['statusstaff'];
+
+            $result = json_decode($statusaktif, true);
+            $resultStaff = json_decode($statustaff, true);
+
+            $statusaktif = $result['MEMO'];
+            $statustaff = $resultStaff['MEMO'];
+
+
+            $karyawans[$i]['statusaktif'] = $statusaktif;
+            $karyawans[$i]['statusstaff'] = $statustaff;
+
+        
+            $i++;
+
+
+        }
 
         return view('reports.karyawan', compact('karyawans'));
     }
