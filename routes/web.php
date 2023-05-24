@@ -1220,9 +1220,12 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanaruskas/index', [LaporanArusKasController::class, 'index']);
     Route::resource('laporanaruskas', LaporanArusKasController::class);
 
-    
+    Route::get('karyawan/get', [KaryawanController::class, 'get'])->name('karyawan.get');
     Route::get('karyawan/index', [KaryawanController::class, 'index']);
+    Route::get('karyawan/report', [KaryawanController::class, 'report'])->name('karyawan.report');
+    Route::get('karyawan/export', [KaryawanController::class, 'export'])->name('karyawan.export');
     Route::resource('karyawan', KaryawanController::class);
+    
 });
 
 Route::patch('format', [FormatController::class, 'update']);
