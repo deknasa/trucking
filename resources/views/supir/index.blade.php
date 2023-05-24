@@ -496,6 +496,11 @@
               newformat: "d-m-Y"
             }
           },
+          {
+            label: 'keterangan BERHENTI SUPIR',
+            name: 'keteranganberhentisupir',
+            
+          },
           // {
           //   label: 'KET RESIGN',
           //   name: 'keteranganresign',

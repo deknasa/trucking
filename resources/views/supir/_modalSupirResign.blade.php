@@ -73,7 +73,7 @@
       let url
       let form = $('#resignForm')
       let supirId = form.find('[name=id]').val()
-      // let action = form.data('action')
+      let action = form.data('action')
       let data = $('#resignForm').serializeArray()
 
       data.push({
@@ -91,6 +91,10 @@
       data.push({
         name: 'indexRow',
         value: indexRow
+      })
+      data.push({
+        name: 'action',
+        value: action
       })
       data.push({
         name: 'page',
@@ -186,9 +190,8 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-        let form = $('#resignModal')
+        let form = $('#resignForm')
 
-        // form.data('action', 'edit')
         
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
@@ -199,8 +202,10 @@
             }
           })
           if (response.data.tglberhentisupir !== "1900-01-01") {
+            form.data('action', 'unapprove')
             $("#unapproveResign").show();
           }else{
+            form.data('action', 'approve')
             form.find('[name=tglberhentisupir]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
           }
 
