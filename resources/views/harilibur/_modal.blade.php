@@ -210,7 +210,6 @@
         Promise
             .all([
                 setStatusAktifOptions(form)
-
             ])
             .then(() => {
                 showDefault(form)

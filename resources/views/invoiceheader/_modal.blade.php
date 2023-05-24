@@ -401,12 +401,13 @@
     $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     initDatepicker()
-
     loadInvoiceGrid();
   }
 
   function editInvoiceHeader(invId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -416,17 +417,27 @@
     `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Invoice')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
-
-    showInvoiceHeader(form, invId, 'edit')
-
+    
+    Promise
+      .all([
+        showInvoiceHeader(form, invId, 'edit')
+      ])
+      .then(() => {
+        clearSelectedRows()
+        $('#gs_').prop('checked', false)
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function deleteInvoiceHeader(invId) {
-    let form = $('#crudForm')
+    let form = $('#crudForm') 
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -436,12 +447,22 @@
     `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Invoice')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     form.find('#btnTampil').prop('disabled', true)
 
-    showInvoiceHeader(form, invId, 'delete')
+    Promise
+      .all([
+        showInvoiceHeader(form, invId, 'edit')
+      ])
+      .then(() => {
+        clearSelectedRows()
+        $('#gs_').prop('checked', false)
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   $(document).on('click', '#btnTampil', function(event) {
@@ -902,59 +923,63 @@
   }
 
   function showInvoiceHeader(form, invId, aksi) {
+    return new Promise((resolve, reject) => {
 
-    form.find(`[name="tglbukti"]`).prop('readonly', true)
-    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+      form.find(`[name="tglbukti"]`).prop('readonly', true)
+      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
-    $.ajax({
-      url: `${apiUrl}invoiceheader/${invId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
-          } else {
-            element.val(value)
-          }
-
-        })
-
-        if (aksi == 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
-        }
-        // getEdit(invId, aksi)
-
-        loadInvoiceGrid();
-
-        getDataInvoice(`${invId}/getEdit`).then((response) => {
-          console.log(response)
-          let selectedIdInv = []
-          let totalRetribusi = 0
+      $.ajax({
+        url: `${apiUrl}invoiceheader/${invId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
           $.each(response.data, (index, value) => {
-            selectedIdInv.push(value.id)
-            totalRetribusi += parseFloat(value.nominalretribusi)
+            let element = form.find(`[name="${index}"]`)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            } else {
+              element.val(value)
+            }
+
           })
 
-          $("#tableInvoice")
-            .jqGrid("setGridParam", {
-              datatype: "local",
-              data: response.data,
-              originalData: response.data,
-              rowNum: response.data.length,
-              selectedRowIds: selectedIdInv
+          if (aksi == 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
+          }
+          // getEdit(invId, aksi)
+
+          loadInvoiceGrid();
+
+          getDataInvoice(`${invId}/getEdit`).then((response) => {
+            console.log(response)
+            let selectedIdInv = []
+            let totalRetribusi = 0
+            $.each(response.data, (index, value) => {
+              selectedIdInv.push(value.id)
+              totalRetribusi += parseFloat(value.nominalretribusi)
             })
-            .trigger("reloadGrid");
-          initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominalretribusi"]`).text(totalRetribusi))
-        });
-      }
+
+            $("#tableInvoice")
+              .jqGrid("setGridParam", {
+                datatype: "local",
+                data: response.data,
+                originalData: response.data,
+                rowNum: response.data.length,
+                selectedRowIds: selectedIdInv
+              })
+              .trigger("reloadGrid");
+            initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominalretribusi"]`).text(totalRetribusi))
+
+            resolve()
+          });
+        }
+      })
     })
   }
 

@@ -403,15 +403,11 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-
-
-
     Promise
       .all([
         setStatusAktifOptions(form),
         setStatusJenisPlatOptions(form),
         setStatusGerobak(form)
-
       ])
       .then(() => {
         showDefault(form)
@@ -421,7 +417,6 @@
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
-
       })
 
     setFormBindKeys(form)
@@ -455,7 +450,6 @@
         setStatusAktifOptions(form),
         setStatusJenisPlatOptions(form),
         setStatusGerobak(form)
-
       ])
       .then(() => {
         showTrado(form, id)

@@ -454,6 +454,8 @@
   function createPengembalianKasGantung() {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
@@ -462,19 +464,28 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Pengembalian Kas Gantung')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    showDefault(form)
-
-    loadPengembalianGrid();
+    Promise
+      .all([
+        showDefault(form)
+      ])
+      .then(() => {
+        loadPengembalianGrid()
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function editPengembalianKasGantung(userId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -484,16 +495,26 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Pengembalian Kas Gantung')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    showpengembalianKasGantung(form, userId)
-    // getPengembalian(userId)
+
+    Promise
+      .all([
+        showpengembalianKasGantung(form, userId),
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
   }
 
   function deletePengembalianKasGantung(userId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -503,13 +524,20 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Pengembalian Kas Gantung')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-
-    showpengembalianKasGantung(form, userId)
-    getPengembalian(userId)
+    Promise
+      .all([
+        showpengembalianKasGantung(form, userId),
+        getPengembalian(userId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function loadPengembalianGrid() {
@@ -677,13 +705,9 @@
           return true;
         },
       });
-    /* Append clear filter button */
     loadClearFilter($('#tablePengembalian'))
 
-    /* Append global search */
-    // loadGlobalSearch($('#tablePengembalian'))
   }
-
 
   function getDataPengembalian(dari, sampai, id) {
     aksi = $('#crudForm').data('action')
@@ -761,56 +785,58 @@
   }
 
   function showpengembalianKasGantung(form, userId) {
+    return new Promise((resolve, reject) => {
+      form.find(`[name="tglbukti"]`).prop('readonly', true)
+      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
-    form.find(`[name="tglbukti"]`).prop('readonly', true)
-    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-
-    $.ajax({
-      url: `${apiUrl}pengembaliankasgantungheader/${userId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
-          } else {
-            element.val(value)
-          }
-          if (index == 'pelanggan') {
-            element.data('current-value', value)
-          }
-        })
-        loadPengembalianGrid();
-        getDataPengembalian(response.data.tgldari, response.data.tglsampai, userId).then((response) => {
-          console.log(userId)
-          let selectedId = []
-
+      $.ajax({
+        url: `${apiUrl}pengembaliankasgantungheader/${userId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
           $.each(response.data, (index, value) => {
-            if (value.pengembaliankasgantungheader_id != null) {
-              selectedId.push(value.id)
+            let element = form.find(`[name="${index}"]`)
+
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            } else {
+              element.val(value)
+            }
+            if (index == 'pelanggan') {
+              element.data('current-value', value)
             }
           })
-          $('#tablePengembalian').jqGrid("clearGridData");
-          setTimeout(() => {
+          loadPengembalianGrid();
+          getDataPengembalian(response.data.tgldari, response.data.tglsampai, userId).then((response) => {
+            console.log(userId)
+            let selectedId = []
 
-            $("#tablePengembalian")
-              .jqGrid("setGridParam", {
-                datatype: "local",
-                data: response.data,
-                originalData: response.data,
-                selectedRowIds: selectedId
-              })
-              .trigger("reloadGrid");
-          }, 100);
-        });
-      }
+            $.each(response.data, (index, value) => {
+              if (value.pengembaliankasgantungheader_id != null) {
+                selectedId.push(value.id)
+              }
+            })
+            $('#tablePengembalian').jqGrid("clearGridData");
+            setTimeout(() => {
+
+              $("#tablePengembalian")
+                .jqGrid("setGridParam", {
+                  datatype: "local",
+                  data: response.data,
+                  originalData: response.data,
+                  selectedRowIds: selectedId
+                })
+                .trigger("reloadGrid");
+            }, 100);
+          });
+          resolve()
+        }
+      })
     })
   }
 
@@ -1041,27 +1067,29 @@
 
 
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}pengembaliankasgantungheader/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        bankId = response.data.bank_id
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}pengembaliankasgantungheader/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          bankId = response.data.bank_id
 
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 

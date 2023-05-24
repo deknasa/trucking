@@ -194,6 +194,8 @@
   function createBankPelanggan() {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
@@ -202,21 +204,28 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Bank Pelanggan')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
     .all([
-      setStatusAktifOptions(form)
+      setStatusAktifOptions(form),
     ])
     .then(() => {
       showDefault(form)
+        .then(() => {
+          $('#crudModal').modal('show')
+        })
+        .finally(() => {
+          $('.modal-loader').addClass('d-none')
+        })
     })
   }
 
   function editBankPelanggan(bankPelangganId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -226,21 +235,28 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Bank Pelanggan')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showBankPelanggan(form, bankPelangganId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function deleteBankPelanggan(bankPelangganId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -250,16 +266,21 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Bank Pelanggan')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showBankPelanggan(form, bankPelangganId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -326,56 +347,58 @@
   }
   
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}bankpelanggan/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          console.log(value)
-           let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
-
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } 
-          else {
-            element.val(value)
-          }
-        })
-        
-       
-      }
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}bankpelanggan/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            console.log(value)
+            let element = form.find(`[name="${index}"]`)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } 
+            else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 
   function showBankPelanggan(form, bankPelangganId) {
-    $.ajax({
-      url: `${apiUrl}bankpelanggan/${bankPelangganId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}bankpelanggan/${bankPelangganId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
           }
-        })
-
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          resolve()
         }
-      }
+      })
     })
   }
   function cekValidasidelete(Id) {

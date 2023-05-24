@@ -485,6 +485,8 @@
   function createUpahSupir() {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     $('#crudModal').find('#crudForm').trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
@@ -493,13 +495,11 @@
     form.data('action', 'add')
 
     $('#crudModalTitle').text('Add Upah Supir')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
 
     $('#table_body').html('')
-    // addRow()
     setUpRow()
 
     $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -508,18 +508,26 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusLuarKotaOptions(form)
+        setStatusLuarKotaOptions(form),
       ])
       .then(() => {
-        showDefault(form)
         initDropzone(form.data('action'))
         initAutoNumeric(form.find(`[name="jarak"]`))
+        showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
 
       })
   }
 
   function editUpahSupir(id) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -529,25 +537,32 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Upah Supir')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusLuarKotaOptions(form)
+        setStatusLuarKotaOptions(form),
       ])
       .then(() => {
         showUpahSupir(form, id)
           .then((upahsupir) => {
             initDropzone(form.data('action'), upahsupir)
           })
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function deleteUpahSupir(id) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -557,19 +572,24 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Upah Supir')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusLuarKotaOptions(form)
+        setStatusLuarKotaOptions(form),
       ])
       .then(() => {
         showUpahSupir(form, id)
           .then((upahsupir) => {
             initDropzone(form.data('action'), upahsupir)
+          })
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
           })
       })
   }
@@ -737,8 +757,8 @@
   }
 
   function showUpahSupir(form, userId, parrent = null) {
-    $('#detailList tbody').html('')
     return new Promise((resolve, reject) => {
+      $('#detailList tbody').html('')
       $.ajax({
         url: `${apiUrl}upahsupir/${userId}`,
         method: 'GET',
@@ -837,7 +857,6 @@
             initDisabled()
           }
           resolve(response.data)
-
         }
       })
     })
@@ -855,27 +874,26 @@
   }
 
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}upahsupir/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
-
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-
-
-      }
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}upahsupir/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 

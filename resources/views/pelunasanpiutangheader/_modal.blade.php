@@ -649,6 +649,7 @@
 
   function createPelunasanPiutangHeader() {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -657,17 +658,23 @@
   `)
     form.data('action', 'add')
     $('#crudModalTitle').text('Add Pelunasan Piutang')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    showDefault(form)
-    loadPelunasanGrid();
+    
+    Promise
+      .all([
+        showDefault(form)
+      ])
+      .then(() => {
+        loadPelunasanGrid()
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
-
-    // setTotal()
-    // setPenyesuaian()
-    // setNominalLebih()
+    
   }
 
   function loadPelunasanGrid() {
@@ -682,34 +689,6 @@
             formatter: 'checkbox',
             search: false,
             editable: false,
-            // align: 'center',
-            // sortable: false,
-            // clear: false,
-            // stype: 'input',
-            // searchable: false,
-            // editable: false,
-            // searchoptions: {
-            //   type: 'checkbox',
-            //   clearSearch: false,
-            //   dataInit: function(element) {
-            //     let disabled = '';
-            //     if ($('#crudForm').data('action') == 'delete') {
-            //       disabled = 'disabled'
-            //     }
-
-            //     $(element).removeClass('form-control')
-            //     $(element).parent().addClass('text-center')
-            //     if (disabled == '') {
-            //       $(element).on('click', function() {
-            //         if ($(this).is(':checked')) {
-            //           selectAllRows()
-            //         } else {
-            //           clearSelectedRows()
-            //         }
-            //       })
-            //     }
-            //   }
-            // },
             formatter: function(value, rowOptions, rowData) {
               let disabled = '';
               if ($('#crudForm').data('action') == 'delete') {
@@ -1072,11 +1051,9 @@
           return true;
         },
       });
-    /* Append clear filter button */
+
     loadClearFilter($('#tablePelunasan'))
 
-    /* Append global search */
-    // loadGlobalSearch($('#tablePelunasan'))
   }
 
   function getDataPelunasan(agenId, id) {
@@ -1241,7 +1218,6 @@
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_nominallebihbayar"]`).text(lebihBayar))
   }
 
-
   function setTotalNominal() {
     let nominalDetails = $(`#tablePelunasan`).find(`td[aria-describedby="tablePelunasan_nominal"]`)
     let nominal = 0
@@ -1266,6 +1242,7 @@
 
   function editPelunasanPiutangHeader(Id) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -1274,158 +1251,24 @@
     Simpan
   `)
     $('#crudModalTitle').text('Edit Pelunasan Piutang')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showPelunasanPiutang(form, Id)
-
+    Promise
+      .all([
+        showPelunasanPiutang(form, Id)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
-
-  function showPelunasanPiutang(form, Id) {
-
-    form.find(`[name="tglbukti"]`).prop('readonly', true)
-    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-    $.ajax({
-      url: `${apiUrl}pelunasanpiutangheader/${Id}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-
-        let tgl = response.data.tglbukti
-        $.each(response.data, (index, value) => {
-          bankId = response.data.bank_id
-          let element = form.find(`[name="${index}"]`)
-
-          form.find(`[name="${index}"]`).val(value).attr('readonly', true)
-
-          if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
-          }
-
-
-          if (index == 'bank') {
-            element.data('current-value', value).prop('readonly', true)
-            element.parent('.input-group').find('.button-clear').remove()
-            element.parent('.input-group').find('.input-group-append').remove()
-          }
-          if (index == 'alatbayar') {
-            element.data('current-value', value).prop('readonly', true)
-            element.parent('.input-group').find('.button-clear').remove()
-            element.parent('.input-group').find('.input-group-append').remove()
-          }
-          if (index == 'agen') {
-            element.data('current-value', value).prop('readonly', true)
-            element.parent('.input-group').find('.button-clear').remove()
-            element.parent('.input-group').find('.input-group-append').remove()
-          }
-          if (index != 'agen' && index != 'agen_id') {
-
-            form.find(`[name="${index}"]`).addClass('disabled')
-            initDisabled()
-          }
-
-        })
-        let agenId = response.data.agen_id
-
-        loadPelunasanGrid();
-
-        getDataPelunasan(agenId, Id).then((response) => {
-
-          let selectedId = []
-          let totalBayar = 0
-          let totalPotongan = 0
-          let totalNominalLebih = 0
-
-          $.each(response.data, (index, value) => {
-            if (value.pelunasanpiutang_id != null) {
-              selectedId.push(value.id)
-              totalBayar += parseFloat(value.bayar)
-              totalPotongan += parseFloat(value.potongan)
-              totalNominalLebih += parseFloat(value.nominallebihbayar)
-            }
-          })
-          $('#tablePelunasan').jqGrid("clearGridData");
-          setTimeout(() => {
-
-            $("#tablePelunasan")
-              .jqGrid("setGridParam", {
-                datatype: "local",
-                data: response.data,
-                originalData: response.data,
-                rowNum: response.data.length,
-                selectedRowIds: selectedId
-              })
-              .trigger("reloadGrid");
-          }, 100);
-
-          initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_bayar"]`).text(totalBayar))
-          initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_potongan"]`).text(totalPotongan))
-          initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_nominallebihbayar"]`).text(totalNominalLebih))
-        });
-      }
-    })
-  }
-  // function clearSelectedRows() {
-  //   $("#tablePelunasan")
-  //     .jqGrid("setGridParam", {
-  //       selectedRowIds: selectedId
-  //     })
-  //     .trigger("reloadGrid");
-  // }
-
-  // function selectAllRows() {
-  //   aksi = $('#crudForm').data('action')
-  //   id = $('#crudForm').find(`[name="id"]`).val()
-  //   agenId = $('#crudForm').find(`[name="agen_id"]`).val()
-  //   if (aksi == 'edit') {
-  //     url = `${apiUrl}pelunasanpiutangheader/${id}/${agenId}/getPelunasanPiutang`
-  //   } else if (aksi == 'delete') {
-  //     url = `${apiUrl}pelunasanpiutangheader/${id}/${agenId}/getDeletePelunasanPiutang`
-  //     attribut = 'disabled'
-  //     forCheckbox = 'disabled'
-  //   } else if (aksi == 'add') {
-  //     url = `${apiUrl}pelunasanpiutangheader/${agenId}/getpiutang`
-  //   }
-  //   $.ajax({
-  //     url: url,
-  //     method: 'GET',
-  //     dataType: 'JSON',
-  //     headers: {
-  //       Authorization: `Bearer ${accessToken}`
-  //     },
-  //     success: (response) => {
-  //       let selectedId = []
-  //       $.each(response.data, (index, value) => {
-  //         selectedId.push(value.id)
-  //       })
-  //       setTimeout(() => {
-  //         $("#tablePelunasan")
-  //           .jqGrid("setGridParam", {
-  //             datatype: "local",
-  //             data: response.data,
-  //             originalData: response.data,
-  //             selectedRowIds: selectedId
-  //           })
-  //           .trigger("reloadGrid");
-  //       }, 100);
-
-  //       selectAll = true
-  //       $.each(response.data, (index, value) => {
-  //         el = '<input type="checkbox" value="' + value.id + '" checked>';
-  //         checkboxHandler(el, value.id)
-  //       })
-  //     }
-  //   })
-
-  // }
 
   function deletePelunasanPiutangHeader(Id) {
     let form = $('#crudForm')
-
+    $('.modal-loader').removeClass('d-none')
     form.data('action', 'delete')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -1433,18 +1276,110 @@
     Hapus
   `)
     $('#crudModalTitle').text('Delete Pelunasan Piutang')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showPelunasanPiutang(form, Id)
+    Promise
+      .all([
+        showPelunasanPiutang(form, Id)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
-  // $(window).on("load", function() {
-  //   var $grid = $("#gridPiutang"),
-  //     newWidth = $grid.closest(".ui-jqgrid").parent().width();
-  //   $grid.jqGrid("setGridWidth", newWidth, true);
-  // });
+  function showPelunasanPiutang(form, Id) {
+    return new Promise((resolve, reject) => {
+      form.find(`[name="tglbukti"]`).prop('readonly', true)
+      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+      $.ajax({
+        url: `${apiUrl}pelunasanpiutangheader/${Id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+
+          let tgl = response.data.tglbukti
+          $.each(response.data, (index, value) => {
+            bankId = response.data.bank_id
+            let element = form.find(`[name="${index}"]`)
+
+            form.find(`[name="${index}"]`).val(value).attr('readonly', true)
+
+            if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            }
+
+
+            if (index == 'bank') {
+              element.data('current-value', value).prop('readonly', true)
+              element.parent('.input-group').find('.button-clear').remove()
+              element.parent('.input-group').find('.input-group-append').remove()
+            }
+            if (index == 'alatbayar') {
+              element.data('current-value', value).prop('readonly', true)
+              element.parent('.input-group').find('.button-clear').remove()
+              element.parent('.input-group').find('.input-group-append').remove()
+            }
+            if (index == 'agen') {
+              element.data('current-value', value).prop('readonly', true)
+              element.parent('.input-group').find('.button-clear').remove()
+              element.parent('.input-group').find('.input-group-append').remove()
+            }
+            if (index != 'agen' && index != 'agen_id') {
+
+              form.find(`[name="${index}"]`).addClass('disabled')
+              initDisabled()
+            }
+
+          })
+          let agenId = response.data.agen_id
+
+          loadPelunasanGrid();
+
+          getDataPelunasan(agenId, Id).then((response) => {
+
+            let selectedId = []
+            let totalBayar = 0
+            let totalPotongan = 0
+            let totalNominalLebih = 0
+
+            $.each(response.data, (index, value) => {
+              if (value.pelunasanpiutang_id != null) {
+                selectedId.push(value.id)
+                totalBayar += parseFloat(value.bayar)
+                totalPotongan += parseFloat(value.potongan)
+                totalNominalLebih += parseFloat(value.nominallebihbayar)
+              }
+            })
+            $('#tablePelunasan').jqGrid("clearGridData");
+            setTimeout(() => {
+
+              $("#tablePelunasan")
+                .jqGrid("setGridParam", {
+                  datatype: "local",
+                  data: response.data,
+                  originalData: response.data,
+                  rowNum: response.data.length,
+                  selectedRowIds: selectedId
+                })
+                .trigger("reloadGrid");
+            }, 100);
+
+            initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_bayar"]`).text(totalBayar))
+            initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_potongan"]`).text(totalPotongan))
+            initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_nominallebihbayar"]`).text(totalNominalLebih))
+          });
+          resolve()
+        }
+      })
+    })
+  }
 
   function getPiutang(id) {
     $('#detailList tbody').html('')
@@ -1525,14 +1460,10 @@
           setPenyesuaian()
           setNominalLebih()
 
-          // initSelect2()
-          // setCoaPotonganOptions(detailRow)
-
           $('.coapotongan-lookup').last().lookup({
             title: 'Coa Potongan Lookup',
             fileName: 'akunpusat',
             beforeProcess: function(test) {
-              // var levelcoa = $(`#levelcoa`).val();
               this.postData = {
                 potongan: '1',
                 levelCoa: '2',
@@ -1552,8 +1483,7 @@
             }
           })
         })
-        // totalNominal = new Intl.NumberFormat('en-US').format(totalNominal);
-        // totalSisa = new Intl.NumberFormat('en-US').format(totalSisa);
+       
         $('#nominalPiutang').append(`${totalNominal}`)
         $('#sisaPiutang').append(`${totalSisa}`)
 
@@ -1874,27 +1804,30 @@
 
 
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}pelunasanpiutangheader/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        bankId = response.data.bank_id
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}pelunasanpiutangheader/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          bankId = response.data.bank_id
 
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            // let element = form.find(`[name="statusaktif"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 

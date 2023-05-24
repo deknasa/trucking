@@ -193,6 +193,7 @@
 
   function createProsesAbsensiSupir() {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -202,15 +203,24 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Proses Absensi Supir')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setAbsensiOptions(form)
+    Promise
+      .all([
+        setAbsensiOptions(form)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function editProsesAbsensiSupir(prosesAbsensiSupirId) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -220,7 +230,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Proses Absensi Supir')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -230,11 +239,18 @@
       ])
       .then(() => {
         showProsesAbsensiSupir(form, prosesAbsensiSupirId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function deleteProsesAbsensiSupir(prosesAbsensiSupirId) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -244,7 +260,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Proses Absensi Supir')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -254,6 +269,12 @@
       ])
       .then(() => {
         showProsesAbsensiSupir(form, prosesAbsensiSupirId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -313,24 +334,27 @@
   }
 
   function showProsesAbsensiSupir(form, prosesAbsensiSupirId) {
-    $.ajax({
-      url: `${apiUrl}prosesabsensisupir/${prosesAbsensiSupirId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}prosesabsensisupir/${prosesAbsensiSupirId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 </script>

@@ -5,7 +5,6 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
           </button>
         </div>
         <form action="" method="post">
@@ -893,6 +892,8 @@
   function createPengeluaranTruckingHeader() {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     $('#crudModal').find('#crudForm').trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
@@ -901,17 +902,26 @@
     form.data('action', 'add')
 
     $('#crudModalTitle').text('Add Pengeluaran Trucking')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
 
     $('#table_body').html('')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    setDefaultBank()
-    // setStatusPostingOptions(form)
-    addRow()
-    setTotal()
+    
+    Promise
+      .all([
+        setDefaultBank(),
+        addRow(),
+        setTotal()
+      ])
+      .then(() => {
+          $('#crudModal').modal('show')
+      })
+      .finally(() => {
+          $('.modal-loader').addClass('d-none')
+      })
+    
   }
 
   async function editPengeluaranTruckingHeader(id) {
@@ -930,17 +940,16 @@
 
     form.find(`[name="bank"]`).removeClass('bank-lookup')
     form.find(`[name="pengeluarantrucking"]`).removeClass('pengeluarantrucking-lookup')
-    // showPengeluaranTruckingHeader(form, id)
-
+    
     Promise
       .all([
         showPengeluaranTruckingHeader(form, id)
       ])
       .then(() => {
-        $('#crudModal').modal('show')
+          $('#crudModal').modal('show')
       })
       .finally(() => {
-        $('.modal-loader').addClass('d-none')
+          $('.modal-loader').addClass('d-none')
       })
 
   }
@@ -948,6 +957,7 @@
   function deletePengeluaranTruckingHeader(id) {
 
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -956,21 +966,23 @@
       Hapus
     `)
     $('#crudModalTitle').text('Delete Pengeluaran Truck')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    // Promise
-    //   .all([
-    //     setStatusPostingOptions(form)
-    //   ])
-    //   .then(() => {
-    //     showPengeluaranTruckingHeader(form, id)
-    //   })
 
     form.find(`[name="bank"]`).removeClass('bank-lookup')
     form.find(`[name="pengeluarantrucking"]`).removeClass('pengeluarantrucking-lookup')
-    showPengeluaranTruckingHeader(form, id)
-
+    
+    
+    Promise
+      .all([
+        showPengeluaranTruckingHeader(form, id)
+      ])
+      .then(() => {
+          $('#crudModal').modal('show')
+      })
+      .finally(() => {
+          $('.modal-loader').addClass('d-none')
+      })
   }
 
   function loadPelunasanBBMGrid() {
@@ -1676,23 +1688,26 @@
   }
 
   function setDefaultBank() {
-    $.ajax({
-      url: `${apiUrl}bank`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, bank) => {
-          // console.log(index); 
-          if (bank.id == 1) {
-            $('#crudForm [name=bank_id]').first().val(bank.id)
-            $('#crudForm [name=bank]').first().val(bank.namabank)
-            $('#crudForm [name=bank]').first().data('currentValue', $('#crudForm [name=bank]').first().val())
-          }
-        })
-      }
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}bank`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, bank) => {
+            // console.log(index); 
+            if (bank.id == 1) {
+              $('#crudForm [name=bank_id]').first().val(bank.id)
+              $('#crudForm [name=bank]').first().val(bank.namabank)
+              $('#crudForm [name=bank]').first().data('currentValue', $('#crudForm [name=bank]').first().val())
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 
@@ -1761,7 +1776,6 @@
           if (kodepengeluaran === "TDE") {
             getDataDeposito(response.data.supirheader_id, id).then((response) => {
 
-
               let selectedId = []
               let totalBayar = 0
 
@@ -1789,30 +1803,34 @@
 
             });
           } else if (kodepengeluaran === "BST") {
+            let detailRow = ""
+
+            resetGrid()
             $.each(response.detail, (index, detail) => {
-
+              let id = detail.id_detail
               if (detail.pengeluarantrucking_id != null) {
-                selectedRowsSumbangan.push(detail.id_detail)
-                selectedRowsSumbanganContainer.push(detail.container_detail)
-                selectedRowsSumbanganJobtrucking.push(detail.nojobtrucking_detail)
-                selectedRowsSumbanganNobukti.push(detail.noinvoice_detail)
-                selectedRowsSumbanganNominal.push(detail.nominal_detail)
+                selectedRows.push(detail.id_detail)
               }
+              detailRow += `
+                <div id="detail_row_${id}">
+                <input type="text" value="${id}"  id="id_detail${id}" class="" name="id_detail[]"  disabled   >
+                <input type="text" value='${detail.container_detail}'  id="container_detail${id}" class="" name="container_detail[]"  disabled   >
+                <input type="text" value="${detail.noinvoice_detail}"  id="noinvoice_detail${id}" class="" name="noinvoice_detail[]"  disabled   >
+                <input type="text" value="${detail.nominal_detail}"  id="nominal${id}" class="" name="nominal[]"  disabled   >
+                <input type="text" value="${detail.nojobtrucking_detail}"  id="nojobtrucking_detail${id}" class="" name="nojobtrucking_detail[]"  disabled   >
+                <input type="text" value="SUMBANGAN SOSIAL"  id="keterangan${id}" class="" name="keterangan[]"  disabled   >
+                </div>
+                `
             })
+            $('#detail-list-grid').append(detailRow)
 
-            $('#tableSumbangan').jqGrid("clearGridData");
-            $('#tableSumbangan').jqGrid('setGridParam', {
-              url: `${apiUrl}pengeluarantruckingheader/${id}/geteditinvoice`,
-              postData: {
-                tgldari: $('#crudForm').find('[name=tgldari]').val(),
-                tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
-                aksi: 'show'
-              },
-              datatype: "json"
-            }).trigger('reloadGrid');
+            $('#modalgrid').setGridParam({
+              datatype: "local",
+              data: response.detail
+            }).trigger('reloadGrid')
 
           } else if (kodepengeluaran === "KBBM") {
-
+            
             getDataPelunasanBBM(response.data.tgldari, response.data.tglsampai, id).then((response) => {
 
               let selectedId = []
@@ -1845,26 +1863,26 @@
           } else {
             $.each(response.detail, (index, detail) => {
               let detailRow = $(`
-              <tr>
-                  <td></td>
-                  <td class="data_tbl tbl_supir">
-                      <input type="hidden" name="supir_id[]">
-                      <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
-                  </td>
-                  <td class="data_tbl tbl_penerimaantruckingheader">
-                      <input type="text" name="penerimaantruckingheader_nobukti[]" data-current-value="${detail.penerimaantruckingheader_nobukti}" class="form-control penerimaantruckingheader-lookup">
-                  </td>
-                  <td class="data_tbl tbl_nominal">
-                      <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
-                  </td>
-                  <td class="data_tbl tbl_keterangan">
-                      <input type="text" name="keterangan[]" class="form-control"> 
-                  </td>
-                  <td>
-                      <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                  </td>
-              </tr>
-            `)
+                <tr>
+                    <td></td>
+                    <td class="data_tbl tbl_supir">
+                        <input type="hidden" name="supir_id[]">
+                        <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
+                    </td>
+                    <td class="data_tbl tbl_penerimaantruckingheader">
+                        <input type="text" name="penerimaantruckingheader_nobukti[]" data-current-value="${detail.penerimaantruckingheader_nobukti}" class="form-control penerimaantruckingheader-lookup">
+                    </td>
+                    <td class="data_tbl tbl_nominal">
+                        <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+                    </td>
+                    <td class="data_tbl tbl_keterangan">
+                        <input type="text" name="keterangan[]" class="form-control"> 
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                    </td>
+                </tr>
+              `)
 
               detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
               detailRow.find(`[name="supir[]"]`).val(detail.supir)
@@ -1927,18 +1945,12 @@
 
             })
 
-            setRowNumbers()
           }
 
+          setRowNumbers()
           if (form.data('action') === 'delete') {
-
-            form.find(`[name="tgldari"]`).prop('readonly', true)
-            form.find(`[name="tgldari"]`).parent('.input-group').find('.input-group-append').remove()
-            form.find(`[name="tglsampai"]`).prop('readonly', true)
-            form.find(`[name="tglsampai"]`).parent('.input-group').find('.input-group-append').remove()
             form.find('[name]').addClass('disabled')
             initDisabled()
-
           }
           resolve()
         }

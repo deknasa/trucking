@@ -60,7 +60,7 @@
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
-                  <tr>
+                  <!-- <tr>
                     <td> 1</td>
                     <td>
                       <div class="row form-group">
@@ -79,7 +79,7 @@
                     <td>
                       <div class="btn btn-danger btn-sm delete-row">HAPUS</div>
                     </td>
-                  </tr>
+                  </tr> -->
                 </tbody>
                 <tfoot>
                   <tr>
@@ -286,7 +286,6 @@
       Simpan
     `)
     form.data('action', 'add')
-    // form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Piutang Header')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
@@ -300,6 +299,7 @@
 
   function editPiutangHeader(userId) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -309,17 +309,24 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Piutang Header')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-
-    showPiutangHeader(form, userId)
-
+    Promise
+      .all([
+        showPiutangHeader(form, userId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function deletePiutangHeader(userId) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -329,11 +336,19 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Piutang Header')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showPiutangHeader(form, userId)
+    Promise
+      .all([
+        showPiutangHeader(form, userId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function cekValidasi(Id, Aksi) {
@@ -388,64 +403,67 @@
   }
 
   function showPiutangHeader(form, userId) {
-    $('#detailList tbody').html('')
+    return new Promise((resolve, reject) => {
+      $('#detailList tbody').html('')
 
-    form.find(`[name="tglbukti"]`).prop('readonly', true)
-    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-    
-    $.ajax({
-      url: `${apiUrl}piutangheader/${userId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
+      form.find(`[name="tglbukti"]`).prop('readonly', true)
+      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+      
+      $.ajax({
+        url: `${apiUrl}piutangheader/${userId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+
+          })
+
+          form.find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))
+          form.find(`[name="agen"]`).val(response.data.agen.namaagen)
+          form.find(`[name="agen"]`).data('currentValue', response.data.agen.namaagen)
+
+          $.each(response.data.piutang_details, (index, detail) => {
+            let detailRow = $(`
+              <tr>
+                <td></td>
+                <td>
+                  <input type="text" name="keterangan_detail[]" class="form-control">
+                </td>
+                <td>
+                  <input type="text" name="nominal_detail[]" class="form-control nominal autonumeric">
+                </td>
+                <td>
+                  <button type="button" class="btn btn-danger btn-sm delete-row">HAPUS</button>
+                </td>
+              </tr>
+            `)
+
+            detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+            detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
+
+            initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+            $('#detailList tbody').append(detailRow)
+            setTotal()
+          })
+
+          setRowNumbers()
+
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
           }
-
-        })
-
-        form.find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))
-        form.find(`[name="agen"]`).val(response.data.agen.namaagen)
-        form.find(`[name="agen"]`).data('currentValue', response.data.agen.namaagen)
-
-        $.each(response.data.piutang_details, (index, detail) => {
-          let detailRow = $(`
-            <tr>
-              <td></td>
-              <td>
-                <input type="text" name="keterangan_detail[]" class="form-control">
-              </td>
-              <td>
-                <input type="text" name="nominal_detail[]" class="form-control nominal autonumeric">
-              </td>
-              <td>
-                <button type="button" class="btn btn-danger btn-sm delete-row">HAPUS</button>
-              </td>
-            </tr>
-          `)
-
-          detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-          detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
-
-          initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
-          $('#detailList tbody').append(detailRow)
-          setTotal()
-        })
-
-        setRowNumbers()
-
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          resolve()
         }
-      }
+      })
     })
   }
 

@@ -206,7 +206,6 @@
     Promise
       .all([
         setStatusAktifOptions(form)
-
       ])
       .then(() => {
         showDefault(form)
@@ -216,7 +215,6 @@
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
-
       })
   }
 
@@ -239,7 +237,6 @@
     Promise
       .all([
         setStatusAktifOptions(form)
-
       ])
       .then(() => {
         showCabang(form, cabangId)
@@ -272,7 +269,6 @@
     Promise
       .all([
         setStatusAktifOptions(form)
-
       ])
       .then(() => {
         showCabang(form, cabangId)
@@ -371,7 +367,6 @@
             form.find('[name]').addClass('disabled')
             initDisabled()
           }
-
           resolve()
         }
       })
@@ -391,7 +386,6 @@
           $.each(response.data, (index, value) => {
             console.log(value)
             let element = form.find(`[name="${index}"]`)
-            // let element = form.find(`[name="statusaktif"]`)
 
             if (element.is('select')) {
               element.val(value).trigger('change')

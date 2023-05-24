@@ -186,6 +186,7 @@
 
   function createUserAcl() {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -195,15 +196,24 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create User Acl')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setUserOptions(form)
+    Promise
+      .all([
+        setUserOptions(form)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function editUserAcl(userId) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -213,7 +223,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit User Acl')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -223,11 +232,18 @@
       ])
       .then(() => {
         showUserAcl(form, userId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function deleteUserAcl(userId) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -237,7 +253,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete User Acl')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -247,6 +262,12 @@
       ])
       .then(() => {
         showUserAcl(form, userId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -306,24 +327,27 @@
   }
 
   function showUserAcl(form, userId) {
-    $.ajax({
-      url: `${apiUrl}useracl/${userId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}useracl/${userId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 

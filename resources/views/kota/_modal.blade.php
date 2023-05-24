@@ -198,6 +198,7 @@
 
   function createKota() {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -207,21 +208,28 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Kota')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
     .all([
-      setStatusAktifOptions(form)
+      setStatusAktifOptions(form),
     ])
     .then(() => {
       showDefault(form)
+        .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
     })
   }
 
   function editKota(kotaId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -231,21 +239,28 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Kota')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showKota(form, kotaId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function deleteKota(kotaId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -255,16 +270,21 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Kota')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showKota(form, kotaId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -332,33 +352,36 @@
   }
 
   function showKota(form, kotaId) {
-    $.ajax({
-      url: `${apiUrl}kota/${kotaId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}kota/${kotaId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+
+            if(index == 'zona') {
+              element.data('current-value', value)
+            }
+          })
+
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
           }
-
-          if(index == 'zona') {
-            element.data('current-value', value)
-          }
-        })
-
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          resolve()
         }
-      }
+      })
     })
   }
 
@@ -381,32 +404,35 @@
       }
     })
   }
-  function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}kota/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          console.log(value)
-           let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } 
-          else {
-            element.val(value)
-          }
-        })
-        
-       
-      }
+  function showDefault(form) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}kota/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            console.log(value)
+            let element = form.find(`[name="${index}"]`)
+            // let element = form.find(`[name="statusaktif"]`)
+
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } 
+            else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
+  
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}kota/${Id}/cekValidasi`,
