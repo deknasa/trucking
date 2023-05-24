@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "ae3b1ed584ff0c12229ccc1df8f39fe4",
+  "ReportGuid": "df413ee69706318a358d87269edeb41e",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/truck/public/reports/ReportLaporanTripGandenganDetail.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanTripGandenganDetail.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1677231018000+0700)/",
+  "ReportChanged": "/Date(1684125030000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -514,7 +514,7 @@
               "Ident": "StiText",
               "Name": "Text28",
               "Guid": "284b8363e15500abb363828222f15fbf",
-              "ClientRectangle": "40,32,38,6",
+              "ClientRectangle": "40,32,54,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -532,7 +532,7 @@
               "Ident": "StiText",
               "Name": "Text36",
               "Guid": "c6a03a0d5a624b2f92c6fa1248f31bbf",
-              "ClientRectangle": "80,32,8,6",
+              "ClientRectangle": "96,32,8,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -550,7 +550,7 @@
               "Ident": "StiText",
               "Name": "Text37",
               "Guid": "b4a4bfd9a8f85333dd0578c10f2049fb",
-              "ClientRectangle": "90,32,42,6",
+              "ClientRectangle": "106,32,64,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"

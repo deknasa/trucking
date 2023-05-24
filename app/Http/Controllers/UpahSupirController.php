@@ -250,7 +250,7 @@ class UpahSupirController extends MyController
         $upahsupir_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/upahsupirrincian', $detailParams);
+            ->get(config('app.api_url') . 'upahsupirrincian', $detailParams);
         
         
         $upahsupir_details = $upahsupir_detail['data'];

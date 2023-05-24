@@ -123,9 +123,9 @@
             </div>
 
             <div id="detail-bst-section">
-              <table id="modalgrid"></table>
-              <div id="modalgridPager"></div>
-              <div id="detail-list-grid" style="display:none"></div>
+              <table id="tableSumbangan"></table>
+              <!-- <div id="modalgridPager"></div> -->
+              <!-- <div id="detail-list-grid" style="display:none"></div> -->
             </div>
 
             <div id="detail-kbbm-section">
@@ -193,6 +193,22 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   var KodePengeluaranId
   let selectedRows = [];
+
+  let sortnameSumbangan = 'noinvoice_detail';
+  let sortorderSumbangan = 'asc';
+  let pageSumbangan = 0;
+  let totalRecordSumbangan
+  let limitSumbangan
+  let postDataSumbangan
+  let triggerClickSumbangan
+  let indexRowSumbangan
+  let selectedRowsSumbangan = [];
+  let selectedRowsSumbanganNobukti = [];
+  let selectedRowsSumbanganContainer = [];
+  let selectedRowsSumbanganJobtrucking = [];
+  let selectedRowsSumbanganKeterangan = [];
+  let selectedRowsSumbanganNominal = [];
+
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -212,9 +228,12 @@
     function rangeInvoice() {
       var tgldari = $('#crudForm').find(`[name="tgldari"]`).val()
       var tglsampai = $('#crudForm').find(`[name="tglsampai"]`).val()
+      console.log('rangeInvoice')
       if (tgldari !== "" && tglsampai !== "") {
         if (KodePengeluaranId == 'BST') {
-          getInvoice(tgldari, tglsampai)
+
+          clearSelectedRowsSumbangan()
+          selectAllRowsSumbangan(tgldari, tglsampai, 'range')
         } else {
           $('#tablePelunasanbbm').jqGrid("clearGridData");
           $("#tablePelunasanbbm")
@@ -334,8 +353,7 @@
             value: $("#tableDeposito").jqGrid("getCell", value, "id")
           })
         });
-      } else if (KodePengeluaranId == "KBBM")
-      {
+      } else if (KodePengeluaranId == "KBBM") {
         data = []
 
         data.push({
@@ -404,8 +422,84 @@
             value: $("#tablePelunasanbbm").jqGrid("getCell", value, "id")
           })
         })
-      }
-      else {
+      } else if (KodePengeluaranId == "BST") {
+        data = []
+
+        data.push({
+          name: 'id',
+          value: form.find(`[name="id"]`).val()
+        })
+        data.push({
+          name: 'nobukti',
+          value: form.find(`[name="nobukti"]`).val()
+        })
+        data.push({
+          name: 'tglbukti',
+          value: form.find(`[name="tglbukti"]`).val()
+        })
+        data.push({
+          name: 'pengeluarantrucking_id',
+          value: form.find(`[name="pengeluarantrucking_id"]`).val()
+        })
+        data.push({
+          name: 'pengeluarantrucking',
+          value: form.find(`[name="pengeluarantrucking"]`).val()
+        })
+        data.push({
+          name: 'tgldari',
+          value: form.find(`[name="tgldari"]`).val()
+        })
+        data.push({
+          name: 'tglsampai',
+          value: form.find(`[name="tglsampai"]`).val()
+        })
+        data.push({
+          name: 'bank_id',
+          value: form.find(`[name="bank_id"]`).val()
+        })
+        data.push({
+          name: 'bank',
+          value: form.find(`[name="bank"]`).val()
+        })
+
+        $.each(selectedRowsSumbangan, function(index, item) {
+          data.push({
+            name: 'id_detail[]',
+            value: item
+          })
+        });
+        $.each(selectedRowsSumbanganNominal, function(index, item) {
+          data.push({
+            name: 'nominal[]',
+            value: parseFloat(item.replaceAll(',', ''))
+          })
+        });
+        $.each(selectedRowsSumbanganContainer, function(index, item) {
+          data.push({
+            name: 'container_detail[]',
+            value: item
+          })
+        });
+        $.each(selectedRowsSumbanganNobukti, function(index, item) {
+          data.push({
+            name: 'noinvoice_detail[]',
+            value: item
+          })
+        });
+        $.each(selectedRowsSumbanganJobtrucking, function(index, item) {
+          data.push({
+            name: 'nojobtrucking_detail[]',
+            value: item
+          })
+        });
+        $.each(selectedRowsSumbangan, function(index, item) {
+          data.push({
+            name: 'keterangan[]',
+            value: 'SUMBANGAN SOSIAL'
+          })
+        });
+
+      } else {
         data = $('#crudForm').serializeArray()
 
         $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
@@ -507,6 +601,7 @@
           }).trigger('reloadGrid');
 
           selectedRows = []
+          clearSelectedRowsSumbangan()
           if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
@@ -780,6 +875,7 @@
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
     selectedRows = []
+    clearSelectedRowsSumbangan()
 
     $('#crudModal').find('.modal-body').html(modalBody)
   })
@@ -829,11 +925,10 @@
     
   }
 
-  function editPengeluaranTruckingHeader(id) {
+  async function editPengeluaranTruckingHeader(id) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
-
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -841,7 +936,6 @@
       Simpan
     `)
     $('#crudModalTitle').text('Edit Pengeluaran Truck')
-
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -1097,8 +1191,7 @@
     loadClearFilter($('#tablePelunasanbbm'))
   }
 
-  function getDataPelunasanBBM(dari, sampai, id) 
-  {
+  function getDataPelunasanBBM(dari, sampai, id) {
     aksi = $('#crudForm').data('action')
     data = {}
     if (aksi == 'edit') {
@@ -1878,6 +1971,36 @@
 
   }
 
+  function getEditSumbangan(id) {
+    aksi = $('#crudForm').data('action')
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}pengeluarantruckingheader/${id}/geteditinvoice`,
+        dataType: "JSON",
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          tgldari: $('#crudForm').find('[name=tgldari]').val(),
+          tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+          limit: 0
+        },
+        success: (response) => {
+
+          $('#tableSumbangan').jqGrid("setGridParam", {
+            url: `${apiUrl}pengeluarantruckingheader/${id}/getEditInvoice`,
+            postData: {
+              tgldari: $('#crudForm').find('[name=tgldari]').val(),
+              tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+            },
+          }).trigger('reloadGrid');
+          resolve();
+        },
+      });
+    });
+  }
+
   $(document).on('click', `#detailList tbody [name="pinjPribadi[]"]`, function() {
 
     if ($(this).prop("checked") == true) {
@@ -2051,27 +2174,50 @@
   }
 
   function loadModalGrid() {
-    $("#modalgrid").jqGrid({
+    let disabled = '';
+    if ($('#crudForm').data('action') == 'delete') {
+      disabled = 'disabled'
+    }
+    $("#tableSumbangan").jqGrid({
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
         colModel: [{
-            editable: true,
-            edittype: 'checkbox',
-            search: false,
-            width: 60,
+            label: '',
+            name: '',
+            width: 30,
             align: 'center',
-            formatoptions: {
-              disabled: false
-            },
-            label: 'Pilih',
-            name: 'id_detail',
-            index: 'Pilih',
-            // key:true,
-            formatter: (value) => {
-              return `<input type="checkbox" class="checkBoxgrid"  id="${value}_checkBoxgrid" value="${value}" onchange="checkboxHandler(this)">`
-            },
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                dari = $('#crudForm').find(`[name="tgldari"]`).val()
+                sampai = $('#crudForm').find(`[name="tglsampai"]`).val()
+                let aksi = $('#crudForm').data('action')
 
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                if (disabled == '') {
+                  $(element).on('click', function() {
+                    if ($(this).is(':checked')) {
+                      selectAllRowsSumbangan(dari, sampai, 'checkAll')
+                    } else {
+                      clearSelectedRowsSumbangan()
+                    }
+                  })
+                } else {
+                  $(element).attr('disabled', true)
+                }
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="sumbanganId[]" value="${rowData.id_detail}" ${disabled} onchange="checkboxSumbanganHandler(this)">`
+            },
           },
           {
             label: 'no invoice',
@@ -2094,60 +2240,79 @@
         ],
         autowidth: true,
         shrinkToFit: false,
-        height: 350,
+        height: 400,
         rowNum: 10,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50, 0],
-        toolbar: [true, "top"],
-        sortable: true,
-        viewrecords: true,
         footerrow: true,
         userDataOnFooter: true,
+        toolbar: [true, "top"],
+        sortable: true,
+        sortname: sortnameSumbangan,
+        sortorder: sortorderSumbangan,
+        page: pageSumbangan,
+        viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: (jqXHR) => {
+          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        },
+
+        onSelectRow: function(id) {
+          activeGrid = $(this)
+        },
         loadComplete: function(data) {
           let grid = $(this)
           changeJqGridRowListText()
+
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
           initResize($(this))
-          // console.log(data);
-          $.each(selectedRows, function(key, value) {
-            $('#modalgrid tbody tr').each(function(row, tr) {
-              if ($(this).find(`td input:checkbox`).val() == value) {
-                console.log(value);
-                $(this).addClass('bg-light-blue')
-                console.log($(this).find(`td input:checkbox`).prop('checked', true))
-                $(this).find(`td input:checkbox`).prop('checked', true)
-              }
-            })
 
-            $(`#detail-list-grid #detail_row_${value}`).find(`#id_detail${value}`).prop('disabled', false)
-            $(`#detail-list-grid #detail_row_${value}`).find(`#container_detail${value}`).prop('disabled', false)
-            $(`#detail-list-grid #detail_row_${value}`).find(`#noinvoice_detail${value}`).prop('disabled', false)
-            $(`#detail-list-grid #detail_row_${value}`).find(`#nominal${value}`).prop('disabled', false)
-            $(`#detail-list-grid #detail_row_${value}`).find(`#nojobtrucking_detail${value}`).prop('disabled', false)
-            $(`#detail-list-grid #detail_row_${value}`).find(`#keterangan${value}`).prop('disabled', false)
-
-          });
+          /* Set global variables */
+          sortnameSumbangan = $(this).jqGrid("getGridParam", "sortname")
+          sortorderSumbangan = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordSumbangan = $(this).getGridParam("records")
+          limitSumbangan = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataSumbangan = $(this).jqGrid('getGridParam', 'postData')
+          triggerClickSumbangan = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
+          if (indexRowSumbangan > $(this).getDataIDs().length - 1) {
+            indexRowSumbangan = $(this).getDataIDs().length - 1;
           }
 
           setHighlight($(this))
-        },
-        onSelectRow: function(id) {
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
-          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
+          $.each(selectedRowsSumbangan, function(key, value) {
+            $(grid).find('tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).addClass('bg-light-blue')
+                $(this).find(`td input:checkbox`).prop('checked', true)
+              }
+            })
+          });
+          if (data.attributes) {
+            $(this).jqGrid('footerData', 'set', {
+              nominal_detail: data.attributes.totalNominal,
+            }, true)
+          }
 
-        },
+        }
       })
+      .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false,
@@ -2155,73 +2320,111 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
-          clearGlobalSearch($('#modalgrid'))
+          $(this).setGridParam({
+            postData: {
+              tgldari: $('#crudForm [name=tgldari]').val(),
+              tglsampai: $('#crudForm [name=tglsampai]').val(),
+            },
+          })
+          clearGlobalSearch($('#tableSumbangan'))
         },
+        afterSearch: function() {
+          console.log($(this).getGridParam())
+        }
       })
-      .customPager()
+      .customPager({})
     /* Append clear filter button */
-    loadClearFilter($('#modalgrid'))
+    loadClearFilter($('#tableSumbangan'))
 
     /* Append global search */
-    loadGlobalSearch($('#modalgrid'))
+    loadGlobalSearch($('#tableSumbangan'))
   }
 
-  function getInvoice(dari, sampai) {
+  function checkboxSumbanganHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRowsSumbangan.push($(element).val())
+      selectedRowsSumbanganNobukti.push($(element).parents('tr').find(`td[aria-describedby="tableSumbangan_noinvoice_detail"]`).text())
+      selectedRowsSumbanganContainer.push($(element).parents('tr').find(`td[aria-describedby="tableSumbangan_container_detail"]`).text())
+      selectedRowsSumbanganJobtrucking.push($(element).parents('tr').find(`td[aria-describedby="tableSumbangan_nojobtrucking_detail"]`).text())
+      selectedRowsSumbanganNominal.push($(element).parents('tr').find(`td[aria-describedby="tableSumbangan_nominal_detail"]`).text())
+
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRowsSumbangan.length; i++) {
+        if (selectedRowsSumbangan[i] == value) {
+          selectedRowsSumbangan.splice(i, 1);
+          selectedRowsSumbanganNobukti.splice(i, 1);
+          selectedRowsSumbanganContainer.splice(i, 1);
+          selectedRowsSumbanganJobtrucking.splice(i, 1);
+          selectedRowsSumbanganNominal.splice(i, 1);
+        }
+      }
+    }
+
+  }
+
+  function clearSelectedRowsSumbangan() {
+    selectedRowsSumbangan = []
+    selectedRowsSumbanganNobukti = [];
+    selectedRowsSumbanganContainer = [];
+    selectedRowsSumbanganJobtrucking = [];
+    selectedRowsSumbanganNominal = [];
+    $('#tableSumbangan').trigger('reloadGrid')
+  }
+
+  function selectAllRowsSumbangan(dari, sampai, option) {
     if ($('#crudForm').data('action') == 'edit') {
       bstId = $(`#crudForm`).find(`[name="id"]`).val()
-      url = `${bstId}/geteditinvoice`
+      urlSumbangan = `${bstId}/geteditinvoice`
     } else {
-      url = 'getinvoice'
+      urlSumbangan = 'getinvoice'
     }
     $.ajax({
-      url: `${apiUrl}pengeluarantruckingheader/${url}`,
+      url: `${apiUrl}pengeluarantruckingheader/${urlSumbangan}`,
       method: 'GET',
       dataType: 'JSON',
       data: {
-        tgldari: dari,
-        tglsampai: sampai,
+        tgldari: $('#crudForm').find('[name=tgldari]').val(),
+        tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
         limit: 0
       },
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-        resetGrid()
-        let totalNominal = 0
-        selectedRows = []
-        $.each(response.data, (index, detail) => {
-          let id = detail.id
-          let detailRow = $(`
-          <div id="detail_row_${detail.id_detail}">
-          <input type="text" value="${detail.id_detail}"  id="id_detail${detail.id_detail}" class="" name="id_detail[]"  disabled  >
-          <input type="text" value="${detail.container_detail}"  id="container_detail${detail.id_detail}" class="" name="container_detail[]"  disabled  >
-          <input type="text" value="${detail.noinvoice_detail}"  id="noinvoice_detail${detail.id_detail}" class="" name="noinvoice_detail[]"  disabled  >
-          <input type="text" value="${detail.nominal_detail}"  id="nominal${detail.id_detail}" class="" name="nominal[]"  disabled  >
-          <input type="text" value="${detail.nojobtrucking_detail}"  id="nojobtrucking_detail${detail.id_detail}" class="" name="nojobtrucking_detail[]"  disabled  >
-          <input type="text" value="SUMBANGAN SOSIAL"  id="keterangan${id}" class="" name="keterangan[]"    >
-          </div>
-          
-          `)
-          $('#detail-list-grid').append(detailRow)
-          if (detail.pengeluarantrucking_id != null) {
-            selectedRows.push(detail.id_detail)
-            detailRow.find(`[name="id_detail[]"]`).attr('disabled', false)
-            detailRow.find(`[name="container_detail[]"]`).attr('disabled', false)
-            detailRow.find(`[name="noinvoice_detail[]"]`).attr('disabled', false)
-            detailRow.find(`[name="nominal[]"]`).attr('disabled', false)
-            detailRow.find(`[name="nojobtrucking_detail[]"]`).attr('disabled', false)
-            detailRow.find(`[name="keterangan[]"]`).attr('disabled', false)
-          }
-        })
+        if (option == 'checkAll') {
+          selectedRowsSumbangan = response.data.map((data) => data.id_detail)
+          selectedRowsSumbanganNobukti = response.data.map((data) => data.noinvoice_detail)
+          selectedRowsSumbanganContainer = response.data.map((data) => data.container_detail)
+          selectedRowsSumbanganJobtrucking = response.data.map((data) => data.nojobtrucking_detail)
+          selectedRowsSumbanganNominal = response.data.map((data) => data.nominal_detail)
+        }
+        if ($('#crudForm').data('action') == 'edit') {
+          response.data.map((data) => {
+            if (data.pengeluarantrucking_id != null) {
+              selectedRowsSumbangan.push(data.id_detail)
+              selectedRowsSumbanganNobukti.push(data.noinvoice_detail)
+              selectedRowsSumbanganContainer.push(data.container_detail)
+              selectedRowsSumbanganJobtrucking.push(data.nojobtrucking_detail)
+              selectedRowsSumbanganNominal.push(data.nominal_detail)
+            }
+          })
+        }
+        $('#tableSumbangan').jqGrid("clearGridData");
+        $('#tableSumbangan').jqGrid('setGridParam', {
+          url: `${apiUrl}pengeluarantruckingheader/${urlSumbangan}`,
+          postData: {
+            tgldari: $('#crudForm').find('[name=tgldari]').val(),
+            tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+            aksi: $('#crudForm').data('action')
+          },
+          datatype: "json"
+        }).trigger('reloadGrid');
 
-        $('#modalgrid').setGridParam({
-          datatype: "local",
-          data: response.data
-        }).trigger('reloadGrid')
-        // console.log(response.data);
       }
     })
-    // console.log(dari, sampai);
   }
 
   function resetGrid() {

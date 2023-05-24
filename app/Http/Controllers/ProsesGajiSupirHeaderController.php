@@ -99,7 +99,7 @@ class ProsesGajiSupirHeaderController extends MyController
         $prosesgajisupir_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/prosesgajisupirdetail', $detailParams);
+            ->get(config('app.api_url') . 'prosesgajisupirdetail', $detailParams);
         
         $data = $header['data'];
         $prosesgajisupir_details = $prosesgajisupir_detail['data'];

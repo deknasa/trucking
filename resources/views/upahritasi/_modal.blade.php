@@ -12,7 +12,7 @@
           <div class="modal-body">
             <input type="hidden" name="id">
 
-            <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   Parent 
@@ -21,7 +21,7 @@
               <div class="col-12 col-md-10">
                 <input type="text" name="parent_id" class="form-control upahritasi-lookup">
               </div>
-            </div>
+            </div> --}}
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
@@ -66,9 +66,16 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="jarak" class="form-control text-right">
+                <div class="input-group">
+                  <input type="text" name="jarak" class="form-control" style="text-align: right">
+                  <div class="input-group-append">
+                    <span class="input-group-text" style="font-weight: bold;">KM</span>
+                  </div>
+                </div>
               </div>
             </div>
+
+            
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">

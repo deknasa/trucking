@@ -109,7 +109,7 @@ class HutangHeaderController extends MyController
         $hutang_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/hutangdetail', $detailParams);
+            ->get(config('app.api_url') . 'hutangdetail', $detailParams);
         
         $data = $header['data'];
         $hutang_details = $hutang_detail['data'];

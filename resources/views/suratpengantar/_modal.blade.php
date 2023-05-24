@@ -1379,7 +1379,7 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-          Aktif: 'AKTIF1',
+          Aktif: 'AKTIF',
           container_Id: containerId,
         }
       },

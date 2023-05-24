@@ -91,7 +91,7 @@
             <div class="row form-group">
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">keterangan <span class="text-danger">*</span> </label>
+                <label class="col-form-label">keterangan</label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">
@@ -316,6 +316,7 @@
     initDropzone(form.data('action'))
     initAutoNumeric(form.find(`[name="qtymin"]`))
     initAutoNumeric(form.find(`[name="qtymax"]`))
+    disabledHirarkiKelompok()
   }
 
   function editStok(stokId) {
@@ -570,6 +571,46 @@
     }
   }
 
+  function disabledHirarkiKelompok(middle=false) {
+    
+    let kategori = $('#crudForm').find(`[name="kategori"]`).parents('.input-group').children()
+    kategori.attr('disabled', true)
+    kategori.val('')
+    kategori.find('.lookup-toggler').attr('disabled', true)
+    $('#kategoriId').attr('disabled', true);
+    $('#subkelompokId').val('');
+    
+    if (middle) {
+      return "oke";
+    }
+
+    let subkelompok = $('#crudForm').find(`[name="subkelompok"]`).parents('.input-group').children()
+    subkelompok.attr('disabled', true)
+    subkelompok.val('')
+    subkelompok.find('.lookup-toggler').attr('disabled', true)
+    $('#subkelompokId').attr('disabled', true);
+    $('#subkelompokId').val('');
+    
+    
+  }
+
+  function enabledSubKelompok() {
+    let subkelompok = $('#crudForm').find(`[name="subkelompok"]`).parents('.input-group').children()
+    subkelompok.attr('disabled', false)
+    subkelompok.val('')
+    subkelompok.find('.lookup-toggler').attr('disabled', false)
+    $('#subkelompokId').attr('disabled', false);
+    $('#subkelompokId').val('');
+  }
+  function enabledKategori() {
+    let kategori = $('#crudForm').find(`[name="kategori"]`).parents('.input-group').children()
+    kategori.attr('disabled', false)
+    kategori.val('')
+    kategori.find('.lookup-toggler').attr('disabled', false)
+    $('#kategoriId').attr('disabled', false);
+    $('#kategoriId').val('');
+  }
+
   function initLookup() {
 
     $('.jenistrado-lookup').lookup({
@@ -613,12 +654,14 @@
         element.val(kelompok.kodekelompok)
         $(`#${element[0]['name']}Id`).val(kelompok.id)
         element.data('currentValue', element.val())
+        enabledSubKelompok()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-
+        disabledHirarkiKelompok()
+        $(`#${element[0]['name']}Id`).val('')
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -642,12 +685,14 @@
         element.val(subkelompok.kodesubkelompok)
         $(`#${element[0]['name']}Id`).val(subkelompok.id)
         element.data('currentValue', element.val())
+        enabledKategori()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-
+        disabledHirarkiKelompok(true)
+        $(`#${element[0]['name']}Id`).val('')
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -676,7 +721,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-
+        $(`#${element[0]['name']}Id`).val('')
         element.val('')
         element.data('currentValue', element.val())
       }

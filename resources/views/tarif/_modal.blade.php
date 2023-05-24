@@ -151,6 +151,17 @@
               </div>
             </div>
 
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  Keterangan </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="keterangan">
+                <input type="text" name="keterangan" class="form-control keterangan">
+              </div>
+            </div>
+
             <div class="table-responsive">
               <table class="table table-bordered mt-3 table-bindkeys" id="detailList" style="width:500px">
                 <thead class="table-secondary">
@@ -632,9 +643,7 @@
             else {
                 element.val(value)
             }
-
-
-
+            
             if (index == 'container') {
               element.data('current-value', value)
             }

@@ -30,6 +30,14 @@
               </div>
 
               <div class="form-group col-sm-6 row">
+                <label class="col-sm-4 col-form-label">nama alias <span class="text-danger">*</span></label>
+                <div class="col-sm-8">
+                  <input type="text" name="namaalias" class="form-control">
+                </div>
+              </div>
+
+
+              <div class="form-group col-sm-6 row">
                 <label class="col-sm-4 col-form-label">Alamat <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" name="alamat" class="form-control">

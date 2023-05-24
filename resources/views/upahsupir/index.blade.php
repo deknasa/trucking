@@ -74,7 +74,6 @@
             label: 'JARAK',
             name: 'jarak',
             align: 'right',
-            formatter: currencyFormat
           },
           {
             label: 'ZONA',
@@ -175,6 +174,10 @@
 
               return ` title="${statusLuarKota.MEMO}"`
             }
+          },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
           },
           {
             label: 'MODIFIEDBY',
