@@ -152,6 +152,26 @@ class GandenganController extends MyController
 
         $gandengans = $response['data'];
 
+
+        $i = 0;
+        foreach ($gandengans as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+
+            $result = json_decode($statusaktif, true);
+
+            $statusaktif = $result['MEMO'];
+
+            $gandengans[$i]['statusaktif'] = $statusaktif;
+
+        
+            $i++;
+
+
+        }
+
+        // dd($gandengans);
+
         return view('reports.gandengan', compact('gandengans'));
     }
 

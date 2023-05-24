@@ -148,6 +148,7 @@ class KaryawanController extends MyController
 
         }
 
+
         return view('reports.karyawan', compact('karyawans'));
     }
 }
