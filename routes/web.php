@@ -472,6 +472,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('jenistrado/{id}/delete', [JenisTradoController::class, 'delete'])->name('jenistrado.delete');
     Route::get('jenistrado/get', [JenisTradoController::class, 'get'])->name('jenistrado.get');
     Route::get('jenistrado/index', [JenisTradoController::class, 'index']);
+    Route::get('jenistrado/export', [JenisTradoController::class, 'export'])->name('jenistrado.export');
+    Route::get('jenistrado/report', [JenisTradoController::class, 'report'])->name('jenistrado.report');
     Route::resource('jenistrado', JenisTradoController::class);
 
     Route::get('kasgantungheader/{id}/delete', [KasGantungHeaderController::class, 'delete'])->name('kasgantungheader.delete');
