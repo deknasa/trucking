@@ -568,6 +568,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('kerusakan/{id}/delete', [KerusakanController::class, 'delete'])->name('kerusakan.delete');
     Route::get('kerusakan/get', [KerusakanController::class, 'get'])->name('kerusakan.get');
     Route::get('kerusakan/index', [KerusakanController::class, 'index']);
+    Route::get('kerusakan/export', [KerusakanController::class, 'export'])->name('kerusakan.export');
+    Route::get('kerusakan/report', [KerusakanController::class, 'report'])->name('kerusakan.report');
     Route::resource('kerusakan', KerusakanController::class);
 
     Route::get('penerima/report', [PenerimaController::class, 'report'])->name('penerima.report');
