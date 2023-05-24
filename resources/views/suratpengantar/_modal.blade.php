@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -375,7 +375,7 @@
       setPersentase()
     })
     $("#crudForm [name]").attr("autocomplete", "off");
-    
+
     $("#addRow").click(function() {
       addRow()
     });
@@ -467,6 +467,18 @@
         name: 'limit',
         value: limit
       })
+      data.push({
+        name: 'tgldariheader',
+        value: $('#tgldariheader').val()
+      })
+      data.push({
+        name: 'tglsampaiheader',
+        value: $('#tglsampaiheader').val()
+      })
+
+      let tgldariheader = $('#tgldariheader').val();
+      let tglsampaiheader = $('#tglsampaiheader').val()
+
 
       switch (action) {
         case 'add':
@@ -479,7 +491,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}suratpengantar/${Id}`
+          url = `${apiUrl}suratpengantar/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -935,7 +947,7 @@
     })
   }
 
-  function getGaji() {
+  function getGaji(plusBorongan) {
     let form = $('#crudForm')
     let data = []
 
@@ -954,7 +966,12 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-        form.find(`[name="gajisupir"]`).val(response.data.nominalsupir)
+        totalBorongan = response.data.nominalsupir
+        if (plusBorongan != undefined) {
+          plusBorongan = parseInt(parseFloat(plusBorongan.replace(/,/g, '')))
+          totalBorongan = plusBorongan + parseFloat(response.data.nominalsupir)
+        }
+        form.find(`[name="gajisupir"]`).val(totalBorongan)
         form.find(`[name="gajikenek"]`).val(response.data.nominalkenek)
         form.find(`[name="komisisupir"]`).val(response.data.nominalkomisi)
 
@@ -1014,7 +1031,7 @@
           })
 
           getTarifOmset(response.data.tarifrincian_id)
-
+          getGaji(response.data.nominalplusborongan)
           initAutoNumeric(form.find(`[name="nominal"]`))
           initAutoNumeric(form.find(`[name="nominalTagih"]`))
           initAutoNumeric(form.find(`[name="qtyton"]`))
@@ -1062,7 +1079,7 @@
             })
           }
           setRowNumbers()
-          
+
           initDatepicker()
           editValidasi(isAllowEdited);
           if (form.data('action') === 'delete') {
@@ -1263,7 +1280,8 @@
       },
       onSelectRow: (trado, element) => {
         $('#crudForm [name=trado_id]').first().val(trado.id)
-        element.val(trado.keterangan)
+        getGaji(trado.nominalplusborongan)
+        element.val(trado.kodetrado)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -1273,6 +1291,7 @@
         $('#crudForm [name=trado_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+        getGaji()
       }
     })
     $('.supir-lookup').lookup({
@@ -1476,43 +1495,43 @@
 
     if (!edit) {
       console.log(edit);
-      pelanggan.attr('disabled',true)
-      pelanggan.find('.lookup-toggler').attr('disabled',true)
-      $('#pelanggan_id').attr('disabled',true);
-  
-      agen.attr('disabled',true)
-      agen.find('.lookup-toggler').attr('disabled',true)
-      $('#agen_id').attr('disabled',true);
-  
-      jenisorder.attr('disabled',true)
-      jenisorder.find('.lookup-toggler').attr('disabled',true)
-      $('#jenisorder_id').attr('disabled',true);
-  
-      tarifrincian.attr('disabled',true)
-      tarifrincian.find('.lookup-toggler').attr('disabled',true)
-      $('#tarifrincian_id').attr('disabled',true);
-      
+      pelanggan.attr('disabled', true)
+      pelanggan.find('.lookup-toggler').attr('disabled', true)
+      $('#pelanggan_id').attr('disabled', true);
+
+      agen.attr('disabled', true)
+      agen.find('.lookup-toggler').attr('disabled', true)
+      $('#agen_id').attr('disabled', true);
+
+      jenisorder.attr('disabled', true)
+      jenisorder.find('.lookup-toggler').attr('disabled', true)
+      $('#jenisorder_id').attr('disabled', true);
+
+      tarifrincian.attr('disabled', true)
+      tarifrincian.find('.lookup-toggler').attr('disabled', true)
+      $('#tarifrincian_id').attr('disabled', true);
+
     } else {
       console.log("true");
-      pelanggan.attr('disabled',false)
-      pelanggan.find('.lookup-toggler').attr('disabled',false)
-      $('#pelanggan_id').attr('disabled',false);
-  
-      agen.attr('disabled',false)
-      agen.find('.lookup-toggler').attr('disabled',false)
-      $('#agen_id').attr('disabled',false);
-  
-      jenisorder.attr('disabled',false)
-      jenisorder.find('.lookup-toggler').attr('disabled',false)
-      $('#jenisorder_id').attr('disabled',false);
-  
-      tarifrincian.attr('disabled',false)
-      tarifrincian.find('.lookup-toggler').attr('disabled',false)
-      $('#tarifrincian_id').attr('disabled',false);
-      
+      pelanggan.attr('disabled', false)
+      pelanggan.find('.lookup-toggler').attr('disabled', false)
+      $('#pelanggan_id').attr('disabled', false);
+
+      agen.attr('disabled', false)
+      agen.find('.lookup-toggler').attr('disabled', false)
+      $('#agen_id').attr('disabled', false);
+
+      jenisorder.attr('disabled', false)
+      jenisorder.find('.lookup-toggler').attr('disabled', false)
+      $('#jenisorder_id').attr('disabled', false);
+
+      tarifrincian.attr('disabled', false)
+      tarifrincian.find('.lookup-toggler').attr('disabled', false)
+      $('#tarifrincian_id').attr('disabled', false);
+
     }
-    
-    
+
+
   }
 
 
@@ -1546,18 +1565,18 @@
       success: response => {
 
         var kondisi = response.kondisi
-        
+
         // if (!response.edit) {
-          isAllowEdited = response.edit;
-          // console.log(isAllowEdited);
+        isAllowEdited = response.edit;
+        // console.log(isAllowEdited);
         // }
-        
+
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {
-          if(Aksi == 'EDIT'){
+          if (Aksi == 'EDIT') {
             editSuratPengantar(Id)
-          }else{
+          } else {
             deleteSuratPengantar(Id)
           }
         }
