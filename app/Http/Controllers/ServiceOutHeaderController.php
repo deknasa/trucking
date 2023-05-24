@@ -199,7 +199,7 @@ class ServiceOutHeaderController extends MyController
         $serviceout_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/serviceoutdetail', $detailParams);
+            ->get(config('app.api_url') . 'serviceoutdetail', $detailParams);
         
         
         $serviceout_details = $serviceout_detail['data'];

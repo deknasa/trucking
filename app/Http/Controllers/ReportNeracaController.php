@@ -32,7 +32,7 @@ class ReportNeracaController extends MyController
         $report = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/reportneraca/report', $detailParams);
+            ->get(config('app.api_url') . 'reportneraca/report', $detailParams);
            
 
         $reports = $report['data']['original']['data'];

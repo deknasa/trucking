@@ -133,7 +133,7 @@
                 </select>
               </div>
             </div>
-            <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   JENIS EMKL <span class="text-danger">*</span>
@@ -143,7 +143,7 @@
                 <input type="hidden" name="jenisemkl">
                 <input type="text" name="keteranganjenisemkl" class="form-control jenisemkl-lookup">
               </div>
-            </div>
+            </div> --}}
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -272,7 +272,10 @@
     activeGrid = null
 
     getMaxLength(form)
-    initSelect2()
+    initSelect2(form.find(`[name="statustas"]`),true)
+    initSelect2(form.find(`[name="statusaktif"]`),true)
+    
+    
     initLookup()
   })
 

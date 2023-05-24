@@ -200,10 +200,11 @@
                             ?>
             `,
               dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
+                initSelect2($(element),false)
+                // $(element).select2({
+                //   width: 'resolve',
+                //   theme: "bootstrap4"
+                // },false);
               }
             },
             formatter: (value, options, rowData) => {
@@ -223,10 +224,7 @@
               return ` title="${statusTas.MEMO}"`
             }
           },
-          {
-            label: 'JENIS EMKL',
-            name: 'jenisemkl'
-          },
+          
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',

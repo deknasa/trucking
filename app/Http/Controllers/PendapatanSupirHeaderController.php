@@ -53,7 +53,7 @@ class PendapatanSupirHeaderController extends MyController
         $pendapatan_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/pendapatansupirdetail', $detailParams);
+            ->get(config('app.api_url') . 'pendapatansupirdetail', $detailParams);
         
         $data = $header['data'];
         $pendapatan_details = $pendapatan_detail['data'];

@@ -1,5 +1,5 @@
 <table id="akunPusatLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="akunPusatLookupPager"></div>
+{{-- <div id="akunPusatLookupPager"></div> --}}
 
 <script>
   $('#akunPusatLookup').jqGrid({
@@ -424,7 +424,7 @@
       sortorder: 'asc',
       toolbar: [true, "top"],
       page: 1,
-      pager: $('#akunPusatLookupPager'),
+      // pager: $('#akunPusatLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -504,6 +504,14 @@
         clearGlobalSearch($('#akunPusatLookup'))
       },
     })
+    .jqGrid("navGrid", pager, {
+        search: false,
+        refresh: false,
+        add: false,
+        edit: false,
+        del: false,
+      })
+    .customPager()
   loadGlobalSearch($('#akunPusatLookup'))
   loadClearFilter($('#akunPusatLookup'))
 </script>

@@ -139,7 +139,7 @@ class ServiceInHeaderController extends MyController
         $servicein_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/serviceindetail', $detailParams);
+            ->get(config('app.api_url') . 'serviceindetail', $detailParams);
         
         
         $servicein_details = $servicein_detail['data'];

@@ -11,6 +11,7 @@
 </div>
 
 @include('supir._modal')
+@include('supir._modalSupirResign')
 
 @push('scripts')
 <script>
@@ -49,6 +50,10 @@
           {
             label: 'NAMA',
             name: 'namasupir',
+          },
+          {
+            label: 'ALIAS',
+            name: 'namaalias',
           },
           {
             label: 'TGL LAHIR',
@@ -750,8 +755,11 @@
               text: "Approval Supir Resign",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                approvalSupirResign(selectedId)
-
+                if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                  showDialog('Harap pilih salah satu record')
+                } else {
+                  supirResign(selectedId)
+                }
               }
             },
           ]

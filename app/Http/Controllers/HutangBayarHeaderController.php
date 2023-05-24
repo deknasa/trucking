@@ -98,7 +98,7 @@ class HutangBayarHeaderController extends MyController
         $hutangbayar_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/hutangbayardetail', $detailParams);
+            ->get(config('app.api_url') . 'hutangbayardetail', $detailParams);
         
         $data = $header['data'];
         $hutangbayar_details = $hutangbayar_detail['data'];
