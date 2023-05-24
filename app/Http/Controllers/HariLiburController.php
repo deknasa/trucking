@@ -110,6 +110,24 @@ class HariLiburController extends MyController
 
         $hariliburs = $response['data'];
 
+        $i = 0;
+        foreach ($hariliburs as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+
+            $result = json_decode($statusaktif, true);
+
+            $statusaktif = $result['MEMO'];
+
+
+            $hariliburs[$i]['statusaktif'] = $statusaktif;
+
+        
+            $i++;
+
+
+        }
+
         return view('reports.harilibur', compact('hariliburs'));
     }
 }
