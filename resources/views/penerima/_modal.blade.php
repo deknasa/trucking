@@ -237,6 +237,8 @@
   function createPenerima() {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     $('#input_masknpwp').inputmask({
       mask: '99.999.999.9-999.999',
       definitions: {
@@ -263,7 +265,6 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Penerima')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -274,11 +275,19 @@
       ])
       .then(() => {
         showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function editPenerima(penerimaId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     $('#input_masknpwp').inputmask({
       mask: '99.999.999.9-999.999',
@@ -305,7 +314,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Penerima')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -316,11 +324,19 @@
       ])
       .then(() => {
         showPenerima(form, penerimaId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function deletePenerima(penerimaId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -330,7 +346,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Penerima')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -341,6 +356,12 @@
       ])
       .then(() => {
         showPenerima(form, penerimaId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -446,56 +467,61 @@
   }
 
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}penerima/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          console.log(value)
-          let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}penerima/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            console.log(value)
+            let element = form.find(`[name="${index}"]`)
+            // let element = form.find(`[name="statusaktif"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-
-
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 
   function showPenerima(form, penerimaId) {
-    $.ajax({
-      url: `${apiUrl}penerima/${penerimaId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}penerima/${penerimaId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
           }
-        })
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          resolve()
         }
-      }
+      })
     })
   }
+  
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}penerima/${Id}/cekValidasi`,

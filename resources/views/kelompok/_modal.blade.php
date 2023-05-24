@@ -187,6 +187,8 @@
   function createKelompok() {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
@@ -195,7 +197,6 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Kelompok')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -205,11 +206,19 @@
     ])
     .then(() => {
       showDefault(form)
+        .then(() => {
+          $('#crudModal').modal('show')
+        })
+        .finally(() => {
+          $('.modal-loader').addClass('d-none')
+        })
     })
   }
 
   function editKelompok(kelompokId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -218,8 +227,7 @@
     Simpan
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Kelompok')
-    $('#crudModal').modal('show')
+    $('#crudModalTitle').text('Edit Kelompok') 
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -229,12 +237,20 @@
       ])
       .then(() => {
         showKelompok(form, kelompokId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function deleteKelompok(kelompokId) {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+    
     form.data('action', 'delete')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -243,7 +259,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Kelompok')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -253,6 +268,12 @@
       ])
       .then(() => {
         showKelompok(form, kelompokId)
+         .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -319,56 +340,61 @@
   }
 
   function showKelompok(form, kelompokId) {
-    $.ajax({
-      url: `${apiUrl}kelompok/${kelompokId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}kelompok/${kelompokId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
           }
-        })
 
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          resolve()
         }
-      }
+      })
     })
   }
 
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}kelompok/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          console.log(value)
-           let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}kelompok/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            console.log(value)
+            let element = form.find(`[name="${index}"]`)
+            // let element = form.find(`[name="statusaktif"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } 
-          else {
-            element.val(value)
-          }
-        })
-        
-       
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } 
+            else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
   

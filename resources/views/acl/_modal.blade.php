@@ -198,12 +198,11 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
-    // setRoleOptions(form)
   }
 
   function editAcl(roleId) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -213,20 +212,24 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Acl')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    // Promise
-    //   .all([
-    //     setRoleOptions(form)
-    //   ])
-    //   .then(() => {
+    
+    Promise
+      .all([
         showAcl(form, roleId)
-      // })
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })  
   }
 
   function deleteAcl(roleId) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -236,17 +239,19 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Acl')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    // Promise
-    //   .all([
-    //     setRoleOptions(form)
-    //   ])
-      // .then(() => {
+    Promise
+      .all([
         showAcl(form, roleId)
-      // })
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function getMaxLength(form) {
@@ -305,31 +310,34 @@
   // }
 
   function showAcl(form, roleId) {
-    $.ajax({
-      url: `${apiUrl}acl/${roleId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}acl/${roleId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          $(`#crudForm [name="role_id"]`).first().trigger('change')
+
+          
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
           }
-        })
-        $(`#crudForm [name="role_id"]`).first().trigger('change')
-
-        
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          resolve()
         }
-      }
+      })
     })
   }
 

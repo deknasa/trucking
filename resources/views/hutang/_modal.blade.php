@@ -297,6 +297,7 @@
 
   function editHutangHeader(id) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -306,15 +307,24 @@
               `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Hutang')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    showHutangHeader(form, id)
 
+    Promise
+      .all([
+        showHutangHeader(form, id)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function deleteHutangHeader(id) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -324,10 +334,19 @@
               `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Hutang')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    showHutangHeader(form, id)
+
+    Promise
+      .all([
+        showHutangHeader(form, id)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function cekValidasi(Id, Aksi) {
@@ -406,77 +425,80 @@
   }
 
   function showHutangHeader(form, userId) {
-    $('#detailList tbody').html('')
+    return new Promise((resolve, reject) => {
+      $('#detailList tbody').html('')
 
-    form.find(`[name="tglbukti"]`).prop('readonly', true)
-    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-    
-    $.ajax({
-      url: `${apiUrl}hutangheader/${userId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+      form.find(`[name="tglbukti"]`).prop('readonly', true)
+      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+      
+      $.ajax({
+        url: `${apiUrl}hutangheader/${userId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
-          } else {
-            element.val(value)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            } else {
+              element.val(value)
+            }
+
+            if (index == 'akunpusat') {
+              element.data('current-value', value)
+            }
+            if (index == 'supplier') {
+              element.data('current-value', value)
+            }
+          })
+
+          $.each(response.detail, (index, detail) => {
+            let detailRow = $(`
+              <tr>
+                <td> </td>
+                <td>
+                  <input type="text" name="keterangan_detail[]"  class="form-control">
+                </td>
+                <td>
+                  <div class="input-group">
+                    <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">
+                  </div>
+                </td>
+                <td>
+                    <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right autonumeric" > 
+                </td>
+                <td>
+                  <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
+                </td>
+              </tr>
+            `)
+
+            detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
+            detailRow.find(`[name="total_detail[]"]`).val(detail.total)
+            detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+
+            initAutoNumeric(detailRow.find(`[name="total_detail[]"]`))
+
+
+            $('#detailList tbody').append(detailRow)
+            initDatepicker(detailRow.find('.datepicker'))
+            setTotal()
+          })
+
+          setRowNumbers()
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
           }
-
-          if (index == 'akunpusat') {
-            element.data('current-value', value)
-          }
-          if (index == 'supplier') {
-            element.data('current-value', value)
-          }
-        })
-
-        $.each(response.detail, (index, detail) => {
-          let detailRow = $(`
-            <tr>
-              <td> </td>
-              <td>
-                <input type="text" name="keterangan_detail[]"  class="form-control">
-              </td>
-              <td>
-                <div class="input-group">
-                  <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">
-                </div>
-              </td>
-              <td>
-                  <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right autonumeric" > 
-              </td>
-              <td>
-                <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
-              </td>
-            </tr>
-          `)
-
-          detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
-          detailRow.find(`[name="total_detail[]"]`).val(detail.total)
-          detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-
-          initAutoNumeric(detailRow.find(`[name="total_detail[]"]`))
-
-
-          $('#detailList tbody').append(detailRow)
-          initDatepicker(detailRow.find('.datepicker'))
-          setTotal()
-        })
-
-        setRowNumbers()
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          resolve()
         }
-      }
+      })
     })
   }
 

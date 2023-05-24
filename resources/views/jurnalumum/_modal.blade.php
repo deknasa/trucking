@@ -276,6 +276,7 @@
 
   function editJurnalUmumHeader(id) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -284,17 +285,28 @@
       Simpan
     `)
     $('#crudModalTitle').text('Edit Jurnal Umum')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showJurnalUmum(form, id)
+    Promise
+      .all([
+        showJurnalUmum(form, id)
+      ])
+      .then(() => {
+        clearSelectedRows()
+        $('#gs_').prop('checked', false)
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
   }
 
   function deleteJurnalUmumHeader(id) {
 
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -303,10 +315,21 @@
       Hapus
     `)
     $('#crudModalTitle').text('Delete Jurnal Umum')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    showJurnalUmum(form, id)
+
+    Promise
+      .all([
+        showJurnalUmum(form, id)
+      ])
+      .then(() => {
+        clearSelectedRows()
+        $('#gs_').prop('checked', false)
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
   }
 
@@ -404,115 +427,118 @@
   }
 
   function showJurnalUmum(form, id) {
-    $('#detailList tbody').html('')
+    return new Promise((resolve, reject) => {
+      $('#detailList tbody').html('')
 
-    form.find(`[name="tglbukti"]`).prop('readonly', true)
-    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+      form.find(`[name="tglbukti"]`).prop('readonly', true)
+      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
-    $.ajax({
-      url: `${apiUrl}jurnalumumheader/${id}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        let tgl = response.data.tglbukti
+      $.ajax({
+        url: `${apiUrl}jurnalumumheader/${id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let tgl = response.data.tglbukti
 
 
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
-          } else {
-            element.val(value)
-          }
-        })
+            if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            } else {
+              element.val(value)
+            }
+          })
 
-        $.each(response.detail, (index, detail) => {
-          let detailRow = $(`
-            <tr>
-            <td></td>
-            <td>
-              <input type="hidden" name="coadebet_detail[]">
-              <input type="text" name="ketcoadebet_detail[]" data-current-value="${detail.coadebet}" class="form-control coadebet-lookup">
-            </td>
-            <td>
-              <input type="hidden" name="coakredit_detail[]">
-              <input type="text" name="ketcoakredit_detail[]" data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
-            </td>
-            <td>
-              <input type="text" name="keterangan_detail[]" class="form-control">   
-            </td><td>
-              <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric nominal" > 
-            </td>
-            <td>
-                <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-            </td>
-            </tr>
-          `)
+          $.each(response.detail, (index, detail) => {
+            let detailRow = $(`
+              <tr>
+              <td></td>
+              <td>
+                <input type="hidden" name="coadebet_detail[]">
+                <input type="text" name="ketcoadebet_detail[]" data-current-value="${detail.coadebet}" class="form-control coadebet-lookup">
+              </td>
+              <td>
+                <input type="hidden" name="coakredit_detail[]">
+                <input type="text" name="ketcoakredit_detail[]" data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
+              </td>
+              <td>
+                <input type="text" name="keterangan_detail[]" class="form-control">   
+              </td><td>
+                <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric nominal" > 
+              </td>
+              <td>
+                  <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+              </td>
+              </tr>
+            `)
 
-          detailRow.find(`[name="coadebet_detail[]"]`).val(detail.coadebet)
-          detailRow.find(`[name="coakredit_detail[]"]`).val(detail.coakredit)
-          detailRow.find(`[name="ketcoadebet_detail[]"]`).val(detail.ketcoadebet)
-          detailRow.find(`[name="ketcoakredit_detail[]"]`).val(detail.ketcoakredit)
-          detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-          detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
+            detailRow.find(`[name="coadebet_detail[]"]`).val(detail.coadebet)
+            detailRow.find(`[name="coakredit_detail[]"]`).val(detail.coakredit)
+            detailRow.find(`[name="ketcoadebet_detail[]"]`).val(detail.ketcoadebet)
+            detailRow.find(`[name="ketcoakredit_detail[]"]`).val(detail.ketcoakredit)
+            detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+            detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
 
-          initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
-          $('#detailList tbody').append(detailRow)
-          setTotal();
+            initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+            $('#detailList tbody').append(detailRow)
+            setTotal();
 
-          $('.coadebet-lookup').last().lookup({
-            title: 'Coa Debet Lookup',
-            fileName: 'akunpusat',
-            beforeProcess: function(test) {
-              this.postData = {
-                Aktif: 'AKTIF',
-                levelCoa: '3',
+            $('.coadebet-lookup').last().lookup({
+              title: 'Coa Debet Lookup',
+              fileName: 'akunpusat',
+              beforeProcess: function(test) {
+                this.postData = {
+                  Aktif: 'AKTIF',
+                  levelCoa: '3',
+                }
+              },
+              onSelectRow: (akunpusat, element) => {
+                element.parents('td').find(`[name="coadebet_detail[]"]`).val(akunpusat.coa)
+                element.val(akunpusat.keterangancoa)
+                element.data('currentValue', element.val())
+              },
+              onCancel: (element) => {
+                element.val(element.data('currentValue'))
+              },
+              onClear: (element) => {
+                element.parents('td').find(`[name="coadebet_detail[]"]`).val('')
+                element.val('')
+                element.data('currentValue', element.val())
               }
-            },
-            onSelectRow: (akunpusat, element) => {
-              element.parents('td').find(`[name="coadebet_detail[]"]`).val(akunpusat.coa)
-              element.val(akunpusat.keterangancoa)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="coadebet_detail[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
+            })
+
+            $('.coakredit-lookup').last().lookup({
+              title: 'Coa Kredit Lookup',
+              fileName: 'akunpusat',
+              onSelectRow: (akunpusat, element) => {
+                element.parents('td').find(`[name="coakredit_detail[]"]`).val(akunpusat.coa)
+                element.val(akunpusat.keterangancoa)
+                element.data('currentValue', element.val())
+              },
+              onCancel: (element) => {
+                element.val(element.data('currentValue'))
+              },
+              onClear: (element) => {
+                element.parents('td').find(`[name="coakredit_detail[]"]`).val('')
+                element.val('')
+                element.data('currentValue', element.val())
+              }
+            })
           })
 
-          $('.coakredit-lookup').last().lookup({
-            title: 'Coa Kredit Lookup',
-            fileName: 'akunpusat',
-            onSelectRow: (akunpusat, element) => {
-              element.parents('td').find(`[name="coakredit_detail[]"]`).val(akunpusat.coa)
-              element.val(akunpusat.keterangancoa)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="coakredit_detail[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
-        })
-
-        setRowNumbers()
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          setRowNumbers()
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
+          }
+          resolve()
         }
-      }
+      })
     })
   }
 

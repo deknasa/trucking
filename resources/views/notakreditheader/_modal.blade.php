@@ -333,6 +333,7 @@
 
   function createNotaKredit() {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.trigger('reset')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -344,19 +345,25 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Nota Kredit')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    // getKasGantung()
-    // setStatusFormatListOptions(form)
-    setStatusApprovalListOptions(form)
+
+    Promise
+      .all([
+        setStatusApprovalListOptions(form)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
   }
 
   function editNotaKredit(userId) {
-    console.log('editNotaKredit');
-
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -366,24 +373,28 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Nota Kredit')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        // setStatusFormatListOptions(form),
         setStatusApprovalListOptions(form)
       ])
       .then(() => {
         showNotaKredit(form, userId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
 
   }
 
   function deleteNotaKredit(userId) {
-    console.log('deleteNotaKredit');
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -393,17 +404,21 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Nota Kredit')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        // setStatusFormatListOptions(form),
         setStatusApprovalListOptions(form)
       ])
       .then(() => {
         showNotaKredit(form, userId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -438,36 +453,39 @@
   }
 
   function showNotaKredit(form, userId) {
-    $('#detailList tbody').html('')
+    return new Promise((resolve, reject) => {
+      $('#detailList tbody').html('')
 
-    $.ajax({
-      url: `${apiUrl}notakreditheader/${userId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        sum = 0;
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          if (element.attr("name") == 'tglbukti') {
-            var result = value.split('-');
-            element.val(result[2] + '-' + result[1] + '-' + result[0]);
-          } else if (element.attr("name") == 'tglapproval') {
-            var result = value.split('-');
-            element.val(result[2] + '-' + result[1] + '-' + result[0]);
-          } else if (element.attr("name") == 'tgllunas') {
-            var result = value.split('-');
-            element.val(result[2] + '-' + result[1] + '-' + result[0]);
-          } else if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-        getNotaKredit(userId)
-      }
+      $.ajax({
+        url: `${apiUrl}notakreditheader/${userId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          sum = 0;
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            if (element.attr("name") == 'tglbukti') {
+              var result = value.split('-');
+              element.val(result[2] + '-' + result[1] + '-' + result[0]);
+            } else if (element.attr("name") == 'tglapproval') {
+              var result = value.split('-');
+              element.val(result[2] + '-' + result[1] + '-' + result[0]);
+            } else if (element.attr("name") == 'tgllunas') {
+              var result = value.split('-');
+              element.val(result[2] + '-' + result[1] + '-' + result[0]);
+            } else if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          getNotaKredit(userId)
+          resolve()
+        }
+      })
     })
   }
 

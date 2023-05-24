@@ -219,6 +219,8 @@
   function createMenu() {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
@@ -231,20 +233,23 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    // setMenuParentOptions(form)
-    // setControllerOptions(form)
     Promise
       .all([
         setMenuParentOptions(form),
         setControllerOptions(form)
       ])
       .then(() => {
-        showMenu(form, menuId)
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
   function editMenu(menuId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -254,7 +259,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Menu')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -265,12 +269,19 @@
       ])
       .then(() => {
         showMenu(form, menuId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
-    //showMenu(form, menuId)
   }
 
   function deleteMenu(menuId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -280,11 +291,9 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Menu')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    //showMenu(form, menuId)
     Promise
       .all([
         setMenuParentOptions(form),
@@ -292,6 +301,12 @@
       ])
       .then(() => {
         showMenu(form, menuId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -375,28 +390,31 @@
   }
 
   function showMenu(form, menuId) {
-    $.ajax({
-      url: `${apiUrl}menu/${menuId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}menu/${menuId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
           }
-        })
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          resolve()
         }
-      }
+      })
     })
   }
 </script>

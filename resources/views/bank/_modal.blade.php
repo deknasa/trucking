@@ -270,7 +270,6 @@
 
     $('.modal-loader').removeClass('d-none')
 
-
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -281,8 +280,6 @@
     $('#crudModalTitle').text('Edit Bank')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
-
 
     Promise
       .all([

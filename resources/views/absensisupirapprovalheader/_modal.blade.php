@@ -248,6 +248,8 @@
   function editAbsensiSupirApprovalHeader(absensiSupirApproval) {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -256,15 +258,25 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit AbsensiSupirApproval')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    ShowAbsensiSupirApproval(form, absensiSupirApproval)
+    Promise
+      .all([
+        ShowAbsensiSupirApproval(form, absensiSupirApproval)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function deleteAbsensiSupirApprovalHeader(absensiSupirApproval) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -274,36 +286,45 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete AbsensiSupirApproval')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    ShowAbsensiSupirApproval(form, absensiSupirApproval)
+    Promise
+      .all([
+        ShowAbsensiSupirApproval(form, absensiSupirApproval)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function ShowAbsensiSupirApproval(form, userId) {
-
-    $('#detailList tbody').html('')
-    $.ajax({
-      url: `${apiUrl}absensisupirapprovalheader/${userId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          element.val(value)
-          if (element.attr("name") == 'tglbukti') {
-            var result = value.split('-');
-            element.val(result[2] + '-' + result[1] + '-' + result[0]);
-          }
-        })
-        getApprovalAbsensi(userId)
-      }
+    return new Promise((resolve, reject) => {
+      $('#detailList tbody').html('')
+      $.ajax({
+        url: `${apiUrl}absensisupirapprovalheader/${userId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            element.val(value)
+            if (element.attr("name") == 'tglbukti') {
+              var result = value.split('-');
+              element.val(result[2] + '-' + result[1] + '-' + result[0]);
+            }
+          })
+          getApprovalAbsensi(userId)
+          resolve()
+        }
+      })
     })
-
   }
 
   function getAbsensi(id) {

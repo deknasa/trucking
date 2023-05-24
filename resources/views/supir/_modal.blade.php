@@ -385,6 +385,8 @@
   function createSupir() {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.find('[name]').removeAttr('disabled')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -394,7 +396,6 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Supir')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -404,6 +405,12 @@
       ])
       .then(() => {
         showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
     $('#crudForm').find('[name=tgllahir]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglmasuk]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -422,6 +429,8 @@
   function editSupir(id) {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.find('[name]').removeAttr('disabled')
     form.data('action', 'edit')
     form.trigger('reset')
@@ -430,7 +439,6 @@
     Simpan
   `)
     $('#crudModalTitle').text('Edit Supir')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -449,11 +457,19 @@
             initSelect2()
             form.find('[name]').removeAttr('disabled')
           })
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function deleteSupir(id) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -462,7 +478,6 @@
       Hapus
     `)
     $('#crudModalTitle').text('Delete Supir')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -476,8 +491,6 @@
             setFormBindKeys(form)
             initDropzone(form.data('action'), supir)
             initDropzonePdf(form.data('action'), supir)
-
-
             form.find('select').each((index, select) => {
               let element = $(select)
 
@@ -489,6 +502,12 @@
             form.find('[name]').attr('disabled', 'disabled').css({
               background: '#fff'
             })
+          })
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
           })
       })
   }
@@ -633,10 +652,6 @@
     })
   }
 
-
-
-
-
   function assignAttachment(dropzone, data) {
     const paramName = dropzone.options.paramName
     const type = paramName.substring(5)
@@ -766,8 +781,6 @@
     })
   }
 
-
-
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}supir/${Id}/cekValidasi`,
@@ -789,7 +802,6 @@
     })
   }
 
-
   function getImgURL(url, callback) {
     var xhr = new XMLHttpRequest();
     xhr.onload = function() {
@@ -802,27 +814,28 @@
   }
 
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}supir/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}supir/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            // let element = form.find(`[name="statusaktif"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-
-
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 </script>

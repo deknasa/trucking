@@ -658,6 +658,7 @@ $('.tbl_qty').show()
   function createPengeluaranstokHeader() {
     resetRow()
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -669,18 +670,27 @@ $('.tbl_qty').show()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     $('#crudModalTitle').text('Create Pengeluaran Stok')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setStatusPotongReturOptions(form)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+
     addRow()
     sumary()
-    // setStatusFormatOptions(form)
-    setStatusPotongReturOptions(form)
-
   }
 
   function editPengeluaranstokHeader(pengeluaranStokHeaderId) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -690,22 +700,27 @@ $('.tbl_qty').show()
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Pengeluaran Stok')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        // setStatusFormatOptions(form)
         setStatusPotongReturOptions(form)
       ])
       .then(() => {
         showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function deletePengeluaranstokHeader(pengeluaranStokHeaderId) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -715,17 +730,21 @@ $('.tbl_qty').show()
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Pengeluaran Stok')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        // setStatusFormatOptions(form)
         setStatusPotongReturOptions(form)
       ])
       .then(() => {
         showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -986,108 +1005,110 @@ $('.tbl_qty').show()
   }
 
   function showPengeluaranstokHeader(form, pengeluaranStokHeaderId) {
-    resetRow()
-    $.ajax({
-      url: `${apiUrl}pengeluaranstokheader/${pengeluaranStokHeaderId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        console.log(response);
-        sum = 0;
-        var statusformat;
-        var persediaan = ''
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          if (element.attr("name") == 'tglbukti') {
-            var result = value.split('-');
-            element.val(result[2] + '-' + result[1] + '-' + result[0]);
-          } else if (element.attr("name") == 'tglkasmasuk') {
-            var result = value.split('-');
-            element.val(result[2] + '-' + result[1] + '-' + result[0]);
-          } else if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-          if (element.attr("trado_id") !== 0) {
-            persediaan = 'trado'
-          } 
-          if (element.attr("gandengan_id") !== 0) {
-            persediaan = 'gandengan'
-          }
-        })
-        $.each(response.detail, (id, detail) => {
-          let detailRow = $(`
-            <tr class="trow">
-                  <td>
-                    <div class="baris">1</div>
-                  </td>
-                  
-                  <td>
-                    <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
-                    <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
-                  </td>
-                   <td class="data_tbl tbl_vulkanisirke">
-                    <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
-                  </td>  
-                  <td>
-                    <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
-                  </td>
-                  <td>
-                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
-                  </td>  
-                  
-                  <td class="data_tbl tbl_harga">
-                    <input type="text"  name="detail_harga[]" id="detail_harga${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
-                  </td>  
-                  
-                  <td class="data_tbl tbl_persentase">
-                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
-                  </td>  
-                  <td class="data_tbl tbl_total">
-                    <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
-                  </td>  
-                  <td>
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                  </td>
-              </tr>
-          `)
-          detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
-          detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
-          detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
-          detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
-          detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
-          detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
-          detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
-          detailRow.find(`[name="totalItem[]"]`).val(detail.total)
-          detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
-          $('table #table_body').append(detailRow)
-          initAutoNumeric($(`.number${id}`))
-          setRowNumbers()
-          $(`#detail_stok_${id}`).lookup({
-            title: 'stok Lookup',
-            fileName: 'stok',
-            onSelectRow: (stok, element) => {
-              element.val(stok.namastok)
-              parent = element.closest('td');
-              parent.children('.detailstokId').val(stok.id)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
+    return new Promise((resolve, reject) => {
+      resetRow()
+      $.ajax({
+        url: `${apiUrl}pengeluaranstokheader/${pengeluaranStokHeaderId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          console.log(response);
+          sum = 0;
+          var statusformat;
+          var persediaan = ''
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            if (element.attr("name") == 'tglbukti') {
+              var result = value.split('-');
+              element.val(result[2] + '-' + result[1] + '-' + result[0]);
+            } else if (element.attr("name") == 'tglkasmasuk') {
+              var result = value.split('-');
+              element.val(result[2] + '-' + result[1] + '-' + result[0]);
+            } else if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+            if (element.attr("trado_id") !== 0) {
+              persediaan = 'trado'
+            } 
+            if (element.attr("gandengan_id") !== 0) {
+              persediaan = 'gandengan'
             }
           })
-          id++;
-        })
-        sumary()
-        
-        setKodePengeluaran(response.data.pengeluaranstok);
-        lookupSelected(persediaan)
-        // console.log(persediaan);
-      }
+          $.each(response.detail, (id, detail) => {
+            let detailRow = $(`
+              <tr class="trow">
+                    <td>
+                      <div class="baris">1</div>
+                    </td>
+                    
+                    <td>
+                      <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
+                      <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                    </td>
+                    <td class="data_tbl tbl_vulkanisirke">
+                      <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                    </td>  
+                    <td>
+                      <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                    </td>
+                    <td>
+                      <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                    </td>  
+                    
+                    <td class="data_tbl tbl_harga">
+                      <input type="text"  name="detail_harga[]" id="detail_harga${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                    </td>  
+                    
+                    <td class="data_tbl tbl_persentase">
+                      <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                    </td>  
+                    <td class="data_tbl tbl_total">
+                      <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
+                    </td>  
+                    <td>
+                      <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                    </td>
+                </tr>
+            `)
+            detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
+            detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
+            detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
+            detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
+            detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
+            detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
+            detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
+            detailRow.find(`[name="totalItem[]"]`).val(detail.total)
+            detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
+            $('table #table_body').append(detailRow)
+            initAutoNumeric($(`.number${id}`))
+            setRowNumbers()
+            $(`#detail_stok_${id}`).lookup({
+              title: 'stok Lookup',
+              fileName: 'stok',
+              onSelectRow: (stok, element) => {
+                element.val(stok.namastok)
+                parent = element.closest('td');
+                parent.children('.detailstokId').val(stok.id)
+                element.data('currentValue', element.val())
+              },
+              onCancel: (element) => {
+                element.val(element.data('currentValue'))
+              }
+            })
+            id++;
+          })
+          sumary()
+          
+          setKodePengeluaran(response.data.pengeluaranstok);
+          lookupSelected(persediaan)
+          resolve()
+        }
+      })
     })
   }
 

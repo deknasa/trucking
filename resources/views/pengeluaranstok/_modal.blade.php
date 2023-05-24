@@ -216,6 +216,8 @@
   function createPengeluaranStok() {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
@@ -224,7 +226,6 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Pengeluaran Stok')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise
@@ -234,11 +235,19 @@
     ])
     .then(() => {
       showDefault(form)
+        .then(() => {
+          $('#crudModal').modal('show')
+        })
+        .finally(() => {
+          $('.modal-loader').addClass('d-none')
+        })
     })
   }
 
   function editPengeluaranStok(pengeluaranstokId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -248,7 +257,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Pengeluaran Stok')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -259,12 +267,20 @@
       ])
       .then(() => {
         showPengeluaranStok(form, pengeluaranstokId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
     
   }
 
   function deletePengeluaranStok(pengeluaranstokId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -274,7 +290,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Pengeluaran Stok')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise
@@ -284,6 +299,12 @@
       ])
       .then(() => {
         showPengeluaranStok(form, pengeluaranstokId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -324,6 +345,7 @@
       })
     })
   }
+
   const setStatusHitungListOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statushitungstok]').empty()
@@ -388,24 +410,27 @@
   }
 
   function showPengeluaranStok(form, pengeluaranstokId) {
-    $.ajax({
-      url: `${apiUrl}pengeluaranstok/${pengeluaranstokId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}pengeluaranstok/${pengeluaranstokId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 
@@ -432,6 +457,7 @@
         element.data('currentValue', element.val())
       }
     })
+
     $('.trado-lookup').lookup({
       title: 'Trado Lookup',
       fileName: 'trado',
@@ -455,31 +481,33 @@
     })
   }
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}pengeluaranstok/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          console.log(value)
-           let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}pengeluaranstok/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            console.log(value)
+            let element = form.find(`[name="${index}"]`)
+            // let element = form.find(`[name="statusaktif"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } 
-          else {
-            element.val(value)
-          }
-        })
-        
-       
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } 
+            else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengeluaranstok/${Id}/cekValidasi`,

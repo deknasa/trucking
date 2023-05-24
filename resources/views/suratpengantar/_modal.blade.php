@@ -654,15 +654,15 @@
   function createSuratPengantar() {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
     Simpan
   `)
     form.data('action', 'add')
-    // form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Surat Pengantar')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -670,7 +670,6 @@
 
     Promise
       .all([
-
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
         setStatusGudangSamaOptions(form),
@@ -678,11 +677,17 @@
       ])
       .then(() => {
         showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
+
     addRow()
     setTotal()
     setTotalTagih()
-
 
     initAutoNumeric(form.find(`[name="nominalTagih"]`))
     initAutoNumeric(form.find(`[name="qtyton"]`))
@@ -692,6 +697,8 @@
   function editSuratPengantar(id) {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -700,7 +707,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Surat Pengantar')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -713,11 +719,19 @@
       ])
       .then(() => {
         showSuratPengantar(form, id)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function deleteSuratPengantar(id) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -727,7 +741,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Surat Pengantar')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -740,6 +753,12 @@
       ])
       .then(() => {
         showSuratPengantar(form, id)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -842,43 +861,6 @@
     })
   }
 
-
-  // const setStatusRitasiOmsetOptions = function(relatedForm) {
-  //   return new Promise((resolve, reject) => {
-  //     relatedForm.find('[name=statusritasiomset]').empty()
-  //     relatedForm.find('[name=statusritasiomset]').append(
-  //       new Option('-- PILIH STATUS RITASI OMSET --', '', false, true)
-  //     ).trigger('change')
-
-  //     $.ajax({
-  //       url: `${apiUrl}parameter`,
-  //       method: 'GET',
-  //       dataType: 'JSON',
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`
-  //       },
-  //       data: {
-  //         filters: JSON.stringify({
-  //           "groupOp": "AND",
-  //           "rules": [{
-  //             "field": "grp",
-  //             "op": "cn",
-  //             "data": "STATUS RITASI OMSET"
-  //           }]
-  //         })
-  //       },
-  //       success: response => {
-  //         response.data.forEach(statusRitasiOmset => {
-  //           let option = new Option(statusRitasiOmset.text, statusRitasiOmset.id)
-
-  //           relatedForm.find('[name=statusritasiomset]').append(option).trigger('change')
-  //         });
-
-  //         resolve()
-  //       }
-  //     })
-  //   })
-  // }
   const setStatusGudangSamaOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusgudangsama]').empty()
@@ -915,6 +897,7 @@
       })
     })
   }
+
   const setStatusBatalMuatOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusbatalmuat]').empty()
@@ -992,101 +975,103 @@
   }
 
   function showSuratPengantar(form, userId) {
-    $('#detailList tbody').html('')
+    return new Promise((resolve, reject) => {
+      $('#detailList tbody').html('')
+      $.ajax({
+        url: `${apiUrl}suratpengantar/${userId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-    $.ajax({
-      url: `${apiUrl}suratpengantar/${userId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(value)
+            } else {
+              element.val(value)
+            }
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else if (element.hasClass('datepicker')) {
-            element.val(value)
-          } else {
-            element.val(value)
-          }
-
-          (index == 'jobtrucking') ? element.data('current-value', value): '';
-          (index == 'dari') ? element.data('current-value', value): '';
-          (index == 'sampai') ? element.data('current-value', value): '';
-          (index == 'pelanggan') ? element.data('current-value', value): '';
-          (index == 'container') ? element.data('current-value', value): '';
-          (index == 'statuscontainer') ? element.data('current-value', value): '';
-          (index == 'trado') ? element.data('current-value', value): '';
-          (index == 'supir') ? element.data('current-value', value): '';
-          (index == 'agen') ? element.data('current-value', value): '';
-          (index == 'jenisorder') ? element.data('current-value', value): '';
-          (index == 'tarifrincian') ? element.data('current-value', value): '';
-          (index == 'cabang') ? element.data('current-value', value): '';
+            (index == 'jobtrucking') ? element.data('current-value', value): '';
+            (index == 'dari') ? element.data('current-value', value): '';
+            (index == 'sampai') ? element.data('current-value', value): '';
+            (index == 'pelanggan') ? element.data('current-value', value): '';
+            (index == 'container') ? element.data('current-value', value): '';
+            (index == 'statuscontainer') ? element.data('current-value', value): '';
+            (index == 'trado') ? element.data('current-value', value): '';
+            (index == 'supir') ? element.data('current-value', value): '';
+            (index == 'agen') ? element.data('current-value', value): '';
+            (index == 'jenisorder') ? element.data('current-value', value): '';
+            (index == 'tarifrincian') ? element.data('current-value', value): '';
+            (index == 'cabang') ? element.data('current-value', value): '';
 
 
-
-        })
-
-        getTarifOmset(response.data.tarifrincian_id)
-
-        initAutoNumeric(form.find(`[name="nominal"]`))
-        initAutoNumeric(form.find(`[name="nominalTagih"]`))
-        initAutoNumeric(form.find(`[name="qtyton"]`))
-        initAutoNumeric(form.find(`[name="nominalperalihan"]`))
-        initAutoNumeric(form.find(`[name="gajisupir"]`))
-        initAutoNumeric(form.find(`[name="gajikenek"]`))
-        initAutoNumeric(form.find(`[name="komisisupir"]`))
-
-        if (response.detail.length === 0) {
-          addRow()
-        } else {
-
-          $.each(response.detail, (index, detail) => {
-            let detailRow = $(`
-                      <tr>
-                        <td></td>
-                        <td>
-                          <input type="text" name="keterangan_detail[]" class="form-control">
-                        </td>
-                        <td>
-                          <input type="text" name="nominal[]" class="form-control autonumeric">
-                        </td>
-                        <td>
-                          <input type="text" name="nominalTagih[]" class="form-control autonumeric">
-                        </td>
-                        <td>
-                          <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                        </td>
-                      </tr>
-                    `)
-
-            detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keteranganbiaya)
-
-            detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
-            detailRow.find(`[name="nominalTagih[]"]`).val(detail.nominaltagih)
-            $('#detailList tbody').append(detailRow)
-
-            initAutoNumeric(detailRow.find('.autonumeric'))
-
-            $('#detailList tbody').append(detailRow)
-
-            setTotal()
-            setTotalTagih()
 
           })
+
+          getTarifOmset(response.data.tarifrincian_id)
+
+          initAutoNumeric(form.find(`[name="nominal"]`))
+          initAutoNumeric(form.find(`[name="nominalTagih"]`))
+          initAutoNumeric(form.find(`[name="qtyton"]`))
+          initAutoNumeric(form.find(`[name="nominalperalihan"]`))
+          initAutoNumeric(form.find(`[name="gajisupir"]`))
+          initAutoNumeric(form.find(`[name="gajikenek"]`))
+          initAutoNumeric(form.find(`[name="komisisupir"]`))
+
+          if (response.detail.length === 0) {
+            addRow()
+          } else {
+
+            $.each(response.detail, (index, detail) => {
+              let detailRow = $(`
+                        <tr>
+                          <td></td>
+                          <td>
+                            <input type="text" name="keterangan_detail[]" class="form-control">
+                          </td>
+                          <td>
+                            <input type="text" name="nominal[]" class="form-control autonumeric">
+                          </td>
+                          <td>
+                            <input type="text" name="nominalTagih[]" class="form-control autonumeric">
+                          </td>
+                          <td>
+                            <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                          </td>
+                        </tr>
+                      `)
+
+              detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keteranganbiaya)
+
+              detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+              detailRow.find(`[name="nominalTagih[]"]`).val(detail.nominaltagih)
+              $('#detailList tbody').append(detailRow)
+
+              initAutoNumeric(detailRow.find('.autonumeric'))
+
+              $('#detailList tbody').append(detailRow)
+
+              setTotal()
+              setTotalTagih()
+
+            })
+          }
+          setRowNumbers()
+          
+          initDatepicker()
+          editValidasi(isAllowEdited);
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
+          }
+          resolve()
         }
-        setRowNumbers()
-        
-        initDatepicker()
-        editValidasi(isAllowEdited);
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
-        }
-      }
+      })
     })
   }
 
@@ -1457,30 +1442,32 @@
   }
 
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}suratpengantar/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        containerId = -1
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}suratpengantar/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          containerId = -1
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            // let element = form.find(`[name="statusaktif"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-
-
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
+
   function editValidasi(edit) {
     let pelanggan = $('#crudForm').find(`[name="pelanggan"]`).parents('.input-group').children()
     let agen = $('#crudForm').find(`[name="agen"]`).parents('.input-group').children()

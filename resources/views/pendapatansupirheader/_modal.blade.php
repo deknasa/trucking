@@ -325,6 +325,8 @@
     function editPendapatanSupir(pendapatanId) {
         let form = $('#crudForm')
 
+        $('.modal-loader').removeClass('d-none')
+
         form.data('action', 'edit')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
@@ -332,16 +334,26 @@
       Simpan
     `)
         $('#crudModalTitle').text('Edit Pendapatan Supir')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        showPendapatanSupir(form, pendapatanId)
 
+        Promise
+            .all([
+                showPendapatanSupir(form, pendapatanId)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
     }
 
     function deletePendapatanSupir(pendapatanId) {
 
         let form = $('#crudForm')
+
+        $('.modal-loader').removeClass('d-none')
 
         form.data('action', 'delete')
         form.trigger('reset')
@@ -350,10 +362,19 @@
       Hapus
     `)
         $('#crudModalTitle').text('Delete Pendapatan Supir')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        showPendapatanSupir(form, pendapatanId)
+
+        Promise
+            .all([
+                showPendapatanSupir(form, pendapatanId)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
 
     }
 
@@ -389,95 +410,99 @@
     }
 
     function showPendapatanSupir(form, pendapatanId) {
-        $('#detailList tbody').html('')
+        return new Promise((resolve, reject) => {
+            $('#detailList tbody').html('')
 
-        $('#crudForm [name=tglbukti]').attr('readonly', true)
-        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+            $('#crudForm [name=tglbukti]').attr('readonly', true)
+            $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
 
-        $.ajax({
+            $.ajax({
             url: `${apiUrl}pendapatansupirheader/${pendapatanId}`,
             method: 'GET',
             dataType: 'JSON',
             headers: {
-                Authorization: `Bearer ${accessToken}`
+            Authorization: `Bearer ${accessToken}`
             },
             success: response => {
-                $.each(response.data, (index, value) => {
-                    let element = form.find(`[name="${index}"]`)
+            $.each(response.data, (index, value) => {
+                let element = form.find(`[name="${index}"]`)
 
-                    if (element.hasClass('datepicker')) {
-                        element.val(dateFormat(value))
-                    } else {
-                        element.val(value)
+                if (element.hasClass('datepicker')) {
+                    element.val(dateFormat(value))
+                } else {
+                    element.val(value)
+                }
+            })
+
+            $.each(response.detail, (index, detail) => {
+                let detailRow = $(`
+                    <tr>
+                    <td></td>
+                    <td>
+                        <input type="hidden" name="supir_id[]">
+                        <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
+                    </td>
+                    <td>
+                        <input type="text" name="keterangan_detail[]" class="form-control">   
+                    </td>
+                    <td>
+                        <input type="text" name="nominal[]"  style="text-align:right" class="form-control autonumeric nominal" > 
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                    </td>
+                    </tr>
+                `)
+
+                detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
+                detailRow.find(`[name="supir[]"]`).val(detail.supir)
+                detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+                detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+
+                initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
+                $('#detailList tbody').append(detailRow)
+                setTotal();
+
+                $('.supir-lookup').last().lookup({
+                    title: 'Supir Lookup',
+                    fileName: 'supir',
+                    beforeProcess: function(test) {
+                        this.postData = {
+                            Aktif: 'AKTIF',
+                        }
+                    },
+                    onSelectRow: (supir, element) => {
+                        element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+                        element.val(supir.namasupir)
+                        element.data('currentValue', element.val())
+                    },
+                    onCancel: (element) => {
+                        element.val(element.data('currentValue'))
+                    },
+                    onClear: (element) => {
+                        element.parents('td').find(`[name="supir_id[]"]`).val('')
+                        element.val('')
+                        element.data('currentValue', element.val())
                     }
                 })
 
-                $.each(response.detail, (index, detail) => {
-                    let detailRow = $(`
-                        <tr>
-                        <td></td>
-                        <td>
-                            <input type="hidden" name="supir_id[]">
-                            <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
-                        </td>
-                        <td>
-                            <input type="text" name="keterangan_detail[]" class="form-control">   
-                        </td>
-                        <td>
-                            <input type="text" name="nominal[]"  style="text-align:right" class="form-control autonumeric nominal" > 
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                        </td>
-                        </tr>
-                    `)
+            })
 
-                    detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
-                    detailRow.find(`[name="supir[]"]`).val(detail.supir)
-                    detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-                    detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
-
-                    initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
-                    $('#detailList tbody').append(detailRow)
-                    setTotal();
-
-                    $('.supir-lookup').last().lookup({
-                        title: 'Supir Lookup',
-                        fileName: 'supir',
-                        beforeProcess: function(test) {
-                            this.postData = {
-                                Aktif: 'AKTIF',
-                            }
-                        },
-                        onSelectRow: (supir, element) => {
-                            element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
-                            element.val(supir.namasupir)
-                            element.data('currentValue', element.val())
-                        },
-                        onCancel: (element) => {
-                            element.val(element.data('currentValue'))
-                        },
-                        onClear: (element) => {
-                            element.parents('td').find(`[name="supir_id[]"]`).val('')
-                            element.val('')
-                            element.data('currentValue', element.val())
-                        }
-                    })
-
-                })
-
-                setRowNumbers()
-                if (form.data('action') === 'delete') {
-                    form.find('[name]').addClass('disabled')
-                    initDisabled()
-                }
+            setRowNumbers()
+            if (form.data('action') === 'delete') {
+                form.find('[name]').addClass('disabled')
+                initDisabled()
             }
+            resolve()
+            }
+            })
         })
     }
 
     function addRow() {
         let detailRow = $(`
       <tr>
+      
         <td></td>
         <td>
             <input type="hidden" name="supir_id[]">

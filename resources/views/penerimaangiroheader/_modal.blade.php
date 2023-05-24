@@ -524,32 +524,41 @@
         addRow()
         initAutoNumeric(form.find('.nominal'))
 
-        // tarikPelunasan('add')
         setTotal()
     }
 
     function editPenerimaanGiro(id) {
         let form = $('#crudForm')
+        $('.modal-loader').removeClass('d-none')
 
         form.data('action', 'edit')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
       Simpan
-    `)
+        `)
         $('#crudModalTitle').text('Edit Penerimaan Giro')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-
-        // tarikPelunasan('edit', id)
-        showPenerimaanGiro(form, id)
-
+        
+        Promise
+            .all([
+                showPenerimaanGiro(form, id)
+            ])
+            .then(() => {
+                clearSelectedRows()
+                $('#gs_').prop('checked', false)
+                $('#crudModal').modal('show')
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
     }
 
     function deletePenerimaanGiro(id) {
 
         let form = $('#crudForm')
+        $('.modal-loader').removeClass('d-none')
 
         form.data('action', 'delete')
         form.trigger('reset')
@@ -558,12 +567,21 @@
       Hapus
     `)
         $('#crudModalTitle').text('Delete Penerimaan Giro')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
-        // tarikPelunasan('delete', id)
-        showPenerimaanGiro(form, id)
+        Promise
+            .all([
+                showPenerimaanGiro(form, id)
+            ])
+            .then(() => {
+                clearSelectedRows()
+                $('#gs_').prop('checked', false)
+                $('#crudModal').modal('show')
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
     }
 
     function approval(Id) {
@@ -637,147 +655,150 @@
     }
 
     function showPenerimaanGiro(form, id) {
-        $('#detailList tbody').html('')
+        return new Promise((resolve, reject) => {
+            $('#detailList tbody').html('')
 
-        $.ajax({
-            url: `${apiUrl}penerimaangiroheader/${id}`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-                let tgl = response.data.tglbukti
+            $.ajax({
+                url: `${apiUrl}penerimaangiroheader/${id}`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    let tgl = response.data.tglbukti
 
-                $.each(response.data, (index, value) => {
-                    let element = form.find(`[name="${index}"]`)
-                    if (element.is('select')) {
-                        element.val(value).trigger('change')
-                    } else if (element.hasClass('datepicker')) {
-                        element.val(dateFormat(value))
-                    } else {
-                        element.val(value)
+                    $.each(response.data, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else if (element.hasClass('datepicker')) {
+                            element.val(dateFormat(value))
+                        } else {
+                            element.val(value)
+                        }
+
+                    })
+
+                    $.each(response.detail, (index, detail) => {
+                        let readOnly = (detail.pelunasanpiutang_nobukti != '-') ? 'readonly' : '';
+                        let detailRow = $(`
+                        <tr class="${detail.pelunasanpiutang_nobukti}">
+                            <td></td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
+                                </div>
+                            </td>
+                            <td>
+                                <input type="text" name="nowarkat[]"  class="form-control">
+                            </td>
+                            <td>
+                                <input type="hidden" name="bank_id[]">
+                                <input type="text" name="bank[]" data-current-value="${detail.bank}" class="form-control bank-lookup">
+                            </td>
+                            <td>
+                                <input type="hidden" name="bankpelanggan_id[]">
+                                <input type="text" name="bankpelanggan[]" data-current-value="${detail.bankpelanggan}" class="form-control bankpelanggan-lookup">
+                            </td>
+                            <td>
+                                <input type="text" name="keterangan_detail[]" class="form-control" ${readOnly}>
+                            </td>
+                            <td>
+                                <input type="text" name="nominal[]" class="form-control autonumeric" ${readOnly}> 
+                            </td>
+                            <td>
+                                <input type="text" name="jenisbiaya[]" class="form-control">   
+                            </td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text" name="bulanbeban[]" class="form-control datepicker">   
+                                </div>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                            </td>
+                        </tr>
+                        `)
+
+                        detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
+                        detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
+                        detailRow.find(`[name="bank_id[]"]`).val(detail.bank_id)
+                        detailRow.find(`[name="bank[]"]`).val(detail.bank)
+                        detailRow.find(`[name="bankpelanggan_id[]"]`).val(detail.bankpelanggan_id)
+                        detailRow.find(`[name="bankpelanggan[]"]`).val(detail.bankpelanggan)
+                        detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+                        detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+                        detailRow.find(`[name="invoice_nobukti[]"]`).val(detail.invoice_nobukti)
+                        detailRow.find(`[name="jenisbiaya[]"]`).val(detail.jenisbiaya)
+                        detailRow.find(`[name="pelunasanpiutang_nobukti[]"]`).val(detail.pelunasanpiutang_nobukti)
+                        detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
+
+                        initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
+                        $('#detailList tbody').append(detailRow)
+
+                        setTotal();
+
+
+                        $('.bank-lookup').last().lookup({
+                            title: 'Bank Lookup',
+                            fileName: 'bank',
+                            beforeProcess: function(test) {
+                                this.postData = {
+                                    Aktif: 'AKTIF',
+                                    tipe: 'BANK'
+
+                                }
+                            },
+                            onSelectRow: (bank, element) => {
+                                element.parents('td').find(`[name="bank_id[]"]`).val(bank.id)
+                                element.val(bank.namabank)
+                                element.data('currentValue', element.val())
+                            },
+                            onCancel: (element) => {
+                                element.val(element.data('currentValue'))
+                            },
+                            onClear: (element) => {
+                                element.parents('td').find(`[name="bank_id[]"]`).val('')
+                                element.val('')
+                                element.data('currentValue', element.val())
+                            }
+                        })
+                        $('.bankpelanggan-lookup').last().lookup({
+                            title: 'Bank Pelanggan Lookup',
+                            fileName: 'bankpelanggan',
+                            beforeProcess: function(test) {
+                                this.postData = {
+                                    Aktif: 'AKTIF',
+
+                                }
+                            },
+                            onSelectRow: (bankpelanggan, element) => {
+                                element.parents('td').find(`[name="bankpelanggan_id[]"]`).val(bankpelanggan.id)
+                                element.val(bankpelanggan.namabank)
+                                element.data('currentValue', element.val())
+                            },
+                            onCancel: (element) => {
+                                element.val(element.data('currentValue'))
+                            },
+                            onClear: (element) => {
+                                element.parents('td').find(`[name="bankpelanggan_id[]"]`).val('')
+                                element.val('')
+                                element.data('currentValue', element.val())
+                            }
+                        })
+
+                    })
+
+                    setRowNumbers()
+                    initDatepicker()
+                    if (form.data('action') === 'delete') {
+                        form.find('[name]').addClass('disabled')
+                        initDisabled()
                     }
-
-                })
-
-                $.each(response.detail, (index, detail) => {
-                    let readOnly = (detail.pelunasanpiutang_nobukti != '-') ? 'readonly' : '';
-                    let detailRow = $(`
-                    <tr class="${detail.pelunasanpiutang_nobukti}">
-                        <td></td>
-                        <td>
-                            <div class="input-group">
-                                <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
-                            </div>
-                        </td>
-                        <td>
-                            <input type="text" name="nowarkat[]"  class="form-control">
-                        </td>
-                        <td>
-                            <input type="hidden" name="bank_id[]">
-                            <input type="text" name="bank[]" data-current-value="${detail.bank}" class="form-control bank-lookup">
-                        </td>
-                        <td>
-                            <input type="hidden" name="bankpelanggan_id[]">
-                            <input type="text" name="bankpelanggan[]" data-current-value="${detail.bankpelanggan}" class="form-control bankpelanggan-lookup">
-                        </td>
-                        <td>
-                            <input type="text" name="keterangan_detail[]" class="form-control" ${readOnly}>
-                        </td>
-                        <td>
-                            <input type="text" name="nominal[]" class="form-control autonumeric" ${readOnly}> 
-                        </td>
-                        <td>
-                            <input type="text" name="jenisbiaya[]" class="form-control">   
-                        </td>
-                        <td>
-                            <div class="input-group">
-                                <input type="text" name="bulanbeban[]" class="form-control datepicker">   
-                            </div>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                        </td>
-                    </tr>
-                    `)
-
-                    detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
-                    detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
-                    detailRow.find(`[name="bank_id[]"]`).val(detail.bank_id)
-                    detailRow.find(`[name="bank[]"]`).val(detail.bank)
-                    detailRow.find(`[name="bankpelanggan_id[]"]`).val(detail.bankpelanggan_id)
-                    detailRow.find(`[name="bankpelanggan[]"]`).val(detail.bankpelanggan)
-                    detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-                    detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
-                    detailRow.find(`[name="invoice_nobukti[]"]`).val(detail.invoice_nobukti)
-                    detailRow.find(`[name="jenisbiaya[]"]`).val(detail.jenisbiaya)
-                    detailRow.find(`[name="pelunasanpiutang_nobukti[]"]`).val(detail.pelunasanpiutang_nobukti)
-                    detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
-
-                    initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
-                    $('#detailList tbody').append(detailRow)
-
-                    setTotal();
-
-
-                    $('.bank-lookup').last().lookup({
-                        title: 'Bank Lookup',
-                        fileName: 'bank',
-                        beforeProcess: function(test) {
-                            this.postData = {
-                                Aktif: 'AKTIF',
-                                tipe: 'BANK'
-
-                            }
-                        },
-                        onSelectRow: (bank, element) => {
-                            element.parents('td').find(`[name="bank_id[]"]`).val(bank.id)
-                            element.val(bank.namabank)
-                            element.data('currentValue', element.val())
-                        },
-                        onCancel: (element) => {
-                            element.val(element.data('currentValue'))
-                        },
-                        onClear: (element) => {
-                            element.parents('td').find(`[name="bank_id[]"]`).val('')
-                            element.val('')
-                            element.data('currentValue', element.val())
-                        }
-                    })
-                    $('.bankpelanggan-lookup').last().lookup({
-                        title: 'Bank Pelanggan Lookup',
-                        fileName: 'bankpelanggan',
-                        beforeProcess: function(test) {
-                            this.postData = {
-                                Aktif: 'AKTIF',
-
-                            }
-                        },
-                        onSelectRow: (bankpelanggan, element) => {
-                            element.parents('td').find(`[name="bankpelanggan_id[]"]`).val(bankpelanggan.id)
-                            element.val(bankpelanggan.namabank)
-                            element.data('currentValue', element.val())
-                        },
-                        onCancel: (element) => {
-                            element.val(element.data('currentValue'))
-                        },
-                        onClear: (element) => {
-                            element.parents('td').find(`[name="bankpelanggan_id[]"]`).val('')
-                            element.val('')
-                            element.data('currentValue', element.val())
-                        }
-                    })
-
-                })
-
-                setRowNumbers()
-                initDatepicker()
-                if (form.data('action') === 'delete') {
-                    form.find('[name]').addClass('disabled')
-                    initDisabled()
+                    resolve()
                 }
-            }
+            })
         })
     }
 

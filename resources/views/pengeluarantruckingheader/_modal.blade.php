@@ -797,6 +797,8 @@
   function createPengeluaranTruckingHeader() {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     $('#crudModal').find('#crudForm').trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
@@ -805,21 +807,32 @@
     form.data('action', 'add')
 
     $('#crudModalTitle').text('Add Pengeluaran Trucking')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
 
     $('#table_body').html('')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    setDefaultBank()
-    // setStatusPostingOptions(form)
-    addRow()
-    setTotal()
+    
+    Promise
+      .all([
+        setDefaultBank(),
+        addRow(),
+        setTotal()
+      ])
+      .then(() => {
+          $('#crudModal').modal('show')
+      })
+      .finally(() => {
+          $('.modal-loader').addClass('d-none')
+      })
+    
   }
 
   function editPengeluaranTruckingHeader(id) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -828,26 +841,30 @@
       Simpan
     `)
     $('#crudModalTitle').text('Edit Pengeluaran Truck')
-    $('#crudModal').modal('show')
+
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    // Promise
-    //   .all([
-    //     setStatusPostingOptions(form)
-    //   ])
-    //   .then(() => {
-    //     showPengeluaranTruckingHeader(form, id)
-    //   })
 
     form.find(`[name="bank"]`).removeClass('bank-lookup')
     form.find(`[name="pengeluarantrucking"]`).removeClass('pengeluarantrucking-lookup')
-    showPengeluaranTruckingHeader(form, id)
+    
+    Promise
+      .all([
+        showPengeluaranTruckingHeader(form, id)
+      ])
+      .then(() => {
+          $('#crudModal').modal('show')
+      })
+      .finally(() => {
+          $('.modal-loader').addClass('d-none')
+      })
 
   }
 
   function deletePengeluaranTruckingHeader(id) {
 
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -856,21 +873,23 @@
       Hapus
     `)
     $('#crudModalTitle').text('Delete Pengeluaran Truck')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    // Promise
-    //   .all([
-    //     setStatusPostingOptions(form)
-    //   ])
-    //   .then(() => {
-    //     showPengeluaranTruckingHeader(form, id)
-    //   })
 
     form.find(`[name="bank"]`).removeClass('bank-lookup')
     form.find(`[name="pengeluarantrucking"]`).removeClass('pengeluarantrucking-lookup')
-    showPengeluaranTruckingHeader(form, id)
-
+    
+    
+    Promise
+      .all([
+        showPengeluaranTruckingHeader(form, id)
+      ])
+      .then(() => {
+          $('#crudModal').modal('show')
+      })
+      .finally(() => {
+          $('.modal-loader').addClass('d-none')
+      })
   }
 
   function loadPelunasanBBMGrid() {
@@ -1577,267 +1596,273 @@
   }
 
   function setDefaultBank() {
-    $.ajax({
-      url: `${apiUrl}bank`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, bank) => {
-          // console.log(index); 
-          if (bank.id == 1) {
-            $('#crudForm [name=bank_id]').first().val(bank.id)
-            $('#crudForm [name=bank]').first().val(bank.namabank)
-            $('#crudForm [name=bank]').first().data('currentValue', $('#crudForm [name=bank]').first().val())
-          }
-        })
-      }
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}bank`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, bank) => {
+            // console.log(index); 
+            if (bank.id == 1) {
+              $('#crudForm [name=bank_id]').first().val(bank.id)
+              $('#crudForm [name=bank]').first().val(bank.namabank)
+              $('#crudForm [name=bank]').first().data('currentValue', $('#crudForm [name=bank]').first().val())
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 
   function showPengeluaranTruckingHeader(form, id) {
-    $('#detailList tbody').html('')
+    return new Promise((resolve, reject) => {
+      $('#detailList tbody').html('')
 
-    form.find(`[name="tglbukti"]`).prop('readonly', true)
-    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+      form.find(`[name="tglbukti"]`).prop('readonly', true)
+      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
-    $.ajax({
-      url: `${apiUrl}pengeluarantruckingheader/${id}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        let tgl = response.data.tglbukti
-        let kodepengeluaran = response.data.kodepengeluaran
+      $.ajax({
+        url: `${apiUrl}pengeluarantruckingheader/${id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let tgl = response.data.tglbukti
+          let kodepengeluaran = response.data.kodepengeluaran
 
-        KodePengeluaranId = kodepengeluaran
-        console.log(kodepengeluaran)
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
-          } else {
-            element.val(value)
-          }
+          KodePengeluaranId = kodepengeluaran
+          console.log(kodepengeluaran)
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            } else {
+              element.val(value)
+            }
 
-          if (kodepengeluaran === "TDE") {
-            if (index == 'supir') {
+            if (kodepengeluaran === "TDE") {
+              if (index == 'supir') {
+                element.data('current-value', value).prop('readonly', true)
+                element.parent('.input-group').find('.button-clear').remove()
+                element.parent('.input-group').find('.input-group-append').remove()
+              }
+            }
+
+            if (index == 'periodedari') {
+              form.find(`[name="tgldari"]`).val(dateFormat(value))
+            }
+            if (index == 'periodesampai') {
+              form.find(`[name="tglsampai"]`).val(dateFormat(value))
+            }
+
+            if (index == 'pengeluarantrucking') {
               element.data('current-value', value).prop('readonly', true)
               element.parent('.input-group').find('.button-clear').remove()
               element.parent('.input-group').find('.input-group-append').remove()
             }
-          }
-
-          if (index == 'periodedari') {
-            form.find(`[name="tgldari"]`).val(dateFormat(value))
-          }
-          if (index == 'periodesampai') {
-            form.find(`[name="tglsampai"]`).val(dateFormat(value))
-          }
-
-          if (index == 'pengeluarantrucking') {
-            element.data('current-value', value).prop('readonly', true)
-            element.parent('.input-group').find('.button-clear').remove()
-            element.parent('.input-group').find('.input-group-append').remove()
-          }
-          if (index == 'bank') {
-            element.data('current-value', value).prop('readonly', true)
-            element.parent('.input-group').find('.button-clear').remove()
-            element.parent('.input-group').find('.input-group-append').remove()
-          }
-          if (index == 'keterangancoa') {
-            element.data('current-value', value)
-          }
-        })
-
-        setTampilanForm()
-
-        if (kodepengeluaran === "TDE") {
-          getDataDeposito(response.data.supirheader_id, id).then((response) => {
-
-            let selectedId = []
-            let totalBayar = 0
-
-            $.each(response.data, (index, value) => {
-              if (value.pengeluarantruckingheader_id != null) {
-                selectedId.push(value.id)
-                totalBayar += parseFloat(value.nominal)
-              }
-            })
-            $('#tableDeposito').jqGrid("clearGridData");
-            setTimeout(() => {
-
-              $("#tableDeposito")
-                .jqGrid("setGridParam", {
-                  datatype: "local",
-                  data: response.data,
-                  originalData: response.data,
-                  rowNum: response.data.length,
-                  selectedRowIds: selectedId
-                })
-                .trigger("reloadGrid");
-            }, 100);
-            console.log(response.data)
-            initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(totalBayar))
-
-          });
-        } else if (kodepengeluaran === "BST") {
-          let detailRow = ""
-
-          resetGrid()
-          $.each(response.detail, (index, detail) => {
-            let id = detail.id_detail
-            if (detail.pengeluarantrucking_id != null) {
-              selectedRows.push(detail.id_detail)
+            if (index == 'bank') {
+              element.data('current-value', value).prop('readonly', true)
+              element.parent('.input-group').find('.button-clear').remove()
+              element.parent('.input-group').find('.input-group-append').remove()
             }
-            detailRow += `
-              <div id="detail_row_${id}">
-              <input type="text" value="${id}"  id="id_detail${id}" class="" name="id_detail[]"  disabled   >
-              <input type="text" value='${detail.container_detail}'  id="container_detail${id}" class="" name="container_detail[]"  disabled   >
-              <input type="text" value="${detail.noinvoice_detail}"  id="noinvoice_detail${id}" class="" name="noinvoice_detail[]"  disabled   >
-              <input type="text" value="${detail.nominal_detail}"  id="nominal${id}" class="" name="nominal[]"  disabled   >
-              <input type="text" value="${detail.nojobtrucking_detail}"  id="nojobtrucking_detail${id}" class="" name="nojobtrucking_detail[]"  disabled   >
-              <input type="text" value="SUMBANGAN SOSIAL"  id="keterangan${id}" class="" name="keterangan[]"  disabled   >
-              </div>
-              `
-          })
-          $('#detail-list-grid').append(detailRow)
-
-          $('#modalgrid').setGridParam({
-            datatype: "local",
-            data: response.detail
-          }).trigger('reloadGrid')
-
-        } else if (kodepengeluaran === "KBBM") {
-          
-          getDataPelunasanBBM(response.data.tgldari, response.data.tglsampai, id).then((response) => {
-
-            let selectedId = []
-            let totalBayar = 0
-
-            $.each(response.data, (index, value) => {
-              if (value.pengeluarantruckingheader_id != null) {
-                selectedId.push(value.id)
-                totalBayar += parseFloat(value.nominal)
-              }
-            })
-            $('#tablePelunasanbbm').jqGrid("clearGridData");
-            setTimeout(() => {
-
-              $("#tablePelunasanbbm")
-                .jqGrid("setGridParam", {
-                  datatype: "local",
-                  data: response.data,
-                  originalData: response.data,
-                  rowNum: response.data.length,
-                  selectedRowIds: selectedId
-                })
-                .trigger("reloadGrid");
-            }, 100);
-            console.log(response.data)
-            initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasanbbm_nominal"]`).text(totalBayar))
-
-          });
-
-        } else {
-          $.each(response.detail, (index, detail) => {
-            let detailRow = $(`
-              <tr>
-                  <td></td>
-                  <td class="data_tbl tbl_supir">
-                      <input type="hidden" name="supir_id[]">
-                      <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
-                  </td>
-                  <td class="data_tbl tbl_penerimaantruckingheader">
-                      <input type="text" name="penerimaantruckingheader_nobukti[]" data-current-value="${detail.penerimaantruckingheader_nobukti}" class="form-control penerimaantruckingheader-lookup">
-                  </td>
-                  <td class="data_tbl tbl_nominal">
-                      <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
-                  </td>
-                  <td class="data_tbl tbl_keterangan">
-                      <input type="text" name="keterangan[]" class="form-control"> 
-                  </td>
-                  <td>
-                      <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                  </td>
-              </tr>
-            `)
-
-            detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
-            detailRow.find(`[name="supir[]"]`).val(detail.supir)
-            detailRow.find(`[name="keterangan[]"]`).val(detail.keterangan)
-            detailRow.find(`[name="penerimaantruckingheader_nobukti[]"]`).val(detail.penerimaantruckingheader_nobukti)
-            detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
-
-            initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
-            $('#detailList tbody').append(detailRow)
-
-            setTotal();
-
-            $('.supir-lookup').last().lookup({
-              title: 'Supir Lookup',
-              fileName: 'supir',
-              beforeProcess: function(test) {
-                // var levelcoa = $(`#levelcoa`).val();
-                this.postData = {
-                  Aktif: 'AKTIF',
-                }
-              },
-              onSelectRow: (supir, element) => {
-                element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
-                element.val(supir.namasupir)
-                element.data('currentValue', element.val())
-              },
-              onCancel: (element) => {
-                element.val(element.data('currentValue'))
-              },
-              onClear: (element) => {
-                element.parents('td').find(`[name="supir_id[]"]`).val('')
-                element.val('')
-                element.data('currentValue', element.val())
-              }
-            })
-
-            $('.penerimaantruckingheader-lookup').last().lookup({
-              title: 'Penerimaan Trucking Lookup',
-              fileName: 'penerimaantruckingheader',
-              beforeProcess: function(test) {
-                // var levelcoa = $(`#levelcoa`).val();
-                this.postData = {
-
-                  Aktif: 'AKTIF',
-                }
-              },
-              onSelectRow: (penerimaantruckingheader, element) => {
-                element.val(penerimaantruckingheader.nobukti)
-                element.data('currentValue', element.val())
-              },
-              onCancel: (element) => {
-                element.val(element.data('currentValue'))
-              },
-              onClear: (element) => {
-                element.val('')
-                element.data('currentValue', element.val())
-              }
-            })
-
-
+            if (index == 'keterangancoa') {
+              element.data('current-value', value)
+            }
           })
 
-        }
+          setTampilanForm()
 
-        setRowNumbers()
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          if (kodepengeluaran === "TDE") {
+            getDataDeposito(response.data.supirheader_id, id).then((response) => {
+
+              let selectedId = []
+              let totalBayar = 0
+
+              $.each(response.data, (index, value) => {
+                if (value.pengeluarantruckingheader_id != null) {
+                  selectedId.push(value.id)
+                  totalBayar += parseFloat(value.nominal)
+                }
+              })
+              $('#tableDeposito').jqGrid("clearGridData");
+              setTimeout(() => {
+
+                $("#tableDeposito")
+                  .jqGrid("setGridParam", {
+                    datatype: "local",
+                    data: response.data,
+                    originalData: response.data,
+                    rowNum: response.data.length,
+                    selectedRowIds: selectedId
+                  })
+                  .trigger("reloadGrid");
+              }, 100);
+              console.log(response.data)
+              initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(totalBayar))
+
+            });
+          } else if (kodepengeluaran === "BST") {
+            let detailRow = ""
+
+            resetGrid()
+            $.each(response.detail, (index, detail) => {
+              let id = detail.id_detail
+              if (detail.pengeluarantrucking_id != null) {
+                selectedRows.push(detail.id_detail)
+              }
+              detailRow += `
+                <div id="detail_row_${id}">
+                <input type="text" value="${id}"  id="id_detail${id}" class="" name="id_detail[]"  disabled   >
+                <input type="text" value='${detail.container_detail}'  id="container_detail${id}" class="" name="container_detail[]"  disabled   >
+                <input type="text" value="${detail.noinvoice_detail}"  id="noinvoice_detail${id}" class="" name="noinvoice_detail[]"  disabled   >
+                <input type="text" value="${detail.nominal_detail}"  id="nominal${id}" class="" name="nominal[]"  disabled   >
+                <input type="text" value="${detail.nojobtrucking_detail}"  id="nojobtrucking_detail${id}" class="" name="nojobtrucking_detail[]"  disabled   >
+                <input type="text" value="SUMBANGAN SOSIAL"  id="keterangan${id}" class="" name="keterangan[]"  disabled   >
+                </div>
+                `
+            })
+            $('#detail-list-grid').append(detailRow)
+
+            $('#modalgrid').setGridParam({
+              datatype: "local",
+              data: response.detail
+            }).trigger('reloadGrid')
+
+          } else if (kodepengeluaran === "KBBM") {
+            
+            getDataPelunasanBBM(response.data.tgldari, response.data.tglsampai, id).then((response) => {
+
+              let selectedId = []
+              let totalBayar = 0
+
+              $.each(response.data, (index, value) => {
+                if (value.pengeluarantruckingheader_id != null) {
+                  selectedId.push(value.id)
+                  totalBayar += parseFloat(value.nominal)
+                }
+              })
+              $('#tablePelunasanbbm').jqGrid("clearGridData");
+              setTimeout(() => {
+
+                $("#tablePelunasanbbm")
+                  .jqGrid("setGridParam", {
+                    datatype: "local",
+                    data: response.data,
+                    originalData: response.data,
+                    rowNum: response.data.length,
+                    selectedRowIds: selectedId
+                  })
+                  .trigger("reloadGrid");
+              }, 100);
+              console.log(response.data)
+              initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasanbbm_nominal"]`).text(totalBayar))
+
+            });
+
+          } else {
+            $.each(response.detail, (index, detail) => {
+              let detailRow = $(`
+                <tr>
+                    <td></td>
+                    <td class="data_tbl tbl_supir">
+                        <input type="hidden" name="supir_id[]">
+                        <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
+                    </td>
+                    <td class="data_tbl tbl_penerimaantruckingheader">
+                        <input type="text" name="penerimaantruckingheader_nobukti[]" data-current-value="${detail.penerimaantruckingheader_nobukti}" class="form-control penerimaantruckingheader-lookup">
+                    </td>
+                    <td class="data_tbl tbl_nominal">
+                        <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+                    </td>
+                    <td class="data_tbl tbl_keterangan">
+                        <input type="text" name="keterangan[]" class="form-control"> 
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                    </td>
+                </tr>
+              `)
+
+              detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
+              detailRow.find(`[name="supir[]"]`).val(detail.supir)
+              detailRow.find(`[name="keterangan[]"]`).val(detail.keterangan)
+              detailRow.find(`[name="penerimaantruckingheader_nobukti[]"]`).val(detail.penerimaantruckingheader_nobukti)
+              detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+
+              initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
+              $('#detailList tbody').append(detailRow)
+
+              setTotal();
+
+              $('.supir-lookup').last().lookup({
+                title: 'Supir Lookup',
+                fileName: 'supir',
+                beforeProcess: function(test) {
+                  // var levelcoa = $(`#levelcoa`).val();
+                  this.postData = {
+                    Aktif: 'AKTIF',
+                  }
+                },
+                onSelectRow: (supir, element) => {
+                  element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+                  element.val(supir.namasupir)
+                  element.data('currentValue', element.val())
+                },
+                onCancel: (element) => {
+                  element.val(element.data('currentValue'))
+                },
+                onClear: (element) => {
+                  element.parents('td').find(`[name="supir_id[]"]`).val('')
+                  element.val('')
+                  element.data('currentValue', element.val())
+                }
+              })
+
+              $('.penerimaantruckingheader-lookup').last().lookup({
+                title: 'Penerimaan Trucking Lookup',
+                fileName: 'penerimaantruckingheader',
+                beforeProcess: function(test) {
+                  // var levelcoa = $(`#levelcoa`).val();
+                  this.postData = {
+
+                    Aktif: 'AKTIF',
+                  }
+                },
+                onSelectRow: (penerimaantruckingheader, element) => {
+                  element.val(penerimaantruckingheader.nobukti)
+                  element.data('currentValue', element.val())
+                },
+                onCancel: (element) => {
+                  element.val(element.data('currentValue'))
+                },
+                onClear: (element) => {
+                  element.val('')
+                  element.data('currentValue', element.val())
+                }
+              })
+
+
+            })
+
+          }
+
+          setRowNumbers()
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
+          }
+          resolve()
         }
-      }
+      })
     })
   }
 

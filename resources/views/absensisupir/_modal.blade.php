@@ -444,6 +444,8 @@
   function editAbsensiSupir(absensiId) {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -452,15 +454,25 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Absensi Supir')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showAbsensiSupir(form, absensiId)
+    Promise
+      .all([
+        showAbsensiSupir(form, absensiId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function deleteAbsensiSupir(absensiId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -469,149 +481,163 @@
       Hapus
     `)
     $('#crudModalTitle').text('Delete Absensi Supir')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    showAbsensiSupir(form, absensiId)
+
+
+    Promise
+      .all([
+        showAbsensiSupir(form, absensiId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function showAbsensiSupir(form, absensiId) {
-    $('#detailList tbody').html('')
-    $.ajax({
-      url: `${apiUrl}absensisupirheader/${absensiId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+    return new Promise((resolve, reject) => {
+      $('#detailList tbody').html('')
+      $.ajax({
+        url: `${apiUrl}absensisupirheader/${absensiId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
-          } else {
-            element.val(value)
+            if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            } else {
+              element.val(value)
+            }
+          })
+
+          $.each(response.detail, (index, detail) => {
+            let detailRow = $(`
+            <tr>
+              <td></td>
+              <td>
+                <input type="hidden" name="trado_id[]" value="${detail.trado_id}">
+                <input type="text" name="trado[]" data-current-value="${detail.trado}" class="form-control" value="${detail.trado}">
+              </td>
+              <td>
+                <input type="hidden" name="supir_id[]">
+                <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup" value="${detail.supir}">
+              </td>
+              <td>
+                <input type="text" name="keterangan_detail[]" class="form-control" value="${detail.keterangan}">
+              </td>
+              <td>
+                <input type="hidden" name="absen_id[]" value="${detail.absen_id}">
+                <input type="text" name="absen"  data-current-value="${detail.absen}" class="form-control absentrado-lookup" value="${detail.absen}">
+              </td>
+              <td>
+                <input type="text" class="form-control inputmask-time" name="jam[]" value="${detail.jam}"></input>
+              </td>
+              <td>
+                <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}">
+              </td>
+            
+
+            </tr>
+            `)
+
+            detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
+            initAutoNumeric(detailRow.find(`[name="uangjalan[]"]`))
+            $('#detailList tbody').append(detailRow)
+            Inputmask("datetime", {
+              inputFormat: "HH:MM",
+              max: 24
+            }).mask(".inputmask-time");
+
+
+            $(document).find('.supir-lookup').last().lookup({
+              title: 'Supir Lookup',
+              fileName: 'supir',
+              beforeProcess: function(test) {
+                this.postData = {
+                  Aktif: 'AKTIF',
+                }
+              },
+              onSelectRow: (supir, element) => {
+                element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+
+                element.val(supir.namasupir)
+                element.data('currentValue', element.val())
+              },
+              onCancel: (element) => {
+                element.val(element.data('currentValue'))
+              },
+              onClear: (element) => {
+                element.parents('td').find(`[name="supir_id[]"]`).val('')
+                element.val('')
+                element.data('currentValue', element.val())
+              }
+            })
+
+            $('.trado-lookup').last().lookup({
+              title: 'Trado Lookup',
+              fileName: 'trado',
+              beforeProcess: function(test) {
+                this.postData = {
+                  Aktif: 'AKTIF',
+                }
+              },
+              onSelectRow: (trado, element) => {
+                element.parents('td').find(`[name="trado_id[]"]`).val(trado.id)
+                element.val(trado.keterangan)
+                element.data('currentValue', element.val())
+              },
+              onCancel: (element) => {
+                element.val(element.data('currentValue'))
+              },
+              onClear: (element) => {
+                element.parents('td').find(`[name="trado_id[]"]`).val('')
+                element.val('')
+                element.data('currentValue', element.val())
+              }
+            })
+
+            $('.absentrado-lookup').last().lookup({
+              title: 'Absen Trado Lookup',
+              fileName: 'absentrado',
+              beforeProcess: function(test) {
+                this.postData = {
+                  Aktif: 'AKTIF',
+                }
+              },
+              onSelectRow: (absentrado, element) => {
+                element.parents('td').find(`[name="absen_id[]"]`).val(absentrado.id)
+                element.val(absentrado.keterangan)
+                element.data('currentValue', element.val())
+              },
+              onCancel: (element) => {
+                element.val(element.data('currentValue'))
+              },
+              onClear: (element) => {
+                element.parents('td').find(`[name="absen_id[]"]`).val('')
+                element.val('')
+                element.data('currentValue', element.val())
+              }
+            })
+          })
+
+          setRowNumbers()
+
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
           }
-        })
 
-        $.each(response.detail, (index, detail) => {
-          let detailRow = $(`
-          <tr>
-            <td></td>
-            <td>
-              <input type="hidden" name="trado_id[]" value="${detail.trado_id}">
-              <input type="text" name="trado[]" data-current-value="${detail.trado}" class="form-control" value="${detail.trado}">
-            </td>
-            <td>
-              <input type="hidden" name="supir_id[]">
-              <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup" value="${detail.supir}">
-            </td>
-            <td>
-              <input type="text" name="keterangan_detail[]" class="form-control" value="${detail.keterangan}">
-            </td>
-            <td>
-              <input type="hidden" name="absen_id[]" value="${detail.absen_id}">
-              <input type="text" name="absen"  data-current-value="${detail.absen}" class="form-control absentrado-lookup" value="${detail.absen}">
-            </td>
-            <td>
-              <input type="text" class="form-control inputmask-time" name="jam[]" value="${detail.jam}"></input>
-            </td>
-            <td>
-              <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}">
-            </td>
-          
-
-          </tr>
-          `)
-
-          detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
-          initAutoNumeric(detailRow.find(`[name="uangjalan[]"]`))
-          $('#detailList tbody').append(detailRow)
-          Inputmask("datetime", {
-            inputFormat: "HH:MM",
-            max: 24
-          }).mask(".inputmask-time");
-
-
-          $(document).find('.supir-lookup').last().lookup({
-            title: 'Supir Lookup',
-            fileName: 'supir',
-            beforeProcess: function(test) {
-              this.postData = {
-                Aktif: 'AKTIF',
-              }
-            },
-            onSelectRow: (supir, element) => {
-              element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
-
-              element.val(supir.namasupir)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="supir_id[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
-
-          $('.trado-lookup').last().lookup({
-            title: 'Trado Lookup',
-            fileName: 'trado',
-            beforeProcess: function(test) {
-              this.postData = {
-                Aktif: 'AKTIF',
-              }
-            },
-            onSelectRow: (trado, element) => {
-              element.parents('td').find(`[name="trado_id[]"]`).val(trado.id)
-              element.val(trado.keterangan)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="trado_id[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
-
-          $('.absentrado-lookup').last().lookup({
-            title: 'Absen Trado Lookup',
-            fileName: 'absentrado',
-            beforeProcess: function(test) {
-              this.postData = {
-                Aktif: 'AKTIF',
-              }
-            },
-            onSelectRow: (absentrado, element) => {
-              element.parents('td').find(`[name="absen_id[]"]`).val(absentrado.id)
-              element.val(absentrado.keterangan)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="absen_id[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
-        })
-
-        setRowNumbers()
-
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          resolve()
         }
-      }
+      })
     })
   }
 

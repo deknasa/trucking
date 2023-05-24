@@ -310,6 +310,7 @@
 
   function editInvoiceChargeGandenganHeader(invoiceChargeGandenganHeader) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -319,16 +320,24 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Invoice Charge Gandengan')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showInvoiceChargeGandenganHeader(form, invoiceChargeGandenganHeader)
-
+    Promise
+      .all([
+        showInvoiceChargeGandenganHeader(form, invoiceChargeGandenganHeader)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function deleteInvoiceChargeGandenganHeader(invoiceChargeGandenganHeader) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -338,11 +347,19 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Invoice Charge Gandengan')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showInvoiceChargeGandenganHeader(form, invoiceChargeGandenganHeader)
+    Promise
+      .all([
+        showInvoiceChargeGandenganHeader(form, invoiceChargeGandenganHeader)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
   }
 
@@ -534,9 +551,6 @@
           let id = detail.id
           let detailRow = $(`
           
-          
-          
-          
           <div id="detail_row_${detail.id}">
           <input type="text" value="${detail.id}"  name="id_detail[]"  readonly disabled  >
           <input type="text" value="${detail.jobtrucking}"  name="jobtrucking_detail[]"  readonly disabled  >
@@ -615,34 +629,36 @@
   }
 
   function showInvoiceChargeGandenganHeader(form, invoiceChargeGandenganHeader) {
-    
-    form.find(`[name="tglbukti"]`).prop('readonly', true)
-    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-    
-    $.ajax({
-      url: `${apiUrl}invoicechargegandenganheader/${invoiceChargeGandenganHeader}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        sum = 0;
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          if (element.attr("name") == 'tglbukti') {
-            var result = value.split('-');
-            element.val(result[2] + '-' + result[1] + '-' + result[0]);
-          }else if (element.attr("name") == 'tglproses') {
-            var result = value.split('-');
-            element.val(result[2] + '-' + result[1] + '-' + result[0]);
-          } else {
-            element.val(value)
-          }
-        })
+    return new Promise((resolve, reject) => {
+      form.find(`[name="tglbukti"]`).prop('readonly', true)
+      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+      
+      $.ajax({
+        url: `${apiUrl}invoicechargegandenganheader/${invoiceChargeGandenganHeader}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          sum = 0;
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            if (element.attr("name") == 'tglbukti') {
+              var result = value.split('-');
+              element.val(result[2] + '-' + result[1] + '-' + result[0]);
+            }else if (element.attr("name") == 'tglproses') {
+              var result = value.split('-');
+              element.val(result[2] + '-' + result[1] + '-' + result[0]);
+            } else {
+              element.val(value)
+            }
+          })
 
-        getInvoiceChargeGandenganHeader(response.data.id)
-      }
+          getInvoiceChargeGandenganHeader(response.data.id)
+          resolve()
+        }
+      })
     })
   }
 

@@ -299,6 +299,8 @@
   function createKasGantung() {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
@@ -307,7 +309,6 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Kas Gantung')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -315,13 +316,24 @@
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglkaskeluar]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    showDefault(form)
-    addRow()
-    setTotal()
+    Promise
+      .all([
+        showDefault(form),
+        addRow(),
+        setTotal()
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function editKasGantung(userId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -331,16 +343,25 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Kas Gantung')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showKasGantung(form, userId)
-
+    Promise
+      .all([
+        showKasGantung(form, userId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function deleteKasGantung(userId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -350,12 +371,19 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Kas Gantung')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-
-    showKasGantung(form, userId)
+    Promise
+      .all([
+        showKasGantung(form, userId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
   }
 
@@ -437,68 +465,71 @@
 
 
   function showKasGantung(form, userId) {
-    $('#detailList tbody').html('')
-    form.find(`[name="tglbukti"]`).prop('readonly', true)
-    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+    return new Promise((resolve, reject) => {
+      $('#detailList tbody').html('')
+      form.find(`[name="tglbukti"]`).prop('readonly', true)
+      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
-    $.ajax({
-      url: `${apiUrl}kasgantungheader/${userId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+      $.ajax({
+        url: `${apiUrl}kasgantungheader/${userId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
-          } else {
-            element.val(value)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            } else {
+              element.val(value)
+            }
+
+            if (index == 'penerima') {
+              element.data('current-value', value)
+            }
+            if (index == 'bank') {
+              element.data('current-value', value)
+            }
+          })
+
+          $.each(response.detail, (index, detail) => {
+            let detailRow = $(`
+              <tr>
+                <td></td>
+                <td>
+                  <input type="text" name="keterangan_detail[]" class="form-control">
+                </td>
+                <td>
+                  <input type="text" name="nominal[]" class="form-control autonumeric nominal">
+                </td>
+                <td>
+                  <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                </td>
+              </tr>
+            `)
+
+            detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+            detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+
+            initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
+            $('#detailList tbody').append(detailRow)
+            setTotal();
+          })
+
+          setRowNumbers()
+
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
           }
-
-          if (index == 'penerima') {
-            element.data('current-value', value)
-          }
-          if (index == 'bank') {
-            element.data('current-value', value)
-          }
-        })
-
-        $.each(response.detail, (index, detail) => {
-          let detailRow = $(`
-            <tr>
-              <td></td>
-              <td>
-                <input type="text" name="keterangan_detail[]" class="form-control">
-              </td>
-              <td>
-                <input type="text" name="nominal[]" class="form-control autonumeric nominal">
-              </td>
-              <td>
-                <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-              </td>
-            </tr>
-          `)
-
-          detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-          detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
-
-          initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
-          $('#detailList tbody').append(detailRow)
-          setTotal();
-        })
-
-        setRowNumbers()
-
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          resolve()
         }
-      }
+      })
     })
   }
 
@@ -571,27 +602,30 @@
 
 
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}kasgantungheader/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        bankId = response.data.bank_id
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}kasgantungheader/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          bankId = response.data.bank_id
 
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            // let element = form.find(`[name="statusaktif"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 

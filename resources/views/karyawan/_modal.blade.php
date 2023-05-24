@@ -214,14 +214,11 @@
     $('#crudModalTitle').text('Create Karyawan')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
-
-
+    
     Promise
       .all([
         setStatusAktifOptions(form),
         setStatusStaffOptions(form)
-
       ])
       .then(() => {
         showDefault(form)

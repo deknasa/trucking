@@ -674,6 +674,8 @@
     function editProsesUangJalanSupir(userId) {
         let form = $('#crudForm')
 
+        $('.modal-loader').removeClass('d-none')
+
         form.data('action', 'edit')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
@@ -682,18 +684,28 @@
   `)
         form.find(`.sometimes`).hide()
         $('#crudModalTitle').text('Edit Proses Uang Jalan')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
         $('#detailTransfer').find("th").last().hide()
         $('#detailTransfer tfoot').find("td").last().hide()
-        showProsesUangJalanSupir(form, userId)
 
+        Promise
+        .all([
+            showProsesUangJalanSupir(form, userId)
+        ])
+        .then(() => {
+        $('#crudModal').modal('show')
+        })
+        .finally(() => {
+        $('.modal-loader').addClass('d-none')
+        })
     }
 
     function deleteProsesUangJalanSupir(userId) {
         let form = $('#crudForm')
+
+        $('.modal-loader').removeClass('d-none')
 
         form.data('action', 'delete')
         form.trigger('reset')
@@ -703,11 +715,19 @@
   `)
         form.find(`.sometimes`).hide()
         $('#crudModalTitle').text('Delete Proses Uang Jalan')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
-        showProsesUangJalanSupir(form, userId)
+        Promise
+        .all([
+            showProsesUangJalanSupir(form, userId)
+        ])
+        .then(() => {
+        $('#crudModal').modal('show')
+        })
+        .finally(() => {
+        $('.modal-loader').addClass('d-none')
+        })
     }
 
     function loadPengembalianGrid() {
@@ -986,13 +1006,6 @@
                 let localRow = $("#tablePengembalian").jqGrid("getLocalRow", rowId);
 
                 if ($('#crudForm').data('action') == 'edit') {
-                    // if (originalGridData.sisa == 0) {
-
-                    //   let getNominal = $("#tablePengembalian").jqGrid("getCell", rowId, "nominal")
-                    //   localRow.nominal = (getNominal != '') ? parseFloat(getNominal.replaceAll(',', '')) : 0
-                    // } else {
-                    //   localRow.nominal = originalGridData.sisa
-                    // }
                     localRow.nominal = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nombayar))
                 }
 
@@ -1061,115 +1074,20 @@
     }
 
     function showProsesUangJalanSupir(form, userId) {
-        $('#detailList tbody').html('')
+        return new Promise((resolve, reject) => {
+            $('#detailList tbody').html('')
 
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`.datepicker`).parent('.input-group').find('.input-group-append').remove()
-        $.ajax({
-            url: `${apiUrl}prosesuangjalansupirheader/${userId}`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-                $.each(response.data, (index, value) => {
-                    let element = form.find(`[name="${index}"]`)
-                    if (element.is('select')) {
-                        element.val(value).trigger('change')
-                    } else {
-                        element.val(value)
-                    }
-
-                    if (index != 'id') {
-                        element.prop('disabled', true)
-                    }
-                })
-
-                form.find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))
-                form.find(`[name="supir"]`).val(response.data.supir)
-                form.find(`[name="supir"]`).data('currentValue', response.data.supir)
-                form.find(`[name="trado"]`).val(response.data.trado)
-                form.find(`[name="trado"]`).data('currentValue', response.data.trado)
-
-                $.each(response.detail.transfer, (index, detail) => {
-                    let detailRow = $(`
-                    <tr>
-                        <td></td>
-                        <td>
-                            <div class="row form-group">
-                                <div class="col-12 col-md-12">
-                                    <input type="text" name="tgltransfer[]" disabled class="form-control"
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="row form-group">
-                                <div class="col-12 col-md-12">
-                                    <input type="text" name="keterangantransfer[]" class="form-control">
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="row form-group">
-                                <div class="col-12 col-md-12">
-                                    <input type="text" name="nilaitransfer[]" disabled class="form-control autonumeric">
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="row form-group">
-                                <div class="col-12 col-md-12">
-                                    <input type="hidden" name="bank_idtransfer[]">
-                                    <input type="text" name="banktransfer[]" disabled class="form-control">
-                                </div>
-                            </div>
-                        </td>
-                        
-                        <td>
-                            <div class="row form-group">
-                                <div class="col-12 col-md-12">
-                                    <input type="text" name="nobukti_kasbank[]" disabled class="form-control">
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    `)
-
-                    detailRow.find(`[name="tgltransfer[]"]`).val(dateFormat(detail.pengeluarantrucking_tglbukti))
-                    detailRow.find(`[name="keterangantransfer[]"]`).val(detail.keterangan)
-                    detailRow.find(`[name="nilaitransfer[]"]`).val(detail.nominal)
-                    detailRow.find(`[name="banktransfer[]"]`).val(detail.bank)
-                    detailRow.find(`[name="bank_idtransfer[]"]`).val(detail.pengeluarantrucking_bank_id)
-                    detailRow.find(`[name="nobukti_kasbank[]"]`).val(detail.pengeluarantrucking_nobukti)
-
-                    initAutoNumeric(detailRow.find(`[name="nilaitransfer[]"]`))
-                    $('#detailTransfer #tbodyTransfer').append(detailRow)
-                    initDatepicker()
-                    setTotalTransfer()
-
-                })
-
-                setRowNumbers('#detailTransfer #tbodyTransfer')
-
-                $.each(response.detail.adjust, (index, value) => {
-                    let element = form.find(`[name="${index}"]`)
-                    if (element.is('select')) {
-                        element.val(value).trigger('change')
-                    } else {
-                        element.val(value)
-                    }
-                    if (index == 'keteranganadjust') {
-                        element.prop('disabled', false)
-                    } else {
-                        element.prop('disabled', true)
-                    }
-                })
-
-                if (response.detail.deposito == null) {
-                    form.find('#tabs-3 [name]').prop('disabled', true)
-                } else {
-                    $.each(response.detail.deposito, (index, value) => {
+            form.find(`[name="tglbukti"]`).prop('readonly', true)
+            form.find(`.datepicker`).parent('.input-group').find('.input-group-append').remove()
+            $.ajax({
+                url: `${apiUrl}prosesuangjalansupirheader/${userId}`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    $.each(response.data, (index, value) => {
                         let element = form.find(`[name="${index}"]`)
                         if (element.is('select')) {
                             element.val(value).trigger('change')
@@ -1177,76 +1095,175 @@
                             element.val(value)
                         }
 
-                        if (index == 'keterangandeposit') {
+                        if (index != 'id') {
+                            element.prop('disabled', true)
+                        }
+                    })
+
+                    form.find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))
+                    form.find(`[name="supir"]`).val(response.data.supir)
+                    form.find(`[name="supir"]`).data('currentValue', response.data.supir)
+                    form.find(`[name="trado"]`).val(response.data.trado)
+                    form.find(`[name="trado"]`).data('currentValue', response.data.trado)
+
+                    $.each(response.detail.transfer, (index, detail) => {
+                        let detailRow = $(`
+                        <tr>
+                            <td></td>
+                            <td>
+                                <div class="row form-group">
+                                    <div class="col-12 col-md-12">
+                                        <input type="text" name="tgltransfer[]" disabled class="form-control"
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="row form-group">
+                                    <div class="col-12 col-md-12">
+                                        <input type="text" name="keterangantransfer[]" class="form-control">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="row form-group">
+                                    <div class="col-12 col-md-12">
+                                        <input type="text" name="nilaitransfer[]" disabled class="form-control autonumeric">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="row form-group">
+                                    <div class="col-12 col-md-12">
+                                        <input type="hidden" name="bank_idtransfer[]">
+                                        <input type="text" name="banktransfer[]" disabled class="form-control">
+                                    </div>
+                                </div>
+                            </td>
+                            
+                            <td>
+                                <div class="row form-group">
+                                    <div class="col-12 col-md-12">
+                                        <input type="text" name="nobukti_kasbank[]" disabled class="form-control">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        `)
+
+                        detailRow.find(`[name="tgltransfer[]"]`).val(dateFormat(detail.pengeluarantrucking_tglbukti))
+                        detailRow.find(`[name="keterangantransfer[]"]`).val(detail.keterangan)
+                        detailRow.find(`[name="nilaitransfer[]"]`).val(detail.nominal)
+                        detailRow.find(`[name="banktransfer[]"]`).val(detail.bank)
+                        detailRow.find(`[name="bank_idtransfer[]"]`).val(detail.pengeluarantrucking_bank_id)
+                        detailRow.find(`[name="nobukti_kasbank[]"]`).val(detail.pengeluarantrucking_nobukti)
+
+                        initAutoNumeric(detailRow.find(`[name="nilaitransfer[]"]`))
+                        $('#detailTransfer #tbodyTransfer').append(detailRow)
+                        initDatepicker()
+                        setTotalTransfer()
+
+                    })
+
+                    setRowNumbers('#detailTransfer #tbodyTransfer')
+
+                    $.each(response.detail.adjust, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else {
+                            element.val(value)
+                        }
+                        if (index == 'keteranganadjust') {
                             element.prop('disabled', false)
                         } else {
                             element.prop('disabled', true)
                         }
                     })
 
-                    initAutoNumeric(form.find(`[name="nilaideposit"]`))
-                    form.find(`[name="tgldeposit"]`).val(dateFormat(response.detail.deposito.tgldeposit))
-                    form.find(`[name="bankdeposit"]`).data('currentValue', response.detail.deposito.bankdeposit)
-                }
+                    if (response.detail.deposito == null) {
+                        form.find('#tabs-3 [name]').prop('disabled', true)
+                    } else {
+                        $.each(response.detail.deposito, (index, value) => {
+                            let element = form.find(`[name="${index}"]`)
+                            if (element.is('select')) {
+                                element.val(value).trigger('change')
+                            } else {
+                                element.val(value)
+                            }
 
-                let totaljlhPinjaman = 0
-                let totalttlBayar = 0
-                let totalSisa = 0
-
-                initAutoNumeric(form.find(`[name="nilaiadjust"]`))
-                form.find(`[name="tgladjust"]`).val(dateFormat(response.detail.adjust.tgladjust))
-                form.find(`[name="bankadjust"]`).data('currentValue', response.detail.adjust.bankadjust)
-
-                loadPengembalianGrid()
-                if (response.detail.pengembalian.bank != null) {
-                    form.find(`[name="bank_idpengembalian"]`).val(response.detail.pengembalian.bank.bank_idpengembalian)
-                    form.find(`[name="bankpengembalian"]`).val(response.detail.pengembalian.bank.bankpengembalian).prop('disabled', true)
-                    form.find(`[name="bankpengembalian"]`).data('currentValue', response.detail.pengembalian.bank.bankpengembalian)
-                    getDataPengembalian(response.data.supir_id, userId).then((response) => {
-
-                        let selectedId = []
-                        let totalBayar = 0
-
-                        $.each(response.data, (index, value) => {
-                            selectedId.push(value.id)
-                            totalBayar += parseFloat(value.nominal)
+                            if (index == 'keterangandeposit') {
+                                element.prop('disabled', false)
+                            } else {
+                                element.prop('disabled', true)
+                            }
                         })
-                        $('#tablePengembalian').jqGrid("clearGridData");
-                        setTimeout(() => {
 
-                            $("#tablePengembalian")
-                                .jqGrid("setGridParam", {
-                                    datatype: "local",
-                                    data: response.data,
-                                    originalData: response.data,
-                                    rowNum: response.data.length,
-                                    selectedRowIds: selectedId
-                                })
-                                .trigger("reloadGrid");
-                        }, 100);
+                        initAutoNumeric(form.find(`[name="nilaideposit"]`))
+                        form.find(`[name="tgldeposit"]`).val(dateFormat(response.detail.deposito.tgldeposit))
+                        form.find(`[name="bankdeposit"]`).data('currentValue', response.detail.deposito.bankdeposit)
+                    }
 
-                        initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_nombayar"]`).text(totalBayar))
+                    let totaljlhPinjaman = 0
+                    let totalttlBayar = 0
+                    let totalSisa = 0
 
-                    });
-                } else {
-                    form.find('#tabs-4 [name]').prop('disabled', true)
+                    initAutoNumeric(form.find(`[name="nilaiadjust"]`))
+                    form.find(`[name="tgladjust"]`).val(dateFormat(response.detail.adjust.tgladjust))
+                    form.find(`[name="bankadjust"]`).data('currentValue', response.detail.adjust.bankadjust)
+
+                    loadPengembalianGrid()
+                    if (response.detail.pengembalian.bank != null) {
+                        form.find(`[name="bank_idpengembalian"]`).val(response.detail.pengembalian.bank.bank_idpengembalian)
+                        form.find(`[name="bankpengembalian"]`).val(response.detail.pengembalian.bank.bankpengembalian).prop('disabled', true)
+                        form.find(`[name="bankpengembalian"]`).data('currentValue', response.detail.pengembalian.bank.bankpengembalian)
+                        getDataPengembalian(response.data.supir_id, userId).then((response) => {
+
+                            let selectedId = []
+                            let totalBayar = 0
+
+                            $.each(response.data, (index, value) => {
+                                selectedId.push(value.id)
+                                totalBayar += parseFloat(value.nominal)
+                            })
+                            $('#tablePengembalian').jqGrid("clearGridData");
+                            setTimeout(() => {
+
+                                $("#tablePengembalian")
+                                    .jqGrid("setGridParam", {
+                                        datatype: "local",
+                                        data: response.data,
+                                        originalData: response.data,
+                                        rowNum: response.data.length,
+                                        selectedRowIds: selectedId
+                                    })
+                                    .trigger("reloadGrid");
+                            }, 100);
+
+                            initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_nombayar"]`).text(totalBayar))
+
+                        });
+                    } else {
+                        form.find('#tabs-4 [name]').prop('disabled', true)
+                    }
+
+                    form.find(`[name="bankdeposit"]`).siblings('.button-clear').remove()
+                    form.find(`[name="bankdeposit"]`).siblings('.input-group-append').remove()
+
+                    form.find(`[name="bankadjust"]`).siblings('.button-clear').remove()
+                    form.find(`[name="bankadjust"]`).siblings('.input-group-append').remove()
+                    form.find(`[name="bankpengembalian"]`).siblings('.button-clear').remove()
+                    form.find(`[name="bankpengembalian"]`).siblings('.input-group-append').remove()
+
+
+
+                    if (form.data('action') === 'delete') {
+                        form.find('[name]').addClass('disabled')
+                        initDisabled()
+                    }
+
+                    resolve()
                 }
-
-                form.find(`[name="bankdeposit"]`).siblings('.button-clear').remove()
-                form.find(`[name="bankdeposit"]`).siblings('.input-group-append').remove()
-
-                form.find(`[name="bankadjust"]`).siblings('.button-clear').remove()
-                form.find(`[name="bankadjust"]`).siblings('.input-group-append').remove()
-                form.find(`[name="bankpengembalian"]`).siblings('.button-clear').remove()
-                form.find(`[name="bankpengembalian"]`).siblings('.input-group-append').remove()
-
-
-
-                if (form.data('action') === 'delete') {
-                    form.find('[name]').addClass('disabled')
-                    initDisabled()
-                }
-            }
+            })
         })
     }
 

@@ -533,13 +533,11 @@
 
     initDatepicker()
     loadHutangGrid()
-    // setBayar()
-    // setPotongan()
-    // setTotal()
   }
 
   function editHutangBayarHeader(Id) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -548,16 +546,27 @@
     Simpan
   `)
     $('#crudModalTitle').text('Edit Pembayaran Hutang')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showHutangBayar(form, Id)
+    Promise
+      .all([
+        showHutangBayar(form, Id)
+      ])
+      .then(() => {
+        clearSelectedRows()
+        $('#gs_').prop('checked', false)
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
   }
 
   function deleteHutangBayarHeader(Id) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -566,90 +575,104 @@
     Hapus
   `)
     $('#crudModalTitle').text('Delete Pembayaran Hutang')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    showHutangBayar(form, Id)
+
+    Promise
+      .all([
+        showHutangBayar(form, Id)
+      ])
+      .then(() => {
+        clearSelectedRows()
+        $('#gs_').prop('checked', false)
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function showHutangBayar(form, Id) {
+    return new Promise((resolve, reject) => {
+      form.find(`[name="tglbukti"]`).prop('readonly', true)
+      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
-    form.find(`[name="tglbukti"]`).prop('readonly', true)
-    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+      $.ajax({
+        url: `${apiUrl}hutangbayarheader/${Id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
 
-    $.ajax({
-      url: `${apiUrl}hutangbayarheader/${Id}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-
-        let tgl = response.data.tglbukti
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-
-          form.find(`[name="${index}"]`).val(value).attr('disabled', false)
-
-          if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
-          }
-
-          if (index == 'bank') {
-            element.data('current-value', value)
-            element.parent('.input-group').find('.button-clear').remove()
-            element.parent('.input-group').find('.input-group-append').remove()
-          }
-          if (index == 'supplier') {
-            element.data('current-value', value)
-            element.parent('.input-group').find('.button-clear').remove()
-            element.parent('.input-group').find('.input-group-append').remove()
-          }
-          if (index == 'alatbayar') {
-            element.data('current-value', value)
-            element.parent('.input-group').find('.button-clear').remove()
-            element.parent('.input-group').find('.input-group-append').remove()
-          }
-
-          if (index != 'tglcair') {
-            element.prop("readonly", true)
-          }
-        })
-
-        loadHutangGrid();
-        getDataHutang(response.data.supplier_id, Id).then((response) => {
-
-          let selectedId = []
-          let totalBayar = 0
-          let totalPotongan = 0
-
+          let tgl = response.data.tglbukti
           $.each(response.data, (index, value) => {
-            if (value.hutangbayar_id != null) {
-              selectedId.push(value.id)
-              totalBayar += parseFloat(value.bayar)
-              totalPotongan += parseFloat(value.potongan)
+            let element = form.find(`[name="${index}"]`)
+
+            form.find(`[name="${index}"]`).val(value).attr('disabled', false)
+
+            if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            }
+
+            if (index == 'bank') {
+              element.data('current-value', value)
+              element.parent('.input-group').find('.button-clear').remove()
+              element.parent('.input-group').find('.input-group-append').remove()
+            }
+            if (index == 'supplier') {
+              element.data('current-value', value)
+              element.parent('.input-group').find('.button-clear').remove()
+              element.parent('.input-group').find('.input-group-append').remove()
+            }
+            if (index == 'alatbayar') {
+              element.data('current-value', value)
+              element.parent('.input-group').find('.button-clear').remove()
+              element.parent('.input-group').find('.input-group-append').remove()
+            }
+
+            if (index != 'tglcair') {
+              element.prop("readonly", true)
             }
           })
-          $('#tableHutang').jqGrid("clearGridData");
-          setTimeout(() => {
 
-            $("#tableHutang")
-              .jqGrid("setGridParam", {
-                datatype: "local",
-                data: response.data,
-                originalData: response.data,
-                rowNum: response.data.length,
-                selectedRowIds: selectedId
-              })
-              .trigger("reloadGrid");
-          }, 100);
+          loadHutangGrid();
+          getDataHutang(response.data.supplier_id, Id).then((response) => {
 
-          initAutoNumeric($('.footrow').find(`td[aria-describedby="tableHutang_bayar"]`).text(totalBayar))
-          initAutoNumeric($('.footrow').find(`td[aria-describedby="tableHutang_potongan"]`).text(totalPotongan))
+            let selectedId = []
+            let totalBayar = 0
+            let totalPotongan = 0
 
-        });
-      }
+            $.each(response.data, (index, value) => {
+              if (value.hutangbayar_id != null) {
+                selectedId.push(value.id)
+                totalBayar += parseFloat(value.bayar)
+                totalPotongan += parseFloat(value.potongan)
+              }
+            })
+            $('#tableHutang').jqGrid("clearGridData");
+            setTimeout(() => {
+
+              $("#tableHutang")
+                .jqGrid("setGridParam", {
+                  datatype: "local",
+                  data: response.data,
+                  originalData: response.data,
+                  rowNum: response.data.length,
+                  selectedRowIds: selectedId
+                })
+                .trigger("reloadGrid");
+            }, 100);
+
+            initAutoNumeric($('.footrow').find(`td[aria-describedby="tableHutang_bayar"]`).text(totalBayar))
+            initAutoNumeric($('.footrow').find(`td[aria-describedby="tableHutang_potongan"]`).text(totalPotongan))
+
+          });
+
+          resolve()
+        }
+      })
     })
   }
 
