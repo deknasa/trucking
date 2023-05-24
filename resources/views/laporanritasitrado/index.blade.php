@@ -25,6 +25,10 @@
                                     <i class="fas fa-sync"></i>
                                     Ekspor
                                 </a>
+                                <a id="btnreload" class="btn btn-primary mr-2 ">
+                                    <i class="fas fa-sync"></i>
+                                    Reload
+                                </a>
                             </div>
                         </div>
 
@@ -93,6 +97,17 @@
     })
 
     $(document).on('click', `#btnEkspor`, function(event) {
+        let periode = $('#crudForm').find('[name=periode]').val()
+
+        if (periode != '') {
+
+            window.open(`{{ route('laporanritasitrado.export') }}?periode=${periode}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
+
+    $(document).on('click', `#btnReload`, function(event) {
         let periode = $('#crudForm').find('[name=periode]').val()
 
         if (periode != '') {
