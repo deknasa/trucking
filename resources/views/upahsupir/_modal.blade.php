@@ -1131,6 +1131,12 @@
 
         // Menghapus nilai autonumeric pada input jarak
         // $('#crudForm [name=jarak]').autoNumeric('remove')
+            let jarakInput = $('#crudForm [name=jarak]').get(0); // Dapatkan elemen input jarak
+            let autoNumericInstance = AutoNumeric.getAutoNumericElement(jarakInput); // Dapatkan instance AutoNumeric dari elemen tersebut
+
+            if (autoNumericInstance) {
+              autoNumericInstance.remove(); // Hapus efek AutoNumeric
+            }
 
         let form = $('#crudForm')
         showUpahSupir(form, upahsupir.id, true).then((upahsupir) => {
