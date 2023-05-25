@@ -643,6 +643,10 @@
       },
       success: response => {
         var data = response.data;
+        // kategori.attr('disabled', true)
+        $('#crudForm').find(`[name="supplier"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+        $('#crudForm').find(`[name="supplier"]`).parents('.input-group').find('.button-clear').attr('disabled', true)
+        // attr('disabled', true)
         $('[name=supplier]').val(data.supplier).attr('readonly', true);
         $('[name=supplier]').data('currentValue', data.supplier)
 
@@ -1567,6 +1571,9 @@
       onClear: (element) => {
         element.val('')
         element.data('currentValue', element.val())
+        $('#crudForm').find(`[name="supplier"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', false)
+        $('#crudForm').find(`[name="supplier"]`).parents('.input-group').find('.button-clear').attr('disabled', false)
+        $('[name=supplier]').attr('readonly', false);
       }
     })
 
