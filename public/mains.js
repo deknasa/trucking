@@ -888,10 +888,22 @@ function initDatepicker() {
 			changeMonth: true,
 			assumeNearbyYear: true,
 			showOn: "button",
-			beforeShow: function (element) {
+			beforeShow: function (element, instance) {
+				let calendar = instance.dpDiv;
+
 				$(element).css({
 					position: "relative",
 				});
+
+				// Dirty hack, but we can't do anything without it (for now, in jQuery UI 1.8.20)
+				setTimeout(function () {
+					calendar.position({
+						my: "left top",
+						at: "left bottom",
+						collision: "none",
+						of: element,
+					});
+				}, 1);
 			},
 			beforeShowDay: function (date) {
 				let y = date.getFullYear().toString(); // get full year
