@@ -411,6 +411,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('supir/{id}/delete', [SupirController::class, 'delete'])->name('supir.delete');
     Route::get('supir/get', [SupirController::class, 'get'])->name('supir.get');
     Route::get('supir/index', [SupirController::class, 'index']);
+    Route::get('supir/export', [SupirController::class, 'export'])->name('supir.export');
+    Route::get('supir/report', [SupirController::class, 'report'])->name('supir.report');
     Route::resource('supir', SupirController::class);
 
     Route::get('bank/field_length', [BankController::class, 'fieldLength'])->name('bank.field_length');
