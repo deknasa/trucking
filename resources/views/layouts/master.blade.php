@@ -427,6 +427,9 @@
       $('#rangeHeader').find('[name=tgldariheader]').val(formattedFirstDay).trigger('change');
       $('#rangeHeader').find('[name=tglsampaiheader]').val(formattedLastDay).trigger('change');
 
+      $('#crudForm').find(`[name="tgldari"]`).val(formattedFirstDay).trigger('change');
+      $('#crudForm').find(`[name="tglsampai"]`).val(formattedLastDay).trigger('change');
+
     }
 
 
