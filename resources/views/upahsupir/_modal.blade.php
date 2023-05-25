@@ -1,8 +1,3 @@
-<style>
-  #crudModal{
-    padding: 5px;
-  }
-</style>
 <div class="modal modal-fullscreen" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <form action="#" id="crudForm">
@@ -84,6 +79,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <div class="input-group">
+                  <input type="hidden" name="jarak_id">
                   <input type="text" name="jarak" class="form-control" style="text-align: right">
                   <div class="input-group-append">
                     <span class="input-group-text" style="font-weight: bold;">KM</span>
@@ -93,7 +89,6 @@
             </div>
             
             
-
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -144,15 +139,17 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-md-2">
+              <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Keterangan </label>
+                  KETERANGAN
+                </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="hidden" name="keterangan">
+                <input type="hidden" name="keterangan_id">
                 <input type="text" name="keterangan" class="form-control keterangan">
               </div>
             </div>
+
 
             <div class="row form-group">
               <div class="col">
@@ -262,7 +259,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   Dropzone.autoDiscover = false;
   let dropzones = []
- 
+
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -343,11 +340,10 @@
 
       $('#crudForm').find(`[name="jarak"]`).each((index, element) => {
         // data.filter((row) => row.name === 'jarak')[index].value = AutoNumeric.getNumber($(`#crudForm [name="jarak`)[index])
-        formData.append('jarak', AutoNumeric.getNumber($(`#crudForm [name="jarak`)[index]))
+        formData.append('jarak', AutoNumeric.getNumber($(`#crudForm [name="jarak"]`)[index]))
       })
 
-     
-
+ 
       formData.append('sortIndex', $('#jqGrid').getGridParam().sortname)
       formData.append('sortOrder', $('#jqGrid').getGridParam().sortorder)
       formData.append('filters', $('#jqGrid').getGridParam('postData').filters)
@@ -517,14 +513,12 @@
       ])
       .then(() => {
         initDropzone(form.data('action'))
-        initAutoNumeric(form.find(`[name="jarak"]`))
-        showDefault(form)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+
+        initAutoNumeric(form.find(`[name="jarak"]`), {
+          minimumValue: 0
+        })
+        
+     
 
       })
   }
@@ -553,7 +547,7 @@
       .then(() => {
         showUpahSupir(form, id)
           .then((upahsupir) => {
-            initDropzone(form.data('action'), upahsupir)
+            initDropzone(form.data('action'), upahsupir);
           })
           .then(() => {
             $('#crudModal').modal('show')
@@ -590,12 +584,7 @@
           .then((upahsupir) => {
             initDropzone(form.data('action'), upahsupir)
           })
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+
       })
   }
 
@@ -802,7 +791,7 @@
             }
 
           })
-          initAutoNumeric(form.find(`[name="jarak"]`))
+          
           $.each(response.detail, (index, detail) => {
             // $.each(response.data.upahsupir_rincian, (index, detail) => {
             let detailRow = $(`
@@ -847,7 +836,10 @@
 
             $('#detailList tbody').append(detailRow)
 
-            initAutoNumeric(detailRow.find('.autonumeric'))
+            initAutoNumeric(detailRow.find('.autonumeric'), {
+              minimumValue: 0
+            })
+            
             setNominalSupir()
             setNominalKenek()
             setNominalKomisi()
@@ -986,79 +978,94 @@
       }
     })
 
-    initAutoNumeric(detailRow.find('.autonumeric'))
+    initAutoNumeric(detailRow.find('.autonumeric'), {
+              minimumValue: 0
+            })
+
     setRowNumbers()
   }
 
 
   function setUpRow() {
-    $.ajax({
-      url: `${apiUrl}upahsupirrincian/setuprow`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.detail, (index, detail) => {
+  $.ajax({
+    url: `${apiUrl}upahsupirrincian/setuprow`,
+    method: 'GET',
+    dataType: 'JSON',
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    },
+    success: response => {
+      $.each(response.detail, (index, detail) => {
+        let detailRow = $(`
+          <tr>
+            <td></td>
+            <td>
+              <input type="hidden" name="container_id[]">
+              <input type="text" name="container[]" data-current-value="${detail.container}" class="form-control" readonly>
+            </td>
+            <td>
+              <input type="hidden" name="statuscontainer_id[]" class="form-control">
+              <input type="text" name="statuscontainer[]" data-current-value="${detail.statuscontainer}" class="form-control" readonly>
+            </td>
+            <td>
+              <input type="text" name="nominalsupir[]" data-current-value="${detail.nominalsupir}" class="form-control autonumeric">
+            </td>
+            <td>
+              <input type="text" name="nominalkenek[]" data-current-value="${detail.nominalkenek}" class="form-control autonumeric">
+            </td>
+            <td>
+              <input type="text" name="nominalkomisi[]" data-current-value="${detail.nominalkomisi}" class="form-control autonumeric">
+            </td>
+            <td>
+              <input type="text" name="nominaltol[]" data-current-value="${detail.nominaltol}" class="form-control autonumeric">
+            </td>
+            <td>
+              <input type="text" name="liter[]" data-current-value="${detail.liter}" class="form-control autonumeric">
+            </td>
+          </tr>
+        `);
 
-          let detailRow = $(`
-            <tr>
-              <td></td>
-              <td>
-                <input type="hidden" name="container_id[]">
-                <input type="text" name="container[]" data-current-value="${detail.container}" class="form-control" readonly>
-              </td>
-              <td>
-                <input type="hidden" name="statuscontainer_id[]" class="form-control">
-                <input type="text" name="statuscontainer[]" data-current-value="${detail.statuscontainer}" class="form-control" readonly>
-              </td>
-              <td>
-                <input type="text" name="nominalsupir[]" data-current-value="${detail.nominalsupir}" class="form-control autonumeric">
-              </td>
-              <td>
-                <input type="text" name="nominalkenek[]" data-current-value="${detail.nominalkenek}" class="form-control autonumeric">
-              </td>
-              <td>
-                <input type="text" name="nominalkomisi[]" data-current-value="${detail.nominalkomisi}" class="form-control autonumeric">
-              </td>
-              <td>
-                <input type="text" name="nominaltol[]" data-current-value="${detail.nominaltol}" class="form-control autonumeric">
-              </td>
-              <td>
-                <input type="text" name="liter[]" data-current-value="${detail.liter}" class="form-control autonumeric">
-              </td>
-              
-            </tr>
-            `)
-          detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
-          detailRow.find(`[name="container[]"]`).val(detail.container)
-          detailRow.find(`[name="statuscontainer_id[]"]`).val(detail.statuscontainer_id)
-          detailRow.find(`[name="statuscontainer[]"]`).val(detail.statuscontainer)
-          detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
-          detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
-          detailRow.find(`[name="nominalkenek[]"]`).val(detail.nominalkenek)
-          detailRow.find(`[name="nominalkenek[]"]`).val(detail.nominalkenek)
-          detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
-          detailRow.find(`[name="nominalkomisi[]"]`).val(detail.nominalkomisi)
-          detailRow.find(`[name="nominaltol[]"]`).val(detail.nominaltol)
-          detailRow.find(`[name="nominaltol[]"]`).val(detail.nominaltol)
-          detailRow.find(`[name="liter[]"]`).val(detail.liter)
-          detailRow.find(`[name="liter[]"]`).val(detail.liter)
+        detailRow.find(`[name="container_id[]"]`).val(detail.container_id);
+        detailRow.find(`[name="container[]"]`).val(detail.container);
+        detailRow.find(`[name="statuscontainer_id[]"]`).val(detail.statuscontainer_id);
+        detailRow.find(`[name="statuscontainer[]"]`).val(detail.statuscontainer);
 
-          initAutoNumeric(detailRow.find('.autonumeric'))
-          setNominalSupir()
-          setNominalKenek()
-          setNominalKomisi()
-          setNominalTol()
-          $('#detailList tbody').append(detailRow)
+        // let nominalSupirInput = detailRow.find(`[name="nominalsupir[]"]`);
+        // let nominalKenekInput = detailRow.find(`[name="nominalkenek[]"]`);
 
-        })
-        setRowNumbers()
-      }
-    })
+        // nominalSupirInput.val(detail.nominalsupir);
+        // nominalKenekInput.val(detail.nominalkenek);
 
-  }
+     
+        // nominalSupirInput.on('input', function() {
+        //   let cleanedInput = nominalSupirInput.val().replace(/\D/g, '');
+        //   nominalSupirInput.val(cleanedInput);
+
+        // });
+
+        // nominalKenekInput.on('input', function() {
+        //   let cleanedInput = nominalKenekInput.val().replace(/\D/g, '');
+        //   nominalKenekInput.val(cleanedInput);
+        // });
+
+
+        initAutoNumeric(detailRow.find('.autonumeric'), {
+              minimumValue: 0
+            })
+        
+        setNominalSupir();
+        setNominalKenek();
+        setNominalKomisi();
+        setNominalTol();
+
+        $('#detailList tbody').append(detailRow);
+      });
+
+      setRowNumbers();
+    }
+  });
+}
+
 
   function setuprowshow(id) {
     $.ajax({
@@ -1086,7 +1093,7 @@
                 <input type="text" name="nominalsupir[]" class="form-control autonumeric">
               </td>
               <td>
-                <input type="text" name="nominalkenek[]" class="form-control autonumeric">
+                <input type="text" name="nominalkenek[]" class="form-control autonumeric" data-negative="false">
               </td>
               <td>
                 <input type="text" name="nominalkomisi[]" class="form-control autonumeric">
@@ -1104,7 +1111,10 @@
           detailRow.find(`[name="container[]"]`).val(detail.container)
           detailRow.find(`[name="statuscontainer_id[]"]`).val(detail.statuscontainer_id)
           detailRow.find(`[name="statuscontainer[]"]`).val(detail.statuscontainer)
-          initAutoNumeric(detailRow.find('.autonumeric'))
+          initAutoNumeric(detailRow.find('.autonumeric'), {
+              minimumValue: 0
+            })
+          
           setNominalSupir()
           setNominalKenek()
           setNominalKomisi()
@@ -1136,6 +1146,13 @@
       $(element).text(index + 1)
     })
   }
+  
+ 
+
+
+
+
+
 
   function initLookup() {
     $('.upahsupir-lookup').lookup({
@@ -1143,14 +1160,20 @@
       fileName: 'upahsupir',
       onSelectRow: (upahsupir, element) => {
         // console.log(element);
-        // console.log(element.val());
-        // element.val(upahsupir.id)
-        // console.log(element.val());
-        // console.log(upahsupir.id);
 
         $('#crudForm [name=parent_id]').first().val(upahsupir.id)
         $('#crudForm [name=parent]').first().val(upahsupir.kotasampai_id)
         element.data('currentValue', element.val())
+
+        // Menghapus nilai autonumeric pada input jarak
+        // $('#crudForm [name=jarak]').autoNumeric('remove')
+        let jarakInput = $('#crudForm [name=jarak]').get(0); // Dapatkan elemen input jarak
+            let autoNumericInstance = AutoNumeric.getAutoNumericElement(jarakInput); // Dapatkan instance AutoNumeric dari elemen tersebut
+
+            if (autoNumericInstance) {
+              autoNumericInstance.remove(); // Hapus efek AutoNumeric
+            }
+            
 
         let form = $('#crudForm')
         showUpahSupir(form, upahsupir.id, true).then((upahsupir) => {
@@ -1165,6 +1188,7 @@
         $('#crudForm [name=parent_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+        
       }
     })
 
@@ -1268,5 +1292,6 @@
       }
     })
   }
+
 </script>
 @endpush()

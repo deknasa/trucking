@@ -49,7 +49,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
-                                    DITERIMA DARI <span class="text-danger">*</span></label>
+                                    DITERIMA DARI
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
                                 <input type="text" name="diterimadari" class="form-control">

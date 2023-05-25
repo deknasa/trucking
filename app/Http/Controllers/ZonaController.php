@@ -223,4 +223,33 @@ class ZonaController extends MyController
         return $response['data'];
     }
 
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'zona', $request->all());
+
+        $zonas = $response['data'];
+
+        $i = 0;
+        foreach ($zonas as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+
+            $result = json_decode($statusaktif, true);
+
+            $statusaktif = $result['MEMO'];
+
+            $zonas[$i]['statusaktif'] = $statusaktif;
+
+        
+            $i++;
+
+
+        }
+
+        return view('reports.zona', compact('zonas'));
+    }
+
 }

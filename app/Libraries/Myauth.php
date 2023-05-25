@@ -13,6 +13,7 @@ class Myauth
             'logtrail',
             'tutupbuku',
             'approvalbukacetak',
+            'approvalsupirgambar',
             'historipenerimaanstok',
             'historipengeluaranstok',
             'reportall',

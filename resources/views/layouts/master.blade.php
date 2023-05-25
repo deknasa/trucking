@@ -43,6 +43,7 @@
   <link rel="stylesheet" href="{{ asset('css/pager.css?version='. config('app.version')) }}">
 
   <link rel="stylesheet" href="{{ asset('plugins/dropzone/dropzone.css') }}">
+
 </head>
 
 <body class="hold-transition sidebar-collapse layout-fixed">
@@ -425,6 +426,9 @@
 
       $('#rangeHeader').find('[name=tgldariheader]').val(formattedFirstDay).trigger('change');
       $('#rangeHeader').find('[name=tglsampaiheader]').val(formattedLastDay).trigger('change');
+
+      $('#crudForm').find(`[name="tgldari"]`).val(formattedFirstDay).trigger('change');
+      $('#crudForm').find(`[name="tglsampai"]`).val(formattedLastDay).trigger('change');
 
     }
 

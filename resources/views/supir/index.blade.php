@@ -325,168 +325,198 @@
             label: 'plafondeposito',
             name: 'plafondeposito',
           },
-          {
-            label: 'PHOTO SUPIR',
-            name: 'photosupir',
-            search: false,
-            align: 'center',
-            formatter: (value, row) => {
-              let images = []
-              if (value) {
-                let files = JSON.parse(value)
+        {
+          label: 'PHOTO SUPIR',
+          name: 'photosupir',
+          search: false,
+          align: 'center',
+          formatter: (value, row) => {
+            let images = []
+            if (value) {
+              let files = JSON.parse(value)
 
-                files.forEach(file => {
-                  if(file == ''){
-                    file = 'no-image'
-                  }
-                  let image = new Image()
-                  image.width = 25
-                  image.height = 25
-                  image.src = `${apiUrl}supir/image/profil/${encodeURI(file)}/small/show`
+              files.forEach(file => {
+                if (file == '') {
+                  file = 'no-image'
+                }
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/supir/${encodeURI(file)}/small/show`
 
-                  images.push(image.outerHTML)
-                });
+                images.push(image.outerHTML)
+              });
 
-                return images.join(' ')
-              }
-              return 'NO PHOTOS'
+              return images.join(' ')
+            } else {
+              let image = new Image()
+              image.width = 25
+              image.height = 25
+              image.src = `${apiUrl}supir/image/supir/no-image/small/show`
+              return image.outerHTML
             }
-          },
-          {
-            label: 'PHOTO KTP',
-            name: 'photoktp',
-            align: 'center',
-            search: false,
-            formatter: (value, row) => {
-              let images = []
-              if (value) {
-                let files = JSON.parse(value)
+          }
+        },
+        {
+          label: 'PHOTO KTP',
+          name: 'photoktp',
+          align: 'center',
+          search: false,
+          formatter: (value, row) => {
+            let images = []
+            if (value) {
+              let files = JSON.parse(value)
 
-                files.forEach(file => {
-                  if(file == ''){
-                    file = 'no-image'
-                  }
-                  let image = new Image()
-                  image.width = 25
-                  image.height = 25
-                  image.src = `${apiUrl}supir/image/ktp/${file}/small/show`
-                  console.log(`${apiUrl}supir/image/ktp/${file}/small/show`)
-                  images.push(image.outerHTML)
-                });
+              files.forEach(file => {
+                if (file == '') {
+                  file = 'no-image'
+                }
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/ktp/${file}/small/show`
 
-                return images.join(' ')
-              }
-              return 'NO PHOTOS'
+                images.push(image.outerHTML)
+              });
+
+              return images.join(' ')
+            } else {
+              let image = new Image()
+              image.width = 25
+              image.height = 25
+              image.src = `${apiUrl}supir/image/ktp/no-image/small/show`
+              return image.outerHTML
             }
-          },
-          {
-            label: 'PHOTO SIM',
-            name: 'photosim',
-            align: 'center',
-            search: false,
-            formatter: (value, row) => {
-              let images = []
-              if (value) {
-                let files = JSON.parse(value)
+          }
+        },
+        {
+          label: 'PHOTO SIM',
+          name: 'photosim',
+          align: 'center',
+          search: false,
+          formatter: (value, row) => {
+            let images = []
+            if (value) {
+              let files = JSON.parse(value)
 
-                files.forEach(file => {
-                  if(file == ''){
-                    file = 'no-image'
-                  }
-                  let image = new Image()
-                  image.width = 25
-                  image.height = 25
-                  image.src = `${apiUrl}supir/image/sim/${file}/small/show`
+              files.forEach(file => {
+                if (file == '') {
+                  file = 'no-image'
+                }
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/sim/${file}/small/show`
 
-                  images.push(image.outerHTML)
-                });
+                images.push(image.outerHTML)
+              });
 
-                return images.join(' ')
-              }
-              return 'NO PHOTOS'
+              return images.join(' ')
+            } else {
+              let image = new Image()
+              image.width = 25
+              image.height = 25
+              image.src = `${apiUrl}supir/image/sim/no-image/small/show`
+              return image.outerHTML
             }
-          },
-          {
-            label: 'PHOTO KK',
-            name: 'photokk',
-            align: 'center',
-            search: false,
-            formatter: (value, row) => {
-              let images = []
-              if (value) {
-                let files = JSON.parse(value)
+          }
+        },
+        {
+          label: 'PHOTO KK',
+          name: 'photokk',
+          align: 'center',
+          search: false,
+          formatter: (value, row) => {
+            let images = []
+            if (value) {
+              let files = JSON.parse(value)
 
-                files.forEach(file => {
-                  if(file == ''){
-                    file = 'no-image'
-                  }
-                  let image = new Image()
-                  image.width = 25
-                  image.height = 25
-                  image.src = `${apiUrl}supir/image/kk/${file}/small/show`
+              files.forEach(file => {
+                if (file == '') {
+                  file = 'no-image'
+                }
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/kk/${file}/small/show`
 
-                  images.push(image.outerHTML)
-                });
+                images.push(image.outerHTML)
+              });
 
-                return images.join(' ')
-              }
-              return 'NO PHOTOS'
+              return images.join(' ')
+            } else {
+              let image = new Image()
+              image.width = 25
+              image.height = 25
+              image.src = `${apiUrl}supir/image/kk/no-image/small/show`
+              return image.outerHTML
             }
-          },
-          {
-            label: 'PHOTO SKCK',
-            name: 'photoskck',
-            search: false,
-            align: 'center',
-            formatter: (value, row) => {
-              let images = []
-              if (value) {
-                let files = JSON.parse(value)
+          }
+        },
+        {
+          label: 'PHOTO SKCK',
+          name: 'photoskck',
+          search: false,
+          align: 'center',
+          formatter: (value, row) => {
+            let images = []
+            if (value) {
+              let files = JSON.parse(value)
 
-                files.forEach(file => {
-                  if(file == ''){
-                    file = 'no-image'
-                  }
-                  let image = new Image()
-                  image.width = 25
-                  image.height = 25
-                  image.src = `${apiUrl}supir/image/skck/${file}/small/show`
+              files.forEach(file => {
+                if (file == '') {
+                  file = 'no-image'
+                }
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/skck/${file}/small/show`
 
-                  images.push(image.outerHTML)
-                });
+                images.push(image.outerHTML)
+              });
 
-                return images.join(' ')
-              }
-              return 'NO PHOTOS'
+              return images.join(' ')
+            } else {
+              let image = new Image()
+              image.width = 25
+              image.height = 25
+              image.src = `${apiUrl}supir/image/skck/no-image/small/show`
+              return image.outerHTML
             }
-          },
-          {
-            label: 'PHOTO DOMISILI',
-            name: 'photodomisili',
-            search: false,
-            align: 'center',
-            formatter: (value, row) => {
-              let images = []
-              if (value) {
-                let files = JSON.parse(value)
+          }
+        },
+        {
+          label: 'PHOTO DOMISILI',
+          name: 'photodomisili',
+          search: false,
+          align: 'center',
+          formatter: (value, row) => {
+            let images = []
+            if (value) {
+              let files = JSON.parse(value)
 
-                files.forEach(file => {
-                  if(file == ''){
-                    file = 'no-image'
-                  }
-                  let image = new Image()
-                  image.width = 25
-                  image.height = 25
-                  image.src = `${apiUrl}supir/image/domisili/${file}/small/show`
+              files.forEach(file => {
+                if (file == '') {
+                  file = 'no-image'
+                }
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}supir/image/domisili/${file}/small/show`
 
-                  images.push(image.outerHTML)
-                });
+                images.push(image.outerHTML)
+              });
 
-                return images.join(' ')
-              }
-              return 'NO PHOTOS'
+              return images.join(' ')
+            } else {
+              let image = new Image()
+              image.width = 25
+              image.height = 25
+              image.src = `${apiUrl}supir/image/domisili/no-image/small/show`
+              return image.outerHTML
             }
-          },
+          }
+        },
           {
             label: 'TGL BERHENTI SUPIR',
             name: 'tglberhentisupir',
@@ -495,6 +525,11 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
+          },
+          {
+            label: 'keterangan BERHENTI SUPIR',
+            name: 'keteranganberhentisupir',
+            
           },
           // {
           //   label: 'KET RESIGN',
@@ -697,12 +732,32 @@
 
             }
           },
+          {
+            id: 'export',
+            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'export')
+              $('#rangeModal').find('button:submit').html(`Export`)
+              $('#rangeModal').modal('show')
+            }
+          },
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'report')
+              $('#rangeModal').find('button:submit').html(`Report`)
+              $('#rangeModal').modal('show')
+            }
+          },
         ],
         extndBtn: [{
           id: 'approve',
           title: 'Approve',
           caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> APPROVE',
+          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
           class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
           dropmenuHTML: [{
               id: 'approvalBlackListSupir',
@@ -772,6 +827,12 @@
 
     if (!`{{ $myAuth->hasPermission('supir', 'destroy') }}`) {
       $('#delete').attr('disabled', 'disabled')
+    }
+    if (!`{{ $myAuth->hasPermission('supir', 'export') }}`) {
+      $('#export').attr('disabled', 'disabled')
+    }
+    if (!`{{ $myAuth->hasPermission('supir', 'report') }}`) {
+      $('#report').attr('disabled', 'disabled')
     }
 
     getTidakBolehLuarkota()
@@ -856,7 +917,47 @@
         params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+      // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+      let formRange = $('#formRange')
+      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+      params += `&offset=${offset}&limit=${limit}`
+
+      if ($('#rangeModal').data('action') == 'export') {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `{{ config('app.api_url') }}supir/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`)
+        xhr.responseType = 'arraybuffer'
+
+
+        xhr.onload = function(e) {
+          if (this.status === 200) {
+            if (this.response !== undefined) {
+              let blob = new Blob([this.response], {
+                type: "application/vnd.ms-excel"
+              })
+              let link = document.createElement('a')
+
+              link.href = window.URL.createObjectURL(blob)
+              link.download = `laporanSupir${(new Date).getTime()}.xlsx`
+              link.click()
+
+              submitButton.removeAttr('disabled')
+            }
+          }
+        }
+
+        xhr.onerror = () => {
+          submitButton.removeAttr('disabled')
+        }
+
+        xhr.send()
+      } else if ($('#rangeModal').data('action') == 'report') {
+
+        window.open(`{{ route('supir.report') }}?${params}`)
+
+        submitButton.removeAttr('disabled')
+      }
     })
 
 

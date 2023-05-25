@@ -419,6 +419,12 @@
           $.each(response.data, (index, value) => {
             if (value !== null && value !== 0 && value !== undefined) {
               form.find(`[name=${index}]`).attr('maxlength', value)
+              if(index == 'kodepos'){
+                form.find(`[name=${index}]`).attr('maxlength', 5)
+              } 
+              if(index == 'telp'){
+                form.find(`[name=${index}]`).attr('maxlength', 13)
+              }
             }
           })
 

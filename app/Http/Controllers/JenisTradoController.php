@@ -204,5 +204,36 @@ class JenisTradoController extends MyController
 
         return $response['data'];
     }
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'jenistrado', $request->all());
+
+        $jenisTrados = $response['data'];
+
+
+        $i = 0;
+        foreach ($jenisTrados as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+
+            $result = json_decode($statusaktif, true);
+
+            $statusaktif = $result['MEMO'];
+
+            $jenisTrados[$i]['statusaktif'] = $statusaktif;
+
+        
+            $i++;
+
+
+        }
+
+        // dd($jenisTrados);
+
+        return view('reports.jenistrado', compact('jenisTrados'));
+    }
 
 }

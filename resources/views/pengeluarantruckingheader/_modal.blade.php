@@ -93,7 +93,20 @@
               </div>
             </div>
 
-            <div class="border p-3 mb-3">
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  Status posting <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="statusposting" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS posting --</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="border p-3 mb-3 posting-border">
               <h6>Posting Pengeluaran</h6>
 
               <div class="row form-group">
@@ -192,7 +205,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   var KodePengeluaranId
   let selectedRows = [];
-
+  var parameterPosting;
   let sortnameSumbangan = 'noinvoice_detail';
   let sortorderSumbangan = 'asc';
   let pageSumbangan = 0;
@@ -741,7 +754,7 @@
   }
 
   function tampilanPJT() {
-
+    
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
@@ -770,6 +783,7 @@
 
   function tampilanBST() {
     $('#detailList tbody').html('')
+    enabledKas(true);
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
@@ -788,6 +802,7 @@
 
   function tampilanKBBM() {
     $('#detailList tbody').html('')
+    enabledKas(true);
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
@@ -805,7 +820,7 @@
   }
 
   function tampilanBSB() {
-
+    enabledKas(true);
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
@@ -823,6 +838,7 @@
   }
 
   function tampilanall() {
+    enabledKas(true);
     $('[name=keterangancoa]').parents('.form-group').show()
     $('.tbl_supir_id').show()
     $('.tbl_sisa').hide()
@@ -843,6 +859,16 @@
   $(document).on('click', '.checkItem', function(event) {
     enabledRow($(this).data("id"))
   })
+  
+  $(document).on('change', $('#crudForm').find('[name=statusposting]'), function(event) {
+    let statusposting_id = $('#crudForm').find('[name=statusposting]').val()
+    if (parameterPosting == statusposting_id) {
+      enabledKas(true);
+    }else{
+      enabledKas(false);
+
+    }
+  })
 
   function enabledRow(row) {
     let check = $(`#penerimaantruckingheader_id${row}`)
@@ -856,8 +882,28 @@
       $(`#keterangan_detail${row}`).prop('disabled', true)
     }
     setTotal()
-
   }
+
+  function enabledKas(enabled = false) {
+    let statusposting_id = $('#crudForm').find('[name=statusposting]').val()
+    // console.log(enabled,parameterPosting , statusposting_id);
+    // if (statusposting_id) {
+    //   console.log(enabled);
+    if (enabled ) {
+      $('.posting-border').show()
+      setDefaultBank()
+
+    }else{
+      $('.posting-border').hide()
+      $('#crudForm [name=bank_id]').first().val('')
+      $('#crudForm [name=bank]').first().val('')
+      $('#crudForm [name=bank]').first().data('currentValue','')
+    }
+      
+      
+  }
+  
+
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
@@ -869,6 +915,8 @@
     getMaxLength(form)
     initLookup()
     initDatepicker()
+    initSelect2(form.find(`[name="statusposting"]`),true)
+    // initSelect2()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -911,6 +959,7 @@
     
     Promise
       .all([
+        setStatusPostingOptions(form),
         setDefaultBank(),
         addRow(),
         setTotal()
@@ -943,6 +992,7 @@
     
     Promise
       .all([
+        setStatusPostingOptions(form),
         showPengeluaranTruckingHeader(form, id)
       ])
       .then(() => {
@@ -975,6 +1025,7 @@
     
     Promise
       .all([
+        setStatusPostingOptions(form),
         showPengeluaranTruckingHeader(form, id)
       ])
       .then(() => {
@@ -2622,6 +2673,46 @@
         element.val('')
         element.data('currentValue', element.val())
       }
+    })
+  }
+
+  const setStatusPostingOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusposting]').empty()
+      relatedForm.find('[name=statusposting]').append(
+        new Option('-- PILIH STATUS Posting --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS POSTING"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusPosting => {
+            let option = new Option(statusPosting.text, statusPosting.id)
+
+            relatedForm.find('[name=statusposting]').append(option).trigger('change')
+            if (statusPosting.text === "POSTING" ) {
+              parameterPosting = statusPosting.id
+            }
+          });
+
+          resolve()
+        }
+      })
     })
   }
 </script>

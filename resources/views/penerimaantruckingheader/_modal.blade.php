@@ -123,7 +123,7 @@
                       <p class="text-right font-weight-bold autonumeric" id="total"></p>
                     </td>
                     <td class="colmn-offset"></td>
-                    <td id="tbl_addRow">
+                    <td id="tbl_addRow" class="tbl_aksi">
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
                   </tr>
@@ -236,8 +236,9 @@
 
         let selectedRowsHutang = $("#tablePinjaman").getGridParam("selectedRowIds");
         $.each(selectedRowsHutang, function(index, value) {
-          let selectedNominal = $("#tablePinjaman").jqGrid("getCell", value, "nominal")
-          let selectedSisa = $("#tablePinjaman").jqGrid("getCell", value, "sisa")
+          dataPinjaman = $("#tablePinjaman").jqGrid("getLocalRow", value);
+          let selectedNominal = dataPinjaman.nominal
+          let selectedSisa = dataPinjaman.sisa
 
           data.push({
             name: 'nominal[]',
@@ -245,15 +246,15 @@
           })
           data.push({
             name: 'sisa[]',
-            value: (selectedSisa != '') ? parseFloat(selectedSisa.replaceAll(',', '')) : 0
+            value: selectedSisa
           })
           data.push({
             name: 'keterangan[]',
-            value: $("#tablePinjaman").jqGrid("getCell", value, "keterangan")
+            value: dataPinjaman.keterangan
           })
           data.push({
             name: 'pengeluarantruckingheader_nobukti[]',
-            value: $("#tablePinjaman").jqGrid("getCell", value, "nobukti")
+            value: dataPinjaman.nobukti
           })
           data.push({
             name: 'supir_id[]',
@@ -261,7 +262,7 @@
           })
           data.push({
             name: 'pjp_id[]',
-            value: $("#tablePinjaman").jqGrid("getCell", value, "id")
+            value: dataPinjaman.id
           })
         });
 
@@ -386,37 +387,35 @@
               $.each(errors, (index, error) => {
                 let indexes = index.split(".");
                 let angka = indexes[1]
-                if (index == 'pjp') {
-                  return showDialog(error);
-                } else {
+                console.log(index)
 
-                  selectedRowsHutang = $("#tablePinjaman").getGridParam("selectedRowIds");
-                  row = parseInt(selectedRowsHutang[angka]) - 1;
-                  let element;
-                  if (indexes[0] == 'bank' || indexes[0] == 'pengeluarantrucking' || indexes[0] == 'supir') {
-                    if (indexes.length > 1) {
-                      element = form.find(`[name="${indexes[0]}[]"]`)[row];
-                    } else {
-                      element = form.find(`[name="${indexes[0]}"]`)[0];
-                    }
 
-                    if ($(element).length > 0 && !$(element).is(":hidden")) {
-                      $(element).addClass("is-invalid");
-                      $(`
+                selectedRowsHutang = $("#tablePinjaman").getGridParam("selectedRowIds");
+                row = parseInt(selectedRowsHutang[angka]) - 1;
+                let element;
+                if (indexes[0] == 'bank' || indexes[0] == 'pengeluarantrucking' || indexes[0] == 'supir' || indexes[0] == 'pjp_id') {
+                  if (indexes.length > 1) {
+                    element = form.find(`[name="${indexes[0]}[]"]`)[row];
+                  } else {
+                    element = form.find(`[name="${indexes[0]}"]`)[0];
+                  }
+
+                  if ($(element).length > 0 && !$(element).is(":hidden")) {
+                    $(element).addClass("is-invalid");
+                    $(`
                       <div class="invalid-feedback">
                       ${error[0].toLowerCase()}
                       </div>
                       `).appendTo($(element).parent());
-                    } else {
-                      return showDialog(error);
-                    }
                   } else {
-
-                    element = $(`#tablePinjaman tr#${parseInt(selectedRowsHutang[angka])}`).find(`td[aria-describedby="tablePinjaman_${indexes[0]}"]`)
-                    $(element).addClass("ui-state-error");
-                    console.log(error)
-                    $(element).attr("title", error[0].toLowerCase())
+                    return showDialog(error);
                   }
+                } else {
+
+                  element = $(`#tablePinjaman tr#${parseInt(selectedRowsHutang[angka])}`).find(`td[aria-describedby="tablePinjaman_${indexes[0]}"]`)
+                  $(element).addClass("ui-state-error");
+                  console.log(error)
+                  $(element).attr("title", error[0].toLowerCase())
                 }
               });
             } else {
@@ -448,6 +447,9 @@
       case 'PJP':
         tampilanPJP()
         break;
+      case 'DPO':
+        tampilanDPO()
+        break;
       default:
         tampilanall()
         break;
@@ -477,6 +479,21 @@
     $('#gbox_tablePinjaman').show()
     $('#detailList').hide()
     loadPinjamanGrid()
+  }
+
+  function tampilanDPO() {
+    $('#detailList').show()
+    $('#gbox_tablePinjaman').hide()
+    $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    $('.tbl_supir_id').show()
+    $('.tbl_pengeluarantruckingheader_nobukti').hide()
+    $('.tbl_sisa').hide()
+    $('.tbl_aksi').hide()
+    $('.colmn-offset').hide()
+    $('.colspan').attr('colspan', 3);
+    $('#sisaColFoot').hide()
+    $('#sisaFoot').hide()
   }
 
   function tampilanall() {
@@ -541,7 +558,7 @@
 
     $('#table_body').html('')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    
+
     Promise
       .all([
         setDefaultBank(),
@@ -549,12 +566,12 @@
         setTotal()
       ])
       .then(() => {
-          $('#crudModal').modal('show')
+        $('#crudModal').modal('show')
       })
       .finally(() => {
-          $('.modal-loader').addClass('d-none')
+        $('.modal-loader').addClass('d-none')
       })
-    
+
   }
 
   function editPenerimaanTruckingHeader(id) {
@@ -573,16 +590,16 @@
     $('.invalid-feedback').remove()
     form.find(`[name="bank"]`).removeClass('bank-lookup')
     form.find(`[name="penerimaantrucking"]`).removeClass('penerimaantrucking-lookup')
-    
+
     Promise
       .all([
         showPenerimaanTruckingHeader(form, id)
       ])
       .then(() => {
-          $('#crudModal').modal('show')
+        $('#crudModal').modal('show')
       })
       .finally(() => {
-          $('.modal-loader').addClass('d-none')
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -603,16 +620,16 @@
 
     form.find(`[name="bank"]`).removeClass('bank-lookup')
     form.find(`[name="penerimaantrucking"]`).removeClass('penerimaantrucking-lookup')
-    
+
     Promise
       .all([
         showPenerimaanTruckingHeader(form, id)
       ])
       .then(() => {
-          $('#crudModal').modal('show')
+        $('#crudModal').modal('show')
       })
       .finally(() => {
-          $('.modal-loader').addClass('d-none')
+        $('.modal-loader').addClass('d-none')
       })
 
   }
@@ -629,7 +646,6 @@
         success: response => {
           $.each(response.data, (index, bank) => {
             // console.log(index);
-            console.log(bank);
             if (bank.id == 1) {
               $('#crudForm [name=bank_id]').first().val(bank.id)
               $('#crudForm [name=bank]').first().val(bank.namabank)
@@ -733,6 +749,7 @@
           },
           {
             label: "NOMINAL",
+            index: 'nominal',
             name: "nominal",
             align: "right",
             editable: true,
@@ -752,7 +769,7 @@
                     rowObject.rowId
                   );
                   let totalSisa
-
+                  localRow.nominal = event.target.value;
                   let nominal = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
                   if ($('#crudForm').data('action') == 'edit') {
                     totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)) - nominal
@@ -766,6 +783,22 @@
                     "sisa",
                     totalSisa
                   );
+
+                  if (totalSisa < 0) {
+                    showDialog('sisa tidak boleh minus')
+                    $("#tablePinjaman").jqGrid(
+                      "setCell",
+                      rowObject.rowId,
+                      "nominal",
+                      0
+                    );
+                    $("#tablePinjaman").jqGrid(
+                      "setCell",
+                      rowObject.rowId,
+                      "sisa",
+                      originalGridData.sisa
+                    );
+                  }
 
                   nominalDetails = $(`#tablePinjaman tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePinjaman_nominal"]`)
                   ttlBayar = 0
@@ -981,6 +1014,12 @@
           localRow.nominal = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal) + parseFloat(originalGridData.potongan))
         }
 
+        $("#tablePinjaman").jqGrid(
+          "setCell",
+          rowId,
+          "nominal",
+          0
+        );
         initAutoNumeric($(`#tablePinjaman tr#${rowId}`).find(`td[aria-describedby="tablePinjaman_nominal"]`))
         setTotalNominal()
         setTotalSisa()
@@ -1099,7 +1138,7 @@
                     <td class="tbl_nominal">
                         <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
                     </td>
-                    <td>
+                    <td  class="tbl_aksi">
                         <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
                     </td>
                 </tr>
@@ -1354,7 +1393,7 @@
         <td class="tbl_nominal">
           <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
         </td>
-        <td>
+        <td  class="tbl_aksi">
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
         </td>
       </tr>

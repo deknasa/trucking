@@ -574,6 +574,15 @@
   }
 
   function tampilankst() {
+    $('[name=supplier]').parents('.form-group').hide()
+    $('[name=servicein_nobukti]').parents('.form-group').hide()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=keterangan]').parents('.form-group').hide()
+    $('[name=nobon]').parents('.form-group').hide()
+    $('[name=hutang_nobukti]').parents('.form-group').hide()
+    $('[name=coa]').parents('.form-group').hide()
+
     $('[name=gudang]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').show()
     $('[name=gandengan]').parents('.form-group').show()
@@ -587,6 +596,13 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('.tbl_penerimaanstok_nobukti').hide();
+    $('.tbl_qty').show()
+    $('.tbl_vulkanisirke').hide();
+    $('.tbl_harga').hide();
+    $('.tbl_persentase').hide();
+    $('.tbl_total').hide();
+    $('.colspan').attr('colspan', 4);
+    $('.sumrow').hide();
   }
 
   function tampilanpst() {
@@ -643,6 +659,10 @@
       },
       success: response => {
         var data = response.data;
+        // kategori.attr('disabled', true)
+        $('#crudForm').find(`[name="supplier"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+        $('#crudForm').find(`[name="supplier"]`).parents('.input-group').find('.button-clear').attr('disabled', true)
+        // attr('disabled', true)
         $('[name=supplier]').val(data.supplier).attr('readonly', true);
         $('[name=supplier]').data('currentValue', data.supplier)
 
@@ -1567,6 +1587,9 @@
       onClear: (element) => {
         element.val('')
         element.data('currentValue', element.val())
+        $('#crudForm').find(`[name="supplier"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', false)
+        $('#crudForm').find(`[name="supplier"]`).parents('.input-group').find('.button-clear').attr('disabled', false)
+        $('[name=supplier]').attr('readonly', false);
       }
     })
 

@@ -375,7 +375,7 @@
           id: 'approve',
           title: 'Approve',
           caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> APPROVE',
+          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
           class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
           dropmenuHTML: [
             {

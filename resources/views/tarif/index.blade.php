@@ -362,10 +362,22 @@
           },
           {
             id: 'export',
-            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-              window.open(`{{ route('tarif.export') }}`)
+              $('#rangeModal').data('action', 'export')
+              $('#rangeModal').find('button:submit').html(`Export`)
+              $('#rangeModal').modal('show')
+            }
+          },
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'report')
+              $('#rangeModal').find('button:submit').html(`Report`)
+              $('#rangeModal').modal('show')
             }
           },
 
@@ -418,6 +430,12 @@
 
     if (!`{{ $myAuth->hasPermission('tarif', 'destroy') }}`) {
       $('#delete').attr('disabled', 'disabled')
+    }
+    if (!`{{ $myAuth->hasPermission('tarif', 'export') }}`) {
+      $('#export').attr('disabled', 'disabled')
+    }
+    if (!`{{ $myAuth->hasPermission('tarif', 'report') }}`) {
+      $('#report').attr('disabled', 'disabled')
     }
 
     $('#importModal').on('shown.bs.modal', function() {
@@ -476,6 +494,89 @@
         $('#loader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
+    })
+    $('#rangeModal').on('shown.bs.modal', function() {
+      if (autoNumericElements.length > 0) {
+        $.each(autoNumericElements, (index, autoNumericElement) => {
+          autoNumericElement.remove()
+        })
+      }
+
+      $('#formRange [name]:not(:hidden)').first().focus()
+
+      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
+      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
+      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+      $('#formRange [name=sampai]').val(totalRecord)
+
+      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
+        digitGroupSeparator: '.',
+        decimalCharacter: ',',
+        allowDecimalPadding: false,
+        minimumValue: 1,
+        maximumValue: totalRecord
+      })
+    })
+
+    $('#formRange').submit(event => {
+      event.preventDefault()
+
+      let params
+      let actionUrl = ``
+
+      /* Clear validation messages */
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
+
+      /* Set params value */
+      for (var key in postData) {
+        if (params != "") {
+          params += "&";
+        }
+        params += key + "=" + encodeURIComponent(postData[key]);
+      }
+
+      // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+      let formRange = $('#formRange')
+      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+      params += `&offset=${offset}&limit=${limit}`
+
+      if ($('#rangeModal').data('action') == 'export') {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `{{ config('app.api_url') }}tarif/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`)
+        xhr.responseType = 'arraybuffer'
+
+
+        xhr.onload = function(e) {
+          if (this.status === 200) {
+            if (this.response !== undefined) {
+              let blob = new Blob([this.response], {
+                type: "application/vnd.ms-excel"
+              })
+              let link = document.createElement('a')
+
+              link.href = window.URL.createObjectURL(blob)
+              link.download = `laporanTarif${(new Date).getTime()}.xlsx`
+              link.click()
+
+              submitButton.removeAttr('disabled')
+            }
+          }
+        }
+
+        xhr.onerror = () => {
+          submitButton.removeAttr('disabled')
+        }
+
+        xhr.send()
+      } else if ($('#rangeModal').data('action') == 'report') {
+       
+        window.open(`{{ route('tarif.report') }}?${params}`)
+
+        submitButton.removeAttr('disabled')
+      }
     })
   })
 </script>

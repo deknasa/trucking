@@ -235,6 +235,26 @@
               }
             }
           },
+          {
+            id: 'export',
+            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'export')
+              $('#rangeModal').find('button:submit').html(`Export`)
+              $('#rangeModal').modal('show')
+            }
+          },
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'report')
+              $('#rangeModal').find('button:submit').html(`Report`)
+              $('#rangeModal').modal('show')
+            }
+          },
         ]
       })
 
@@ -276,6 +296,13 @@
       $('#delete').attr('disabled', 'disabled')
     }
 
+    if (!`{{ $myAuth->hasPermission('pengeluarantrucking', 'export') }}`) {
+      $('#export').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('pengeluarantrucking', 'report') }}`) {
+      $('#report').attr('disabled', 'disabled')
+    }
     if (!`{{ $myAuth->hasPermission('pengeluarantrucking', 'export') }}`) {
       $('#export').attr('disabled', 'disabled')
     }
