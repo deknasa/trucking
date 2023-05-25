@@ -160,7 +160,7 @@ class UpahRitasiController extends MyController
         $upahritasi_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/upahritasirincian', $detailParams);
+            ->get(config('app.api_url') . 'upahritasirincian', $detailParams);
 
 
         $upahritasi_details = $upahritasi_detail['data'];

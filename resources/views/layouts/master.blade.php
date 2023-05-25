@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="{{ asset('plugins/select2/themes/select2-bootstrap4.min.css') }}">
 
   <!-- Jquery UI -->
-  <link rel="stylesheet" href="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('libraries/jquery-ui/cupertino/jquery-ui.min.css') }}">
 
   <!-- EasyUI -->
   <!-- <link rel="stylesheet" type="text/css" href="{{ asset('libraries/easyui/themes/default/easyui.css') }}">
@@ -426,6 +426,9 @@
 
       $('#rangeHeader').find('[name=tgldariheader]').val(formattedFirstDay).trigger('change');
       $('#rangeHeader').find('[name=tglsampaiheader]').val(formattedLastDay).trigger('change');
+
+      $('#crudForm').find(`[name="tgldari"]`).val(formattedFirstDay).trigger('change');
+      $('#crudForm').find(`[name="tglsampai"]`).val(formattedLastDay).trigger('change');
 
     }
 

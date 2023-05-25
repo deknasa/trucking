@@ -1,5 +1,5 @@
 <table id="bankLookup" class="lookup-grid"></table>
-<div id="bankLookupPager"></div>
+{{-- <div id="bankLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -190,7 +190,7 @@
       sortorder: 'asc',
       page: 1,
       toolbar: [true, "top"],
-      pager: $('#bankLookupPager'),
+      // pager: $('#bankLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -268,7 +268,7 @@
       beforeSearch: function() {
         clearGlobalSearch($('#bankLookup'))
       },
-    })
+    }).customPager()
 
   loadGlobalSearch($('#bankLookup'))
   loadClearFilter($('#bankLookup'))

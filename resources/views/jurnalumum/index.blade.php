@@ -372,8 +372,6 @@
               } else {
                 cekApproval(selectedId, 'EDIT')
               }
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
             }
           },
           {
@@ -387,8 +385,6 @@
               } else {
                 cekApproval(selectedId, 'DELETE')
               }
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
             }
           },
 

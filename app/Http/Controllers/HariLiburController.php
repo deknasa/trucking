@@ -64,4 +64,70 @@ class HariLiburController extends MyController
 
         return $response['data'];
     }
+    public function export(Request $request)
+    {
+        $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
+        ];
+
+        $parameters = $this->get($params)['rows'];
+
+        $columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'ID',
+                'index' => 'id',
+            ],
+            [
+                'label' => 'Group',
+                'index' => 'grp',
+            ],
+            [
+                'label' => 'Subgroup',
+                'index' => 'subgrp',
+            ],
+            [
+                'label' => 'Text',
+                'index' => 'text',
+            ],
+            [
+                'label' => 'Memo',
+                'index' => 'memo',
+            ],
+        ];
+
+        $this->toExcel($this->title, $parameters, $columns);
+    }
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'harilibur', $request->all());
+
+        $hariliburs = $response['data'];
+
+        $i = 0;
+        foreach ($hariliburs as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+
+            $result = json_decode($statusaktif, true);
+
+            $statusaktif = $result['MEMO'];
+
+
+            $hariliburs[$i]['statusaktif'] = $statusaktif;
+
+        
+            $i++;
+
+
+        }
+
+        return view('reports.harilibur', compact('hariliburs'));
+    }
 }

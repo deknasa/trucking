@@ -323,4 +323,40 @@ class TarifController extends MyController
 
         $writer->save('php://output');
     }
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'tarif', $request->all());
+
+        $tarifs = $response['data'];
+
+        $i = 0;
+        foreach ($tarifs as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+            $statusSistemTon = $params['statussistemton'];
+            $statusPenyesuaianHarga = $params['statuspenyesuaianharga'];
+
+            $result = json_decode($statusaktif, true);
+            $resultSistemTon = json_decode($statusSistemTon, true);
+            $resultPenyesuaianHarga = json_decode($statusPenyesuaianHarga, true);
+
+            $statusaktif = $result['MEMO'];
+            $statusSistemTon = $resultSistemTon['MEMO'];
+            $statusPenyesuaianHarga = $resultPenyesuaianHarga['MEMO'];
+
+
+            $tarifs[$i]['statusaktif'] = $statusaktif;
+            $tarifs[$i]['statussistemton'] = $statusSistemTon;
+            $tarifs[$i]['statuspenyesuaianharga'] = $statusPenyesuaianHarga;
+
+        
+            $i++;
+
+        }
+
+        return view('reports.tarif', compact('tarifs'));
+    }
 }

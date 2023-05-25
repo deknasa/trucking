@@ -552,6 +552,12 @@
           label: 'JLH BAN SERAP',
           name: 'jumlahbanserap',
         },
+          {
+            label: 'PLUS BORONGAN',
+            name: 'nominalplusborongan',
+            align: 'right',
+            formatter: currencyFormat,
+          },
         {
           label: 'STATUS BAN EDIT',
           name: 'statusappeditban',
@@ -682,93 +688,104 @@
             return ` title="${statusLewatValidasi.MEMO}"`
           }
         },
-        {
-          label: 'PHOTO STNK',
-          name: 'photostnk',
-          align: 'center',
-          search: false,
-          formatter: (value, row) => {
-            let images = []
+          {
+            label: 'PHOTO STNK',
+            name: 'photostnk',
+            align: 'center',
+            search: false,
+            formatter: (value, row) => {
+              let images = []
+              if (value.length) {
+                let files = JSON.parse(value)
 
-            if (value) {
-              let files = JSON.parse(value)
+                files.forEach(file => {
+                  if (file == '') {
+                    file = 'no-image'
+                  }
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}trado/image/stnk/${encodeURI(file)}/small/show`
+                  images.push(image.outerHTML)
+                });
 
-              files.forEach(file => {
-                if (file == '') {
-                  file = 'no-image'
-                }
+                return images.join(' ')
+              } else {
                 let image = new Image()
                 image.width = 25
                 image.height = 25
-                image.src = `${apiUrl}trado/image/stnk/${file}/small`
-
-                images.push(image.outerHTML)
-              });
-
-              return images.join(' ')
+                image.src = `${apiUrl}trado/image/stnk/no-image/small/show`
+                return image.outerHTML
+              }
             }
+          },
+          {
+            label: 'PHOTO BPKB',
+            name: 'photobpkb',
+            align: 'center',
+            search: false,
+            formatter: (value, row) => {
+              let images = []
 
-            return 'NO PHOTOS'
-          }
-        },
-        {
-          label: 'PHOTO BPKB',
-          name: 'photobpkb',
-          align: 'center',
-          search: false,
-          formatter: (value, row) => {
-            let images = []
+              if (value) {
+                let files = JSON.parse(value)
 
-            if (value) {
-              let files = JSON.parse(value)
+                files.forEach(file => {
+                  if (file == '') {
+                    file = 'no-image'
+                  }
 
-              files.forEach(file => {
-                if (file == '') {
-                  file = 'no-image'
-                }
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}trado/image/bpkb/${encodeURI(file)}/small/show`
+
+                  images.push(image.outerHTML)
+                });
+
+                return images.join(' ')
+              } else {
                 let image = new Image()
                 image.width = 25
                 image.height = 25
-                image.src = `${apiUrl}trado/image/bpkb/${file}/small`
-
-                images.push(image.outerHTML)
-              });
-
-              return images.join(' ')
+                image.src = `${apiUrl}trado/image/bpkb/no-image/small/show`
+                return image.outerHTML
+              }
             }
+          },
+          {
+            label: 'PHOTO TRADO',
+            name: 'phototrado',
+            align: 'center',
+            search: false,
+            formatter: (value, row) => {
+              let images = []
 
-            return 'NO PHOTOS'
-          }
-        },
-        {
-          label: 'PHOTO TRADO',
-          name: 'phototrado',
-          align: 'center',
-          search: false,
-          formatter: (value, row) => {
-            let images = []
+              if (value) {
+                let files = JSON.parse(value)
 
-            if (value) {
-              let files = JSON.parse(value)
+                files.forEach(file => {
+                  if (file == '') {
+                    file = 'no-image'
+                  }
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src = `${apiUrl}trado/image/trado/${encodeURI(file)}/small/show`
 
-              files.forEach(file => {
-                if (file == '') {
-                  file = 'no-image'
-                }
+                  images.push(image.outerHTML)
+                });
+
+                return images.join(' ')
+              } else {
                 let image = new Image()
                 image.width = 25
                 image.height = 25
-                image.src = `${apiUrl}trado/image/trado/${file}/small`
-
-                images.push(image.outerHTML)
-              });
-
-              return images.join(' ')
+                image.src = `${apiUrl}trado/image/trado/no-image/small/show`
+                return image.outerHTML
+              }
             }
-
-            return 'NO PHOTOS'
-          }
-        },
+          },
       ],
       autowidth: true,
       responsive: true,

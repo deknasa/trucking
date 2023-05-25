@@ -108,6 +108,25 @@ class StatusContainerController extends MyController
 
         $statusContainers = $response['data'];
 
+        $i = 0;
+        foreach ($statusContainers as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+
+            $result = json_decode($statusaktif, true);
+
+            $statusaktif = $result['MEMO'];
+
+
+            $statusContainers[$i]['statusaktif'] = $statusaktif;
+
+        
+            $i++;
+
+
+        }
+
+
         return view('reports.statuscontainer', compact('statusContainers'));
     }
 }

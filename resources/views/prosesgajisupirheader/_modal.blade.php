@@ -1021,6 +1021,8 @@
     function createProsesGajiSupirHeader() {
         let form = $('#crudForm')
 
+        $('.modal-loader').removeClass('d-none')
+
         form.trigger('reset')
         form.find('#btnSubmit').html(`
             <i class="fa fa-save"></i>
@@ -1029,7 +1031,6 @@
 
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Proses Gaji Supir')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -1044,8 +1045,18 @@
         $('#crudForm').find('[name=tglbuktiUangjalan]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         rekapRincian()
         initDatepicker()
-        showDefault(form)
-        // form.find(`[name="subnominal"]`).addClass('disabled')
+
+        Promise
+            .all([
+                showDefault(form)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+        
     }
 
     async function editProsesGajiSupirHeader(Id) {
@@ -1365,28 +1376,32 @@
 
 
     function showDefault(form) {
-        $.ajax({
-            url: `${apiUrl}prosesgajisupirheader/default`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-                bankId = response.data.bank_id
-                form.find(`[name="bank_idPR"]`).val(response.data.bank_id)
-                form.find(`[name="bankPR"]`).val(response.data.bank).data('current-value', response.data.bank)
-                form.find(`[name="bank_idPS"]`).val(response.data.bank_id)
-                form.find(`[name="bankPS"]`).val(response.data.bank).data('current-value', response.data.bank)
-                form.find(`[name="bank_idPP"]`).val(response.data.bank_id)
-                form.find(`[name="bankPP"]`).val(response.data.bank).data('current-value', response.data.bank)
-                form.find(`[name="bank_idDeposito"]`).val(response.data.bank_id)
-                form.find(`[name="bankDeposito"]`).val(response.data.bank).data('current-value', response.data.bank)
-                form.find(`[name="bank_idBBM"]`).val(response.data.bank_id)
-                form.find(`[name="bankBBM"]`).val(response.data.bank).data('current-value', response.data.bank)
-                form.find(`[name="bank_idUangjalan"]`).val(response.data.bank_id)
-                form.find(`[name="bankUangjalan"]`).val(response.data.bank).data('current-value', response.data.bank)
-            }
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}prosesgajisupirheader/default`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    bankId = response.data.bank_id
+                    form.find(`[name="bank_idPR"]`).val(response.data.bank_id)
+                    form.find(`[name="bankPR"]`).val(response.data.bank).data('current-value', response.data.bank)
+                    form.find(`[name="bank_idPS"]`).val(response.data.bank_id)
+                    form.find(`[name="bankPS"]`).val(response.data.bank).data('current-value', response.data.bank)
+                    form.find(`[name="bank_idPP"]`).val(response.data.bank_id)
+                    form.find(`[name="bankPP"]`).val(response.data.bank).data('current-value', response.data.bank)
+                    form.find(`[name="bank_idDeposito"]`).val(response.data.bank_id)
+                    form.find(`[name="bankDeposito"]`).val(response.data.bank).data('current-value', response.data.bank)
+                    form.find(`[name="bank_idBBM"]`).val(response.data.bank_id)
+                    form.find(`[name="bankBBM"]`).val(response.data.bank).data('current-value', response.data.bank)
+                    form.find(`[name="bank_idUangjalan"]`).val(response.data.bank_id)
+                    form.find(`[name="bankUangjalan"]`).val(response.data.bank).data('current-value', response.data.bank)
+
+                    resolve()
+                }
+            })
         })
     }
 

@@ -262,6 +262,8 @@
   function createAbsensi(tradoId) {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.data('action', 'store')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -270,12 +272,20 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Input Absen')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    showAbsensi(form, tradoId)
 
+    Promise
+      .all([
+        showDefault(form)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function getMaxLength(form) {
@@ -306,6 +316,8 @@
   function editAbsensi(tradoId) {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -314,16 +326,26 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Absen')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    showAbsensi(form, tradoId)
 
+    Promise
+      .all([
+        showAbsensi(form, tradoId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function deleteAbsensi(tradoId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -333,42 +355,54 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Absen')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    showAbsensi(form, tradoId)
+    
+    Promise
+      .all([
+        showAbsensi(form, tradoId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
   }
 
 
   function showAbsensi(form, tradoId) {
-    $.ajax({
-      url: `${apiUrl}mandorabsensisupir/${tradoId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          if (element.attr("name") == 'tglbukti') {
-            if (value) {
-              let result = value.split('-');
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}mandorabsensisupir/${tradoId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            if (element.attr("name") == 'tglbukti') {
+              if (value) {
+                let result = value.split('-');
 
-              element.val(result[2] + '-' + result[1] + '-' + result[0]);
+                element.val(result[2] + '-' + result[1] + '-' + result[0]);
+              }
+            } else {
+              element.val(value)
             }
-          } else {
-            element.val(value)
-          }
-        })
+          })
 
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
+          }
+          resolve()
         }
-      }
+      })
     })
   }
 
@@ -413,28 +447,29 @@ function cekValidasiAdd(tradoId) {
 }
 
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}mandor/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          console.log(value)
-          let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}mandor/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            console.log(value)
+            let element = form.find(`[name="${index}"]`)
+            // let element = form.find(`[name="statusaktif"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-
-
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 

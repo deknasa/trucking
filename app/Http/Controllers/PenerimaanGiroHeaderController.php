@@ -141,7 +141,7 @@ class PenerimaanGiroHeaderController extends MyController
         $penerimaangiro_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/penerimaangirodetail', $detailParams);
+            ->get(config('app.api_url') . 'penerimaangirodetail', $detailParams);
 
         $data = $header['data'];
         $penerimaangiro_details = $penerimaangiro_detail['data'];

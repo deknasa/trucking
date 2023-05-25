@@ -371,15 +371,15 @@
   function createUpahRitasi() {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
     Simpan
   `)
     form.data('action', 'add')
-    // form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Upah Ritasi')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#table_body').html('')
@@ -394,6 +394,12 @@
       ])
     .then(() => {
         showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
 
     setNominalSupir()
@@ -404,6 +410,8 @@
   function editUpahRitasi(id) {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -412,7 +420,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Upah Ritasi')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -423,11 +430,19 @@
       ])
       .then(() => {
         showUpahRitasi(form, id)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function deleteUpahRitasi(id) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -437,7 +452,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Upah Ritasi')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -448,6 +462,12 @@
       ])
       .then(() => {
         showUpahRitasi(form, id)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -554,83 +574,84 @@
   }
 
   function showUpahRitasi(form, userId) {
-    $('#detailList tbody').html('')
+    return new Promise((resolve, reject) => {
+      $('#detailList tbody').html('')
+      $.ajax({
+        url: `${apiUrl}upahritasi/${userId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-    $.ajax({
-      url: `${apiUrl}upahritasi/${userId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            } else {
+              element.val(value)
+            }
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
-          } else {
-            element.val(value)
-          }
-
-          if (index == 'kotadari') {
-            element.data('current-value', value)
-          }
-          if (index == 'kotasampai') {
-            element.data('current-value', value)
-          }
-          if (index == 'zona') {
-            element.data('current-value', value)
-          }
+            if (index == 'kotadari') {
+              element.data('current-value', value)
+            }
+            if (index == 'kotasampai') {
+              element.data('current-value', value)
+            }
+            if (index == 'zona') {
+              element.data('current-value', value)
+            }
+            
+          })
           
-        })
-        
-        initAutoNumeric($('#crudForm').find(`[name=jarak]`))
+          initAutoNumeric($('#crudForm').find(`[name=jarak]`))
 
-        $.each(response.detail, (index, detail) => {
-          // $.each(response.data.upahritasi_rincian, (index, detail) => {
-          let detailRow = $(`
-            <tr>
-              <td></td>
-              <td>
-                <input type="hidden" name="container_id[]">
-                <input type="text" name="container[]" readonly data-current-value="${detail.container}" class="form-control container-lookup">
-              </td>
-              
-              <td>
-                <input type="text" name="nominalsupir[]" class="form-control autonumeric">
-              </td>
-              
-              <td>
-                <input type="text" name="liter[]" class="form-control autonumeric">
-              </td>
-              
-            </tr>
-          `)
+          $.each(response.detail, (index, detail) => {
+            // $.each(response.data.upahritasi_rincian, (index, detail) => {
+            let detailRow = $(`
+              <tr>
+                <td></td>
+                <td>
+                  <input type="hidden" name="container_id[]">
+                  <input type="text" name="container[]" readonly data-current-value="${detail.container}" class="form-control container-lookup">
+                </td>
+                
+                <td>
+                  <input type="text" name="nominalsupir[]" class="form-control autonumeric">
+                </td>
+                
+                <td>
+                  <input type="text" name="liter[]" class="form-control autonumeric">
+                </td>
+                
+              </tr>
+            `)
 
 
-          detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
-          detailRow.find(`[name="container[]"]`).val(detail.container)
-          detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
-          detailRow.find(`[name="liter[]"]`).val(detail.liter);
+            detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+            detailRow.find(`[name="container[]"]`).val(detail.container)
+            detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
+            detailRow.find(`[name="liter[]"]`).val(detail.liter);
 
-          $('#detailList tbody').append(detailRow)
+            $('#detailList tbody').append(detailRow)
 
-          initAutoNumeric(detailRow.find('.autonumeric'))
-          setNominalSupir()
-        })
+            initAutoNumeric(detailRow.find('.autonumeric'))
+            setNominalSupir()
+          })
 
-        setupRowShow(userId);
+          setupRowShow(userId);
+          setRowNumbers()
 
-        setRowNumbers()
-
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
+          }
+          resolve()
         }
-      }
+      })
     })
   }
 
@@ -779,29 +800,30 @@
   }
   
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}upahritasi/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          console.log(value)
-           let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}upahritasi/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            console.log(value)
+            let element = form.find(`[name="${index}"]`)
+            // let element = form.find(`[name="statusaktif"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } 
-          else {
-            element.val(value)
-          }
-        })
-        
-       
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } 
+            else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 

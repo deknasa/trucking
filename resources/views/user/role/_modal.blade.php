@@ -124,9 +124,13 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    setRoleOptions(form)
+    Promise
+      .all([
+        setRoleOptions(form)
+      ])
+      // console.log('c')
       .then(() => {
-        showUserRoles(form, userId)
+        showUserRoles(form)
       })
   }
 

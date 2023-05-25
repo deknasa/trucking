@@ -258,4 +258,64 @@ class TradoController extends MyController
 
         return $response['data'];
     }
+
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'trado', $request->all());
+
+        $trados = $response['data'];
+
+        $i = 0;
+        foreach ($trados as $index => $params) {
+
+
+            $statusaktif = $params['statusaktif'];
+            $statusStandarisasi = $params['statusstandarisasi'];
+            $statusJenisPlat = $params['statusjenisplat'];
+            $statusMutasi = $params['statusmutasi'];
+            $statusValidasiKendaraan = $params['statusvalidasikendaraan'];
+            $statusMobilStoring= $params['statusmobilstoring'];
+            $statusAppEditBan= $params['statusappeditban'];
+            $statusLewatValidasi= $params['statuslewatvalidasi'];
+
+
+            $result = json_decode($statusaktif, true);
+            $resultStandarisasi = json_decode($statusStandarisasi, true);
+            $resultJenisPlat = json_decode($statusJenisPlat, true);
+            $resultMutasi = json_decode($statusMutasi, true);
+            $resultValidasiKendaraan = json_decode($statusValidasiKendaraan, true);
+            $resultMobilStoring = json_decode($statusMobilStoring, true);
+            $resultAppEditBan = json_decode($statusAppEditBan, true);
+            $resultLewatValidasi = json_decode($statusLewatValidasi, true);
+
+            $statusaktif = $result['MEMO'];
+            $statusStandarisasi = $resultStandarisasi['MEMO'];
+            $statusJenisPlat = $resultJenisPlat['MEMO'];
+            $statusMutasi = $resultMutasi['MEMO'];
+            $statusValidasiKendaraan = $resultValidasiKendaraan['MEMO'];
+            $statusMobilStoring = $resultMobilStoring['MEMO'];
+            $statusAppEditBan = $resultAppEditBan['MEMO'];
+            $statusLewatValidasi = $resultLewatValidasi['MEMO'];
+
+
+            $trados[$i]['statusaktif'] = $statusaktif;
+            $trados[$i]['statusstandarisasi'] = $statusStandarisasi;
+            $trados[$i]['statusjenisplat'] = $statusJenisPlat;
+            $trados[$i]['statusmutasi'] = $statusMutasi;
+            $trados[$i]['statusvalidasikendaraan'] = $statusValidasiKendaraan;
+            $trados[$i]['statusmobilstoring'] = $statusMobilStoring;
+            $trados[$i]['statusappeditban'] = $statusAppEditBan;
+            $trados[$i]['statuslewatvalidasi'] = $statusLewatValidasi;
+
+            $i++;
+        }
+
+        // dd($trados);
+
+
+        return view('reports.trado', compact('trados'));
+    }
 }

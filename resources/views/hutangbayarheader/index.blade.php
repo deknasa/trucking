@@ -480,8 +480,6 @@
               } else {
                 cekValidasi(selectedId, 'EDIT')
               }
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
             }
           },
           {
@@ -496,8 +494,6 @@
               } else {
                 cekValidasi(selectedId, 'DELETE')
               }
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
             }
           },
           

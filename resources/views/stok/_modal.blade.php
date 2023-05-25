@@ -91,7 +91,7 @@
             <div class="row form-group">
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">keterangan <span class="text-danger">*</span> </label>
+                <label class="col-form-label">keterangan</label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">
@@ -283,8 +283,9 @@
 
 
   function createStok() {
-
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -296,24 +297,32 @@
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     $('#crudModalTitle').text('Create Stok')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise
-      .all([
-        setStatusAktifOptions(form)
-      ])
-      .then(() => {
-        showDefault(form)
-      })
+    .all([
+      setStatusAktifOptions(form),
+    ])
+    .then(() => {
+      showDefault(form)
+        .then(() => {
+          $('#crudModal').modal('show')
+        })
+        .finally(() => {
+          $('.modal-loader').addClass('d-none')
+        })
+    })
 
     initDropzone(form.data('action'))
     initAutoNumeric(form.find(`[name="qtymin"]`))
     initAutoNumeric(form.find(`[name="qtymax"]`))
+    disabledHirarkiKelompok()
   }
 
   function editStok(stokId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -323,24 +332,30 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Pengeluaran Stok')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showStok(form, stokId)
           .then((stok) => {
             initDropzone(form.data('action'), stok)
           })
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function deleteStok(stokId) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -350,18 +365,23 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Pengeluaran Stok')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
       ])
       .then(() => {
         showStok(form, stokId)
           .then((stok) => {
             initDropzone(form.data('action'), stok)
+          })
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
           })
       })
   }
@@ -429,28 +449,29 @@
   }
 
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}stok/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          console.log(value)
-          let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}stok/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            console.log(value)
+            let element = form.find(`[name="${index}"]`)
+            // let element = form.find(`[name="statusaktif"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-
-
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 
@@ -550,6 +571,46 @@
     }
   }
 
+  function disabledHirarkiKelompok(middle=false) {
+    
+    let kategori = $('#crudForm').find(`[name="kategori"]`).parents('.input-group').children()
+    kategori.attr('disabled', true)
+    kategori.val('')
+    kategori.find('.lookup-toggler').attr('disabled', true)
+    $('#kategoriId').attr('disabled', true);
+    $('#subkelompokId').val('');
+    
+    if (middle) {
+      return "oke";
+    }
+
+    let subkelompok = $('#crudForm').find(`[name="subkelompok"]`).parents('.input-group').children()
+    subkelompok.attr('disabled', true)
+    subkelompok.val('')
+    subkelompok.find('.lookup-toggler').attr('disabled', true)
+    $('#subkelompokId').attr('disabled', true);
+    $('#subkelompokId').val('');
+    
+    
+  }
+
+  function enabledSubKelompok() {
+    let subkelompok = $('#crudForm').find(`[name="subkelompok"]`).parents('.input-group').children()
+    subkelompok.attr('disabled', false)
+    subkelompok.val('')
+    subkelompok.find('.lookup-toggler').attr('disabled', false)
+    $('#subkelompokId').attr('disabled', false);
+    $('#subkelompokId').val('');
+  }
+  function enabledKategori() {
+    let kategori = $('#crudForm').find(`[name="kategori"]`).parents('.input-group').children()
+    kategori.attr('disabled', false)
+    kategori.val('')
+    kategori.find('.lookup-toggler').attr('disabled', false)
+    $('#kategoriId').attr('disabled', false);
+    $('#kategoriId').val('');
+  }
+
   function initLookup() {
 
     $('.jenistrado-lookup').lookup({
@@ -593,12 +654,14 @@
         element.val(kelompok.kodekelompok)
         $(`#${element[0]['name']}Id`).val(kelompok.id)
         element.data('currentValue', element.val())
+        enabledSubKelompok()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-
+        disabledHirarkiKelompok()
+        $(`#${element[0]['name']}Id`).val('')
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -622,12 +685,14 @@
         element.val(subkelompok.kodesubkelompok)
         $(`#${element[0]['name']}Id`).val(subkelompok.id)
         element.data('currentValue', element.val())
+        enabledKategori()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-
+        disabledHirarkiKelompok(true)
+        $(`#${element[0]['name']}Id`).val('')
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -656,7 +721,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-
+        $(`#${element[0]['name']}Id`).val('')
         element.val('')
         element.data('currentValue', element.val())
       }

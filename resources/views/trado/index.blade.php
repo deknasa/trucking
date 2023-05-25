@@ -465,6 +465,12 @@
             name: 'jumlahbanserap',
           },
           {
+            label: 'PLUS BORONGAN',
+            name: 'nominalplusborongan',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
             label: 'STATUS BAN EDIT',
             name: 'statusappeditban',
             stype: 'select',
@@ -559,7 +565,7 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
-                  if(file == ''){
+                  if (file == '') {
                     file = 'no-image'
                   }
                   let image = new Image()
@@ -570,9 +576,13 @@
                 });
 
                 return images.join(' ')
+              } else {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}trado/image/stnk/no-image/small/show`
+                return image.outerHTML
               }
-
-              return 'NO PHOTOS'
             }
           },
           {
@@ -587,10 +597,10 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
-                  if(file == ''){
+                  if (file == '') {
                     file = 'no-image'
                   }
-                  
+
                   let image = new Image()
                   image.width = 25
                   image.height = 25
@@ -600,9 +610,13 @@
                 });
 
                 return images.join(' ')
+              } else {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}trado/image/bpkb/no-image/small/show`
+                return image.outerHTML
               }
-
-              return 'NO PHOTOS'
             }
           },
           {
@@ -617,7 +631,7 @@
                 let files = JSON.parse(value)
 
                 files.forEach(file => {
-                  if(file == ''){
+                  if (file == '') {
                     file = 'no-image'
                   }
                   let image = new Image()
@@ -629,9 +643,13 @@
                 });
 
                 return images.join(' ')
+              } else {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}trado/image/trado/no-image/small/show`
+                return image.outerHTML
               }
-
-              return 'NO PHOTOS'
             }
           },
         ],
@@ -756,6 +774,26 @@
               }
             }
           },
+          {
+            id: 'export',
+            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'export')
+              $('#rangeModal').find('button:submit').html(`Export`)
+              $('#rangeModal').modal('show')
+            }
+          },
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'report')
+              $('#rangeModal').find('button:submit').html(`Report`)
+              $('#rangeModal').modal('show')
+            }
+          },
         ]
       })
 
@@ -795,6 +833,12 @@
 
     if (!`{{ $myAuth->hasPermission('trado', 'destroy') }}`) {
       $('#delete').attr('disabled', 'disabled')
+    }
+    if (!`{{ $myAuth->hasPermission('trado', 'export') }}`) {
+      $('#export').attr('disabled', 'disabled')
+    }
+    if (!`{{ $myAuth->hasPermission('trado', 'report') }}`) {
+      $('#report').attr('disabled', 'disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -838,8 +882,48 @@
         params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+      // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+
+      let formRange = $('#formRange')
+      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+      params += `&offset=${offset}&limit=${limit}`
+
+      if ($('#rangeModal').data('action') == 'export') {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `{{ config('app.api_url') }}trado/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`)
+        xhr.responseType = 'arraybuffer'
+
+        xhr.onload = function(e) {
+          if (this.status === 200) {
+            if (this.response !== undefined) {
+              let blob = new Blob([this.response], {
+                type: "application/vnd.ms-excel"
+              })
+              let link = document.createElement('a')
+
+              link.href = window.URL.createObjectURL(blob)
+              link.download = `laporanTrado${(new Date).getTime()}.xlsx`
+              link.click()
+
+              submitButton.removeAttr('disabled')
+            }
+          }
+        }
+
+        xhr.onerror = () => {
+          submitButton.removeAttr('disabled')
+        }
+
+        xhr.send()
+      } else if ($('#rangeModal').data('action') == 'report') {
+        window.open(`{{ route('trado.report') }}?${params}`)
+
+        submitButton.removeAttr('disabled')
+      }
     })
+    
   })
 </script>
 @endpush()

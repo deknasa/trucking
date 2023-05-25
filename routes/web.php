@@ -8,6 +8,7 @@ use App\Http\Controllers\AbsensiSupirApprovalHeaderController;
 use App\Http\Controllers\ApprovalTransaksiHeaderController;
 use App\Http\Controllers\ApprovalInvoiceHeaderController;
 
+use App\Http\Controllers\ApprovalSupirGambarController;
 use App\Http\Controllers\BukaAbsensiController;
 use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\TutupBukuController;
@@ -61,6 +62,7 @@ use App\Http\Controllers\NotaKreditHeaderController;
 use App\Http\Controllers\NotaDebetHeaderController;
 
 use App\Http\Controllers\ApprovalBukaCetakController;
+use App\Http\Controllers\ApprovalTradoGambarController;
 use App\Http\Controllers\ExportLaporanDepositoController;
 use App\Http\Controllers\ExportLaporanKasGantungController;
 use App\Http\Controllers\ExportLaporanKasHarianController;
@@ -323,6 +325,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('absensisupir_detail/detail/grid', [AbsensiSupirDetailController::class, 'detailGrid']);
     Route::resource('absensisupir_detail', AbsensiSupirDetailController::class);
     
+    Route::get('approvalsupirgambar/index', [ApprovalSupirGambarController::class,'index']);
+    Route::resource('approvalsupirgambar', ApprovalSupirGambarController::class);
+
     Route::get('bukaabsensi/index', [BukaAbsensiController::class,'index']);
     Route::resource('bukaabsensi', BukaAbsensiController::class);
     Route::resource('suratpengantarapprovalinputtrip', SuratPengantarApprovalInputTripController::class);
@@ -379,6 +384,8 @@ Route::middleware(['auth','authorized'])->group(function () {
 
     Route::get('trado/field_length', [TradoController::class, 'fieldLength'])->name('trado.field_length');
     Route::get('trado/{id}/delete', [TradoController::class, 'delete'])->name('trado.delete');
+    Route::get('trado/report', [TradoController::class, 'report'])->name('trado.report');
+    Route::get('trado/export', [TradoController::class, 'export'])->name('trado.export');
     Route::get('trado/get', [TradoController::class, 'get'])->name('trado.get');
     Route::get('trado/index', [TradoController::class, 'index']);
     Route::resource('trado', TradoController::class);
@@ -401,6 +408,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('container/{id}/delete', [ContainerController::class, 'delete'])->name('container.delete');
     Route::get('container/index', [ContainerController::class, 'index']);
     Route::get('container/get', [ContainerController::class, 'get'])->name('container.get');
+    Route::get('container/export', [ContainerController::class, 'export'])->name('container.export');
+    Route::get('container/report', [ContainerController::class, 'report'])->name('container.report');
     Route::resource('container', ContainerController::class);
 
 
@@ -409,6 +418,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('supir/{id}/delete', [SupirController::class, 'delete'])->name('supir.delete');
     Route::get('supir/get', [SupirController::class, 'get'])->name('supir.get');
     Route::get('supir/index', [SupirController::class, 'index']);
+    Route::get('supir/export', [SupirController::class, 'export'])->name('supir.export');
+    Route::get('supir/report', [SupirController::class, 'report'])->name('supir.report');
     Route::resource('supir', SupirController::class);
 
     Route::get('bank/field_length', [BankController::class, 'fieldLength'])->name('bank.field_length');
@@ -470,6 +481,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('jenistrado/{id}/delete', [JenisTradoController::class, 'delete'])->name('jenistrado.delete');
     Route::get('jenistrado/get', [JenisTradoController::class, 'get'])->name('jenistrado.get');
     Route::get('jenistrado/index', [JenisTradoController::class, 'index']);
+    Route::get('jenistrado/export', [JenisTradoController::class, 'export'])->name('jenistrado.export');
+    Route::get('jenistrado/report', [JenisTradoController::class, 'report'])->name('jenistrado.report');
     Route::resource('jenistrado', JenisTradoController::class);
 
     Route::get('kasgantungheader/{id}/delete', [KasGantungHeaderController::class, 'delete'])->name('kasgantungheader.delete');
@@ -564,6 +577,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('kerusakan/{id}/delete', [KerusakanController::class, 'delete'])->name('kerusakan.delete');
     Route::get('kerusakan/get', [KerusakanController::class, 'get'])->name('kerusakan.get');
     Route::get('kerusakan/index', [KerusakanController::class, 'index']);
+    Route::get('kerusakan/export', [KerusakanController::class, 'export'])->name('kerusakan.export');
+    Route::get('kerusakan/report', [KerusakanController::class, 'report'])->name('kerusakan.report');
     Route::resource('kerusakan', KerusakanController::class);
 
     Route::get('penerima/report', [PenerimaController::class, 'report'])->name('penerima.report');
@@ -587,6 +602,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('kota/field_length', [KotaController::class, 'fieldLength'])->name('kota.field_length');
     Route::get('kota/{id}/delete', [KotaController::class, 'delete'])->name('kota.delete');
     Route::get('kota/get', [KotaController::class, 'get'])->name('kota.get');
+    Route::get('kota/export', [KotaController::class, 'export'])->name('kota.export');
+    Route::get('kota/report', [KotaController::class, 'report'])->name('kota.report');
     Route::get('kota/index', [KotaController::class, 'index']);
     Route::resource('kota', KotaController::class);
 
@@ -594,6 +611,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('mandor/{id}/delete', [MandorController::class, 'delete'])->name('mandor.delete');
     Route::get('mandor/get', [MandorController::class, 'get'])->name('mandor.get');
     Route::get('mandor/index', [MandorController::class, 'index']);
+    Route::get('mandor/export', [MandorController::class, 'export'])->name('mandor.export');
+    Route::get('mandor/report', [MandorController::class, 'report'])->name('mandor.report');
     Route::resource('mandor', MandorController::class);
 
     Route::get('merk/field_length', [MerkController::class, 'fieldLength'])->name('merk.field_length');
@@ -606,6 +625,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('penerimaantrucking/{id}/delete', [PenerimaanTruckingController::class, 'delete'])->name('penerimaantrucking.delete');
     Route::get('penerimaantrucking/get', [PenerimaanTruckingController::class, 'get'])->name('penerimaantrucking.get');
     Route::get('penerimaantrucking/index', [PenerimaanTruckingController::class, 'index']);
+    Route::get('penerimaantrucking/export', [PenerimaanTruckingController::class, 'export'])->name('penerimaantrucking.export');
+    Route::get('penerimaantrucking/report', [PenerimaanTruckingController::class, 'report'])->name('penerimaantrucking.report');
     Route::resource('penerimaantrucking', PenerimaanTruckingController::class);
 
     Route::get('penerimaanstok/report', [PenerimaanStokController::class, 'report'])->name('penerimaanstok.report');
@@ -636,11 +657,14 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('zona/{id}/delete', [ZonaController::class, 'delete'])->name('zona.delete');
     Route::get('zona/get', [ZonaController::class, 'get'])->name('zona.get');
     Route::get('zona/index', [ZonaController::class, 'index']);
+    Route::get('zona/export', [ZonaController::class, 'export'])->name('zona.export');
+    Route::get('zona/report', [ZonaController::class, 'report'])->name('zona.report');
     Route::resource('zona', ZonaController::class);
 
     Route::get('tarif/field_length', [TarifController::class, 'fieldLength'])->name('tarif.field_length');
     Route::get('tarif/{id}/delete', [TarifController::class, 'delete'])->name('tarif.delete');
     Route::get('tarif/export', [TarifController::class, 'export'])->name('tarif.export');
+    Route::get('tarif/report', [TarifController::class, 'report'])->name('tarif.report');
     Route::get('tarif/get', [TarifController::class, 'get'])->name('tarif.get');
     Route::get('tarif/index', [TarifController::class, 'index']);
     Route::resource('tarif', TarifController::class);
@@ -870,7 +894,6 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('gajisupirheader/report', [GajiSupirHeaderController::class, 'report'])->name('gajisupirheader.report');
     Route::resource('gajisupirheader', GajiSupirHeaderController::class);
 
-    Route::get('gajisupirdetail/absensi/grid', [GajiSupirDetailController::class, 'absensiGrid']);
     Route::get('gajisupirdetail/jurnal/grid', [GajiSupirDetailController::class, 'jurnalGrid']);
     Route::get('gajisupirdetail/potsemua/grid', [GajiSupirDetailController::class, 'potsemuaGrid']);
     Route::get('gajisupirdetail/potpribadi/grid', [GajiSupirDetailController::class, 'potpribadiGrid']);
@@ -948,6 +971,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('jurnalumumpusatdetail', JurnalUmumPusatDetailController::class);
 
     Route::get('harilibur/get', [HariLiburController::class, 'get'])->name('harilibur.get');
+    Route::get('harilibur/export', [HariLiburController::class, 'export'])->name('harilibur.export');
+    Route::get('harilibur/report', [HariLiburController::class, 'report'])->name('harilibur.report');
     Route::get('harilibur/index', [HariLiburController::class, 'index']);
     Route::resource('harilibur', HariLiburController::class);
 
@@ -1062,7 +1087,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporanpenyesuaianbarang', LaporanPenyesuaianBarangController::class);
     
     Route::get('laporanhutangbbm/report', [LaporanHutangBBMController::class, 'report'])->name('laporanhutangbbm.report');
-    Route::get('laporanhutangbbm/export', [LaporanHutangBBMController::class, 'export'])->name('laporanhutangbbm.export');
+    Route::get('laporanhutangbbm/report', [LaporanHutangBBMController::class, 'report'])->name('laporanhutangbbm.report');
     Route::get('laporanhutangbbm/index', [LaporanHutangBBMController::class, 'index']);
     Route::resource('laporanhutangbbm', LaporanHutangBBMController::class);
 
@@ -1219,9 +1244,15 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanaruskas/index', [LaporanArusKasController::class, 'index']);
     Route::resource('laporanaruskas', LaporanArusKasController::class);
 
-    
+    Route::get('karyawan/get', [KaryawanController::class, 'get'])->name('karyawan.get');
     Route::get('karyawan/index', [KaryawanController::class, 'index']);
+    Route::get('karyawan/report', [KaryawanController::class, 'report'])->name('karyawan.report');
+    Route::get('karyawan/export', [KaryawanController::class, 'export'])->name('karyawan.export');
     Route::resource('karyawan', KaryawanController::class);
+
+    Route::get('approvaltradogambar/index', [ApprovalTradoGambarController::class, 'index']);
+    Route::resource('approvaltradogambar', ApprovalTradoGambarController::class);
+    
 });
 
 Route::patch('format', [FormatController::class, 'update']);

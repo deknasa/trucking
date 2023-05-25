@@ -79,7 +79,7 @@
               <div class="form-group col-sm-6 row">
                 <label class="col-sm-4 col-form-label">PLUS BORONGAN <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control" name="nominalplusborongan">
+                  <input type="text" class="form-control text-right autonumeric" name="nominalplusborongan">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
@@ -310,7 +310,6 @@
       formData.append('indexRow', indexRow)
       formData.append('page', page)
       formData.append('limit', limit)
-
       if (form.data('action') == 'add') {
         url = `${apiUrl}trado`
       } else if (form.data('action') == 'edit') {
@@ -403,15 +402,11 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-
-
-
     Promise
       .all([
         setStatusAktifOptions(form),
         setStatusJenisPlatOptions(form),
         setStatusGerobak(form)
-
       ])
       .then(() => {
         showDefault(form)
@@ -421,7 +416,6 @@
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
-
       })
 
     setFormBindKeys(form)
@@ -430,6 +424,7 @@
     initDatepicker()
     initSelect2()
     form.find('[name]').removeAttr('disabled')
+    // initAutoNumeric(form.find(`[name="boronganborongan"]`))
   }
 
   function editTrado(id) {
@@ -455,7 +450,6 @@
         setStatusAktifOptions(form),
         setStatusJenisPlatOptions(form),
         setStatusGerobak(form)
-
       ])
       .then(() => {
         showTrado(form, id)

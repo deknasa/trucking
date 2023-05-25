@@ -175,6 +175,8 @@
   function editBukaAbsensi(bukaAbsensiId) {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -182,15 +184,25 @@
     Simpan
   `)
     $('#crudModalTitle').text('Edit Buka Absensi')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showBukaAbsensi(form, bukaAbsensiId)
+    Promise
+      .all([
+        showBukaAbsensi(form, bukaAbsensiId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function deleteBukaAbsensi(bukaAbsensiId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -199,42 +211,53 @@
     Hapus
   `)
     $('#crudModalTitle').text('Delete Buka Absensi')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showBukaAbsensi(form, bukaAbsensiId)
+    Promise
+      .all([
+        showBukaAbsensi(form, bukaAbsensiId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   
 
   function showBukaAbsensi(form, bukaAbsensiId) {
-    $.ajax({
-      url: `${apiUrl}bukaabsensi/${bukaAbsensiId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}bukaabsensi/${bukaAbsensiId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          }else if(element.attr("name") == 'tglabsensi'){
-            var result = value.split('-');
-            element.val(result[2]+'-'+result[1]+'-'+result[0]);
-          } else {
-            element.val(value)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            }else if(element.attr("name") == 'tglabsensi'){
+              var result = value.split('-');
+              element.val(result[2]+'-'+result[1]+'-'+result[0]);
+            } else {
+              element.val(value)
+            }
+          })
+          
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
           }
-        })
-        
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          resolve()
         }
-      }
+      })
     })
   }
 </script>

@@ -18,6 +18,7 @@ class KaryawanController extends MyController
 
     public function index(Request $request)
     {
+      
         $title = $this->title;
         $data = [
             'comboaktif' => $this->comboList('list','STATUS AKTIF','STATUS AKTIF'),
@@ -77,5 +78,77 @@ class KaryawanController extends MyController
             ->get(config('app.api_url') . 'suratpengantar/combo');
         
         return $response['data'];
+    }
+    public function export(Request $request)
+    {
+       
+        $params = [
+            'offset' => $request->dari - 1,
+            'rows' => $request->sampai - $request->dari + 1,
+        ];
+
+        $parameters = $this->get($params)['rows'];
+
+        $columns = [
+            [
+                'label' => 'No',
+            ],
+            [
+                'label' => 'ID',
+                'index' => 'id',
+            ],
+            [
+                'label' => 'Group',
+                'index' => 'grp',
+            ],
+            [
+                'label' => 'Subgroup',
+                'index' => 'subgrp',
+            ],
+            [
+                'label' => 'Text',
+                'index' => 'text',
+            ],
+            [
+                'label' => 'Memo',
+                'index' => 'memo',
+            ],
+        ];
+
+        $this->toExcel($this->title, $parameters, $columns);
+    }
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'karyawan', $request->all());
+
+        $karyawans = $response['data'];
+
+        $i = 0;
+        foreach ($karyawans as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+            $statustaff = $params['statusstaff'];
+
+            $result = json_decode($statusaktif, true);
+            $resultStaff = json_decode($statustaff, true);
+
+            $statusaktif = $result['MEMO'];
+            $statustaff = $resultStaff['MEMO'];
+
+
+            $karyawans[$i]['statusaktif'] = $statusaktif;
+            $karyawans[$i]['statusstaff'] = $statustaff;
+
+        
+            $i++;
+
+
+        }
+
+
+        return view('reports.karyawan', compact('karyawans'));
     }
 }

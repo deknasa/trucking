@@ -260,6 +260,8 @@
     function editServiceOut(id) {
         let form = $('#crudForm')
 
+        $('.modal-loader').removeClass('d-none')
+
         form.data('action', 'edit')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
@@ -267,14 +269,26 @@
             Simpan
         `)
         $('#crudModalTitle').text('Edit Service Out ')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        showServiceOut(form, id)
+
+        Promise
+            .all([
+                showServiceOut(form, id)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+        
     }
 
     function deleteServiceOut(id) {
         let form = $('#crudForm')
+
+        $('.modal-loader').removeClass('d-none')
 
         form.data('action', 'delete')
         form.trigger('reset')
@@ -284,85 +298,99 @@
         `)
         form.find(`.sometimes`).hide()
         $('#crudModalTitle').text('Delete Service Out')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        showServiceOut(form, id)
+
+        Promise
+            .all([
+                showServiceOut(form, id)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+        
     }
 
     function showServiceOut(form, id) {
-        $('#detailList tbody').html('')
+        return new Promise((resolve, reject) => {
+            $('#detailList tbody').html('')
 
-        $.ajax({
-            url: `${apiUrl}serviceoutheader/${id}`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-                $.each(response.data, (index, value) => {
-                    let element = form.find(`[name="${index}"]`)
+            $.ajax({
+                url: `${apiUrl}serviceoutheader/${id}`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    $.each(response.data, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
 
-                    if (element.is('select')) {
-                        element.val(value).trigger('change')
-                    } else if (element.hasClass('datepicker')) {
-                        element.val(dateFormat(value))
-                    } else {
-                        element.val(value)
-                    }
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else if (element.hasClass('datepicker')) {
+                            element.val(dateFormat(value))
+                        } else {
+                            element.val(value)
+                        }
 
-                    if (index == 'trado') {
-                        element.data('current-value', value)
-                    }
-                })
-
-                $.each(response.detail, (index, detail) => {
-                    let detailRow = $(`
-                    <tr>
-                        <td></td>
-                        <td>
-                            <input type="text" name="servicein_nobukti[]" data-current-value="${detail.servicein_nobukti}" class="form-control serviceinheader-lookup">
-                        </td>
-                        <td>
-                            <input type="text" name="keterangan_detail[]" class="form-control">
-                        </td>
-                        <td>
-                        <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
-                      </td>
-                    </tr>`)
-
-                    detailRow.find(`[name="servicein_nobukti[]"]`).val(detail.servicein_nobukti)
-
-                    detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-
-                    $('#detailList tbody').append(detailRow)
-
-
-                    $('.serviceinheader-lookup').last().lookup({
-                        title: 'servicein Lookup',
-                        fileName: 'serviceinheader',
-
-                        onSelectRow: (servicein, element) => {
-                            element.val(servicein.nobukti)
-                            element.data('currentValue', element.val())
-                        },
-                        onCancel: (element) => {
-                            element.val(element.data('currentValue'))
-                        },
-                        onClear: (element) => {
-                            element.val('')
-                            element.data('currentValue', element.val())
+                        if (index == 'trado') {
+                            element.data('current-value', value)
                         }
                     })
 
-                })
-                setRowNumbers()
-                if (form.data('action') === 'delete') {
-                    form.find('[name]').addClass('disabled')
-                    initDisabled()
+                    $.each(response.detail, (index, detail) => {
+                        let detailRow = $(`
+                        <tr>
+                            <td></td>
+                            <td>
+                                <input type="text" name="servicein_nobukti[]" data-current-value="${detail.servicein_nobukti}" class="form-control serviceinheader-lookup">
+                            </td>
+                            <td>
+                                <input type="text" name="keterangan_detail[]" class="form-control">
+                            </td>
+                            <td>
+                            <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
+                        </td>
+                        </tr>`)
+
+                        detailRow.find(`[name="servicein_nobukti[]"]`).val(detail.servicein_nobukti)
+
+                        detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+
+                        $('#detailList tbody').append(detailRow)
+
+
+                        $('.serviceinheader-lookup').last().lookup({
+                            title: 'servicein Lookup',
+                            fileName: 'serviceinheader',
+
+                            onSelectRow: (servicein, element) => {
+                                element.val(servicein.nobukti)
+                                element.data('currentValue', element.val())
+                            },
+                            onCancel: (element) => {
+                                element.val(element.data('currentValue'))
+                            },
+                            onClear: (element) => {
+                                element.val('')
+                                element.data('currentValue', element.val())
+                            }
+                        })
+
+                    })
+                    setRowNumbers()
+                    if (form.data('action') === 'delete') {
+                        form.find('[name]').addClass('disabled')
+                        initDisabled()
+                    }
+
+                    resolve()
                 }
-            }
+            })
         })
     }
 

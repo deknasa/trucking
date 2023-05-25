@@ -1,10 +1,11 @@
 {
-  "ReportGuid": "bf0f878fe3dab99acf119fe4399d103c",
+  "ReportVersion": "2023.1.1",
+  "ReportGuid": "ac2de328dc0ae5cf869897c3d117cdac",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportKota.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportContainer.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1635924498000+0700)/",
+  "ReportChanged": "/Date(1685000157000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -24,39 +25,59 @@
     "DataSources": {
       "0": {
         "Ident": "StiDataTableSource",
-        "Name": "Kota",
-        "Alias": "Kota",
+        "Name": "kota",
+        "Alias": "kota",
         "Columns": {
           "0": {
-            "Name": "fid",
-            "Index": -1,
-            "NameInSource": "fid",
-            "Alias": "fid",
-            "Type": "System.Int32"
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
+            "Type": "System.String"
           },
           "1": {
-            "Name": "fkota",
-            "Index": -1,
-            "NameInSource": "fkota",
-            "Alias": "fkota",
+            "Name": "kodekota",
+            "NameInSource": "kodekota",
+            "Alias": "kodekota",
             "Type": "System.String"
           },
           "2": {
-            "Name": "fzona",
-            "Index": -1,
-            "NameInSource": "fzona",
-            "Alias": "fzona",
+            "Name": "keterangan",
+            "NameInSource": "keterangan",
+            "Alias": "keterangan",
             "Type": "System.String"
           },
           "3": {
-            "Name": "faktif",
-            "Index": -1,
-            "NameInSource": "faktif",
-            "Alias": "faktif",
+            "Name": "zona_id",
+            "NameInSource": "zona_id",
+            "Alias": "zona_id",
+            "Type": "System.String"
+          },
+          "4": {
+            "Name": "statusaktif",
+            "NameInSource": "statusaktif",
+            "Alias": "statusaktif",
+            "Type": "System.String"
+          },
+          "5": {
+            "Name": "modifiedby",
+            "NameInSource": "modifiedby",
+            "Alias": "modifiedby",
+            "Type": "System.String"
+          },
+          "6": {
+            "Name": "created_at",
+            "NameInSource": "created_at",
+            "Alias": "created_at",
+            "Type": "System.String"
+          },
+          "7": {
+            "Name": "updated_at",
+            "NameInSource": "updated_at",
+            "Alias": "updated_at",
             "Type": "System.String"
           }
         },
-        "NameInSource": "Kota"
+        "NameInSource": "Data.kota"
       }
     }
   },
@@ -115,7 +136,7 @@
             "0": {
               "Ident": "StiText",
               "Name": "Text1",
-              "ClientRectangle": "0,0,6.6,1.2",
+              "ClientRectangle": "0,0,6.4,1.2",
               "ComponentPlacement": "rt.ReportTitleBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -133,12 +154,12 @@
           }
         },
         "2": {
-          "Ident": "StiHeaderBand",
-          "Name": "HeaderBand1",
+          "Ident": "StiGroupHeaderBand",
+          "Name": "GroupHeaderBand1",
           "ClientRectangle": "0,2.4,19.01,0.6",
-          "ComponentPlacement": "h.ap.Page1",
+          "ComponentPlacement": "gh.Page1",
           "Interaction": {
-            "Ident": "StiInteraction"
+            "Ident": "StiBandInteraction"
           },
           "Border": ";;;;;;;solid:Black",
           "Brush": "solid:",
@@ -147,7 +168,7 @@
               "Ident": "StiText",
               "Name": "Text15",
               "ClientRectangle": "0,0,0.8,0.6",
-              "ComponentPlacement": "h.ap.HeaderBand1",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
               "ComponentStyle": "Table Header",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -170,16 +191,16 @@
             },
             "1": {
               "Ident": "StiText",
-              "Name": "Text16",
-              "Guid": "2fc9e8f828556964175dc0f5efb4bc69",
-              "ClientRectangle": "0.8,0,2,0.6",
-              "ComponentPlacement": "h.ap.HeaderBand1",
+              "Name": "Text3",
+              "Guid": "7b9b483fc2f3bf4d8452726d4e9a7d94",
+              "ClientRectangle": "0.8,0,5.6,0.6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
               "ComponentStyle": "Table Header",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "ID"
+                "Value": "KODE KOTA"
               },
               "VertAlignment": "Center",
               "Font": ";10;Bold;",
@@ -196,16 +217,16 @@
             },
             "2": {
               "Ident": "StiText",
-              "Name": "Text3",
-              "Guid": "7b9b483fc2f3bf4d8452726d4e9a7d94",
-              "ClientRectangle": "2.8,0,6,0.6",
-              "ComponentPlacement": "h.ap.HeaderBand1",
+              "Name": "Text2",
+              "Guid": "0ec1f34220ac10ba01d24ef1c15bd18b",
+              "ClientRectangle": "6.4,0,4.8,0.6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
               "ComponentStyle": "Table Header",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "KOTA"
+                "Value": "KETERANGAN"
               },
               "VertAlignment": "Center",
               "Font": ";10;Bold;",
@@ -222,10 +243,36 @@
             },
             "3": {
               "Ident": "StiText",
+              "Name": "Text5",
+              "Guid": "0f99d62f36a880966c3e71171a4dbab0",
+              "ClientRectangle": "14.2,0,4.8,0.6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ComponentStyle": "Table Header",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "STATUS AKTIF"
+              },
+              "VertAlignment": "Center",
+              "Font": ";10;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
+              "Brush": "solid:156,195,229",
+              "TextBrush": "solid:255,255,255",
+              "Margins": {
+                "Left": 3,
+                "Right": 0,
+                "Top": 0,
+                "Bottom": 0
+              },
+              "Type": "Expression"
+            },
+            "4": {
+              "Ident": "StiText",
               "Name": "Text4",
-              "Guid": "483fc2115e82692a04ab8494587d7c57",
-              "ClientRectangle": "8.8,0,5.6,0.6",
-              "ComponentPlacement": "h.ap.HeaderBand1",
+              "Guid": "9d57bf43751c10352e9d48017a33a2b1",
+              "ClientRectangle": "11.2,0,3,0.6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
               "ComponentStyle": "Table Header",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -245,54 +292,60 @@
                 "Bottom": 0
               },
               "Type": "Expression"
-            },
-            "4": {
+            }
+          }
+        },
+        "3": {
+          "Ident": "StiDataBand",
+          "Name": "DataBand2",
+          "ClientRectangle": "0,3.8,19.01,0.8",
+          "ComponentPlacement": "d.Page1",
+          "Interaction": {
+            "Ident": "StiBandInteraction"
+          },
+          "Border": ";;;;;;;solid:Black",
+          "Brush": "solid:",
+          "Components": {
+            "0": {
               "Ident": "StiText",
-              "Name": "Text5",
-              "Guid": "61b605bddb38ca89baaaa16c24bdd0ba",
-              "ClientRectangle": "14.4,0,4.6,0.6",
-              "ComponentPlacement": "h.ap.HeaderBand1",
-              "ComponentStyle": "Table Header",
+              "Name": "Text7",
+              "Guid": "0e495134760184402730fe0cf2a838ce",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "0.8,0,5.6,0.6",
+              "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "STATUS"
+                "Value": "{kota.kodekota}"
               },
+              "CanBreak": true,
               "VertAlignment": "Center",
-              "Font": ";10;Bold;",
-              "Border": ";;;;;;;solid:0,0,0",
-              "Brush": "solid:156,195,229",
-              "TextBrush": "solid:255,255,255",
+              "Border": "All;242,242,242;;;;;;solid:0,0,0",
+              "Brush": "solid:",
+              "TextBrush": "solid:0,0,0",
+              "TextOptions": {
+                "WordWrap": true
+              },
               "Margins": {
                 "Left": 3,
                 "Right": 0,
                 "Top": 0,
                 "Bottom": 0
               },
-              "Type": "Expression"
-            }
-          }
-        },
-        "3": {
-          "Ident": "StiDataBand",
-          "Name": "DataBand1",
-          "ClientRectangle": "0,3.8,19.01,0.8",
-          "ComponentPlacement": "d.Page1",
-          "Interaction": {
-            "Ident": "StiBandInteraction"
-          },
-          "CanBreak": true,
-          "Border": ";;;;;;;solid:Black",
-          "Brush": "solid:",
-          "Components": {
-            "0": {
+              "TextFormat": {
+                "Ident": "StiDateFormatService"
+              },
+              "Type": "DataColumn"
+            },
+            "1": {
               "Ident": "StiText",
               "Name": "Text20",
               "CanGrow": true,
               "GrowToHeight": true,
               "ClientRectangle": "0,0,0.8,0.6",
-              "ComponentPlacement": "d.DataBand1",
+              "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -315,48 +368,19 @@
               },
               "Type": "Expression"
             },
-            "1": {
-              "Ident": "StiText",
-              "Name": "Text21",
-              "CanGrow": true,
-              "GrowToHeight": true,
-              "ClientRectangle": "0.8,0,2,0.6",
-              "ComponentPlacement": "d.DataBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "{Kota.fid}"
-              },
-              "CanBreak": true,
-              "VertAlignment": "Center",
-              "Border": "All;242,242,242;;;;;;solid:0,0,0",
-              "Brush": "solid:",
-              "TextBrush": "solid:0,0,0",
-              "TextOptions": {
-                "WordWrap": true
-              },
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
-              },
-              "Type": "DataColumn"
-            },
             "2": {
               "Ident": "StiText",
-              "Name": "Text7",
-              "Guid": "0e495134760184402730fe0cf2a838ce",
+              "Name": "Text8",
+              "Guid": "e760f6d0932d0eb40786027951ca89dd",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "2.8,0,6,0.6",
-              "ComponentPlacement": "d.DataBand1",
+              "ClientRectangle": "6.4,0,4.8,0.6",
+              "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{Kota.fkota}"
+                "Value": "{kota.keterangan}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -376,17 +400,17 @@
             },
             "3": {
               "Ident": "StiText",
-              "Name": "Text2",
-              "Guid": "53fd32f133e0c48acdd12dda78f2bd70",
+              "Name": "Text6",
+              "Guid": "470eb87547e03013eb4d98fd3816de4e",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "8.8,0,5.6,0.6",
-              "ComponentPlacement": "d.DataBand1",
+              "ClientRectangle": "14.2,0,4.8,0.6",
+              "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{Kota.fzona}"
+                "Value": "{kota.statusaktif}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -406,17 +430,17 @@
             },
             "4": {
               "Ident": "StiText",
-              "Name": "Text6",
-              "Guid": "9a4754e86c777ae1e3a974892ae4dfe7",
+              "Name": "Text9",
+              "Guid": "7f1b7305d8629968b00dfd17d7a4a42b",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "14.4,0,4.6,0.6",
-              "ComponentPlacement": "d.DataBand1",
+              "ClientRectangle": "11.2,0,3,0.6",
+              "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{Kota.faktif}"
+                "Value": "{kota.zona_id}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -435,7 +459,7 @@
               "Type": "DataColumn"
             }
           },
-          "DataSourceName": "Kota"
+          "DataSourceName": "kota"
         }
       },
       "PageWidth": 21.01,
