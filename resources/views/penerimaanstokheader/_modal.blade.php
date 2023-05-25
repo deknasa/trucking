@@ -574,6 +574,15 @@
   }
 
   function tampilankst() {
+    $('[name=supplier]').parents('.form-group').hide()
+    $('[name=servicein_nobukti]').parents('.form-group').hide()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=keterangan]').parents('.form-group').hide()
+    $('[name=nobon]').parents('.form-group').hide()
+    $('[name=hutang_nobukti]').parents('.form-group').hide()
+    $('[name=coa]').parents('.form-group').hide()
+
     $('[name=gudang]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').show()
     $('[name=gandengan]').parents('.form-group').show()
@@ -587,6 +596,13 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('.tbl_penerimaanstok_nobukti').hide();
+    $('.tbl_qty').show()
+    $('.tbl_vulkanisirke').hide();
+    $('.tbl_harga').hide();
+    $('.tbl_persentase').hide();
+    $('.tbl_total').hide();
+    $('.colspan').attr('colspan', 4);
+    $('.sumrow').hide();
   }
 
   function tampilanpst() {
