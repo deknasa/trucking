@@ -1138,10 +1138,6 @@
       fileName: 'upahsupir',
       onSelectRow: (upahsupir, element) => {
         // console.log(element);
-        // console.log(element.val());
-        // element.val(upahsupir.id)
-    
-        // console.log(upahsupir.id);
 
         $('#crudForm [name=parent_id]').first().val(upahsupir.id)
         $('#crudForm [name=parent]').first().val(upahsupir.kotasampai_id)
@@ -1149,12 +1145,13 @@
 
         // Menghapus nilai autonumeric pada input jarak
         // $('#crudForm [name=jarak]').autoNumeric('remove')
-            let jarakInput = $('#crudForm [name=jarak]').get(0); // Dapatkan elemen input jarak
+        let jarakInput = $('#crudForm [name=jarak]').get(0); // Dapatkan elemen input jarak
             let autoNumericInstance = AutoNumeric.getAutoNumericElement(jarakInput); // Dapatkan instance AutoNumeric dari elemen tersebut
 
             if (autoNumericInstance) {
               autoNumericInstance.remove(); // Hapus efek AutoNumeric
             }
+            
 
         let form = $('#crudForm')
         showUpahSupir(form, upahsupir.id, true).then((upahsupir) => {
