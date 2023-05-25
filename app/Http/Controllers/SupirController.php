@@ -313,4 +313,49 @@ class SupirController extends MyController
 
         return $response['data'];
     }
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'supir', $request->all());
+
+        $supirs = $response['data'];
+
+        $i = 0;
+        foreach ($supirs as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+            $statusLuarKota = $params['statusluarkota'];
+            $statusZonaTertentu = $params['statuszonatertentu'];
+            $statusBlacklist = $params['statusblacklist'];
+            $statusUpdateGambar = $params['statusadaupdategambar'];
+
+            $result = json_decode($statusaktif, true);
+            $resultLuarKota = json_decode($statusLuarKota, true);
+            $resultZonaTertentu = json_decode($statusZonaTertentu, true);
+            $resultBlacklist = json_decode($statusBlacklist, true);
+            $resultUpdateGambar = json_decode($statusUpdateGambar, true);
+
+            $statusaktif = $result['MEMO'];
+            $statusLuarKota = $resultLuarKota['MEMO'];
+            $statusZonaTertentu = $resultZonaTertentu['MEMO'];
+            $statusBlacklist = $resultBlacklist['MEMO'];
+            $statusUpdateGambar = $resultUpdateGambar['MEMO'];
+
+
+            $supirs[$i]['statusaktif'] = $statusaktif;
+            $supirs[$i]['statusluarkota'] = $statusLuarKota;
+            $supirs[$i]['statuszonatertentu'] = $statusZonaTertentu;
+            $supirs[$i]['statusblacklist'] = $statusBlacklist;
+            $supirs[$i]['statusadaupdategambar'] = $statusUpdateGambar;
+
+        
+            $i++;
+
+
+        }
+
+        return view('reports.supir', compact('supirs'));
+    }
 }
