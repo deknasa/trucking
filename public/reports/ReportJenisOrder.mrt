@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "3ef55f09d0ae1cc64d54d813f0efd67d",
+  "ReportGuid": "198bc4428acfb156112dce1808a9cc38",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportJenisOrder.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportJenisEmkl.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1685010158000+0700)/",
+  "ReportChanged": "/Date(1685008658000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -25,8 +25,8 @@
     "DataSources": {
       "0": {
         "Ident": "StiDataTableSource",
-        "Name": "absentrado",
-        "Alias": "absentrado",
+        "Name": "jenisorder",
+        "Alias": "jenisorder",
         "Columns": {
           "0": {
             "Name": "id",
@@ -35,9 +35,9 @@
             "Type": "System.String"
           },
           "1": {
-            "Name": "kodeabsen",
-            "NameInSource": "kodeabsen",
-            "Alias": "kodeabsen",
+            "Name": "kodejenisorder",
+            "NameInSource": "kodejenisorder",
+            "Alias": "kodejenisorder",
             "Type": "System.String"
           },
           "2": {
@@ -71,7 +71,7 @@
             "Type": "System.String"
           }
         },
-        "NameInSource": "Data.absentrado"
+        "NameInSource": "Data.jenisorder"
       }
     }
   },
@@ -130,13 +130,13 @@
             "0": {
               "Ident": "StiText",
               "Name": "Text1",
-              "ClientRectangle": "0,0,8.4,1.2",
+              "ClientRectangle": "0,0,7.8,1.2",
               "ComponentPlacement": "rt.ReportTitleBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Report Absen Trado"
+                "Value": "Report Jenis Order"
               },
               "VertAlignment": "Center",
               "Font": ";24;Bold;",
@@ -194,7 +194,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "KODE ABSEN"
+                "Value": "KODE JENIS ORDER"
               },
               "VertAlignment": "Center",
               "Font": ";10;Bold;",
@@ -286,7 +286,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{absentrado.kodeabsen}"
+                "Value": "{jenisorder.kodejenisorder}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -348,7 +348,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{absentrado.keterangan}"
+                "Value": "{jenisorder.keterangan}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -378,7 +378,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{absentrado.statusaktif}"
+                "Value": "{jenisorder.statusaktif}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -397,7 +397,7 @@
               "Type": "DataColumn"
             }
           },
-          "DataSourceName": "absentrado"
+          "DataSourceName": "jenisorder"
         }
       },
       "PageWidth": 21.01,

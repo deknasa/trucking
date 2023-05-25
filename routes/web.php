@@ -469,12 +469,16 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('jenisemkl/{id}/delete', [JenisEmklController::class, 'delete'])->name('jenisemkl.delete');
     Route::get('jenisemkl/get', [JenisEmklController::class, 'get'])->name('jenisemkl.get');
     Route::get('jenisemkl/index', [JenisEmklController::class, 'index']);
+    Route::get('jenisemkl/export', [JenisEmklController::class, 'export'])->name('jenisemkl.export');
+    Route::get('jenisemkl/report', [JenisEmklController::class, 'report'])->name('jenisemkl.report');
     Route::resource('jenisemkl', JenisEmklController::class);
 
     Route::get('jenisorder/field_length', [JenisOrderController::class, 'fieldLength'])->name('jenisorder.field_length');
     Route::get('jenisorder/{id}/delete', [JenisOrderController::class, 'delete'])->name('jenisorder.delete');
     Route::get('jenisorder/get', [JenisOrderController::class, 'get'])->name('jenisorder.get');
     Route::get('jenisorder/index', [JenisOrderController::class, 'index']);
+    Route::get('jenisorder/export', [JenisOrderController::class, 'export'])->name('jenisorder.export');
+    Route::get('jenisorder/report', [JenisOrderController::class, 'report'])->name('jenisorder.report');
     Route::resource('jenisorder', JenisOrderController::class);
 
     Route::get('jenistrado/field_length', [JenisTradoController::class, 'fieldLength'])->name('jenistrado.field_length');
@@ -645,6 +649,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('pengeluarantrucking/{id}/delete', [PengeluaranTruckingController::class, 'delete'])->name('pengeluarantrucking.delete');
     Route::get('pengeluarantrucking/get', [PengeluaranTruckingController::class, 'get'])->name('pengeluarantrucking.get');
     Route::get('pengeluarantrucking/index', [PengeluaranTruckingController::class, 'index']);
+    Route::get('pengeluarantrucking/export', [PengeluaranTruckingController::class, 'export'])->name('pengeluarantrucking.export');
+    Route::get('pengeluarantrucking/report', [PengeluaranTruckingController::class, 'report'])->name('pengeluarantrucking.report');
     Route::resource('pengeluarantrucking', PengeluaranTruckingController::class);
 
     Route::get('satuan/field_length', [SatuanController::class, 'fieldLength'])->name('satuan.field_length');

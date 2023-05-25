@@ -185,85 +185,105 @@ class AbsenTradoController extends MyController
     /**
      * @ClassName
      */
-    public function report(Request $request): View
+    public function report(Request $request)
     {
-        $params['offset'] = $request->dari - 1;
-        $params['rows'] = $request->sampai - $request->dari + 1;
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'absentrado', $request->all());
 
-        $absenTrados = $this->get($params)['rows'];
+        $absentrados = $response['data'];
 
-        return view('reports.absentrado', compact('absenTrados'));
+        $i = 0;
+        foreach ($absentrados as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+
+            $result = json_decode($statusaktif, true);
+
+            $statusaktif = $result['MEMO'];
+
+            $absentrados[$i]['statusaktif'] = $statusaktif;
+
+        
+            $i++;
+
+
+        }
+
+        return view('reports.absentrado', compact('absentrados'));
     }
 
     /**
      * @ClassName
      */
-    public function export(Request $request): void
-    {
-        $params = [
-            'offset' => $request->dari - 1,
-            'rows' => $request->sampai - $request->dari + 1,
-        ];
+    // public function export(Request $request): void
+    // {
 
-        $absenTrados = $this->get($params);
+    //     $params = [
+    //         'offset' => $request->dari - 1,
+    //         'rows' => $request->sampai - $request->dari + 1,
+    //     ];
 
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Laporan AbsenTrado');
-        $sheet->getStyle("A1")->getFont()->setSize(20);
-        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:E1');
+    //     $absenTrados = $this->get($params);
 
-        $sheet->setCellValue('A2', 'No');
-        $sheet->setCellValue('B2', 'ID');
-        $sheet->setCellValue('C2', 'Kode Absen');
-        $sheet->setCellValue('D2', 'Keterangan');
-        $sheet->setCellValue('E2', 'Status');
-        $sheet->setCellValue('F2', 'ModifiedBy');
-        $sheet->setCellValue('G2', 'ModifiedOn');
+    //     $spreadsheet = new Spreadsheet();
+    //     $sheet = $spreadsheet->getActiveSheet();
+    //     $sheet->setCellValue('A1', 'Laporan AbsenTrado');
+    //     $sheet->getStyle("A1")->getFont()->setSize(20);
+    //     $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+    //     $sheet->mergeCells('A1:E1');
 
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
+    //     $sheet->setCellValue('A2', 'No');
+    //     $sheet->setCellValue('B2', 'ID');
+    //     $sheet->setCellValue('C2', 'Kode Absen');
+    //     $sheet->setCellValue('D2', 'Keterangan');
+    //     $sheet->setCellValue('E2', 'Status');
+    //     $sheet->setCellValue('F2', 'ModifiedBy');
+    //     $sheet->setCellValue('G2', 'ModifiedOn');
 
-        $no = 1;
-        $x = 3;
-        foreach ($absenTrados['rows'] as $row) {
-            $sheet->setCellValue('A' . $x, $no++);
-            $sheet->setCellValue('B' . $x, $row['id']);
-            $sheet->setCellValue('C' . $x, $row['kodeabsen']);
-            $sheet->setCellValue('D' . $x, $row['keterangan']);
-            $sheet->setCellValue('E' . $x, $row['statusaktif']);
-            $sheet->setCellValue('F' . $x, $row['modifiedby']);
-            $sheet->setCellValue('G' . $x, date("d-m-Y H:i:s", strtotime($row['updated_at'])));
-            $lastCell = 'G' . $x;
-            $x++;
-        }
+    //     $sheet->getColumnDimension('C')->setAutoSize(true);
+    //     $sheet->getColumnDimension('D')->setAutoSize(true);
+    //     $sheet->getColumnDimension('E')->setAutoSize(true);
+    //     $sheet->getColumnDimension('F')->setAutoSize(true);
+    //     $sheet->getColumnDimension('G')->setAutoSize(true);
 
-        $sheet->setCellValue('E' . $x, "=ROWS(E3:" . $lastCell . ")");
+    //     $no = 1;
+    //     $x = 3;
+    //     foreach ($absenTrados['rows'] as $row) {
+    //         $sheet->setCellValue('A' . $x, $no++);
+    //         $sheet->setCellValue('B' . $x, $row['id']);
+    //         $sheet->setCellValue('C' . $x, $row['kodeabsen']);
+    //         $sheet->setCellValue('D' . $x, $row['keterangan']);
+    //         $sheet->setCellValue('E' . $x, $row['statusaktif']);
+    //         $sheet->setCellValue('F' . $x, $row['modifiedby']);
+    //         $sheet->setCellValue('G' . $x, date("d-m-Y H:i:s", strtotime($row['updated_at'])));
+    //         $lastCell = 'G' . $x;
+    //         $x++;
+    //     }
 
-        $styleArray = array(
-            'borders' => array(
-                'allBorders' => array(
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ),
-            ),
-        );
+    //     $sheet->setCellValue('E' . $x, "=ROWS(E3:" . $lastCell . ")");
 
-        $sheet->getStyle('A2:G2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF02c4f5');
-        $sheet->getStyle('A2:' . $lastCell)->applyFromArray($styleArray);
+    //     $styleArray = array(
+    //         'borders' => array(
+    //             'allBorders' => array(
+    //                 'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+    //             ),
+    //         ),
+    //     );
 
-        $writer = new Xlsx($spreadsheet);
-        $filename = 'laporanAbsenTrado' . date('dmYHis');
+    //     $sheet->getStyle('A2:G2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF02c4f5');
+    //     $sheet->getStyle('A2:' . $lastCell)->applyFromArray($styleArray);
 
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
-        header('Cache-Control: max-age=0');
+    //     $writer = new Xlsx($spreadsheet);
+    //     $filename = 'laporanAbsenTrado' . date('dmYHis');
 
-        $writer->save('php://output');
-    }
+    //     header('Content-Type: application/vnd.ms-excel');
+    //     header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+    //     header('Cache-Control: max-age=0');
+
+    //     $writer->save('php://output');
+    // }
 
     public function combo($aksi)
     {
