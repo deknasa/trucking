@@ -597,6 +597,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('kota/field_length', [KotaController::class, 'fieldLength'])->name('kota.field_length');
     Route::get('kota/{id}/delete', [KotaController::class, 'delete'])->name('kota.delete');
     Route::get('kota/get', [KotaController::class, 'get'])->name('kota.get');
+    Route::get('kota/export', [KotaController::class, 'export'])->name('kota.export');
+    Route::get('kota/report', [KotaController::class, 'report'])->name('kota.report');
     Route::get('kota/index', [KotaController::class, 'index']);
     Route::resource('kota', KotaController::class);
 
@@ -618,6 +620,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('penerimaantrucking/{id}/delete', [PenerimaanTruckingController::class, 'delete'])->name('penerimaantrucking.delete');
     Route::get('penerimaantrucking/get', [PenerimaanTruckingController::class, 'get'])->name('penerimaantrucking.get');
     Route::get('penerimaantrucking/index', [PenerimaanTruckingController::class, 'index']);
+    Route::get('penerimaantrucking/export', [PenerimaanTruckingController::class, 'export'])->name('penerimaantrucking.export');
+    Route::get('penerimaantrucking/report', [PenerimaanTruckingController::class, 'report'])->name('penerimaantrucking.report');
     Route::resource('penerimaantrucking', PenerimaanTruckingController::class);
 
     Route::get('penerimaanstok/report', [PenerimaanStokController::class, 'report'])->name('penerimaanstok.report');
@@ -648,6 +652,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('zona/{id}/delete', [ZonaController::class, 'delete'])->name('zona.delete');
     Route::get('zona/get', [ZonaController::class, 'get'])->name('zona.get');
     Route::get('zona/index', [ZonaController::class, 'index']);
+    Route::get('zona/export', [ZonaController::class, 'export'])->name('zona.export');
+    Route::get('zona/report', [ZonaController::class, 'report'])->name('zona.report');
     Route::resource('zona', ZonaController::class);
 
     Route::get('tarif/field_length', [TarifController::class, 'fieldLength'])->name('tarif.field_length');
