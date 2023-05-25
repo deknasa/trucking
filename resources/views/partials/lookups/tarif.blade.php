@@ -24,20 +24,11 @@
           label: 'TUJUAN',
           name: 'tujuan',
         },
-        {
-          label: 'CONTAINER',
-          name: 'container_id',
-        },
-        {
-          label: 'NOMINAL',
-          name: 'nominal',
-          align: 'right',
-          formatter: 'currency',
-          formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-          }
-        },
+        // {
+        //   label: 'CONTAINER',
+        //   name: 'container_id',
+        // },
+        
         {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
@@ -103,10 +94,10 @@
             return ` title="${statusAktif.MEMO}"`
           }
         },
-        {
-          label: 'TUJUAN ASAL',
-          name: 'tujuanasal',
-        },
+        // {
+        //   label: 'TUJUAN ASAL',
+        //   name: 'tujuanasal',
+        // },
         {
           label: 'SISTEM TON',
           name: 'statussistemton',
@@ -180,22 +171,22 @@
           label: 'ZONA',
           name: 'zona_id',
         },
-        {
-          label: 'NOMINAL TON',
-          name: 'nominalton',
-          align: 'right',
-          formatter: 'currency',
-          formatoptions: {
-              decimalSeparator: ',',
-              thousandsSeparator: '.'
-          }
-        },
-        {
-          label: 'TGL BERLAKU',
-          name: 'tglberlaku',
-          formatter: "date",
-          formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y" }
-        },
+        // {
+        //   label: 'NOMINAL TON',
+        //   name: 'nominalton',
+        //   align: 'right',
+        //   formatter: 'currency',
+        //   formatoptions: {
+        //       decimalSeparator: ',',
+        //       thousandsSeparator: '.'
+        //   }
+        // },
+        // {
+        //   label: 'TGL BERLAKU',
+        //   name: 'tglberlaku',
+        //   formatter: "date",
+        //   formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y" }
+        // },
         {
           label: 'STATUS PENYESUAIAN HARGA',
           name: 'statuspenyesuaianharga',
