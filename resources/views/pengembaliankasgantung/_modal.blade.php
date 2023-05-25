@@ -262,7 +262,6 @@
         name: 'limit',
         value: limit
       })
-
       data.push({
         name: 'tgldariheader',
         value: $('#tgldariheader').val()
@@ -579,11 +578,65 @@
             }
           },
           {
-            label: "NOMINAL",
-            name: "nominal",
+            label: "SISA",
+            name: "sisa",
             sortable: true,
             align: "right",
             formatter: currencyFormat,
+          },
+          {
+            label: "NOMINAL",
+            name: "nominal",
+            align: "right",
+            editable: true,
+            editoptions: {
+              dataInit: function(element, id) {
+                initAutoNumeric($('#crudForm').find(`[id="${id.id}"]`))
+              },
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+                  let originalGridData = $("#tablePengembalian")
+                    .jqGrid("getGridParam", "originalData")
+                    .find((row) => row.id == rowObject.rowId);
+
+                  let localRow = $("#tablePengembalian").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  let totalSisa
+
+                  let nominal = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
+                  if ($('#crudForm').data('action') == 'edit') {
+                    totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)) - nominal
+                  } else {
+                    totalSisa = originalGridData.sisa - nominal
+                  }
+
+                  $("#tablePengembalian").jqGrid(
+                    "setCell",
+                    rowObject.rowId,
+                    "sisa",
+                    totalSisa
+                  );
+
+                  nominalDetails = $(`#tablePengembalian tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePengembalian_nominal"]`)
+                  ttlBayar = 0
+                  $.each(nominalDetails, (index, nominalDetail) => {
+                    ttlBayarDetail = parseFloat($(nominalDetail).attr('title').replaceAll(',', ''))
+                    ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
+                    ttlBayar += ttlBayars
+                  });
+                  ttlBayar += nominal
+                  initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_nominal"]`).text(ttlBayar))
+
+                  // setAllTotal()
+                  setTotalSisa()
+                },
+              }, ],
+            },
+            sortable: false,
+            sorttype: "int",
           },
           {
             label: "KETERANGAN",
@@ -694,8 +747,8 @@
           $("#tablePengembalian").jqGrid(
             "setCell",
             rowId,
-            "sisa",
-            parseInt(localRow.sisa) + parseInt(localRow.bayar)
+            "nominal",
+            parseInt(localRow.nominal) + parseInt(localRow.bayar)
           );
 
           return true;

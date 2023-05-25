@@ -494,9 +494,6 @@
 
   }
 
-
-
-
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
 

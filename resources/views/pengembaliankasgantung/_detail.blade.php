@@ -35,11 +35,11 @@
             name: 'coa',
           },
           {
-            label: 'NOMINAL',
+            label: 'NOMINAL  ',
             name: 'nominal',
             align: 'right',
             formatter: currencyFormat,
-          }
+          },
         ],
         autowidth: true,
         shrinkToFit: false,
