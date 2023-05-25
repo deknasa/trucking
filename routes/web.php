@@ -408,6 +408,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('container/{id}/delete', [ContainerController::class, 'delete'])->name('container.delete');
     Route::get('container/index', [ContainerController::class, 'index']);
     Route::get('container/get', [ContainerController::class, 'get'])->name('container.get');
+    Route::get('container/export', [ContainerController::class, 'export'])->name('container.export');
+    Route::get('container/report', [ContainerController::class, 'report'])->name('container.report');
     Route::resource('container', ContainerController::class);
 
 
