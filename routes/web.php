@@ -658,6 +658,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('tarif/field_length', [TarifController::class, 'fieldLength'])->name('tarif.field_length');
     Route::get('tarif/{id}/delete', [TarifController::class, 'delete'])->name('tarif.delete');
     Route::get('tarif/export', [TarifController::class, 'export'])->name('tarif.export');
+    Route::get('tarif/report', [TarifController::class, 'report'])->name('tarif.report');
     Route::get('tarif/get', [TarifController::class, 'get'])->name('tarif.get');
     Route::get('tarif/index', [TarifController::class, 'index']);
     Route::resource('tarif', TarifController::class);
