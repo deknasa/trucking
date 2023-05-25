@@ -361,86 +361,48 @@
       let selectedRows = $("#tablePelunasan").getGridParam("selectedRowIds");
 
       $.each(selectedRows, function(index, value) {
-        let selectedBayar = $("#tablePelunasan").jqGrid("getCell", value, "bayar")
-        let selectedPotongan = $("#tablePelunasan").jqGrid("getCell", value, "potongan")
-        let selectedLebihBayar = $("#tablePelunasan").jqGrid("getCell", value, "nominallebihbayar")
+        dataPelunasan = $("#tablePelunasan").jqGrid("getLocalRow", value);
+        let selectedBayar = (dataPelunasan.bayar == undefined) ? 0 : dataPelunasan.bayar;
+        let selectedPotongan = (dataPelunasan.potongan == undefined) ? 0 : dataPelunasan.potongan;
+        let selectedLebihBayar = (dataPelunasan.nominallebihbayar == undefined) ? 0 : dataPelunasan.nominallebihbayar;
+        let selectedSisa = dataPelunasan.sisa
         data.push({
           name: 'bayar[]',
-          value: (selectedBayar != '') ? parseFloat(selectedBayar.replaceAll(',', '')) : 0
+          value: (isNan(selectedBayar)) ? parseFloat(selectedBayar.replaceAll(',', '')) : selectedBayar
         })
         data.push({
           name: 'potongan[]',
-          value: (selectedPotongan != '') ? parseFloat(selectedPotongan.replaceAll(',', '')) : 0
+          value: (isNan(selectedPotongan)) ? parseFloat(selectedPotongan.replaceAll(',', '')) : selectedPotongan
         })
         data.push({
           name: 'nominallebihbayar[]',
-          value: (selectedLebihBayar != '') ? parseFloat(selectedLebihBayar.replaceAll(',', '')) : 0
+          value: (isNan(selectedLebihBayar)) ? parseFloat(selectedLebihBayar.replaceAll(',', '')) : selectedLebihBayar
+        })
+        data.push({
+          name: 'sisa[]',
+          value: selectedSisa
         })
         data.push({
           name: 'keterangan[]',
-          value: $("#tablePelunasan").jqGrid("getCell", value, "keterangan")
+          value: dataPelunasan.keterangan
         })
         data.push({
           name: 'keteranganpotongan[]',
-          value: $("#tablePelunasan").jqGrid("getCell", value, "keteranganpotongan")
+          value: dataPelunasan.keteranganpotongan
         })
         data.push({
           name: 'coapotongan[]',
-          value: $("#tablePelunasan").jqGrid("getCell", value, "coapotongan")
+          value: dataPelunasan.coapotongan
         })
         data.push({
           name: 'piutang_nobukti[]',
-          value: $("#tablePelunasan").jqGrid("getCell", value, "nobukti")
+          value: dataPelunasan.nobukti
         })
         data.push({
           name: 'piutang_id[]',
-          value: $("#tablePelunasan").jqGrid("getCell", value, "id")
+          value: dataPelunasan.id
         })
       });
-      // $('#table_body tr').each(function(row, tr) {
-
-
-      //   if ($(this).find(`[name="piutang_id[]"]`).is(':checked')) {
-
-      //     data.push({
-      //       name: 'sisa[]',
-      //       value: AutoNumeric.getNumber($(`#crudForm [name="sisa[]"]`)[row])
-      //     })
-      //     data.push({
-      //       name: 'keterangandetailppd[]',
-      //       value: $(this).find(`[name="keterangandetailppd[]"]`).val()
-      //     })
-      //     data.push({
-      //       name: 'bayarppd[]',
-      //       value: AutoNumeric.getNumber($(`#crudForm [name="bayarppd[]"]`)[row])
-      //     })
-      //     data.push({
-      //       name: 'keteranganpotonganppd[]',
-      //       value: $(this).find(`[name="keteranganpotonganppd[]"]`).val()
-      //     })
-      //     data.push({
-      //       name: 'potonganppd[]',
-      //       value: AutoNumeric.getNumber($(`#crudForm [name="potonganppd[]"]`)[row])
-      //     })
-      //     data.push({
-      //       name: 'coapotonganppd[]',
-      //       value: $(this).find(`[name="coapotonganppd[]"]`).val()
-      //     })
-      //     data.push({
-      //       name: 'nominallebihbayarppd[]',
-      //       value: AutoNumeric.getNumber($(`#crudForm [name="nominallebihbayarppd[]"]`)[row])
-      //     })
-      //     data.push({
-      //       name: 'piutang_nobukti[]',
-      //       value: $(this).find(`[name="piutang_nobukti[]"]`).val()
-      //     })
-      //     data.push({
-      //       name: 'piutang_id[]',
-      //       value: $(this).find(`[name="piutang_id[]"]`).val()
-      //     })
-
-      //   }
-      // })
 
       data.push({
         name: 'sortIndex',
@@ -550,7 +512,7 @@
               row = parseInt(selectedRows[angka]) - 1;
               let element;
 
-              if (indexes[0] == 'alatbayar' || indexes[0] == 'tglbukti' || indexes[0] == 'bank' || indexes[0] == 'nowarkat' || indexes[0] == 'agen') {
+              if (indexes[0] == 'alatbayar' || indexes[0] == 'tglbukti' || indexes[0] == 'bank' || indexes[0] == 'nowarkat' || indexes[0] == 'agen' || indexes[0] == 'piutang_id') {
                 if (indexes.length > 1) {
                   element = form.find(`[name="${indexes[0]}[]"]`)[row];
                 } else {
@@ -661,7 +623,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    
+
     Promise
       .all([
         showDefault(form)
@@ -674,7 +636,7 @@
         $('.modal-loader').addClass('d-none')
       })
 
-    
+
   }
 
   function loadPelunasanGrid() {
@@ -742,6 +704,20 @@
             name: "keterangan",
             sortable: false,
             editable: true,
+            editoptions: {
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+
+                  let localRow = $("#tablePelunasan").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  console.log(localRow)
+                  localRow.keterangan = event.target.value;
+                },
+              }, ],
+            },
           },
           {
             label: "BAYAR",
@@ -777,13 +753,27 @@
                     totalSisa = originalGridData.sisa - bayar - potongan
                   }
 
-                  console.log(totalSisa)
                   $("#tablePelunasan").jqGrid(
                     "setCell",
                     rowObject.rowId,
                     "sisa",
                     totalSisa
                   );
+
+                  if (totalSisa < 0) {
+                    showDialog('sisa tidak boleh minus')
+                    $("#tablePelunasan").jqGrid(
+                      "setCell",
+                      rowObject.rowId,
+                      "bayar",
+                      0
+                    );
+                    if (originalGridData.sisa == 0) {
+                      $("#tablePelunasan").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)));
+                    } else {
+                      $("#tablePelunasan").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa - potongan);
+                    }
+                  }
 
                   bayarDetails = $(`#tablePelunasan tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePelunasan_bayar"]`)
                   ttlBayar = 0
@@ -821,8 +811,9 @@
                     "getLocalRow",
                     rowObject.rowId
                   );
-                  let totalSisa
                   localRow.potongan = event.target.value;
+
+                  let totalSisa
                   let potongan = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
                   let getBayar = $("#tablePelunasan").jqGrid(
                     "getCell",
@@ -842,6 +833,20 @@
                     totalSisa
                   );
 
+                  if (totalSisa < 0) {
+                    showDialog('sisa tidak boleh minus')
+                    $("#tablePelunasan").jqGrid(
+                      "setCell",
+                      rowObject.rowId,
+                      "potongan",
+                      0
+                    );
+                    if (originalGridData.sisa == 0) {
+                      $("#tablePelunasan").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)) - bayar);
+                    } else {
+                      $("#tablePelunasan").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa - bayar);
+                    }
+                  }
                   let potonganDetails = $(`#tablePelunasan tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePelunasan_potongan"]`)
                   let ttlPotongan = 0
                   $.each(potonganDetails, (index, potonganDetail) => {
@@ -868,7 +873,6 @@
             editoptions: {
               class: 'coapotongan-lookup',
               dataInit: function(element) {
-                console.log(element)
                 $('.coapotongan-lookup').last().lookup({
                   title: 'Coa Potongan Lookup',
                   fileName: 'akunpusat',
@@ -881,9 +885,15 @@
                     }
                   },
                   onSelectRow: (akunpusat, el) => {
+
+                    let localRow = $("#tablePelunasan").jqGrid(
+                      "getLocalRow",
+                      $(element).attr('rowid')
+                    );
                     el.val(akunpusat.coa)
-                    el.data('currentValue', el.val())
-                    console.log()
+                    el.data('currentValue', akunpusat.coa)
+
+                    localRow.coapotongan = akunpusat.coa
                   },
                   onCancel: (el) => {
                     el.val(el.data('currentValue'))
@@ -893,7 +903,7 @@
                     el.data('currentValue', el.val())
                   }
                 })
-              }
+              },
             },
             sortable: false,
           },
@@ -902,6 +912,19 @@
             name: "keteranganpotongan",
             editable: true,
             sortable: false,
+            editoptions: {
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+
+                  let localRow = $("#tablePelunasan").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  localRow.keteranganpotongan = event.target.value;
+                },
+              }, ],
+            },
           },
           {
             label: "NOMINAL LEBIH BAYAR",
@@ -918,7 +941,11 @@
                   let originalGridData = $("#tablePelunasan")
                     .jqGrid("getGridParam", "originalData")
                     .find((row) => row.id == rowObject.rowId);
-
+                  let localRow = $("#tablePelunasan").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  localRow.nominallebihbayar = event.target.value;
                   let lebihBayar = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
 
                   let lebihBayarDetails = $(`#tablePelunasan tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePelunasan_nominallebihbayar"]`)
@@ -1157,12 +1184,9 @@
           "sisa",
           0
         );
-        $("#tablePelunasan").jqGrid(
-          "setCell",
-          rowId,
-          "bayar",
-          localRow.bayar
-        );
+        $("#tablePelunasan").jqGrid("setCell", rowId, "bayar", localRow.bayar);
+        $("#tablePelunasan").jqGrid("setCell", rowId, "potongan", 0);
+        $("#tablePelunasan").jqGrid("setCell", rowId, "nominallebihbayar", 0);
 
         initAutoNumeric($(`#tablePelunasan tr#${rowId}`).find(`td[aria-describedby="tablePelunasan_bayar"]`))
         initAutoNumeric($(`#tablePelunasan tr#${rowId}`).find(`td[aria-describedby="tablePelunasan_potongan"]`))
@@ -1483,7 +1507,7 @@
             }
           })
         })
-       
+
         $('#nominalPiutang').append(`${totalNominal}`)
         $('#sisaPiutang').append(`${totalSisa}`)
 
