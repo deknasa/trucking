@@ -397,8 +397,10 @@
       })
 
     setNominalSupir()
-    initAutoNumeric(form.find(`[name="jarak"]`))
-
+    // initAutoNumeric(form.find(`[name="jarak"]`))
+    initAutoNumeric(form.find(`[name="jarak"]`), {
+          minimumValue: 0
+        })
   }
 
   function editUpahRitasi(id) {
@@ -587,7 +589,9 @@
           
         })
         
-        initAutoNumeric($('#crudForm').find(`[name=jarak]`))
+        initAutoNumeric(form.find(`[name="jarak"]`), {
+          minimumValue: 0
+        })
 
         $.each(response.detail, (index, detail) => {
           // $.each(response.data.upahritasi_rincian, (index, detail) => {
@@ -618,7 +622,9 @@
 
           $('#detailList tbody').append(detailRow)
 
-          initAutoNumeric(detailRow.find('.autonumeric'))
+          initAutoNumeric(detailRow.find('.autonumeric'), {
+              minimumValue: 0
+            })
           setNominalSupir()
         })
 
@@ -667,7 +673,9 @@
             detailRow.find(`[name="container[]"]`).val(detail.container)
             detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
             detailRow.find(`[name="liter[]"]`).val(detail.liter)
-            initAutoNumeric(detailRow.find('.autonumeric'))
+            initAutoNumeric(detailRow.find('.autonumeric'), {
+              minimumValue: 0
+            })
             setNominalSupir()
             $('#detailList tbody').append(detailRow)
             
