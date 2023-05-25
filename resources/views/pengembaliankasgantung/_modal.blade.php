@@ -60,7 +60,7 @@
                   </div>
                   <div class="col-12 col-sm-9 col-md-8 ">
                     <div class="input-group">
-                      <input type="text" name="tgldari" class="form-control datepicker">
+                      <input type="text" name="tgldari" class="form-control datepicker" id="tgldari">
                     </div>
                   </div>
                 </div>
@@ -75,7 +75,7 @@
                   </div>
                   <div class="col-12 col-sm-9 col-md-8 ">
                     <div class="input-group">
-                      <input type="text" name="tglsampai" class="form-control datepicker">
+                      <input type="text" name="tglsampai" class="form-control datepicker" id="tglsampai">
                     </div>
                   </div>
                 </div>
@@ -377,8 +377,9 @@
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
-
+    
     setFormBindKeys(form)
+   
 
     activeGrid = null
 
@@ -387,10 +388,16 @@
     initLookup()
     initDatepicker()
 
+    setRange()
+    
+   
+
     $(`[name=tgldari], [name=tglsampai]`)
       .on("change", function() {
         rangeKasgantung();
+       
       })
+      
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -399,6 +406,8 @@
     initDatepicker()
 
   })
+
+  
 
   function rangeKasgantung() {
     var tgldari = $('#crudForm').find(`[name="tgldari"]`).val()
@@ -423,6 +432,8 @@
     }
 
   }
+
+ 
 
   function enabledRow(row) {
     let check = $(`#kasgantungdetail_${row}`)
@@ -709,6 +720,8 @@
 
   }
 
+  
+
   function getDataPengembalian(dari, sampai, id) {
     aksi = $('#crudForm').data('action')
     data = {}
@@ -783,6 +796,7 @@
     });
 
   }
+  
 
   function showpengembalianKasGantung(form, userId) {
     return new Promise((resolve, reject) => {
