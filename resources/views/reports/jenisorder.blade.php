@@ -6,7 +6,7 @@
 <head>
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>Laporan Absen Trado</title>
+  <title>Laporan Jenis Order</title>
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.viewer.office2013.whiteblue.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.designer.office2013.whiteblue.css') }}">
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.reports.js') }}"></script>
@@ -31,18 +31,18 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ asset('public/reports/ReportAbsenTrado.mrt') }}`)
+      report.loadFile(`{{ asset('public/reports/ReportJenisOrder.mrt') }}`)
 
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
-        'absentrado': <?= json_encode($absentrados); ?>,
+        'jenisorder': <?= json_encode($jenisorders); ?>,
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
-      // designer.report = report;
-      // designer.renderHtml('content');
+    //   designer.report = report;
+    //   designer.renderHtml('content');
       viewer.report = report
       
      

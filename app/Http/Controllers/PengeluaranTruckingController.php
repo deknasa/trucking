@@ -79,6 +79,24 @@ class PengeluaranTruckingController extends MyController
 
         $pengeluaranTruckings = $response['data'];
 
-        return view('reports.pengeluarantrucking', compact('pengeluaranTr$pengeluaranTruckings'));
+        $i = 0;
+        foreach ($pengeluaranTruckings as $index => $params) {
+
+            $statusaktif = $params['format'];
+
+            $result = json_decode($statusaktif, true);
+
+            $statusaktif = $result['MEMO'];
+
+
+            $pengeluaranTruckings[$i]['format'] = $statusaktif;
+
+        
+            $i++;
+
+
+        }
+
+        return view('reports.pengeluarantrucking', compact('pengeluaranTruckings'));
     }
 }
