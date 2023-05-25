@@ -73,11 +73,13 @@ function initDisabled() {
 	});
 }
 
-function initAutoNumeric(elements = null) {
+function initAutoNumeric(elements = null, options = null) {
 	let option = {
 		digitGroupSeparator: formats.THOUSANDSEPARATOR,
 		decimalCharacter: formats.DECIMALSEPARATOR,
 	};
+
+	Object.assign(option, options)
 
 	if (elements == null) {
 		new AutoNumeric.multiple(".autonumeric", option);
