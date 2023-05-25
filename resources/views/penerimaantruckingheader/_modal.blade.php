@@ -511,9 +511,6 @@
 
   }
 
-
-
-
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
 
@@ -1221,7 +1218,7 @@
     })
   }
 
-  function setTotalNominal() {
+  function  setTotalNominal() {
     let nominalDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_nominal"]`)
     let nominal = 0
     $.each(nominalDetails, (index, nominalDetail) => {
