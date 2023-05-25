@@ -124,9 +124,16 @@
 
       return acl.id
     })
-
-    showUserAcl(userId)
-    loadAcoGrid()
+    
+    // showUserAcl(userId)
+    // loadAcoGrid()
+    Promise
+      .all([
+        loadAcoGrid()
+      ])
+      .then(() => {
+        showUserAcl(userId)
+      })
   }
 
   function showUserAcl(userId) {
@@ -321,7 +328,6 @@
       })
     })
   }
-
 
   function checkboxHandler(element) {
     let value = $(element).val();

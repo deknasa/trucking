@@ -451,7 +451,6 @@
       Simpan
     `)
     form.data('action', 'add')
-    // form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Pemutihan Supir')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
@@ -468,6 +467,8 @@
   async function editPemutihanSupir(pemutihanId) {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -476,20 +477,26 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Pemutihan Supir')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showPemutihanSupir(form, pemutihanId)
-    // let postList = await getEditPost(pemutihanId)
-    // let nonpostList = await getEditNonPost(pemutihanId)
-    // tablePost(`${pemutihanId}/getEditPost`)
-    // tableNonPost(`${pemutihanId}/getEditNonPost`)
+    Promise
+      .all([
+        showPemutihanSupir(form, pemutihanId)
+      ])
+        .then(() => {
+          $('#crudModal').modal('show')
+        })
+        .finally(() => {
+          $('.modal-loader').addClass('d-none')
+        })
 
   }
 
   function deletePemutihanSupir(userId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -499,11 +506,19 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Pemutihan Supir')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showPemutihanSupir(form, userId)
+    Promise
+      .all([
+        showPemutihanSupir(form, pemutihanId)
+      ])
+        .then(() => {
+          $('#crudModal').modal('show')
+        })
+        .finally(() => {
+          $('.modal-loader').addClass('d-none')
+        })
   }
 
   function tablePost(url) {
@@ -868,54 +883,57 @@
   }
 
   function showPemutihanSupir(form, pemutihanId) {
-    $('#detailList tbody').html('')
-    form.find(`[name="tglbukti"]`).prop('readonly', true)
-    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-    $.ajax({
-      url: `${apiUrl}pemutihansupir/${pemutihanId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
+    return new Promise((resolve, reject) => {
+      $('#detailList tbody').html('')
+      form.find(`[name="tglbukti"]`).prop('readonly', true)
+      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+      $.ajax({
+        url: `${apiUrl}pemutihansupir/${pemutihanId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            } else {
+              element.val(value)
+            }
+            if (index == 'supir') {
+              element.data('current-value', value).prop('readonly', true)
+              element.parent('.input-group').find('.button-clear').remove()
+              element.parent('.input-group').find('.input-group-append').remove()
+            }
+            if (index == 'bank') {
+              element.data('current-value', value).prop('readonly', true)
+              element.parent('.input-group').find('.button-clear').remove()
+              element.parent('.input-group').find('.input-group-append').remove()
+            }
+
+          })
+
+
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
+            tablePost(`${pemutihanId}/getDeletePost`)
+            selectAllRowsPosting(response.data.supir_id)
+            tableNonPost(`${pemutihanId}/getDeleteNonPost`)
+            selectAllRowsNonPosting(response.data.supir_id)
           } else {
-            element.val(value)
+            tablePost(`${pemutihanId}/getEditPost`)
+            selectAllRowsPosting(response.data.supir_id)
+            tableNonPost(`${pemutihanId}/getEditNonPost`)
+            selectAllRowsNonPosting(response.data.supir_id)
           }
-          if (index == 'supir') {
-            element.data('current-value', value).prop('readonly', true)
-            element.parent('.input-group').find('.button-clear').remove()
-            element.parent('.input-group').find('.input-group-append').remove()
-          }
-          if (index == 'bank') {
-            element.data('current-value', value).prop('readonly', true)
-            element.parent('.input-group').find('.button-clear').remove()
-            element.parent('.input-group').find('.input-group-append').remove()
-          }
-
-        })
-
-
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
-          tablePost(`${pemutihanId}/getDeletePost`)
-          selectAllRowsPosting(response.data.supir_id)
-          tableNonPost(`${pemutihanId}/getDeleteNonPost`)
-          selectAllRowsNonPosting(response.data.supir_id)
-        } else {
-          tablePost(`${pemutihanId}/getEditPost`)
-          selectAllRowsPosting(response.data.supir_id)
-          tableNonPost(`${pemutihanId}/getEditNonPost`)
-          selectAllRowsNonPosting(response.data.supir_id)
+          resolve()
         }
-      }
+      })
     })
   }
 

@@ -574,6 +574,15 @@
   }
 
   function tampilankst() {
+    $('[name=supplier]').parents('.form-group').hide()
+    $('[name=servicein_nobukti]').parents('.form-group').hide()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=keterangan]').parents('.form-group').hide()
+    $('[name=nobon]').parents('.form-group').hide()
+    $('[name=hutang_nobukti]').parents('.form-group').hide()
+    $('[name=coa]').parents('.form-group').hide()
+
     $('[name=gudang]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').show()
     $('[name=gandengan]').parents('.form-group').show()
@@ -587,6 +596,13 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('.tbl_penerimaanstok_nobukti').hide();
+    $('.tbl_qty').show()
+    $('.tbl_vulkanisirke').hide();
+    $('.tbl_harga').hide();
+    $('.tbl_persentase').hide();
+    $('.tbl_total').hide();
+    $('.colspan').attr('colspan', 4);
+    $('.sumrow').hide();
   }
 
   function tampilanpst() {
@@ -643,6 +659,10 @@
       },
       success: response => {
         var data = response.data;
+        // kategori.attr('disabled', true)
+        $('#crudForm').find(`[name="supplier"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+        $('#crudForm').find(`[name="supplier"]`).parents('.input-group').find('.button-clear').attr('disabled', true)
+        // attr('disabled', true)
         $('[name=supplier]').val(data.supplier).attr('readonly', true);
         $('[name=supplier]').data('currentValue', data.supplier)
 
@@ -1035,6 +1055,7 @@
 
   function editPenerimaanstokHeader(penerimaanStokHeaderId) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -1044,14 +1065,24 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Penerimaan Stok')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    showPenerimaanstokHeader(form, penerimaanStokHeaderId)
+
+    Promise
+      .all([
+        showPenerimaanstokHeader(form, penerimaanStokHeaderId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function deletePenerimaanstokHeader(penerimaanStokHeaderId) {
     let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -1061,12 +1092,19 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Penerimaan Stok')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    showPenerimaanstokHeader(form, penerimaanStokHeaderId)
 
-
+    Promise
+      .all([
+        showPenerimaanstokHeader(form, penerimaanStokHeaderId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function getMaxLength(form) {
@@ -1270,128 +1308,130 @@
   }
 
   function showPenerimaanstokHeader(form, penerimaanStokHeaderId) {
-    resetRow()
-    $.ajax({
-      url: `${apiUrl}penerimaanstokheader/${penerimaanStokHeaderId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        sum = 0;
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          if (element.attr("name") == 'tglbukti') {
-            var result = value.split('-');
-            element.val(result[2] + '-' + result[1] + '-' + result[0]);
-          } else {
-            element.val(value)
-          }
-        })
-
-        $.each(response.detail, (id, detail) => {
-          let detailRow = $(`
-            <tr class="trow">
-                  <td>
-                    <div class="baris">1</div>
-                  </td>
-                  
-                  <td>
-                    <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
-                    <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
-                  </td>
-                  <td class="data_tbl tbl_vulkanisirke">
-                    <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
-                  </td>  
-                  <td>
-                    <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
-                  </td>
-                  <td class="data_tbl tbl_qty">
-                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
-                  </td>  
-                  
-                  <td class="data_tbl tbl_harga">
-                    <input type="text"  name="detail_harga[]" id="detail_harga${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
-                  </td>  
-                  
-                  <td class="data_tbl tbl_penerimaanstok_nobukti">
-                    <input type="text"  name="detail_penerimaanstoknobukti[]" id="detail_penerimaanstoknobukti_${id}" class="form-control ">
-                    <input type="text" id="detailpenerimaanstoknobuktiId_${id}" readonly hidden class="detailpenerimaanstoknobuktiId" name="detail_penerimaanstoknobukti_id[]">
-                  </td>
-                  
-                  <td class="data_tbl tbl_persentase">
-                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
-                  </td>  
-                  <td class="data_tbl tbl_total">
-                    <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
-                  </td>  
-                  <td>
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                  </td>
-              </tr>
-          `)
-          detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
-          detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
-          detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
-          detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
-          detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
-          detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
-          detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
-          detailRow.find(`[name="totalItem[]"]`).val(detail.total)
-          detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
-          $('table #table_body').append(detailRow)
-          initAutoNumeric($(`.number${id}`))
-          setRowNumbers()
-          $(`#detail_stok_${id}`).lookup({
-            title: 'stok Lookup',
-            fileName: 'stok',
-            beforeProcess: function(test) {
-              this.postData = {
-                Aktif: 'AKTIF',
-
-              }
-            },
-            onSelectRow: (stok, element) => {
-              element.val(stok.namastok)
-              parent = element.closest('td');
-              parent.children('.detailstokId').val(stok.id)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
+    return new Promise((resolve, reject) => {
+      resetRow()
+      $.ajax({
+        url: `${apiUrl}penerimaanstokheader/${penerimaanStokHeaderId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          sum = 0;
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            if (element.attr("name") == 'tglbukti') {
+              var result = value.split('-');
+              element.val(result[2] + '-' + result[1] + '-' + result[0]);
+            } else {
+              element.val(value)
             }
           })
-          $(`#detail_penerimaanstoknobukti_${id}`).lookup({
-            title: 'penerimaan stok header Lookup',
-            fileName: 'penerimaanstokheader',
-            beforeProcess: function(test) {
-              var penerimaanstokId = $(`#penerimaanstokId`).val();
-              this.postData = {
-                penerimaanstok_id: penerimaanstokId,
-              }
-            },
-            onSelectRow: (penerimaan, element) => {
-              parent = element.closest('td');
-              parent.children('.detailpenerimaanstoknobuktiId').val(penerimaan.id)
-              element.val(penerimaan.nobukti)
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.val('')
-              parent = element.closest('td');
-              parent.children('.detailpenerimaanstoknobuktiId').val('')
-              element.data('currentValue', element.val())
-            }
-          })
-          id++;
-        })
-        sumary()
-        setKodePenerimaan(response.data.penerimaanstok);
 
-      }
+          $.each(response.detail, (id, detail) => {
+            let detailRow = $(`
+              <tr class="trow">
+                    <td>
+                      <div class="baris">1</div>
+                    </td>
+                    
+                    <td>
+                      <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
+                      <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                    </td>
+                    <td class="data_tbl tbl_vulkanisirke">
+                      <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                    </td>  
+                    <td>
+                      <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                    </td>
+                    <td class="data_tbl tbl_qty">
+                      <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                    </td>  
+                    
+                    <td class="data_tbl tbl_harga">
+                      <input type="text"  name="detail_harga[]" id="detail_harga${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                    </td>  
+                    
+                    <td class="data_tbl tbl_penerimaanstok_nobukti">
+                      <input type="text"  name="detail_penerimaanstoknobukti[]" id="detail_penerimaanstoknobukti_${id}" class="form-control ">
+                      <input type="text" id="detailpenerimaanstoknobuktiId_${id}" readonly hidden class="detailpenerimaanstoknobuktiId" name="detail_penerimaanstoknobukti_id[]">
+                    </td>
+                    
+                    <td class="data_tbl tbl_persentase">
+                      <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                    </td>  
+                    <td class="data_tbl tbl_total">
+                      <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
+                    </td>  
+                    <td>
+                      <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                    </td>
+                </tr>
+            `)
+            detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
+            detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
+            detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
+            detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
+            detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
+            detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
+            detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
+            detailRow.find(`[name="totalItem[]"]`).val(detail.total)
+            detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
+            $('table #table_body').append(detailRow)
+            initAutoNumeric($(`.number${id}`))
+            setRowNumbers()
+            $(`#detail_stok_${id}`).lookup({
+              title: 'stok Lookup',
+              fileName: 'stok',
+              beforeProcess: function(test) {
+                this.postData = {
+                  Aktif: 'AKTIF',
+
+                }
+              },
+              onSelectRow: (stok, element) => {
+                element.val(stok.namastok)
+                parent = element.closest('td');
+                parent.children('.detailstokId').val(stok.id)
+                element.data('currentValue', element.val())
+              },
+              onCancel: (element) => {
+                element.val(element.data('currentValue'))
+              }
+            })
+            $(`#detail_penerimaanstoknobukti_${id}`).lookup({
+              title: 'penerimaan stok header Lookup',
+              fileName: 'penerimaanstokheader',
+              beforeProcess: function(test) {
+                var penerimaanstokId = $(`#penerimaanstokId`).val();
+                this.postData = {
+                  penerimaanstok_id: penerimaanstokId,
+                }
+              },
+              onSelectRow: (penerimaan, element) => {
+                parent = element.closest('td');
+                parent.children('.detailpenerimaanstoknobuktiId').val(penerimaan.id)
+                element.val(penerimaan.nobukti)
+              },
+              onCancel: (element) => {
+                element.val(element.data('currentValue'))
+              },
+              onClear: (element) => {
+                element.val('')
+                parent = element.closest('td');
+                parent.children('.detailpenerimaanstoknobuktiId').val('')
+                element.data('currentValue', element.val())
+              }
+            })
+            id++;
+          })
+          sumary()
+          setKodePenerimaan(response.data.penerimaanstok);
+          resolve()
+        }
+      })
     })
   }
 
@@ -1547,6 +1587,9 @@
       onClear: (element) => {
         element.val('')
         element.data('currentValue', element.val())
+        $('#crudForm').find(`[name="supplier"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', false)
+        $('#crudForm').find(`[name="supplier"]`).parents('.input-group').find('.button-clear').attr('disabled', false)
+        $('[name=supplier]').attr('readonly', false);
       }
     })
 

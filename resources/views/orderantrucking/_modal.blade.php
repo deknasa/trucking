@@ -328,6 +328,8 @@
   function createOrderanTrucking() {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
@@ -336,7 +338,6 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Orderan Trucking')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -350,11 +351,19 @@
       ])
       .then(() => {
         showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function editOrderanTrucking(orderanTruckingId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -364,7 +373,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Orderan Trucking')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm [name=tglbukti]').attr('readonly', true)
@@ -378,11 +386,19 @@
       ])
       .then(() => {
         showOrderanTrucking(form, orderanTruckingId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function deleteOrderanTrucking(orderanTruckingId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -392,7 +408,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Orderan Trucking')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm [name=tglbukti]').attr('readonly', true)
@@ -405,6 +420,12 @@
       ])
       .then(() => {
         showOrderanTrucking(form, orderanTruckingId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -508,87 +529,92 @@
   }
 
   function showOrderanTrucking(form, orderanTruckingId) {
-    $.ajax({
-      url: `${apiUrl}orderantrucking/${orderanTruckingId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          containerId = response.data.container_id
-          jenisorderId = response.data.jenisorder_id
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}orderantrucking/${orderanTruckingId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            containerId = response.data.container_id
+            jenisorderId = response.data.jenisorder_id
 
-          if (index == 'tglbukti') {
-            element.val(dateFormat(value))
+            if (index == 'tglbukti') {
+              element.val(dateFormat(value))
+            }
+
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+
+            if (index == 'container') {
+              element.data('current-value', value)
+              console.log(containerId)
+                getcont(containerId)
+            }
+            if (index == 'agen') {
+              element.data('current-value', value)
+            }
+            if (index == 'jenisorder') {
+              element.data('current-value', value)
+            }
+            if (index == 'pelanggan') {
+              element.data('current-value', value)
+            }
+            if (index == 'tarifrincian') {
+              element.data('current-value', value)
+            }
+
+            if (index == 'agen_id') {
+              getagentas(value)
+            }
+          })
+
+
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
           }
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-
-          if (index == 'container') {
-            element.data('current-value', value)
-            console.log(containerId)
-              getcont(containerId)
-          }
-          if (index == 'agen') {
-            element.data('current-value', value)
-          }
-          if (index == 'jenisorder') {
-            element.data('current-value', value)
-          }
-          if (index == 'pelanggan') {
-            element.data('current-value', value)
-          }
-          if (index == 'tarifrincian') {
-            element.data('current-value', value)
-          }
-
-          if (index == 'agen_id') {
-            getagentas(value)
-          }
-        })
-
-
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          resolve()
         }
-      }
+      })
     })
   }
 
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}orderantrucking/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        containerId = 0
-        jenisorderId = 0
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}orderantrucking/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          containerId = 0
+          jenisorderId = 0
 
-        $.each(response.data, (index, value) => {
-          console.log(value)
-          let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+          $.each(response.data, (index, value) => {
+            console.log(value)
+            let element = form.find(`[name="${index}"]`)
+            // let element = form.find(`[name="statusaktif"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-
-
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
     })
   }
 

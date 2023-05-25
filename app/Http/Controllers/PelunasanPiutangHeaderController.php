@@ -195,7 +195,7 @@ class PelunasanPiutangHeaderController extends MyController
         $pelunasanpiutang_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/pelunasanpiutangdetail', $detailParams);
+            ->get(config('app.api_url') . 'pelunasanpiutangdetail', $detailParams);
         
         
         $pelunasanpiutang_details = $pelunasanpiutang_detail['data'];

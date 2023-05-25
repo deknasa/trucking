@@ -98,7 +98,7 @@ class GajiSupirHeaderController extends MyController
         $gajisupir_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get('http://localhost/trucking-laravel/public/api/gajisupirdetail', $detailParams);
+            ->get(config('app.api_url') . 'gajisupirdetail', $detailParams);
         
         $data = $header['data'];
         $gajisupir_details = $gajisupir_detail['data'];

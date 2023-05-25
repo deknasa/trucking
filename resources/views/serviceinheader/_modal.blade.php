@@ -260,6 +260,8 @@
     function editServicein(id) {
         let form = $('#crudForm')
 
+        $('.modal-loader').removeClass('d-none')
+
         form.data('action', 'edit')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
@@ -267,14 +269,25 @@
             Simpan
         `)
         $('#crudModalTitle').text('Edit Service In ')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        showServicein(form, id)
+
+        Promise
+            .all([
+                showServicein(form, id)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
     }
 
     function deleteServicein(id) {
         let form = $('#crudForm')
+
+        $('.modal-loader').removeClass('d-none')
 
         form.data('action', 'delete')
         form.trigger('reset')
@@ -284,102 +297,114 @@
         `)
         form.find(`.sometimes`).hide()
         $('#crudModalTitle').text('Delete Service in')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        showServicein(form, id)
+
+        Promise
+            .all([
+                showServicein(form, id)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+        
     }
 
     function showServicein(form, id) {
-        $('#detailList tbody').html('')
+        return new Promise((resolve, reject) => {
+            $('#detailList tbody').html('')
+            form.find(`[name="tglbukti"]`).prop('readonly', true)
+            form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+            
+            $.ajax({
+                url: `${apiUrl}serviceinheader/${id}`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    $.each(response.data, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
 
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-        
-        $.ajax({
-            url: `${apiUrl}serviceinheader/${id}`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-                $.each(response.data, (index, value) => {
-                    let element = form.find(`[name="${index}"]`)
-
-                    if (element.is('select')) {
-                        element.val(value).trigger('change')
-                    } else if (element.hasClass('datepicker')) {
-                        element.val(dateFormat(value))
-                    } else {
-                        element.val(value)
-                    }
-
-                    if (index == 'trado') {
-                        element.data('current-value', value)
-                    }
-
-                })
-
-                $.each(response.detail, (index, detail) => {
-                    let detailRow = $(`
-                    <tr>
-                        <td></td>
-                        <td>
-                            <input type="hidden" name="karyawan_id[]" class="form-control">
-                            <input type="text" name="karyawan[]" data-current-value="${detail.karyawan}" class="form-control karyawan-lookup">
-                        </td>
-
-                        <td>
-                            <input type="text" name="keterangan_detail[]" class="form-control">
-                        </td>
-
-                        <td>
-                            <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
-                        </td>
-                    </tr>`)
-
-                    detailRow.find(`[name="karyawan[]"]`).val(detail.karyawan)
-                    detailRow.find(`[name="karyawan_id[]"]`).val(detail.karyawan_id)
-
-                    detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-
-                    $('#detailList tbody').append(detailRow)
-
-                    $('.karyawan-lookup').last().lookup({
-                        title: 'Karyawan Lookup',
-                        fileName: 'karyawan',
-                        beforeProcess: function(test) {
-                            // var levelcoa = $(`#levelcoa`).val();
-                            this.postData = {
-
-                                Aktif: 'AKTIF',
-                                staff: 'MEKANIK'
-                            }
-                        },
-                        onSelectRow: (karyawan, element) => {
-                            element.parents('td').find(`[name="karyawan_id[]"]`).val(karyawan.id)
-                            element.val(karyawan.namakaryawan)
-                            element.data('currentValue', element.val())
-                        },
-                        onCancel: (element) => {
-                            element.val(element.data('currentValue'))
-                        },
-                        onClear: (element) => {
-                            element.parents('td').find(`[name="karyawan_id[]"]`).val('')
-                            element.val('')
-                            element.data('currentValue', element.val())
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else if (element.hasClass('datepicker')) {
+                            element.val(dateFormat(value))
+                        } else {
+                            element.val(value)
                         }
+
+                        if (index == 'trado') {
+                            element.data('current-value', value)
+                        }
+
                     })
 
+                    $.each(response.detail, (index, detail) => {
+                        let detailRow = $(`
+                        <tr>
+                            <td></td>
+                            <td>
+                                <input type="hidden" name="karyawan_id[]" class="form-control">
+                                <input type="text" name="karyawan[]" data-current-value="${detail.karyawan}" class="form-control karyawan-lookup">
+                            </td>
 
-                })
-                setRowNumbers()
-                if (form.data('action') === 'delete') {
-                    form.find('[name]').addClass('disabled')
-                    initDisabled()
+                            <td>
+                                <input type="text" name="keterangan_detail[]" class="form-control">
+                            </td>
+
+                            <td>
+                                <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+                            </td>
+                        </tr>`)
+
+                        detailRow.find(`[name="karyawan[]"]`).val(detail.karyawan)
+                        detailRow.find(`[name="karyawan_id[]"]`).val(detail.karyawan_id)
+
+                        detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+
+                        $('#detailList tbody').append(detailRow)
+
+                        $('.karyawan-lookup').last().lookup({
+                            title: 'Karyawan Lookup',
+                            fileName: 'karyawan',
+                            beforeProcess: function(test) {
+                                // var levelcoa = $(`#levelcoa`).val();
+                                this.postData = {
+
+                                    Aktif: 'AKTIF',
+                                    staff: 'MEKANIK'
+                                }
+                            },
+                            onSelectRow: (karyawan, element) => {
+                                element.parents('td').find(`[name="karyawan_id[]"]`).val(karyawan.id)
+                                element.val(karyawan.namakaryawan)
+                                element.data('currentValue', element.val())
+                            },
+                            onCancel: (element) => {
+                                element.val(element.data('currentValue'))
+                            },
+                            onClear: (element) => {
+                                element.parents('td').find(`[name="karyawan_id[]"]`).val('')
+                                element.val('')
+                                element.data('currentValue', element.val())
+                            }
+                        })
+
+
+                    })
+                    setRowNumbers()
+                    if (form.data('action') === 'delete') {
+                        form.find('[name]').addClass('disabled')
+                        initDisabled()
+                    }
+                    resolve()
                 }
-            }
+            })
         })
     }
 

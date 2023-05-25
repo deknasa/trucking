@@ -193,11 +193,6 @@
             }
           },
           {
-            label: 'pelanggan',
-            name: 'pelanggan',
-            align: 'left'
-          },
-          {
             label: 'bank',
             name: 'bank',
             align: 'left'

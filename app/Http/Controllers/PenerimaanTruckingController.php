@@ -66,6 +66,24 @@ class PenerimaanTruckingController extends MyController
 
         $penerimaanTruckings = $response['data'];
 
-        return view('reports.penerimaantrucking', compact('penerimaanTr$penerimaanTruckings'));
+        $i = 0;
+        foreach ($penerimaanTruckings as $index => $params) {
+
+            $statusaktif = $params['format'];
+
+            $result = json_decode($statusaktif, true);
+
+            $statusaktif = $result['MEMO'];
+
+
+            $penerimaanTruckings[$i]['format'] = $statusaktif;
+
+        
+            $i++;
+
+
+        }
+
+        return view('reports.penerimaantrucking', compact('penerimaanTruckings'));
     }
 }

@@ -274,6 +274,8 @@
   function editRekapPenerimaanHeader(rekapPenerimaanId) {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -282,15 +284,25 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Penerimaan Stok')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    
-    showRekapPenerimaan(form, rekapPenerimaanId)
+
+    Promise
+      .all([
+        showRekapPenerimaan(form, rekapPenerimaanId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function deleteRekapPenerimaanHeader(rekapPenerimaanId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -300,11 +312,19 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Penerimaan Stok')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showRekapPenerimaan(form, rekapPenerimaanId)
+    Promise
+      .all([
+        showRekapPenerimaan(form, rekapPenerimaanId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
   }
 
@@ -383,33 +403,35 @@
   }
     
   function showRekapPenerimaan(form, rekapPenerimaanId) {
+    return new Promise((resolve, reject) => {
     resetRow()
-    $.ajax({
-      url: `${apiUrl}rekappenerimaanheader/${rekapPenerimaanId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        sum =0;
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          }else if(element.attr("name") == 'tglbukti'){
-            var result = value.split('-');
-            element.val(result[2]+'-'+result[1]+'-'+result[0]);
-          }else if(element.attr("name") == 'tgltransaksi'){
-            var result = value.split('-');
-            element.val(result[2]+'-'+result[1]+'-'+result[0]);
-          } else {
-            element.val(value)
-          }
-        })
-        getRekapPenerimaan(rekapPenerimaanId)
-
-      }
+      $.ajax({
+        url: `${apiUrl}rekappenerimaanheader/${rekapPenerimaanId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          sum =0;
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            }else if(element.attr("name") == 'tglbukti'){
+              var result = value.split('-');
+              element.val(result[2]+'-'+result[1]+'-'+result[0]);
+            }else if(element.attr("name") == 'tgltransaksi'){
+              var result = value.split('-');
+              element.val(result[2]+'-'+result[1]+'-'+result[0]);
+            } else {
+              element.val(value)
+            }
+          })
+          getRekapPenerimaan(rekapPenerimaanId)
+          resolve()
+        }
+      })
     })
   }
 

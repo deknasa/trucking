@@ -62,7 +62,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  DIBAYAR KE <span class="text-danger">*</span></label>
+                  DIBAYAR KE
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="dibayarke" class="form-control">
@@ -358,8 +358,8 @@
 
   function createPengeluaran() {
     let form = $('#crudForm')
-
-    $('#crudModal').find('#crudForm').trigger('reset')
+    $('.modal-loader').removeClass('d-none')
+    form.trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
       Simpan
@@ -367,7 +367,6 @@
     form.data('action', 'add')
 
     $('#crudModalTitle').text('Add Pengeluaran')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -380,13 +379,17 @@
       .all([
         setStatusJenisTransaksiOptions(form)
       ])
-      // console.log('c')
       .then(() => {
         showDefault(form)
+          .then(() => {
+            clearSelectedRows()
+            $('#gs_').prop('checked', false)
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
-
-
-
 
     addRow()
     setTotal()
@@ -394,34 +397,37 @@
 
 
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}pengeluaranheader/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        bankId = response.data.bank_id
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}pengeluaranheader/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          bankId = response.data.bank_id
 
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-      }
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+
+          resolve()
+        }
+      })
     })
   }
 
 
   function editPengeluaran(id) {
     let form = $('#crudForm')
-
+    $('.modal-loader').removeClass('d-none')
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -429,7 +435,6 @@
       Simpan
     `)
     $('#crudModalTitle').text('Edit Pengeluaran')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise
@@ -438,6 +443,14 @@
       ])
       .then(() => {
         showPengeluaran(form, id)
+          .then(() => {
+            clearSelectedRows()
+            $('#gs_').prop('checked', false)
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
 
   }
@@ -445,7 +458,7 @@
   function deletePengeluaran(id) {
 
     let form = $('#crudForm')
-
+    $('.modal-loader').removeClass('d-none')
     form.data('action', 'delete')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -453,7 +466,6 @@
       Hapus
     `)
     $('#crudModalTitle').text('Delete Pengeluaran')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise
@@ -462,6 +474,14 @@
       ])
       .then(() => {
         showPengeluaran(form, id)
+          .then(() => {
+            clearSelectedRows()
+            $('#gs_').prop('checked', false)
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
 
   }
@@ -560,128 +580,132 @@
   }
 
   function showPengeluaran(form, id) {
-    $('#detailList tbody').html('')
+    return new Promise((resolve, reject) => {
+      $('#detailList tbody').html('')
 
-    $('#crudForm [name=tglbukti]').attr('readonly', true)
-    $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+      $('#crudForm [name=tglbukti]').attr('readonly', true)
+      $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
 
-    $.ajax({
-      url: `${apiUrl}pengeluaranheader/${id}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        let tgl = response.data.tglbukti
+      $.ajax({
+        url: `${apiUrl}pengeluaranheader/${id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let tgl = response.data.tglbukti
 
-        $.each(response.data, (index, value) => {
-          bankId = response.data.bank_id
-          console.log(response.data.bank_id)
-          let element = form.find(`[name="${index}"]`)
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
-          } else {
-            element.val(value)
-          }
+          $.each(response.data, (index, value) => {
+            bankId = response.data.bank_id
+            console.log(response.data.bank_id)
+            let element = form.find(`[name="${index}"]`)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            } else {
+              element.val(value)
+            }
 
-          if (index == 'pelanggan') {
-            element.data('current-value', value)
-          }
-          if (index == 'alatbayar') {
-            element.data('current-value', value)
-          }
-          if (index == 'bank') {
-            element.data('current-value', value)
-          }
-        })
-
-        $.each(response.detail, (index, detail) => {
-          let detailRow = $(`
-            <tr>
-                <td></td>
-                <td>
-                  <input type="hidden" name="coadebet[]">
-                  <input type="text" name="ketcoadebet[]" data-current-value="${detail.ketcoadebet}" class="form-control akunpusat-lookup">
-                </td>                
-                <td>
-                    <input type="text" name="keterangan_detail[]"  class="form-control">
-                </td>
-                <td>
-                    <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
-                </td>
-
-                <td>
-                    <input type="text" name="nowarkat[]"  class="form-control">
-                </td>
-                <td>
-                    <div class="input-group">
-                        <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
-                    </div>
-                </td>
-                <td>
-                    <div class="input-group">
-                        <input type="text" name="bulanbeban[]" class="form-control datepicker">   
-                    </div>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                </td>
-            </tr>
-          `)
-
-          detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
-          detailRow.find(`[name="tgljatuhtempo[]"]`).val(detail.tgljatuhtempo)
-          detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-          detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
-          detailRow.find(`[name="coadebet[]"]`).val(detail.coadebet)
-          detailRow.find(`[name="ketcoadebet[]"]`).val(detail.ketcoadebet)
-
-          detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
-          initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
-
-          detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
-          $('#detailList tbody').append(detailRow)
-
-          setTotal();
-
-          $('.akunpusat-lookup').last().lookup({
-            title: 'Kode Perk. Lookup',
-            fileName: 'akunpusat',
-            beforeProcess: function(test) {
-              // var levelcoa = $(`#levelcoa`).val();
-              this.postData = {
-                levelCoa: '3',
-                Aktif: 'AKTIF',
-              }
-            },
-            onSelectRow: (akunpusat, element) => {
-              $(`#crudForm [name="coadebet[]"]`).last().val(akunpusat.coa)
-              element.val(akunpusat.keterangancoa)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              $(`#crudForm [name="coadebet[]"]`).last().val('')
-              element.val('')
-              element.data('currentValue', element.val())
+            if (index == 'pelanggan') {
+              element.data('current-value', value)
+            }
+            if (index == 'alatbayar') {
+              element.data('current-value', value)
+            }
+            if (index == 'bank') {
+              element.data('current-value', value)
             }
           })
 
+          $.each(response.detail, (index, detail) => {
+            let detailRow = $(`
+              <tr>
+                  <td></td>
+                  <td>
+                    <input type="hidden" name="coadebet[]">
+                    <input type="text" name="ketcoadebet[]" data-current-value="${detail.ketcoadebet}" class="form-control akunpusat-lookup">
+                  </td>                
+                  <td>
+                      <input type="text" name="keterangan_detail[]"  class="form-control">
+                  </td>
+                  <td>
+                      <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
+                  </td>
 
-        })
+                  <td>
+                      <input type="text" name="nowarkat[]"  class="form-control">
+                  </td>
+                  <td>
+                      <div class="input-group">
+                          <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
+                      </div>
+                  </td>
+                  <td>
+                      <div class="input-group">
+                          <input type="text" name="bulanbeban[]" class="form-control datepicker">   
+                      </div>
+                  </td>
+                  <td>
+                      <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                  </td>
+              </tr>
+            `)
 
-        setRowNumbers()
-        initDatepicker()
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+            detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
+            detailRow.find(`[name="tgljatuhtempo[]"]`).val(detail.tgljatuhtempo)
+            detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+            detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
+            detailRow.find(`[name="coadebet[]"]`).val(detail.coadebet)
+            detailRow.find(`[name="ketcoadebet[]"]`).val(detail.ketcoadebet)
+
+            detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
+            initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+
+            detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
+            $('#detailList tbody').append(detailRow)
+
+            setTotal();
+
+            $('.akunpusat-lookup').last().lookup({
+              title: 'Kode Perk. Lookup',
+              fileName: 'akunpusat',
+              beforeProcess: function(test) {
+                // var levelcoa = $(`#levelcoa`).val();
+                this.postData = {
+                  levelCoa: '3',
+                  Aktif: 'AKTIF',
+                }
+              },
+              onSelectRow: (akunpusat, element) => {
+                $(`#crudForm [name="coadebet[]"]`).last().val(akunpusat.coa)
+                element.val(akunpusat.keterangancoa)
+                element.data('currentValue', element.val())
+              },
+              onCancel: (element) => {
+                element.val(element.data('currentValue'))
+              },
+              onClear: (element) => {
+                $(`#crudForm [name="coadebet[]"]`).last().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+              }
+            })
+
+
+          })
+
+          setRowNumbers()
+          initDatepicker()
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
+          }
+
+          resolve()
         }
-      }
+      })
     })
   }
 

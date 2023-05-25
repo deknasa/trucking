@@ -282,6 +282,8 @@
   function createParameter() {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
@@ -289,14 +291,22 @@
   `)
     form.data('action', 'add')
     $('#crudModalTitle').text('Create Parameter')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     $('#table_body').html('')
     addRow()
 
-      setDefaultOptions(form)
+    Promise
+      .all([
+        setDefaultOptions(form)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   const setDefaultOptions = function(relatedForm) {
@@ -339,6 +349,8 @@
   function editParameter(parameterId) {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -346,10 +358,8 @@
     Simpan
   `)
     $('#crudModalTitle').text('Edit Parameter')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
 
     Promise
       .all([
@@ -357,13 +367,19 @@
       ])
       .then(() => {
         showParameter(form, parameterId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('modal-loader').addClass('d.none')
+          })
       })
-
-
   }
 
   function deleteParameter(parameterId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -373,7 +389,6 @@
   `)
     form.find('[name]').addClass('disabled')
     $('#crudModalTitle').text('Delete Parameter')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -383,8 +398,13 @@
       ])
       .then(() => {
         showParameter(form, parameterId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
-
   }
 
   function isJSON(something) {
@@ -400,94 +420,97 @@
   }
 
   function showParameter(form, parameterId) {
-    $.ajax({
-      url: `${apiUrl}parameter/${parameterId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
-
-        let memo = response.data.memo
-        let isJson = isJSON(memo);
-
-        if (isJson === false) {
-          addRow();
-        } else {
-
-          let memoToArray = JSON.parse(memo)
-          $.each(memoToArray, (index, detail) => {
-
-            let detailRow = $(`
-              <tr>
-                <td>
-                    <input type="text" name="key[]" class="form-control">
-                </td>
-                <td>
-                  <div class="input-group" id="${index}">
-                    <input type="text" name="value[]" class="form-control">
-                  </div>
-                </td>
-                <td>
-                    <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
-                </td>
-            </tr>`)
-            let inputColor = $(`<div class="input-group-prepend" style="width:50px; background: #fff">
-                      <span class="input-group-text form-control" id="basic-addon2" style="background: #fff">
-                        <input type="color" name="color[]" style="border:none; background: #fff">
-                      </span>
-                    </div>`)
-
-            detailRow.find(`[name="key[]"]`).val(index)
-            detailRow.find(`[name="value[]"]`).val(detail)
-
-            $('#detailList tbody').append(detailRow)
-            if (index == 'WARNA') {
-              // detailRow.find(`[name="value[]"]`).css({'color':`'${detail}'`});      
-              // detailRow.find(`[name="value[]"]`).prop('disabled', true);      
-              let test = $('#detailList tbody').find(`#${index}`).prepend(inputColor);
-              detailRow.find(`[name="color[]"]`).val(detail)
-              detailRow.find(`[name="key[]"]`).addClass('disabled')
-              initDisabled()
-            }
-            if(index == 'JURNAL'){
-              detailRow.find(`[name="key[]"]`).addClass('disabled')
-              initDisabled()
-              detailRow.find(`[name="value[]"]`).addClass("coa-lookup")
-              $('.coa-lookup').last().lookup({
-                title: 'Jurnal Lookup',
-                fileName: 'akunpusat',
-                onSelectRow: (akunpusat, element) => {
-                  element.val(akunpusat.coa)
-                  element.data('currentValue', element.val())
-                },
-                onCancel: (element) => {
-                  element.val(element.data('currentValue'))
-                },
-                onClear: (element) => {
-                  element.val('')
-                  element.data('currentValue', element.val())
-                }
-              })
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}parameter/${parameterId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
             }
           })
-        }
 
+          let memo = response.data.memo
+          let isJson = isJSON(memo);
 
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          if (isJson === false) {
+            addRow();
+          } else {
+
+            let memoToArray = JSON.parse(memo)
+            $.each(memoToArray, (index, detail) => {
+
+              let detailRow = $(`
+                <tr>
+                  <td>
+                      <input type="text" name="key[]" class="form-control">
+                  </td>
+                  <td>
+                    <div class="input-group" id="${index}">
+                      <input type="text" name="value[]" class="form-control">
+                    </div>
+                  </td>
+                  <td>
+                      <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+                  </td>
+              </tr>`)
+              let inputColor = $(`<div class="input-group-prepend" style="width:50px; background: #fff">
+                        <span class="input-group-text form-control" id="basic-addon2" style="background: #fff">
+                          <input type="color" name="color[]" style="border:none; background: #fff">
+                        </span>
+                      </div>`)
+
+              detailRow.find(`[name="key[]"]`).val(index)
+              detailRow.find(`[name="value[]"]`).val(detail)
+
+              $('#detailList tbody').append(detailRow)
+              if (index == 'WARNA') {
+                // detailRow.find(`[name="value[]"]`).css({'color':`'${detail}'`});      
+                // detailRow.find(`[name="value[]"]`).prop('disabled', true);      
+                let test = $('#detailList tbody').find(`#${index}`).prepend(inputColor);
+                detailRow.find(`[name="color[]"]`).val(detail)
+                detailRow.find(`[name="key[]"]`).addClass('disabled')
+                initDisabled()
+              }
+              if(index == 'JURNAL'){
+                detailRow.find(`[name="key[]"]`).addClass('disabled')
+                initDisabled()
+                detailRow.find(`[name="value[]"]`).addClass("coa-lookup")
+                $('.coa-lookup').last().lookup({
+                  title: 'Jurnal Lookup',
+                  fileName: 'akunpusat',
+                  onSelectRow: (akunpusat, element) => {
+                    element.val(akunpusat.coa)
+                    element.data('currentValue', element.val())
+                  },
+                  onCancel: (element) => {
+                    element.val(element.data('currentValue'))
+                  },
+                  onClear: (element) => {
+                    element.val('')
+                    element.data('currentValue', element.val())
+                  }
+                })
+              }
+            })
+          }
+
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
+          }
+
+          resolve()
         }
-      }
+      })
     })
   }
 

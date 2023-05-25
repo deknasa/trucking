@@ -79,10 +79,12 @@
 
   $(document).ready(function() {
     $("#tabs").tabs()
-    $('.select2').select2({
-      width: 'resolve',
-      theme: "bootstrap4"
-    });
+    // $('.select2').select2({
+    //   width: 'resolve',
+    //   theme: "bootstrap4"
+    // });
+    initSelect2($('#kodepengeluaranheader'),false)
+    
     setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {

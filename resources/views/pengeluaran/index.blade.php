@@ -492,8 +492,6 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
               createPengeluaran()
             }
           },
@@ -509,8 +507,7 @@
               } else {
                 cekValidasi(selectedId, 'EDIT')
               }
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
+              
             }
           },
           {
@@ -525,8 +522,7 @@
               } else {
                 cekValidasi(selectedId, 'DELETE')
               }
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
+              
             }
           },
           {

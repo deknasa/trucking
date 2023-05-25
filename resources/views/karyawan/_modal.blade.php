@@ -32,7 +32,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  KETERANGAN <span class="text-danger">*</span>
+                  KETERANGAN
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -214,14 +214,11 @@
     $('#crudModalTitle').text('Create Karyawan')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
-
-
+    
     Promise
       .all([
         setStatusAktifOptions(form),
         setStatusStaffOptions(form)
-
       ])
       .then(() => {
         showDefault(form)

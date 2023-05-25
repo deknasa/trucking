@@ -376,6 +376,8 @@
   function createTarif() {
     let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
@@ -384,7 +386,6 @@
     form.data('action', 'add')
     // form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Add Tarif')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -397,16 +398,24 @@
         setStatusPenyesuaianHargaOptions(form),
         setStatusSistemTonOptions(form)
       ])
-      // console.log('c')
       .then(() => {
         showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
+
     initAutoNumeric(form.find(`[name="nominal"]`))
     initAutoNumeric(form.find(`[name="nominalton"]`))
   }
 
   function editTarif(tarifId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'edit')
     form.trigger('reset')
@@ -416,7 +425,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Tarif')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -428,11 +436,19 @@
       ])
       .then(() => {
         showTarif(form, tarifId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function deleteTarif(tarifId) {
     let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -442,7 +458,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Tarif')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -454,6 +469,12 @@
       ])
       .then(() => {
         showTarif(form, tarifId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -595,87 +616,86 @@
   }
 
   function showTarif(form, tarifId, parent = false) {
-    $('#detailList tbody').html('')
-    $.ajax({
-      url: `${apiUrl}tarif/${tarifId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        if (parent) {
-          delete response.data['id'];
-          delete response.data['parent_id'];
-          delete response.data['parent'];
-        }
-
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
-          }
-          else {
-              element.val(value)
+    return new Promise((resolve, reject) => {
+      $('#detailList tbody').html('')
+      $.ajax({
+        url: `${apiUrl}tarif/${tarifId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          if (parent) {
+            delete response.data['id'];
+            delete response.data['parent_id'];
+            delete response.data['parent'];
           }
 
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-
-          if (index == 'container') {
-            element.data('current-value', value)
-          }
-          if (index == 'kota') {
-            element.data('current-value', value)
-          }
-          if (index == 'zona') {
-            element.data('current-value', value)
-          }
-          if (index == 'keterangan') {
-            element.data('current-value', value)
-          }
-        })
-
-
- $.each(response.detail, (index, detail) => {
-            // $.each(response.data.upahsupir_rincian, (index, detail) => {
-            let detailRow = $(`
-              <tr>
-                <td></td>
-                
-                
-                <input type="hidden" name="detail_id[]" value="${detail.id}">
-                <td>
-                  <input type="hidden" name="container_id[]">
-                  <input type="text" name="container[]" data-current-value="${detail.container}" class="form-control " readonly>
-                </td>
-                <td>
-                  <input type="text" name="nominal[]" class="form-control autonumeric">
-                </td>
-                
-              </tr>
-            `)
-    
-            detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
-            detailRow.find(`[name="container[]"]`).val(detail.container)
-            detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
-    
-            $('#detailList tbody').append(detailRow)
-    
-            initAutoNumeric(detailRow.find('.autonumeric'))
-            setNominal()
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            }
+            else {
+                element.val(value)
+            }
+            
+            if (index == 'container') {
+              element.data('current-value', value)
+            }
+            if (index == 'kota') {
+              element.data('current-value', value)
+            }
+            if (index == 'zona') {
+              element.data('current-value', value)
+            }
           })
-          // setuprowshow(userId);
 
-          setRowNumbers()
 
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          $.each(response.detail, (index, detail) => {
+              // $.each(response.data.upahsupir_rincian, (index, detail) => {
+              let detailRow = $(`
+                <tr>
+                  <td></td>
+                  
+                  
+                  <input type="hidden" name="detail_id[]" value="${detail.id}">
+                  <td>
+                    <input type="hidden" name="container_id[]">
+                    <input type="text" name="container[]" data-current-value="${detail.container}" class="form-control " readonly>
+                  </td>
+                  <td>
+                    <input type="text" name="nominal[]" class="form-control autonumeric">
+                  </td>
+                  
+                </tr>
+              `)
+      
+              detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+              detailRow.find(`[name="container[]"]`).val(detail.container)
+              detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+      
+              $('#detailList tbody').append(detailRow)
+      
+              initAutoNumeric(detailRow.find('.autonumeric'))
+              setNominal()
+            })
+            // setuprowshow(userId);
+
+            setRowNumbers()
+
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
+          }
+
+          resolve()
         }
-      }
+      })
     })
   }
 
@@ -928,27 +948,29 @@
   }
 
   function showDefault(form) {
-    $.ajax({
-      url: `${apiUrl}tarif/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          // let element = form.find(`[name="statusaktif"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}tarif/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            // let element = form.find(`[name="statusaktif"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          } else {
-            element.val(value)
-          }
-        })
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
 
-
-      }
+        }
+      })
     })
   }
   

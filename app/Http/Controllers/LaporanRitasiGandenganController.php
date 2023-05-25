@@ -32,19 +32,21 @@ class LaporanRitasiGandenganController extends MyController
         $detailParams = [
             'periode' => $request->periode,
         ];
+
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporanritasigandengan/export', $detailParams);
+
+        $data = $header['data'];
+        // echo json_encode($data);
+        // die;
+
         date_default_timezone_set("Asia/Jakarta");
 
         $monthNum  = intval(substr($request->periode, 0, 2));
         $yearNum  = substr($request->periode,3);
         $monthName = $this->getBulan($monthNum);
-        
-        // $responses = Http::withHeaders($request->header())
-        //     ->withOptions(['verify' => false])
-        //     ->withToken(session('access_token'))
-        //     ->get(config('app.api_url') . 'laporanritasigandengan/export', $detailParams);
-
-        // $pengeluaran = $responses['data'];
-        // $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -77,8 +79,6 @@ class LaporanRitasiGandenganController extends MyController
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
 
-
-
         $writer = new Xlsx($spreadsheet);
         $filename = 'LAPORANRITASIGANDENGAN' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
@@ -89,7 +89,7 @@ class LaporanRitasiGandenganController extends MyController
     }
 
     public function getBulan($bln){
-        switch ($bln){
+        switch ($bln){ 
          case 1:
           return "JANUARI";
           break;
