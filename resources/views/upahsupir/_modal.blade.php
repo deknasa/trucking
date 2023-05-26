@@ -559,6 +559,7 @@
         showUpahSupir(form, id)
           .then((upahsupir) => {
             initDropzone(form.data('action'), upahsupir);
+          
           })
           .then(() => {
             $('#crudModal').modal('show')
@@ -802,7 +803,12 @@
             }
 
           })
-
+          initAutoNumeric(form.find(`[name="jarak"]`), {
+            minimumValue: 0
+          })
+          // initAutoNumeric(form.find('.autonumeric'), {
+          //   minimumValue: 0
+          // })
           $.each(response.detail, (index, detail) => {
             // $.each(response.data.upahsupir_rincian, (index, detail) => {
             let detailRow = $(`
