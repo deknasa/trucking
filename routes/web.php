@@ -388,6 +388,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('stok/field_length', [StokController::class, 'fieldLength'])->name('stok.field_length');
     Route::get('stok/{id}/delete', [StokController::class, 'delete'])->name('stok.delete');
     Route::get('stok/get', [StokController::class, 'get'])->name('stok.get');
+    Route::get('stok/report', [StokController::class, 'report'])->name('stok.report');
     Route::get('stok/index', [StokController::class, 'index']);
     Route::resource('stok', StokController::class);
 
@@ -546,12 +547,16 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('gudang/{id}/delete', [GudangController::class, 'delete'])->name('gudang.delete');
     Route::get('gudang/get', [GudangController::class, 'get'])->name('gudang.get');
     Route::get('gudang/index', [GudangController::class, 'index']);
-    Route::resource('gudang', GudangController::class);
+    Route::get('gudang/report', [GudangController::class, 'report'])->name('gudang.report');
+    Route::get('gudang/export', [GudangController::class, 'export'])->name('gudang.export');
+    Route::resource('gudang', GudangControlle\r::class);
 
     Route::get('subkelompok/report', [SubKelompokController::class, 'report'])->name('subkelompok.report');
     Route::get('subkelompok/{id}/delete', [SubKelompokController::class, 'delete'])->name('subkelompok.delete');
     Route::get('subkelompok/get', [SubKelompokController::class, 'get'])->name('subkelompok.get');
     Route::get('subkelompok/index', [SubKelompokController::class, 'index']);
+    Route::get('subkelompok/report', [SubKelompokController::class, 'report'])->name('subkelompok.report');
+    Route::get('subkelompok/export', [SubKelompokController::class, 'export'])->name('subkelompok.export');
     Route::resource('subkelompok', SubKelompokController::class);
 
     Route::get('supplier/report', [SupplierController::class, 'report'])->name('supplier.report');
@@ -564,12 +569,16 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('kategori/{id}/delete', [KategoriController::class, 'delete'])->name('kategori.delete');
     Route::get('kategori/get', [KategoriController::class, 'get'])->name('kategori.get');
     Route::get('kategori/index', [KategoriController::class, 'index']);
+    Route::get('kategori/report', [KategoriController::class, 'report'])->name('kategori.report');
+    Route::get('kategori/export', [KategoriController::class, 'export'])->name('kategori.export');
     Route::resource('kategori', KategoriController::class);
 
     Route::get('kelompok/field_length', [KelompokController::class, 'fieldLength'])->name('kelompok.field_length');
     Route::get('kelompok/{id}/delete', [KelompokController::class, 'delete'])->name('kelompok.delete');
     Route::get('kelompok/get', [KelompokController::class, 'get'])->name('kelompok.get');
     Route::get('kelompok/index', [KelompokController::class, 'index']);
+    Route::get('kelompok/report', [KelompokController::class, 'report'])->name('kelompok.report');
+    Route::get('kelompok/export', [KelompokController::class, 'export'])->name('kelompok.export');
     Route::resource('kelompok', KelompokController::class);
 
     Route::get('kerusakan/field_length', [KerusakanController::class, 'fieldLength'])->name('kerusakan.field_length');
@@ -618,6 +627,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('merk/{id}/delete', [MerkController::class, 'delete'])->name('merk.delete');
     Route::get('merk/get', [MerkController::class, 'get'])->name('merk.get');
     Route::get('merk/index', [MerkController::class, 'index']);
+    Route::get('merk/report', [MerkController::class, 'report'])->name('merk.report');
+    Route::get('merk/export', [MerkController::class, 'export'])->name('merk.export');
     Route::resource('merk', MerkController::class);
 
     Route::get('penerimaantrucking/report', [PenerimaanTruckingController::class, 'report'])->name('penerimaantrucking.report');
@@ -652,6 +663,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('satuan/{id}/delete', [SatuanController::class, 'delete'])->name('satuan.delete');
     Route::get('satuan/get', [SatuanController::class, 'get'])->name('satuan.get');
     Route::get('satuan/index', [SatuanController::class, 'index']);
+    Route::get('satuan/report', [SatuanController::class, 'report'])->name('satuan.report');
+    Route::get('satuan/export', [SatuanController::class, 'export'])->name('satuan.export');
     Route::resource('satuan', SatuanController::class);
 
     Route::get('zona/field_length', [ZonaController::class, 'fieldLength'])->name('zona.field_length');

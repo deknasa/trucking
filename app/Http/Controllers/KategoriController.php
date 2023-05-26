@@ -199,4 +199,34 @@ class KategoriController extends MyController
 
         return $response['data'];
     }
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'kategori', $request->all());
+
+        $kategoris = $response['data'];
+
+
+
+        $i = 0;
+        foreach ($kategoris as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+
+            $result = json_decode($statusaktif, true);
+
+            $statusaktif = $result['MEMO'];
+
+            $kategoris[$i]['statusaktif'] = $statusaktif;
+
+        
+            $i++;
+
+
+        }
+
+        return view('reports.kategori', compact('kategoris'));
+    }
 }
