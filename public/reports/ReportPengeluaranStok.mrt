@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "362cb6f6d28bf9ac2ed1a2ee6075660a",
+  "ReportGuid": "2ebdfb9d144c4803b36b785e1fc0f785",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportAbsenTrado.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanStok.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1685066469000+0700)/",
+  "ReportChanged": "/Date(1685067012000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -25,8 +25,8 @@
     "DataSources": {
       "0": {
         "Ident": "StiDataTableSource",
-        "Name": "penerimaanStok",
-        "Alias": "penerimaanStok",
+        "Name": "pengeluaranStok",
+        "Alias": "pengeluaranStok",
         "Columns": {
           "0": {
             "Name": "id",
@@ -35,9 +35,9 @@
             "Type": "System.String"
           },
           "1": {
-            "Name": "kodepenerimaan",
-            "NameInSource": "kodepenerimaan",
-            "Alias": "kodepenerimaan",
+            "Name": "kodepengeluaran",
+            "NameInSource": "kodepengeluaran",
+            "Alias": "kodepengeluaran",
             "Type": "System.String"
           },
           "2": {
@@ -107,7 +107,7 @@
             "Type": "System.String"
           }
         },
-        "NameInSource": "Data.penerimaanStok"
+        "NameInSource": "Data.pengeluaranStok"
       }
     }
   },
@@ -166,13 +166,13 @@
             "0": {
               "Ident": "StiText",
               "Name": "Text1",
-              "ClientRectangle": "0,0,9.8,1.2",
+              "ClientRectangle": "0,0,10.6,1.2",
               "ComponentPlacement": "rt.ReportTitleBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Report Penerimaan Stok"
+                "Value": "Report Pengeluaran Stok"
               },
               "VertAlignment": "Center",
               "Font": ";24;Bold;",
@@ -223,14 +223,14 @@
               "Ident": "StiText",
               "Name": "Text3",
               "Guid": "7b9b483fc2f3bf4d8452726d4e9a7d94",
-              "ClientRectangle": "0.8,0,3.8,0.6",
+              "ClientRectangle": "0.8,0,4,0.6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "ComponentStyle": "Table Header",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "KODE PENERIMAAN"
+                "Value": "KODE PENGELUARAN"
               },
               "VertAlignment": "Center",
               "Font": ";10;Bold;",
@@ -249,7 +249,7 @@
               "Ident": "StiText",
               "Name": "Text2",
               "Guid": "0ec1f34220ac10ba01d24ef1c15bd18b",
-              "ClientRectangle": "4.6,0,3.2,0.6",
+              "ClientRectangle": "4.8,0,3,0.6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "ComponentStyle": "Table Header",
               "Interaction": {
@@ -374,7 +374,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{penerimaanStok.kodepenerimaan}"
+                "Value": "{pengeluaranStok.kodepengeluaran}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -436,7 +436,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{penerimaanStok.keterangan}"
+                "Value": "{pengeluaranStok.keterangan}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -466,7 +466,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{penerimaanStok.format}"
+                "Value": "{pengeluaranStok.format}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -496,7 +496,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{penerimaanStok.coa}"
+                "Value": "{pengeluaranStok.coa}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -526,7 +526,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{penerimaanStok.statushitungstok}"
+                "Value": "{pengeluaranStok.statushitungstok}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -545,7 +545,7 @@
               "Type": "DataColumn"
             }
           },
-          "DataSourceName": "penerimaanStok"
+          "DataSourceName": "pengeluaranStok"
         }
       },
       "PageWidth": 21.01,

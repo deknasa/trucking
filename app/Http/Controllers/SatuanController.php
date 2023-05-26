@@ -200,4 +200,33 @@ class SatuanController extends MyController
 
         return $response['data'];
     }
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'satuan', $request->all());
+
+        $satuans = $response['data'];
+
+
+        $i = 0;
+        foreach ($satuans as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+
+            $result = json_decode($statusaktif, true);
+
+            $statusaktif = $result['MEMO'];
+
+            $satuans[$i]['statusaktif'] = $statusaktif;
+
+        
+            $i++;
+
+
+        }
+
+        return view('reports.satuan', compact('satuans'));
+    }
 }

@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "362cb6f6d28bf9ac2ed1a2ee6075660a",
+  "ReportGuid": "def02e3a59dfa17bf6e7cf9d53d6b809",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportAbsenTrado.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportGudang.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1685066469000+0700)/",
+  "ReportChanged": "/Date(1685016102000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -25,8 +25,8 @@
     "DataSources": {
       "0": {
         "Ident": "StiDataTableSource",
-        "Name": "penerimaanStok",
-        "Alias": "penerimaanStok",
+        "Name": "kategori",
+        "Alias": "kategori",
         "Columns": {
           "0": {
             "Name": "id",
@@ -35,9 +35,9 @@
             "Type": "System.String"
           },
           "1": {
-            "Name": "kodepenerimaan",
-            "NameInSource": "kodepenerimaan",
-            "Alias": "kodepenerimaan",
+            "Name": "kodekategori",
+            "NameInSource": "kodekategori",
+            "Alias": "kodekategori",
             "Type": "System.String"
           },
           "2": {
@@ -47,67 +47,37 @@
             "Type": "System.String"
           },
           "3": {
-            "Name": "coa",
-            "NameInSource": "coa",
-            "Alias": "coa",
+            "Name": "statusaktif",
+            "NameInSource": "statusaktif",
+            "Alias": "statusaktif",
             "Type": "System.String"
           },
           "4": {
-            "Name": "format",
-            "NameInSource": "format",
-            "Alias": "format",
+            "Name": "subkelompok",
+            "NameInSource": "subkelompok",
+            "Alias": "subkelompok",
             "Type": "System.String"
           },
           "5": {
-            "Name": "formattext",
-            "NameInSource": "formattext",
-            "Alias": "formattext",
-            "Type": "System.String"
-          },
-          "6": {
-            "Name": "formatid",
-            "NameInSource": "formatid",
-            "Alias": "formatid",
-            "Type": "System.String"
-          },
-          "7": {
-            "Name": "statushitungstok",
-            "NameInSource": "statushitungstok",
-            "Alias": "statushitungstok",
-            "Type": "System.String"
-          },
-          "8": {
-            "Name": "statushitungstoktext",
-            "NameInSource": "statushitungstoktext",
-            "Alias": "statushitungstoktext",
-            "Type": "System.String"
-          },
-          "9": {
-            "Name": "statushitungstokid",
-            "NameInSource": "statushitungstokid",
-            "Alias": "statushitungstokid",
-            "Type": "System.String"
-          },
-          "10": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "11": {
+          "6": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.String"
           },
-          "12": {
+          "7": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.String"
           }
         },
-        "NameInSource": "Data.penerimaanStok"
+        "NameInSource": "Data.kategori"
       }
     }
   },
@@ -166,13 +136,13 @@
             "0": {
               "Ident": "StiText",
               "Name": "Text1",
-              "ClientRectangle": "0,0,9.8,1.2",
+              "ClientRectangle": "0,0,6.4,1.2",
               "ComponentPlacement": "rt.ReportTitleBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Report Penerimaan Stok"
+                "Value": "Report Kategori"
               },
               "VertAlignment": "Center",
               "Font": ";24;Bold;",
@@ -223,14 +193,14 @@
               "Ident": "StiText",
               "Name": "Text3",
               "Guid": "7b9b483fc2f3bf4d8452726d4e9a7d94",
-              "ClientRectangle": "0.8,0,3.8,0.6",
+              "ClientRectangle": "0.8,0,4,0.6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "ComponentStyle": "Table Header",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "KODE PENERIMAAN"
+                "Value": "KODE KATEGORI"
               },
               "VertAlignment": "Center",
               "Font": ";10;Bold;",
@@ -247,9 +217,35 @@
             },
             "2": {
               "Ident": "StiText",
+              "Name": "Text5",
+              "Guid": "0f99d62f36a880966c3e71171a4dbab0",
+              "ClientRectangle": "12.8,0,6.2,0.6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ComponentStyle": "Table Header",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "STATUS AKTIF"
+              },
+              "VertAlignment": "Center",
+              "Font": ";10;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
+              "Brush": "solid:156,195,229",
+              "TextBrush": "solid:255,255,255",
+              "Margins": {
+                "Left": 3,
+                "Right": 0,
+                "Top": 0,
+                "Bottom": 0
+              },
+              "Type": "Expression"
+            },
+            "3": {
+              "Ident": "StiText",
               "Name": "Text2",
-              "Guid": "0ec1f34220ac10ba01d24ef1c15bd18b",
-              "ClientRectangle": "4.6,0,3.2,0.6",
+              "Guid": "a9162b815370e24461fd5510c01d4141",
+              "ClientRectangle": "4.8,0,4,0.6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "ComponentStyle": "Table Header",
               "Interaction": {
@@ -271,70 +267,18 @@
               },
               "Type": "Expression"
             },
-            "3": {
-              "Ident": "StiText",
-              "Name": "Text5",
-              "Guid": "0f99d62f36a880966c3e71171a4dbab0",
-              "ClientRectangle": "10.2,0,3.4,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
-              "ComponentStyle": "Table Header",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "STATUS FORMAT"
-              },
-              "VertAlignment": "Center",
-              "Font": ";10;Bold;",
-              "Border": ";;;;;;;solid:0,0,0",
-              "Brush": "solid:156,195,229",
-              "TextBrush": "solid:255,255,255",
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
-              },
-              "Type": "Expression"
-            },
             "4": {
               "Ident": "StiText",
               "Name": "Text4",
-              "Guid": "a1fb1dbfdb2c1ea82d0e4fb4ffb3f399",
-              "ClientRectangle": "7.8,0,2.4,0.6",
+              "Guid": "169871f90d7c821cb5374483c53ad328",
+              "ClientRectangle": "8.8,0,4,0.6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "ComponentStyle": "Table Header",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "COA"
-              },
-              "VertAlignment": "Center",
-              "Font": ";10;Bold;",
-              "Border": ";;;;;;;solid:0,0,0",
-              "Brush": "solid:156,195,229",
-              "TextBrush": "solid:255,255,255",
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
-              },
-              "Type": "Expression"
-            },
-            "5": {
-              "Ident": "StiText",
-              "Name": "Text9",
-              "Guid": "c93da2627fd6e26483ee1a1d7d9a9713",
-              "ClientRectangle": "13.6,0,5.4,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
-              "ComponentStyle": "Table Header",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "STATUS HITUNG STOK"
+                "Value": "SUB KELOMPOK"
               },
               "VertAlignment": "Center",
               "Font": ";10;Bold;",
@@ -368,13 +312,13 @@
               "Guid": "0e495134760184402730fe0cf2a838ce",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "0.8,0,3.8,0.6",
+              "ClientRectangle": "0.8,0,4,0.6",
               "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{penerimaanStok.kodepenerimaan}"
+                "Value": "{kategori.kodekategori}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -430,13 +374,13 @@
               "Guid": "e760f6d0932d0eb40786027951ca89dd",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "4.6,0,3.2,0.6",
+              "ClientRectangle": "4.8,0,4,0.6",
               "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{penerimaanStok.keterangan}"
+                "Value": "{kategori.keterangan}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -457,16 +401,16 @@
             "3": {
               "Ident": "StiText",
               "Name": "Text6",
-              "Guid": "470eb87547e03013eb4d98fd3816de4e",
+              "Guid": "3632415d022f7cd585824f172e55f000",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "10.2,0,3.4,0.6",
+              "ClientRectangle": "8.8,0,4,0.6",
               "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{penerimaanStok.format}"
+                "Value": "{kategori.subkelompok}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -486,47 +430,17 @@
             },
             "4": {
               "Ident": "StiText",
-              "Name": "Text10",
-              "Guid": "79f8c6998ec8f82bc7cedd17227b3f42",
+              "Name": "Text9",
+              "Guid": "18c379951b5628d784e67e62ec12af9a",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "7.8,0,2.4,0.6",
+              "ClientRectangle": "12.8,0,6.2,0.6",
               "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{penerimaanStok.coa}"
-              },
-              "CanBreak": true,
-              "VertAlignment": "Center",
-              "Border": "All;242,242,242;;;;;;solid:0,0,0",
-              "Brush": "solid:",
-              "TextBrush": "solid:0,0,0",
-              "TextOptions": {
-                "WordWrap": true
-              },
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
-              },
-              "Type": "DataColumn"
-            },
-            "5": {
-              "Ident": "StiText",
-              "Name": "Text11",
-              "Guid": "61c3e2a686fb8f31c691a94ba3519980",
-              "CanGrow": true,
-              "GrowToHeight": true,
-              "ClientRectangle": "13.6,0,5.4,0.6",
-              "ComponentPlacement": "d.DataBand2",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "{penerimaanStok.statushitungstok}"
+                "Value": "{kategori.statusaktif}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",
@@ -545,7 +459,7 @@
               "Type": "DataColumn"
             }
           },
-          "DataSourceName": "penerimaanStok"
+          "DataSourceName": "kategori"
         }
       },
       "PageWidth": 21.01,

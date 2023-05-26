@@ -288,6 +288,26 @@
               }
             }
           },
+          {
+            id: 'export',
+            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'export')
+              $('#rangeModal').find('button:submit').html(`Export`)
+              $('#rangeModal').modal('show')
+            }
+          },
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'report')
+              $('#rangeModal').find('button:submit').html(`Report`)
+              $('#rangeModal').modal('show')
+            }
+          },
         ]
 
       })
@@ -361,56 +381,58 @@
       })
     })
 
-    // $('#formRange').submit(function(event) {
-    //   event.preventDefault()
+    $('#formRange').submit(function(event) {
+      event.preventDefault()
 
-    //   let params
-    //   let submitButton = $(this).find('button:submit')
+      let params
+      let submitButton = $(this).find('button:submit')
 
-    //   submitButton.attr('disabled', 'disabled')
+      submitButton.attr('disabled', 'disabled')
 
-    //   /* Set params value */
-    //   for (var key in postData) {
-    //     if (params != "") {
-    //       params += "&";
-    //     }
-    //     params += key + "=" + encodeURIComponent(postData[key]);
-    //   }
+      /* Set params value */
+      for (var key in postData) {
+        if (params != "") {
+          params += "&";
+        }
+        params += key + "=" + encodeURIComponent(postData[key]);
+      }
 
-    //   let formRange = $('#formRange')
-    //   let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-    //   let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
-    //   params += `&offset=${offset}&limit=${limit}`
+      let formRange = $('#formRange')
+      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+      params += `&offset=${offset}&limit=${limit}`
 
-    //   if ($('#rangeModal').data('action') == 'export') {
-    //     let xhr = new XMLHttpRequest()
-    //     xhr.open('GET', `{{ config('app.api_url') }}stok/export?${params}`, true)
-    //     xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
-    //     xhr.responseType = 'arraybuffer'
+      if ($('#rangeModal').data('action') == 'export') {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `{{ config('app.api_url') }}stok/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+        xhr.responseType = 'arraybuffer'
 
-    //     xhr.onload = function(e) {
-    //       if (this.status === 200) {
-    //         if (this.response !== undefined) {
-    //           let blob = new Blob([this.response], {
-    //             type: "application/vnd.ms-excel"
-    //           })
-    //           let link = document.createElement('a')
+        xhr.onload = function(e) {
+          if (this.status === 200) {
+            if (this.response !== undefined) {
+              let blob = new Blob([this.response], {
+                type: "application/vnd.ms-excel"
+              })
+              let link = document.createElement('a')
 
-    //           link.href = window.URL.createObjectURL(blob)
-    //           link.download = `laporanpengeluaranStok${(new Date).getTime()}.xlsx`
-    //           link.click()
+              link.href = window.URL.createObjectURL(blob)
+              link.download = `laporanStok${(new Date).getTime()}.xlsx`
+              link.click()
 
-    //           submitButton.removeAttr('disabled')
-    //         }
-    //       }
-    //     }
+              submitButton.removeAttr('disabled')
+            }
+          }
+        }
 
-    //     xhr.send()
-    //   } else if ($('#rangeModal').data('action') == 'report') {
+        xhr.send()
+      } else if ($('#rangeModal').data('action') == 'report') {
 
-    //     submitButton.removeAttr('disabled')
-    //   }
-    // })
+        window.open(`{{ route('stok.report') }}?${params}`)
+
+        submitButton.removeAttr('disabled')
+      }
+    })
 
 
 
