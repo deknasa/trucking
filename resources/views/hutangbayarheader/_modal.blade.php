@@ -1811,7 +1811,6 @@
       onSelectRow: (alatbayar, element) => {
         $('#crudForm [name=alatbayar_id]').first().val(alatbayar.id)
         element.val(alatbayar.namaalatbayar)
-        console.log(alatbayar)
         bankId = alatbayar.bank_id
         element.data('currentValue', element.val())
       },
