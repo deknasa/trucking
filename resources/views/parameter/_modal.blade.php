@@ -301,12 +301,40 @@
       .all([
         setDefaultOptions(form)
       ])
-      .then(() => {
-        $('#crudModal').modal('show')
+      // .then(() => {
+      //   showDefault(form)
+        .then(() => {
+          $('#crudModal').modal('show')
+        })
+        .finally(() => {
+          $('.modal-loader').addClass('d-none')
+        })
+      // })
+  }
+
+  function showDefault(form) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}parameter/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            console.log(value)
+            let element = form.find(`[name="${index}"]`)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
       })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
-      })
+    })
   }
 
   const setDefaultOptions = function(relatedForm) {
