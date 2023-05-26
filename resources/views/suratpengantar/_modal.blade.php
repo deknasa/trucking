@@ -733,6 +733,11 @@
         showSuratPengantar(form, id)
           .then(() => {
             $('#crudModal').modal('show')
+            $('#crudForm [name=tglbukti]').attr('readonly', true)
+            $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+            $('#crudForm [name=jobtrucking]').attr('readonly', true)
+            $('#crudForm [name=jobtrucking]').siblings('.input-group-append').remove()
+            $('#crudForm [name=jobtrucking]').siblings('.button-clear').remove()
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')

@@ -375,9 +375,7 @@
     $('#crudModalTitle').text('Edit Orderan Trucking')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    $('#crudForm [name=tglbukti]').attr('readonly', true)
-    $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
-
+   
 
     Promise
       .all([
@@ -388,6 +386,9 @@
         showOrderanTrucking(form, orderanTruckingId)
           .then(() => {
             $('#crudModal').modal('show')
+            $('#crudForm [name=tglbukti]').attr('readonly', true)
+            $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
