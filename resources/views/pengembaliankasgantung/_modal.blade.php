@@ -223,12 +223,12 @@
         let selectedSisa = dataPengembalianKasGantung.sisa
         data.push({
           name: 'nominal[]',
-          value: (isNaN(selectedNominal)) ? parseFloat(selectedNominal.replaceAll(',', '')) : selectedNominal        
+          value: (isNaN(selectedNominal)) ? parseFloat(selectedNominal.replaceAll(',', '')) : selectedNominal
         })
         data.push({
-            name: 'sisa[]',
-            value: selectedSisa
-          })
+          name: 'sisa[]',
+          value: selectedSisa
+        })
         data.push({
           name: 'keterangandetail[]',
           value: dataPengembalianKasGantung.keterangandetail
@@ -380,9 +380,9 @@
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
-    
+
     setFormBindKeys(form)
-   
+
 
     activeGrid = null
 
@@ -392,15 +392,15 @@
     initDatepicker()
 
     setRange()
-    
-   
+
+
 
     $(`[name=tgldari], [name=tglsampai]`)
       .on("change", function() {
         rangeKasgantung();
-       
+
       })
-      
+
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -410,33 +410,41 @@
 
   })
 
-  
+
 
   function rangeKasgantung() {
+
     var tgldari = $('#crudForm').find(`[name="tgldari"]`).val()
     var tglsampai = $('#crudForm').find(`[name="tglsampai"]`).val()
     // console.log(tgldari, tglsampai);
     if (tgldari !== "" && tglsampai !== "") {
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
 
-      getDataPengembalian(tgldari, tglsampai).then((response) => {
-        $('#tablePengembalian').jqGrid("clearGridData");
-        setTimeout(() => {
+      getDataPengembalian(tgldari, tglsampai).
+      then((response) => {
+          $('#tablePengembalian').jqGrid("clearGridData");
+          setTimeout(() => {
 
-          $("#tablePengembalian")
-            .jqGrid("setGridParam", {
-              datatype: "local",
-              data: response.data,
-              originalData: response.data,
-              selectedRowIds: []
-            })
-            .trigger("reloadGrid");
-        }, 100);
-      });
+            $("#tablePengembalian")
+              .jqGrid("setGridParam", {
+                datatype: "local",
+                data: response.data,
+                originalData: response.data,
+                selectedRowIds: []
+              })
+              .trigger("reloadGrid");
+          }, 100);
+        })
+        .catch((errors) => {
+          console.log(errors)
+          setErrorMessages($('#crudForm'), errors)
+        })
     }
 
   }
 
- 
+
 
   function enabledRow(row) {
     let check = $(`#kasgantungdetail_${row}`)
@@ -678,8 +686,8 @@
             name: "keterangandetail",
             sortable: false,
             editable: true,
-            editoptions : {
-              dataEvents : [{
+            editoptions: {
+              dataEvents: [{
                 type: "keyup",
                 fn: function(event, rowObject) {
                   let localRow = $("#tablePengembalian").jqGrid(
@@ -688,7 +696,7 @@
                   );
                   localRow.keterangandetail = event.target.value;
                 }
-              },]
+              }, ]
             }
           },
           {
@@ -829,7 +837,7 @@
     loadClearFilter($('#tablePengembalian'))
   }
 
-  function  setTotalNominal() {
+  function setTotalNominal() {
     let nominalDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_nominal"]`)
     let nominal = 0
     $.each(nominalDetails, (index, nominalDetail) => {
@@ -851,7 +859,7 @@
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_sisa"]`).text(sisa))
   }
 
-  
+
 
   function getDataPengembalian(dari, sampai, id) {
     aksi = $('#crudForm').data('action')
@@ -874,14 +882,14 @@
       forCheckbox = 'disabled'
     } else if (aksi == 'add') {
       url = `${apiUrl}pengembaliankasgantungheader/getkasgantung`
-     
+
     }
 
     data = {
-        limit: 0,
-        tgldari: dari,
-        tglsampai: sampai
-      }
+      limit: 0,
+      tgldari: dari,
+      tglsampai: sampai
+    }
     return new Promise((resolve, reject) => {
       $.ajax({
         url: url,
@@ -892,6 +900,19 @@
         data: data,
         success: (response) => {
           resolve(response);
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+
+            errors = error.responseJSON.errors
+            reject(errors)
+
+          } else {
+            showDialog(error.statusText)
+          }
         },
       });
     });
@@ -927,7 +948,7 @@
     });
 
   }
-  
+
 
   function showpengembalianKasGantung(form, userId) {
     return new Promise((resolve, reject) => {
