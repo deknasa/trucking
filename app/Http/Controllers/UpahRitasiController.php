@@ -167,6 +167,7 @@ class UpahRitasiController extends MyController
         $user = $upahritasi_detail['user'];
         return view('reports.upahritasi', compact('upahritasi_details', 'user'));
     }
+    
     public function export(Request $request): void
     {
         $upahritasi = Http::withHeaders($request->header())

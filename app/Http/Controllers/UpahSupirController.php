@@ -260,11 +260,6 @@ class UpahSupirController extends MyController
 
     public function export(Request $request): void
     {
-
-        // $tarif = Http::withHeaders($request->header())
-        // ->withOptions(['verify' => false])
-        // ->withToken(session('access_token'))
-        // ->get(config('app.api_url') . 'tarif/listpivot')['data'];
         $upahsupir = [
             [
                 "dari"=> "BELAWAN",
@@ -285,8 +280,6 @@ class UpahSupirController extends MyController
                 "LITER FULL CONTAINER"=> "0,00",
                 "LITER EMPTY CONTAINER"=> "0,00",
                 "LITER FULL EMPTY CONTAINER"=> "0,00",
-                // "dari"=> "BELAWAN",
-                // "tujuan"=> "AMPLAS"
             ],
             [
                 "dari"=> "BELAWAN",
@@ -307,8 +300,6 @@ class UpahSupirController extends MyController
                 "LITER FULL CONTAINER"=> "0,00",
                 "LITER EMPTY CONTAINER"=> "0,00",
                 "LITER FULL EMPTY CONTAINER"=> "0,00",
-                // "dari"=> "BELAWAN",
-                // "tujuan"=> "AMPLAS"
             ],
             [
                 "dari"=> "BELAWAN",
@@ -329,8 +320,6 @@ class UpahSupirController extends MyController
                 "LITER FULL CONTAINER"=> "0,00",
                 "LITER EMPTY CONTAINER"=> "0,00",
                 "LITER FULL EMPTY CONTAINER"=> "0,00",
-                // "dari"=> "BELAWAN",
-                // "tujuan"=> "AMPLAS"
             ],
         ];
         
