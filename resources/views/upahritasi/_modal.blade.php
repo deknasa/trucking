@@ -607,14 +607,10 @@
               element.data('current-value', value)
             }
             
-          })
           
 
         })
-        
-        initAutoNumeric(form.find(`[name="jarak"]`), {
-          minimumValue: 0
-        })
+
 
         $.each(response.detail, (index, detail) => {
           // $.each(response.data.upahritasi_rincian, (index, detail) => {
