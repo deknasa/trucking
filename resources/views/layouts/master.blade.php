@@ -49,8 +49,8 @@
 <body class="hold-transition sidebar-collapse layout-fixed">
   <div class="modal-loader d-none">
     <div class="modal-loader-content d-flex align-items-center justify-content-center">
-      <img src="{{ asset('images/loading-red.gif') }}" rel="preload">
-      <span>Loading</span>
+      <img src="{{ asset('images/loading-blue.gif') }}" rel="preload">
+      Loading...
     </div>
   </div>
 

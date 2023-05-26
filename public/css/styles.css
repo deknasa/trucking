@@ -458,15 +458,13 @@ html {
 .modal-loader-content {
 	background: #d9edf7;
 	border: 1px solid #ddd;
+	font-family: dejavu;
+	padding: 8px;
 }
 
 .modal-loader-content img {
-	width: 50px;
+	width: 21px;
 	height: auto;
-}
-
-.modal-loader-content span {
-	font-size: 1.5rem;
 }
 
 .table tr > th,
