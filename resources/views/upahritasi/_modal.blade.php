@@ -67,7 +67,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <div class="input-group">
-                  <input type="text" name="jarak" class="form-control" style="text-align: right">
+                  <input type="text" name="jarak" class="form-control autonumeric" style="text-align: right">
                   <div class="input-group-append">
                     <span class="input-group-text" style="font-weight: bold;">KM</span>
                   </div>
@@ -242,9 +242,7 @@
         data.filter((row) => row.name === 'liter[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="liter[]"]`)[index])
       })
 
-      $('#crudForm').find(`[name="jarak`).each((index, element) => {
-        data.filter((row) => row.name === 'jarak')[index].value = AutoNumeric.getNumber($(`#crudForm [name="jarak`)[index])
-      })
+        data.filter((row) => row.name === 'jarak').value = AutoNumeric.getNumber($(`#crudForm [name="jarak"]`)[0])
 
 
       data.push({
