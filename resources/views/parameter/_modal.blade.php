@@ -301,15 +301,77 @@
       .all([
         setDefaultOptions(form)
       ])
-      // .then(() => {
-      //   showDefault(form)
+      .then(() => {
+        showDefault(form)
         .then(() => {
           $('#crudModal').modal('show')
         })
         .finally(() => {
           $('.modal-loader').addClass('d-none')
         })
-      // })
+      })
+  }
+
+  function editParameter(parameterId) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'edit')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+    <i class="fa fa-save"></i>
+    Simpan
+  `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('Edit Parameter')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setDefaultOptions(form)
+      ])
+      .then(() => {
+        showParameter(form, parameterId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
+  }
+
+  function deleteParameter(parameterId) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'delete')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+    <i class="fa fa-save"></i>
+    Hapus
+  `)
+    form.find('[name]').addClass('disabled')
+    $('#crudModalTitle').text('Delete Parameter')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setDefaultOptions(form)
+      ])
+      .then(() => {
+        showParameter(form, parameterId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
   }
 
   function showDefault(form) {
@@ -323,8 +385,9 @@
         },
         success: response => {
           $.each(response.data, (index, value) => {
-            console.log(value)
+            console.log(index,value)
             let element = form.find(`[name="${index}"]`)
+            
             if (element.is('select')) {
               element.val(value).trigger('change')
             } else {
@@ -363,7 +426,7 @@
         },
         success: response => {
           response.data.forEach(Default => {
-            let option = new Option(Default.text, Default.text)
+            let option = new Option(Default.text, Default.id)
 
             relatedForm.find('[name=default]').append(option).trigger('change')
           });
@@ -372,67 +435,6 @@
         }
       })
     })
-  }
-
-  function editParameter(parameterId) {
-    let form = $('#crudForm')
-
-    $('.modal-loader').removeClass('d-none')
-
-    form.data('action', 'edit')
-    form.trigger('reset')
-    form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Simpan
-  `)
-    $('#crudModalTitle').text('Edit Parameter')
-    $('.is-invalid').removeClass('is-invalid')
-    $('.invalid-feedback').remove()
-
-    Promise
-      .all([
-        setDefaultOptions(form)
-      ])
-      .then(() => {
-        showParameter(form, parameterId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .finally(() => {
-            $('modal-loader').addClass('d.none')
-          })
-      })
-  }
-
-  function deleteParameter(parameterId) {
-    let form = $('#crudForm')
-
-    $('.modal-loader').removeClass('d-none')
-
-    form.data('action', 'delete')
-    form.trigger('reset')
-    form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Hapus
-  `)
-    form.find('[name]').addClass('disabled')
-    $('#crudModalTitle').text('Delete Parameter')
-    $('.is-invalid').removeClass('is-invalid')
-    $('.invalid-feedback').remove()
-
-    Promise
-      .all([
-        setDefaultOptions(form)
-      ])
-      .then(() => {
-        showParameter(form, parameterId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
-      })
   }
 
   function isJSON(something) {

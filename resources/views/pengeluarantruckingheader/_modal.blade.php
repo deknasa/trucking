@@ -899,8 +899,6 @@
       $('#crudForm [name=bank]').first().val('')
       $('#crudForm [name=bank]').first().data('currentValue','')
     }
-      
-      
   }
   
 
