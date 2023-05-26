@@ -423,6 +423,7 @@
     initLookup()
     initDatepicker()
     initSelect2()
+    getMaxLength(form)
     form.find('[name]').removeAttr('disabled')
     // initAutoNumeric(form.find(`[name="boronganborongan"]`))
   }
@@ -831,6 +832,31 @@
         }
       })
     })
+  }
+  
+  function getMaxLength(form) {
+    if (!form.attr('has-maxlength')) {
+      $.ajax({
+        url: `${apiUrl}trado/field_length`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            if (value !== null && value !== 0 && value !== undefined) {
+              form.find(`[name=${index}]`).attr('maxlength', value)
+            }
+          })
+
+          form.attr('has-maxlength', true)
+        },
+        error: error => {
+          showDialog(error.statusText)
+        }
+      })
+    }
   }
 </script>
 @endpush()
