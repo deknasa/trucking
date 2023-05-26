@@ -119,86 +119,121 @@ class AkunPusatController extends MyController
     /**
      * @ClassName
      */
-    public function report(Request $request): View
+    public function report(Request $request)
     {
-        $params['offset'] = $request->dari - 1;
-        $params['rows'] = $request->sampai - $request->dari + 1;
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'akunpusat', $request->all());
 
-        $akunPusats = $this->get($params)['rows'];
+        $akunpusats = $response['data'];
 
-        return view('reports.akunPusat', compact('akunPusats'));
+        $i = 0;
+        foreach ($akunpusats as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+            $statuscoa = $params['statuscoa'];
+            $statusAkunPayable = $params['statusaccountpayable'];
+            $statusNeraca = $params['statusneraca'];
+            $statusLabaRugi = $params['statuslabarugi'];
+
+            $result = json_decode($statusaktif, true);
+            $resultStatuscoa = json_decode($statuscoa, true);
+            $resultAkunPayable = json_decode($statusAkunPayable, true);
+            $resultNeraca = json_decode($statusNeraca, true);
+            $resultLabaRugi = json_decode($statusLabaRugi, true);
+
+            $format = $result['MEMO'];
+            $statusStatuscoa = $resultStatuscoa['MEMO'];
+            $statusAkunPayable = $resultAkunPayable['MEMO'];
+            $statusNeraca = $resultNeraca['MEMO'];
+            $statusLabaRugi = $resultLabaRugi['MEMO'];
+
+
+            $akunpusats[$i]['statusaktif'] = $format;
+            $akunpusats[$i]['statuscoa'] = $statusStatuscoa;
+            $akunpusats[$i]['statusaccountpayable'] = $statusAkunPayable;
+            $akunpusats[$i]['statusneraca'] = $statusNeraca;
+            $akunpusats[$i]['statuslabarugi'] = $statusLabaRugi;
+
+
+            $i++;
+        }
+
+        return view('reports.akunpusat', compact('akunpusats'));
     }
 
     /**
      * @ClassName
      */
-    public function export(Request $request): void
-    {
-        $params = [
-            'offset' => $request->dari - 1,
-            'rows' => $request->sampai - $request->dari + 1,
-        ];
+    // public function export(Request $request): void
+    // {
+    //     $params = [
+    //         'offset' => $request->dari - 1,
+    //         'rows' => $request->sampai - $request->dari + 1,
+    //     ];
 
-        $akunPusats = $this->get($params);
+    //     $akunPusats = $this->get($params);
 
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Laporan Akun Pusat');
-        $sheet->getStyle("A1")->getFont()->setSize(20);
-        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:E1');
+    //     $spreadsheet = new Spreadsheet();
+    //     $sheet = $spreadsheet->getActiveSheet();
+    //     $sheet->setCellValue('A1', 'Laporan Akun Pusat');
+    //     $sheet->getStyle("A1")->getFont()->setSize(20);
+    //     $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+    //     $sheet->mergeCells('A1:E1');
 
-        $sheet->setCellValue('A2', 'No');
-        $sheet->setCellValue('B2', 'ID');
-        $sheet->setCellValue('C2', 'Group');
-        $sheet->setCellValue('D2', 'Sub Group');
-        $sheet->setCellValue('E2', 'Nama Akun Pusat');
-        $sheet->setCellValue('F2', 'Memo');
-        $sheet->setCellValue('G2', 'ModifiedBy');
-        $sheet->setCellValue('H2', 'ModifiedOn');
+    //     $sheet->setCellValue('A2', 'No');
+    //     $sheet->setCellValue('B2', 'ID');
+    //     $sheet->setCellValue('C2', 'Group');
+    //     $sheet->setCellValue('D2', 'Sub Group');
+    //     $sheet->setCellValue('E2', 'Nama Akun Pusat');
+    //     $sheet->setCellValue('F2', 'Memo');
+    //     $sheet->setCellValue('G2', 'ModifiedBy');
+    //     $sheet->setCellValue('H2', 'ModifiedOn');
 
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
+    //     $sheet->getColumnDimension('C')->setAutoSize(true);
+    //     $sheet->getColumnDimension('D')->setAutoSize(true);
+    //     $sheet->getColumnDimension('E')->setAutoSize(true);
+    //     $sheet->getColumnDimension('F')->setAutoSize(true);
+    //     $sheet->getColumnDimension('G')->setAutoSize(true);
+    //     $sheet->getColumnDimension('H')->setAutoSize(true);
 
-        $no = 1;
-        $x = 3;
-        foreach ($akunPusats['rows'] as $row) {
-            $sheet->setCellValue('A' . $x, $no++);
-            $sheet->setCellValue('B' . $x, $row['id']);
-            $sheet->setCellValue('C' . $x, $row['grp']);
-            $sheet->setCellValue('D' . $x, $row['subgrp']);
-            $sheet->setCellValue('E' . $x, $row['text']);
-            $sheet->setCellValue('F' . $x, $row['memo']);
-            $sheet->setCellValue('G' . $x, $row['modifiedby']);
-            $sheet->setCellValue('H' . $x,  date("d-m-Y H:i:s", strtotime($row['updated_at'])));
-            $lastCell = 'H' . $x;
-            $x++;
-        }
+    //     $no = 1;
+    //     $x = 3;
+    //     foreach ($akunPusats['rows'] as $row) {
+    //         $sheet->setCellValue('A' . $x, $no++);
+    //         $sheet->setCellValue('B' . $x, $row['id']);
+    //         $sheet->setCellValue('C' . $x, $row['grp']);
+    //         $sheet->setCellValue('D' . $x, $row['subgrp']);
+    //         $sheet->setCellValue('E' . $x, $row['text']);
+    //         $sheet->setCellValue('F' . $x, $row['memo']);
+    //         $sheet->setCellValue('G' . $x, $row['modifiedby']);
+    //         $sheet->setCellValue('H' . $x,  date("d-m-Y H:i:s", strtotime($row['updated_at'])));
+    //         $lastCell = 'H' . $x;
+    //         $x++;
+    //     }
 
-        $sheet->setCellValue('E' . $x, "=ROWS(E3:" . $lastCell . ")");
+    //     $sheet->setCellValue('E' . $x, "=ROWS(E3:" . $lastCell . ")");
 
-        $styleArray = array(
-            'borders' => array(
-                'allBorders' => array(
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ),
-            ),
-        );
+    //     $styleArray = array(
+    //         'borders' => array(
+    //             'allBorders' => array(
+    //                 'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+    //             ),
+    //         ),
+    //     );
 
-        $sheet->getStyle('A2:H2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF02c4f5');
-        $sheet->getStyle('A2:' . $lastCell)->applyFromArray($styleArray);
+    //     $sheet->getStyle('A2:H2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF02c4f5');
+    //     $sheet->getStyle('A2:' . $lastCell)->applyFromArray($styleArray);
 
-        $writer = new Xlsx($spreadsheet);
-        $filename = 'laporanAkun Pusat' . date('dmYHis');
+    //     $writer = new Xlsx($spreadsheet);
+    //     $filename = 'laporanAkun Pusat' . date('dmYHis');
 
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
-        header('Cache-Control: max-age=0');
+    //     header('Content-Type: application/vnd.ms-excel');
+    //     header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+    //     header('Cache-Control: max-age=0');
 
-        $writer->save('php://output');
-    }
+    //     $writer->save('php://output');
+    // }
+    
 }

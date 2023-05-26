@@ -188,4 +188,43 @@ class BankController extends MyController
 
         return $response['data'];
     }
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'bank', $request->all());
+
+        $banks = $response['data'];
+
+        $i = 0;
+        foreach ($banks as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+            $statusDefault = $params['statusdefault'];
+            $formatPenerimaan = $params['formatpenerimaan'];
+            $formatPengeluaran = $params['formatpengeluaran'];
+
+            $result = json_decode($statusaktif, true);
+            $resultDefault = json_decode($statusDefault, true);
+            $resultPengeluaran = json_decode($formatPengeluaran, true);
+            $resultPenerimaan = json_decode($formatPenerimaan, true);
+
+            $statusaktif = $result['MEMO'];
+            $statusDefault = $resultDefault['MEMO'];
+            $formatPenerimaan = $resultPengeluaran['MEMO'];
+            $formatPengeluaran = $resultPenerimaan['MEMO'];
+
+
+            $banks[$i]['statusaktif'] = $statusaktif;
+            $banks[$i]['statusdefault'] = $statusDefault;
+            $banks[$i]['formatpenerimaan'] = $formatPenerimaan;
+            $banks[$i]['formatpengeluaran'] = $formatPengeluaran;
+
+
+            $i++;
+        }
+
+        return view('reports.bank', compact('banks'));
+    }
 }

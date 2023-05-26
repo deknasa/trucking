@@ -190,6 +190,41 @@ class AlatBayarController extends MyController
         
         return $response['data'];
     }
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'alatbayar', $request->all());
+
+        $alatbayars = $response['data'];
+
+        $i = 0;
+        foreach ($alatbayars as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+            $statusLangsungCair = $params['statuslangsungcair'];
+            $statusDefault = $params['statusdefault'];
+
+            $result = json_decode($statusaktif, true);
+            $resultLangsungCair = json_decode($statusLangsungCair, true);
+            $resultDefault = json_decode($statusDefault, true);
+
+            $statusaktif = $result['MEMO'];
+            $statusLangsungCair = $resultLangsungCair['MEMO'];
+            $statusDefault = $resultDefault['MEMO'];
+
+
+            $alatbayars[$i]['statusaktif'] = $statusaktif;
+            $alatbayars[$i]['statuslangsungcair'] = $statusLangsungCair;
+            $alatbayars[$i]['statusdefault'] = $statusDefault;
+
+
+            $i++;
+        }
+
+        return view('reports.alatbayar', compact('alatbayars'));
+    }
 
     
 }
