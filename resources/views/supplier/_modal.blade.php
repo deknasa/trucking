@@ -103,7 +103,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="email" class="form-control">
+                <input type="email" name="email" class="form-control">
               </div>
             </div>
 
