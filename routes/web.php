@@ -428,6 +428,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('bank/{id}/delete', [BankController::class, 'delete'])->name('bank.delete');
     Route::get('bank/get', [BankController::class, 'get'])->name('bank.get');
     Route::get('bank/index', [BankController::class, 'index']);
+    Route::get('bank/report', [BankController::class, 'report'])->name('bank.report');
     Route::resource('bank', BankController::class);
 
     Route::get('absentrado/field_length', [AbsenTradoController::class, 'fieldLength'])->name('absentrado.field_length');
@@ -458,12 +459,14 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('alatbayar/{id}/delete', [AlatBayarController::class, 'delete'])->name('alatbayar.delete');
     Route::get('alatbayar/get', [AlatBayarController::class, 'get'])->name('alatbayar.get');
     Route::get('alatbayar/index', [AlatBayarController::class, 'index']);
+    Route::get('alatbayar/report', [AlatBayarController::class, 'report'])->name('alatbayar.report');
     Route::resource('alatbayar', AlatBayarController::class);
 
     Route::get('bankpelanggan/field_length', [BankPelangganController::class, 'fieldLength'])->name('bankpelanggan.field_length');
     Route::get('bankpelanggan/{id}/delete', [BankPelangganController::class, 'delete'])->name('bankpelanggan.delete');
     Route::get('bankpelanggan/get', [BankPelangganController::class, 'get'])->name('bankpelanggan.get');
     Route::get('bankpelanggan/index', [BankPelangganController::class, 'index']);
+    Route::get('bankpelanggan/report', [BankPelangganController::class, 'report'])->name('bankpelanggan.report');
     Route::resource('bankpelanggan', BankPelangganController::class);
 
     Route::get('jenisemkl/field_length', [JenisEmklController::class, 'fieldLength'])->name('jenisemkl.field_length');

@@ -201,4 +201,30 @@ class BankPelangganController extends MyController
 
         return $response['data'];
     }
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'bankpelanggan', $request->all());
+
+        $bankpelanggans = $response['data'];
+
+        $i = 0;
+        foreach ($bankpelanggans as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+
+            $result = json_decode($statusaktif, true);
+
+            $statusaktif = $result['MEMO'];
+
+            $bankpelanggans[$i]['statusaktif'] = $statusaktif;
+
+
+            $i++;
+        }
+
+        return view('reports.bankpelanggan', compact('bankpelanggans'));
+    }
 }
