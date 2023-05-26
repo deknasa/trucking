@@ -15,6 +15,7 @@
         tipe: `{!! $tipe ?? '' !!}`,
         bankId: `{!! $bankId ?? '' !!}`,
         bankExclude: `{!! $bankExclude ?? '' !!}`,
+        alatbayar: `{!! $alatbayar ?? '' !!}`,
       },
       colModel: [{
           label: 'ID',

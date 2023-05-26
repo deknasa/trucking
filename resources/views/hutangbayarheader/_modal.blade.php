@@ -1728,7 +1728,8 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          bankId: bankId
+          // bankId: bankId
+          alatbayar: bankId
         }
       },
       onSelectRow: (bank, element) => {
@@ -1810,7 +1811,6 @@
       onSelectRow: (alatbayar, element) => {
         $('#crudForm [name=alatbayar_id]').first().val(alatbayar.id)
         element.val(alatbayar.namaalatbayar)
-        console.log(alatbayar)
         bankId = alatbayar.bank_id
         element.data('currentValue', element.val())
       },
@@ -1819,6 +1819,9 @@
       },
       onClear: (element) => {
         $('#crudForm [name=alatbayar_id]').first().val('')
+        $('#crudForm [name=bank_id]').first().val('')
+        $('#crudForm [name=bank]').first().val('')
+        $('#crudForm [name=bank]').first().data('currentValue', element.val())
         element.val('')
         element.data('currentValue', element.val())
       }

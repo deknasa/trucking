@@ -100,9 +100,9 @@
                   <tr>
                     <th width="1%" class="">No</th>
                     <th class="data_tbl tbl_checkbox" style="display:none" width="1%">Pilih</th>
-                    <th width="20%" class="tbl_supir_id">SUPIR</th>
+                    <th width="20%" class="tbl_supir_id">SUPIR </th>
                     <th width="15%" class="tbl_pengeluarantruckingheader_nobukti">NO BUKTI PENGELUARAN TRUCKING</th>
-                    <th width="14%" class="tbl_sisa">Sisa</th>
+                    <th width="14%" class="tbl_sisa">Sisa </th>
                     <th width="25%" class="tbl_keterangan">Keterangan</th>
                     <th width="20%" class="tbl_nominal">Nominal</th>
                     <th width="1%" class="tbl_aksi">Aksi</th>
@@ -593,6 +593,8 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        $('#crudForm [name=tglbukti]').attr('readonly', true)
+        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')

@@ -457,12 +457,16 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
+  
+
     Promise
       .all([
         showAbsensiSupir(form, absensiId)
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        form.find('[name=tglbukti]').attr('readonly', true)
+        form.find('[name=tglbukti]').siblings('.input-group-append').remove()
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')

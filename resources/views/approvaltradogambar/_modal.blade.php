@@ -257,7 +257,7 @@
         form.trigger('reset')
         form.find('#btnSubmit').html(`
             <i class="fa fa-save"></i>
-            Simpan
+            Hapus
         `)
         form.data('action', 'delete')
         form.find(`.sometimes`).show()
@@ -299,6 +299,9 @@
                             element.val(dateFormat(value))
                         } else {
                             element.val(value)
+                        }
+                        if(index == 'kodetrado'){
+                            element.prop('readonly', true)
                         }
                     })
 

@@ -20,7 +20,7 @@
           },
           {
             label: 'DARI',
-            name: 'kotadari_id',
+            name: 'kotadari',
             align: 'left'
           },
           {
