@@ -302,48 +302,14 @@
         setDefaultOptions(form)
       ])
       .then(() => {
-        $('#crudModal').modal('show')
+        showDefault(form)
+        .then(() => {
+          $('#crudModal').modal('show')
+        })
+        .finally(() => {
+          $('.modal-loader').addClass('d-none')
+        })
       })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
-      })
-  }
-
-  const setDefaultOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=default]').empty()
-      relatedForm.find('[name=default]').append(
-        new Option('-- PILIH STATUS DEFAULT --', '', false, true)
-      ).trigger('change')
-
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS DEFAULT PARAMETER"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(Default => {
-            let option = new Option(Default.text, Default.text)
-
-            relatedForm.find('[name=default]').append(option).trigger('change')
-          });
-
-          resolve()
-        }
-      })
-    })
   }
 
   function editParameter(parameterId) {
@@ -357,6 +323,7 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
+    form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Parameter')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -371,7 +338,7 @@
             $('#crudModal').modal('show')
           })
           .finally(() => {
-            $('modal-loader').addClass('d.none')
+            $('.modal-loader').addClass('d-none')
           })
       })
   }
@@ -405,6 +372,69 @@
             $('.modal-loader').addClass('d-none')
           })
       })
+  }
+
+  function showDefault(form) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}parameter/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            console.log(index,value)
+            let element = form.find(`[name="${index}"]`)
+            
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        }
+      })
+    })
+  }
+
+  const setDefaultOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=default]').empty()
+      relatedForm.find('[name=default]').append(
+        new Option('-- PILIH STATUS DEFAULT --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS DEFAULT PARAMETER"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(Default => {
+            let option = new Option(Default.text, Default.id)
+
+            relatedForm.find('[name=default]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
   }
 
   function isJSON(something) {
