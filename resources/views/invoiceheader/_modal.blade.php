@@ -215,20 +215,22 @@
       let selectedRowsInvoice = $("#tableInvoice").getGridParam("selectedRowIds");
 
       $.each(selectedRowsInvoice, function(index, value) {
-        let selectedExtra = $("#tableInvoice").jqGrid("getCell", value, "nominalextra")
-        let selectedRetribusi = $("#tableInvoice").jqGrid("getCell", value, "nominalretribusi")
-
+        dataInvoice = $("#tableInvoice").jqGrid("getLocalRow", value);
+        let selectedExtra = dataInvoice.nominalextra
+        let selectedRetribusi = (dataInvoice.nominalretribusi == undefined) ? 0 : dataInvoice.nominalretribusi;
+        console.log(selectedExtra)
+        console.log(isNaN(selectedExtra))
         data.push({
           name: 'nominalextra[]',
-          value: (selectedExtra != '') ? parseFloat(selectedExtra.replaceAll(',', '')) : 0
+          value: (isNaN(selectedExtra)) ? parseFloat(selectedExtra.replaceAll(',', '')) : selectedExtra
         })
         data.push({
           name: 'nominalretribusi[]',
-          value: (selectedRetribusi != '') ? parseFloat(selectedRetribusi.replaceAll(',', '')) : 0
+          value: (isNaN(selectedRetribusi)) ? parseFloat(selectedRetribusi.replaceAll(',', '')) : selectedRetribusi
         })
         data.push({
           name: 'sp_id[]',
-          value: $("#tableInvoice").jqGrid("getCell", value, "id")
+          value: dataInvoice.id
         })
       });
 
@@ -585,7 +587,7 @@
                     rowObject.rowId
                   );
                   let total
-
+                  localRow.nominalretribusi = event.target.value;
                   let retribusi = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
                   let getOmset = $("#tableInvoice").jqGrid("getCell", rowObject.rowId, "omset")
                   let omset = (getOmset != '') ? parseFloat(getOmset.replaceAll(',', '')) : 0

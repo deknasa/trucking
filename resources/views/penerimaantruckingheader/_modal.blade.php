@@ -237,12 +237,11 @@
         let selectedRowsHutang = $("#tablePinjaman").getGridParam("selectedRowIds");
         $.each(selectedRowsHutang, function(index, value) {
           dataPinjaman = $("#tablePinjaman").jqGrid("getLocalRow", value);
-          let selectedNominal = dataPinjaman.nominal
           let selectedSisa = dataPinjaman.sisa
-
+          let selectedNominal = (dataPinjaman.nominal == undefined) ? 0 : dataPinjaman.nominal;
           data.push({
             name: 'nominal[]',
-            value: (selectedNominal != '') ? parseFloat(selectedNominal.replaceAll(',', '')) : 0
+            value: (isNaN(selectedNominal)) ? parseFloat(selectedNominal.replaceAll(',', '')) : selectedNominal
           })
           data.push({
             name: 'sisa[]',
@@ -387,9 +386,6 @@
               $.each(errors, (index, error) => {
                 let indexes = index.split(".");
                 let angka = indexes[1]
-                console.log(index)
-
-
                 selectedRowsHutang = $("#tablePinjaman").getGridParam("selectedRowIds");
                 row = parseInt(selectedRowsHutang[angka]) - 1;
                 let element;
@@ -792,12 +788,11 @@
                       "nominal",
                       0
                     );
-                    $("#tablePinjaman").jqGrid(
-                      "setCell",
-                      rowObject.rowId,
-                      "sisa",
-                      originalGridData.sisa
-                    );
+                    if(originalGridData.sisa == 0){
+                      $("#tablePinjaman").jqGrid("setCell",rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
+                    }else{
+                      $("#tablePinjaman").jqGrid("setCell",rowObject.rowId, "sisa",originalGridData.sisa);
+                    }
                   }
 
                   nominalDetails = $(`#tablePinjaman tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePinjaman_nominal"]`)

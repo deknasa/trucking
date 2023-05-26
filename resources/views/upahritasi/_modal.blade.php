@@ -403,8 +403,10 @@
       })
 
     setNominalSupir()
-    initAutoNumeric(form.find(`[name="jarak"]`))
-
+    // initAutoNumeric(form.find(`[name="jarak"]`))
+    initAutoNumeric(form.find(`[name="jarak"]`), {
+          minimumValue: 0
+        })
   }
 
   function editUpahRitasi(id) {
@@ -607,7 +609,34 @@
             
           })
           
-          initAutoNumeric($('#crudForm').find(`[name=jarak]`))
+
+        })
+        
+        initAutoNumeric(form.find(`[name="jarak"]`), {
+          minimumValue: 0
+        })
+
+        $.each(response.detail, (index, detail) => {
+          // $.each(response.data.upahritasi_rincian, (index, detail) => {
+          let detailRow = $(`
+            <tr>
+              <td></td>
+              <td>
+                <input type="hidden" name="container_id[]">
+                <input type="text" name="container[]" readonly data-current-value="${detail.container}" class="form-control container-lookup">
+              </td>
+              
+              <td>
+                <input type="text" name="nominalsupir[]" class="form-control autonumeric">
+              </td>
+              
+              <td>
+                <input type="text" name="liter[]" class="form-control autonumeric">
+              </td>
+              
+            </tr>
+          `)
+
 
           $.each(response.detail, (index, detail) => {
             // $.each(response.data.upahritasi_rincian, (index, detail) => {
@@ -635,6 +664,13 @@
             detailRow.find(`[name="container[]"]`).val(detail.container)
             detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
             detailRow.find(`[name="liter[]"]`).val(detail.liter);
+
+
+          initAutoNumeric(detailRow.find('.autonumeric'), {
+              minimumValue: 0
+            })
+          setNominalSupir()
+        })
 
             $('#detailList tbody').append(detailRow)
 
@@ -688,7 +724,9 @@
             detailRow.find(`[name="container[]"]`).val(detail.container)
             detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
             detailRow.find(`[name="liter[]"]`).val(detail.liter)
-            initAutoNumeric(detailRow.find('.autonumeric'))
+            initAutoNumeric(detailRow.find('.autonumeric'), {
+              minimumValue: 0
+            })
             setNominalSupir()
             $('#detailList tbody').append(detailRow)
             
