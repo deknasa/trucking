@@ -181,7 +181,7 @@
             </div>
 
             <div class="border p-3 potongkas" >
-              <h6>Posting Penerimaan</h6>
+              <h6 id="titlePotongkas">Posting Penerimaan</h6>
               <div class="row">
                 <div class="form-group col-md-6">
                   <div class="row">
@@ -297,13 +297,14 @@
       // deleteRow($(this).parents('tr'))
       console.log($(this).val());
       if ($(this).val() == 219) {
-        $('.potongkas').show()
+        $('.potongkas').show()//potong kas
+        $('#titlePotongkas').html('POSTING Penerimaan')
         $('[name=tglkasmasuk]').parents('.form-group').show()
         // $('[name=bank]').parents('.form-group').show()
         // $('[name=tglkasmasuk]').parents('.form-group').show()
       }else if($(this).val() == 220){
-        $('.potongkas').show()
-        // $('[name=bank]').parents('.form-group').show()
+        $('.potongkas').show()//potong hutang
+        $('#titlePotongkas').html('POSTING Pengeluaran')
         $('[name=tglkasmasuk]').parents('.form-group').hide()
         $('[name=penerimaan_nobukti]').parents('.form-group').hide()
       }else{
