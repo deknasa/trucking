@@ -129,4 +129,39 @@ class PenerimaanStokController extends MyController
     {
         //
     }
+
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'penerimaanstok', $request->all());
+
+        $penerimaanStoks = $response['data'];
+
+
+
+         
+        $i = 0;
+        foreach ($penerimaanStoks as $index => $params) {
+
+            $format = $params['format'];
+            $statusHitungStok = $params['statushitungstok'];
+
+            $result = json_decode($format, true);
+            $resultHitungStok = json_decode($statusHitungStok, true);
+
+            $format = $result['MEMO'];
+            $statusHitungStok = $resultHitungStok['MEMO'];
+
+
+            $penerimaanStoks[$i]['format'] = $format;
+            $penerimaanStoks[$i]['statushitungstok'] = $statusHitungStok;
+
+
+            $i++;
+        }
+
+        return view('reports.penerimaanStok', compact('penerimaanStoks'));
+    }
 }

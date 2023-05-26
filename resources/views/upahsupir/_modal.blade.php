@@ -80,7 +80,7 @@
               <div class="col-12 col-md-10">
                 <div class="input-group">
                   <input type="hidden" name="jarak_id">
-                  <input type="text" name="jarak" class="form-control" style="text-align: right">
+                  <input type="text" name="jarak" class="form-control  autonumeric" style="text-align: right">
                   <div class="input-group-append">
                     <span class="input-group-text" style="font-weight: bold;">KM</span>
                   </div>
@@ -310,38 +310,40 @@
         })
       })
 
-      formData.delete(`nominalsupir[]`);
+      // formData.delete(`nominalsupir[]`);
       $('#crudForm').find(`[name="nominalsupir[]"]`).each((index, element) => {
-        formData.append(`nominalsupir[]`, AutoNumeric.getNumber($(`#crudForm [name="nominalsupir[]"]`)[index]))
+        data.filter((row) => row.name === 'nominalsupir[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalsupir[]"]`)[index])
+        // formData.append(`nominalsupir[]`, AutoNumeric.getNumber($(`#crudForm [name="nominalsupir[]"]`)[index]))
       })
 
-      formData.delete(`nominalkenek[]`);
+      // formData.delete(`nominalkenek[]`);
       $('#crudForm').find(`[name="nominalkenek[]"]`).each((index, element) => {
-        formData.append('nominalkenek[]', AutoNumeric.getNumber($(`#crudForm [name="nominalkenek[]"]`)[index]))
+        data.filter((row) => row.name === 'nominalkenek[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalkenek[]"]`)[index])
+        // formData.append('nominalkenek[]', AutoNumeric.getNumber($(`#crudForm [name="nominalkenek[]"]`)[index]))
       })
 
-      formData.delete(`nominalkomisi[]`);
+      // formData.delete(`nominalkomisi[]`);
       $('#crudForm').find(`[name="nominalkomisi[]"]`).each((index, element) => {
-        // data.filter((row) => row.name === 'nominalkomisi[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalkomisi[]"]`)[index])
-        formData.append('nominalkomisi[]', AutoNumeric.getNumber($(`#crudForm [name="nominalkomisi[]"]`)[index]))
+        data.filter((row) => row.name === 'nominalkomisi[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalkomisi[]"]`)[index])
+        // formData.append('nominalkomisi[]', AutoNumeric.getNumber($(`#crudForm [name="nominalkomisi[]"]`)[index]))
       })
 
-      formData.delete(`nominaltol[]`);
+      // formData.delete(`nominaltol[]`);
       $('#crudForm').find(`[name="nominaltol[]"]`).each((index, element) => {
-        // data.filter((row) => row.name === 'nominaltol[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaltol[]"]`)[index])
-        formData.append('nominaltol[]', AutoNumeric.getNumber($(`#crudForm [name="nominaltol[]"]`)[index]))
+        data.filter((row) => row.name === 'nominaltol[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaltol[]"]`)[index])
+        // formData.append('nominaltol[]', AutoNumeric.getNumber($(`#crudForm [name="nominaltol[]"]`)[index]))
       })
 
-      formData.delete(`liter[]`);
+      // formData.delete(`liter[]`);
       $('#crudForm').find(`[name="liter[]"]`).each((index, element) => {
-        // data.filter((row) => row.name === 'liter[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="liter[]"]`)[index])
-        formData.append('liter[]', AutoNumeric.getNumber($(`#crudForm [name="liter[]"]`)[index]))
+        data.filter((row) => row.name === 'liter[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="liter[]"]`)[index])
+        // formData.append('liter[]', AutoNumeric.getNumber($(`#crudForm [name="liter[]"]`)[index]))
       })
 
-      $('#crudForm').find(`[name="jarak"]`).each((index, element) => {
-        // data.filter((row) => row.name === 'jarak')[index].value = AutoNumeric.getNumber($(`#crudForm [name="jarak`)[index])
-        formData.append('jarak', AutoNumeric.getNumber($(`#crudForm [name="jarak"]`)[index]))
-      })
+        data.filter((row) => row.name === 'jarak').value = AutoNumeric.getNumber($(`#crudForm [name="jarak"]`)[0])
+
+   console.log(data)
+
 
 
       formData.append('sortIndex', $('#jqGrid').getGridParam().sortname)
