@@ -34,13 +34,6 @@
   let hasDetail = false
 
   $(document).ready(function() {
-
-
-    // $('#lookup').hide()
-
-   
-
-
     $("#jqGrid").jqGrid({
         url: `${apiUrl}upahsupir`,
         mtype: "GET",
@@ -74,7 +67,6 @@
             label: 'JARAK',
             name: 'jarak',
             align: 'right',
-            // formatter: currencyFormat
           },
           {
             label: 'ZONA',
