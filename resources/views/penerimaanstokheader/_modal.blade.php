@@ -226,7 +226,7 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">keterangan <span class="text-danger">*</span> </label>
+                <label class="col-form-label">keterangan </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">
@@ -239,9 +239,9 @@
                 <thead>
                   <tr>
                     <th style="width: 10px">No</th>
-                    <th style="width: 100px">stok</th>
+                    <th style="width: 100px">stok <span class="text-danger">*</span> </th>
                     <th class="data_tbl tbl_vulkanisirke" style="width: 10px">vulkanisir ke</th>
-                    <th style="width:100px">keterangan</th>
+                    <th style="width:100px">keterangan <span class="text-danger">*</span> </th>
                     <th class="data_tbl tbl_qty" style="width: 10px">qty</th>
                     <th class="data_tbl tbl_harga" style="width:100px">harga</th>
                     <th class="data_tbl tbl_penerimaanstok_nobukti" style="width:100px">Penerimaanstoknobukti</th>
