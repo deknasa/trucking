@@ -10,52 +10,48 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{ asset('adminlte/plugins/fontawesome-free/css/all.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('libraries/adminlte/plugins/fontawesome-free/css/all.min.css') }}">
 
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte-customized.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('libraries/adminlte/dist/css/adminlte-customized.min.css') }}">
 
   <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="{{ asset('adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('libraries/adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
 
   <!-- Daterange picker -->
-  <link rel="stylesheet" href="{{ asset('adminlte/plugins/daterangepicker/daterangepicker.css') }}">
+  <link rel="stylesheet" href="{{ asset('libraries/adminlte/plugins/daterangepicker/daterangepicker.css') }}">
 
   <!-- JqGrid -->
   <link rel="stylesheet" href="{{ asset('libraries/jqgrid/570/css/ui.jqgrid-bootstrap4.css') }}" />
 
   <!-- Select2 -->
-  <link rel="stylesheet" href="{{ asset('plugins/select2/4.0.13/css/select2.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('plugins/select2/themes/select2-bootstrap4.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('libraries/adminlte/plugins/select2/css/select2.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('libraries/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 
   <!-- Jquery UI -->
   <link rel="stylesheet" href="{{ asset('libraries/jquery-ui/cupertino/jquery-ui.min.css') }}">
 
-  <!-- EasyUI -->
-  <!-- <link rel="stylesheet" type="text/css" href="{{ asset('libraries/easyui/themes/default/easyui.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('libraries/easyui/themes/icon.css') }}"> -->
-
   <!-- Nestable2 -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.css" />
+  <link rel="stylesheet" href="{{ asset('libraries/nestable2/1.6.0/css/jquery.nestable.min.css') }}" />
 
   <!-- Custom styles -->
-  <link rel="stylesheet" href="{{ asset('css/styles.css?version='. config('app.version')) }}">
-  <link rel="stylesheet" href="{{ asset('css/pager.css?version='. config('app.version')) }}">
+  <link rel="stylesheet" href="{{ asset('libraries/tas-lib/css/styles.css?version='. config('app.version')) }}">
+  <link rel="stylesheet" href="{{ asset('libraries/tas-lib/css/pager.css?version='. config('app.version')) }}">
 
-  <link rel="stylesheet" href="{{ asset('plugins/dropzone/dropzone.css') }}">
+  <link rel="stylesheet" href="{{ asset('libraries/adminlte/plugins/dropzone/dropzone.css') }}">
 
 </head>
 
 <body class="hold-transition sidebar-collapse layout-fixed">
   <div class="modal-loader d-none">
     <div class="modal-loader-content d-flex align-items-center justify-content-center">
-      <img src="{{ asset('images/loading-blue.gif') }}" rel="preload">
+      <img src="{{ asset('libraries/tas-lib/img/loading-blue.gif') }}" rel="preload">
       Loading...
     </div>
   </div>
 
   <div class="loader" id="loader">
-    <img src="{{ asset('images/hour-glass.gif') }}" rel="preload">
+    <img src="{{ asset('libraries/tas-lib/img/hour-glass.gif') }}" rel="preload">
     <span>Loading</span>
   </div>
 
@@ -258,33 +254,29 @@
   </div>
 
   <!-- jQuery -->
-  <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
-  <!-- <script type="text/javascript" src="{{ asset('libraries/easyui/easyloader.js') }}"></script> -->
+  <script src="{{ asset('libraries/adminlte/plugins/jquery/jquery.min.js') }}"></script>
 
   <!-- jQuery UI -->
   <script src="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.js') }}"></script>
 
-  <!-- EasyUI -->
-  {{-- <script type="text/javascript" src="{{ asset('libraries/easyui/jquery.easyui.min.js') }}"></script> --}}
-
   <!-- Highlight -->
-  <script src="{{ asset('js/highlight.js') }}"></script>
+  <script src="{{ asset('libraries/highlight/highlight.js') }}"></script>
 
   <!-- Bootstrap 4 -->
-  <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ asset('libraries/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
   <!-- ChartJS -->
-  <script src="{{ asset('adminlte/plugins/chart.js/Chart.min.js') }}"></script>
+  <script src="{{ asset('libraries/adminlte/plugins/chart.js/Chart.min.js') }}"></script>
 
   <!-- daterangepicker -->
-  <script src="{{ asset('adminlte/plugins/moment/moment.min.js') }}"></script>
-  <script src="{{ asset('adminlte/plugins/daterangepicker/daterangepicker.js') }}"></script>
+  <script src="{{ asset('libraries/adminlte/plugins/moment/moment.min.js') }}"></script>
+  <script src="{{ asset('libraries/adminlte/plugins/daterangepicker/daterangepicker.js') }}"></script>
 
   <!-- overlayScrollbars -->
-  <script src="{{ asset('adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+  <script src="{{ asset('libraries/adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
 
   <!-- AdminLTE App -->
-  <script src="{{ asset('adminlte/dist/js/adminlte.js') }}"></script>
+  <script src="{{ asset('libraries/adminlte/dist/js/adminlte.js') }}"></script>
 
   <!-- JqGrid -->
   <script src="{{ asset('libraries/jqgrid/570/js/jquery.jqGrid.js') }}"></script>
@@ -294,25 +286,25 @@
   <script src="{{ asset('libraries/autonumeric/4.5.4/autonumeric.min.js') }}"></script>
 
   <!-- Select2 -->
-  <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
+  <script src="{{ asset('libraries/adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
 
   <!-- Inputmask -->
   <script src="{{ asset('libraries/inputmask/5.0.6/jquery.inputmask.min.js') }}"></script>
 
   <!-- dropzone -->
-  <script src="{{ asset('plugins/dropzone/dropzone.js') }}"></script>
+  <script src="{{ asset('libraries/adminlte/plugins/dropzone/dropzone.js') }}"></script>
 
   <!-- Nestable2 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.js"></script>
+  <script src="{{ asset('libraries/nestable2/1.6.0/js/jquery.nestable.min.js') }}"></script>
 
   <!-- jQuery UI -->
   <script src="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.js') }}"></script>
 
   <!-- Custom global script -->
-  <script src="{{ asset('js/pager.js?version='. config('app.version')) }}"></script>
-  <script src="{{ asset('js/lookup.js?version='. config('app.version')) }}"></script>
-  <script src="{{ asset('mains.js?version='. config('app.version')) }}"></script>
-  <script src="{{ asset('js/app.js?version='. config('app.version')) }}"></script>
+  <script src="{{ asset('libraries/tas-lib/js/pager.js?version='. config('app.version')) }}"></script>
+  <script src="{{ asset('libraries/tas-lib/js/lookup.js?version='. config('app.version')) }}"></script>
+  <script src="{{ asset('libraries/tas-lib/js/mains.js?version='. config('app.version')) }}"></script>
+  <script src="{{ asset('libraries/tas-lib/js/app.js?version='. config('app.version')) }}"></script>
 
 
   <!-- Custom page script -->
