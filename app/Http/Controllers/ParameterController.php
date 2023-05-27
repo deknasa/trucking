@@ -201,7 +201,15 @@ class ParameterController extends MyController
             ->get(config('app.api_url') . 'parameter', $request->all());
 
         $parameters = $response['data'];
-
+       
+        $i = 0;
+        foreach ($parameters as $index => $params) {
+            $memo = $params['memo'];
+            $result = json_decode($memo, true);
+            $memo = $result['MEMO'];
+            $parameters[$i]['memo'] = $memo;
+            $i++;
+        }
         return view('reports.parameter', compact('parameters'));
     }
 
