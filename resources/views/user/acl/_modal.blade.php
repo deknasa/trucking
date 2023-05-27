@@ -102,6 +102,8 @@
   async function editUserAcl(userId) {
     let form = $('#userAclForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmitUserAcl').html(`
@@ -110,12 +112,10 @@
   `)
     form.find(`.sometimes`).hide()
     $('#userAclModalTitle').text('Edit User Role')
-    $('#userAclModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     let userAcls = await getUserAcls(userId)
-
     selectedRows = userAcls.data.map((acl) => {
       let element = $('#userAclForm').find(`[name="aco_ids[]"][value=${acl.id}]`)
 
@@ -125,29 +125,37 @@
       return acl.id
     })
     
-    // showUserAcl(userId)
-    // loadAcoGrid()
     Promise
       .all([
         loadAcoGrid()
       ])
       .then(() => {
         showUserAcl(userId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+              $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function showUserAcl(userId) {
-    $.ajax({
-      url: `${apiUrl}user/${userId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: (response) => {
-        $('#userAclForm').find(`[name="user_id"]`).val(response.data.id)
-        $('#userAclForm').find(`[name="user"]`).val(response.data.user)
-      }
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}user/${userId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: (response) => {
+          $('#userAclForm').find(`[name="user_id"]`).val(response.data.id)
+          $('#userAclForm').find(`[name="user"]`).val(response.data.user)
+
+          resolve()
+        }
+      })
     })
   }
 

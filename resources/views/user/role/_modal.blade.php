@@ -112,6 +112,8 @@
   function editUserRole(userId) {
     let form = $('#userRoleForm')
 
+    $('.modal-loader').removeClass('d-none')
+
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmitUserRole').html(`
@@ -120,7 +122,6 @@
   `)
     form.find(`.sometimes`).hide()
     $('#userRoleModalTitle').text('Edit User Role')
-    $('#userRoleModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -128,34 +129,43 @@
       .all([
         setRoleOptions(form)
       ])
-      // console.log('c')
       .then(() => {
-        showUserRoles(form)
+        showUserRoles(form, userId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .finally(() => {
+              $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   function showUserRoles(form, userId) {
-    $.ajax({
-      url: `${apiUrl}user/${userId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        let roleIds = []
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}user/${userId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let roleIds = []
 
-        response.data.roles.forEach((role) => {
-          roleIds.push(role.id)
-        });
+          response.data.roles.forEach((role) => {
+            roleIds.push(role.id)
+          });
 
-        form.find(`[name="role_ids[]"]`).val(roleIds).change()
-        form.find(`[name="user_id"]`).val(response.data.id)
-        form.find(`[name="user"]`).val(response.data.user)
-      },
-      error: (error) => {
-        showDialog(error.responseJSON.message)
-      }
+          form.find(`[name="role_ids[]"]`).val(roleIds).change()
+          form.find(`[name="user_id"]`).val(response.data.id)
+          form.find(`[name="user"]`).val(response.data.user)
+
+          resolve()
+        },
+        error: (error) => {
+          showDialog(error.responseJSON.message)
+        }
+      })
     })
   }
 
