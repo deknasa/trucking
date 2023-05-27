@@ -434,7 +434,7 @@
 
 
     function loadDataHeader(url, addtional = null) {
-      clearGlobalSearch($('#jqGrid'))
+
       let data = {
         tgldari: $('#tgldariheader').val(),
         tglsampai: $('#tglsampaiheader').val()
@@ -443,14 +443,66 @@
         ...data,
         ...addtional
       }
+      getIndex(url, data).then((response) => {
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+        clearGlobalSearch($('#jqGrid'))
+        $('#jqGrid').setGridParam({
+          url: `${apiUrl}${url}`,
+          datatype: "json",
+          postData: data,
 
-      $('#jqGrid').setGridParam({
-        url: `${apiUrl}${url}`,
-        datatype: "json",
-        postData: data,
+          page: 1
+        }).trigger('reloadGrid')
+      }).catch((errors) => {
+        clearGlobalSearch($('#jqGrid'))
 
-        page: 1
-      }).trigger('reloadGrid')
+        $.each(errors, (index, error) => {
+          let indexes = index.split(".");
+          let element;
+          element = $('#rangeHeader').find(`[name="${indexes[0]}header"]`)[0];
+
+          $(element).addClass("is-invalid");
+          $(`
+              <div class="invalid-feedback">
+              ${error[0].toLowerCase()}
+              </div>
+			    `).appendTo($(element).parent());
+
+        });
+
+        $(".is-invalid").first().focus();
+      })
+
+    }
+
+    function getIndex(url, data) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: `${apiUrl}${url}`,
+          dataType: "JSON",
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: data,
+          success: (response) => {
+            resolve(response);
+          },
+          error: error => {
+            if (error.status === 422) {
+              $('.is-invalid').removeClass('is-invalid')
+              $('.invalid-feedback').remove()
+
+
+              errors = error.responseJSON.errors
+              reject(errors)
+
+            } else {
+              showDialog(error.statusText)
+            }
+          },
+        });
+      });
     }
 
     function setRangeLookup() {
