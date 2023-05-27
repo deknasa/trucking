@@ -150,10 +150,10 @@
                   <tr>
                     <th width="1%" class="">No</th>
                     <th class="data_tbl tbl_checkbox" style="display:none" width="1%">Pilih</th>
-                    <th width="20%" class="data_tbl tbl_supir_id">SUPIR <span class="text-danger">*</span></th>
+                    <th width="20%" class="data_tbl tbl_supir_id">SUPIR</th>
                     <th class="data_tbl tbl_penerimaantruckingheader" width="20%">NO BUKTI PENERIMAAN TRUCKING</th>
                     <th width="14%" class="tbl_sisa">Sisa</th>
-                    <th width="20%" class="tbl_nominal">Nominal <span class="text-danger">*</span></th>
+                    <th width="20%" class="tbl_nominal">Nominal</th>
                     <th class="data_tbl tbl_keterangan" width="25%">Keterangan</th>
                     <th width="1%" class="tbl_aksi">Aksi</th>
                   </tr>
@@ -899,6 +899,8 @@
       $('#crudForm [name=bank]').first().val('')
       $('#crudForm [name=bank]').first().data('currentValue','')
     }
+      
+      
   }
   
 
@@ -995,8 +997,6 @@
       ])
       .then(() => {
           $('#crudModal').modal('show')
-          $('#crudForm [name=tglbukti]').attr('readonly', true)
-          $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
       })
       .finally(() => {
           $('.modal-loader').addClass('d-none')
@@ -1806,11 +1806,7 @@
             if (index == 'periodesampai') {
               form.find(`[name="tglsampai"]`).val(dateFormat(value))
             }
-            if (index == 'statusposting') {
-              element.prop('disabled', true)
-              // element.parent('.input-group').find('.button-clear').remove()
-              // element.parent('.input-group').find('.input-group-append').remove()
-            }
+
             if (index == 'pengeluarantrucking') {
               element.data('current-value', value).prop('readonly', true)
               element.parent('.input-group').find('.button-clear').remove()
