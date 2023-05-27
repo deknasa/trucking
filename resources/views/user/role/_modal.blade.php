@@ -5,7 +5,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="userRoleLabel"></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <div class="modal-body">
@@ -51,13 +51,31 @@
   hasFormBindKeys = false
 
   $(document).ready(function() {
-    $('#btnSubmitUserRole').click(function(event) {
+    $(document).on('click', '#btnSubmitUserRole', function(event) {
       event.preventDefault()
 
       let userId = $('#userRoleForm').find(`[name=user_id]`).val()
-      
+
       updateUserRole(userId)
     })
+  })
+
+  $(document).on('shown.bs.modal', '#userRoleModal', () => {
+    let form = $('#userRoleForm')
+
+    setFormBindKeys(form)
+
+    activeGrid = null
+
+    $('#multiple')
+      .select2({
+        theme: 'bootstrap4',
+        width: '100%',
+      })
+  })
+
+  $(document).on('hidden.bs.modal', '#userRoleModal', () => {
+    activeGrid = '#jqGrid'
   })
 
   function updateUserRole(userId) {
@@ -91,24 +109,6 @@
     })
   }
 
-  $('#userRoleModal').on('shown.bs.modal', () => {
-    let form = $('#userRoleForm')
-
-    setFormBindKeys(form)
-
-    activeGrid = null
-
-    $('#multiple')
-      .select2({
-        theme: 'bootstrap4',
-        width: '100%',
-      })
-  })
-
-  $('#userRoleModal').on('hidden.bs.modal', () => {
-    activeGrid = '#jqGrid'
-  })
-
   function editUserRole(userId) {
     let form = $('#userRoleForm')
 
@@ -117,9 +117,10 @@
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmitUserRole').html(`
-    <i class="fa fa-save"></i>
-    Simpan
-  `)
+      <i class="fa fa-save"></i>
+      SIMPAN
+    `)
+
     form.find(`.sometimes`).hide()
     $('#userRoleModalTitle').text('Edit User Role')
     $('.is-invalid').removeClass('is-invalid')
@@ -132,10 +133,10 @@
       .then(() => {
         showUserRoles(form, userId)
           .then(() => {
-            $('#crudModal').modal('show')
+            $('#userRoleModal').modal('show')
           })
           .finally(() => {
-              $('.modal-loader').addClass('d-none')
+            $('.modal-loader').addClass('d-none')
           })
       })
   }
