@@ -133,6 +133,7 @@
       .then(() => {
         showUserRoles(form, userId)
           .then(() => {
+
             $('#userRoleModal').modal('show')
           })
           .finally(() => {
@@ -152,6 +153,7 @@
         },
         success: response => {
           let roleIds = []
+
 
           response.data.roles.forEach((role) => {
             roleIds.push(role.id)

@@ -132,10 +132,12 @@
       .then(() => {
         showUserAcl(userId)
           .then(() => {
+
             $('#userAclModal').modal('show')
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
+
           })
       })
   }

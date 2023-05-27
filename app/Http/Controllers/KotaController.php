@@ -185,8 +185,6 @@ class KotaController extends MyController
 
         
             $i++;
-
-
         }
 
         return view('reports.kota', compact('kotas'));
