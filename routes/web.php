@@ -917,6 +917,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('gajisupirheader', GajiSupirHeaderController::class);
 
     Route::get('gajisupirdetail/jurnal/grid', [GajiSupirDetailController::class, 'jurnalGrid']);
+    Route::get('gajisupirdetail/absensi/grid', [GajiSupirDetailController::class, 'absensiGrid']);
     Route::get('gajisupirdetail/potsemua/grid', [GajiSupirDetailController::class, 'potsemuaGrid']);
     Route::get('gajisupirdetail/potpribadi/grid', [GajiSupirDetailController::class, 'potpribadiGrid']);
     Route::get('gajisupirdetail/deposito/grid', [GajiSupirDetailController::class, 'depositoGrid']);
