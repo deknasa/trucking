@@ -55,15 +55,15 @@ class AuthController extends Controller
             ->post(config('app.api_url') . 'token', $credentials);
 
            
-            $tokenEmkl = Http::withHeaders([
-                'Accept' => 'application/json'
-            ])->withOptions(['verify' => false])
-            ->post(config('app.emkl_api_url') . 'oauth/token', $credentialsEmkl);
+            // $tokenEmkl = Http::withHeaders([
+            //     'Accept' => 'application/json'
+            // ])->withOptions(['verify' => false])
+            // ->post(config('app.emkl_api_url') . 'oauth/token', $credentialsEmkl);
 
             // dd($tokenEmkl->getBody()->getContents());
             
             session(['access_token' => $token['access_token']]);
-            session(['access_token_emkl' => $tokenEmkl['access_token']]);
+            // session(['access_token_emkl' => $tokenEmkl['access_token']]);
             session(['menus' => $this->getMenu()]);
 
             return redirect()->route('dashboard');

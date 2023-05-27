@@ -105,9 +105,9 @@
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmitUserAcl').html(`
-    <i class="fa fa-save"></i>
-    Simpan
-  `)
+      <i class="fa fa-save"></i>
+      SIMPAN
+    `)
     form.find(`.sometimes`).hide()
     $('#userAclModalTitle').text('Edit User Role')
     $('#userAclModal').modal('show')
