@@ -218,6 +218,27 @@ class AgenController extends MyController
 
         $agens = $response['data'];
 
+        $i = 0;
+        foreach ($agens as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+            $statusApproval = $params['statusapproval'];
+            $statusTas = $params['statustas'];
+
+            $result = json_decode($statusaktif, true);
+            $resultApproval = json_decode($statusApproval, true);
+            $resultTas = json_decode($statusTas, true);
+
+            $statusaktif = $result['MEMO'];
+            $statusApproval = $resultApproval['MEMO'];
+            $statusTas = $resultTas['MEMO'];
+
+            $agens[$i]['statusaktif'] = $statusaktif;
+            $agens[$i]['statusapproval'] = $statusApproval;
+            $agens[$i]['statustas'] = $statusTas;
+            $i++;
+        }
+
         return view('reports.agen', compact('agens'));
     }
 

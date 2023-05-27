@@ -93,4 +93,32 @@ class SupplierController extends MyController
             return redirect()->route('supplier.index');
         }
     }
+    public function report(Request $request)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'supplier', $request->all());
+
+        $suppliers = $response['data'];
+
+        $i = 0;
+        foreach ($suppliers as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+            $statusDaftarHarga = $params['statusdaftarharga'];
+
+            $result = json_decode($statusaktif, true);
+            $resultDaftarHarga = json_decode($statusDaftarHarga, true);
+
+            $statusaktif = $result['MEMO'];
+            $statusDaftarHarga = $resultDaftarHarga['MEMO'];
+
+            $suppliers[$i]['statusaktif'] = $statusaktif;
+            $suppliers[$i]['statusdaftarharga'] = $statusDaftarHarga;
+            $i++;
+        }
+
+        return view('reports.supplier', compact('suppliers'));
+    }
 }
