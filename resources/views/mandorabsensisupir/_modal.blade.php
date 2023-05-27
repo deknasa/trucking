@@ -278,7 +278,8 @@
 
     Promise
       .all([
-        showDefault(form)
+        showDefault(form),
+        showAbsensi(form,tradoId)
       ])
       .then(() => {
         $('#crudModal').modal('show')
