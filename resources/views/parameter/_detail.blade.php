@@ -13,9 +13,7 @@
     let parameterColModel = []
 
     function loadDetailGrid(id) {
-
         let pager = '#detailPager'
-
         $("#detail").jqGrid({
                 url: `{{ config('app.api_url') . 'parameter/detail' }}?id=${id}`,
                 mtype: "GET",
@@ -42,6 +40,9 @@
                 sortable: true,
                 pager: pager,
                 viewrecords: true,
+                postData: {
+                    id: id
+                },
                 prmNames: {
                     sort: 'sortIndex',
                     order: 'sortOrder',
