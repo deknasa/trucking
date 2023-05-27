@@ -486,6 +486,7 @@
     // $('[name=supplier]').val('').attr('readonly', false);
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
+    $('#addRow').show()
   }
 
   function tampilanpo() {
@@ -515,6 +516,7 @@
     // $('[name=supplier]').val('').attr('readonly', false);
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
+    $('#addRow').show()
   }
 
   function tampilanpbt() {
@@ -550,6 +552,7 @@
         showDialog(error.statusText)
       }
     })
+    // $('#addRow').hide()
   }
 
   function tampilanpgt() {
@@ -571,6 +574,7 @@
     $('[name=gandenganke]').parents('.form-group').show()
     $('.tbl_penerimaanstok_nobukti').hide();
 
+    $('#addRow').show()
   }
 
   function tampilankst() {
@@ -603,6 +607,8 @@
     $('.tbl_total').hide();
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
+    
+    $('#addRow').show()
   }
 
   function tampilanpst() {
@@ -624,6 +630,8 @@
 
     $('.tbl_penerimaanstok_nobukti').show();
     $('.colspan').attr('colspan', 7);
+    
+    $('#addRow').show()
   }
 
   function tampilanall() {
@@ -647,6 +655,7 @@
     // $('[name=supplier]').attr('readonly', false);
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
+    $('#addRow').show()
   }
 
   function setSuplier(penerimaan_id) {
@@ -784,7 +793,11 @@
         })
         sumary()
         setTampilanForm()
-
+        if (KodePenerimaanId === 'SPB') {
+          $('#addRow').hide()
+        }else{
+          $('#addRow').show()
+        }
       },
       error: error => {
         showDialog(error.statusText)
@@ -1572,13 +1585,7 @@
           // console.log(penerimaan.supplier,
           // penerimaan.nobon);
         }
-        // if (penerimaanstokId == 6) {//spbs /reuse
-        //   setSuplier(penerimaan.id);
-        //   $('[name=nobon]').val(penerimaan.nobon)
-        //   setDetail(penerimaan.id);
-        //   // console.log(penerimaan.supplier,
-        //   // penerimaan.nobon);
-        // }
+        
         element.val(penerimaan.nobukti)
       },
       onCancel: (element) => {

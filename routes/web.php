@@ -557,7 +557,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('gudang/index', [GudangController::class, 'index']);
     Route::get('gudang/report', [GudangController::class, 'report'])->name('gudang.report');
     Route::get('gudang/export', [GudangController::class, 'export'])->name('gudang.export');
-    Route::resource('gudang', GudangControlle\r::class);
+    Route::resource('gudang', GudangController::class);
 
     Route::get('subkelompok/report', [SubKelompokController::class, 'report'])->name('subkelompok.report');
     Route::get('subkelompok/{id}/delete', [SubKelompokController::class, 'delete'])->name('subkelompok.delete');
