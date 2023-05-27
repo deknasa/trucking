@@ -62,7 +62,7 @@
 
     $(this).attr('disabled', '')
     $('#loader').removeClass('d-none')
-    
+
     $.ajax({
       url: `${apiUrl}user/${userId}/acl`,
       method: 'POST',
@@ -107,9 +107,9 @@
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmitUserAcl').html(`
-    <i class="fa fa-save"></i>
-    Simpan
-  `)
+      <i class="fa fa-save"></i>
+      SIMPAN
+    `)
     form.find(`.sometimes`).hide()
     $('#userAclModalTitle').text('Edit User Role')
     $('.is-invalid').removeClass('is-invalid')
@@ -124,7 +124,7 @@
 
       return acl.id
     })
-    
+
     Promise
       .all([
         loadAcoGrid()
@@ -132,10 +132,12 @@
       .then(() => {
         showUserAcl(userId)
           .then(() => {
-            $('#crudModal').modal('show')
+
+            $('#userAclModal').modal('show')
           })
           .finally(() => {
-              $('.modal-loader').addClass('d-none')
+            $('.modal-loader').addClass('d-none')
+
           })
       })
   }

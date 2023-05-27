@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -99,6 +101,34 @@ class PenerimaController extends MyController
         } catch (\Throwable $th) {
             return redirect()->route('penerima.index');
         }
+    }
+    public function report(Request $request): View
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'penerima', $request->all());
+
+        $penerimas = $response['data'];
+
+        $i = 0;
+        foreach ($penerimas as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+            $statusKaryawan = $params['statuskaryawan'];
+
+            $result = json_decode($statusaktif, true);
+            $resultKaryawan = json_decode($statusKaryawan, true);
+
+            $statusaktif = $result['MEMO'];
+            $statusKaryawan = $resultKaryawan['MEMO'];
+
+            $penerimas[$i]['statusaktif'] = $statusaktif;
+            $penerimas[$i]['statuskaryawan'] = $statusKaryawan;
+            $i++;
+        }
+
+        return view('reports.penerima', compact('penerimas'));
     }
 
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Illuminate\Support\Facades\Http;
 
 class PelangganController extends MyController
@@ -87,5 +88,29 @@ class PelangganController extends MyController
             ->get(config('app.api_url') . 'pelanggan/combostatus', $status);
 
         return $response['data'];
+    }
+    public function report(Request $request): View
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'pelanggan', $request->all());
+
+        $pelanggans = $response['data'];
+
+        $i = 0;
+        foreach ($pelanggans as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+
+            $result = json_decode($statusaktif, true);
+
+            $statusaktif = $result['MEMO'];
+
+            $pelanggans[$i]['statusaktif'] = $statusaktif;
+            $i++;
+        }
+
+        return view('reports.pelanggan', compact('pelanggans'));
     }
 }
