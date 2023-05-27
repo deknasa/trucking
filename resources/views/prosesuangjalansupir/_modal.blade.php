@@ -408,28 +408,28 @@
 
                 let selectedRowsPengembalian = $("#tablePengembalian").getGridParam("selectedRowIds");
                 $.each(selectedRowsPengembalian, function(index, value) {
-                    let selectedBayar = $("#tablePengembalian").jqGrid("getCell", value, "nombayar")
-                    let selectedSisa = $("#tablePengembalian").jqGrid("getCell", value, "sisa")
-
+                    dataPengembalian = $("#tablePengembalian").jqGrid("getLocalRow", value);
+                    let selectedSisa = dataPengembalian.sisa
+                    let selectedNominal = (dataPengembalian.nombayar == undefined) ? 0 : dataPengembalian.nombayar;
                     data.push({
                         name: 'nombayar[]',
-                        value: (selectedBayar != '') ? parseFloat(selectedBayar.replaceAll(',', '')) : 0
+                        value: (isNaN(selectedNominal)) ? parseFloat(selectedNominal.replaceAll(',', '')) : selectedNominal
                     })
                     data.push({
                         name: 'sisa[]',
-                        value: (selectedSisa != '') ? parseFloat(selectedSisa.replaceAll(',', '')) : 0
+                        value: selectedSisa
                     })
                     data.push({
                         name: 'keteranganpinjaman[]',
-                        value: $("#tablePengembalian").jqGrid("getCell", value, "keteranganpinjaman")
+                        value: dataPengembalian.keteranganpinjaman
                     })
                     data.push({
                         name: 'pengeluarantruckingheader_nobukti[]',
-                        value: $("#tablePengembalian").jqGrid("getCell", value, "nobukti")
+                        value: dataPengembalian.nobukti
                     })
                     data.push({
                         name: 'pjt_id[]',
-                        value: $("#tablePengembalian").jqGrid("getCell", value, "id")
+                        value: dataPengembalian.id
                     })
                 });
             }
@@ -667,6 +667,7 @@
         addRowTransfer()
         $('#addRowTransfer').show()
         initAutoNumeric(form.find(`[name="nilaideposit"]`))
+        initAutoNumeric(form.find(`[name="nilaiadjust"]`))
 
         loadPengembalianGrid()
     }
@@ -691,15 +692,15 @@
         $('#detailTransfer tfoot').find("td").last().hide()
 
         Promise
-        .all([
-            showProsesUangJalanSupir(form, userId)
-        ])
-        .then(() => {
-        $('#crudModal').modal('show')
-        })
-        .finally(() => {
-        $('.modal-loader').addClass('d-none')
-        })
+            .all([
+                showProsesUangJalanSupir(form, userId)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
     }
 
     function deleteProsesUangJalanSupir(userId) {
@@ -719,15 +720,15 @@
         $('.invalid-feedback').remove()
 
         Promise
-        .all([
-            showProsesUangJalanSupir(form, userId)
-        ])
-        .then(() => {
-        $('#crudModal').modal('show')
-        })
-        .finally(() => {
-        $('.modal-loader').addClass('d-none')
-        })
+            .all([
+                showProsesUangJalanSupir(form, userId)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
     }
 
     function loadPengembalianGrid() {
@@ -790,7 +791,7 @@
                                         rowObject.rowId
                                     );
                                     let totalSisa
-
+                                    localRow.nombayar = event.target.value;
                                     let nombayar = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
                                     if ($('#crudForm').data('action') == 'edit') {
                                         totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nombayar)) - nombayar
@@ -804,6 +805,20 @@
                                         "sisa",
                                         totalSisa
                                     );
+                                    if (totalSisa < 0) {
+                                        showDialog('sisa tidak boleh minus')
+                                        $("#tablePengembalian").jqGrid(
+                                            "setCell",
+                                            rowObject.rowId,
+                                            "nombayar",
+                                            0
+                                        );
+                                        if (originalGridData.sisa == 0) {
+                                            $("#tablePengembalian").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nombayar)));
+                                        } else {
+                                            $("#tablePengembalian").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
+                                        }
+                                    }
 
                                     nombayarDetails = $(`#tablePengembalian tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePengembalian_nombayar"]`)
                                     ttlBayar = 0

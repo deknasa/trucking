@@ -628,7 +628,7 @@
                 name: 'bankUangjalan',
                 value: form.find(`[name="bankUangjalan"]`).val()
             })
-            
+
             data.push({
                 name: 'nobuktiUangjalan',
                 value: form.find(`[name="nobuktiUangjalan"]`).val()
@@ -791,17 +791,19 @@
                                 let tglSampai = $('#crudForm').find(`[name="tglsampai"]`).val()
                                 let aksi = $('#crudForm').data('action')
 
+                                $(element).attr('id', 'gsRincian')
                                 $(element).removeClass('form-control')
                                 $(element).parent().addClass('text-center')
                                 if (disabled == '') {
                                     $(element).on('click', function() {
+                                        $(element).attr('disabled', true)
                                         if ($(this).is(':checked')) {
                                             selectAllRows(tglDari, tglSampai, aksi)
                                         } else {
                                             clearSelectedRows()
                                         }
                                     })
-                                }else{
+                                } else {
                                     $(element).attr('disabled', true)
                                 }
                             }
@@ -982,6 +984,7 @@
 
                     setHighlight($(this))
 
+                    $('#gsRincian').attr('disabled', false)
                 }
             })
 
@@ -1056,10 +1059,10 @@
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
             })
-        
+
     }
 
-    async function editProsesGajiSupirHeader(Id) {
+    function editProsesGajiSupirHeader(Id) {
         let form = $('#crudForm')
 
         form.data('action', 'edit')
@@ -1069,43 +1072,21 @@
             Simpan
         `)
         $('#crudModalTitle').text('Edit Proses Gaji Supir')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-
-        showProsesGajiSupir(form, Id, 'edit')
-        let ricList = await getEdit(Id)
-        $('#rekapRincian').jqGrid('setGridParam', {
-            url: `${apiUrl}prosesgajisupirheader/${Id}/getEdit`,
-            postData: {
-                dari: $('#crudForm').find('[name=tgldari]').val(),
-                sampai: $('#crudForm').find('[name=tglsampai]').val(),
-            },
-            datatype: "json"
-        }).trigger('reloadGrid');
-        selectedRows = ricList.data.map((data) => {
-            let element = $('#crudForm').find(`[name="rincianId[]"][value=${data.idric}]`)
-
-            element.prop('checked', true)
-            element.parents('tr').addClass('bg-light-blue')
-
-            return data.idric
-        })
-        selectedBorongan = ricList.data.map((data) => data.borongan)
-        selectedJalan = ricList.data.map((data) => data.uangjalan)
-        selectedKomisi = ricList.data.map((data) => data.komisisupir)
-        selectedMakan = ricList.data.map((data) => data.uangmakanharian)
-        selectedPP = ricList.data.map((data) => data.potonganpinjaman)
-        selectedPS = ricList.data.map((data) => data.potonganpinjamansemua)
-        selectedDeposito = ricList.data.map((data) => data.deposito)
-        selectedBBM = ricList.data.map((data) => data.bbm)
-        selectedRIC = ricList.data.map((data) => data.nobuktiric)
-        selectedSupir = ricList.data.map((data) => data.supir_id)
-
-        countNominal()
+        Promise
+            .all([
+                showProsesGajiSupir(form, Id, 'edit')
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
     }
 
-    async function deleteProsesGajiSupirHeader(Id) {
+    function deleteProsesGajiSupirHeader(Id) {
         let form = $('#crudForm')
 
         form.data('action', 'delete')
@@ -1115,41 +1096,20 @@
             Hapus
         `)
         $('#crudModalTitle').text('Delete Proses Gaji Supir')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
         form.find('#btnTampil').prop('disabled', true)
-        showProsesGajiSupir(form, Id, 'delete')
-        let ricList = await getEdit(Id)
-        $('#rekapRincian').jqGrid('setGridParam', {
-            url: `${apiUrl}prosesgajisupirheader/${Id}/getEdit`,
-            postData: {
-                dari: $('#crudForm').find('[name=tgldari]').val(),
-                sampai: $('#crudForm').find('[name=tglsampai]').val(),
-            },
-            datatype: "json"
-        }).trigger('reloadGrid');
-        selectedRows = ricList.data.map((data) => {
-            let element = $('#crudForm').find(`[name="rincianId[]"][value=${data.idric}]`)
-
-            element.prop('checked', true)
-            element.parents('tr').addClass('bg-light-blue')
-
-            return data.idric
-        })
-
-        selectedBorongan = ricList.data.map((data) => data.borongan)
-        selectedJalan = ricList.data.map((data) => data.uangjalan)
-        selectedKomisi = ricList.data.map((data) => data.komisisupir)
-        selectedMakan = ricList.data.map((data) => data.uangmakanharian)
-        selectedPP = ricList.data.map((data) => data.potonganpinjaman)
-        selectedPS = ricList.data.map((data) => data.potonganpinjamansemua)
-        selectedDeposito = ricList.data.map((data) => data.deposito)
-        selectedBBM = ricList.data.map((data) => data.bbm)
-        selectedRIC = ricList.data.map((data) => data.nobuktiric)
-        selectedSupir = ricList.data.map((data) => data.supir_id)
-        countNominal()
+        Promise
+            .all([
+                showProsesGajiSupir(form, Id, 'delete')
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
     }
 
     function cekValidasi(Id, Aksi) {
@@ -1215,6 +1175,31 @@
 
                 // url = `${gajiId}/getEdit`
                 rekapRincian()
+                $.each(response.getTrip, (index, detail) => {
+
+                    selectedRows.push(detail.idric)
+
+                    selectedBorongan.push(detail.borongan)
+                    selectedJalan.push(detail.uangjalan)
+                    selectedKomisi.push(detail.komisisupir)
+                    selectedMakan.push(detail.uangmakanharian)
+                    selectedPP.push(detail.potonganpinjaman)
+                    selectedPS.push(detail.potonganpinjamansemua)
+                    selectedDeposito.push(detail.deposito)
+                    selectedBBM.push(detail.bbm)
+                    selectedRIC.push(detail.nobuktiric)
+                    selectedSupir.push(detail.supir_id)
+
+                })
+
+                $('#rekapRincian').jqGrid("clearGridData");
+                $('#rekapRincian').jqGrid('setGridParam', {
+                    url: `${apiUrl}prosesgajisupirheader/${gajiId}/getEdit`,
+                    postData: {
+                        sortIndex: sortnameRincian
+                    },
+                    datatype: "json"
+                }).trigger('reloadGrid');
 
 
                 if (response.potsemua != null) {
@@ -1306,6 +1291,8 @@
                     form.find('[name]').addClass('disabled')
                     initDisabled()
                 }
+
+                countNominal()
             }
         })
     }
@@ -1522,7 +1509,7 @@
                 element.data('currentValue', element.val())
             }
         })
-        
+
         $('.bankUangjalan-lookup').lookup({
             title: 'Bank Lookup',
             fileName: 'bank',
