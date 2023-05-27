@@ -352,6 +352,15 @@ class TarifController extends MyController
             $tarifs[$i]['statussistemton'] = $statusSistemTon;
             $tarifs[$i]['statuspenyesuaianharga'] = $statusPenyesuaianHarga;
 
+            
+
+            //  $rincian = Http::withHeaders($this->httpHeaders)
+            //         ->withOptions(['verify' => false])
+            //         ->withToken(session('access_token'))
+            //         ->get(config('app.api_url') . 'tarifrincian', ['tarif_id' => $tarifs[$i]['id']]);
+
+            //     $tarifs[$i]['rincian'] = $rincian['data'];
+
         
             $i++;
 
