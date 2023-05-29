@@ -245,7 +245,7 @@
     activeGrid = null
     initDatepicker()
     getMaxLength(form)
-    initSelect2()
+    // initSelect2()
     initLookup()
     Inputmask("datetime", {
       inputFormat: "HH:MM",

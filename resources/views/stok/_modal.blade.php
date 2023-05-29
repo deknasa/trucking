@@ -271,8 +271,8 @@
     activeGrid = null
     initDatepicker()
     initLookup()
-    initSelect2()
-    // getMaxLength(form)
+    initSelect2(form.find(`[name="statusaktif"]`))
+    getMaxLength(form)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -307,6 +307,7 @@
       showDefault(form)
         .then(() => {
           $('#crudModal').modal('show')
+          disabledHirarkiKelompok()
         })
         .finally(() => {
           $('.modal-loader').addClass('d-none')
@@ -316,7 +317,6 @@
     initDropzone(form.data('action'))
     initAutoNumeric(form.find(`[name="qtymin"]`))
     initAutoNumeric(form.find(`[name="qtymax"]`))
-    disabledHirarkiKelompok()
   }
 
   function editStok(stokId) {
