@@ -648,6 +648,13 @@ $('.tbl_qty').show()
     initDatepicker()
     initLookup()
     initSelect2($('#statuspotongretur'),true)
+    if( form.data('action') !== 'add'){
+      let pengeluaranstok = $('#crudForm').find(`[name="pengeluaranstok"]`).parents('.input-group').children()
+      pengeluaranstok.attr('disabled', true)
+      pengeluaranstok.find('.lookup-toggler').attr('disabled', true)
+      $('#pengeluaranstokId').attr('disabled', true);
+      console.log(pengeluaranstok);
+    }
     // getMaxLength(form)
   })
 
@@ -965,10 +972,13 @@ $('.tbl_qty').show()
   function enabledKorDisable(){
     $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    $('#gudangId').attr('disabled',false);
     $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    $('#tradoId').attr('disabled',false);
     $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    $('#gandenganId').attr('disabled',false);
   }
 
   function setSuplier(penerimaan_id) {
