@@ -87,7 +87,8 @@
           {
             label: 'ID KARYAWAN',
             name: 'karyawan_id',
-            align: 'right'
+            align: 'right',
+            hidden: 'true',
           },
           {
             label: 'Cabang',
