@@ -410,7 +410,43 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if (Aksi == 'EDIT') {
+            //function validasi aksi
+            cekValidasiAksi(Id, Aksi)
+            // if (Aksi == 'EDIT') {
+            //   editJurnalUmumHeader(Id)
+            // }
+            // if (Aksi == 'DELETE') {
+            //   deleteJurnalUmumHeader(Id)
+            // }
+            // if (Aksi == 'COPY') {
+            //   copyJurnal(Id)
+            // }
+          }
+
+        } else {
+          showDialog(response.message['keterangan'])
+        }
+      }
+    })
+  }
+
+  // validasiaksi
+  function cekValidasiAksi(Id, Aksi) {
+    console.log('cekaski')
+    $.ajax({
+      url: `{{ config('app.api_url') }}jurnalumumheader/${Id}/cekvalidasiaksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+
+        var kondisi = response.kondisi
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          if (Aksi == 'EDIT') {
               editJurnalUmumHeader(Id)
             }
             if (Aksi == 'DELETE') {
@@ -419,10 +455,6 @@
             if (Aksi == 'COPY') {
               copyJurnal(Id)
             }
-          }
-
-        } else {
-          showDialog(response.message['keterangan'])
         }
       }
     })
