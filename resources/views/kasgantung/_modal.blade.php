@@ -161,11 +161,11 @@
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
-      
+
       $('#crudForm').find(`[name="nominal[]"]`).each((index, element) => {
         data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
       })
-      
+
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -465,6 +465,8 @@
 
 
   function showKasGantung(form, userId) {
+    form.find(`[name="tglbukti"]`).prop('readonly', true)
+    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
     return new Promise((resolve, reject) => {
       $('#detailList tbody').html('')
       form.find(`[name="tglbukti"]`).prop('readonly', true)
