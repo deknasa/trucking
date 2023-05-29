@@ -236,7 +236,9 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    initAutoNumeric(form.find(`[name="nominalsumbangan"]`))
+    initAutoNumeric(form.find(`[name="nominalsumbangan"]`), {
+      minimumValue:0
+    })
     
     Promise
       .all([
@@ -402,7 +404,9 @@
             initDisabled()
           }
 
-          initAutoNumeric(form.find(`[name="nominalsumbangan"]`))
+          initAutoNumeric(form.find(`[name="nominalsumbangan"]`),{
+            minimumValue:0
+          })
 
           resolve()
         }
