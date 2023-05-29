@@ -352,6 +352,8 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -380,6 +382,8 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -465,12 +469,8 @@
 
 
   function showKasGantung(form, userId) {
-    form.find(`[name="tglbukti"]`).prop('readonly', true)
-    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
     return new Promise((resolve, reject) => {
       $('#detailList tbody').html('')
-      form.find(`[name="tglbukti"]`).prop('readonly', true)
-      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
       $.ajax({
         url: `${apiUrl}kasgantungheader/${userId}`,

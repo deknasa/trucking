@@ -1036,6 +1036,8 @@
             ])
             .then(() => {
                 $('#crudModal').modal('show')
+                form.find(`[name="tglbukti"]`).prop('readonly', true)
+                form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -1061,6 +1063,8 @@
             ])
             .then(() => {
                 $('#crudModal').modal('show')
+                form.find(`[name="tglbukti"]`).prop('readonly', true)
+                form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -1993,8 +1997,6 @@
     }
 
     function showGajiSupir(form, gajiId, aksi) {
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
         detailLainnya()
 
         $.ajax({
