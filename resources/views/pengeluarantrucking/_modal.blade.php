@@ -228,7 +228,7 @@
     activeGrid = null
     getMaxLength(form)
     initLookup()
-    initSelect2()
+    initSelect2(form.find('.select2bs4'), true)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {

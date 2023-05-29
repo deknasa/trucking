@@ -269,7 +269,6 @@
     activeGrid = null
 
     getMaxLength(form)
-    initSelect2()
     initLookup()
   })
 

@@ -203,7 +203,7 @@
 
     activeGrid = null
     initLookup()
-    initSelect2();
+    initSelect2(form.find('.select2bs4'), true);
     getMaxLength(form)
   })
 
