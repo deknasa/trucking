@@ -46,7 +46,7 @@
                 <input type="password" name="password" class="form-control">
               </div>
             </div>
-            <!-- <div class="row form-group">
+            <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   Cabang <span class="text-danger">*</span>
@@ -57,7 +57,7 @@
                   <option value="">-- PILIH CABANG --</option>
                 </select>
               </div>
-            </div> -->
+            </div> 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -73,7 +73,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Dashboard <span class="text-danger">*</span>
+                  Dashboard
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -112,7 +112,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
-
+  let modalBody = $('#crudModal').find('.modal-body').html()
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -218,10 +218,13 @@
     activeGrid = null
 
     getMaxLength(form)
+        initSelect2()
+        initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createUser() {
@@ -467,6 +470,11 @@
               element.val(value)
             }
           })
+          console.log(form.data('action'))
+                    if (form.data('action') === 'delete') {
+                        form.find('[name]').addClass('disabled')
+                        initDisabled()
+                    }
           resolve()
         }
       })

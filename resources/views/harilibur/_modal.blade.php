@@ -185,7 +185,6 @@
 
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
-
         $('#crudModal').find('.modal-body').html(modalBody)
     })
 
