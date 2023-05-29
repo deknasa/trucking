@@ -1034,7 +1034,14 @@
     activeGrid = null
     initDatepicker()
     initLookup()
-
+    if( form.data('action') !== 'add'){
+      let penerimaanstok = $('#crudForm').find(`[name="penerimaanstok"]`).parents('.input-group').children()
+      penerimaanstok.attr('disabled', true)
+      penerimaanstok.find('.lookup-toggler').attr('disabled', true)
+      $('#penerimaanstokId').attr('disabled', true);
+      console.log($('#crudForm').find(`[name="penerimaanstok"]`).val());
+    }
+      
     getMaxLength(form)
   })
 
@@ -1319,6 +1326,9 @@
       }
     })
   }
+  function disabledkodepenerimaanedit() {
+    
+  }
 
   function showPenerimaanstokHeader(form, penerimaanStokHeaderId) {
     return new Promise((resolve, reject) => {
@@ -1442,6 +1452,12 @@
           })
           sumary()
           setKodePenerimaan(response.data.penerimaanstok);
+         
+          if (KodePenerimaanId === 'SPB') {
+            $('#addRow').hide()
+          }else{
+            $('#addRow').show()
+          }
           resolve()
         }
       })
@@ -1577,6 +1593,7 @@
 
       },
       onSelectRow: (penerimaan, element) => {
+        // console.log('asdasdsa');
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         if (penerimaanstokId == (3||6)) {//spb beli /reuse
           setSuplier(penerimaan.id);

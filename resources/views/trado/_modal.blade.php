@@ -422,7 +422,11 @@
     initDropzone(form.data('action'))
     initLookup()
     initDatepicker()
-    initSelect2()
+    initSelect2(form.find(`
+      [name="statusaktif"],
+      [name="statusjenisplat"],
+      [name="statusgerobak"]
+    `), true)
     getMaxLength(form)
     form.find('[name]').removeAttr('disabled')
     // initAutoNumeric(form.find(`[name="boronganborongan"]`))
@@ -459,7 +463,7 @@
             initDropzone(form.data('action'), trado)
             initLookup()
             initDatepicker()
-            initSelect2()
+            initSelect2(form.find('.select2bs4'), true)
             form.find('[name]').removeAttr('disabled')
           })
           .then(() => {
@@ -504,7 +508,7 @@
             initDropzone(form.data('action'), trado)
             initLookup()
             initDatepicker()
-            initSelect2()
+            initSelect2(form.find('.select2bs4'), true)
             form.find('[name]').removeAttr('disabled')
 
             form.find('select').each((index, select) => {

@@ -48,7 +48,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
-
+  let modalBody = $('#crudModal').find('.modal-body').html()
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -156,6 +156,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createRole() {
@@ -184,6 +185,7 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
+  
     $('#crudModalTitle').text('Edit Role')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -193,7 +195,10 @@
         showRole(form, roleId)
       ])
       .then(() => {
-        $('#crudModal').modal('show')
+        showRole(form, id)
+        .then(() => {
+                        $('#crudModal').modal('show')
+                    })
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -281,5 +286,6 @@
       })
     })
   }
+  
 </script>
 @endpush()

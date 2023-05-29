@@ -488,6 +488,10 @@
           $('#crudModal').modal('show')
           $('#crudForm [name=tglbukti]').attr('readonly', true)
           $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+          $('#crudForm [name=supir]').siblings('.input-group-append').remove()
+          $('#crudForm [name=supir]').siblings('.button-clear').remove()
+          $('#crudForm [name=bank]').siblings('.button-clear').remove()
+          $('#crudForm [name=bank]').siblings('.input-group-append').remove()
         })
         .finally(() => {
           $('.modal-loader').addClass('d-none')

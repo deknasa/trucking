@@ -430,7 +430,7 @@
     initDropzonePdf(form.data('action'))
     initLookup()
     initDatepicker()
-    initSelect2()
+    initSelect2(form.find('.select2bs4'), true)
     form.find('[name]').removeAttr('disabled')
   }
 
@@ -462,7 +462,7 @@
             initDropzonePdf(form.data('action'), supir)
             initLookup()
             initDatepicker()
-            initSelect2()
+            initSelect2(form.find('.select2bs4'), true)
             form.find('[name]').removeAttr('disabled')
           })
           .then(() => {
