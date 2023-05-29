@@ -368,15 +368,15 @@
         let selectedSisa = dataPelunasan.sisa
         data.push({
           name: 'bayar[]',
-          value: (isNan(selectedBayar)) ? parseFloat(selectedBayar.replaceAll(',', '')) : selectedBayar
+          value: (isNaN(selectedBayar)) ? parseFloat(selectedBayar.replaceAll(',', '')) : selectedBayar
         })
         data.push({
           name: 'potongan[]',
-          value: (isNan(selectedPotongan)) ? parseFloat(selectedPotongan.replaceAll(',', '')) : selectedPotongan
+          value: (isNaN(selectedPotongan)) ? parseFloat(selectedPotongan.replaceAll(',', '')) : selectedPotongan
         })
         data.push({
           name: 'nominallebihbayar[]',
-          value: (isNan(selectedLebihBayar)) ? parseFloat(selectedLebihBayar.replaceAll(',', '')) : selectedLebihBayar
+          value: (isNaN(selectedLebihBayar)) ? parseFloat(selectedLebihBayar.replaceAll(',', '')) : selectedLebihBayar
         })
         data.push({
           name: 'sisa[]',
@@ -1284,6 +1284,8 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1309,6 +1311,8 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1317,8 +1321,6 @@
 
   function showPelunasanPiutang(form, Id) {
     return new Promise((resolve, reject) => {
-      form.find(`[name="tglbukti"]`).prop('readonly', true)
-      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       $.ajax({
         url: `${apiUrl}pelunasanpiutangheader/${Id}`,
         method: 'GET',
