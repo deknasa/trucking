@@ -449,6 +449,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        $('#crudForm [name=coadebet]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -473,6 +474,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        $('#crudForm [name=coakredit]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -497,6 +499,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        $('#crudForm [name=coapostingdebet]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -521,6 +524,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        $('#crudForm [name=coapostingkredit]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }

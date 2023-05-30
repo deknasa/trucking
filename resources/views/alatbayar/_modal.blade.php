@@ -98,10 +98,11 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  COA </label>
+                  COA <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="coa" class="form-control coa-lookup">
+                <input type="hidden" name="coa">
+                <input type="text" name="keterangancoa" class="form-control coa-lookup">
               </div>
             </div>
           </div>
@@ -525,7 +526,7 @@
             if (index == 'bank') {
               element.data('current-value', value)
             }
-            if (index == 'coa') {
+            if (index == 'keterangancoa') {
               element.data('current-value', value)
             }
           })
@@ -562,13 +563,15 @@
       title: 'COA Lookup',
       fileName: 'akunpusat',
       onSelectRow: (coa, element) => {
-        element.val(coa.coa)
+        $('#crudForm [name=coa]').first().val(coa.coa)
+        element.val(coa.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
-      onClear: (element) => {
+      onClear: (element) => {        
+        $('#crudForm [name=coa]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
