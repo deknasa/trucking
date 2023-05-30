@@ -32,7 +32,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  PENGURUTAN <span class="text-danger">*</span>
+                  PENGURUTAN 
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -42,7 +42,7 @@
             <div class="row form-group sometimes">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  MENU PARENT <span class="text-danger">*</span>
+                  MENU PARENT 
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -54,7 +54,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  ICON <span class="text-danger">*</span>
+                  ICON 
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -64,7 +64,7 @@
             <div class="row form-group sometimes">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  LINK <span class="text-danger"></span>
+                  LINK 
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -103,7 +103,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
-
+  let modalBody = $('#crudModal').find('.modal-body').html()
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -214,6 +214,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createMenu() {
