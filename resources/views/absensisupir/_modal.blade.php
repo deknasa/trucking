@@ -528,7 +528,7 @@
               <td></td>
               <td>
                 <input type="hidden" name="trado_id[]" value="${detail.trado_id}">
-                <input type="text" name="trado[]" data-current-value="${detail.trado}" class="form-control" value="${detail.trado}">
+                <input type="text" name="trado[]" data-current-value="${detail.trado}" class="form-control" value="${detail.trado}" readonly>
               </td>
               <td>
                 <input type="hidden" name="supir_id[]">
@@ -797,8 +797,15 @@
   }
 
   function cekValidasi(Id, Aksi) {
+    let url 
+    if (Aksi == 'EDIT') {
+      url = `{{ config('app.api_url') }}absensisupirheader/${Id}/cekvalidasi`;
+    }
+    if (Aksi == 'DELETE') {
+      url = `{{ config('app.api_url') }}absensisupirheader/${Id}/cekvalidasidelete`;
+    }
     $.ajax({
-      url: `{{ config('app.api_url') }}absensisupirheader/${Id}/cekvalidasi`,
+      url:url,
       method: 'POST',
       dataType: 'JSON',
       beforeSend: request => {
