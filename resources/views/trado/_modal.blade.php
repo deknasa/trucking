@@ -79,7 +79,7 @@
               <div class="form-group col-sm-6 row">
                 <label class="col-sm-4 col-form-label">PLUS BORONGAN <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control text-right autonumeric" name="nominalplusborongan">
+                  <input type="text" class="form-control autonumeric text-right" name="nominalplusborongan">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
@@ -290,8 +290,8 @@
 
       let url
       let form = $('#crudForm')
-
-      let formData = new FormData(form[0])
+      let data = $('#crudForm').serializeArray()
+      let formData = new FormData()
       let Id = form.find('[name=id]').val()
 
       dropzones.forEach(dropzone => {
@@ -303,6 +303,11 @@
           formData.append(`${paramName}[${index}]`, file)
         })
       })
+      data.filter((row) => row.name === 'nominalplusborongan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominalplusborongan"]`)[0])
+
+      $.each(data, function(key, input) {
+        formData.append(input.name, input.value);
+      });
 
       formData.append('sortIndex', $('#jqGrid').getGridParam().sortname)
       formData.append('sortOrder', $('#jqGrid').getGridParam().sortorder)
@@ -429,7 +434,6 @@
     `), true)
     getMaxLength(form)
     form.find('[name]').removeAttr('disabled')
-    // initAutoNumeric(form.find(`[name="boronganborongan"]`))
   }
 
   function editTrado(id) {
