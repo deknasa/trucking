@@ -60,7 +60,8 @@
           {
             label: 'KELOMPOK',
             name: 'kelompok',
-          },       {
+          },       
+          {
             label: 'DEFAULT',
             name: 'default',
           },
