@@ -84,8 +84,10 @@
           total: 'attributes.totalPages',
           records: 'attributes.totalRows',
         },
-        loadBeforeSend: (jqXHR) => {
+        loadBeforeSend: function(jqXHR) {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+          setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
           activeGrid = $(this)
@@ -132,6 +134,8 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
+          abortGridLastRequest($(this))
+          
           clearGlobalSearch($('#detail'))
         },
       })
@@ -152,7 +156,9 @@
   }
 
   function loadDetailData(id) {
-    $('#detail').setGridParam({
+        abortGridLastRequest($('#detail'))
+
+        $('#detail').setGridParam({
       url: `${apiUrl}pencairangiropengeluarandetail`,
       datatype: "json",
       postData: {
