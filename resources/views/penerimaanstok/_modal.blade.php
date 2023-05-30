@@ -47,9 +47,8 @@
                 </label>
               </div>
               <div class="col-8 col-md-10">
-                <div class="input-group">
-                  <input type="text" name="coa" class="form-control akunpusat-lookup">
-                </div>
+                <input type="hidden" name="coa">
+                <input type="text" name="keterangancoa" class="form-control akunpusat-lookup">
               </div>
             </div>
             
@@ -473,13 +472,15 @@
         }
       },      
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
+        $('#crudForm [name=coa]').first().val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        $('#crudForm [name=coa]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }

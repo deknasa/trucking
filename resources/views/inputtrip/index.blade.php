@@ -133,7 +133,9 @@
 
 
                 <div class="form-group ">
-                  <label name="labeljobtrucking" class="col-sm-12 col-form-label">NO JOB TRUCKING<span class="text-danger">*</span></label>
+                  <label name="labeljobtrucking" class="col-sm-12 col-form-label">NO JOB TRUCKING
+                    {{-- <span class="text-danger">*</span> --}}
+                  </label>
                   <div class="col-sm-12">
                     <input type="text" name="jobtrucking" class="form-control jobtrucking-lookup">
                   </div>
