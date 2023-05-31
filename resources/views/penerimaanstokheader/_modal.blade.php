@@ -1038,7 +1038,7 @@
       let penerimaanstok = $('#crudForm').find(`[name="penerimaanstok"]`).parents('.input-group').children()
       penerimaanstok.attr('disabled', true)
       penerimaanstok.find('.lookup-toggler').attr('disabled', true)
-      $('#penerimaanstokId').attr('disabled', true);
+      $('#penerimaanstokId').attr('readonly', true);
       console.log($('#crudForm').find(`[name="penerimaanstok"]`).val());
     }
       
