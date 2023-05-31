@@ -325,7 +325,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                cekValidasiAksi(selectedId, 'EDIT')
+                cekValidasi(selectedId, 'EDIT')
               }
             }
           },
@@ -338,7 +338,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                cekValidasiAksi(selectedId, 'DELETE')
+                cekValidasi(selectedId, 'DELETE')
               }
             }
           },

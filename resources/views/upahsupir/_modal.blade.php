@@ -79,8 +79,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <div class="input-group">
-                  <input type="hidden" name="jarak_id">
-                  <input type="text" name="jarak" class="form-control  autonumeric" style="text-align: right">
+                  <input type="text" name="jarak" class="form-control" style="text-align: right">
                   <div class="input-group-append">
                     <span class="input-group-text" style="font-weight: bold;">KM</span>
                   </div>
@@ -298,7 +297,7 @@
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
-      let formData = new FormData(form[0])
+      let formData = new FormData()
 
       dropzones.forEach(dropzone => {
         const {
@@ -340,10 +339,11 @@
         // formData.append('liter[]', AutoNumeric.getNumber($(`#crudForm [name="liter[]"]`)[index]))
       })
 
-        data.filter((row) => row.name === 'jarak').value = AutoNumeric.getNumber($(`#crudForm [name="jarak"]`)[0])
+      data.filter((row) => row.name === 'jarak')[0].value = AutoNumeric.getNumber($(`#crudForm [name="jarak"]`)[0])
 
-   console.log(data)
-
+      $.each(data, function(key, input) {
+        formData.append(input.name, input.value);
+      });
 
 
       formData.append('sortIndex', $('#jqGrid').getGridParam().sortname)
@@ -559,7 +559,7 @@
         showUpahSupir(form, id)
           .then((upahsupir) => {
             initDropzone(form.data('action'), upahsupir);
-          
+
           })
           .then(() => {
             $('#crudModal').modal('show')

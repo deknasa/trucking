@@ -105,11 +105,14 @@
             label: 'MENU EXE',
             name: 'menuexe',
             align: 'left'
-          }, {
+          }, 
+          {
             label: 'KODE MENU',
             name: 'menukode',
             align: 'left'
           },
+          
+         
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',

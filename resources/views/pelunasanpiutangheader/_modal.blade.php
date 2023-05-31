@@ -362,9 +362,9 @@
 
       $.each(selectedRows, function(index, value) {
         dataPelunasan = $("#tablePelunasan").jqGrid("getLocalRow", value);
-        let selectedBayar = (dataPelunasan.bayar == undefined) ? 0 : dataPelunasan.bayar;
-        let selectedPotongan = (dataPelunasan.potongan == undefined) ? 0 : dataPelunasan.potongan;
-        let selectedLebihBayar = (dataPelunasan.nominallebihbayar == undefined) ? 0 : dataPelunasan.nominallebihbayar;
+        let selectedBayar = (dataPelunasan.bayar == undefined || dataPelunasan.bayar == '') ? 0 : dataPelunasan.bayar;
+        let selectedPotongan = (dataPelunasan.potongan == undefined || dataPelunasan.potongan == '') ? 0 : dataPelunasan.potongan;
+        let selectedLebihBayar = (dataPelunasan.nominallebihbayar == undefined || dataPelunasan.nominallebihbayar == '') ? 0 : dataPelunasan.nominallebihbayar;
         let selectedSisa = dataPelunasan.sisa
         data.push({
           name: 'bayar[]',
@@ -748,7 +748,7 @@
                     "potongan")
                   let potongan = (getPotongan != '') ? parseFloat(getPotongan.replaceAll(',', '')) : 0
                   if ($('#crudForm').data('action') == 'edit') {
-                    totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)) - bayar - potongan
+                    totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar) + parseFloat(originalGridData.potongan)) - bayar - potongan
                   } else {
                     totalSisa = originalGridData.sisa - bayar - potongan
                   }
@@ -822,7 +822,7 @@
                   let bayar = (getBayar != '') ? parseFloat(getBayar.replaceAll(',', '')) : 0
 
                   if ($('#crudForm').data('action') == 'edit') {
-                    totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)) - bayar - potongan
+                    totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)+ parseFloat(originalGridData.potongan)) - bayar - potongan
                   } else {
                     totalSisa = originalGridData.sisa - bayar - potongan
                   }
@@ -1133,7 +1133,7 @@
         }
         sisa = 0
         if ($('#crudForm').data('action') == 'edit') {
-          sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar))
+          sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)+ parseFloat(originalGridData.potongan))
         } else {
           sisa = originalGridData.sisa
         }
@@ -1286,6 +1286,12 @@
         $('#crudModal').modal('show')
         form.find(`[name="tglbukti"]`).prop('readonly', true)
         form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="alatbayar"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1313,6 +1319,12 @@
         $('#crudModal').modal('show')
         form.find(`[name="tglbukti"]`).prop('readonly', true)
         form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="alatbayar"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1354,14 +1366,9 @@
             }
             if (index == 'agen') {
               element.data('current-value', value).prop('readonly', true)
-              element.parent('.input-group').find('.button-clear').remove()
-              element.parent('.input-group').find('.input-group-append').remove()
             }
-            if (index != 'agen' && index != 'agen_id') {
-
-              form.find(`[name="${index}"]`).addClass('disabled')
-              initDisabled()
-            }
+            form.find(`[name="${index}"]`).addClass('disabled')
+            initDisabled()
 
           })
           let agenId = response.data.agen_id
@@ -1374,7 +1381,7 @@
             let totalBayar = 0
             let totalPotongan = 0
             let totalNominalLebih = 0
-
+            console.log(response.data)
             $.each(response.data, (index, value) => {
               if (value.pelunasanpiutang_id != null) {
                 selectedId.push(value.id)
