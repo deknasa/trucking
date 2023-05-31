@@ -212,73 +212,11 @@
                     }
                     if (filter == '188') {
                         dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
-                ],
-                autowidth: true,
-                shrinkToFit: false,
-                height: 350,
-                rowNum: rowNum,
-                rownumbers: true,
-                rownumWidth: 45,
-                rowList: [10, 20, 50, 0],
-                toolbar: [true, "top"],
-                cmTemplate: {
-                    sortable: false
-                },
-                sortname: sortname,
-                sortorder: sortorder,
-                page: page,
-                viewrecords: true,
-                prmNames: {
-                    sort: 'sortIndex',
-                    order: 'sortOrder',
-                    rows: 'limit'
-                },
-                jsonReader: {
-                    root: 'data',
-                    total: 'attributes.totalPages',
-                    records: 'attributes.totalRows',
-                },
-
-                loadBeforeSend: function(jqXHR) {
-                    jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-
-                    setGridLastRequest($(this), jqXHR)
-                },
-                onSelectRow: function(id) {
-                    activeGrid = $(this)
-                    indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-                    page = $(this).jqGrid('getGridParam', 'page')
-                    let limit = $(this).jqGrid('getGridParam', 'postData').limit
-                    if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-                },
-                loadComplete: function(data) {
-                    changeJqGridRowListText()
-                    $(document).unbind('keydown')
-                    setCustomBindKeys($(this))
-                    initResize($(this))
-
-                    /* Set global variables */
-                    sortname = $(this).jqGrid("getGridParam", "sortname")
-                    sortorder = $(this).jqGrid("getGridParam", "sortorder")
-                    totalRecord = $(this).getGridParam("records")
-                    limit = $(this).jqGrid('getGridParam', 'postData').limit
-                    postData = $(this).jqGrid('getGridParam', 'postData')
-                    triggerClick = true
-
-                    $('.clearsearchclass').click(function() {
-                        clearColumnSearch($(this))
-                    })
-
-                    if (indexRow > $(this).getDataIDs().length - 1) {
-                        indexRow = $(this).getDataIDs().length - 1;
-
                     }
 
-                    if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai != '' && filter !=
-                        '' && dataFilter != '') {
+                    if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai != '' && filter != '' && dataFilter != '') {
 
                         $('#jqGrid').jqGrid('setGridParam', {
-                            url: `${apiUrl}kartustok`,
                             postData: {
                                 stokdari_id: stokdari_id,
                                 stoksampai_id: stoksampai_id,
@@ -287,7 +225,6 @@
                                 filter: filter,
                                 datafilter: dataFilter
                             },
-                            datatype: "json"
                         }).trigger('reloadGrid');
 
                     } else {
@@ -295,467 +232,468 @@
                     }
 
                     // window.open(`{{ route('reportall.report') }}?tgl=${tanggal}&data=${data}`)
-                })
+                    })
+               
 
-                $("#jqGrid").jqGrid({
+                    $("#jqGrid").jqGrid({
 
-                        mtype: "GET",
-                        styleUI: 'Bootstrap4',
-                        iconSet: 'fontAwesome',
-                        datatype: "local",
-                        colModel: [{
-                                label: 'NO. BUKTI',
-                                name: 'nobukti',
+                            mtype: "GET",
+                            styleUI: 'Bootstrap4',
+                            iconSet: 'fontAwesome',
+                            datatype: "local",
+                            colModel: [{
+                                    label: 'NO. BUKTI',
+                                    name: 'nobukti',
+                                },
+                                {
+                                    label: 'TGL BUKTI',
+                                    name: 'tglbukti',
+                                    formatter: "date",
+                                    formatoptions: {
+                                        srcformat: "ISO8601Long",
+                                        newformat: "d-m-Y"
+                                    }
+                                },
+                                {
+                                    label: 'KODE BARANG',
+                                    name: 'kodebarang',
+                                },
+                                {
+                                    label: 'NAMA BARANG',
+                                    name: 'namabarang',
+                                },
+                                {
+                                    label: 'KATEGORI',
+                                    name: 'kategori_id',
+                                },
+                                {
+                                    label: 'QTY MASUK',
+                                    name: 'qtymasuk',
+                                    align: 'right',
+                                    formatter: 'number',
+                                    formatoptions: {
+                                        decimalSeparator: '.',
+                                        thousandsSeparator: ','
+                                    }
+                                },
+
+                                {
+                                    label: 'NILAI MASUK',
+                                    name: 'nilaimasuk',
+                                    align: 'right',
+                                    formatter: 'number',
+                                    formatoptions: {
+                                        decimalSeparator: '.',
+                                        thousandsSeparator: ','
+                                    }
+                                },
+                                {
+                                    label: 'QTY KELUAR',
+                                    name: 'qtykeluar',
+                                    align: 'right',
+                                    formatter: 'number',
+                                    formatoptions: {
+                                        decimalSeparator: '.',
+                                        thousandsSeparator: ','
+                                    }
+                                },
+                                {
+                                    label: 'NILAI KELUAR',
+                                    name: 'nilaikeluar',
+                                    align: 'right',
+                                    formatter: 'number',
+                                    formatoptions: {
+                                        decimalSeparator: '.',
+                                        thousandsSeparator: ','
+                                    }
+                                },
+                                {
+                                    label: 'QTY SALDO',
+                                    name: 'qtysaldo',
+                                    align: 'right',
+                                    formatter: 'number',
+                                    formatoptions: {
+                                        decimalSeparator: '.',
+                                        thousandsSeparator: ','
+                                    }
+                                },
+
+                                {
+                                    label: 'NILAI SALDO',
+                                    name: 'nilaisaldo',
+                                    align: 'right',
+                                    formatter: 'number',
+                                    formatoptions: {
+                                        decimalSeparator: '.',
+                                        thousandsSeparator: ','
+                                    }
+                                },
+
+
+                                {
+                                    label: 'MODIFIEDBY',
+                                    name: 'modifiedby',
+                                }
+                            ],
+                            autowidth: true,
+                            shrinkToFit: false,
+                            height: 350,
+                            rowNum: rowNum,
+                            rownumbers: true,
+                            rownumWidth: 45,
+                            rowList: [10, 20, 50, 0],
+                            toolbar: [true, "top"],
+                            cmTemplate: {
+                                sortable: false
                             },
-                            {
-                                label: 'TGL BUKTI',
-                                name: 'tglbukti',
-                                formatter: "date",
-                                formatoptions: {
-                                    srcformat: "ISO8601Long",
-                                    newformat: "d-m-Y"
+                            sortname: sortname,
+                            sortorder: sortorder,
+                            page: page,
+                            viewrecords: true,
+                            prmNames: {
+                                sort: 'sortIndex',
+                                order: 'sortOrder',
+                                rows: 'limit'
+                            },
+                            jsonReader: {
+                                root: 'data',
+                                total: 'attributes.totalPages',
+                                records: 'attributes.totalRows',
+                            },
+
+
+                            loadBeforeSend: (jqXHR) => {
+                                jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+                            },
+                            onSelectRow: function(id) {
+                                activeGrid = $(this)
+                                indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
+                                page = $(this).jqGrid('getGridParam', 'page')
+                                let limit = $(this).jqGrid('getGridParam', 'postData').limit
+                                if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+                            },
+                            loadError: function(error) {
+                                if (error.status === 422) {
+                                    $('.is-invalid').removeClass('is-invalid')
+                                    $('.invalid-feedback').remove()
+
+                                    setErrorMessages(form, error.responseJSON.errors);
+                                } else {
+                                    showDialog(error.statusText)
                                 }
                             },
-                            {
-                                label: 'KODE BARANG',
-                                name: 'kodebarang',
-                            },
-                            {
-                                label: 'NAMA BARANG',
-                                name: 'namabarang',
-                            },
-                            {
-                                label: 'KATEGORI',
-                                name: 'kategori_id',
-                            },
-                            {
-                                label: 'QTY MASUK',
-                                name: 'qtymasuk',
-                                align: 'right',
-                                formatter: 'number',
-                                formatoptions: {
-                                    decimalSeparator: '.',
-                                    thousandsSeparator: ','
+                            loadComplete: function(data) {
+                                changeJqGridRowListText()
+                                $(document).unbind('keydown')
+                                setCustomBindKeys($(this))
+                                initResize($(this))
+
+                                /* Set global variables */
+                                sortname = $(this).jqGrid("getGridParam", "sortname")
+                                sortorder = $(this).jqGrid("getGridParam", "sortorder")
+                                totalRecord = $(this).getGridParam("records")
+                                limit = $(this).jqGrid('getGridParam', 'postData').limit
+                                postData = $(this).jqGrid('getGridParam', 'postData')
+                                triggerClick = true
+
+                                $('.clearsearchclass').click(function() {
+                                    clearColumnSearch($(this))
+                                })
+
+                                if (indexRow > $(this).getDataIDs().length - 1) {
+                                    indexRow = $(this).getDataIDs().length - 1;
                                 }
-                            },
 
-                            {
-                                label: 'NILAI MASUK',
-                                name: 'nilaimasuk',
-                                align: 'right',
-                                formatter: 'number',
-                                formatoptions: {
-                                    decimalSeparator: '.',
-                                    thousandsSeparator: ','
+                                if (triggerClick) {
+                                    if (id != '') {
+                                        indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+                                        $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                                        id = ''
+                                    } else if (indexRow != undefined) {
+                                        $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                                    }
+
+                                    if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+                                        $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+                                    }
+
+                                    triggerClick = false
+                                } else {
+                                    $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
                                 }
+
+                                setHighlight($(this))
                             },
-                            {
-                                label: 'QTY KELUAR',
-                                name: 'qtykeluar',
-                                align: 'right',
-                                formatter: 'number',
-                                formatoptions: {
-                                    decimalSeparator: '.',
-                                    thousandsSeparator: ','
-                                }
-                            },
-                            {
-                                label: 'NILAI KELUAR',
-                                name: 'nilaikeluar',
-                                align: 'right',
-                                formatter: 'number',
-                                formatoptions: {
-                                    decimalSeparator: '.',
-                                    thousandsSeparator: ','
-                                }
-                            },
-                            {
-                                label: 'QTY SALDO',
-                                name: 'qtysaldo',
-                                align: 'right',
-                                formatter: 'number',
-                                formatoptions: {
-                                    decimalSeparator: '.',
-                                    thousandsSeparator: ','
-                                }
-                            },
-
-                            {
-                                label: 'NILAI SALDO',
-                                name: 'nilaisaldo',
-                                align: 'right',
-                                formatter: 'number',
-                                formatoptions: {
-                                    decimalSeparator: '.',
-                                    thousandsSeparator: ','
-                                }
-                            },
-
-
-                            {
-                                label: 'MODIFIEDBY',
-                                name: 'modifiedby',
-                            }
-                        ],
-                        autowidth: true,
-                        shrinkToFit: false,
-                        height: 350,
-                        rowNum: rowNum,
-                        rownumbers: true,
-                        rownumWidth: 45,
-                        rowList: [10, 20, 50, 0],
-                        toolbar: [true, "top"],
-                        cmTemplate: {
-                            sortable: false
-                        },
-                        sortname: sortname,
-                        sortorder: sortorder,
-                        page: page,
-                        viewrecords: true,
-                        prmNames: {
-                            sort: 'sortIndex',
-                            order: 'sortOrder',
-                            rows: 'limit'
-                        },
-                        jsonReader: {
-                            root: 'data',
-                            total: 'attributes.totalPages',
-                            records: 'attributes.totalRows',
-                        },
-
-
-                        loadBeforeSend: (jqXHR) => {
-                            jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-                        },
-                        onSelectRow: function(id) {
-                            activeGrid = $(this)
-                            indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-                            page = $(this).jqGrid('getGridParam', 'page')
-                            let limit = $(this).jqGrid('getGridParam', 'postData').limit
-                            if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-                        },
-                        loadError: function(error) {
-                            if (error.status === 422) {
-                                $('.is-invalid').removeClass('is-invalid')
-                                $('.invalid-feedback').remove()
-
-                                setErrorMessages(form, error.responseJSON.errors);
-                            } else {
-                                showDialog(error.statusText)
-                            }
-                        },
-                        loadComplete: function(data) {
-                            changeJqGridRowListText()
-                            $(document).unbind('keydown')
-                            setCustomBindKeys($(this))
-                            initResize($(this))
-
-                            /* Set global variables */
-                            sortname = $(this).jqGrid("getGridParam", "sortname")
-                            sortorder = $(this).jqGrid("getGridParam", "sortorder")
-                            totalRecord = $(this).getGridParam("records")
-                            limit = $(this).jqGrid('getGridParam', 'postData').limit
-                            postData = $(this).jqGrid('getGridParam', 'postData')
-                            triggerClick = true
-
-                            $('.clearsearchclass').click(function() {
-                                clearColumnSearch($(this))
                             })
 
-                            if (indexRow > $(this).getDataIDs().length - 1) {
-                                indexRow = $(this).getDataIDs().length - 1;
+                            .jqGrid("setLabel", "rn", "No.")
+                            .jqGrid('filterToolbar', {
+                            stringResult: true,
+                            searchOnEnter: false,
+                            defaultSearch: 'cn',
+                            groupOp: 'AND',
+                            disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+                            beforeSearch: function() {
+                                clearGlobalSearch($('#jqGrid'))
+                            },
+                            })
+
+                            .customPager({
+                            buttons: [{
+                                id: 'export',
+                                innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+                                class: 'btn btn-warning btn-sm mr-1',
+                                onClick: function(event) {
+                                    let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
+                                    let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
+                                    let dari = $('#crudForm').find('[name=dari]').val()
+                                    let sampai = $('#crudForm').find('[name=sampai]').val()
+                                    let filter = $('#crudForm').find('[name=filter]').val()
+                                    let dataFilter = ''
+                                    if (filter == '186') {
+                                        dataFilter = $('#crudForm').find('[name=gudang_id]').val()
+                                    }
+                                    if (filter == '187') {
+                                        dataFilter = $('#crudForm').find('[name=trado_id]').val()
+                                    }
+                                    if (filter == '188') {
+                                        dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
+                                    }
+
+                                    if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai !=
+                                        '' && filter != '' && dataFilter != '') {
+
+                                        window.open(
+                                            `{{ route('kartustok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}&datafilter=${dataFilter}`
+                                        )
+                                    } else {
+                                        showDialog('ISI SELURUH KOLOM')
+                                    }
+                                }
+                            }, {
+                                id: 'report',
+                                innerHTML: '<i class="fa fa-print"></i> REPORT',
+                                class: 'btn btn-info btn-sm mr-1',
+                                onClick: function(event) {
+                                    let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
+                                    let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
+                                    let dari = $('#crudForm').find('[name=dari]').val()
+                                    let sampai = $('#crudForm').find('[name=sampai]').val()
+                                    let filter = $('#crudForm').find('[name=filter]').val()
+                                    let dataFilter = ''
+                                    if (filter == '186') {
+                                        dataFilter = $('#crudForm').find('[name=gudang_id]').val()
+                                    }
+                                    if (filter == '187') {
+                                        dataFilter = $('#crudForm').find('[name=trado_id]').val()
+                                    }
+                                    if (filter == '188') {
+                                        dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
+                                    }
+
+                                    if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai !=
+                                        '' && filter != '' && dataFilter != '') {
+
+                                        window.open(
+                                            `{{ route('kartustok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}&datafilter=${dataFilter}`
+                                        )
+                                    } else {
+                                        showDialog('ISI SELURUH KOLOM')
+                                    }
+                                }
+                            }, ]
+                            })
+
+                            /* Append clear filter button */
+                            loadClearFilter($('#jqGrid'))
+
+                            /* Append global search */
+                            loadGlobalSearch($('#jqGrid'))
+
+
+                            if (!`{{ $myAuth->hasPermission('kartustok', 'export') }}`) {
+                            $('#export').attr('disabled', 'disabled')
                             }
 
-                            if (triggerClick) {
-                                if (id != '') {
-                                    indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-                                    $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-                                    id = ''
-                                } else if (indexRow != undefined) {
-                                    $(`[id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-                                }
-
-                                if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-                                    $(`[id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-                                }
-
-                                triggerClick = false
-                            } else {
-                                $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+                            if (!`{{ $myAuth->hasPermission('kartustok', 'report') }}`) {
+                            $('#report').attr('disabled', 'disabled')
                             }
 
-                            setHighlight($(this))
-                        },
-                    })
+                            showDefault($('#crudForm'))
+                            })
 
-                    .jqGrid("setLabel", "rn", "No.")
-                    .jqGrid('filterToolbar', {
-                        stringResult: true,
-                        searchOnEnter: false,
-                        defaultSearch: 'cn',
-                        groupOp: 'AND',
-                        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
-                        beforeSearch: function() {
-                            clearGlobalSearch($('#jqGrid'))
-                        },
-                    })
-
-                    .customPager({
-                        buttons: [{
-                            id: 'export',
-                            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-                            class: 'btn btn-warning btn-sm mr-1',
-                            onClick: function(event) {
-                                let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
-                                let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
-                                let dari = $('#crudForm').find('[name=dari]').val()
-                                let sampai = $('#crudForm').find('[name=sampai]').val()
-                                let filter = $('#crudForm').find('[name=filter]').val()
-                                let dataFilter = ''
-                                if (filter == '186') {
-                                    dataFilter = $('#crudForm').find('[name=gudang_id]').val()
-                                }
-                                if (filter == '187') {
-                                    dataFilter = $('#crudForm').find('[name=trado_id]').val()
-                                }
-                                if (filter == '188') {
-                                    dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
-                                }
-
-                                if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai !=
-                                    '' && filter != '' && dataFilter != '') {
-
-                                    window.open(
-                                        `{{ route('kartustok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}&datafilter=${dataFilter}`
-                                    )
-                                } else {
-                                    showDialog('ISI SELURUH KOLOM')
-                                }
+                            function showDefault(form) {
+                            return new Promise((resolve, reject) => {
+                            $.ajax({
+                            url: `${apiUrl}kartustok/default`,
+                            method: 'GET',
+                            dataType: 'JSON',
+                            headers: {
+                                Authorization: `Bearer ${accessToken}`
+                            },
+                            success: response => {
+                                resolve(response);
+                            },
+                            error: error => {
+                                reject(error);
                             }
-                        }, {
-                            id: 'report',
-                            innerHTML: '<i class="fa fa-print"></i> REPORT',
-                            class: 'btn btn-info btn-sm mr-1',
-                            onClick: function(event) {
-                                let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
-                                let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
-                                let dari = $('#crudForm').find('[name=dari]').val()
-                                let sampai = $('#crudForm').find('[name=sampai]').val()
-                                let filter = $('#crudForm').find('[name=filter]').val()
-                                let dataFilter = ''
-                                if (filter == '186') {
-                                    dataFilter = $('#crudForm').find('[name=gudang_id]').val()
-                                }
-                                if (filter == '187') {
-                                    dataFilter = $('#crudForm').find('[name=trado_id]').val()
-                                }
-                                if (filter == '188') {
-                                    dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
-                                }
-
-                                if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai !=
-                                    '' && filter != '' && dataFilter != '') {
-
-                                    window.open(
-                                        `{{ route('kartustok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}&datafilter=${dataFilter}`
-                                    )
-                                } else {
-                                    showDialog('ISI SELURUH KOLOM')
-                                }
-                            }
-                        }, ]
-                    })
-
-                /* Append clear filter button */
-                loadClearFilter($('#jqGrid'))
-
-                /* Append global search */
-                loadGlobalSearch($('#jqGrid'))
-
-
-                if (!`{{ $myAuth->hasPermission('kartustok', 'export') }}`) {
-                    $('#export').attr('disabled', 'disabled')
-                }
-
-                if (!`{{ $myAuth->hasPermission('kartustok', 'report') }}`) {
-                    $('#report').attr('disabled', 'disabled')
-                }
-
-                showDefault($('#crudForm'))
-            })
-
-            function showDefault(form) {
-                return new Promise((resolve, reject) => {
-                    $.ajax({
-                        url: `${apiUrl}kartustok/default`,
-                        method: 'GET',
-                        dataType: 'JSON',
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`
-                        },
-                        success: response => {
-                            resolve(response);
-                        },
-                        error: error => {
-                            reject(error);
-                        }
-                    });
-                });
-            }
-
-            $(document).on('change', `#crudForm [name="filter"]`, function(event) {
-
-                let filter = $(this).val();
-                // $('#crudForm').find('[name=trado_id]').val('')
-                // $('#crudForm').find('[name=trado]').val('')
-                // $('#crudForm').find('[name=gudang_id]').val('')
-                // $('#crudForm').find('[name=gudang]').val('')
-                // $('#crudForm').find('[name=gandengan_id]').val('')
-                // $('#crudForm').find('[name=gandengan]').val('')
-
-                if (filter == '186') {
-                    $('#gudang').show()
-                    $('#trado').hide()
-                    $('#gandengan').hide()
-                } else if (filter == '187') {
-                    $('#trado').show()
-                    $('#gudang').hide()
-                    $('#gandengan').hide()
-                } else if (filter == '188') {
-                    $('#gandengan').show()
-                    $('#gudang').hide()
-                    $('#trado').hide()
-                } else {
-                    $('#trado').hide()
-                    $('#gandengan').hide()
-                }
-            })
-
-            function initLookup() {
-
-                $('.stokdari-lookup').lookup({
-                    title: 'Stok Lookup',
-                    fileName: 'stok',
-                    onSelectRow: (stok, element) => {
-                        $('#crudForm [name=stokdari_id]').first().val(stok.id)
-                        element.val(stok.namastok)
-                        element.data('currentValue', element.val())
-                    },
-                    onCancel: (element) => {
-                        element.val(element.data('currentValue'))
-                    },
-                    onClear: (element) => {
-                        $('#crudForm [name=stokdari_id]').first().val('')
-                        element.val('')
-                        element.data('currentValue', element.val())
-                    }
-                })
-                $('.stoksampai-lookup').lookup({
-                    title: 'Stok Lookup',
-                    fileName: 'stok',
-                    onSelectRow: (stok, element) => {
-                        $('#crudForm [name=stoksampai_id]').first().val(stok.id)
-                        element.val(stok.namastok)
-                        element.data('currentValue', element.val())
-                    },
-                    onCancel: (element) => {
-                        element.val(element.data('currentValue'))
-                    },
-                    onClear: (element) => {
-                        $('#crudForm [name=stoksampai_id]').first().val('')
-                        element.val('')
-                        element.data('currentValue', element.val())
-                    }
-                })
-                $('.gudang-lookup').lookup({
-                    title: 'Gudang Lookup',
-                    fileName: 'gudang',
-                    onSelectRow: (gudang, element) => {
-                        $('#crudForm [name=gudang_id]').first().val(gudang.id)
-                        element.val(gudang.gudang)
-                        element.data('currentValue', element.val())
-                    },
-                    onCancel: (element) => {
-                        element.val(element.data('currentValue'))
-                    },
-                    onClear: (element) => {
-                        $('#crudForm [name=gudang_id]').first().val('')
-                        element.val('')
-                        element.data('currentValue', element.val())
-                    }
-                })
-                $('.trado-lookup').lookup({
-                    title: 'Trado Lookup',
-                    fileName: 'trado',
-                    onSelectRow: (trado, element) => {
-                        $('#crudForm [name=trado_id]').first().val(trado.id)
-                        element.val(trado.kodetrado)
-                        element.data('currentValue', element.val())
-                    },
-                    onCancel: (element) => {
-                        element.val(element.data('currentValue'))
-                    },
-                    onClear: (element) => {
-                        $('#crudForm [name=trado_id]').first().val('')
-                        element.val('')
-                        element.data('currentValue', element.val())
-                    }
-                })
-                $('.gandengan-lookup').lookup({
-                    title: 'Gandengan Lookup',
-                    fileName: 'gandengan',
-                    onSelectRow: (gandengan, element) => {
-                        $('#crudForm [name=gandengan_id]').first().val(gandengan.id)
-                        element.val(gandengan.keterangan)
-                        element.data('currentValue', element.val())
-                    },
-                    onCancel: (element) => {
-                        element.val(element.data('currentValue'))
-                    },
-                    onClear: (element) => {
-                        $('#crudForm [name=gandengan_id]').first().val('')
-                        element.val('')
-                        element.data('currentValue', element.val())
-                    }
-                })
-            }
-
-            const setFilterOptions = function(relatedForm) {
-                return new Promise((resolve, reject) => {
-                    relatedForm.find('[name=filter]').empty()
-                    relatedForm.find('[name=filter]').append(
-                        new Option('-- PILIH FILTER --', '', false, true)
-                    ).trigger('change')
-
-                    let data = [];
-                    data.push({
-                        name: 'grp',
-                        value: 'STOK PERSEDIAAN'
-                    })
-                    data.push({
-                        name: 'subgrp',
-                        value: 'STOK PERSEDIAAN'
-                    })
-                    $.ajax({
-                        url: `${apiUrl}parameter/combo`,
-                        method: 'GET',
-                        dataType: 'JSON',
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`
-                        },
-                        data: data,
-                        success: response => {
-
-                            response.data.forEach(stokPersediaan => {
-                                let option = new Option(stokPersediaan.text, stokPersediaan.id)
-                                relatedForm.find('[name=filter]').append(option).trigger(
-                                    'change')
                             });
+                            });
+                            }
 
-                        }
-                    })
-                })
-            }
+                            $(document).on('change', `#crudForm [name="filter"]`, function(event) {
+
+                            let filter = $(this).val();
+                            // $('#crudForm').find('[name=trado_id]').val('')
+                            // $('#crudForm').find('[name=trado]').val('')
+                            // $('#crudForm').find('[name=gudang_id]').val('')
+                            // $('#crudForm').find('[name=gudang]').val('')
+                            // $('#crudForm').find('[name=gandengan_id]').val('')
+                            // $('#crudForm').find('[name=gandengan]').val('')
+
+                            if (filter == '186') {
+                            $('#gudang').show()
+                            $('#trado').hide()
+                            $('#gandengan').hide()
+                            } else if (filter == '187') {
+                            $('#trado').show()
+                            $('#gudang').hide()
+                            $('#gandengan').hide()
+                            } else if (filter == '188') {
+                            $('#gandengan').show()
+                            $('#gudang').hide()
+                            $('#trado').hide()
+                            } else {
+                            $('#trado').hide()
+                            $('#gandengan').hide()
+                            }
+                            })
+
+                            function initLookup() {
+
+                            $('.stokdari-lookup').lookup({
+                            title: 'Stok Lookup',
+                            fileName: 'stok',
+                            onSelectRow: (stok, element) => {
+                            $('#crudForm [name=stokdari_id]').first().val(stok.id)
+                            element.val(stok.namastok)
+                            element.data('currentValue', element.val())
+                            },
+                            onCancel: (element) => {
+                            element.val(element.data('currentValue'))
+                            },
+                            onClear: (element) => {
+                            $('#crudForm [name=stokdari_id]').first().val('')
+                            element.val('')
+                            element.data('currentValue', element.val())
+                            }
+                            })
+                            $('.stoksampai-lookup').lookup({
+                            title: 'Stok Lookup',
+                            fileName: 'stok',
+                            onSelectRow: (stok, element) => {
+                            $('#crudForm [name=stoksampai_id]').first().val(stok.id)
+                            element.val(stok.namastok)
+                            element.data('currentValue', element.val())
+                            },
+                            onCancel: (element) => {
+                            element.val(element.data('currentValue'))
+                            },
+                            onClear: (element) => {
+                            $('#crudForm [name=stoksampai_id]').first().val('')
+                            element.val('')
+                            element.data('currentValue', element.val())
+                            }
+                            })
+                            $('.gudang-lookup').lookup({
+                            title: 'Gudang Lookup',
+                            fileName: 'gudang',
+                            onSelectRow: (gudang, element) => {
+                            $('#crudForm [name=gudang_id]').first().val(gudang.id)
+                            element.val(gudang.gudang)
+                            element.data('currentValue', element.val())
+                            },
+                            onCancel: (element) => {
+                            element.val(element.data('currentValue'))
+                            },
+                            onClear: (element) => {
+                            $('#crudForm [name=gudang_id]').first().val('')
+                            element.val('')
+                            element.data('currentValue', element.val())
+                            }
+                            })
+                            $('.trado-lookup').lookup({
+                            title: 'Trado Lookup',
+                            fileName: 'trado',
+                            onSelectRow: (trado, element) => {
+                            $('#crudForm [name=trado_id]').first().val(trado.id)
+                            element.val(trado.kodetrado)
+                            element.data('currentValue', element.val())
+                            },
+                            onCancel: (element) => {
+                            element.val(element.data('currentValue'))
+                            },
+                            onClear: (element) => {
+                            $('#crudForm [name=trado_id]').first().val('')
+                            element.val('')
+                            element.data('currentValue', element.val())
+                            }
+                            })
+                            $('.gandengan-lookup').lookup({
+                            title: 'Gandengan Lookup',
+                            fileName: 'gandengan',
+                            onSelectRow: (gandengan, element) => {
+                            $('#crudForm [name=gandengan_id]').first().val(gandengan.id)
+                            element.val(gandengan.keterangan)
+                            element.data('currentValue', element.val())
+                            },
+                            onCancel: (element) => {
+                            element.val(element.data('currentValue'))
+                            },
+                            onClear: (element) => {
+                            $('#crudForm [name=gandengan_id]').first().val('')
+                            element.val('')
+                            element.data('currentValue', element.val())
+                            }
+                            })
+                            }
+
+                            const setFilterOptions = function(relatedForm) {
+                            return new Promise((resolve, reject) => {
+                            relatedForm.find('[name=filter]').empty()
+                            relatedForm.find('[name=filter]').append(
+                            new Option('-- PILIH FILTER --', '', false, true)
+                            ).trigger('change')
+
+                            let data = [];
+                            data.push({
+                            name: 'grp',
+                            value: 'STOK PERSEDIAAN'
+                            })
+                            data.push({
+                            name: 'subgrp',
+                            value: 'STOK PERSEDIAAN'
+                            })
+                            $.ajax({
+                            url: `${apiUrl}parameter/combo`,
+                            method: 'GET',
+                            dataType: 'JSON',
+                            headers: {
+                                Authorization: `Bearer ${accessToken}`
+                            },
+                            data: data,
+                            success: response => {
+
+                                response.data.forEach(stokPersediaan => {
+                                    let option = new Option(stokPersediaan.text, stokPersediaan.id)
+                                    relatedForm.find('[name=filter]').append(option).trigger(
+                                        'change')
+                                });
+
+                            }
+                            })
+                            })
+                            }
         </script>
     @endpush()
 @endsection
