@@ -235,19 +235,19 @@
 
 
             <div class="table-scroll table-responsive">
-              <table class="table table-bordered table-bindkeys" style="width: 950;">
+              <table class="table table-bordered table-bindkeys" style="width: 100%; min-width: 500px;">
                 <thead>
                   <tr>
-                    <th style="width: 10px">No</th>
-                    <th style="width: 100px">stok <span class="text-danger">*</span> </th>
+                    <th style="width:10%; max-width: 25px;max-width: 15px">No</th>
+                    <th style="width: 20%; min-width: 200px;">stok <span class="text-danger">*</span> </th>
                     <th class="data_tbl tbl_vulkanisirke" style="width: 10px">vulkanisir ke</th>
-                    <th style="width:100px">keterangan <span class="text-danger">*</span> </th>
-                    <th class="data_tbl tbl_qty" style="width: 10px">qty</th>
-                    <th class="data_tbl tbl_harga" style="width:100px">harga</th>
-                    <th class="data_tbl tbl_penerimaanstok_nobukti" style="width:100px">Penerimaanstoknobukti</th>
-                    <th class="data_tbl tbl_persentase" style="width :10px">persentase discount</th>
-                    <th class="data_tbl tbl_total" style="width: 100px">Total</th>
-                    <th style="width: 10px">Aksi</th>
+                    <th style="width: 20%; min-width: 200px;">keterangan <span class="text-danger">*</span> </th>
+                    <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty</th>
+                    <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
+                    <th class="data_tbl tbl_penerimaanstok_nobukti"  style="width: 20%; min-width: 200px;">Penerimaanstoknobukti</th>
+                    <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
+                    <th class="data_tbl tbl_total"  style="width: 20%; min-width: 200px;">Total</th>
+                    <th style="width:10%; max-width: 25px;max-width: 15px">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
