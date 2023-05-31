@@ -471,8 +471,19 @@
             element = $('#rangeHeader').find(`[name="${indexes[0]}"]`)[0];
           }
 
-            $(element).addClass("is-invalid");
-            $(`
+        $.each(errors, (index, error) => {
+          let indexes = index.split(".");
+          let element;
+          if(indexes[0] == 'tgldari' || indexes[0] == 'tglsampai'){
+            element = $('#rangeHeader').find(`[name="${indexes[0]}header"]`)[0];
+          }else{            
+            element = $('#rangeHeader').find(`[name="${indexes[0]}"]`)[0];
+          }
+
+          $(element).addClass("is-invalid");
+          $(`
+
+
               <div class="invalid-feedback">
               ${error[0].toLowerCase()}
               </div>
