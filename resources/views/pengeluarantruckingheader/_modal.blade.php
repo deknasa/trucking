@@ -96,7 +96,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Status posting <span class="text-danger">*</span>
+                  Status posting<span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -245,7 +245,26 @@
         if (KodePengeluaranId == 'BST') {
 
           clearSelectedRowsSumbangan()
-          selectAllRowsSumbangan(tgldari, tglsampai, 'range')
+          getDataSumbangan()
+            .then((response) => {
+              $('.is-invalid').removeClass('is-invalid')
+              $('.invalid-feedback').remove()
+
+              // $('#tableSumbangan').jqGrid("clearGridData");
+              $('#tableSumbangan').jqGrid('setGridParam', {
+                url: `${apiUrl}pengeluarantruckingheader/${response.url}`,
+                postData: {
+                  tgldari: $('#crudForm').find('[name=tgldari]').val(),
+                  tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                  aksi: $('#crudForm').data('action')
+                },
+                datatype: "json"
+              }).trigger('reloadGrid');
+            })
+          .catch((errors) => {
+            setErrorMessages($('#crudForm'), errors)
+          })
+
         } else if (KodePengeluaranId == 'KBBM') {
           $('#tablePelunasanbbm').jqGrid("clearGridData");
           $("#tablePelunasanbbm")
@@ -646,20 +665,30 @@
               $.each(errors, (index, error) => {
                 let indexes = index.split(".");
                 let angka = indexes[1]
+                row = parseInt(selectedRows[angka]) - 1;
 
                 if (KodePengeluaranId == 'TDE') {
                   tableError = 'tableDeposito'
                   selectedRowsError = $("#tableDeposito").getGridParam("selectedRowIds");
                 } else if (KodePengeluaranId == 'BST') {
                   tableError = 'tableSumbangan'
+                 
                 } else if (KodePengeluaranId == 'KBBM') {
                   tableError = 'tablePelunasanbbm'
                   selectedRowsError = $("#tablePelunasanbbm").getGridParam("selectedRowIds");
                 }
 
                 let element;
-                if (indexes[0] == 'bank' || indexes[0] == 'pengeluarantrucking' || indexes[0] == 'statusposting' || indexes[0] == 'supir' || indexes[0] == 'tde_id' || indexes[0] == 'kbbm_id' || indexes[0] == 'id_detail') {
+                if (indexes[0] == 'bank' || indexes[0] == 'pengeluarantrucking' || indexes[0] == 'statusposting' || indexes[0] == 'supir' || indexes[0] == 'tde_id' || indexes[0] == 'kbbm_id' || indexes[0] == 'id_detail' || indexes[0] == 'nominal') {
                   element = form.find(`[name="${indexes[0]}"]`)[0];
+
+                  if (indexes.length > 1) {
+                  element = form.find(`[name="${indexes[0]}[]"]`)[row];
+                } else {
+                  element = form.find(`[name="${indexes[0]}"]`)[0];
+                }
+
+
                   if ($(element).length > 0 && !$(element).is(":hidden")) {
                     $(element).addClass("is-invalid");
                     $(`
@@ -671,10 +700,11 @@
                     return showDialog(error);
                   }
                 } else {
-
-                  element = $(`#${tableError} tr#${parseInt(selectedRowsError[angka])}`).find(`td[aria-describedby="${tableError}_${indexes[0]}"]`)
-                  $(element).addClass("ui-state-error");
-                  $(element).attr("title", error[0].toLowerCase())
+                  if (KodePengeluaranId == "TDE" ||  KodePengeluaranId == "KBBM") {
+                    element = $(`#${tableError} tr#${parseInt(selectedRowsError[angka])}`).find(`td[aria-describedby="${tableError}_${indexes[0]}"]`)
+                    $(element).addClass("ui-state-error");
+                    $(element).attr("title", error[0].toLowerCase())
+                  }
                 }
               });
             } else {
@@ -921,6 +951,8 @@
 
     $('#table_body').html('')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     Promise
       .all([
@@ -931,6 +963,7 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+       
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -962,6 +995,9 @@
       ])
       .then(() => {
           $('#crudModal').modal('show')
+          $('#crudForm [name=tglbukti]').attr('readonly', true)
+          $('#crudForm [name=statusposting]').attr('disabled', true)
+          $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -995,6 +1031,7 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        $('#crudForm [name=statusposting]').attr('disabled', true)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -2245,7 +2282,7 @@
                 if (disabled == '') {
                   $(element).on('click', function() {
                     if ($(this).is(':checked')) {
-                      selectAllRowsSumbangan(dari, sampai, 'checkAll')
+                      selectAllRowsSumbangan()
                     } else {
                       clearSelectedRowsSumbangan()
                     }
@@ -2417,56 +2454,110 @@
     $('#tableSumbangan').trigger('reloadGrid')
   }
 
-  function selectAllRowsSumbangan(dari, sampai, option) {
+  function getDataSumbangan() {
     if ($('#crudForm').data('action') == 'edit') {
       bstId = $(`#crudForm`).find(`[name="id"]`).val()
       urlSumbangan = `${bstId}/geteditinvoice`
     } else {
       urlSumbangan = 'getinvoice'
     }
-    $.ajax({
-      url: `${apiUrl}pengeluarantruckingheader/${urlSumbangan}`,
-      method: 'GET',
-      dataType: 'JSON',
-      data: {
-        tgldari: $('#crudForm').find('[name=tgldari]').val(),
-        tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
-        limit: 0
-      },
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        if (option == 'checkAll') {
-          selectedRowsSumbangan = response.data.map((data) => data.id_detail)
-          selectedRowsSumbanganNobukti = response.data.map((data) => data.noinvoice_detail)
-          selectedRowsSumbanganContainer = response.data.map((data) => data.container_detail)
-          selectedRowsSumbanganJobtrucking = response.data.map((data) => data.nojobtrucking_detail)
-          selectedRowsSumbanganNominal = response.data.map((data) => data.nominal_detail)
-        }
-        if ($('#crudForm').data('action') == 'edit') {
-          response.data.map((data) => {
-            if (data.pengeluarantrucking_id != null) {
-              selectedRowsSumbangan.push(data.id_detail)
-              selectedRowsSumbanganNobukti.push(data.noinvoice_detail)
-              selectedRowsSumbanganContainer.push(data.container_detail)
-              selectedRowsSumbanganJobtrucking.push(data.nojobtrucking_detail)
-              selectedRowsSumbanganNominal.push(data.nominal_detail)
-            }
-          })
-        }
-        $('#tableSumbangan').jqGrid("clearGridData");
-        $('#tableSumbangan').jqGrid('setGridParam', {
+    return new Promise((resolve, reject) => {
+        $.ajax({
           url: `${apiUrl}pengeluarantruckingheader/${urlSumbangan}`,
-          postData: {
+          method: 'GET',
+          dataType: 'JSON',
+          data: {
             tgldari: $('#crudForm').find('[name=tgldari]').val(),
             tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
-            aksi: $('#crudForm').data('action')
+            limit: 0
           },
-          datatype: "json"
-        }).trigger('reloadGrid');
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          success: response => {
+              response.url = urlSumbangan
+              resolve(response)
+          },
+          error: error => {
+              if (error.status === 422) {
+                  $('.is-invalid').removeClass('is-invalid')
+                  $('.invalid-feedback').remove()
 
-      }
+
+                  errors = error.responseJSON.errors
+                  reject(errors)
+
+              } else {
+                  showDialog(error.statusText)
+              }
+              }
+    })
+  })
+  }
+
+  function selectAllRowsSumbangan() {
+    if ($('#crudForm').data('action') == 'edit') {
+      bstId = $(`#crudForm`).find(`[name="id"]`).val()
+      urlSumbangan = `${bstId}/geteditinvoice`
+    } else {
+      urlSumbangan = 'getinvoice'
+    }
+    return new Promise((resolve, reject) => {
+        $.ajax({
+          url: `${apiUrl}pengeluarantruckingheader/${urlSumbangan}`,
+          method: 'GET',
+          dataType: 'JSON',
+          data: {
+            tgldari: $('#crudForm').find('[name=tgldari]').val(),
+            tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+            limit: 0
+          },
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          success: response => {
+            if ($('#crudForm').data('action') == 'add') {
+              selectedRowsSumbangan = response.data.map((data) => data.id_detail)
+                selectedRowsSumbanganNobukti = response.data.map((data) => data.noinvoice_detail)
+                selectedRowsSumbanganContainer = response.data.map((data) => data.container_detail)
+                selectedRowsSumbanganJobtrucking = response.data.map((data) => data.nojobtrucking_detail)
+                selectedRowsSumbanganNominal = response.data.map((data) => data.nominal_detail)
+            }else if ($('#crudForm').data('action') == 'edit') {
+                response.data.map((data) => {
+                  if (data.pengeluarantrucking_id != null) {
+                    selectedRowsSumbangan.push(data.id_detail)
+                    selectedRowsSumbanganNobukti.push(data.noinvoice_detail)
+                    selectedRowsSumbanganContainer.push(data.container_detail)
+                    selectedRowsSumbanganJobtrucking.push(data.nojobtrucking_detail)
+                    selectedRowsSumbanganNominal.push(data.nominal_detail)
+                  }
+                })
+                $('#tableSumbangan').jqGrid("clearGridData");
+              $('#tableSumbangan').jqGrid('setGridParam', {
+                url: `${apiUrl}pengeluarantruckingheader/${urlSumbangan}`,
+                postData: {
+                  tgldari: $('#crudForm').find('[name=tgldari]').val(),
+                  tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                  aksi: $('#crudForm').data('action')
+                },
+                datatype: "json"
+              }).trigger('reloadGrid');
+            }
+          },
+          error: error => {
+              if (error.status === 422) {
+                  $('.is-invalid').removeClass('is-invalid')
+                  $('.invalid-feedback').remove()
+
+
+                  errors = error.responseJSON.errors
+                  reject(errors)
+
+              } else {
+                  showDialog(error.statusText)
+              }
+              }
+       })
     })
   }
 
