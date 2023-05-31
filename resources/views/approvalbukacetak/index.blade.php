@@ -11,7 +11,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card card-primary">
+            <div class="card card-easyui bordered mb-4">
                 <div class="card-header">
                 </div>
                 <form id="crudForm">
@@ -23,20 +23,10 @@
                                     <input type="text" name="periode" class="form-control datepicker">
                                 </div>
                             </div>
-                            <div class="col-sm-4 mt-2">
-                                <a id="btnReload" class="btn btn-secondary mr-2">
-                                    <i class="fas fa-sync"></i>
-                                    Reload
-                                </a>
-                                <button id="btnSubmit" class="btn btn-primary ">
-                                    <i class="fa fa-save"></i>
-                                    Proses
-                                </button>
-                            </div>
                         </div>
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">Proses data<span class="text-danger">*</span></label>
-                            
+
                             <div class="col-12 col-sm-9 col-md-10">
                                 <select name="cetak" id="cetak" class="form-select select2bs4" style="width: 100%;">
 
@@ -46,14 +36,26 @@
 
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">table Cetak<span class="text-danger">*</span></label>
-                            
+
                             <div class="col-12 col-sm-9 col-md-10">
                                 <select name="table" id="table" class="form-select select2bs4" style="width: 100%;">
 
                                 </select>
                             </div>
                         </div>
+                        <div class="row">
 
+                            <div class="col-sm-4 mt-2">
+                                <a id="btnReload" class="btn btn-primary mr-2 ">
+                                    <i class="fas fa-sync"></i>
+                                    Reload
+                                </a>
+                                <!-- <button id="btnSubmit" class="btn btn-primary ">
+                                    <i class="fa fa-save"></i>
+                                    Proses
+                                </button> -->
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -122,30 +124,19 @@
 			</div>
 		`
             )
-            .addClass("btn btn-primary").html(`
+            .addClass("btn btn-easyui text-easyui-dark").html(`
 			<i class="fa fa-calendar-alt"></i>
 		`);
 
         $('#cetak').on('select2:selected', function() {
-            console.log(tesData);
+
         })
 
-        $(document).on('click', '#btnReload', function(event) {
+        loadGrid()
 
-
-            $('#jqGrid').jqGrid('setGridParam', {
-                postData: {
-                    periode: $('#crudForm').find('[name=periode]').val(),
-                    cetak: $('#crudForm').find('[name=cetak]').val(),
-                    table: $('#crudForm').find('[name=table]').val(),
-                },
-            }).trigger('reloadGrid');
-        })
 
         $('#btnSubmit').click(function(event) {
-
             event.preventDefault()
-
             let method
             let url
             let form = $('#crudForm')
@@ -157,7 +148,6 @@
                     value: item
                 })
             });
-            console.log(data);
             data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
@@ -196,8 +186,11 @@
                 },
                 data: data,
                 success: response => {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
                     $('#crudForm').trigger('reset')
                     $('#crudModal').modal('hide')
+
 
                     $('#jqGrid').jqGrid().trigger('reloadGrid');
                     let data = $('#jqGrid').jqGrid("getGridParam", "postData");
@@ -224,12 +217,32 @@
 
         })
 
+    })
+
+    $(document).on('click', '#btnReload', function(event) {
+        getData()
+            .then((response) => {
+                $('#jqGrid').jqGrid('setGridParam', {
+                    url: `{{ config('app.api_url') . 'approvalbukacetak' }}`,
+                    datatype: "json",
+                    postData: {
+                        periode: $('#crudForm').find('[name=periode]').val(),
+                        cetak: $('#crudForm').find('[name=cetak]').val(),
+                        table: $('#crudForm').find('[name=table]').val(),
+                    },
+                }).trigger('reloadGrid');
+            })
+            .catch((errors) => {
+                setErrorMessages($('#crudForm'), errors)
+            })
+    })
+
+    function loadGrid() {
         $("#jqGrid").jqGrid({
-                url: `{{ config('app.api_url') . 'approvalbukacetak' }}`,
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
-                datatype: "json",
+                datatype: "local",
                 colModel: [{
                         label: 'Pilih',
                         name: 'id',
@@ -256,28 +269,28 @@
                         label: 'STATUS CETAK',
                         name: 'statuscetak',
                         align: 'left',
-                          
-                          formatter: (value, options, rowData) => {
-                          let statuscetak = JSON.parse(value)
-                          if (!statuscetak) {
-                            return ''
-                          }
-                          let formattedValue = $(`
+
+                        formatter: (value, options, rowData) => {
+                            let statuscetak = JSON.parse(value)
+                            if (!statuscetak) {
+                                return ''
+                            }
+                            let formattedValue = $(`
                             <div class="badge" style="background-color: ${statuscetak.WARNA}; color: #fff;">
                               <span>${statuscetak.SINGKATAN}</span>
                             </div>
                           `)
-                          
-                          return formattedValue[0].outerHTML
+
+                            return formattedValue[0].outerHTML
                         },
                         cellattr: (rowId, value, rowObject) => {
-                          let statuscetak = JSON.parse(rowObject.statuscetak)
-                          if (!statuscetak) {
-                            return ` title=" "`
-                          }
-                          return ` title="${statuscetak.MEMO}"`
+                            let statuscetak = JSON.parse(rowObject.statuscetak)
+                            if (!statuscetak) {
+                                return ` title=" "`
+                            }
+                            return ` title="${statuscetak.MEMO}"`
                         }
-                      },
+                    },
                     {
                         label: 'NO BUKTI',
                         name: 'nobukti',
@@ -298,8 +311,8 @@
                         name: 'keterangan',
                         align: 'left'
                     },
-                    
-                    
+
+
                     {
                         label: 'STATUS APPROVAL',
                         name: 'statusapproval',
@@ -307,17 +320,17 @@
                         stype: 'select',
                         searchoptions: {
                             value: `<?php
-                            $i = 1;
-                            
-                            foreach ($data['comboapproval'] as $status) :
-                            echo "$status[param]:$status[parameter]";
-                            if ($i !== count($data['comboapproval'])) {
-                                echo ";";
-                            }
-                            $i++;
-                            endforeach
-                            
-                            ?>
+                                    $i = 1;
+
+                                    foreach ($data['comboapproval'] as $status) :
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['comboapproval'])) {
+                                            echo ";";
+                                        }
+                                        $i++;
+                                    endforeach
+
+                                    ?>
                             `,
                             dataInit: function(element) {
                                 $(element).select2({
@@ -326,13 +339,29 @@
                                 });
                             }
                         },
+                        formatter: (value, options, rowData) => {
+                            let statusApproval = JSON.parse(value)
+
+                            let formattedValue = $(`
+                                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                                <span>${statusApproval.SINGKATAN}</span>
+                                </div>
+                            `)
+
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusApproval = JSON.parse(rowObject.statusapproval)
+
+                            return ` title="${statusApproval.MEMO}"`
+                        }
                     },
                     {
                         label: 'USER APPROVAL',
                         name: 'userapproval',
                         align: 'left'
                     },
-                   
+
                     {
                         label: 'UPDATEDAT',
                         name: 'updated_at',
@@ -390,7 +419,7 @@
 
                 },
                 loadComplete: function(data) {
-          changeJqGridRowListText()
+                    changeJqGridRowListText()
 
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
@@ -459,18 +488,53 @@
                 },
             })
 
-            .customPager({})
-
-
+            .customPager({
+                buttons: [{
+                    id: 'btnSubmit',
+                    innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
+                    class: 'btn btn-purple btn-sm mr-1',
+                }]
+            })
 
         /* Append clear filter button */
         loadClearFilter($('#jqGrid'))
 
         /* Append global search */
         loadGlobalSearch($('#jqGrid'))
+    }
 
-
-    })
+    function getData() {
+        return new Promise((resolve, reject) => {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            $.ajax({
+                url: `${apiUrl}approvalbukacetak`,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    periode: $('#crudForm').find('[name=periode]').val(),
+                    cetak: $('#crudForm').find('[name=cetak]').val(),
+                    table: $('#crudForm').find('[name=table]').val(),
+                },
+                success: (response) => {
+                    console.log(response)
+                    resolve(response);
+                },
+                error: error => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        errors = error.responseJSON.errors
+                        reject(errors)
+                    } else {
+                        showDialog(error.statusText)
+                    }
+                }
+            })
+        })
+    }
 
     const setStatusApprovalOptions = function(relatedForm) {
         // return new Promise((resolve, reject) => {
@@ -556,7 +620,6 @@
         })
         // })
     }
-   
 </script>
 @endpush()
 @endsection
