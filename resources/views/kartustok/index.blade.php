@@ -212,6 +212,66 @@
                     }
                     if (filter == '188') {
                         dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
+                ],
+                autowidth: true,
+                shrinkToFit: false,
+                height: 350,
+                rowNum: rowNum,
+                rownumbers: true,
+                rownumWidth: 45,
+                rowList: [10, 20, 50, 0],
+                toolbar: [true, "top"],
+                cmTemplate: {
+                    sortable: false
+                },
+                sortname: sortname,
+                sortorder: sortorder,
+                page: page,
+                viewrecords: true,
+                prmNames: {
+                    sort: 'sortIndex',
+                    order: 'sortOrder',
+                    rows: 'limit'
+                },
+                jsonReader: {
+                    root: 'data',
+                    total: 'attributes.totalPages',
+                    records: 'attributes.totalRows',
+                },
+
+                loadBeforeSend: function(jqXHR) {
+                    jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+                    setGridLastRequest($(this), jqXHR)
+                },
+                onSelectRow: function(id) {
+                    activeGrid = $(this)
+                    indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
+                    page = $(this).jqGrid('getGridParam', 'page')
+                    let limit = $(this).jqGrid('getGridParam', 'postData').limit
+                    if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+                },
+                loadComplete: function(data) {
+                    changeJqGridRowListText()
+                    $(document).unbind('keydown')
+                    setCustomBindKeys($(this))
+                    initResize($(this))
+
+                    /* Set global variables */
+                    sortname = $(this).jqGrid("getGridParam", "sortname")
+                    sortorder = $(this).jqGrid("getGridParam", "sortorder")
+                    totalRecord = $(this).getGridParam("records")
+                    limit = $(this).jqGrid('getGridParam', 'postData').limit
+                    postData = $(this).jqGrid('getGridParam', 'postData')
+                    triggerClick = true
+
+                    $('.clearsearchclass').click(function() {
+                        clearColumnSearch($(this))
+                    })
+
+                    if (indexRow > $(this).getDataIDs().length - 1) {
+                        indexRow = $(this).getDataIDs().length - 1;
+
                     }
 
                     if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai != '' && filter !=

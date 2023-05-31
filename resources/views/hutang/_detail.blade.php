@@ -76,8 +76,10 @@
           records: 'attributes.totalRows',
         },
         
-        loadBeforeSend: (jqXHR) => {
+        loadBeforeSend: function(jqXHR) {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+          setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
           activeGrid = $(this)
@@ -104,7 +106,9 @@
   }
 
   function loadDetailData(id) {
-    $('#detail').setGridParam({
+        abortGridLastRequest($('#detail'))
+
+        $('#detail').setGridParam({
       url: `${apiUrl}hutangdetail`,
       datatype: "json",
       postData: {

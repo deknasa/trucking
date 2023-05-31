@@ -52,8 +52,10 @@
                     total: 'attributes.totalPages',
                     records: 'attributes.totalRows',
                 },
-                loadBeforeSend: (jqXHR) => {
-                    jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+                loadBeforeSend: function(jqXHR) {
+                    jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+                    setGridLastRequest($(this), jqXHR)
                 },
                 loadComplete: function() {
                     initResize($(this))
