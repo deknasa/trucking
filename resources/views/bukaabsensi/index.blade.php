@@ -182,20 +182,6 @@
             }
           },
           {
-            id: 'edit',
-            innerHTML: '<i class="fa fa-pen"></i> EDIT',
-            class: 'btn btn-success btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                editBukaAbsensi(selectedId)
-              }
-            }
-          },
-          {
             id: 'delete',
             innerHTML: '<i class="fa fa-trash"></i> DELETE',
             class: 'btn btn-danger btn-sm mr-1',

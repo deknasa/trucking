@@ -454,28 +454,36 @@
 
           page: 1
         }).trigger('reloadGrid')
-      }).catch((errors) => {
+      }).catch((error) => {
         clearGlobalSearch($('#jqGrid'))
+        
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          errors = error.responseJSON.errors
 
-        $.each(errors, (index, error) => {
-          let indexes = index.split(".");
-          let element;
-          if(indexes[0] == 'tgldari' || indexes[0] == 'tglsampai'){
+          $.each(errors, (index, error) => {
+            let indexes = index.split(".");
+            let element;
+            if(indexes[0] == 'tgldari' || indexes[0] == 'tglsampai'){
             element = $('#rangeHeader').find(`[name="${indexes[0]}header"]`)[0];
           }else{            
             element = $('#rangeHeader').find(`[name="${indexes[0]}"]`)[0];
           }
 
-          $(element).addClass("is-invalid");
-          $(`
+            $(element).addClass("is-invalid");
+            $(`
               <div class="invalid-feedback">
               ${error[0].toLowerCase()}
               </div>
 			    `).appendTo($(element).parent());
 
-        });
+          });
 
-        $(".is-invalid").first().focus();
+          $(".is-invalid").first().focus();
+        } else {
+          showDialog(error.statusText)
+        }
       })
 
     }
@@ -493,17 +501,7 @@
             resolve(response);
           },
           error: error => {
-            if (error.status === 422) {
-              $('.is-invalid').removeClass('is-invalid')
-              $('.invalid-feedback').remove()
-
-
-              errors = error.responseJSON.errors
-              reject(errors)
-
-            } else {
-              showDialog(error.statusText)
-            }
+            reject(error)
           },
         });
       });
@@ -537,14 +535,66 @@
         ...data,
         ...addtional
       }
+      getIndexLookup(url, data).then((response) => {
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+        clearGlobalSearch($('#jqGrid'))
+        $(`#${grid}`).setGridParam({
+          url: `${apiUrl}${url}`,
+          datatype: "json",
+          postData: data,
 
-      $(`#${grid}`).setGridParam({
-        url: `${apiUrl}${url}`,
-        datatype: "json",
-        postData: data,
+          page: 1
+        }).trigger('reloadGrid')
+      }).catch((error) => {
+        clearGlobalSearch($('#jqGrid'))
 
-        page: 1
-      }).trigger('reloadGrid')
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          errors = error.responseJSON.errors
+
+          $.each(errors, (index, error) => {
+            let indexes = index.split(".");
+            let element;
+            element = $('#rangeHeaderLookup').find(`[name="${indexes[0]}headerlookup"]`)[0];
+
+            $(element).addClass("is-invalid");
+            $(`
+              <div class="invalid-feedback">
+              ${error[0].toLowerCase()}
+              </div>
+			    `).appendTo($(element).parent());
+
+          });
+
+          $(".is-invalid").first().focus();
+        } else {
+          showDialog(error.statusText)
+        }
+      })
+
+
+    }
+
+    function getIndexLookup(url, data) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: `${apiUrl}${url}`,
+          dataType: "JSON",
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: data,
+          success: (response) => {
+            resolve(response);
+          },
+          error: error => {
+            reject(error)
+
+          },
+        });
+      });
     }
   </script>
 </body>
