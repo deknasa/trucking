@@ -756,6 +756,8 @@ function loadGlobalSearch(grid) {
 		`#${$.jgrid.jqID(grid[0].id)}_searchText`,
 		function () {
 			delay(function () {
+				abortGridLastRequest(grid)
+				
 				clearColumnSearch(grid);
 
 				var postData = grid.jqGrid("getGridParam", "postData"),
@@ -1322,4 +1324,22 @@ function detectDeviceType() {
 		return "mobile";
 	}
 	return "desktop";
+}
+
+function setGridLastRequest(grid, lastRequest) {
+	grid.setGridParam({
+		lastRequest
+	})
+}
+
+function getGridLastRequest(grid) {
+	return grid.getGridParam().lastRequest
+}
+
+function abortGridLastRequest(grid) {
+	let lastRequest = getGridLastRequest(grid)
+
+	if (lastRequest) {
+		lastRequest.abort()
+	}
 }

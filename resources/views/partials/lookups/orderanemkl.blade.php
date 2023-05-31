@@ -188,6 +188,8 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
+        abortGridLastRequest($(this))
+
         clearGlobalSearch($('#orderanemklLookup'))
       },
     })
@@ -275,7 +277,7 @@
           aktif: `{!! $Aktif ?? '' !!}`,
           bulanjob: $('[name=bulanjob]').val(),
         },
-        loadBeforeSend: (jqXHR) => {
+        loadBeforeSend: function(jqXHR) {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenEmkl}`)
         },
       }).trigger('reloadGrid');
