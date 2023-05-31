@@ -18,10 +18,10 @@
                                 </div>
                             </div>
                         </div>
-                            
+
                         <div class="form-group row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">tgl tutup buku <span class="text-danger">*</span></label>
-                            
+
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="text" name="tgltutupbuku" class="form-control datepicker">
@@ -34,8 +34,8 @@
                                 <div class="row text-danger">nb :</div>
                                 <div class="row">
                                     <ul>
-                                        <li  class="text-danger">Setelah Proses tutup buku maka seluruh transaksi yang terjadi sebelum tanggal untuk pilihan tutup buku berikut ini tidak dapat dirubah kembali.</li>
-                                        <li  class="text-danger">Sebelum Proses ini dilanjutkan, terlebih dahulu user pada komputer client lain yang menggunakan aplikasi ini untuk sementara dimatikan hingga proses ini selesai.</li>
+                                        <li class="text-danger">Setelah Proses tutup buku maka seluruh transaksi yang terjadi sebelum tanggal untuk pilihan tutup buku berikut ini tidak dapat dirubah kembali.</li>
+                                        <li class="text-danger">Sebelum Proses ini dilanjutkan, terlebih dahulu user pada komputer client lain yang menggunakan aplikasi ini untuk sementara dimatikan hingga proses ini selesai.</li>
                                     </ul>
                                 </div>
                             </div>
@@ -45,9 +45,9 @@
                             <div class="col-sm-6 mt-4">
                                 <a id="btnSubmit" class="btn btn-primary mr-2 ">
                                     <i class="fas fa-save"></i>
-                                    Sumbit
+                                    Submit
                                 </a>
-                               
+
                             </div>
                         </div>
                     </div>
@@ -63,6 +63,7 @@
         initDatepicker()
         // $('#crudForm').find('[name=tglterakhir]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         tglterakhir()
+
         function tglterakhir() {
             $.ajax({
                 url: `${apiUrl}tutupbuku`,
@@ -81,7 +82,7 @@
                     }
                 },
             })
-        } 
+        }
         $('#crudForm').find('[name=tgltutupbuku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     })
 
@@ -90,7 +91,7 @@
         let tgltutupbuku = $('#crudForm').find('[name=tgltutupbuku]').val()
         let form = $('#crudForm')
         let data = $('#crudForm').serializeArray()
-        if (tglterakhir != '' && tgltutupbuku != '' ) {
+        if (tglterakhir != '' && tgltutupbuku != '') {
             $.ajax({
                 url: `${apiUrl}tutupbuku`,
                 method: 'POST',
@@ -100,9 +101,11 @@
                 },
                 data: data,
                 success: response => {
-                    showDialog('TUTUP BUKU SUKSES')
-                    
-                    $('#crudForm').find('[name=tglterakhir]').val('').trigger('change');
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+                    showDialog(response.message)
+
+                    $('#crudForm').find('[name=tglterakhir]').val(response.data['text']).trigger('change');
                     $('#crudForm').find('[name=tgltutupbuku]').val('').trigger('change');
 
                 },
@@ -111,7 +114,7 @@
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
                         setErrorMessages(form, error.responseJSON.errors);
-                    }else if (error.status === 423) {
+                    } else if (error.status === 423) {
                         // console.log(error);
                         showDialog(error.responseJSON.statusText)
 
@@ -120,14 +123,12 @@
                     }
                 },
             })
-                    
-            
+
+
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
     })
-            
-    
 </script>
 @endpush()
 @endsection
