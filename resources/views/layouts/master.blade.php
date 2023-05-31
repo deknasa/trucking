@@ -460,7 +460,11 @@
         $.each(errors, (index, error) => {
           let indexes = index.split(".");
           let element;
-          element = $('#rangeHeader').find(`[name="${indexes[0]}header"]`)[0];
+          if(indexes[0] == 'tgldari' || indexes[0] == 'tglsampai'){
+            element = $('#rangeHeader').find(`[name="${indexes[0]}header"]`)[0];
+          }else{            
+            element = $('#rangeHeader').find(`[name="${indexes[0]}"]`)[0];
+          }
 
           $(element).addClass("is-invalid");
           $(`
