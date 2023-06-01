@@ -170,6 +170,7 @@
 
 
     function grid() {
+        let form = $('#crudForm');
         $("#jqGrid").jqGrid({
                 url: `${apiUrl}historipenerimaanstok`,
                 mtype: "GET",
@@ -178,6 +179,8 @@
                 postData: {
                     stokdari_id: $('#crudForm').find('[name=stokdari_id]').val(),
                     stoksampai_id: $('#crudForm').find('[name=stoksampai_id]').val(),
+                    stokdari: $('#crudForm').find('[name=stokdari]').val(),
+                    stoksampai: $('#crudForm').find('[name=stoksampai]').val(),
                     dari: $('#crudForm').find('[name=dari]').val(),
                     sampai: $('#crudForm').find('[name=sampai]').val(),
                     filter: $('#crudForm').find('[name=filter]').val()
@@ -283,6 +286,16 @@
                     page = $(this).jqGrid('getGridParam', 'page')
                     let limit = $(this).jqGrid('getGridParam', 'postData').limit
                     if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+                },
+                loadError: function (xhr, status, error) {
+                    if (xhr.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid');
+                        $('.invalid-feedback').remove();
+
+                        setErrorMessages(form, xhr.responseJSON.errors);
+                    } else {
+                        showDialog(xhr.statusText);
+                    }
                 },
                 loadComplete: function(data) {
                     changeJqGridRowListText()

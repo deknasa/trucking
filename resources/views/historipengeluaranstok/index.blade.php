@@ -108,8 +108,29 @@
         $('#crudForm').find('[name=sampai]').val(formattedLastDay).trigger('change');
 
         showDefault($('#crudForm'))
-        $('#btnPreview').click(function(event) {
+    .then(response => {
+        $.each(response.data, (index, value) => {
+            console.log(value);
+            let element = $('#crudForm').find(`[name="${index}"]`);
 
+            if (element.is('select')) {
+                element.val(value).trigger('change');
+            } else {
+                element.val(value);
+            }
+        });
+
+        grid();
+        // loadDetailGrid($('#crudForm').find('[name=invoice]').val());
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
+
+
+        $('#btnPreview').click(function(event) {
+            
             let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
             let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
             let dari = $('#crudForm').find('[name=dari]').val()
@@ -140,6 +161,7 @@
     })
 
     function grid() {
+        let form = $('#crudForm');
         $("#jqGrid").jqGrid({
                 url: `${apiUrl}historipengeluaranstok`,
                 mtype: "GET",
@@ -150,7 +172,9 @@
                     stoksampai_id: $('#crudForm').find('[name=stoksampai_id]').val(),
                     dari: $('#crudForm').find('[name=dari]').val(),
                     sampai: $('#crudForm').find('[name=sampai]').val(),
-                    filter: $('#crudForm').find('[name=filter]').val()
+                    filter: $('#crudForm').find('[name=filter]').val(),
+                    stokdari: $('#crudForm').find('[name=stokdari]').val(),
+                    stoksampai: $('#crudForm').find('[name=stoksampai]').val(),
                 },
                 datatype: "json",
                 colModel: [{
@@ -253,6 +277,16 @@
                     page = $(this).jqGrid('getGridParam', 'page')
                     let limit = $(this).jqGrid('getGridParam', 'postData').limit
                     if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+                },
+                loadError: function (xhr, status, error) {
+                    if (xhr.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid');
+                        $('.invalid-feedback').remove();
+
+                        setErrorMessages(form, xhr.responseJSON.errors);
+                    } else {
+                        showDialog(xhr.statusText);
+                    }
                 },
                 loadComplete: function(data) {
                     changeJqGridRowListText()
@@ -366,6 +400,7 @@
     }
 
     function showDefault(form) {
+    return new Promise((resolve, reject) => {
         $.ajax({
             url: `${apiUrl}historipengeluaranstok/default`,
             method: 'GET',
@@ -374,23 +409,15 @@
                 Authorization: `Bearer ${accessToken}`
             },
             success: response => {
-
-                $.each(response.data, (index, value) => {
-                    console.log(value)
-                    let element = form.find(`[name="${index}"]`)
-
-                    if (element.is('select')) {
-                        element.val(value).trigger('change')
-                    } else {
-                        element.val(value)
-                    }
-                })
-
-                grid()
-                // loadDetailGrid($('#crudForm').find('[name=invoice]').val())
+                resolve(response);
+            },
+            error: error => {
+                reject(error);
             }
-        })
-    }
+        });
+    });
+}
+
     $(document).on('change', `#crudForm [name="filter"]`, function(event) {
         let filter = $(this).val();
         $('#crudForm').find('[name=trado_id]').val('')
