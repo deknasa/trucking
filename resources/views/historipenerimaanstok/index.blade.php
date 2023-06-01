@@ -117,6 +117,25 @@
         $('#crudForm').find('[name=sampai]').val(formattedLastDay).trigger('change');
 
         showDefault($('#crudForm'))
+    .then(response => {
+        console.log(response);
+        $.each(response.data, (index, value) => {
+            console.log(value);
+            let element = $('#crudForm').find(`[name="${index}"]`);
+
+            if (element.is('select')) {
+                element.val(value).trigger('change');
+            } else {
+                element.val(value);
+            }
+        });
+        grid();
+        // loadDetailGrid($('#crudForm').find('[name=invoice]').val());
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
         $('#btnPreview').click(function(event) {
 
             let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
@@ -495,6 +514,7 @@
     }
 
     function showDefault(form) {
+    return new Promise((resolve, reject) => {
         $.ajax({
             url: `${apiUrl}historipenerimaanstok/default`,
             method: 'GET',
@@ -503,23 +523,14 @@
                 Authorization: `Bearer ${accessToken}`
             },
             success: response => {
-
-                $.each(response.data, (index, value) => {
-                    console.log(value)
-                    let element = form.find(`[name="${index}"]`)
-
-                    if (element.is('select')) {
-                        element.val(value).trigger('change')
-                    } else {
-                        element.val(value)
-                    }
-                })
-
-                grid()
-                // loadDetailGrid($('#crudForm').find('[name=invoice]').val())
+                resolve(response);
+            },
+            error: error => {
+                reject(error);
             }
-        })
-    }
+        });
+    });
+}
     const setFilterOptions = function(relatedForm) {
         return new Promise((resolve, reject) => {
             relatedForm.find('[name=filter]').empty()
