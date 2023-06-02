@@ -85,6 +85,7 @@
         }
       }).always(() => {
         $('#btnSimpan').removeAttr('disabled')
+        $('#loader').addClass('d-none')
       })
     })
   })
