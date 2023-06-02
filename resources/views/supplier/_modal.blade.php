@@ -484,6 +484,18 @@
           $.each(response.data, (index, value) => {
             if (value !== null && value !== 0 && value !== undefined) {
               form.find(`[name=${index}]`).attr('maxlength', value)
+              if(index == 'kodepos'){
+                form.find(`[name=kodepos]`).attr('maxlength', 5)
+              }
+              if(index == 'notelp1'){
+                form.find(`[name=notelp1]`).attr('maxlength', 13)
+              }
+              if(index == 'notelp2'){
+                form.find(`[name=notelp2]`).attr('maxlength', 13)
+              }
+              if(index == 'rekeningbank'){
+                form.find(`[name=rekeningbank]`).attr('maxlength', 13)
+              }
             }
           })
 
