@@ -98,14 +98,14 @@
               <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1000px;">
                 <thead>
                   <tr>
-                    <th width="1%" class="">No</th>
+                    <th style="width:5%; max-width: 25px;max-width: 15px" class="">No</th>
                     <th class="data_tbl tbl_checkbox" style="display:none" width="1%">Pilih</th>
-                    <th width="20%" class="tbl_supir_id">SUPIR </th>
-                    <th width="15%" class="tbl_pengeluarantruckingheader_nobukti">NO BUKTI PENGELUARAN TRUCKING</th>
-                    <th width="14%" class="tbl_sisa">Sisa </th>
-                    <th width="25%" class="tbl_keterangan">Keterangan</th>
-                    <th width="20%" class="tbl_nominal">Nominal</th>
-                    <th width="1%" class="tbl_aksi">Aksi</th>
+                    <th style="width: 20%; min-width: 200px;" class="tbl_supir_id">SUPIR </th>
+                    <th style="width: 20%; min-width: 200px;" class="tbl_pengeluarantruckingheader_nobukti">NO BUKTI PENGELUARAN TRUCKING</th>
+                    <th style="width: 20%; min-width: 200px;" class="tbl_sisa">Sisa </th>
+                    <th style="width: 20%; min-width: 200px;" class="tbl_keterangan">Keterangan</th>
+                    <th style="width: 20%; min-width: 200px;" class="tbl_nominal">Nominal</th>
+                    <th style="width:5%; max-width: 25px;max-width: 15px" class="tbl_aksi">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
