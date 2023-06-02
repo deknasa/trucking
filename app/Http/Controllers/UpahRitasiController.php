@@ -151,25 +151,29 @@ class UpahRitasiController extends MyController
 
     public function report(Request $request)
     {
-
+     
         $detailParams = [
             'forReport' => true,
             'upahritasi_id' => $request->id
         ];
-
+    
         $upahritasi_detail = Http::withHeaders(request()->header())
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'upahritasirincian', $detailParams);
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') . 'upahritasirincian', $detailParams);
 
+       
+    
+    $upahritasi_details = $upahritasi_detail['data'];
 
-        $upahritasi_details = $upahritasi_detail['data'];
-        $user = $upahritasi_detail['user'];
-        return view('reports.upahritasi', compact('upahritasi_details', 'user'));
+    $user = $upahritasi_detail->json()['user'];
+    
+    return view('reports.upahritasi', compact('upahritasi_details', 'user'));
     }
     
     public function export(Request $request): void
     {
+        
         $upahritasi = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))

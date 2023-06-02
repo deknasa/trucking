@@ -1,11 +1,12 @@
 {
-  "ReportGuid": "d82bb717d14f09d1116c89871f082e9a",
+  "ReportVersion": "2023.1.1",
+  "ReportGuid": "22866f551d880e883f9853decc371b7f",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportUpahRitasi.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportUpahSupir.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1668765949000+0700)/",
+  "ReportChanged": "/Date(1685718029000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -28,98 +29,72 @@
         "Columns": {
           "0": {
             "Name": "kotadari",
-            "Index": -1,
             "NameInSource": "kotadari",
             "Alias": "kotadari",
             "Type": "System.String"
           },
           "1": {
             "Name": "kotasampai",
-            "Index": -1,
             "NameInSource": "kotasampai",
             "Alias": "kotasampai",
             "Type": "System.String"
           },
           "2": {
             "Name": "jarak",
-            "Index": -1,
             "NameInSource": "jarak",
             "Alias": "jarak",
             "Type": "System.String"
           },
           "3": {
             "Name": "zona",
-            "Index": -1,
             "NameInSource": "zona",
             "Alias": "zona",
             "Type": "System.String"
           },
           "4": {
-            "Name": "tglmulaiberlaku",
-            "Index": -1,
-            "NameInSource": "tglmulaiberlaku",
-            "Alias": "tglmulaiberlaku",
-            "Type": "System.DateTime"
-          },
-          "5": {
-            "Name": "tglakhirberlaku",
-            "Index": -1,
-            "NameInSource": "tglakhirberlaku",
-            "Alias": "tglakhirberlaku",
-            "Type": "System.DateTime"
-          },
-          "6": {
             "Name": "statusluarkota",
-            "Index": -1,
             "NameInSource": "statusluarkota",
             "Alias": "statusluarkota",
             "Type": "System.String"
           },
-          "7": {
+          "5": {
             "Name": "container_id",
-            "Index": -1,
             "NameInSource": "container_id",
             "Alias": "container_id",
             "Type": "System.String"
           },
-          "8": {
+          "6": {
             "Name": "statuscontainer_id",
-            "Index": -1,
             "NameInSource": "statuscontainer_id",
             "Alias": "statuscontainer_id",
             "Type": "System.String"
           },
-          "9": {
+          "7": {
             "Name": "nominalsupir",
-            "Index": -1,
             "NameInSource": "nominalsupir",
             "Alias": "nominalsupir",
             "Type": "System.String"
           },
-          "10": {
+          "8": {
             "Name": "nominalkenek",
-            "Index": -1,
             "NameInSource": "nominalkenek",
             "Alias": "nominalkenek",
             "Type": "System.String"
           },
-          "11": {
+          "9": {
             "Name": "nominalkomisi",
-            "Index": -1,
             "NameInSource": "nominalkomisi",
             "Alias": "nominalkomisi",
             "Type": "System.String"
           },
-          "12": {
+          "10": {
             "Name": "nominaltol",
-            "Index": -1,
             "NameInSource": "nominaltol",
             "Alias": "nominaltol",
             "Type": "System.String"
           },
-          "13": {
+          "11": {
             "Name": "liter",
-            "Index": -1,
             "NameInSource": "liter",
             "Alias": "liter",
             "Type": "System.String"
@@ -134,14 +109,12 @@
         "Columns": {
           "0": {
             "Name": "name",
-            "Index": -1,
             "NameInSource": "name",
             "Alias": "name",
             "Type": "System.String"
           },
           "1": {
             "Name": "cabang_id",
-            "Index": -1,
             "NameInSource": "cabang_id",
             "Alias": "cabang_id",
             "Type": "System.String"
@@ -176,7 +149,7 @@
             "0": {
               "Ident": "StiText",
               "Name": "Text2",
-              "ClientRectangle": "82,0,46,6",
+              "ClientRectangle": "100,0,46,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
