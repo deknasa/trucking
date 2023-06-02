@@ -70,10 +70,6 @@
       loadDataHeader('pengembaliankasgantungheader')
     })
 
-    $('#crudModal').on('hidden.bs.modal', function() {
-      activeGrid = '#jqGrid'
-    })
-
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'pengembaliankasgantungheader' }}`,
         mtype: "GET",
