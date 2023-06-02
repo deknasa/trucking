@@ -42,7 +42,7 @@
               <div class="form-group col-sm-6 row">
                 <label class="col-sm-4 col-form-label">Tahun <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input pattern="[0-9.]+" type="text" class="form-control numbernoseparate" name="tahun">
+                  <input type="text" class="form-control numbernoseparate" name="tahun" maxlength="4">
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
@@ -77,7 +77,7 @@
               </div>
               {{-- //NOTE - nominal borongan --}}
               <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">PLUS BORONGAN <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">PLUS BORONGAN </label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control text-right autonumeric" name="nominalplusborongan">
                 </div>
@@ -223,7 +223,7 @@
               <div class="col">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload Foto Trado</label>
+                    <label class="col-form-label">Upload Foto Trado <span class="text-danger">*</span></label>
                   </div>
                 </div>
                 <div class="dropzone" data-field="phototrado">
@@ -236,7 +236,7 @@
               <div class="col">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload Foto BPKB</label>
+                    <label class="col-form-label">Upload Foto BPKB <span class="text-danger">*</span></label>
                   </div>
                 </div>
                 <div class="dropzone" data-field="photobpkb">
@@ -249,7 +249,7 @@
               <div class="col">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload Foto STNK</label>
+                    <label class="col-form-label">Upload Foto STNK <span class="text-danger">*</span></label>
                   </div>
                 </div>
                 <div class="dropzone" data-field="photostnk">
@@ -422,11 +422,15 @@
     initDropzone(form.data('action'))
     initLookup()
     initDatepicker()
-    initSelect2()
+    initSelect2(form.find(`
+      [name="statusaktif"],
+      [name="statusjenisplat"],
+      [name="statusgerobak"]
+    `), true)
     getMaxLength(form)
     form.find('[name]').removeAttr('disabled')
-    // initAutoNumeric(form.find(`[name="boronganborongan"]`))
   }
+
 
   function editTrado(id) {
     let form = $('#crudForm')
@@ -459,7 +463,7 @@
             initDropzone(form.data('action'), trado)
             initLookup()
             initDatepicker()
-            initSelect2()
+            initSelect2(form.find('.select2bs4'), true)
             form.find('[name]').removeAttr('disabled')
           })
           .then(() => {
@@ -845,11 +849,31 @@
         },
         success: response => {
           $.each(response.data, (index, value) => {
+         
             if (value !== null && value !== 0 && value !== undefined) {
               form.find(`[name=${index}]`).attr('maxlength', value)
+              if(index == 'tahun'){
+                form.find(`[name=tahun]`).attr('maxlength', 4)
+              }
+              if(index == 'norangka'){
+                form.find(`[name=norangka]`).attr('maxlength', 20)
+              }
+              if(index == 'nostnk'){
+                form.find(`[name=nostnk]`).attr('maxlength', 8)
+              }
+              if(index == 'kodetrado'){
+                form.find(`[name=kodetrado]`).attr('maxlength', 12)
+              }
+              if(index == 'nomesin'){
+                form.find(`[name=nomesin]`).attr('maxlength', 20)
+              }
+              if(index == 'nobpkb'){
+                form.find(`[name=nobpkb]`).attr('maxlength', 15)
+              }
+              
             }
           })
-
+          console.log(response)
           form.attr('has-maxlength', true)
         },
         error: error => {
