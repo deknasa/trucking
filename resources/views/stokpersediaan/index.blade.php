@@ -90,36 +90,50 @@
         initLookup()
         setKeteranganOptions($('#crudForm'))
 
+
+
         showDefault($('#crudForm'))
+        .then(response => {
+         
+        $.each(response.data, (index, value) => {
+            console.log(value);
+            let element = $('#crudForm').find(`[name="${index}"]`);
 
-
-    })
-
-    function showDefault(form) {
-        $.ajax({
-            url: `${apiUrl}stokpersediaan/default`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-
-                $.each(response.data, (index, value) => {
-                    console.log(value)
-                    let element = form.find(`[name="${index}"]`)
-
-                    if (element.is('select')) {
-                        element.val(value).trigger('change')
-                    } else {
-                        element.val(value)
-                    }
-                })
-
-                grid()
+            if (element.is('select')) {
+                element.val(value).trigger('change');
+            } else {
+                element.val(value);
             }
-        })
+        });
+        grid()
+       
+    })
+    .catch(error => {
+        // Penanganan kesalahan
+        console.error(error);
+    });
+
+
+    });
+    function showDefault(form) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}stokpersediaan/default`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error);
+                }
+            });
+        });
     }
+      
 
     function grid() {
         $("#jqGrid").jqGrid({
@@ -178,6 +192,12 @@
                     root: 'data',
                     total: 'attributes.totalPages',
                     records: 'attributes.totalRows',
+                },
+                postData: {
+                        filter: $('#crudForm').find('[name=keterangan]').val(),
+                        gudang: $('#crudForm').find('[name=gudang]').val(),
+                        gudang_id: $('#crudForm').find('[name=gudang_id]').val(),
+
                 },
                 loadBeforeSend: function(jqXHR) {
                     jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)

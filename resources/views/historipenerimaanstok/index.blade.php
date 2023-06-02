@@ -117,6 +117,25 @@
         $('#crudForm').find('[name=sampai]').val(formattedLastDay).trigger('change');
 
         showDefault($('#crudForm'))
+    .then(response => {
+        console.log(response);
+        $.each(response.data, (index, value) => {
+            console.log(value);
+            let element = $('#crudForm').find(`[name="${index}"]`);
+
+            if (element.is('select')) {
+                element.val(value).trigger('change');
+            } else {
+                element.val(value);
+            }
+        });
+        grid();
+        // loadDetailGrid($('#crudForm').find('[name=invoice]').val());
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
         $('#btnPreview').click(function(event) {
 
             let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
@@ -151,6 +170,7 @@
 
 
     function grid() {
+        let form = $('#crudForm');
         $("#jqGrid").jqGrid({
                 url: `${apiUrl}historipenerimaanstok`,
                 mtype: "GET",
@@ -159,6 +179,8 @@
                 postData: {
                     stokdari_id: $('#crudForm').find('[name=stokdari_id]').val(),
                     stoksampai_id: $('#crudForm').find('[name=stoksampai_id]').val(),
+                    stokdari: $('#crudForm').find('[name=stokdari]').val(),
+                    stoksampai: $('#crudForm').find('[name=stoksampai]').val(),
                     dari: $('#crudForm').find('[name=dari]').val(),
                     sampai: $('#crudForm').find('[name=sampai]').val(),
                     filter: $('#crudForm').find('[name=filter]').val()
@@ -264,6 +286,16 @@
                     page = $(this).jqGrid('getGridParam', 'page')
                     let limit = $(this).jqGrid('getGridParam', 'postData').limit
                     if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+                },
+                loadError: function (xhr, status, error) {
+                    if (xhr.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid');
+                        $('.invalid-feedback').remove();
+
+                        setErrorMessages(form, xhr.responseJSON.errors);
+                    } else {
+                        showDialog(xhr.statusText);
+                    }
                 },
                 loadComplete: function(data) {
                     changeJqGridRowListText()
@@ -495,6 +527,7 @@
     }
 
     function showDefault(form) {
+    return new Promise((resolve, reject) => {
         $.ajax({
             url: `${apiUrl}historipenerimaanstok/default`,
             method: 'GET',
@@ -503,23 +536,14 @@
                 Authorization: `Bearer ${accessToken}`
             },
             success: response => {
-
-                $.each(response.data, (index, value) => {
-                    console.log(value)
-                    let element = form.find(`[name="${index}"]`)
-
-                    if (element.is('select')) {
-                        element.val(value).trigger('change')
-                    } else {
-                        element.val(value)
-                    }
-                })
-
-                grid()
-                // loadDetailGrid($('#crudForm').find('[name=invoice]').val())
+                resolve(response);
+            },
+            error: error => {
+                reject(error);
             }
-        })
-    }
+        });
+    });
+}
     const setFilterOptions = function(relatedForm) {
         return new Promise((resolve, reject) => {
             relatedForm.find('[name=filter]').empty()
