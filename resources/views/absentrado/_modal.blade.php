@@ -64,8 +64,8 @@
               <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1300px;">
                 <thead>
                   <tr>
-                    <th width="3%">KEY</th>
-                    <th width="8%">VALUE</th>
+                    <th width="3%">Judul</th>
+                    <th width="8%">Keterangan</th>
                     <th width="2%">Aksi</th>
                   </tr>
                 </thead>
