@@ -58,7 +58,7 @@
                 </select>
               </div>
             </div> 
-            <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   Status Karyawan <span class="text-danger">*</span>
@@ -69,7 +69,7 @@
                   <option value="">-- PILIH STATUS KARYAWAN --</option>
                 </select>
               </div>
-            </div>
+            </div> --}}
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
