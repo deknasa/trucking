@@ -394,6 +394,13 @@
           $.each(response.data, (index, value) => {
             if (value !== null && value !== 0 && value !== undefined) {
               form.find(`[name=${index}]`).attr('maxlength', value)
+
+              if(index == 'nohp'){
+                form.find(`[name=nohp]`).attr('maxlength', 13)
+              }
+              if(index == 'notelp'){
+                form.find(`[name=notelp]`).attr('maxlength', 13)
+              }
             }
           })
 
