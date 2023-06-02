@@ -634,7 +634,7 @@
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
 
-          $('#kodepengeluaranheader').val(response.data.pengeluarantrucking_id).trigger('change')
+          $('#pengeluaranheader_id').val(response.data.pengeluarantrucking_id).trigger('change')
 
           $('#jqGrid').jqGrid('setGridParam', {
             postData: {
