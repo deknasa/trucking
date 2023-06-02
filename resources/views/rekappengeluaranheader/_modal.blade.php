@@ -215,7 +215,7 @@
       initDatepicker()
       initLookup()
 
-      $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
+      // $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
     // getMaxLength(form)
   })
 
@@ -275,6 +275,7 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
   }
 
   function editRekapPengeluaranHeader(rekapPengeluaranId) {
@@ -298,6 +299,14 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()        
+        form.find(`[name="tgltransaksi"]`).prop('readonly', true)
+        form.find(`[name="tgltransaksi"]`).parent('.input-group').find('.input-group-append').remove()        
+        form.find(`[name="bank"]`).prop('readonly', true)
+        form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
+
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
