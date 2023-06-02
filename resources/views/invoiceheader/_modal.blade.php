@@ -213,7 +213,10 @@
         value: form.find(`[name="tglsampai"]`).val()
       })
       let selectedRowsInvoice = $("#tableInvoice").getGridParam("selectedRowIds");
-
+      data.push({
+        name: 'jumlahdetail',
+        value: selectedRowsInvoice
+      })
       $.each(selectedRowsInvoice, function(index, value) {
         dataInvoice = $("#tableInvoice").jqGrid("getLocalRow", value);
         let selectedExtra = dataInvoice.nominalextra
@@ -430,6 +433,15 @@
         clearSelectedRows()
         $('#gs_').prop('checked', false)
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="agen"]`).prop('readonly', true)
+        form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="jenisorder"]`).prop('readonly', true)
+        form.find(`[name="jenisorder"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="jenisorder"]`).parent('.input-group').find('.button-clear').remove()
+
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
