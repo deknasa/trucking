@@ -45,54 +45,6 @@
                 </div>
               </div>
 
-                
-              {{-- <div class="form-group col-md-6" style="display: none">
-                <div class="row" >
-                  <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">STATUS FORMAT <span class="text-danger">*</span> </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <select name="statusformat" disabled class="form-select select2bs4" style="width: 100%;">
-                      <option value="">-- PILIH STATUS FORMAT --</option>
-                    </select>
-                    <input type="text" name="statusformat_id" readonly hidden class="form-control">
-                  </div>
-                </div>
-              </div> --}}
-
-              <div class="form-group col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">servicein no bukti </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="servicein_nobukti" class="form-control servicein-lookup">
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">penerimaan stok nobukti </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="penerimaanstok_nobukti" class="form-control penerimaanstokheader-lookup">
-                  </div>
-                </div>
-              </div>
-              
-              <div class="form-group col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">pengeluaran stok nobukti </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="pengeluaranstok_nobukti" class="form-control pengeluaranstokheader-lookup">
-                  </div>
-                </div>
-              </div>
-                   
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
@@ -128,40 +80,82 @@
                   </div>
                 </div>
               </div>
-              
-              <div class="form-group col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">trado </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="trado" class="form-control trado-lookup">
-                    <input type="text" id="tradoId" name="trado_id" readonly hidden>
-                  </div>
-                </div>
-              </div>
-             
-              <div class="form-group col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">gudang </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="gudang" class="form-control gudang-lookup">
-                    <input type="text" id="gudangId" name="gudang_id" readonly hidden>
-                  </div>
-                </div>
-              </div>
 
-              <div class="form-group col-md-6">
+              <div class="col-12">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">gandengan </label>
+                  <div class="form-group col-md-6">
+                    <div class="row">
+                      <div class="col-12 col-sm-3 col-md-4">
+                        <label class="col-form-label">servicein no bukti </label>
+                      </div>
+                      <div class="col-12 col-sm-9 col-md-8">
+                        <input type="text" name="servicein_nobukti" class="form-control servicein-lookup">
+                      </div>
+                    </div>
                   </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="gandengan" class="form-control gandengan-lookup">
-                    <input type="text" id="gandenganId" name="gandengan_id" readonly hidden>
+    
+                  <div class="form-group col-md-6">
+                    <div class="row">
+                      <div class="col-12 col-sm-3 col-md-4">
+                        <label class="col-form-label">penerimaan stok nobukti </label>
+                      </div>
+                      <div class="col-12 col-sm-9 col-md-8">
+                        <input type="text" name="penerimaanstok_nobukti" class="form-control penerimaanstokheader-lookup">
+                      </div>
+                    </div>
                   </div>
+                  
+                  <div class="form-group col-md-6">
+                    <div class="row">
+                      <div class="col-12 col-sm-3 col-md-4">
+                        <label class="col-form-label">pengeluaran stok nobukti </label>
+                      </div>
+                      <div class="col-12 col-sm-9 col-md-8">
+                        <input type="text" name="pengeluaranstok_nobukti" class="form-control pengeluaranstokheader-lookup">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                   
+              <div class="col-12">
+                <div class="row">
+                  <div class="form-group col-md-6">
+                    <div class="row">
+                      <div class="col-12 col-sm-3 col-md-4">
+                        <label class="col-form-label">trado </label>
+                      </div>
+                      <div class="col-12 col-sm-9 col-md-8">
+                        <input type="text" name="trado" class="form-control trado-lookup">
+                        <input type="text" id="tradoId" name="trado_id" readonly hidden>
+                      </div>
+                    </div>
+                  </div>
+                 
+                  <div class="form-group col-md-6">
+                    <div class="row">
+                      <div class="col-12 col-sm-3 col-md-4">
+                        <label class="col-form-label">gudang </label>
+                      </div>
+                      <div class="col-12 col-sm-9 col-md-8">
+                        <input type="text" name="gudang" class="form-control gudang-lookup">
+                        <input type="text" id="gudangId" name="gudang_id" readonly hidden>
+                      </div>
+                    </div>
+                  </div>
+    
+                  <div class="form-group col-md-6">
+                    <div class="row">
+                      <div class="col-12 col-sm-3 col-md-4">
+                        <label class="col-form-label">gandengan </label>
+                      </div>
+                      <div class="col-12 col-sm-9 col-md-8">
+                        <input type="text" name="gandengan" class="form-control gandengan-lookup">
+                        <input type="text" id="gandenganId" name="gandengan_id" readonly hidden>
+                      </div>
+                    </div>
+                  </div>
+                  
                 </div>
               </div>
 
@@ -227,42 +221,41 @@
             <div class="row mt-5">
               <div class="col-md-12">
                   <div class="card" style="max-height:500px; overflow-y: scroll;">
-                      <div class="card-body">
-            <table class="table table-bordered table-bindkeys">
-              <thead>
-                <tr>
-                  <th style="width : 5%">No</th>
-                    <th style="width : 20%">stok</th>
-                    <th class="data_tbl tbl_vulkanisirke" style="width : 20px">vulkanisirke</th>
-                    <th style="width : 20%">keterangan</th>
-                    <th class="tbl_qty" style="width : 5%">qty</th>
-                    <th class="data_tbl tbl_harga" style="width : 10%">harga</th>
-                    <th class="data_tbl tbl_persentase" style="width : 5%">persentase discount</th>
-                    <th class="data_tbl tbl_total" style="width : 10%">Total</th>
-                    <th style="width : 5%">Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="table_body" class="form-group">
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="6" class="colspan"></td>
+                    <div class="card-body">
+                      <table class="table table-bordered table-bindkeys" style="width: 100%; min-width: 500px;">
+                        <thead>
+                          <tr>
+                            <th style="width:10%; max-width: 25px; max-width: 15px">No</th>
+                            <th style="width: 20%; min-width: 200px;">stok</th>
+                            <th class="data_tbl tbl_vulkanisirke" style="width: 20px">vulkanisirke</th>
+                            <th style="width: 20%; min-width: 200px;">keterangan</th>
+                            <th class="tbl_qty" style="width:10%; min-width: 100px">qty</th>
+                            <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
+                            <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
+                            <th class="data_tbl tbl_total" style="width: 20%; min-width: 200px;">Total</th>
+                            <th style="width:10%; max-width: 25px;max-width: 15px">Aksi</th>
+                          </tr>
+                        </thead>
+                        <tbody id="table_body" class="form-group">
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <td colspan="6" class="colspan"></td>
+          
+                            <td class="font-weight-bold  data_tbl tbl_total"> Total : </td>
+                            <td id="sumary" class="text-right font-weight-bold data_tbl tbl_total"> </td>
+                            <td>
+                              <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                            </td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-                  <td class="font-weight-bold  data_tbl tbl_total"> Total : </td>
-                  <td id="sumary" class="text-right font-weight-bold data_tbl tbl_total"> </td>
-                  <td>
-                    <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-        </div>
-    </div>
-</div>
-
-
-          </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
               <i class="fa fa-save"></i>
@@ -521,9 +514,9 @@
     
     
     $('[name=statuspotongretur]').parents('.form-group').hide()
-    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').show()
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
-    $('[name=servicein_nobukti]').parents('.form-group').hide()
+    $('[name=servicein_nobukti]').parents('.form-group').show()
     $('[name=supplier]').parents('.form-group').hide()
     $('[name=gudang]').parents('.form-group').hide()
     $('.tbl_qty').show()
@@ -917,7 +910,26 @@ $('.tbl_qty').show()
     sumary();
   }
 
-
+  function penerimaanOrServicein(el,disabled =true) {
+    if (disabled) {
+      switch (el) {
+        case 'penerimaan':
+            $('#crudForm').find(`[name="servicein_nobukti"]`).parents('.input-group').children().attr('disabled',true)
+            $('#crudForm').find(`[name="servicein_nobukti"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled',true)
+          break;
+        case 'servicein':
+            $('#crudForm').find(`[name="penerimaanstok_nobukti"]`).parents('.input-group').children().attr('disabled',true)
+            $('#crudForm').find(`[name="penerimaanstok_nobukti"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled',true)
+            default:
+           break;
+      }
+    }else{
+      $('#crudForm').find(`[name="servicein_nobukti"]`).parents('.input-group').children().attr('disabled',false)
+      $('#crudForm').find(`[name="servicein_nobukti"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled',false)
+      $('#crudForm').find(`[name="penerimaanstok_nobukti"]`).parents('.input-group').children().attr('disabled',false)
+      $('#crudForm').find(`[name="penerimaanstok_nobukti"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled',false)
+    }
+  }
   function lookupSelected(el){
     if (kodePengeluaranStok =="KOR") {
       // console.log(kodepengeluaranstok);
@@ -1420,6 +1432,7 @@ $('.tbl_qty').show()
           setSuplier(penerimaan.id);
           element.val(penerimaan.nobukti)
           element.data('currentValue', element.val())
+          penerimaanOrServicein('penerimaan')
           if (kodePengeluaranStok == "RTR") {
             getSpb(penerimaan.id)
           }
@@ -1438,6 +1451,7 @@ $('.tbl_qty').show()
         onClear: (element) => {
           element.val('')
           element.data('currentValue', element.val())
+          penerimaanOrServicein('penerimaan',false)
         }
       })
       $('.hutang-lookup').lookup({
@@ -1458,9 +1472,9 @@ $('.tbl_qty').show()
       $('.servicein-lookup').lookup({
         title: 'service in Lookup',
         fileName: 'serviceinheader',
-        onSelectRow: (gandengan, element) => {
-          element.val(gandengan.nobukti)
-          console.log(gandengan);
+        onSelectRow: (servicein, element) => {
+          penerimaanOrServicein('servicein')
+          element.val(servicein.nobukti)
           element.data('currentValue', element.val())
         },
         onCancel: (element) => {
@@ -1468,6 +1482,7 @@ $('.tbl_qty').show()
         },
         onClear: (element) => {
           element.val('')
+          penerimaanOrServicein('servicein',false)
           element.data('currentValue', element.val())
         }
       })
