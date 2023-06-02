@@ -379,6 +379,9 @@
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 },
+                data: {
+                    bank_id: $('#bankheader').val(),
+                },
                 success: response => {
                     bankId = response.data.bank_id
 

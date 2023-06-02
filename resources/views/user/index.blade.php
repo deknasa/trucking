@@ -84,12 +84,13 @@
             name: 'dashboard',
             align: 'left'
           },
-          {
-            label: 'ID KARYAWAN',
-            name: 'karyawan_id',
-            align: 'right',
-            hidden: 'true',
-          },
+
+          // {
+          //   label: 'ID KARYAWAN',
+          //   name: 'karyawan_id',
+          //   align: 'right'
+          // },
+
           {
             label: 'Cabang',
             name: 'cabang_id',

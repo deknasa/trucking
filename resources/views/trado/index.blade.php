@@ -49,10 +49,6 @@
             name: 'keterangan',
           },
           {
-            label: 'PLUS BORONGAN',
-            name: 'keterangan',
-          },
-          {
             label: 'NO POLISI',
             name: 'kodetrado',
           },
