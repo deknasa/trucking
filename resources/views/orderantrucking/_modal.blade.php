@@ -544,12 +544,14 @@
             containerId = response.data.container_id
             jenisorderId = response.data.jenisorder_id
 
-            if (index == 'tglbukti') {
-              element.val(dateFormat(value))
-            }
+            // if (index == 'tglbukti') {
+            //   element.val(dateFormat(value))
+            // }
 
             if (element.is('select')) {
               element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
             } else {
               element.val(value)
             }
