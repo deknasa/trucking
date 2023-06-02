@@ -1026,7 +1026,7 @@ function initSelect2(elements = null, isInsideModal = true) {
 			let option = {
 				width: "100%",
 				theme: "bootstrap4",
-				dropdownParent: isInsideModal ? $(element).parent() : "",
+				dropdownParent: isInsideModal ? $(element).parents('.modal-content') : "",
 			};
 
 			$(element)
@@ -1040,7 +1040,7 @@ function initSelect2(elements = null, isInsideModal = true) {
 			let option = {
 				width: "100%",
 				theme: "bootstrap4",
-				dropdownParent: isInsideModal ? $(element).parent() : "",
+				dropdownParent: isInsideModal ? $(element).parents('.modal-content') : "",
 			};
 
 			$(element)
