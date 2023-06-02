@@ -3,7 +3,7 @@
 <div class="form-group row">
   <label class="col-12 col-sm-2 col-form-label mt-2">kodepenerimaan stok<span class="text-danger">*</span></label>
   <div class="col-sm-4 mt-2">
-    <select name="kodepenerimaanheader" id="kodepenerimaanheader" class="form-select select2" style="width: 100%;">
+    <select name="penerimaanheader_id" id="penerimaanheader_id" class="form-select select2" style="width: 100%;">
       <option value="">-- PILIH Pengeluaran stok --</option>
       @foreach ($comboKodepenerimaan as $kodepenerimaan)
         <option @if ($kodepenerimaan['id'] == "1") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}}  </option>
@@ -87,7 +87,7 @@
     setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
-      loadDataHeader('penerimaantruckingheader',{penerimaanheader_id:$('#kodepenerimaanheader').val()})
+      loadDataHeader('penerimaantruckingheader',{penerimaanheader_id:$('#penerimaanheader_id').val()})
     })
 
     $("#jqGrid").jqGrid({
@@ -98,7 +98,7 @@
         postData: {
           tgldari:$('#tgldariheader').val() ,
           tglsampai:$('#tglsampaiheader').val(),
-          penerimaanheader_id:$('#kodepenerimaanheader').val(),
+          penerimaanheader_id:$('#penerimaanheader_id').val(),
         },
         datatype: "json",
         colModel: [{

@@ -357,7 +357,7 @@
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
 
-          $('#kodepenerimaanheader').val(response.data.penerimaantrucking_id).trigger('change')
+          $('#penerimaanheader_id').val(response.data.penerimaantrucking_id).trigger('change')
 
           $('#jqGrid').jqGrid('setGridParam', {
             postData: {
@@ -595,6 +595,9 @@
         $('#crudModal').modal('show')
         $('#crudForm [name=tglbukti]').attr('readonly', true)
         $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+        $('#crudForm [name=supirheader]').attr('readonly', true)
+        $('#crudForm [name=supir]').siblings('.input-group-append').remove()
+        $('#crudForm [name=supir]').siblings('.button-clear').remove()
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
