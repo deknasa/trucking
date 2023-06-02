@@ -185,8 +185,10 @@
           total: 'attributes.totalPages',
           records: 'attributes.totalRows',
         },
-        loadBeforeSend: (jqXHR) => {
+        loadBeforeSend: function(jqXHR) {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+          setGridLastRequest($(this), jqXHR)
         },
         ajaxRowOptions: {
           async: false,
@@ -258,6 +260,8 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
+          abortGridLastRequest($(this))
+          
           clearGlobalSearch($('#jqGrid'))
         },
       })

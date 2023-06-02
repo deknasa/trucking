@@ -155,8 +155,10 @@
         let rows = $(this).jqGrid('getGridParam', 'postData').limit
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
       },
-      loadBeforeSend: (jqXHR) => {
-        jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      loadBeforeSend: function(jqXHR) {
+        jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+        setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
           changeJqGridRowListText()
@@ -212,6 +214,8 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
+        abortGridLastRequest($(this))
+
         clearGlobalSearch($('#gandenganLookup'))
       },
     })

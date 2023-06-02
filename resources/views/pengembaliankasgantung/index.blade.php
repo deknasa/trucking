@@ -70,10 +70,6 @@
       loadDataHeader('pengembaliankasgantungheader')
     })
 
-    $('#crudModal').on('hidden.bs.modal', function() {
-      activeGrid = '#jqGrid'
-    })
-
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'pengembaliankasgantungheader' }}`,
         mtype: "GET",
@@ -267,8 +263,10 @@
           total: 'attributes.totalPages',
           records: 'attributes.totalRows',
         },
-        loadBeforeSend: (jqXHR) => {
-          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        loadBeforeSend: function(jqXHR) {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+          setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
           let nobukti = $('#jqGrid').jqGrid('getCell', id, 'penerimaan_nobukti')

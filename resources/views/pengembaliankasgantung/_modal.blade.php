@@ -376,38 +376,22 @@
     })
 
 
+    $(document).on("change", `[name=tgldari], [name=tglsampai]`, function(event) {
+      rangeKasgantung();
+    })
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
-
     setFormBindKeys(form)
-
-
     activeGrid = null
-
-    // getMaxLength(form)
-
     initLookup()
     initDatepicker()
-
-    setRange()
-
-
-
-    $(`[name=tgldari], [name=tglsampai]`)
-      .on("change", function() {
-        rangeKasgantung();
-
-      })
-
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
-    initDatepicker()
-
   })
 
 
@@ -803,6 +787,7 @@
                 $(this)
                   .find(`tr input[value=${selectedRowId}]`)
                   .prop("checked", true);
+                initAutoNumeric($(this).find(`td[aria-describedby="tablePengembalian_nominal"]`))
               });
           }, 100);
 
@@ -864,12 +849,13 @@
   function getDataPengembalian(dari, sampai, id) {
     aksi = $('#crudForm').data('action')
     data = {}
+    urlPengembalian = ''
     if (aksi == 'edit') {
       console.log(id)
       if (id != undefined) {
-        url = `${apiUrl}pengembaliankasgantungheader/${id}/edit/getpengembalian`
+        urlPengembalian = `${apiUrl}pengembaliankasgantungheader/${id}/edit/getpengembalian`
       } else {
-        url = `${apiUrl}pengembaliankasgantungheader/getkasgantung`
+        urlPengembalian = `${apiUrl}pengembaliankasgantungheader/getkasgantung`
         data = {
           limit: 0,
           tgldari: dari,
@@ -877,11 +863,11 @@
         }
       }
     } else if (aksi == 'delete') {
-      url = `${apiUrl}pengembaliankasgantungheader/${id}/delete/getpengembalian`
+      urlPengembalian = `${apiUrl}pengembaliankasgantungheader/${id}/delete/getpengembalian`
       attribut = 'disabled'
       forCheckbox = 'disabled'
     } else if (aksi == 'add') {
-      url = `${apiUrl}pengembaliankasgantungheader/getkasgantung`
+      urlPengembalian = `${apiUrl}pengembaliankasgantungheader/getkasgantung`
 
     }
 
@@ -892,7 +878,7 @@
     }
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: url,
+        url: urlPengembalian,
         dataType: "JSON",
         headers: {
           Authorization: `Bearer ${accessToken}`
@@ -979,12 +965,13 @@
           })
           loadPengembalianGrid();
           getDataPengembalian(response.data.tgldari, response.data.tglsampai, userId).then((response) => {
-            console.log(userId)
-            let selectedId = []
 
+            let selectedId = []
+            totalBayar = 0
             $.each(response.data, (index, value) => {
               if (value.pengembaliankasgantungheader_id != null) {
                 selectedId.push(value.id)
+                totalBayar += parseFloat(value.nominal)
               }
             })
             $('#tablePengembalian').jqGrid("clearGridData");
@@ -999,6 +986,7 @@
                 })
                 .trigger("reloadGrid");
             }, 100);
+            initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_nominal"]`).text(totalBayar))
           });
           resolve()
         }

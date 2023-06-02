@@ -485,3 +485,10 @@ html {
 .ui-tabs-panel {
 	font-family: 'Source Sans Pro' !important;
 }
+
+.dropzone .dz-preview .dz-image {
+	border-radius: 0 !important;
+}
+.dropzone .dz-preview .dz-details {
+	max-width: 200px
+}

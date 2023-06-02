@@ -74,7 +74,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Default <span class="text-danger">*</span>
+                  Default 
                 </label>
               </div>
 
@@ -99,8 +99,8 @@
               <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1300px;">
                 <thead>
                   <tr>
-                    <th width="3%">KEY</th>
-                    <th width="8%">VALUE</th>
+                    <th width="3%">KEY <span class="text-danger">*</span></th>
+                    <th width="8%">VALUE <span class="text-danger">*</span></th>
                     <th width="2%">Aksi</th>
                   </tr>
                 </thead>
@@ -270,6 +270,7 @@
 
     getMaxLength(form)
     initLookup()
+    initSelect2(form.find('.select2bs4'), true)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -425,7 +426,7 @@
         },
         success: response => {
           response.data.forEach(Default => {
-            let option = new Option(Default.text, Default.id)
+            let option = new Option(Default.text, Default.text)
 
             relatedForm.find('[name=default]').append(option).trigger('change')
           });

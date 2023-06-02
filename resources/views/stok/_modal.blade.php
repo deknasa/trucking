@@ -122,11 +122,23 @@
                     <label class="col-form-label">Upload Foto Stok</label>
                   </div>
                 </div>
-                <div class="dropzone" data-field="gambar">
+                <div class="dropzone" id="my-dropzone" style="padding: 0; min-width: 202px !important; min-height: 234px !important"></div>
+
+                <div class="dz-preview dz-file-preview">
+                  <div class="dz-details" >
+                    <img data-dz-thumbnail style="width:100%" />
+                  </div>
+                </div>
+                <!-- <div class="dropzone" data-field="gambar" style="padding: 0; min-width: 202px !important; min-height: 234px !important">
                   <div class="fallback">
                     <input name="gambar" type="file" />
                   </div>
-                </div>
+                  <div class="dz-preview dz-file-preview">
+                    <div class="dz-details" style="display: flex;">
+                      <img data-dz-thumbnail width="100%" />
+                    </div>
+                  </div>
+                </div> -->
               </div>
             </div>
 
@@ -300,19 +312,19 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise
-    .all([
-      setStatusAktifOptions(form),
-    ])
-    .then(() => {
-      showDefault(form)
-        .then(() => {
-          $('#crudModal').modal('show')
-          disabledHirarkiKelompok()
-        })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
-    })
+      .all([
+        setStatusAktifOptions(form),
+      ])
+      .then(() => {
+        showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+            disabledHirarkiKelompok()
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
 
     initDropzone(form.data('action'))
     initAutoNumeric(form.find(`[name="qtymin"]`))
@@ -513,6 +525,9 @@
       if (!element.dropzone) {
         let newDropzone = new Dropzone(element, {
           url: 'test',
+          previewTemplate: document.querySelector('.dz-preview').innerHTML,
+          thumbnailWidth: null,
+          thumbnailHeight: null,
           autoProcessQueue: false,
           addRemoveLinks: true,
           acceptedFiles: 'image/*',
@@ -571,15 +586,15 @@
     }
   }
 
-  function disabledHirarkiKelompok(middle=false) {
-    
+  function disabledHirarkiKelompok(middle = false) {
+
     let kategori = $('#crudForm').find(`[name="kategori"]`).parents('.input-group').children()
     kategori.attr('disabled', true)
     kategori.val('')
     kategori.find('.lookup-toggler').attr('disabled', true)
     $('#kategoriId').attr('disabled', true);
     $('#subkelompokId').val('');
-    
+
     if (middle) {
       return "oke";
     }
@@ -590,8 +605,8 @@
     subkelompok.find('.lookup-toggler').attr('disabled', true)
     $('#subkelompokId').attr('disabled', true);
     $('#subkelompokId').val('');
-    
-    
+
+
   }
 
   function enabledSubKelompok() {
@@ -602,6 +617,7 @@
     $('#subkelompokId').attr('disabled', false);
     $('#subkelompokId').val('');
   }
+
   function enabledKategori() {
     let kategori = $('#crudForm').find(`[name="kategori"]`).parents('.input-group').children()
     kategori.attr('disabled', false)
