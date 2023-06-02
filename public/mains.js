@@ -1021,21 +1021,28 @@ $(document).on("input", ".numbernoseparate", function () {
 
 /* Select2: Autofocus search input on open */
 function initSelect2(elements = null, isInsideModal = true) {
-	let option = {
-		width: "100%",
-		theme: "bootstrap4",
-		dropdownParent: isInsideModal ? $("#crudModal") : "",
-	};
-
 	if (elements === null) {
-		$(document)
-			.find("select")
-			.select2(option)
-			.on("select2:open", function (e) {
-				document.querySelector(".select2-search__field").focus();
-			});
+		$(document).find("select").each((index, element) => {
+			let option = {
+				width: "100%",
+				theme: "bootstrap4",
+				dropdownParent: isInsideModal ? $(element).parent() : "",
+			};
+
+			$(element)
+				.select2(option)
+				.on("select2:open", function (e) {
+					document.querySelector(".select2-search__field").focus();
+				});
+		})
 	} else {
 		$.each(elements, (index, element) => {
+			let option = {
+				width: "100%",
+				theme: "bootstrap4",
+				dropdownParent: isInsideModal ? $(element).parent() : "",
+			};
+
 			$(element)
 				.select2(option)
 				.on("select2:open", function (e) {
