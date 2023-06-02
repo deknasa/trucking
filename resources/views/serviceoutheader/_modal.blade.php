@@ -61,29 +61,40 @@
                         </div>
 
 
-                        <div class="table-responsive table-scroll ">
-                            <table class="table table-bordered table-bindkeys" id="detailList" style="width:1350px">
-                                <thead>
-                                    <tr>
-                                        <th width="1%">No</th>
-                                        <th width="5%">Nobukti Servicein</th>
-                                        <th width="5%">Keterangan</th>
-                                        <th width="1%">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        <div class="row mt-5">
+                            <div class="col-md-12">
+                                <div class="card" style="max-height:500px; overflow-y: scroll;">
+                                    <div class="card-body">
+                                    
+                                        <div class="table-responsive table-scroll ">
+                                            <table class="table table-bordered table-bindkeys" id="detailList" >
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:5%; max-width: 25px;min-width: 15px">No</th>
+                                                        <th style="width:40%;">Nobukti Servicein</th>
+                                                        <th style="width:40%;">Keterangan</th>
+                                                        <th style="width:5%; max-width: 25px;min-width: 15px">Aksi</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
 
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="3"></td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="3"></td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                     <div class="modal-footer justify-content-start">
                         <button id="btnSubmit" class="btn btn-primary">
