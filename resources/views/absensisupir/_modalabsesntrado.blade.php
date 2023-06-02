@@ -248,6 +248,8 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
+          abortGridLastRequest($(this))
+          
           clearGlobalSearch($('#detail'))
         },
       })

@@ -54,7 +54,7 @@
               <div class="form-group col-sm-6 row">
                 <label class="col-sm-4 col-form-label">Telp <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" name="telp" class="form-control numbernoseparate">
+                  <input type="text" name="telp" class="form-control numbernoseparate" maxlength="13">
                 </div>
               </div>
 
@@ -166,7 +166,7 @@
               <div class="col-md-4">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload Foto Supir</label>
+                    <label class="col-form-label">Upload Foto Supir <span class="text-danger">*</span></label>
                   </div>
                 </div>
                 <div class="dropzone dropzoneImg" data-field="photosupir">
@@ -179,7 +179,7 @@
               <div class="col-md-4">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload Foto KTP</label>
+                    <label class="col-form-label">Upload Foto KTP <span class="text-danger">*</span></label>
                   </div>
                 </div>
                 <div class="dropzone dropzoneImg" data-field="photoktp">
@@ -192,7 +192,7 @@
               <div class="col-md-4">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload Foto SIM</label>
+                    <label class="col-form-label">Upload Foto SIM <span class="text-danger">*</span></label>
                   </div>
                 </div>
                 <div class="dropzone dropzoneImg" data-field="photosim">
@@ -207,7 +207,7 @@
               <div class="col-md-4">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload Foto KK</label>
+                    <label class="col-form-label">Upload Foto KK <span class="text-danger">*</span></label>
                   </div>
                 </div>
                 <div class="dropzone dropzoneImg" data-field="photokk">
@@ -220,7 +220,7 @@
               <div class="col-md-4">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload Foto SKCK</label>
+                    <label class="col-form-label">Upload Foto SKCK <span class="text-danger">*</span></label>
                   </div>
                 </div>
                 <div class="dropzone dropzoneImg" data-field="photoskck">
@@ -233,7 +233,7 @@
               <div class="col-md-4">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload Foto Domisili</label>
+                    <label class="col-form-label">Upload Foto Domisili <span class="text-danger">*</span></label>
                   </div>
                 </div>
                 <div class="dropzone dropzoneImg" data-field="photodomisili">
@@ -246,7 +246,7 @@
               <div class="col-md-4">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload Foto Vaksin</label>
+                    <label class="col-form-label">Upload Foto Vaksin <span class="text-danger">*</span></label>
                   </div>
                 </div>
                 <div class="dropzone dropzoneImg" data-field="photovaksin">
@@ -259,7 +259,7 @@
               <div class="col-md-4">
                 <div class="row mb-2">
                   <div class="col">
-                    <label class="col-form-label">Upload surat perjanjian</label>
+                    <label class="col-form-label">Upload surat perjanjian <span class="text-danger">*</span></label>
                   </div>
                 </div>
                 <div class="dropzone dropzonePdf" data-field="pdfsuratperjanjian">
@@ -430,7 +430,7 @@
     initDropzonePdf(form.data('action'))
     initLookup()
     initDatepicker()
-    initSelect2()
+    initSelect2(form.find('.select2bs4'), true)
     form.find('[name]').removeAttr('disabled')
   }
 
@@ -462,7 +462,7 @@
             initDropzonePdf(form.data('action'), supir)
             initLookup()
             initDatepicker()
-            initSelect2()
+            initSelect2(form.find('.select2bs4'), true)
             form.find('[name]').removeAttr('disabled')
           })
           .then(() => {

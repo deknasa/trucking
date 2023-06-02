@@ -235,19 +235,19 @@
 
 
             <div class="table-scroll table-responsive">
-              <table class="table table-bordered table-bindkeys" style="width: 950;">
+              <table class="table table-bordered table-bindkeys" style="width: 100%; min-width: 500px;">
                 <thead>
                   <tr>
-                    <th style="width: 10px">No</th>
-                    <th style="width: 100px">stok <span class="text-danger">*</span> </th>
+                    <th style="width:10%; max-width: 25px;max-width: 15px">No</th>
+                    <th style="width: 20%; min-width: 200px;">stok <span class="text-danger">*</span> </th>
                     <th class="data_tbl tbl_vulkanisirke" style="width: 10px">vulkanisir ke</th>
-                    <th style="width:100px">keterangan <span class="text-danger">*</span> </th>
-                    <th class="data_tbl tbl_qty" style="width: 10px">qty</th>
-                    <th class="data_tbl tbl_harga" style="width:100px">harga</th>
-                    <th class="data_tbl tbl_penerimaanstok_nobukti" style="width:100px">Penerimaanstoknobukti</th>
-                    <th class="data_tbl tbl_persentase" style="width :10px">persentase discount</th>
-                    <th class="data_tbl tbl_total" style="width: 100px">Total</th>
-                    <th style="width: 10px">Aksi</th>
+                    <th style="width: 20%; min-width: 200px;">keterangan <span class="text-danger">*</span> </th>
+                    <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty</th>
+                    <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
+                    <th class="data_tbl tbl_penerimaanstok_nobukti"  style="width: 20%; min-width: 200px;">Penerimaanstoknobukti</th>
+                    <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
+                    <th class="data_tbl tbl_total"  style="width: 20%; min-width: 200px;">Total</th>
+                    <th style="width:10%; max-width: 25px;max-width: 15px">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -486,6 +486,7 @@
     // $('[name=supplier]').val('').attr('readonly', false);
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
+    $('#addRow').show()
   }
 
   function tampilanpo() {
@@ -515,6 +516,7 @@
     // $('[name=supplier]').val('').attr('readonly', false);
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
+    $('#addRow').show()
   }
 
   function tampilanpbt() {
@@ -550,6 +552,7 @@
         showDialog(error.statusText)
       }
     })
+    // $('#addRow').hide()
   }
 
   function tampilanpgt() {
@@ -571,6 +574,7 @@
     $('[name=gandenganke]').parents('.form-group').show()
     $('.tbl_penerimaanstok_nobukti').hide();
 
+    $('#addRow').show()
   }
 
   function tampilankst() {
@@ -603,6 +607,8 @@
     $('.tbl_total').hide();
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
+    
+    $('#addRow').show()
   }
 
   function tampilanpst() {
@@ -624,6 +630,8 @@
 
     $('.tbl_penerimaanstok_nobukti').show();
     $('.colspan').attr('colspan', 7);
+    
+    $('#addRow').show()
   }
 
   function tampilanall() {
@@ -647,6 +655,7 @@
     // $('[name=supplier]').attr('readonly', false);
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
+    $('#addRow').show()
   }
 
   function setSuplier(penerimaan_id) {
@@ -784,7 +793,11 @@
         })
         sumary()
         setTampilanForm()
-
+        if (KodePenerimaanId === 'SPB') {
+          $('#addRow').hide()
+        }else{
+          $('#addRow').show()
+        }
       },
       error: error => {
         showDialog(error.statusText)
@@ -1021,7 +1034,14 @@
     activeGrid = null
     initDatepicker()
     initLookup()
-
+    if( form.data('action') !== 'add'){
+      let penerimaanstok = $('#crudForm').find(`[name="penerimaanstok"]`).parents('.input-group').children()
+      penerimaanstok.attr('disabled', true)
+      penerimaanstok.find('.lookup-toggler').attr('disabled', true)
+      $('#penerimaanstokId').attr('readonly', true);
+      console.log($('#crudForm').find(`[name="penerimaanstok"]`).val());
+    }
+      
     getMaxLength(form)
   })
 
@@ -1306,6 +1326,9 @@
       }
     })
   }
+  function disabledkodepenerimaanedit() {
+    
+  }
 
   function showPenerimaanstokHeader(form, penerimaanStokHeaderId) {
     return new Promise((resolve, reject) => {
@@ -1429,6 +1452,12 @@
           })
           sumary()
           setKodePenerimaan(response.data.penerimaanstok);
+         
+          if (KodePenerimaanId === 'SPB') {
+            $('#addRow').hide()
+          }else{
+            $('#addRow').show()
+          }
           resolve()
         }
       })
@@ -1564,6 +1593,7 @@
 
       },
       onSelectRow: (penerimaan, element) => {
+        // console.log('asdasdsa');
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         if (penerimaanstokId == (3||6)) {//spb beli /reuse
           setSuplier(penerimaan.id);
@@ -1572,13 +1602,7 @@
           // console.log(penerimaan.supplier,
           // penerimaan.nobon);
         }
-        // if (penerimaanstokId == 6) {//spbs /reuse
-        //   setSuplier(penerimaan.id);
-        //   $('[name=nobon]').val(penerimaan.nobon)
-        //   setDetail(penerimaan.id);
-        //   // console.log(penerimaan.supplier,
-        //   // penerimaan.nobon);
-        // }
+        
         element.val(penerimaan.nobukti)
       },
       onCancel: (element) => {

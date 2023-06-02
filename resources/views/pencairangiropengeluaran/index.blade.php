@@ -230,6 +230,7 @@
         //         }
         //     })
         // })
+        let form = $('#crudForm');
 
         $("#jqGrid").jqGrid({
                 url: `{{ config('app.api_url') . 'pencairangiropengeluaranheader' }}`,
@@ -407,8 +408,20 @@
                     total: 'attributes.totalPages',
                     records: 'attributes.totalRows',
                 },
-                loadBeforeSend: (jqXHR) => {
-                    jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+                loadBeforeSend: function(jqXHR) {
+                    jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+                    setGridLastRequest($(this), jqXHR)
+                },
+                loadError: function (xhr, status, error) {
+                    if (xhr.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid');
+                        $('.invalid-feedback').remove();
+
+                        setErrorMessages(form, xhr.responseJSON.errors);
+                    } else {
+                        showDialog(xhr.statusText);
+                    }
                 },
                 onSelectRow: function(id, status) {
                     let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')

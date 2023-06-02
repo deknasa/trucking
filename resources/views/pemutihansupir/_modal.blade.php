@@ -488,6 +488,10 @@
           $('#crudModal').modal('show')
           $('#crudForm [name=tglbukti]').attr('readonly', true)
           $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+          $('#crudForm [name=supir]').siblings('.input-group-append').remove()
+          $('#crudForm [name=supir]').siblings('.button-clear').remove()
+          $('#crudForm [name=bank]').siblings('.button-clear').remove()
+          $('#crudForm [name=bank]').siblings('.input-group-append').remove()
         })
         .finally(() => {
           $('.modal-loader').addClass('d-none')
@@ -633,8 +637,10 @@
           total: 'attributes.totalPages',
           records: 'attributes.totalRows',
         },
-        loadBeforeSend: (jqXHR) => {
-          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        loadBeforeSend: function(jqXHR) {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+          setGridLastRequest($(this), jqXHR)
         },
 
         onSelectRow: function(id) {
@@ -688,6 +694,8 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
+          abortGridLastRequest($(this))
+          
           clearGlobalSearch($('#posting'))
         },
       })
@@ -814,8 +822,10 @@
           total: 'attributesNon.totalPages',
           records: 'attributesNon.totalRows',
         },
-        loadBeforeSend: (jqXHR) => {
-          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        loadBeforeSend: function(jqXHR) {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+          setGridLastRequest($(this), jqXHR)
         },
 
         onSelectRow: function(id) {
@@ -869,6 +879,8 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
+          abortGridLastRequest($(this))
+          
           clearGlobalSearch($('#nonposting'))
         },
       })

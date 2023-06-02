@@ -935,8 +935,10 @@
                     total: 'attributes.totalPages',
                     records: 'attributes.totalRows',
                 },
-                loadBeforeSend: (jqXHR) => {
-                    jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+                loadBeforeSend: function(jqXHR) {
+                    jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+                    setGridLastRequest($(this), jqXHR)
                 },
 
                 onSelectRow: function(id) {
@@ -1080,6 +1082,8 @@
             ])
             .then(() => {
                 $('#crudModal').modal('show')
+                form.find(`[name="tglbukti"]`).prop('readonly', true)
+                form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -1106,6 +1110,8 @@
             ])
             .then(() => {
                 $('#crudModal').modal('show')
+                form.find(`[name="tglbukti"]`).prop('readonly', true)
+                form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -1143,10 +1149,6 @@
     }
 
     function showProsesGajiSupir(form, gajiId, aksi) {
-
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-
         $.ajax({
             url: `${apiUrl}prosesgajisupirheader/${gajiId}`,
             method: 'GET',
@@ -1196,6 +1198,8 @@
                 $('#rekapRincian').jqGrid('setGridParam', {
                     url: `${apiUrl}prosesgajisupirheader/${gajiId}/getEdit`,
                     postData: {
+                        tgldari: $('#crudForm').find('[name=tgldari]').val(),
+                        tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
                         sortIndex: sortnameRincian
                     },
                     datatype: "json"
@@ -1303,7 +1307,38 @@
         let tglDari = form.find(`[name="tgldari"]`).val()
         let tglSampai = form.find(`[name="tglsampai"]`).val()
         let aksi = form.data('action')
-        selectAllRows(tglDari, tglSampai, aksi)
+        getAllTrip()
+            .then((response) => {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+
+                selectedRows = response.data.map((data) => data.idric)
+                selectedBorongan = response.data.map((data) => data.borongan)
+                selectedJalan = response.data.map((data) => data.uangjalan)
+                selectedKomisi = response.data.map((data) => data.komisisupir)
+                selectedMakan = response.data.map((data) => data.uangmakanharian)
+                selectedPP = response.data.map((data) => data.potonganpinjaman)
+                selectedPS = response.data.map((data) => data.potonganpinjamansemua)
+                selectedDeposito = response.data.map((data) => data.deposito)
+                selectedBBM = response.data.map((data) => data.bbm)
+                selectedRIC = response.data.map((data) => data.nobuktiric)
+                selectedSupir = response.data.map((data) => data.supir_id)
+
+                $('#rekapRincian').jqGrid('setGridParam', {
+                    url: `${apiUrl}prosesgajisupirheader/${response.url}`,
+                    postData: {
+                        tgldari: $('#crudForm').find('[name=tgldari]').val(),
+                        tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                        aksi: aksi
+                    },
+                    datatype: "json"
+                }).trigger('reloadGrid');
+                countNominal()
+            })
+            .catch((errors) => {
+                console.log(errors)
+                setErrorMessages($('#crudForm'), errors)
+            })
     })
 
     async function getEdit(gajiId) {
@@ -1550,6 +1585,50 @@
         $('#rekapRincian').trigger('reloadGrid')
     }
 
+    function getAllTrip() {
+        if ($(`#crudForm`).data('action') == 'edit') {
+            ricId = $(`#crudForm`).find(`[name="id"]`).val()
+            urlTrip = `${ricId}/getEdit`
+        } else {
+            urlTrip = 'getRic'
+        }
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}prosesgajisupirheader/${urlTrip}`,
+                method: 'GET',
+                dataType: 'JSON',
+                data: {
+                    limit: 0,
+                    tgldari: $('#crudForm').find('[name=tgldari]').val(),
+                    tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                    aksi: $(`#crudForm`).data('action'),
+                    sortIndex: sortnameRincian,
+                },
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: (response) => {
+                    response.url = urlTrip
+                    resolve(response)
+                },
+                error: error => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+
+
+                        errors = error.responseJSON.errors
+                        reject(errors)
+
+                    } else {
+                        showDialog(error.statusText)
+                    }
+                }
+            })
+        })
+    }
+
     function selectAllRows(tglDari, tglSampai, aksi) {
         if (aksi == 'edit') {
             ricId = $(`#crudForm`).find(`[name="id"]`).val()
@@ -1563,8 +1642,8 @@
             dataType: 'JSON',
             data: {
                 limit: 0,
-                dari: $('#crudForm').find('[name=tgldari]').val(),
-                sampai: $('#crudForm').find('[name=tglsampai]').val(),
+                tgldari: $('#crudForm').find('[name=tgldari]').val(),
+                tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
                 aksi: aksi,
                 sortIndex: sortnameRincian,
             },
@@ -1587,8 +1666,8 @@
                 $('#rekapRincian').jqGrid('setGridParam', {
                     url: `${apiUrl}prosesgajisupirheader/${url}`,
                     postData: {
-                        dari: $('#crudForm').find('[name=tgldari]').val(),
-                        sampai: $('#crudForm').find('[name=tglsampai]').val(),
+                        tgldari: $('#crudForm').find('[name=tgldari]').val(),
+                        tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
                         aksi: aksi
                     },
                     datatype: "json"

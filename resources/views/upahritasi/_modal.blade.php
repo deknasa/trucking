@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -75,7 +75,7 @@
               </div>
             </div>
 
-            
+
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -143,7 +143,7 @@
                       <input type="hidden" name="container_id[]">
                       <input type="text" name="container[]" class="form-control container-lookup">
                     </td>
-                   
+
                     <td>
                       <input type="text" name="nominalsupir[]" class="form-control autonumeric">
                     </td>
@@ -163,7 +163,7 @@
                     <td>
                       <p class="text-right font-weight-bold autonumeric" id="nominalSupir"></p>
                     </td>
-                    
+
                     <td></td>
                     {{-- <td>
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
@@ -206,7 +206,7 @@
       setNominalSupir()
     })
 
-   
+
 
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
@@ -242,9 +242,7 @@
         data.filter((row) => row.name === 'liter[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="liter[]"]`)[index])
       })
 
-      $('#crudForm').find(`[name="jarak`).each((index, element) => {
-        data.filter((row) => row.name === 'jarak')[index].value = AutoNumeric.getNumber($(`#crudForm [name="jarak`)[index])
-      })
+      data.filter((row) => row.name === 'jarak')[0].value = AutoNumeric.getNumber($(`#crudForm [name="jarak"]`)[0])
 
 
       data.push({
@@ -310,8 +308,8 @@
           $('#jqGrid').trigger('reloadGrid', {
             page: response.data.page
           }).trigger('reloadGrid');
-          
-          if(id == 0){
+
+          if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
 
@@ -344,7 +342,7 @@
     activeGrid = null
 
     getMaxLength(form)
-    initSelect2()
+    initSelect2(form.find('.select2bs4'), true)
     initDatepicker()
     initLookup()
   })
@@ -366,7 +364,7 @@
     new AutoNumeric('#nominalSupir').set(total)
   }
 
-  
+
 
   function createUpahRitasi() {
     let form = $('#crudForm')
@@ -388,11 +386,11 @@
     $('#crudForm').find('[name=tglakhirberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     Promise
-    .all([
+      .all([
         setStatusAktifOptions(form),
         setStatusLuarKotaOptions(form)
       ])
-    .then(() => {
+      .then(() => {
         showDefault(form)
           .then(() => {
             $('#crudModal').modal('show')
@@ -402,8 +400,9 @@
           })
       })
     setNominalSupir()
-    // initAutoNumeric(form.find(`[name="jarak"]`))
-    // initAutoNumeric(form.find(`[name="jarak"]`))
+    initAutoNumeric(form.find(`[name="jarak"]`), {
+      minimumValue: 0
+    })
   }
 
   function editUpahRitasi(id) {
@@ -603,15 +602,17 @@
             if (index == 'zona') {
               element.data('current-value', value)
             }
-            
-          
 
-        })
 
-       
-        $.each(response.detail, (index, detail) => {
-          // $.each(response.data.upahritasi_rincian, (index, detail) => {
-          let detailRow = $(`
+          })
+
+          initAutoNumeric(form.find(`[name="jarak"]`), {
+            minimumValue: 0
+          })
+
+          $.each(response.detail, (index, detail) => {
+            // $.each(response.data.upahritasi_rincian, (index, detail) => {
+            let detailRow = $(`
             <tr>
               <td></td>
               <td>
@@ -628,54 +629,28 @@
               </td>
               
             </tr>
-          `)
-
-          console.log('response', response.detail);
-          $.each(response.detail, (index, detail) => {
-            // $.each(response.data.upahritasi_rincian, (index, detail) => {
-            let detailRow = $(`
-              <tr>
-                <td></td>
-                <td>
-                  <input type="hidden" name="container_id[]">
-                  <input type="text" name="container[]" readonly data-current-value="${detail.container}" class="form-control container-lookup">
-                </td>
-                
-                <td>
-                  <input type="text" name="nominalsupir[]" class="form-control autonumeric" data-current-value="${detail.nominalsupir}">
-                </td>
-                
-                <td>
-                  <input type="text" name="liter[]" class="form-control autonumeric" data-current-value="${detail.liter}">
-                </td>
-                
-              </tr>
             `)
-
-
             detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
             detailRow.find(`[name="container[]"]`).val(detail.container)
             detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
-            detailRow.find(`[name="liter[]"]`).val(detail.liter);
-
-
-          initAutoNumeric(detailRow.find('.autonumeric'))
-          setNominalSupir()
-        })
+            detailRow.find(`[name="liter[]"]`).val(detail.liter)
 
             $('#detailList tbody').append(detailRow)
 
-            initAutoNumeric(detailRow.find('.autonumeric'))
+            initAutoNumeric(detailRow.find('.autonumeric'), {
+              minimumValue: 0
+            })
             setNominalSupir()
           })
 
-          setupRowShow(userId);
+          // setupRowShow(userId);
           setRowNumbers()
 
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
           }
+
           resolve()
         }
       })
@@ -684,16 +659,16 @@
 
   function setUpRow() {
     $.ajax({
-        url: `${apiUrl}upahritasirincian/setuprow`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.detail, (index, detail) => {
-            
-            let detailRow = $(`
+      url: `${apiUrl}upahritasirincian/setuprow`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.detail, (index, detail) => {
+
+          let detailRow = $(`
             <tr>
               <td></td>
               <td>
@@ -711,32 +686,35 @@
               
             </tr>
             `)
-            detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
-            detailRow.find(`[name="container[]"]`).val(detail.container)
-            detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
-            detailRow.find(`[name="liter[]"]`).val(detail.liter)
-            initAutoNumeric(detailRow.find('.autonumeric'))
-            setNominalSupir()
-            $('#detailList tbody').append(detailRow)
-            
+          detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+          detailRow.find(`[name="container[]"]`).val(detail.container)
+          detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
+          detailRow.find(`[name="liter[]"]`).val(detail.liter)
+          initAutoNumeric(detailRow.find('.autonumeric'), {
+            minimumValue: 0
           })
-          setRowNumbers()
-        }
-      })
-   
+          setNominalSupir()
+          $('#detailList tbody').append(detailRow)
+
+        })
+        setRowNumbers()
+      }
+    })
+
   }
+
   function setupRowShow(id) {
     $.ajax({
-        url: `${apiUrl}upahritasirincian/setuprowshow/${id}`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.detail, (index, detail) => {
-            
-            let detailRow = $(`
+      url: `${apiUrl}upahritasirincian/setuprowshow/${id}`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $.each(response.detail, (index, detail) => {
+
+          let detailRow = $(`
             <tr>
               <td></td>
               <td>
@@ -754,17 +732,17 @@
               
             </tr>
             `)
-            detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
-            detailRow.find(`[name="container[]"]`).val(detail.container)
-            initAutoNumeric(detailRow.find('.autonumeric'))
-            setNominalSupir()
-            $('#detailList tbody').append(detailRow)
-            
-          })
-          setRowNumbers()
-        }
-      })
-   
+          detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+          detailRow.find(`[name="container[]"]`).val(detail.container)
+          initAutoNumeric(detailRow.find('.autonumeric'))
+          setNominalSupir()
+          $('#detailList tbody').append(detailRow)
+
+        })
+        setRowNumbers()
+      }
+    })
+
   }
 
   function addRow() {
@@ -825,7 +803,7 @@
     setRowNumbers()
     setNominalSupir()
   }
-  
+
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
@@ -843,8 +821,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
           })
@@ -871,7 +848,7 @@
         $('#crudForm [name=parent_id]').first().val(upahritasi.id)
         element.data('currentValue', element.val())
         let form = $('#crudForm')
-        showUpahRitasi(form,upahritasi.id)
+        showUpahRitasi(form, upahritasi.id)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))

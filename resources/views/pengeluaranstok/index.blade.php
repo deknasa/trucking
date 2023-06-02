@@ -90,49 +90,49 @@
               return ` title="${Format.MEMO}"`
             }
           },
-          {
-            label: 'status hitung stok',
-            name: 'statushitungstok',
-            stype: 'select',
-            searchoptions: {
+          // {
+          //   label: 'status hitung stok',
+          //   name: 'statushitungstok',
+          //   stype: 'select',
+          //   searchoptions: {
 
-              value: `<?php
-                      $i = 1;
+          //     value: `<?php
+          //             $i = 1;
 
-                      foreach ($data['combohitungstok'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combohitungstok'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
+          //             foreach ($data['combohitungstok'] as $status) :
+          //               echo "$status[param]:$status[parameter]";
+          //               if ($i !== count($data['combohitungstok'])) {
+          //                 echo ";";
+          //               }
+          //               $i++;
+          //             endforeach
 
-                      ?>
-              `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusHitungStok = JSON.parse(value)
+          //             ?>
+          //     `,
+          //     dataInit: function(element) {
+          //       $(element).select2({
+          //         width: 'resolve',
+          //         theme: "bootstrap4"
+          //       });
+          //     }
+          //   },
+          //   formatter: (value, options, rowData) => {
+          //     let statusHitungStok = JSON.parse(value)
 
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusHitungStok.WARNA}; color: #fff;">
-                  <span>${statusHitungStok.SINGKATAN}</span>
-                </div>
-              `)
+          //     let formattedValue = $(`
+          //       <div class="badge" style="background-color: ${statusHitungStok.WARNA}; color: #fff;">
+          //         <span>${statusHitungStok.SINGKATAN}</span>
+          //       </div>
+          //     `)
 
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusHitungStok = JSON.parse(rowObject.statushitungstok)
+          //     return formattedValue[0].outerHTML
+          //   },
+          //   cellattr: (rowId, value, rowObject) => {
+          //     let statusHitungStok = JSON.parse(rowObject.statushitungstok)
 
-              return ` title="${statusHitungStok.MEMO}"`
-            }
-          },
+          //     return ` title="${statusHitungStok.MEMO}"`
+          //   }
+          // },
           {
             label: 'modifiedby',
             name: 'modifiedby',
@@ -182,8 +182,10 @@
           total: 'attributes.totalPages',
           records: 'attributes.totalRows',
         },
-        loadBeforeSend: (jqXHR) => {
+        loadBeforeSend: function(jqXHR) {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+          setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
           activeGrid = $(this)
@@ -244,6 +246,8 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
+          abortGridLastRequest($(this))
+          
           clearGlobalSearch($('#jqGrid'))
         },
       })

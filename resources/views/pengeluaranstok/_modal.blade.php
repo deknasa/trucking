@@ -41,11 +41,13 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">coa </label>
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  COA <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="coa" class="form-control akunpusat-lookup">
+                <input type="hidden" name="coa">
+                <input type="text" name="keterangancoa" class="form-control akunpusat-lookup">
               </div>
             </div>
 
@@ -203,7 +205,7 @@
 
     activeGrid = null
     initLookup()
-    initSelect2();
+    initSelect2(form.find('.select2bs4'), true);
     getMaxLength(form)
   })
 
@@ -446,13 +448,15 @@
         }
       },      
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
+        $('#crudForm [name=coa]').first().val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        $('#crudForm [name=coa]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }

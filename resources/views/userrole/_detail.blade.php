@@ -74,8 +74,10 @@
         onSelectRow: function(id) {
           activeGrid = $(this)
         },
-        loadBeforeSend: (jqXHR) => {
-          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        loadBeforeSend: function(jqXHR) {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+          setGridLastRequest($(this), jqXHR)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -87,7 +89,9 @@
   }
 
   function loadDetailData(id) {
-    $('#detail').setGridParam({
+        abortGridLastRequest($('#detail'))
+
+        $('#detail').setGridParam({
       url: `{{ config('app.api_url') . 'userrole/detail' }}?user_id=${id}`,
       postData: {
         id: id

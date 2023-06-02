@@ -219,8 +219,10 @@
           total: 'attributes.totalPages',
           records: 'attributes.totalRows',
         },
-        loadBeforeSend: (jqXHR) => {
-          jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+        loadBeforeSend: function(jqXHR) {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+          setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
           let nobukti = $('#jqGrid').jqGrid('getCell', id, 'kasgantung_nobukti')
@@ -303,6 +305,8 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
+          abortGridLastRequest($(this))
+          
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -325,7 +329,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                cekValidasiAksi(selectedId, 'EDIT')
+                cekValidasi(selectedId, 'EDIT')
               }
             }
           },
@@ -338,7 +342,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                cekValidasiAksi(selectedId, 'DELETE')
+                cekValidasi(selectedId, 'DELETE')
               }
             }
           },
