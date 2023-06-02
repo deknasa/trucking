@@ -243,6 +243,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+        $(`#${element[0]['name']}Id`).val('')
       }
     })
   }
@@ -389,7 +394,8 @@
                     showDialog(response.message['keterangan'])
                 } else {
                     if (Aksi == 'EDIT') {
-                        editRekapPenerimaanHeader(Id)
+                        showDialog('REKAP PENERIMAAN TIDAK BISA DIEDIT')
+                        // editRekapPenerimaanHeader(Id)
                     }
                     if (Aksi == 'DELETE') {
                         deleteRekapPenerimaanHeader(Id)
@@ -450,8 +456,11 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        console.log(response.attributes.totalRows);
         let totalNominal = 0
         let row = 0
+        // showDialog('REKAP PENERIMAAN TIDAK BISA DIEDIT')
+
         $.each(response.data, (index, detail) => {
           let id = detail.id
           row++
@@ -479,8 +488,9 @@
           $('#detailList tbody').append(detailRow)
           totalNominal +=parseInt(detail.nominal)
           initAutoNumeric(detailRow.find('.nominal'))
-          })      
-          new AutoNumeric($('#sumary')[0]).set(totalNominal);
+        })      
+        new AutoNumeric($('#sumary')[0]).set(totalNominal);
+      
       }
     })
   }
