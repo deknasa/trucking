@@ -473,6 +473,7 @@
           })
           .then(() => {
             $('#crudModal').modal('show')
+            getMaxLength(form)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -634,9 +635,13 @@
           autoProcessQueue: false,
           addRemoveLinks: true,
           acceptedFiles: 'image/*',
+          // maxFiles: 5,
           paramName: $(element).data('field'),
           init: function() {
             dropzones.push(this)
+            // this.on("maxfilesexceeded", function(file) {
+            //   this.removeFile(file);
+            // });
           }
         })
       }
@@ -842,7 +847,7 @@
       })
     })
   }
-  
+
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
@@ -854,28 +859,28 @@
         },
         success: response => {
           $.each(response.data, (index, value) => {
-         
+
             if (value !== null && value !== 0 && value !== undefined) {
               form.find(`[name=${index}]`).attr('maxlength', value)
-              if(index == 'tahun'){
+              if (index == 'tahun') {
                 form.find(`[name=tahun]`).attr('maxlength', 4)
               }
-              if(index == 'norangka'){
+              if (index == 'norangka') {
                 form.find(`[name=norangka]`).attr('maxlength', 20)
               }
-              if(index == 'nostnk'){
+              if (index == 'nostnk') {
                 form.find(`[name=nostnk]`).attr('maxlength', 8)
               }
-              if(index == 'kodetrado'){
+              if (index == 'kodetrado') {
                 form.find(`[name=kodetrado]`).attr('maxlength', 12)
               }
-              if(index == 'nomesin'){
+              if (index == 'nomesin') {
                 form.find(`[name=nomesin]`).attr('maxlength', 20)
               }
-              if(index == 'nobpkb'){
+              if (index == 'nobpkb') {
                 form.find(`[name=nobpkb]`).attr('maxlength', 15)
               }
-              
+
             }
           })
           console.log(response)
