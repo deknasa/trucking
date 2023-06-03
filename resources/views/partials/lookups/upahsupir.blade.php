@@ -18,11 +18,11 @@
             search: false,
             hidden: true
           },
-          {
-            label: 'DARI',
-            name: 'kotadari',
-            align: 'left'
-          },
+          // {
+          //   label: 'DARI',
+          //   name: 'kotadari',
+          //   align: 'left'
+          // },
           {
             label: 'TUJUAN',
             name: 'kotasampai_id',
