@@ -1,11 +1,12 @@
 {
-  "ReportGuid": "e87001abeb6c6d278076bd1fc4fa9b88",
+  "ReportVersion": "2023.1.1",
+  "ReportGuid": "4ef902169fd8356a2cacd0140d863f47",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportHutangBayar.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportUpahRitasi.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1668764295000+0700)/",
+  "ReportChanged": "/Date(1685718652000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -28,98 +29,42 @@
         "Columns": {
           "0": {
             "Name": "kotadari",
-            "Index": -1,
             "NameInSource": "kotadari",
             "Alias": "kotadari",
             "Type": "System.String"
           },
           "1": {
             "Name": "kotasampai",
-            "Index": -1,
             "NameInSource": "kotasampai",
             "Alias": "kotasampai",
             "Type": "System.String"
           },
           "2": {
             "Name": "jarak",
-            "Index": -1,
             "NameInSource": "jarak",
             "Alias": "jarak",
             "Type": "System.String"
           },
           "3": {
             "Name": "zona",
-            "Index": -1,
             "NameInSource": "zona",
             "Alias": "zona",
             "Type": "System.String"
           },
           "4": {
-            "Name": "tglmulaiberlaku",
-            "Index": -1,
-            "NameInSource": "tglmulaiberlaku",
-            "Alias": "tglmulaiberlaku",
-            "Type": "System.DateTime"
-          },
-          "5": {
-            "Name": "tglakhirberlaku",
-            "Index": -1,
-            "NameInSource": "tglakhirberlaku",
-            "Alias": "tglakhirberlaku",
-            "Type": "System.DateTime"
-          },
-          "6": {
-            "Name": "statusluarkota",
-            "Index": -1,
-            "NameInSource": "statusluarkota",
-            "Alias": "statusluarkota",
-            "Type": "System.String"
-          },
-          "7": {
             "Name": "container_id",
-            "Index": -1,
             "NameInSource": "container_id",
             "Alias": "container_id",
             "Type": "System.String"
           },
-          "8": {
-            "Name": "statuscontainer_id",
-            "Index": -1,
-            "NameInSource": "statuscontainer_id",
-            "Alias": "statuscontainer_id",
-            "Type": "System.String"
-          },
-          "9": {
+          "5": {
             "Name": "nominalsupir",
-            "Index": -1,
             "NameInSource": "nominalsupir",
             "Alias": "nominalsupir",
             "Type": "System.String"
           },
-          "10": {
-            "Name": "nominalkenek",
-            "Index": -1,
-            "NameInSource": "nominalkenek",
-            "Alias": "nominalkenek",
-            "Type": "System.String"
-          },
-          "11": {
-            "Name": "nominalkomisi",
-            "Index": -1,
-            "NameInSource": "nominalkomisi",
-            "Alias": "nominalkomisi",
-            "Type": "System.String"
-          },
-          "12": {
-            "Name": "nominaltol",
-            "Index": -1,
-            "NameInSource": "nominaltol",
-            "Alias": "nominaltol",
-            "Type": "System.String"
-          },
-          "13": {
+          "6": {
             "Name": "liter",
-            "Index": -1,
             "NameInSource": "liter",
             "Alias": "liter",
             "Type": "System.String"
@@ -134,14 +79,12 @@
         "Columns": {
           "0": {
             "Name": "name",
-            "Index": -1,
             "NameInSource": "name",
             "Alias": "name",
             "Type": "System.String"
           },
           "1": {
             "Name": "cabang_id",
-            "Index": -1,
             "NameInSource": "cabang_id",
             "Alias": "cabang_id",
             "Type": "System.String"
@@ -176,7 +119,7 @@
             "0": {
               "Ident": "StiText",
               "Name": "Text2",
-              "ClientRectangle": "82,0,46,6",
+              "ClientRectangle": "100,0,46,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1165,6 +1108,7 @@
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive13",
               "ClientRectangle": "32,0,0,0",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1174,6 +1118,7 @@
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive13",
               "ClientRectangle": "32,6,0,0",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1433,6 +1378,7 @@
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive1",
               "ClientRectangle": "4,12,0,0",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1442,6 +1388,7 @@
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive1",
               "ClientRectangle": "4,38,0,0",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1451,6 +1398,7 @@
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive2",
               "ClientRectangle": "70,12,0,0",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1460,6 +1408,7 @@
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive2",
               "ClientRectangle": "70,38,0,0",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1469,6 +1418,7 @@
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive3",
               "ClientRectangle": "102,12,0,0",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1478,6 +1428,7 @@
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive3",
               "ClientRectangle": "102,38,0,0",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1487,6 +1438,7 @@
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive4",
               "ClientRectangle": "38,12,0,0",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1496,6 +1448,7 @@
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive4",
               "ClientRectangle": "38,38,0,0",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
