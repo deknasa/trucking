@@ -655,9 +655,13 @@
           autoProcessQueue: false,
           addRemoveLinks: true,
           acceptedFiles: 'image/*',
+          // maxFiles: 5,
           paramName: $(element).data('field'),
           init: function() {
             dropzones.push(this)
+            // this.on("maxfilesexceeded", function(file) {
+            //   this.removeFile(file);
+            // });
           }
         })
       }
@@ -672,6 +676,7 @@
   function assignAttachment(dropzone, data) {
     const paramName = dropzone.options.paramName
     const type = paramName.substring(5)
+    maxLengthFile = 5 - JSON.parse(data[paramName]).length
     if (data[paramName] == '') {
       $('.dropzone').each((index, element) => {
         if (!element.dropzone) {
@@ -680,9 +685,13 @@
             autoProcessQueue: false,
             addRemoveLinks: true,
             acceptedFiles: 'image/*',
+            // maxFiles: 5,
             paramName: $(element).data('field'),
             init: function() {
               dropzones.push(this)
+              // this.on("maxfilesexceeded", function(file) {
+              // this.removeFile(file);
+            // });
             }
           })
         }
@@ -1281,7 +1290,7 @@
       },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kotadari_id]').first().val(kota.id)
-        element.val(kota.keterangan)
+        element.val(kota.kodekota)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -1306,7 +1315,7 @@
       },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kotasampai_id]').first().val(kota.id)
-        element.val(kota.keterangan)
+        element.val(kota.kodekota)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
