@@ -403,6 +403,9 @@
             if (value !== null && value !== 0 && value !== undefined) {
               form.find(`[name=${index}]`).attr('maxlength', value)
             }
+            if (value !== null && value !== 0 && value !== undefined) {
+              form.find(`[name=coa]`).attr('maxlength', 15)
+            }
           })
 
           form.attr('has-maxlength', true)
