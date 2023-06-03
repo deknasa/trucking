@@ -418,15 +418,45 @@
     $('#formRangeTgl').submit(event => {
     event.preventDefault()
 
-    let actionUrl = `{{ route('upahsupir.export') }}`
+    getCekExport()
+      .then((response) => {
+        let actionUrl = `{{ route('upahsupir.export') }}`
 
-    /* Clear validation messages */
-    $('.is-invalid').removeClass('is-invalid')
-    $('.invalid-feedback').remove()
+          /* Clear validation messages */
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
 
 
-    window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
+          window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
+      })
+      .catch((error) => {
+        setErrorMessages($('#formRangeTgl'), error.responseJSON.errors);
+      })
 })
+  function getCekExport() {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: `${apiUrl}upahsupir/listpivot`,
+          dataType: "JSON",
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: {
+            dari:$('#formRangeTgl').find('[name=dari]').val(),
+            sampai:$('#formRangeTgl').find('[name=sampai]').val()
+          },
+          success: (response) => {
+            resolve(response);
+          },
+          error: error => {
+            reject(error)
+
+          },
+        });
+      });
+    }
+
+
 
     $('#btnImport').click(function(event) {
       event.preventDefault()
