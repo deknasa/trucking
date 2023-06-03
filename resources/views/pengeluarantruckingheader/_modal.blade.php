@@ -144,18 +144,22 @@
               <table id="tablePelunasanbbm"></table>
             </div>
 
+            <div class="row mt-5">
+              <div class="col-md-12">
+                  <div class="card" style="max-height:500px; overflow-y: scroll;">
+                      <div class="card-body">
             <div id="detail-default-section" class="table-scroll table-responsive">
-              <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1000px;">
+              <table class="table table-bordered table-bindkeys mt-3" id="detailList" >
                 <thead>
                   <tr>
-                    <th width="1%" class="">No</th>
+                    <th style="width:5%; max-width: 25px;max-width: 15px">No</th>
                     <th class="data_tbl tbl_checkbox" style="display:none" width="1%">Pilih</th>
-                    <th width="20%" class="data_tbl tbl_supir_id">SUPIR</th>
-                    <th class="data_tbl tbl_penerimaantruckingheader" width="20%">NO BUKTI PENERIMAAN TRUCKING</th>
-                    <th width="14%" class="tbl_sisa">Sisa</th>
-                    <th width="20%" class="tbl_nominal">Nominal</th>
-                    <th class="data_tbl tbl_keterangan" width="25%">Keterangan</th>
-                    <th width="1%" class="tbl_aksi">Aksi</th>
+                    <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_supir_id">SUPIR</th>
+                    <th class="data_tbl tbl_penerimaantruckingheader" style="width: 20%; min-width: 200px;">NO BUKTI PENERIMAAN TRUCKING</th>
+                    <th style="width: 20%; min-width: 200px;" class="tbl_sisa">Sisa</th>
+                    <th style="width: 20%; min-width: 200px;" class="tbl_nominal">Nominal</th>
+                    <th class="data_tbl tbl_keterangan" style="width: 20%; min-width: 200px;">Keterangan</th>
+                    <th style="width:5%; max-width: 25px;max-width: 15px">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -180,7 +184,10 @@
                 </tfoot>
               </table>
             </div>
-
+                </div>
+              </div>
+          </div>
+      </div>
 
           </div>
           <div class="modal-footer justify-content-start">
@@ -1841,6 +1848,9 @@
               element.data('current-value', value).prop('readonly', true)
               element.parent('.input-group').find('.button-clear').remove()
               element.parent('.input-group').find('.input-group-append').remove()
+            }
+            if (index == 'statusposting') {
+              element.data('current-value', value).prop('disabled', true)
             }
             if (index == 'bank') {
               element.data('current-value', value).prop('readonly', true)

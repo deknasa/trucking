@@ -339,12 +339,14 @@
             innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                window.open(`{{ route('upahsupir.export') }}?id=${selectedId}`)
-              }
+              // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              // if (selectedId == null || selectedId == '' || selectedId == undefined) {
+              //   showDialog('Please select a row')
+              // } else {
+              //   window.open(`{{ route('upahsupir.export') }}?id=${selectedId}`)
+              // }
+              $('#rangeTglModal').find('button:submit').html(`Export`)
+              $('#rangeTglModal').modal('show')
             }
           },  
           {
@@ -402,6 +404,29 @@
     $('#importModal').on('shown.bs.modal', function() {
       $('#formImport [name]:not(:hidden)').first().focus()
     })
+
+    $('#rangeTglModal').on('shown.bs.modal', function() {
+
+
+    initDatepicker()
+
+    $('#formRangeTgl').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#formRangeTgl').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
+    })
+
+    $('#formRangeTgl').submit(event => {
+    event.preventDefault()
+
+    let actionUrl = `{{ route('upahsupir.export') }}`
+
+    /* Clear validation messages */
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+
+    window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
+})
 
     $('#btnImport').click(function(event) {
       event.preventDefault()
