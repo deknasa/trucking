@@ -394,6 +394,14 @@ class MenuController extends MyController
         try {
             DB::beginTransaction();
 
+            $menus = Menu::all();
+
+            foreach ($menus as $menu) {
+                $menu->menukode .= 'temp';
+                $menu->menukode .= 'temp';
+                $menu->save();
+            }
+
             $this->_updateRecursiveMenu($request->menu);
             session(['menus' => (new Menu())->getMenu()]);
 
