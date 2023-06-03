@@ -265,9 +265,6 @@ class UpahSupirController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'upahsupir/listpivot?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
 
-
-            dd($upahsupir);
-
         if ($upahsupir == null) {
             echo "<script>window.close();</script>";
         } else {
