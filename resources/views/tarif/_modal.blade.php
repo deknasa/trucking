@@ -813,6 +813,7 @@
       },        
       onSelectRow: (upahsupir, element) => {
         $('#crudForm [name=upahsupir_id]').first().val(upahsupir.id)
+        $('#crudForm').find(`[name=tujuan]`).prop('readonly', true)
         $('#crudForm [name=tujuan]').val(upahsupir.kotasampai_id)
         element.val(upahsupir.kotasampai_id)
         element.data('currentValue', element.val())
@@ -822,6 +823,7 @@
       },
       onClear: (element) => {
         $('#crudForm [name=upahsupir_id]').first().val('')
+        $('#crudForm').find(`[name=tujuan]`).prop('readonly', false)
         $('#crudForm [name=tujuan]').val('')
         element.val('')
         element.data('currentValue', element.val())

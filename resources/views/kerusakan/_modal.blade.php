@@ -166,6 +166,8 @@
     activeGrid = null
 
     getMaxLength(form)
+        initSelect2()
+        initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
