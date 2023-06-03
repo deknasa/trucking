@@ -136,6 +136,18 @@
                 </select>
               </div>
             </div>
+            <div class="row form-group" id="simpanKandang">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  STATUS SIMPAN KANDANG <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <select name="statussimpankandang" class="form-control select2bs4" z-index="6">
+                  <option value="">-- PILIH STATUS SIMPAN KANDANG --</option>
+                </select>
+              </div>
+            </div>
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
@@ -514,6 +526,7 @@
       .all([
         setStatusAktifOptions(form),
         setStatusLuarKotaOptions(form),
+        setStatusSimpanKandangOptions(form),
       ])
       .then(() => {
         showDefault(form)
@@ -563,6 +576,7 @@
           })
           .then(() => {
             $('#crudModal').modal('show')
+            $('#simpanKandang').hide()
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -595,6 +609,14 @@
         showUpahSupir(form, id)
           .then((upahsupir) => {
             initDropzone(form.data('action'), upahsupir)
+          })
+
+          .then(() => {
+            $('#crudModal').modal('show')
+            $('#simpanKandang').hide()
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
           })
 
       })
@@ -754,6 +776,44 @@
             let option = new Option(statusAktif.text, statusAktif.id)
 
             relatedForm.find('[name=statusaktif]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+
+  const setStatusSimpanKandangOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statussimpankandang]').empty()
+      relatedForm.find('[name=statussimpankandang]').append(
+        new Option('-- PILIH STATUS SIMPAN KANDANG --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          limit: 0,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS SIMPAN KANDANG"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusSimpanKandang => {
+            let option = new Option(statusSimpanKandang.text, statusSimpanKandang.id)
+
+            relatedForm.find('[name=statussimpankandang]').append(option).trigger('change')
           });
 
           resolve()
