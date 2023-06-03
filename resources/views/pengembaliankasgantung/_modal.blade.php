@@ -534,6 +534,10 @@
         $('#crudModal').modal('show')
         form.find(`[name="tglbukti"]`).prop('readonly', true)
         form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="tgldari"]`).prop('readonly', true)
+        form.find(`[name="tgldari"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="tglsampai"]`).prop('readonly', true)
+        form.find(`[name="tglsampai"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
