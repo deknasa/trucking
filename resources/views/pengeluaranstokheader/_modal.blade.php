@@ -1275,6 +1275,13 @@ $('.tbl_qty').show()
       $('.supir-lookup').lookup({
         title: 'supir Lookup',
         fileName: 'supir',
+        beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
         onSelectRow: (supir, element) => {
           element.val(supir.namasupir)
           $(`#${element[0]['name']}Id`).val(supir.id)
@@ -1292,6 +1299,7 @@ $('.tbl_qty').show()
       $('.kerusakan-lookup').lookup({
         title: 'kerusakan Lookup',
         fileName: 'kerusakan',
+        
         onSelectRow: (kerusakan, element) => {
           element.val(kerusakan.keterangan)
           $(`#${element[0]['name']}Id`).val(kerusakan.id)
@@ -1308,6 +1316,13 @@ $('.tbl_qty').show()
       $('.supplier-lookup').lookup({
         title: 'supplier Lookup',
         fileName: 'supplier',
+        beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
         onSelectRow: (supplier, element) => {
           element.val(supplier.namasupplier)
           $(`#${element[0]['name']}Id`).val(supplier.id)
@@ -1344,6 +1359,13 @@ $('.tbl_qty').show()
       $('.trado-lookup').lookup({
         title: 'Trado Lookup',
         fileName: 'trado',
+        beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
         onSelectRow: (trado, element) => {
           element.val(trado.kodetrado)
           $(`#${element[0]['name']}Id`).val(trado.id)
@@ -1363,6 +1385,13 @@ $('.tbl_qty').show()
       $('.gandengan-lookup').lookup({
         title: 'gandengan Lookup',
         fileName: 'gandengan',
+        beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
         onSelectRow: (gandengan, element) => {
           element.val(gandengan.keterangan)
           $(`#${element[0]['name']}Id`).val(gandengan.id)
