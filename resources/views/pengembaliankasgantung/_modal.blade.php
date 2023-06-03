@@ -55,7 +55,7 @@
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
                     <label class="col-form-label">
-                      DARI TANGGAL
+                      DARI TANGGAL <span class="text-danger">*</span>
                     </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8 ">
@@ -66,11 +66,11 @@
                 </div>
               </div>
 
-              <div class="col-md-6 mb-3">
+              <div class="col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
                     <label class="col-form-label">
-                      SAMPAI TANGGAL
+                      SAMPAI TANGGAL <span class="text-danger">*</span>
                     </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8 ">
@@ -80,19 +80,13 @@
                   </div>
                 </div>
               </div>
-
-              <!-- <div class="col-md-6 mb-3">
+              <div class="col-md-6 mb-3">
                 <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">PELANGGAN</label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
-                    <input type="text" id="pelangganId" name="pelanggan_id" readonly hidden>
-                  </div>
+                  <button id="btnTampil" type="button" class="btn btn-secondary"><i class="fas fa-sync"></i>
+                    RELOAD
+                  </button>
                 </div>
-              </div> -->
-
+              </div>
             </div>
 
             <div class="border p-3">
@@ -145,6 +139,12 @@
 
   $(document).ready(function() {
 
+    $(document).on('click', '#btnTampil', function(event) {
+      event.preventDefault()
+      selectedId = []
+      rangeKasgantung()
+    });
+
     $(document).on('click', "#addRow", function() {
       addRow()
     });
@@ -159,9 +159,6 @@
     $(document).on('input', `#table_body [name="nominal[]"]`, function(event) {
       setTotal()
     })
-
-
-
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -194,14 +191,6 @@
         name: 'bank_id',
         value: form.find(`[name="bank_id"]`).val()
       })
-      // data.push({
-      //   name: 'pelanggan',
-      //   value: form.find(`[name="pelanggan"]`).val()
-      // })
-      // data.push({
-      //   name: 'pelanggan_id',
-      //   value: form.find(`[name="pelanggan_id"]`).val()
-      // })
       data.push({
         name: 'tgldari',
         value: form.find(`[name="tgldari"]`).val()
@@ -341,7 +330,7 @@
               row = parseInt(selectedRows[angka]) - 1;
               let element;
 
-              if (indexes[0] == 'bank' || indexes[0] == 'tgldari' || indexes[0] == 'tglsampai') {
+              if (indexes[0] == 'bank' || indexes[0] == 'tglbukti' || indexes[0] == 'tgldari' || indexes[0] == 'tglsampai' || indexes[0] == 'kasgantungdetail_id') {
                 if (indexes.length > 1) {
                   element = form.find(`[name="${indexes[0]}[]"]`)[row];
                 } else {
@@ -376,9 +365,6 @@
     })
 
 
-    $(document).on("change", `[name=tgldari], [name=tglsampai]`, function(event) {
-      rangeKasgantung();
-    })
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -394,38 +380,40 @@
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
-
-
   function rangeKasgantung() {
 
     var tgldari = $('#crudForm').find(`[name="tgldari"]`).val()
     var tglsampai = $('#crudForm').find(`[name="tglsampai"]`).val()
-    // console.log(tgldari, tglsampai);
-    if (tgldari !== "" && tglsampai !== "") {
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
 
-      getDataPengembalian(tgldari, tglsampai).
-      then((response) => {
-          $('#tablePengembalian').jqGrid("clearGridData");
-          setTimeout(() => {
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
 
-            $("#tablePengembalian")
-              .jqGrid("setGridParam", {
-                datatype: "local",
-                data: response.data,
-                originalData: response.data,
-                selectedRowIds: []
-              })
-              .trigger("reloadGrid");
-          }, 100);
+    getDataPengembalian(tgldari, tglsampai)
+      .then((response) => {
+        selectedId = []
+        totalBayar = 0
+        $.each(response.data, (index, value) => {
+          if (value.pengembaliankasgantungheader_id != null) {
+            selectedId.push(value.id)
+            totalBayar += parseFloat(value.nominal)
+          }
         })
-        .catch((errors) => {
-          console.log(errors)
-          setErrorMessages($('#crudForm'), errors)
-        })
-    }
+        $('#tablePengembalian').jqGrid("clearGridData");
+        setTimeout(() => {
 
+          $("#tablePengembalian")
+            .jqGrid("setGridParam", {
+              datatype: "local",
+              data: response.data,
+              originalData: response.data,
+              selectedRowIds: selectedId
+            })
+            .trigger("reloadGrid");
+        }, 100);
+      })
+      .catch((errors) => {
+        setErrorMessages($('#crudForm'), errors)
+      })
   }
 
 
@@ -464,9 +452,10 @@
 
     form.trigger('reset')
     form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Simpan
-  `)
+      <i class="fa fa-save"></i>
+      Simpan
+    `)
+
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Pengembalian Kas Gantung')
@@ -510,6 +499,8 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -532,6 +523,7 @@
     $('#crudModalTitle').text('Delete Pengembalian Kas Gantung')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    form.find('#btnTampil').prop('disabled', true)
 
     Promise
       .all([
@@ -540,6 +532,8 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -547,6 +541,7 @@
   }
 
   function loadPengembalianGrid() {
+    //console.log('test')
     $("#tablePengembalian")
       .jqGrid({
         datatype: 'local',
@@ -844,38 +839,29 @@
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_sisa"]`).text(sisa))
   }
 
-
-
   function getDataPengembalian(dari, sampai, id) {
     aksi = $('#crudForm').data('action')
+
     data = {}
     urlPengembalian = ''
     if (aksi == 'edit') {
-      console.log(id)
-      if (id != undefined) {
-        urlPengembalian = `${apiUrl}pengembaliankasgantungheader/${id}/edit/getpengembalian`
-      } else {
-        urlPengembalian = `${apiUrl}pengembaliankasgantungheader/getkasgantung`
-        data = {
-          limit: 0,
-          tgldari: dari,
-          tglsampai: sampai
-        }
-      }
+      id = $(`#crudForm`).find(`[name="id"]`).val()
+      urlPengembalian = `${apiUrl}pengembaliankasgantungheader/${id}/edit/getpengembalian`
     } else if (aksi == 'delete') {
       urlPengembalian = `${apiUrl}pengembaliankasgantungheader/${id}/delete/getpengembalian`
       attribut = 'disabled'
       forCheckbox = 'disabled'
     } else if (aksi == 'add') {
       urlPengembalian = `${apiUrl}pengembaliankasgantungheader/getkasgantung`
-
     }
+
 
     data = {
       limit: 0,
       tgldari: dari,
       tglsampai: sampai
     }
+
     return new Promise((resolve, reject) => {
       $.ajax({
         url: urlPengembalian,
@@ -935,11 +921,9 @@
 
   }
 
-
   function showpengembalianKasGantung(form, userId) {
     return new Promise((resolve, reject) => {
-      form.find(`[name="tglbukti"]`).prop('readonly', true)
-      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+
 
       $.ajax({
         url: `${apiUrl}pengembaliankasgantungheader/${userId}`,
@@ -964,7 +948,8 @@
             // }
           })
           loadPengembalianGrid();
-          getDataPengembalian(response.data.tgldari, response.data.tglsampai, userId).then((response) => {
+
+          getDataPengembalian($('#crudForm').find(`[name="tgldari"]`).val(), $('#crudForm').find(`[name="tglsampai"]`).val(), userId).then((response) => {
 
             let selectedId = []
             totalBayar = 0
@@ -1166,7 +1151,6 @@
     }
   }
 
-
   function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengembaliankasgantungheader/${Id}/cekvalidasi`,
@@ -1192,7 +1176,6 @@
     })
   }
 
-
   function cekValidasiAksi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengembaliankasgantungheader/${Id}/cekValidasiAksi`,
@@ -1217,7 +1200,6 @@
       }
     })
   }
-
 
   function showDefault(form) {
     return new Promise((resolve, reject) => {
