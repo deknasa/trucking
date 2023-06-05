@@ -236,11 +236,11 @@ class PenerimaanHeaderController extends MyController
             ],
             [
                 'label' => 'Pelanggan',
-                'index' => 'pelanggan_id'
+                // 'index' => 'pelanggan_id'
             ],
             [
                 'label' => 'Bank Pelanggan',
-                'index' => 'bankpelanggan_id'
+                // 'index' => 'bankpelanggan_id'
             ],
             [
                 'label' => 'No Bukti Invoice',
@@ -248,7 +248,7 @@ class PenerimaanHeaderController extends MyController
             ],
             [
                 'label' => 'Jenis Biaya',
-                'index' => 'jenisbiaya'
+                // 'index' => 'jenisbiaya'
             ],
             [
                 'label' => 'Keterangan',
@@ -299,7 +299,7 @@ class PenerimaanHeaderController extends MyController
         foreach ($penerimaan_details as $response_index => $response_detail) {
 
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
-                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : 0);
             }
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', ',', '.');
 
@@ -309,10 +309,10 @@ class PenerimaanHeaderController extends MyController
             $sheet->setCellValue("D$detail_start_row", $response_detail['coadebet']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['coakredit']);
             $sheet->setCellValue("F$detail_start_row", $response_detail['bank_id']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['pelanggan_id']);
-            $sheet->setCellValue("H$detail_start_row", $response_detail['bankpelanggan_id']);
+            // $sheet->setCellValue("G$detail_start_row", $response_detail['pelanggan_id']);
+            // $sheet->setCellValue("H$detail_start_row", $response_detail['bankpelanggan_id']);
             $sheet->setCellValue("I$detail_start_row", $response_detail['invoice_nobukti']);
-            $sheet->setCellValue("J$detail_start_row", $response_detail['jenisbiaya']);
+            // $sheet->setCellValue("J$detail_start_row", $response_detail['jenisbiaya']);
             $sheet->setCellValue("K$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("L$detail_start_row", $response_detail['nominals']);
 
