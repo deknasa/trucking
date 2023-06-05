@@ -25,7 +25,7 @@ class Myauth
             'penerimaanstokdetail',
             'pengeluaranstokdetail',
             'gudang',
-            'user',
+            // 'user',
         ],
         'method' => [
             'gridtab',
