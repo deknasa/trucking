@@ -136,14 +136,12 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-          if (data.data.length == 0) {
-            console.log('length 0')
-            $('#detail').jqGrid('setGridParam', {
-              postData: {
-                id: 0,
-              },
-            }).trigger('reloadGrid');
+
+          if (data.data.length === 0) {
+            abortGridLastRequest($('#detail'))
+            clearGridData($('#detail'))
           }
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
