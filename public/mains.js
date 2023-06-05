@@ -1333,13 +1333,16 @@ function setGridLastRequest(grid, lastRequest) {
 }
 
 function getGridLastRequest(grid) {
-	return grid.getGridParam().lastRequest
+	return grid.getGridParam()?.lastRequest
 }
 
 function abortGridLastRequest(grid) {
-	let lastRequest = getGridLastRequest(grid)
+	getGridLastRequest(grid)?.abort()
+}
 
-	if (lastRequest) {
-		lastRequest.abort()
-	}
+function clearGridData(grid) {
+	grid.jqGrid('setGridParam', {
+		datatype: 'local',
+		data: []
+	}).trigger('reloadGrid')
 }
