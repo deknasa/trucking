@@ -133,6 +133,7 @@
                 $(element).parent().addClass('text-center')
 
                 $(element).on('click', function() {
+                  $(element).attr('disabled', true)
                   if ($(this).is(':checked')) {
                     selectAllRows()
                   } else {
@@ -466,6 +467,7 @@
 
 
           setHighlight($(this))
+          $('#gs_').attr('disabled', false)
         }
       })
 
