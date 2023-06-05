@@ -471,7 +471,7 @@
       .then(() => {
         loadPengembalianGrid()
         $('#crudModal').modal('show')
-        setRange()
+        setRange(true)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
