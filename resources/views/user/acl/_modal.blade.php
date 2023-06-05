@@ -183,6 +183,7 @@
                 $(element).removeClass('form-control')
                 $(element).parent().addClass('text-center')
                 $(element).on('click', function() {
+                  $(element).attr('disabled', true)
                   if ($(this).is(':checked')) {
                     selectAllRows()
                   } else {
@@ -276,6 +277,8 @@
           } else {
             $('#acoGrid').setSelection($('#acoGrid').getDataIDs()[indexRow])
           }
+
+          $('#gs_').attr('disabled', false)
         }
       })
       .jqGrid('filterToolbar', {

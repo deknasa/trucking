@@ -63,6 +63,7 @@ class Myauth
             'pelunasangrid',
             'transfergrid',
             'absensigrid',
+            'rolegrid',
         ],
     ];
 
