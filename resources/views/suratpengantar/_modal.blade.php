@@ -249,13 +249,13 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">QTY TON<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">QTY TON<span class="text-danger"></span></label>
                   <div class="col-sm-12">
                     <input type="text" name="qtyton" class="form-control">
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">GUDANG<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">GUDANG<span class="text-danger"></span></label>
                   <div class="col-sm-12">
                     <input type="text" name="gudang" class="form-control">
                   </div>
