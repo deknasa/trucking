@@ -70,7 +70,7 @@
 
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Nama <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Nama Pemilik<span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="nama">
                 </div>
@@ -135,7 +135,7 @@
               <div class="form-group col-sm-6 row">
                 <label class="col-sm-4 col-form-label">Isi Silinder <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control numbernoseparate" name="isisilinder">
+                  <input type="text" class="form-control numbernoseparate" name="isisilinder" id="isisilinder">
                 </div>
               </div>
             </div>
@@ -870,7 +870,7 @@
                 form.find(`[name=norangka]`).attr('maxlength', 20)
               }
               if (index == 'nostnk') {
-                form.find(`[name=nostnk]`).attr('maxlength', 8)
+                form.find(`[name=nostnk]`).attr('maxlength', 50)
               }
               if (index == 'kodetrado') {
                 form.find(`[name=kodetrado]`).attr('maxlength', 12)
@@ -882,6 +882,19 @@
                 form.find(`[name=nobpkb]`).attr('maxlength', 15)
               }
 
+            }
+            
+            if (index == 'jumlahsumbu') {
+                form.find(`[name=jumlahsumbu]`).attr('maxlength', 2)
+            }
+            if (index == 'isisilinder') {
+              form.find(`[name=isisilinder]`).attr('maxlength', 2)
+            }
+            if (index == 'jumlahroda') {
+              form.find(`[name=jumlahroda]`).attr('maxlength', 2)
+            }
+            if (index == 'jumlahbanserap') {
+              form.find(`[name=jumlahbanserap]`).attr('maxlength', 2)
             }
           })
           console.log(response)
