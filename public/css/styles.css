@@ -489,6 +489,12 @@ html {
 .dropzone .dz-preview .dz-image {
 	border-radius: 0 !important;
 }
-.dropzone .dz-preview .dz-details {
-	max-width: 200px
+.dropzone .dz-details {
+	max-width: 200px;
+	display: flex;
+    flex-wrap: wrap;
+    float: left;
+    align-items: center;
+    flex-direction: row;
+    margin: 5px;
 }
