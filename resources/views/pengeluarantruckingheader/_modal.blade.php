@@ -15,7 +15,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-2 col-md-2">
                 <label class="col-form-label">
-                  NO BUKTI <span class="text-danger">*</span>
+                  NO BUKTI <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
