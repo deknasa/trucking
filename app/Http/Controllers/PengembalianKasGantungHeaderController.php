@@ -149,8 +149,8 @@ class PengembalianKasGantungHeaderController extends MyController
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:D1');
-        $sheet->mergeCells('A2:D2');
+        $sheet->mergeCells('A1:E1');
+        $sheet->mergeCells('A2:E2');
 
         $header_start_row = 4;
         $detail_table_header_row = 15;
@@ -203,6 +203,10 @@ class PengembalianKasGantungHeaderController extends MyController
                 'label' => 'No',
             ],
             [
+                'label' => 'No Bukti Kas Gantung',
+                'index' => 'kasgantung_nobukti',
+            ],
+            [
                 'label' => 'Keterangan',
                 'index' => 'keterangan',
             ],
@@ -247,7 +251,7 @@ class PengembalianKasGantungHeaderController extends MyController
 				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] 
 			]
         ];
-        $sheet ->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet ->getStyle("A$detail_table_header_row:E$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
         $nominal = 0;
@@ -258,21 +262,22 @@ class PengembalianKasGantungHeaderController extends MyController
             }
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', ',', '.');
         
-            $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['coa']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['nominals']);
+            $sheet->setCellValue("A$detail_start_row", $response_index + 1);    
+            $sheet->setCellValue("B$detail_start_row", $response_detail['kasgantung_nobukti']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['coa']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['nominals']);
 
-            $sheet ->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("D$detail_start_row")->applyFromArray($style_number);
+            $sheet ->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
+            $sheet ->getStyle("E$detail_start_row")->applyFromArray($style_number);
             $nominal += $response_detail['nominal'];
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A'.$total_start_row.':c'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':c'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("D$total_start_row", number_format((float) $nominal, '2', ',', '.'))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':E'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         // set diketahui dibuat
         $ttd_start_row = $total_start_row+2;
@@ -302,9 +307,10 @@ class PengembalianKasGantungHeaderController extends MyController
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Laporan Pengembalian Kas Trucking' . date('dmYHis');
+        $filename = 'Laporan Pengembalian Kas Gantung' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

@@ -528,8 +528,7 @@
 
     Promise
       .all([
-        showpengembalianKasGantung(form, userId),
-        getPengembalian(userId)
+        showpengembalianKasGantung(form, userId)
       ])
       .then(() => {
         $('#crudModal').modal('show')
