@@ -1250,7 +1250,7 @@
         $('#crudForm [name=parent_id]').first().val(upahsupir.id)
         $('#crudForm [name=parent]').first().val(upahsupir.kotasampai_id)
         element.data('currentValue', element.val())
-
+        upahSupirKota = upahsupir.kotasampai_id;
         // Menghapus nilai autonumeric pada input jarak
         // $('#crudForm [name=jarak]').autoNumeric('remove')
         let jarakInput = $('#crudForm [name=jarak]').get(0); // Dapatkan elemen input jarak
@@ -1264,6 +1264,8 @@
         let form = $('#crudForm')
         showUpahSupir(form, upahsupir.id, true).then((upahsupir) => {
           initDropzone('edit', upahsupir)
+          element.val(upahSupirKota)
+          element.data('currentValue', element.val())
         })
 
       },
