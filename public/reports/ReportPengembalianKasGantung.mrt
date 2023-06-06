@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "2bf36b17c952f85385c38d36ef79810c",
+  "ReportGuid": "0f88f5a882a18c26032d6d60b3532160",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPengembalianKasGantung.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1685953663000+0700)/",
+  "ReportChanged": "/Date(1686032393000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -24,23 +24,121 @@
     "DataSources": {
       "0": {
         "Ident": "StiDataTableSource",
-        "Name": "root",
-        "Alias": "root",
+        "Name": "pengembaliankasgantung_details",
+        "Alias": "pengembaliankasgantung_details",
         "Columns": {
           "0": {
-            "Name": "pengembaliankasgantung_details",
-            "NameInSource": "pengembaliankasgantung_details",
-            "Alias": "pengembaliankasgantung_details",
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
             "Type": "System.String"
           },
           "1": {
-            "Name": "user",
-            "NameInSource": "user",
-            "Alias": "user",
+            "Name": "nobukti",
+            "NameInSource": "nobukti",
+            "Alias": "nobukti",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "tglbukti",
+            "NameInSource": "tglbukti",
+            "Alias": "tglbukti",
+            "Type": "System.DateTime"
+          },
+          "3": {
+            "Name": "coakasmasuk",
+            "NameInSource": "coakasmasuk",
+            "Alias": "coakasmasuk",
+            "Type": "System.String"
+          },
+          "4": {
+            "Name": "tgldari",
+            "NameInSource": "tgldari",
+            "Alias": "tgldari",
+            "Type": "System.DateTime"
+          },
+          "5": {
+            "Name": "tglsampai",
+            "NameInSource": "tglsampai",
+            "Alias": "tglsampai",
+            "Type": "System.DateTime"
+          },
+          "6": {
+            "Name": "penerimaan_nobukti",
+            "NameInSource": "penerimaan_nobukti",
+            "Alias": "penerimaan_nobukti",
+            "Type": "System.String"
+          },
+          "7": {
+            "Name": "postingdari",
+            "NameInSource": "postingdari",
+            "Alias": "postingdari",
+            "Type": "System.String"
+          },
+          "8": {
+            "Name": "tglkasmasuk",
+            "NameInSource": "tglkasmasuk",
+            "Alias": "tglkasmasuk",
+            "Type": "System.DateTime"
+          },
+          "9": {
+            "Name": "bank",
+            "NameInSource": "bank",
+            "Alias": "bank",
+            "Type": "System.String"
+          },
+          "10": {
+            "Name": "pengembaliankasgantung_id",
+            "NameInSource": "pengembaliankasgantung_id",
+            "Alias": "pengembaliankasgantung_id",
+            "Type": "System.String"
+          },
+          "11": {
+            "Name": "nominal",
+            "NameInSource": "nominal",
+            "Alias": "nominal",
+            "Type": "System.String"
+          },
+          "12": {
+            "Name": "keterangan",
+            "NameInSource": "keterangan",
+            "Alias": "keterangan",
+            "Type": "System.String"
+          },
+          "13": {
+            "Name": "coa",
+            "NameInSource": "coa",
+            "Alias": "coa",
             "Type": "System.String"
           }
         },
-        "NameInSource": "Data.root"
+        "NameInSource": "Data.pengembaliankasgantung_details"
+      },
+      "1": {
+        "Ident": "StiDataTableSource",
+        "Name": "user",
+        "Alias": "user",
+        "Columns": {
+          "0": {
+            "Name": "name",
+            "NameInSource": "name",
+            "Alias": "name",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "cabang_id",
+            "NameInSource": "cabang_id",
+            "Alias": "cabang_id",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "nama_cabang",
+            "NameInSource": "nama_cabang",
+            "Alias": "nama_cabang",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.user"
       }
     }
   },
@@ -142,7 +240,7 @@
               "Ident": "StiText",
               "Name": "Text27",
               "Guid": "3ade6587466407a7d43e4fb9b4e79565",
-              "ClientRectangle": "168,16,22,6",
+              "ClientRectangle": "164,16,22,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -162,7 +260,7 @@
               "Ident": "StiText",
               "Name": "Text28",
               "Guid": "f9b75a118c1b873cb41072be038369f1",
-              "ClientRectangle": "190,16,26,6",
+              "ClientRectangle": "188,16,30,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -177,7 +275,7 @@
               "TextBrush": "solid:Black",
               "TextFormat": {
                 "Ident": "StiCustomFormatService",
-                "StringFormat": "dd/MM/yyyy HH:mm:ss"
+                "StringFormat": "dd-MM-yyyy HH:mm:ss"
               },
               "Type": "SystemVariables"
             },
@@ -185,7 +283,7 @@
               "Ident": "StiText",
               "Name": "Text32",
               "Guid": "f7e68f8a1c58d0c5c348a855d877c93a",
-              "ClientRectangle": "216,16,22,6",
+              "ClientRectangle": "218,16,22,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -470,6 +568,10 @@
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiCustomFormatService",
+                "StringFormat": "dd-MM-yyyy"
+              },
               "Type": "DataColumn"
             },
             "22": {
@@ -524,6 +626,10 @@
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiCustomFormatService",
+                "StringFormat": "dd-MM-yyyy"
+              },
               "Type": "DataColumn"
             },
             "25": {
@@ -637,6 +743,10 @@
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiCustomFormatService",
+                "StringFormat": "dd-MM-yyyy"
+              },
               "Type": "DataColumn"
             },
             "31": {
@@ -966,7 +1076,8 @@
               },
               "ReferenceToGuid": "c4c17cd86d7e8b7d09eeaf40cffaa100"
             }
-          }
+          },
+          "DataSourceName": "pengembaliankasgantung_details"
         },
         "2": {
           "Ident": "StiGroupFooterBand",
