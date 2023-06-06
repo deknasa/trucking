@@ -471,7 +471,10 @@
       .then(() => {
         loadPengembalianGrid()
         $('#crudModal').modal('show')
+<<<<<<< Updated upstream
         setRange(true)
+=======
+>>>>>>> Stashed changes
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')

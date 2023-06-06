@@ -99,6 +99,7 @@ class PengembalianKasGantungHeaderController extends MyController
     public function export(Request $request): void
     {
         //FETCH HEADER
+<<<<<<< Updated upstream
         $id = $request->id;
         $data = Http::withHeaders($request->header())
         ->withOptions(['verify' => false])
@@ -139,6 +140,26 @@ class PengembalianKasGantungHeaderController extends MyController
         $pengembaliankasgantung['tglsampai'] = $dateTglSampai;
         $pengembaliankasgantung['tglkasmasuk'] = $dateTglKasMasuk;
 
+=======
+        $pengembaliankasgantung = Http::withHeaders($request->header())
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') .'pengembaliankasgantungheader/'.$request->id)['data'];
+        
+        //FETCH DETAIL
+        $detailParams = [
+            'pengembaliankasgantung_id' => $request->id,
+        ];
+
+        $responses = Http::withHeaders($request->header())
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') .'pengembaliankasgantung_detail', $detailParams);
+
+        $pengembaliankasgantung_details = $responses['data'];
+        $user = $responses['user'];
+        
+>>>>>>> Stashed changes
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', 'TAS '.$user['nama_cabang']);
@@ -149,8 +170,13 @@ class PengembalianKasGantungHeaderController extends MyController
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+<<<<<<< Updated upstream
         $sheet->mergeCells('A1:E1');
         $sheet->mergeCells('A2:E2');
+=======
+        $sheet->mergeCells('A1:D1');
+        $sheet->mergeCells('A2:D2');
+>>>>>>> Stashed changes
 
         $header_start_row = 4;
         $detail_table_header_row = 15;
@@ -168,6 +194,7 @@ class PengembalianKasGantungHeaderController extends MyController
                 'index' => 'tglbukti',
             ],
             [
+<<<<<<< Updated upstream
                 'label' => 'No Bukti Penerimaan',
                 'index' => 'penerimaan_nobukti',
             ],
@@ -176,6 +203,12 @@ class PengembalianKasGantungHeaderController extends MyController
                 'index' => 'bank',
             ],
             [
+=======
+                'label' => 'Penerimaan No Bukti',
+                'index' => 'penerimaan_nobukti',
+            ],
+            [
+>>>>>>> Stashed changes
                 'label' => 'COA Kas Masuk',
                 'index' => 'coakasmasuk',
             ],
@@ -187,7 +220,14 @@ class PengembalianKasGantungHeaderController extends MyController
                 'label' => 'Tanggal Sampai',
                 'index' => 'tglsampai',
             ],
+<<<<<<< Updated upstream
             
+=======
+            [
+                'label' => 'Bank',
+                'index' => 'bank',
+            ],
+>>>>>>> Stashed changes
             [
                 'label' => 'Tanggal Kas Masuk',
                 'index' => 'tglkasmasuk',
@@ -203,10 +243,13 @@ class PengembalianKasGantungHeaderController extends MyController
                 'label' => 'No',
             ],
             [
+<<<<<<< Updated upstream
                 'label' => 'No Bukti Kas Gantung',
                 'index' => 'kasgantung_nobukti',
             ],
             [
+=======
+>>>>>>> Stashed changes
                 'label' => 'Keterangan',
                 'index' => 'keterangan',
             ],
@@ -224,7 +267,11 @@ class PengembalianKasGantungHeaderController extends MyController
         //LOOPING HEADER        
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
+<<<<<<< Updated upstream
               
+=======
+            
+>>>>>>> Stashed changes
                 $sheet->setCellValue('C' . $header_start_row++, ': '.$pengembaliankasgantung[$header_column['index']]);
            
         }
@@ -251,7 +298,13 @@ class PengembalianKasGantungHeaderController extends MyController
 				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] 
 			]
         ];
+<<<<<<< Updated upstream
         $sheet ->getStyle("A$detail_table_header_row:E$detail_table_header_row")->applyFromArray($styleArray);
+=======
+
+        // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
+        $sheet ->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
+>>>>>>> Stashed changes
 
         // LOOPING DETAIL
         $nominal = 0;
@@ -262,6 +315,7 @@ class PengembalianKasGantungHeaderController extends MyController
             }
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', ',', '.');
         
+<<<<<<< Updated upstream
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);    
             $sheet->setCellValue("B$detail_start_row", $response_detail['kasgantung_nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
@@ -270,14 +324,29 @@ class PengembalianKasGantungHeaderController extends MyController
 
             $sheet ->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
             $sheet ->getStyle("E$detail_start_row")->applyFromArray($style_number);
+=======
+            $sheet->setCellValue("A$detail_start_row", $response_index + 1);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['coa']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['nominals']);
+
+            $sheet ->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
+            $sheet ->getStyle("D$detail_start_row")->applyFromArray($style_number);
+>>>>>>> Stashed changes
             $nominal += $response_detail['nominal'];
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
+<<<<<<< Updated upstream
         $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':E'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+=======
+        $sheet->mergeCells('A'.$total_start_row.':c'.$total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':c'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("D$total_start_row", number_format((float) $nominal, '2', ',', '.'))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+>>>>>>> Stashed changes
 
         // set diketahui dibuat
         $ttd_start_row = $total_start_row+2;
@@ -298,7 +367,11 @@ class PengembalianKasGantungHeaderController extends MyController
         
         $sheet->setCellValue("B".($ttd_start_row+5), 'Dicetak Pada :');
         $sheet->getStyle("B".($ttd_start_row+5))->getFont()->setItalic(true);
+<<<<<<< Updated upstream
         $sheet->setCellValue("C".($ttd_start_row+5), date('d-m-Y H:i:s'));
+=======
+        $sheet->setCellValue("C".($ttd_start_row+5), date('d/m/Y H:i:s'));
+>>>>>>> Stashed changes
         $sheet->getStyle("C".($ttd_start_row+5))->getFont()->setItalic(true);
         $sheet->setCellValue("D".($ttd_start_row+5), $user['name']);
         $sheet->getStyle("D".($ttd_start_row+5))->getFont()->setItalic(true);
@@ -307,10 +380,16 @@ class PengembalianKasGantungHeaderController extends MyController
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
+<<<<<<< Updated upstream
         $sheet->getColumnDimension('E')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Pengembalian Kas Gantung' . date('dmYHis');
+=======
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'Laporan Pengembalian Kas Trucking' . date('dmYHis');
+>>>>>>> Stashed changes
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
