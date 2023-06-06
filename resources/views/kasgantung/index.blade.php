@@ -154,7 +154,7 @@
           },
           {
             label: 'PENERIMA',
-            name: 'penerima_id',
+            name: 'penerima',
             align: 'left'
           },
           {
