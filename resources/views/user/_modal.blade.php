@@ -254,6 +254,9 @@
           .then(() => {
             $('#crudModal').modal('show')
           })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
@@ -287,6 +290,9 @@
           .then(() => {
             $('#crudModal').modal('show')
           })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
@@ -318,6 +324,9 @@
         showUser(form, userId)
           .then(() => {
             $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -471,11 +480,14 @@
             }
           })
           console.log(form.data('action'))
-                    if (form.data('action') === 'delete') {
-                        form.find('[name]').addClass('disabled')
-                        initDisabled()
-                    }
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
+          }
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
