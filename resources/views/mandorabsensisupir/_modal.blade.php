@@ -40,7 +40,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  supir <span class="text-danger">*</span>
+                  supir <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -74,7 +74,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Jam <span class="text-danger">*</span>
+                  Jam <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -142,13 +142,14 @@
         case 'store':
           method = 'POST'
           url = `${apiUrl}mandorabsensisupir`
+
           break;
         case 'edit':
-          method = 'POST'
+          method = 'PATCH'
           url = `${apiUrl}mandorabsensisupir/${mandorId}/update`
           break;
         case 'delete':
-          method = 'POST'
+          method = 'DELETE'
           url = `${apiUrl}mandorabsensisupir/${mandorId}/delete`
           break;
         default:
@@ -279,7 +280,7 @@
     Promise
       .all([
         showDefault(form),
-        showAbsensi(form,tradoId)
+        showAbsensi(form, tradoId)
       ])
       .then(() => {
         $('#crudModal').modal('show')
@@ -359,7 +360,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    
+
     Promise
       .all([
         showAbsensi(form, tradoId)
@@ -429,23 +430,23 @@
     })
   }
 
-function cekValidasiAdd(tradoId) {
-  $.ajax({
-    url: `${apiUrl}mandorabsensisupir/${tradoId}/cekvalidasiadd`,
-    method: 'GET',
-    dataType: 'JSON',
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    },
-    success: response => {
-      if(response.errors){
-        showDialog(response.message)
-      }else{
-        createAbsensi(tradoId)
+  function cekValidasiAdd(tradoId) {
+    $.ajax({
+      url: `${apiUrl}mandorabsensisupir/${tradoId}/cekvalidasiadd`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        if (response.errors) {
+          showDialog(response.message)
+        } else {
+          createAbsensi(tradoId)
+        }
       }
-    }
-  })
-}
+    })
+  }
 
   function showDefault(form) {
     return new Promise((resolve, reject) => {
