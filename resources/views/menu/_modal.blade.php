@@ -36,7 +36,7 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="menuseq" class="form-control">
+                <input type="text" name="menuseq" class="form-control numbernoseparate">
               </div>
             </div>
             <div class="row form-group sometimes">
