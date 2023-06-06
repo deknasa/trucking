@@ -163,7 +163,7 @@
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Jumlah Roda <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Jumlah BAN <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control numbernoseparate" name="jumlahroda">
                 </div>
@@ -303,8 +303,9 @@
           formData.append(`${paramName}[${index}]`, file)
         })
       })
-      data.filter((row) => row.name === 'nominalplusborongan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominalplusborongan"]`)[0])
-
+      if (form.data('action') != 'delete') {
+        data.filter((row) => row.name === 'nominalplusborongan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominalplusborongan"]`)[0])
+      }
       $.each(data, function(key, input) {
         formData.append(input.name, input.value);
       });
