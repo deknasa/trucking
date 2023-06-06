@@ -496,6 +496,9 @@
               if(index == 'rekeningbank'){
                 form.find(`[name=rekeningbank]`).attr('maxlength', 13)
               }
+              if(index == 'kota'){
+                form.find(`[name=kota]`).attr('maxlength', 150)
+              }
             }
           })
 
