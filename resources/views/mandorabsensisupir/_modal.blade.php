@@ -40,7 +40,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  supir <span class="text-danger"></span>
+                  supir <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -74,7 +74,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Jam <span class="text-danger"></span>
+                  Jam <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -475,6 +475,46 @@
     })
   }
 
+  function getabsentrado(id) {
+    $.ajax({
+      url: `${apiUrl}mandorabsensisupir/${id}/getabsentrado`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      success: response => {
+
+        kodeabsen = response.data.kodeabsen
+        setSupirEnable()
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
+  }
+
+  
+  function setSupirEnable() {
+    let supir = $('#crudForm [name=supir]')
+    if (kodeabsen == '1') {
+      //2x20
+      supir.attr('readonly', true)
+      supir.parents('.input-group').find('.input-group-append').hide()
+      supir.parents('.input-group').find('.button-clear').hide()
+
+
+    } else {
+      supir.attr('readonly', false)
+        supir.parents('.input-group').find('.input-group-append').show()
+        supir.parents('.input-group').find('.button-clear').show()
+
+    }
+  }
+
+
+
+
 
   function initLookup() {
     $('.supir-lookup').lookup({
@@ -512,7 +552,9 @@
       onSelectRow: (absentrado, element) => {
         $(`#crudForm [name="absen_id"]`).first().val(absentrado.id)
         element.val(absentrado.keterangan)
+        absentradoId = absentrado.id
         element.data('currentValue', element.val())
+        getabsentrado(absentradoId)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
