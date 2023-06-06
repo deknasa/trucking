@@ -91,6 +91,20 @@
       //   var id = kasgantungheaders.id
       //   var apiUrl = `{{ config('app.api_url') }}`;
         
+<<<<<<< Updated upstream
+        $.ajax({
+          url: `${apiUrl}pengembaliankasgantungheader/${id}/printreport`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            Authorization: `Bearer {{ session('access_token') }}`
+          },
+          success: response => {
+            window.close()
+          }
+        })
+      });
+=======
       //   $.ajax({
       //     url: `${apiUrl}kasgantungheader/${id}/printreport`,
       //     method: 'GET',
@@ -106,6 +120,7 @@
       //   })
           
       // });
+>>>>>>> Stashed changes
     }
   </script>
   <style>
