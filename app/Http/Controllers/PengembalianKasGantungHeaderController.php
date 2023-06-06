@@ -99,24 +99,46 @@ class PengembalianKasGantungHeaderController extends MyController
     public function export(Request $request): void
     {
         //FETCH HEADER
-        $pengembaliankasgantung = Http::withHeaders($request->header())
+        $id = $request->id;
+        $data = Http::withHeaders($request->header())
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'pengembaliankasgantungheader/'.$request->id)['data'];
-        
-        //FETCH DETAIL
-        $detailParams = [
-            'pengembaliankasgantung_id' => $request->id,
+        ->get(config('app.api_url') .'pengembaliankasgantungheader/'.$id.'/export');
+
+         //FETCH DETAIL
+         $detailParams = [
+            'pengembaliankasgantung_id' => $request->id
         ];
+        $responses = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') .'pengembaliankasgantung_detail', $detailParams);
 
-        $responses = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'pengembaliankasgantung_detail', $detailParams);
-
+        $pengembaliankasgantung = $data['data'];
         $pengembaliankasgantung_details = $responses['data'];
         $user = $responses['user'];
-        
+
+        $tglBukti = $pengembaliankasgantung["tglbukti"];
+        $timeStamp = strtotime($tglBukti);
+        $dateTglBukti = date('d-m-Y', $timeStamp); 
+
+        $tglDari = $pengembaliankasgantung["tgldari"];
+        $timeStampDari = strtotime($tglDari);
+        $dateTglDari = date('d-m-Y', $timeStampDari); 
+
+        $tglSampai = $pengembaliankasgantung["tglsampai"];
+        $timeStampSampai = strtotime($tglSampai);
+        $dateTglSampai = date('d-m-Y', $timeStampSampai); 
+
+        $tglKasMasuk = $pengembaliankasgantung["tglkasmasuk"];
+        $timeStampKasMasuk = strtotime($tglKasMasuk);
+        $dateTglKasMasuk = date('d-m-Y', $timeStampKasMasuk); 
+
+        $pengembaliankasgantung['tglbukti'] = $dateTglBukti;
+        $pengembaliankasgantung['tgldari'] = $dateTglDari;
+        $pengembaliankasgantung['tglsampai'] = $dateTglSampai;
+        $pengembaliankasgantung['tglkasmasuk'] = $dateTglKasMasuk;
+
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', 'TAS '.$user['nama_cabang']);
@@ -146,8 +168,12 @@ class PengembalianKasGantungHeaderController extends MyController
                 'index' => 'tglbukti',
             ],
             [
-                'label' => 'Penerimaan No Bukti',
+                'label' => 'No Bukti Penerimaan',
                 'index' => 'penerimaan_nobukti',
+            ],
+            [
+                'label' => 'Bank',
+                'index' => 'bank',
             ],
             [
                 'label' => 'COA Kas Masuk',
@@ -161,10 +187,7 @@ class PengembalianKasGantungHeaderController extends MyController
                 'label' => 'Tanggal Sampai',
                 'index' => 'tglsampai',
             ],
-            [
-                'label' => 'Bank',
-                'index' => 'bank',
-            ],
+            
             [
                 'label' => 'Tanggal Kas Masuk',
                 'index' => 'tglkasmasuk',
@@ -197,7 +220,7 @@ class PengembalianKasGantungHeaderController extends MyController
         //LOOPING HEADER        
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
-            
+              
                 $sheet->setCellValue('C' . $header_start_row++, ': '.$pengembaliankasgantung[$header_column['index']]);
            
         }
@@ -224,8 +247,6 @@ class PengembalianKasGantungHeaderController extends MyController
 				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] 
 			]
         ];
-
-        // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
         $sheet ->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
@@ -272,7 +293,7 @@ class PengembalianKasGantungHeaderController extends MyController
         
         $sheet->setCellValue("B".($ttd_start_row+5), 'Dicetak Pada :');
         $sheet->getStyle("B".($ttd_start_row+5))->getFont()->setItalic(true);
-        $sheet->setCellValue("C".($ttd_start_row+5), date('d/m/Y H:i:s'));
+        $sheet->setCellValue("C".($ttd_start_row+5), date('d-m-Y H:i:s'));
         $sheet->getStyle("C".($ttd_start_row+5))->getFont()->setItalic(true);
         $sheet->setCellValue("D".($ttd_start_row+5), $user['name']);
         $sheet->getStyle("D".($ttd_start_row+5))->getFont()->setItalic(true);
