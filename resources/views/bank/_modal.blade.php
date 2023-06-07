@@ -21,7 +21,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  KODE BANK <span class="text-danger">*</span>
+                  KODE KAS/BANK <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -31,7 +31,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  NAMA BANK <span class="text-danger">*</span>
+                  NAMA KAS/BANK <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -41,7 +41,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  COA <span class="text-danger">*</span></label>
+                  KODE PERKIRAAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="coa" class="form-control coa-lookup">
@@ -241,7 +241,7 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Bank')
+    $('#crudModalTitle').text('Create Kas/Bank')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -277,7 +277,7 @@
     Simpan
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Bank')
+    $('#crudModalTitle').text('Edit Kas/Bank')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -312,7 +312,7 @@
     Hapus
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Bank')
+    $('#crudModalTitle').text('Delete Kas/Bank')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
