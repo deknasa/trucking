@@ -112,7 +112,7 @@
                 <label class="col-sm-4 col-form-label">Tgl Pajak STNK <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tglpajakstnk">
+                    <input type="text" class="form-control" name="tglpajakstnk">
                   </div>
                 </div>
               </div>
@@ -516,8 +516,8 @@
             initLookup()
             initDatepicker()
             initSelect2(form.find('.select2bs4'), true)
-            form.find('[name]').removeAttr('disabled')
-
+            form.find('[name]').removeAttr('disabled') 
+          
             form.find('select').each((index, select) => {
               let element = $(select)
 
@@ -536,8 +536,8 @@
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
-          })
-      })
+          })  
+      })      
   }
 
 
