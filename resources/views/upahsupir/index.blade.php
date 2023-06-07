@@ -331,7 +331,19 @@
               deleteUpahSupir(selectedId)
             }
           },
-          
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('upahsupir.report') }}?id=${selectedId}`)
+              }
+            }
+          },          
           {
             id: 'export',
             title: 'Export',
@@ -350,22 +362,9 @@
             }
           },  
           {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                window.open(`{{ route('upahsupir.report') }}?id=${selectedId}`)
-              }
-            }
-          },
-          {
             id: 'import',
             innerHTML: '<i class="fas fa-file-upload"></i> UPDATE HARGA',
-            class: 'btn btn-info btn-sm mr-1',
+            class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
               // $('#importModal').data('action', 'import')
               $('#importModal').find('button:submit').html(`Update Harga`)

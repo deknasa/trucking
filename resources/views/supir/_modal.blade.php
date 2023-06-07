@@ -54,7 +54,7 @@
               <div class="form-group col-sm-6 row">
                 <label class="col-sm-4 col-form-label">Telp/HP <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" name="telp" class="form-control numbernoseparate" maxlength="13">
+                  <input type="text" name="telp" class="form-control numbernoseparate" maxlength="50">
                 </div>
               </div>
 

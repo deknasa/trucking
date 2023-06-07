@@ -5,14 +5,14 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
-      <div class="card">
+      <div class="card card-easyui bordered mb-4">
+        <div class="card-header">
+          <h5 class="card-title" id="crudModalTitle" style="color: #0e2d5f;font-weight: 700;"> {{$title}} </h5>
 
+        </div>
         <form action="#" id="crudForm">
           <div class=" ">
-            <div class="card-header bg-primary">
-              <h5 class="card-title" id="crudModalTitle"> {{$title}} </h5>
 
-            </div>
             <form action="" method="post">
               <div class="card-body">
 
