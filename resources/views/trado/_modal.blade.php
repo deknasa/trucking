@@ -516,8 +516,8 @@
             initLookup()
             initDatepicker()
             initSelect2(form.find('.select2bs4'), true)
-            form.find('[name]').removeAttr('disabled')
-
+            form.find('[name]').removeAttr('disabled') 
+          
             form.find('select').each((index, select) => {
               let element = $(select)
 
@@ -533,6 +533,13 @@
           })
           .then(() => {
             $('#crudModal').modal('show')
+            //  $('#crudForm [name=tglpajakstnk]').siblings('.input-group-append').remove()
+            //  $('#crudForm [name=mandor]').siblings('.input-group-append').remove()
+            //  $('#crudForm [name=mandor]').siblings('.button-clear').remove()
+
+            //  $('#crudForm [name=supir]').siblings('.input-group-append').remove()
+            //  $('#crudForm [name=supir]').siblings('.button-clear').remove()
+
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
