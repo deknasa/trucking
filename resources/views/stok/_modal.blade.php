@@ -122,7 +122,7 @@
                     <label class="col-form-label">Upload Foto Stok</label>
                   </div>
                 </div>
-                <div class="dropzone" id="my-dropzone" style="padding: 0; min-width: 202px !important; min-height: 234px !important"></div>
+                <div class="dropzone" data-field="gambar" id="my-dropzone" style="padding: 0; min-width: 202px !important; min-height: 234px !important; display:flex;"></div>
 
                 <div class="dz-preview dz-file-preview">
                   <div class="dz-details" >
@@ -166,7 +166,7 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   let dropzones = []
-
+  let maxLengthForDropzone = 5;
   $(document).ready(function() {
 
 
@@ -291,6 +291,9 @@
     $('#crudModal').find('.modal-body').html(modalBody)
 
     activeGrid = '#jqGrid'
+    dropzones.forEach(dropzone => {
+      dropzone.removeAllFiles()
+    })
   })
 
 
@@ -511,6 +514,7 @@
               element.val(value)
             }
           })
+          maxLengthForDropzone = 5 - response.count
           resolve(response.data)
           initAutoNumeric(form.find(`[name="qtymin"]`))
           initAutoNumeric(form.find(`[name="qtymax"]`))
@@ -531,9 +535,13 @@
           autoProcessQueue: false,
           addRemoveLinks: true,
           acceptedFiles: 'image/*',
+          maxFiles: maxLengthForDropzone,
           paramName: $(element).data('field'),
           init: function() {
             dropzones.push(this)
+            this.on("maxfilesexceeded", function(file) {
+              this.removeFile(file);
+            });
           }
         })
       }
