@@ -1249,6 +1249,7 @@
 
         $('#crudForm [name=parent_id]').first().val(upahsupir.id)
         $('#crudForm [name=parent]').first().val(upahsupir.kotasampai_id)
+        $('#crudForm').find(`[name=kotasampai]`).prop('readonly', false)
         element.data('currentValue', element.val())
         upahSupirKota = upahsupir.kotasampai_id;
         // Menghapus nilai autonumeric pada input jarak
@@ -1325,6 +1326,7 @@
       },
       onClear: (element) => {
         $('#crudForm [name=kotasampai_id]').first().val('')
+        $('#crudForm').find(`[name=kotasampai]`).prop('readonly', false)
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -1341,7 +1343,10 @@
         }
       },
       onSelectRow: (kota, element) => {
-        $('#crudForm [name=kotasampai_id]').first().val(kota.id)
+        $('#crudForm [name=kotasampai_id]').first().val(kota.kotaId)
+        $('#crudForm [name=kotasampai]').first().val(kota.tujuan)
+        $('#crudForm [name=tarif_id]').first().val(kota.id)
+        $('#crudForm').find(`[name=kotasampai]`).prop('readonly', true)
         element.val(kota.tujuan)
         element.data('currentValue', element.val())
       },
@@ -1350,6 +1355,7 @@
       },
       onClear: (element) => {
         $('#crudForm [name=kotasampai_id]').first().val('')
+        $('#crudForm').find(`[name=kotasampai]`).prop('readonly', false)
         element.val('')
         element.data('currentValue', element.val())
       }
