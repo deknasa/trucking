@@ -105,6 +105,11 @@
             align: 'left'
           },
           {
+            label: 'gandengan',
+            name: 'gandengan',
+            align: 'left'
+          },
+          {
             label: 'supplier',
             name: 'supplier',
             align: 'left'

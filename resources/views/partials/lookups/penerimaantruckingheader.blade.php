@@ -19,6 +19,9 @@
       postData: {
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
+        
+        // penerimaanheader_id:  `{!! $penerimaanheader_id ?? '' !!}`,
+      
       },
       datatype: "json",
       colModel: [{

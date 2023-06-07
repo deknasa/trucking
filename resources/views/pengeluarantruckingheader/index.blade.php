@@ -233,6 +233,16 @@
             }
           },
           {
+            label: 'supir',
+            name: 'supir',
+            align: 'left'
+          },
+          {
+            label: 'trado',
+            name: 'trado',
+            align: 'left'
+          },
+          {
             label: 'COA',
             name: 'coa',
             align: 'left'
