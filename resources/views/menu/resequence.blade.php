@@ -55,7 +55,7 @@
       e.preventDefault()
 
       $('#btnSimpan').attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       let url = `{{ route('menu.resequence.store') }}`
       let csrfToken = `{{ csrf_token() }}`
@@ -85,7 +85,7 @@
         }
       }).always(() => {
         $('#btnSimpan').removeAttr('disabled')
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
       })
     })
   })
