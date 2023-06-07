@@ -900,7 +900,7 @@
                 form.find(`[name=jumlahsumbu]`).attr('maxlength', 2)
             }
             if (index == 'isisilinder') {
-              form.find(`[name=isisilinder]`).attr('maxlength', 2)
+              form.find(`[name=isisilinder]`).attr('maxlength', 5)
             }
             if (index == 'jumlahroda') {
               form.find(`[name=jumlahroda]`).attr('maxlength', 2)
