@@ -106,7 +106,7 @@
             name: 'alamat',
           },
           {
-            label: 'NO TELP',
+            label: 'NO TELEPON',
             name: 'notelp',
           },
           {
@@ -171,7 +171,7 @@
             name: 'userapproval',
           },
           {
-            label: 'TANGGAL APPROVAL',
+            label: 'TGL APPROVAL',
             name: 'tglapproval',
             align: 'left',
             formatter: "date",

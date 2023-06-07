@@ -25,7 +25,7 @@
           name: 'jobtrucking',
         },
         {
-          label: 'TANGGAL BUKTI',
+          label: 'TGL BUKTI',
           name: 'tglbukti',
           align: 'right',
           formatter: "date",

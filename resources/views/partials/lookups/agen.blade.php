@@ -113,7 +113,7 @@
           align: 'left'
         },
         {
-          label: 'NO TELP',
+          label: 'NO TELEPON',
           name: 'notelp',
           align: 'left'
         },

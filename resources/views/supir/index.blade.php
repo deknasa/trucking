@@ -73,7 +73,7 @@
             name: 'kota',
           },
           {
-            label: 'TELP',
+            label: 'NO TELEPON',
             name: 'telp',
           },
           {
@@ -318,11 +318,11 @@
           //   name: 'zona_id',
           // },
           {
-            label: 'angsuranpinjaman',
+            label: 'angsuran pinjaman',
             name: 'angsuranpinjaman',
           },
           {
-            label: 'plafondeposito',
+             label: 'plafon deposito',
             name: 'plafondeposito',
           },
         {

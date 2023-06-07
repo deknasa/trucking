@@ -25,7 +25,7 @@
 
                             <div class="col-12 col-sm-2 col-md-2">
                                 <label class="col-form-label">
-                                    TANGGAL BUKTI <span class="text-danger">*</span>
+                                    TGL BUKTI <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
@@ -49,7 +49,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
-                                    TANGGAL DARI <span class="text-danger">*</span></label>
+                                    TGL DARI <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
                                 <div class="input-group">
@@ -61,7 +61,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
-                                    TANGGAL SAMPAI <span class="text-danger">*</span></label>
+                                    TGL SAMPAI <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
                                 <div class="input-group">

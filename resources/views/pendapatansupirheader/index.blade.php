@@ -202,7 +202,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL BUKTI',
+            label: 'TGL BUKTI',
             name: 'tglbukti',
             align: 'left',
             formatter: "date",
@@ -217,7 +217,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL DARI',
+            label: 'TGL DARI',
             name: 'tgldari',
             align: 'left',
             formatter: "date",
@@ -227,7 +227,7 @@
             }
           },
           {
-            label: 'TANGGAL SAMPAI',
+            label: 'TGL SAMPAI',
             name: 'tglsampai',
             align: 'left',
             formatter: "date",
@@ -252,7 +252,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL APPROVAL',
+            label: 'TGL APPROVAL',
             name: 'tglapproval',
             align: 'left',
             formatter: "date",
@@ -267,7 +267,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL CETAK',
+            label: 'TGL CETAK',
             name: 'tglbukacetak',
             align: 'left',
             formatter: "date",

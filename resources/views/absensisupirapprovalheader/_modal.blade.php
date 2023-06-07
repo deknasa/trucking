@@ -14,14 +14,14 @@
               <input type="hidden" name="id" hidden class="form-control" readonly>
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">nobukti </label>
+                <label class="col-form-label">no bukti </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" readonly name="nobukti" class="form-control">
               </div>
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">tglbukti </label>
+                <label class="col-form-label">tgl bukti </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <div class="input-group">
@@ -32,7 +32,7 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">absensisupir <span class="text-danger">*</span> </label>
+                <label class="col-form-label">absensi supir <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="absensisupir_nobukti" class="form-control absensisupir-lookup">
@@ -239,7 +239,7 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create AbsensiSupirApproval')
+    $('#crudModalTitle').text('CREATE ABSENSI SUPIR APPROVAL')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()

@@ -69,7 +69,7 @@
             name: 'nobukti',
           },
           {
-            label: 'TANGGAL TRIP',
+            label: 'TGL TRIP',
             name: 'tglbukti',
             align: 'left',
             formatter: "date",
@@ -83,7 +83,7 @@
             name: 'nosp',
           },
           {
-            label: 'TANGGAL SP',
+            label: 'TGL SP',
             name: 'tglsp',
             align: 'left',
             formatter: "date",

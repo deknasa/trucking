@@ -74,7 +74,7 @@
             hidden: true
           },
           {
-            label: 'KODE JNS EMKL',
+            label: 'KODE JENIS EMKL',
             name: 'kodejenisemkl',
           },
           {

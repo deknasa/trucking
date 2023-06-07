@@ -84,7 +84,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  NO TELP <span class="text-danger">*</span>
+                NO TELEPON <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">

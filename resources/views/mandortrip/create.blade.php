@@ -88,7 +88,7 @@
                 </div>
 
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NOMOR GANDENGAN / CHASIS<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">NO GANDENGAN / CHASIS<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="gandengan_id">
                     <input type="text" name="gandengan" class="form-control gandengan-lookup">

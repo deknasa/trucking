@@ -25,7 +25,7 @@
 
                             <div class="col-12 col-md-2">
                                 <label class="col-form-label">
-                                    TANGGAL BUKTI <span class="text-danger">*</span>
+                                    TGL BUKTI <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-md-4">
@@ -62,7 +62,7 @@
 
                             <div class="col-12 col-md-2">
                                 <label class="col-form-label">
-                                    TANGGAL SAMPAI <span class="text-danger">*</span>
+                                    TGL SAMPAI <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-md-4">
@@ -106,7 +106,7 @@
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                                 <label>
-                                                    Tanggal Bukti</label>
+                                                    TGL bukti</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
                                                 <input type="text" name="tglbuktiPR" class="form-control" disabled>
@@ -146,7 +146,7 @@
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                                 <label>
-                                                    Tanggal Bukti</label>
+                                                    TGL bukti</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
                                                 <input type="text" name="tglbuktiPS" class="form-control" disabled>
@@ -186,7 +186,7 @@
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                                 <label>
-                                                    Tanggal Bukti</label>
+                                                    TGL bukti</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
                                                 <input type="text" name="tglbuktiPP" class="form-control" disabled>
@@ -226,7 +226,7 @@
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                                 <label>
-                                                    Tanggal Bukti</label>
+                                                    TGL bukti</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
                                                 <input type="text" name="tglbuktiDeposito" class="form-control" disabled>
@@ -266,7 +266,7 @@
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                                 <label>
-                                                    Tanggal Bukti</label>
+                                                    TGL bukti</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
                                                 <input type="text" name="tglbuktiBBM" class="form-control" disabled>
@@ -306,7 +306,7 @@
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2 col-form-label">
                                                 <label>
-                                                    Tanggal Bukti</label>
+                                                    TGL bukti</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
                                                 <input type="text" name="tglbuktiUangjalan" class="form-control" disabled>
@@ -825,7 +825,7 @@
                         align: 'left'
                     },
                     {
-                        label: 'TANGGAL BUKTI',
+                        label: 'TGL BUKTI',
                         name: 'tglbuktiric',
                         align: 'left',
                         formatter: "date",

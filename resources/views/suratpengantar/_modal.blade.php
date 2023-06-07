@@ -20,7 +20,7 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">TANGGAL TRIP <span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">TGL TRIP <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <div class="input-group">
                       <input type="text" name="tglbukti" class="form-control datepicker">
@@ -69,7 +69,7 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NOMOR GANDENGAN / CHASIS</label>
+                  <label class="col-sm-12 col-form-label">NO GANDENGAN / CHASIS</label>
                   <div class="col-sm-12">
                     <input type="hidden" name="gandengan_id">
                     <input type="text" name="gandengan" class="form-control gandengan-lookup">
@@ -83,13 +83,13 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NOMOR CONTAINER</label>
+                  <label class="col-sm-12 col-form-label">NO CONTAINER (1)</label>
                   <div class="col-sm-12">
                     <input type="text" name="nocont" class="form-control" readonly>
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NO SEAL</label>
+                  <label class="col-sm-12 col-form-label">NO SEAL (1)</label>
                   <div class="col-sm-12">
                     <input type="text" name="noseal" class="form-control" readonly>
                   </div>
@@ -181,13 +181,13 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NO CONTAINER 2</label>
+                  <label class="col-sm-12 col-form-label">NO CONTAINER (2)</label>
                   <div class="col-sm-12">
                     <input type="text" name="nocont2" class="form-control" readonly>
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NO SEAL 2</label>
+                  <label class="col-sm-12 col-form-label">NO SEAL (2)</label>
                   <div class="col-sm-12">
                     <input type="text" name="noseal2" class="form-control" readonly>
                   </div>
@@ -224,13 +224,13 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NO JOB</label>
+                  <label class="col-sm-12 col-form-label">NO JOB (1)</label>
                   <div class="col-sm-12">
                     <input type="text" name="nojob" class="form-control" readonly>
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NO JOB 2</label>
+                  <label class="col-sm-12 col-form-label">NO JOB (2)</label>
                   <div class="col-sm-12">
                     <input type="text" name="nojob2" class="form-control" readonly>
                   </div>

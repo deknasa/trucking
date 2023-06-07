@@ -73,7 +73,7 @@
             name: 'keterangan',
           },
           {
-            label: 'tanggal bukti',
+            label: 'TGL BUKTI',
             name: 'tglbukti',
             align: 'right',
             formatter: "date",

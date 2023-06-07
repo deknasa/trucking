@@ -162,7 +162,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL BUKTI',
+            label: 'TGL BUKTI',
             name: 'tglbukti',
             align: 'left',
             formatter: "date",
@@ -194,7 +194,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL APPROVAL',
+            label: 'TGL APPROVAL',
             name: 'tglapproval',
             align: 'left',
             formatter: "date",
